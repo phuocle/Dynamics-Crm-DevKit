@@ -3,7 +3,7 @@
 * [Integrated with Visual Studio](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Integrated-with-Visual-Studio) that easy deploy WebResource.
 * [CLI program](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CLI) easy deploy plugins, workflows, custom actions, webresources.
 
-Please check our [tutorials](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Tutorials) that Dynamics Crm DevKit can help you
+Please [Install Dynamics Crm DevKit](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Install) and check our [tutorials](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Tutorials).
 
 # Thanks
 * [Florian Krönert](https://github.com/DigitalFlow/Xrm-WebApi-Client)
