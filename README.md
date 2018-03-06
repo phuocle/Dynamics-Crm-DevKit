@@ -12,3 +12,4 @@ Please [Install Dynamics Crm DevKit](https://github.com/phuocle/Dynamics-Crm-Dev
 * [Jason Lattimer](https://github.com/jlattimer/CRMDeveloperExtensions)
 * [Alex Parker](https://github.com/zanders3/json)
 * [Facebook SDK for .NET](https://github.com/facebook-csharp-sdk/simple-json)
+* [requirejs](https://github.com/requirejs/requirejs)
