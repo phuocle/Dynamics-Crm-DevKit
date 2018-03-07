@@ -1,4 +1,5 @@
 ﻿using System.Activities;
+using System.Text.RegularExpressions;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using Wooow.Kool.Shared.Lib;
@@ -8,11 +9,15 @@ namespace Wooow.Kool.Workflow
     [CrmPluginRegistration("WooowKoolWorkflowContact_ValidateRegex", "WooowKoolWorkflowContact_ValidateRegex", "", "Wooow.Kool.Workflow.Contact", IsolationModeEnum.Sandbox)]
     public class WooowKoolWorkflowContact_ValidateRegex : CodeActivity
     {
-        //[Default("Default InputValue"), Input("InputValue")]
-        //public InArgument<string> InputValue { get; set; }
+        [Input("String To Validate")]
+        public InArgument<string> StringToValidate { get; set; }
 
-        //[Default("Default OutputValue"), Output("OutputValue")]
-        //public OutArgument<string> OutputValue { get; set; }
+        [Input("Match Pattern")]
+        public InArgument<string> MatchPattern { get; set; }
+
+        [Output("Valid")]
+        public OutArgument<string> Valid { get; set; }
+
 
         protected override void Execute(CodeActivityContext executionContext)
         {
@@ -27,9 +32,24 @@ namespace Wooow.Kool.Workflow
         {
             tracing.Trace("Begin Execute Workflow: WooowKoolWorkflowContact_ValidateRegex");
 
-            //Your excute plugin code here
+            var stringToValidate = StringToValidate.Get(executionContext);
+            var matchPattern = MatchPattern.Get(executionContext);
+            if (ValidateString(stringToValidate, matchPattern))
+            {
+                Valid.Set(executionContext, "1");
+            }
+            else
+            {
+                Valid.Set(executionContext, "0");
+            }
 
             tracing.Trace("End Execute Workflow: WooowKoolWorkflowContact_ValidateRegex");
+        }
+
+        private bool ValidateString(string valString, string matchPattern)
+        {
+            Match match = Regex.Match(valString, matchPattern, RegexOptions.IgnoreCase);
+            return match.Success;
         }
     }
 }
