@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooow.Kool.Plugin.Account.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooow.Kool.Workflow.Contact", "Wooow.Kool.Workflow.Contact\Wooow.Kool.Workflow.Contact.csproj", "{33EE1807-9CB9-4088-B836-744094C8A65F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooow.Kool.Workflow.Contact.Test", "Wooow.Kool.Workflow.Contact.Test\Wooow.Kool.Workflow.Contact.Test.csproj", "{165C3818-63C1-45D8-AFB7-CE61B696E8A8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Wooow.Kool.Shared\Wooow.Kool.Shared.projitems*{33ee1807-9cb9-4088-b836-744094c8a65f}*SharedItemsImports = 4
@@ -40,6 +42,10 @@ Global
 		{33EE1807-9CB9-4088-B836-744094C8A65F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33EE1807-9CB9-4088-B836-744094C8A65F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33EE1807-9CB9-4088-B836-744094C8A65F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{165C3818-63C1-45D8-AFB7-CE61B696E8A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{165C3818-63C1-45D8-AFB7-CE61B696E8A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{165C3818-63C1-45D8-AFB7-CE61B696E8A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{165C3818-63C1-45D8-AFB7-CE61B696E8A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

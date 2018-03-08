@@ -1,0 +1,112 @@
+{
+  "plugins": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "Kool",
+      "includefiles": [
+        "Wooow.*.dll"
+      ],
+      "excludefiles": [
+        "*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "???.*.dll"
+      ],
+      "excludefiles": [
+        "*.Test.dll"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "Kool",
+      "includefiles": [
+        "Wooow.*.dll"
+      ],
+      "excludefiles": [
+        "*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "???.*.dll"
+      ],
+      "excludefiles": [
+        "*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "entities\\*.js",
+        "lib\\*.js",
+        "images\\*.png"
+      ],
+      "excludefiles": [
+        "lib\\*.debug.js",
+        "entities\\*.intellisense.js"
+      ],
+      "dependencies": [
+        {
+          "includefiles": [
+            "entities\\*.js"
+          ],
+          "excludefiles": [
+            "entities\\*.form.js",
+            "entities\\*.webapi.js",
+            "entities\\*.intellisense.js"
+          ],
+          "dependencies": [
+            "???/lib/require.js"
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "???.WebResource",
+      "includefiles": [
+        "entities\\*.js",
+        "lib\\*.js",
+        "images\\*.png"
+      ],
+      "excludefiles": [
+        "lib\\*.debug.js",
+        "entities\\*.intellisense.js"
+      ],
+      "dependencies": [
+        {
+          "includefiles": [
+            "entities\\*.js"
+          ],
+          "excludefiles": [
+            "entities\\*.form.js",
+            "entities\\*.webapi.js",
+            "entities\\*.intellisense.js"
+          ],
+          "dependencies": [
+            "???/lib/require.js"
+          ]
+        }
+      ]
+    }
+  ]
+}
