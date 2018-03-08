@@ -37,7 +37,7 @@ namespace Wooow.Kool.CustomAction
             Your code here to connect Finance System with target, accountNumber data.
             This case the result always return value: 12345
             */
-            var annualRevenue = 12345;
+            var annualRevenue = 12345m;
             //Update Annual Revenue data to Account
             var account = new Account(target.Id);
             account.Revenue = annualRevenue;
