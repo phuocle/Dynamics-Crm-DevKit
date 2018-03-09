@@ -4,6 +4,6 @@ for /f "delims=" %%d in ('dir /a:d /o:-n /s packages\PL.DynamicsCrm.DevKit.Cli.*
     goto break
 )
 :break
-set CrmConnection="AuthType=Office365;Url=https://phuoc2018mar06.crm.dynamics.com;Username=admin@Phuoc2018Mar06.onmicrosoft.com;Password=Phuoc2018Mar06;"
+set CrmConnection="AuthType=Office365;Url=https://xxx.crm.dynamics.com;Username=admin@xxx.onmicrosoft.com;Password=xxx;"
 "%PLDynamicsCrmDevKitCli%\tools\PL.DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"PL.DynamicsCrm.DevKit.Cli.json" /type:"" /profile:"RELEASE" /version:"1.0.0.0"
 exit
