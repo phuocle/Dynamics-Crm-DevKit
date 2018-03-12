@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="SharedProjectFile_SccProperties">
+    <SharedProjectFile_ProjectGuid>{25385d40-d815-49ee-9172-862721f8669e}</SharedProjectFile_ProjectGuid>
+    <SharedProjectFile_SccProjectName>SAK</SharedProjectFile_SccProjectName>
+    <SharedProjectFile_SccAuxPath>SAK</SharedProjectFile_SccAuxPath>
+    <SharedProjectFile_SccLocalPath>SAK</SharedProjectFile_SccLocalPath>
+    <SharedProjectFile_SccProvider>SAK</SharedProjectFile_SccProvider>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d92f5473-e2a4-416e-8d80-cf3d48a48c6d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PL.DynamicsCrm.DevKit.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CodeAndIntellisense.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GeneratedCSharpLateBound.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GeneratedJScriptLateBound.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NuGet\NuGetHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NuGet\NuGetPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DevKitCrmConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DevKitCrmConfigHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Signing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xrm\CrmAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xrm\CrmConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xrm\PluginInputOutputParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xrm\SystemForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xrm\XrmEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xrm\XrmHelper.cs" />
+  </ItemGroup>
+</Project>

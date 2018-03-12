@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>15. C# Shared Project</Name>
+    <Description>C# Shared Project Template</Description>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <TemplateID>6e4fe9bc-0c96-4081-a92e-6f55961b2599</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>SharedProject</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <CreateInPlace>true</CreateInPlace>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="Shared.shproj" File="Shared.shproj" ReplaceParameters="true">
+      <ProjectItem TargetFileName="$namespace$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
+      <Folder Name="Lib" TargetFolderName="Lib" />
+      <Folder Name="Entities" TargetFolderName="Entities" />
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4f6aad45d813e293</Assembly>
+    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.SharedProjectTemplateWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

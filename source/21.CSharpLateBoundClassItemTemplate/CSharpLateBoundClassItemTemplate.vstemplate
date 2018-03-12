@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>21. C# Late Bound Class</Name>
+    <Description>C# Late Bound Class Template</Description>
+    <Icon>icon.png</Icon>
+    <TemplateID>0ff99023-2c48-4360-98ca-d7a770534a65</TemplateID>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>Visual C#</ProjectSubType>
+    <AppliesTo>CSharp</AppliesTo>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <DefaultName>Class.cs</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$.cs">Class.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$.generated.cs">Class1.cs</ProjectItem>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4f6aad45d813e293</Assembly>
+    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.CSharpLateBoundClassItemTemplateWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

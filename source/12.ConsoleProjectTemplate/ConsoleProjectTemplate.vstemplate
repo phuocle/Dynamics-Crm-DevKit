@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>12. C# Console Project</Name>
+    <Description>C# Console Project Template</Description>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <TemplateID>ae0ddb0b-ef16-4c6f-9065-eb77fea2ba14</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ConsoleProject</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AppSettings.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true">Program.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4f6aad45d813e293</Assembly>
+    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.ConsoleProjectTemplateWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

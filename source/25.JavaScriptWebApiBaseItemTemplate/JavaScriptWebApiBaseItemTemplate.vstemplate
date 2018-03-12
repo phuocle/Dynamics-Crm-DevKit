@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>25. JavaScript WebApiBase.js</Name>
+    <Description>JavaScript WebApiBase.js Template</Description>
+    <Icon>icon.png</Icon>
+    <TemplateID>cfd53dac-47e5-4809-93cc-21522f15b3c2</TemplateID>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <DefaultName>WebApiBase.js</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem ReplaceParameters="true" TargetFileName="WebApiBase.js">WebApiBase.js</ProjectItem>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4f6aad45d813e293</Assembly>
+    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.JavaScriptWebApiBaseItemTemplateWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

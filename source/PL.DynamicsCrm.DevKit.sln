@@ -1,0 +1,388 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplate", "ProjectTemplate", "{27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplate", "ItemTemplate", "{B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.JavaScriptCrmIntellisenseItemTemplate", "01.JavaScriptCrmIntellisenseItemTemplate\01.JavaScriptCrmIntellisenseItemTemplate.csproj", "{8F72FDF2-1875-4761-BFDA-5CA64D2FE477}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02.JavaScriptWebApiIntellisenseItemTemplate", "02.JavaScriptWebApiIntellisenseItemTemplate\02.JavaScriptWebApiIntellisenseItemTemplate.csproj", "{FDA55473-5905-48AB-8A77-08287822447B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03.JavaScriptFormBaseItemTemplate", "03.JavaScriptCrmFormItemTemplate\03.JavaScriptFormBaseItemTemplate.csproj", "{D249A37F-0553-49CC-8A0D-BF7186056FCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04.JavaScriptUtilityItemTemplate", "04.JavaScriptUtilityItemTemplate\04.JavaScriptUtilityItemTemplate.csproj", "{378330E5-EA1B-4D39-B336-3D8924F9A925}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05.JavaScriptRequireItemTemplate", "05.JavaScriptRequireItemTemplate\05.JavaScriptRequireItemTemplate.csproj", "{04D577B3-11F0-4349-868C-7C043EBF48E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06.JavaScriptWebApiClientItemTemplate", "06.JavaScriptWebApiClientItemTemplate\06.JavaScriptWebApiClientItemTemplate.csproj", "{11CB673C-4CBD-4B69-A6A1-78E9C93CEBEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.JavaScriptWebApiItemTemplate", "07.JavaScriptWebApiItemTemplate\07.JavaScriptWebApiItemTemplate.csproj", "{CCBD1381-E6A6-4A57-9853-E93A27A33F11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08.CSharpPluginItemTemplate", "08.CSharpPluginItemTemplate\08.CSharpPluginItemTemplate.csproj", "{6A978468-339C-4BD8-8AFF-481DE2038525}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "09.CSharpCustomActionItemTemplate", "09.CSharpCustomActionItemTemplate\09.CSharpCustomActionItemTemplate.csproj", "{CA29675D-B211-46EC-9B16-2B9A4C2CC869}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "10.CSharpWorkflowItemTemplate", "10.CSharpWorkflowItemTemplate\10.CSharpWorkflowItemTemplate.csproj", "{6373A171-F07C-4153-BDA2-C3730497889D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "11.CSharpTestItemTemplate", "11.CSharpTestItemTemplate\11.CSharpTestItemTemplate.csproj", "{B7281E07-25A1-4F0F-9595-A1394211DCD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "19.CSharpDateItemTemplate", "19.CSharpDateItemTemplate\19.CSharpDateItemTemplate.csproj", "{144C32F4-530D-4CF6-A549-74CCA0351666}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "20.CSharpPluginCoreItemTemplate", "20.CSharpPluginCoreItemTemplate\20.CSharpPluginCoreItemTemplate.csproj", "{1AC3A55F-52CE-4CB5-B0B6-7F2C3C2BD199}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "21.CSharpLateBoundClassItemTemplate", "21.CSharpLateBoundClassItemTemplate\21.CSharpLateBoundClassItemTemplate.csproj", "{921403BE-B301-40D8-B023-083C4747B50D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "22.CSharpEntityBaseItemTemplate", "22.CSharpBaseEntityItemTemplate\22.CSharpEntityBaseItemTemplate.csproj", "{DDB22285-B918-428A-A6EA-6D9E44A3EDA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "23.CSharpJsonItemTemplate", "23.CSharpJsonItemTemplate\23.CSharpJsonItemTemplate.csproj", "{BAD4C5D2-BBC0-43E9-8C19-AB05EABF014C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "24.CSharpExtensionItemTemplate", "24.CSharpExtensionItemTemplate\24.CSharpExtensionItemTemplate.csproj", "{CFDAC9A0-3CA6-44CD-BBBF-459C3A5B6790}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "25.JavaScriptWebApiBaseItemTemplate", "25.JavaScriptWebApiBaseItemTemplate\25.JavaScriptWebApiBaseItemTemplate.csproj", "{39425D9D-04A9-40B8-A35C-005B2500D006}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "26.ProxyTypesProjectTemplate", "26.ProxyTypesProjectTemplate\26.ProxyTypesProjectTemplate.csproj", "{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12.ConsoleProjectTemplate", "12.ConsoleProjectTemplate\12.ConsoleProjectTemplate.csproj", "{2C597B0B-F648-486D-BC45-593F584B8BCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.CustomActionProjectTemplate", "13.CustomActionProjectTemplate\13.CustomActionProjectTemplate.csproj", "{1C97EFE1-D106-42A3-97FF-FC22779C70F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "14.PluginProjectTemplate", "14.PluginProjectTemplate\14.PluginProjectTemplate.csproj", "{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "15.SharedProjectTemplate", "15.SharedProjectTemplate\15.SharedProjectTemplate.csproj", "{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "16.TestProjectTemplate", "16.TestProjectTemplate\16.TestProjectTemplate.csproj", "{547D1385-E9AA-47E5-A94B-D0B50719BBAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "17.WebResourceProjectTemplate", "17.WebResourceProjectTemplate\17.WebResourceProjectTemplate.csproj", "{AE2C2285-298E-47CD-80EB-11F44B9F3D42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "18.WorkflowProjectTemplate", "18.WorkflowProjectTemplate\18.WorkflowProjectTemplate.csproj", "{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PL.DynamicsCrm.DevKit.Shared", "PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.shproj", "{D92F5473-E2A4-416E-8D80-CF3D48A48C6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DynamicsCrm.DevKit.Wizard", "PL.DynamicsCrm.DevKit.Wizard\PL.DynamicsCrm.DevKit.Wizard.csproj", "{AA712C45-5DEC-46E5-9E02-497B2EBF9CAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DynamicsCrm.DevKit.Cli", "PL.DynamicsCrm.DevKit.Cli\PL.DynamicsCrm.DevKit.Cli.csproj", "{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DynamicsCrm.DevKit", "PL.DynamicsCrm.DevKit\PL.DynamicsCrm.DevKit.csproj", "{36F40DF9-126F-47F2-98BF-5E42DE8B8D38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DynamicsCrm.DevKit.Package", "PL.DynamicsCrm.DevKit.Package\PL.DynamicsCrm.DevKit.Package.csproj", "{6302EA70-637D-4FDC-B169-1493427DD8D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "27.UiTestProjectTemplate", "27.UiTestProjectTemplate\27.UiTestProjectTemplate.csproj", "{5259082A-3733-4FBE-B50B-C9BBA22D95AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "28.CSharpTestUiItemTemplate", "28.CSharpTestUiItemTemplate\28.CSharpTestUiItemTemplate.csproj", "{53392F2B-21C1-41BF-9073-2994B94E101E}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems*{aa712c45-5dec-46e5-9e02-497b2ebf9cab}*SharedItemsImports = 4
+		PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems*{d92f5473-e2a4-416e-8d80-cf3d48a48c6d}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F72FDF2-1875-4761-BFDA-5CA64D2FE477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F72FDF2-1875-4761-BFDA-5CA64D2FE477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F72FDF2-1875-4761-BFDA-5CA64D2FE477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F72FDF2-1875-4761-BFDA-5CA64D2FE477}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDA55473-5905-48AB-8A77-08287822447B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDA55473-5905-48AB-8A77-08287822447B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDA55473-5905-48AB-8A77-08287822447B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDA55473-5905-48AB-8A77-08287822447B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D249A37F-0553-49CC-8A0D-BF7186056FCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D249A37F-0553-49CC-8A0D-BF7186056FCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D249A37F-0553-49CC-8A0D-BF7186056FCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D249A37F-0553-49CC-8A0D-BF7186056FCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{378330E5-EA1B-4D39-B336-3D8924F9A925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{378330E5-EA1B-4D39-B336-3D8924F9A925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{378330E5-EA1B-4D39-B336-3D8924F9A925}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{378330E5-EA1B-4D39-B336-3D8924F9A925}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D577B3-11F0-4349-868C-7C043EBF48E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04D577B3-11F0-4349-868C-7C043EBF48E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04D577B3-11F0-4349-868C-7C043EBF48E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04D577B3-11F0-4349-868C-7C043EBF48E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11CB673C-4CBD-4B69-A6A1-78E9C93CEBEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11CB673C-4CBD-4B69-A6A1-78E9C93CEBEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11CB673C-4CBD-4B69-A6A1-78E9C93CEBEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11CB673C-4CBD-4B69-A6A1-78E9C93CEBEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCBD1381-E6A6-4A57-9853-E93A27A33F11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCBD1381-E6A6-4A57-9853-E93A27A33F11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCBD1381-E6A6-4A57-9853-E93A27A33F11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCBD1381-E6A6-4A57-9853-E93A27A33F11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A978468-339C-4BD8-8AFF-481DE2038525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A978468-339C-4BD8-8AFF-481DE2038525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A978468-339C-4BD8-8AFF-481DE2038525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A978468-339C-4BD8-8AFF-481DE2038525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6373A171-F07C-4153-BDA2-C3730497889D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6373A171-F07C-4153-BDA2-C3730497889D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6373A171-F07C-4153-BDA2-C3730497889D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6373A171-F07C-4153-BDA2-C3730497889D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7281E07-25A1-4F0F-9595-A1394211DCD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7281E07-25A1-4F0F-9595-A1394211DCD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7281E07-25A1-4F0F-9595-A1394211DCD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7281E07-25A1-4F0F-9595-A1394211DCD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144C32F4-530D-4CF6-A549-74CCA0351666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144C32F4-530D-4CF6-A549-74CCA0351666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144C32F4-530D-4CF6-A549-74CCA0351666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144C32F4-530D-4CF6-A549-74CCA0351666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AC3A55F-52CE-4CB5-B0B6-7F2C3C2BD199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AC3A55F-52CE-4CB5-B0B6-7F2C3C2BD199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AC3A55F-52CE-4CB5-B0B6-7F2C3C2BD199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AC3A55F-52CE-4CB5-B0B6-7F2C3C2BD199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921403BE-B301-40D8-B023-083C4747B50D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDB22285-B918-428A-A6EA-6D9E44A3EDA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDB22285-B918-428A-A6EA-6D9E44A3EDA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDB22285-B918-428A-A6EA-6D9E44A3EDA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDB22285-B918-428A-A6EA-6D9E44A3EDA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAD4C5D2-BBC0-43E9-8C19-AB05EABF014C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAD4C5D2-BBC0-43E9-8C19-AB05EABF014C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAD4C5D2-BBC0-43E9-8C19-AB05EABF014C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAD4C5D2-BBC0-43E9-8C19-AB05EABF014C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFDAC9A0-3CA6-44CD-BBBF-459C3A5B6790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFDAC9A0-3CA6-44CD-BBBF-459C3A5B6790}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFDAC9A0-3CA6-44CD-BBBF-459C3A5B6790}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFDAC9A0-3CA6-44CD-BBBF-459C3A5B6790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39425D9D-04A9-40B8-A35C-005B2500D006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39425D9D-04A9-40B8-A35C-005B2500D006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39425D9D-04A9-40B8-A35C-005B2500D006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39425D9D-04A9-40B8-A35C-005B2500D006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C597B0B-F648-486D-BC45-593F584B8BCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C597B0B-F648-486D-BC45-593F584B8BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C597B0B-F648-486D-BC45-593F584B8BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C597B0B-F648-486D-BC45-593F584B8BCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C97EFE1-D106-42A3-97FF-FC22779C70F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C97EFE1-D106-42A3-97FF-FC22779C70F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C97EFE1-D106-42A3-97FF-FC22779C70F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C97EFE1-D106-42A3-97FF-FC22779C70F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA712C45-5DEC-46E5-9E02-497B2EBF9CAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA712C45-5DEC-46E5-9E02-497B2EBF9CAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA712C45-5DEC-46E5-9E02-497B2EBF9CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA712C45-5DEC-46E5-9E02-497B2EBF9CAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36F40DF9-126F-47F2-98BF-5E42DE8B8D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36F40DF9-126F-47F2-98BF-5E42DE8B8D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36F40DF9-126F-47F2-98BF-5E42DE8B8D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36F40DF9-126F-47F2-98BF-5E42DE8B8D38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5259082A-3733-4FBE-B50B-C9BBA22D95AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5259082A-3733-4FBE-B50B-C9BBA22D95AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5259082A-3733-4FBE-B50B-C9BBA22D95AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5259082A-3733-4FBE-B50B-C9BBA22D95AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53392F2B-21C1-41BF-9073-2994B94E101E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53392F2B-21C1-41BF-9073-2994B94E101E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53392F2B-21C1-41BF-9073-2994B94E101E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53392F2B-21C1-41BF-9073-2994B94E101E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8F72FDF2-1875-4761-BFDA-5CA64D2FE477} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{FDA55473-5905-48AB-8A77-08287822447B} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{D249A37F-0553-49CC-8A0D-BF7186056FCF} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{378330E5-EA1B-4D39-B336-3D8924F9A925} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{04D577B3-11F0-4349-868C-7C043EBF48E4} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{11CB673C-4CBD-4B69-A6A1-78E9C93CEBEE} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{CCBD1381-E6A6-4A57-9853-E93A27A33F11} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{6A978468-339C-4BD8-8AFF-481DE2038525} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{CA29675D-B211-46EC-9B16-2B9A4C2CC869} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{6373A171-F07C-4153-BDA2-C3730497889D} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{B7281E07-25A1-4F0F-9595-A1394211DCD4} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{144C32F4-530D-4CF6-A549-74CCA0351666} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{1AC3A55F-52CE-4CB5-B0B6-7F2C3C2BD199} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{921403BE-B301-40D8-B023-083C4747B50D} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{DDB22285-B918-428A-A6EA-6D9E44A3EDA1} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{BAD4C5D2-BBC0-43E9-8C19-AB05EABF014C} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{CFDAC9A0-3CA6-44CD-BBBF-459C3A5B6790} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{39425D9D-04A9-40B8-A35C-005B2500D006} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
+		{2C597B0B-F648-486D-BC45-593F584B8BCC} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
+		{1C97EFE1-D106-42A3-97FF-FC22779C70F0} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
+		{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
+		{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
+		{547D1385-E9AA-47E5-A94B-D0B50719BBAB} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
+		{AE2C2285-298E-47CD-80EB-11F44B9F3D42} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
+		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
+		{5259082A-3733-4FBE-B50B-C9BBA22D95AA} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
+		{53392F2B-21C1-41BF-9073-2994B94E101E} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 35
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://phuocle.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = PL.DynamicsCrm.DevKit.Shared\\PL.DynamicsCrm.DevKit.Shared.shproj
+		SccProjectName1 = PL.DynamicsCrm.DevKit.Shared
+		SccLocalPath1 = PL.DynamicsCrm.DevKit.Shared
+		SccProjectUniqueName2 = PL.DynamicsCrm.DevKit.Shared\\PL.DynamicsCrm.DevKit.Shared.projitems
+		SccProjectTopLevelParentUniqueName2 = PL.DynamicsCrm.DevKit.Shared\\PL.DynamicsCrm.DevKit.Shared.shproj
+		SccProjectName2 = PL.DynamicsCrm.DevKit.Shared
+		SccLocalPath2 = PL.DynamicsCrm.DevKit.Shared
+		SccProjectUniqueName3 = PL.DynamicsCrm.DevKit.Wizard\\PL.DynamicsCrm.DevKit.Wizard.csproj
+		SccProjectName3 = PL.DynamicsCrm.DevKit.Wizard
+		SccLocalPath3 = PL.DynamicsCrm.DevKit.Wizard
+		SccProjectUniqueName4 = PL.DynamicsCrm.DevKit.Cli\\PL.DynamicsCrm.DevKit.Cli.csproj
+		SccProjectName4 = PL.DynamicsCrm.DevKit.Cli
+		SccLocalPath4 = PL.DynamicsCrm.DevKit.Cli
+		SccProjectUniqueName5 = PL.DynamicsCrm.DevKit\\PL.DynamicsCrm.DevKit.csproj
+		SccProjectName5 = PL.DynamicsCrm.DevKit
+		SccLocalPath5 = PL.DynamicsCrm.DevKit
+		SccProjectUniqueName6 = PL.DynamicsCrm.DevKit.Package\\PL.DynamicsCrm.DevKit.Package.csproj
+		SccProjectName6 = PL.DynamicsCrm.DevKit.Package
+		SccLocalPath6 = PL.DynamicsCrm.DevKit.Package
+		SccProjectUniqueName7 = 01.JavaScriptCrmIntellisenseItemTemplate\\01.JavaScriptCrmIntellisenseItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName7 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName7 = 01.JavaScriptCrmIntellisenseItemTemplate
+		SccLocalPath7 = 01.JavaScriptCrmIntellisenseItemTemplate
+		SccProjectUniqueName8 = 02.JavaScriptWebApiIntellisenseItemTemplate\\02.JavaScriptWebApiIntellisenseItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName8 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName8 = 02.JavaScriptWebApiIntellisenseItemTemplate
+		SccLocalPath8 = 02.JavaScriptWebApiIntellisenseItemTemplate
+		SccProjectUniqueName9 = 04.JavaScriptUtilityItemTemplate\\04.JavaScriptUtilityItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName9 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName9 = 04.JavaScriptUtilityItemTemplate
+		SccLocalPath9 = 04.JavaScriptUtilityItemTemplate
+		SccProjectUniqueName10 = 05.JavaScriptRequireItemTemplate\\05.JavaScriptRequireItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName10 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName10 = 05.JavaScriptRequireItemTemplate
+		SccLocalPath10 = 05.JavaScriptRequireItemTemplate
+		SccProjectUniqueName11 = 06.JavaScriptWebApiClientItemTemplate\\06.JavaScriptWebApiClientItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName11 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName11 = 06.JavaScriptWebApiClientItemTemplate
+		SccLocalPath11 = 06.JavaScriptWebApiClientItemTemplate
+		SccProjectUniqueName12 = 07.JavaScriptWebApiItemTemplate\\07.JavaScriptWebApiItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName12 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName12 = 07.JavaScriptWebApiItemTemplate
+		SccLocalPath12 = 07.JavaScriptWebApiItemTemplate
+		SccProjectUniqueName13 = 08.CSharpPluginItemTemplate\\08.CSharpPluginItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName13 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName13 = 08.CSharpPluginItemTemplate
+		SccLocalPath13 = 08.CSharpPluginItemTemplate
+		SccProjectUniqueName14 = 09.CSharpCustomActionItemTemplate\\09.CSharpCustomActionItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName14 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName14 = 09.CSharpCustomActionItemTemplate
+		SccLocalPath14 = 09.CSharpCustomActionItemTemplate
+		SccProjectUniqueName15 = 10.CSharpWorkflowItemTemplate\\10.CSharpWorkflowItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName15 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName15 = 10.CSharpWorkflowItemTemplate
+		SccLocalPath15 = 10.CSharpWorkflowItemTemplate
+		SccProjectUniqueName16 = 11.CSharpTestItemTemplate\\11.CSharpTestItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName16 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName16 = 11.CSharpTestItemTemplate
+		SccLocalPath16 = 11.CSharpTestItemTemplate
+		SccProjectUniqueName17 = 12.ConsoleProjectTemplate\\12.ConsoleProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName17 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName17 = 12.ConsoleProjectTemplate
+		SccLocalPath17 = 12.ConsoleProjectTemplate
+		SccProjectUniqueName18 = 13.CustomActionProjectTemplate\\13.CustomActionProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName18 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName18 = 13.CustomActionProjectTemplate
+		SccLocalPath18 = 13.CustomActionProjectTemplate
+		SccProjectUniqueName19 = 14.PluginProjectTemplate\\14.PluginProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName19 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName19 = 14.PluginProjectTemplate
+		SccLocalPath19 = 14.PluginProjectTemplate
+		SccProjectUniqueName20 = 15.SharedProjectTemplate\\15.SharedProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName20 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName20 = 15.SharedProjectTemplate
+		SccLocalPath20 = 15.SharedProjectTemplate
+		SccProjectUniqueName21 = 16.TestProjectTemplate\\16.TestProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName21 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName21 = 16.TestProjectTemplate
+		SccLocalPath21 = 16.TestProjectTemplate
+		SccProjectUniqueName22 = 17.WebResourceProjectTemplate\\17.WebResourceProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName22 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName22 = 17.WebResourceProjectTemplate
+		SccLocalPath22 = 17.WebResourceProjectTemplate
+		SccProjectUniqueName23 = 18.WorkflowProjectTemplate\\18.WorkflowProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName23 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName23 = 18.WorkflowProjectTemplate
+		SccLocalPath23 = 18.WorkflowProjectTemplate
+		SccProjectUniqueName24 = 19.CSharpDateItemTemplate\\19.CSharpDateItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName24 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName24 = 19.CSharpDateItemTemplate
+		SccLocalPath24 = 19.CSharpDateItemTemplate
+		SccProjectUniqueName25 = 20.CSharpPluginCoreItemTemplate\\20.CSharpPluginCoreItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName25 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName25 = 20.CSharpPluginCoreItemTemplate
+		SccLocalPath25 = 20.CSharpPluginCoreItemTemplate
+		SccProjectUniqueName26 = 21.CSharpLateBoundClassItemTemplate\\21.CSharpLateBoundClassItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName26 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName26 = 21.CSharpLateBoundClassItemTemplate
+		SccLocalPath26 = 21.CSharpLateBoundClassItemTemplate
+		SccProjectUniqueName27 = 23.CSharpJsonItemTemplate\\23.CSharpJsonItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName27 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName27 = 23.CSharpJsonItemTemplate
+		SccLocalPath27 = 23.CSharpJsonItemTemplate
+		SccProjectUniqueName28 = 24.CSharpExtensionItemTemplate\\24.CSharpExtensionItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName28 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName28 = 24.CSharpExtensionItemTemplate
+		SccLocalPath28 = 24.CSharpExtensionItemTemplate
+		SccProjectUniqueName29 = 25.JavaScriptWebApiBaseItemTemplate\\25.JavaScriptWebApiBaseItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName29 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName29 = 25.JavaScriptWebApiBaseItemTemplate
+		SccLocalPath29 = 25.JavaScriptWebApiBaseItemTemplate
+		SccProjectUniqueName30 = 26.ProxyTypesProjectTemplate\\26.ProxyTypesProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName30 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName30 = 26.ProxyTypesProjectTemplate
+		SccLocalPath30 = 26.ProxyTypesProjectTemplate
+		SccProjectUniqueName31 = 03.JavaScriptCrmFormItemTemplate\\03.JavaScriptFormBaseItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName31 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName31 = 03.JavaScriptCrmFormItemTemplate
+		SccLocalPath31 = 03.JavaScriptCrmFormItemTemplate
+		SccProjectUniqueName32 = 22.CSharpBaseEntityItemTemplate\\22.CSharpEntityBaseItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName32 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName32 = 22.CSharpBaseEntityItemTemplate
+		SccLocalPath32 = 22.CSharpBaseEntityItemTemplate
+		SccProjectUniqueName33 = 27.UiTestProjectTemplate\\27.UiTestProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName33 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName33 = 27.UiTestProjectTemplate
+		SccLocalPath33 = 27.UiTestProjectTemplate
+		SccProjectUniqueName34 = 28.CSharpTestUiItemTemplate\\28.CSharpTestUiItemTemplate.csproj
+		SccProjectTopLevelParentUniqueName34 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName34 = 28.CSharpTestUiItemTemplate
+		SccLocalPath34 = 28.CSharpTestUiItemTemplate
+	EndGlobalSection
+EndGlobal
