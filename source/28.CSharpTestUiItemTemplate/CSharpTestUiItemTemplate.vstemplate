@@ -14,7 +14,7 @@
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$.cs">Class.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4f6aad45d813e293</Assembly>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=93b9df07fea4eb7d</Assembly>
     <FullClassName>PL.DynamicsCrm.DevKit.Wizard.CSharpTestUiItemTemplateWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>

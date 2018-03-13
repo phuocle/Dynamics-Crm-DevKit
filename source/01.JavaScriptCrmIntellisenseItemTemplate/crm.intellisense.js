@@ -1402,8 +1402,6 @@ intellisense.FieldDateTime = {
 intellisense.Form = {
     ///<field name="Body" type="Object">[Get] returns all fields on form.</field>
     Body: '',
-    ///<field name="Utility" type="Object">[Get] returns a container for useful methods.</field>
-    Utility: intellisense.Utility,
     ///<field name="AddOnSave" type="Function"></field>
     AddOnSave: intellisense.FunctionFormAddOnSave,
     ///<field name="Attributes" type="Object">[Get] returns attributes contain data in the Customer Engagement form or grids.</field>

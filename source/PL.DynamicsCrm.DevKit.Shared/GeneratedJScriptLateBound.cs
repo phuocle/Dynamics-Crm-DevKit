@@ -1248,6 +1248,8 @@ namespace PL.DynamicsCrm.DevKit.Shared
     event.items = event.items.filter(function (item) {
         var removes = ['hasOwnProperty', 'propertyIsEnumerable', 'isPrototypeOf', 'toLocaleString', 'toString', 'valueOf', 'constructor', '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__', '__proto__'];
         if (removes.indexOf(item.name) != -1) return false;
+        var removes2 = ['apply', 'arguments', 'bind', 'call', 'caller', 'length', 'name', 'prototype', 'toMethod'];
+        if (event.targetName == 'WebApi' && removes2.indexOf(item.name) != -1) return false;
         item.glyph = 'vs:GlyphGroupNamespace';
         if (item.comments.length != 0) {
             if (item.comments.indexOf('type='Boolean'') >= 0)
