@@ -104,6 +104,7 @@
     <Compile Include="CSharpPluginCoreItemTemplateWizard.cs" />
     <Compile Include="CSharpPluginItemTemplateWizard.cs" />
     <Compile Include="PluginProjectTemplateWizard.cs" />
+    <Compile Include="ReportProjectTemplateWizard.cs" />
     <Compile Include="SharedProjectTemplateWizard.cs" />
     <Compile Include="CSharpTestItemTemplateWizard.cs" />
     <Compile Include="TestProjectTemplateWizard.cs" />
@@ -151,6 +152,7 @@
     <EmbeddedResource Include="data\FormBase.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="data\ReportProjectTemplate.csproj" />
     <Content Include="icon.png" />
   </ItemGroup>
   <Import Project="..\PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />

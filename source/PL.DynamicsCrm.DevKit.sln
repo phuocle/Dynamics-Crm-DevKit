@@ -73,6 +73,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "27.UiTestProjectTemplate", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "28.CSharpTestUiItemTemplate", "28.CSharpTestUiItemTemplate\28.CSharpTestUiItemTemplate.csproj", "{53392F2B-21C1-41BF-9073-2994B94E101E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "29.ReportProjectTemplate", "29.ReportProjectTemplate\29.ReportProjectTemplate.csproj", "{ACFB5F3D-6156-47F4-A879-C9552E7C334C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems*{aa712c45-5dec-46e5-9e02-497b2ebf9cab}*SharedItemsImports = 4
@@ -211,6 +213,10 @@ Global
 		{53392F2B-21C1-41BF-9073-2994B94E101E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53392F2B-21C1-41BF-9073-2994B94E101E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53392F2B-21C1-41BF-9073-2994B94E101E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACFB5F3D-6156-47F4-A879-C9552E7C334C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACFB5F3D-6156-47F4-A879-C9552E7C334C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACFB5F3D-6156-47F4-A879-C9552E7C334C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACFB5F3D-6156-47F4-A879-C9552E7C334C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -244,12 +250,13 @@ Global
 		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
 		{5259082A-3733-4FBE-B50B-C9BBA22D95AA} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
 		{53392F2B-21C1-41BF-9073-2994B94E101E} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{ACFB5F3D-6156-47F4-A879-C9552E7C334C} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 35
+		SccNumberOfProjects = 36
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://phuocle.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -384,5 +391,9 @@ Global
 		SccProjectTopLevelParentUniqueName34 = PL.DynamicsCrm.DevKit.sln
 		SccProjectName34 = 28.CSharpTestUiItemTemplate
 		SccLocalPath34 = 28.CSharpTestUiItemTemplate
+		SccProjectUniqueName35 = 29.ReportProjectTemplate\\29.ReportProjectTemplate.csproj
+		SccProjectTopLevelParentUniqueName35 = PL.DynamicsCrm.DevKit.sln
+		SccProjectName35 = 29.ReportProjectTemplate
+		SccLocalPath35 = 29.ReportProjectTemplate
 	EndGlobalSection
 EndGlobal

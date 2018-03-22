@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>29. C# Report Project</Name>
+    <Description>C# Report Project Template</Description>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <TemplateID>3a28de4f-2b6e-401f-a152-0dd26a9c78ba</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ReportProject</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem TargetFileName="note.v9.txt">note.v9.txt</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=93b9df07fea4eb7d</Assembly>
+    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.ReportProjectTemplateWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

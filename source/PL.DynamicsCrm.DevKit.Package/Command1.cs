@@ -147,7 +147,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                     value += $"{parts[j]}/";
                 if (value.EndsWith("/")) value = value.TrimEnd("/".ToCharArray());
                 condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>";
-            }            
+            }
             var fetchXml = $@"
 <fetch>
   <entity name='webresource'>
@@ -156,7 +156,7 @@ namespace PL.DynamicsCrm.DevKit.Package
       {condition}
     </filter>
   </entity>
-</fetch>";  
+</fetch>";
             var rows = crmService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0)
             {
@@ -188,7 +188,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                 requests.Add(pubRequest);
                 emRequest.Requests = requests;
                 dte.StatusBar.Text = "Updating & publishing web resource...";
-                
+
                 ExecuteMultipleResponse emResponse = (ExecuteMultipleResponse)crmService.Execute(emRequest);
                 bool wasError = false;
                 foreach (var responseItem in emResponse.Responses)

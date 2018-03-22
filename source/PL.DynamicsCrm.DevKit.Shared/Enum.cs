@@ -15,7 +15,8 @@
     JsWebApiItem,
     ProxyTypes,
     UiTest,
-    UiTestItem
+    UiTestItem,
+    Report
 }
 
 public enum ParameterType

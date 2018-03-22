@@ -1,0 +1,6 @@
+﻿1. Open Registry Editor
+2. Goto: HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319
+3. Right click on the name of the folder (the v4.0.30319 folder) and select New, then DWORD. Give it the name of SchUseStrongCrypto and the Value of 1.
+4. Exit the Registry Editor
+5. then restart your machine.
+6. Test and verify

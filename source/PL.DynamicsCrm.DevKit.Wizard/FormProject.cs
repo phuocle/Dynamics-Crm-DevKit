@@ -234,6 +234,14 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         lblProjectName.Text = "";
                         lblProjectName.Tag = lblProjectName.Text;
                         break;
+                    case FormType.Report:
+                        txtName.Visible = true;
+                        Text = "Add new Report Project";
+                        lblProjectName.Text = $"{parts[0]}.{parts[1]}.{FormType.Report.ToString()}";
+                        lblProjectName.Tag = lblProjectName.Text;
+                        btnConnection.Visible = false;
+                        btnOk.Enabled = true;
+                        break;
                 }
             }
         }
