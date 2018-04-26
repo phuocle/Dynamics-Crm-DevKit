@@ -14,6 +14,7 @@
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
       <ProjectItem TargetFileName="note.v9.txt">note.v9.txt</ProjectItem>
+      <ProjectItem TargetFileName="ReportTemplate.rdl">ReportTemplate.rdl</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

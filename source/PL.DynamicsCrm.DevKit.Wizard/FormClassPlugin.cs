@@ -133,8 +133,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private void ddlStage_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //PreValidation             PreOperation
-
             if (ddlStage?.Text?.ToString() == "PreValidation" ||
                 ddlStage?.Text?.ToString() == "PreOperation")
             {

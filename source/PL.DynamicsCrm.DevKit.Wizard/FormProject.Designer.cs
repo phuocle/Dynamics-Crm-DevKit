@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox = new System.Windows.Forms.GroupBox();
+            this.chkOthers = new System.Windows.Forms.CheckBox();
             this.btnDefaultNetVersion = new System.Windows.Forms.Button();
             this.cboNetVersion = new System.Windows.Forms.ComboBox();
             this.lblNetVersion = new System.Windows.Forms.Label();
@@ -42,7 +43,6 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.lblProject = new System.Windows.Forms.Label();
-            this.chkOthers = new System.Windows.Forms.CheckBox();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,6 +71,18 @@
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             // 
+            // chkOthers
+            // 
+            this.chkOthers.AutoSize = true;
+            this.chkOthers.Location = new System.Drawing.Point(511, 25);
+            this.chkOthers.Name = "chkOthers";
+            this.chkOthers.Size = new System.Drawing.Size(76, 24);
+            this.chkOthers.TabIndex = 20;
+            this.chkOthers.Text = "Others";
+            this.chkOthers.UseVisualStyleBackColor = true;
+            this.chkOthers.Visible = false;
+            this.chkOthers.CheckedChanged += new System.EventHandler(this.chkOthers_CheckedChanged);
+            // 
             // btnDefaultNetVersion
             // 
             this.btnDefaultNetVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -81,7 +93,7 @@
             this.btnDefaultNetVersion.TabIndex = 19;
             this.btnDefaultNetVersion.Text = "><";
             this.btnDefaultNetVersion.UseVisualStyleBackColor = true;
-            this.btnDefaultNetVersion.Click += new System.EventHandler(this.btnDefaultNetVersion_Click);
+            this.btnDefaultNetVersion.Visible = false;
             // 
             // cboNetVersion
             // 
@@ -94,6 +106,7 @@
             this.cboNetVersion.Size = new System.Drawing.Size(132, 28);
             this.cboNetVersion.TabIndex = 18;
             this.cboNetVersion.ValueMember = "Version";
+            this.cboNetVersion.SelectedIndexChanged += new System.EventHandler(this.cboNetVersion_SelectedIndexChanged);
             // 
             // lblNetVersion
             // 
@@ -139,7 +152,7 @@
             this.btnDefaultCrmVersion.TabIndex = 14;
             this.btnDefaultCrmVersion.Text = "><";
             this.btnDefaultCrmVersion.UseVisualStyleBackColor = true;
-            this.btnDefaultCrmVersion.Click += new System.EventHandler(this.btnDefaultCrmVersion_Click);
+            this.btnDefaultCrmVersion.Visible = false;
             // 
             // lblProjectName
             // 
@@ -184,6 +197,7 @@
             this.cboCrmVersion.Size = new System.Drawing.Size(132, 28);
             this.cboCrmVersion.TabIndex = 2;
             this.cboCrmVersion.ValueMember = "Version";
+            this.cboCrmVersion.SelectedIndexChanged += new System.EventHandler(this.cboCrmVersion_SelectedIndexChanged);
             // 
             // btnCancel
             // 
@@ -216,18 +230,6 @@
             this.lblProject.Size = new System.Drawing.Size(108, 20);
             this.lblProject.TabIndex = 2;
             this.lblProject.Text = "Project Name:";
-            // 
-            // chkOthers
-            // 
-            this.chkOthers.AutoSize = true;
-            this.chkOthers.Location = new System.Drawing.Point(511, 25);
-            this.chkOthers.Name = "chkOthers";
-            this.chkOthers.Size = new System.Drawing.Size(76, 24);
-            this.chkOthers.TabIndex = 20;
-            this.chkOthers.Text = "Others";
-            this.chkOthers.UseVisualStyleBackColor = true;
-            this.chkOthers.Visible = false;
-            this.chkOthers.CheckedChanged += new System.EventHandler(this.chkOthers_CheckedChanged);
             // 
             // FormProject
             // 

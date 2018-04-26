@@ -7,6 +7,10 @@
       <Name>note.v9.txt</Name>
       <FullPath>note.v9.txt</FullPath>
     </ResourceProjectItem>
+    <ProjectItem>
+      <Name>ReportTemplate.rdl</Name>
+      <FullPath>ReportTemplate.rdl</FullPath>
+    </ProjectItem>
   </Reports>
   <Configurations>
     <Configuration>

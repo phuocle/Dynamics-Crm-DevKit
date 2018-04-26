@@ -16,7 +16,8 @@
     ProxyTypes,
     UiTest,
     UiTestItem,
-    Report
+    Report,
+    ReportItem
 }
 
 public enum ParameterType

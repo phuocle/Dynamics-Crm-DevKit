@@ -609,16 +609,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                             (!btnConnection.Visible && txtName.Text.Length > 0);
         }
 
-        private void btnDefaultCrmVersion_Click(object sender, System.EventArgs e)
-        {
-            if(MessageBox.Show("Are you sure to make this default ?", "Confirm?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-                config.DefaultCrmVersion = cboCrmVersion.Text;
-                DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
-            }
-        }
-
         private void btnConnection_Click(object sender, System.EventArgs e)
         {
             var form = new FormConnection(DTE);
@@ -656,16 +646,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             btnOk.Enabled = cboEntity.Items.Count > 0;
         }
 
-        private void btnDefaultNetVersion_Click(object sender, System.EventArgs e)
-        {
-            if (MessageBox.Show("Are you sure to make this default ?", "Confirm?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-                config.DefaultNetVersion = cboNetVersion.Text;
-                DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
-            }
-        }
-
         private void chkOthers_CheckedChanged(object sender, System.EventArgs e)
         {
             var value = chkOthers.Checked;
@@ -675,6 +655,20 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 txtName_TextChanged(null, null);
             else
                 cboEntity_SelectedIndexChanged(null, null);
+        }
+
+        private void cboCrmVersion_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+            config.DefaultCrmVersion = cboCrmVersion.Text;
+            DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
+        }
+
+        private void cboNetVersion_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+            config.DefaultNetVersion = cboNetVersion.Text;
+            DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
         }
     }
 }

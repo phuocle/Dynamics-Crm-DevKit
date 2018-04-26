@@ -81,7 +81,6 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
             var response = (RetrieveEntityResponse)CrmService.Execute(request);
             var fetchData = new
             {
-                customizationlevel = "0",
                 primaryobjecttypecode = response.EntityMetadata.ObjectTypeCode,
                 iscustomprocessingstepallowed = "1"
             };
@@ -90,8 +89,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
   <entity name='sdkmessage'>
     <attribute name='name' />
     <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
-      <filter type='and'>
-        <condition attribute='customizationlevel' operator='eq' value='{fetchData.customizationlevel}' />
+      <filter type='and'>        
         <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
         <condition attribute='iscustomprocessingstepallowed' operator='eq' value='{fetchData.iscustomprocessingstepallowed}'/>
       </filter>

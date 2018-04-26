@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="note.v9.txt" />
+    <None Include="ReportTemplate.rdl" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
