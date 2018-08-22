@@ -1,14 +1,19 @@
 ﻿using System.Activities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
+using $DevKitShared$;
 
 namespace $rootnamespace$
 {
-    [CrmPluginRegistration("$class$", "$class$", "", "$rootnamespace$.$EntityName$", IsolationModeEnum.Sandbox)]
+    [CrmPluginRegistration("$class$", "$class$", "", "$rootnamespace$", IsolationModeEnum.Sandbox)]
     public class $class$ : CodeActivity
     {
-        //[Default("Default InputValue"), Input("InputValue")]
-        //public InArgument<string> InputValue { get; set; }
+        //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity
+
+        //[Default("Default Value")]
+        //[Input("Input Value")]
+        //[ReferenceTarget("account")]
+        //public InArgument<EntityReference> InputValue { get; set; }
 
         //[Default("Default OutputValue"), Output("OutputValue")]
         //public OutArgument<string> OutputValue { get; set; }
@@ -24,11 +29,10 @@ namespace $rootnamespace$
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            tracing.Trace("Begin Execute Workflow: $class$");
+            Debugger.Trace(tracing, "Begin Execute Workflow: $class$");
+            //YOUR CUSTOM-WORKFLOW-CODE GO HERE
 
-            //Your excute plugin code here
-
-            tracing.Trace("End Execute Workflow: $class$");
+            Debugger.Trace(tracing, "End Execute Workflow: $class$");
         }
     }
 }

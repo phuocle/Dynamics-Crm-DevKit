@@ -6,6 +6,6 @@
         public string Name { get; set; }
         public bool Require { get; set; }
         public string Type { get; set; }
-        public ParameterType ParameterType { get; set;}
+        public ParameterType ParameterType { get; set; }
     }
 }

@@ -38,6 +38,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.ddlMessage = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,20 +54,21 @@
             this.groupBox1.Controls.Add(this.ddlMessage);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(10, 0);
+            this.groupBox1.Location = new System.Drawing.Point(8, 0);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox1.Size = new System.Drawing.Size(467, 181);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(8);
+            this.groupBox1.Size = new System.Drawing.Size(398, 165);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             // 
             // btnConnection
             // 
             this.btnConnection.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnection.Location = new System.Drawing.Point(422, 26);
-            this.btnConnection.Margin = new System.Windows.Forms.Padding(8);
+            this.btnConnection.Location = new System.Drawing.Point(352, 20);
+            this.btnConnection.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnConnection.Name = "btnConnection";
-            this.btnConnection.Size = new System.Drawing.Size(28, 28);
+            this.btnConnection.Size = new System.Drawing.Size(37, 27);
             this.btnConnection.TabIndex = 17;
             this.btnConnection.Text = "><";
             this.btnConnection.UseVisualStyleBackColor = true;
@@ -79,26 +81,29 @@
             this.ddlExecution.Items.AddRange(new object[] {
             "Synchronous",
             "Asynchronous"});
-            this.ddlExecution.Location = new System.Drawing.Point(96, 94);
+            this.ddlExecution.Location = new System.Drawing.Point(97, 85);
+            this.ddlExecution.Margin = new System.Windows.Forms.Padding(2);
             this.ddlExecution.Name = "ddlExecution";
-            this.ddlExecution.Size = new System.Drawing.Size(315, 28);
+            this.ddlExecution.Size = new System.Drawing.Size(246, 25);
             this.ddlExecution.TabIndex = 12;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 97);
+            this.label1.Location = new System.Drawing.Point(11, 88);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 20);
+            this.label1.Size = new System.Drawing.Size(73, 17);
             this.label1.TabIndex = 13;
             this.label1.Text = "Execution:";
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCancel.Location = new System.Drawing.Point(191, 134);
+            this.btnCancel.Location = new System.Drawing.Point(188, 123);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(89, 31);
+            this.btnCancel.Size = new System.Drawing.Size(87, 30);
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -108,9 +113,10 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnOk.Enabled = false;
-            this.btnOk.Location = new System.Drawing.Point(96, 134);
+            this.btnOk.Location = new System.Drawing.Point(97, 123);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(2);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(89, 31);
+            this.btnOk.Size = new System.Drawing.Size(87, 30);
             this.btnOk.TabIndex = 6;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -124,18 +130,20 @@
             "PreValidation",
             "PreOperation",
             "PostOperation"});
-            this.ddlStage.Location = new System.Drawing.Point(96, 60);
+            this.ddlStage.Location = new System.Drawing.Point(97, 53);
+            this.ddlStage.Margin = new System.Windows.Forms.Padding(2);
             this.ddlStage.Name = "ddlStage";
-            this.ddlStage.Size = new System.Drawing.Size(315, 28);
+            this.ddlStage.Size = new System.Drawing.Size(246, 25);
             this.ddlStage.TabIndex = 5;
             this.ddlStage.SelectedIndexChanged += new System.EventHandler(this.ddlStage_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 63);
+            this.label4.Location = new System.Drawing.Point(11, 56);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(56, 20);
+            this.label4.Size = new System.Drawing.Size(49, 17);
             this.label4.TabIndex = 11;
             this.label4.Text = "Stage:";
             // 
@@ -143,34 +151,49 @@
             // 
             this.ddlMessage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddlMessage.FormattingEnabled = true;
-            this.ddlMessage.Location = new System.Drawing.Point(96, 26);
+            this.ddlMessage.Location = new System.Drawing.Point(97, 21);
+            this.ddlMessage.Margin = new System.Windows.Forms.Padding(2);
             this.ddlMessage.Name = "ddlMessage";
-            this.ddlMessage.Size = new System.Drawing.Size(315, 28);
+            this.ddlMessage.Size = new System.Drawing.Size(246, 25);
             this.ddlMessage.TabIndex = 4;
             this.ddlMessage.SelectedIndexChanged += new System.EventHandler(this.ddlMessage_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 29);
+            this.label3.Location = new System.Drawing.Point(11, 24);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(78, 20);
+            this.label3.Size = new System.Drawing.Size(69, 17);
             this.label3.TabIndex = 8;
             this.label3.Text = "Message:";
             // 
+            // progressBar
+            // 
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar.Location = new System.Drawing.Point(8, 160);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(0);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(398, 5);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar.TabIndex = 25;
+            this.progressBar.Visible = false;
+            // 
             // FormClassPlugin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(487, 191);
+            this.ClientSize = new System.Drawing.Size(414, 173);
+            this.ControlBox = false;
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBox1);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormClassPlugin";
-            this.Padding = new System.Windows.Forms.Padding(10, 0, 10, 10);
+            this.Padding = new System.Windows.Forms.Padding(8, 0, 8, 8);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add New Plugin Class";
@@ -192,5 +215,6 @@
         private System.Windows.Forms.ComboBox ddlMessage;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnConnection;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }

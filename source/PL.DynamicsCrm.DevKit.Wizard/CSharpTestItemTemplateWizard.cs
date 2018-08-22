@@ -1,13 +1,15 @@
-﻿using Microsoft.VisualStudio.TemplateWizard;
-using System.Collections.Generic;
-using EnvDTE;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
+using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
-    class CSharpTestItemTemplateWizard : IWizard
+    internal class CSharpTestItemTemplateWizard : IWizard
     {
-        private DTE DTE { get; set; }
+        private DTE Dte { get; set; }
+
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
         }
@@ -24,20 +26,18 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
+            WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewItem)
             {
-                DTE = (DTE)automationObject;
-                var projects = (object[])DTE.ActiveSolutionProjects;
-                var project = (Project)projects[0];
+                Dte = (DTE) automationObject;
+                var projects = (object[]) Dte.ActiveSolutionProjects;
+                var project = (Project) projects[0];
                 var entityName = string.Empty;
-                if (project.Name.Split('.').Length == 3)
-                    entityName = "none";
-                else
-                    entityName = project.Name.Split('.')[3];
+                entityName = project.Name.Split('.')[project.Name.Split('.').Length - 2];
                 var logicalName = entityName.ToLower();
-                var form = new FormProject(FormType.TestItem, DTE, entityName);
+                var form = new FormProject(FormType.TestItem, Dte, entityName);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     replacementsDictionary.Add("$class$", form.Class);
@@ -63,13 +63,40 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                             replacementsDictionary.Add("$Plugin$", "true");
                     }
                     else
+                    {
                         replacementsDictionary.Add("$FormType$", "false");
+                    }
+                    var solutionFullName = Dte?.Solution?.FullName;
+                    var fInfo = new FileInfo(solutionFullName);
+                    var parts = fInfo.Name.Split(".".ToCharArray());
+                    replacementsDictionary.Add("$DevKitShared$", $"{GetName(parts)}Shared");
+                    replacementsDictionary.Add("$ReferencePlugin$", GetName2(cols));
                 }
                 else
+                {
                     throw new WizardCancelledException("Cancel Click");
+                }
             }
             else
+            {
                 throw new WizardCancelledException("Cancel Click");
+            }
+        }
+
+        private string GetName(string[] parts)
+        {
+            var data = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                data += parts[i] + ".";
+            return data;
+        }
+
+        private string GetName2(string[] parts)
+        {
+            var data = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                data += parts[i] + ".";
+            return data.TrimEnd(".".ToCharArray());
         }
 
         public bool ShouldAddProjectItem(string filePath)

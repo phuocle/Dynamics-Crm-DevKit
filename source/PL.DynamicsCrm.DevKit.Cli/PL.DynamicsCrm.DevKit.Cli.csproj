@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\DemoPhuocCrm2\PhuocCrmCli\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -105,7 +105,6 @@
     <Compile Include="CommandLineArgs.cs" />
     <Compile Include="CrmPluginRegistrationAttribute.cs" />
     <Compile Include="CliLog.cs" />
-    <Compile Include="Models\Dependency.cs" />
     <Compile Include="Models\CliJson.cs" />
     <Compile Include="Models\Plugin.cs" />
     <Compile Include="Models\WebResource.cs" />
@@ -120,6 +119,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Nuget\pack.bat" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.0.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.nuspec" />
     <None Include="packages.config" />
     <Content Include="PL.DynamicsCrm.DevKit.Cli.json">

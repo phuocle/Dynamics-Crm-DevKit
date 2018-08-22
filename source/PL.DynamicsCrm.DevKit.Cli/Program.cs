@@ -1,11 +1,11 @@
-﻿using CmdLine;
-using Microsoft.Xrm.Tooling.Connector;
-using PL.DynamicsCrm.DevKit.Cli.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using CmdLine;
+using Microsoft.Xrm.Tooling.Connector;
+using PL.DynamicsCrm.DevKit.Cli.Models;
 
 namespace PL.DynamicsCrm.DevKit.Cli
 {
@@ -23,28 +23,34 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"???";
+                return @"D:\sources\Demo\Abz.Demo\Abz.Demo.WebResource.Demo";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
             }
         }
 
+        private static Plugin PluginJson { get; set; }
+        private static Plugin WorkflowJson { get; set; }
+        private static WebResource WebResourceJson { get; set; }
+
+        private static CrmServiceClient CrmServiceClient { get; set; }
+
         public static void Main(string[] args)
         {
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new String('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli ", CliLog.COLOR_RED, "1.0.2");
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new String('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli ", CliLog.COLOR_RED, "1.1.0");
+            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             CommandLineArgs arguments = null;
 #if !DEBUG
             try
             {
 #endif
-                arguments = CommandLine.Parse<CommandLineArgs>();
-                Run(arguments);
+            arguments = CommandLine.Parse<CommandLineArgs>();
+            Run(arguments);
 #if DEBUG
-                CliLog.WriteLine(CliLog.COLOR_RED, "!!! FINISHED !!!");
-                Console.ReadKey();
+            CliLog.WriteLine(CliLog.COLOR_RED, "!!! FINISHED !!!");
+            Console.ReadKey();
 #endif
 #if !DEBUG
             }
@@ -54,7 +60,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 Console.ReadKey();
                 return;
             }
-#endif            
+#endif
         }
 
         private static void Run(CommandLineArgs arguments)
@@ -86,32 +92,36 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
         }
 
-        private static Plugin PluginJson { get; set; } = null;
-        private static Plugin WorkflowJson { get; set; } = null;
-        private static WebResource WebResourceJson { get; set; }
-
         private static bool IsValid(CommandLineArgs arguments)
         {
             if (arguments.Connection.Length == 0)
             {
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/conn: missing");
                 return false;
-            }            
+            }
+
             if (arguments.Json.Length == 0)
             {
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/json: missing");
                 return false;
             }
+
             var jsonFile = Path.Combine(CurrentDirectory, arguments.Json);
             if (!File.Exists(jsonFile))
-            { 
+            {
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/json: PL.DynamicsCrm.DevKit json missing [{jsonFile}]");
                 return false;
             }
+
             var json = SimpleJson.DeserializeObject<CliJson>(File.ReadAllText(jsonFile));
             if (arguments.Type.Length > 0)
             {
-                var types = new List<string>() { TaskType.plugins.ToString(), TaskType.workflows.ToString(), TaskType.webresources.ToString() };
+                var types = new List<string>
+                {
+                    TaskType.plugins.ToString(),
+                    TaskType.workflows.ToString(),
+                    TaskType.webresources.ToString()
+                };
                 if (!types.Contains(arguments.Type))
                 {
                     CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: should be: plugins or workflows or webresources");
@@ -120,23 +130,26 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             else
             {
-                PluginJson = json.plugins.Where(x => x.profile == arguments.Profile).FirstOrDefault();
-                WorkflowJson = json.workflows.Where(x => x.profile == arguments.Profile).FirstOrDefault();
-                WebResourceJson = json.webresources.Where(x => x.profile == arguments.Profile).FirstOrDefault();
+                PluginJson = json.plugins.FirstOrDefault(x => x.profile == arguments.Profile);
+                WorkflowJson = json.workflows.FirstOrDefault(x => x.profile == arguments.Profile);
+                WebResourceJson = json.webresources.FirstOrDefault(x => x.profile == arguments.Profile);
             }
+
             if (arguments.Profile.Length == 0)
             {
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: missing");
                 return false;
             }
+
             if (arguments.Version.Length == 0)
             {
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/version: missing");
                 return false;
             }
+
             if (arguments.Type == TaskType.plugins.ToString())
             {
-                PluginJson = json.plugins.Where(x => x.profile == arguments.Profile).FirstOrDefault();
+                PluginJson = json.plugins.FirstOrDefault(x => x.profile == arguments.Profile);
                 if (PluginJson == null)
                 {
                     CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: not found profile: {arguments.Profile}");
@@ -145,7 +158,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             else if (arguments.Type == TaskType.workflows.ToString())
             {
-                WorkflowJson = json.workflows.Where(x => x.profile == arguments.Profile).FirstOrDefault();
+                WorkflowJson = json.workflows.FirstOrDefault(x => x.profile == arguments.Profile);
                 if (WorkflowJson == null)
                 {
                     CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: not found profile: {arguments.Profile}");
@@ -154,23 +167,24 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             else if (arguments.Type == TaskType.webresources.ToString())
             {
-                WebResourceJson = json.webresources.Where(x => x.profile == arguments.Profile).FirstOrDefault();
+                WebResourceJson = json.webresources.FirstOrDefault(x => x.profile == arguments.Profile);
                 if (WebResourceJson == null)
                 {
                     CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: not found profile: {arguments.Profile}");
                     return false;
                 }
             }
+
             if (!IsConnectedDynamics365(arguments.Connection))
             {
-                CliLog.WriteLine(CliLog.COLOR_ERROR, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
+                CliLog.WriteLine(CliLog.COLOR_ERROR,
+                    $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
                 return false;
             }
+
             CliLog.WriteLine(CliLog.COLOR_YELLOW, "Connected ", CliLog.COLOR_MAGENTA, "Dynamics CRM!");
             return true;
         }
-
-        private static CrmServiceClient CrmServiceClient { get; set; }
 
         private static bool IsConnectedDynamics365(string connection)
         {
@@ -184,7 +198,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             catch
             {
                 return false;
-            }            
-        }        
+            }
+        }
     }
 }

@@ -42,7 +42,7 @@
     <AssemblyOriginatorKeyFile>PL.DynamicsCrm.DevKit.Wizard.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -64,6 +64,9 @@
       <HintPath>..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NUglify, Version=1.5.11.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUglify.1.5.11\lib\net40\NUglify.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
@@ -84,24 +87,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CSharpDateItemTemplateWizard.cs" />
-    <Compile Include="CSharpEntityBaseItemTemplateWizard.cs" />
     <Compile Include="ConsoleProjectTemplateWizard.cs" />
     <Compile Include="CSharpCustomActionItemTemplateWizard.cs" />
-    <Compile Include="CSharpExtensionItemTemplateWizard.cs" />
     <Compile Include="CSharpTestUiItemTemplateWizard.cs" />
     <Compile Include="CustomActionProjectTemplateWizard.cs" />
-    <Compile Include="JavaScriptFormBaseItemTemplateWizard.cs" />
-    <Compile Include="JavaScriptCrmIntellisenseItemTemplateWizard.cs" />
-    <Compile Include="CSharpJsonItemTemplateWizard.cs" />
-    <Compile Include="JavaScriptRequireItemTemplateWizard.cs" />
-    <Compile Include="JavaScriptUtilityItemTemplateWizard.cs" />
-    <Compile Include="JavaScriptWebApiBaseItemTemplateWizard.cs" />
-    <Compile Include="JavaScriptCrmWebApiIntellisenseItemTemplateWizard.cs" />
-    <Compile Include="JavaScriptWebApiClientItemTemplateWizard.cs" />
+    <Compile Include="JavaScriptFormItemTemplateWizard.cs" />
+    <Compile Include="JavaScriptTestItemTemplateWizard.cs" />
     <Compile Include="JavaScriptWebApiItemTemplateWizard.cs" />
     <Compile Include="CSharpLateBoundClassItemTemplateWizard.cs" />
-    <Compile Include="CSharpPluginCoreItemTemplateWizard.cs" />
     <Compile Include="CSharpPluginItemTemplateWizard.cs" />
     <Compile Include="PluginProjectTemplateWizard.cs" />
     <Compile Include="ReportProjectTemplateWizard.cs" />
@@ -149,10 +142,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="data\FormBase.js" />
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="data\DevKit.js" />
+    <EmbeddedResource Include="data\OptionSet.js" />
+    <EmbeddedResource Include="data\WebApi.js" />
+    <EmbeddedResource Include="data\WebApiClient.js" />
     <EmbeddedResource Include="data\ReportProjectTemplate.csproj" />
+    <EmbeddedResource Include="data\WebApiClient.min.js" />
     <Content Include="icon.png" />
   </ItemGroup>
   <Import Project="..\PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />

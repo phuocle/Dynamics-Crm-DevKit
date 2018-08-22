@@ -16,8 +16,8 @@
     <ProjectGuid>{53392F2B-21C1-41BF-9073-2994B94E101E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>_28.CSharpTestUiItemTemplate</RootNamespace>
-    <AssemblyName>28.CSharpTestUiItemTemplate</AssemblyName>
+    <RootNamespace>CSharpTestUiItemTemplate</RootNamespace>
+    <AssemblyName>CSharpTestUiItemTemplate</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>

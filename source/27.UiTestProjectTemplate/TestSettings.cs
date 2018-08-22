@@ -8,7 +8,9 @@ namespace $RootNamespace$
         {
             BrowserType = BrowserType.Chrome,
             PrivateMode = true,
-            FireEvents = true
+            FireEvents = true,
+            Headless = false,
+            UserAgent = false
         };
     }
 }

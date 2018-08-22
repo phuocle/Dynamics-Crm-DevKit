@@ -1,21 +1,24 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PL.DynamicsCrm.DevKit.Shared.Xrm
 {
     public class XrmHelper
     {
-        private OrganizationServiceProxy CrmService { get; set; }
         public XrmHelper(OrganizationServiceProxy crmService)
         {
             CrmService = crmService;
         }
+
+        private OrganizationServiceProxy CrmService { get; }
+
         public List<XrmEntity> GetAllCustomActions()
         {
             var fetchData = new
@@ -40,13 +43,13 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
 </fetch>";
             var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
             var list = (from entity in rows.Entities
-                        select new XrmEntity {
-                            LogicalName = entity["name"].ToString(),
-                            Name = GetSchemaName(entity["primaryobjecttypecode"].ToString())
-                       }).ToList<XrmEntity>();
+                select new XrmEntity
+                {
+                    LogicalName = entity["name"].ToString(),
+                    Name = GetSchemaName(entity["primaryobjecttypecode"].ToString())
+                }).ToList();
             return list;
         }
-
 
 
         public List<XrmEntity> GetAllEntities()
@@ -58,27 +61,26 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
             };
             var response = (RetrieveAllEntitiesResponse)CrmService.Execute(request);
             var entities = new List<XrmEntity>();
-            foreach (EntityMetadata entity in response.EntityMetadata)
-            {
+            foreach (var entity in response.EntityMetadata)
                 entities.Add(new XrmEntity
                 {
                     Name = entity.SchemaName,
                     LogicalName = entity.LogicalName,
                     HasImage = !string.IsNullOrEmpty(entity.PrimaryImageAttribute),
-                    EntityTypeCode = entity.ObjectTypeCode ?? -1,
+                    EntityTypeCode = entity.ObjectTypeCode ?? -1
                 });
-            }
             entities = entities.OrderBy(entity => entity.Name).ToList();
             return entities;
         }
 
         public List<string> GetSdkMessages(string logicalName)
         {
-            var request = new RetrieveEntityRequest() {
+            var request = new RetrieveEntityRequest
+            {
                 EntityFilters = EntityFilters.Entity,
                 LogicalName = logicalName
             };
-            var response = (RetrieveEntityResponse)CrmService.Execute(request);
+            var response = (RetrieveEntityResponse) CrmService.Execute(request);
             var fetchData = new
             {
                 primaryobjecttypecode = response.EntityMetadata.ObjectTypeCode,
@@ -89,7 +91,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
   <entity name='sdkmessage'>
     <attribute name='name' />
     <link-entity name='sdkmessagefilter' from='sdkmessageid' to='sdkmessageid'>
-      <filter type='and'>        
+      <filter type='and'>
         <condition attribute='primaryobjecttypecode' operator='eq' value='{fetchData.primaryobjecttypecode}'/>
         <condition attribute='iscustomprocessingstepallowed' operator='eq' value='{fetchData.iscustomprocessingstepallowed}'/>
       </filter>
@@ -98,8 +100,8 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
 </fetch>";
             var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
             var messages = (from entity in rows.Entities
-                            select entity["name"].ToString()
-                           ).ToList<string>();
+                    select entity["name"].ToString()
+                ).ToList();
             messages.Sort();
             return messages;
         }
@@ -134,13 +136,13 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
 </fetch>";
             var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
             var list = new List<PluginInputOutputParameter>();
-            Guid sdkMessageRequestId = Guid.Empty;
+            var sdkMessageRequestId = Guid.Empty;
             foreach (var row in rows.Entities)
             {
-                var name = (string)row.GetAttributeValue<AliasedValue>("f.name")?.Value ?? string.Empty;
-                var clrparser = (string)row.GetAttributeValue<AliasedValue>("f.clrparser")?.Value ?? string.Empty;
-                var optional = (bool?)row.GetAttributeValue<AliasedValue>("f.optional")?.Value ?? false;
-                var position = (int?)row.GetAttributeValue<AliasedValue>("f.position")?.Value ?? -1;
+                var name = (string) row.GetAttributeValue<AliasedValue>("f.name")?.Value ?? string.Empty;
+                var clrparser = (string) row.GetAttributeValue<AliasedValue>("f.clrparser")?.Value ?? string.Empty;
+                var optional = (bool?) row.GetAttributeValue<AliasedValue>("f.optional")?.Value ?? false;
+                var position = (int?) row.GetAttributeValue<AliasedValue>("f.position")?.Value ?? -1;
                 list.Add(new PluginInputOutputParameter
                 {
                     Name = name,
@@ -151,6 +153,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
                 });
                 sdkMessageRequestId = row.Id;
             }
+
             var fetchData2 = new
             {
                 sdkmessagerequestid = sdkMessageRequestId
@@ -171,10 +174,11 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
             var rows2 = CrmService.RetrieveMultiple(new FetchExpression(fetchXml2));
             foreach (var row in rows2.Entities)
             {
-                var name = (string)row.GetAttributeValue<AliasedValue>("f.name")?.Value ?? string.Empty;
-                var clrformatter = (string)row.GetAttributeValue<AliasedValue>("f.clrformatter")?.Value ?? string.Empty;
+                var name = (string) row.GetAttributeValue<AliasedValue>("f.name")?.Value ?? string.Empty;
+                var clrformatter = (string) row.GetAttributeValue<AliasedValue>("f.clrformatter")?.Value ??
+                                   string.Empty;
                 var optional = false;
-                var position = (int?)row.GetAttributeValue<AliasedValue>("f.position")?.Value ?? -1;
+                var position = (int?) row.GetAttributeValue<AliasedValue>("f.position")?.Value ?? -1;
                 list.Add(new PluginInputOutputParameter
                 {
                     Name = name,
@@ -184,6 +188,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
                     ParameterType = ParameterType.Output
                 });
             }
+
             list = list
                 .OrderBy(order => order.ParameterType)
                 .ThenBy(order => order.Position)
@@ -198,7 +203,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
                 EntityFilters = EntityFilters.Entity,
                 LogicalName = entityName.ToLower()
             };
-            var response = (RetrieveEntityResponse)CrmService.Execute(request);
+            var response = (RetrieveEntityResponse) CrmService.Execute(request);
             return response.EntityMetadata.ObjectTypeCode.Value;
         }
 
@@ -210,7 +215,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
                 EntityFilters = EntityFilters.Entity,
                 LogicalName = logicalName
             };
-            var response = (RetrieveEntityResponse)CrmService.Execute(request);
+            var response = (RetrieveEntityResponse) CrmService.Execute(request);
             return response.EntityMetadata.SchemaName;
         }
     }

@@ -1,20 +1,19 @@
-﻿using Microsoft.VisualStudio.TemplateWizard;
-using System.Collections.Generic;
-using EnvDTE;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
 using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
-    class CustomActionProjectTemplateWizard : IWizard
+    internal class CustomActionProjectTemplateWizard : IWizard
     {
-        private DTE DTE { get; set; }
-        private Project Project { get; set; }
-        private string ProjectName { get; set; }
-
         private string _destDirectory;
         private string _keyName;
+        private DTE Dte { get; set; }
+        private Project Project { get; set; }
+        private string ProjectName { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -34,21 +33,36 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public void RunFinished()
         {
             var projectFullName = Project.FullName;
-            DTE.Solution.Remove(Project);
+            Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
             var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
-            var oldDir = dInfoProject.FullName;
-            dInfoProject.MoveTo(dInfoProject.Parent.FullName + "\\" + ProjectName);
-            DTE.Solution.AddFromFile(dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
-            DTE.Solution.SaveAs(DTE.Solution.FullName);
+            var folder = dInfoProject.Parent.FullName + "\\" + ProjectName;
+            if (Directory.Exists(folder))
+                try
+                {
+                    Directory.Delete(folder, true);
+                }
+                catch
+                {
+                }
+
+            dInfoProject.MoveTo(folder);
+            Dte.Solution.AddFromFile(dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName +
+                                     ".csproj");
+            Dte.Solution.SaveAs(Dte.Solution.FullName);
+            var tfs = new Tfs(Dte);
+            tfs.Undo(fInfoProject.DirectoryName);
+            tfs.Add(dInfoProject.FullName);
+            Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
+            WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewProject)
             {
-                DTE = (DTE)automationObject;
-                var form = new FormProject(FormType.CustomAction, DTE);
+                Dte = (DTE) automationObject;
+                var form = new FormProject(FormType.CustomAction, Dte);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     ProjectName = form.ProjectName;
@@ -67,14 +81,34 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         _destDirectory = replacementsDictionary["$destinationdirectory$"];
                     if (replacementsDictionary.ContainsKey("$ProjectName$"))
                         _keyName = replacementsDictionary["$ProjectName$"] + ".snk";
-                    replacementsDictionary.Add("$ShareProject$", $"{form.RootNamespace.Split(".".ToCharArray())[0]}.{form.RootNamespace.Split(".".ToCharArray())[1]}.Shared");
+                    var solutionFullName = Dte?.Solution?.FullName;
+                    var fInfo = new FileInfo(solutionFullName);
+                    var parts = fInfo.Name.Split(".".ToCharArray());
+                    replacementsDictionary.Add("$ShareProject$", $"{GetName(parts)}Shared");
                     replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
                 }
                 else
+                {
+                    try
+                    {
+                        Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
+                    }
+                    catch { }
                     throw new WizardCancelledException("Cancel Click");
+                }
             }
             else
+            {
                 throw new WizardCancelledException("Cancel Click");
+            }
+        }
+
+        private string GetName(string[] parts)
+        {
+            var data = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                data += parts[i] + ".";
+            return data;
         }
 
         public bool ShouldAddProjectItem(string filePath)

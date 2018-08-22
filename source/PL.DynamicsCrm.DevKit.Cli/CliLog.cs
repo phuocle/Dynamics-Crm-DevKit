@@ -11,18 +11,16 @@ namespace PL.DynamicsCrm.DevKit.Cli
         public const ConsoleColor COLOR_RED = ConsoleColor.Red;
         public const ConsoleColor COLOR_BLUE = ConsoleColor.Blue;
         public const ConsoleColor COLOR_MAGENTA = ConsoleColor.Magenta;
-        public const int STAR_LENGTH = 110;
+        public const int STAR_LENGTH = 60;
 
         public static void WriteLine(params object[] values)
         {
             var oldConsoleColor = Console.ForegroundColor;
-            foreach(var value in values)
-            {
+            foreach (var value in values)
                 if (value is ConsoleColor)
-                    Console.ForegroundColor = (ConsoleColor)value;
+                    Console.ForegroundColor = (ConsoleColor) value;
                 else
                     Console.Write(value);
-            }
             Console.WriteLine();
             Console.ForegroundColor = oldConsoleColor;
         }

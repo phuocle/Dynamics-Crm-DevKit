@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace PL.DynamicsCrm.DevKit.Shared
@@ -7,11 +8,14 @@ namespace PL.DynamicsCrm.DevKit.Shared
     {
         public static string ReadEmbeddedResource(string path)
         {
-            var data = string.Empty;
+            string data;
             var assembly = Assembly.GetExecutingAssembly();
-            using (Stream stream = assembly.GetManifestResourceStream(path))
-            using (StreamReader reader = new StreamReader(stream))
+            using (var stream = assembly.GetManifestResourceStream(path))
+            using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
+            {
                 data = reader.ReadToEnd();
+            }
+
             return data;
         }
     }

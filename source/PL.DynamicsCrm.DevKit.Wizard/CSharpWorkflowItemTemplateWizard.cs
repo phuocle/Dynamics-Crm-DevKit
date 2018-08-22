@@ -1,13 +1,15 @@
-﻿using Microsoft.VisualStudio.TemplateWizard;
-using System.Collections.Generic;
-using EnvDTE;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
+using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
-    class CSharpWorkflowItemTemplateWizard : IWizard
+    internal class CSharpWorkflowItemTemplateWizard : IWizard
     {
-        private DTE DTE { get; set; }
+        private DTE Dte { get; set; }
+
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
         }
@@ -24,25 +26,42 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
+            WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewItem)
             {
-                DTE = (DTE)automationObject;
-                var projects = (object[])DTE.ActiveSolutionProjects;
-                var project = (Project)projects[0];
-                var entityName = project.Name.Split('.')[3];
-                var form = new FormProject(FormType.WorkflowItem, DTE, entityName);
+                Dte = (DTE) automationObject;
+                var projects = (object[]) Dte.ActiveSolutionProjects;
+                var project = (Project) projects[0];
+                var entityName = project.Name.Split('.')[project.Name.Split('.').Length - 1];
+                var form = new FormProject(FormType.WorkflowItem, Dte, entityName);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     replacementsDictionary.Add("$class$", form.ProjectName);
                     replacementsDictionary.Add("$EntityName$", entityName);
+                    var solutionFullName = Dte?.Solution?.FullName;
+                    var fInfo = new FileInfo(solutionFullName);
+                    var parts = fInfo.Name.Split(".".ToCharArray());
+                    replacementsDictionary.Add("$DevKitShared$", $"{GetName(parts)}Shared");
                 }
                 else
+                {
                     throw new WizardCancelledException("Cancel Click");
+                }
             }
             else
+            {
                 throw new WizardCancelledException("Cancel Click");
+            }
+        }
+
+        private string GetName(string[] parts)
+        {
+            var data = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                data += parts[i] + ".";
+            return data;
         }
 
         public bool ShouldAddProjectItem(string filePath)

@@ -1,10 +1,10 @@
-﻿using Microsoft.VisualStudio.TemplateWizard;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
-    class JavaScriptUtilityItemTemplateWizard : IWizard
+    internal class JavaScriptUtilityItemTemplateWizard : IWizard
     {
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -22,7 +22,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
+            WizardRunKind runKind, object[] customParams)
         {
             var parts = replacementsDictionary["$rootnamespace$"].Split(".".ToCharArray());
             replacementsDictionary.Add("$ProjectName$", $"{parts[1]}");

@@ -1,27 +1,53 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using System;
+using Microsoft.Xrm.Sdk;
+using $DevKitShared$;
 
 namespace $rootnamespace$
 {
-    [CrmPluginRegistration("$message$", "$logicalname$", StageEnum.$stage_string$, ExecutionModeEnum.$execution$, "", "$rootnamespace$.$entityname$.$class$$execution$", 1, IsolationModeEnum.Sandbox)]
-    public class $class$$execution$ : PluginBase
+    [CrmPluginRegistration("$message$", "$logicalname$", StageEnum.$stage_string$, ExecutionModeEnum.$execution$, "",
+    "$rootnamespace$.$entityname$.$class$$execution$", 1, IsolationModeEnum.Sandbox)]
+    public class $class$$execution$ : IPlugin
     {
 $privateclass$
-        public override void Execute()
+        private readonly string _unsecureString = null;
+        private readonly string _secureString = null;
+
+        public $class$$execution$(string unsecureString, string secureString)
         {
-            if (Plugin.Context.Stage != (int)StageEnum.$stage_string$) throw new InvalidPluginExecutionException("Stage does not equals $stage_string$");
-            if (Plugin.Context.PrimaryEntityName != "$logicalname$") throw new InvalidPluginExecutionException("PrimaryEntityName does not equals $logicalname$");
-            if (Plugin.Context.MessageName.ToLower() != "$message$".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals $message$");
-            if (Plugin.Context.Mode != (int)ExecutionModeEnum.$execution$) throw new InvalidPluginExecutionException("Execution does not equal $execution$");
-            var outputs = ExecuteCustomAction();
-            foreach (var output in outputs)
-                if (Plugin.Context.OutputParameters.Contains(output.Key))
-                    Plugin.Context.OutputParameters[output.Key] = output.Value;
+            if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
+            if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
         }
 
-        private ParameterCollection ExecuteCustomAction()
+        public void Execute(IServiceProvider serviceProvider)
+        {
+            var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
+            if (context == null) throw new InvalidPluginExecutionException("Initialize IPluginExecutionContext fail.");
+            var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
+            if (serviceFactory == null) throw new InvalidPluginExecutionException("Initialize IOrganizationServiceFactory fail.");
+            var service = serviceFactory.CreateOrganizationService(context.UserId);
+            if (service == null) throw new InvalidPluginExecutionException("Initialize IOrganizationService fail.");
+            var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
+            if (tracing == null) throw new InvalidPluginExecutionException("Initialize ITracingService fail.");
+            if (context.Stage != (int)StageEnum.$stage_string$) throw new InvalidPluginExecutionException("Stage does not equals $stage_string$");
+            if (context.PrimaryEntityName.ToLower() != "$logicalname$".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals $logicalname$");
+            if (context.MessageName.ToLower() != "$message$".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals $message$");
+            if (context.Mode != (int)ExecutionModeEnum.$execution$) throw new InvalidPluginExecutionException("Execution does not equals $execution$");
+
+            Debugger.Begin(tracing, context);
+
+            var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
+            foreach (var output in outputs)
+                if (context.OutputParameters.Contains(output.Key))
+                    context.OutputParameters[output.Key] = output.Value;
+
+            Debugger.End(tracing, context);
+        }
+
+        private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE
+
             return outputs;
         }
     }

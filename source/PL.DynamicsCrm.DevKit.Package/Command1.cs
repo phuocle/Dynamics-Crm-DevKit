@@ -29,7 +29,7 @@ namespace PL.DynamicsCrm.DevKit.Package
         private Command1(Microsoft.VisualStudio.Shell.Package package)
         {
             this.package = package ?? throw new ArgumentNullException("package");
-            OleMenuCommandService commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            var commandService = ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
                 var menuCommandID = new CommandID(CommandSet, CommandId);
@@ -40,47 +40,56 @@ namespace PL.DynamicsCrm.DevKit.Package
             }
         }
 
+        public static Command1 Instance { get; private set; }
+
+        private IServiceProvider ServiceProvider => package;
+
         private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
         {
-            OleMenuCommand menuCommand = sender as OleMenuCommand;
-            var dte = (DTE)ServiceProvider.GetService(typeof(DTE));
-            SelectedItem item = dte.SelectedItems.Item(1);
+            var menuCommand = sender as OleMenuCommand;
+            var dte = (DTE) ServiceProvider.GetService(typeof(DTE));
+            var item = dte.SelectedItems.Item(1);
             if (item == null) return;
             if (item.Name == null) return;
             var extension = item.Name.Substring(item.Name.LastIndexOf(".") + 1);
-            var allowExtions = new List<string> { "html", "htm", "js", "png", "gif", "jpg", "jpeg", "css", "ico", "xml", "xsl", "xslt", "xap" };
+            var allowExtions = new List<string>
+            {
+                "html",
+                "htm",
+                "js",
+                "png",
+                "gif",
+                "jpg",
+                "jpeg",
+                "css",
+                "ico",
+                "xml",
+                "xsl",
+                "xslt",
+                "xap"
+            };
             if (!allowExtions.Contains(extension))
             {
                 menuCommand.Visible = false;
                 return;
             }
+
             if (item.Name.EndsWith(".intellisense.js"))
             {
                 menuCommand.Visible = false;
                 return;
             }
+
             var solutionFullName = dte?.Solution?.FullName;
             var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
-            if (!File.Exists(devKitCrmConfigFile)) {
+            if (!File.Exists(devKitCrmConfigFile))
+            {
                 menuCommand.Visible = false;
                 return;
             }
+
             menuCommand.Visible = true;
-        }
-
-        public static Command1 Instance
-        {
-            get;
-            private set;
-        }
-
-        private IServiceProvider ServiceProvider
-        {
-            get
-            {
-                return this.package;
-            }
         }
 
         public static void Initialize(Microsoft.VisualStudio.Shell.Package package)
@@ -90,12 +99,13 @@ namespace PL.DynamicsCrm.DevKit.Package
 
         private void ShowError(string message)
         {
-            VsShellUtilities.ShowMessageBox(ServiceProvider, message, "ERROR", OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            VsShellUtilities.ShowMessageBox(ServiceProvider, message, "ERROR", OLEMSGICON.OLEMSGICON_INFO,
+                OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
 
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            var dte = (EnvDTE.DTE)this.ServiceProvider.GetService(typeof(EnvDTE.DTE));
+            var dte = (DTE) ServiceProvider.GetService(typeof(DTE));
             dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
             var activeDocument = dte.ActiveDocument;
             var solutionFullName = dte.Solution.FullName;
@@ -104,21 +114,23 @@ namespace PL.DynamicsCrm.DevKit.Package
 
             dte.StatusBar.Text = "Read PL.DynamicsCrm.DevKit.json config";
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(dte);
-            var defaultConnection = config.CrmConnections.Where(conn => conn.Name == config.DefaultCrmConnection).FirstOrDefault();
+            var defaultConnection = config.CrmConnections.Where(conn => conn.Name == config.DefaultCrmConnection)
+                .FirstOrDefault();
             if (defaultConnection == null)
             {
                 ShowError("Default Crm connection not found!");
                 goto CLEAR_STATUS;
             }
+
             if (string.IsNullOrEmpty(config.SolutionPrefix))
             {
                 ShowError("PL.DynamicsCrm.DevKit.json config not found SolutionPrefix data");
                 goto CLEAR_STATUS;
             }
+
             dte.StatusBar.Text = "Connecting ...";
             var check = SharedGlobals.GetGlobal("CrmService", dte);
             if (check == null)
-            {
                 try
                 {
                     var uri = new Uri(defaultConnection.Url);
@@ -133,8 +145,8 @@ namespace PL.DynamicsCrm.DevKit.Package
                     ShowError("Connecting Fail!");
                     goto CLEAR_STATUS;
                 }
-            }
-            var crmService = (OrganizationServiceProxy)SharedGlobals.GetGlobal("CrmService", dte);
+
+            var crmService = (OrganizationServiceProxy) SharedGlobals.GetGlobal("CrmService", dte);
             dte.StatusBar.Text = "Connected ...";
 
             var fileName = activeDocument.FullName;
@@ -143,11 +155,12 @@ namespace PL.DynamicsCrm.DevKit.Package
             for (var i = 1; i < parts.Length; i++)
             {
                 var value = $"{config.SolutionPrefix}/{parts[i]}/";
-                for(var j = i + 1; j <parts.Length; j++)
+                for (var j = i + 1; j < parts.Length; j++)
                     value += $"{parts[j]}/";
                 if (value.EndsWith("/")) value = value.TrimEnd("/".ToCharArray());
                 condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>";
             }
+
             var fetchXml = $@"
 <fetch>
   <entity name='webresource'>
@@ -163,10 +176,11 @@ namespace PL.DynamicsCrm.DevKit.Package
                 ShowError("Web resource not found!");
                 goto CLEAR_STATUS;
             }
+
             var webResourceId = rows.Entities[0].Id;
             try
             {
-                ExecuteMultipleRequest emRequest = new ExecuteMultipleRequest
+                var emRequest = new ExecuteMultipleRequest
                 {
                     Requests = new OrganizationRequestCollection(),
                     Settings = new ExecuteMultipleSettings
@@ -175,48 +189,46 @@ namespace PL.DynamicsCrm.DevKit.Package
                         ReturnResponses = true
                     }
                 };
-                OrganizationRequestCollection requests = new OrganizationRequestCollection();
-                string publishXml = "<importexportxml><webresources>";
-                Entity webResource = new Entity("webresource") { Id = webResourceId };
-                string content = File.ReadAllText(fileName);
+                var requests = new OrganizationRequestCollection();
+                var publishXml = "<importexportxml><webresources>";
+                var webResource = new Entity("webresource") {Id = webResourceId};
+                var content = File.ReadAllText(fileName);
                 webResource["content"] = EncodeString(content);
-                UpdateRequest request = new UpdateRequest { Target = webResource };
+                var request = new UpdateRequest {Target = webResource};
                 requests.Add(request);
                 publishXml += "<webresource>{" + webResource.Id + "}</webresource>";
                 publishXml += "</webresources></importexportxml>";
-                PublishXmlRequest pubRequest = new PublishXmlRequest { ParameterXml = publishXml };
+                var pubRequest = new PublishXmlRequest {ParameterXml = publishXml};
                 requests.Add(pubRequest);
                 emRequest.Requests = requests;
                 dte.StatusBar.Text = "Updating & publishing web resource...";
 
-                ExecuteMultipleResponse emResponse = (ExecuteMultipleResponse)crmService.Execute(emRequest);
-                bool wasError = false;
+                var emResponse = (ExecuteMultipleResponse) crmService.Execute(emRequest);
+                var wasError = false;
                 foreach (var responseItem in emResponse.Responses)
                 {
                     if (responseItem.Fault == null) continue;
                     wasError = true;
                 }
+
                 if (wasError)
-                {
-                    ShowError("Error Updating And Publishing Web Resources To CRM. See the Output Window for additional details.");
-                    goto CLEAR_STATUS;
-                }
+                    ShowError(
+                        "Error Updating And Publishing Web Resources To CRM. See the Output Window for additional details.");
                 else
-                {
                     dte.StatusBar.Text = "Updated And Published Web Resource";
-                    goto CLEAR_STATUS;
-                }
             }
             catch (FaultException<OrganizationServiceFault> crmEx)
             {
-                ShowError("Error Updating And Publishing Web Resource To CRM: " + crmEx.Message + Environment.NewLine + crmEx.StackTrace);
-                goto CLEAR_STATUS;
+                ShowError("Error Updating And Publishing Web Resource To CRM: " + crmEx.Message + Environment.NewLine +
+                          crmEx.StackTrace);
             }
             catch (Exception ex)
             {
-                ShowError("Error Updating And Publishing Web Resource To CRM: " + ex.Message + Environment.NewLine + ex.StackTrace);
+                ShowError("Error Updating And Publishing Web Resource To CRM: " + ex.Message + Environment.NewLine +
+                          ex.StackTrace);
             }
-CLEAR_STATUS:
+
+            CLEAR_STATUS:
             dte.StatusBar.Clear();
             dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
         }

@@ -47,6 +47,7 @@
 		<Folder Include="entities\" />
 		<Folder Include="lib\" />
     <Folder Include="images\"/>
+    <Folder Include="test\"/>
 		<Compile Include="Properties\AssemblyInfo.cs" />
 		<Content Include="Web.config" />
 		<None Include="Web.Debug.config">
@@ -56,6 +57,16 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="deploy.bat" />
+    <None Include="test.bat" />
+    <None Include="chutzpah.json" />
+    <None Include="package.json" />
+    <None Include="package-lock.json" />
+    <None Include="packages.config" />
+    <Content Include="test\DevKitMock.js" />
+    <Content Include="test\requireConfig.js" />
+    <Content Include="test\mock.intellisense.js" />
+    <Content Include="lib\WebApiClient.js" />
+    <Content Include="entities\devkit.intellisense.js" />
 	</ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

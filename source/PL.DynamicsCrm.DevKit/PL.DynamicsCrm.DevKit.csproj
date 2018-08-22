@@ -68,48 +68,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\01.JavaScriptCrmIntellisenseItemTemplate\01.JavaScriptCrmIntellisenseItemTemplate.csproj">
-      <Project>{8F72FDF2-1875-4761-BFDA-5CA64D2FE477}</Project>
-      <Name>01.JavaScriptCrmIntellisenseItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\02.JavaScriptWebApiIntellisenseItemTemplate\02.JavaScriptWebApiIntellisenseItemTemplate.csproj">
-      <Project>{FDA55473-5905-48AB-8A77-08287822447B}</Project>
-      <Name>02.JavaScriptWebApiIntellisenseItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\03.JavaScriptCrmFormItemTemplate\03.JavaScriptFormBaseItemTemplate.csproj">
-      <Project>{D249A37F-0553-49CC-8A0D-BF7186056FCF}</Project>
-      <Name>03.JavaScriptFormBaseItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\04.JavaScriptUtilityItemTemplate\04.JavaScriptUtilityItemTemplate.csproj">
-      <Project>{378330E5-EA1B-4D39-B336-3D8924F9A925}</Project>
-      <Name>04.JavaScriptUtilityItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\05.JavaScriptRequireItemTemplate\05.JavaScriptRequireItemTemplate.csproj">
-      <Project>{04D577B3-11F0-4349-868C-7C043EBF48E4}</Project>
-      <Name>05.JavaScriptRequireItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\06.JavaScriptWebApiClientItemTemplate\06.JavaScriptWebApiClientItemTemplate.csproj">
-      <Project>{11CB673C-4CBD-4B69-A6A1-78E9C93CEBEE}</Project>
-      <Name>06.JavaScriptWebApiClientItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
     <ProjectReference Include="..\07.JavaScriptWebApiItemTemplate\07.JavaScriptWebApiItemTemplate.csproj">
       <Project>{CCBD1381-E6A6-4A57-9853-E93A27A33F11}</Project>
       <Name>07.JavaScriptWebApiItemTemplate</Name>
@@ -194,51 +152,9 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\19.CSharpDateItemTemplate\19.CSharpDateItemTemplate.csproj">
-      <Project>{144C32F4-530D-4CF6-A549-74CCA0351666}</Project>
-      <Name>19.CSharpDateItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\20.CSharpPluginCoreItemTemplate\20.CSharpPluginCoreItemTemplate.csproj">
-      <Project>{1AC3A55F-52CE-4CB5-B0B6-7F2C3C2BD199}</Project>
-      <Name>20.CSharpPluginCoreItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
     <ProjectReference Include="..\21.CSharpLateBoundClassItemTemplate\21.CSharpLateBoundClassItemTemplate.csproj">
       <Project>{921403BE-B301-40D8-B023-083C4747B50D}</Project>
       <Name>21.CSharpLateBoundClassItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\22.CSharpBaseEntityItemTemplate\22.CSharpEntityBaseItemTemplate.csproj">
-      <Project>{DDB22285-B918-428A-A6EA-6D9E44A3EDA1}</Project>
-      <Name>22.CSharpEntityBaseItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\23.CSharpJsonItemTemplate\23.CSharpJsonItemTemplate.csproj">
-      <Project>{BAD4C5D2-BBC0-43E9-8C19-AB05EABF014C}</Project>
-      <Name>23.CSharpJsonItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\24.CSharpExtensionItemTemplate\24.CSharpExtensionItemTemplate.csproj">
-      <Project>{CFDAC9A0-3CA6-44CD-BBBF-459C3A5B6790}</Project>
-      <Name>24.CSharpExtensionItemTemplate</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\25.JavaScriptWebApiBaseItemTemplate\25.JavaScriptWebApiBaseItemTemplate.csproj">
-      <Project>{39425D9D-04A9-40B8-A35C-005B2500D006}</Project>
-      <Name>25.JavaScriptWebApiBaseItemTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
@@ -268,6 +184,27 @@
       <Project>{ACFB5F3D-6156-47F4-A879-C9552E7C334C}</Project>
       <Name>29.ReportProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\31.JavaScriptFormItemTemplate\31.JavaScriptFormItemTemplate.csproj">
+      <Project>{f3432efe-5fe3-46f4-9335-703e658c022e}</Project>
+      <Name>31.JavaScriptFormItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\32.JavaScriptTestItemTemplate\32.JavaScriptTestItemTemplate.csproj">
+      <Project>{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5}</Project>
+      <Name>32.JavaScriptTestItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\33.CSharpLateBoundClassItemTemplate2\33.CSharpLateBoundClassItemTemplate2.csproj">
+      <Project>{94B6AC50-3D82-4060-9C1D-3486F2046EEA}</Project>
+      <Name>33.CSharpLateBoundClassItemTemplate2</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>

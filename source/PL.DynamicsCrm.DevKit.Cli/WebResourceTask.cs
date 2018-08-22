@@ -1,24 +1,19 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using PL.DynamicsCrm.DevKit.Cli.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace PL.DynamicsCrm.DevKit.Cli
 {
     public class WebResourceTask
     {
-        private CrmServiceClient CrmServiceClient { get; set; } = null;
-        private WebResource WebResourceJson { get; set; } = null;
-        private string CurrentDirectory { get; set; } = null;
-        private string Version { get; set; }
-        private List<Guid> WebResourcesToPublish { get; set; }
-
-        public WebResourceTask(CrmServiceClient crmServiceClient, string currentDirectory, WebResource webResourceJson, string version)
+        public WebResourceTask(CrmServiceClient crmServiceClient, string currentDirectory, WebResource webResourceJson,
+            string version)
         {
             CrmServiceClient = crmServiceClient;
             CurrentDirectory = currentDirectory;
@@ -27,145 +22,65 @@ namespace PL.DynamicsCrm.DevKit.Cli
             WebResourcesToPublish = new List<Guid>();
         }
 
+        private CrmServiceClient CrmServiceClient { get; }
+        private WebResource WebResourceJson { get; }
+        private string CurrentDirectory { get; }
+        private string Version { get; }
+        private List<Guid> WebResourcesToPublish { get; }
+
+        private List<WebResourceFile> WebResourceFiles
+        {
+            get
+            {
+                var items = new List<WebResourceFile>();
+                var includefiles = new List<string>();
+                foreach (var pattern in WebResourceJson.includefiles)
+                {
+                    var filePattern = $"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\{pattern}";
+                    filePattern = filePattern.Replace(@"\\", @"\");
+                    includefiles.AddRange(GetFiles(filePattern));
+                }
+
+                var excludefiles = new List<string>();
+                foreach (var pattern in WebResourceJson.excludefiles)
+                {
+                    var filePattern = $"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\{pattern}";
+                    filePattern = filePattern.Replace(@"\\", @"\");
+                    excludefiles.AddRange(GetFiles(filePattern));
+                }
+
+                var files = includefiles.Where(file => !excludefiles.Contains(file)).ToList();
+                foreach (var file in files)
+                {
+                    var name = WebResourceJson.prefix + "/" + file
+                                   .Substring($"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\".Replace(@"\\", @"\")
+                                       .Length).Replace("\\", "/");
+                    var webResourceFile = new WebResourceFile
+                    {
+                        file = file,
+                        version = Version,
+                        uniquename = name,
+                        displayname = name
+                    };
+                    items.Add(webResourceFile);
+                }
+
+                return items;
+            }
+        }
+
         public void Run()
         {
-            CliLog.WriteLine(CliLog.COLOR_MAGENTA, new String('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_MAGENTA, "BEGIN WEBRESOURCE TASKS");
-            CliLog.WriteLine(CliLog.COLOR_MAGENTA, new String('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "START WEBRESOURCE TASKS");
+            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             foreach (var webResourceFile in WebResourceFiles)
                 DeployWebResource(webResourceFile);
-            if (IsSupportWebResourceDependency())
-            {
-                foreach (var dependency in WebResourceJson.dependencies)
-                    UpdateDependency(dependency);
-            }
             if (WebResourcesToPublish.Count > 0)
                 PublishWebResources();
-            CliLog.WriteLine(CliLog.COLOR_MAGENTA, new String('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_MAGENTA, "END WEBRESOURCE TASKS");
-            CliLog.WriteLine(CliLog.COLOR_MAGENTA, new String('*', CliLog.STAR_LENGTH));
-        }
-
-        private void UpdateDependency(Dependency dependency)
-        {
-            var files = GetWebResourceFilesDependencies(dependency);
-            var dependencyXml = GetDependencyXml(dependency.dependencies);
-            foreach (var file in files)
-            {
-                var fetchData = new
-                {
-                    name = file.uniquename
-                };
-                var fetchXml = $@"
-<fetch>
-  <entity name='webresource'>
-    <attribute name='dependencyxml' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-  </entity>
-</fetch>";
-                var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                var existingDependencyXml = string.Empty;
-                if (rows.Entities.Count > 0)
-                    existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
-                if (existingDependencyXml != dependencyXml)
-                {
-                    var webResourceId = rows.Entities[0].Id;
-                    var enttiy = new Entity("webresource", webResourceId);
-                    enttiy["dependencyxml"] = dependencyXml;
-                    CliLog.WriteLine(CliLog.COLOR_BLUE, "Updated Dependency Webresource ", CliLog.COLOR_CYAN, file.uniquename);
-                    CrmServiceClient.Update(enttiy);
-                    if (!WebResourcesToPublish.Contains(webResourceId))
-                        WebResourcesToPublish.Add(webResourceId);
-                }
-            }
-        }
-
-        private string GetDependencyXml(List<string> dependencies)
-        {
-            var library = string.Empty;
-            foreach (var dependency in dependencies)
-            {
-                var fetchData = new
-                {
-                    name = dependency
-                };
-                var fetchXml = $@"
-<fetch>
-  <entity name='webresource'>
-    <attribute name='webresourceid' />
-    <attribute name='languagecode' />
-    <attribute name='name' />
-    <attribute name='displayname' />
-    <attribute name='description' />
-    <attribute name='webresourceidunique' />
-    <filter type='and'>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-    </filter>
-  </entity>
-</fetch>";
-                var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                if (rows.Entities.Count == 0) return string.Empty;
-                var entity = rows.Entities[0];
-                var name = entity.GetAttributeValue<string>("name");
-                var displayname = entity.GetAttributeValue<string>("displayname");
-                var description = entity.GetAttributeValue<string>("description");
-                var webresourceidunique = entity.GetAttributeValue<Guid>("webresourceidunique");
-                var languagecode = entity.GetAttributeValue<int?>("languagecode");
-                library += $"<Library name='{name}' displayName='{displayname}' languagecode='{languagecode}' description='{description}' libraryUniqueId='{{{webresourceidunique}}}'/>";
-            }
-            var _dependencyXml = $"<Dependencies><Dependency componentType='WebResource'>{library}</Dependency></Dependencies>";
-            _dependencyXml = _dependencyXml.Replace("'", "\"");
-            return _dependencyXml;
-        }
-
-        private List<WebResourceFile> GetWebResourceFilesDependencies(Dependency dependency)
-        {
-            var items = new List<WebResourceFile>();
-            var includefiles = new List<string>();
-            foreach (var pattern in dependency.includefiles)
-            {
-                var filePattern = $"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\{pattern}";
-                filePattern = filePattern.Replace(@"\\", @"\");
-                includefiles.AddRange(GetFiles(filePattern));
-            }
-            var excludefiles = new List<string>();
-            foreach (var pattern in dependency.excludefiles)
-            {
-                var filePattern = $"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\{pattern}";
-                filePattern = filePattern.Replace(@"\\", @"\");
-                excludefiles.AddRange(GetFiles(filePattern));
-            }
-            var files = includefiles.Where(file => !excludefiles.Contains(file)).ToList<string>();
-            foreach (var file in files)
-            {
-                var name = WebResourceJson.prefix + "/" + file.Substring(($"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\").Replace(@"\\", @"\").Length).Replace("\\", "/");
-                var webResourceFile = new WebResourceFile()
-                {
-                    file = file,
-                    version = Version,
-                    uniquename = name,
-                    displayname = name
-                };
-                items.Add(webResourceFile);
-            }
-            return items;
-        }
-
-        private enum WebResourceWebResourceType
-        {
-            Webpage_HTML = 1,
-            StyleSheet_CSS = 2,
-            Script_JScript = 3,
-            Data_XML = 4,
-            PNGformat = 5,
-            JPGformat = 6,
-            GIFformat = 7,
-            Silverlight_XAP = 8,
-            StyleSheet_XSL = 9,
-            ICOformat = 10,
-            String_RESX = 11
+            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "END WEBRESOURCE TASKS");
+            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
         }
 
         private Entity DeployWebResource(WebResourceFile webResourceFile)
@@ -186,13 +101,14 @@ namespace PL.DynamicsCrm.DevKit.Cli
 </fetch>";
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             var content = string.Empty;
-            Guid webResourceId = Guid.Empty;
+            var webResourceId = Guid.Empty;
             if (rows.Entities.Count > 0)
             {
                 var entity = rows.Entities[0];
                 webResourceId = entity.Id;
                 content = entity?["content"]?.ToString();
             }
+
             var fileContent = Convert.ToBase64String(File.ReadAllBytes(webResourceFile.file));
             if (fileContent == content)
                 return null;
@@ -240,19 +156,23 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     filetype = WebResourceWebResourceType.Silverlight_XAP;
                     break;
             }
-            webResource["webresourcetype"] = new OptionSetValue((int)filetype);
+
+            webResource["webresourcetype"] = new OptionSetValue((int) filetype);
             if (webResourceId == Guid.Empty)
             {
-                CliLog.WriteLine(CliLog.COLOR_GREEN, "Creating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file, CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
+                CliLog.WriteLine(CliLog.COLOR_GREEN, "Creating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file,
+                    CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
                 webResourceId = CrmServiceClient.Create(webResource);
                 webResource["webresourceid"] = webResourceId;
             }
             else
             {
                 webResource["webresourceid"] = webResourceId;
-                CliLog.WriteLine(CliLog.COLOR_BLUE, "Updating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file, CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
+                CliLog.WriteLine(CliLog.COLOR_BLUE, "Updating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file,
+                    CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
                 CrmServiceClient.Update(webResource);
             }
+
             WebResourcesToPublish.Add(webResourceId);
             AddWebResourceToSolution(webResource);
             return webResource;
@@ -284,14 +204,16 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0)
             {
-                var request = new AddSolutionComponentRequest()
+                var request = new AddSolutionComponentRequest
                 {
                     AddRequiredComponents = true,
                     ComponentType = 61,
                     ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
                     SolutionUniqueName = WebResourceJson.solution
                 };
-                CliLog.WriteLine(CliLog.COLOR_GREEN, "\tAdding WebResource: ", CliLog.COLOR_CYAN, $"{webResource["name"]} ", CliLog.COLOR_GREEN, "to solution: ", CliLog.COLOR_CYAN, $"{WebResourceJson.solution}");
+                CliLog.WriteLine(CliLog.COLOR_GREEN, "\tAdding WebResource: ", CliLog.COLOR_CYAN,
+                    $"{webResource["name"]} ", CliLog.COLOR_GREEN, "to solution: ", CliLog.COLOR_CYAN,
+                    $"{WebResourceJson.solution}");
                 CrmServiceClient.Execute(request);
             }
         }
@@ -311,57 +233,26 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CrmServiceClient.Execute(publish);
         }
 
-        private bool IsSupportWebResourceDependency()
-        {
-            var request = new RetrieveVersionRequest();
-            var response = (RetrieveVersionResponse)CrmServiceClient.Execute(request);
-            var version = new Version(response.Version);
-            if (version >= new Version("9.0"))
-                return true;
-            return false;
-        }
-
-        private List<WebResourceFile> WebResourceFiles
-        {
-            get
-            {
-                var items = new List<WebResourceFile>();
-                var includefiles = new List<string>();
-                foreach (var pattern in WebResourceJson.includefiles)
-                {
-                    var filePattern = $"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\{pattern}";
-                    filePattern = filePattern.Replace(@"\\", @"\");
-                    includefiles.AddRange(GetFiles(filePattern));
-                }
-                var excludefiles = new List<string>();
-                foreach (var pattern in WebResourceJson.excludefiles)
-                {
-                    var filePattern = $"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\{pattern}";
-                    filePattern = filePattern.Replace(@"\\", @"\");
-                    excludefiles.AddRange(GetFiles(filePattern));
-                }
-                var files = includefiles.Where(file => !excludefiles.Contains(file)).ToList<string>();
-                foreach (var file in files)
-                {
-                    var name = WebResourceJson.prefix + "/" + file.Substring(($"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\").Replace(@"\\", @"\") .Length).Replace("\\", "/");
-                    var webResourceFile = new WebResourceFile()
-                    {
-                        file = file,
-                        version = Version,
-                        uniquename = name,
-                        displayname = name
-                    };
-                    items.Add(webResourceFile);
-                }                
-                return items;
-            }
-        }
-
         private List<string> GetFiles(string filePattern)
         {
             var folder = filePattern.Substring(0, filePattern.LastIndexOf("\\"));
             var pattern = filePattern.Substring(folder.Length + 1);
-            return Directory.GetFiles(folder, pattern).ToList<string>();
+            return Directory.GetFiles(folder, pattern).ToList();
+        }
+
+        private enum WebResourceWebResourceType
+        {
+            Webpage_HTML = 1,
+            StyleSheet_CSS = 2,
+            Script_JScript = 3,
+            Data_XML = 4,
+            PNGformat = 5,
+            JPGformat = 6,
+            GIFformat = 7,
+            Silverlight_XAP = 8,
+            StyleSheet_XSL = 9,
+            ICOformat = 10,
+            String_RESX = 11
         }
     }
 }

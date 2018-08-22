@@ -1,17 +1,15 @@
-﻿using Microsoft.VisualStudio.TemplateWizard;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EnvDTE;
 using System.IO;
+using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
+using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
     public class SharedProjectTemplateWizard : IWizard
     {
-        private DTE DTE { get; set; }
+        private DTE Dte { get; set; }
         private Project Project { get; set; }
         private string ProjectName { get; set; }
 
@@ -32,24 +30,50 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public void RunFinished()
         {
             var projectFullName = Project.FullName;
-            DTE.Solution.Remove(Project);
+            Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
-            var oldDir = dInfoProject.FullName;
-            dInfoProject.MoveTo(dInfoProject.Parent.FullName + "\\" + ProjectName);
-            DTE.Solution.AddFromFile(dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName + ".shproj");
-            DTE.Solution.SaveAs(DTE.Solution.FullName);
+            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
+            var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
+            if (Directory.Exists(folder))
+                try
+                {
+                    Directory.Delete(folder, true);
+                }
+                catch
+                {
+                    // ignored
+                }
+            dInfoProject.MoveTo(folder);
+            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".shproj");
+            Dte.Solution.SaveAs(Dte.Solution.FullName);
+            var tfs = new Tfs(Dte);
+            tfs.Undo(fInfoProject.DirectoryName);
+            tfs.Add(dInfoProject.FullName);
+            Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
+            WizardRunKind runKind, object[] customParams)
         {
-            DTE = (DTE)automationObject;
+            Dte = (DTE) automationObject;
 
-            var solutionFullName = DTE?.Solution?.FullName;
-            var fInfo = new FileInfo(solutionFullName);
-            var parts = fInfo?.Name?.Split(".".ToCharArray());
-            ProjectName = $"{parts[0]}.{parts[1]}.{FormType.Shared.ToString()}";
+            var solutionFullName = Dte?.Solution?.FullName;
+            if (solutionFullName != null)
+            {
+                var fInfo = new FileInfo(solutionFullName);
+                var parts = fInfo.Name.Split(".".ToCharArray());
+                ProjectName = GetName(parts) +  $"{FormType.Shared.ToString()}";
+            }
+            replacementsDictionary.Add("$rootnamespace$", ProjectName);
             replacementsDictionary.Add("$namespace$", ProjectName);
+        }
+
+        private string GetName(string[] parts)
+        {
+            var data = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                data += parts[i] + ".";
+            return data;
         }
 
         public bool ShouldAddProjectItem(string filePath)

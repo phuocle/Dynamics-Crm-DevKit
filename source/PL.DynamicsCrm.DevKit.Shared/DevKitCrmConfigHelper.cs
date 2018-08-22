@@ -1,7 +1,7 @@
-﻿using EnvDTE;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using EnvDTE;
 
 namespace PL.DynamicsCrm.DevKit.Shared
 {
@@ -9,23 +9,29 @@ namespace PL.DynamicsCrm.DevKit.Shared
     {
         private const string INDENT_STRING = "    ";
 
-        static string FormatJson(string json)
+        private static string FormatJson(string json)
         {
-            int indentation = 0;
-            int quoteCount = 0;
+            var indentation = 0;
+            var quoteCount = 0;
             var result =
                 from ch in json
                 let quotes = ch == '"' ? quoteCount++ : quoteCount
-                let lineBreak = ch == ',' && quotes % 2 == 0 ? ch + Environment.NewLine + String.Concat(Enumerable.Repeat(INDENT_STRING, indentation)) : null
-                let openChar = ch == '{' || ch == '[' ? ch + Environment.NewLine + String.Concat(Enumerable.Repeat(INDENT_STRING, ++indentation)) : ch.ToString()
-                let closeChar = ch == '}' || ch == ']' ? Environment.NewLine + String.Concat(Enumerable.Repeat(INDENT_STRING, --indentation)) + ch : ch.ToString()
+                let lineBreak = ch == ',' && quotes % 2 == 0
+                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(INDENT_STRING, indentation))
+                    : null
+                let openChar = ch == '{' || ch == '['
+                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(INDENT_STRING, ++indentation))
+                    : ch.ToString()
+                let closeChar = ch == '}' || ch == ']'
+                    ? Environment.NewLine + string.Concat(Enumerable.Repeat(INDENT_STRING, --indentation)) + ch
+                    : ch.ToString()
                 select lineBreak == null
-                            ? openChar.Length > 1
-                                ? openChar
-                                : closeChar
-                            : lineBreak;
+                    ? openChar.Length > 1
+                        ? openChar
+                        : closeChar
+                    : lineBreak;
 
-            return String.Concat(result);
+            return string.Concat(result);
         }
 
         public static void SetDevKitCrmConfig(DTE dte, DevKitCrmConfig devKitCrmConfig)

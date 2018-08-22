@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox = new System.Windows.Forms.GroupBox();
+            this.btnLoadForms = new System.Windows.Forms.Button();
+            this.chkListForm = new System.Windows.Forms.CheckedListBox();
             this.chkOthers = new System.Windows.Forms.CheckBox();
             this.btnDefaultNetVersion = new System.Windows.Forms.Button();
             this.cboNetVersion = new System.Windows.Forms.ComboBox();
@@ -43,11 +45,14 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.lblProject = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox
             // 
+            this.groupBox.Controls.Add(this.btnLoadForms);
+            this.groupBox.Controls.Add(this.chkListForm);
             this.groupBox.Controls.Add(this.chkOthers);
             this.groupBox.Controls.Add(this.btnDefaultNetVersion);
             this.groupBox.Controls.Add(this.cboNetVersion);
@@ -63,20 +68,45 @@
             this.groupBox.Controls.Add(this.btnOk);
             this.groupBox.Controls.Add(this.lblProject);
             this.groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox.Location = new System.Drawing.Point(10, 0);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(30, 31, 30, 31);
+            this.groupBox.Location = new System.Drawing.Point(5, 0);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(25);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(10, 31, 30, 31);
-            this.groupBox.Size = new System.Drawing.Size(590, 179);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(5, 25, 5, 2);
+            this.groupBox.Size = new System.Drawing.Size(570, 330);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
+            // 
+            // btnLoadForms
+            // 
+            this.btnLoadForms.Enabled = false;
+            this.btnLoadForms.Location = new System.Drawing.Point(9, 73);
+            this.btnLoadForms.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.btnLoadForms.Name = "btnLoadForms";
+            this.btnLoadForms.Size = new System.Drawing.Size(150, 30);
+            this.btnLoadForms.TabIndex = 22;
+            this.btnLoadForms.Text = "Load Forms";
+            this.btnLoadForms.UseVisualStyleBackColor = true;
+            this.btnLoadForms.Visible = false;
+            this.btnLoadForms.Click += new System.EventHandler(this.btnLoadForms_Click);
+            // 
+            // chkListForm
+            // 
+            this.chkListForm.FormattingEnabled = true;
+            this.chkListForm.Location = new System.Drawing.Point(9, 107);
+            this.chkListForm.Margin = new System.Windows.Forms.Padding(2);
+            this.chkListForm.Name = "chkListForm";
+            this.chkListForm.Size = new System.Drawing.Size(388, 220);
+            this.chkListForm.TabIndex = 21;
+            this.chkListForm.Visible = false;
+            this.chkListForm.SelectedIndexChanged += new System.EventHandler(this.chkListForm_SelectedIndexChanged);
             // 
             // chkOthers
             // 
             this.chkOthers.AutoSize = true;
-            this.chkOthers.Location = new System.Drawing.Point(511, 25);
+            this.chkOthers.Location = new System.Drawing.Point(471, 47);
+            this.chkOthers.Margin = new System.Windows.Forms.Padding(2);
             this.chkOthers.Name = "chkOthers";
-            this.chkOthers.Size = new System.Drawing.Size(76, 24);
+            this.chkOthers.Size = new System.Drawing.Size(70, 21);
             this.chkOthers.TabIndex = 20;
             this.chkOthers.Text = "Others";
             this.chkOthers.UseVisualStyleBackColor = true;
@@ -86,10 +116,10 @@
             // btnDefaultNetVersion
             // 
             this.btnDefaultNetVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDefaultNetVersion.Location = new System.Drawing.Point(279, 136);
-            this.btnDefaultNetVersion.Margin = new System.Windows.Forms.Padding(8);
+            this.btnDefaultNetVersion.Location = new System.Drawing.Point(282, 153);
+            this.btnDefaultNetVersion.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnDefaultNetVersion.Name = "btnDefaultNetVersion";
-            this.btnDefaultNetVersion.Size = new System.Drawing.Size(28, 28);
+            this.btnDefaultNetVersion.Size = new System.Drawing.Size(37, 28);
             this.btnDefaultNetVersion.TabIndex = 19;
             this.btnDefaultNetVersion.Text = "><";
             this.btnDefaultNetVersion.UseVisualStyleBackColor = true;
@@ -100,10 +130,10 @@
             this.cboNetVersion.DisplayMember = "Version";
             this.cboNetVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboNetVersion.FormattingEnabled = true;
-            this.cboNetVersion.Location = new System.Drawing.Point(136, 136);
-            this.cboNetVersion.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
+            this.cboNetVersion.Location = new System.Drawing.Point(115, 113);
+            this.cboNetVersion.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
             this.cboNetVersion.Name = "cboNetVersion";
-            this.cboNetVersion.Size = new System.Drawing.Size(132, 28);
+            this.cboNetVersion.Size = new System.Drawing.Size(111, 25);
             this.cboNetVersion.TabIndex = 18;
             this.cboNetVersion.ValueMember = "Version";
             this.cboNetVersion.SelectedIndexChanged += new System.EventHandler(this.cboNetVersion_SelectedIndexChanged);
@@ -111,44 +141,44 @@
             // lblNetVersion
             // 
             this.lblNetVersion.AutoSize = true;
-            this.lblNetVersion.Location = new System.Drawing.Point(6, 139);
-            this.lblNetVersion.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.lblNetVersion.Location = new System.Drawing.Point(2, 116);
+            this.lblNetVersion.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.lblNetVersion.Name = "lblNetVersion";
-            this.lblNetVersion.Size = new System.Drawing.Size(106, 20);
+            this.lblNetVersion.Size = new System.Drawing.Size(96, 17);
             this.lblNetVersion.TabIndex = 17;
             this.lblNetVersion.Text = ".NET Version:";
             // 
             // btnConnection
             // 
             this.btnConnection.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnection.Location = new System.Drawing.Point(479, 23);
-            this.btnConnection.Margin = new System.Windows.Forms.Padding(8);
+            this.btnConnection.Location = new System.Drawing.Point(519, 17);
+            this.btnConnection.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnConnection.Name = "btnConnection";
-            this.btnConnection.Size = new System.Drawing.Size(28, 28);
+            this.btnConnection.Size = new System.Drawing.Size(37, 27);
             this.btnConnection.TabIndex = 16;
             this.btnConnection.Text = "><";
             this.btnConnection.UseVisualStyleBackColor = true;
-            this.btnConnection.Click += new System.EventHandler(this.btnConnection_Click);
+            this.btnConnection.Click += new System.EventHandler(this.btnConnection_ClickAsync);
             // 
             // cboEntity
             // 
             this.cboEntity.DisplayMember = "Name";
             this.cboEntity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboEntity.FormattingEnabled = true;
-            this.cboEntity.Location = new System.Drawing.Point(136, 23);
-            this.cboEntity.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
+            this.cboEntity.Location = new System.Drawing.Point(115, 18);
+            this.cboEntity.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
             this.cboEntity.Name = "cboEntity";
-            this.cboEntity.Size = new System.Drawing.Size(329, 28);
+            this.cboEntity.Size = new System.Drawing.Size(400, 25);
             this.cboEntity.TabIndex = 15;
             this.cboEntity.SelectedIndexChanged += new System.EventHandler(this.cboEntity_SelectedIndexChanged);
             // 
             // btnDefaultCrmVersion
             // 
             this.btnDefaultCrmVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDefaultCrmVersion.Location = new System.Drawing.Point(279, 93);
-            this.btnDefaultCrmVersion.Margin = new System.Windows.Forms.Padding(8);
+            this.btnDefaultCrmVersion.Location = new System.Drawing.Point(240, 153);
+            this.btnDefaultCrmVersion.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnDefaultCrmVersion.Name = "btnDefaultCrmVersion";
-            this.btnDefaultCrmVersion.Size = new System.Drawing.Size(28, 28);
+            this.btnDefaultCrmVersion.Size = new System.Drawing.Size(37, 28);
             this.btnDefaultCrmVersion.TabIndex = 14;
             this.btnDefaultCrmVersion.Text = "><";
             this.btnDefaultCrmVersion.UseVisualStyleBackColor = true;
@@ -157,21 +187,21 @@
             // lblProjectName
             // 
             this.lblProjectName.AutoSize = true;
-            this.lblProjectName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProjectName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProjectName.ForeColor = System.Drawing.Color.Red;
-            this.lblProjectName.Location = new System.Drawing.Point(133, 57);
+            this.lblProjectName.Location = new System.Drawing.Point(115, 46);
             this.lblProjectName.Margin = new System.Windows.Forms.Padding(0);
             this.lblProjectName.Name = "lblProjectName";
-            this.lblProjectName.Size = new System.Drawing.Size(35, 16);
+            this.lblProjectName.Size = new System.Drawing.Size(32, 17);
             this.lblProjectName.TabIndex = 13;
             this.lblProjectName.Text = "aaa";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(136, 23);
-            this.txtName.Margin = new System.Windows.Forms.Padding(8);
+            this.txtName.Location = new System.Drawing.Point(115, 18);
+            this.txtName.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(329, 26);
+            this.txtName.Size = new System.Drawing.Size(400, 23);
             this.txtName.TabIndex = 1;
             this.txtName.TabStop = false;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
@@ -179,10 +209,10 @@
             // lblCrmVersion
             // 
             this.lblCrmVersion.AutoSize = true;
-            this.lblCrmVersion.Location = new System.Drawing.Point(6, 96);
-            this.lblCrmVersion.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.lblCrmVersion.Location = new System.Drawing.Point(2, 78);
+            this.lblCrmVersion.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.lblCrmVersion.Name = "lblCrmVersion";
-            this.lblCrmVersion.Size = new System.Drawing.Size(100, 20);
+            this.lblCrmVersion.Size = new System.Drawing.Size(89, 17);
             this.lblCrmVersion.TabIndex = 11;
             this.lblCrmVersion.Text = "Crm Version:";
             // 
@@ -191,20 +221,20 @@
             this.cboCrmVersion.DisplayMember = "Version";
             this.cboCrmVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboCrmVersion.FormattingEnabled = true;
-            this.cboCrmVersion.Location = new System.Drawing.Point(136, 93);
-            this.cboCrmVersion.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
+            this.cboCrmVersion.Location = new System.Drawing.Point(115, 75);
+            this.cboCrmVersion.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
             this.cboCrmVersion.Name = "cboCrmVersion";
-            this.cboCrmVersion.Size = new System.Drawing.Size(132, 28);
+            this.cboCrmVersion.Size = new System.Drawing.Size(111, 25);
             this.cboCrmVersion.TabIndex = 2;
             this.cboCrmVersion.ValueMember = "Version";
             this.cboCrmVersion.SelectedIndexChanged += new System.EventHandler(this.cboCrmVersion_SelectedIndexChanged);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(479, 82);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(8);
+            this.btnCancel.Location = new System.Drawing.Point(406, 113);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(100, 34);
+            this.btnCancel.Size = new System.Drawing.Size(150, 30);
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -212,11 +242,11 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(363, 82);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(8);
+            this.btnOk.Location = new System.Drawing.Point(406, 75);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(100, 34);
-            this.btnOk.TabIndex = 3;
+            this.btnOk.Size = new System.Drawing.Size(150, 30);
+            this.btnOk.TabIndex = 0;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
@@ -224,26 +254,39 @@
             // lblProject
             // 
             this.lblProject.AutoSize = true;
-            this.lblProject.Location = new System.Drawing.Point(6, 26);
-            this.lblProject.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.lblProject.Location = new System.Drawing.Point(2, 21);
+            this.lblProject.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.lblProject.Name = "lblProject";
-            this.lblProject.Size = new System.Drawing.Size(108, 20);
+            this.lblProject.Size = new System.Drawing.Size(97, 17);
             this.lblProject.TabIndex = 2;
             this.lblProject.Text = "Project Name:";
             // 
+            // progressBar
+            // 
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar.Location = new System.Drawing.Point(5, 325);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(0);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(570, 5);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar.TabIndex = 24;
+            this.progressBar.Visible = false;
+            // 
             // FormProject
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(610, 189);
+            this.ClientSize = new System.Drawing.Size(580, 335);
+            this.ControlBox = false;
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBox);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormProject";
-            this.Padding = new System.Windows.Forms.Padding(10, 0, 10, 10);
+            this.Padding = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -271,5 +314,8 @@
         private System.Windows.Forms.Label lblNetVersion;
         private System.Windows.Forms.Button btnDefaultNetVersion;
         private System.Windows.Forms.CheckBox chkOthers;
+        private System.Windows.Forms.CheckedListBox chkListForm;
+        private System.Windows.Forms.Button btnLoadForms;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }

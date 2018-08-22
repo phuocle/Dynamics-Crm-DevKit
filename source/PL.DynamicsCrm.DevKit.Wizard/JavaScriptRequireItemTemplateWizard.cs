@@ -1,6 +1,6 @@
-﻿using EnvDTE;
+﻿using System.Collections.Generic;
+using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
-using System.Collections.Generic;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
@@ -22,7 +22,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
+            WizardRunKind runKind, object[] customParams)
         {
             var parts = replacementsDictionary["$rootnamespace$"].Split(".".ToCharArray());
             replacementsDictionary.Add("$ProjectName$", $"{parts[1]}");

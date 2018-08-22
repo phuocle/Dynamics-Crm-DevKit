@@ -1,13 +1,13 @@
-﻿using EnvDTE;
-using Microsoft.VisualStudio.TemplateWizard;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
     public class CSharpTestUiItemTemplateWizard : IWizard
     {
-        private DTE DTE { get; set; }
+        private DTE Dte { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -25,29 +25,30 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
+            WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewItem)
             {
-                DTE = (DTE)automationObject;
-                var projects = (object[])DTE.ActiveSolutionProjects;
-                var project = (Project)projects[0];
+                Dte = (DTE) automationObject;
+                var projects = (object[]) Dte.ActiveSolutionProjects;
+                var project = (Project) projects[0];
                 var entityName = string.Empty;
                 if (project.Name.Split('.').Length == 3)
                     entityName = "none";
                 else
                     entityName = project.Name.Split('.')[3];
                 var logicalName = entityName.ToLower();
-                var form = new FormProject(FormType.UiTestItem, DTE, entityName);
+                var form = new FormProject(FormType.UiTestItem, Dte, entityName);
                 if (form.ShowDialog() == DialogResult.OK)
-                {
                     replacementsDictionary.Add("$class$", form.ProjectName);
-                }
                 else
                     throw new WizardCancelledException("Cancel Click");
             }
             else
+            {
                 throw new WizardCancelledException("Cancel Click");
+            }
         }
 
         public bool ShouldAddProjectItem(string filePath)

@@ -1,5 +1,5 @@
-﻿using PL.DynamicsCrm.DevKit.Shared.Xrm;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using PL.DynamicsCrm.DevKit.Shared.Xrm;
 
 namespace PL.DynamicsCrm.DevKit.Shared
 {

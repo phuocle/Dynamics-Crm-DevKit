@@ -69,6 +69,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="SimpleJson.cs" />
+    <None Include="Date.cs" />
+    <None Include="PluginCore.cs" />
+    <None Include="Extension.cs" />
+    <None Include="EntityBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

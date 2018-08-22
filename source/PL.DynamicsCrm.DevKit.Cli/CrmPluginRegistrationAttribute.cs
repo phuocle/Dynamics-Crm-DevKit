@@ -390,7 +390,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
     public enum PluginStepOperationEnum
     {
         Delete = 0,
-        Deactivate = 1,
+        Deactivate = 1
     }
 
     public enum StageEnum
@@ -405,7 +405,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public class CrmPluginRegistrationAttribute : Attribute
     {
-        public CrmPluginRegistrationAttribute(string message, string entityLogicalName, StageEnum stage, ExecutionModeEnum executionMode, string filteringAttributes, string stepName, int executionOrder, IsolationModeEnum isolationModel)
+        public CrmPluginRegistrationAttribute(string message, string entityLogicalName, StageEnum stage,
+            ExecutionModeEnum executionMode, string filteringAttributes, string stepName, int executionOrder,
+            IsolationModeEnum isolationModel)
         {
             Message = message;
             EntityLogicalName = entityLogicalName;
@@ -420,28 +422,34 @@ namespace PL.DynamicsCrm.DevKit.Cli
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="message">Message Name</param>
         /// <param name="entityLogicalName"></param>
         /// <param name="stage"></param>
         /// <param name="executionMode"></param>
-        /// <param name="filteringAttributes">Comma separated list of attributes that will trigger this step. Leave null for all attributes.</param>
+        /// <param name="filteringAttributes">
+        ///     Comma separated list of attributes that will trigger this step. Leave null for all
+        ///     attributes.
+        /// </param>
         /// <param name="stepName"></param>
         /// <param name="executionOrder"></param>
         /// <param name="isolationModel"></param>
-        public CrmPluginRegistrationAttribute(MessageNameEnum message, string entityLogicalName, StageEnum stage, ExecutionModeEnum executionMode, string filteringAttributes, string stepName, int executionOrder, IsolationModeEnum isolationModel) : this(message.ToString(), entityLogicalName, stage, executionMode, filteringAttributes, stepName, executionOrder, isolationModel)
+        public CrmPluginRegistrationAttribute(MessageNameEnum message, string entityLogicalName, StageEnum stage,
+            ExecutionModeEnum executionMode, string filteringAttributes, string stepName, int executionOrder,
+            IsolationModeEnum isolationModel) : this(message.ToString(), entityLogicalName, stage, executionMode,
+            filteringAttributes, stepName, executionOrder, isolationModel)
         {
         }
 
         /// <summary>
-        /// Create workflow activity registration
+        ///     Create workflow activity registration
         /// </summary>
         /// <param name="name">Name of the Workflow Activity</param>
         /// <param name="friendlyName">Friendly name</param>
         /// <param name="description">Description</param>
         /// <param name="groupName">Group Name</param>
-        public CrmPluginRegistrationAttribute(string name, string friendlyName, string description, string groupName, IsolationModeEnum isolationModel)
+        public CrmPluginRegistrationAttribute(string name, string friendlyName, string description, string groupName,
+            IsolationModeEnum isolationModel)
         {
             Name = name;
             FriendlyName = friendlyName;
@@ -473,14 +481,14 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         #region Constructor Mandatory Properties
 
-        public IsolationModeEnum IsolationMode { get; private set; }
-        public string Message { get; private set; }
-        public string EntityLogicalName { get; private set; }
-        public string FilteringAttributes { get; private set; }
-        public string Name { get; private set; }
-        public int ExecutionOrder { get; private set; }
-        public StageEnum? Stage { get; private set; }
-        public ExecutionModeEnum ExecutionMode { get; private set; }
+        public IsolationModeEnum IsolationMode { get; }
+        public string Message { get; }
+        public string EntityLogicalName { get; }
+        public string FilteringAttributes { get; }
+        public string Name { get; }
+        public int ExecutionOrder { get; }
+        public StageEnum? Stage { get; }
+        public ExecutionModeEnum ExecutionMode { get; }
 
         #endregion
     }

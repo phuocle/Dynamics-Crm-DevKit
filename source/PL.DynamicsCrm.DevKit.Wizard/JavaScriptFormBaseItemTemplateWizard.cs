@@ -1,13 +1,13 @@
-﻿using Microsoft.VisualStudio.TemplateWizard;
-using System.Collections.Generic;
-using EnvDTE;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
+using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
+using NUglify;
 using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
-    class JavaScriptFormBaseItemTemplateWizard : IWizard
+    internal class JavaScriptFormBaseItemTemplateWizard : IWizard
     {
         private string ProjectName { get; set; }
         private string CrmForm { get; set; }
@@ -37,29 +37,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
         }
 
-        private void CreateCrmForm()
-        {
-            var code = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.FormBase.js");
-            code = code.Replace("$ProjectName$", ProjectName);
-            var pattern = @"\/\/(.*)";
-            code = Regex.Replace(code, pattern, string.Empty);
-            code = Regex.Replace(code, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
-            File.WriteAllText(CrmForm, code);                
-        }
-
-        private void CreateCrmFormDebug()
-        {
-            var code = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.FormBase.js");
-            code = code.Replace("$ProjectName$", ProjectName);
-            code = code.Replace("//if (", "if (");
-            File.WriteAllText(CrmFormDebug, code);
-        }
-
         public void RunFinished()
         {
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
+            WizardRunKind runKind, object[] customParams)
         {
             var parts = replacementsDictionary["$rootnamespace$"].Split(".".ToCharArray());
             ProjectName = $"{parts[1]}";
@@ -68,6 +51,36 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public bool ShouldAddProjectItem(string filePath)
         {
             return true;
+        }
+
+        private void CreateCrmForm()
+        {
+            //var code = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.FormBase.js");
+
+            var code = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.DevKit.js");
+            //var codeSetting = new CodeSettings()
+            //{
+
+            //};
+
+            code = Uglify.Js(code).Code;
+            //var minifier = new JsMinifier();
+            //code = minifier.Minify(code);
+
+            //code = code.Replace("$ProjectName$", ProjectName);
+            //var pattern = @"\/\/(.*)";
+            //code = Regex.Replace(code, pattern, string.Empty);
+            //code = Regex.Replace(code, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
+
+            File.WriteAllText(CrmForm, code);
+        }
+
+        private void CreateCrmFormDebug()
+        {
+            var code = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.FormBase.js");
+            code = code.Replace("$ProjectName$", ProjectName);
+            code = code.Replace("//if (", "if (");
+            File.WriteAllText(CrmFormDebug, code);
         }
     }
 }

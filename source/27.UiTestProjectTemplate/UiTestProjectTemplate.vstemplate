@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005"
+            xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>27. C# Ui Test Project</Name>
+    <Name>7. C# Ui Test Project</Name>
     <Description>C# Ui Test Project Template</Description>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
@@ -16,7 +18,8 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="TestSettings.cs">TestSettings.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="packages.config">_packages.config</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="app.config">app.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true">AppSettings.cs</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005"
+            xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>12. C# Console Project</Name>
+    <Name>1. C# Console Project</Name>
     <Description>C# Console Project Template</Description>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
     <TemplateID>ae0ddb0b-ef16-4c6f-9065-eb77fea2ba14</TemplateID>
-    <CreateNewFolder>true</CreateNewFolder>
+    <CreateNewFolder>false</CreateNewFolder>
     <DefaultName>ConsoleProject</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
   </TemplateData>

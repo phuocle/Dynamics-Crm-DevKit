@@ -17,7 +17,10 @@
     UiTest,
     UiTestItem,
     Report,
-    ReportItem
+    ReportItem,
+    JsFormItem,
+    JsTestItem,
+    SelectEntity
 }
 
 public enum ParameterType

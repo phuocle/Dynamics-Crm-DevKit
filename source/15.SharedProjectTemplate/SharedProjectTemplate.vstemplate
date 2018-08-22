@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005"
+            xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>15. C# Shared Project</Name>
+    <Name>9. C# Shared Project</Name>
     <Description>C# Shared Project Template</Description>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
@@ -14,9 +16,14 @@
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="Shared.shproj" File="Shared.shproj" ReplaceParameters="true">
-      <ProjectItem TargetFileName="$namespace$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
       <Folder Name="Lib" TargetFolderName="Lib" />
       <Folder Name="Entities" TargetFolderName="Entities" />
+      <ProjectItem TargetFileName="$namespace$.projitems" ReplaceParameters="true">Shared.projitems</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="Lib\Date.cs">Date.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Lib\PluginCore.cs">PluginCore.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Lib\Extension.cs">Extension.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Lib\EntityBase.cs">EntityBase.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Lib\SimpleJson.cs">SimpleJson.cs</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

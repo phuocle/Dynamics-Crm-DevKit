@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005"
+            xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>10. C# Workflow Class</Name>
+    <Name>3. C# Workflow Class</Name>
     <Description>C# Workflow Class Template</Description>
     <Icon>icon.png</Icon>
     <TemplateID>33cf3373-dcd8-4ff7-879b-fd71ef16c5c3</TemplateID>

@@ -1,7 +1,7 @@
-﻿using EnvDTE;
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using EnvDTE;
 
 namespace PL.DynamicsCrm.DevKit.Shared
 {
@@ -9,8 +9,11 @@ namespace PL.DynamicsCrm.DevKit.Shared
     {
         [DllImport("mscoree.dll")]
         internal static extern int StrongNameFreeBuffer(IntPtr pbMemory);
+
         [DllImport("mscoree.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
-        internal static extern int StrongNameKeyGen(IntPtr wszKeyContainer, uint dwFlags, out IntPtr keyBlob, out uint keyBlobSize);
+        internal static extern int StrongNameKeyGen(IntPtr wszKeyContainer, uint dwFlags, out IntPtr keyBlob,
+            out uint keyBlobSize);
+
         [DllImport("mscoree.dll", CharSet = CharSet.Unicode)]
         internal static extern int StrongNameErrorInfo();
 
@@ -21,9 +24,9 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 if (string.IsNullOrEmpty(destDirectory))
                     return;
 
-                string keyFilePath = Path.Combine(destDirectory, keyName);
+                var keyFilePath = Path.Combine(destDirectory, keyName);
 
-                IntPtr buffer = IntPtr.Zero;
+                var buffer = IntPtr.Zero;
 
                 WriteKeydata(buffer, keyFilePath);
 
@@ -37,7 +40,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             finally
             {
             }
-        }        
+        }
 
         private static void WriteKeydata(IntPtr buffer, string keyFilePath)
         {
@@ -49,7 +52,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     throw new InvalidOperationException();
 
                 var keyBuffer = new byte[buffSize];
-                Marshal.Copy(buffer, keyBuffer, 0, (int)buffSize);
+                Marshal.Copy(buffer, keyBuffer, 0, (int) buffSize);
                 File.WriteAllBytes(keyFilePath, keyBuffer);
             }
             finally

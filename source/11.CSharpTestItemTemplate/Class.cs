@@ -1,9 +1,8 @@
 ﻿using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
-using $namespace3$.Shared.Entities;
-using $namespace3$.Shared.Lib;
-
+using $DevKitShared$;
+using $ReferencePlugin$;
 $if$($FormType$==true)
 namespace $namespace2$
 {
@@ -21,10 +20,7 @@ namespace $namespace2$
             PluginContext.MessageName = "$message$";
             PluginContext.Stage = (int) StageEnum.$stage_string$;
             PluginContext.Mode = (int) ExecutionModeEnum.$execution$;
-            var target = new Shared.Entities.$entityname$()
-            {
-            };
-            PluginContext.InputParameters["Target"] = target.Entity;
+            PluginContext.InputParameters["Target"] = null;
         }
 
         [TestMethod]
@@ -32,8 +28,8 @@ namespace $namespace2$
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
-            plugin.Stage = -1;            
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWith<$class$$execution$>(plugin), "Stage does not equals $stage_string$");
+            plugin.Stage = -1;
+            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<$class$$execution$>(plugin, null, null), "Stage does not equals $stage_string$");
         }
 
         [TestMethod]
@@ -43,7 +39,7 @@ namespace $namespace2$
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int) StageEnum.$stage_string$;
             plugin.PrimaryEntityName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWith<$class$$execution$>(plugin), "PrimaryEntityName does not equals $logicalname$");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<$class$$execution$>(plugin, null, null), "PrimaryEntityName does not equals $logicalname$");
         }
 
         [TestMethod]
@@ -54,7 +50,7 @@ namespace $namespace2$
             plugin.Stage = (int)StageEnum.$stage_string$;
             plugin.PrimaryEntityName = "$logicalname$";
             plugin.MessageName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWith<$class$$execution$>(plugin), "MessageName does not equals $message$");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<$class$$execution$>(plugin, null, null), "MessageName does not equals $message$");
         }
 
         [TestMethod]
@@ -66,7 +62,7 @@ namespace $namespace2$
             plugin.PrimaryEntityName = "$logicalname$";
             plugin.MessageName = "$message$";
             plugin.Mode = -1;
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWith<$class$$execution$>(plugin), "Execution does not equal $execution$");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<$class$$execution$>(plugin, null, null), "Execution does not equal $execution$");
         }
 
         /*
@@ -134,7 +130,7 @@ namespace $namespace2$
         public void $class$_Test_01()
         {
             Assert.Fail();
-        }        
+        }
     }
 }
 $endif$
