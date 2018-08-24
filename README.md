@@ -9,9 +9,9 @@
 * No need ~~Plugin Registration Tool~~ because it have a **deploy.bat**
 * No need ~~WebResource deploy Tool or manualy do it~~ because it have a **deploy.bat** and **integrated with Visual Studio tool**
 * **JavaScript intellisense**
-![Intellisense](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/master/wiki/images/tutorials/7/intellisense.gif)
-![Intellisense](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/master/wiki/images/tutorials/10/intellisense.gif)
-
+![Intellisense](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/master/wiki/images/js_intellisense.gif)
+* **Automation deploy plugin**
+![Intellisense](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/master/wiki/images/plugin_deploy.gif)
 # Thanks
 * [Florian Krönert](https://github.com/DigitalFlow/Xrm-WebApi-Client)
 * [Scott Durow](https://github.com/scottdurow/SparkleXrm/tree/master/spkl)
