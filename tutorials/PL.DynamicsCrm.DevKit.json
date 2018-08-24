@@ -2,7 +2,7 @@
     "DefaultCrmVersion":"9.0.2.4",
     "DefaultNetVersion":"v4.5.2",
     "DefaultCrmConnection":"Paz.LuckeyMonkey",
-    "SolutionPrefix":null,
+    "SolutionPrefix":"paz_",
     "CrmConnections":[
         {
             "Name":"Paz.LuckeyMonkey",

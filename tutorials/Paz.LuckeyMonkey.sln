@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.ProxyTypes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Lead.Test", "Paz.LuckeyMonkey.Plugin.Lead.Test\Paz.LuckeyMonkey.Plugin.Lead.Test.csproj", "{1D9DE1BA-B68B-441D-85CF-4B84EB02EF8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.WebResource", "Paz.LuckeyMonkey.WebResource\Paz.LuckeyMonkey.WebResource.csproj", "{56263EF0-668C-462D-9AC3-BA4BED862969}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{4476761e-00a8-4b70-8691-59163723b1a3}*SharedItemsImports = 4
@@ -39,6 +41,10 @@ Global
 		{1D9DE1BA-B68B-441D-85CF-4B84EB02EF8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D9DE1BA-B68B-441D-85CF-4B84EB02EF8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D9DE1BA-B68B-441D-85CF-4B84EB02EF8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56263EF0-668C-462D-9AC3-BA4BED862969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56263EF0-668C-462D-9AC3-BA4BED862969}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56263EF0-668C-462D-9AC3-BA4BED862969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56263EF0-668C-462D-9AC3-BA4BED862969}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

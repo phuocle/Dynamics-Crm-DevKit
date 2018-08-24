@@ -50,8 +50,8 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???",
+      "solution": "LuckeyMonkey",
+      "prefix": "paz_",
       "rootfolder": "",
       "includefiles": [
         "entities\\*.js",
