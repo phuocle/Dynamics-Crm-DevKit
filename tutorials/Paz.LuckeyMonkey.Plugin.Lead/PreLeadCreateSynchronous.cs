@@ -58,12 +58,21 @@ namespace Paz.LuckeyMonkey.Plugin.Lead
             //var preEntity = (Entity)context.PreEntityImages["PreImage"];
             //var postEntity = (Entity)context.PreEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
+            LeadSubjectAlwaysUppercase(context, service, tracing);            
+        }
+
+        private void LeadSubjectAlwaysUppercase(IPluginExecutionContext context, IOrganizationService service, ITracingService tracing)
+        {
+            Debugger.Trace(tracing, "BEGIN LeadSubjectAlwaysUppercase");
+
             var target = (Entity)context.InputParameters["Target"];
             var lead = new Shared.Entities.Lead(target);
             if (lead.Subject != null)
             {
                 lead.Subject = lead.Subject.ToUpper();
             }
+
+            Debugger.Trace(tracing, "END LeadSubjectAlwaysUppercase");
         }
     }
 }
