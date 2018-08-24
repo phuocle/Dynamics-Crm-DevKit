@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="SharedProjectFile_SccProperties">
+    <SharedProjectFile_ProjectGuid>{2c8fd2f6-c9e0-4c41-ae79-c486e4db4449}</SharedProjectFile_ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>563b3ce6-31fd-47be-8f9d-5b2738b9178d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Paz.LuckeyMonkey.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.generated.cs">
+			<DependentUpon>Lead.cs</DependentUpon>
+		</Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\EntityBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
+  </ItemGroup>
+</Project>
