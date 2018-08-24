@@ -3,7 +3,7 @@
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005"
             xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>2. C# Plugin Class</Name>
+    <Name>02. C# Plugin Class</Name>
     <Description>C# Plugin Class Template</Description>
     <Icon>icon.png</Icon>
     <TemplateID>d9739720-543e-4569-abe0-aad1a9a76f2d</TemplateID>
