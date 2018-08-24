@@ -1,5 +1,5 @@
 # PL.DynamicsCrm.DevKit contains:
-* [29 projects/items template.](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-and-Items-Template)
+* [19 projects/items template.](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-and-Items-Template)
 * [Integrated with Visual Studio](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Integrated-with-Visual-Studio) for deploy WebResource.
 * [PL.DynamicsCrm.DevKit.Cli](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CLI) for deploy plugins, workflows, custom actions, webresources.
 
