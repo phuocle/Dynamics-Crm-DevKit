@@ -27,9 +27,9 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "LuckeyMonkey",
       "includefiles": [
-        "???.*.dll"
+        "Paz.LuckeyMonkey.*.dll"
       ],
       "excludefiles": [
         "*.Test.dll"
