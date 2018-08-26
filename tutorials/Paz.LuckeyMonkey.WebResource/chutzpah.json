@@ -17,5 +17,5 @@
       "ExpandReferenceComments": "false"
     }
   ],
-  "CodeCoverageExcludes": [ "*.form.js", "*.webapi.js", "*.test.js", "DevKitXrmMock.js", "requireConfig.js", "xrm-mock\\build\\index.js" ]
+  "CodeCoverageExcludes": [ "*.form.js", "*.webapi.js", "*.test.js", "DevKitXrmMock.js", "requireConfig.js", "xrm-mock\\build\\index.js", "sinon\\pkg\\sinon.js" ]
 }

@@ -34,6 +34,8 @@ var formLead = (function () {
 	}
 	return {
 		OnLoad: onLoad,
-		OnSave: onSave
+		OnSave: onSave,
+		__SubjectAddOnChange__: SubjectAddOnChange,
+		__PhoneAddOnChange__: PhoneAddOnChange
 	};
 })();
