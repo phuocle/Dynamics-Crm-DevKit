@@ -32,9 +32,39 @@ var formLead = (function () {
 	        form.Body.MobilePhone.RequiredLevel = OptionSet.FieldRequiredLevel.None;
 	    }
 	}
+	function hasRole(role) {
+	    var fetchData = {
+	        name: role
+	    };
+	    var fetchXml = [
+    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>",
+    "  <entity name='systemuser'>",
+    "    <attribute name='systemuserid'/>",
+    "    <filter type='and'>",
+    "      <condition attribute='systemuserid' operator='eq-userid'/>",
+    "    </filter>",
+    "    <link-entity name='systemuserroles' from='systemuserid' to='systemuserid' visible='false' intersect='true'>",
+    "      <link-entity name='role' from='roleid' to='roleid' alias='ae'>",
+    "        <filter type='and'>",
+    "          <condition attribute='name' operator='eq' value='", fetchData.name, "'/>",
+    "        </filter>",
+    "      </link-entity>",
+    "    </link-entity>",
+    "  </entity>",
+    "</fetch>",
+	    ].join("");
+	    var req = new LuckeyMonkey.WebApi.RetrieveRequest();
+	    req.async = false;
+	    req.fetchXml = fetchXml;
+	    req.entityName = "systemuser";
+	    var res = WebApiClient.Retrieve(req);
+	    if (res.value.length === 0) return false;
+	    return true;
+	}
 	return {
 		OnLoad: onLoad,
 		OnSave: onSave,
+        HasRole: hasRole,
 		__SubjectAddOnChange__: SubjectAddOnChange,
 		__PhoneAddOnChange__: PhoneAddOnChange
 	};

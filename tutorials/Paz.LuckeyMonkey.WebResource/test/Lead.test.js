@@ -43,6 +43,33 @@ define(['xrm-mock', 'sinon'], function (xrm_mock, sinon) {
             //result
             var form = new LuckeyMonkey.FormLead();
             expect(form.Body.Subject.Disabled).toBe(true);
-        });        
+        });
+        it("formLead.HasRole('Qualify Lead')", function () {
+            //setup
+            var data = {
+                "@odata.context": "http://fakeurl.com/api/data/v8.0/$metadata#systemusers(systemuserid,ownerid)",
+                "value": [{
+                    "@odata.etag": "W/\"320689\"",
+                    "systemuserid": "59046ca1-5579-e811-80dc-000d3aa2cf16",
+                    "ownerid": "59046ca1-5579-e811-80dc-000d3aa2cf16"
+                }]
+            };
+            server.RespondWith("Qualify Lead", data);
+            //call
+            var hasRole = formLead.HasRole("Qualify Lead");
+            //result
+            expect(hasRole).toBe(true);
+        });
+        it("formLead.HasRole('System Administrator')", function () {
+            var data = {
+                "@odata.context": "http://fakeurl.com/api/data/v8.0/$metadata#systemusers(systemuserid,ownerid)",
+                "value": []
+            };
+            server.RespondWith("System Administrator", data);
+            //call
+            var hasRole = formLead.HasRole("System Administrator");
+            //result
+            expect(hasRole).toBe(false);
+        });
     });
 });
