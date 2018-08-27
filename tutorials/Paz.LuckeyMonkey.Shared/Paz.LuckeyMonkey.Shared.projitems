@@ -15,14 +15,18 @@
     <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
+			<DependentUpon>Account.cs</DependentUpon>
+		</Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.generated.cs">
-			<DependentUpon>ActivityParty.cs</DependentUpon>
-		</Compile>
+      <DependentUpon>ActivityParty.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.generated.cs">
-			<DependentUpon>Email.cs</DependentUpon>
-		</Compile>
+      <DependentUpon>Email.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.generated.cs">
       <DependentUpon>Lead.cs</DependentUpon>
@@ -33,8 +37,8 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Template.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Template.generated.cs">
-			<DependentUpon>Template.cs</DependentUpon>
-		</Compile>
+      <DependentUpon>Template.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />
