@@ -61,10 +61,36 @@ var formLead = (function () {
 	    if (res.value.length === 0) return false;
 	    return true;
 	}
+	function qualifyLead_Click(executionContext) {//executionContext is PrimaryControl parameter use in the Riibon Workbench
+	    var form = new LuckeyMonkey.FormLead(executionContext);
+	    var input = {
+	        LeadId: form.EntityId
+	    };
+	    var jsonInput = JSON.stringify(input);
+	    var req = new LuckeyMonkey.WebApi.CustomRequest();
+	    req.async = false;
+	    req.method = "POST";
+	    req.bound = false;
+	    req.name = "paz_Ajax";
+	    req.payload = {
+	        "function": "QualifyLead",
+	        "jsonInput": jsonInput
+	    };
+	    var res = WebApiClient.Execute(req);
+	    var outputJson = res.output;
+	    var output = JSON.parse(outputJson);
+	    if (output.Status) {
+	        form.Utility.OpenForm({
+	            entityName: "account",
+	            entityId: output.AccountId
+	        }, null, null, null);
+	    }
+	}
 	return {
 		OnLoad: onLoad,
 		OnSave: onSave,
-        HasRole: hasRole,
+		HasRole: hasRole,
+		QualifyLead_Click: qualifyLead_Click,
 		__SubjectAddOnChange__: SubjectAddOnChange,
 		__PhoneAddOnChange__: PhoneAddOnChange
 	};

@@ -54,6 +54,7 @@
       <DependentUpon>Lead.js</DependentUpon>
     </None>
     <Content Include="entities\Lead.js" />
+    <Content Include="RibbonDiffXml\Lead.xml" />
     <Content Include="test\Lead.test.js" />
     <Content Include="Web.config" />
     <None Include="Web.Debug.config">
