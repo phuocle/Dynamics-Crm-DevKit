@@ -3,7 +3,7 @@
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005"
             xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>6. C# Test Ui Class</Name>
+    <Name>06. C# Test Ui Class</Name>
     <Description>C# Test Ui Class Template</Description>
     <Icon>icon.png</Icon>
     <TemplateID>4eedbdcc-7b3d-4221-a072-e3b96b09b56a</TemplateID>
