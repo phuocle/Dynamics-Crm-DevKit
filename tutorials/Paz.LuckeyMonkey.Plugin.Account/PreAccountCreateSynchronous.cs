@@ -80,7 +80,6 @@ namespace Paz.LuckeyMonkey.Plugin.Account
     <attribute name='paz_field3'/>
     <attribute name='paz_field2'/>
     <attribute name='paz_field1'/>
-    <order attribute='paz_field3' descending='false'/>
     <filter type='and'>
       <condition attribute='leadid' operator='eq' value='{fetchData.leadid}'/>
     </filter>

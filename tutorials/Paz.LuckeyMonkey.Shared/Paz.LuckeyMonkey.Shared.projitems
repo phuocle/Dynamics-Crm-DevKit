@@ -23,6 +23,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.generated.cs">
       <DependentUpon>ActivityParty.cs</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.generated.cs">
+			<DependentUpon>Contact.cs</DependentUpon>
+		</Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.generated.cs">
       <DependentUpon>Email.cs</DependentUpon>

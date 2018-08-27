@@ -31,12 +31,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Workflow.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.CustomAction.Test", "Paz.LuckeyMonkey.CustomAction.Test\Paz.LuckeyMonkey.CustomAction.Test.csproj", "{E677DEF7-FB68-4D54-A373-EEF09B29676D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.UiTest", "Paz.LuckeyMonkey.UiTest\Paz.LuckeyMonkey.UiTest.csproj", "{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{4476761e-00a8-4b70-8691-59163723b1a3}*SharedItemsImports = 4
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{563b3ce6-31fd-47be-8f9d-5b2738b9178d}*SharedItemsImports = 13
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{9c35d944-7d2e-4b01-8a80-0b9f1347e81b}*SharedItemsImports = 4
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{bc6351a2-482e-4eec-80de-68fc3e8de5e2}*SharedItemsImports = 4
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{dad85432-fa5f-43dc-8a39-d101b9edc24e}*SharedItemsImports = 4
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{ef3cc828-2549-48ac-8bf8-f9e53a00b78f}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +87,10 @@ Global
 		{E677DEF7-FB68-4D54-A373-EEF09B29676D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E677DEF7-FB68-4D54-A373-EEF09B29676D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E677DEF7-FB68-4D54-A373-EEF09B29676D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
