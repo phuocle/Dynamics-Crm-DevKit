@@ -62,6 +62,7 @@ var formLead = (function () {
 	    return true;
 	}
 	function qualifyLead_Click(executionContext) {//executionContext is PrimaryControl parameter use in the Riibon Workbench
+	    debugger;
 	    var form = new LuckeyMonkey.FormLead(executionContext);
 	    var input = {
 	        LeadId: form.EntityId
@@ -77,8 +78,7 @@ var formLead = (function () {
 	        "jsonInput": jsonInput
 	    };
 	    var res = WebApiClient.Execute(req);
-	    var outputJson = res.output;
-	    var output = JSON.parse(outputJson);
+	    var output = JSON.parse(res.jsonOutput);
 	    if (output.Status) {
 	        form.Utility.OpenForm({
 	            entityName: "account",

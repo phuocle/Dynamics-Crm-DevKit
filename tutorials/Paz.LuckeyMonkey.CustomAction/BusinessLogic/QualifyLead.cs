@@ -8,19 +8,18 @@ using System.Linq;
 
 namespace Paz.LuckeyMonkey.CustomAction.BusinessLogic
 {
+    public class InputQualifyLead
+    {
+        public string LeadId { get; set; }
+    }
+
+    public class OutputQualifyLead
+    {
+        public string AccountId { get; set; }
+        public bool Status { get; set; }
+    }
     public class QualifyLead
     {
-        private class InputQualifyLead
-        {
-            public string LeadId { get; set; }
-        }
-
-        private class OutputQualifyLead
-        {
-            public string AccountId { get; set; }
-            public bool Status { get; set; }
-        }
-
         internal string Do(IPluginExecutionContext context, IOrganizationService service, ITracingService tracing, string jsonInput)
         {
             //Parse jsonInput to strong type InputQualifyLead

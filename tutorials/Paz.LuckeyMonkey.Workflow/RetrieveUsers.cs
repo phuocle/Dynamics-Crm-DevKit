@@ -27,24 +27,30 @@ namespace Paz.LuckeyMonkey.Workflow
         {
             Debugger.Trace(tracing, "Begin Execute Workflow: RetrieveUsers");
             //YOUR CUSTOM-WORKFLOW-CODE GO HERE
+            var fetchData = new
+            {
+                isdefault = "0"
+            };
             var fetchXml = $@"
 <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>
   <entity name='systemuser'>
-    <attribute name='systemuserid'/>
+    <attribute name='systemuserid' />
     <link-entity name='teammembership' from='systemuserid' to='systemuserid' visible='false' intersect='true'>
       <link-entity name='team' from='teamid' to='teamid' alias='aa'>
+        <filter>
+          <condition attribute='isdefault' operator='eq' value='{fetchData.isdefault}'/>
+        </filter>
         <link-entity name='teammembership' from='teamid' to='teamid' visible='false' intersect='true'>
           <link-entity name='systemuser' from='systemuserid' to='systemuserid' alias='ab'>
             <filter type='and'>
-              <condition attribute='systemuserid' operator='eq-userid'/>
+              <condition attribute='systemuserid' operator='eq-userid' />
             </filter>
           </link-entity>
         </link-entity>
       </link-entity>
     </link-entity>
   </entity>
-</fetch>
-";
+</fetch>";
             var users = service.RetrieveAll<SystemUser>(fetchXml);
             var userIds = string.Join(";",
                 users

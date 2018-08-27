@@ -28,6 +28,7 @@ namespace Paz.LuckeyMonkey.CustomAction
 
         public void Execute(IServiceProvider serviceProvider)
         {
+            
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             if (context == null) throw new InvalidPluginExecutionException("Initialize IPluginExecutionContext fail.");
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
@@ -53,6 +54,7 @@ namespace Paz.LuckeyMonkey.CustomAction
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
+            
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE
             var function = (string)context.InputParameters["function"];
