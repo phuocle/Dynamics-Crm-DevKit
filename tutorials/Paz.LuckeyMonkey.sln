@@ -23,10 +23,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Workflow",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.CustomAction", "Paz.LuckeyMonkey.CustomAction\Paz.LuckeyMonkey.CustomAction.csproj", "{BC6351A2-482E-4EEC-80DE-68FC3E8DE5E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Account", "Paz.LuckeyMonkey.Plugin.Account\Paz.LuckeyMonkey.Plugin.Account.csproj", "{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Account.Test", "Paz.LuckeyMonkey.Plugin.Account.Test\Paz.LuckeyMonkey.Plugin.Account.Test.csproj", "{7F735985-F175-40D3-9CEC-73FD79E4C8E7}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{4476761e-00a8-4b70-8691-59163723b1a3}*SharedItemsImports = 4
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{563b3ce6-31fd-47be-8f9d-5b2738b9178d}*SharedItemsImports = 13
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{9c35d944-7d2e-4b01-8a80-0b9f1347e81b}*SharedItemsImports = 4
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{bc6351a2-482e-4eec-80de-68fc3e8de5e2}*SharedItemsImports = 4
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{ef3cc828-2549-48ac-8bf8-f9e53a00b78f}*SharedItemsImports = 4
 	EndGlobalSection
@@ -59,6 +64,14 @@ Global
 		{BC6351A2-482E-4EEC-80DE-68FC3E8DE5E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC6351A2-482E-4EEC-80DE-68FC3E8DE5E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC6351A2-482E-4EEC-80DE-68FC3E8DE5E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F735985-F175-40D3-9CEC-73FD79E4C8E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F735985-F175-40D3-9CEC-73FD79E4C8E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F735985-F175-40D3-9CEC-73FD79E4C8E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F735985-F175-40D3-9CEC-73FD79E4C8E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,8 +17,8 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
-			<DependentUpon>Account.cs</DependentUpon>
-		</Compile>
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.generated.cs">
       <DependentUpon>ActivityParty.cs</DependentUpon>

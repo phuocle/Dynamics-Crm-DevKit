@@ -547,6 +547,9 @@ namespace Paz.LuckeyMonkey.Shared.Entities
             public const string ParentAccountId = "parentaccountid";
             public const string ParentContactId = "parentcontactid";
             public const string ParticipatesInWorkflow = "participatesinworkflow";
+            public const string paz_Field1 = "paz_field1";
+            public const string paz_Field2 = "paz_field2";
+            public const string paz_Field3 = "paz_field3";
             public const string PreferredContactMethodCode = "preferredcontactmethodcode";
             public const string PriorityCode = "prioritycode";
             public const string ProcessId = "processid";
@@ -2098,6 +2101,39 @@ namespace Paz.LuckeyMonkey.Shared.Entities
         {
             get { return Entity.GetAttributeValue<bool?>(Fields.ParticipatesInWorkflow); }
             set { Entity.Attributes[Fields.ParticipatesInWorkflow] = value; }
+        }
+
+        /// <summary>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Field 1</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string paz_Field1
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.paz_Field1); }
+            set { Entity.Attributes[Fields.paz_Field1] = value; }
+        }
+
+        /// <summary>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Field 2</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string paz_Field2
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.paz_Field2); }
+            set { Entity.Attributes[Fields.paz_Field2] = value; }
+        }
+
+        /// <summary>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Field 3</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string paz_Field3
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.paz_Field3); }
+            set { Entity.Attributes[Fields.paz_Field3] = value; }
         }
 
         /// <summary>
