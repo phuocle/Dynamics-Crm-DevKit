@@ -293,6 +293,42 @@ namespace Paz.LuckeyMonkey.Shared.Entities.LeadOptionSets
         No_need = 3
     }
 
+    public enum paz_MultiSelectOptionSetGlobal
+    {
+        /// <summary>
+        /// Data1 = 100000000
+        /// </summary>
+        Data1 = 100000000,
+        /// <summary>
+        /// Data2 = 100000001
+        /// </summary>
+        Data2 = 100000001,
+        /// <summary>
+        /// Data3 = 100000002
+        /// </summary>
+        Data3 = 100000002,
+        /// <summary>
+        /// Data4 = 100000003
+        /// </summary>
+        Data4 = 100000003
+    }
+
+    public enum paz_MultiSelectOptionSetLocal
+    {
+        /// <summary>
+        /// Value1 = 100000000
+        /// </summary>
+        Value1 = 100000000,
+        /// <summary>
+        /// Value2 = 100000001
+        /// </summary>
+        Value2 = 100000001,
+        /// <summary>
+        /// Value3 = 100000002
+        /// </summary>
+        Value3 = 100000002
+    }
+
     public enum PreferredContactMethodCode
     {
         /// <summary>
@@ -550,6 +586,8 @@ namespace Paz.LuckeyMonkey.Shared.Entities
             public const string paz_Field1 = "paz_field1";
             public const string paz_Field2 = "paz_field2";
             public const string paz_Field3 = "paz_field3";
+            public const string paz_MultiSelectOptionSetGlobal = "paz_multiselectoptionsetglobal";
+            public const string paz_MultiSelectOptionSetLocal = "paz_multiselectoptionsetlocal";
             public const string PreferredContactMethodCode = "preferredcontactmethodcode";
             public const string PriorityCode = "prioritycode";
             public const string ProcessId = "processid";
@@ -2134,6 +2172,52 @@ namespace Paz.LuckeyMonkey.Shared.Entities
         {
             get { return Entity.GetAttributeValue<string>(Fields.paz_Field3); }
             set { Entity.Attributes[Fields.paz_Field3] = value; }
+        }
+
+        /// <summary>
+        /// <para>MultiSelectPicklist</para>
+        /// <para>MultiSelect OptionSet-Global</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public List<paz_MultiSelectOptionSetGlobal> paz_MultiSelectOptionSetGlobal
+        {
+            get
+            {
+                var data = new List<paz_MultiSelectOptionSetGlobal>();
+                foreach (OptionSetValue item in Entity.GetAttributeValue<OptionSetValueCollection>(Fields.paz_MultiSelectOptionSetGlobal))
+                    data.Add((paz_MultiSelectOptionSetGlobal)item.Value);
+                return data;
+            }
+            set
+            {
+                var data = new OptionSetValueCollection();
+                foreach (var item in value)
+                    data.Add(new OptionSetValue((int)item));
+                Entity.Attributes[Fields.paz_MultiSelectOptionSetGlobal] = data;
+            }
+        }
+
+        /// <summary>
+        /// <para>MultiSelectPicklist</para>
+        /// <para>MultiSelect OptionSet-Local</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public List<paz_MultiSelectOptionSetLocal> paz_MultiSelectOptionSetLocal
+        {
+            get
+            {
+                var data = new List<paz_MultiSelectOptionSetLocal>();
+                foreach (OptionSetValue item in Entity.GetAttributeValue<OptionSetValueCollection>(Fields.paz_MultiSelectOptionSetLocal))
+                    data.Add((paz_MultiSelectOptionSetLocal)item.Value);
+                return data;
+            }
+            set
+            {
+                var data = new OptionSetValueCollection();
+                foreach (var item in value)
+                    data.Add(new OptionSetValue((int)item));
+                Entity.Attributes[Fields.paz_MultiSelectOptionSetLocal] = data;
+            }
         }
 
         /// <summary>

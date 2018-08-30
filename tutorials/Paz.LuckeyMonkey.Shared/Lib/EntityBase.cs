@@ -45,6 +45,11 @@ namespace Paz.LuckeyMonkey.Shared
             {
                 return new OptionSetValue(optionSetValue.Value);
             }
+            var optionSetValueCollection = value as OptionSetValueCollection;
+            if (optionSetValueCollection != null)
+            {
+                return new OptionSetValueCollection(optionSetValueCollection);
+            }
             var entityReferenceValue = value as EntityReference;
             if (entityReferenceValue != null)
             {

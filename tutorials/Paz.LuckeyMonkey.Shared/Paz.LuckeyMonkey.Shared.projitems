@@ -25,16 +25,14 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.generated.cs">
-			<DependentUpon>Contact.cs</DependentUpon>
-		</Compile>
+      <DependentUpon>Contact.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.generated.cs">
       <DependentUpon>Email.cs</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.generated.cs">
-      <DependentUpon>Lead.cs</DependentUpon>
-    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.generated.cs"><DependentUpon>Lead.cs</DependentUpon></Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SystemUser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SystemUser.generated.cs">
       <DependentUpon>SystemUser.cs</DependentUpon>
