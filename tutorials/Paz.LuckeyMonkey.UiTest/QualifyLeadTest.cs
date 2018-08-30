@@ -124,11 +124,11 @@ namespace Paz.LuckeyMonkey.UiTest
                 var emails = AppSettings.CrmService.RetrieveAll<Email>(fetchXml4);
                 Assert.AreEqual(2, emails.Count);
                 //Delete data
-                AppSettings.CrmService.Delete(Email.EntityLogicalName, emails[1].Id);
-                AppSettings.CrmService.Delete(Email.EntityLogicalName, emails[0].Id);
-                AppSettings.CrmService.Delete(Contact.EntityLogicalName, contactId);
-                AppSettings.CrmService.Delete(Account.EntityLogicalName, accountId);
-                AppSettings.CrmService.Delete(Lead.EntityLogicalName, leadId);
+                //AppSettings.CrmService.Delete(Email.EntityLogicalName, emails[1].Id);
+                //AppSettings.CrmService.Delete(Email.EntityLogicalName, emails[0].Id);
+                //AppSettings.CrmService.Delete(Contact.EntityLogicalName, contactId);
+                //AppSettings.CrmService.Delete(Account.EntityLogicalName, accountId);
+                //AppSettings.CrmService.Delete(Lead.EntityLogicalName, leadId);
                 //Success delete data
                 Assert.IsTrue(true);
             }
