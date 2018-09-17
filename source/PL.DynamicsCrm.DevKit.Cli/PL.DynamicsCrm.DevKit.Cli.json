@@ -60,6 +60,14 @@
       ],
       "excludefiles": [
         "entities\\*.intellisense.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+          ],
+          "dependencies": [
+          ]
+        }
       ]
     },
     {
@@ -74,6 +82,14 @@
       ],
       "excludefiles": [
         "entities\\*.intellisense.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+          ],
+          "dependencies": [
+          ]
+        }
       ]
     }
   ]

@@ -44,7 +44,7 @@ var OptionSet = {
         Money: 'money',
         MultiOptionSet: 'multioptionset',
         OptionSet: 'optionset',
-        String: 'string',
+        String: 'string'
     },
     FieldFormat: {
         Date: 'date',

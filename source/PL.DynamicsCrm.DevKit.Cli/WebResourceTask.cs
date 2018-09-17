@@ -76,11 +76,113 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             foreach (var webResourceFile in WebResourceFiles)
                 DeployWebResource(webResourceFile);
+            if (IsSupportWebResourceDependency)
+            {
+                var dependencies = MergeDependencies(WebResourceJson.dependencies);
+                foreach (var dependency in dependencies)
+                    UpdateDependency(dependency);
+            }
             if (WebResourcesToPublish.Count > 0)
                 PublishWebResources();
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             CliLog.WriteLine(CliLog.COLOR_GREEN, "END WEBRESOURCE TASKS");
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
+        }
+
+        private List<Dependency> MergeDependencies(List<Dependency> dependencies)
+        {
+            var list = new List<Dependency>();
+            foreach(var dependency in dependencies)
+            {
+                foreach(var webreource in dependency.webresources)
+                {
+                    var found = list.Where(d => d.webresources.Contains(webreource)).FirstOrDefault();
+                    if (found == null)
+                    {
+                        list.Add(new Dependency
+                        {
+                            webresources = new List<string>() { webreource },
+                            dependencies = dependency.dependencies
+                        });
+                    }
+                    else
+                    {
+                        var temp = new List<string>(found.dependencies);
+                        temp.AddRange(dependency.dependencies);
+                        found.dependencies = temp;
+                    }
+                }
+            }
+            return list;
+        }
+
+        private void UpdateDependency(Dependency dependency)
+        {
+            var dependencyXml = GetDependencyXml(dependency.dependencies);
+            foreach (var webResourceName in dependency.webresources)
+            {
+                var fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='dependencyxml' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{webResourceName}'/>
+    </filter>
+  </entity>
+</fetch>";
+                var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                var existingDependencyXml = string.Empty;
+                if (rows.Entities.Count > 0)
+                    existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
+                if (existingDependencyXml != dependencyXml)
+                {
+                    var webResourceId = rows.Entities[0].Id;
+                    var enttiy = new Entity("webresource", webResourceId);
+                    enttiy["dependencyxml"] = dependencyXml;
+                    CliLog.WriteLine(CliLog.COLOR_BLUE, "Updated Dependency Webresource ", CliLog.COLOR_CYAN, webResourceName);
+                    CrmServiceClient.Update(enttiy);
+                    if (!WebResourcesToPublish.Contains(webResourceId))
+                        WebResourcesToPublish.Add(webResourceId);
+                }
+            }
+        }
+
+        private string GetDependencyXml(List<string> dependencies)
+        {
+            var library = string.Empty;
+            foreach (var dependency in dependencies)
+            {
+                var fetchData = new
+                {
+                    name = dependency
+                };
+                var fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='webresourceid' />
+    <attribute name='languagecode' />
+    <attribute name='name' />
+    <attribute name='displayname' />
+    <attribute name='description' />
+    <attribute name='webresourceidunique' />
+    <filter type='and'>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+                var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (rows.Entities.Count == 0) return string.Empty;
+                var entity = rows.Entities[0];
+                var name = entity.GetAttributeValue<string>("name");
+                var displayname = entity.GetAttributeValue<string>("displayname");
+                var description = entity.GetAttributeValue<string>("description");
+                var webresourceidunique = entity.GetAttributeValue<Guid>("webresourceidunique");
+                var languagecode = entity.GetAttributeValue<int?>("languagecode");
+                library += $"<Library name='{name}' displayName='{displayname}' languagecode='{languagecode}' description='{description}' libraryUniqueId='{{{webresourceidunique}}}'/>";
+            }
+            var _dependencyXml = $"<Dependencies><Dependency componentType='WebResource'>{library}</Dependency></Dependencies>";
+            _dependencyXml = _dependencyXml.Replace("'", "\"");
+            return _dependencyXml;
         }
 
         private Entity DeployWebResource(WebResourceFile webResourceFile)
@@ -155,9 +257,35 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 case "xap":
                     filetype = WebResourceWebResourceType.Silverlight_XAP;
                     break;
+                case "resx":
+                    filetype = WebResourceWebResourceType.String_RESX;
+                    break;
+                case "svg":
+                    filetype = WebResourceWebResourceType.SVGFormat;
+                    break;
             }
 
             webResource["webresourcetype"] = new OptionSetValue((int) filetype);
+            if (filetype == WebResourceWebResourceType.String_RESX)
+            {
+                var fileName = webResourceFileInfo.Name.Substring(0, webResourceFileInfo.Name.Length - webResourceFileInfo.Extension.Length);
+                var arr = fileName.Split(".".ToCharArray());
+                var languagecode = -1;
+                if (int.TryParse(arr[arr.Length - 1], out languagecode))
+                {
+                    var req = new RetrieveProvisionedLanguagesRequest();
+                    var res = (RetrieveProvisionedLanguagesResponse)CrmServiceClient.Execute(req);
+                    if (res.RetrieveProvisionedLanguages.Contains(languagecode))
+                        webResource["languagecode"] = languagecode;
+                    else
+                        return null;
+                }
+            }
+            else
+            {
+                var req = new RetrieveProvisionedLanguagesRequest();
+                var res = (RetrieveProvisionedLanguagesResponse)CrmServiceClient.Execute(req);
+            }
             if (webResourceId == Guid.Empty)
             {
                 CliLog.WriteLine(CliLog.COLOR_GREEN, "Creating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file,
@@ -237,7 +365,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
         {
             var folder = filePattern.Substring(0, filePattern.LastIndexOf("\\"));
             var pattern = filePattern.Substring(folder.Length + 1);
-            return Directory.GetFiles(folder, pattern).ToList();
+            if (pattern.Contains("**"))
+            {
+                pattern = pattern.Replace("**", "*");
+                return Directory.GetFiles(folder, pattern, SearchOption.AllDirectories).ToList();
+            }
+            return Directory.GetFiles(folder, pattern, SearchOption.TopDirectoryOnly).ToList();
         }
 
         private enum WebResourceWebResourceType
@@ -252,7 +385,27 @@ namespace PL.DynamicsCrm.DevKit.Cli
             Silverlight_XAP = 8,
             StyleSheet_XSL = 9,
             ICOformat = 10,
-            String_RESX = 11
+            SVGFormat = 11,
+            String_RESX = 12
+        }
+
+        private bool? isSupportWebResourceDependency = null;
+        private bool IsSupportWebResourceDependency
+        {
+            get
+            {
+                if (isSupportWebResourceDependency == null)
+                {
+                    var request = new RetrieveVersionRequest();
+                    var response = (RetrieveVersionResponse)CrmServiceClient.Execute(request);
+                    var version = new Version(response.Version);
+                    if (version >= new Version("9.0"))
+                        isSupportWebResourceDependency = true;
+                    else
+                        isSupportWebResourceDependency = false;
+                }
+                return isSupportWebResourceDependency.Value;
+            }
         }
     }
 }

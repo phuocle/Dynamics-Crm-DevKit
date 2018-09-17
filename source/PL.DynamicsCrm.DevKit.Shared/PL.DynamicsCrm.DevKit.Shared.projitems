@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)JsForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsIntellisense.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsWebApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NameValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\NuGetHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\NuGetPackage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DevKitCrmConfig.cs" />

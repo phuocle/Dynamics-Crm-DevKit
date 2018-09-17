@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
                     EntityReferenceLogicalName = value;
                 }
             }
-
+            IsCustomAttribute = attribute.IsCustomAttribute.Value;
             IsPrimaryKey = attribute.IsPrimaryId == true && entityName.ToLower() + "id" == Name.ToLower();
             IsRequired = attribute.RequiredLevel != null &&
                          attribute.RequiredLevel.Value == AttributeRequiredLevel.ApplicationRequired;
@@ -59,7 +59,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
 
             if (attribute is MultiSelectPicklistAttributeMetadata) IsMultiSelectPicklist = true;
         }
-
+        public bool IsCustomAttribute { get; set; }
         public string EntityName { get; set; }
         public string Name { get; set; }
         public string DisplayName { get; set; }
@@ -144,6 +144,13 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
             {
                 var values = new NameValueCollection();
                 foreach (var c in optionMetadata.OptionSet.Options)
+                    values.Add(ProcessName(c.Label.UserLocalizedLabel.Label), c.Value?.ToString());
+                OptionSetValues = values;
+            }
+            else if (attribute is MultiSelectPicklistAttributeMetadata optionMetadata3)
+            {
+                var values = new NameValueCollection();
+                foreach (var c in optionMetadata3.OptionSet.Options)
                     values.Add(ProcessName(c.Label.UserLocalizedLabel.Label), c.Value?.ToString());
                 OptionSetValues = values;
             }

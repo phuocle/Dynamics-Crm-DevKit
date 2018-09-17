@@ -703,6 +703,13 @@ intellisense.FunctionUtilityResourceString = function (webResourceName, key) {
     ///<param name='key' type='String'>The key for the localized string.</param>
     ///<returns type='void' />
 }
+intellisense.FunctionUtilityResource = function (key) {
+    ///<summary>
+    ///Returns the localized string for a given key associated with the default web resource name
+    ///</summary>
+    ///<param name='key' type='String'>The key for the localized string.</param>
+    ///<returns type='void' />
+}
 intellisense.FunctionUtilityInvokeProcessAction = function (name, parameter, successCallback, errorCallback) {
     ///<summary>
     ///Invokes an action based on the specified parameters.
@@ -1090,6 +1097,8 @@ intellisense.Utility = {
     LearningPathAttributeName: '',
     ///<field name='ResourceString' type='Function'></field>
     ResourceString: intellisense.FunctionUtilityResourceString,
+    ///<field name='Resource' type='Function'></field>
+    Resource: intellisense.FunctionUtilityResource,
     ///<field name='InvokeProcessAction' type='Function'></field>
     InvokeProcessAction: intellisense.FunctionUtilityInvokeProcessAction,
     ///<field name='LookupObjects' type='Function'></field>

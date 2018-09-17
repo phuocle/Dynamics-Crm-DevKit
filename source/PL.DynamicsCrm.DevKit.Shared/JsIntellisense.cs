@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 foreach (var form in ProcessForms)
                 {
                     if (form.IsQuickCreate) continue;
-                    formIntellisense += $"{ProjectName}.Form{GetSafeName(form.Name)} = function(executionContext) {{\r\n";
+                    formIntellisense += $"{ProjectName}.Form{GetSafeName(form.Name)} = function (executionContext, defaultWebResourceName) {{\r\n";
                     formIntellisense += $"\tvar {EntityName.ToLower()} = intellisense.Form;\r\n";
                     formIntellisense += $"\t{EntityName.ToLower()}.Utility = intellisense.Utility;\r\n";
                     formIntellisense += $"\tvar tab = {{}};\r\n";
@@ -71,7 +71,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     {
                         formIntellisense += $"\tvar quickForm = {{\r\n";
                         formIntellisense += intellisenseQuickForm;
-                        formIntellisense += $"\t}}\r\n";
+                        formIntellisense += $"\t}};\r\n";
                         formIntellisense += $"\t{EntityName.ToLower()}.QuickForm = quickForm;\r\n";
                     }
 
@@ -80,13 +80,13 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     {
                         formIntellisense += $"\tvar navigation = {{\r\n";
                         formIntellisense += intellisenseNavigation;
-                        formIntellisense += $"\t}}\r\n";
+                        formIntellisense += $"\t}};\r\n";
                         formIntellisense += $"\t{EntityName.ToLower()}.Navigation = navigation;\r\n";
                     }
 
                     formIntellisense += GetJsIntellisenseOptionSet();
                     formIntellisense += $"\treturn {EntityName.ToLower()};\r\n";
-                    formIntellisense += $"}}\r\n";
+                    formIntellisense += $"}};\r\n";
                 }
 
                 foreach (var form in ProcessForms)
@@ -329,8 +329,8 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCodeIntellisense += $"\t\tEntityCollectionName: null,\r\n";
             webApiCodeIntellisense += $"\t\t///<field name=\"OptionSet\" type=\"Object\"></field>\r\n";
             webApiCodeIntellisense += GetWebApiOptionSetIntellisense();
-            webApiCodeIntellisense += $"\t}}\r\n";
-            webApiCodeIntellisense += $"}}\r\n";
+            webApiCodeIntellisense += $"\t}};\r\n";
+            webApiCodeIntellisense += $"}};\r\n";
             return webApiCodeIntellisense;
         }
 
@@ -493,7 +493,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     code += string.Format(line2, name, "FieldNumber");
                 }
             }
-
+            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return code;
         }
 

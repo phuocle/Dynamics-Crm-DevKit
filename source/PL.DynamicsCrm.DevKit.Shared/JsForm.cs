@@ -195,20 +195,27 @@ namespace PL.DynamicsCrm.DevKit.Shared
                         InnerText = x?.ToString()
                     };
                 foreach (var tab in tabs)
-                    if (tab.Name.Contains(" ") ||
-                        tab.Name.Contains("{") ||
-                        tab.Name.Contains("}"))
-                        message += $"tab.Name = {tab.Name} invalid name\r\n";
+                {
+                    if (tab.Name == null)
+                        message += $"tab has name = null\r\n";
+                    else
+                    {
+                        if (tab.Name.Contains(" ") ||
+                            tab.Name.Contains("{") ||
+                            tab.Name.Contains("}"))
+                            message += $"tab.Name = {tab.Name} invalid name\r\n";
+                    }
+                }
                 foreach (var tab in tabs)
                 {
                     var xdoc2 = XDocument.Parse(tab.InnerText);
-                    var sections = from x2 in xdoc2.Descendants("columns").Descendants("column").Descendants("sections")
-                            .Elements("section")
+                    var sections = from x2 in xdoc2.Descendants("columns").Descendants("column").Descendants("sections").Elements("section")
                         select new
                         {
                             Name = x2.Attribute("name")?.Value
                         };
                     foreach (var section in sections)
+                    {
                         if (section.Name != null)
                         {
                             if (section.Name.Contains(" ") ||
@@ -216,6 +223,9 @@ namespace PL.DynamicsCrm.DevKit.Shared
                                 section.Name.Contains("}"))
                                 message += $"tab: {tab.Name} - section: {section.Name} invalid name\r\n";
                         }
+                        else
+                            message += $"tab: {tab.Name} - has section name = null\r\n";
+                    }
                 }
             }
 
@@ -281,7 +291,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 foreach (var section in sections)
                     code += $"\t\t\t\t\t{section.Name}: {{}},\r\n";
                 code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-                code += $"\t\t\t\t}},\r\n";
+                code += $"\t\t\t\t}}\r\n";
                 code += $"\t\t\t}},\r\n";
             }
 
@@ -428,11 +438,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     devKit = devKit.Replace("else { throw new Error(", "//else { throw new Error(");
                 }
-                formCode += $"\t{ProjectName}.Form{GetSafeName(form.Name)} = function(executionContext) {{\r\n";
+                formCode += $"\t{ProjectName}.Form{GetSafeName(form.Name)} = function(executionContext, defaultWebResourceName) {{\r\n";
                 formCode += devKit + "\r\n";
                 formCode += $"\t\tvar formContext = null;\r\n";
-                formCode += $"\t\tif (executionContext !== undefined)\r\n";
-                formCode += $"\t\t{{\r\n";
+                formCode += $"\t\tif (executionContext !== undefined) {{\r\n";
                 formCode += $"\t\t\tif (executionContext.getFormContext === undefined) {{\r\n";
                 formCode += $"\t\t\t\tformContext = executionContext;\r\n";
                 formCode += $"\t\t\t}}\r\n";
@@ -443,11 +452,11 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 formCode += $"\t\tvar form = devKit.LoadForm(formContext);\r\n";
                 formCode += $"\t\tvar body = {{\r\n";
                 formCode += GetJsFormBody(form.FormXml);
-                formCode += $"\t\t}}\r\n";
+                formCode += $"\t\t}};\r\n";
                 formCode += $"\t\tdevKit.LoadFields(formContext, body);\r\n";
                 formCode += $"\t\tvar tab = {{\r\n";
                 formCode += GetJsFormCode(form.FormXml);
-                formCode += $"\t\t}}\r\n";
+                formCode += $"\t\t}};\r\n";
                 formCode += $"\t\tdevKit.LoadTabs(formContext, tab);\r\n";
                 formCode += $"\t\tbody.Tab = tab;\r\n";
                 formCode += $"\t\tform.Body = body;\r\n";
@@ -456,7 +465,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     formCode += $"\t\tvar header = {{\r\n";
                     formCode += codeHeader;
-                    formCode += $"\t\t}}\r\n";
+                    formCode += $"\t\t}};\r\n";
                     formCode += $"\t\tdevKit.LoadFields(formContext, header, \"header_\");\r\n";
                     formCode += $"\t\tform.Header = header;\r\n";
                 }
@@ -465,7 +474,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     formCode += $"\t\tvar footer = {{\r\n";
                     formCode += codeFooter;
-                    formCode += $"\t\t}}\r\n";
+                    formCode += $"\t\t}};\r\n";
                     formCode += $"\t\tdevKit.LoadFields(formContext, header, \"footer_\");\r\n";
                     formCode += $"\t\tform.Footer = footer;\r\n";
                 }
@@ -481,7 +490,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     formCode += $"\t\tvar quickForm = {{\r\n";
                     formCode += codeQuickForm;
-                    formCode += $"\t\t}}\r\n";
+                    formCode += $"\t\t}};\r\n";
                     formCode += $"\t\tdevKit.LoadQuickForms(formContext, quickForm);\r\n";
                     formCode += $"\t\tform.QuickForm = quickForm;\r\n";
                 }
@@ -490,7 +499,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     formCode += $"\t\tvar navigation = {{\r\n";
                     formCode += codeNavigation;
-                    formCode += $"\t\t}}\r\n";
+                    formCode += $"\t\t}};\r\n";
                     formCode += $"\t\tdevKit.LoadNavigations(formContext, navigation);\r\n";
                     formCode += $"\t\tform.Navigation = navigation;\r\n";
                 }
@@ -498,7 +507,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 formCode += JsOptionSetFormCode;
                 formCode += $"\t\tform.OptionSet = optionSet;\r\n";
                 formCode += $"\t\treturn form;\r\n";
-                formCode += $"\t}}\r\n";
+                formCode += $"\t}};\r\n";
             }
             foreach (var form in processForms)
             {

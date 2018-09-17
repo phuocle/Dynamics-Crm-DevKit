@@ -49,7 +49,7 @@
                         contextData.addOnLoad(callback);
                     }
                     else { throw new Error('loadForm.AddOnLoad'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data/getisdirty
                 Object.defineProperty(form, 'IsDirty', {
                     get: function () {
@@ -74,21 +74,21 @@
                         contextData.refresh(save).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadForm.Refresh'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data/removeonload
                 form.RemoveOnLoad = function (callback) {
                     if (contextData !== null && contextData.removeOnLoad !== undefined) {
                         contextData.removeOnLoad(callback);
                     }
                     else { throw new Error('loadForm.RemoveOnLoad'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data/save
                 form.Save = function (saveOptions, successCallback, errorCallback) {
                     if (contextData !== null && contextData.save !== undefined) {
                         contextData.save(saveOptions).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadForm.Save'); }
-                }
+                };
                 //******************************************************************************************************************************
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity
                 //******************************************************************************************************************************
@@ -98,7 +98,7 @@
                         contextDataEntity.addOnSave(callback);
                     }
                     else { throw new Error('loadForm.AddOnSave'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/getdataxml
                 Object.defineProperty(form, 'DataXml', {
                     get: function () {
@@ -168,14 +168,14 @@
                         contextDataEntity.removeOnSave(callback);
                     }
                     else { throw new Error('loadForm.RemoveOnSave'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/save
                 form.EntitySave = function (saveOption) {
                     if (contextDataEntity !== null && contextDataEntity.save !== undefined) {
                         contextDataEntity.save(saveOption);
                     }
                     else { throw new Error('loadForm.EntitySave'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes
                 Object.defineProperty(form, 'Attributes', {
                     get: function () {
@@ -194,14 +194,14 @@
                         contextUi.clearFormNotification(uniqueId);
                     }
                     else { throw new Error('loadForm.ClearFormNotification'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/close
                 form.Close = function () {
                     if (contextUi !== null && contextUi.close !== undefined) {
                         contextUi.close();
                     }
                     else { throw new Error('loadForm.Close'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/getformtype
                 Object.defineProperty(form, 'FormType', {
                     get: function () {
@@ -235,14 +235,14 @@
                         contextUi.refreshRibbon(refreshAll);
                     }
                     else { throw new Error('loadForm.RefreshRibbon'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/setformnotification
                 form.SetFormNotification = function (message, level, uniqueId) {
                     if (contextUi !== null && contextUi.setFormNotification !== undefined) {
                         return contextUi.setFormNotification(message, level, uniqueId);
                     }
                     else { throw new Error('loadForm.SetFormNotification'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls
                 Object.defineProperty(form, 'Controls', {
                     get: function () {
@@ -284,7 +284,7 @@
                     else { throw new Error('loadForm.FormNavigate'); }
                 };
                 return form;
-            };
+            }
             function loadProcess(formContext) {
                 var process = {};
                 var getProcess = (function () {
@@ -365,70 +365,70 @@
                         getProcess.addOnProcessStatusChange(callback);
                     }
                     else { throw new Error('loadProcess.AddOnProcessStatusChange'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonstagechange
                 process.AddOnStageChange = function (callback) {
                     if (getProcess !== null && getProcess.addOnStageChange !== undefined) {
                         getProcess.addOnStageChange(callback);
                     }
                     else { throw new Error('loadProcess.AddOnStageChange'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonstageselected
                 process.AddOnStageSelected = function (callback) {
                     if (getProcess !== null && getProcess.addOnStageSelected !== undefined) {
                         getProcess.addOnStageSelected(callback);
                     }
                     else { throw new Error('loadProcess.AddOnStageSelected'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getenabledprocesses
                 process.EnabledProcesses = function (callback) {
                     if (getProcess !== null && getProcess.getEnabledProcesses !== undefined) {
                         getProcess.getEnabledProcesses(callback);
                     }
                     else { throw new Error('loadProcess.EnabledProcesses'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/navigation/movenext
                 process.MoveNext = function (callback) {
                     if (getProcess !== null && getProcess.moveNext !== undefined) {
                         getProcess.moveNext(callback);
                     }
                     else { throw new Error('loadProcess.MoveNext'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/navigation/moveprevious
                 process.MovePrevious = function (callback) {
                     if (getProcess !== null && getProcess.movePrevious !== undefined) {
                         getProcess.movePrevious(callback);
                     }
                     else { throw new Error('loadProcess.MovePrevious'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getprocessinstances
                 process.ProcessInstances = function (callback) {
                     if (getProcess !== null && getProcess.getProcessInstances !== undefined) {
                         getProcess.getProcessInstances(callback);
                     }
                     else { throw new Error('loadProcess.ProcessInstances'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
                 process.RemoveOnProcessStatusChange = function (callback) {
                     if (getProcess !== null && getProcess.removeOnProcessStatusChange !== undefined) {
                         getProcess.removeOnProcessStatusChange(callback);
                     }
                     else { throw new Error('loadProcess.RemoveOnProcessStatusChange'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
                 process.RemoveOnStageChange = function (callback) {
                     if (getProcess !== null && getProcess.removeOnStageChange !== undefined) {
                         getProcess.removeOnStageChange(callback);
                     }
                     else { throw new Error('loadProcess.RemoveOnStageChange'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
                 process.RemoveOnStageSelected = function (callback) {
                     if (getProcess !== null && getProcess.removeOnStageSelected !== undefined) {
                         getProcess.removeOnStageSelected(callback);
                     }
                     else { throw new Error('loadProcess.RemoveOnStageSelected'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getselectedstage
                 Object.defineProperty(process, 'SelectedStage', {
                     get: function () {
@@ -466,23 +466,23 @@
                         getProcess.setActiveProcess(processId, callback);
                     }
                     else { throw new Error('loadProcess.SetActiveProcess'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/setactiveprocessinstance
                 process.SetActiveProcessInstance = function (processInstanceId, callback) {
                     if (getProcess !== null && getProcess.setActiveProcessInstance !== undefined) {
                         getProcess.setActiveProcessInstance(processInstanceId, callback);
                     }
                     else { throw new Error('loadProcess.SetActiveProcessInstance'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activestage/setactivestage
                 process.SetActiveStage = function (stageId, callback) {
                     if (getProcess !== null && getProcess.setActiveStage !== undefined) {
                         getProcess.setActiveStage(stageId, callback);
                     }
                     else { throw new Error('loadProcess.SetActiveStage'); }
-                }
+                };
                 return process;
-            };
+            }
             function loadField(formContext, body, field, type) {
                 var logicalName = (function () {
                     if (type === undefined) return field.toLowerCase();
@@ -500,7 +500,7 @@
                 var attribute = (function () {
                     if (formContext) {
                         if (type !== undefined) {
-                            if (control == null) {
+                            if (control === null) {
                                 if (formContext.getAttribute) {
                                     return formContext.getAttribute(logicalName);
                                 }
@@ -520,7 +520,7 @@
                     }
                     else {
                         if (type !== undefined) {
-                            if (control == null) {
+                            if (control === null) {
                                 if (Xrm && Xrm.Page && Xrm.Page.getAttribute) {
                                     return Xrm.Page.getAttribute(logicalName);
                                 }
@@ -549,14 +549,14 @@
                         attribute.addOnChange(callback);
                     }
                     else { throw new Error('loadField.AddOnChange'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/fireonchange
                 body[field].FireOnChange = function () {
                     if (attribute !== null && attribute.fireOnChange !== undefined) {
                         attribute.fireOnChange();
                     }
                     else { throw new Error('loadField.FireOnChange'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getattributetype
                 Object.defineProperty(body[field], 'AttributeType', {
                     get: function () {
@@ -644,7 +644,7 @@
                         return attribute.getOption(value);
                     }
                     else { throw new Error('loadField.Option'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getoptions
                 Object.defineProperty(body[field], 'Options', {
                     get: function () {
@@ -768,7 +768,7 @@
                         attribute.removeOnChange(callback);
                     }
                     else { throw new Error('loadField.RemoveOnChange'); }
-                }
+                };
                 //******************************************************************************************************************************
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls
                 //******************************************************************************************************************************
@@ -778,14 +778,14 @@
                         control.addCustomFilter(filter, entityLogicaName);
                     }
                     else { throw new Error('loadField.AddCustomFilter'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addcustomview
                 body[field].AddCustomView = function (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) {
                     if (control !== null && control.addCustomView !== undefined) {
                         control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
                     }
                     else { throw new Error('loadField.AddCustomView'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addnotification
                 body[field].AddNotification = function (title, message, notificationLevel, uniqueId, callback) {
                     if (control !== null && control.addNotification !== undefined) {
@@ -794,49 +794,49 @@
                         return control.addNotification(notification);
                     }
                     else { throw new Error('loadField.AddNotification'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addonpostsearch
                 body[field].AddOnPostSearch = function (callback) {
                     if (control !== null && control.addOnPostSearch !== undefined) {
                         control.addOnPostSearch(callback);
                     }
                     else { throw new Error('loadField.AddOnPostSearch'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addonresultopened
                 body[field].AddOnResultOpened = function (callback) {
                     if (control !== null && control.addOnResultOpened !== undefined) {
                         control.addOnResultOpened(callback);
                     }
                     else { throw new Error('loadField.AddOnResultOpened'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addonselection
                 body[field].AddOnSelection = function (callback) {
                     if (control !== null && control.addOnSelection !== undefined) {
                         control.addOnSelection(callback);
                     }
                     else { throw new Error('loadField.AddOnSelection'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addpresearch
                 body[field].AddPreSearch = function (callback) {
                     if (control !== null && control.addPreSearch !== undefined) {
                         control.addPreSearch(callback);
                     }
                     else { throw new Error('loadField.AddPreSearch'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearnotification
                 body[field].ClearNotification = function (uniqueId) {
                     if (control !== null && control.clearNotification !== undefined) {
                         return control.clearNotification(uniqueId);
                     }
                     else { throw new Error('loadField.ClearNotification'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearoptions
                 body[field].ClearOptions = function () {
                     if (control !== null && control.clearOptions !== undefined) {
                         return control.clearOptions();
                     }
                     else { throw new Error('loadField.ClearOptions'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getcontroltype
                 Object.defineProperty(body[field], 'ControlType', {
                     get: function () {
@@ -1062,63 +1062,63 @@
                         return control.openSearchResult(resultNumber, mode);
                     }
                     else { throw new Error('loadField.OpenSearchResult'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/refresh
                 body[field].Refresh = function () {
                     if (control !== null && control.refresh !== undefined) {
                         control.refresh();
                     }
                     else { throw new Error('loadField.Refresh'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removeonpostsearch
                 body[field].RemoveOnPostSearch = function (callback) {
                     if (control !== null && control.removeOnPostSearch !== undefined) {
                         control.removeOnPostSearch(callback);
                     }
                     else { throw new Error('loadField.RemoveOnPostSearch'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removeonresultopened
                 body[field].RemoveOnResultOpened = function (callback) {
                     if (control !== null && control.removeOnResultOpened !== undefined) {
                         control.removeOnResultOpened(callback);
                     }
                     else { throw new Error('loadField.RemoveOnResultOpened'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removeonselection
                 body[field].RemoveOnSelection = function (callback) {
                     if (control !== null && control.removeOnSelection !== undefined) {
                         control.removeOnSelection(callback);
                     }
                     else { throw new Error('loadField.RemoveOnSelection'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removeoption
                 body[field].RemoveOption = function (value) {
                     if (control !== null && control.removeOption !== undefined) {
                         control.removeOption(value);
                     }
                     else { throw new Error('loadField.RemoveOption'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removepresearch
                 body[field].RemovePreSearch = function (callback) {
                     if (control !== null && control.removePreSearch !== undefined) {
                         control.removePreSearch(callback);
                     }
                     else { throw new Error('loadField.RemovePreSearch'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setfocus
                 body[field].Focus = function () {
                     if (control !== null && control.setFocus !== undefined) {
                         control.setFocus();
                     }
                     else { throw new Error('loadField.Focus'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setnotification
                 body[field].SetNotification = function (message, uniqueId) {
                     if (control !== null && control.setNotification !== undefined) {
                         return control.setNotification(message, uniqueId);
                     }
                     else { throw new Error('loadField.SetNotification'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addoption
                 body[field].AddOption = function (text, value, index) {
                     if (control !== null && control.addOption !== undefined) {
@@ -1126,14 +1126,14 @@
                         control.addOption(option, index);
                     }
                     else { throw new Error('loadField.AddOption'); }
-                }
-            };
+                };
+            }
             function loadFields(formContext, body, type) {
                 for (var field in body) {
                     loadField(formContext, body, field, type);
                 }
                 return body;
-            };
+            }
             function loadSection(formContext, tab, sections, section) {
                 var tabObject = (function () {
                     if (formContext && formContext.ui && formContext.ui.tabs && formContext.ui.tabs.get) {
@@ -1200,7 +1200,7 @@
                         else { throw new Error('loadSection.SetVisible'); }
                     }
                 });
-            };
+            }
             function loadTab(formContext, tabs, tab) {
                 var tabObject = (function () {
                     if (formContext && formContext.ui && formContext.ui.tabs && formContext.ui.tabs.get) {
@@ -1301,12 +1301,12 @@
                 for (var section in tabs[tab].Section) {
                     loadSection(formContext, tab, tabs[tab].Section, section);
                 }
-            };
+            }
             function loadTabs(formContext, tabs) {
                 for (var tab in tabs) {
                     loadTab(formContext, tabs, tab);
                 }
-            };
+            }
             function loadNavigation(formContext, navigations, navigation) {
                 var navigationItem = (function () {
                     if (formContext && formContext.ui && formContext.ui.navigation && formContext.ui.navigation.items && formContext.ui.navigation.items.get) {
@@ -1419,7 +1419,7 @@
                         return quickViewControl.isLoaded();
                     }
                     else { throw new Error('loadQuickForm.IsLoaded'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-quickforms/getname
                 Object.defineProperty(quickForms[quickForm], 'Name', {
                     get: function () {
@@ -1464,7 +1464,7 @@
                 var utility = {};
                 var getUtility = (function () {
                     if (Xrm && Xrm.Utility) {
-                        return Xrm.Utility
+                        return Xrm.Utility;
                     }
                     return null;
                 })();
@@ -1504,21 +1504,21 @@
                         getUtility.closeProgressIndicator();
                     }
                     else { throw new Error('loadUtility.CloseProgressIndicator'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getallowedstatustransitions
                 utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) {
                     if (getUtility !== null && getUtility.getAllowedStatusTransitions !== undefined) {
                         getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.AllowedStatusTransitions'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getentitymetadata
                 utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) {
                     if (getUtility !== null && getUtility.getEntityMetadata !== undefined) {
                         getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.EntityMetadata'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getlearningpathattributename
                 Object.defineProperty(utility, 'LearningPathAttributeName', {
                     get: function () {
@@ -1531,45 +1531,55 @@
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getresourcestring
                 utility.ResourceString = function (webResourceName, key) {
                     if (getUtility !== null && getUtility.getResourceString !== undefined) {
-                        getUtility.getResourceString(webResourceName, key);
+                        return getUtility.getResourceString(webResourceName, key);
                     }
                     else { throw new Error('loadUtility.ResourceString'); }
-                }
+                };
+                //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getresourcestring
+                utility.Resource = function (key) {
+                    if (getUtility !== null && getUtility.getResourceString !== undefined) {
+                        if (defaultWebResourceName !== undefined) {
+                            return getUtility.getResourceString(defaultWebResourceName, key);
+                        }
+                        else { throw new Error('loadUtility.Resource - defaultWebResourceName null'); }
+                    }
+                    else { throw new Error('loadUtility.Resource'); }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/invokeprocessaction
                 utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) {
                     if (getUtility !== null && getUtility.invokeProcessAction !== undefined) {
                         getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.InvokeProcessAction'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/lookupobjects
                 utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) {
                     if (getUtility !== null && getUtility.lookupObjects !== undefined) {
                         getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.LookupObjects'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/refreshparentgrid
                 utility.RefreshParentGrid = function (lookupOptions) {
                     if (getUtility !== null && getUtility.refreshParentGrid !== undefined) {
                         getUtility.refreshParentGrid(lookupOptions);
                     }
                     else { throw new Error('loadUtility.RefreshParentGrid'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/showprogressindicator
                 utility.ShowProgressIndicator = function (message) {
                     if (getUtility !== null && getUtility.showProgressIndicator !== undefined) {
                         getUtility.showProgressIndicator(message);
                     }
                     else { throw new Error('loadUtility.ShowProgressIndicator'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getadvancedconfigsetting
                 utility.AdvancedConfigSetting = function (setting) {
                     if (getGlobalContext !== null && getGlobalContext.getAdvancedConfigSetting !== undefined) {
-                        getGlobalContext.getAdvancedConfigSetting(setting);
+                        return getGlobalContext.getAdvancedConfigSetting(setting);
                     }
                     else { throw new Error('loadUtility.AdvancedConfigSetting'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getclienturl
                 Object.defineProperty(utility, 'ClientUrl', {
                     get: function () {
@@ -1585,14 +1595,14 @@
                         getGlobalContext.getCurrentAppName().then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.CurrentAppName'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
                 utility.CurrentAppProperties = function (successCallback, errorCallback) {
                     if (getGlobalContext !== null && getGlobalContext.getCurrentAppProperties !== undefined) {
                         getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.CurrentAppProperties'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappurl
                 Object.defineProperty(utility, 'CurrentAppUrl', {
                     get: function () {
@@ -1617,126 +1627,126 @@
                         return getGlobalContext.isOnPremises();
                     }
                     else { throw new Error('loadUtility.IsOnPremises'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/prependorgname
                 utility.PrependOrgName = function (sPath) {
                     if (getGlobalContext !== null && getGlobalContext.prependOrgName !== undefined) {
                         return getGlobalContext.prependOrgName(sPath);
                     }
                     else { throw new Error('loadUtility.PrependOrgName'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openalertdialog
                 utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) {
                     if (getNavigation !== null && getNavigation.openAlertDialog !== undefined) {
                         getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.OpenAlertDialog'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openconfirmdialog
                 utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) {
                     if (getNavigation !== null && getNavigation.openConfirmDialog !== undefined) {
                         getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.OpenConfirmDialog'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openerrordialog
                 utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) {
                     if (getNavigation !== null && getNavigation.openErrorDialog !== undefined) {
                         getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.OpenErrorDialog'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openfile
                 utility.OpenFile = function (file, openFileOptions) {
                     if (getNavigation !== null && getNavigation.openFile !== undefined) {
                         getNavigation.openFile(file, openFileOptions);
                     }
                     else { throw new Error('loadUtility.OpenFile'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openform
                 utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) {
                     if (getNavigation !== null && getNavigation.openForm !== undefined) {
                         getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.OpenForm'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openurl
                 utility.OpenUrl = function (url, openUrlOptions) {
                     if (getNavigation !== null && getNavigation.openUrl !== undefined) {
                         getNavigation.openUrl(url, openUrlOptions);
                     }
                     else { throw new Error('loadUtility.OpenUrl'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openwebresource
                 utility.OpenWebResource = function (webResourceName, windowOptions, data) {
                     if (getNavigation !== null && getNavigation.openWebResource !== undefined) {
                         getNavigation.openWebResource(webResourceName, windowOptions, data);
                     }
                     else { throw new Error('loadUtility.OpenWebResource'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-panel/loadpanel
                 utility.LoadPanel = function (url, title) {
                     if (getPanel !== null && getPanel.loadPanel !== undefined) {
                         getPanel.loadPanel(url, title);
                     }
                     else { throw new Error('loadUtility.LoadPanel'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-encoding/xmlattributeencode
                 utility.XmlAttributeEncode = function (arg) {
                     if (getEncoding !== null && getEncoding.xmlAttributeEncode !== undefined) {
                         return getEncoding.xmlAttributeEncode(arg);
                     }
                     else { throw new Error('loadUtility.XmlAttributeEncode'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-encoding/xmlencode
                 utility.XmlEncode = function (arg) {
                     if (getEncoding !== null && getEncoding.xmlEncode !== undefined) {
                         return getEncoding.xmlEncode(arg);
                     }
                     else { throw new Error('loadUtility.XmlEncode'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/captureaudio
                 utility.CaptureAudio = function (successCallback, errorCallback) {
                     if (getDevice !== null && getDevice.captureAudio !== undefined) {
                         getDevice.captureAudio().then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.CaptureAudio'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/captureimage
                 utility.CaptureImage = function (imageOptions, successCallback, errorCallback) {
                     if (getDevice !== null && getDevice.captureImage !== undefined) {
                         getDevice.captureImage(imageOptions).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.CaptureImage'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/capturevideo
                 utility.CaptureVideo = function (successCallback, errorCallback) {
                     if (getDevice !== null && getDevice.captureVideo !== undefined) {
                         getDevice.captureVideo().then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.CaptureVideo'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/getbarcodevalue
                 utility.BarcodeValue = function (successCallback, errorCallback) {
                     if (getDevice !== null && getDevice.getBarcodeValue !== undefined) {
                         getDevice.getBarcodeValue().then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.BarcodeValue'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/getcurrentposition
                 utility.CurrentPosition = function (successCallback, errorCallback) {
                     if (getDevice !== null && getDevice.getCurrentPosition !== undefined) {
                         getDevice.getCurrentPosition().then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.CurrentPosition'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/pickfile
                 utility.PickFile = function (pickFileOptions, successCallback, errorCallback) {
                     if (getDevice !== null && getDevice.pickFile !== undefined) {
                         getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback);
                     }
                     else { throw new Error('loadUtility.PickFile'); }
-                }
+                };
                 //--https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client
                 Object.defineProperty(utility, 'Client', {
                     get: function () {
@@ -1776,7 +1786,7 @@
                                 return client.isOffline();
                             }
                             else { throw new Error('loadUtility.IsOffline'); }
-                        }
+                        };
                         return Client;
                     }
                 });
@@ -1819,7 +1829,7 @@
                                 return organizationSettings.isAutoSaveEnabled;
                             }
                             else { throw new Error('loadUtility.IsAutoSaveEnabled'); }
-                        }
+                        };
                         Object.defineProperty(OrganizationSettings, 'LanguageId', {
                             get: function () {
                                 if (organizationSettings !== null && organizationSettings.languageId !== undefined) {
@@ -1886,19 +1896,19 @@
                                 return userSettings.isGuidedHelpEnabled;
                             }
                             else { throw new Error('loadUtility.IsGuidedHelpEnabled'); }
-                        }
+                        };
                         UserSettings.IsHighContrastEnabled = function () {
                             if (userSettings !== null && userSettings.isHighContrastEnabled !== undefined) {
                                 return userSettings.isHighContrastEnabled;
                             }
                             else { throw new Error('loadUtility.IsHighContrastEnabled'); }
-                        }
+                        };
                         UserSettings.IsRTL = function () {
                             if (userSettings !== null && userSettings.isRTL !== undefined) {
                                 return userSettings.isRTL;
                             }
                             else { throw new Error('loadUtility.IsRTL'); }
-                        }
+                        };
                         Object.defineProperty(UserSettings, 'LanguageId', {
                             get: function () {
                                 if (userSettings !== null && userSettings.languageId !== undefined) {
@@ -1952,7 +1962,7 @@
                                 return userSettings.getTimeZoneOffsetMinutes();
                             }
                             else { throw new Error('loadUtility.TimeZoneOffsetMinutes'); }
-                        }
+                        };
                         return UserSettings;
                     }
                 });

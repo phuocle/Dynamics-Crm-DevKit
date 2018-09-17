@@ -89,28 +89,28 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private bool IsValid()
         {
-            if (txtName.Text.Length == 0)
+            if (txtName.Visible && txtName.Enabled && txtName.Text.Length == 0)
             {
                 MessageBox.Show(@"Please enter Crm Connection Name");
                 txtName.Focus();
                 return false;
             }
 
-            if (txtUrl.Text.Length == 0)
+            if (txtUrl.Visible && txtUrl.Enabled && txtUrl.Text.Length == 0)
             {
                 MessageBox.Show(@"Please enter Url");
                 txtUrl.Focus();
                 return false;
             }
 
-            if (txtUserName.Text.Length == 0)
+            if (txtUserName.Visible && txtUserName.Enabled && txtUserName.Text.Length == 0)
             {
                 MessageBox.Show(@"Please enter User Name");
                 txtUserName.Focus();
                 return false;
             }
 
-            if (txtPassword.Text.Length == 0)
+            if (txtPassword.Visible && txtPassword.Enabled && txtPassword.Text.Length == 0)
             {
                 MessageBox.Show(@"Please enter Password");
                 txtPassword.Focus();

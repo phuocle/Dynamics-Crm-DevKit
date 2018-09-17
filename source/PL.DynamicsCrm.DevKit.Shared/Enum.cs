@@ -20,7 +20,8 @@
     ReportItem,
     JsFormItem,
     JsTestItem,
-    SelectEntity
+    SelectEntity,
+    ResourceString
 }
 
 public enum ParameterType

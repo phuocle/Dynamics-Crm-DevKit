@@ -170,7 +170,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     }
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Lookup ||
-                    crmAttribute.FieldType == AttributeTypeCode.Customer)
+                         crmAttribute.FieldType == AttributeTypeCode.Customer)
                 {
                     var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
                     crmAttribute.LogicalCollectionName = GetLogicalCollectionName(crmAttribute);
@@ -179,22 +179,25 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     var navigations = crmAttribute.NavigationPropertyName.Split(";".ToCharArray());
                     if (entities.Length == 1)
                     {
-                        webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ logicalName: \"_{crmAttribute.LogicalName}_value\", entityLogicalCollectionName: \"{collections[0]}\", entityLogicalName: \"{entities[0]}\" }},\r\n";
+                        if (crmAttribute.IsCustomAttribute)
+                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ schemaName: \"{crmAttribute.SchemaName}\", logicalName: \"_{crmAttribute.LogicalName}_value\", entityLogicalCollectionName: \"{collections[0]}\", entityLogicalName: \"{entities[0]}\" }},\r\n";
+                        else
+                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ schemaName: \"{crmAttribute.LogicalName}\", logicalName: \"_{crmAttribute.LogicalName}_value\", entityLogicalCollectionName: \"{collections[0]}\", entityLogicalName: \"{entities[0]}\" }},\r\n";
                     }
                     else
                     {
                         var j = 0;
                         foreach (var e in entities)
                         {
-                            webApiCode += $"\t\t\t{navigations[j]}: {{ logicalName: \"_{navigations[j].Split("_".ToCharArray())[0]}_value\", entityLogicalCollectionName: \"{collections[j]}\", entityLogicalName: \"{entities[j]}\" }},\r\n";
+                            webApiCode += $"\t\t\t{navigations[j]}: {{ schemaName: \"{navigations[j]}\", logicalName: \"_{navigations[j].Split("_".ToCharArray())[0]}_value\", entityLogicalCollectionName: \"{collections[j]}\", entityLogicalName: \"{entities[j]}\" }},\r\n";
                             j++;
                         }
                     }
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Owner)
                 {
-                    webApiCode += $"\t\t\tOwnerId_systemuser: {{ logicalName: \"_ownerid_value\", entityLogicalCollectionName: \"systemusers\", entityLogicalName: \"systemuser\" }},\r\n";
-                    webApiCode += $"\t\t\tOwnerId_team: {{ logicalName: \"_ownerid_value\", entityLogicalCollectionName: \"teams\", entityLogicalName: \"team\" }},\r\n";
+                    webApiCode += $"\t\t\tOwnerId_systemuser: {{ schemaName: \"ownerid\", logicalName: \"_ownerid_value\", entityLogicalCollectionName: \"systemusers\", entityLogicalName: \"systemuser\" }},\r\n";
+                    webApiCode += $"\t\t\tOwnerId_team: {{ schemaName: \"ownerid\", logicalName: \"_ownerid_value\", entityLogicalCollectionName: \"teams\", entityLogicalName: \"team\" }},\r\n";
                 }
                 if (!(crmAttribute.IsValidForCreate || crmAttribute.IsValidForUpdate))
                 {
@@ -213,11 +216,12 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\tvar upsertEntity = {{}};\r\n";
             webApiCode += $"\t\tfor (var field in {@class}) {{\r\n";
             webApiCode += $"\t\t\tvar logicalName = {@class}[field].logicalName;\r\n";
+            webApiCode += $"\t\t\tvar schemaName = {@class}[field].schemaName;\r\n";
             webApiCode += $"\t\t\tvar entityLogicalCollectionName = {@class}[field].entityLogicalCollectionName;\r\n";
             webApiCode += $"\t\t\tvar entityLogicalName = {@class}[field].entityLogicalName;\r\n";
             webApiCode += $"\t\t\tvar readOnly = {@class}[field].readOnly;\r\n";
-            webApiCode += $"\t\t\t{@class}[field] = webApiField(entity, logicalName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity);\r\n";
-            webApiCode += $"\t\t}};\r\n";
+            webApiCode += $"\t\t\t{@class}[field] = webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity);\r\n";
+            webApiCode += $"\t\t}}\r\n";
             webApiCode += $"\t\t{@class}.Entity = upsertEntity;\r\n";
             webApiCode += $"\t\t{@class}.EntityName = \"{@class}\";\r\n";
             webApiCode += $"\t\t{@class}.EntityCollectionName = \"{GetLogicalCollectionName(@class)}\";\r\n";
@@ -225,10 +229,6 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t{@class}.OptionSet = optionSet;\r\n";
             webApiCode += $"\t\treturn {@class};\r\n";
             webApiCode += $"\t}};\r\n";
-
-            //var webApiClient = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.WebApiClient.js");
-            //webApiClient = webApiClient.Replace("DevKit", ProjectName);
-            //webApiCode += webApiClient;
 
             webApiCode += $"}})({ProjectName} || ({ProjectName} = {{}}));";
             webApiCode = webApiCode.Replace("\"", "'");

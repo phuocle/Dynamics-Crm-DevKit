@@ -46,11 +46,13 @@
             this.btnOk = new System.Windows.Forms.Button();
             this.lblProject = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.lblResourceStringName = new System.Windows.Forms.Label();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox
             // 
+            this.groupBox.Controls.Add(this.lblResourceStringName);
             this.groupBox.Controls.Add(this.btnLoadForms);
             this.groupBox.Controls.Add(this.chkListForm);
             this.groupBox.Controls.Add(this.chkOthers);
@@ -272,6 +274,17 @@
             this.progressBar.TabIndex = 24;
             this.progressBar.Visible = false;
             // 
+            // lblResourceStringName
+            // 
+            this.lblResourceStringName.AutoSize = true;
+            this.lblResourceStringName.Location = new System.Drawing.Point(2, 46);
+            this.lblResourceStringName.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblResourceStringName.Name = "lblResourceStringName";
+            this.lblResourceStringName.Size = new System.Drawing.Size(49, 17);
+            this.lblResourceStringName.TabIndex = 23;
+            this.lblResourceStringName.Text = "Name:";
+            this.lblResourceStringName.Visible = false;
+            // 
             // FormProject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -317,5 +330,6 @@
         private System.Windows.Forms.CheckedListBox chkListForm;
         private System.Windows.Forms.Button btnLoadForms;
         private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Label lblResourceStringName;
     }
 }

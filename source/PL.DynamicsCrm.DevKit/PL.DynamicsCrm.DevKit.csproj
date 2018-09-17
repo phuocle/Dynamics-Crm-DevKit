@@ -208,6 +208,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\34.ResourceStringItemTemplate\34.ResourceStringItemTemplate.csproj">
+      <Project>{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}</Project>
+      <Name>34.ResourceStringItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PL.DynamicsCrm.DevKit.Package\PL.DynamicsCrm.DevKit.Package.csproj">
       <Project>{6302EA70-637D-4FDC-B169-1493427DD8D2}</Project>
       <Name>PL.DynamicsCrm.DevKit.Package</Name>

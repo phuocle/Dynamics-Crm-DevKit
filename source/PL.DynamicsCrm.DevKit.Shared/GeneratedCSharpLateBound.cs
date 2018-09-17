@@ -176,9 +176,11 @@ namespace PL.DynamicsCrm.DevKit.Shared
             }
             else
             {
-                dataType += crmAttribute.FieldType.ToString();
+                if (crmAttribute.IsMultiSelectPicklist)
+                    dataType += "MultiSelectPicklist";
+                else
+                    dataType += crmAttribute.FieldType.ToString();
             }
-
             if (crmAttribute.MaxLength.HasValue) dataType += " - MaxLength: " + crmAttribute.MaxLength;
             if (crmAttribute.Min.HasValue) dataType += " - MinValue: " + crmAttribute.Min.Value.ToString("#,##0");
             if (crmAttribute.Max.HasValue) dataType += " - MaxValue: " + crmAttribute.Max.Value.ToString("#,##0");
@@ -188,7 +190,6 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 var description = crmAttribute.Description.Replace("\n", " ");
                 xml += "\t\t/// <para>" + XmlEscape(description) + "</para>\r\n";
             }
-
             xml += "\t\t/// <para>" + dataType + "</para>\r\n";
             xml += "\t\t/// <para>" + crmAttribute.DisplayName + "</para>\r\n";
             xml += "\t\t/// </summary>\r\n";
@@ -297,8 +298,19 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     case AttributeTypeCode.Virtual:
                     case AttributeTypeCode.EntityName:
                     case AttributeTypeCode.String:
-                        return "set {{ Entity.Attributes[Fields." + crmAttribute.Name +
-                               "] = value; }}";
+                        if (crmAttribute.IsMultiSelectPicklist)
+                        {
+                            code += "set\r\n";
+                            code += "\t\t\t{{\r\n";
+                            code += "\t\t\t\tvar data = new OptionSetValueCollection();\r\n";
+                            code += "\t\t\t\tforeach (var item in value)\r\n";
+                            code += "\t\t\t\t\tdata.Add(new OptionSetValue((int)item));\r\n";
+                            code += "\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name + "] = data;\r\n";
+                            code += "\t\t\t}}";
+                            return code;
+                        }
+                        else
+                            return "set {{ Entity.Attributes[Fields." + crmAttribute.Name + "] = value; }}";
                     case AttributeTypeCode.PartyList:
                         code += "set\r\n";
                         code += "\t\t\t{{\r\n";
@@ -393,8 +405,19 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.Virtual:
                 case AttributeTypeCode.EntityName:
                 case AttributeTypeCode.String:
-                    return "get {{ return Entity.GetAttributeValue<string>(Fields." +
-                           crmAttribute.Name + "); }}";
+                    if (crmAttribute.IsMultiSelectPicklist)
+                    {
+                        code += "get\r\n";
+                        code += "\t\t\t{{\r\n";
+                        code += "\t\t\t\tvar data = new List<" + crmAttribute.Name + ">();\r\n";
+                        code += "\t\t\t\tforeach (OptionSetValue item in Entity.GetAttributeValue<OptionSetValueCollection>(Fields." + crmAttribute.Name + "))\r\n";
+                        code += "\t\t\t\t\tdata.Add((" + crmAttribute.Name + ")item.Value);\r\n";
+                        code += "\t\t\t\treturn data;\r\n";
+                        code += "\t\t\t}}";
+                        return code;
+                    }
+                    else
+                        return "get {{ return Entity.GetAttributeValue<string>(Fields." + crmAttribute.Name + "); }}";
                 case AttributeTypeCode.PartyList:
                     code += "get\r\n";
                     code += "\t\t\t{{\r\n";
@@ -453,7 +476,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.Virtual:
                 case AttributeTypeCode.EntityName:
                 case AttributeTypeCode.String:
-                    return "string";
+                    if (crmAttribute.IsMultiSelectPicklist)
+                        return "List<" + crmAttribute.Name + ">";
+                    else
+                        return "string";
                 case AttributeTypeCode.PartyList:
                     return "List<ActivityParty>";
                 case AttributeTypeCode.ManagedProperty:
@@ -651,7 +677,8 @@ namespace PL.DynamicsCrm.DevKit.Shared
             foreach (var crmAttribute in Lists)
                 if (crmAttribute.FieldType == AttributeTypeCode.Picklist ||
                     crmAttribute.FieldType == AttributeTypeCode.State ||
-                    crmAttribute.FieldType == AttributeTypeCode.Status)
+                    crmAttribute.FieldType == AttributeTypeCode.Status ||
+                    crmAttribute.IsMultiSelectPicklist)
                 {
                     var tmp = string.Empty;
                     foreach (string nvc in crmAttribute.OptionSetValues)
