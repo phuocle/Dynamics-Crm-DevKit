@@ -92,8 +92,9 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 foreach (var form in ProcessForms)
                 {
                     if (!form.IsQuickCreate) continue;
-                    formIntellisense += $"{ProjectName}.Form{GetSafeName(form.Name)} = function (executionContext) {{\r\n";
+                    formIntellisense += $"{ProjectName}.Form{GetSafeName(form.Name)} = function (executionContext, defaultWebResourceName) {{\r\n";
                     formIntellisense += $"\tvar {EntityName.ToLower()} = intellisense.FormQuickCreate;\r\n";
+                    formIntellisense += $"\t{EntityName.ToLower()}.Utility = intellisense.Utility;\r\n";
                     formIntellisense += $"\t///<field name=\"section\" type=\"Object\"></field>\r\n";
                     formIntellisense += $"\tvar section = {{\r\n";
                     var xdoc = XDocument.Parse(form.FormXml);
@@ -117,6 +118,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     formIntellisense = formIntellisense.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
                     formIntellisense += $"\t}}\r\n";
                     formIntellisense += $"\t{EntityName.ToLower()}.Body = body;\r\n";
+                    formIntellisense += GetJsIntellisenseOptionSet();
                     formIntellisense += $"\treturn {EntityName.ToLower()};\r\n";
                     formIntellisense += $"}}\r\n";
                 }
@@ -429,12 +431,24 @@ namespace PL.DynamicsCrm.DevKit.Shared
             var code = string.Empty;
             const string line1 = "\t\t///<field name=\"{0}\" type=\"{1}\">{2}</field>\r\n";
             const string line2 = "\t\t{0}: intellisense.{1},\r\n";
+            var previousName = string.Empty;
+            var previousCount = 0;
             foreach (var item in list)
             {
                 var crmAttribute = Fields.FirstOrDefault(x => x.LogicalName == item);
                 if (crmAttribute == null) continue;
                 var name = crmAttribute.SchemaName;
-
+                if (name == previousName)
+                {
+                    previousCount = previousCount + 1;
+                    name = name + "_" + previousCount.ToString();
+                }
+                else
+                {
+                    previousName = string.Empty;
+                    previousCount = 0;
+                }
+                previousName = crmAttribute.SchemaName;
                 if (crmAttribute.FieldType == AttributeTypeCode.Memo ||
                     crmAttribute.FieldType == AttributeTypeCode.String)
                 {

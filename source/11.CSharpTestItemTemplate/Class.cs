@@ -69,7 +69,7 @@ namespace $namespace2$
         [TestMethod]
         public void $class$_CrmPluginRegistration_Check_Image1()
         {
-            var @class = new $class$$execution$();
+            var @class = new $class$$execution$(null, null);
             foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
             {
                 if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
@@ -87,7 +87,7 @@ namespace $namespace2$
         [TestMethod]
         public void $class$_CrmPluginRegistration_Check_Image2()
         {
-            var @class = new $class$$execution$();
+            var @class = new $class$$execution$(null, null);
             foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
             {
                 if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))

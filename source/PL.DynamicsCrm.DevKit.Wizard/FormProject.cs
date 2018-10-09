@@ -595,7 +595,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     code += $"\t\t[TestMethod]\r\n";
                     code += $"\t\tpublic void {Class}_CrmPluginRegistration_Check_FilteringAttributes()\r\n";
                     code += $"\t\t{{\r\n";
-                    code += $"\t\t\tvar @class = new {cboEntity.Text}();\r\n";
+                    code += $"\t\t\tvar @class = new {cboEntity.Text}(null, null);\r\n";
                     code += $"\t\t\tforeach(var attribute in Attribute.GetCustomAttributes(@class.GetType()))\r\n";
                     code += $"\t\t\t{{\r\n";
                     code += $"\t\t\t\tif (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))\r\n";
@@ -618,14 +618,28 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                var @class = cboEntity.Text;
-                var stage = string.Empty;
-                if (StageString == "PostOperation") stage = "Post";
-                if (StageString == "PreValidation") stage = "PreValidation";
-                if (StageString == "PreOperation") stage = "Pre";
-                if (stage.Length == 0) return string.Empty;
-                var temp = @class.Substring((stage + EntityName).Length);
-                return temp.Substring(0, temp.Length - Execution.Length);
+                try
+                {
+                    var @class = cboEntity.Text;
+                    var stage = string.Empty;
+                    if (StageString == "PostOperation") stage = "Post";
+                    if (StageString == "PreValidation") stage = "PreValidation";
+                    if (StageString == "PreOperation") stage = "Pre";
+                    if (stage.Length == 0) return string.Empty;
+                    if (@class.StartsWith("PostNone"))
+                    {
+                        @class = @class.Substring("PostNone".Length);
+                        if (@class.EndsWith("Synchronous"))
+                            return @class.Substring(0, @class.Length - "Synchronous".Length);
+                        return "_";
+                    }
+                    var temp = @class.Substring((stage + EntityName).Length);
+                    return temp.Substring(0, temp.Length - Execution.Length);
+                }
+                catch
+                {
+                    return "????";
+                }
             }
         }
 

@@ -46,7 +46,7 @@ $privateclass$
         {
             //var target = (???)context.InputParameters["Target"];
             //var preEntity = (Entity)context.PreEntityImages["PreImage"];
-            //var postEntity = (Entity)context.PreEntityImages["PostImage"];
+            //var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
 
         }

@@ -70,6 +70,9 @@
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\DevKitCrmConfigHelper.cs">
       <Link>DevKitCrmConfigHelper.cs</Link>
     </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
+      <Link>EncryptDecrypt.cs</Link>
+    </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\SimpleJson.cs">
       <Link>SimpleJson.cs</Link>
     </Compile>

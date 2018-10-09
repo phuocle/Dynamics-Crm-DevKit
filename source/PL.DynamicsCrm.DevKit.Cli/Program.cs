@@ -6,6 +6,7 @@ using System.Net;
 using CmdLine;
 using Microsoft.Xrm.Tooling.Connector;
 using PL.DynamicsCrm.DevKit.Cli.Models;
+using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Cli
 {
@@ -39,7 +40,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         public static void Main(string[] args)
         {
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli ", CliLog.COLOR_RED, "1.1.2");
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli ", CliLog.COLOR_RED, "1.1.3");
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             CommandLineArgs arguments = null;
 #if !DEBUG
@@ -188,6 +189,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         private static bool IsConnectedDynamics365(string connection)
         {
+            var password = connection.Substring(connection.IndexOf("Password="));
+            password = password.Substring("Password=".Length);
+            password = password.Substring(0, password.Length - 1);
+            password = TryDecryptPassword(password);
+            connection = $"{connection.Substring(0, connection.IndexOf("Password="))}Password={password};";
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -199,6 +205,18 @@ namespace PL.DynamicsCrm.DevKit.Cli
             {
                 return false;
             }
+        }
+
+        private static string TryDecryptPassword(string password)
+        {
+            try
+            {
+                password = EncryptDecrypt.DecryptString(password);
+            }
+            catch
+            {
+            }
+            return password;
         }
     }
 }

@@ -103,6 +103,18 @@ namespace PL.DynamicsCrm.DevKit.Package
                 OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
 
+        private static string TryDecryptPassword(string password)
+        {
+            try
+            {
+                password = EncryptDecrypt.DecryptString(password);
+            }
+            catch
+            {
+            }
+            return password;
+        }
+
         private void MenuItemCallback(object sender, EventArgs e)
         {
             var dte = (DTE) ServiceProvider.GetService(typeof(DTE));
@@ -131,12 +143,13 @@ namespace PL.DynamicsCrm.DevKit.Package
             dte.StatusBar.Text = "Connecting ...";
             var check = SharedGlobals.GetGlobal("CrmService", dte);
             if (check == null)
+            {
                 try
                 {
                     var uri = new Uri(defaultConnection.Url);
                     var clientCredentials = new ClientCredentials();
                     clientCredentials.UserName.UserName = defaultConnection.UserName;
-                    clientCredentials.UserName.Password = defaultConnection.Password;
+                    clientCredentials.UserName.Password = TryDecryptPassword(defaultConnection.Password);
                     check = new OrganizationServiceProxy(uri, null, clientCredentials, null);
                     SharedGlobals.SetGlobal("CrmService", check, dte);
                 }
@@ -145,6 +158,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                     ShowError("Connecting Fail!");
                     goto CLEAR_STATUS;
                 }
+            }
 
             var crmService = (OrganizationServiceProxy) SharedGlobals.GetGlobal("CrmService", dte);
             dte.StatusBar.Text = "Connected ...";
