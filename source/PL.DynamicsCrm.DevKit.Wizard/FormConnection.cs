@@ -70,7 +70,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     Name = txtName.Text,
                     Url = txtUrl.Text,
                     UserName = txtUserName.Text,
-                    Password = txtPassword.Text
+                    Password = EncryptDecrypt.EncryptString(txtPassword.Text)
                 };
                 if (config.CrmConnections == null)
                     config.CrmConnections = new List<CrmConnection>();
@@ -135,7 +135,18 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var uri = new Uri(CrmConnection.Url);
             var clientCredentials = new ClientCredentials();
             clientCredentials.UserName.UserName = CrmConnection.UserName;
-            clientCredentials.UserName.Password = CrmConnection.Password;
+            var password = string.Empty;
+            try
+            {
+                password = EncryptDecrypt.DecryptString(CrmConnection.Password);
+            }
+            catch
+            {
+                password = CrmConnection.Password;
+                CrmConnection.Password = EncryptDecrypt.EncryptString(password);
+                DevKitCrmConfigHelper.SetDevKitCrmConfig(Dte, CrmConnection);
+            }
+            clientCredentials.UserName.Password = EncryptDecrypt.DecryptString(CrmConnection.Password);
             CrmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
             Close();
         }

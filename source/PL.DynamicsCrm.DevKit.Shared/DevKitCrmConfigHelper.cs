@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using EnvDTE;
+using PL.DynamicsCrm.DevKit.Shared.Xrm;
 
 namespace PL.DynamicsCrm.DevKit.Shared
 {
@@ -41,6 +42,20 @@ namespace PL.DynamicsCrm.DevKit.Shared
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
             var json = SimpleJson.SerializeObject(devKitCrmConfig);
             File.WriteAllText(devKitCrmConfigFile, FormatJson(json));
+        }
+
+        public static void SetDevKitCrmConfig(DTE dte, CrmConnection crmConnection)
+        {
+            var config = GetDevKitCrmConfig(dte);
+            foreach(var item in config.CrmConnections)
+            {
+                if (item.Name == crmConnection.Name)
+                {
+                    item.Password = crmConnection.Password;
+                    break;
+                }
+            }
+            SetDevKitCrmConfig(dte, config);
         }
 
         internal static DevKitCrmConfig GetDevKitCrmConfig(DTE dte)

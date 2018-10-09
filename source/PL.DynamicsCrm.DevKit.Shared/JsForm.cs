@@ -197,7 +197,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 foreach (var tab in tabs)
                 {
                     if (tab.Name == null)
-                        message += $"tab has name = null\r\n";
+                        message += $"tab on form has name = GUID. Please edit to correct name and try it again.\r\n";
                     else
                     {
                         if (tab.Name.Contains(" ") ||
@@ -224,7 +224,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                                 message += $"tab: {tab.Name} - section: {section.Name} invalid name\r\n";
                         }
                         else
-                            message += $"tab: {tab.Name} - has section name = null\r\n";
+                            message += $"tab: {tab.Name} - has section name = GUID. Please edit to correct name and try it again.\r\n";
                     }
                 }
             }
@@ -235,12 +235,25 @@ namespace PL.DynamicsCrm.DevKit.Shared
         private string GetJsForListFields(IEnumerable<string> list)
         {
             var code = string.Empty;
+            var previousName = string.Empty;
+            var previousCount = 0;
             foreach (var item in list)
             {
                 var crmAttribute = Fields.FirstOrDefault(x => x.LogicalName == item);
                 if (crmAttribute == null) continue;
                 var name = crmAttribute.SchemaName;
+                if (name == previousName)
+                {
+                    previousCount = previousCount + 1;
+                    name = name + "_" + previousCount.ToString();
+                }
+                else
+                {
+                    previousName = string.Empty;
+                    previousCount = 0;
+                }
                 code += $"\t\t\t{name}: {{}},\r\n";
+                previousName = crmAttribute.SchemaName;
             }
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return code;
@@ -430,16 +443,16 @@ namespace PL.DynamicsCrm.DevKit.Shared
             formCode += $"var {ProjectName};\r\n";
             formCode += $"(function ({ProjectName}) {{\r\n";
             formCode += $"\t'use strict';\r\n";
+            var devKit = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.DevKit.js");
+            if (!isDebug)
+            {
+                devKit = devKit.Replace("else { throw new Error(", "//else { throw new Error(");
+            }
+            formCode += devKit + "\r\n";
             foreach (var form in processForms)
             {
                 if (form.IsQuickCreate) continue;
-                var devKit = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.DevKit.js");
-                if (!isDebug)
-                {
-                    devKit = devKit.Replace("else { throw new Error(", "//else { throw new Error(");
-                }
                 formCode += $"\t{ProjectName}.Form{GetSafeName(form.Name)} = function(executionContext, defaultWebResourceName) {{\r\n";
-                formCode += devKit + "\r\n";
                 formCode += $"\t\tvar formContext = null;\r\n";
                 formCode += $"\t\tif (executionContext !== undefined) {{\r\n";
                 formCode += $"\t\t\tif (executionContext.getFormContext === undefined) {{\r\n";
@@ -503,7 +516,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     formCode += $"\t\tdevKit.LoadNavigations(formContext, navigation);\r\n";
                     formCode += $"\t\tform.Navigation = navigation;\r\n";
                 }
-                formCode += $"\t\tform.Utility = devKit.LoadUtility();\r\n";
+                formCode += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
                 formCode += JsOptionSetFormCode;
                 formCode += $"\t\tform.OptionSet = optionSet;\r\n";
                 formCode += $"\t\treturn form;\r\n";
@@ -512,7 +525,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             foreach (var form in processForms)
             {
                 if (!form.IsQuickCreate) continue;
-                formCode += $"\t{ProjectName}.Form{GetSafeName(form.Name)} = function(executionContext) {{\r\n";
+                formCode += $"\t{ProjectName}.Form{GetSafeName(form.Name)} = function(executionContext, defaultWebResourceName) {{\r\n";
                 formCode += $"\t\tvar formContext = null;\r\n";
                 formCode += $"\t\tif (executionContext !== undefined)\r\n";
                 formCode += $"\t\t{{\r\n";
@@ -541,6 +554,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 formCode += $"\t\t}}\r\n";
                 formCode += $"\t\tdevKit.LoadFields(formContext, body);\r\n";
                 formCode += $"\t\tform.Body = body;\r\n";
+                formCode += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
                 formCode += JsOptionSetFormCode;
                 formCode += $"\t\tform.OptionSet = optionSet;\r\n";
                 formCode += $"\t\treturn form;\r\n";

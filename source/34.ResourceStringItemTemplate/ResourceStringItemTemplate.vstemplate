@@ -3,7 +3,7 @@
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005"
             xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>11. Resource String</Name>
+    <Name>10. Resource String</Name>
     <Description>Resource String Template</Description>
     <Icon>icon.png</Icon>
     <TemplateID>0ff99023-2c48-4360-98ca-d7a770534a65</TemplateID>

@@ -33,6 +33,16 @@ var OptionSet = {
         Expanded: 'expanded',
         Collapsed: 'collapsed'
     },
+    ProcessDisplayState: {
+        Expanded: 'expanded',
+        Collapsed: 'collapsed',
+        Floating: 'floating'
+    },
+    ProcessStatus: {
+        Active: 'active',
+        Aborted: 'aborted',
+        Finished: 'finished'
+    },
     FieldAttributeType: {
         Boolean: 'boolean',
         DateTime: 'datetime',
