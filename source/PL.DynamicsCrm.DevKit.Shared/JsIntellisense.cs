@@ -376,6 +376,24 @@ namespace PL.DynamicsCrm.DevKit.Shared
         private static string GetSafeName(string name)
         {
             name = name.Replace(" ", "");
+            name = name.Replace("'", string.Empty);
+            name = name.Replace("-", "_");
+            name = name.Replace("(", string.Empty);
+            name = name.Replace(")", string.Empty);
+            name = name.Replace("/", string.Empty);
+            name = name.Replace("%", string.Empty);
+            name = name.Replace(",", string.Empty);
+            name = name.Replace("$", string.Empty);
+            name = name.Replace(".", string.Empty);
+            name = name.Replace("{", string.Empty);
+            name = name.Replace("}", string.Empty);
+            name = name.Replace(":", string.Empty);
+            name = name.Replace(";", string.Empty);
+            name = name.Replace("&", string.Empty);
+            name = name.Replace("=", string.Empty);
+            name = name.Replace("+", string.Empty);
+            name = name.Replace("-", string.Empty);
+            name = name.Replace(".", string.Empty);
             return name;
         }
 
@@ -402,7 +420,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
                                 name = x2.Attribute("name")?.Value
                             };
                 foreach (var row2 in rows2)
+                {
+                    if (row2.name.StartsWith("ref_pan")) continue;
                     intellisense += $"\t\t\t{row2.name}: intellisense.FormSection,\r\n";
+                }
                 intellisense = intellisense.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
                 intellisense += $"\t\t}}\r\n";
                 intellisense += $"\t}};\r\n";
