@@ -1,7 +1,7 @@
 {
-    "DefaultCrmVersion":"9.0.2.4",
+    "DefaultCrmVersion":"9.0.2.5",
     "DefaultNetVersion":"v4.5.2",
-    "DefaultCrmConnection":"Paz.LuckeyMonkey",
+    "DefaultCrmConnection":"crm304614.api.crm5.dynamics.com",
     "SolutionPrefix":"paz_",
     "CrmConnections":[
         {
@@ -9,6 +9,12 @@
             "Url":"https://demodevkit.api.crm.dynamics.com/XRMServices/2011/Organization.svc",
             "UserName":"admin@crm290456.onmicrosoft.com",
             "Password":"phuoc.levan@1180"
+        },
+        {
+            "Name":"crm304614.api.crm5.dynamics.com",
+            "Url":"https://crm304614.api.crm5.dynamics.com/XRMServices/2011/Organization.svc",
+            "UserName":"admin@crm304614.onmicrosoft.com",
+            "Password":"XVYcZiFupBAhk4bbedwoiA=="
         }
     ]
 }

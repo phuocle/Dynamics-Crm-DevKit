@@ -54,6 +54,13 @@
       <DependentUpon>Lead.js</DependentUpon>
     </None>
     <Content Include="entities\Lead.js" />
+    <Content Include="entities\Opportunity.form.js">
+      <DependentUpon>Opportunity.js</DependentUpon>
+    </Content>
+    <None Include="entities\Opportunity.intellisense.js">
+      <DependentUpon>Opportunity.js</DependentUpon>
+    </None>
+    <Content Include="entities\Opportunity.js" />
     <Content Include="RibbonDiffXml\Lead.xml" />
     <Content Include="test\Lead.test.js" />
     <Content Include="Web.config" />
