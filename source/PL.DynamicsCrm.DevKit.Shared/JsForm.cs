@@ -218,6 +218,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     {
                         if (section.Name != null)
                         {
+                            if (section.Name.StartsWith("ref_pan")) continue;
                             if (section.Name.Contains(" ") ||
                                 section.Name.Contains("{") ||
                                 section.Name.Contains("}"))
@@ -262,6 +263,24 @@ namespace PL.DynamicsCrm.DevKit.Shared
         private static string GetSafeName(string name)
         {
             name = name.Replace(" ", "");
+            name = name.Replace("'", string.Empty);
+            name = name.Replace("-", "_");
+            name = name.Replace("(", string.Empty);
+            name = name.Replace(")", string.Empty);
+            name = name.Replace("/", string.Empty);
+            name = name.Replace("%", string.Empty);
+            name = name.Replace(",", string.Empty);
+            name = name.Replace("$", string.Empty);
+            name = name.Replace(".", string.Empty);
+            name = name.Replace("{", string.Empty);
+            name = name.Replace("}", string.Empty);
+            name = name.Replace(":", string.Empty);
+            name = name.Replace(";", string.Empty);
+            name = name.Replace("&", string.Empty);
+            name = name.Replace("=", string.Empty);
+            name = name.Replace("+", string.Empty);
+            name = name.Replace("-", string.Empty);
+            name = name.Replace(".", string.Empty);
             return name;
         }
 
@@ -302,7 +321,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
                         Name = x2.Attribute("name")?.Value
                     };
                 foreach (var section in sections)
+                {
+                    if (section.Name.StartsWith("ref_pan")) continue;
                     code += $"\t\t\t\t\t{section.Name}: {{}},\r\n";
+                }
                 code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
                 code += $"\t\t\t\t}}\r\n";
                 code += $"\t\t\t}},\r\n";
@@ -488,7 +510,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     formCode += $"\t\tvar footer = {{\r\n";
                     formCode += codeFooter;
                     formCode += $"\t\t}};\r\n";
-                    formCode += $"\t\tdevKit.LoadFields(formContext, header, \"footer_\");\r\n";
+                    formCode += $"\t\tdevKit.LoadFields(formContext, footer, \"footer_\");\r\n";
                     formCode += $"\t\tform.Footer = footer;\r\n";
                 }
                 var codeProcess = GetJsProcessCode();

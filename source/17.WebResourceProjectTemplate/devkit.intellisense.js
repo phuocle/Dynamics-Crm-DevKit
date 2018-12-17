@@ -3251,7 +3251,7 @@ var WebApiClient = {
     'Response': function () { },
     ///<field name='Retrieve' type='Function'></field>
     'Retrieve': function (request) {
-        ///<param name='request' type='$ProjectNameJs$2.WebApi.RetrieveRequest'></param>
+        ///<param name='request' type='$ProjectNameJs$.WebApi.RetrieveRequest'></param>
         return {
             ///<field name='then' type='Function'></field>
             then: intellisense.WebApiCatch,
@@ -3269,7 +3269,7 @@ var WebApiClient = {
     'Token': '',
     ///<field name='Update' type='Function'></field>
     'Update': function (request) {
-        ///<param name='request' type='$ProjectNameJs$2.WebApi.UpdateRequest'></param>
+        ///<param name='request' type='$ProjectNameJs$.WebApi.UpdateRequest'></param>
         return {
             ///<field name='then' type='Function'></field>
             then: intellisense.WebApiCatch
