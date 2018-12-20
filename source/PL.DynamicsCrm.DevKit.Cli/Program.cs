@@ -14,7 +14,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
     {
         plugins,
         workflows,
-        webresources
+        webresources,
+        solutionpackagers
     }
 
     public class Program
@@ -24,7 +25,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"";
+                return @"C:\sources\phuocle\tfs\CDS-CRMGRIDPLUS\CRM\PL.CrmGridPlus.SolutionPackager";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -34,13 +35,14 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private static Plugin PluginJson { get; set; }
         private static Plugin WorkflowJson { get; set; }
         private static WebResource WebResourceJson { get; set; }
+        private static SolutionPackager SolutionPackagerJson { get; set; }
 
         private static CrmServiceClient CrmServiceClient { get; set; }
 
         public static void Main(string[] args)
         {
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli ", CliLog.COLOR_RED, "1.1.3");
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli ", CliLog.COLOR_RED, "1.1.4");
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             CommandLineArgs arguments = null;
 #if !DEBUG
@@ -91,6 +93,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var task = new WebResourceTask(CrmServiceClient, CurrentDirectory, WebResourceJson, arguments.Version);
                 task.Run();
             }
+            else if (arguments.Type == TaskType.solutionpackagers.ToString())
+            {
+                var task = new SolutionPackagerTask(CrmServiceClient, CurrentDirectory, SolutionPackagerJson, arguments.Version);
+                task.Run();
+            }
         }
 
         private static bool IsValid(CommandLineArgs arguments)
@@ -121,11 +128,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 {
                     TaskType.plugins.ToString(),
                     TaskType.workflows.ToString(),
-                    TaskType.webresources.ToString()
+                    TaskType.webresources.ToString(),
+                    TaskType.solutionpackagers.ToString()
                 };
                 if (!types.Contains(arguments.Type))
                 {
-                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: should be: plugins or workflows or webresources");
+                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: should be: plugins or workflows or webresources or solutionpackagers");
                     return false;
                 }
             }
@@ -134,6 +142,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 PluginJson = json.plugins.FirstOrDefault(x => x.profile == arguments.Profile);
                 WorkflowJson = json.workflows.FirstOrDefault(x => x.profile == arguments.Profile);
                 WebResourceJson = json.webresources.FirstOrDefault(x => x.profile == arguments.Profile);
+                SolutionPackagerJson = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
             }
 
             if (arguments.Profile.Length == 0)
@@ -175,7 +184,16 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     return false;
                 }
             }
-
+            else if (arguments.Type == TaskType.solutionpackagers.ToString())
+            {
+                SolutionPackagerJson = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
+                if (SolutionPackagerJson == null)
+                {
+                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: not found profile: {arguments.Profile}");
+                    return false;
+                }
+                //TODO: Check required data
+            }
             if (!IsConnectedDynamics365(arguments.Connection))
             {
                 CliLog.WriteLine(CliLog.COLOR_ERROR,

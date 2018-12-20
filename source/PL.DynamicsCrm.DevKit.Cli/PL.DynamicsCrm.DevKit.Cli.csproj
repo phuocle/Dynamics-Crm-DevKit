@@ -110,6 +110,12 @@
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
       <Link>EncryptDecrypt.cs</Link>
     </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\FileHandler.cs">
+      <Link>FileHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\FileSystem.cs">
+      <Link>FileSystem.cs</Link>
+    </Compile>
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="CommandLineArgs.cs" />
     <Compile Include="CrmPluginRegistrationAttribute.cs" />
@@ -117,12 +123,14 @@
     <Compile Include="Models\CliJson.cs" />
     <Compile Include="Models\Dependency.cs" />
     <Compile Include="Models\Plugin.cs" />
+    <Compile Include="Models\SolutionPackager.cs" />
     <Compile Include="Models\WebResource.cs" />
     <Compile Include="Models\WebResourceFile.cs" />
     <Compile Include="PluginTask.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleJson.cs" />
+    <Compile Include="SolutionPackagerTask.cs" />
     <Compile Include="WebResourceTask.cs" />
     <Compile Include="WorkflowTask.cs" />
   </ItemGroup>
