@@ -358,14 +358,18 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 184);
                         break;
                     case FormType.Report:
-                        txtName.Visible = true;
-                        Text = @"Add new Report Project";
+                        link.Text = @"Add New Report Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Report.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
-                        btnConnection.Visible = false;
-                        btnOk.Enabled = true;
-                        Size = new Size(596, 200);
-                        txtName.Size = new Size(440, 23);
+
+                        txtName.Visible = true;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.JsFormItem:
                         link.Text = @"Add New Js Form Class";
