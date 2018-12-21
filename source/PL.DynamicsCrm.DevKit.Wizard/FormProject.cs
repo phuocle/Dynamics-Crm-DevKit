@@ -271,12 +271,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         lblProject.Text = @"Entity:";
                         lblProjectName.Text = $"";
 
-
                         cboEntity.Visible = true;
                         cboEntity.Enabled = false;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
-
 
                         btnOk.Location = new Point(421, 80);
                         btnCancel.Location = new Point(551, 80);
@@ -390,21 +388,20 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         chkListForm.Enabled = false;
                         break;
                     case FormType.SelectEntity:
-                        Size = new Size(556, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        cboEntity.Visible = true;
-                        btnConnection.Visible = false;
-                        btnOk.Enabled = false;
-                        Text = @"Select Entity for Plugin Class";
+                        link.Text = @"Select Entity for Plugin Class";
+
                         lblProjectName.Text = $@"";
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        cboEntity.Enabled = false;
                         lblProject.Text = @"Entity:";
-                        lblProject.Location = new Point(40, 21);
+
+                        cboEntity.Visible = true;
+                        cboEntity.Enabled = false;
+                        btnConnection.Visible = true;
+                        btnOk.Enabled = false;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.ResourceString:
                         link.Text = @"Add New Resource String";

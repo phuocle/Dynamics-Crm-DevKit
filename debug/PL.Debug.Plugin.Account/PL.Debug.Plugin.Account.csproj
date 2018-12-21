@@ -49,6 +49,7 @@
     <None Include="deploy.bat" />
     <None Include="PL.Debug.Plugin.Account.snk" />
     <Compile Include="PostAccountCreateAsynchronous.cs" />
+    <Compile Include="PostAccountCreateSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\PL.Debug.Shared\PL.Debug.Shared.projitems" Label="Shared" Condition="Exists('..\PL.Debug.Shared\PL.Debug.Shared.projitems')" />
