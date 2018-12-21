@@ -343,19 +343,19 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 215);
                         break;
                     case FormType.UiTestItem:
-                        Size = new Size(596, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        txtName.Visible = true;
-                        Text = @"Add new Ui Test Item";
+                        link.Text = @"Add New UI Test Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Ui-Item-Template";
+
                         lblProject.Text = @"Class Name";
                         lblProjectName.Text = "";
                         lblProjectName.Tag = lblProjectName.Text;
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        txtName.Size = new Size(440, 23);
+
+                        txtName.Visible = true;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.Report:
                         txtName.Visible = true;
