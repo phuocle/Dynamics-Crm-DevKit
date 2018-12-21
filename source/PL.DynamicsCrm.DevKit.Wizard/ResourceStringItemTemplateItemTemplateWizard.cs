@@ -37,6 +37,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$ResourceStringName$", form.ResourceStringName);
                 }
             }
+            else
+            {
+                throw new WizardCancelledException("Cancel Click");
+            }
         }
 
         public bool ShouldAddProjectItem(string filePath)
