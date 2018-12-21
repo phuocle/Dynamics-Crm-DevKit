@@ -23,11 +23,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.Debug.Workflow", "PL.Deb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.Debug.Workflow.Account", "PL.Debug.Workflow.Account\PL.Debug.Workflow.Account.csproj", "{C2C7DC9A-2324-467D-9B4A-839A55F83726}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.Debug.CustomAction", "PL.Debug.CustomAction\PL.Debug.CustomAction.csproj", "{388FA02F-F37E-49CE-B259-43167DAD1488}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{06f5014b-72b6-451a-bc1f-d6274c6f3ae4}*SharedItemsImports = 4
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{168a0119-01f1-4c34-9d37-a261fb4e7975}*SharedItemsImports = 4
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{2e1c0de0-3a5a-4b18-88a1-5dba13fe30c5}*SharedItemsImports = 4
+		PL.Debug.Shared\PL.Debug.Shared.projitems*{388fa02f-f37e-49ce-b259-43167dad1488}*SharedItemsImports = 4
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{c004d77f-da4e-4a37-8e51-4a4b046d982a}*SharedItemsImports = 4
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{c2c7dc9a-2324-467d-9b4a-839a55f83726}*SharedItemsImports = 4
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{cc9f14a5-9d80-4a55-82de-81a08e1fda11}*SharedItemsImports = 13
@@ -73,6 +76,10 @@ Global
 		{C2C7DC9A-2324-467D-9B4A-839A55F83726}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2C7DC9A-2324-467D-9B4A-839A55F83726}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2C7DC9A-2324-467D-9B4A-839A55F83726}.Release|Any CPU.Build.0 = Release|Any CPU
+		{388FA02F-F37E-49CE-B259-43167DAD1488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{388FA02F-F37E-49CE-B259-43167DAD1488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{388FA02F-F37E-49CE-B259-43167DAD1488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{388FA02F-F37E-49CE-B259-43167DAD1488}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

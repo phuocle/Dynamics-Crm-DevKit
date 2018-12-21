@@ -227,17 +227,25 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 184);
                         break;
                     case FormType.CustomAction:
-                        txtName.Visible = true;
-                        txtName.Enabled = false;
-                        Text = @"Add new Custom Action Project";
+                        link.Text = @"Add new Custom Action Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Custom-Action-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.CustomAction.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
+
                         btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
                         cboEntity.Enabled = false;
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.LateBoundClass:
                         Size = new Size(596, 166);
