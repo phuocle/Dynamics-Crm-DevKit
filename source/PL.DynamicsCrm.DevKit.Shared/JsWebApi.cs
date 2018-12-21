@@ -68,15 +68,17 @@ namespace PL.DynamicsCrm.DevKit.Shared
             var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
             foreach (var entity in entities)
             {
-                var request = new RetrieveEntityRequest
+                if (entity.Length > 0)
                 {
-                    EntityFilters = EntityFilters.Attributes,
-                    LogicalName = entity
-                };
-                var response = (RetrieveEntityResponse)CrmService.Execute(request);
-                value += response.EntityMetadata.LogicalCollectionName + ";";
+                    var request = new RetrieveEntityRequest
+                    {
+                        EntityFilters = EntityFilters.Attributes,
+                        LogicalName = entity
+                    };
+                    var response = (RetrieveEntityResponse)CrmService.Execute(request);
+                    value += response.EntityMetadata.LogicalCollectionName + ";";
+                }
             }
-
             return value.TrimEnd(";".ToCharArray());
         }
         private RetrieveEntityResponse _Relationships = null;
