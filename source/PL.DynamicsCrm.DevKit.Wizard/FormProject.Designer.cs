@@ -30,12 +30,10 @@
         {
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.btnLoadForms = new System.Windows.Forms.Button();
-            this.chkListForm = new System.Windows.Forms.CheckedListBox();
             this.chkOthers = new System.Windows.Forms.CheckBox();
             this.cboNetVersion = new System.Windows.Forms.ComboBox();
             this.lblNetVersion = new System.Windows.Forms.Label();
             this.btnConnection = new System.Windows.Forms.Button();
-            this.cboEntity = new System.Windows.Forms.ComboBox();
             this.lblProjectName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblCrmVersion = new System.Windows.Forms.Label();
@@ -43,6 +41,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.lblProject = new System.Windows.Forms.Label();
+            this.chkListForm = new System.Windows.Forms.CheckedListBox();
+            this.cboEntity = new System.Windows.Forms.ComboBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.link = new System.Windows.Forms.LinkLabel();
             this.groupBox.SuspendLayout();
@@ -79,7 +79,7 @@
             // 
             this.btnLoadForms.Enabled = false;
             this.btnLoadForms.Location = new System.Drawing.Point(551, 170);
-            this.btnLoadForms.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnLoadForms.Margin = new System.Windows.Forms.Padding(5);
             this.btnLoadForms.Name = "btnLoadForms";
             this.btnLoadForms.Size = new System.Drawing.Size(120, 28);
             this.btnLoadForms.TabIndex = 22;
@@ -87,17 +87,6 @@
             this.btnLoadForms.UseVisualStyleBackColor = true;
             this.btnLoadForms.Visible = false;
             this.btnLoadForms.Click += new System.EventHandler(this.btnLoadForms_Click);
-            // 
-            // chkListForm
-            // 
-            this.chkListForm.FormattingEnabled = true;
-            this.chkListForm.Location = new System.Drawing.Point(13, 81);
-            this.chkListForm.Margin = new System.Windows.Forms.Padding(2);
-            this.chkListForm.Name = "chkListForm";
-            this.chkListForm.Size = new System.Drawing.Size(531, 235);
-            this.chkListForm.TabIndex = 21;
-            this.chkListForm.Visible = false;
-            this.chkListForm.SelectedIndexChanged += new System.EventHandler(this.chkListForm_SelectedIndexChanged);
             // 
             // chkOthers
             // 
@@ -151,21 +140,6 @@
             this.btnConnection.Visible = false;
             this.btnConnection.Click += new System.EventHandler(this.btnConnection_ClickAsync);
             // 
-            // cboEntity
-            // 
-            this.cboEntity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboEntity.DisplayMember = "Name";
-            this.cboEntity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboEntity.FormattingEnabled = true;
-            this.cboEntity.Location = new System.Drawing.Point(120, 28);
-            this.cboEntity.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.cboEntity.Name = "cboEntity";
-            this.cboEntity.Size = new System.Drawing.Size(492, 28);
-            this.cboEntity.TabIndex = 15;
-            this.cboEntity.Visible = false;
-            this.cboEntity.SelectedIndexChanged += new System.EventHandler(this.cboEntity_SelectedIndexChanged);
-            // 
             // lblProjectName
             // 
             this.lblProjectName.AutoSize = true;
@@ -176,14 +150,13 @@
             this.lblProjectName.Size = new System.Drawing.Size(36, 20);
             this.lblProjectName.TabIndex = 13;
             this.lblProjectName.Text = "aaa";
-            this.lblProjectName.Visible = false;
             // 
             // txtName
             // 
             this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.Location = new System.Drawing.Point(120, 28);
-            this.txtName.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.txtName.Margin = new System.Windows.Forms.Padding(5);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(492, 26);
             this.txtName.TabIndex = 1;
@@ -219,7 +192,7 @@
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(551, 113);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(5);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(120, 28);
             this.btnCancel.TabIndex = 4;
@@ -230,7 +203,7 @@
             // btnOk
             // 
             this.btnOk.Location = new System.Drawing.Point(421, 113);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(5);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(120, 28);
             this.btnOk.TabIndex = 0;
@@ -247,6 +220,32 @@
             this.lblProject.Size = new System.Drawing.Size(108, 20);
             this.lblProject.TabIndex = 2;
             this.lblProject.Text = "Project Name:";
+            // 
+            // chkListForm
+            // 
+            this.chkListForm.FormattingEnabled = true;
+            this.chkListForm.Location = new System.Drawing.Point(13, 81);
+            this.chkListForm.Margin = new System.Windows.Forms.Padding(2);
+            this.chkListForm.Name = "chkListForm";
+            this.chkListForm.Size = new System.Drawing.Size(531, 235);
+            this.chkListForm.TabIndex = 21;
+            this.chkListForm.Visible = false;
+            this.chkListForm.SelectedIndexChanged += new System.EventHandler(this.chkListForm_SelectedIndexChanged);
+            // 
+            // cboEntity
+            // 
+            this.cboEntity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboEntity.DisplayMember = "Name";
+            this.cboEntity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboEntity.FormattingEnabled = true;
+            this.cboEntity.Location = new System.Drawing.Point(120, 28);
+            this.cboEntity.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.cboEntity.Name = "cboEntity";
+            this.cboEntity.Size = new System.Drawing.Size(492, 28);
+            this.cboEntity.TabIndex = 15;
+            this.cboEntity.Visible = false;
+            this.cboEntity.SelectedIndexChanged += new System.EventHandler(this.cboEntity_SelectedIndexChanged);
             // 
             // progressBar
             // 

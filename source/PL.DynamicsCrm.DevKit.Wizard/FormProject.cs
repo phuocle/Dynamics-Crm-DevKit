@@ -111,7 +111,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Console.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
 
-                        lblProjectName.Visible = true;
                         txtName.Visible = true;
                         btnConnection.Visible = true;
                         lblCrmVersion.Visible = true;
@@ -131,7 +130,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         lblProjectName.Text = GetName(parts) + $@"{FormType.WebResource.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
 
-                        lblProjectName.Visible = true;
                         txtName.Visible = true;
                         btnConnection.Visible = true;
                         lblCrmVersion.Visible = true;
@@ -145,16 +143,24 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 215);
                         break;
                     case FormType.Plugin:
-                        cboEntity.Visible = true;
-                        btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Text = @"Add new Plugin Project";
+                        link.Text = @"Add New Plugin Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Plugin-Project-Template";
+
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Plugin.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
+
+                        cboEntity.Visible = true;
+                        btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
                         cboEntity.Enabled = false;
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.Test:
                         cboEntity.Visible = true;

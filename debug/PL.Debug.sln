@@ -15,9 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.Debug.Console", "PL.Debu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.Debug.WebResource.1", "PL.Debug.WebResource.1\PL.Debug.WebResource.1.csproj", "{FE51511A-08B9-4F66-8F82-07AB110DCD28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.Debug.Plugin.Contact", "PL.Debug.Plugin.Contact\PL.Debug.Plugin.Contact.csproj", "{168A0119-01F1-4C34-9D37-A261FB4E7975}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{06f5014b-72b6-451a-bc1f-d6274c6f3ae4}*SharedItemsImports = 4
+		PL.Debug.Shared\PL.Debug.Shared.projitems*{168a0119-01f1-4c34-9d37-a261fb4e7975}*SharedItemsImports = 4
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{c004d77f-da4e-4a37-8e51-4a4b046d982a}*SharedItemsImports = 4
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{cc9f14a5-9d80-4a55-82de-81a08e1fda11}*SharedItemsImports = 13
 	EndGlobalSection
@@ -46,6 +49,10 @@ Global
 		{FE51511A-08B9-4F66-8F82-07AB110DCD28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE51511A-08B9-4F66-8F82-07AB110DCD28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE51511A-08B9-4F66-8F82-07AB110DCD28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{168A0119-01F1-4C34-9D37-A261FB4E7975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{168A0119-01F1-4C34-9D37-A261FB4E7975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{168A0119-01F1-4C34-9D37-A261FB4E7975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{168A0119-01F1-4C34-9D37-A261FB4E7975}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
