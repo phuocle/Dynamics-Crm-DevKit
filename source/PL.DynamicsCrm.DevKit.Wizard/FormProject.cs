@@ -324,18 +324,22 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 215);
                         break;
                     case FormType.UiTest:
-                        txtName.Visible = true;
-                        txtName.Enabled = false;
-                        Text = @"Add new Ui Test Project";
+                        link.Text = @"Add New UI Test Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.UiTest.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
                         btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
                         btnOk.Enabled = false;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
-                        cboEntity.Enabled = false;
-                        cboNetVersion.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.UiTestItem:
                         Size = new Size(596, 166);
