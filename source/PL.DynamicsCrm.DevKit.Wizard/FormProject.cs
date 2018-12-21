@@ -192,18 +192,24 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 184);
                         break;
                     case FormType.Workflow:
-                        cboEntity.Visible = true;
-                        btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        chkOthers.Visible = true;
-                        Text = @"Add new Workflow Project";
+                        link.Text = @"Add New Workflow Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Workflow-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Workflow.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
-                        Size = new Size(596, 200);
+
+                        cboEntity.Visible = true;
+                        btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+                        chkOthers.Visible = true;
                         chkOthers.Enabled = false;
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
+                        btnOk.Enabled = false;
                         cboEntity.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.WorkflowItem:
                         Size = new Size(596, 166);
