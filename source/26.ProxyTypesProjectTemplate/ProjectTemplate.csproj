@@ -45,6 +45,6 @@
     <Compile Include="ProxyTypesAssembly.cs" />
     <None Include="packages.config" />
     <None Include="run.bat" />
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

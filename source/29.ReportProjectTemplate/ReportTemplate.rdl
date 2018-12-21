@@ -1,18 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <Description>Report Template</Description>
+  <Author>PL.DynamicsCrm.DevKit</Author>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
     <DataSource Name="Dynamics365">
       <ConnectionProperties>
         <DataProvider>MSCRMFETCH</DataProvider>
-        <ConnectString>https://disco.crm.dynamics.com/;orgbf3c7bd9</ConnectString>
+        <ConnectString>https://disco.crm5.dynamics.com/;orgeb8f78bb</ConnectString>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>f4f8fdea-75c5-4e86-8513-749e7913d354</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="DataSet">
+    <DataSet Name="Account">
       <Query>
         <DataSourceName>Dynamics365</DataSourceName>
         <QueryParameters>
@@ -38,17 +40,21 @@
   <ReportSections>
     <ReportSection>
       <Body>
-        <Height>4cm</Height>
-        <Style />
+        <Height>27.7cm</Height>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
       </Body>
-      <Width>15cm</Width>
+      <Width>19cm</Width>
       <Page>
         <PageHeight>29.7cm</PageHeight>
         <PageWidth>21cm</PageWidth>
-        <LeftMargin>2cm</LeftMargin>
-        <RightMargin>2cm</RightMargin>
-        <TopMargin>2cm</TopMargin>
-        <BottomMargin>2cm</BottomMargin>
+        <LeftMargin>1cm</LeftMargin>
+        <RightMargin>1cm</RightMargin>
+        <TopMargin>1cm</TopMargin>
+        <BottomMargin>1cm</BottomMargin>
         <ColumnSpacing>1.27cm</ColumnSpacing>
         <Style />
       </Page>
@@ -292,7 +298,7 @@
       <DataType>String</DataType>
       <DefaultValue>
         <Values>
-          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="account"&gt;&lt;all-attributes /&gt;&lt;filter type="and"&gt;&lt;condition attribute="modifiedon" operator="last-x-days" value="30" /&gt;&lt;/filter&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
+          <Value>&lt;fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false"&gt;&lt;entity name="account"&gt;&lt;all-attributes/&gt;&lt;/entity&gt;&lt;/fetch&gt;</Value>
         </Values>
       </DefaultValue>
       <Prompt>CRM_FilteredAccount</Prompt>
@@ -317,6 +323,17 @@
       <Prompt>CRM_FullName</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
+    <ReportParameter Name="accountid">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Account</DataSetName>
+          <ValueField>accountid</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>AccountId</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -332,7 +349,7 @@
   </CustomProperties>
   <Language>en-US</Language>
   <CodeModules>
-    <CodeModule>Microsoft.Crm.Reporting.RdlHelper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</CodeModule>
+    <CodeModule>Microsoft.Crm.Reporting.RdlHelper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35</CodeModule>
   </CodeModules>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
