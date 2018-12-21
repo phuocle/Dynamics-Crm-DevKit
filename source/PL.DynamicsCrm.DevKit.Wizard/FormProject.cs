@@ -407,21 +407,22 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         lblProject.Location = new Point(40, 21);
                         break;
                     case FormType.ResourceString:
+                        link.Text = @"Add New Resource String";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template";
+
+                        lblProject.Text = @"Language";
                         LoadLanguages();
-                        Size = new Size(566, 196);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
+
+                        lblProjectName.Visible = false;
                         txtName.Visible = true;
                         cboEntity.Visible = true;
-                        Text = @"Add new Resource String Item";
-                        lblProject.Text = @"Language";
-                        lblProjectName.Visible = false;
-                        txtName.Location = new Point(115, 55);
-                        btnOk.Location = new Point(115, 95);
-                        btnCancel.Location = new Point(115 + 150 + 15, 95);
-                        lblProject.Location = new Point(20, 21);
+
+                        txtName.Location = new Point(120, 28 + 40);
+
+                        btnOk.Location = new Point(421, 120);
+                        btnCancel.Location = new Point(551, 120);
+
+                        Size = new Size(710, 230);
                         break;
                 }
             }
