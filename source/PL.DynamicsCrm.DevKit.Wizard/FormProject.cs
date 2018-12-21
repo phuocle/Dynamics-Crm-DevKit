@@ -105,17 +105,23 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 switch (_formType)
                 {
                     case FormType.Console:
-                        txtName.Visible = true;
-                        txtName.Enabled = false;
-                        Text = @"Add new Console Project";
+                        link.Text = @"Add New Console Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template";
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Console.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
+
+                        lblProjectName.Visible = true;
+                        txtName.Visible = true;
                         btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
+                        txtName.Enabled = false;
                         btnOk.Enabled = false;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
-                        cboEntity.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.WebResource:
                         txtName.Visible = true;
@@ -155,10 +161,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(596, 165);
                         lblCrmVersion.Visible = false;
                         cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
                         lblNetVersion.Visible = false;
                         cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         cboEntity.Visible = true;
                         Text = @"Add new Test Class";
                         lblProject.Text = @"Class";
@@ -187,10 +191,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(596, 166);
                         lblCrmVersion.Visible = false;
                         cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
                         lblNetVersion.Visible = false;
                         cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         txtName.Visible = true;
                         Text = @"Add new Workflow Item";
                         lblProject.Text = @"Class Name";
@@ -217,10 +219,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(596, 166);
                         lblCrmVersion.Visible = false;
                         cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
                         lblNetVersion.Visible = false;
                         cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
@@ -237,10 +237,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(596, 166);
                         lblCrmVersion.Visible = false;
                         cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
                         lblNetVersion.Visible = false;
                         cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
@@ -257,10 +255,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(596, 166);
                         lblCrmVersion.Visible = false;
                         cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
                         lblNetVersion.Visible = false;
                         cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
@@ -307,10 +303,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(596, 166);
                         lblCrmVersion.Visible = false;
                         cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
                         lblNetVersion.Visible = false;
                         cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         txtName.Visible = true;
                         Text = @"Add new Ui Test Item";
                         lblProject.Text = @"Class Name";
@@ -336,10 +330,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         btnLoadForms.Visible = true;
                         lblCrmVersion.Visible = false;
                         cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
                         lblNetVersion.Visible = false;
                         cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
@@ -357,10 +349,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(556, 166);
                         lblCrmVersion.Visible = false;
                         cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
                         lblNetVersion.Visible = false;
                         cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         cboEntity.Visible = true;
                         btnConnection.Visible = false;
                         btnOk.Enabled = false;
@@ -377,8 +367,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(566, 196);
                         lblCrmVersion.Visible = false;
                         cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         lblNetVersion.Visible = false;
                         cboNetVersion.Visible = false;
                         txtName.Visible = true;
@@ -386,13 +374,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Text = @"Add new Resource String Item";
                         lblProject.Text = @"Language";
                         lblProjectName.Visible = false;
-                        lblResourceStringName.Visible = true;
                         txtName.Location = new Point(115, 55);
                         btnOk.Location = new Point(115, 95);
                         btnCancel.Location = new Point(115 + 150 + 15, 95);
                         lblProject.Location = new Point(20, 21);
-                        lblResourceStringName.Location = new Point(20, 55);
-                        lblResourceStringName.Text = @"Name";
                         break;
                 }
             }
@@ -1325,6 +1310,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             public string Name { get; set; }
             public string Id { get; set; }
+        }
+
+        private void link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            link.LinkVisited = true;
+            System.Diagnostics.Process.Start((string)link.Tag);
         }
     }
 }
