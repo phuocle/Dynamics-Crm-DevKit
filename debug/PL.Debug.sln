@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.Debug.ProxyTypes", "PL.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.Debug.Console", "PL.Debug.Console\PL.Debug.Console.csproj", "{C004D77F-DA4E-4A37-8E51-4A4B046D982A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.Debug.WebResource.1", "PL.Debug.WebResource.1\PL.Debug.WebResource.1.csproj", "{FE51511A-08B9-4F66-8F82-07AB110DCD28}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PL.Debug.Shared\PL.Debug.Shared.projitems*{06f5014b-72b6-451a-bc1f-d6274c6f3ae4}*SharedItemsImports = 4
@@ -40,6 +42,10 @@ Global
 		{C004D77F-DA4E-4A37-8E51-4A4B046D982A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C004D77F-DA4E-4A37-8E51-4A4B046D982A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C004D77F-DA4E-4A37-8E51-4A4B046D982A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE51511A-08B9-4F66-8F82-07AB110DCD28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE51511A-08B9-4F66-8F82-07AB110DCD28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE51511A-08B9-4F66-8F82-07AB110DCD28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE51511A-08B9-4F66-8F82-07AB110DCD28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

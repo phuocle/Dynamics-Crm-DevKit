@@ -107,6 +107,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     case FormType.Console:
                         link.Text = @"Add New Console Project";
                         link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Console.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
 
@@ -124,18 +125,24 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 215);
                         break;
                     case FormType.WebResource:
-                        txtName.Visible = true;
-                        Text = @"Add new WebResource Project";
+                        link.Text = @"Add New WebResource Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.WebResource.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
+
+                        lblProjectName.Visible = true;
+                        txtName.Visible = true;
                         btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        btnCancel.Enabled = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
                         txtName.Enabled = false;
-                        cboEntity.Enabled = false;
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
-                        Size = new Size(596, 200);
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.Plugin:
                         cboEntity.Visible = true;
