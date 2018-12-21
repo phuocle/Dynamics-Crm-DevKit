@@ -67,6 +67,7 @@
     <Content Include="entities\OpportunityProduct.webapi.js">
       <DependentUpon>OpportunityProduct.js</DependentUpon>
     </Content>
+    <Content Include="test\Account.test.js" />
     <Content Include="Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

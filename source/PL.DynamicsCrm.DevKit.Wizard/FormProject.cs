@@ -265,22 +265,23 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 184);
                         break;
                 case FormType.JsTestItem:
-                        Size = new Size(596, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
+                        link.Text = @"Add New Js Test Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Test-Item-Template";
+
+                        lblProject.Text = @"Entity:";
+                        lblProjectName.Text = $"";
+
+
                         cboEntity.Visible = true;
+                        cboEntity.Enabled = false;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
-                        Text = @"Add new Js Test Class";
-                        lblProject.Text = "Class:";
-                        lblProjectName.Text = $"";
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        cboEntity.Enabled = false;
-                        lblProject.Text = @"Entity:";
-                        lblProject.Location = new Point(40, 21);
+
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.JsWebApiItem:
                         link.Text = @"Add New Js WebApi Class";
