@@ -212,19 +212,19 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 215);
                         break;
                     case FormType.WorkflowItem:
-                        Size = new Size(596, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        txtName.Visible = true;
-                        Text = @"Add new Workflow Item";
+                        link.Text = @"Add new Workflow Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template";
+
                         lblProject.Text = @"Class Name";
-                        lblProjectName.Text = "";//$@"{(GetName(parts).Substring(0, GetName(parts).Length -1)).Replace(".","")}{FormType.Workflow.ToString()}{EntityName}";
+                        lblProjectName.Text = "";
                         lblProjectName.Tag = lblProjectName.Text;
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        lblProject.Location = new Point(20, 21);
+
+                        txtName.Visible = true;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.CustomAction:
                         txtName.Visible = true;

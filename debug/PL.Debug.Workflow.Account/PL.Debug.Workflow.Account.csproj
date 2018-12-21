@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SendMail.cs" />
     <None Include="PL.Debug.Workflow.Account.snk" />
     <None Include="packages.config" />
     <None Include="deploy.bat" />
