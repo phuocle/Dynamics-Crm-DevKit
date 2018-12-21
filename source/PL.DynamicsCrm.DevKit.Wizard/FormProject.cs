@@ -304,17 +304,25 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         lblProject.Location = new Point(40, 21);
                         break;
                     case FormType.ProxyTypes:
-                        txtName.Visible = true;
-                        txtName.Enabled = false;
-                        Text = @"Add new Proxy Types Project";
+                        link.Text = @"Add New Proxy Types Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template";
+
                         lblProjectName.Tag = $"{GetName(parts).Substring(0, GetName(parts).Length - 1)}";
                         txtName.Text = @"ProxyTypes";
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
+
                         btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
                         cboEntity.Enabled = false;
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.UiTest:
                         txtName.Visible = true;
