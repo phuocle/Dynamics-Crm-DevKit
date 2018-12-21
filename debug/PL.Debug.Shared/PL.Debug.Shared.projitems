@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="SharedProjectFile_SccProperties">
     <SharedProjectFile_ProjectGuid>{2c8fd2f6-c9e0-4c41-ae79-c486e4db4449}</SharedProjectFile_ProjectGuid>
@@ -12,10 +12,13 @@
     <Import_RootNamespace>PL.Debug.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
     <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
+			<DependentUpon>Account.cs</DependentUpon>
+		</Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />
