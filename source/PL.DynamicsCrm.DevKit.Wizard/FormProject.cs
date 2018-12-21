@@ -283,25 +283,24 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         lblProject.Location = new Point(40, 21);
                         break;
                     case FormType.JsWebApiItem:
-                        Size = new Size(596, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        cboEntity.Visible = true;
-                        btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Text = @"Add new Js WebApi Class";
+                        link.Text = @"Add New Js WebApi Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template";
+
                         lblProject.Text = @"Class:";
                         lblProjectName.Text = $"";
                         chkOthers.Visible = true;
                         chkOthers.Text = "Debug";
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
+                        lblProject.Text = "Entity:";
+                        cboEntity.Visible = true;
+                        btnConnection.Visible = true;
+                        btnOk.Enabled = false;
                         cboEntity.Enabled = false;
                         chkOthers.Enabled = false;
-                        lblProject.Text = "Entity:";
-                        lblProject.Location = new Point(40, 21);
+
+                        btnOk.Location = new Point(421, 94);
+                        btnCancel.Location = new Point(551, 94);
+
+                        Size = new Size(710, 198);
                         break;
                     case FormType.ProxyTypes:
                         link.Text = @"Add New Proxy Types Project";
