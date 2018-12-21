@@ -71,14 +71,14 @@
             this.groupBox.Margin = new System.Windows.Forms.Padding(19, 20, 19, 20);
             this.groupBox.Name = "groupBox";
             this.groupBox.Padding = new System.Windows.Forms.Padding(4, 20, 4, 2);
-            this.groupBox.Size = new System.Drawing.Size(680, 267);
+            this.groupBox.Size = new System.Drawing.Size(680, 330);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             // 
             // btnLoadForms
             // 
             this.btnLoadForms.Enabled = false;
-            this.btnLoadForms.Location = new System.Drawing.Point(551, 170);
+            this.btnLoadForms.Location = new System.Drawing.Point(421, 81);
             this.btnLoadForms.Margin = new System.Windows.Forms.Padding(5);
             this.btnLoadForms.Name = "btnLoadForms";
             this.btnLoadForms.Size = new System.Drawing.Size(120, 28);
@@ -227,7 +227,7 @@
             this.chkListForm.Location = new System.Drawing.Point(13, 81);
             this.chkListForm.Margin = new System.Windows.Forms.Padding(2);
             this.chkListForm.Name = "chkListForm";
-            this.chkListForm.Size = new System.Drawing.Size(531, 235);
+            this.chkListForm.Size = new System.Drawing.Size(401, 235);
             this.chkListForm.TabIndex = 21;
             this.chkListForm.Visible = false;
             this.chkListForm.SelectedIndexChanged += new System.EventHandler(this.chkListForm_SelectedIndexChanged);
@@ -250,7 +250,7 @@
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(20, 313);
+            this.progressBar.Location = new System.Drawing.Point(20, 376);
             this.progressBar.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(680, 4);
@@ -273,7 +273,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 327);
+            this.ClientSize = new System.Drawing.Size(710, 390);
             this.ControlBox = false;
             this.Controls.Add(this.link);
             this.Controls.Add(this.progressBar);

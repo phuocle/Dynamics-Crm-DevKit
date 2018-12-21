@@ -364,22 +364,19 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         txtName.Size = new Size(440, 23);
                         break;
                     case FormType.JsFormItem:
-                        Size = new Size(596, 380);
-                        chkListForm.Visible = true;
-                        btnLoadForms.Visible = true;
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        cboEntity.Visible = true;
-                        btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Text = @"Add new Js Form Class";
+                        link.Text = @"Add New Js Form Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template";
+
                         lblProject.Text = "Entity:";
-                        lblProject.Location = new Point(40, 21);
                         lblProjectName.Text = $"";
                         chkOthers.Visible = true;
                         chkOthers.Text = @"Debug";
+
+                        chkListForm.Visible = true;
+                        btnLoadForms.Visible = true;
+                        cboEntity.Visible = true;
+                        btnConnection.Visible = true;
+                        btnOk.Enabled = false;
                         cboEntity.Enabled = false;
                         chkOthers.Enabled = false;
                         chkListForm.Enabled = false;

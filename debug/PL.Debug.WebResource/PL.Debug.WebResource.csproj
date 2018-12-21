@@ -47,6 +47,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Account.intellisense.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Account.js" />
     <Content Include="entities\OpportunityProduct.form.js">
       <DependentUpon>OpportunityProduct.js</DependentUpon>
     </Content>
