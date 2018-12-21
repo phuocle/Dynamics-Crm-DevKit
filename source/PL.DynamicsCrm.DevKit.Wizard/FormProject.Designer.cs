@@ -71,7 +71,7 @@
             this.groupBox.Margin = new System.Windows.Forms.Padding(19, 20, 19, 20);
             this.groupBox.Name = "groupBox";
             this.groupBox.Padding = new System.Windows.Forms.Padding(4, 20, 4, 2);
-            this.groupBox.Size = new System.Drawing.Size(680, 155);
+            this.groupBox.Size = new System.Drawing.Size(680, 267);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             // 
@@ -250,7 +250,7 @@
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(20, 201);
+            this.progressBar.Location = new System.Drawing.Point(20, 313);
             this.progressBar.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(680, 4);
@@ -273,7 +273,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 215);
+            this.ClientSize = new System.Drawing.Size(710, 327);
             this.ControlBox = false;
             this.Controls.Add(this.link);
             this.Controls.Add(this.progressBar);

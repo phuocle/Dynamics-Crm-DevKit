@@ -163,12 +163,18 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         Size = new Size(710, 215);
                         break;
                     case FormType.Test:
-                        cboEntity.Visible = true;
-                        Text = @"Add new Test Project";
+                        link.Text = @"Add New Test Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template";
+
                         lblProjectName.Text = $@"???.Test";
                         LoadProjects();
-                        Size = new Size(596, 200);
-                        cboEntity.Size = new Size(440, 25);
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        cboEntity.Visible = true;
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.TestItem:
                         Size = new Size(596, 165);
