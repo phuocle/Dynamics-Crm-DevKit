@@ -167,30 +167,29 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template";
 
                         lblProjectName.Text = $@"???.Test";
+
                         LoadProjects();
+                        cboEntity.Visible = true;
 
                         btnOk.Location = new Point(421, 80);
                         btnCancel.Location = new Point(551, 80);
 
-                        cboEntity.Visible = true;
-
                         Size = new Size(710, 184);
                         break;
                     case FormType.TestItem:
-                        Size = new Size(596, 165);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        cboEntity.Visible = true;
-                        Text = @"Add new Test Class";
+                        link.Text = @"Add New Test Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template";
+
                         lblProject.Text = @"Class";
                         lblProjectName.Text = $@"???.Test";
-                        cboEntity.Size = new Size(440, 25);
+
                         LoadClasses();
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        lblProject.Location = new Point(20, 21);
+                        cboEntity.Visible = true;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.Workflow:
                         cboEntity.Visible = true;
