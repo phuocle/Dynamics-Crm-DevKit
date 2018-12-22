@@ -215,6 +215,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\35.DataProviderProjectTemplate\35.DataProviderProjectTemplate.csproj">
+      <Project>{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}</Project>
+      <Name>35.DataProviderProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PL.DynamicsCrm.DevKit.Package\PL.DynamicsCrm.DevKit.Package.csproj">
       <Project>{6302EA70-637D-4FDC-B169-1493427DD8D2}</Project>
       <Name>PL.DynamicsCrm.DevKit.Package</Name>

@@ -421,6 +421,24 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         Size = new Size(710, 230);
                         break;
+                    case FormType.DataProvider:
+                        link.Text = @"Add New Data Provider Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Data-Provider-Project-Template";
+
+                        lblProjectName.Text = GetName(parts) + $@"{FormType.DataProvider.ToString()}";
+                        lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
+                        btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
+                        break;
                 }
             }
         }
@@ -1148,6 +1166,16 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 DialogResult = DialogResult.OK;
                 Close();
             }
+            else if (FormType == FormType.DataProvider)
+            {
+                txtName.Enabled = false;
+                cboCrmVersion.Enabled = false;
+                cboNetVersion.Enabled = false;
+                btnOk.Enabled = false;
+                btnCancel.Enabled = false;
+                DialogResult = DialogResult.OK;
+                Close();
+            }
         }
 
         public string SelectedEntity { get; set; }
@@ -1216,7 +1244,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 }
 
                 if (FormType == FormType.ProxyTypes || FormType == FormType.WebResource ||
-                    FormType == FormType.Console || FormType == FormType.CustomAction || FormType == FormType.UiTest)
+                    FormType == FormType.Console || FormType == FormType.CustomAction || FormType == FormType.UiTest || FormType == FormType.DataProvider)
                 {
                     btnOk.Enabled = true;
                     btnCancel.Enabled = true;
