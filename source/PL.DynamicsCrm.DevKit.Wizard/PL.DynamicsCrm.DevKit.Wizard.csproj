@@ -91,6 +91,7 @@
     <Compile Include="CSharpCustomActionItemTemplateWizard.cs" />
     <Compile Include="CSharpTestUiItemTemplateWizard.cs" />
     <Compile Include="CustomActionProjectTemplateWizard.cs" />
+    <Compile Include="DataProviderProjectTemplateWizard.cs" />
     <Compile Include="JavaScriptFormItemTemplateWizard.cs" />
     <Compile Include="JavaScriptTestItemTemplateWizard.cs" />
     <Compile Include="JavaScriptWebApiItemTemplateWizard.cs" />

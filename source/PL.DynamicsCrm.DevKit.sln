@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "33.CSharpLateBoundClassItem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "34.ResourceStringItemTemplate", "34.ResourceStringItemTemplate\34.ResourceStringItemTemplate.csproj", "{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "35.DataProviderProjectTemplate", "35.DataProviderProjectTemplate\35.DataProviderProjectTemplate.csproj", "{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems*{aa712c45-5dec-46e5-9e02-497b2ebf9cab}*SharedItemsImports = 4
@@ -169,6 +171,10 @@ Global
 		{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -195,8 +201,9 @@ Global
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
 		{94B6AC50-3D82-4060-9C1D-3486F2046EEA} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
 		{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
+		{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}
-	EndGlobalSection	
+	EndGlobalSection
 EndGlobal
