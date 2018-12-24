@@ -18,6 +18,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             InitializeComponent();
 
             Dte = dte;
+
+            link.Text = "Add New Plugin Class";
+            link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Plugin-Item-Template";
+
             FormType = formType;
             EntityName = entityName;
             LogicalName = logicalName;
@@ -192,6 +196,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 ddlExecution.Text = "";
                 ddlExecution.Enabled = true;
             }
+        }
+
+        private void link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            link.LinkVisited = true;
+            System.Diagnostics.Process.Start((string)link.Tag);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
         public static List<NuGetPackage> GetMicrosoftCrmSdkCoreAssembliesPackages()
         {
             var list = GetPackages("Microsoft.CrmSdk.CoreAssemblies");
-            if (list == null) return new List<NuGetPackage> { new NuGetPackage { Version = "9.0.2.4" } };
+            if (list == null) return new List<NuGetPackage> { new NuGetPackage { Version = "9.0.2.5" } };
             var packages = (from item in list
                 orderby item.Version.ToOriginalString() descending
                 select new NuGetPackage
@@ -41,7 +41,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
         public static NuGetPackage GetPLDynamicsCrmDevKitCliPackage()
         {
             var list = GetPackages("PL.DynamicsCrm.DevKit.Cli");
-            if (list == null) return new NuGetPackage { Version = "1.1.0" };
+            if (list == null) return new NuGetPackage { Version = "1.1.4" };
             var packages = (from item in list
                 orderby item.Version.ToOriginalString() descending
                 select new NuGetPackage

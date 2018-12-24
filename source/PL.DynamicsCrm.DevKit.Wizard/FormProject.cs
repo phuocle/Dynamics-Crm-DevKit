@@ -105,294 +105,339 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 switch (_formType)
                 {
                     case FormType.Console:
-                        txtName.Visible = true;
-                        txtName.Enabled = false;
-                        Text = @"Add new Console Project";
+                        link.Text = @"Add New Console Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Console-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Console.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
                         btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
+                        txtName.Enabled = false;
                         btnOk.Enabled = false;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
-                        cboEntity.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.WebResource:
-                        txtName.Visible = true;
-                        Text = @"Add new WebResource Project";
+                        link.Text = @"Add New WebResource Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/WebResource-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.WebResource.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
                         btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        btnCancel.Enabled = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
                         txtName.Enabled = false;
-                        cboEntity.Enabled = false;
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
-                        Size = new Size(596, 200);
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.Plugin:
-                        cboEntity.Visible = true;
-                        btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Text = @"Add new Plugin Project";
+                        link.Text = @"Add New Plugin Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Plugin-Project-Template";
+
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Plugin.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
+
+                        cboEntity.Visible = true;
+                        btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
                         cboEntity.Enabled = false;
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.Test:
-                        cboEntity.Visible = true;
-                        Text = @"Add new Test Project";
+                        link.Text = @"Add New Test Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Test-Project-Template";
+
                         lblProjectName.Text = $@"???.Test";
+
                         LoadProjects();
-                        Size = new Size(596, 200);
-                        cboEntity.Size = new Size(440, 25);
+                        cboEntity.Visible = true;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.TestItem:
-                        Size = new Size(596, 165);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
-                        cboEntity.Visible = true;
-                        Text = @"Add new Test Class";
+                        link.Text = @"Add New Test Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Item-Template";
+
                         lblProject.Text = @"Class";
                         lblProjectName.Text = $@"???.Test";
-                        cboEntity.Size = new Size(440, 25);
+
                         LoadClasses();
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        lblProject.Location = new Point(20, 21);
+                        cboEntity.Visible = true;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.Workflow:
-                        cboEntity.Visible = true;
-                        btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        chkOthers.Visible = true;
-                        Text = @"Add new Workflow Project";
+                        link.Text = @"Add New Workflow Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Workflow-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Workflow.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
-                        Size = new Size(596, 200);
+
+                        cboEntity.Visible = true;
+                        btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+                        chkOthers.Visible = true;
                         chkOthers.Enabled = false;
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
+                        btnOk.Enabled = false;
                         cboEntity.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.WorkflowItem:
-                        Size = new Size(596, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
-                        txtName.Visible = true;
-                        Text = @"Add new Workflow Item";
+                        link.Text = @"Add new Workflow Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template";
+
                         lblProject.Text = @"Class Name";
-                        lblProjectName.Text = "";//$@"{(GetName(parts).Substring(0, GetName(parts).Length -1)).Replace(".","")}{FormType.Workflow.ToString()}{EntityName}";
+                        lblProjectName.Text = "";
                         lblProjectName.Tag = lblProjectName.Text;
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        lblProject.Location = new Point(20, 21);
+
+                        txtName.Visible = true;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.CustomAction:
-                        txtName.Visible = true;
-                        txtName.Enabled = false;
-                        Text = @"Add new Custom Action Project";
+                        link.Text = @"Add new Custom Action Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Custom-Action-Project-Template";
+
                         lblProjectName.Text = GetName(parts) + $@"{FormType.CustomAction.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
+
                         btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
                         cboEntity.Enabled = false;
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                     case FormType.LateBoundClass:
-                        Size = new Size(596, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
+                        link.Text = @"Add new C# Late Bound Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Late-Bound-Class-Item-Template";
+
+                        lblProjectName.Text = $@"";
+                        lblProject.Text = @"Entity:";
+
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
-                        Text = @"Add new C# Late Bound Class";
-                        lblProject.Text = @"Class:";
-                        lblProjectName.Text = $@"";
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
                         cboEntity.Enabled = false;
-                        lblProject.Text = @"Entity:";
-                        lblProject.Location = new Point(40, 21);
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                 case FormType.JsTestItem:
-                        Size = new Size(596, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
+                        link.Text = @"Add New Js Test Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Test-Item-Template";
+
+                        lblProject.Text = @"Entity:";
+                        lblProjectName.Text = $"";
+
                         cboEntity.Visible = true;
+                        cboEntity.Enabled = false;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
-                        Text = @"Add new Js Test Class";
-                        lblProject.Text = "Class:";
-                        lblProjectName.Text = $"";
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        cboEntity.Enabled = false;
-                        lblProject.Text = @"Entity:";
-                        lblProject.Location = new Point(40, 21);
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.JsWebApiItem:
-                        Size = new Size(596, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
-                        cboEntity.Visible = true;
-                        btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Text = @"Add new Js WebApi Class";
+                        link.Text = @"Add New Js WebApi Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-WebApi-Item-Template";
+
                         lblProject.Text = @"Class:";
                         lblProjectName.Text = $"";
                         chkOthers.Visible = true;
                         chkOthers.Text = "Debug";
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        cboEntity.Enabled = false;
-                        chkOthers.Enabled = false;
                         lblProject.Text = "Entity:";
-                        lblProject.Location = new Point(40, 21);
-                        break;
-                    case FormType.ProxyTypes:
-                        txtName.Visible = true;
-                        txtName.Enabled = false;
-                        Text = @"Add new Proxy Types Project";
-                        lblProjectName.Tag = $"{GetName(parts).Substring(0, GetName(parts).Length - 1)}";
-                        txtName.Text = @"ProxyTypes";
-                        btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
-                        cboEntity.Enabled = false;
-                        break;
-                    case FormType.UiTest:
-                        txtName.Visible = true;
-                        txtName.Enabled = false;
-                        Text = @"Add new Ui Test Project";
-                        lblProjectName.Text = GetName(parts) + $@"{FormType.UiTest.ToString()}";
-                        lblProjectName.Tag = lblProjectName.Text;
-                        btnConnection.Visible = true;
-                        btnOk.Enabled = false;
-                        Size = new Size(596, 200);
-                        cboCrmVersion.Enabled = false;
-                        cboNetVersion.Enabled = false;
-                        cboEntity.Enabled = false;
-                        cboNetVersion.Enabled = false;
-                        break;
-                    case FormType.UiTestItem:
-                        Size = new Size(596, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
-                        txtName.Visible = true;
-                        Text = @"Add new Ui Test Item";
-                        lblProject.Text = @"Class Name";
-                        lblProjectName.Text = "";
-                        lblProjectName.Tag = lblProjectName.Text;
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        txtName.Size = new Size(440, 23);
-                        break;
-                    case FormType.Report:
-                        txtName.Visible = true;
-                        Text = @"Add new Report Project";
-                        lblProjectName.Text = GetName(parts) + $@"{FormType.Report.ToString()}";
-                        lblProjectName.Tag = lblProjectName.Text;
-                        btnConnection.Visible = false;
-                        btnOk.Enabled = true;
-                        Size = new Size(596, 200);
-                        txtName.Size = new Size(440, 23);
-                        break;
-                    case FormType.JsFormItem:
-                        Size = new Size(596, 380);
-                        chkListForm.Visible = true;
-                        btnLoadForms.Visible = true;
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
-                        Text = @"Add new Js Form Class";
+                        cboEntity.Enabled = false;
+                        chkOthers.Enabled = false;
+
+                        btnOk.Location = new Point(421, 94);
+                        btnCancel.Location = new Point(551, 94);
+
+                        Size = new Size(710, 198);
+                        break;
+                    case FormType.ProxyTypes:
+                        link.Text = @"Add New Proxy Types Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/ProxyTypes-Project-Template";
+
+                        lblProjectName.Tag = $"{GetName(parts).Substring(0, GetName(parts).Length - 1)}";
+                        txtName.Text = @"ProxyTypes";
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
+
+                        btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+
+                        cboEntity.Enabled = false;
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
+                        break;
+                    case FormType.UiTest:
+                        link.Text = @"Add New UI Test Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Ui-Test-Project-Template";
+
+                        lblProjectName.Text = GetName(parts) + $@"{FormType.UiTest.ToString()}";
+                        lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
+                        btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
+                        break;
+                    case FormType.UiTestItem:
+                        link.Text = @"Add New UI Test Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Ui-Item-Template";
+
+                        lblProject.Text = @"Class Name";
+                        lblProjectName.Text = "";
+                        lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
+                        break;
+                    case FormType.Report:
+                        link.Text = @"Add New Report Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Report-Project-Template";
+
+                        lblProjectName.Text = GetName(parts) + $@"{FormType.Report.ToString()}";
+                        lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
+                        break;
+                    case FormType.JsFormItem:
+                        link.Text = @"Add New Js Form Class";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template";
+
                         lblProject.Text = "Entity:";
-                        lblProject.Location = new Point(40, 21);
                         lblProjectName.Text = $"";
                         chkOthers.Visible = true;
                         chkOthers.Text = @"Debug";
+
+                        chkListForm.Visible = true;
+                        btnLoadForms.Visible = true;
+                        cboEntity.Visible = true;
+                        btnConnection.Visible = true;
+                        btnOk.Enabled = false;
                         cboEntity.Enabled = false;
                         chkOthers.Enabled = false;
                         chkListForm.Enabled = false;
                         break;
                     case FormType.SelectEntity:
-                        Size = new Size(556, 166);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
-                        cboEntity.Visible = true;
-                        btnConnection.Visible = false;
-                        btnOk.Enabled = false;
-                        Text = @"Select Entity for Plugin Class";
+                        link.Text = @"Select Entity for Plugin Class";
+
                         lblProjectName.Text = $@"";
-                        btnOk.Location = new Point(115, 75);
-                        btnCancel.Location = new Point(115 + 150 + 15, 75);
-                        cboEntity.Enabled = false;
                         lblProject.Text = @"Entity:";
-                        lblProject.Location = new Point(40, 21);
+
+                        cboEntity.Visible = true;
+                        cboEntity.Enabled = false;
+                        btnConnection.Visible = true;
+                        btnOk.Enabled = false;
+
+                        btnOk.Location = new Point(421, 80);
+                        btnCancel.Location = new Point(551, 80);
+
+                        Size = new Size(710, 184);
                         break;
                     case FormType.ResourceString:
+                        link.Text = @"Add New Resource String";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template";
+
+                        lblProject.Text = @"Language";
                         LoadLanguages();
-                        Size = new Size(566, 196);
-                        lblCrmVersion.Visible = false;
-                        cboCrmVersion.Visible = false;
-                        btnDefaultCrmVersion.Visible = false;
-                        btnDefaultNetVersion.Visible = false;
-                        lblNetVersion.Visible = false;
-                        cboNetVersion.Visible = false;
+
+                        lblProjectName.Visible = false;
                         txtName.Visible = true;
                         cboEntity.Visible = true;
-                        Text = @"Add new Resource String Item";
-                        lblProject.Text = @"Language";
-                        lblProjectName.Visible = false;
-                        lblResourceStringName.Visible = true;
-                        txtName.Location = new Point(115, 55);
-                        btnOk.Location = new Point(115, 95);
-                        btnCancel.Location = new Point(115 + 150 + 15, 95);
-                        lblProject.Location = new Point(20, 21);
-                        lblResourceStringName.Location = new Point(20, 55);
-                        lblResourceStringName.Text = @"Name";
+
+                        txtName.Location = new Point(120, 28 + 40);
+
+                        btnOk.Location = new Point(421, 120);
+                        btnCancel.Location = new Point(551, 120);
+
+                        Size = new Size(710, 230);
+                        break;
+                    case FormType.DataProvider:
+                        link.Text = @"Add New Data Provider Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Data-Provider-Project-Template";
+
+                        lblProjectName.Text = GetName(parts) + $@"{FormType.DataProvider.ToString()}";
+                        lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
+                        btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+                        btnOk.Enabled = false;
+
+                        Size = new Size(710, 215);
                         break;
                 }
             }
@@ -1121,6 +1166,16 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 DialogResult = DialogResult.OK;
                 Close();
             }
+            else if (FormType == FormType.DataProvider)
+            {
+                txtName.Enabled = false;
+                cboCrmVersion.Enabled = false;
+                cboNetVersion.Enabled = false;
+                btnOk.Enabled = false;
+                btnCancel.Enabled = false;
+                DialogResult = DialogResult.OK;
+                Close();
+            }
         }
 
         public string SelectedEntity { get; set; }
@@ -1189,7 +1244,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 }
 
                 if (FormType == FormType.ProxyTypes || FormType == FormType.WebResource ||
-                    FormType == FormType.Console || FormType == FormType.CustomAction || FormType == FormType.UiTest)
+                    FormType == FormType.Console || FormType == FormType.CustomAction || FormType == FormType.UiTest || FormType == FormType.DataProvider)
                 {
                     btnOk.Enabled = true;
                     btnCancel.Enabled = true;
@@ -1325,6 +1380,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             public string Name { get; set; }
             public string Id { get; set; }
+        }
+
+        private void link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            link.LinkVisited = true;
+            System.Diagnostics.Process.Start((string)link.Tag);
         }
     }
 }

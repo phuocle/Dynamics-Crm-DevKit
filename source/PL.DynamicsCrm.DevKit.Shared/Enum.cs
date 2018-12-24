@@ -21,7 +21,8 @@
     JsFormItem,
     JsTestItem,
     SelectEntity,
-    ResourceString
+    ResourceString,
+    DataProvider
 }
 
 public enum ParameterType
