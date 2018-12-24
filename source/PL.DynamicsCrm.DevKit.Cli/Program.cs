@@ -14,7 +14,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
     {
         plugins,
         workflows,
-        webresources
+        webresources,
+        dataproviders
     }
 
     public class Program
@@ -24,7 +25,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"";
+                return @"D:\src\vsts\tfs\CDS-CRMGRIDPLUS\CRM\PL.CrmGridPlus.DataProvider.AzureSql";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -34,7 +35,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private static Plugin PluginJson { get; set; }
         private static Plugin WorkflowJson { get; set; }
         private static WebResource WebResourceJson { get; set; }
-
+        private static DataProvider DataProviderJson { get; set; }
         private static CrmServiceClient CrmServiceClient { get; set; }
 
         public static void Main(string[] args)
@@ -91,6 +92,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var task = new WebResourceTask(CrmServiceClient, CurrentDirectory, WebResourceJson, arguments.Version);
                 task.Run();
             }
+            else if (arguments.Type == TaskType.dataproviders.ToString())
+            {
+                var task = new DataProviderTask(CrmServiceClient, CurrentDirectory, DataProviderJson, arguments.Version);
+                task.Run();
+            }
         }
 
         private static bool IsValid(CommandLineArgs arguments)
@@ -121,7 +127,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 {
                     TaskType.plugins.ToString(),
                     TaskType.workflows.ToString(),
-                    TaskType.webresources.ToString()
+                    TaskType.webresources.ToString(),
+                    TaskType.dataproviders.ToString()
                 };
                 if (!types.Contains(arguments.Type))
                 {
@@ -134,6 +141,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 PluginJson = json.plugins.FirstOrDefault(x => x.profile == arguments.Profile);
                 WorkflowJson = json.workflows.FirstOrDefault(x => x.profile == arguments.Profile);
                 WebResourceJson = json.webresources.FirstOrDefault(x => x.profile == arguments.Profile);
+                DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
             }
 
             if (arguments.Profile.Length == 0)
@@ -174,6 +182,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: not found profile: {arguments.Profile}");
                     return false;
                 }
+            }
+            else if (arguments.Type == TaskType.dataproviders.ToString())
+            {
+                DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
+                ;
             }
 
             if (!IsConnectedDynamics365(arguments.Connection))
