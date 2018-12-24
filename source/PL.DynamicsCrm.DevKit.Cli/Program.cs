@@ -32,6 +32,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
         }
 
+        private static string CrmConnectOrgUriActual { get; set; }
+
         private static Plugin PluginJson { get; set; }
         private static Plugin WorkflowJson { get; set; }
         private static WebResource WebResourceJson { get; set; }
@@ -196,12 +198,10 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             if (!IsConnectedDynamics365(arguments.Connection))
             {
-                CliLog.WriteLine(CliLog.COLOR_ERROR,
-                    $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
+                CliLog.WriteLine(CliLog.COLOR_ERROR, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
                 return false;
             }
-
-            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Connected ", CliLog.COLOR_MAGENTA, "Dynamics CRM!");
+            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Connected ", CliLog.COLOR_MAGENTA, "Dynamics CRM: ", CliLog.COLOR_CYAN, CrmConnectOrgUriActual );
             return true;
         }
 
@@ -217,6 +217,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connection);
                 CrmServiceClient.OrganizationServiceProxy.Timeout = new TimeSpan(2, 0, 0);
+                CrmConnectOrgUriActual = CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri;
                 return true;
             }
             catch

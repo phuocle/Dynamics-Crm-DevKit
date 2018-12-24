@@ -33,9 +33,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             if (SolutionPackagerJson.logfolder != null)
             {
-                if (!Directory.Exists(Path.Combine(CurrentDirectory, SolutionPackagerJson.logfolder)))
+                if (!Directory.Exists(Path.Combine(CurrentDirectory, SolutionPackagerJson.folder, SolutionPackagerJson.logfolder)))
                 {
-                    Directory.CreateDirectory(Path.Combine(CurrentDirectory, SolutionPackagerJson.logfolder));
+                    Directory.CreateDirectory(Path.Combine(CurrentDirectory, SolutionPackagerJson.folder, SolutionPackagerJson.logfolder));
                 }
             }
         }
@@ -57,7 +57,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var command = new StringBuilder();
             command.Append($" /action:{SolutionPackagerJson.type}");
             command.Append($" /zipfile:\"{solutionFile}\"");
-            command.Append($" /folder:\"{CurrentDirectory}\\{SolutionPackagerJson.solutionzipfolder}\"");
+            command.Append($" /folder:\"{CurrentDirectory}\\{SolutionPackagerJson.folder}\\{SolutionPackagerJson.solutiontype}\"");
             command.Append(" /clobber");
             if (SolutionPackagerJson.mapfile != null)
             {
@@ -67,7 +67,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             if (SolutionPackagerJson.logfolder != null)
             {
-                command.Append($" /log:\"{Path.Combine(CurrentDirectory, SolutionPackagerJson.logfolder, DateTime.Now.ToString("yyyy-MM-dd hh-mm") + "." + SolutionPackagerJson.solutiontype + ".txt")}\"");
+                command.Append($" /log:\"{CurrentDirectory}\\{SolutionPackagerJson.folder}\\{SolutionPackagerJson.logfolder}\\{DateTime.Now.ToString("yyyy-MM-dd hh-mm") + "." + SolutionPackagerJson.solutiontype + ".txt"}\"");
             }
             command.Append($" /packagetype:{SolutionPackagerJson.solutiontype}");
             return command.ToString();
@@ -79,7 +79,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var command = CreateCommandArgs(solutionFile);
             CliLog.WriteLine(CliLog.COLOR_CYAN, "\t" + command);
             CliLog.WriteLine(CliLog.COLOR_GREEN, "Created Command Args");
-            int timeout = 60000;
+            int timeout = 6000;
             CliLog.WriteLine(CliLog.COLOR_GREEN, "Executing Solution Packager");
 
             using (Process process = new Process())
@@ -87,10 +87,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var processStartInfo = CreateProcessStartInfo(command);
                 process.StartInfo = processStartInfo;
                 process.StartInfo.WorkingDirectory = CurrentDirectory;
-
                 StringBuilder output = new StringBuilder();
                 StringBuilder errorDataReceived = new StringBuilder();
-
                 using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
                 {
                     using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
@@ -100,24 +98,28 @@ namespace PL.DynamicsCrm.DevKit.Cli
                             if (e.Data == null)
                                 outputWaitHandle.Set();
                             else
-                                output.AppendLine(e.Data);
+                            {
+                                CliLog.WriteLine(e.Data);
+                            }
                         };
                         process.ErrorDataReceived += (sender, e) =>
                         {
                             if (e.Data == null)
                                 errorWaitHandle.Set();
                             else
+                            {
                                 errorDataReceived.AppendLine(e.Data);
+                            }
                         };
-
                         process.Start();
                         process.BeginOutputReadLine();
                         process.BeginErrorReadLine();
-
                         if (process.WaitForExit(timeout) && outputWaitHandle.WaitOne(timeout) && errorWaitHandle.WaitOne(timeout))
                         {
                             if (process.ExitCode == 0)
                             {
+                                CliLog.WriteLine("");
+                                CliLog.WriteLine(CliLog.COLOR_GREEN, "Executed Solution Packager");
                                 return;
                             }
                         }
@@ -128,15 +130,14 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     }
                 }
             }
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "Executed Solution Packager");
         }
 
         private ProcessStartInfo CreateProcessStartInfo(string command)
         {
-            var processStartInfo = new ProcessStartInfo
+            var path = CurrentDirectory + @"\bin\coretools\SolutionPackager.exe";
+            var processStartInfo = new ProcessStartInfo(path)
             {
-                FileName = "cmd",
-                Arguments = $"/c \"\\bin\\coretools\\SolutionPackager.exe {command}\"",
+                Arguments = $"{command}",
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true,
@@ -149,7 +150,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         {
             CliLog.WriteLine(CliLog.COLOR_GREEN, $"Exporting {SolutionPackagerJson.solutiontype} solution: ", CliLog.COLOR_CYAN, SolutionPackagerJson.solution);
             var fileName = FileHandler.FormatSolutionVersionString(SolutionPackagerJson.solution, System.Version.Parse(Version), SolutionPackagerJson.solutiontype);
-            var solutionFile = Path.Combine(CurrentDirectory, SolutionPackagerJson.solutionzipfolder, fileName);
+            var solutionFile = Path.Combine(CurrentDirectory, SolutionPackagerJson.solutionzipfolder, DateTime.Now.ToString("yyyyMMdd") + "-" + fileName);
             CliLog.WriteLine(CliLog.COLOR_CYAN, "\t" + solutionFile);
             var request = new ExportSolutionRequest
             {
