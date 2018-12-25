@@ -92,5 +92,31 @@
         }
       ]
     }
+  ],
+  "dataproviders": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "prefix": "???",
+      "includefiles": [
+        "???.dll"
+      ],
+      "excludefiles": [
+        "???.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "prefix": "???",
+      "includefiles": [
+        "???.dll"
+      ],
+      "excludefiles": [
+        "???.dll"
+      ]
+    }
   ]
 }
