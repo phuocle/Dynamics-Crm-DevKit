@@ -17,6 +17,7 @@
       <Folder Name="entities" TargetFolderName="entities" />
       <Folder Name="images" TargetFolderName="images" />
       <Folder Name="test" TargetFolderName="test" />
+      <Folder Name="resources" TargetFolderName="resources" />
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Web.config">Web.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Web.Debug.config">Web.Debug.config</ProjectItem>

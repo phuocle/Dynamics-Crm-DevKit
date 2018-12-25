@@ -37,7 +37,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 if (project.Name.Split('.').Length == 3)
                     entityName = "none";
                 else
-                    entityName = project.Name.Split('.')[3];
+                    if (project.Name.Split('.').Length == 4)
+                        entityName = project.Name.Split('.')[3];
+                    else
+                        entityName = "none";
                 var logicalName = entityName.ToLower();
                 var form = new FormProject(FormType.UiTestItem, Dte, entityName);
                 if (form.ShowDialog() == DialogResult.OK)
