@@ -8,7 +8,7 @@
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$RootNamespace$</RootNamespace>
+    <RootNamespace>$SafeNamespace$</RootNamespace>
     <AssemblyName>$AssemblyName$</AssemblyName>
     <TargetFrameworkVersion>$NetVersion$</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

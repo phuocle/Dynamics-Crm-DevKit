@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
+using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
@@ -51,9 +52,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$PrimaryEntityName$", entityName);
                     replacementsDictionary.Add("$FilteringAttributes$", form.FilteringAttributes);
                     replacementsDictionary.Add("$logicalname$", logicalName);
-                    if (project.Name.Contains(".Plugin.") ||
+                    if (project.Name.Contains(".Plugin") ||
                         project.Name.Contains(".CustomAction.") ||
-                        project.Name.EndsWith(".CustomAction"))
+                        project.Name.EndsWith(".CustomAction") ||
+                        project.Name.Contains(".DataProvider.") ||
+                        project.Name.EndsWith(".DataProvider"))
                     {
                         replacementsDictionary.Add("$FormType$", "true");
                         if (project.Name.Contains(".CustomAction.") ||
@@ -70,7 +73,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     var fInfo = new FileInfo(solutionFullName);
                     var parts = fInfo.Name.Split(".".ToCharArray());
                     replacementsDictionary.Add("$DevKitShared$", $"{GetName(parts)}Shared");
-                    replacementsDictionary.Add("$ReferencePlugin$", GetName2(cols));
                 }
                 else
                 {

@@ -53,6 +53,8 @@
             this.groupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox.AutoSize = true;
+            this.groupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox.Controls.Add(this.btnLoadForms);
             this.groupBox.Controls.Add(this.chkOthers);
             this.groupBox.Controls.Add(this.cboNetVersion);
@@ -67,22 +69,22 @@
             this.groupBox.Controls.Add(this.lblProject);
             this.groupBox.Controls.Add(this.chkListForm);
             this.groupBox.Controls.Add(this.cboEntity);
-            this.groupBox.Location = new System.Drawing.Point(14, 45);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(19, 20, 19, 20);
+            this.groupBox.Location = new System.Drawing.Point(13, 32);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(4, 20, 4, 2);
-            this.groupBox.Size = new System.Drawing.Size(680, 330);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(9, 9, 9, 0);
+            this.groupBox.Size = new System.Drawing.Size(609, 275);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             // 
             // btnLoadForms
             // 
             this.btnLoadForms.Enabled = false;
-            this.btnLoadForms.Location = new System.Drawing.Point(421, 81);
-            this.btnLoadForms.Margin = new System.Windows.Forms.Padding(5);
+            this.btnLoadForms.Location = new System.Drawing.Point(12, 78);
+            this.btnLoadForms.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLoadForms.Name = "btnLoadForms";
-            this.btnLoadForms.Size = new System.Drawing.Size(120, 28);
-            this.btnLoadForms.TabIndex = 22;
+            this.btnLoadForms.Size = new System.Drawing.Size(107, 34);
+            this.btnLoadForms.TabIndex = 28;
             this.btnLoadForms.Text = "Load Forms";
             this.btnLoadForms.UseVisualStyleBackColor = true;
             this.btnLoadForms.Visible = false;
@@ -92,10 +94,10 @@
             // 
             this.chkOthers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkOthers.AutoSize = true;
-            this.chkOthers.Location = new System.Drawing.Point(551, 63);
-            this.chkOthers.Margin = new System.Windows.Forms.Padding(2);
+            this.chkOthers.Location = new System.Drawing.Point(532, 23);
+            this.chkOthers.Margin = new System.Windows.Forms.Padding(1);
             this.chkOthers.Name = "chkOthers";
-            this.chkOthers.Size = new System.Drawing.Size(83, 24);
+            this.chkOthers.Size = new System.Drawing.Size(73, 21);
             this.chkOthers.TabIndex = 20;
             this.chkOthers.Text = "Others";
             this.chkOthers.UseVisualStyleBackColor = true;
@@ -107,10 +109,10 @@
             this.cboNetVersion.DisplayMember = "Version";
             this.cboNetVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboNetVersion.FormattingEnabled = true;
-            this.cboNetVersion.Location = new System.Drawing.Point(120, 113);
-            this.cboNetVersion.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.cboNetVersion.Location = new System.Drawing.Point(112, 98);
+            this.cboNetVersion.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
             this.cboNetVersion.Name = "cboNetVersion";
-            this.cboNetVersion.Size = new System.Drawing.Size(279, 28);
+            this.cboNetVersion.Size = new System.Drawing.Size(243, 24);
             this.cboNetVersion.TabIndex = 18;
             this.cboNetVersion.ValueMember = "Version";
             this.cboNetVersion.Visible = false;
@@ -119,10 +121,10 @@
             // lblNetVersion
             // 
             this.lblNetVersion.AutoSize = true;
-            this.lblNetVersion.Location = new System.Drawing.Point(9, 116);
-            this.lblNetVersion.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblNetVersion.Location = new System.Drawing.Point(13, 102);
+            this.lblNetVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblNetVersion.Name = "lblNetVersion";
-            this.lblNetVersion.Size = new System.Drawing.Size(106, 20);
+            this.lblNetVersion.Size = new System.Drawing.Size(96, 17);
             this.lblNetVersion.TabIndex = 17;
             this.lblNetVersion.Text = ".NET Version:";
             this.lblNetVersion.Visible = false;
@@ -130,10 +132,10 @@
             // btnConnection
             // 
             this.btnConnection.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnection.Location = new System.Drawing.Point(628, 21);
+            this.btnConnection.Location = new System.Drawing.Point(488, 15);
             this.btnConnection.Margin = new System.Windows.Forms.Padding(0);
             this.btnConnection.Name = "btnConnection";
-            this.btnConnection.Size = new System.Drawing.Size(40, 40);
+            this.btnConnection.Size = new System.Drawing.Size(37, 34);
             this.btnConnection.TabIndex = 16;
             this.btnConnection.Text = "><";
             this.btnConnection.UseVisualStyleBackColor = true;
@@ -144,21 +146,19 @@
             // 
             this.lblProjectName.AutoSize = true;
             this.lblProjectName.ForeColor = System.Drawing.Color.Red;
-            this.lblProjectName.Location = new System.Drawing.Point(116, 58);
+            this.lblProjectName.Location = new System.Drawing.Point(111, 45);
             this.lblProjectName.Margin = new System.Windows.Forms.Padding(0);
             this.lblProjectName.Name = "lblProjectName";
-            this.lblProjectName.Size = new System.Drawing.Size(36, 20);
+            this.lblProjectName.Size = new System.Drawing.Size(32, 17);
             this.lblProjectName.TabIndex = 13;
             this.lblProjectName.Text = "aaa";
             // 
             // txtName
             // 
-            this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtName.Location = new System.Drawing.Point(120, 28);
-            this.txtName.Margin = new System.Windows.Forms.Padding(5);
+            this.txtName.Location = new System.Drawing.Point(112, 20);
+            this.txtName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(492, 26);
+            this.txtName.Size = new System.Drawing.Size(369, 22);
             this.txtName.TabIndex = 1;
             this.txtName.TabStop = false;
             this.txtName.Visible = false;
@@ -167,10 +167,10 @@
             // lblCrmVersion
             // 
             this.lblCrmVersion.AutoSize = true;
-            this.lblCrmVersion.Location = new System.Drawing.Point(9, 84);
-            this.lblCrmVersion.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblCrmVersion.Location = new System.Drawing.Point(13, 69);
+            this.lblCrmVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCrmVersion.Name = "lblCrmVersion";
-            this.lblCrmVersion.Size = new System.Drawing.Size(100, 20);
+            this.lblCrmVersion.Size = new System.Drawing.Size(89, 17);
             this.lblCrmVersion.TabIndex = 11;
             this.lblCrmVersion.Text = "Crm Version:";
             this.lblCrmVersion.Visible = false;
@@ -180,10 +180,10 @@
             this.cboCrmVersion.DisplayMember = "Version";
             this.cboCrmVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboCrmVersion.FormattingEnabled = true;
-            this.cboCrmVersion.Location = new System.Drawing.Point(120, 81);
-            this.cboCrmVersion.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.cboCrmVersion.Location = new System.Drawing.Point(112, 65);
+            this.cboCrmVersion.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
             this.cboCrmVersion.Name = "cboCrmVersion";
-            this.cboCrmVersion.Size = new System.Drawing.Size(279, 28);
+            this.cboCrmVersion.Size = new System.Drawing.Size(243, 24);
             this.cboCrmVersion.TabIndex = 2;
             this.cboCrmVersion.ValueMember = "Version";
             this.cboCrmVersion.Visible = false;
@@ -191,10 +191,10 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(551, 113);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(5);
+            this.btnCancel.Location = new System.Drawing.Point(493, 65);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(0);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(120, 28);
+            this.btnCancel.Size = new System.Drawing.Size(107, 34);
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -202,10 +202,10 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(421, 113);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(5);
+            this.btnOk.Location = new System.Drawing.Point(379, 65);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(0);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(120, 28);
+            this.btnOk.Size = new System.Drawing.Size(107, 34);
             this.btnOk.TabIndex = 0;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -214,35 +214,33 @@
             // lblProject
             // 
             this.lblProject.AutoSize = true;
-            this.lblProject.Location = new System.Drawing.Point(9, 31);
-            this.lblProject.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblProject.Location = new System.Drawing.Point(13, 23);
+            this.lblProject.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblProject.Name = "lblProject";
-            this.lblProject.Size = new System.Drawing.Size(108, 20);
+            this.lblProject.Size = new System.Drawing.Size(97, 17);
             this.lblProject.TabIndex = 2;
             this.lblProject.Text = "Project Name:";
             // 
             // chkListForm
             // 
             this.chkListForm.FormattingEnabled = true;
-            this.chkListForm.Location = new System.Drawing.Point(13, 81);
-            this.chkListForm.Margin = new System.Windows.Forms.Padding(2);
+            this.chkListForm.Location = new System.Drawing.Point(12, 119);
+            this.chkListForm.Margin = new System.Windows.Forms.Padding(1);
             this.chkListForm.Name = "chkListForm";
-            this.chkListForm.Size = new System.Drawing.Size(401, 235);
+            this.chkListForm.Size = new System.Drawing.Size(357, 140);
             this.chkListForm.TabIndex = 21;
             this.chkListForm.Visible = false;
             this.chkListForm.SelectedIndexChanged += new System.EventHandler(this.chkListForm_SelectedIndexChanged);
             // 
             // cboEntity
             // 
-            this.cboEntity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboEntity.DisplayMember = "Name";
             this.cboEntity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboEntity.FormattingEnabled = true;
-            this.cboEntity.Location = new System.Drawing.Point(120, 28);
-            this.cboEntity.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.cboEntity.Location = new System.Drawing.Point(112, 20);
+            this.cboEntity.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
             this.cboEntity.Name = "cboEntity";
-            this.cboEntity.Size = new System.Drawing.Size(492, 28);
+            this.cboEntity.Size = new System.Drawing.Size(369, 24);
             this.cboEntity.TabIndex = 15;
             this.cboEntity.Visible = false;
             this.cboEntity.SelectedIndexChanged += new System.EventHandler(this.cboEntity_SelectedIndexChanged);
@@ -250,10 +248,10 @@
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(20, 376);
+            this.progressBar.Location = new System.Drawing.Point(0, 330);
             this.progressBar.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(680, 4);
+            this.progressBar.Size = new System.Drawing.Size(640, 4);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 24;
             this.progressBar.Visible = false;
@@ -261,9 +259,9 @@
             // link
             // 
             this.link.AutoSize = true;
-            this.link.Location = new System.Drawing.Point(10, 16);
+            this.link.Location = new System.Drawing.Point(13, 12);
             this.link.Name = "link";
-            this.link.Size = new System.Drawing.Size(80, 20);
+            this.link.Size = new System.Drawing.Size(72, 17);
             this.link.TabIndex = 25;
             this.link.TabStop = true;
             this.link.Text = "linkLabel1";
@@ -271,19 +269,20 @@
             // 
             // FormProject
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 390);
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(640, 334);
             this.ControlBox = false;
             this.Controls.Add(this.link);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormProject";
-            this.Padding = new System.Windows.Forms.Padding(20, 5, 10, 10);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

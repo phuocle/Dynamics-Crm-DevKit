@@ -46,8 +46,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 }
 
             dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName +
-                                     ".csproj");
+            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
@@ -55,8 +54,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
-            WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewProject)
             {
@@ -69,6 +67,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$NetVersion$", form.NetVersion);
                     replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                     replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                    replacementsDictionary.Add("$SafeNamespace$", form.SelectedProjectData.Namespace + ".Test");
                     if (form.ProxyTypes != null)
                     {
                         replacementsDictionary.Add("$ProxyTypes$", "true");
@@ -98,7 +97,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 throw new WizardCancelledException("Cancel Click");
             }
         }
-
         public bool ShouldAddProjectItem(string filePath)
         {
             return true;

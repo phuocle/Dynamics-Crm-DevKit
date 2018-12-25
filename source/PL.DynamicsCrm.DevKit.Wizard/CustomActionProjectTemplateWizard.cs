@@ -47,8 +47,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 }
 
             dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName +
-                                     ".csproj");
+            Dte.Solution.AddFromFile(dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
@@ -72,6 +71,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$NetVersion$", form.NetVersion);
                     replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                     replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                    if (form.Others)
+                        replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
+                    else
+                        replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace2(form.RootNamespace));
                     replacementsDictionary.Add("$ProjectName$", ProjectName);
                     replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
                     var ProjectPath = $"{replacementsDictionary["$solutiondirectory$"]}\\{ProjectName}";

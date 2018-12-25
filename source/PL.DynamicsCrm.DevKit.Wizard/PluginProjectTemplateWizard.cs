@@ -82,6 +82,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$NetVersion$", form.NetVersion);
                     replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                     replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                    replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace2(form.RootNamespace));
                     replacementsDictionary.Add("$ProjectName$", ProjectName);
                     replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
                     var projectPath = $"{replacementsDictionary["$solutiondirectory$"]}\\{ProjectName}";

@@ -30,6 +30,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             ddlExecution.Enabled = false;
             if (FormType == FormType.CustomActionItem)
             {
+                link.Text = "Add New Custom Action Class";
+                link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Action-Item-Template";
+
                 ddlStage.Text = @"PostOperation";
                 ddlStage.Enabled = false;
                 ddlStage.Visible = false;
@@ -38,8 +41,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 ddlExecution.Enabled = false;
                 ddlExecution.Visible = false;
                 label1.Visible = false;
-                Text = @"Add New Custom Action Class";
-                Size = new Size(430, 150);
             }
         }
 

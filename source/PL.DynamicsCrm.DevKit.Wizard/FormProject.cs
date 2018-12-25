@@ -48,6 +48,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public string RootNameSpace { get; set; }
         public string SharedNameSpace { get; set; }
 
+        public bool Others => chkOthers.Checked;
+
         public string CrmConnectionString
         {
             get
@@ -121,7 +123,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         txtName.Enabled = false;
                         btnOk.Enabled = false;
 
-                        Size = new Size(710, 215);
                         break;
                     case FormType.WebResource:
                         link.Text = @"Add New WebResource Project";
@@ -140,12 +141,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         txtName.Enabled = false;
                         btnOk.Enabled = false;
 
-                        Size = new Size(710, 215);
                         break;
                     case FormType.Plugin:
                         link.Text = @"Add New Plugin Project";
                         link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Plugin-Project-Template";
-
 
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Plugin.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
@@ -160,7 +159,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         cboEntity.Enabled = false;
                         btnOk.Enabled = false;
 
-                        Size = new Size(710, 215);
                         break;
                     case FormType.Test:
                         link.Text = @"Add New Test Project";
@@ -171,10 +169,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         LoadProjects();
                         cboEntity.Visible = true;
 
-                        btnOk.Location = new Point(421, 80);
-                        btnCancel.Location = new Point(551, 80);
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
 
-                        Size = new Size(710, 184);
                         break;
                     case FormType.TestItem:
                         link.Text = @"Add New Test Class";
@@ -186,10 +183,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         LoadClasses();
                         cboEntity.Visible = true;
 
-                        btnOk.Location = new Point(421, 80);
-                        btnCancel.Location = new Point(551, 80);
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
 
-                        Size = new Size(710, 184);
                         break;
                     case FormType.Workflow:
                         link.Text = @"Add New Workflow Project";
@@ -197,6 +193,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         lblProjectName.Text = GetName(parts) + $@"{FormType.Workflow.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
+                        lblProject.Text = "Entity:";
 
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
@@ -206,10 +203,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         cboNetVersion.Visible = true;
                         chkOthers.Visible = true;
                         chkOthers.Enabled = false;
+
                         btnOk.Enabled = false;
                         cboEntity.Enabled = false;
 
-                        Size = new Size(710, 215);
                         break;
                     case FormType.WorkflowItem:
                         link.Text = @"Add new Workflow Class";
@@ -221,10 +218,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         txtName.Visible = true;
 
-                        btnOk.Location = new Point(421, 80);
-                        btnCancel.Location = new Point(551, 80);
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
 
-                        Size = new Size(710, 184);
                         break;
                     case FormType.CustomAction:
                         link.Text = @"Add new Custom Action Project";
@@ -232,20 +228,20 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         lblProjectName.Text = GetName(parts) + $@"{FormType.CustomAction.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
+                        lblProject.Text = "Entity:";
 
-                        txtName.Visible = true;
-                        txtName.Enabled = false;
-
+                        cboEntity.Visible = true;
                         btnConnection.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
                         lblNetVersion.Visible = true;
                         cboNetVersion.Visible = true;
+                        chkOthers.Visible = true;
+                        chkOthers.Enabled = false;
 
-                        cboEntity.Enabled = false;
                         btnOk.Enabled = false;
+                        cboEntity.Enabled = false;
 
-                        Size = new Size(710, 215);
                         break;
                     case FormType.LateBoundClass:
                         link.Text = @"Add new C# Late Bound Class";
@@ -259,10 +255,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         btnOk.Enabled = false;
                         cboEntity.Enabled = false;
 
-                        btnOk.Location = new Point(421, 80);
-                        btnCancel.Location = new Point(551, 80);
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
 
-                        Size = new Size(710, 184);
                         break;
                 case FormType.JsTestItem:
                         link.Text = @"Add New Js Test Class";
@@ -276,10 +271,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
 
-                        btnOk.Location = new Point(421, 80);
-                        btnCancel.Location = new Point(551, 80);
-
-                        Size = new Size(710, 184);
                         break;
                     case FormType.JsWebApiItem:
                         link.Text = @"Add New Js WebApi Class";
@@ -293,13 +284,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
+
                         cboEntity.Enabled = false;
                         chkOthers.Enabled = false;
 
-                        btnOk.Location = new Point(421, 94);
-                        btnCancel.Location = new Point(551, 94);
-
-                        Size = new Size(710, 198);
                         break;
                     case FormType.ProxyTypes:
                         link.Text = @"Add New Proxy Types Project";
@@ -320,7 +308,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         cboEntity.Enabled = false;
                         btnOk.Enabled = false;
 
-                        Size = new Size(710, 215);
                         break;
                     case FormType.UiTest:
                         link.Text = @"Add New UI Test Project";
@@ -338,7 +325,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         cboNetVersion.Visible = true;
                         btnOk.Enabled = false;
 
-                        Size = new Size(710, 215);
                         break;
                     case FormType.UiTestItem:
                         link.Text = @"Add New UI Test Class";
@@ -350,10 +336,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         txtName.Visible = true;
 
-                        btnOk.Location = new Point(421, 80);
-                        btnCancel.Location = new Point(551, 80);
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
 
-                        Size = new Size(710, 184);
                         break;
                     case FormType.Report:
                         link.Text = @"Add New Report Project";
@@ -364,10 +349,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         txtName.Visible = true;
 
-                        btnOk.Location = new Point(421, 80);
-                        btnCancel.Location = new Point(551, 80);
-
-                        Size = new Size(710, 184);
                         break;
                     case FormType.JsFormItem:
                         link.Text = @"Add New Js Form Class";
@@ -398,10 +379,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
 
-                        btnOk.Location = new Point(421, 80);
-                        btnCancel.Location = new Point(551, 80);
-
-                        Size = new Size(710, 184);
                         break;
                     case FormType.ResourceString:
                         link.Text = @"Add New Resource String";
@@ -414,12 +391,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         txtName.Visible = true;
                         cboEntity.Visible = true;
 
-                        txtName.Location = new Point(120, 28 + 40);
-
-                        btnOk.Location = new Point(421, 120);
-                        btnCancel.Location = new Point(551, 120);
-
-                        Size = new Size(710, 230);
                         break;
                     case FormType.DataProvider:
                         link.Text = @"Add New Data Provider Project";
@@ -437,7 +408,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         cboNetVersion.Visible = true;
                         btnOk.Enabled = false;
 
-                        Size = new Size(710, 215);
                         break;
                 }
             }
@@ -869,21 +839,23 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             {
                 if (project.FileName.Length == 0) continue;
                 var id = project.Properties.Item("AssemblyGuid").Value.ToString();
+                var @namespace = project.Properties.Item("RootNamespace").Value.ToString();
                 var name = project.Name;
                 if (project.Name.EndsWith(".ProxyTypes"))
-                    ProxyTypes = new ProjectData {Id = id, Name = name};
+                    ProxyTypes = new ProjectData {Id = id, Name = name, Namespace = @namespace};
                 if (project.Name.Contains($".{FormType.Plugin.ToString()}.") ||
                     project.Name.Contains($".{FormType.Workflow.ToString()}.") ||
                     project.Name.EndsWith($".{FormType.Workflow.ToString()}") ||
                     project.Name.Contains($".{FormType.CustomAction.ToString()}.") ||
-                    project.Name.EndsWith($".{FormType.CustomAction.ToString()}"))
+                    project.Name.EndsWith($".{FormType.CustomAction.ToString()}") ||
+                    project.Name.Contains($".{FormType.DataProvider.ToString()}.") ||
+                    project.Name.EndsWith($".{FormType.DataProvider.ToString()}"))
                 {
                     if (project.Name.EndsWith(".Test")) continue;
                     if (IsAddedTestProject(DTE.Solution.Projects, $"{project.Name}.Test")) continue;
-                    projects.Add(new ProjectData {Id = id, Name = name});
+                    projects.Add(new ProjectData {Id = id, Name = name, Namespace = @namespace});
                 }
             }
-
             cboEntity.DisplayMember = "Name";
             cboEntity.ValueMember = "Id";
             cboEntity.DataSource = projects;
@@ -1211,7 +1183,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 var xrmHelper = new XrmHelper(CrmService);
                 if (FormType == FormType.Plugin || FormType == FormType.LateBoundClass ||
                     FormType == FormType.JsWebApiItem || FormType == FormType.Workflow ||
-                    FormType == FormType.JsFormItem || FormType == FormType.JsTestItem)
+                    FormType == FormType.JsFormItem || FormType == FormType.JsTestItem || FormType == FormType.CustomAction)
                 {
 
                     progressBar.Visible = true;
@@ -1244,7 +1216,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 }
 
                 if (FormType == FormType.ProxyTypes || FormType == FormType.WebResource ||
-                    FormType == FormType.Console || FormType == FormType.CustomAction || FormType == FormType.UiTest || FormType == FormType.DataProvider)
+                    FormType == FormType.Console || FormType == FormType.UiTest || FormType == FormType.DataProvider)
                 {
                     btnOk.Enabled = true;
                     btnCancel.Enabled = true;
@@ -1380,6 +1352,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             public string Name { get; set; }
             public string Id { get; set; }
+            public string Namespace { get; set; }
         }
 
         private void link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

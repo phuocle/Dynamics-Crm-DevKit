@@ -65,6 +65,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     ProjectName = form.ProjectName;
                     replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                     replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                    replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
                     replacementsDictionary.Add("$version$", form.CrmVersion);
                     replacementsDictionary.Add("$NetVersion$", form.NetVersion);
                     replacementsDictionary.Add("$ProjectName$", form.ProjectName);
