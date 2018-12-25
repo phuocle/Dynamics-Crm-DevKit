@@ -4,7 +4,7 @@ using Microsoft.Xrm.Sdk.Query;
 using $ShareProject$;
 using System;
 
-namespace $RootNamespace$
+namespace $SafeNamespace$
 {
     public class RetrieveMultiple : IPlugin
     {

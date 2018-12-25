@@ -1,6 +1,6 @@
 ﻿using Microsoft.Dynamics365.UIAutomation.Browser;
 
-namespace $RootNamespace$
+namespace $SafeNamespace$
 {
     public static class TestSettings
     {

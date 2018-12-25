@@ -7,7 +7,7 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 
-namespace $RootNamespace$
+namespace $SafeNamespace$
 {
     public class AppSettings
     {

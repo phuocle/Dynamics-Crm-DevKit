@@ -56,29 +56,30 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
-            WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewProject)
             {
-                Dte = (DTE) automationObject;
+                Dte = (DTE)automationObject;
                 var form = new FormProject(FormType.Report, Dte);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     ProjectName = form.ProjectName;
-                    replacementsDictionary.Add("$ProjectName$", ProjectName);
-                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                }
-                else
-                {
-                    throw new WizardCancelledException("Cancel Click");
+                    if (!Utility.ExistProject(Dte, ProjectName))
+                    {
+                        replacementsDictionary.Add("$ProjectName$", ProjectName);
+                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                        return;
+                    }
                 }
             }
-            else
+            try
             {
-                throw new WizardCancelledException("Cancel Click");
+                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
             }
+            catch { }
+            throw new WizardCancelledException("Cancel Click");
         }
 
         public bool ShouldAddProjectItem(string filePath)

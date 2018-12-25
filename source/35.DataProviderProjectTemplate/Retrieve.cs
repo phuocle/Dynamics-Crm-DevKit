@@ -3,7 +3,7 @@ using Microsoft.Xrm.Sdk.Extensions;
 using $ShareProject$;
 using System;
 
-namespace $RootNamespace$
+namespace $SafeNamespace$
 {
     public class Retrieve : IPlugin
     {

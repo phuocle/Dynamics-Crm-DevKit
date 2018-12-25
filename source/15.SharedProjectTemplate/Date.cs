@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace System
 {
     [DebuggerNonUserCode()]
-    public struct Date : IComparable, IFormattable, ISerializable, IComparable<Date>, IEquatable<Date>
+    public struct Date : IComparable, IFormattable, IComparable<Date>, IEquatable<Date>
     {
         private DateTime _dt;
 
@@ -178,10 +178,6 @@ namespace System
         public static bool Equals(Date d1, Date d2)
         {
             return d1._dt.Equals(d2._dt);
-        }
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("ticks", this._dt.Ticks);
         }
 
         public static bool IsLeapYear(int year)

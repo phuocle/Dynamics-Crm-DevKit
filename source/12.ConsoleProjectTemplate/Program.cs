@@ -1,4 +1,4 @@
-﻿namespace $RootNamespace$
+﻿namespace $SafeNamespace$
 {
     public class Program
     {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
@@ -47,7 +48,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$execution$", form.Execution);
                     replacementsDictionary.Add("$privateclass$", form.PrivateClass);
                     replacementsDictionary.Add("$logicalname$", form.LogicalName);
-                    replacementsDictionary.Add("$DevKitShared$", $"{project.Name.Split('.')[0]}.{project.Name.Split('.')[1]}.Shared");
+                    var solutionFullName = Dte?.Solution?.FullName;
+                    var fInfo = new FileInfo(solutionFullName);
+                    var parts = fInfo.Name.Split(".".ToCharArray());
+                    replacementsDictionary.Add("$DevKitShared$", $"{GetName(parts)}Shared");
+
                 }
                 else
                 {
@@ -58,6 +63,13 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             {
                 throw new WizardCancelledException("Cancel Click");
             }
+        }
+        private string GetName(string[] parts)
+        {
+            var data = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                data += parts[i] + ".";
+            return data;
         }
 
         public bool ShouldAddProjectItem(string filePath)

@@ -1,10 +1,9 @@
 ﻿using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
+$if$($FormType$==true)using Microsoft.Xrm.Sdk;
 using $DevKitShared$;
-using $ReferencePlugin$;
-$if$($FormType$==true)
-namespace $namespace2$
+
+namespace $rootnamespace$
 {
     [TestClass]
     public class $class$$execution$Test
@@ -111,7 +110,7 @@ $FilteringAttributes$
     }
 }
 $else$
-namespace $namespace2$
+namespace $rootnamespace$
 {
     [TestClass]
     public class $class$Test

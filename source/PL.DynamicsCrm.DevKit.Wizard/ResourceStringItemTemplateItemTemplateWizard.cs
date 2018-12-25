@@ -36,6 +36,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$LanguageCode$", form.LanguageCode);
                     replacementsDictionary.Add("$ResourceStringName$", form.ResourceStringName);
                 }
+                else
+                {
+                    throw new WizardCancelledException("Cancel Click");
+                }
             }
             else
             {
