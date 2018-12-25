@@ -48,9 +48,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.COLOR_GREEN, "START DATA PROVIDER TASKS");
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
 
-            //foreach (var pluginFile in DataProviderFiles) RegisterDataProvider(pluginFile);
-
-
+            foreach (var pluginFile in DataProviderFiles)
+                RegisterDataProvider(pluginFile);
 
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             CliLog.WriteLine(CliLog.COLOR_GREEN, "END DATA PROVIDER TASKS");
@@ -205,7 +204,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
         }
 
-
         private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
         {
             Assembly assembly;
@@ -219,7 +217,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     assembly = Assembly.ReflectionOnlyLoad(args.Name);
                     break;
             }
-
             return assembly;
         }
     }
