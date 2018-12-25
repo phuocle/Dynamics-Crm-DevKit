@@ -58,44 +58,41 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             if (runKind == WizardRunKind.AsNewProject)
             {
-                Dte = (DTE) automationObject;
+                Dte = (DTE)automationObject;
                 var form = new FormProject(FormType.Test, Dte);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     ProjectName = form.ProjectName;
-                    replacementsDictionary.Add("$version$", form.CrmVersion);
-                    replacementsDictionary.Add("$NetVersion$", form.NetVersion);
-                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                    replacementsDictionary.Add("$SafeNamespace$", form.SelectedProjectData.Namespace + ".Test");
-                    if (form.ProxyTypes != null)
+                    if (!Utility.ExistProject(Dte, ProjectName))
                     {
-                        replacementsDictionary.Add("$ProxyTypes$", "true");
-                        replacementsDictionary.Add("$ProjectProxyTypesName$", form.ProxyTypes.Name);
-                        replacementsDictionary.Add("$ProjectProxyTypesGuid$", form.ProxyTypes.Id);
-                    }
-                    else
-                    {
-                        replacementsDictionary.Add("$ProxyTypes$", "false");
-                    }
+                        replacementsDictionary.Add("$version$", form.CrmVersion);
+                        replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                        replacementsDictionary.Add("$SafeNamespace$", form.SelectedProjectData.Namespace + ".Test");
+                        if (form.ProxyTypes != null)
+                        {
+                            replacementsDictionary.Add("$ProxyTypes$", "true");
+                            replacementsDictionary.Add("$ProjectProxyTypesName$", form.ProxyTypes.Name);
+                            replacementsDictionary.Add("$ProjectProxyTypesGuid$", form.ProxyTypes.Id);
+                        }
+                        else
+                        {
+                            replacementsDictionary.Add("$ProxyTypes$", "false");
+                        }
 
-                    replacementsDictionary.Add("$ProjectTestName$", form.SelectedProjectData.Name);
-                    replacementsDictionary.Add("$ProjectTestGuid$", form.SelectedProjectData.Id);
-                }
-                else
-                {
-                    try
-                    {
-                        Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
+                        replacementsDictionary.Add("$ProjectTestName$", form.SelectedProjectData.Name);
+                        replacementsDictionary.Add("$ProjectTestGuid$", form.SelectedProjectData.Id);
+                        return;
                     }
-                    catch { }
-                    throw new WizardCancelledException("Cancel Click");
                 }
             }
-            else
+            try
             {
-                throw new WizardCancelledException("Cancel Click");
+                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
             }
+            catch { }
+            throw new WizardCancelledException("Cancel Click");
         }
         public bool ShouldAddProjectItem(string filePath)
         {

@@ -58,34 +58,36 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             if (runKind == WizardRunKind.AsNewProject)
             {
-                Dte = (DTE) automationObject;
+                Dte = (DTE)automationObject;
                 var form = new FormProject(FormType.UiTest, Dte);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     ProjectName = form.ProjectName;
-                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                    replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
-                    replacementsDictionary.Add("$version$", form.CrmVersion);
-                    replacementsDictionary.Add("$NetVersion$", form.NetVersion);
-                    replacementsDictionary.Add("$ProjectName$", form.ProjectName);
-                    replacementsDictionary.Add("$CrmUrl$", form.CrmConnection.Url);
-                    replacementsDictionary.Add("$CrmUserName$", form.CrmConnection.UserName);
-                    replacementsDictionary.Add("$CrmPassword$", form.CrmConnection.Password);
-                    var solutionFullName = Dte?.Solution?.FullName;
-                    var fInfo = new FileInfo(solutionFullName);
-                    var parts = fInfo.Name.Split(".".ToCharArray());
-                    replacementsDictionary.Add("$ShareProject$", $"{GetName(parts)}Shared");
-                }
-                else
-                {
-                    throw new WizardCancelledException("Cancel Click");
+                    if (!Utility.ExistProject(Dte, ProjectName))
+                    {
+                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                        replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
+                        replacementsDictionary.Add("$version$", form.CrmVersion);
+                        replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                        replacementsDictionary.Add("$ProjectName$", form.ProjectName);
+                        replacementsDictionary.Add("$CrmUrl$", form.CrmConnection.Url);
+                        replacementsDictionary.Add("$CrmUserName$", form.CrmConnection.UserName);
+                        replacementsDictionary.Add("$CrmPassword$", form.CrmConnection.Password);
+                        var solutionFullName = Dte?.Solution?.FullName;
+                        var fInfo = new FileInfo(solutionFullName);
+                        var parts = fInfo.Name.Split(".".ToCharArray());
+                        replacementsDictionary.Add("$ShareProject$", $"{GetName(parts)}Shared");
+                        return;
+                    }
                 }
             }
-            else
+            try
             {
-                throw new WizardCancelledException("Cancel Click");
+                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
             }
+            catch { }
+            throw new WizardCancelledException("Cancel Click");
         }
 
         private string GetName(string[] parts)

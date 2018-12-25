@@ -247,7 +247,7 @@
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(0, 330);
+            this.progressBar.Location = new System.Drawing.Point(0, 320);
             this.progressBar.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(640, 4);
@@ -272,7 +272,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(640, 334);
+            this.ClientSize = new System.Drawing.Size(640, 324);
             this.ControlBox = false;
             this.Controls.Add(this.link);
             this.Controls.Add(this.progressBar);

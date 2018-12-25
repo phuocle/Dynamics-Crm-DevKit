@@ -49,8 +49,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 }
 
             dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName +
-                                     ".csproj");
+            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
@@ -66,53 +65,49 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             return data;
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
-            WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewProject)
             {
-                Dte = (DTE) automationObject;
+                Dte = (DTE)automationObject;
                 var form = new FormProject(FormType.Plugin, Dte);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     ProjectName = form.ProjectName;
-                    replacementsDictionary.Remove("$projectname$");
-                    replacementsDictionary.Add("$projectname$", ProjectName);
-                    replacementsDictionary.Add("$version$", form.CrmVersion);
-                    replacementsDictionary.Add("$NetVersion$", form.NetVersion);
-                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                    replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace2(form.RootNamespace));
-                    replacementsDictionary.Add("$ProjectName$", ProjectName);
-                    replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
-                    var projectPath = $"{replacementsDictionary["$solutiondirectory$"]}\\{ProjectName}";
-                    replacementsDictionary.Remove("$destinationdirectory$");
-                    replacementsDictionary.Add("$destinationdirectory$", projectPath);
-                    if (replacementsDictionary.ContainsKey("$destinationdirectory$"))
-                        _destDirectory = replacementsDictionary["$destinationdirectory$"];
-                    if (replacementsDictionary.ContainsKey("$ProjectName$"))
-                        _keyName = replacementsDictionary["$ProjectName$"] + ".snk";
-
-                    var solutionFullName = Dte?.Solution?.FullName;
-                    var fInfo = new FileInfo(solutionFullName);
-                    var parts = fInfo.Name.Split(".".ToCharArray());
-                    replacementsDictionary.Add("$ShareProject$", $"{GetName(parts)}Shared");
-                    replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
-                }
-                else
-                {
-                    try
+                    if (!Utility.ExistProject(Dte, ProjectName))
                     {
-                        Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
+                        replacementsDictionary.Remove("$projectname$");
+                        replacementsDictionary.Add("$projectname$", ProjectName);
+                        replacementsDictionary.Add("$version$", form.CrmVersion);
+                        replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                        replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace2(form.RootNamespace));
+                        replacementsDictionary.Add("$ProjectName$", ProjectName);
+                        replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
+                        var projectPath = $"{replacementsDictionary["$solutiondirectory$"]}\\{ProjectName}";
+                        replacementsDictionary.Remove("$destinationdirectory$");
+                        replacementsDictionary.Add("$destinationdirectory$", projectPath);
+                        if (replacementsDictionary.ContainsKey("$destinationdirectory$"))
+                            _destDirectory = replacementsDictionary["$destinationdirectory$"];
+                        if (replacementsDictionary.ContainsKey("$ProjectName$"))
+                            _keyName = replacementsDictionary["$ProjectName$"] + ".snk";
+
+                        var solutionFullName = Dte?.Solution?.FullName;
+                        var fInfo = new FileInfo(solutionFullName);
+                        var parts = fInfo.Name.Split(".".ToCharArray());
+                        replacementsDictionary.Add("$ShareProject$", $"{GetName(parts)}Shared");
+                        replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
+                        return;
                     }
-                    catch { }
-                    throw new WizardCancelledException("Cancel Click");
                 }
             }
-            else
+            try
             {
-                throw new WizardCancelledException("Cancel Click");
+                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
             }
+            catch { }
+            throw new WizardCancelledException("Cancel Click");
         }
 
         public bool ShouldAddProjectItem(string filePath)

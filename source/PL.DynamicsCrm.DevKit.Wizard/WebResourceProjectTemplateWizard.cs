@@ -47,8 +47,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 }
 
             dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName +
-                                     ".csproj");
+            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
@@ -56,37 +55,38 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
-            WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewProject)
             {
-                Dte = (DTE) automationObject;
+                Dte = (DTE)automationObject;
                 var form = new FormProject(FormType.WebResource, Dte);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     ProjectName = form.ProjectName;
-                    replacementsDictionary.Add("$version$", form.CrmVersion);
-                    replacementsDictionary.Add("$NetVersion$", form.NetVersion);
-                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                    replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
-                    replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
-                    replacementsDictionary.Add("$ProjectName$", form.ProjectName);
-                    replacementsDictionary.Add("$packagename$", form.AssemblyName.ToLower());
-                    var parts = replacementsDictionary["$RootNamespace$"].Split(".".ToCharArray());
-                    replacementsDictionary.Add("$ProjectNameJs$", $"{parts[1]}");
-                    replacementsDictionary.Add("$WebApiClientMin$", GetWebApiClientMin(parts[1]));
-                }
-                else
-                {
-                    throw new WizardCancelledException("Cancel Click");
+                    if (!Utility.ExistProject(Dte, ProjectName))
+                    {
+                        replacementsDictionary.Add("$version$", form.CrmVersion);
+                        replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                        replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
+                        replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
+                        replacementsDictionary.Add("$ProjectName$", form.ProjectName);
+                        replacementsDictionary.Add("$packagename$", form.AssemblyName.ToLower());
+                        var parts = replacementsDictionary["$RootNamespace$"].Split(".".ToCharArray());
+                        replacementsDictionary.Add("$ProjectNameJs$", $"{parts[1]}");
+                        replacementsDictionary.Add("$WebApiClientMin$", GetWebApiClientMin(parts[1]));
+                        return;
+                    }
                 }
             }
-            else
+            try
             {
-                throw new WizardCancelledException("Cancel Click");
+                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
             }
+            catch { }
+            throw new WizardCancelledException("Cancel Click");
         }
 
         private string GetWebApiClientMin(string projectName)

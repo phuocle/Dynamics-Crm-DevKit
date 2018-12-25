@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EnvDTE;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -36,6 +37,16 @@ namespace PL.DynamicsCrm.DevKit.Shared
         {
             var lastIndex = @namespace.LastIndexOf('.');
             return @namespace.Substring(0, lastIndex) + @namespace.Substring(lastIndex + 1);
+        }
+
+        public static bool ExistProject(DTE dte, string projectName)
+        {
+            foreach(Project project in dte.Solution.Projects)
+            {
+                if (project.FileName.Length == 0) continue;
+                if (project.Name == projectName) return true;
+            }
+            return false;
         }
     }
 }

@@ -1180,7 +1180,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
             btnOk.Enabled = btnConnection.Visible && CrmConnection != null && txtName.Text.Length > 0 ||
                             !btnConnection.Visible && txtName.Text.Length > 0;
-            if (FormType == FormType.Workflow) btnOk.Enabled = true;
+            if (FormType == FormType.Workflow || FormType == FormType.CustomAction)
+                btnOk.Enabled = true;
         }
 
         private void btnConnection_ClickAsync(object sender, EventArgs e)
