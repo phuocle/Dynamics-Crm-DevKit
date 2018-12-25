@@ -73,15 +73,15 @@
             this.groupBox.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox.Name = "groupBox";
             this.groupBox.Padding = new System.Windows.Forms.Padding(9, 9, 9, 0);
-            this.groupBox.Size = new System.Drawing.Size(609, 275);
+            this.groupBox.Size = new System.Drawing.Size(615, 279);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             // 
             // btnLoadForms
             // 
             this.btnLoadForms.Enabled = false;
-            this.btnLoadForms.Location = new System.Drawing.Point(12, 78);
-            this.btnLoadForms.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLoadForms.Location = new System.Drawing.Point(12, 65);
+            this.btnLoadForms.Margin = new System.Windows.Forms.Padding(4);
             this.btnLoadForms.Name = "btnLoadForms";
             this.btnLoadForms.Size = new System.Drawing.Size(107, 34);
             this.btnLoadForms.TabIndex = 28;
@@ -92,7 +92,6 @@
             // 
             // chkOthers
             // 
-            this.chkOthers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkOthers.AutoSize = true;
             this.chkOthers.Location = new System.Drawing.Point(532, 23);
             this.chkOthers.Margin = new System.Windows.Forms.Padding(1);
@@ -156,7 +155,7 @@
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(112, 20);
-            this.txtName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtName.Margin = new System.Windows.Forms.Padding(4);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(369, 22);
             this.txtName.TabIndex = 1;
@@ -224,10 +223,10 @@
             // chkListForm
             // 
             this.chkListForm.FormattingEnabled = true;
-            this.chkListForm.Location = new System.Drawing.Point(12, 119);
+            this.chkListForm.Location = new System.Drawing.Point(12, 106);
             this.chkListForm.Margin = new System.Windows.Forms.Padding(1);
             this.chkListForm.Name = "chkListForm";
-            this.chkListForm.Size = new System.Drawing.Size(357, 140);
+            this.chkListForm.Size = new System.Drawing.Size(357, 157);
             this.chkListForm.TabIndex = 21;
             this.chkListForm.Visible = false;
             this.chkListForm.SelectedIndexChanged += new System.EventHandler(this.chkListForm_SelectedIndexChanged);

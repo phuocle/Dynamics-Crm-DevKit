@@ -89,6 +89,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DevKit.Monkey.DataProvid
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DevKit.Monkey.DataProvider.2.Test", "PL.DevKit.Monkey.DataProvider.2.Test\PL.DevKit.Monkey.DataProvider.2.Test.csproj", "{D922E7C4-72F0-49D1-A6D0-0EE6BF16A123}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DevKit.Monkey.WebResource.3", "PL.DevKit.Monkey.WebResource.3\PL.DevKit.Monkey.WebResource.3.csproj", "{B68C9BDD-0575-4A3B-871F-3660078583CE}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PL.DevKit.Monkey.Shared\PL.DevKit.Monkey.Shared.projitems*{1116ce9c-d710-4982-81c5-4521ed73a3f9}*SharedItemsImports = 4
@@ -288,6 +290,10 @@ Global
 		{D922E7C4-72F0-49D1-A6D0-0EE6BF16A123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D922E7C4-72F0-49D1-A6D0-0EE6BF16A123}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D922E7C4-72F0-49D1-A6D0-0EE6BF16A123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B68C9BDD-0575-4A3B-871F-3660078583CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B68C9BDD-0575-4A3B-871F-3660078583CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B68C9BDD-0575-4A3B-871F-3660078583CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B68C9BDD-0575-4A3B-871F-3660078583CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

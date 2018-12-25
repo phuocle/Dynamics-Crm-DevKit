@@ -271,6 +271,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
 
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
+
                         break;
                     case FormType.JsWebApiItem:
                         link.Text = @"Add New Js WebApi Class";
@@ -287,6 +290,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         cboEntity.Enabled = false;
                         chkOthers.Enabled = false;
+
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
 
                         break;
                     case FormType.ProxyTypes:
@@ -390,6 +396,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         lblProjectName.Visible = false;
                         txtName.Visible = true;
                         cboEntity.Visible = true;
+
+                        cboEntity.Location = new Point(txtName.Location.X, txtName.Location.Y + txtName.Height + 8);
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y + cboEntity.Height );
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y + cboEntity.Height);
 
                         break;
                     case FormType.DataProvider:
