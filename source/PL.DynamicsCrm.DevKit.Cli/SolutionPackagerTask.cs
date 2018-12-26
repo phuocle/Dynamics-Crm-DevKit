@@ -5,7 +5,6 @@ using PL.DynamicsCrm.DevKit.Shared;
 using System.IO;
 using System;
 using System.Text;
-using System.Threading;
 using System.Diagnostics;
 
 namespace PL.DynamicsCrm.DevKit.Cli
@@ -55,7 +54,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private string CreateCommandArgs(string solutionFile)
         {
             var command = new StringBuilder();
-            command.Append($" /action:{SolutionPackagerJson.type}");
+            command.Append($"/action:{SolutionPackagerJson.type}");
             command.Append($" /zipfile:\"{solutionFile}\"");
             command.Append($" /folder:\"{CurrentDirectory}\\{SolutionPackagerJson.folder}\\{SolutionPackagerJson.solutiontype}\"");
             command.Append(" /clobber");
@@ -77,12 +76,13 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         private void Packger(string solutionFile)
         {
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "Creating Command Args");
             var command = CreateCommandArgs(solutionFile);
-            CliLog.WriteLine(CliLog.COLOR_CYAN, "\t" + command);
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "Created Command Args");
+            var path = "\"" + GetParentFolder(CurrentDirectory) + $@"\packages\Microsoft.CrmSdk.CoreTools.{Version}\content\bin\coretools\SolutionPackager.exe" + "\"";
             CliLog.WriteLine(CliLog.COLOR_GREEN, "Executing Solution Packager");
-            var path = CurrentDirectory + @"\bin\coretools\SolutionPackager.exe";
+            CliLog.WriteLine(CliLog.COLOR_CYAN, "\t" + path);
+            CliLog.WriteLine(CliLog.COLOR_CYAN, "\t" + command);
+
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "");
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo(path)
@@ -92,7 +92,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     CreateNoWindow = true
-
                 }
             };
             process.Start();
@@ -102,6 +101,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(CliLog.COLOR_CYAN, line);
             }
             CliLog.WriteLine(CliLog.COLOR_GREEN, "Executed Solution Packager");
+        }
+
+        private string GetParentFolder(string currentDirectory)
+        {
+            var directory = new DirectoryInfo(currentDirectory);
+            return directory.Parent.FullName;
         }
 
         private string GetSolutionFromCrm()
@@ -121,6 +126,5 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.COLOR_GREEN, $"Exported {SolutionPackagerJson.solutiontype} solution: ", CliLog.COLOR_CYAN, SolutionPackagerJson.solution);
             return solutionFile;
         }
-
     }
 }

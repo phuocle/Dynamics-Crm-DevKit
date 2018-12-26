@@ -1,14 +1,4 @@
 {
-  "solutionpackagers": [
-    {
-      "profile": "DEBUG",
-      "solution": "???"
-    },
-    {
-      "profile": "RELEASE",
-      "solution": "???"
-    }
-  ],
   "plugins": [
     {
       "profile": "DEBUG",
