@@ -421,7 +421,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         break;
                     case FormType.SolutionPackager:
                         link.Text = @"Add New Solution Packager Project";
-                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Solution-Packager-Project-Template";
 
                         lblProjectName.Text = GetName(parts) + $@"{FormType.SolutionPackager.ToString()}";
                         lblProjectName.Tag = lblProjectName.Text;
