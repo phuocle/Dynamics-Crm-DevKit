@@ -15,6 +15,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         plugins,
         workflows,
         webresources,
+        solutionpackagers
         dataproviders
     }
 
@@ -32,9 +33,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
         }
 
+        private static string CrmConnectOrgUriActual { get; set; }
         private static Plugin PluginJson { get; set; }
         private static Plugin WorkflowJson { get; set; }
         private static WebResource WebResourceJson { get; set; }
+        private static SolutionPackager SolutionPackagerJson { get; set; }
         private static DataProvider DataProviderJson { get; set; }
         private static CrmServiceClient CrmServiceClient { get; set; }
 
@@ -92,6 +95,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var task = new WebResourceTask(CrmServiceClient, CurrentDirectory, WebResourceJson, arguments.Version);
                 task.Run();
             }
+            else if (arguments.Type == TaskType.solutionpackagers.ToString())
+            {
+                var task = new SolutionPackagerTask(CrmServiceClient, CurrentDirectory, SolutionPackagerJson, arguments.Version);
+                task.Run();
+            }
             else if (arguments.Type == TaskType.dataproviders.ToString())
             {
                 var task = new DataProviderTask(CrmServiceClient, CurrentDirectory, DataProviderJson, arguments.Version);
@@ -128,11 +136,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     TaskType.plugins.ToString(),
                     TaskType.workflows.ToString(),
                     TaskType.webresources.ToString(),
+                    TaskType.solutionpackagers.ToString()
                     TaskType.dataproviders.ToString()
                 };
                 if (!types.Contains(arguments.Type))
                 {
-                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: should be: plugins or workflows or webresources");
+                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: should be: plugins or workflows or webresources or solutionpackagers or dataproviders");
                     return false;
                 }
             }
@@ -141,6 +150,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 PluginJson = json.plugins.FirstOrDefault(x => x.profile == arguments.Profile);
                 WorkflowJson = json.workflows.FirstOrDefault(x => x.profile == arguments.Profile);
                 WebResourceJson = json.webresources.FirstOrDefault(x => x.profile == arguments.Profile);
+                SolutionPackagerJson = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
                 DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
             }
 
@@ -183,20 +193,27 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     return false;
                 }
             }
+            else if (arguments.Type == TaskType.solutionpackagers.ToString())
+            {
+                SolutionPackagerJson = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
+                if (SolutionPackagerJson == null)
+                {
+                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: not found profile: {arguments.Profile}");
+                    return false;
+                }
+                //TODO: Check required data
+            }
             else if (arguments.Type == TaskType.dataproviders.ToString())
             {
                 DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
                 ;
             }
-
             if (!IsConnectedDynamics365(arguments.Connection))
             {
-                CliLog.WriteLine(CliLog.COLOR_ERROR,
-                    $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
+                CliLog.WriteLine(CliLog.COLOR_ERROR, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
                 return false;
             }
-
-            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Connected ", CliLog.COLOR_MAGENTA, "Dynamics CRM!");
+            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Connected ", CliLog.COLOR_MAGENTA, "Dynamics CRM: ", CliLog.COLOR_CYAN, CrmConnectOrgUriActual );
             return true;
         }
 
@@ -212,6 +229,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connection);
                 CrmServiceClient.OrganizationServiceProxy.Timeout = new TimeSpan(2, 0, 0);
+                CrmConnectOrgUriActual = CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri;
                 return true;
             }
             catch
