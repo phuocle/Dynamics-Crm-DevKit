@@ -61,9 +61,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
             command.Append(" /clobber");
             if (SolutionPackagerJson.mapfile != null)
             {
-                //MapFile.Create(unpackSettings.SolutionPackageConfig, Path.Combine(unpackSettings.ProjectPath, ExtensionConstants.SolutionPackagerMapFile));
-                //if (File.Exists(Path.Combine(unpackSettings.ProjectPath, ExtensionConstants.SolutionPackagerMapFile)))
-                //    command.Append($" /map: \"{Path.Combine(unpackSettings.ProjectPath, ExtensionConstants.SolutionPackagerMapFile)}\"");
+                var map = $"{CurrentDirectory}\\{SolutionPackagerJson.mapfile}";
+                if (File.Exists(map))
+                {
+                    command.Append($" /map: \"{map}\"");
+                }
             }
             if (SolutionPackagerJson.logfolder != null)
             {
@@ -79,71 +81,27 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var command = CreateCommandArgs(solutionFile);
             CliLog.WriteLine(CliLog.COLOR_CYAN, "\t" + command);
             CliLog.WriteLine(CliLog.COLOR_GREEN, "Created Command Args");
-            int timeout = 6000;
             CliLog.WriteLine(CliLog.COLOR_GREEN, "Executing Solution Packager");
-
-            using (Process process = new Process())
-            {
-                var processStartInfo = CreateProcessStartInfo(command);
-                process.StartInfo = processStartInfo;
-                process.StartInfo.WorkingDirectory = CurrentDirectory;
-                StringBuilder output = new StringBuilder();
-                StringBuilder errorDataReceived = new StringBuilder();
-                using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
-                {
-                    using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
-                    {
-                        process.OutputDataReceived += (sender, e) =>
-                        {
-                            if (e.Data == null)
-                                outputWaitHandle.Set();
-                            else
-                            {
-                                CliLog.WriteLine(e.Data);
-                            }
-                        };
-                        process.ErrorDataReceived += (sender, e) =>
-                        {
-                            if (e.Data == null)
-                                errorWaitHandle.Set();
-                            else
-                            {
-                                errorDataReceived.AppendLine(e.Data);
-                            }
-                        };
-                        process.Start();
-                        process.BeginOutputReadLine();
-                        process.BeginErrorReadLine();
-                        if (process.WaitForExit(timeout) && outputWaitHandle.WaitOne(timeout) && errorWaitHandle.WaitOne(timeout))
-                        {
-                            if (process.ExitCode == 0)
-                            {
-                                CliLog.WriteLine("");
-                                CliLog.WriteLine(CliLog.COLOR_GREEN, "Executed Solution Packager");
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            ;
-                        }
-                    }
-                }
-            }
-        }
-
-        private ProcessStartInfo CreateProcessStartInfo(string command)
-        {
             var path = CurrentDirectory + @"\bin\coretools\SolutionPackager.exe";
-            var processStartInfo = new ProcessStartInfo(path)
+            var process = new Process
             {
-                Arguments = $"{command}",
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true,
-                UseShellExecute = false
+                StartInfo = new ProcessStartInfo(path)
+                {
+                    Arguments = $"{command}",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+
+                }
             };
-            return processStartInfo;
+            process.Start();
+            while (!process.StandardOutput.EndOfStream)
+            {
+                string line = process.StandardOutput.ReadLine();
+                CliLog.WriteLine(CliLog.COLOR_CYAN, line);
+            }
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "Executed Solution Packager");
         }
 
         private string GetSolutionFromCrm()
@@ -158,7 +116,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 SolutionName = SolutionPackagerJson.solution
             };
             var response = (ExportSolutionResponse)CrmServiceClient.Execute(request);
-
             string tempFile = FileHandler.WriteTempFile(fileName, response.ExportSolutionFile);
             File.Copy(tempFile, solutionFile, true);
             CliLog.WriteLine(CliLog.COLOR_GREEN, $"Exported {SolutionPackagerJson.solutiontype} solution: ", CliLog.COLOR_CYAN, SolutionPackagerJson.solution);
