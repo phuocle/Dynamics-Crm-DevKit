@@ -108,7 +108,6 @@
       "profile": "DEBUG",
       "folder": "bin\\Debug",
       "solution": "???",
-      "prefix": "???",
       "includefiles": [
         "???.dll"
       ],
@@ -120,13 +119,54 @@
       "profile": "RELEASE",
       "folder": "Release\\dll",
       "solution": "???",
-      "prefix": "???",
       "includefiles": [
         "???.dll"
       ],
       "excludefiles": [
         "???.dll"
       ]
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Unmanaged",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Extract-Managed",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Unmanaged",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Managed",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Pack",
+      "mapfile": ""
     }
   ]
 }

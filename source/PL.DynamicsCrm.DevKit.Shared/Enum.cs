@@ -22,7 +22,8 @@
     JsTestItem,
     SelectEntity,
     ResourceString,
-    DataProvider
+    DataProvider,
+    SolutionPackager
 }
 
 public enum ParameterType
