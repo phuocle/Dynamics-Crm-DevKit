@@ -1,0 +1,21 @@
+﻿Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "$ProjectName$", "$ProjectName$\", "$Guid$"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3D$NetVersion$"
+		Debug.AspNetCompiler.VirtualPath = "/$ProjectName$"
+		Debug.AspNetCompiler.PhysicalPath = "$ProjectName$\"
+		Debug.AspNetCompiler.TargetPath = "$ProjectName$\"
+		Debug.AspNetCompiler.Updateable = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/$ProjectName$"
+		Release.AspNetCompiler.PhysicalPath = "$ProjectName$\"
+		Release.AspNetCompiler.TargetPath = "$ProjectName$\"
+		Release.AspNetCompiler.Updateable = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "$Port$"
+		SlnRelativePath = "$ProjectName$\"
+	EndProjectSection
+EndProject

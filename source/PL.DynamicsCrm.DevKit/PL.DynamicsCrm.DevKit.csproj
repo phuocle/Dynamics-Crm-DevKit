@@ -222,6 +222,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\36.SolutionPackagerProjectTemplate\36.SolutionPackagerProjectTemplate.csproj">
+      <Project>{C555420B-02D8-4388-AADF-375A9809ACDA}</Project>
+      <Name>36.SolutionPackagerProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PL.DynamicsCrm.DevKit.Package\PL.DynamicsCrm.DevKit.Package.csproj">
       <Project>{6302EA70-637D-4FDC-B169-1493427DD8D2}</Project>
       <Name>PL.DynamicsCrm.DevKit.Package</Name>

@@ -419,6 +419,23 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         btnOk.Enabled = false;
 
                         break;
+                    case FormType.SolutionPackager:
+                        link.Text = @"Add New Solution Packager Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit";
+
+                        lblProjectName.Text = GetName(parts) + $@"{FormType.SolutionPackager.ToString()}";
+                        lblProjectName.Tag = lblProjectName.Text;
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
+                        btnConnection.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        lblNetVersion.Visible = true;
+                        cboNetVersion.Visible = true;
+                        btnOk.Enabled = false;
+
+                        break;
                 }
             }
         }
@@ -1158,6 +1175,16 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 DialogResult = DialogResult.OK;
                 Close();
             }
+            else if (FormType == FormType.SolutionPackager)
+            {
+                txtName.Enabled = false;
+                cboCrmVersion.Enabled = false;
+                cboNetVersion.Enabled = false;
+                btnOk.Enabled = false;
+                btnCancel.Enabled = false;
+                DialogResult = DialogResult.OK;
+                Close();
+            }
         }
 
         public string SelectedEntity { get; set; }
@@ -1227,7 +1254,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 }
 
                 if (FormType == FormType.ProxyTypes || FormType == FormType.WebResource ||
-                    FormType == FormType.Console || FormType == FormType.UiTest || FormType == FormType.DataProvider)
+                    FormType == FormType.Console || FormType == FormType.UiTest || FormType == FormType.DataProvider || FormType == FormType.SolutionPackager)
                 {
                     btnOk.Enabled = true;
                     btnCancel.Enabled = true;

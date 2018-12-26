@@ -7,7 +7,7 @@
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$RootNamespace$</RootNamespace>
+    <RootNamespace>$SafeNamespace$</RootNamespace>
     <AssemblyName>$AssemblyName$</AssemblyName>
     <TargetFrameworkVersion>$NetVersion$</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -32,21 +32,12 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Crm.Sdk.Proxy">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$version$\lib\net452\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$version$\lib\net452\Microsoft.Xrm.Sdk.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GeneratedCode.cs" />
-    <Compile Include="ProxyTypesAssembly.cs" />
     <None Include="packages.config" />
-    <None Include="run.bat" />
+    <None Include="mapping.xml" />
+    <None Include="Extract-Managed.bat" />
+    <None Include="Extract-Unmanaged.bat" />
+    <None Include="Pack-Managed.bat" />
+    <None Include="Pack-Unmanaged.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

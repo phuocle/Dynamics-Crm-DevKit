@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>12. C# Solution Packager Project</Name>
+    <Description>C# Solution Packager Project Template</Description>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <TemplateID>29714d87-d360-4c15-83f1-12120aab43de</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>SolutionPackagerProject</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="mapping.xml">mapping.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Extract-Managed.bat">Extract-Managed.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Extract-Unmanaged.bat">Extract-Unmanaged.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Pack-Managed.bat">Pack-Managed.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Pack-Unmanaged.bat">Pack-Unmanaged.bat</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=93b9df07fea4eb7d</Assembly>
+    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.SolutionPackagerProjectTemplateWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>
