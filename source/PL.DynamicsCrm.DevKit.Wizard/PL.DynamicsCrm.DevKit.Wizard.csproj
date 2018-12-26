@@ -102,6 +102,7 @@
     <Compile Include="ResourceStringItemTemplateItemTemplateWizard.cs" />
     <Compile Include="SharedProjectTemplateWizard.cs" />
     <Compile Include="CSharpTestItemTemplateWizard.cs" />
+    <Compile Include="SolutionPackagerProjectTemplateWizard.cs" />
     <Compile Include="TestProjectTemplateWizard.cs" />
     <Compile Include="UiTestProjectTemplateWizard.cs" />
     <Compile Include="WebResourceProjectTemplateWizard.cs" />
@@ -150,6 +151,7 @@
     <EmbeddedResource Include="data\WebApiClient.js" />
     <EmbeddedResource Include="data\ReportProjectTemplate.csproj" />
     <EmbeddedResource Include="data\WebApiClient.min.js" />
+    <EmbeddedResource Include="data\WebSite.txt" />
     <Content Include="icon.png" />
   </ItemGroup>
   <Import Project="..\PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
