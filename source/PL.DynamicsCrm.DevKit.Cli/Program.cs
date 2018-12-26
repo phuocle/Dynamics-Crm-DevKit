@@ -15,7 +15,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         plugins,
         workflows,
         webresources,
-        solutionpackagers
+        solutionpackagers,
         dataproviders
     }
 
@@ -136,7 +136,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     TaskType.plugins.ToString(),
                     TaskType.workflows.ToString(),
                     TaskType.webresources.ToString(),
-                    TaskType.solutionpackagers.ToString()
+                    TaskType.solutionpackagers.ToString(),
                     TaskType.dataproviders.ToString()
                 };
                 if (!types.Contains(arguments.Type))
