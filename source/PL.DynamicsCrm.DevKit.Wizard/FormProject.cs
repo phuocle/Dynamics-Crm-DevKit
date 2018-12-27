@@ -386,6 +386,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         btnConnection.Visible = true;
                         btnOk.Enabled = false;
 
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
+
                         break;
                     case FormType.ResourceString:
                         link.Text = @"Add New Resource String";
