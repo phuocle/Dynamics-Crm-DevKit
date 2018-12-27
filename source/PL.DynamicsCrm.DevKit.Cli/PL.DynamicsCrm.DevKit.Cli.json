@@ -119,6 +119,7 @@
   ],
   "solutionpackagers": [
     {
+      "rootfolder": "",
       "profile": "Extract-Unmanaged",
       "solution": "???",
       "solutiontype": "Unmanaged",
@@ -129,6 +130,7 @@
       "mapfile": ""
     },
     {
+      "rootfolder": "",
       "profile": "Extract-Managed",
       "solution": "???",
       "solutiontype": "Managed",
@@ -139,6 +141,7 @@
       "mapfile": ""
     },
     {
+      "rootfolder": "",
       "profile": "Pack-Unmanaged",
       "solution": "???",
       "solutiontype": "Unmanaged",
@@ -149,6 +152,7 @@
       "mapfile": ""
     },
     {
+      "rootfolder": "",
       "profile": "Pack-Managed",
       "solution": "???",
       "solutiontype": "Managed",

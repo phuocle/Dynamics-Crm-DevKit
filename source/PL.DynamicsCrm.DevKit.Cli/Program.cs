@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using CmdLine;
 using Microsoft.Xrm.Tooling.Connector;
 using PL.DynamicsCrm.DevKit.Cli.Models;
@@ -47,13 +48,16 @@ namespace PL.DynamicsCrm.DevKit.Cli
         {
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli ", CliLog.COLOR_RED, Program.CLI_VERSION);
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "Path: ", CliLog.COLOR_WHITE, GetCliPath());
             CommandLineArgs arguments = null;
 #if !DEBUG
             try
             {
 #endif
             arguments = CommandLine.Parse<CommandLineArgs>();
+            var jsonFile = Path.Combine(CurrentDirectory, arguments.Json);
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli.json path: ", CliLog.COLOR_WHITE, jsonFile);
+            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             Run(arguments);
 #if DEBUG
             CliLog.WriteLine(CliLog.COLOR_RED, "!!! FINISHED !!!");
@@ -68,6 +72,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 return;
             }
 #endif
+        }
+
+        private static string GetCliPath()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            return assembly.Location;
         }
 
         private static void Run(CommandLineArgs arguments)
@@ -215,7 +225,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
                 return false;
             }
-            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Connected ", CliLog.COLOR_MAGENTA, "Dynamics CRM: ", CliLog.COLOR_CYAN, CrmConnectOrgUriActual );
+            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Connected ", CliLog.COLOR_MAGENTA, "Dynamics CRM: ", CliLog.COLOR_RED, CrmConnectOrgUriActual );
             return true;
         }
 
