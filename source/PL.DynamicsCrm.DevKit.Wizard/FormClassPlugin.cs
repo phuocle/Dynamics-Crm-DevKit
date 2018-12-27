@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -146,6 +145,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     if (form2.ShowDialog() == DialogResult.OK)
                     {
                         list = _xrmHelper.GetSdkMessages(form2.SelectedEntity.ToLower());
+                        EntityName = form2.SelectedEntity;
+                        LogicalName = form2.SelectedEntity.ToLower();
                     }
                 }
                 btnConnection.Enabled = true;

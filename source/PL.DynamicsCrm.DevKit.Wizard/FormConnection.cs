@@ -148,6 +148,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
             clientCredentials.UserName.Password = EncryptDecrypt.DecryptString(CrmConnection.Password);
             CrmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
+
+            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
+            config.DefaultCrmConnection = cboConnection.Text;
+            DevKitCrmConfigHelper.SetDevKitCrmConfig(Dte, config);
+
             Close();
         }
 

@@ -39,8 +39,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\Release\web\$ProjectName$</OutputPath>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -54,6 +54,7 @@
     <Folder Include="images\"/>
     <Folder Include="test\"/>
     <Folder Include="resources\"/>
+		<Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.bat" />
     <None Include="test.bat" />
     <None Include="chutzpah.json" />
