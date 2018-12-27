@@ -4,9 +4,6 @@ using PL.DynamicsCrm.DevKit.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
@@ -35,29 +32,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
-        private void TryDeleteFile(string file)
-        {
-            if (File.Exists(file))
-            {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch { }
-            }
-        }
 
-        private void TryDeleteDirectory(string directory)
-        {
-            if (Directory.Exists(directory))
-            {
-                try
-                {
-                    Directory.Delete(directory, true);
-                }
-                catch { }
-            }
-        }
 
         public void RunFinished()
         {
@@ -66,30 +41,31 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var fInfoProject = new FileInfo(projectFullName);
             var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
             var folder = dInfoProject.Parent.FullName + "\\" + ProjectName;
-            TryDeleteDirectory(folder);
+            Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
-            TryDeleteDirectory(folder + "\\bin");
-            TryDeleteDirectory(folder + "\\obj");
-            TryDeleteFile(folder + "\\" + ProjectName + ".csproj");
-            TryDeleteFile(folder + "\\" + ProjectName + ".csproj.vspscc");
+            Utility.TryDeleteDirectory(folder + "\\bin");
+            Utility.TryDeleteDirectory(folder + "\\obj");
+            Utility.TryDeleteFile(folder + "\\" + ProjectName + ".csproj");
+            Utility.TryDeleteFile(folder + "\\" + ProjectName + ".csproj.vspscc");
+            Utility.TryDeleteFile(folder + "\\" + ProjectName + ".csproj.user");
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var fullName = Dte.Solution.FullName;
             Port = (Dte.Solution.Projects.Count + 1).ToString();
-            UpdateSolutionFile(fullName, ProjectName);
+            UpdateSolutionFile(fullName, ProjectName, NetVersion, Port);
             Dte.Solution.Open(fullName);
         }
 
-        private void UpdateSolutionFile(string solutionFile, string projectName)
+        private void UpdateSolutionFile(string solutionFile, string projectName, string netVersion, string port)
         {
             var data = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.WebSite.txt");
             var solution = File.ReadAllText(solutionFile);
             data = data
                 .Replace("$ProjectName$", projectName)
                 .Replace("$Guid$", $"{{{Guid.NewGuid().ToString().ToUpper()}}}")
-                .Replace("$NetVersion$", NetVersion)
-                .Replace("$Port$", Port);
+                .Replace("$NetVersion$", netVersion)
+                .Replace("$Port$", port);
             solution += data;
             File.WriteAllText(solutionFile, solution);
         }

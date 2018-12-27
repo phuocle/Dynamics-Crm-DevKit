@@ -48,5 +48,29 @@ namespace PL.DynamicsCrm.DevKit.Shared
             }
             return false;
         }
+
+        public static void TryDeleteFile(string file)
+        {
+            if (File.Exists(file))
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch { }
+            }
+        }
+
+        public static void TryDeleteDirectory(string directory)
+        {
+            if (Directory.Exists(directory))
+            {
+                try
+                {
+                    Directory.Delete(directory, true);
+                }
+                catch { }
+            }
+        }
     }
 }
