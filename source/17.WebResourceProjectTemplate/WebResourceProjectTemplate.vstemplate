@@ -14,13 +14,14 @@
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
       <Folder Name="lib" TargetFolderName="lib" />
-      <Folder Name="html" TargetFolderName="html" />
-      <Folder Name="css" TargetFolderName="css" />
-      <Folder Name="js" TargetFolderName="js" />
       <Folder Name="entities" TargetFolderName="entities" />
       <Folder Name="images" TargetFolderName="images" />
       <Folder Name="test" TargetFolderName="test" />
       <Folder Name="resources" TargetFolderName="resources" />
+      <Folder Name="html" TargetFolderName="html" />
+      <Folder Name="css" TargetFolderName="css" />
+      <Folder Name="js" TargetFolderName="js" />
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.bat">deploy.bat</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="chutzpah.json">chutzpah.json</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="test\mock.intellisense.js">mock.intellisense.js</ProjectItem>
