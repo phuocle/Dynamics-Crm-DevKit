@@ -72,7 +72,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AssemblyInfo.cs" />
     <None Include="chutzpah.json" />
     <None Include="deploy.bat" />
     <None Include="package-lock.json" />
@@ -80,9 +79,6 @@
     <None Include="_packages.config" />
     <None Include="ProjectTemplate.csproj" />
     <None Include="test.bat" />
-    <None Include="Web.config" />
-    <None Include="Web.Debug.config" />
-    <None Include="Web.Release.config" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="WebResourceProjectTemplate.vstemplate">

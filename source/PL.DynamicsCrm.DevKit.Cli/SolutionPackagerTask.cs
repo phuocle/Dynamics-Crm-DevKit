@@ -6,6 +6,8 @@ using System.IO;
 using System;
 using System.Text;
 using System.Diagnostics;
+using Microsoft.Xrm.Sdk.Query;
+using System.Threading;
 
 namespace PL.DynamicsCrm.DevKit.Cli
 {
@@ -18,6 +20,10 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         public SolutionPackagerTask(CrmServiceClient crmServiceClient, string currentDirectory, SolutionPackager solutionPackagerJson, string version)
         {
+            if (solutionPackagerJson.rootfolder != null)
+            {
+                currentDirectory = currentDirectory + "\\" + solutionPackagerJson.rootfolder;
+            }
             CrmServiceClient = crmServiceClient;
             CurrentDirectory = currentDirectory;
             SolutionPackagerJson = solutionPackagerJson;
@@ -57,7 +63,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             command.Append($"/action:{SolutionPackagerJson.type}");
             command.Append($" /zipfile:\"{solutionFile}\"");
             command.Append($" /folder:\"{CurrentDirectory}\\{SolutionPackagerJson.folder}\\{SolutionPackagerJson.solutiontype}\"");
-            command.Append(" /clobber");
+            command.Append(" /clobber /nologo /localize /allowdelete:Yes /allowwrite:Yes");
             if (SolutionPackagerJson.mapfile != null)
             {
                 var map = $"{CurrentDirectory}\\{SolutionPackagerJson.mapfile}";
@@ -83,6 +89,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.COLOR_CYAN, "\t" + command);
 
             CliLog.WriteLine(CliLog.COLOR_GREEN, "");
+
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo(path)
@@ -98,8 +105,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
             while (!process.StandardOutput.EndOfStream)
             {
                 string line = process.StandardOutput.ReadLine();
-                CliLog.WriteLine(CliLog.COLOR_CYAN, line);
+                CliLog.WriteLine(CliLog.COLOR_WHITE, line);
             }
+            process.WaitForExit();
             CliLog.WriteLine(CliLog.COLOR_GREEN, "Executed Solution Packager");
         }
 
@@ -109,10 +117,34 @@ namespace PL.DynamicsCrm.DevKit.Cli
             return directory.Parent.FullName;
         }
 
+        private string CrmVersion
+        {
+            get
+            {
+                var fetchData = new
+                {
+                    uniquename = SolutionPackagerJson.solution
+                };
+                var fetchXml = $@"
+<fetch>
+  <entity name='solution'>
+    <attribute name='version' />
+    <filter type='and'>
+      <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+    </filter>
+  </entity>
+</fetch>";
+                var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (rows.Entities.Count != 1) return "1.0.0.0";
+                var solution = rows.Entities[0];
+                return solution.GetAttributeValue<string>("version");
+            }
+        }
+
         private string GetSolutionFromCrm()
         {
-            CliLog.WriteLine(CliLog.COLOR_GREEN, $"Exporting {SolutionPackagerJson.solutiontype} solution: ", CliLog.COLOR_CYAN, SolutionPackagerJson.solution);
-            var fileName = FileHandler.FormatSolutionVersionString(SolutionPackagerJson.solution, System.Version.Parse(Version), SolutionPackagerJson.solutiontype);
+            CliLog.WriteLine(CliLog.COLOR_GREEN, $"Exporting {SolutionPackagerJson.solutiontype} solution: ", CliLog.COLOR_CYAN, SolutionPackagerJson.solution, CliLog.COLOR_GREEN, " to:");
+            var fileName = FileHandler.FormatSolutionVersionString(SolutionPackagerJson.solution, System.Version.Parse(CrmVersion), SolutionPackagerJson.solutiontype);
             var solutionFile = Path.Combine(CurrentDirectory, SolutionPackagerJson.solutionzipfolder, DateTime.Now.ToString("yyyyMMdd") + "-" + fileName);
             CliLog.WriteLine(CliLog.COLOR_CYAN, "\t" + solutionFile);
             var request = new ExportSolutionRequest
@@ -123,7 +155,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var response = (ExportSolutionResponse)CrmServiceClient.Execute(request);
             string tempFile = FileHandler.WriteTempFile(fileName, response.ExportSolutionFile);
             File.Copy(tempFile, solutionFile, true);
-            CliLog.WriteLine(CliLog.COLOR_GREEN, $"Exported {SolutionPackagerJson.solutiontype} solution: ", CliLog.COLOR_CYAN, SolutionPackagerJson.solution);
+            CliLog.WriteLine(CliLog.COLOR_GREEN, $"Exported {SolutionPackagerJson.solutiontype} solution: ", CliLog.COLOR_CYAN);
             return solutionFile;
         }
     }

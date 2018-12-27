@@ -11,6 +11,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         public const ConsoleColor COLOR_RED = ConsoleColor.Red;
         public const ConsoleColor COLOR_BLUE = ConsoleColor.Blue;
         public const ConsoleColor COLOR_MAGENTA = ConsoleColor.Magenta;
+        public const ConsoleColor COLOR_WHITE = ConsoleColor.White;
         public const int STAR_LENGTH = 60;
 
         public static void WriteLine(params object[] values)
