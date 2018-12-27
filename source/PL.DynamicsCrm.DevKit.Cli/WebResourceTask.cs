@@ -12,8 +12,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
 {
     public class WebResourceTask
     {
-        public WebResourceTask(CrmServiceClient crmServiceClient, string currentDirectory, WebResource webResourceJson,
-            string version)
+        public WebResourceTask(CrmServiceClient crmServiceClient, string currentDirectory, WebResource webResourceJson, string version)
         {
             CrmServiceClient = crmServiceClient;
             CurrentDirectory = currentDirectory;
@@ -48,7 +47,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     filePattern = filePattern.Replace(@"\\", @"\");
                     excludefiles.AddRange(GetFiles(filePattern));
                 }
-
                 var files = includefiles.Where(file => !excludefiles.Contains(file)).ToList();
                 foreach (var file in files)
                 {
@@ -64,7 +62,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     };
                     items.Add(webResourceFile);
                 }
-
                 return items;
             }
         }
@@ -74,13 +71,25 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             CliLog.WriteLine(CliLog.COLOR_GREEN, "START WEBRESOURCE TASKS");
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
-            foreach (var webResourceFile in WebResourceFiles)
-                DeployWebResource(webResourceFile);
+            var files = WebResourceFiles;
+            var totalWebResources = files.Count;
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "Found: ", CliLog.COLOR_CYAN, totalWebResources, CliLog.COLOR_GREEN, " webresources");
+            var i = 1;
+            foreach (var webResourceFile in files)
+            {
+                DeployWebResource(webResourceFile, i, totalWebResources);
+                i++;
+            }
             if (IsSupportWebResourceDependency)
             {
                 var dependencies = MergeDependencies(WebResourceJson.dependencies);
+                CliLog.WriteLine(CliLog.COLOR_GREEN, "Found: ", CliLog.COLOR_CYAN, dependencies.Count, CliLog.COLOR_GREEN, " dependencies");
+                var j = 1;
                 foreach (var dependency in dependencies)
-                    UpdateDependency(dependency);
+                {
+                    UpdateDependency(dependency, j, dependencies.Count);
+                    j++;
+                }
             }
             if (WebResourcesToPublish.Count > 0)
                 PublishWebResources();
@@ -116,8 +125,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
             return list;
         }
 
-        private void UpdateDependency(Dependency dependency)
+        private void UpdateDependency(Dependency dependency, int j, int count)
         {
+            var len = count.ToString().Length;
             var dependencyXml = GetDependencyXml(dependency.dependencies);
             foreach (var webResourceName in dependency.webresources)
             {
@@ -139,10 +149,14 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     var webResourceId = rows.Entities[0].Id;
                     var enttiy = new Entity("webresource", webResourceId);
                     enttiy["dependencyxml"] = dependencyXml;
-                    CliLog.WriteLine(CliLog.COLOR_BLUE, "Updated Dependency Webresource ", CliLog.COLOR_CYAN, webResourceName);
+                    CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", j), ": ", CliLog.COLOR_BLUE, "Updated Dependency Webresource ", CliLog.COLOR_CYAN, webResourceName);
                     CrmServiceClient.Update(enttiy);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
+                }
+                else
+                {
+                    CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", j) + ": Done");
                 }
             }
         }
@@ -185,8 +199,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
             return _dependencyXml;
         }
 
-        private Entity DeployWebResource(WebResourceFile webResourceFile)
+        private Entity DeployWebResource(WebResourceFile webResourceFile, int current, int totalWebResources)
         {
+            var len = totalWebResources.ToString().Length;
             var fetchData = new
             {
                 name = webResourceFile.uniquename
@@ -210,10 +225,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 webResourceId = entity.Id;
                 content = entity?["content"]?.ToString();
             }
-
             var fileContent = Convert.ToBase64String(File.ReadAllBytes(webResourceFile.file));
             if (fileContent == content)
+            {
+                CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", current) + ": Done");
                 return null;
+            }
             var webResource = new Entity("webresource");
             webResource["name"] = webResourceFile.uniquename;
             webResource["displayname"] = webResourceFile.displayname;
@@ -278,29 +295,24 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     if (res.RetrieveProvisionedLanguages.Contains(languagecode))
                         webResource["languagecode"] = languagecode;
                     else
+                    {
+                        CliLog.WriteLine(CliLog.COLOR_RED, "Language code not found: ", CliLog.COLOR_BLUE, languagecode);
                         return null;
+                    }
                 }
-            }
-            else
-            {
-                var req = new RetrieveProvisionedLanguagesRequest();
-                var res = (RetrieveProvisionedLanguagesResponse)CrmServiceClient.Execute(req);
             }
             if (webResourceId == Guid.Empty)
             {
-                CliLog.WriteLine(CliLog.COLOR_GREEN, "Creating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file,
-                    CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
+                CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", current), ": ", CliLog.COLOR_GREEN, "Creating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file, CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
                 webResourceId = CrmServiceClient.Create(webResource);
                 webResource["webresourceid"] = webResourceId;
             }
             else
             {
                 webResource["webresourceid"] = webResourceId;
-                CliLog.WriteLine(CliLog.COLOR_BLUE, "Updating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file,
-                    CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
+                CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", current), ": ", CliLog.COLOR_BLUE, "Updating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file, CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
                 CrmServiceClient.Update(webResource);
             }
-
             WebResourcesToPublish.Add(webResourceId);
             AddWebResourceToSolution(webResource);
             return webResource;
@@ -339,7 +351,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
                     SolutionUniqueName = WebResourceJson.solution
                 };
-                CliLog.WriteLine(CliLog.COLOR_GREEN, "\tAdding WebResource: ", CliLog.COLOR_CYAN,
+                CliLog.WriteLine(CliLog.COLOR_CYAN, "|", CliLog.COLOR_GREEN, "\tAdding WebResource: ", CliLog.COLOR_CYAN,
                     $"{webResource["name"]} ", CliLog.COLOR_GREEN, "to solution: ", CliLog.COLOR_CYAN,
                     $"{WebResourceJson.solution}");
                 CrmServiceClient.Execute(request);
@@ -357,8 +369,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     "<webresource>" + webresources + "</webresource>" +
                     "</webresources></importexportxml>"
             };
-            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Publishing WebResources !!!");
+            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Publishing WebResources");
             CrmServiceClient.Execute(publish);
+            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Published WebResources");
         }
 
         private List<string> GetFiles(string filePattern)
@@ -370,7 +383,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 pattern = pattern.Replace("**", "*");
                 return Directory.GetFiles(folder, pattern, SearchOption.AllDirectories).ToList();
             }
-            return Directory.GetFiles(folder, pattern, SearchOption.TopDirectoryOnly).ToList();
+            if (Directory.Exists(folder))
+                return Directory.GetFiles(folder, pattern, SearchOption.TopDirectoryOnly).ToList();
+            return new List<string>();
         }
 
         private enum WebResourceWebResourceType
