@@ -77,6 +77,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         var parts = replacementsDictionary["$RootNamespace$"].Split(".".ToCharArray());
                         replacementsDictionary.Add("$ProjectNameJs$", $"{parts[1]}");
                         replacementsDictionary.Add("$WebApiClientMin$", GetWebApiClientMin(parts[1]));
+                        replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
                         return;
                     }
                 }

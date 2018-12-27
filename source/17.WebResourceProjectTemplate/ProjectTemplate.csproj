@@ -40,25 +40,21 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\Release\web\$ProjectName$</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 	<ItemGroup>
+    <Folder Include="html\" />
+    <Folder Include="css\" />
+    <Folder Include="js\" />
 		<Folder Include="entities\" />
 		<Folder Include="lib\" />
     <Folder Include="images\"/>
     <Folder Include="test\"/>
     <Folder Include="resources\"/>
 		<Compile Include="Properties\AssemblyInfo.cs" />
-		<Content Include="Web.config" />
-		<None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
     <None Include="deploy.bat" />
     <None Include="test.bat" />
     <None Include="chutzpah.json" />
@@ -71,9 +67,6 @@
     <Content Include="lib\WebApiClient.js" />
     <Content Include="entities\devkit.intellisense.js" />
 	</ItemGroup>
-  <ItemGroup>
-    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

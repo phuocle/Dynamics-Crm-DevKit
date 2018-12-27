@@ -18,17 +18,17 @@
       <Folder Name="images" TargetFolderName="images" />
       <Folder Name="test" TargetFolderName="test" />
       <Folder Name="resources" TargetFolderName="resources" />
+      <Folder Name="html" TargetFolderName="html" />
+      <Folder Name="css" TargetFolderName="css" />
+      <Folder Name="js" TargetFolderName="js" />
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Web.config">Web.config</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Debug.config">Web.Debug.config</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Release.config">Web.Release.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.bat">deploy.bat</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="chutzpah.json">chutzpah.json</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="test\mock.intellisense.js">mock.intellisense.js</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="test\DevKitMock.js">DevKitMock.js</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="package.json">package.json</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="package-lock.json">package-lock.json</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="packages.config">_packages.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="test.bat">test.bat</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="test\requireConfig.js">requireConfig.js</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="entities\devkit.intellisense.js">devkit.intellisense.js</ProjectItem>
