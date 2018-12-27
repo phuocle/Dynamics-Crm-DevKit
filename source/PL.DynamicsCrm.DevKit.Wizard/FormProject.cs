@@ -30,6 +30,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             FormType = formType;
 
             cboCrmVersion.DataSource = NuGetHelper.GetMicrosoftCrmSdkCoreAssembliesPackages();
+
             cboNetVersion.DataSource = new List<string> {"v4.5.2", "v4.6.2"};
 
             LoadDefault();
