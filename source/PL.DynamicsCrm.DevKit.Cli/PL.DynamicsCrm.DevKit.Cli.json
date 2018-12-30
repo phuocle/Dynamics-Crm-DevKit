@@ -54,12 +54,17 @@
       "prefix": "???",
       "rootfolder": "",
       "includefiles": [
+        "css\\**.css",
         "entities\\*.js",
+        "html\\*.html",
+        "images\\**.png",
+        "js\\*.js",
         "lib\\*.js",
-        "images\\*.png"
+        "resources\\*.resx"
       ],
       "excludefiles": [
-        "entities\\*.intellisense.js"
+        "entities\\*.intellisense.js",
+        "test\\**.js"
       ],
       "dependencies": [
         {
@@ -76,12 +81,17 @@
       "prefix": "???",
       "rootfolder": "???.WebResource",
       "includefiles": [
+        "css\\**.css",
         "entities\\*.js",
+        "html\\*.html",
+        "images\\**.png",
+        "js\\*.js",
         "lib\\*.js",
-        "images\\*.png"
+        "resources\\*.resx"
       ],
       "excludefiles": [
-        "entities\\*.intellisense.js"
+        "entities\\*.intellisense.js",
+        "test\\**.js"
       ],
       "dependencies": [
         {

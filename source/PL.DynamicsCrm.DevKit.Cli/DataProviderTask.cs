@@ -34,9 +34,19 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var includefiles = new List<string>();
                 foreach (var includefile in DataProviderJson.includefiles)
                     includefiles.AddRange(Directory.GetFiles(folder, includefile).ToList());
+                foreach (var includefile in DataProviderJson.includefiles)
+                {
+                    var other = includefile.Replace("*.", string.Empty);
+                    includefiles.AddRange(Directory.GetFiles(folder, other).ToList());
+                }
                 var excludefiles = new List<string>();
                 foreach (var excludefile in DataProviderJson.excludefiles)
                     excludefiles.AddRange(Directory.GetFiles(folder, excludefile).ToList());
+                foreach (var excludefile in DataProviderJson.excludefiles)
+                {
+                    var other = excludefile.Replace("*.", string.Empty);
+                    excludefiles.AddRange(Directory.GetFiles(folder, other).ToList());
+                }
                 var assemblies = includefiles.Where(file => !excludefiles.Contains(file)).ToList();
                 return assemblies;
             }

@@ -29,7 +29,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"D:\src\vsts\tfs\CDS-CRMGRIDPLUS\CRM\PL.CrmGridPlus.WebResource";
+                return @"C:\sources\phuocle\tfs\DEVKIT\test\level1\DevKitLevel1.DataProvider";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

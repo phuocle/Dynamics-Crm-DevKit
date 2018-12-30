@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -33,18 +32,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var projectFullName = Project.FullName;
             Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
+            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
             var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
-            if (Directory.Exists(folder))
-                try
-                {
-                    Directory.Delete(folder, true);
-                }
-                catch
-                {
-                    // ignored
-                }
-
+            Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
             Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
@@ -82,21 +72,19 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         }
                         replacementsDictionary.Add("$CrmUserName$", crmUserName);
                         replacementsDictionary.Add("$CrmPassword$", connection[2]);
+
                         return;
                     }
                 }
             }
-            try
-            {
-                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
-            }
-            catch { }
+            MessageBox.Show($"{FormType.ProxyTypes.ToString()} project exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return true;
+            return !File.Exists(filePath);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     formProjectItem = GetFormProjectItem(Dte, form.Class);
                     if (formProjectItem == null)
                     {
-                        MessageBox.Show($"Not found: {form.Class}.js file!");
+                        MessageBox.Show($"Not found: {form.Class}.js file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         throw new WizardCancelledException($"Not found: {form.Class}.js file!");
                     }
                     GeneratedJsWebApiCode = form.GeneratedJsWebApiCode;

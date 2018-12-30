@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -37,34 +36,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
             var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
-            var folder = dInfoProject.Parent.FullName + "\\" + ProjectName;
+            var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
             Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
-            Utility.TryDeleteDirectory(folder + "\\bin");
-            Utility.TryDeleteDirectory(folder + "\\obj");
-            Utility.TryDeleteFile(folder + "\\" + ProjectName + ".csproj");
-            Utility.TryDeleteFile(folder + "\\" + ProjectName + ".csproj.vspscc");
-            Utility.TryDeleteFile(folder + "\\" + ProjectName + ".csproj.user");
+            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
+            Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
-            Dte.Solution.SaveAs(Dte.Solution.FullName);
-            var fullName = Dte.Solution.FullName;
-            Port = (Dte.Solution.Projects.Count + 1).ToString();
-            UpdateSolutionFile(fullName, ProjectName, NetVersion, Port);
-            Dte.Solution.Open(fullName);
-        }
-
-        private void UpdateSolutionFile(string solutionFile, string projectName, string netVersion, string port)
-        {
-            var data = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.WebSite.txt");
-            var solution = File.ReadAllText(solutionFile);
-            data = data
-                .Replace("$ProjectName$", projectName)
-                .Replace("$Guid$", $"{{{Guid.NewGuid().ToString().ToUpper()}}}")
-                .Replace("$NetVersion$", netVersion)
-                .Replace("$Port$", port);
-            solution += data;
-            File.WriteAllText(solutionFile, solution);
+            tfs.Add(dInfoProject.FullName);
+            Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
@@ -91,15 +71,13 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$ProjectNameJs$", $"{parts[1]}");
                         replacementsDictionary.Add("$WebApiClientMin$", GetWebApiClientMin(parts[1]));
                         replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
+
                         return;
                     }
                 }
             }
-            try
-            {
-                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
-            }
-            catch { }
+            MessageBox.Show($"{FormType.WebResource.ToString()} project exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }
 
@@ -116,7 +94,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return true;
+            return !File.Exists(filePath);
         }
     }
 }

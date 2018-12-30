@@ -5,5 +5,5 @@ for /f "delims=" %%d in ('dir /a:d /o:-n /s ..\packages\PL.DynamicsCrm.DevKit.Cl
 )
 :break
 set CrmConnection="$CrmConnectionString$"
-"%PLDynamicsCrmDevKitCli%\tools\PL.DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"..\PL.DynamicsCrm.DevKit.Cli.json" /type:"solutionpackagers" /profile:"Pack-Unmanaged" /version:"9.0.2.6"
+"%PLDynamicsCrmDevKitCli%\tools\PL.DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"..\PL.DynamicsCrm.DevKit.Cli.json" /type:"solutionpackagers" /profile:"Pack-Unmanaged" /version:"$version$"
 exit

@@ -43,7 +43,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
         {
             foreach(Project project in dte.Solution.Projects)
             {
-                if (project.FileName.Length == 0) continue;
+                if (project.ProjectItems == null ||  project.FileName.Length == 0) continue;
                 if (project.Name == projectName) return true;
             }
             return false;
@@ -71,6 +71,22 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 }
                 catch { }
             }
+        }
+
+        public static string GetSharedProject(string solutionFullName)
+        {
+            var fInfo = new FileInfo(solutionFullName);
+            var parts = fInfo.Name.Split(".".ToCharArray());
+            var value = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                value += parts[i] + ".";
+            return value + $"{FormType.Shared.ToString()}";
+        }
+
+        public static string GetFolderProject(string solutionFullName, string projectName)
+        {
+            var fInfo = new FileInfo(solutionFullName);
+            return fInfo.Directory.FullName + "\\" + projectName;
         }
     }
 }

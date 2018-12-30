@@ -634,6 +634,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
             foreach (var entity in entities)
             {
+                if (entity == null || entity.Length == 0) continue;
                 var request = new RetrieveEntityRequest
                 {
                     EntityFilters = EntityFilters.Attributes,

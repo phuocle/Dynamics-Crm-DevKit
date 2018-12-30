@@ -30,29 +30,32 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunFinished()
         {
-            ActiveProject.Save();
+            Dte.ExecuteCommand("File.SaveAll");
             var projectItemsFile = ActiveProject.FullName.Replace(".shproj", ".projitems");
             var arr = ClassGenerated.Split(@"\".ToCharArray());
             var fileName = arr[arr.Length - 1];
             var fileNameWithoutGenerator = fileName.Replace(".generated", "");
             if (DeleteFile.Length > 0)
             {
-                var lines = File.ReadAllLines(projectItemsFile);
-                var text = string.Empty;
-                foreach (var line in lines)
+                if (ActiveProject.Name.EndsWith($".{FormType.Shared.ToString()}"))
                 {
-                    if (line.EndsWith($"{fileName + (char) 34} />", StringComparison.Ordinal))
+                    var lines = File.ReadAllLines(projectItemsFile);
+                    var text = string.Empty;
+                    foreach (var line in lines)
                     {
-                        var part1 = line.Substring(0, line.IndexOf($"{fileName + (char) 34} />", StringComparison.Ordinal));
-                        text += part1 + fileNameWithoutGenerator + (char) 34 + " />\r\n";
-                        text += part1 + fileName + (char) 34 + $"><DependentUpon>{fileNameWithoutGenerator}</DependentUpon></Compile>\r\n";
+                        if (line.EndsWith($"{fileName + (char)34} />", StringComparison.Ordinal))
+                        {
+                            var part1 = line.Substring(0, line.IndexOf($"{fileName + (char)34} />", StringComparison.Ordinal));
+                            text += part1 + fileNameWithoutGenerator + (char)34 + " />\r\n";
+                            text += part1 + fileName + (char)34 + $">\r\n\t\t\t<DependentUpon>{fileNameWithoutGenerator}</DependentUpon>\r\n\t\t</Compile>\r\n";
+                        }
+                        else
+                        {
+                            text += line + "\r\n";
+                        }
                     }
-                    else
-                    {
-                        text += line + "\r\n";
-                    }
+                    File.WriteAllText(projectItemsFile, text);
                 }
-                File.WriteAllText(projectItemsFile, text);
             }
             else
             {
@@ -78,6 +81,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 File.WriteAllText(projectItemsFile, text);
             }
             Dte.ExecuteCommand("File.SaveAll");
+            if (ActiveProject.Name.EndsWith($".{FormType.Shared.ToString()}"))
+            {
+                var temp = projectItemsFile.Replace(".projitems", ".shproj");
+                var data = File.ReadAllText(temp);
+                data = data.Trim() + " ";
+                File.WriteAllText(temp, data);
+                data = data.Trim();
+                File.WriteAllText(temp, data);
+            }
         }
 
         private string GetName(string[] parts)
@@ -88,8 +100,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             return data;
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
-            WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewItem)
             {
