@@ -33,16 +33,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.UiTest", "DevK
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DevKitLevel1.Shared", "DevKitLevel1.Shared\DevKitLevel1.Shared.shproj", "{EB0BAB6B-5186-4710-B0BB-5C85AAC97738}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.Workflow.Account", "DevKitLevel1.Workflow.Account\DevKitLevel1.Workflow.Account.csproj", "{D4AE4E3A-981B-43A5-A330-3C047A9DED66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.Workflow", "DevKitLevel1.Workflow\DevKitLevel1.Workflow.csproj", "{259EAD44-BCBD-49E9-B1F0-5F18775416AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.Workflow.Administrator", "DevKitLevel1.Workflow.Administrator\DevKitLevel1.Workflow.Administrator.csproj", "{7E1B2FD6-DCDB-4613-B4CA-25E326D4A6D6}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{0800f635-504d-482d-b088-4c87e9d45d6f}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{0fb1e3a2-d41a-426c-9700-610f80d8cd65}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{221a46d7-47a3-40a2-b122-b830dcaed21a}*SharedItemsImports = 4
+		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{259ead44-bcbd-49e9-b1f0-5f18775416ac}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{4f1edd80-27ac-49db-b650-8abdbeeece1f}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{5841c864-5857-456c-be32-605af986ea52}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{5bc090c7-3a97-4810-af49-9c1f0c8d3045}*SharedItemsImports = 4
+		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{7e1b2fd6-dcdb-4613-b4ca-25e326d4a6d6}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{837fe800-ad41-48dc-8225-9db3e3c06683}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{8e4224c4-486d-4abd-baf4-7d262a4badbb}*SharedItemsImports = 4
+		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{d4ae4e3a-981b-43a5-a330-3c047a9ded66}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{eb0bab6b-5186-4710-b0bb-5c85aac97738}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -106,6 +115,18 @@ Global
 		{0FB1E3A2-D41A-426C-9700-610F80D8CD65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FB1E3A2-D41A-426C-9700-610F80D8CD65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB1E3A2-D41A-426C-9700-610F80D8CD65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4AE4E3A-981B-43A5-A330-3C047A9DED66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4AE4E3A-981B-43A5-A330-3C047A9DED66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4AE4E3A-981B-43A5-A330-3C047A9DED66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4AE4E3A-981B-43A5-A330-3C047A9DED66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{259EAD44-BCBD-49E9-B1F0-5F18775416AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{259EAD44-BCBD-49E9-B1F0-5F18775416AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{259EAD44-BCBD-49E9-B1F0-5F18775416AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{259EAD44-BCBD-49E9-B1F0-5F18775416AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E1B2FD6-DCDB-4613-B4CA-25E326D4A6D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E1B2FD6-DCDB-4613-B4CA-25E326D4A6D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E1B2FD6-DCDB-4613-B4CA-25E326D4A6D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E1B2FD6-DCDB-4613-B4CA-25E326D4A6D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
