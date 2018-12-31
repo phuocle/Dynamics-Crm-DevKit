@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace $rootnamespace$
+namespace DevKitLevel1.Shared
 {
     [DebuggerNonUserCode()]
     public class EntityBase
@@ -113,7 +113,7 @@ namespace $rootnamespace$
 
         public Entity GetUpdateEntity()
         {
-            var update = Entity.KeyAttributes.Count > 0 ? new Entity(Entity.LogicalName, Entity.KeyAttributes) :  new Entity { Id = Entity.Id, LogicalName = Entity.LogicalName };
+            var update = Entity.KeyAttributes.Count > 0 ? new Entity(Entity.LogicalName, Entity.KeyAttributes) : new Entity { Id = Entity.Id, LogicalName = Entity.LogicalName };
             foreach (var property in Entity.Attributes)
             {
                 var key = property.Key;
