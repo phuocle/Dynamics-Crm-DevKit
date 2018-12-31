@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DevKitLevel1.Shared", "DevKitLevel1.Shared\DevKitLevel1.Shared.shproj", "{86BC74AB-3927-4989-B18B-109BE490524F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.Console", "DevKitLevel1.Console\DevKitLevel1.Console.csproj", "{5BC090C7-3A97-4810-AF49-9C1F0C8D3045}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.Plugin.Account", "DevKitLevel1.Plugin.Account\DevKitLevel1.Plugin.Account.csproj", "{221A46D7-47A3-40A2-B122-B830DCAED21A}"
@@ -31,16 +29,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.CustomAction.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.CustomAction.Account.Test", "DevKitLevel1.CustomAction.Account.Test\DevKitLevel1.CustomAction.Account.Test.csproj", "{E5821E2F-2C47-4B6A-9C0D-D24870DA3B24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.UiTest", "DevKitLevel1.UiTest\DevKitLevel1.UiTest.csproj", "{0FB1E3A2-D41A-426C-9700-610F80D8CD65}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DevKitLevel1.Shared", "DevKitLevel1.Shared\DevKitLevel1.Shared.shproj", "{EB0BAB6B-5186-4710-B0BB-5C85AAC97738}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{0800f635-504d-482d-b088-4c87e9d45d6f}*SharedItemsImports = 4
+		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{0fb1e3a2-d41a-426c-9700-610f80d8cd65}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{221a46d7-47a3-40a2-b122-b830dcaed21a}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{4f1edd80-27ac-49db-b650-8abdbeeece1f}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{5841c864-5857-456c-be32-605af986ea52}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{5bc090c7-3a97-4810-af49-9c1f0c8d3045}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{837fe800-ad41-48dc-8225-9db3e3c06683}*SharedItemsImports = 4
-		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{86bc74ab-3927-4989-b18b-109be490524f}*SharedItemsImports = 13
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{8e4224c4-486d-4abd-baf4-7d262a4badbb}*SharedItemsImports = 4
+		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{eb0bab6b-5186-4710-b0bb-5c85aac97738}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +102,10 @@ Global
 		{E5821E2F-2C47-4B6A-9C0D-D24870DA3B24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5821E2F-2C47-4B6A-9C0D-D24870DA3B24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5821E2F-2C47-4B6A-9C0D-D24870DA3B24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FB1E3A2-D41A-426C-9700-610F80D8CD65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FB1E3A2-D41A-426C-9700-610F80D8CD65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FB1E3A2-D41A-426C-9700-610F80D8CD65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FB1E3A2-D41A-426C-9700-610F80D8CD65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

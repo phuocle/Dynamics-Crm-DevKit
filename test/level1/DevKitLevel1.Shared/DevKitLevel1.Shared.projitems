@@ -6,7 +6,7 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>86bc74ab-3927-4989-b18b-109be490524f</SharedGUID>
+    <SharedGUID>eb0bab6b-5186-4710-b0bb-5c85aac97738</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>DevKitLevel1.Shared</Import_RootNamespace>
