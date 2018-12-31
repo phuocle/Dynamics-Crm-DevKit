@@ -1,4 +1,5 @@
-﻿using FakeXrmEasy;
+﻿using System;
+using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 $if$($FormType$==true)using Microsoft.Xrm.Sdk;
 using $DevKitShared$;
