@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "$packagename$",
+  "name": "devkitlevel1.webresource",
   "version": "1.0.0",
-  "description": "$packagename$",
+  "description": "aaaa",
   "main": "index.js",
   "directories": {
     "lib": "lib",
@@ -19,5 +19,9 @@
     "sinon": "^6.1.4",
     "xrm-mock": "^3.4.7",
     "xrm-webapi-client": "^3.6.11"
+  },
+  "dependencies": {
+    "dayjs": "^1.7.8",
+    "underscore": "^1.9.1"
   }
 }
