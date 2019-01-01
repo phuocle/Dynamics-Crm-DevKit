@@ -53,6 +53,7 @@
     <None Include="DevKitLevel1.Plugin.Account.snk" />
     <Compile Include="PostAccountCreateAsynchronous.cs" />
     <Compile Include="PostAccountMergeAsynchronous.cs" />
+    <Compile Include="PreAccountCreateSynchronous.cs" />
     <Compile Include="PreAccountUpdateSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

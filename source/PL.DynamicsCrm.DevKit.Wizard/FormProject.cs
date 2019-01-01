@@ -441,6 +441,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         break;
                 }
+                link.Text = "Github Wiki: " + link.Text;
             }
         }
 

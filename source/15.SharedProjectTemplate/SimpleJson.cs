@@ -1058,10 +1058,6 @@ namespace $rootnamespace$
             {
                 object key = ke.Current;
                 object value = ve.Current;
-                if (key?.ToString() == "Item" && value == null)
-                {
-                    continue;
-                }
                 if (!first)
                     builder.Append(",");
                 string stringKey = key as string;
@@ -1510,7 +1506,7 @@ namespace $rootnamespace$
             IDictionary<string, ReflectionUtils.GetDelegate> getters = GetCache[type];
             foreach (KeyValuePair<string, ReflectionUtils.GetDelegate> getter in getters)
             {
-                if (getter.Value != null)
+                if (getter.Value != null && getter.Key != "Item")
                     obj.Add(MapClrMemberNameToJsonFieldName(getter.Key), getter.Value(input));
             }
             output = obj;

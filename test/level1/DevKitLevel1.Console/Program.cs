@@ -1,4 +1,5 @@
-﻿using DevKitLevel1.Shared.Entities;
+﻿using DevKitLevel1.Shared;
+using DevKitLevel1.Shared.Entities;
 using Microsoft.Xrm.Sdk;
 
 namespace DevKitLevel1.Console
@@ -17,6 +18,7 @@ namespace DevKitLevel1.Console
             var accounts = AppSettings.CrmService.RetrieveAll<Account>(fetchXml);
             foreach(var account in accounts)
             {
+                var json = SimpleJson.SerializeObject(account);
                 System.Console.WriteLine(account.Name);
             }
             System.Console.ReadKey();
