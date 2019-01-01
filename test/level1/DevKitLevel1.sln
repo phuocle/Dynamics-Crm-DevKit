@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
@@ -60,6 +59,27 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.DataProvider.Test", "DevKitLevel1.DataProvider.Test\DevKitLevel1.DataProvider.Test.csproj", "{E2CE0EBB-6059-4695-836D-3AF93EA6C714}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.DataProvider.Sql.Test", "DevKitLevel1.DataProvider.Sql.Test\DevKitLevel1.DataProvider.Sql.Test.csproj", "{EFB32B5E-F390-4669-A48A-BC33C6FE97B9}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DevKitLevel1.SolutionPackager", "DevKitLevel1.SolutionPackager\", "{1A3EE92B-1DAA-4ECA-BFAD-ED869B843017}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		Debug.AspNetCompiler.VirtualPath = "/DevKitLevel1.SolutionPackager"
+		Debug.AspNetCompiler.PhysicalPath = "DevKitLevel1.SolutionPackager\"
+		Debug.AspNetCompiler.TargetPath = "DevKitLevel1.SolutionPackager\"
+		Debug.AspNetCompiler.Updateable = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/DevKitLevel1.SolutionPackager"
+		Release.AspNetCompiler.PhysicalPath = "DevKitLevel1.SolutionPackager\"
+		Release.AspNetCompiler.TargetPath = "DevKitLevel1.SolutionPackager\"
+		Release.AspNetCompiler.Updateable = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "65074"
+		SlnRelativePath = "DevKitLevel1.SolutionPackager\"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -183,6 +203,10 @@ Global
 		{EFB32B5E-F390-4669-A48A-BC33C6FE97B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFB32B5E-F390-4669-A48A-BC33C6FE97B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFB32B5E-F390-4669-A48A-BC33C6FE97B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A3EE92B-1DAA-4ECA-BFAD-ED869B843017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A3EE92B-1DAA-4ECA-BFAD-ED869B843017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A3EE92B-1DAA-4ECA-BFAD-ED869B843017}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A3EE92B-1DAA-4ECA-BFAD-ED869B843017}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

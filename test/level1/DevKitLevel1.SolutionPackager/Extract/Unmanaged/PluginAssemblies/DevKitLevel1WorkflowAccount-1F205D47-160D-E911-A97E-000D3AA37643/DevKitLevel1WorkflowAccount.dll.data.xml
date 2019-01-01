@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="DevKitLevel1.Workflow.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bf1473f2815eb4a6" PluginAssemblyId="1f205d47-160d-e911-a97e-000d3aa37643" CustomizationLevel="1">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevKitLevel1WorkflowAccount-1F205D47-160D-E911-A97E-000D3AA37643/DevKitLevel1WorkflowAccount.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="DevKitLevel1.WorkflowAccount.SendMail, DevKitLevel1.Workflow.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bf1473f2815eb4a6" PluginTypeId="470b3648-160d-e911-a980-000d3aa37980" Name="DevKitLevel1.WorkflowAccount.SendMail">
+      <FriendlyName>DevKitLevel1.WorkflowAccount.SendMail</FriendlyName>
+      <WorkflowActivityGroupName>DevKitLevel1.WorkflowAccount</WorkflowActivityGroupName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

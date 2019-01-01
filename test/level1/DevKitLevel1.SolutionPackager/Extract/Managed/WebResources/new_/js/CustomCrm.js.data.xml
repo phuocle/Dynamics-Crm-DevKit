@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource>
+  <WebResourceId>{fa82a172-da0d-e911-a980-000d3aa37980}</WebResourceId>
+  <Name>new_/js/CustomCrm.js</Name>
+  <DisplayName>new_/js/CustomCrm.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/new_jsCustomCrmjsFA82A172-DA0D-E911-A980-000D3AA37980</FileName>
+</WebResource>

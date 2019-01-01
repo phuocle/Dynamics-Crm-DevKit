@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="DevKitLevel1.PluginOpportunity.PostOpportunityLoseAsynchronous" SdkMessageProcessingStepId="{42484692-9e0c-e911-a986-000d3aa37ec7}">
+  <PluginTypeName>DevKitLevel1.PluginOpportunity.PostOpportunityLoseAsynchronous, DevKitLevel1.Plugin.Opportunity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d</PluginTypeName>
+  <PluginTypeId>0d041792-9e0c-e911-a97e-000d3aa3707e</PluginTypeId>
+  <PrimaryEntity>opportunity</PrimaryEntity>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>1</Mode>
+  <Rank>1</Rank>
+  <SdkMessageId>{d1bdbb1b-ea3e-db11-86a7-000a3a5473e8}</SdkMessageId>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="DevKitLevel1.PluginAccount.PostAccountCreateAsynchronous" SdkMessageProcessingStepId="{355979fe-9d0c-e911-a97e-000d3aa3766e}">
+  <PluginTypeName>DevKitLevel1.PluginAccount.PostAccountCreateAsynchronous, DevKitLevel1.Plugin.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d</PluginTypeName>
+  <PluginTypeId>1324d8fb-9d0c-e911-a97e-000d3aa37bf7</PluginTypeId>
+  <PrimaryEntity>account</PrimaryEntity>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>1</InvocationSource>
+  <Mode>1</Mode>
+  <Rank>1</Rank>
+  <SdkMessageId>{9ebdbb1b-ea3e-db11-86a7-000a3a5473e8}</SdkMessageId>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>
