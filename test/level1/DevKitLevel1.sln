@@ -39,12 +39,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.Workflow.Admin
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DevKitLevel1.Shared", "DevKitLevel1.Shared\DevKitLevel1.Shared.shproj", "{84CA2B4A-9BD4-4AC4-A241-D2BDB91CE156}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.DataProvider", "DevKitLevel1.DataProvider\DevKitLevel1.DataProvider.csproj", "{4340747C-4EA7-4E05-A37A-59F3600D37E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKitLevel1.DataProvider.Sql", "DevKitLevel1.DataProvider.Sql\DevKitLevel1.DataProvider.Sql.csproj", "{05A8B44C-F909-455F-9919-6EE917E180A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90EDF3D4-95A6-4FEE-AC79-E554D612262E}"
+	ProjectSection(SolutionItems) = preProject
+		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
+		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{05a8b44c-f909-455f-9919-6ee917e180a3}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{0800f635-504d-482d-b088-4c87e9d45d6f}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{0fb1e3a2-d41a-426c-9700-610f80d8cd65}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{221a46d7-47a3-40a2-b122-b830dcaed21a}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{259ead44-bcbd-49e9-b1f0-5f18775416ac}*SharedItemsImports = 4
+		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{4340747c-4ea7-4e05-a37a-59f3600d37e3}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{4f1edd80-27ac-49db-b650-8abdbeeece1f}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{5841c864-5857-456c-be32-605af986ea52}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{5bc090c7-3a97-4810-af49-9c1f0c8d3045}*SharedItemsImports = 4
@@ -127,6 +139,14 @@ Global
 		{7E1B2FD6-DCDB-4613-B4CA-25E326D4A6D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E1B2FD6-DCDB-4613-B4CA-25E326D4A6D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E1B2FD6-DCDB-4613-B4CA-25E326D4A6D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4340747C-4EA7-4E05-A37A-59F3600D37E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4340747C-4EA7-4E05-A37A-59F3600D37E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4340747C-4EA7-4E05-A37A-59F3600D37E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4340747C-4EA7-4E05-A37A-59F3600D37E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A8B44C-F909-455F-9919-6EE917E180A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A8B44C-F909-455F-9919-6EE917E180A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A8B44C-F909-455F-9919-6EE917E180A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A8B44C-F909-455F-9919-6EE917E180A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
