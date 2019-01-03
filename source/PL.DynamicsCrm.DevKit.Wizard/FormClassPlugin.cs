@@ -41,6 +41,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 ddlExecution.Visible = false;
                 label1.Visible = false;
             }
+            link.Text = "Github Wiki: " + link.Text;
         }
 
         public FormType FormType { get; }

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="DevKitLevel1.Plugin.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" PluginAssemblyId="bb65b2fe-9d0c-e911-a986-000d3aa37ec7" CustomizationLevel="1">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevKitLevel1PluginAccount-BB65B2FE-9D0C-E911-A986-000D3AA37EC7/DevKitLevel1PluginAccount.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="DevKitLevel1.PluginAccount.PostAccountCreateAsynchronous, DevKitLevel1.Plugin.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" PluginTypeId="1324d8fb-9d0c-e911-a97e-000d3aa37bf7" Name="DevKitLevel1.PluginAccount.PostAccountCreateAsynchronous">
+      <FriendlyName>DevKitLevel1.PluginAccount.PostAccountCreateAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="DevKitLevel1.PluginAccount.PostAccountMergeAsynchronous, DevKitLevel1.Plugin.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" PluginTypeId="5ec08bfd-9d0c-e911-a97e-000d3aa37643" Name="DevKitLevel1.PluginAccount.PostAccountMergeAsynchronous">
+      <FriendlyName>DevKitLevel1.PluginAccount.PostAccountMergeAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="DevKitLevel1.PluginAccount.PreAccountUpdateSynchronous, DevKitLevel1.Plugin.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" PluginTypeId="415979fe-9d0c-e911-a97e-000d3aa3766e" Name="DevKitLevel1.PluginAccount.PreAccountUpdateSynchronous">
+      <FriendlyName>DevKitLevel1.PluginAccount.PreAccountUpdateSynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

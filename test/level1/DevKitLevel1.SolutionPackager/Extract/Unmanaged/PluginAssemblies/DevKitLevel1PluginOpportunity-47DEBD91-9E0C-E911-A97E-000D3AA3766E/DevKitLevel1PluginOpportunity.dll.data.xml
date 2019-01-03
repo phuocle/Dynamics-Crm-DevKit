@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="DevKitLevel1.Plugin.Opportunity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" PluginAssemblyId="47debd91-9e0c-e911-a97e-000d3aa3766e" CustomizationLevel="1">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevKitLevel1PluginOpportunity-47DEBD91-9E0C-E911-A97E-000D3AA3766E/DevKitLevel1PluginOpportunity.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="DevKitLevel1.PluginOpportunity.PostOpportunityLoseAsynchronous, DevKitLevel1.Plugin.Opportunity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" PluginTypeId="0d041792-9e0c-e911-a97e-000d3aa3707e" Name="DevKitLevel1.PluginOpportunity.PostOpportunityLoseAsynchronous">
+      <FriendlyName>DevKitLevel1.PluginOpportunity.PostOpportunityLoseAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="DevKitLevel1.PluginOpportunity.PostOpportunityWinAsynchronous, DevKitLevel1.Plugin.Opportunity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" PluginTypeId="10041792-9e0c-e911-a97e-000d3aa3707e" Name="DevKitLevel1.PluginOpportunity.PostOpportunityWinAsynchronous">
+      <FriendlyName>DevKitLevel1.PluginOpportunity.PostOpportunityWinAsynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

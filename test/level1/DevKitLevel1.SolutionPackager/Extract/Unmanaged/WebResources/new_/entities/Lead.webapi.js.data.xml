@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource>
+  <WebResourceId>{626af172-da0d-e911-a986-000d3aa37ec7}</WebResourceId>
+  <Name>new_/entities/Lead.webapi.js</Name>
+  <DisplayName>new_/entities/Lead.webapi.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="new_/lib/WebApiClient.js" displayName="new_/lib/WebApiClient.js" languagecode="" description="1.0.0.0" libraryUniqueId="{29e6511b-bea7-4752-9687-374ef76ae0fa}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/new_entitiesLeadwebapijs626AF172-DA0D-E911-A986-000D3AA37EC7</FileName>
+</WebResource>

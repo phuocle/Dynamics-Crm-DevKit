@@ -56,10 +56,10 @@
       "includefiles": [
         "css\\**.css",
         "entities\\*.js",
-        "html\\*.html",
+        "html\\**.html",
         "images\\**.png",
-        "js\\*.js",
-        "lib\\*.js",
+        "js\\**.js",
+        "lib\\**.js",
         "resources\\*.resx"
       ],
       "excludefiles": [
@@ -83,10 +83,10 @@
       "includefiles": [
         "css\\**.css",
         "entities\\*.js",
-        "html\\*.html",
+        "html\\**.html",
         "images\\**.png",
-        "js\\*.js",
-        "lib\\*.js",
+        "js\\**.js",
+        "lib\\**.js",
         "resources\\*.resx"
       ],
       "excludefiles": [

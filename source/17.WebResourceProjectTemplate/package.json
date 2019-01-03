@@ -1,7 +1,8 @@
 {
+  "private": true,
   "name": "$packagename$",
   "version": "1.0.0",
-  "description": "",
+  "description": "$packagename$",
   "main": "index.js",
   "directories": {
     "lib": "lib",
