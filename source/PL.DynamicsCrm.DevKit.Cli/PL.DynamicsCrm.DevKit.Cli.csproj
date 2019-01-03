@@ -108,6 +108,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Const.cs">
+      <Link>Const.cs</Link>
+    </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
       <Link>EncryptDecrypt.cs</Link>
     </Compile>

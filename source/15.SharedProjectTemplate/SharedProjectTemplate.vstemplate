@@ -10,7 +10,11 @@
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>SharedProject</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
-    <CreateInPlace>true</CreateInPlace>
+    <CreateInPlace>false</CreateInPlace>
+    <LocationField>Disabled</LocationField>
+    <EnableLocationBrowseButton>false</EnableLocationBrowseButton>
+    <EnableEditOfLocationField>false</EnableEditOfLocationField>
+    <BuildProjectOnLoad>true</BuildProjectOnLoad>
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="Shared.shproj" File="Shared.shproj" ReplaceParameters="true">
