@@ -356,6 +356,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         txtName.Visible = true;
 
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
+
                         break;
                     case FormType.JsFormItem:
                         link.Text = @"Add New Js Form Class";
@@ -617,6 +620,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var data = string.Empty;
             for (var i = 0; i < parts.Length - 1; i++)
                 data += parts[i] + ".";
+            if (data.EndsWith(".Report."))
+                data = data.Replace(".Report.", ".");
+            if (data.EndsWith(".Test."))
+                data = data.Replace(".Test.", ".");
             return data;
         }
 
@@ -1210,7 +1217,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
             btnOk.Enabled = btnConnection.Visible && CrmConnection != null && txtName.Text.Length > 0 ||
                             !btnConnection.Visible && txtName.Text.Length > 0;
-            if (FormType == FormType.Workflow || FormType == FormType.CustomAction)
+            if (FormType == FormType.Workflow || FormType == FormType.CustomAction || FormType == FormType.Report)
                 btnOk.Enabled = true;
         }
 
