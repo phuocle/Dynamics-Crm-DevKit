@@ -29,19 +29,19 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunFinished()
         {
-            var projectFullName = Project.FullName;
-            Dte.Solution.Remove(Project);
-            var fInfoProject = new FileInfo(projectFullName);
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
-            var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
-            Utility.TryDeleteDirectory(folder);
-            dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
-            Dte.Solution.SaveAs(Dte.Solution.FullName);
-            var tfs = new Tfs(Dte);
-            tfs.Undo(fInfoProject.DirectoryName);
-            tfs.Add(dInfoProject.FullName);
-            Dte.ExecuteCommand("SolutionExplorer.Refresh");
+            //var projectFullName = Project.FullName;
+            //Dte.Solution.Remove(Project);
+            //var fInfoProject = new FileInfo(projectFullName);
+            //var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
+            //var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
+            //Utility.TryDeleteDirectory(folder);
+            //dInfoProject.MoveTo(folder);
+            //Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
+            //Dte.Solution.SaveAs(Dte.Solution.FullName);
+            //var tfs = new Tfs(Dte);
+            //tfs.Undo(fInfoProject.DirectoryName);
+            //tfs.Add(dInfoProject.FullName);
+            //Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
@@ -68,6 +68,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         var fInfo = new FileInfo(solutionFullName);
                         var parts = fInfo.Name.Split(".".ToCharArray());
                         replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
+                        replacementsDictionary["$destinationdirectory$"] = Utility.GetFolderProject(solutionFullName, ProjectName);
+                        replacementsDictionary["$safeprojectname$"] = ProjectName;
+                        replacementsDictionary["$projectname$"] = ProjectName;
                         return;
                     }
                 }
