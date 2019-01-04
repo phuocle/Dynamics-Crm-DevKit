@@ -41,7 +41,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
             tfs.Add(dInfoProject.FullName);
-            Dte.ExecuteCommand("SolutionExplorer.Refresh");
+            //Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
@@ -52,6 +52,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var fInfo = new FileInfo(solutionFullName);
             if (!Directory.Exists(Path.Combine(fInfo.DirectoryName, ProjectName)))
             {
+                replacementsDictionary.Add("$DevKitVersion$", Const.VERSION);
                 replacementsDictionary.Add("$rootnamespace$", ProjectName);
                 replacementsDictionary.Add("$namespace$", ProjectName);
                 return;

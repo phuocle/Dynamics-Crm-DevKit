@@ -55,6 +55,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     ProjectName = form.ProjectName;
                     if (!Utility.ExistProject(Dte, ProjectName))
                     {
+                        replacementsDictionary.Add("$DevKitVersion$", Const.VERSION);
                         replacementsDictionary.Add("$version$", form.CrmVersion);
                         replacementsDictionary.Add("$NetVersion$", form.NetVersion);
                         replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
