@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="DevKitLevel1.CustomAction.Admin.None.PostNonenew_AjaxAdminSynchronous" SdkMessageProcessingStepId="{8b14bdb9-9f0c-e911-a97e-000d3aa37bf7}">
+  <PluginTypeName>DevKitLevel1.CustomAction.Admin.PostNonenew_AjaxAdminSynchronous, DevKitLevel1.CustomAction.Admin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd90d0996a785c10</PluginTypeName>
+  <PluginTypeId>0f69c2b7-9f0c-e911-a97e-000d3aa3766e</PluginTypeId>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>0</Mode>
+  <Rank>1</Rank>
+  <SdkMessageId>{07af1252-9f0c-e911-a97e-000d3aa3707e}</SdkMessageId>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>

@@ -22,14 +22,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
     public class Program
     {
-        public const string CLI_VERSION = "1.1.4";
-
         private static string CurrentDirectory
         {
             get
             {
 #if DEBUG
-                return @"D:\src\vsts\tfs\CDS-CRMGRIDPLUS\CRM\PL.CrmGridPlus.WebResource";
+                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\level1\DevKitLevel1.DataProvider.Sql";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -47,7 +45,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         public static void Main(string[] args)
         {
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli ", CliLog.COLOR_RED, Program.CLI_VERSION);
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli ", CliLog.COLOR_RED, Const.VERSION);
             CliLog.WriteLine(CliLog.COLOR_GREEN, "Path: ", CliLog.COLOR_WHITE, GetCliPath());
             CommandLineArgs arguments = null;
 #if !DEBUG
@@ -57,6 +55,13 @@ namespace PL.DynamicsCrm.DevKit.Cli
             arguments = CommandLine.Parse<CommandLineArgs>();
             var jsonFile = Path.Combine(CurrentDirectory, arguments.Json);
             CliLog.WriteLine(CliLog.COLOR_GREEN, "PL.DynamicsCrm.DevKit.Cli.json path: ", CliLog.COLOR_WHITE, jsonFile);
+            CliLog.WriteLine(CliLog.COLOR_GREEN, "Arguments: ",
+                CliLog.COLOR_MAGENTA, "/conn:", CliLog.COLOR_CYAN, arguments.Connection, " ",
+                CliLog.COLOR_MAGENTA, "/json:", CliLog.COLOR_CYAN, arguments.Json, " ",
+                CliLog.COLOR_MAGENTA, "/type:", CliLog.COLOR_CYAN, arguments.Type, " ",
+                CliLog.COLOR_MAGENTA, "/profile:", CliLog.COLOR_CYAN, arguments.Profile, " ",
+                CliLog.COLOR_MAGENTA, "/version:", CliLog.COLOR_CYAN, arguments.Version
+                );
             CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
             Run(arguments);
 #if DEBUG

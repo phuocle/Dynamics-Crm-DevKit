@@ -2,7 +2,7 @@
     "DefaultCrmVersion":"9.0.2.5",
     "DefaultNetVersion":"v4.5.2",
     "DefaultCrmConnection":"crm304614",
-    "SolutionPrefix":null,
+    "SolutionPrefix":"new_",
     "CrmConnections":[
         {
             "Name":"crm304614",

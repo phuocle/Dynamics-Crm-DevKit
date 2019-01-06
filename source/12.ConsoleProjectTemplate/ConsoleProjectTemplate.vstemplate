@@ -10,6 +10,9 @@
     <CreateNewFolder>false</CreateNewFolder>
     <DefaultName>ConsoleProject</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Disabled</LocationField>
+    <EnableLocationBrowseButton>false</EnableLocationBrowseButton>
+    <EnableEditOfLocationField>false</EnableEditOfLocationField>
   </TemplateData>
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
@@ -21,7 +24,7 @@
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=93b9df07fea4eb7d</Assembly>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.2.0.0, Culture=neutral, PublicKeyToken=93b9df07fea4eb7d</Assembly>
     <FullClassName>PL.DynamicsCrm.DevKit.Wizard.ConsoleProjectTemplateWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>

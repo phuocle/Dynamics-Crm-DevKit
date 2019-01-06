@@ -9,11 +9,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 {
     internal class WorkflowProjectTemplateWizard : IWizard
     {
-        private string _destDirectory;
         private string _keyName;
         private DTE Dte { get; set; }
         private Project Project { get; set; }
         private string ProjectName { get; set; }
+        private string NewFolder { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -23,7 +23,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             project.Name = ProjectName;
             Project = project;
-            Signing.GenerateKey(project, _destDirectory, _keyName);
+            Signing.GenerateKey(project, NewFolder, _keyName);
         }
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
@@ -36,18 +36,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
             var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
-            var folder = dInfoProject.Parent.FullName + "\\" + ProjectName;
-            if (Directory.Exists(folder))
-                try
-                {
-                    Directory.Delete(folder, true);
-                }
-                catch
-                {
-                }
-
+            var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
+            Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
+            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
@@ -66,6 +58,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     ProjectName = form.ProjectName;
                     if (!Utility.ExistProject(Dte, ProjectName))
                     {
+                        replacementsDictionary.Add("$DevKitVersion$", Const.VERSION);
                         replacementsDictionary.Remove("$projectname$");
                         replacementsDictionary.Add("$projectname$", ProjectName);
                         replacementsDictionary.Add("$version$", form.CrmVersion);
@@ -79,40 +72,29 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$ProjectName$", ProjectName);
                         replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
                         var ProjectPath = $"{replacementsDictionary["$solutiondirectory$"]}\\{ProjectName}";
-                        replacementsDictionary.Remove("$destinationdirectory$");
-                        replacementsDictionary.Add("$destinationdirectory$", ProjectPath);
-                        if (replacementsDictionary.ContainsKey("$destinationdirectory$"))
-                            _destDirectory = replacementsDictionary["$destinationdirectory$"];
                         if (replacementsDictionary.ContainsKey("$ProjectName$"))
                             _keyName = replacementsDictionary["$ProjectName$"] + ".snk";
                         var solutionFullName = Dte?.Solution?.FullName;
                         var fInfo = new FileInfo(solutionFullName);
                         var parts = fInfo.Name.Split(".".ToCharArray());
-                        replacementsDictionary.Add("$ShareProject$", $"{GetName(parts)}Shared");
+                        replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
                         replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
+
+                        NewFolder = Utility.GetFolderProject(solutionFullName, ProjectName);
+                        replacementsDictionary.Remove("$destinationdirectory$");
+                        replacementsDictionary["$destinationdirectory$"] = NewFolder;
                         return;
                     }
                 }
             }
-            try
-            {
-                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
-            }
-            catch { }
+            MessageBox.Show($"{FormType.Workflow.ToString()} project exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
-        }
-
-        private string GetName(string[] parts)
-        {
-            var data = string.Empty;
-            for (var i = 0; i < parts.Length - 1; i++)
-                data += parts[i] + ".";
-            return data;
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return true;
+            return !File.Exists(filePath);
         }
     }
 }

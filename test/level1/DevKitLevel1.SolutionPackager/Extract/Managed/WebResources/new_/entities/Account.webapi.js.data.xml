@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource>
+  <WebResourceId>{02b74473-da0d-e911-a97e-000d3aa3766e}</WebResourceId>
+  <Name>new_/entities/Account.webapi.js</Name>
+  <DisplayName>new_/entities/Account.webapi.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="new_/lib/WebApiClient.js" displayName="new_/lib/WebApiClient.js" languagecode="" description="1.0.0.0" libraryUniqueId="{29e6511b-bea7-4752-9687-374ef76ae0fa}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/new_entitiesAccountwebapijs02B74473-DA0D-E911-A97E-000D3AA3766E</FileName>
+</WebResource>

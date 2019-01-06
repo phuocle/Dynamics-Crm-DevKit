@@ -22,7 +22,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private DTE Dte { get; }
 
-        public OrganizationServiceProxy CrmService { get; private set; }
+        public OrganizationServiceProxy CrmService { get; private set; } = null;
 
         public CrmConnection CrmConnection { get; private set; }
 
@@ -39,28 +39,24 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             if (!IsValid()) return;
             btnConnect.Enabled = false;
             Cursor = Cursors.WaitCursor;
-            var uri = new Uri(txtUrl.Text);
-            var clientCredentials = new ClientCredentials();
-            clientCredentials.UserName.UserName = txtUserName.Text;
-            clientCredentials.UserName.Password = txtPassword.Text;
-            CrmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
             bool connected;
             try
             {
-                CrmService.Execute(new WhoAmIRequest());
+                var uri = new Uri(txtUrl.Text);
+                var clientCredentials = new ClientCredentials();
+                clientCredentials.UserName.UserName = txtUserName.Text;
+                clientCredentials.UserName.Password = txtPassword.Text;
+                var crmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
+                crmService.Execute(new WhoAmIRequest());
                 connected = true;
             }
             catch
             {
                 connected = false;
             }
-
             if (!connected)
             {
-                MessageBox.Show(@"Something wrong with your connection. Please try it again");
-                Cursor = Cursors.Default;
-                btnConnect.Enabled = true;
-                CrmService = null;
+                MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -82,37 +78,37 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 txtUserName.Text = "";
                 txtPassword.Text = "";
                 LoadConnections();
-                Cursor = Cursors.Default;
-                btnConnect.Enabled = true;
             }
+            Cursor = Cursors.Default;
+            btnConnect.Enabled = true;
         }
 
         private bool IsValid()
         {
             if (txtName.Visible && txtName.Enabled && txtName.Text.Length == 0)
             {
-                MessageBox.Show(@"Please enter Crm Connection Name");
+                MessageBox.Show(@"Please enter Crm Connection Name", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtName.Focus();
                 return false;
             }
 
             if (txtUrl.Visible && txtUrl.Enabled && txtUrl.Text.Length == 0)
             {
-                MessageBox.Show(@"Please enter Url");
+                MessageBox.Show(@"Please enter Url", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtUrl.Focus();
                 return false;
             }
 
             if (txtUserName.Visible && txtUserName.Enabled && txtUserName.Text.Length == 0)
             {
-                MessageBox.Show(@"Please enter User Name");
+                MessageBox.Show(@"Please enter User Name", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtUserName.Focus();
                 return false;
             }
 
             if (txtPassword.Visible && txtPassword.Enabled && txtPassword.Text.Length == 0)
             {
-                MessageBox.Show(@"Please enter Password");
+                MessageBox.Show(@"Please enter Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtPassword.Focus();
                 return false;
             }
@@ -147,8 +143,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 DevKitCrmConfigHelper.SetDevKitCrmConfig(Dte, CrmConnection);
             }
             clientCredentials.UserName.Password = EncryptDecrypt.DecryptString(CrmConnection.Password);
-            CrmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
-
+            try
+            {
+                CrmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
+            }
+            catch
+            {
+                MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
             config.DefaultCrmConnection = cboConnection.Text;
             DevKitCrmConfigHelper.SetDevKitCrmConfig(Dte, config);

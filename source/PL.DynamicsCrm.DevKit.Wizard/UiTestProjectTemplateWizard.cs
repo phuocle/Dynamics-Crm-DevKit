@@ -33,19 +33,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
             var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
-            var folder = dInfoProject.Parent.FullName + "\\" + ProjectName;
-            if (Directory.Exists(folder))
-                try
-                {
-                    Directory.Delete(folder, true);
-                }
-                catch
-                {
-                }
-
+            var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
+            Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName +
-                                     ".csproj");
+            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".csproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
@@ -65,6 +56,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     ProjectName = form.ProjectName;
                     if (!Utility.ExistProject(Dte, ProjectName))
                     {
+                        replacementsDictionary.Add("$DevKitVersion$", Const.VERSION);
                         replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                         replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
                         replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
@@ -77,30 +69,20 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         var solutionFullName = Dte?.Solution?.FullName;
                         var fInfo = new FileInfo(solutionFullName);
                         var parts = fInfo.Name.Split(".".ToCharArray());
-                        replacementsDictionary.Add("$ShareProject$", $"{GetName(parts)}Shared");
+                        replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
+
                         return;
                     }
                 }
             }
-            try
-            {
-                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
-            }
-            catch { }
+            MessageBox.Show($"{FormType.UiTest.ToString()} project exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
-        }
-
-        private string GetName(string[] parts)
-        {
-            var data = string.Empty;
-            for (var i = 0; i < parts.Length - 1; i++)
-                data += parts[i] + ".";
-            return data;
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return true;
+            return !File.Exists(filePath);
         }
     }
 }

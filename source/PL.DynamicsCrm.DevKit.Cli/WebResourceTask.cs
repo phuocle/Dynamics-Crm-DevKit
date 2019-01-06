@@ -39,7 +39,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     filePattern = filePattern.Replace(@"\\", @"\");
                     includefiles.AddRange(GetFiles(filePattern));
                 }
-
                 var excludefiles = new List<string>();
                 foreach (var pattern in WebResourceJson.excludefiles)
                 {

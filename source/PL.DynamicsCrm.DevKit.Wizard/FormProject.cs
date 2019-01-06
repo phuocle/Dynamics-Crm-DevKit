@@ -356,6 +356,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         txtName.Visible = true;
 
+                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
+
                         break;
                     case FormType.JsFormItem:
                         link.Text = @"Add New Js Form Class";
@@ -441,6 +444,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         break;
                 }
+                link.Text = "Github Wiki: " + link.Text;
             }
         }
 
@@ -616,6 +620,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var data = string.Empty;
             for (var i = 0; i < parts.Length - 1; i++)
                 data += parts[i] + ".";
+            if (data.EndsWith(".Report."))
+                data = data.Replace(".Report.", ".");
+            if (data.EndsWith(".Test."))
+                data = data.Replace(".Test.", ".");
             return data;
         }
 
@@ -868,12 +876,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var projects = new List<ProjectData>();
             foreach (Project project in DTE.Solution.Projects)
             {
-                if (project.FileName.Length == 0) continue;
-                var id = project.Properties.Item("AssemblyGuid").Value.ToString();
-                var @namespace = project.Properties.Item("RootNamespace").Value.ToString();
-                var name = project.Name;
-                if (project.Name.EndsWith(".ProxyTypes"))
-                    ProxyTypes = new ProjectData {Id = id, Name = name, Namespace = @namespace};
+                if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name.Contains($".{FormType.Plugin.ToString()}.") ||
                     project.Name.Contains($".{FormType.Workflow.ToString()}.") ||
                     project.Name.EndsWith($".{FormType.Workflow.ToString()}") ||
@@ -884,6 +887,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 {
                     if (project.Name.EndsWith(".Test")) continue;
                     if (IsAddedTestProject(DTE.Solution.Projects, $"{project.Name}.Test")) continue;
+                    var id = project.Properties.Item("AssemblyGuid").Value.ToString();
+                    var name = project.Name;
+                    var @namespace = project.Properties.Item("RootNamespace").Value.ToString();
                     projects.Add(new ProjectData {Id = id, Name = name, Namespace = @namespace});
                 }
             }
@@ -917,22 +923,22 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             if (cboCrmVersion.Visible && cboCrmVersion.Enabled && cboCrmVersion.Text.Length == 0)
             {
-                MessageBox.Show(@"Please select Crm Version!");
+                MessageBox.Show(@"Please select Crm Version!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (cboNetVersion.Visible && cboNetVersion.Enabled && cboNetVersion.Text.Length == 0)
             {
-                MessageBox.Show(@"Please select .NET Version!");
+                MessageBox.Show(@"Please select .NET Version!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (cboEntity.Visible && cboEntity.Enabled && cboEntity.Text.Length == 0)
             {
-                MessageBox.Show(@"Please select data!");
+                MessageBox.Show(@"Please select data!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (FormType == FormType.ResourceString && txtName.Visible && txtName.Enabled && txtName.Text.Length == 0)
             {
-                MessageBox.Show(@"Please enter data!");
+                MessageBox.Show(@"Please enter data!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (FormType == FormType.Console ||
@@ -946,7 +952,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 var sharedProject = $"{fInfo.DirectoryName}\\{GetName(parts)}Shared\\{GetName(parts)}Shared.shproj";
                 if (!File.Exists(sharedProject))
                 {
-                    MessageBox.Show(@"Please add Shared project and try again!");
+                    MessageBox.Show(@"Please add Shared project and try again!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     btnCancel.Enabled = true;
                     return;
                 }
@@ -980,7 +986,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 var sharedProject = $"{fInfo.DirectoryName}\\{GetName(parts)}ProxyTypes\\{GetName(parts)}ProxyTypes.csproj";
                 if (!File.Exists(sharedProject))
                 {
-                    MessageBox.Show(@"Please add ProxyTypes project and try again!");
+                    MessageBox.Show(@"Please add ProxyTypes project and try again!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     btnCancel.Enabled = true;
                     return;
                 }
@@ -999,7 +1005,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
                 if (!File.Exists(file))
                 {
-                    MessageBox.Show($@"File not found: {file}");
+                    MessageBox.Show($@"File not found: {file}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 progressBar.Visible = true;
@@ -1016,7 +1022,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                 if (MessageError.Length > 0)
                 {
-                    MessageBox.Show(MessageError, "ERROR");
+                    MessageBox.Show(MessageError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
@@ -1049,7 +1055,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                 if (MessageError?.Length > 0)
                 {
-                    MessageBox.Show(MessageError, "ERROR");
+                    MessageBox.Show(MessageError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     btnCancel.Enabled = true;
                     btnOk.Enabled = true;
                     cboEntity.Enabled = true;
@@ -1211,7 +1217,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
             btnOk.Enabled = btnConnection.Visible && CrmConnection != null && txtName.Text.Length > 0 ||
                             !btnConnection.Visible && txtName.Text.Length > 0;
-            if (FormType == FormType.Workflow || FormType == FormType.CustomAction)
+            if (FormType == FormType.Workflow || FormType == FormType.CustomAction || FormType == FormType.Report)
                 btnOk.Enabled = true;
         }
 
@@ -1350,7 +1356,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var checkDuplicate = forms.GroupBy(x => x).Any(g => g.Count() > 1);
             if (checkDuplicate)
             {
-                MessageBox.Show($@"Duplicate Form name for this entity: {entityName} !");
+                MessageBox.Show($@"Duplicate Form name for this entity: {entityName} !", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

@@ -1,0 +1,13 @@
+﻿1. Open Registry Editor
+2. Goto: HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319
+3. Right click on the name of the folder (the v4.0.30319 folder) and select New, then DWORD. Give it the name of SchUseStrongCrypto and the Value of 1.
+4. Exit the Registry Editor
+5. then restart your machine.
+6. Test and verify
+
+Download Report Authoring Extension
++ https://www.microsoft.com/en-us/download/details.aspx?id=50375 (v.8.2.2.248)
++ https://www.microsoft.com/en-us/download/details.aspx?id=56973 (v.9.00.0002.0426)
+
+Microsoft.Crm.Reporting.RdlHelper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+Microsoft.Crm.Reporting.RdlHelper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35

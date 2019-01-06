@@ -3,7 +3,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PL.DynamicsCrm.DevKit.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="1.1.4" Language="en-US"
+        <Identity Id="PL.DynamicsCrm.DevKit.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="1.2.0" Language="en-US"
                   Publisher="PhuocLe" />
         <DisplayName>PL.DynamicsCrm.DevKit</DisplayName>
         <Description xml:space="preserve">A collection of projects and items template for develop Dynamics 365 Crm</Description>
@@ -11,9 +11,12 @@
         <License>License.txt</License>
         <Icon>icon.png</Icon>
         <PreviewImage>icon.png</PreviewImage>
+        <Tags>Dynamics; Dynamics 365; Dynamics CRM; Tool; JavaScript</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0, 15.0]" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0,)" />
+        <InstallationTarget Version="[14.0,)" Id="Microsoft.VisualStudio.Community" />
+        <InstallationTarget Version="[14.0,)" Id="Microsoft.VisualStudio.Enterprise" />
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
@@ -87,7 +90,7 @@
 
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[14.0,16.0)"
-                      DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.Net.Component.4.5.2.TargetingPack" Version="[15.0,)" DisplayName=".NET Framework 4.5.2 targeting pack" />
     </Prerequisites>
 </PackageManifest>

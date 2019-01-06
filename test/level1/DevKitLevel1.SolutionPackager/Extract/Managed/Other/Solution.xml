@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.1.0.1096" SolutionPackageVersion="9.1" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SolutionManifest>
+    <UniqueName>Temp</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="Temp" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions />
+    <Version>1.0.0.0</Version>
+    <Managed>1</Managed>
+    <Publisher>
+      <UniqueName>phuocle2</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="PhuocLe2" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions />
+      <EMailAddress xsi:nil="true"></EMailAddress>
+      <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
+      <CustomizationPrefix>new</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>10000</CustomizationOptionValuePrefix>
+      <Addresses>
+        <Address>
+          <AddressNumber>1</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+        <Address>
+          <AddressNumber>2</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+      </Addresses>
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="29" id="{2386ffa2-bcd3-413c-91aa-c6375e7e90e5}" behavior="0" />
+      <RootComponent type="29" id="{d8399fd6-bce9-4577-9c2d-d188fa025732}" behavior="0" />
+      <RootComponent type="29" id="{e34a24b1-eff2-47bf-88d9-896ebffc5bcc}" behavior="0" />
+      <RootComponent type="50" schemaName=":RibbonDiffXml" behavior="0" />
+      <RootComponent type="61" schemaName="new_/css/admin/index.css" behavior="0" />
+      <RootComponent type="61" schemaName="new_/css/index.css" behavior="0" />
+      <RootComponent type="61" schemaName="new_/entities/Account.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/entities/Account.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/entities/Account.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/entities/Lead.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/entities/Lead.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/entities/Lead.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/html/HtmlWebResource.html" behavior="0" />
+      <RootComponent type="61" schemaName="new_/images/icon.png" behavior="0" />
+      <RootComponent type="61" schemaName="new_/js/CustomCrm.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/lib/dayjs/dayjs.min.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/lib/underscore/underscore-min.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/lib/WebApiClient.js" behavior="0" />
+      <RootComponent type="61" schemaName="new_/resources/Resource.1033.resx" behavior="0" />
+      <RootComponent type="91" id="{e6e0669e-9f0c-e911-a97e-000d3aa3707e}" schemaName="DevKitLevel1.CustomAction, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd90d0996a785c10" behavior="0" />
+      <RootComponent type="91" id="{16a5e8ab-9f0c-e911-a97e-000d3aa37bf7}" schemaName="DevKitLevel1.CustomAction.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd90d0996a785c10" behavior="0" />
+      <RootComponent type="91" id="{525ca8b9-9f0c-e911-a980-000d3aa37980}" schemaName="DevKitLevel1.CustomAction.Admin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd90d0996a785c10" behavior="0" />
+      <RootComponent type="91" id="{8334c37b-a70d-e911-a97e-000d3aa3766e}" schemaName="DevKitLevel1.DataProvider.Sql, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" behavior="0" />
+      <RootComponent type="91" id="{bb65b2fe-9d0c-e911-a986-000d3aa37ec7}" schemaName="DevKitLevel1.Plugin.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" behavior="0" />
+      <RootComponent type="91" id="{47debd91-9e0c-e911-a97e-000d3aa3766e}" schemaName="DevKitLevel1.Plugin.Opportunity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a7d5e3a2612a23d" behavior="0" />
+      <RootComponent type="91" id="{c242e343-160d-e911-a97e-000d3aa37bf7}" schemaName="DevKitLevel1.Workflow, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bf1473f2815eb4a6" behavior="0" />
+      <RootComponent type="91" id="{1f205d47-160d-e911-a97e-000d3aa37643}" schemaName="DevKitLevel1.Workflow.Account, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bf1473f2815eb4a6" behavior="0" />
+      <RootComponent type="91" id="{4f0b3648-160d-e911-a980-000d3aa37980}" schemaName="DevKitLevel1.Workflow.Administrator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bf1473f2815eb4a6" behavior="0" />
+      <RootComponent type="92" id="{355979fe-9d0c-e911-a97e-000d3aa3766e}" behavior="0" />
+      <RootComponent type="92" id="{42484692-9e0c-e911-a986-000d3aa37ec7}" behavior="0" />
+      <RootComponent type="92" id="{4a01faa4-9f0c-e911-a97e-000d3aa3707e}" behavior="0" />
+      <RootComponent type="92" id="{4fdebd91-9e0c-e911-a97e-000d3aa3766e}" behavior="0" />
+      <RootComponent type="92" id="{4fe50eaf-9f0c-e911-a986-000d3aa37ec7}" behavior="0" />
+      <RootComponent type="92" id="{8b14bdb9-9f0c-e911-a97e-000d3aa37bf7}" behavior="0" />
+      <RootComponent type="92" id="{be65b2fe-9d0c-e911-a986-000d3aa37ec7}" behavior="0" />
+      <RootComponent type="92" id="{c065b2fe-9d0c-e911-a986-000d3aa37ec7}" behavior="0" />
+    </RootComponents>
+    <MissingDependencies>
+      <MissingDependency>
+        <Required key="0" type="1" schemaName="opportunity" displayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="1" type="92" id="{4fdebd91-9e0c-e911-a97e-000d3aa3766e}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="0" type="1" schemaName="opportunity" displayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="2" type="92" id="{42484692-9e0c-e911-a986-000d3aa37ec7}" />
+      </MissingDependency>
+    </MissingDependencies>
+  </SolutionManifest>
+</ImportExportXml>

@@ -1,0 +1,206 @@
+{
+  "plugins": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "Temp",
+      "includefiles": [
+        "DevKitLevel1.Plugin.*.dll",
+        "DevKitLevel1.CustomAction.*.dll"
+      ],
+      "excludefiles": [
+        "DevKitLevel1.Plugin.*.Test.dll",
+        "DevKitLevel1.CustomAction.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "Temp",
+      "includefiles": [
+        "DevKitLevel1.Plugin.*.dll",
+        "DevKitLevel1.CustomAction.*.dll"
+      ],
+      "excludefiles": [
+        "DevKitLevel1.Plugin.*.Test.dll",
+        "DevKitLevel1.CustomAction.*.Test.dll"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "Temp",
+      "includefiles": [
+        "DevKitLevel1.Workflow.*.dll"
+      ],
+      "excludefiles": [
+        "DevKitLevel1.Workflow.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "???.*.dll"
+      ],
+      "excludefiles": [
+        "*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "Temp",
+      "prefix": "new_",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "entities\\*.intellisense.js",
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "new_/entities/Account.js",
+            "new_/entities/Lead.js"
+          ],
+          "dependencies": [
+            "new_/resources/Resource.1033.resx"
+          ]
+        },
+        {
+          "webresources": [
+            "new_/entities/Account.webapi.js",
+            "new_/entities/Lead.webapi.js"
+          ],
+          "dependencies": [
+            "new_/lib/WebApiClient.js"
+          ]
+        },
+        {
+          "webresources": [
+            "new_/entities/Account.js"
+          ],
+          "dependencies": [
+            "new_/entities/Account.form.js",
+            "new_/entities/Account.webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "new_/entities/Lead.js"
+          ],
+          "dependencies": [
+            "new_/entities/Lead.form.js",
+            "new_/entities/Lead.webapi.js"
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "???.WebResource",
+      "includefiles": [
+        "entities\\*.js",
+        "lib\\*.js",
+        "images\\*.png"
+      ],
+      "excludefiles": [
+        "entities\\*.intellisense.js",
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+          ],
+          "dependencies": [
+          ]
+        }
+      ]
+    }
+  ],
+  "dataproviders": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "Temp",
+      "includefiles": [
+        "DevKitLevel1.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "DevKitLevel1.DataProvider.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "???.dll"
+      ],
+      "excludefiles": [
+        "???.dll"
+      ]
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "rootfolder": "",
+      "profile": "Extract-Unmanaged",
+      "solution": "Temp",
+      "solutiontype": "Unmanaged",
+      "folder": "Extract",
+      "solutionzipfolder": "zip",
+      "logfolder": "log",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "rootfolder": "",
+      "profile": "Extract-Managed",
+      "solution": "Temp",
+      "solutiontype": "Managed",
+      "folder": "Extract",
+      "solutionzipfolder": "zip",
+      "logfolder": "log",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "rootfolder": "",
+      "profile": "Pack-Unmanaged",
+      "solution": "Temp",
+      "solutiontype": "Unmanaged",
+      "folder": "Extract",
+      "solutionzipfolder": "zip",
+      "logfolder": "log",
+      "type": "Pack",
+      "mapfile": ""
+    },
+    {
+      "rootfolder": "",
+      "profile": "Pack-Managed",
+      "solution": "Temp",
+      "solutiontype": "Managed",
+      "folder": "Extract",
+      "solutionzipfolder": "zip",
+      "logfolder": "log",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ]
+}
