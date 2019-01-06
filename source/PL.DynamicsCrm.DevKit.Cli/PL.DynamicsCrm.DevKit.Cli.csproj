@@ -125,9 +125,11 @@
     <Compile Include="CrmPluginRegistrationAttribute.cs" />
     <Compile Include="CliLog.cs" />
     <Compile Include="DataProviderTask.cs" />
+    <Compile Include="LateBoundTask.cs" />
     <Compile Include="Models\CliJson.cs" />
     <Compile Include="Models\DataProvider.cs" />
     <Compile Include="Models\Dependency.cs" />
+    <Compile Include="Models\LateBound.cs" />
     <Compile Include="Models\Plugin.cs" />
     <Compile Include="Models\SolutionPackager.cs" />
     <Compile Include="Models\WebResource.cs" />

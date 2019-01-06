@@ -9,5 +9,6 @@ namespace PL.DynamicsCrm.DevKit.Cli.Models
         public List<WebResource> webresources { get; set; }
         public List<SolutionPackager> solutionpackagers { get; set; }
         public List<DataProvider> dataproviders { get; set; }
+        public List<LateBound> latebounds { get; set; }
     }
 }

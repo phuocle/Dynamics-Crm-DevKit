@@ -17,7 +17,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
         workflows,
         webresources,
         solutionpackagers,
-        dataproviders
+        dataproviders,
+        latebounds
     }
 
     public class Program
@@ -27,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\level1\DevKitLevel1.DataProvider.Sql";
+                return @"D:\src\vsts\tfs\CDS-CRMGRIDPLUS\CRM";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -40,6 +41,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private static WebResource WebResourceJson { get; set; }
         private static SolutionPackager SolutionPackagerJson { get; set; }
         private static DataProvider DataProviderJson { get; set; }
+        private static LateBound LateBoundJson {get;set;}
         private static CrmServiceClient CrmServiceClient { get; set; }
 
         public static void Main(string[] args)
@@ -122,6 +124,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var task = new DataProviderTask(CrmServiceClient, CurrentDirectory, DataProviderJson, arguments.Version);
                 task.Run();
             }
+            else if (arguments.Type == TaskType.latebounds.ToString())
+            {
+                var task = new LateBoundTask(CrmServiceClient, CurrentDirectory, LateBoundJson, arguments.Version);
+                task.Run();
+            }
         }
 
         private static bool IsValid(CommandLineArgs arguments)
@@ -154,11 +161,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     TaskType.workflows.ToString(),
                     TaskType.webresources.ToString(),
                     TaskType.solutionpackagers.ToString(),
-                    TaskType.dataproviders.ToString()
+                    TaskType.dataproviders.ToString(),
+                    TaskType.latebounds.ToString()
                 };
                 if (!types.Contains(arguments.Type))
                 {
-                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: should be: plugins or workflows or webresources or solutionpackagers or dataproviders");
+                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: should be: plugins or workflows or webresources or solutionpackagers or dataproviders or latebounds");
                     return false;
                 }
             }
@@ -169,6 +177,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 WebResourceJson = json.webresources.FirstOrDefault(x => x.profile == arguments.Profile);
                 SolutionPackagerJson = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
                 DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
+                LateBoundJson = json.latebounds.FirstOrDefault(x => x.profile == arguments.Profile);
             }
 
             if (arguments.Profile.Length == 0)
@@ -223,7 +232,10 @@ namespace PL.DynamicsCrm.DevKit.Cli
             else if (arguments.Type == TaskType.dataproviders.ToString())
             {
                 DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
-                ;
+            }
+            else if (arguments.Type == TaskType.latebounds.ToString())
+            {
+                LateBoundJson = json.latebounds.FirstOrDefault(x => x.profile == arguments.Profile);
             }
             if (!IsConnectedDynamics365(arguments.Connection))
             {
