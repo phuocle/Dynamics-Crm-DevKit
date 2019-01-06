@@ -40,9 +40,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CopyVsixExtensionFiles>False</CopyVsixExtensionFiles>
-    <CopyVsixExtensionLocation>
-    </CopyVsixExtensionLocation>
+    <CopyVsixExtensionFiles>True</CopyVsixExtensionFiles>
+    <CopyVsixExtensionLocation>C:\Users\phuoclev\AppData\Local\Microsoft\VisualStudio\14.0Exp\Extensions\DevKit</CopyVsixExtensionLocation>
     <CreateVsixContainer>True</CreateVsixContainer>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

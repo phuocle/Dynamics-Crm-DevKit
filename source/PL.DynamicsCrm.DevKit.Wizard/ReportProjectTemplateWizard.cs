@@ -31,29 +31,18 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             var projectFullName = Project.FullName;
             Dte.Solution.Remove(Project);
-            File.WriteAllText(projectFullName,
-                Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.ReportProjectTemplate.csproj"));
+            File.WriteAllText(projectFullName, Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.ReportProjectTemplate.csproj"));
             var fInfoProject = new FileInfo(projectFullName);
             fInfoProject.MoveTo(fInfoProject.DirectoryName + "\\" + ProjectName + ".rptproj");
             var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
             var folder = dInfoProject.Parent.FullName + "\\" + ProjectName;
-            if (Directory.Exists(folder))
-                try
-                {
-                    Directory.Delete(folder, true);
-                }
-                catch
-                {
-                }
-
+            Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(
-                dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName + ".rptproj");
+            Dte.Solution.AddFromFile(dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName + ".rptproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
             tfs.Add(dInfoProject.FullName);
-            Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
