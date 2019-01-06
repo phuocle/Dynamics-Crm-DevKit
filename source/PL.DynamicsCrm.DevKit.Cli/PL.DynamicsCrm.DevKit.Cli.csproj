@@ -108,6 +108,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Const.cs">
+      <Link>Const.cs</Link>
+    </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
       <Link>EncryptDecrypt.cs</Link>
     </Compile>
@@ -144,6 +147,7 @@
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.2.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.3.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.4.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.0.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.nuspec" />
     <None Include="packages.config" />
     <Content Include="PL.DynamicsCrm.DevKit.Cli.json">

@@ -41,7 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CopyVsixExtensionFiles>True</CopyVsixExtensionFiles>
-    <CopyVsixExtensionLocation>C:\Users\PhuocLe\AppData\Local\Microsoft\VisualStudio\14.0Exp\Extensions\devkit</CopyVsixExtensionLocation>
+    <CopyVsixExtensionLocation>C:\Users\phuoclev\AppData\Local\Microsoft\VisualStudio\14.0Exp\Extensions\DevKit</CopyVsixExtensionLocation>
     <CreateVsixContainer>True</CreateVsixContainer>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -69,6 +69,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\07.JavaScriptWebApiItemTemplate\07.JavaScriptWebApiItemTemplate.csproj">

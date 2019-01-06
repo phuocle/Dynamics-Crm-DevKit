@@ -462,7 +462,7 @@ namespace $rootnamespace$
         public string Image2Name { get; set; }
         public string Image2Attributes { get; set; }
         public string Description { get; set; }
-        public bool? DeleteAsyncOperation { get; set; }
+        public bool DeleteAsyncOperation { get; set; } = false;
         public string UnSecureConfiguration { get; set; }
         public string SecureConfiguration { get; set; }
         public bool Offline { get; set; }
