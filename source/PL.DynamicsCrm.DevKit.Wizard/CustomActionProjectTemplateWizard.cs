@@ -94,7 +94,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return !File.Exists(filePath);
+            return true;
         }
     }
 }

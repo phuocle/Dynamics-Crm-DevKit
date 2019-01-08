@@ -13,6 +13,7 @@
     <LocationField>Disabled</LocationField>
     <EnableLocationBrowseButton>false</EnableLocationBrowseButton>
     <EnableEditOfLocationField>false</EnableEditOfLocationField>
+    <CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
