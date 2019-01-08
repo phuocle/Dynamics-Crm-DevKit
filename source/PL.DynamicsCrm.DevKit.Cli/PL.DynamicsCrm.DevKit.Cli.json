@@ -172,5 +172,26 @@
       "type": "Pack",
       "mapfile": ""
     }
+  ],
+  "latebounds": [
+    {
+      "profile": "SELECTED",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "selected",
+      "entities": [
+        "Account",
+        "Email",
+        "Contact"
+      ]
+    },
+    {
+      "profile": "EXISTING",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "existing",
+      "entities": [
+      ]
+    }
   ]
 }
