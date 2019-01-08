@@ -108,6 +108,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\21.CSharpLateBoundClassItemTemplate\Class.cs">
+      <Link>Data\Class.cs</Link>
+    </EmbeddedResource>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Const.cs">
       <Link>Const.cs</Link>
     </Compile>
@@ -119,6 +122,12 @@
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\FileSystem.cs">
       <Link>FileSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\GeneratedCSharpLateBound.cs">
+      <Link>GeneratedCSharpLateBound.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Xrm\CrmAttribute.cs">
+      <Link>Xrm\CrmAttribute.cs</Link>
     </Compile>
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="CommandLineArgs.cs" />
