@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"D:\src\vsts\tfs\CDS-CRMGRIDPLUS\CRM";
+                return @"C:\sources\phuocle\tfs\CDS-CRMGRIDPLUS\CRM";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -90,16 +90,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private static void Run(CommandLineArgs arguments)
         {
             if (!IsValid(arguments)) return;
-            if (arguments.Type.Length == 0)
-            {
-                var task1 = new PluginTask(CrmServiceClient, CurrentDirectory, PluginJson, arguments.Version);
-                task1.Run();
-                var task2 = new WorkflowTask(CrmServiceClient, CurrentDirectory, WorkflowJson, arguments.Version);
-                task2.Run();
-                var task3 = new WebResourceTask(CrmServiceClient, CurrentDirectory, WebResourceJson, arguments.Version);
-                task3.Run();
-            }
-            else if (arguments.Type == TaskType.plugins.ToString())
+            if (arguments.Type == TaskType.plugins.ToString())
             {
                 var task = new PluginTask(CrmServiceClient, CurrentDirectory, PluginJson, arguments.Version);
                 task.Run();
@@ -144,14 +135,17 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/json: missing");
                 return false;
             }
-
+            if (arguments.Type.Length == 0)
+            {
+                CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: missing");
+                return false;
+            }
             var jsonFile = Path.Combine(CurrentDirectory, arguments.Json);
             if (!File.Exists(jsonFile))
             {
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/json: PL.DynamicsCrm.DevKit json missing [{jsonFile}]");
                 return false;
             }
-
             var json = SimpleJson.DeserializeObject<CliJson>(File.ReadAllText(jsonFile));
             if (arguments.Type.Length > 0)
             {

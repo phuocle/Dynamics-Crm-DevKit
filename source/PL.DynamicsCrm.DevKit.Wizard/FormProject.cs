@@ -1086,7 +1086,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 progressBar.Visible = true;
                 Task task = Task.Factory.StartNew(() =>
                 {
-                    _generated = lateBound.Go(CrmService, companyName, projectName, entityName, RootNameSpace, SharedNameSpace);
+                    _generated = lateBound.Go(CrmService, /*companyName,*//* projectName,*/ entityName, RootNameSpace, SharedNameSpace);
                 });
                 while (!task.IsCompleted)
                 {
