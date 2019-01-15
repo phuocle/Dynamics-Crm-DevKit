@@ -109,7 +109,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             {
                 File.Move(path, $"{path}.{DateTime.Now:MMddyyyyHHmmss}");
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
@@ -121,7 +121,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             {
                 return File.ReadAllBytes(path);
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -133,7 +133,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             {
                 return File.ReadAllText(path);
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -185,7 +185,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 DirectoryInfo di = new DirectoryInfo(folder);
                 return di.Exists;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }
