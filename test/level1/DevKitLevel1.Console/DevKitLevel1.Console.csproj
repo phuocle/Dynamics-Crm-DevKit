@@ -65,6 +65,10 @@
     <Compile Include="Entities\Contact.generated.cs">
       <DependentUpon>Contact.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Lead.cs" />
+    <Compile Include="Entities\Lead.generated.cs">
+      <DependentUpon>Lead.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
