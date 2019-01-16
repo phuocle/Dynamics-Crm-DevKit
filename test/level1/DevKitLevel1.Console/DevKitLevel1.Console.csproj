@@ -69,8 +69,24 @@
     <Compile Include="Entities\Lead.generated.cs">
       <DependentUpon>Lead.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Opportunity.cs" />
+    <Compile Include="Entities\Opportunity.generated.cs">
+      <DependentUpon>Opportunity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Quote.cs" />
+    <Compile Include="Entities\Quote.generated.cs">
+      <DependentUpon>Quote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Opportunity.cs" />
+    <Compile Include="Opportunity.generated.cs">
+      <DependentUpon>Opportunity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quote.cs" />
+    <Compile Include="Quote.generated.cs">
+      <DependentUpon>Quote.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
