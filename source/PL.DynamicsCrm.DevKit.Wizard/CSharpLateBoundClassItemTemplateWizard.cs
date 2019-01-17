@@ -9,11 +9,17 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 {
     internal class CSharpLateBoundClassItemTemplateWizard : IWizard
     {
+
+        private const string SHARED_PROJECT = "{D954291E-2A0B-460D-934E-DC6B0785DB48}";
+        private string Class { get; set; }
         private DTE Dte { get; set; }
         private Project ActiveProject { get; set; }
-        private string ClassGenerated { get; set; }
+        private string ClassFileGenerated { get; set; }
+        private string ClassFile { get; set; }
+        private bool IsNew { get; set; } = false;
+        private string GeneratedCode { get; set; }
+        private ProjectItem CurrentProjectItem { get; set; } = null;
 
-        private string DeleteFile { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -25,70 +31,61 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
-            if (projectItem.Name.Contains(".generated.cs")) ClassGenerated = projectItem.FileNames[0];
+            if (CurrentProjectItem == null)
+            {
+                CurrentProjectItem = projectItem;
+            }
+            if (projectItem.Name.Contains(".generated.cs"))
+            {
+                ClassFileGenerated = projectItem.FileNames[0];
+            }
+            if (!ActiveProject.Name.EndsWith("Shared") && !projectItem.Name.Contains(".generated.cs"))
+            {
+                projectItem.ProjectItems.AddFromFile(ClassFileGenerated);
+                projectItem.ContainingProject.Save();
+            }
+            if (IsNew && ActiveProject.Name.EndsWith($"{FormType.Shared.ToString()}"))
+            {
+                Dte.ExecuteCommand("File.SaveAll");
+            }
         }
 
         public void RunFinished()
         {
-            Dte.ExecuteCommand("File.SaveAll");
-            var projectItemsFile = ActiveProject.FullName.Replace(".shproj", ".projitems");
-            var arr = ClassGenerated.Split(@"\".ToCharArray());
-            var fileName = arr[arr.Length - 1];
-            var fileNameWithoutGenerator = fileName.Replace(".generated", "");
-            if (DeleteFile.Length > 0)
+            CloseWindows();
+            if (!IsNew)
             {
-                if (ActiveProject.Name.EndsWith($".{FormType.Shared.ToString()}"))
+                File.WriteAllText(ClassFileGenerated, GeneratedCode, System.Text.Encoding.UTF8);
+            }
+            else
+            {
+                if(ActiveProject.Name.EndsWith($"{FormType.Shared.ToString()}"))
                 {
+                    var sharedProject = ActiveProject.FullName;
+                    var projectItemsFile = ActiveProject.FullName.Replace(".shproj", ".projitems");
                     var lines = File.ReadAllLines(projectItemsFile);
                     var text = string.Empty;
+                    var @class = $"{Class}.cs";
+                    var @classGenerated = $"{Class}.generated.cs";
+                    var fInfoProject = new FileInfo(ActiveProject.FullName);
+                    var dic = fInfoProject.Directory.FullName;
+                    var check = CurrentProjectItem.FileNames[0].Substring(dic.Length + 1);
                     foreach (var line in lines)
                     {
-                        if (line.EndsWith($"{fileName + (char)34} />", StringComparison.Ordinal))
+                        if (line.EndsWith($"{check + (char)34} />", StringComparison.Ordinal))
                         {
-                            var part1 = line.Substring(0, line.IndexOf($"{fileName + (char)34} />", StringComparison.Ordinal));
-                            text += part1 + fileNameWithoutGenerator + (char)34 + " />\r\n";
-                            text += part1 + fileName + (char)34 + $">\r\n\t\t\t<DependentUpon>{fileNameWithoutGenerator}</DependentUpon>\r\n\t\t</Compile>\r\n";
+                            text += $"  <Compile Include=\"$(MSBuildThisFileDirectory){check}\">\r\n";
+                            text += $"    <DependentUpon>{@class}</DependentUpon>\r\n";
+                            text += $"  </Compile>\r\n";
                         }
                         else
                         {
                             text += line + "\r\n";
                         }
                     }
-                    File.WriteAllText(projectItemsFile, text);
+                    File.WriteAllText(projectItemsFile, text, System.Text.Encoding.UTF8);
+                    Dte.ExecuteCommand("File.SaveAll");
                 }
-            }
-            else
-            {
-                var lines = File.ReadAllLines(projectItemsFile);
-                var text = string.Empty;
-                foreach (var line in lines)
-                {
-                    if (line.EndsWith($".generated.cs{(char) 34} />", StringComparison.Ordinal))
-                    {
-                        fileName = line.Substring(line.LastIndexOf('\\') + 1);
-                        fileName = fileName.Substring(0, fileName.Length - 4);
-                        fileNameWithoutGenerator = line.Substring(line.LastIndexOf('\\') + 1);
-                        fileNameWithoutGenerator = fileNameWithoutGenerator.Substring(0, fileNameWithoutGenerator.IndexOf('.'));
-                        var find = $"{fileName + (char)34} />";
-                        var replace = $"{fileName + (char)34}>\r\n\t\t\t<DependentUpon>{fileNameWithoutGenerator}.cs</DependentUpon>\r\n\t\t</Compile>\r\n";
-                        text += line.Replace(find, replace);
-                    }
-                    else
-                    {
-                        text += line + "\r\n";
-                    }
-                }
-                File.WriteAllText(projectItemsFile, text);
-            }
-            Dte.ExecuteCommand("File.SaveAll");
-            if (ActiveProject.Name.EndsWith($".{FormType.Shared.ToString()}"))
-            {
-                var temp = projectItemsFile.Replace(".projitems", ".shproj");
-                var data = File.ReadAllText(temp);
-                data = data.Trim() + " ";
-                File.WriteAllText(temp, data);
-                data = data.Trim();
-                File.WriteAllText(temp, data);
             }
         }
 
@@ -108,8 +105,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 if (Dte.ActiveSolutionProjects is Array activeSolutionProjects && activeSolutionProjects.Length > 0)
                     ActiveProject = activeSolutionProjects.GetValue(0) as Project;
                 var form = new FormProject(FormType.LateBoundClass, Dte);
-                form.RootNameSpace = replacementsDictionary["$rootnamespace$"];
 
+                form.RootNameSpace = replacementsDictionary["$rootnamespace$"];
                 var solutionFullName = Dte?.Solution?.FullName;
                 var fInfo = new FileInfo(solutionFullName);
                 var parts = fInfo.Name.Split(".".ToCharArray());
@@ -117,9 +114,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    DeleteFile = LoadDeleteFile(automationObject, form.Class);
+                    Class = form.Class;
                     replacementsDictionary.Add("$class$", form.Class);
-                    replacementsDictionary.Add("$generated$", form.Generated);
+                    GeneratedCode = form.Generated;
+                    replacementsDictionary.Add("$generated$", GeneratedCode);
+                    CloseWindows();
                 }
                 else
                 {
@@ -132,58 +131,44 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
         }
 
-        public bool ShouldAddProjectItem(string filePath)
-        {
-            if (DeleteFile.Length > 0)
-            {
-                if (filePath.ToLower() == "class1.cs")
-                    return true;
-                if (filePath.ToLower() == "class.cs")
-                    return false;
-            }
 
-            return true;
+        private void CloseWindows()
+        {
+            foreach (Window window in Dte.Windows)
+                if (window.Caption == $"{Class}.cs" || window.Caption == $"{Class}.generated.cs")
+                    window.Close();
         }
 
-        private string LoadDeleteFile(object automationObject, string entityName)
+        public bool ShouldAddProjectItem(string filePath)
         {
-            entityName = $"{entityName}.generated.cs";
-            var dte = (DTE) automationObject;
-            var selectItem = dte.SelectedItems.Item(1);
+            IsNew = CheckIsNew();
+            return IsNew;
+        }
+
+        private bool CheckIsNew()
+        {
+            if (IsNew) return true;
+            var @class = $"{Class}.cs";
+            var @classGenerated = $"{Class}.generated.cs";
+            var selectItem = Dte.SelectedItems.Item(1);
             ProjectItems projectItems = null;
             if (selectItem.Project != null)
                 projectItems = selectItem.Project.ProjectItems;
             else if (selectItem.ProjectItem != null)
                 projectItems = selectItem.ProjectItem.ProjectItems;
-            if (projectItems == null) return string.Empty;
+            if (projectItems == null)
+                throw new WizardCancelledException("Cancel Click");
             foreach (ProjectItem projectItem in projectItems)
-                if (entityName == projectItem.Name)
+            {
+                if (projectItem.Name == @class || projectItem.Name == @classGenerated)
                 {
-                    foreach (Window window in dte.Windows)
-                        if (window.Caption == entityName)
-                            window.Close();
-                    var path = projectItem.FileNames[0];
-                    File.Delete(path);
-                    projectItem.Remove();
-                    ActiveProject.Save();
-                    return path;
+                    var fInfo = new FileInfo(projectItem.FileNames[0]);
+                    ClassFile = $"{fInfo.Directory.FullName}\\{@class}";
+                    ClassFileGenerated = $"{fInfo.Directory.FullName}\\{@classGenerated}";
+                    return !File.Exists(ClassFile);
                 }
-
-            foreach (ProjectItem projectItem in projectItems)
-            foreach (ProjectItem childProjectItem in projectItem.ProjectItems)
-                if (entityName == childProjectItem.Name)
-                {
-                    foreach (Window window in dte.Windows)
-                        if (window.Caption == entityName)
-                            window.Close();
-                    var path = childProjectItem.FileNames[0];
-                    File.Delete(path);
-                    projectItem.Remove();
-                    ActiveProject.Save();
-                    return path;
-                }
-
-            return string.Empty;
+            }
+            return true;
         }
     }
 }

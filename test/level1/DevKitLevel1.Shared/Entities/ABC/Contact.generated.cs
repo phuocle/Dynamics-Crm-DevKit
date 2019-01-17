@@ -9,36 +9,24 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using DevKitLevel1.Shared;
-using DevKitLevel1.Shared.Entities.AccountOptionSets;
+using DevKitLevel1.Shared.Entities.ABC.ContactOptionSets;
 
-namespace DevKitLevel1.Shared.Entities.AccountOptionSets
+namespace DevKitLevel1.Shared.Entities.ABC.ContactOptionSets
 {
-    public enum AccountCategoryCode
+    public enum AccountRoleCode
     {
         /// <summary>
-        /// Preferred_Customer = 1
+        /// Decision_Maker = 1
         /// </summary>
-        Preferred_Customer = 1,
+        Decision_Maker = 1,
         /// <summary>
-        /// Standard = 2
+        /// Employee = 2
         /// </summary>
-        Standard = 2
-    }
-
-    public enum AccountClassificationCode
-    {
+        Employee = 2,
         /// <summary>
-        /// Default_Value = 1
+        /// Influencer = 3
         /// </summary>
-        Default_Value = 1
-    }
-
-    public enum AccountRatingCode
-    {
-        /// <summary>
-        /// Default_Value = 1
-        /// </summary>
-        Default_Value = 1
+        Influencer = 3
     }
 
     public enum Address1_AddressTypeCode
@@ -129,7 +117,23 @@ namespace DevKitLevel1.Shared.Entities.AccountOptionSets
         Default_Value = 1
     }
 
-    public enum BusinessTypeCode
+    public enum Address3_AddressTypeCode
+    {
+        /// <summary>
+        /// Default_Value = 1
+        /// </summary>
+        Default_Value = 1
+    }
+
+    public enum Address3_FreightTermsCode
+    {
+        /// <summary>
+        /// Default_Value = 1
+        /// </summary>
+        Default_Value = 1
+    }
+
+    public enum Address3_ShippingMethodCode
     {
         /// <summary>
         /// Default_Value = 1
@@ -148,209 +152,65 @@ namespace DevKitLevel1.Shared.Entities.AccountOptionSets
     public enum CustomerTypeCode
     {
         /// <summary>
-        /// Competitor = 1
+        /// Default_Value = 1
         /// </summary>
-        Competitor = 1,
-        /// <summary>
-        /// Consultant = 2
-        /// </summary>
-        Consultant = 2,
-        /// <summary>
-        /// Customer = 3
-        /// </summary>
-        Customer = 3,
-        /// <summary>
-        /// Investor = 4
-        /// </summary>
-        Investor = 4,
-        /// <summary>
-        /// Partner = 5
-        /// </summary>
-        Partner = 5,
-        /// <summary>
-        /// Influencer = 6
-        /// </summary>
-        Influencer = 6,
-        /// <summary>
-        /// Press = 7
-        /// </summary>
-        Press = 7,
-        /// <summary>
-        /// Prospect = 8
-        /// </summary>
-        Prospect = 8,
-        /// <summary>
-        /// Reseller = 9
-        /// </summary>
-        Reseller = 9,
-        /// <summary>
-        /// Supplier = 10
-        /// </summary>
-        Supplier = 10,
-        /// <summary>
-        /// Vendor = 11
-        /// </summary>
-        Vendor = 11,
-        /// <summary>
-        /// Other = 12
-        /// </summary>
-        Other = 12
+        Default_Value = 1
     }
 
-    public enum IndustryCode
+    public enum EducationCode
     {
         /// <summary>
-        /// Accounting = 1
+        /// Default_Value = 1
         /// </summary>
-        Accounting = 1,
-        /// <summary>
-        /// Agriculture_and_Non_petrol_Natural_Resource_Extraction = 2
-        /// </summary>
-        Agriculture_and_Non_petrol_Natural_Resource_Extraction = 2,
-        /// <summary>
-        /// Broadcasting_Printing_and_Publishing = 3
-        /// </summary>
-        Broadcasting_Printing_and_Publishing = 3,
-        /// <summary>
-        /// Brokers = 4
-        /// </summary>
-        Brokers = 4,
-        /// <summary>
-        /// Building_Supply_Retail = 5
-        /// </summary>
-        Building_Supply_Retail = 5,
-        /// <summary>
-        /// Business_Services = 6
-        /// </summary>
-        Business_Services = 6,
-        /// <summary>
-        /// Consulting = 7
-        /// </summary>
-        Consulting = 7,
-        /// <summary>
-        /// Consumer_Services = 8
-        /// </summary>
-        Consumer_Services = 8,
-        /// <summary>
-        /// Design_Direction_and_Creative_Management = 9
-        /// </summary>
-        Design_Direction_and_Creative_Management = 9,
-        /// <summary>
-        /// Distributors_Dispatchers_and_Processors = 10
-        /// </summary>
-        Distributors_Dispatchers_and_Processors = 10,
-        /// <summary>
-        /// Doctors_Offices_and_Clinics = 11
-        /// </summary>
-        Doctors_Offices_and_Clinics = 11,
-        /// <summary>
-        /// Durable_Manufacturing = 12
-        /// </summary>
-        Durable_Manufacturing = 12,
-        /// <summary>
-        /// Eating_and_Drinking_Places = 13
-        /// </summary>
-        Eating_and_Drinking_Places = 13,
-        /// <summary>
-        /// Entertainment_Retail = 14
-        /// </summary>
-        Entertainment_Retail = 14,
-        /// <summary>
-        /// Equipment_Rental_and_Leasing = 15
-        /// </summary>
-        Equipment_Rental_and_Leasing = 15,
-        /// <summary>
-        /// Financial = 16
-        /// </summary>
-        Financial = 16,
-        /// <summary>
-        /// Food_and_Tobacco_Processing = 17
-        /// </summary>
-        Food_and_Tobacco_Processing = 17,
-        /// <summary>
-        /// Inbound_Capital_Intensive_Processing = 18
-        /// </summary>
-        Inbound_Capital_Intensive_Processing = 18,
-        /// <summary>
-        /// Inbound_Repair_and_Services = 19
-        /// </summary>
-        Inbound_Repair_and_Services = 19,
-        /// <summary>
-        /// Insurance = 20
-        /// </summary>
-        Insurance = 20,
-        /// <summary>
-        /// Legal_Services = 21
-        /// </summary>
-        Legal_Services = 21,
-        /// <summary>
-        /// Non_Durable_Merchandise_Retail = 22
-        /// </summary>
-        Non_Durable_Merchandise_Retail = 22,
-        /// <summary>
-        /// Outbound_Consumer_Service = 23
-        /// </summary>
-        Outbound_Consumer_Service = 23,
-        /// <summary>
-        /// Petrochemical_Extraction_and_Distribution = 24
-        /// </summary>
-        Petrochemical_Extraction_and_Distribution = 24,
-        /// <summary>
-        /// Service_Retail = 25
-        /// </summary>
-        Service_Retail = 25,
-        /// <summary>
-        /// SIG_Affiliations = 26
-        /// </summary>
-        SIG_Affiliations = 26,
-        /// <summary>
-        /// Social_Services = 27
-        /// </summary>
-        Social_Services = 27,
-        /// <summary>
-        /// Special_Outbound_Trade_Contractors = 28
-        /// </summary>
-        Special_Outbound_Trade_Contractors = 28,
-        /// <summary>
-        /// Specialty_Realty = 29
-        /// </summary>
-        Specialty_Realty = 29,
-        /// <summary>
-        /// Transportation = 30
-        /// </summary>
-        Transportation = 30,
-        /// <summary>
-        /// Utility_Creation_and_Distribution = 31
-        /// </summary>
-        Utility_Creation_and_Distribution = 31,
-        /// <summary>
-        /// Vehicle_Retail = 32
-        /// </summary>
-        Vehicle_Retail = 32,
-        /// <summary>
-        /// Wholesale = 33
-        /// </summary>
-        Wholesale = 33
+        Default_Value = 1
     }
 
-    public enum OwnershipCode
+    public enum FamilyStatusCode
     {
         /// <summary>
-        /// Public = 1
+        /// Single = 1
         /// </summary>
-        Public = 1,
+        Single = 1,
         /// <summary>
-        /// Private = 2
+        /// Married = 2
         /// </summary>
-        Private = 2,
+        Married = 2,
         /// <summary>
-        /// Subsidiary = 3
+        /// Divorced = 3
         /// </summary>
-        Subsidiary = 3,
+        Divorced = 3,
         /// <summary>
-        /// Other = 4
+        /// Widowed = 4
         /// </summary>
-        Other = 4
+        Widowed = 4
+    }
+
+    public enum GenderCode
+    {
+        /// <summary>
+        /// Male = 1
+        /// </summary>
+        Male = 1,
+        /// <summary>
+        /// Female = 2
+        /// </summary>
+        Female = 2
+    }
+
+    public enum HasChildrenCode
+    {
+        /// <summary>
+        /// Default_Value = 1
+        /// </summary>
+        Default_Value = 1
+    }
+
+    public enum LeadSourceCode
+    {
+        /// <summary>
+        /// Default_Value = 1
+        /// </summary>
+        Default_Value = 1
     }
 
     public enum PaymentTermsCode
@@ -486,17 +346,14 @@ namespace DevKitLevel1.Shared.Entities.AccountOptionSets
     }
 }
 
-namespace DevKitLevel1.Shared.Entities
+namespace DevKitLevel1.Shared.Entities.ABC
 {
-    public partial class Account : EntityBase
+    public partial class Contact : EntityBase
     {
         public struct Fields
         {
-            public const string AccountCategoryCode = "accountcategorycode";
-            public const string AccountClassificationCode = "accountclassificationcode";
             public const string AccountId = "accountid";
-            public const string AccountNumber = "accountnumber";
-            public const string AccountRatingCode = "accountratingcode";
+            public const string AccountRoleCode = "accountrolecode";
             public const string Address1_AddressId = "address1_addressid";
             public const string Address1_AddressTypeCode = "address1_addresstypecode";
             public const string Address1_City = "address1_city";
@@ -545,13 +402,47 @@ namespace DevKitLevel1.Shared.Entities
             public const string Address2_Telephone3 = "address2_telephone3";
             public const string Address2_UPSZone = "address2_upszone";
             public const string Address2_UTCOffset = "address2_utcoffset";
+            public const string Address3_AddressId = "address3_addressid";
+            public const string Address3_AddressTypeCode = "address3_addresstypecode";
+            public const string Address3_City = "address3_city";
+            public const string Address3_Composite = "address3_composite";
+            public const string Address3_Country = "address3_country";
+            public const string Address3_County = "address3_county";
+            public const string Address3_Fax = "address3_fax";
+            public const string Address3_FreightTermsCode = "address3_freighttermscode";
+            public const string Address3_Latitude = "address3_latitude";
+            public const string Address3_Line1 = "address3_line1";
+            public const string Address3_Line2 = "address3_line2";
+            public const string Address3_Line3 = "address3_line3";
+            public const string Address3_Longitude = "address3_longitude";
+            public const string Address3_Name = "address3_name";
+            public const string Address3_PostalCode = "address3_postalcode";
+            public const string Address3_PostOfficeBox = "address3_postofficebox";
+            public const string Address3_PrimaryContactName = "address3_primarycontactname";
+            public const string Address3_ShippingMethodCode = "address3_shippingmethodcode";
+            public const string Address3_StateOrProvince = "address3_stateorprovince";
+            public const string Address3_Telephone1 = "address3_telephone1";
+            public const string Address3_Telephone2 = "address3_telephone2";
+            public const string Address3_Telephone3 = "address3_telephone3";
+            public const string Address3_UPSZone = "address3_upszone";
+            public const string Address3_UTCOffset = "address3_utcoffset";
             public const string Aging30 = "aging30";
             public const string Aging30_Base = "aging30_base";
             public const string Aging60 = "aging60";
             public const string Aging60_Base = "aging60_base";
             public const string Aging90 = "aging90";
             public const string Aging90_Base = "aging90_base";
-            public const string BusinessTypeCode = "businesstypecode";
+            public const string Anniversary = "anniversary";
+            public const string AnnualIncome = "annualincome";
+            public const string AnnualIncome_Base = "annualincome_base";
+            public const string AssistantName = "assistantname";
+            public const string AssistantPhone = "assistantphone";
+            public const string BirthDate = "birthdate";
+            public const string Business2 = "business2";
+            public const string Callback = "callback";
+            public const string ChildrensNames = "childrensnames";
+            public const string Company = "company";
+            public const string ContactId = "contactid";
             public const string CreatedBy = "createdby";
             public const string CreatedByExternalParty = "createdbyexternalparty";
             public const string CreatedOn = "createdon";
@@ -562,6 +453,7 @@ namespace DevKitLevel1.Shared.Entities
             public const string CustomerSizeCode = "customersizecode";
             public const string CustomerTypeCode = "customertypecode";
             public const string DefaultPriceLevelId = "defaultpricelevelid";
+            public const string Department = "department";
             public const string Description = "description";
             public const string DoNotBulkEMail = "donotbulkemail";
             public const string DoNotBulkPostalMail = "donotbulkpostalmail";
@@ -570,46 +462,57 @@ namespace DevKitLevel1.Shared.Entities
             public const string DoNotPhone = "donotphone";
             public const string DoNotPostalMail = "donotpostalmail";
             public const string DoNotSendMM = "donotsendmm";
+            public const string EducationCode = "educationcode";
             public const string EMailAddress1 = "emailaddress1";
             public const string EMailAddress2 = "emailaddress2";
             public const string EMailAddress3 = "emailaddress3";
+            public const string EmployeeId = "employeeid";
             public const string EntityImageId = "entityimageid";
             public const string ExchangeRate = "exchangerate";
+            public const string ExternalUserIdentifier = "externaluseridentifier";
+            public const string FamilyStatusCode = "familystatuscode";
             public const string Fax = "fax";
+            public const string FirstName = "firstname";
             public const string FollowEmail = "followemail";
-            public const string FtpSiteURL = "ftpsiteurl";
+            public const string FtpSiteUrl = "ftpsiteurl";
+            public const string FullName = "fullname";
+            public const string GenderCode = "gendercode";
+            public const string GovernmentId = "governmentid";
+            public const string HasChildrenCode = "haschildrencode";
+            public const string Home2 = "home2";
             public const string ImportSequenceNumber = "importsequencenumber";
-            public const string IndustryCode = "industrycode";
+            public const string IsAutoCreate = "isautocreate";
+            public const string IsBackofficeCustomer = "isbackofficecustomer";
             public const string IsPrivate = "isprivate";
+            public const string JobTitle = "jobtitle";
+            public const string LastName = "lastname";
             public const string LastOnHoldTime = "lastonholdtime";
             public const string LastUsedInCampaign = "lastusedincampaign";
-            public const string MarketCap = "marketcap";
-            public const string MarketCap_Base = "marketcap_base";
+            public const string LeadSourceCode = "leadsourcecode";
+            public const string ManagerName = "managername";
+            public const string ManagerPhone = "managerphone";
             public const string MarketingOnly = "marketingonly";
             public const string MasterId = "masterid";
             public const string Merged = "merged";
+            public const string MiddleName = "middlename";
+            public const string MobilePhone = "mobilephone";
             public const string ModifiedBy = "modifiedby";
             public const string ModifiedByExternalParty = "modifiedbyexternalparty";
             public const string ModifiedOn = "modifiedon";
             public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
-            public const string Name = "name";
-            public const string NumberOfEmployees = "numberofemployees";
+            public const string msdyn_gdproptout = "msdyn_gdproptout";
+            public const string NickName = "nickname";
+            public const string NumberOfChildren = "numberofchildren";
             public const string OnHoldTime = "onholdtime";
-            public const string OpenDeals = "opendeals";
-            public const string OpenDeals_Date = "opendeals_date";
-            public const string OpenDeals_State = "opendeals_state";
-            public const string OpenRevenue = "openrevenue";
-            public const string OpenRevenue_Base = "openrevenue_base";
-            public const string OpenRevenue_Date = "openrevenue_date";
-            public const string OpenRevenue_State = "openrevenue_state";
             public const string OriginatingLeadId = "originatingleadid";
             public const string OverriddenCreatedOn = "overriddencreatedon";
             public const string OwnerId = "ownerid";
-            public const string OwnershipCode = "ownershipcode";
             public const string OwningBusinessUnit = "owningbusinessunit";
             public const string OwningTeam = "owningteam";
             public const string OwningUser = "owninguser";
-            public const string ParentAccountId = "parentaccountid";
+            public const string Pager = "pager";
+            public const string ParentContactId = "parentcontactid";
+            public const string ParentCustomerId = "parentcustomerid";
             public const string ParticipatesInWorkflow = "participatesinworkflow";
             public const string PaymentTermsCode = "paymenttermscode";
             public const string PreferredAppointmentDayCode = "preferredappointmentdaycode";
@@ -618,178 +521,112 @@ namespace DevKitLevel1.Shared.Entities
             public const string PreferredEquipmentId = "preferredequipmentid";
             public const string PreferredServiceId = "preferredserviceid";
             public const string PreferredSystemUserId = "preferredsystemuserid";
-            public const string PrimaryContactId = "primarycontactid";
-            public const string PrimarySatoriId = "primarysatoriid";
-            public const string PrimaryTwitterId = "primarytwitterid";
             public const string ProcessId = "processid";
-            public const string Revenue = "revenue";
-            public const string Revenue_Base = "revenue_base";
-            public const string SharesOutstanding = "sharesoutstanding";
+            public const string Salutation = "salutation";
             public const string ShippingMethodCode = "shippingmethodcode";
-            public const string SIC = "sic";
             public const string SLAId = "slaid";
             public const string SLAInvokedId = "slainvokedid";
+            public const string SpousesName = "spousesname";
             public const string StageId = "stageid";
             public const string StateCode = "statecode";
             public const string StatusCode = "statuscode";
-            public const string StockExchange = "stockexchange";
+            public const string SubscriptionId = "subscriptionid";
+            public const string Suffix = "suffix";
             public const string TeamsFollowed = "teamsfollowed";
             public const string Telephone1 = "telephone1";
             public const string Telephone2 = "telephone2";
             public const string Telephone3 = "telephone3";
             public const string TerritoryCode = "territorycode";
-            public const string TerritoryId = "territoryid";
-            public const string TickerSymbol = "tickersymbol";
             public const string TimeSpentByMeOnEmailAndMeetings = "timespentbymeonemailandmeetings";
             public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
             public const string TransactionCurrencyId = "transactioncurrencyid";
             public const string TraversedPath = "traversedpath";
             public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
             public const string VersionNumber = "versionnumber";
-            public const string WebSiteURL = "websiteurl";
-            public const string YomiName = "yominame";
+            public const string WebSiteUrl = "websiteurl";
+            public const string YomiFirstName = "yomifirstname";
+            public const string YomiFullName = "yomifullname";
+            public const string YomiLastName = "yomilastname";
+            public const string YomiMiddleName = "yomimiddlename";
         }
 
-        public const string EntityLogicalName = "account";
+        public const string EntityLogicalName = "contact";
 
-        public const int EntityTypeCode = 1;
+        public const int EntityTypeCode = 2;
 
         [DebuggerNonUserCode()]
-        public Account()
+        public Contact()
         {
             Entity = new Entity(EntityLogicalName);
             PreEntity = CloneThisEntity(Entity);
         }
 
         [DebuggerNonUserCode()]
-        public Account(Guid AccountId)
+        public Contact(Guid ContactId)
         {
-            Entity = new Entity(EntityLogicalName, AccountId);
+            Entity = new Entity(EntityLogicalName, ContactId);
             PreEntity = CloneThisEntity(Entity);
         }
 
         [DebuggerNonUserCode()]
-        public Account(string keyName, object keyValue)
+        public Contact(string keyName, object keyValue)
         {
             Entity = new Entity(EntityLogicalName, keyName, keyValue);
             PreEntity = CloneThisEntity(Entity);
         }
 
         [DebuggerNonUserCode()]
-        public Account(Entity entity)
+        public Contact(Entity entity)
         {
             Entity = entity;
             PreEntity = CloneThisEntity(Entity);
         }
 
         [DebuggerNonUserCode()]
-        public Account(Entity entity, Entity preEntity)
+        public Contact(Entity entity, Entity preEntity)
         {
             Entity = entity;
             PreEntity = preEntity;
         }
 
         [DebuggerNonUserCode()]
-        public Account(KeyAttributeCollection keys)
+        public Contact(KeyAttributeCollection keys)
         {
             Entity = new Entity(EntityLogicalName, keys);
             PreEntity = CloneThisEntity(Entity);
         }
 
         /// <summary>
-        /// <para>Select a category to indicate whether the customer account is standard or preferred.</para>
-        /// <para>Picklist</para>
-        /// <para>Category</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public AccountCategoryCode? AccountCategoryCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AccountCategoryCode);
-                if (value == null) return null;
-                return (AccountCategoryCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.AccountCategoryCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.AccountCategoryCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria.</para>
-        /// <para>Picklist</para>
-        /// <para>Classification</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public AccountClassificationCode? AccountClassificationCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AccountClassificationCode);
-                if (value == null) return null;
-                return (AccountClassificationCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.AccountClassificationCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.AccountClassificationCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Unique identifier of the account.</para>
-        /// <para>Primary Key - Uniqueidentifier</para>
+        /// <para>Unique identifier of the account with which the contact is associated.</para>
+        /// <para>ReadOnly - Lookup</para>
         /// <para>Account</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public Guid AccountId
+        public EntityReference AccountId
         {
-            get { return Id; }
-            set
-            {
-                Entity.Attributes[Fields.AccountId] = value;
-                Entity.Id = value;
-            }
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.AccountId); }
         }
 
         /// <summary>
-        /// <para>Type an ID number or code for the account to quickly search and identify the account in system views.</para>
-        /// <para>String - MaxLength: 20</para>
-        /// <para>Account Number</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string AccountNumber
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.AccountNumber); }
-            set { Entity.Attributes[Fields.AccountNumber] = value; }
-        }
-
-        /// <summary>
-        /// <para>Select a rating to indicate the value of the customer account.</para>
+        /// <para>Select the contact's role within the company or sales process, such as decision maker, employee, or influencer.</para>
         /// <para>Picklist</para>
-        /// <para>Account Rating</para>
+        /// <para>Role</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public AccountRatingCode? AccountRatingCode
+        public AccountRoleCode? AccountRoleCode
         {
             get
             {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AccountRatingCode);
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AccountRoleCode);
                 if (value == null) return null;
-                return (AccountRatingCode)value.Value;
+                return (AccountRoleCode)value.Value;
             }
             set
             {
                 if (value.HasValue)
-                    Entity.Attributes[Fields.AccountRatingCode] = new OptionSetValue((int)value.Value);
+                    Entity.Attributes[Fields.AccountRoleCode] = new OptionSetValue((int)value.Value);
                 else
-                    Entity.Attributes[Fields.AccountRatingCode] = null;
+                    Entity.Attributes[Fields.AccountRoleCode] = null;
             }
         }
 
@@ -1056,7 +893,7 @@ namespace DevKitLevel1.Shared.Entities
         /// <summary>
         /// <para>Type the main phone number associated with the primary address.</para>
         /// <para>String - MaxLength: 50</para>
-        /// <para>Address Phone</para>
+        /// <para>Address 1: Phone</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Address1_Telephone1
@@ -1292,7 +1129,7 @@ namespace DevKitLevel1.Shared.Entities
 
         /// <summary>
         /// <para>Type a descriptive name for the secondary address, such as Corporate Headquarters.</para>
-        /// <para>String - MaxLength: 200</para>
+        /// <para>String - MaxLength: 100</para>
         /// <para>Address 2: Name</para>
         /// </summary>
         [DebuggerNonUserCode()]
@@ -1434,6 +1271,326 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
+        /// <para>Unique identifier for address 3.</para>
+        /// <para>Uniqueidentifier</para>
+        /// <para>Address 3: ID</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public Guid? Address3_AddressId
+        {
+            get { return Entity.GetAttributeValue<Guid?>(Fields.Address3_AddressId); }
+            set { Entity.Attributes[Fields.Address3_AddressId] = value; }
+        }
+
+        /// <summary>
+        /// <para>Select the third address type.</para>
+        /// <para>Picklist</para>
+        /// <para>Address 3: Address Type</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public Address3_AddressTypeCode? Address3_AddressTypeCode
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address3_AddressTypeCode);
+                if (value == null) return null;
+                return (Address3_AddressTypeCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.Address3_AddressTypeCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.Address3_AddressTypeCode] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type the city for the 3rd address.</para>
+        /// <para>String - MaxLength: 80</para>
+        /// <para>Address 3: City</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_City
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_City); }
+            set { Entity.Attributes[Fields.Address3_City] = value; }
+        }
+
+        /// <summary>
+        /// <para>Shows the complete third address.</para>
+        /// <para>ReadOnly - Memo - MaxLength: 1000</para>
+        /// <para>Address 3</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Composite
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Composite); }
+        }
+
+        /// <summary>
+        /// <para>the country or region for the 3rd address.</para>
+        /// <para>String - MaxLength: 80</para>
+        /// <para>Address3: Country/Region</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Country
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Country); }
+            set { Entity.Attributes[Fields.Address3_Country] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the county for the third address.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Address 3: County</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_County
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_County); }
+            set { Entity.Attributes[Fields.Address3_County] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the fax number associated with the third address.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Address 3: Fax</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Fax
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Fax); }
+            set { Entity.Attributes[Fields.Address3_Fax] = value; }
+        }
+
+        /// <summary>
+        /// <para>Select the freight terms for the third address to make sure shipping orders are processed correctly.</para>
+        /// <para>Picklist</para>
+        /// <para>Address 3: Freight Terms</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public Address3_FreightTermsCode? Address3_FreightTermsCode
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address3_FreightTermsCode);
+                if (value == null) return null;
+                return (Address3_FreightTermsCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.Address3_FreightTermsCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.Address3_FreightTermsCode] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type the latitude value for the third address for use in mapping and other applications.</para>
+        /// <para>Double - MinValue: -90 - MaxValue: 90</para>
+        /// <para>Address 3: Latitude</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public double? Address3_Latitude
+        {
+            get { return Entity.GetAttributeValue<double?>(Fields.Address3_Latitude); }
+            set { Entity.Attributes[Fields.Address3_Latitude] = value; }
+        }
+
+        /// <summary>
+        /// <para>the first line of the 3rd address.</para>
+        /// <para>String - MaxLength: 250</para>
+        /// <para>Address3: Street 1</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Line1
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Line1); }
+            set { Entity.Attributes[Fields.Address3_Line1] = value; }
+        }
+
+        /// <summary>
+        /// <para>the second line of the 3rd address.</para>
+        /// <para>String - MaxLength: 250</para>
+        /// <para>Address3: Street 2</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Line2
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Line2); }
+            set { Entity.Attributes[Fields.Address3_Line2] = value; }
+        }
+
+        /// <summary>
+        /// <para>the third line of the 3rd address.</para>
+        /// <para>String - MaxLength: 250</para>
+        /// <para>Address3: Street 3</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Line3
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Line3); }
+            set { Entity.Attributes[Fields.Address3_Line3] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the longitude value for the third address for use in mapping and other applications.</para>
+        /// <para>Double - MinValue: -180 - MaxValue: 180</para>
+        /// <para>Address 3: Longitude</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public double? Address3_Longitude
+        {
+            get { return Entity.GetAttributeValue<double?>(Fields.Address3_Longitude); }
+            set { Entity.Attributes[Fields.Address3_Longitude] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type a descriptive name for the third address, such as Corporate Headquarters.</para>
+        /// <para>String - MaxLength: 200</para>
+        /// <para>Address 3: Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Name
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Name); }
+            set { Entity.Attributes[Fields.Address3_Name] = value; }
+        }
+
+        /// <summary>
+        /// <para>the ZIP Code or postal code for the 3rd address.</para>
+        /// <para>String - MaxLength: 20</para>
+        /// <para>Address3: ZIP/Postal Code</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_PostalCode
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_PostalCode); }
+            set { Entity.Attributes[Fields.Address3_PostalCode] = value; }
+        }
+
+        /// <summary>
+        /// <para>the post office box number of the 3rd address.</para>
+        /// <para>String - MaxLength: 20</para>
+        /// <para>Address 3: Post Office Box</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_PostOfficeBox
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_PostOfficeBox); }
+            set { Entity.Attributes[Fields.Address3_PostOfficeBox] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the name of the main contact at the account's third address.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Address 3: Primary Contact Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_PrimaryContactName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_PrimaryContactName); }
+            set { Entity.Attributes[Fields.Address3_PrimaryContactName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Select a shipping method for deliveries sent to this address.</para>
+        /// <para>Picklist</para>
+        /// <para>Address 3: Shipping Method</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public Address3_ShippingMethodCode? Address3_ShippingMethodCode
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address3_ShippingMethodCode);
+                if (value == null) return null;
+                return (Address3_ShippingMethodCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.Address3_ShippingMethodCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.Address3_ShippingMethodCode] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>the state or province of the third address.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Address3: State/Province</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_StateOrProvince
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_StateOrProvince); }
+            set { Entity.Attributes[Fields.Address3_StateOrProvince] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the main phone number associated with the third address.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Address 3: Telephone1</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Telephone1
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Telephone1); }
+            set { Entity.Attributes[Fields.Address3_Telephone1] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type a second phone number associated with the third address.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Address 3: Telephone2</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Telephone2
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Telephone2); }
+            set { Entity.Attributes[Fields.Address3_Telephone2] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type a third phone number associated with the primary address.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Address 3: Telephone3</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_Telephone3
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_Telephone3); }
+            set { Entity.Attributes[Fields.Address3_Telephone3] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the UPS zone of the third address to make sure shipping charges are calculated correctly and deliveries are made promptly, if shipped by UPS.</para>
+        /// <para>String - MaxLength: 4</para>
+        /// <para>Address 3: UPS Zone</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Address3_UPSZone
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Address3_UPSZone); }
+            set { Entity.Attributes[Fields.Address3_UPSZone] = value; }
+        }
+
+        /// <summary>
+        /// <para>Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address.</para>
+        /// <para>Integer - MinValue: -1,500 - MaxValue: 1,500</para>
+        /// <para>Address 3: UTC Offset</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public int? Address3_UTCOffset
+        {
+            get { return Entity.GetAttributeValue<int?>(Fields.Address3_UTCOffset); }
+            set { Entity.Attributes[Fields.Address3_UTCOffset] = value; }
+        }
+
+        /// <summary>
         /// <para>For system use only.</para>
         /// <para>ReadOnly - Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
         /// <para>Aging 30</para>
@@ -1450,7 +1607,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>The base currency equivalent of the aging 30 field.</para>
+        /// <para>Shows the Aging 30 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
         /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
         /// <para>Aging 30 (Base)</para>
         /// </summary>
@@ -1482,7 +1639,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>The base currency equivalent of the aging 60 field.</para>
+        /// <para>Shows the Aging 60 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
         /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
         /// <para>Aging 60 (Base)</para>
         /// </summary>
@@ -1514,7 +1671,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>The base currency equivalent of the aging 90 field.</para>
+        /// <para>Shows the Aging 90 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
         /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
         /// <para>Aging 90 (Base)</para>
         /// </summary>
@@ -1530,25 +1687,181 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the legal designation or other business type of the account for contracts or reporting purposes.</para>
-        /// <para>Picklist</para>
-        /// <para>Business Type</para>
+        /// <para>Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications.</para>
+        /// <para>DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly</para>
+        /// <para>Anniversary</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public BusinessTypeCode? BusinessTypeCode
+        public Date? Anniversary
         {
             get
             {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.BusinessTypeCode);
-                if (value == null) return null;
-                return (BusinessTypeCode)value.Value;
+                var dateTime = Entity.GetAttributeValue<DateTime?>(Fields.Anniversary);
+                if (dateTime == null) return null;
+                return dateTime.Value.ToDate();
             }
             set
             {
                 if (value.HasValue)
-                    Entity.Attributes[Fields.BusinessTypeCode] = new OptionSetValue((int)value.Value);
+                {
+                    DateTime? dateTime = value.Value.ToDateTime();
+                    Entity.Attributes[Fields.Anniversary] = dateTime;
+                }
                 else
-                    Entity.Attributes[Fields.BusinessTypeCode] = null;
+                    Entity.Attributes[Fields.Anniversary] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type the contact's annual income for use in profiling and financial analysis.</para>
+        /// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
+        /// <para>Annual Income</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public decimal? AnnualIncome
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<Money>(Fields.AnnualIncome);
+                if (value == null) return null;
+                return value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.AnnualIncome] = new Money(value.Value);
+                else
+                    Entity.Attributes[Fields.AnnualIncome] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Shows the Annual Income field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
+        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
+        /// <para>Annual Income (Base)</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public decimal? AnnualIncome_Base
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<Money>(Fields.AnnualIncome_Base);
+                if (value == null) return null;
+                return value.Value;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type the name of the contact's assistant.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Assistant</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string AssistantName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.AssistantName); }
+            set { Entity.Attributes[Fields.AssistantName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the phone number for the contact's assistant.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Assistant Phone</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string AssistantPhone
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.AssistantPhone); }
+            set { Entity.Attributes[Fields.AssistantPhone] = value; }
+        }
+
+        /// <summary>
+        /// <para>Enter the contact's birthday for use in customer gift programs or other communications.</para>
+        /// <para>DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly</para>
+        /// <para>Birthday</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public Date? BirthDate
+        {
+            get
+            {
+                var dateTime = Entity.GetAttributeValue<DateTime?>(Fields.BirthDate);
+                if (dateTime == null) return null;
+                return dateTime.Value.ToDate();
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    DateTime? dateTime = value.Value.ToDateTime();
+                    Entity.Attributes[Fields.BirthDate] = dateTime;
+                }
+                else
+                    Entity.Attributes[Fields.BirthDate] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type a second business phone number for this contact.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Business Phone 2</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Business2
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Business2); }
+            set { Entity.Attributes[Fields.Business2] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type a callback phone number for this contact.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Callback Number</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Callback
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Callback); }
+            set { Entity.Attributes[Fields.Callback] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the names of the contact's children for reference in communications and client programs.</para>
+        /// <para>String - MaxLength: 255</para>
+        /// <para>Children's Names</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string ChildrensNames
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.ChildrensNames); }
+            set { Entity.Attributes[Fields.ChildrensNames] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the company phone of the contact.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Company Phone</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Company
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Company); }
+            set { Entity.Attributes[Fields.Company] = value; }
+        }
+
+        /// <summary>
+        /// <para>Unique identifier of the contact.</para>
+        /// <para>Primary Key - Uniqueidentifier</para>
+        /// <para>Contact</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public Guid ContactId
+        {
+            get { return Id; }
+            set
+            {
+                Entity.Attributes[Fields.ContactId] = value;
+                Entity.Id = value;
             }
         }
 
@@ -1597,7 +1910,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer.</para>
+        /// <para>Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer.</para>
         /// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
         /// <para>Credit Limit</para>
         /// </summary>
@@ -1620,7 +1933,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows the credit limit converted to the system's default base currency for reporting purposes.</para>
+        /// <para>Shows the Credit Limit field converted to the system's default base currency for reporting purposes. The calculations use the exchange rate specified in the Currencies area.</para>
         /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
         /// <para>Credit Limit (Base)</para>
         /// </summary>
@@ -1636,7 +1949,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer.</para>
+        /// <para>Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues.</para>
         /// <para>Boolean</para>
         /// <para>Credit Hold</para>
         /// </summary>
@@ -1648,7 +1961,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the size category or range of the account for segmentation and reporting purposes.</para>
+        /// <para>Select the size of the contact's company for segmentation and reporting purposes.</para>
         /// <para>Picklist</para>
         /// <para>Customer Size</para>
         /// </summary>
@@ -1671,7 +1984,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the category that best describes the relationship between the account and your organization.</para>
+        /// <para>Select the category that best describes the relationship between the contact and your organization.</para>
         /// <para>Picklist</para>
         /// <para>Relationship Type</para>
         /// </summary>
@@ -1694,7 +2007,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Choose the default price list associated with the account to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders.</para>
+        /// <para>Choose the default price list associated with the contact to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders.</para>
         /// <para>Lookup</para>
         /// <para>Price List</para>
         /// </summary>
@@ -1706,7 +2019,19 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type additional information to describe the account, such as an excerpt from the company's website.</para>
+        /// <para>Type the department or business unit where the contact works in the parent company or business.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Department</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Department
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Department); }
+            set { Entity.Attributes[Fields.Department] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type additional information to describe the contact, such as an excerpt from the company's website.</para>
         /// <para>Memo - MaxLength: 2000</para>
         /// <para>Description</para>
         /// </summary>
@@ -1718,7 +2043,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email.</para>
+        /// <para>Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Bulk Emails</para>
         /// </summary>
@@ -1730,7 +2055,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail.</para>
+        /// <para>Select whether the contact accepts bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the letters.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Bulk Mails</para>
         /// </summary>
@@ -1742,7 +2067,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows direct email sent from Microsoft Dynamics 365.</para>
+        /// <para>Select whether the contact allows direct email sent from Microsoft Dynamics 365. If Do Not Allow is selected, Microsoft Dynamics 365 will not send the email.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Emails</para>
         /// </summary>
@@ -1754,7 +2079,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns.</para>
+        /// <para>Select whether the contact allows faxes. If Do Not Allow is selected, the contact will be excluded from any fax activities distributed in marketing campaigns.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Faxes</para>
         /// </summary>
@@ -1766,7 +2091,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns.</para>
+        /// <para>Select whether the contact accepts phone calls. If Do Not Allow is selected, the contact will be excluded from any phone call activities distributed in marketing campaigns.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Phone Calls</para>
         /// </summary>
@@ -1778,7 +2103,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns.</para>
+        /// <para>Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Mails</para>
         /// </summary>
@@ -1790,7 +2115,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account accepts marketing materials, such as brochures or catalogs.</para>
+        /// <para>Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives.</para>
         /// <para>Boolean</para>
         /// <para>Send Marketing Materials</para>
         /// </summary>
@@ -1802,7 +2127,30 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the primary email address for the account.</para>
+        /// <para>Select the contact's highest level of education for use in segmentation and analysis.</para>
+        /// <para>Picklist</para>
+        /// <para>Education</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public EducationCode? EducationCode
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.EducationCode);
+                if (value == null) return null;
+                return (EducationCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.EducationCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.EducationCode] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type the primary email address for the contact.</para>
         /// <para>String - MaxLength: 100</para>
         /// <para>Email</para>
         /// </summary>
@@ -1814,7 +2162,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the secondary email address for the account.</para>
+        /// <para>Type the secondary email address for the contact.</para>
         /// <para>String - MaxLength: 100</para>
         /// <para>Email Address 2</para>
         /// </summary>
@@ -1826,7 +2174,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type an alternate email address for the account.</para>
+        /// <para>Type an alternate email address for the contact.</para>
         /// <para>String - MaxLength: 100</para>
         /// <para>Email Address 3</para>
         /// </summary>
@@ -1835,6 +2183,18 @@ namespace DevKitLevel1.Shared.Entities
         {
             get { return Entity.GetAttributeValue<string>(Fields.EMailAddress3); }
             set { Entity.Attributes[Fields.EMailAddress3] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the employee ID or number for the contact for reference in orders, service cases, or other communications with the contact's organization.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Employee</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string EmployeeId
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.EmployeeId); }
+            set { Entity.Attributes[Fields.EmployeeId] = value; }
         }
 
         /// <summary>
@@ -1860,7 +2220,42 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the fax number for the account.</para>
+        /// <para>Identifier for an external user.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>External User Identifier</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string ExternalUserIdentifier
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.ExternalUserIdentifier); }
+            set { Entity.Attributes[Fields.ExternalUserIdentifier] = value; }
+        }
+
+        /// <summary>
+        /// <para>Select the marital status of the contact for reference in follow-up phone calls and other communications.</para>
+        /// <para>Picklist</para>
+        /// <para>Marital Status</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public FamilyStatusCode? FamilyStatusCode
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.FamilyStatusCode);
+                if (value == null) return null;
+                return (FamilyStatusCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.FamilyStatusCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.FamilyStatusCode] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type the fax number for the contact.</para>
         /// <para>String - MaxLength: 50</para>
         /// <para>Fax</para>
         /// </summary>
@@ -1872,7 +2267,19 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account.</para>
+        /// <para>Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>First Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string FirstName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.FirstName); }
+            set { Entity.Attributes[Fields.FirstName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the contact.</para>
         /// <para>Boolean</para>
         /// <para>Follow Email Activity</para>
         /// </summary>
@@ -1884,15 +2291,96 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the URL for the account's FTP site to enable users to access data and share documents.</para>
+        /// <para>Type the URL for the contact's FTP site to enable users to access data and share documents.</para>
         /// <para>String - MaxLength: 200</para>
         /// <para>FTP Site</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string FtpSiteURL
+        public string FtpSiteUrl
         {
-            get { return Entity.GetAttributeValue<string>(Fields.FtpSiteURL); }
-            set { Entity.Attributes[Fields.FtpSiteURL] = value; }
+            get { return Entity.GetAttributeValue<string>(Fields.FtpSiteUrl); }
+            set { Entity.Attributes[Fields.FtpSiteUrl] = value; }
+        }
+
+        /// <summary>
+        /// <para>Combines and shows the contact's first and last names so that the full name can be displayed in views and reports.</para>
+        /// <para>ReadOnly - String - MaxLength: 160</para>
+        /// <para>Full Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string FullName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.FullName); }
+        }
+
+        /// <summary>
+        /// <para>Select the contact's gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
+        /// <para>Picklist</para>
+        /// <para>Gender</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public GenderCode? GenderCode
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.GenderCode);
+                if (value == null) return null;
+                return (GenderCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.GenderCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.GenderCode] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type the passport number or other government ID for the contact for use in documents or reports.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Government</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string GovernmentId
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.GovernmentId); }
+            set { Entity.Attributes[Fields.GovernmentId] = value; }
+        }
+
+        /// <summary>
+        /// <para>Select whether the contact has any children for reference in follow-up phone calls and other communications.</para>
+        /// <para>Picklist</para>
+        /// <para>Has Children</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public HasChildrenCode? HasChildrenCode
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.HasChildrenCode);
+                if (value == null) return null;
+                return (HasChildrenCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.HasChildrenCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.HasChildrenCode] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type a second home phone number for this contact.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Home Phone 2</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Home2
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Home2); }
+            set { Entity.Attributes[Fields.Home2] = value; }
         }
 
         /// <summary>
@@ -1908,26 +2396,26 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the account's primary industry for use in marketing segmentation and demographic analysis.</para>
-        /// <para>Picklist</para>
-        /// <para>Industry</para>
+        /// <para>Information about whether the contact was auto-created when promoting an email or an appointment.</para>
+        /// <para>ReadOnly - Boolean</para>
+        /// <para>Auto-created</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public IndustryCode? IndustryCode
+        public bool? IsAutoCreate
         {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.IndustryCode);
-                if (value == null) return null;
-                return (IndustryCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.IndustryCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.IndustryCode] = null;
-            }
+            get { return Entity.GetAttributeValue<bool?>(Fields.IsAutoCreate); }
+        }
+
+        /// <summary>
+        /// <para>Select whether the contact exists in a separate accounting or other system, such as Microsoft Dynamics GP or another ERP database, for use in integration processes.</para>
+        /// <para>Boolean</para>
+        /// <para>Back Office Customer</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public bool? IsBackofficeCustomer
+        {
+            get { return Entity.GetAttributeValue<bool?>(Fields.IsBackofficeCustomer); }
+            set { Entity.Attributes[Fields.IsBackofficeCustomer] = value; }
         }
 
         /// <summary>
@@ -1938,6 +2426,30 @@ namespace DevKitLevel1.Shared.Entities
         public bool? IsPrivate
         {
             get { return Entity.GetAttributeValue<bool?>(Fields.IsPrivate); }
+        }
+
+        /// <summary>
+        /// <para>Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Job Title</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string JobTitle
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.JobTitle); }
+            set { Entity.Attributes[Fields.JobTitle] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
+        /// <para>Required - String - MaxLength: 50</para>
+        /// <para>Last Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string LastName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.LastName); }
+            set { Entity.Attributes[Fields.LastName] = value; }
         }
 
         /// <summary>
@@ -1953,7 +2465,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows the date when the account was last included in a marketing campaign or quick campaign.</para>
+        /// <para>Shows the date when the contact was last included in a marketing campaign or quick campaign.</para>
         /// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
         /// <para>Last Date Included in Campaign</para>
         /// </summary>
@@ -1965,42 +2477,50 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis.</para>
-        /// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
-        /// <para>Market Capitalization</para>
+        /// <para>Select the primary marketing source that directed the contact to your organization.</para>
+        /// <para>Picklist</para>
+        /// <para>Lead Source</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public decimal? MarketCap
+        public LeadSourceCode? LeadSourceCode
         {
             get
             {
-                var value = Entity.GetAttributeValue<Money>(Fields.MarketCap);
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.LeadSourceCode);
                 if (value == null) return null;
-                return value.Value;
+                return (LeadSourceCode)value.Value;
             }
             set
             {
                 if (value.HasValue)
-                    Entity.Attributes[Fields.MarketCap] = new Money(value.Value);
+                    Entity.Attributes[Fields.LeadSourceCode] = new OptionSetValue((int)value.Value);
                 else
-                    Entity.Attributes[Fields.MarketCap] = null;
+                    Entity.Attributes[Fields.LeadSourceCode] = null;
             }
         }
 
         /// <summary>
-        /// <para>Shows the market capitalization converted to the system's default base currency.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Market Capitalization (Base)</para>
+        /// <para>Type the name of the contact's manager for use in escalating issues or other follow-up communications with the contact.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Manager</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public decimal? MarketCap_Base
+        public string ManagerName
         {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.MarketCap_Base);
-                if (value == null) return null;
-                return value.Value;
-            }
+            get { return Entity.GetAttributeValue<string>(Fields.ManagerName); }
+            set { Entity.Attributes[Fields.ManagerName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the phone number for the contact's manager.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Manager Phone</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string ManagerPhone
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.ManagerPhone); }
+            set { Entity.Attributes[Fields.ManagerPhone] = value; }
         }
 
         /// <summary>
@@ -2016,7 +2536,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows the master account that the account was merged with.</para>
+        /// <para>Unique identifier of the master contact for merge.</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Master ID</para>
         /// </summary>
@@ -2027,7 +2547,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows whether the account has been merged with another account.</para>
+        /// <para>Shows whether the account has been merged with a master contact.</para>
         /// <para>ReadOnly - Boolean</para>
         /// <para>Merged</para>
         /// </summary>
@@ -2035,6 +2555,30 @@ namespace DevKitLevel1.Shared.Entities
         public bool? Merged
         {
             get { return Entity.GetAttributeValue<bool?>(Fields.Merged); }
+        }
+
+        /// <summary>
+        /// <para>Type the contact's middle name or initial to make sure the contact is addressed correctly.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Middle Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string MiddleName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.MiddleName); }
+            set { Entity.Attributes[Fields.MiddleName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the mobile phone number for the contact.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Mobile Phone</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string MobilePhone
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.MobilePhone); }
+            set { Entity.Attributes[Fields.MobilePhone] = value; }
         }
 
         /// <summary>
@@ -2071,7 +2615,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows who created the record on behalf of another user.</para>
+        /// <para>Shows who last updated the record on behalf of another user.</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Modified By (Delegate)</para>
         /// </summary>
@@ -2082,27 +2626,39 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the company or business name.</para>
-        /// <para>Required - String - MaxLength: 160</para>
-        /// <para>Account Name</para>
+        /// <para>Describes whether contact is opted out or not</para>
+        /// <para>Boolean</para>
+        /// <para>GDPR Optout</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string Name
+        public bool? msdyn_gdproptout
         {
-            get { return Entity.GetAttributeValue<string>(Fields.Name); }
-            set { Entity.Attributes[Fields.Name] = value; }
+            get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_gdproptout); }
+            set { Entity.Attributes[Fields.msdyn_gdproptout] = value; }
         }
 
         /// <summary>
-        /// <para>Type the number of employees that work at the account for use in marketing segmentation and demographic analysis.</para>
-        /// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
-        /// <para>Number of Employees</para>
+        /// <para>Type the contact's nickname.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Nickname</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public int? NumberOfEmployees
+        public string NickName
         {
-            get { return Entity.GetAttributeValue<int?>(Fields.NumberOfEmployees); }
-            set { Entity.Attributes[Fields.NumberOfEmployees] = value; }
+            get { return Entity.GetAttributeValue<string>(Fields.NickName); }
+            set { Entity.Attributes[Fields.NickName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the number of children the contact has for reference in follow-up phone calls and other communications.</para>
+        /// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
+        /// <para>No. of Children</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public int? NumberOfChildren
+        {
+            get { return Entity.GetAttributeValue<int?>(Fields.NumberOfChildren); }
+            set { Entity.Attributes[Fields.NumberOfChildren] = value; }
         }
 
         /// <summary>
@@ -2117,94 +2673,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Number of open opportunities against an account and its child accounts.</para>
-        /// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
-        /// <para>Open Deals</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public int? OpenDeals
-        {
-            get { return Entity.GetAttributeValue<int?>(Fields.OpenDeals); }
-        }
-
-        /// <summary>
-        /// <para>Last Updated time of rollup field Open Deals.</para>
-        /// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
-        /// <para>Open Deals (Last Updated On)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public DateTime? OpenDeals_DateUtc
-        {
-            get { return Entity.GetAttributeValue<DateTime?>(Fields.OpenDeals_Date); }
-        }
-
-        /// <summary>
-        /// <para>State of rollup field Open Deals.</para>
-        /// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
-        /// <para>Open Deals (State)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public int? OpenDeals_State
-        {
-            get { return Entity.GetAttributeValue<int?>(Fields.OpenDeals_State); }
-        }
-
-        /// <summary>
-        /// <para>Sum of open revenue against an account and its child accounts.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Open Revenue</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? OpenRevenue
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.OpenRevenue);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Value of the Open Revenue in base currency.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Open Revenue (Base)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? OpenRevenue_Base
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.OpenRevenue_Base);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Last Updated time of rollup field Open Revenue.</para>
-        /// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
-        /// <para>Open Revenue (Last Updated On)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public DateTime? OpenRevenue_DateUtc
-        {
-            get { return Entity.GetAttributeValue<DateTime?>(Fields.OpenRevenue_Date); }
-        }
-
-        /// <summary>
-        /// <para>State of rollup field Open Revenue.</para>
-        /// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
-        /// <para>Open Revenue (State)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public int? OpenRevenue_State
-        {
-            get { return Entity.GetAttributeValue<int?>(Fields.OpenRevenue_State); }
-        }
-
-        /// <summary>
-        /// <para>Shows the lead that the account was created from if the account was created by converting a lead in Microsoft Dynamics 365. This is used to relate the account to data on the originating lead for use in reporting and analytics.</para>
+        /// <para>Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics.</para>
         /// <para>Lookup</para>
         /// <para>Originating Lead</para>
         /// </summary>
@@ -2240,30 +2709,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the account's ownership structure, such as public or private.</para>
-        /// <para>Picklist</para>
-        /// <para>Ownership</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public OwnershipCode? OwnershipCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.OwnershipCode);
-                if (value == null) return null;
-                return (OwnershipCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.OwnershipCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.OwnershipCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Shows the business unit that the record owner belongs to.</para>
+        /// <para>Unique identifier of the business unit that owns the contact.</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Owning Business Unit</para>
         /// </summary>
@@ -2274,7 +2720,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Unique identifier of the team who owns the account.</para>
+        /// <para>Unique identifier of the team who owns the contact.</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Owning Team</para>
         /// </summary>
@@ -2285,7 +2731,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Unique identifier of the user who owns the account.</para>
+        /// <para>Unique identifier of the user who owns the contact.</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Owning User</para>
         /// </summary>
@@ -2296,19 +2742,42 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Choose the parent account associated with this account to show parent and child businesses in reporting and analytics.</para>
-        /// <para>Lookup</para>
-        /// <para>Parent Account</para>
+        /// <para>Type the pager number for the contact.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Pager</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public EntityReference ParentAccountId
+        public string Pager
         {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.ParentAccountId); }
-            set { Entity.Attributes[Fields.ParentAccountId] = value; }
+            get { return Entity.GetAttributeValue<string>(Fields.Pager); }
+            set { Entity.Attributes[Fields.Pager] = value; }
         }
 
         /// <summary>
-        /// <para>For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data.</para>
+        /// <para>Unique identifier of the parent contact.</para>
+        /// <para>ReadOnly - Lookup</para>
+        /// <para>Parent Contact</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public EntityReference ParentContactId
+        {
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.ParentContactId); }
+        }
+
+        /// <summary>
+        /// <para>Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities.</para>
+        /// <para>Customer</para>
+        /// <para>Company Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public EntityReference ParentCustomerId
+        {
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.ParentCustomerId); }
+            set { Entity.Attributes[Fields.ParentCustomerId] = value; }
+        }
+
+        /// <summary>
+        /// <para>Shows whether the contact participates in workflow rules.</para>
         /// <para>Boolean</para>
         /// <para>Participates in Workflow</para>
         /// </summary>
@@ -2412,7 +2881,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Choose the account's preferred service facility or equipment to make sure services are scheduled correctly for the customer.</para>
+        /// <para>Choose the contact's preferred service facility or equipment to make sure services are scheduled correctly for the customer.</para>
         /// <para>Lookup</para>
         /// <para>Preferred Facility/Equipment</para>
         /// </summary>
@@ -2424,7 +2893,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Choose the account's preferred service for reference when you schedule service activities.</para>
+        /// <para>Choose the contact's preferred service to make sure services are scheduled correctly for the customer.</para>
         /// <para>Lookup</para>
         /// <para>Preferred Service</para>
         /// </summary>
@@ -2436,7 +2905,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Choose the preferred service representative for reference when you schedule service activities for the account.</para>
+        /// <para>Choose the regular or preferred customer service representative for reference when scheduling service activities for the contact.</para>
         /// <para>Lookup</para>
         /// <para>Preferred User</para>
         /// </summary>
@@ -2445,42 +2914,6 @@ namespace DevKitLevel1.Shared.Entities
         {
             get { return Entity.GetAttributeValue<EntityReference>(Fields.PreferredSystemUserId); }
             set { Entity.Attributes[Fields.PreferredSystemUserId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Choose the primary contact for the account to provide quick access to contact details.</para>
-        /// <para>Lookup</para>
-        /// <para>Primary Contact</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public EntityReference PrimaryContactId
-        {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.PrimaryContactId); }
-            set { Entity.Attributes[Fields.PrimaryContactId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Primary Satori ID for Account</para>
-        /// <para>String - MaxLength: 200</para>
-        /// <para>Primary Satori ID</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string PrimarySatoriId
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.PrimarySatoriId); }
-            set { Entity.Attributes[Fields.PrimarySatoriId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Primary Twitter ID for Account</para>
-        /// <para>String - MaxLength: 128</para>
-        /// <para>Primary Twitter ID</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string PrimaryTwitterId
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.PrimaryTwitterId); }
-            set { Entity.Attributes[Fields.PrimaryTwitterId] = value; }
         }
 
         /// <summary>
@@ -2496,58 +2929,19 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the annual revenue for the account, used as an indicator in financial performance analysis.</para>
-        /// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
-        /// <para>Annual Revenue</para>
+        /// <para>Type the salutation of the contact to make sure the contact is addressed correctly in sales calls, email messages, and marketing campaigns.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Salutation</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public decimal? Revenue
+        public string Salutation
         {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.Revenue);
-                if (value == null) return null;
-                return value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.Revenue] = new Money(value.Value);
-                else
-                    Entity.Attributes[Fields.Revenue] = null;
-            }
+            get { return Entity.GetAttributeValue<string>(Fields.Salutation); }
+            set { Entity.Attributes[Fields.Salutation] = value; }
         }
 
         /// <summary>
-        /// <para>Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Annual Revenue (Base)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? Revenue_Base
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.Revenue_Base);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Type the number of shares available to the public for the account. This number is used as an indicator in financial performance analysis.</para>
-        /// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
-        /// <para>Shares Outstanding</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public int? SharesOutstanding
-        {
-            get { return Entity.GetAttributeValue<int?>(Fields.SharesOutstanding); }
-            set { Entity.Attributes[Fields.SharesOutstanding] = value; }
-        }
-
-        /// <summary>
-        /// <para>Select a shipping method for deliveries sent to the account's address to designate the preferred carrier or other delivery option.</para>
+        /// <para>Select a shipping method for deliveries sent to this address.</para>
         /// <para>Picklist</para>
         /// <para>Shipping Method</para>
         /// </summary>
@@ -2570,19 +2964,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis.</para>
-        /// <para>String - MaxLength: 20</para>
-        /// <para>SIC Code</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string SIC
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.SIC); }
-            set { Entity.Attributes[Fields.SIC] = value; }
-        }
-
-        /// <summary>
-        /// <para>Choose the service level agreement (SLA) that you want to apply to the Account record.</para>
+        /// <para>Choose the service level agreement (SLA) that you want to apply to the Contact record.</para>
         /// <para>Lookup</para>
         /// <para>SLA</para>
         /// </summary>
@@ -2605,6 +2987,18 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
+        /// <para>Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Spouse/Partner Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string SpousesName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.SpousesName); }
+            set { Entity.Attributes[Fields.SpousesName] = value; }
+        }
+
+        /// <summary>
         /// <para>Shows the ID of the stage.</para>
         /// <para>Uniqueidentifier</para>
         /// <para>(Deprecated) Process Stage</para>
@@ -2617,7 +3011,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated.</para>
+        /// <para>Shows whether the contact is active or inactive. Inactive contacts are read-only and can't be edited unless they are reactivated.</para>
         /// <para>State</para>
         /// <para>Status</para>
         /// </summary>
@@ -2640,7 +3034,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the account's status.</para>
+        /// <para>Select the contact's status.</para>
         /// <para>Status</para>
         /// <para>Status Reason</para>
         /// </summary>
@@ -2663,15 +3057,27 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the stock exchange at which the account is listed to track their stock and financial performance of the company.</para>
-        /// <para>String - MaxLength: 20</para>
-        /// <para>Stock Exchange</para>
+        /// <para>For internal use only.</para>
+        /// <para>Uniqueidentifier</para>
+        /// <para>Subscription</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string StockExchange
+        public Guid? SubscriptionId
         {
-            get { return Entity.GetAttributeValue<string>(Fields.StockExchange); }
-            set { Entity.Attributes[Fields.StockExchange] = value; }
+            get { return Entity.GetAttributeValue<Guid?>(Fields.SubscriptionId); }
+            set { Entity.Attributes[Fields.SubscriptionId] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the suffix used in the contact's name, such as Jr. or Sr. to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
+        /// <para>String - MaxLength: 10</para>
+        /// <para>Suffix</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Suffix
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Suffix); }
+            set { Entity.Attributes[Fields.Suffix] = value; }
         }
 
         /// <summary>
@@ -2687,9 +3093,9 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the main phone number for this account.</para>
+        /// <para>Type the main phone number for this contact.</para>
         /// <para>String - MaxLength: 50</para>
-        /// <para>Main Phone</para>
+        /// <para>Business Phone</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Telephone1
@@ -2699,9 +3105,9 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type a second phone number for this account.</para>
+        /// <para>Type a second phone number for this contact.</para>
         /// <para>String - MaxLength: 50</para>
-        /// <para>Other Phone</para>
+        /// <para>Home Phone</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Telephone2
@@ -2711,7 +3117,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type a third phone number for this account.</para>
+        /// <para>Type a third phone number for this contact.</para>
         /// <para>String - MaxLength: 50</para>
         /// <para>Telephone 3</para>
         /// </summary>
@@ -2723,9 +3129,9 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select a region or territory for the account for use in segmentation and analysis.</para>
+        /// <para>Select a region or territory for the contact for use in segmentation and analysis.</para>
         /// <para>Picklist</para>
-        /// <para>Territory Code</para>
+        /// <para>Territory</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public TerritoryCode? TerritoryCode
@@ -2746,31 +3152,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Choose the sales region or territory for the account to make sure the account is assigned to the correct representative and for use in segmentation and analysis.</para>
-        /// <para>Lookup</para>
-        /// <para>Territory</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public EntityReference TerritoryId
-        {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.TerritoryId); }
-            set { Entity.Attributes[Fields.TerritoryId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money.</para>
-        /// <para>String - MaxLength: 10</para>
-        /// <para>Ticker Symbol</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string TickerSymbol
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.TickerSymbol); }
-            set { Entity.Attributes[Fields.TickerSymbol] = value; }
-        }
-
-        /// <summary>
-        /// <para>Total time spent for emails (read and write) and meetings by me in relation to account record.</para>
+        /// <para>Total time spent for emails (read and write) and meetings by me in relation to the contact record.</para>
         /// <para>ReadOnly - String - MaxLength: 1250</para>
         /// <para>Time Spent by me</para>
         /// </summary>
@@ -2829,7 +3211,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Version number of the account.</para>
+        /// <para>Version number of the contact.</para>
         /// <para>ReadOnly - BigInt</para>
         /// <para>Version Number</para>
         /// </summary>
@@ -2840,27 +3222,62 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the account's website URL to get quick details about the company profile.</para>
+        /// <para>Type the contact's professional or personal website or blog URL.</para>
         /// <para>String - MaxLength: 200</para>
         /// <para>Website</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string WebSiteURL
+        public string WebSiteUrl
         {
-            get { return Entity.GetAttributeValue<string>(Fields.WebSiteURL); }
-            set { Entity.Attributes[Fields.WebSiteURL] = value; }
+            get { return Entity.GetAttributeValue<string>(Fields.WebSiteUrl); }
+            set { Entity.Attributes[Fields.WebSiteUrl] = value; }
         }
 
         /// <summary>
-        /// <para>Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.</para>
-        /// <para>String - MaxLength: 160</para>
-        /// <para>Yomi Account Name</para>
+        /// <para>Type the phonetic spelling of the contact's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
+        /// <para>String - MaxLength: 150</para>
+        /// <para>Yomi First Name</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string YomiName
+        public string YomiFirstName
         {
-            get { return Entity.GetAttributeValue<string>(Fields.YomiName); }
-            set { Entity.Attributes[Fields.YomiName] = value; }
+            get { return Entity.GetAttributeValue<string>(Fields.YomiFirstName); }
+            set { Entity.Attributes[Fields.YomiFirstName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Shows the combined Yomi first and last names of the contact so that the full phonetic name can be displayed in views and reports.</para>
+        /// <para>ReadOnly - String - MaxLength: 450</para>
+        /// <para>Yomi Full Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string YomiFullName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.YomiFullName); }
+        }
+
+        /// <summary>
+        /// <para>Type the phonetic spelling of the contact's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
+        /// <para>String - MaxLength: 150</para>
+        /// <para>Yomi Last Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string YomiLastName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.YomiLastName); }
+            set { Entity.Attributes[Fields.YomiLastName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the phonetic spelling of the contact's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
+        /// <para>String - MaxLength: 150</para>
+        /// <para>Yomi Middle Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string YomiMiddleName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.YomiMiddleName); }
+            set { Entity.Attributes[Fields.YomiMiddleName] = value; }
         }
 
         /// <summary>

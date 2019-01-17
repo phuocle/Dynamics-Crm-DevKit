@@ -79,7 +79,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DevKitLevel1.SolutionPackag
 		SlnRelativePath = "DevKitLevel1.SolutionPackager\"
 	EndProjectSection
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DevKitLevel1.Shared.2", "DevKitLevel1.Shared.2\DevKitLevel1.Shared.2.shproj", "{3309584A-16AE-4774-9B14-59FD557D204C}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DevKitLevel1.Shared", "DevKitLevel1.Shared\DevKitLevel1.Shared.shproj", "{D954291E-2A0B-460D-934E-DC6B0785DB48}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -88,7 +88,6 @@ Global
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{0fb1e3a2-d41a-426c-9700-610f80d8cd65}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{221a46d7-47a3-40a2-b122-b830dcaed21a}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{259ead44-bcbd-49e9-b1f0-5f18775416ac}*SharedItemsImports = 4
-		DevKitLevel1.Shared.2\DevKitLevel1.Shared.2.projitems*{3309584a-16ae-4774-9b14-59fd557d204c}*SharedItemsImports = 13
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{4340747c-4ea7-4e05-a37a-59f3600d37e3}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{4f1edd80-27ac-49db-b650-8abdbeeece1f}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{5841c864-5857-456c-be32-605af986ea52}*SharedItemsImports = 4
@@ -97,6 +96,7 @@ Global
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{837fe800-ad41-48dc-8225-9db3e3c06683}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{8e4224c4-486d-4abd-baf4-7d262a4badbb}*SharedItemsImports = 4
 		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{d4ae4e3a-981b-43a5-a330-3c047a9ded66}*SharedItemsImports = 4
+		DevKitLevel1.Shared\DevKitLevel1.Shared.projitems*{d954291e-2a0b-460d-934e-dc6b0785db48}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
