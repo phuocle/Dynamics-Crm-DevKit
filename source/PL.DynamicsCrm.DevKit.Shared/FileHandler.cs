@@ -35,7 +35,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
 
                 return tempFile;
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -53,7 +53,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
 
                 return extractedFolder;
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }

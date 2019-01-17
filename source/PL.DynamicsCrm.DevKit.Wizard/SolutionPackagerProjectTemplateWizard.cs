@@ -10,7 +10,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 {
     internal class SolutionPackagerProjectTemplateWizard : IWizard
     {
-        private string _destDirectory;
         private string _keyName;
         private DTE Dte { get; set; }
         private Project Project { get; set; }
