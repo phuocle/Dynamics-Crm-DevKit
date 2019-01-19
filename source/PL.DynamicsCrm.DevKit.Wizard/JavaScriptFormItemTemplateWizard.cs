@@ -98,17 +98,17 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private void CreateForm()
         {
-            File.WriteAllText(FormProjectItem, GeneratedJsForm);
+            File.WriteAllText(FormProjectItem, GeneratedJsForm, System.Text.Encoding.UTF8);
         }
 
         private void CreateFormCode()
         {
-            File.WriteAllText(FormCodeProjectItem, GeneratedJsFormCode);
+            File.WriteAllText(FormCodeProjectItem, GeneratedJsFormCode, System.Text.Encoding.UTF8);
         }
 
         private void CreateFormIntellisense()
         {
-            File.WriteAllText(FormCodeIntellisenseProjectItem, GeneratedJsFormIntellisense);
+            File.WriteAllText(FormCodeIntellisenseProjectItem, GeneratedJsFormIntellisense, System.Text.Encoding.UTF8);
         }
 
         private string LoadDeleteFile(object automationObject, string entityName)

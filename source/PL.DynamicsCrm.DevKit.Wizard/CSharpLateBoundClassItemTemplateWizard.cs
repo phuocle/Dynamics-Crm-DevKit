@@ -9,8 +9,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 {
     internal class CSharpLateBoundClassItemTemplateWizard : IWizard
     {
-
-        private const string SHARED_PROJECT = "{D954291E-2A0B-460D-934E-DC6B0785DB48}";
         private string Class { get; set; }
         private DTE Dte { get; set; }
         private Project ActiveProject { get; set; }

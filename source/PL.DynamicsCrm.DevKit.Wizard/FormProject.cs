@@ -773,7 +773,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 isJsWebApi = comment.JsWebApi;
                 isDebugWebApi = comment.IsDebugWebApi;
             }
-            JsForm.GeneratorCode(lists, isDebugForm, isJsWebApi, isDebugWebApi);
+            JsForm.GeneratorCode(lists.OfType<string>().ToList() , isDebugForm, isJsWebApi, isDebugWebApi);
             MessageError = JsForm.Message;
             GeneratedJsForm = JsForm.Form;
             GeneratedJsFormCode = JsForm.FormCode;

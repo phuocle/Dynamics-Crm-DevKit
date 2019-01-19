@@ -18,7 +18,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         webresources,
         solutionpackagers,
         dataproviders,
-        latebounds
+        generators
     }
 
     public class Program
@@ -41,7 +41,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private static WebResource WebResourceJson { get; set; }
         private static SolutionPackager SolutionPackagerJson { get; set; }
         private static DataProvider DataProviderJson { get; set; }
-        private static LateBound LateBoundJson {get;set;}
+        private static Generator GeneratorJson {get;set;}
         private static CrmServiceClient CrmServiceClient { get; set; }
 
         public static void Main(string[] args)
@@ -115,9 +115,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var task = new DataProviderTask(CrmServiceClient, CurrentDirectory, DataProviderJson, arguments.Version);
                 task.Run();
             }
-            else if (arguments.Type == TaskType.latebounds.ToString())
+            else if (arguments.Type == TaskType.generators.ToString())
             {
-                var task = new LateBoundTask(CrmServiceClient, CurrentDirectory, LateBoundJson, arguments.Version);
+                var task = new GeneratorTask(CrmServiceClient, CurrentDirectory, GeneratorJson, arguments.Version);
                 task.Run();
             }
         }
@@ -129,7 +129,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/conn: missing");
                 return false;
             }
-
             if (arguments.Json.Length == 0)
             {
                 CliLog.WriteLine(CliLog.COLOR_ERROR, $"/json: missing");
@@ -156,11 +155,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     TaskType.webresources.ToString(),
                     TaskType.solutionpackagers.ToString(),
                     TaskType.dataproviders.ToString(),
-                    TaskType.latebounds.ToString()
+                    TaskType.generators.ToString()
                 };
                 if (!types.Contains(arguments.Type))
                 {
-                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: should be: plugins or workflows or webresources or solutionpackagers or dataproviders or latebounds");
+                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/type: should be: plugins or workflows or webresources or solutionpackagers or dataproviders or generators");
                     return false;
                 }
             }
@@ -171,7 +170,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 WebResourceJson = json.webresources.FirstOrDefault(x => x.profile == arguments.Profile);
                 SolutionPackagerJson = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
                 DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
-                LateBoundJson = json.latebounds.FirstOrDefault(x => x.profile == arguments.Profile);
+                GeneratorJson = json.generators.FirstOrDefault(x => x.profile == arguments.Profile);
             }
 
             if (arguments.Profile.Length == 0)
@@ -221,15 +220,24 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: not found profile: {arguments.Profile}");
                     return false;
                 }
-                //TODO: Check required data
             }
             else if (arguments.Type == TaskType.dataproviders.ToString())
             {
                 DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
+                if (DataProviderJson == null)
+                {
+                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: not found profile: {arguments.Profile}");
+                    return false;
+                }
             }
-            else if (arguments.Type == TaskType.latebounds.ToString())
+            else if (arguments.Type == TaskType.generators.ToString())
             {
-                LateBoundJson = json.latebounds.FirstOrDefault(x => x.profile == arguments.Profile);
+                GeneratorJson = json.generators.FirstOrDefault(x => x.profile == arguments.Profile);
+                if (GeneratorJson == null)
+                {
+                    CliLog.WriteLine(CliLog.COLOR_ERROR, $"/profile: not found profile: {arguments.Profile}");
+                    return false;
+                }
             }
             if (!IsConnectedDynamics365(arguments.Connection))
             {

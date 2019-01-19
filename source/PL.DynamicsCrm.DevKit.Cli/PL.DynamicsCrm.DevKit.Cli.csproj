@@ -56,8 +56,11 @@
     <Reference Include="CmdLine, Version=1.0.7.509, Culture=neutral, PublicKeyToken=e6ac9ead3d3b48e4, processorArchitecture=MSIL">
       <HintPath>..\packages\CmdLine.1.0.7.509\lib\net40-Client\CmdLine.dll</HintPath>
     </Reference>
+    <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.4\lib\net452\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.5\lib\net452\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=2.22.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.22.302111727\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
@@ -66,22 +69,25 @@
       <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.22.302111727\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Rest.ClientRuntime, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.0.2.4\lib\net452\Microsoft.Rest.ClientRuntime.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.0.2.7\lib\net452\Microsoft.Rest.ClientRuntime.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.4\lib\net452\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.5\lib\net452\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.Deployment.9.0.2.4\lib\net452\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.Deployment.9.0.2.5\lib\net452\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Workflow, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.9.0.2.4\lib\net452\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.9.0.2.5\lib\net452\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.0.2.4\lib\net452\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.0.2.7\lib\net452\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NUglify, Version=1.5.12.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUglify.1.5.12\lib\net40\NUglify.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -97,6 +103,7 @@
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Workflow.Activities" />
     <Reference Include="System.Workflow.ComponentModel" />
     <Reference Include="System.Workflow.Runtime" />
@@ -111,34 +118,58 @@
     <EmbeddedResource Include="..\21.CSharpLateBoundClassItemTemplate\Class.cs">
       <Link>Data\Class.cs</Link>
     </EmbeddedResource>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\CommentIntellisense.cs">
+      <Link>LinkFiles\CommentIntellisense.cs</Link>
+    </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Const.cs">
-      <Link>Const.cs</Link>
+      <Link>LinkFiles\Const.cs</Link>
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
-      <Link>EncryptDecrypt.cs</Link>
+      <Link>LinkFiles\EncryptDecrypt.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Enum.cs">
+      <Link>LinkFiles\Enum.cs</Link>
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\FileHandler.cs">
-      <Link>FileHandler.cs</Link>
+      <Link>LinkFiles\FileHandler.cs</Link>
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\FileSystem.cs">
-      <Link>FileSystem.cs</Link>
+      <Link>LinkFiles\FileSystem.cs</Link>
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\GeneratedCSharpLateBound.cs">
-      <Link>GeneratedCSharpLateBound.cs</Link>
+      <Link>LinkFiles\GeneratedCSharpLateBound.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\JsForm.cs">
+      <Link>LinkFiles\JsForm.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\JsIntellisense.cs">
+      <Link>LinkFiles\JsIntellisense.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\JsWebApi.cs">
+      <Link>LinkFiles\JsWebApi.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\SimpleJson.cs">
+      <Link>LinkFiles\SimpleJson.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Utility.cs">
+      <Link>LinkFiles\Utility.cs</Link>
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Xrm\CrmAttribute.cs">
       <Link>Xrm\CrmAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Xrm\SystemForm.cs">
+      <Link>LinkFiles\SystemForm.cs</Link>
     </Compile>
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="CommandLineArgs.cs" />
     <Compile Include="CrmPluginRegistrationAttribute.cs" />
     <Compile Include="CliLog.cs" />
     <Compile Include="DataProviderTask.cs" />
-    <Compile Include="LateBoundTask.cs" />
+    <Compile Include="GeneratorTask.cs" />
     <Compile Include="Models\CliJson.cs" />
     <Compile Include="Models\DataProvider.cs" />
     <Compile Include="Models\Dependency.cs" />
-    <Compile Include="Models\LateBound.cs" />
+    <Compile Include="Models\Generator.cs" />
     <Compile Include="Models\Plugin.cs" />
     <Compile Include="Models\SolutionPackager.cs" />
     <Compile Include="Models\WebResource.cs" />
@@ -146,7 +177,6 @@
     <Compile Include="PluginTask.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleJson.cs" />
     <Compile Include="SolutionPackagerTask.cs" />
     <Compile Include="WebResourceTask.cs" />
     <Compile Include="WorkflowTask.cs" />
@@ -161,6 +191,15 @@
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.0.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.nuspec" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="..\PL.DynamicsCrm.DevKit.Wizard\data\WebApi.js">
+      <Link>Data\WebApi.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\PL.DynamicsCrm.DevKit.Wizard\data\DevKit.js">
+      <Link>Data\DevKit.js</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\PL.DynamicsCrm.DevKit.Wizard\data\OptionSet.js">
+      <Link>Data\OptionSet.js</Link>
+    </EmbeddedResource>
     <Content Include="PL.DynamicsCrm.DevKit.Cli.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -184,4 +223,8 @@
     <Folder Include="Release\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>DEL $(TargetDir)*.xml
+DEL $(TargetDir)*.pdb</PostBuildEvent>
+  </PropertyGroup>
 </Project>
