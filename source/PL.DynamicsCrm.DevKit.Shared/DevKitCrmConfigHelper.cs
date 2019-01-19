@@ -41,7 +41,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
             var json = SimpleJson.SerializeObject(devKitCrmConfig);
-            File.WriteAllText(devKitCrmConfigFile, FormatJson(json));
+            File.WriteAllText(devKitCrmConfigFile, FormatJson(json), System.Text.Encoding.UTF8);
         }
 
         public static void SetDevKitCrmConfig(DTE dte, CrmConnection crmConnection)

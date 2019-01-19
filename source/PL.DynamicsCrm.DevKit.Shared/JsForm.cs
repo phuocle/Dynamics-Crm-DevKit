@@ -676,7 +676,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             return Forms.Select(f => f.Name).ToList();
         }
 
-        public void GeneratorCode(CheckedItemCollection checkedItems, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
+        public void GeneratorCode(List<string> checkedItems, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
         {
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)

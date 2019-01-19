@@ -9,24 +9,46 @@ namespace PL.DynamicsCrm.DevKit.Shared
     {
         public static string ReadEmbeddedResource(string path)
         {
-            string data;
-            var assembly = Assembly.GetExecutingAssembly();
-            using (var stream = assembly.GetManifestResourceStream(path))
-            using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
+            try
             {
-                data = reader.ReadToEnd();
+                string data;
+                var assembly = Assembly.GetExecutingAssembly();
+                using (var stream = assembly.GetManifestResourceStream(path))
+                using (var reader = new StreamReader(stream))
+                {
+                    data = reader.ReadToEnd();
+                }
+                return data;
             }
-
-            return data;
+            catch
+            {
+                if (path == "PL.DynamicsCrm.DevKit.Wizard.data.WebApi.js")
+                {
+                    path = "PL.DynamicsCrm.DevKit.Cli.Data.WebApi.js";
+                    return ReadEmbeddedResource(path);
+                }
+                else if (path == "PL.DynamicsCrm.DevKit.Wizard.data.DevKit.js")
+                {
+                    path = "PL.DynamicsCrm.DevKit.Cli.Data.DevKit.js";
+                    return ReadEmbeddedResource(path);
+                }
+                else if (path == "PL.DynamicsCrm.DevKit.Wizard.data.OptionSet.js")
+                {
+                    path = "PL.DynamicsCrm.DevKit.Cli.Data.OptionSet.js";
+                    return ReadEmbeddedResource(path);
+                }
+            }
+            return string.Empty;
         }
 
         public static string SafeNamespace(string @namespace)
         {
             var items = @namespace.Split('.');
-            for(var i = 0; i<items.Length; i++ )
+            for (var i = 0; i < items.Length; i++)
             {
                 int output = -1;
-                if (int.TryParse(items[i], out output)){
+                if (int.TryParse(items[i], out output))
+                {
                     items[i] = $"_{items[i]}";
                 }
             }
@@ -41,9 +63,9 @@ namespace PL.DynamicsCrm.DevKit.Shared
 
         public static bool ExistProject(DTE dte, string projectName)
         {
-            foreach(Project project in dte.Solution.Projects)
+            foreach (Project project in dte.Solution.Projects)
             {
-                if (project.ProjectItems == null ||  project.FileName.Length == 0) continue;
+                if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name == projectName) return true;
             }
             return false;

@@ -71,7 +71,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 .Replace("$NetVersion$", netVersion)
                 .Replace("$Port$", port);
             solution += data;
-            File.WriteAllText(solutionFile, solution);
+            File.WriteAllText(solutionFile, solution, System.Text.Encoding.UTF8);
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)

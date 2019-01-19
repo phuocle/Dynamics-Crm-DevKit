@@ -173,25 +173,24 @@
       "mapfile": ""
     }
   ],
-  "latebounds": [
+  "generators": [
     {
-      "profile": "SELECTED",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "type": "selected",
-      "entities": [
-        "Account",
-        "Email",
-        "Contact"
-      ]
+      "profile": "LATEBOUND",
+      "rootnamespace": "PL.CrmGridPlus",
+      "rootfolder": "PL.CrmGridPlus.Shared\\Entities",
+      "type": "CSharp"
     },
     {
-      "profile": "EXISTING",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "type": "existing",
-      "entities": [
-      ]
+      "profile": "JS-FORM",
+      "rootnamespace": "PL.CrmGridPlus",
+      "rootfolder": "PL.CrmGridPlus.Shared\\Entities",
+      "type": "JsForm"
+    },
+    {
+      "profile": "WEBAPI",
+      "rootnamespace": "PL.CrmGridPlus",
+      "rootfolder": "PL.CrmGridPlus.Shared\\Entities",
+      "type": "WebApi"
     }
   ]
 }
