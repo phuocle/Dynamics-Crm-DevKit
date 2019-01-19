@@ -9,9 +9,9 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using DevKitLevel1.Shared;
-using DevKitLevel1.Shared.Entities.AccountOptionSets;
+using DevKitLevel1.Shared.Entities.ABC.DEF.AccountOptionSets;
 
-namespace DevKitLevel1.Shared.Entities.AccountOptionSets
+namespace DevKitLevel1.Shared.Entities.ABC.DEF.AccountOptionSets
 {
     public enum AccountCategoryCode
     {
@@ -486,7 +486,7 @@ namespace DevKitLevel1.Shared.Entities.AccountOptionSets
     }
 }
 
-namespace DevKitLevel1.Shared.Entities
+namespace DevKitLevel1.Shared.Entities.ABC.DEF
 {
     public partial class Account : EntityBase
     {

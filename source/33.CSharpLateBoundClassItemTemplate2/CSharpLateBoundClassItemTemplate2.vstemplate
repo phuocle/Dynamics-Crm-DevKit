@@ -11,8 +11,8 @@
     <DefaultName>Class.cs</DefaultName>
   </TemplateData>
   <TemplateContent>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$class$.cs">Class.cs</ProjectItem>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$.generated.cs">Class1.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$.cs">Class.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
     <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.2.0.0, Culture=neutral, PublicKeyToken=93b9df07fea4eb7d</Assembly>

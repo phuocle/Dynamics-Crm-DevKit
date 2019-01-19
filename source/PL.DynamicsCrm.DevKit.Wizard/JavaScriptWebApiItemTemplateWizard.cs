@@ -96,7 +96,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private void CreateWebApiCode()
         {
-            File.WriteAllText(WebApiCodeProjectItem, GeneratedJsWebApiCode);
+            File.WriteAllText(WebApiCodeProjectItem, GeneratedJsWebApiCode, System.Text.Encoding.UTF8);
             var fInfo = new FileInfo(WebApiCodeProjectItem);
             var entityName = fInfo.Name.Substring(0, fInfo.Name.Length - ".webapi.js".Length);
             WebApiCodeIntellisenseProjectItem = $"{fInfo.DirectoryName}\\{entityName}.intellisense.js";
@@ -106,7 +106,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private void CreateWebApiCodeIntellisense()
         {
-            File.WriteAllText(WebApiCodeIntellisenseProjectItem, GeneratedJsWebApiCodeIntellisense);
+            File.WriteAllText(WebApiCodeIntellisenseProjectItem, GeneratedJsWebApiCodeIntellisense, System.Text.Encoding.UTF8);
         }
     }
 }

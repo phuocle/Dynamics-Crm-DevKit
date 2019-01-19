@@ -31,7 +31,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             var projectFullName = Project.FullName;
             Dte.Solution.Remove(Project);
-            File.WriteAllText(projectFullName, Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.ReportProjectTemplate.csproj"));
+            File.WriteAllText(projectFullName, Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.ReportProjectTemplate.csproj"), System.Text.Encoding.UTF8);
             var fInfoProject = new FileInfo(projectFullName);
             fInfoProject.MoveTo(fInfoProject.DirectoryName + "\\" + ProjectName + ".rptproj");
             var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);

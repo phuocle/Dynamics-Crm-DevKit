@@ -127,7 +127,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"var {ProjectName};\r\n";
             webApiCode += $"(function ({ProjectName}) {{\r\n";
             webApiCode += $"\t'use strict';\r\n";
-            webApiCode += $"\t{ProjectName}.{Class}Api = function (entity) {{\r\n";
+            webApiCode += $"\t{ProjectName}.{Class}Api = function (e) {{\r\n";
             webApiCode += $"\t\tvar EMPTY_STRING = '';\r\n";
             var webapi = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.WebApi.js");
             webApiCode += webapi;
@@ -150,25 +150,25 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     crmAttribute.FieldType == AttributeTypeCode.Money
                 )
                 {
-                    webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ logicalName: \"{crmAttribute.LogicalName}\" }},\r\n";
+                    webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.DateTime)
                 {
                     if (crmAttribute.DateTimeBehavior == DateTimeBehavior.DateOnly)
-                        webApiCode += $"\t\t\t{crmAttribute.SchemaName}_DateOnly: {{ logicalName: \"{crmAttribute.LogicalName}\" }},\r\n";
+                        webApiCode += $"\t\t\t{crmAttribute.SchemaName}_DateOnly: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
                     else if (crmAttribute.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                     {
                         if (crmAttribute.DateTimeFormat == DateTimeFormat.DateOnly)
-                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_TimezoneDateOnly: {{ logicalName: \"{crmAttribute.LogicalName}\" }},\r\n";
+                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_TimezoneDateOnly: {{ L=a: \"{crmAttribute.LogicalName}\" }},\r\n";
                         else
-                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_TimezoneDateAndTime: {{ logicalName: \"{crmAttribute.LogicalName}\" }},\r\n";
+                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_TimezoneDateAndTime: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
                     }
                     else if (crmAttribute.DateTimeBehavior == DateTimeBehavior.UserLocal)
                     {
                         if (crmAttribute.DateTimeFormat == DateTimeFormat.DateOnly)
-                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_UtcDateOnly: {{ logicalName: \"{crmAttribute.LogicalName}\" }},\r\n";
+                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_UtcDateOnly: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
                         else
-                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_UtcDateAndTime: {{ logicalName: \"{crmAttribute.LogicalName}\" }},\r\n";
+                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_UtcDateAndTime: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
                     }
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Lookup ||
@@ -182,29 +182,29 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     if (entities.Length == 1)
                     {
                         if (crmAttribute.IsCustomAttribute)
-                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ schemaName: \"{crmAttribute.SchemaName}\", logicalName: \"_{crmAttribute.LogicalName}_value\", entityLogicalCollectionName: \"{collections[0]}\", entityLogicalName: \"{entities[0]}\" }},\r\n";
+                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ b: \"{crmAttribute.SchemaName}\", a: \"_{crmAttribute.LogicalName}_value\", c: \"{collections[0]}\", d: \"{entities[0]}\" }},\r\n";
                         else
-                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ schemaName: \"{crmAttribute.LogicalName}\", logicalName: \"_{crmAttribute.LogicalName}_value\", entityLogicalCollectionName: \"{collections[0]}\", entityLogicalName: \"{entities[0]}\" }},\r\n";
+                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ b: \"{crmAttribute.LogicalName}\", a: \"_{crmAttribute.LogicalName}_value\", c: \"{collections[0]}\", d: \"{entities[0]}\" }},\r\n";
                     }
                     else
                     {
                         var j = 0;
                         foreach (var e in entities)
                         {
-                            webApiCode += $"\t\t\t{navigations[j]}: {{ schemaName: \"{navigations[j]}\", logicalName: \"_{navigations[j].Split("_".ToCharArray())[0]}_value\", entityLogicalCollectionName: \"{collections[j]}\", entityLogicalName: \"{entities[j]}\" }},\r\n";
+                            webApiCode += $"\t\t\t{navigations[j]}: {{ b: \"{navigations[j]}\", a: \"_{navigations[j].Split("_".ToCharArray())[0]}_value\", c: \"{collections[j]}\", d: \"{entities[j]}\" }},\r\n";
                             j++;
                         }
                     }
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Owner)
                 {
-                    webApiCode += $"\t\t\tOwnerId_systemuser: {{ schemaName: \"ownerid\", logicalName: \"_ownerid_value\", entityLogicalCollectionName: \"systemusers\", entityLogicalName: \"systemuser\" }},\r\n";
-                    webApiCode += $"\t\t\tOwnerId_team: {{ schemaName: \"ownerid\", logicalName: \"_ownerid_value\", entityLogicalCollectionName: \"teams\", entityLogicalName: \"team\" }},\r\n";
+                    webApiCode += $"\t\t\tOwnerId_systemuser: {{ b: \"ownerid\", a: \"_ownerid_value\", c: \"systemusers\", d: \"systemuser\" }},\r\n";
+                    webApiCode += $"\t\t\tOwnerId_team: {{ b: \"ownerid\", a: \"_ownerid_value\", c: \"teams\", d: \"team\" }},\r\n";
                 }
                 if (!(crmAttribute.IsValidForCreate || crmAttribute.IsValidForUpdate))
                 {
                     webApiCode = webApiCode.TrimEnd(" },\r\n".ToCharArray());
-                    webApiCode += $", readOnly: true }},\r\n";
+                    webApiCode += $", r: true }},\r\n";
                 }
             }
             webApiCode = webApiCode.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
@@ -214,17 +214,17 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t\t\tObject.assign({@class}, arguments[i]);\r\n";
             webApiCode += $"\t\t\t}}\r\n";
             webApiCode += $"\t\t}}\r\n";
-            webApiCode += $"\t\tif (entity === undefined) entity = {{}};\r\n";
-            webApiCode += $"\t\tvar upsertEntity = {{}};\r\n";
+            webApiCode += $"\t\tif (e === undefined) e = {{}};\r\n";
+            webApiCode += $"\t\tvar u = {{}};\r\n";
             webApiCode += $"\t\tfor (var field in {@class}) {{\r\n";
-            webApiCode += $"\t\t\tvar logicalName = {@class}[field].logicalName;\r\n";
-            webApiCode += $"\t\t\tvar schemaName = {@class}[field].schemaName;\r\n";
-            webApiCode += $"\t\t\tvar entityLogicalCollectionName = {@class}[field].entityLogicalCollectionName;\r\n";
-            webApiCode += $"\t\t\tvar entityLogicalName = {@class}[field].entityLogicalName;\r\n";
-            webApiCode += $"\t\t\tvar readOnly = {@class}[field].readOnly;\r\n";
-            webApiCode += $"\t\t\t{@class}[field] = webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity);\r\n";
+            webApiCode += $"\t\t\tvar a = {@class}[field].a;\r\n";
+            webApiCode += $"\t\t\tvar b = {@class}[field].b;\r\n";
+            webApiCode += $"\t\t\tvar c = {@class}[field].c;\r\n";
+            webApiCode += $"\t\t\tvar d = {@class}[field].d;\r\n";
+            webApiCode += $"\t\t\tvar r = {@class}[field].r;\r\n";
+            webApiCode += $"\t\t\t{@class}[field] = webApiField(e, a, b, c, d, r, u);\r\n";
             webApiCode += $"\t\t}}\r\n";
-            webApiCode += $"\t\t{@class}.Entity = upsertEntity;\r\n";
+            webApiCode += $"\t\t{@class}.Entity = u;\r\n";
             webApiCode += $"\t\t{@class}.EntityName = \"{@class}\";\r\n";
             webApiCode += $"\t\t{@class}.EntityCollectionName = \"{GetLogicalCollectionName(@class)}\";\r\n";
             webApiCode += JsOptionSetFormCode;

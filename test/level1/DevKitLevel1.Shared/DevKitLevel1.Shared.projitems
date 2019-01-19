@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="SharedProjectFile_SccProperties">
-    <SharedProjectFile_ProjectGuid>{2c8fd2f6-c9e0-4c41-ae79-c486e4db4449}</SharedProjectFile_ProjectGuid>
+    <SharedProjectFile_ProjectGuid>D954291E-2A0B-460D-934E-DC6B0785DB48</SharedProjectFile_ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>84ca2b4a-9bd4-4ac4-a241-d2bdb91ce156</SharedGUID>
+    <SharedGUID>D954291E-2A0B-460D-934E-DC6B0785DB48</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>DevKitLevel1.Shared</Import_RootNamespace>
@@ -15,10 +15,34 @@
     <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\Account.generated.cs">
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\Contact.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\Contact.generated.cs">
+      <DependentUpon>Contact.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\DEF\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\DEF\Account.generated.cs">
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\DEF\Contact.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\DEF\Contact.generated.cs">
+      <DependentUpon>Contact.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\DEF\Lead.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\DEF\Lead.generated.cs">
+      <DependentUpon>Lead.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\Lead.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ABC\Lead.generated.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
-			<DependentUpon>Account.cs</DependentUpon>
-		</Compile>
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />

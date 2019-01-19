@@ -9,111 +9,27 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using DevKitLevel1.Shared;
-using DevKitLevel1.Shared.Entities.AccountOptionSets;
+using DevKitLevel1.Shared.Entities.ABC.LeadOptionSets;
 
-namespace DevKitLevel1.Shared.Entities.AccountOptionSets
+namespace DevKitLevel1.Shared.Entities.ABC.LeadOptionSets
 {
-    public enum AccountCategoryCode
-    {
-        /// <summary>
-        /// Preferred_Customer = 1
-        /// </summary>
-        Preferred_Customer = 1,
-        /// <summary>
-        /// Standard = 2
-        /// </summary>
-        Standard = 2
-    }
-
-    public enum AccountClassificationCode
-    {
-        /// <summary>
-        /// Default_Value = 1
-        /// </summary>
-        Default_Value = 1
-    }
-
-    public enum AccountRatingCode
-    {
-        /// <summary>
-        /// Default_Value = 1
-        /// </summary>
-        Default_Value = 1
-    }
-
     public enum Address1_AddressTypeCode
     {
         /// <summary>
-        /// Bill_To = 1
+        /// Default_Value = 1
         /// </summary>
-        Bill_To = 1,
-        /// <summary>
-        /// Ship_To = 2
-        /// </summary>
-        Ship_To = 2,
-        /// <summary>
-        /// Primary = 3
-        /// </summary>
-        Primary = 3,
-        /// <summary>
-        /// Other = 4
-        /// </summary>
-        Other = 4
-    }
-
-    public enum Address1_FreightTermsCode
-    {
-        /// <summary>
-        /// FOB = 1
-        /// </summary>
-        FOB = 1,
-        /// <summary>
-        /// No_Charge = 2
-        /// </summary>
-        No_Charge = 2
+        Default_Value = 1
     }
 
     public enum Address1_ShippingMethodCode
     {
         /// <summary>
-        /// Airborne = 1
-        /// </summary>
-        Airborne = 1,
-        /// <summary>
-        /// DHL = 2
-        /// </summary>
-        DHL = 2,
-        /// <summary>
-        /// FedEx = 3
-        /// </summary>
-        FedEx = 3,
-        /// <summary>
-        /// UPS = 4
-        /// </summary>
-        UPS = 4,
-        /// <summary>
-        /// Postal_Mail = 5
-        /// </summary>
-        Postal_Mail = 5,
-        /// <summary>
-        /// Full_Load = 6
-        /// </summary>
-        Full_Load = 6,
-        /// <summary>
-        /// Will_Call = 7
-        /// </summary>
-        Will_Call = 7
-    }
-
-    public enum Address2_AddressTypeCode
-    {
-        /// <summary>
         /// Default_Value = 1
         /// </summary>
         Default_Value = 1
     }
 
-    public enum Address2_FreightTermsCode
+    public enum Address2_AddressTypeCode
     {
         /// <summary>
         /// Default_Value = 1
@@ -129,72 +45,24 @@ namespace DevKitLevel1.Shared.Entities.AccountOptionSets
         Default_Value = 1
     }
 
-    public enum BusinessTypeCode
+    public enum BudgetStatus
     {
         /// <summary>
-        /// Default_Value = 1
+        /// No_Committed_Budget = 0
         /// </summary>
-        Default_Value = 1
-    }
-
-    public enum CustomerSizeCode
-    {
+        No_Committed_Budget = 0,
         /// <summary>
-        /// Default_Value = 1
+        /// May_Buy = 1
         /// </summary>
-        Default_Value = 1
-    }
-
-    public enum CustomerTypeCode
-    {
+        May_Buy = 1,
         /// <summary>
-        /// Competitor = 1
+        /// Can_Buy = 2
         /// </summary>
-        Competitor = 1,
+        Can_Buy = 2,
         /// <summary>
-        /// Consultant = 2
+        /// Will_Buy = 3
         /// </summary>
-        Consultant = 2,
-        /// <summary>
-        /// Customer = 3
-        /// </summary>
-        Customer = 3,
-        /// <summary>
-        /// Investor = 4
-        /// </summary>
-        Investor = 4,
-        /// <summary>
-        /// Partner = 5
-        /// </summary>
-        Partner = 5,
-        /// <summary>
-        /// Influencer = 6
-        /// </summary>
-        Influencer = 6,
-        /// <summary>
-        /// Press = 7
-        /// </summary>
-        Press = 7,
-        /// <summary>
-        /// Prospect = 8
-        /// </summary>
-        Prospect = 8,
-        /// <summary>
-        /// Reseller = 9
-        /// </summary>
-        Reseller = 9,
-        /// <summary>
-        /// Supplier = 10
-        /// </summary>
-        Supplier = 10,
-        /// <summary>
-        /// Vendor = 11
-        /// </summary>
-        Vendor = 11,
-        /// <summary>
-        /// Other = 12
-        /// </summary>
-        Other = 12
+        Will_Buy = 3
     }
 
     public enum IndustryCode
@@ -333,92 +201,96 @@ namespace DevKitLevel1.Shared.Entities.AccountOptionSets
         Wholesale = 33
     }
 
-    public enum OwnershipCode
+    public enum InitialCommunication
     {
         /// <summary>
-        /// Public = 1
+        /// Contacted = 0
         /// </summary>
-        Public = 1,
+        Contacted = 0,
         /// <summary>
-        /// Private = 2
+        /// Not_Contacted = 1
         /// </summary>
-        Private = 2,
-        /// <summary>
-        /// Subsidiary = 3
-        /// </summary>
-        Subsidiary = 3,
-        /// <summary>
-        /// Other = 4
-        /// </summary>
-        Other = 4
+        Not_Contacted = 1
     }
 
-    public enum PaymentTermsCode
+    public enum LeadQualityCode
     {
         /// <summary>
-        /// Net_30 = 1
+        /// Hot = 1
         /// </summary>
-        Net_30 = 1,
+        Hot = 1,
         /// <summary>
-        /// _2_10_Net_30 = 2
+        /// Warm = 2
         /// </summary>
-        _2_10_Net_30 = 2,
+        Warm = 2,
         /// <summary>
-        /// Net_45 = 3
+        /// Cold = 3
         /// </summary>
-        Net_45 = 3,
-        /// <summary>
-        /// Net_60 = 4
-        /// </summary>
-        Net_60 = 4
+        Cold = 3
     }
 
-    public enum PreferredAppointmentDayCode
+    public enum LeadSourceCode
     {
         /// <summary>
-        /// Sunday = 0
+        /// Advertisement = 1
         /// </summary>
-        Sunday = 0,
+        Advertisement = 1,
         /// <summary>
-        /// Monday = 1
+        /// Employee_Referral = 2
         /// </summary>
-        Monday = 1,
+        Employee_Referral = 2,
         /// <summary>
-        /// Tuesday = 2
+        /// External_Referral = 3
         /// </summary>
-        Tuesday = 2,
+        External_Referral = 3,
         /// <summary>
-        /// Wednesday = 3
+        /// Partner = 4
         /// </summary>
-        Wednesday = 3,
+        Partner = 4,
         /// <summary>
-        /// Thursday = 4
+        /// Public_Relations = 5
         /// </summary>
-        Thursday = 4,
+        Public_Relations = 5,
         /// <summary>
-        /// Friday = 5
+        /// Seminar = 6
         /// </summary>
-        Friday = 5,
+        Seminar = 6,
         /// <summary>
-        /// Saturday = 6
+        /// Trade_Show = 7
         /// </summary>
-        Saturday = 6
+        Trade_Show = 7,
+        /// <summary>
+        /// Web = 8
+        /// </summary>
+        Web = 8,
+        /// <summary>
+        /// Word_of_Mouth = 9
+        /// </summary>
+        Word_of_Mouth = 9,
+        /// <summary>
+        /// Other = 10
+        /// </summary>
+        Other = 10
     }
 
-    public enum PreferredAppointmentTimeCode
+    public enum Need
     {
         /// <summary>
-        /// Morning = 1
+        /// Must_have = 0
         /// </summary>
-        Morning = 1,
+        Must_have = 0,
         /// <summary>
-        /// Afternoon = 2
+        /// Should_have = 1
         /// </summary>
-        Afternoon = 2,
+        Should_have = 1,
         /// <summary>
-        /// Evening = 3
+        /// Good_to_have = 2
         /// </summary>
-        Evening = 3
+        Good_to_have = 2,
+        /// <summary>
+        /// No_need = 3
+        /// </summary>
+        No_need = 3
     }
 
     public enum PreferredContactMethodCode
@@ -445,7 +317,63 @@ namespace DevKitLevel1.Shared.Entities.AccountOptionSets
         Mail = 5
     }
 
-    public enum ShippingMethodCode
+    public enum PriorityCode
+    {
+        /// <summary>
+        /// Default_Value = 1
+        /// </summary>
+        Default_Value = 1
+    }
+
+    public enum PurchaseProcess
+    {
+        /// <summary>
+        /// Individual = 0
+        /// </summary>
+        Individual = 0,
+        /// <summary>
+        /// Committee = 1
+        /// </summary>
+        Committee = 1,
+        /// <summary>
+        /// Unknown = 2
+        /// </summary>
+        Unknown = 2
+    }
+
+    public enum PurchaseTimeFrame
+    {
+        /// <summary>
+        /// Immediate = 0
+        /// </summary>
+        Immediate = 0,
+        /// <summary>
+        /// This_Quarter = 1
+        /// </summary>
+        This_Quarter = 1,
+        /// <summary>
+        /// Next_Quarter = 2
+        /// </summary>
+        Next_Quarter = 2,
+        /// <summary>
+        /// This_Year = 3
+        /// </summary>
+        This_Year = 3,
+        /// <summary>
+        /// Unknown = 4
+        /// </summary>
+        Unknown = 4
+    }
+
+    public enum SalesStage
+    {
+        /// <summary>
+        /// Qualify = 0
+        /// </summary>
+        Qualify = 0
+    }
+
+    public enum SalesStageCode
     {
         /// <summary>
         /// Default_Value = 1
@@ -456,47 +384,59 @@ namespace DevKitLevel1.Shared.Entities.AccountOptionSets
     public enum StateCode
     {
         /// <summary>
-        /// Active = 0
+        /// Open = 0
         /// </summary>
-        Active = 0,
+        Open = 0,
         /// <summary>
-        /// Inactive = 1
+        /// Qualified = 1
         /// </summary>
-        Inactive = 1
+        Qualified = 1,
+        /// <summary>
+        /// Disqualified = 2
+        /// </summary>
+        Disqualified = 2
     }
 
     public enum StatusCode
     {
         /// <summary>
-        /// Active = 1
+        /// New = 1
         /// </summary>
-        Active = 1,
+        New = 1,
         /// <summary>
-        /// Inactive = 2
+        /// Contacted = 2
         /// </summary>
-        Inactive = 2
-    }
-
-    public enum TerritoryCode
-    {
+        Contacted = 2,
         /// <summary>
-        /// Default_Value = 1
+        /// Qualified = 3
         /// </summary>
-        Default_Value = 1
+        Qualified = 3,
+        /// <summary>
+        /// Lost = 4
+        /// </summary>
+        Lost = 4,
+        /// <summary>
+        /// Cannot_Contact = 5
+        /// </summary>
+        Cannot_Contact = 5,
+        /// <summary>
+        /// No_Longer_Interested = 6
+        /// </summary>
+        No_Longer_Interested = 6,
+        /// <summary>
+        /// Canceled = 7
+        /// </summary>
+        Canceled = 7
     }
 }
 
-namespace DevKitLevel1.Shared.Entities
+namespace DevKitLevel1.Shared.Entities.ABC
 {
-    public partial class Account : EntityBase
+    public partial class Lead : EntityBase
     {
         public struct Fields
         {
-            public const string AccountCategoryCode = "accountcategorycode";
-            public const string AccountClassificationCode = "accountclassificationcode";
             public const string AccountId = "accountid";
-            public const string AccountNumber = "accountnumber";
-            public const string AccountRatingCode = "accountratingcode";
             public const string Address1_AddressId = "address1_addressid";
             public const string Address1_AddressTypeCode = "address1_addresstypecode";
             public const string Address1_City = "address1_city";
@@ -504,7 +444,6 @@ namespace DevKitLevel1.Shared.Entities
             public const string Address1_Country = "address1_country";
             public const string Address1_County = "address1_county";
             public const string Address1_Fax = "address1_fax";
-            public const string Address1_FreightTermsCode = "address1_freighttermscode";
             public const string Address1_Latitude = "address1_latitude";
             public const string Address1_Line1 = "address1_line1";
             public const string Address1_Line2 = "address1_line2";
@@ -513,7 +452,6 @@ namespace DevKitLevel1.Shared.Entities
             public const string Address1_Name = "address1_name";
             public const string Address1_PostalCode = "address1_postalcode";
             public const string Address1_PostOfficeBox = "address1_postofficebox";
-            public const string Address1_PrimaryContactName = "address1_primarycontactname";
             public const string Address1_ShippingMethodCode = "address1_shippingmethodcode";
             public const string Address1_StateOrProvince = "address1_stateorprovince";
             public const string Address1_Telephone1 = "address1_telephone1";
@@ -528,7 +466,6 @@ namespace DevKitLevel1.Shared.Entities
             public const string Address2_Country = "address2_country";
             public const string Address2_County = "address2_county";
             public const string Address2_Fax = "address2_fax";
-            public const string Address2_FreightTermsCode = "address2_freighttermscode";
             public const string Address2_Latitude = "address2_latitude";
             public const string Address2_Line1 = "address2_line1";
             public const string Address2_Line2 = "address2_line2";
@@ -537,7 +474,6 @@ namespace DevKitLevel1.Shared.Entities
             public const string Address2_Name = "address2_name";
             public const string Address2_PostalCode = "address2_postalcode";
             public const string Address2_PostOfficeBox = "address2_postofficebox";
-            public const string Address2_PrimaryContactName = "address2_primarycontactname";
             public const string Address2_ShippingMethodCode = "address2_shippingmethodcode";
             public const string Address2_StateOrProvince = "address2_stateorprovince";
             public const string Address2_Telephone1 = "address2_telephone1";
@@ -545,26 +481,20 @@ namespace DevKitLevel1.Shared.Entities
             public const string Address2_Telephone3 = "address2_telephone3";
             public const string Address2_UPSZone = "address2_upszone";
             public const string Address2_UTCOffset = "address2_utcoffset";
-            public const string Aging30 = "aging30";
-            public const string Aging30_Base = "aging30_base";
-            public const string Aging60 = "aging60";
-            public const string Aging60_Base = "aging60_base";
-            public const string Aging90 = "aging90";
-            public const string Aging90_Base = "aging90_base";
-            public const string BusinessTypeCode = "businesstypecode";
+            public const string BudgetAmount = "budgetamount";
+            public const string BudgetAmount_Base = "budgetamount_base";
+            public const string BudgetStatus = "budgetstatus";
+            public const string CampaignId = "campaignid";
+            public const string CompanyName = "companyname";
+            public const string ConfirmInterest = "confirminterest";
+            public const string ContactId = "contactid";
             public const string CreatedBy = "createdby";
-            public const string CreatedByExternalParty = "createdbyexternalparty";
             public const string CreatedOn = "createdon";
             public const string CreatedOnBehalfBy = "createdonbehalfby";
-            public const string CreditLimit = "creditlimit";
-            public const string CreditLimit_Base = "creditlimit_base";
-            public const string CreditOnHold = "creditonhold";
-            public const string CustomerSizeCode = "customersizecode";
-            public const string CustomerTypeCode = "customertypecode";
-            public const string DefaultPriceLevelId = "defaultpricelevelid";
+            public const string CustomerId = "customerid";
+            public const string DecisionMaker = "decisionmaker";
             public const string Description = "description";
             public const string DoNotBulkEMail = "donotbulkemail";
-            public const string DoNotBulkPostalMail = "donotbulkpostalmail";
             public const string DoNotEMail = "donotemail";
             public const string DoNotFax = "donotfax";
             public const string DoNotPhone = "donotphone";
@@ -574,223 +504,144 @@ namespace DevKitLevel1.Shared.Entities
             public const string EMailAddress2 = "emailaddress2";
             public const string EMailAddress3 = "emailaddress3";
             public const string EntityImageId = "entityimageid";
+            public const string EstimatedAmount = "estimatedamount";
+            public const string EstimatedAmount_Base = "estimatedamount_base";
+            public const string EstimatedCloseDate = "estimatedclosedate";
+            public const string EstimatedValue = "estimatedvalue";
+            public const string EvaluateFit = "evaluatefit";
             public const string ExchangeRate = "exchangerate";
             public const string Fax = "fax";
+            public const string FirstName = "firstname";
             public const string FollowEmail = "followemail";
-            public const string FtpSiteURL = "ftpsiteurl";
+            public const string FullName = "fullname";
             public const string ImportSequenceNumber = "importsequencenumber";
             public const string IndustryCode = "industrycode";
+            public const string InitialCommunication = "initialcommunication";
+            public const string IsAutoCreate = "isautocreate";
             public const string IsPrivate = "isprivate";
+            public const string JobTitle = "jobtitle";
+            public const string LastName = "lastname";
             public const string LastOnHoldTime = "lastonholdtime";
             public const string LastUsedInCampaign = "lastusedincampaign";
-            public const string MarketCap = "marketcap";
-            public const string MarketCap_Base = "marketcap_base";
-            public const string MarketingOnly = "marketingonly";
+            public const string LeadId = "leadid";
+            public const string LeadQualityCode = "leadqualitycode";
+            public const string LeadSourceCode = "leadsourcecode";
             public const string MasterId = "masterid";
             public const string Merged = "merged";
+            public const string MiddleName = "middlename";
+            public const string MobilePhone = "mobilephone";
             public const string ModifiedBy = "modifiedby";
-            public const string ModifiedByExternalParty = "modifiedbyexternalparty";
             public const string ModifiedOn = "modifiedon";
             public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
-            public const string Name = "name";
+            public const string msdyn_gdproptout = "msdyn_gdproptout";
+            public const string Need = "need";
             public const string NumberOfEmployees = "numberofemployees";
             public const string OnHoldTime = "onholdtime";
-            public const string OpenDeals = "opendeals";
-            public const string OpenDeals_Date = "opendeals_date";
-            public const string OpenDeals_State = "opendeals_state";
-            public const string OpenRevenue = "openrevenue";
-            public const string OpenRevenue_Base = "openrevenue_base";
-            public const string OpenRevenue_Date = "openrevenue_date";
-            public const string OpenRevenue_State = "openrevenue_state";
-            public const string OriginatingLeadId = "originatingleadid";
+            public const string OriginatingCaseId = "originatingcaseid";
             public const string OverriddenCreatedOn = "overriddencreatedon";
             public const string OwnerId = "ownerid";
-            public const string OwnershipCode = "ownershipcode";
             public const string OwningBusinessUnit = "owningbusinessunit";
             public const string OwningTeam = "owningteam";
             public const string OwningUser = "owninguser";
+            public const string Pager = "pager";
             public const string ParentAccountId = "parentaccountid";
+            public const string ParentContactId = "parentcontactid";
             public const string ParticipatesInWorkflow = "participatesinworkflow";
-            public const string PaymentTermsCode = "paymenttermscode";
-            public const string PreferredAppointmentDayCode = "preferredappointmentdaycode";
-            public const string PreferredAppointmentTimeCode = "preferredappointmenttimecode";
             public const string PreferredContactMethodCode = "preferredcontactmethodcode";
-            public const string PreferredEquipmentId = "preferredequipmentid";
-            public const string PreferredServiceId = "preferredserviceid";
-            public const string PreferredSystemUserId = "preferredsystemuserid";
-            public const string PrimaryContactId = "primarycontactid";
-            public const string PrimarySatoriId = "primarysatoriid";
-            public const string PrimaryTwitterId = "primarytwitterid";
+            public const string PriorityCode = "prioritycode";
             public const string ProcessId = "processid";
+            public const string PurchaseProcess = "purchaseprocess";
+            public const string PurchaseTimeFrame = "purchasetimeframe";
+            public const string QualificationComments = "qualificationcomments";
+            public const string QualifyingOpportunityId = "qualifyingopportunityid";
+            public const string RelatedObjectId = "relatedobjectid";
             public const string Revenue = "revenue";
             public const string Revenue_Base = "revenue_base";
-            public const string SharesOutstanding = "sharesoutstanding";
-            public const string ShippingMethodCode = "shippingmethodcode";
+            public const string SalesStage = "salesstage";
+            public const string SalesStageCode = "salesstagecode";
+            public const string Salutation = "salutation";
+            public const string ScheduleFollowUp_Prospect = "schedulefollowup_prospect";
+            public const string ScheduleFollowUp_Qualify = "schedulefollowup_qualify";
             public const string SIC = "sic";
             public const string SLAId = "slaid";
             public const string SLAInvokedId = "slainvokedid";
             public const string StageId = "stageid";
             public const string StateCode = "statecode";
             public const string StatusCode = "statuscode";
-            public const string StockExchange = "stockexchange";
+            public const string Subject = "subject";
             public const string TeamsFollowed = "teamsfollowed";
             public const string Telephone1 = "telephone1";
             public const string Telephone2 = "telephone2";
             public const string Telephone3 = "telephone3";
-            public const string TerritoryCode = "territorycode";
-            public const string TerritoryId = "territoryid";
-            public const string TickerSymbol = "tickersymbol";
             public const string TimeSpentByMeOnEmailAndMeetings = "timespentbymeonemailandmeetings";
             public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
             public const string TransactionCurrencyId = "transactioncurrencyid";
             public const string TraversedPath = "traversedpath";
             public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
             public const string VersionNumber = "versionnumber";
-            public const string WebSiteURL = "websiteurl";
-            public const string YomiName = "yominame";
+            public const string WebSiteUrl = "websiteurl";
+            public const string YomiCompanyName = "yomicompanyname";
+            public const string YomiFirstName = "yomifirstname";
+            public const string YomiFullName = "yomifullname";
+            public const string YomiLastName = "yomilastname";
+            public const string YomiMiddleName = "yomimiddlename";
         }
 
-        public const string EntityLogicalName = "account";
+        public const string EntityLogicalName = "lead";
 
-        public const int EntityTypeCode = 1;
+        public const int EntityTypeCode = 4;
 
         [DebuggerNonUserCode()]
-        public Account()
+        public Lead()
         {
             Entity = new Entity(EntityLogicalName);
             PreEntity = CloneThisEntity(Entity);
         }
 
         [DebuggerNonUserCode()]
-        public Account(Guid AccountId)
+        public Lead(Guid LeadId)
         {
-            Entity = new Entity(EntityLogicalName, AccountId);
+            Entity = new Entity(EntityLogicalName, LeadId);
             PreEntity = CloneThisEntity(Entity);
         }
 
         [DebuggerNonUserCode()]
-        public Account(string keyName, object keyValue)
+        public Lead(string keyName, object keyValue)
         {
             Entity = new Entity(EntityLogicalName, keyName, keyValue);
             PreEntity = CloneThisEntity(Entity);
         }
 
         [DebuggerNonUserCode()]
-        public Account(Entity entity)
+        public Lead(Entity entity)
         {
             Entity = entity;
             PreEntity = CloneThisEntity(Entity);
         }
 
         [DebuggerNonUserCode()]
-        public Account(Entity entity, Entity preEntity)
+        public Lead(Entity entity, Entity preEntity)
         {
             Entity = entity;
             PreEntity = preEntity;
         }
 
         [DebuggerNonUserCode()]
-        public Account(KeyAttributeCollection keys)
+        public Lead(KeyAttributeCollection keys)
         {
             Entity = new Entity(EntityLogicalName, keys);
             PreEntity = CloneThisEntity(Entity);
         }
 
         /// <summary>
-        /// <para>Select a category to indicate whether the customer account is standard or preferred.</para>
-        /// <para>Picklist</para>
-        /// <para>Category</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public AccountCategoryCode? AccountCategoryCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AccountCategoryCode);
-                if (value == null) return null;
-                return (AccountCategoryCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.AccountCategoryCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.AccountCategoryCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria.</para>
-        /// <para>Picklist</para>
-        /// <para>Classification</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public AccountClassificationCode? AccountClassificationCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AccountClassificationCode);
-                if (value == null) return null;
-                return (AccountClassificationCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.AccountClassificationCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.AccountClassificationCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Unique identifier of the account.</para>
-        /// <para>Primary Key - Uniqueidentifier</para>
+        /// <para>Unique identifier of the account with which the lead is associated.</para>
+        /// <para>ReadOnly - Lookup</para>
         /// <para>Account</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public Guid AccountId
+        public EntityReference AccountId
         {
-            get { return Id; }
-            set
-            {
-                Entity.Attributes[Fields.AccountId] = value;
-                Entity.Id = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Type an ID number or code for the account to quickly search and identify the account in system views.</para>
-        /// <para>String - MaxLength: 20</para>
-        /// <para>Account Number</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string AccountNumber
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.AccountNumber); }
-            set { Entity.Attributes[Fields.AccountNumber] = value; }
-        }
-
-        /// <summary>
-        /// <para>Select a rating to indicate the value of the customer account.</para>
-        /// <para>Picklist</para>
-        /// <para>Account Rating</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public AccountRatingCode? AccountRatingCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AccountRatingCode);
-                if (value == null) return null;
-                return (AccountRatingCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.AccountRatingCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.AccountRatingCode] = null;
-            }
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.AccountId); }
         }
 
         /// <summary>
@@ -831,7 +682,7 @@ namespace DevKitLevel1.Shared.Entities
         /// <summary>
         /// <para>Type the city for the primary address.</para>
         /// <para>String - MaxLength: 80</para>
-        /// <para>Address 1: City</para>
+        /// <para>City</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Address1_City
@@ -854,7 +705,7 @@ namespace DevKitLevel1.Shared.Entities
         /// <summary>
         /// <para>Type the country or region for the primary address.</para>
         /// <para>String - MaxLength: 80</para>
-        /// <para>Address 1: Country/Region</para>
+        /// <para>Country/Region</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Address1_Country
@@ -888,29 +739,6 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the freight terms for the primary address to make sure shipping orders are processed correctly.</para>
-        /// <para>Picklist</para>
-        /// <para>Address 1: Freight Terms</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public Address1_FreightTermsCode? Address1_FreightTermsCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address1_FreightTermsCode);
-                if (value == null) return null;
-                return (Address1_FreightTermsCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.Address1_FreightTermsCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.Address1_FreightTermsCode] = null;
-            }
-        }
-
-        /// <summary>
         /// <para>Type the latitude value for the primary address for use in mapping and other applications.</para>
         /// <para>Double - MinValue: -90 - MaxValue: 90</para>
         /// <para>Address 1: Latitude</para>
@@ -925,7 +753,7 @@ namespace DevKitLevel1.Shared.Entities
         /// <summary>
         /// <para>Type the first line of the primary address.</para>
         /// <para>String - MaxLength: 250</para>
-        /// <para>Address 1: Street 1</para>
+        /// <para>Street 1</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Address1_Line1
@@ -937,7 +765,7 @@ namespace DevKitLevel1.Shared.Entities
         /// <summary>
         /// <para>Type the second line of the primary address.</para>
         /// <para>String - MaxLength: 250</para>
-        /// <para>Address 1: Street 2</para>
+        /// <para>Street 2</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Address1_Line2
@@ -949,7 +777,7 @@ namespace DevKitLevel1.Shared.Entities
         /// <summary>
         /// <para>Type the third line of the primary address.</para>
         /// <para>String - MaxLength: 250</para>
-        /// <para>Address 1: Street 3</para>
+        /// <para>Street 3</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Address1_Line3
@@ -972,7 +800,7 @@ namespace DevKitLevel1.Shared.Entities
 
         /// <summary>
         /// <para>Type a descriptive name for the primary address, such as Corporate Headquarters.</para>
-        /// <para>String - MaxLength: 200</para>
+        /// <para>String - MaxLength: 100</para>
         /// <para>Address 1: Name</para>
         /// </summary>
         [DebuggerNonUserCode()]
@@ -985,7 +813,7 @@ namespace DevKitLevel1.Shared.Entities
         /// <summary>
         /// <para>Type the ZIP Code or postal code for the primary address.</para>
         /// <para>String - MaxLength: 20</para>
-        /// <para>Address 1: ZIP/Postal Code</para>
+        /// <para>ZIP/Postal Code</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Address1_PostalCode
@@ -1004,18 +832,6 @@ namespace DevKitLevel1.Shared.Entities
         {
             get { return Entity.GetAttributeValue<string>(Fields.Address1_PostOfficeBox); }
             set { Entity.Attributes[Fields.Address1_PostOfficeBox] = value; }
-        }
-
-        /// <summary>
-        /// <para>Type the name of the main contact at the account's primary address.</para>
-        /// <para>String - MaxLength: 100</para>
-        /// <para>Address 1: Primary Contact Name</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string Address1_PrimaryContactName
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.Address1_PrimaryContactName); }
-            set { Entity.Attributes[Fields.Address1_PrimaryContactName] = value; }
         }
 
         /// <summary>
@@ -1044,7 +860,7 @@ namespace DevKitLevel1.Shared.Entities
         /// <summary>
         /// <para>Type the state or province of the primary address.</para>
         /// <para>String - MaxLength: 50</para>
-        /// <para>Address 1: State/Province</para>
+        /// <para>State/Province</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Address1_StateOrProvince
@@ -1056,7 +872,7 @@ namespace DevKitLevel1.Shared.Entities
         /// <summary>
         /// <para>Type the main phone number associated with the primary address.</para>
         /// <para>String - MaxLength: 50</para>
-        /// <para>Address Phone</para>
+        /// <para>Address 1: Telephone 1</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Address1_Telephone1
@@ -1208,29 +1024,6 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the freight terms for the secondary address to make sure shipping orders are processed correctly.</para>
-        /// <para>Picklist</para>
-        /// <para>Address 2: Freight Terms</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public Address2_FreightTermsCode? Address2_FreightTermsCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address2_FreightTermsCode);
-                if (value == null) return null;
-                return (Address2_FreightTermsCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.Address2_FreightTermsCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.Address2_FreightTermsCode] = null;
-            }
-        }
-
-        /// <summary>
         /// <para>Type the latitude value for the secondary address for use in mapping and other applications.</para>
         /// <para>Double - MinValue: -90 - MaxValue: 90</para>
         /// <para>Address 2: Latitude</para>
@@ -1292,7 +1085,7 @@ namespace DevKitLevel1.Shared.Entities
 
         /// <summary>
         /// <para>Type a descriptive name for the secondary address, such as Corporate Headquarters.</para>
-        /// <para>String - MaxLength: 200</para>
+        /// <para>String - MaxLength: 100</para>
         /// <para>Address 2: Name</para>
         /// </summary>
         [DebuggerNonUserCode()]
@@ -1324,18 +1117,6 @@ namespace DevKitLevel1.Shared.Entities
         {
             get { return Entity.GetAttributeValue<string>(Fields.Address2_PostOfficeBox); }
             set { Entity.Attributes[Fields.Address2_PostOfficeBox] = value; }
-        }
-
-        /// <summary>
-        /// <para>Type the name of the main contact at the account's secondary address.</para>
-        /// <para>String - MaxLength: 100</para>
-        /// <para>Address 2: Primary Contact Name</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string Address2_PrimaryContactName
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.Address2_PrimaryContactName); }
-            set { Entity.Attributes[Fields.Address2_PrimaryContactName] = value; }
         }
 
         /// <summary>
@@ -1434,122 +1215,112 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>For system use only.</para>
-        /// <para>ReadOnly - Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
-        /// <para>Aging 30</para>
+        /// <para>Information about the budget amount of the lead's company or organization.</para>
+        /// <para>Money - MinValue: 0 - MaxValue: 1,000,000,000,000</para>
+        /// <para>Budget Amount</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public decimal? Aging30
+        public decimal? BudgetAmount
         {
             get
             {
-                var value = Entity.GetAttributeValue<Money>(Fields.Aging30);
+                var value = Entity.GetAttributeValue<Money>(Fields.BudgetAmount);
                 if (value == null) return null;
                 return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>The base currency equivalent of the aging 30 field.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Aging 30 (Base)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? Aging30_Base
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.Aging30_Base);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>For system use only.</para>
-        /// <para>ReadOnly - Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
-        /// <para>Aging 60</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? Aging60
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.Aging60);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>The base currency equivalent of the aging 60 field.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Aging 60 (Base)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? Aging60_Base
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.Aging60_Base);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>For system use only.</para>
-        /// <para>ReadOnly - Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
-        /// <para>Aging 90</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? Aging90
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.Aging90);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>The base currency equivalent of the aging 90 field.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Aging 90 (Base)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? Aging90_Base
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.Aging90_Base);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Select the legal designation or other business type of the account for contracts or reporting purposes.</para>
-        /// <para>Picklist</para>
-        /// <para>Business Type</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public BusinessTypeCode? BusinessTypeCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.BusinessTypeCode);
-                if (value == null) return null;
-                return (BusinessTypeCode)value.Value;
             }
             set
             {
                 if (value.HasValue)
-                    Entity.Attributes[Fields.BusinessTypeCode] = new OptionSetValue((int)value.Value);
+                    Entity.Attributes[Fields.BudgetAmount] = new Money(value.Value);
                 else
-                    Entity.Attributes[Fields.BusinessTypeCode] = null;
+                    Entity.Attributes[Fields.BudgetAmount] = null;
             }
+        }
+
+        /// <summary>
+        /// <para>Value of the Budget Amount in base currency.</para>
+        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
+        /// <para>Budget Amount (Base)</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public decimal? BudgetAmount_Base
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<Money>(Fields.BudgetAmount_Base);
+                if (value == null) return null;
+                return value.Value;
+            }
+        }
+
+        /// <summary>
+        /// <para>Information about the budget status of the lead's company or organization.</para>
+        /// <para>Picklist</para>
+        /// <para>Budget</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public BudgetStatus? BudgetStatus
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.BudgetStatus);
+                if (value == null) return null;
+                return (BudgetStatus)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.BudgetStatus] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.BudgetStatus] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Choose the campaign that the lead was generated from to track the effectiveness of marketing campaigns and identify  communications received by the lead.</para>
+        /// <para>Lookup</para>
+        /// <para>Source Campaign</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public EntityReference CampaignId
+        {
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.CampaignId); }
+            set { Entity.Attributes[Fields.CampaignId] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the name of the company associated with the lead. This becomes the account name when the lead is qualified and converted to a customer account.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Company Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string CompanyName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.CompanyName); }
+            set { Entity.Attributes[Fields.CompanyName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Select whether the lead confirmed interest in your offerings. This helps in determining the lead quality.</para>
+        /// <para>Boolean</para>
+        /// <para>Confirm Interest</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public bool? ConfirmInterest
+        {
+            get { return Entity.GetAttributeValue<bool?>(Fields.ConfirmInterest); }
+            set { Entity.Attributes[Fields.ConfirmInterest] = value; }
+        }
+
+        /// <summary>
+        /// <para>Unique identifier of the contact with which the lead is associated.</para>
+        /// <para>ReadOnly - Lookup</para>
+        /// <para>Contact</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public EntityReference ContactId
+        {
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.ContactId); }
         }
 
         /// <summary>
@@ -1564,18 +1335,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows the external party who created the record.</para>
-        /// <para>ReadOnly - Lookup</para>
-        /// <para>Created By (External Party)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public EntityReference CreatedByExternalParty
-        {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.CreatedByExternalParty); }
-        }
-
-        /// <summary>
-        /// <para>Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options.</para>
+        /// <para>Date and time when the record was created.</para>
         /// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
         /// <para>Created On</para>
         /// </summary>
@@ -1597,116 +1357,31 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer.</para>
-        /// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
-        /// <para>Credit Limit</para>
+        /// <para>Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities.</para>
+        /// <para>Customer</para>
+        /// <para>Customer</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public decimal? CreditLimit
+        public EntityReference CustomerId
         {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.CreditLimit);
-                if (value == null) return null;
-                return value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.CreditLimit] = new Money(value.Value);
-                else
-                    Entity.Attributes[Fields.CreditLimit] = null;
-            }
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.CustomerId); }
+            set { Entity.Attributes[Fields.CustomerId] = value; }
         }
 
         /// <summary>
-        /// <para>Shows the credit limit converted to the system's default base currency for reporting purposes.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Credit Limit (Base)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? CreditLimit_Base
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.CreditLimit_Base);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer.</para>
+        /// <para>Select whether your notes include information about who makes the purchase decisions at the lead's company.</para>
         /// <para>Boolean</para>
-        /// <para>Credit Hold</para>
+        /// <para>Decision Maker?</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public bool? CreditOnHold
+        public bool? DecisionMaker
         {
-            get { return Entity.GetAttributeValue<bool?>(Fields.CreditOnHold); }
-            set { Entity.Attributes[Fields.CreditOnHold] = value; }
+            get { return Entity.GetAttributeValue<bool?>(Fields.DecisionMaker); }
+            set { Entity.Attributes[Fields.DecisionMaker] = value; }
         }
 
         /// <summary>
-        /// <para>Select the size category or range of the account for segmentation and reporting purposes.</para>
-        /// <para>Picklist</para>
-        /// <para>Customer Size</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public CustomerSizeCode? CustomerSizeCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.CustomerSizeCode);
-                if (value == null) return null;
-                return (CustomerSizeCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.CustomerSizeCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.CustomerSizeCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Select the category that best describes the relationship between the account and your organization.</para>
-        /// <para>Picklist</para>
-        /// <para>Relationship Type</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public CustomerTypeCode? CustomerTypeCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.CustomerTypeCode);
-                if (value == null) return null;
-                return (CustomerTypeCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.CustomerTypeCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.CustomerTypeCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Choose the default price list associated with the account to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders.</para>
-        /// <para>Lookup</para>
-        /// <para>Price List</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public EntityReference DefaultPriceLevelId
-        {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.DefaultPriceLevelId); }
-            set { Entity.Attributes[Fields.DefaultPriceLevelId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Type additional information to describe the account, such as an excerpt from the company's website.</para>
+        /// <para>Type additional information to describe the lead, such as an excerpt from the company's website.</para>
         /// <para>Memo - MaxLength: 2000</para>
         /// <para>Description</para>
         /// </summary>
@@ -1718,7 +1393,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email.</para>
+        /// <para>Select whether the lead accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the lead can be added to marketing lists, but will be excluded from the email.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Bulk Emails</para>
         /// </summary>
@@ -1730,19 +1405,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail.</para>
-        /// <para>Boolean</para>
-        /// <para>Do not allow Bulk Mails</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public bool? DoNotBulkPostalMail
-        {
-            get { return Entity.GetAttributeValue<bool?>(Fields.DoNotBulkPostalMail); }
-            set { Entity.Attributes[Fields.DoNotBulkPostalMail] = value; }
-        }
-
-        /// <summary>
-        /// <para>Select whether the account allows direct email sent from Microsoft Dynamics 365.</para>
+        /// <para>Select whether the lead allows direct email sent from Microsoft Dynamics 365.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Emails</para>
         /// </summary>
@@ -1754,7 +1417,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns.</para>
+        /// <para>Select whether the lead allows faxes.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Faxes</para>
         /// </summary>
@@ -1766,7 +1429,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns.</para>
+        /// <para>Select whether the lead allows phone calls.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Phone Calls</para>
         /// </summary>
@@ -1778,7 +1441,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns.</para>
+        /// <para>Select whether the lead allows direct mail.</para>
         /// <para>Boolean</para>
         /// <para>Do not allow Mails</para>
         /// </summary>
@@ -1790,9 +1453,9 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select whether the account accepts marketing materials, such as brochures or catalogs.</para>
+        /// <para>Select whether the lead accepts marketing materials, such as brochures or catalogs. Leads that opt out can be excluded from marketing initiatives.</para>
         /// <para>Boolean</para>
-        /// <para>Send Marketing Materials</para>
+        /// <para>Marketing Material</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public bool? DoNotSendMM
@@ -1802,7 +1465,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the primary email address for the account.</para>
+        /// <para>Type the primary email address for the lead.</para>
         /// <para>String - MaxLength: 100</para>
         /// <para>Email</para>
         /// </summary>
@@ -1814,7 +1477,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the secondary email address for the account.</para>
+        /// <para>Type the secondary email address for the lead.</para>
         /// <para>String - MaxLength: 100</para>
         /// <para>Email Address 2</para>
         /// </summary>
@@ -1826,7 +1489,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type an alternate email address for the account.</para>
+        /// <para>Type a third email address for the lead.</para>
         /// <para>String - MaxLength: 100</para>
         /// <para>Email Address 3</para>
         /// </summary>
@@ -1838,14 +1501,102 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>For internal use only.</para>
         /// <para>ReadOnly - Uniqueidentifier</para>
-        /// <para>Entity Image Id</para>
+        /// <para></para>
         /// </summary>
         [DebuggerNonUserCode()]
         public Guid? EntityImageId
         {
             get { return Entity.GetAttributeValue<Guid?>(Fields.EntityImageId); }
+        }
+
+        /// <summary>
+        /// <para>Type the estimated revenue value that this lead will generate to assist in sales forecasting and planning.</para>
+        /// <para>Money - MinValue: 0 - MaxValue: 1,000,000,000,000</para>
+        /// <para>Est. Value</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public decimal? EstimatedAmount
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<Money>(Fields.EstimatedAmount);
+                if (value == null) return null;
+                return value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.EstimatedAmount] = new Money(value.Value);
+                else
+                    Entity.Attributes[Fields.EstimatedAmount] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Value of the Est. Value in base currency.</para>
+        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
+        /// <para>Est. Value (Base)</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public decimal? EstimatedAmount_Base
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<Money>(Fields.EstimatedAmount_Base);
+                if (value == null) return null;
+                return value.Value;
+            }
+        }
+
+        /// <summary>
+        /// <para>Enter the expected close date for the lead, so that the sales team can schedule timely follow-up meetings to move the prospect to the next sales stage.</para>
+        /// <para>DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly</para>
+        /// <para>Est. Close Date</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public Date? EstimatedCloseDate
+        {
+            get
+            {
+                var dateTime = Entity.GetAttributeValue<DateTime?>(Fields.EstimatedCloseDate);
+                if (dateTime == null) return null;
+                return dateTime.Value.ToDate();
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    DateTime? dateTime = value.Value.ToDateTime();
+                    Entity.Attributes[Fields.EstimatedCloseDate] = dateTime;
+                }
+                else
+                    Entity.Attributes[Fields.EstimatedCloseDate] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type a numeric value of the lead's estimated value, such as a product quantity, if no revenue amount can be specified in the Est. Value field. This can be used for sales forecasting and planning.</para>
+        /// <para>Double - MinValue: 0 - MaxValue: 1,000,000,000</para>
+        /// <para>Est. Value (deprecated)</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public double? EstimatedValue
+        {
+            get { return Entity.GetAttributeValue<double?>(Fields.EstimatedValue); }
+            set { Entity.Attributes[Fields.EstimatedValue] = value; }
+        }
+
+        /// <summary>
+        /// <para>Select whether the fit between the lead's requirements and your offerings was evaluated.</para>
+        /// <para>Boolean</para>
+        /// <para>Evaluate Fit</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public bool? EvaluateFit
+        {
+            get { return Entity.GetAttributeValue<bool?>(Fields.EvaluateFit); }
+            set { Entity.Attributes[Fields.EvaluateFit] = value; }
         }
 
         /// <summary>
@@ -1860,7 +1611,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the fax number for the account.</para>
+        /// <para>Type the fax number for the primary contact for the lead.</para>
         /// <para>String - MaxLength: 50</para>
         /// <para>Fax</para>
         /// </summary>
@@ -1872,7 +1623,19 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account.</para>
+        /// <para>Type the first name of the primary contact for the lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>First Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string FirstName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.FirstName); }
+            set { Entity.Attributes[Fields.FirstName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the lead.</para>
         /// <para>Boolean</para>
         /// <para>Follow Email Activity</para>
         /// </summary>
@@ -1884,19 +1647,18 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the URL for the account's FTP site to enable users to access data and share documents.</para>
-        /// <para>String - MaxLength: 200</para>
-        /// <para>FTP Site</para>
+        /// <para>Combines and shows the lead's first and last names so the full name can be displayed in views and reports.</para>
+        /// <para>ReadOnly - String - MaxLength: 160</para>
+        /// <para>Name</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string FtpSiteURL
+        public string FullName
         {
-            get { return Entity.GetAttributeValue<string>(Fields.FtpSiteURL); }
-            set { Entity.Attributes[Fields.FtpSiteURL] = value; }
+            get { return Entity.GetAttributeValue<string>(Fields.FullName); }
         }
 
         /// <summary>
-        /// <para>Unique identifier of the data import or data migration that created this record.</para>
+        /// <para>Sequence number of the import that created this record.</para>
         /// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
         /// <para>Import Sequence Number</para>
         /// </summary>
@@ -1908,7 +1670,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the account's primary industry for use in marketing segmentation and demographic analysis.</para>
+        /// <para>Select the primary industry in which the lead's business is focused, for use in marketing segmentation and demographic analysis.</para>
         /// <para>Picklist</para>
         /// <para>Industry</para>
         /// </summary>
@@ -1931,13 +1693,72 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
+        /// <para>Choose whether someone from the sales team contacted this lead earlier.</para>
+        /// <para>Picklist</para>
+        /// <para>Initial Communication</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public InitialCommunication? InitialCommunication
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.InitialCommunication);
+                if (value == null) return null;
+                return (InitialCommunication)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.InitialCommunication] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.InitialCommunication] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Information about whether the contact was auto-created when promoting an email or an appointment.</para>
         /// <para>ReadOnly - Boolean</para>
-        /// <para></para>
+        /// <para>Auto-created</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public bool? IsAutoCreate
+        {
+            get { return Entity.GetAttributeValue<bool?>(Fields.IsAutoCreate); }
+        }
+
+        /// <summary>
+        /// <para>Indicates whether the lead is private or visible to the entire organization.</para>
+        /// <para>ReadOnly - Boolean</para>
+        /// <para>Is Private</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public bool? IsPrivate
         {
             get { return Entity.GetAttributeValue<bool?>(Fields.IsPrivate); }
+        }
+
+        /// <summary>
+        /// <para>Type the job title of the primary contact for this lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Job Title</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string JobTitle
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.JobTitle); }
+            set { Entity.Attributes[Fields.JobTitle] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the last name of the primary contact for the lead to make sure the prospect is addressed correctly in sales calls, email, and marketing campaigns.</para>
+        /// <para>Required - String - MaxLength: 50</para>
+        /// <para>Last Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string LastName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.LastName); }
+            set { Entity.Attributes[Fields.LastName] = value; }
         }
 
         /// <summary>
@@ -1953,9 +1774,9 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows the date when the account was last included in a marketing campaign or quick campaign.</para>
+        /// <para>Shows the date when the lead was last included in a marketing campaign or quick campaign.</para>
         /// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
-        /// <para>Last Date Included in Campaign</para>
+        /// <para>Last Campaign Date</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public DateTime? LastUsedInCampaignUtc
@@ -1965,58 +1786,69 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis.</para>
-        /// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
-        /// <para>Market Capitalization</para>
+        /// <para>Unique identifier of the lead.</para>
+        /// <para>Primary Key - Uniqueidentifier</para>
+        /// <para>Lead</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public decimal? MarketCap
+        public Guid LeadId
+        {
+            get { return Id; }
+            set
+            {
+                Entity.Attributes[Fields.LeadId] = value;
+                Entity.Id = value;
+            }
+        }
+
+        /// <summary>
+        /// <para>Select a rating value to indicate the lead's potential to become a customer.</para>
+        /// <para>Picklist</para>
+        /// <para>Rating</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public LeadQualityCode? LeadQualityCode
         {
             get
             {
-                var value = Entity.GetAttributeValue<Money>(Fields.MarketCap);
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.LeadQualityCode);
                 if (value == null) return null;
-                return value.Value;
+                return (LeadQualityCode)value.Value;
             }
             set
             {
                 if (value.HasValue)
-                    Entity.Attributes[Fields.MarketCap] = new Money(value.Value);
+                    Entity.Attributes[Fields.LeadQualityCode] = new OptionSetValue((int)value.Value);
                 else
-                    Entity.Attributes[Fields.MarketCap] = null;
+                    Entity.Attributes[Fields.LeadQualityCode] = null;
             }
         }
 
         /// <summary>
-        /// <para>Shows the market capitalization converted to the system's default base currency.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Market Capitalization (Base)</para>
+        /// <para>Select the primary marketing source that prompted the lead to contact you.</para>
+        /// <para>Picklist</para>
+        /// <para>Lead Source</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public decimal? MarketCap_Base
+        public LeadSourceCode? LeadSourceCode
         {
             get
             {
-                var value = Entity.GetAttributeValue<Money>(Fields.MarketCap_Base);
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.LeadSourceCode);
                 if (value == null) return null;
-                return value.Value;
+                return (LeadSourceCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.LeadSourceCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.LeadSourceCode] = null;
             }
         }
 
         /// <summary>
-        /// <para>Whether is only for marketing</para>
-        /// <para>Boolean</para>
-        /// <para>Marketing Only</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public bool? MarketingOnly
-        {
-            get { return Entity.GetAttributeValue<bool?>(Fields.MarketingOnly); }
-            set { Entity.Attributes[Fields.MarketingOnly] = value; }
-        }
-
-        /// <summary>
-        /// <para>Shows the master account that the account was merged with.</para>
+        /// <para>Unique identifier of the master lead for merge.</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Master ID</para>
         /// </summary>
@@ -2027,7 +1859,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows whether the account has been merged with another account.</para>
+        /// <para>Tells whether the lead has been merged with another lead.</para>
         /// <para>ReadOnly - Boolean</para>
         /// <para>Merged</para>
         /// </summary>
@@ -2035,6 +1867,30 @@ namespace DevKitLevel1.Shared.Entities
         public bool? Merged
         {
             get { return Entity.GetAttributeValue<bool?>(Fields.Merged); }
+        }
+
+        /// <summary>
+        /// <para>Type the middle name or initial of the primary contact for the lead to make sure the prospect is addressed correctly.</para>
+        /// <para>String - MaxLength: 50</para>
+        /// <para>Middle Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string MiddleName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.MiddleName); }
+            set { Entity.Attributes[Fields.MiddleName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the mobile phone number for the primary contact for the lead.</para>
+        /// <para>String - MaxLength: 20</para>
+        /// <para>Mobile Phone</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string MobilePhone
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.MobilePhone); }
+            set { Entity.Attributes[Fields.MobilePhone] = value; }
         }
 
         /// <summary>
@@ -2049,18 +1905,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows the external party who modified the record.</para>
-        /// <para>ReadOnly - Lookup</para>
-        /// <para>Modified By (External Party)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public EntityReference ModifiedByExternalParty
-        {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedByExternalParty); }
-        }
-
-        /// <summary>
-        /// <para>Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options.</para>
+        /// <para>Date and time when the record was modified.</para>
         /// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
         /// <para>Modified On</para>
         /// </summary>
@@ -2071,7 +1916,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows who created the record on behalf of another user.</para>
+        /// <para>Shows who last updated the record on behalf of another user.</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Modified By (Delegate)</para>
         /// </summary>
@@ -2082,21 +1927,44 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the company or business name.</para>
-        /// <para>Required - String - MaxLength: 160</para>
-        /// <para>Account Name</para>
+        /// <para>Describes whether lead is opted out or not</para>
+        /// <para>Boolean</para>
+        /// <para>GDPR Optout</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string Name
+        public bool? msdyn_gdproptout
         {
-            get { return Entity.GetAttributeValue<string>(Fields.Name); }
-            set { Entity.Attributes[Fields.Name] = value; }
+            get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_gdproptout); }
+            set { Entity.Attributes[Fields.msdyn_gdproptout] = value; }
         }
 
         /// <summary>
-        /// <para>Type the number of employees that work at the account for use in marketing segmentation and demographic analysis.</para>
-        /// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
-        /// <para>Number of Employees</para>
+        /// <para>Choose how high the level of need is for the lead's company.</para>
+        /// <para>Picklist</para>
+        /// <para>Need</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public Need? Need
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Need);
+                if (value == null) return null;
+                return (Need)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.Need] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.Need] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type the number of employees that work at the company associated with the lead, for use in marketing segmentation and demographic analysis.</para>
+        /// <para>Integer - MinValue: 0 - MaxValue: 1,000,000</para>
+        /// <para>No. of Employees</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public int? NumberOfEmployees
@@ -2117,102 +1985,15 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Number of open opportunities against an account and its child accounts.</para>
-        /// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
-        /// <para>Open Deals</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public int? OpenDeals
-        {
-            get { return Entity.GetAttributeValue<int?>(Fields.OpenDeals); }
-        }
-
-        /// <summary>
-        /// <para>Last Updated time of rollup field Open Deals.</para>
-        /// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
-        /// <para>Open Deals (Last Updated On)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public DateTime? OpenDeals_DateUtc
-        {
-            get { return Entity.GetAttributeValue<DateTime?>(Fields.OpenDeals_Date); }
-        }
-
-        /// <summary>
-        /// <para>State of rollup field Open Deals.</para>
-        /// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
-        /// <para>Open Deals (State)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public int? OpenDeals_State
-        {
-            get { return Entity.GetAttributeValue<int?>(Fields.OpenDeals_State); }
-        }
-
-        /// <summary>
-        /// <para>Sum of open revenue against an account and its child accounts.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Open Revenue</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? OpenRevenue
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.OpenRevenue);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Value of the Open Revenue in base currency.</para>
-        /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
-        /// <para>Open Revenue (Base)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public decimal? OpenRevenue_Base
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<Money>(Fields.OpenRevenue_Base);
-                if (value == null) return null;
-                return value.Value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Last Updated time of rollup field Open Revenue.</para>
-        /// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
-        /// <para>Open Revenue (Last Updated On)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public DateTime? OpenRevenue_DateUtc
-        {
-            get { return Entity.GetAttributeValue<DateTime?>(Fields.OpenRevenue_Date); }
-        }
-
-        /// <summary>
-        /// <para>State of rollup field Open Revenue.</para>
-        /// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
-        /// <para>Open Revenue (State)</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public int? OpenRevenue_State
-        {
-            get { return Entity.GetAttributeValue<int?>(Fields.OpenRevenue_State); }
-        }
-
-        /// <summary>
-        /// <para>Shows the lead that the account was created from if the account was created by converting a lead in Microsoft Dynamics 365. This is used to relate the account to data on the originating lead for use in reporting and analytics.</para>
+        /// <para>This attribute is used for Sample Service Business Processes.</para>
         /// <para>Lookup</para>
-        /// <para>Originating Lead</para>
+        /// <para>Originating Case</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public EntityReference OriginatingLeadId
+        public EntityReference OriginatingCaseId
         {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.OriginatingLeadId); }
-            set { Entity.Attributes[Fields.OriginatingLeadId] = value; }
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.OriginatingCaseId); }
+            set { Entity.Attributes[Fields.OriginatingCaseId] = value; }
         }
 
         /// <summary>
@@ -2228,7 +2009,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
+        /// <para>Owner Id</para>
         /// <para>Owner</para>
         /// <para>Owner</para>
         /// </summary>
@@ -2240,30 +2021,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the account's ownership structure, such as public or private.</para>
-        /// <para>Picklist</para>
-        /// <para>Ownership</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public OwnershipCode? OwnershipCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.OwnershipCode);
-                if (value == null) return null;
-                return (OwnershipCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.OwnershipCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.OwnershipCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Shows the business unit that the record owner belongs to.</para>
+        /// <para>Unique identifier for the business unit that owns the record</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Owning Business Unit</para>
         /// </summary>
@@ -2274,7 +2032,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Unique identifier of the team who owns the account.</para>
+        /// <para>Unique identifier for the team that owns the record.</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Owning Team</para>
         /// </summary>
@@ -2285,7 +2043,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Unique identifier of the user who owns the account.</para>
+        /// <para>Unique identifier for the user that owns the record.</para>
         /// <para>ReadOnly - Lookup</para>
         /// <para>Owning User</para>
         /// </summary>
@@ -2296,9 +2054,21 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Choose the parent account associated with this account to show parent and child businesses in reporting and analytics.</para>
+        /// <para>Type the pager number for the primary contact for the lead.</para>
+        /// <para>String - MaxLength: 20</para>
+        /// <para>Pager</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Pager
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Pager); }
+            set { Entity.Attributes[Fields.Pager] = value; }
+        }
+
+        /// <summary>
+        /// <para>Choose an account to connect this lead to, so that the relationship is visible in reports and analytics.</para>
         /// <para>Lookup</para>
-        /// <para>Parent Account</para>
+        /// <para>Parent Account for lead</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public EntityReference ParentAccountId
@@ -2308,7 +2078,19 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data.</para>
+        /// <para>Choose a contact to connect this lead to, so that the relationship is visible in reports and analytics.</para>
+        /// <para>Lookup</para>
+        /// <para>Parent Contact for lead</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public EntityReference ParentContactId
+        {
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.ParentContactId); }
+            set { Entity.Attributes[Fields.ParentContactId] = value; }
+        }
+
+        /// <summary>
+        /// <para>Shows whether the lead participates in workflow rules.</para>
         /// <para>Boolean</para>
         /// <para>Participates in Workflow</para>
         /// </summary>
@@ -2317,75 +2099,6 @@ namespace DevKitLevel1.Shared.Entities
         {
             get { return Entity.GetAttributeValue<bool?>(Fields.ParticipatesInWorkflow); }
             set { Entity.Attributes[Fields.ParticipatesInWorkflow] = value; }
-        }
-
-        /// <summary>
-        /// <para>Select the payment terms to indicate when the customer needs to pay the total amount.</para>
-        /// <para>Picklist</para>
-        /// <para>Payment Terms</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public PaymentTermsCode? PaymentTermsCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PaymentTermsCode);
-                if (value == null) return null;
-                return (PaymentTermsCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.PaymentTermsCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.PaymentTermsCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Select the preferred day of the week for service appointments.</para>
-        /// <para>Picklist</para>
-        /// <para>Preferred Day</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public PreferredAppointmentDayCode? PreferredAppointmentDayCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PreferredAppointmentDayCode);
-                if (value == null) return null;
-                return (PreferredAppointmentDayCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.PreferredAppointmentDayCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.PreferredAppointmentDayCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Select the preferred time of day for service appointments.</para>
-        /// <para>Picklist</para>
-        /// <para>Preferred Time</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public PreferredAppointmentTimeCode? PreferredAppointmentTimeCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PreferredAppointmentTimeCode);
-                if (value == null) return null;
-                return (PreferredAppointmentTimeCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.PreferredAppointmentTimeCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.PreferredAppointmentTimeCode] = null;
-            }
         }
 
         /// <summary>
@@ -2412,81 +2125,32 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Choose the account's preferred service facility or equipment to make sure services are scheduled correctly for the customer.</para>
-        /// <para>Lookup</para>
-        /// <para>Preferred Facility/Equipment</para>
+        /// <para>Select the priority so that preferred customers or critical issues are handled quickly.</para>
+        /// <para>Picklist</para>
+        /// <para>Priority</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public EntityReference PreferredEquipmentId
+        public PriorityCode? PriorityCode
         {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.PreferredEquipmentId); }
-            set { Entity.Attributes[Fields.PreferredEquipmentId] = value; }
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PriorityCode);
+                if (value == null) return null;
+                return (PriorityCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.PriorityCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.PriorityCode] = null;
+            }
         }
 
         /// <summary>
-        /// <para>Choose the account's preferred service for reference when you schedule service activities.</para>
-        /// <para>Lookup</para>
-        /// <para>Preferred Service</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public EntityReference PreferredServiceId
-        {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.PreferredServiceId); }
-            set { Entity.Attributes[Fields.PreferredServiceId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Choose the preferred service representative for reference when you schedule service activities for the account.</para>
-        /// <para>Lookup</para>
-        /// <para>Preferred User</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public EntityReference PreferredSystemUserId
-        {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.PreferredSystemUserId); }
-            set { Entity.Attributes[Fields.PreferredSystemUserId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Choose the primary contact for the account to provide quick access to contact details.</para>
-        /// <para>Lookup</para>
-        /// <para>Primary Contact</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public EntityReference PrimaryContactId
-        {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.PrimaryContactId); }
-            set { Entity.Attributes[Fields.PrimaryContactId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Primary Satori ID for Account</para>
-        /// <para>String - MaxLength: 200</para>
-        /// <para>Primary Satori ID</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string PrimarySatoriId
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.PrimarySatoriId); }
-            set { Entity.Attributes[Fields.PrimarySatoriId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Primary Twitter ID for Account</para>
-        /// <para>String - MaxLength: 128</para>
-        /// <para>Primary Twitter ID</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string PrimaryTwitterId
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.PrimaryTwitterId); }
-            set { Entity.Attributes[Fields.PrimaryTwitterId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Shows the ID of the process.</para>
+        /// <para>Contains the id of the process associated with the entity.</para>
         /// <para>Uniqueidentifier</para>
-        /// <para>Process</para>
+        /// <para>Process Id</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public Guid? ProcessId
@@ -2496,7 +2160,89 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the annual revenue for the account, used as an indicator in financial performance analysis.</para>
+        /// <para>Choose whether an individual or a committee will be involved in the  purchase process for the lead.</para>
+        /// <para>Picklist</para>
+        /// <para>Purchase Process</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public PurchaseProcess? PurchaseProcess
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PurchaseProcess);
+                if (value == null) return null;
+                return (PurchaseProcess)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.PurchaseProcess] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.PurchaseProcess] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Choose how long the lead will likely take to make the purchase, so the sales team will be aware.</para>
+        /// <para>Picklist</para>
+        /// <para>Purchase Timeframe</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public PurchaseTimeFrame? PurchaseTimeFrame
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PurchaseTimeFrame);
+                if (value == null) return null;
+                return (PurchaseTimeFrame)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.PurchaseTimeFrame] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.PurchaseTimeFrame] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type comments about the qualification or scoring of the lead.</para>
+        /// <para>Memo - MaxLength: 2000</para>
+        /// <para>Qualification Comments</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string QualificationComments
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.QualificationComments); }
+            set { Entity.Attributes[Fields.QualificationComments] = value; }
+        }
+
+        /// <summary>
+        /// <para>Choose the opportunity that the lead was qualified on and then converted to.</para>
+        /// <para>Lookup</para>
+        /// <para>Qualifying Opportunity</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public EntityReference QualifyingOpportunityId
+        {
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.QualifyingOpportunityId); }
+            set { Entity.Attributes[Fields.QualifyingOpportunityId] = value; }
+        }
+
+        /// <summary>
+        /// <para>Related Campaign Response.</para>
+        /// <para>Lookup</para>
+        /// <para>Related Campaign Response</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public EntityReference RelatedObjectId
+        {
+            get { return Entity.GetAttributeValue<EntityReference>(Fields.RelatedObjectId); }
+            set { Entity.Attributes[Fields.RelatedObjectId] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the annual revenue of the company associated with the lead to provide an understanding of the prospect's business.</para>
         /// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
         /// <para>Annual Revenue</para>
         /// </summary>
@@ -2519,7 +2265,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
+        /// <para>Value of the Annual Revenue in base currency.</para>
         /// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
         /// <para>Annual Revenue (Base)</para>
         /// </summary>
@@ -2535,42 +2281,89 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the number of shares available to the public for the account. This number is used as an indicator in financial performance analysis.</para>
-        /// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
-        /// <para>Shares Outstanding</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public int? SharesOutstanding
-        {
-            get { return Entity.GetAttributeValue<int?>(Fields.SharesOutstanding); }
-            set { Entity.Attributes[Fields.SharesOutstanding] = value; }
-        }
-
-        /// <summary>
-        /// <para>Select a shipping method for deliveries sent to the account's address to designate the preferred carrier or other delivery option.</para>
+        /// <para>Select the sales stage of this lead to aid the sales team in their efforts to convert this lead to an opportunity.</para>
         /// <para>Picklist</para>
-        /// <para>Shipping Method</para>
+        /// <para>Sales Stage</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public ShippingMethodCode? ShippingMethodCode
+        public SalesStage? SalesStage
         {
             get
             {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.ShippingMethodCode);
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.SalesStage);
                 if (value == null) return null;
-                return (ShippingMethodCode)value.Value;
+                return (SalesStage)value.Value;
             }
             set
             {
                 if (value.HasValue)
-                    Entity.Attributes[Fields.ShippingMethodCode] = new OptionSetValue((int)value.Value);
+                    Entity.Attributes[Fields.SalesStage] = new OptionSetValue((int)value.Value);
                 else
-                    Entity.Attributes[Fields.ShippingMethodCode] = null;
+                    Entity.Attributes[Fields.SalesStage] = null;
             }
         }
 
         /// <summary>
-        /// <para>Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis.</para>
+        /// <para>Select the sales process stage for the lead to help determine the probability of the lead converting to an opportunity.</para>
+        /// <para>Picklist</para>
+        /// <para>Sales Stage Code</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public SalesStageCode? SalesStageCode
+        {
+            get
+            {
+                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.SalesStageCode);
+                if (value == null) return null;
+                return (SalesStageCode)value.Value;
+            }
+            set
+            {
+                if (value.HasValue)
+                    Entity.Attributes[Fields.SalesStageCode] = new OptionSetValue((int)value.Value);
+                else
+                    Entity.Attributes[Fields.SalesStageCode] = null;
+            }
+        }
+
+        /// <summary>
+        /// <para>Type the salutation of the primary contact for this lead to make sure the prospect is addressed correctly in sales calls, email messages, and marketing campaigns.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Salutation</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string Salutation
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.Salutation); }
+            set { Entity.Attributes[Fields.Salutation] = value; }
+        }
+
+        /// <summary>
+        /// <para>Enter the date and time of the prospecting follow-up meeting with the lead.</para>
+        /// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
+        /// <para>Schedule Follow Up (Prospect)</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public DateTime? ScheduleFollowUp_ProspectUtc
+        {
+            get { return Entity.GetAttributeValue<DateTime?>(Fields.ScheduleFollowUp_Prospect); }
+            set { Entity.Attributes[Fields.ScheduleFollowUp_Prospect] = value; }
+        }
+
+        /// <summary>
+        /// <para>Enter the date and time of the qualifying follow-up meeting with the lead.</para>
+        /// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
+        /// <para>Schedule Follow Up (Qualify)</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public DateTime? ScheduleFollowUp_QualifyUtc
+        {
+            get { return Entity.GetAttributeValue<DateTime?>(Fields.ScheduleFollowUp_Qualify); }
+            set { Entity.Attributes[Fields.ScheduleFollowUp_Qualify] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the Standard Industrial Classification (SIC) code that indicates the lead's primary industry of business for use in marketing segmentation and demographic analysis.</para>
         /// <para>String - MaxLength: 20</para>
         /// <para>SIC Code</para>
         /// </summary>
@@ -2582,7 +2375,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Choose the service level agreement (SLA) that you want to apply to the Account record.</para>
+        /// <para>Choose the service level agreement (SLA) that you want to apply to the Lead record.</para>
         /// <para>Lookup</para>
         /// <para>SLA</para>
         /// </summary>
@@ -2605,9 +2398,9 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows the ID of the stage.</para>
+        /// <para>Contains the id of the stage where the entity is located.</para>
         /// <para>Uniqueidentifier</para>
-        /// <para>(Deprecated) Process Stage</para>
+        /// <para>(Deprecated) Stage Id</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public Guid? StageId
@@ -2617,7 +2410,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated.</para>
+        /// <para>Shows whether the lead is open, qualified, or disqualified. Qualified and disqualified leads are read-only and can't be edited unless they are reactivated.</para>
         /// <para>State</para>
         /// <para>Status</para>
         /// </summary>
@@ -2640,7 +2433,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select the account's status.</para>
+        /// <para>Select the lead's status.</para>
         /// <para>Status</para>
         /// <para>Status Reason</para>
         /// </summary>
@@ -2663,15 +2456,15 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the stock exchange at which the account is listed to track their stock and financial performance of the company.</para>
-        /// <para>String - MaxLength: 20</para>
-        /// <para>Stock Exchange</para>
+        /// <para>Type a subject or descriptive name, such as the expected order, company name, or marketing source list, to identify the lead.</para>
+        /// <para>Required - String - MaxLength: 300</para>
+        /// <para>Topic</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string StockExchange
+        public string Subject
         {
-            get { return Entity.GetAttributeValue<string>(Fields.StockExchange); }
-            set { Entity.Attributes[Fields.StockExchange] = value; }
+            get { return Entity.GetAttributeValue<string>(Fields.Subject); }
+            set { Entity.Attributes[Fields.Subject] = value; }
         }
 
         /// <summary>
@@ -2687,9 +2480,9 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the main phone number for this account.</para>
+        /// <para>Type the work phone number for the primary contact for the lead.</para>
         /// <para>String - MaxLength: 50</para>
-        /// <para>Main Phone</para>
+        /// <para>Business Phone</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Telephone1
@@ -2699,9 +2492,9 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type a second phone number for this account.</para>
+        /// <para>Type the home phone number for the primary contact for the lead.</para>
         /// <para>String - MaxLength: 50</para>
-        /// <para>Other Phone</para>
+        /// <para>Home Phone</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Telephone2
@@ -2711,9 +2504,9 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type a third phone number for this account.</para>
+        /// <para>Type an alternate phone number for the primary contact for the lead.</para>
         /// <para>String - MaxLength: 50</para>
-        /// <para>Telephone 3</para>
+        /// <para>Other Phone</para>
         /// </summary>
         [DebuggerNonUserCode()]
         public string Telephone3
@@ -2723,54 +2516,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Select a region or territory for the account for use in segmentation and analysis.</para>
-        /// <para>Picklist</para>
-        /// <para>Territory Code</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public TerritoryCode? TerritoryCode
-        {
-            get
-            {
-                var value = Entity.GetAttributeValue<OptionSetValue>(Fields.TerritoryCode);
-                if (value == null) return null;
-                return (TerritoryCode)value.Value;
-            }
-            set
-            {
-                if (value.HasValue)
-                    Entity.Attributes[Fields.TerritoryCode] = new OptionSetValue((int)value.Value);
-                else
-                    Entity.Attributes[Fields.TerritoryCode] = null;
-            }
-        }
-
-        /// <summary>
-        /// <para>Choose the sales region or territory for the account to make sure the account is assigned to the correct representative and for use in segmentation and analysis.</para>
-        /// <para>Lookup</para>
-        /// <para>Territory</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public EntityReference TerritoryId
-        {
-            get { return Entity.GetAttributeValue<EntityReference>(Fields.TerritoryId); }
-            set { Entity.Attributes[Fields.TerritoryId] = value; }
-        }
-
-        /// <summary>
-        /// <para>Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money.</para>
-        /// <para>String - MaxLength: 10</para>
-        /// <para>Ticker Symbol</para>
-        /// </summary>
-        [DebuggerNonUserCode()]
-        public string TickerSymbol
-        {
-            get { return Entity.GetAttributeValue<string>(Fields.TickerSymbol); }
-            set { Entity.Attributes[Fields.TickerSymbol] = value; }
-        }
-
-        /// <summary>
-        /// <para>Total time spent for emails (read and write) and meetings by me in relation to account record.</para>
+        /// <para>Total time spent for emails (read and write) and meetings by me in relation to the lead record.</para>
         /// <para>ReadOnly - String - MaxLength: 1250</para>
         /// <para>Time Spent by me</para>
         /// </summary>
@@ -2805,7 +2551,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>For internal use only.</para>
+        /// <para>A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur.</para>
         /// <para>String - MaxLength: 1250</para>
         /// <para>(Deprecated) Traversed Path</para>
         /// </summary>
@@ -2829,7 +2575,7 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Version number of the account.</para>
+        /// <para>Version Number</para>
         /// <para>ReadOnly - BigInt</para>
         /// <para>Version Number</para>
         /// </summary>
@@ -2840,27 +2586,74 @@ namespace DevKitLevel1.Shared.Entities
         }
 
         /// <summary>
-        /// <para>Type the account's website URL to get quick details about the company profile.</para>
+        /// <para>Type the website URL for the company associated with this lead.</para>
         /// <para>String - MaxLength: 200</para>
         /// <para>Website</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string WebSiteURL
+        public string WebSiteUrl
         {
-            get { return Entity.GetAttributeValue<string>(Fields.WebSiteURL); }
-            set { Entity.Attributes[Fields.WebSiteURL] = value; }
+            get { return Entity.GetAttributeValue<string>(Fields.WebSiteUrl); }
+            set { Entity.Attributes[Fields.WebSiteUrl] = value; }
         }
 
         /// <summary>
-        /// <para>Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.</para>
-        /// <para>String - MaxLength: 160</para>
-        /// <para>Yomi Account Name</para>
+        /// <para>Type the phonetic spelling of the lead's company name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
+        /// <para>String - MaxLength: 100</para>
+        /// <para>Yomi Company Name</para>
         /// </summary>
         [DebuggerNonUserCode()]
-        public string YomiName
+        public string YomiCompanyName
         {
-            get { return Entity.GetAttributeValue<string>(Fields.YomiName); }
-            set { Entity.Attributes[Fields.YomiName] = value; }
+            get { return Entity.GetAttributeValue<string>(Fields.YomiCompanyName); }
+            set { Entity.Attributes[Fields.YomiCompanyName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the phonetic spelling of the lead's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
+        /// <para>String - MaxLength: 150</para>
+        /// <para>Yomi First Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string YomiFirstName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.YomiFirstName); }
+            set { Entity.Attributes[Fields.YomiFirstName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Combines and shows the lead's Yomi first and last names so the full phonetic name can be displayed in views and reports.</para>
+        /// <para>ReadOnly - String - MaxLength: 450</para>
+        /// <para>Yomi Full Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string YomiFullName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.YomiFullName); }
+        }
+
+        /// <summary>
+        /// <para>Type the phonetic spelling of the lead's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
+        /// <para>String - MaxLength: 150</para>
+        /// <para>Yomi Last Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string YomiLastName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.YomiLastName); }
+            set { Entity.Attributes[Fields.YomiLastName] = value; }
+        }
+
+        /// <summary>
+        /// <para>Type the phonetic spelling of the lead's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
+        /// <para>String - MaxLength: 150</para>
+        /// <para>Yomi Middle Name</para>
+        /// </summary>
+        [DebuggerNonUserCode()]
+        public string YomiMiddleName
+        {
+            get { return Entity.GetAttributeValue<string>(Fields.YomiMiddleName); }
+            set { Entity.Attributes[Fields.YomiMiddleName] = value; }
         }
 
         /// <summary>

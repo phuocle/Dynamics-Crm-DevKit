@@ -10,7 +10,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 {
     internal class SolutionPackagerProjectTemplateWizard : IWizard
     {
-        private string _destDirectory;
         private string _keyName;
         private DTE Dte { get; set; }
         private Project Project { get; set; }
@@ -72,7 +71,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 .Replace("$NetVersion$", netVersion)
                 .Replace("$Port$", port);
             solution += data;
-            File.WriteAllText(solutionFile, solution);
+            File.WriteAllText(solutionFile, solution, System.Text.Encoding.UTF8);
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
