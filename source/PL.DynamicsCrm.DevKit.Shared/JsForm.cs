@@ -9,7 +9,6 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using NUglify;
 using PL.DynamicsCrm.DevKit.Shared.Xrm;
-using static System.Windows.Forms.CheckedListBox;
 
 namespace PL.DynamicsCrm.DevKit.Shared
 {

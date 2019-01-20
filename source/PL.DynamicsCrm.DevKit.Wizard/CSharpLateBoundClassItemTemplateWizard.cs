@@ -14,9 +14,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         private Project ActiveProject { get; set; }
         private string ClassFileGenerated { get; set; }
         private string ClassFile { get; set; }
-        private bool IsNew { get; set; } = false;
+        private bool IsNew { get; set; }
         private string GeneratedCode { get; set; }
-        private ProjectItem CurrentProjectItem { get; set; } = null;
+        private ProjectItem CurrentProjectItem { get; set; }
 
 
         public void BeforeOpeningFile(ProjectItem projectItem)
@@ -57,16 +57,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
             else
             {
-                if(ActiveProject.Name.EndsWith($"{FormType.Shared.ToString()}"))
+                if (!ActiveProject.Name.EndsWith($"{FormType.Shared.ToString()}")) return;
+                var projectItemsFile = ActiveProject.FullName.Replace(".shproj", ".projitems");
+                var lines = File.ReadAllLines(projectItemsFile);
+                var text = string.Empty;
+                var @class = $"{Class}.cs";
+                var fInfoProject = new FileInfo(ActiveProject.FullName);
+                var dic = fInfoProject.Directory?.FullName;
+                if (dic != null)
                 {
-                    var sharedProject = ActiveProject.FullName;
-                    var projectItemsFile = ActiveProject.FullName.Replace(".shproj", ".projitems");
-                    var lines = File.ReadAllLines(projectItemsFile);
-                    var text = string.Empty;
-                    var @class = $"{Class}.cs";
-                    var @classGenerated = $"{Class}.generated.cs";
-                    var fInfoProject = new FileInfo(ActiveProject.FullName);
-                    var dic = fInfoProject.Directory.FullName;
                     var check = CurrentProjectItem.FileNames[0].Substring(dic.Length + 1);
                     foreach (var line in lines)
                     {
@@ -81,9 +80,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                             text += line + "\r\n";
                         }
                     }
-                    File.WriteAllText(projectItemsFile, text, System.Text.Encoding.UTF8);
-                    Dte.ExecuteCommand("File.SaveAll");
                 }
+                File.WriteAllText(projectItemsFile, text, System.Text.Encoding.UTF8);
+                Dte.ExecuteCommand("File.SaveAll");
             }
         }
 
@@ -102,14 +101,14 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 Dte = (DTE) automationObject;
                 if (Dte.ActiveSolutionProjects is Array activeSolutionProjects && activeSolutionProjects.Length > 0)
                     ActiveProject = activeSolutionProjects.GetValue(0) as Project;
-                var form = new FormProject(FormType.LateBoundClass, Dte);
-
-                form.RootNameSpace = replacementsDictionary["$rootnamespace$"];
+                var form = new FormProject(FormType.LateBoundClass, Dte)
+                {
+                    RootNameSpace = replacementsDictionary["$rootnamespace$"]
+                };
                 var solutionFullName = Dte?.Solution?.FullName;
-                var fInfo = new FileInfo(solutionFullName);
+                var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
                 var parts = fInfo.Name.Split(".".ToCharArray());
                 form.SharedNameSpace = GetName(parts);
-
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     Class = form.Class;
@@ -128,7 +127,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 throw new WizardCancelledException("Cancel Click");
             }
         }
-
 
         private void CloseWindows()
         {
@@ -161,8 +159,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 if (projectItem.Name == @class || projectItem.Name == @classGenerated)
                 {
                     var fInfo = new FileInfo(projectItem.FileNames[0]);
-                    ClassFile = $"{fInfo.Directory.FullName}\\{@class}";
-                    ClassFileGenerated = $"{fInfo.Directory.FullName}\\{@classGenerated}";
+                    ClassFile = $"{fInfo.Directory?.FullName}\\{@class}";
+                    ClassFileGenerated = $"{fInfo.Directory?.FullName}\\{@classGenerated}";
                     return !File.Exists(ClassFile);
                 }
             }

@@ -5,10 +5,8 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using NUglify;
 using PL.DynamicsCrm.DevKit.Shared.Xrm;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PL.DynamicsCrm.DevKit.Shared
 {
@@ -81,21 +79,21 @@ namespace PL.DynamicsCrm.DevKit.Shared
             }
             return value.TrimEnd(";".ToCharArray());
         }
-        private RetrieveEntityResponse _Relationships = null;
+        private RetrieveEntityResponse _relationships = null;
         private RetrieveEntityResponse Relationships
         {
             get
             {
-                if (_Relationships == null)
+                if (_relationships == null)
                 {
                     var requestRelationships = new RetrieveEntityRequest
                     {
                         EntityFilters = EntityFilters.Relationships,
                         LogicalName = EntityName.ToLower()
                     };
-                    _Relationships = (RetrieveEntityResponse)CrmService.Execute(requestRelationships);
+                    _relationships = (RetrieveEntityResponse)CrmService.Execute(requestRelationships);
                 }
-                return _Relationships;
+                return _relationships;
             }
         }
         private string GetNavigationPropertyName(CrmAttribute crmAttribute)

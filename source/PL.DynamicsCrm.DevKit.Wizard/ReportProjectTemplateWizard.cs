@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -34,11 +35,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             File.WriteAllText(projectFullName, Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.ReportProjectTemplate.csproj"), System.Text.Encoding.UTF8);
             var fInfoProject = new FileInfo(projectFullName);
             fInfoProject.MoveTo(fInfoProject.DirectoryName + "\\" + ProjectName + ".rptproj");
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
-            var folder = dInfoProject.Parent.FullName + "\\" + ProjectName;
+            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
+            var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
             Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent.FullName + "\\" + ProjectName + "\\" + ProjectName + ".rptproj");
+            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".rptproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
@@ -56,7 +57,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     ProjectName = form.ProjectName;
                     if (!Utility.ExistProject(Dte, ProjectName))
                     {
-                        replacementsDictionary.Add("$DevKitVersion$", Const.VERSION);
+                        replacementsDictionary.Add("$DevKitVersion$", Const.Version);
                         replacementsDictionary.Add("$ProjectName$", ProjectName);
                         replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                         replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
@@ -68,7 +69,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             {
                 Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
             throw new WizardCancelledException("Cancel Click");
         }
 

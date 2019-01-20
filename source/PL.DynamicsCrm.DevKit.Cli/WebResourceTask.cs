@@ -67,12 +67,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         public void Run()
         {
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "START WEBRESOURCE TASKS");
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
+            CliLog.WriteLine(CliLog.ColorGreen, "START WEBRESOURCE TASKS");
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             var files = WebResourceFiles;
             var totalWebResources = files.Count;
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "Found: ", CliLog.COLOR_CYAN, totalWebResources, CliLog.COLOR_GREEN, " webresources");
+            CliLog.WriteLine(CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, totalWebResources, CliLog.ColorGreen, " webresources");
             var i = 1;
             foreach (var webResourceFile in files)
             {
@@ -82,7 +82,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             if (IsSupportWebResourceDependency)
             {
                 var dependencies = MergeDependencies(WebResourceJson.dependencies);
-                CliLog.WriteLine(CliLog.COLOR_GREEN, "Found: ", CliLog.COLOR_CYAN, dependencies.Count, CliLog.COLOR_GREEN, " dependencies");
+                CliLog.WriteLine(CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, dependencies.Count, CliLog.ColorGreen, " dependencies");
                 var j = 1;
                 foreach (var dependency in dependencies)
                 {
@@ -92,19 +92,19 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             if (WebResourcesToPublish.Count > 0)
                 PublishWebResources();
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "END WEBRESOURCE TASKS");
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
+            CliLog.WriteLine(CliLog.ColorGreen, "END WEBRESOURCE TASKS");
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
         }
 
-        private List<Dependency> MergeDependencies(List<Dependency> dependencies)
+        private List<Dependency> MergeDependencies(IEnumerable<Dependency> dependencies)
         {
             var list = new List<Dependency>();
             foreach(var dependency in dependencies)
             {
                 foreach(var webreource in dependency.webresources)
                 {
-                    var found = list.Where(d => d.webresources.Contains(webreource)).FirstOrDefault();
+                    var found = list.FirstOrDefault(d => d.webresources.Contains(webreource));
                     if (found == null)
                     {
                         list.Add(new Dependency
@@ -146,21 +146,23 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 if (existingDependencyXml != dependencyXml)
                 {
                     var webResourceId = rows.Entities[0].Id;
-                    var enttiy = new Entity("webresource", webResourceId);
-                    enttiy["dependencyxml"] = dependencyXml;
-                    CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", j), ": ", CliLog.COLOR_BLUE, "Updated Dependency Webresource ", CliLog.COLOR_CYAN, webResourceName);
+                    var enttiy = new Entity("webresource", webResourceId)
+                    {
+                        ["dependencyxml"] = dependencyXml
+                    };
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", j), ": ", CliLog.ColorBlue, "Updated Dependency Webresource ", CliLog.ColorCyan, webResourceName);
                     CrmServiceClient.Update(enttiy);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
                 }
                 else
                 {
-                    CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", j) + ": Done");
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", j) + ": Done");
                 }
             }
         }
 
-        private string GetDependencyXml(List<string> dependencies)
+        private string GetDependencyXml(IEnumerable<string> dependencies)
         {
             var library = string.Empty;
             foreach (var dependency in dependencies)
@@ -193,9 +195,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var languagecode = entity.GetAttributeValue<int?>("languagecode");
                 library += $"<Library name='{name}' displayName='{displayname}' languagecode='{languagecode}' description='{description}' libraryUniqueId='{{{webresourceidunique}}}'/>";
             }
-            var _dependencyXml = $"<Dependencies><Dependency componentType='WebResource'>{library}</Dependency></Dependencies>";
-            _dependencyXml = _dependencyXml.Replace("'", "\"");
-            return _dependencyXml;
+            var dependencyXml = $"<Dependencies><Dependency componentType='WebResource'>{library}</Dependency></Dependencies>";
+            dependencyXml = dependencyXml.Replace("'", "\"");
+            return dependencyXml;
         }
 
         private Entity DeployWebResource(WebResourceFile webResourceFile, int current, int totalWebResources)
@@ -227,67 +229,66 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var fileContent = Convert.ToBase64String(File.ReadAllBytes(webResourceFile.file));
             if (fileContent == content)
             {
-                CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", current) + ": Done");
+                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", current) + ": Done");
                 return null;
             }
-            var webResource = new Entity("webresource");
-            webResource["name"] = webResourceFile.uniquename;
-            webResource["displayname"] = webResourceFile.displayname;
-            webResource["description"] = webResourceFile.version;
-            webResource["content"] = fileContent;
-
+            var webResource = new Entity("webresource")
+            {
+                ["name"] = webResourceFile.uniquename,
+                ["displayname"] = webResourceFile.displayname,
+                ["description"] = webResourceFile.version,
+                ["content"] = fileContent
+            };
             var webResourceFileInfo = new FileInfo(webResourceFile.file);
-            var filetype = WebResourceWebResourceType.Script_JScript;
+            var filetype = WebResourceWebResourceType.ScriptJScript;
             switch (webResourceFileInfo.Extension.ToLower().TrimStart('.'))
             {
                 case "html":
                 case "htm":
-                    filetype = WebResourceWebResourceType.Webpage_HTML;
+                    filetype = WebResourceWebResourceType.WebpageHtml;
                     break;
                 case "js":
-                    filetype = WebResourceWebResourceType.Script_JScript;
+                    filetype = WebResourceWebResourceType.ScriptJScript;
                     break;
                 case "png":
-                    filetype = WebResourceWebResourceType.PNGformat;
+                    filetype = WebResourceWebResourceType.PngFormat;
                     break;
                 case "gif":
-                    filetype = WebResourceWebResourceType.GIFformat;
+                    filetype = WebResourceWebResourceType.GifFormat;
                     break;
                 case "jpg":
                 case "jpeg":
-                    filetype = WebResourceWebResourceType.JPGformat;
+                    filetype = WebResourceWebResourceType.JpgFormat;
                     break;
                 case "css":
-                    filetype = WebResourceWebResourceType.StyleSheet_CSS;
+                    filetype = WebResourceWebResourceType.StyleSheetCss;
                     break;
                 case "ico":
-                    filetype = WebResourceWebResourceType.ICOformat;
+                    filetype = WebResourceWebResourceType.IcoFormat;
                     break;
                 case "xml":
-                    filetype = WebResourceWebResourceType.Data_XML;
+                    filetype = WebResourceWebResourceType.DataXml;
                     break;
                 case "xsl":
                 case "xslt":
-                    filetype = WebResourceWebResourceType.StyleSheet_XSL;
+                    filetype = WebResourceWebResourceType.StyleSheetXsl;
                     break;
                 case "xap":
-                    filetype = WebResourceWebResourceType.Silverlight_XAP;
+                    filetype = WebResourceWebResourceType.SilverlightXap;
                     break;
                 case "resx":
-                    filetype = WebResourceWebResourceType.String_RESX;
+                    filetype = WebResourceWebResourceType.StringResx;
                     break;
                 case "svg":
-                    filetype = WebResourceWebResourceType.SVGFormat;
+                    filetype = WebResourceWebResourceType.SvgFormat;
                     break;
             }
-
             webResource["webresourcetype"] = new OptionSetValue((int) filetype);
-            if (filetype == WebResourceWebResourceType.String_RESX)
+            if (filetype == WebResourceWebResourceType.StringResx)
             {
                 var fileName = webResourceFileInfo.Name.Substring(0, webResourceFileInfo.Name.Length - webResourceFileInfo.Extension.Length);
                 var arr = fileName.Split(".".ToCharArray());
-                var languagecode = -1;
-                if (int.TryParse(arr[arr.Length - 1], out languagecode))
+                if (int.TryParse(arr[arr.Length - 1], out var languagecode))
                 {
                     var req = new RetrieveProvisionedLanguagesRequest();
                     var res = (RetrieveProvisionedLanguagesResponse)CrmServiceClient.Execute(req);
@@ -295,21 +296,21 @@ namespace PL.DynamicsCrm.DevKit.Cli
                         webResource["languagecode"] = languagecode;
                     else
                     {
-                        CliLog.WriteLine(CliLog.COLOR_RED, "Language code not found: ", CliLog.COLOR_BLUE, languagecode);
+                        CliLog.WriteLine(CliLog.ColorRed, "Language code not found: ", CliLog.ColorBlue, languagecode);
                         return null;
                     }
                 }
             }
             if (webResourceId == Guid.Empty)
             {
-                CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", current), ": ", CliLog.COLOR_GREEN, "Creating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file, CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
+                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", current), ": ", CliLog.ColorGreen, "Creating WebResource ", CliLog.ColorCyan, webResourceFile.file, CliLog.ColorGreen, " to ", CliLog.ColorCyan, webResourceFile.uniquename);
                 webResourceId = CrmServiceClient.Create(webResource);
                 webResource["webresourceid"] = webResourceId;
             }
             else
             {
                 webResource["webresourceid"] = webResourceId;
-                CliLog.WriteLine(CliLog.COLOR_CYAN, string.Format("{0,0}|{1," + len + "}", "", current), ": ", CliLog.COLOR_BLUE, "Updating WebResource ", CliLog.COLOR_CYAN, webResourceFile.file, CliLog.COLOR_GREEN, " to ", CliLog.COLOR_CYAN, webResourceFile.uniquename);
+                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", current), ": ", CliLog.ColorBlue, "Updating WebResource ", CliLog.ColorCyan, webResourceFile.file, CliLog.ColorGreen, " to ", CliLog.ColorCyan, webResourceFile.uniquename);
                 CrmServiceClient.Update(webResource);
             }
             WebResourcesToPublish.Add(webResourceId);
@@ -341,23 +342,21 @@ namespace PL.DynamicsCrm.DevKit.Cli
   </entity>
 </fetch>";
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (rows.Entities.Count == 0)
+            if (rows.Entities.Count != 0) return;
+            var request = new AddSolutionComponentRequest
             {
-                var request = new AddSolutionComponentRequest
-                {
-                    AddRequiredComponents = true,
-                    ComponentType = 61,
-                    ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
-                    SolutionUniqueName = WebResourceJson.solution
-                };
-                CliLog.WriteLine(CliLog.COLOR_CYAN, "|", CliLog.COLOR_GREEN, "\tAdding WebResource: ", CliLog.COLOR_CYAN,
-                    $"{webResource["name"]} ", CliLog.COLOR_GREEN, "to solution: ", CliLog.COLOR_CYAN,
-                    $"{WebResourceJson.solution}");
-                CrmServiceClient.Execute(request);
-            }
+                AddRequiredComponents = true,
+                ComponentType = 61,
+                ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
+                SolutionUniqueName = WebResourceJson.solution
+            };
+            CliLog.WriteLine(CliLog.ColorCyan, "|", CliLog.ColorGreen, "\tAdding WebResource: ", CliLog.ColorCyan,
+                $"{webResource["name"]} ", CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan,
+                $"{WebResourceJson.solution}");
+            CrmServiceClient.Execute(request);
         }
 
-        public void PublishWebResources()
+        private void PublishWebResources()
         {
             var stringGuids = WebResourcesToPublish.Select(g => g.ToString());
             var webresources = string.Join("</webresource><webresource>", stringGuids);
@@ -368,57 +367,47 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     "<webresource>" + webresources + "</webresource>" +
                     "</webresources></importexportxml>"
             };
-            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Publishing WebResources");
+            CliLog.WriteLine(CliLog.ColorYellow, "Publishing WebResources");
             CrmServiceClient.Execute(publish);
-            CliLog.WriteLine(CliLog.COLOR_YELLOW, "Published WebResources");
+            CliLog.WriteLine(CliLog.ColorYellow, "Published WebResources");
         }
 
-        private List<string> GetFiles(string filePattern)
+        private IEnumerable<string> GetFiles(string filePattern)
         {
-            var folder = filePattern.Substring(0, filePattern.LastIndexOf("\\"));
+            var folder = filePattern.Substring(0, filePattern.LastIndexOf("\\", StringComparison.Ordinal));
             var pattern = filePattern.Substring(folder.Length + 1);
-            if (pattern.Contains("**"))
-            {
-                pattern = pattern.Replace("**", "*");
-                return Directory.GetFiles(folder, pattern, SearchOption.AllDirectories).ToList();
-            }
-            if (Directory.Exists(folder))
-                return Directory.GetFiles(folder, pattern, SearchOption.TopDirectoryOnly).ToList();
-            return new List<string>();
+            if (!pattern.Contains("**")) return Directory.Exists(folder) ? Directory.GetFiles(folder, pattern, SearchOption.TopDirectoryOnly).ToList() : new List<string>();
+            pattern = pattern.Replace("**", "*");
+            return Directory.GetFiles(folder, pattern, SearchOption.AllDirectories).ToList();
         }
 
         private enum WebResourceWebResourceType
         {
-            Webpage_HTML = 1,
-            StyleSheet_CSS = 2,
-            Script_JScript = 3,
-            Data_XML = 4,
-            PNGformat = 5,
-            JPGformat = 6,
-            GIFformat = 7,
-            Silverlight_XAP = 8,
-            StyleSheet_XSL = 9,
-            ICOformat = 10,
-            SVGFormat = 11,
-            String_RESX = 12
+            WebpageHtml = 1,
+            StyleSheetCss = 2,
+            ScriptJScript = 3,
+            DataXml = 4,
+            PngFormat = 5,
+            JpgFormat = 6,
+            GifFormat = 7,
+            SilverlightXap = 8,
+            StyleSheetXsl = 9,
+            IcoFormat = 10,
+            SvgFormat = 11,
+            StringResx = 12
         }
 
-        private bool? isSupportWebResourceDependency = null;
+        private bool? _isSupportWebResourceDependency = null;
         private bool IsSupportWebResourceDependency
         {
             get
             {
-                if (isSupportWebResourceDependency == null)
-                {
-                    var request = new RetrieveVersionRequest();
-                    var response = (RetrieveVersionResponse)CrmServiceClient.Execute(request);
-                    var version = new Version(response.Version);
-                    if (version >= new Version("9.0"))
-                        isSupportWebResourceDependency = true;
-                    else
-                        isSupportWebResourceDependency = false;
-                }
-                return isSupportWebResourceDependency.Value;
+                if (_isSupportWebResourceDependency != null) return _isSupportWebResourceDependency.Value;
+                var request = new RetrieveVersionRequest();
+                var response = (RetrieveVersionResponse)CrmServiceClient.Execute(request);
+                var version = new Version(response.Version);
+                _isSupportWebResourceDependency = version >= new Version("9.0");
+                return _isSupportWebResourceDependency.Value;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -32,7 +33,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var projectFullName = Project.FullName;
             Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
+            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
             var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
             Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
@@ -56,7 +57,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     ProjectName = form.ProjectName;
                     if (!Utility.ExistProject(Dte, ProjectName))
                     {
-                        replacementsDictionary.Add("$DevKitVersion$", Const.VERSION);
+                        replacementsDictionary.Add("$DevKitVersion$", Const.Version);
                         replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                         replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
                         replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
@@ -67,15 +68,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$CrmUserName$", form.CrmConnection.UserName);
                         replacementsDictionary.Add("$CrmPassword$", form.CrmConnection.Password);
                         var solutionFullName = Dte?.Solution?.FullName;
-                        var fInfo = new FileInfo(solutionFullName);
-                        var parts = fInfo.Name.Split(".".ToCharArray());
                         replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
-
                         return;
                     }
                 }
             }
-            MessageBox.Show($"{FormType.UiTest.ToString()} project exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($@"{FormType.UiTest.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }

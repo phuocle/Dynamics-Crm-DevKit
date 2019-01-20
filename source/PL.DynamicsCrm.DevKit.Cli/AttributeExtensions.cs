@@ -10,7 +10,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
         {
             CrmPluginRegistrationAttribute attribute = null;
             var arguments = data.ConstructorArguments.ToArray();
-            // determine which constructor is being used by the first type
             if (data.ConstructorArguments.Count == 8 && data.ConstructorArguments[0].ArgumentType.Name == "String")
                 attribute = new CrmPluginRegistrationAttribute(
                     (string) arguments[0].Value,
@@ -43,57 +42,60 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     (IsolationModeEnum) Enum.ToObject(typeof(IsolationModeEnum), (int) arguments[4].Value)
                 );
 
-            foreach (var namedArgument in data.NamedArguments)
-                switch (namedArgument.MemberName)
+            if (data.NamedArguments != null && attribute != null)
+                foreach (var namedArgument in data.NamedArguments)
                 {
-                    case "Id":
-                        attribute.Id = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "FriendlyName":
-                        attribute.FriendlyName = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "GroupName":
-                        attribute.FriendlyName = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "Image1Name":
-                        attribute.Image1Name = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "Image1Attributes":
-                        attribute.Image1Attributes = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "Image2Name":
-                        attribute.Image2Name = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "Image2Attributes":
-                        attribute.Image2Attributes = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "Image1Type":
-                        attribute.Image1Type = (ImageTypeEnum) namedArgument.TypedValue.Value;
-                        break;
-                    case "Image2Type":
-                        attribute.Image2Type = (ImageTypeEnum) namedArgument.TypedValue.Value;
-                        break;
-                    case "Description":
-                        attribute.Description = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "DeleteAsyncOperation":
-                        attribute.DeleteAsyncOperation = (bool) namedArgument.TypedValue.Value;
-                        break;
-                    case "UnSecureConfiguration":
-                        attribute.UnSecureConfiguration = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "SecureConfiguration":
-                        attribute.SecureConfiguration = (string) namedArgument.TypedValue.Value;
-                        break;
-                    case "Offline":
-                        attribute.Offline = (bool) namedArgument.TypedValue.Value;
-                        break;
-                    case "Server":
-                        attribute.Server = (bool) namedArgument.TypedValue.Value;
-                        break;
-                    case "Action":
-                        attribute.Action = (PluginStepOperationEnum) namedArgument.TypedValue.Value;
-                        break;
+                    switch (namedArgument.MemberName)
+                    {
+                        case "Id":
+                            attribute.Id = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "FriendlyName":
+                            attribute.FriendlyName = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "GroupName":
+                            attribute.FriendlyName = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "Image1Name":
+                            attribute.Image1Name = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "Image1Attributes":
+                            attribute.Image1Attributes = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "Image2Name":
+                            attribute.Image2Name = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "Image2Attributes":
+                            attribute.Image2Attributes = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "Image1Type":
+                            attribute.Image1Type = (ImageTypeEnum) namedArgument.TypedValue.Value;
+                            break;
+                        case "Image2Type":
+                            attribute.Image2Type = (ImageTypeEnum) namedArgument.TypedValue.Value;
+                            break;
+                        case "Description":
+                            attribute.Description = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "DeleteAsyncOperation":
+                            attribute.DeleteAsyncOperation = (bool) namedArgument.TypedValue.Value;
+                            break;
+                        case "UnSecureConfiguration":
+                            attribute.UnSecureConfiguration = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "SecureConfiguration":
+                            attribute.SecureConfiguration = (string) namedArgument.TypedValue.Value;
+                            break;
+                        case "Offline":
+                            attribute.Offline = (bool) namedArgument.TypedValue.Value;
+                            break;
+                        case "Server":
+                            attribute.Server = (bool) namedArgument.TypedValue.Value;
+                            break;
+                        case "Action":
+                            attribute.Action = (PluginStepOperationEnum) namedArgument.TypedValue.Value;
+                            break;
+                    }
                 }
             return attribute;
         }

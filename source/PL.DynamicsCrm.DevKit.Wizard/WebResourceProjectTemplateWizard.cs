@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -13,8 +14,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         private DTE Dte { get; set; }
         private Project Project { get; set; }
         private string ProjectName { get; set; }
-        private string NetVersion { get; set; }
-        private string Port { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -35,7 +34,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var projectFullName = Project.FullName;
             Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
+            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
             var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
             Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
@@ -58,8 +57,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     ProjectName = form.ProjectName;
                     if (!Utility.ExistProject(Dte, ProjectName))
                     {
-                        NetVersion = form.NetVersion;
-                        replacementsDictionary.Add("$DevKitVersion$", Const.VERSION);
+                        replacementsDictionary.Add("$DevKitVersion$", Const.Version);
                         replacementsDictionary.Add("$version$", form.CrmVersion);
                         replacementsDictionary.Add("$NetVersion$", form.NetVersion);
                         replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
@@ -77,7 +75,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     }
                 }
             }
-            MessageBox.Show($"{FormType.WebResource.ToString()} project exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($@"{FormType.WebResource.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }

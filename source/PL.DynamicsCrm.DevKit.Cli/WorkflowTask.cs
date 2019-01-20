@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private string CurrentDirectory { get; }
         private string Version { get; }
 
-        private List<string> WorkflowFiles
+        private IEnumerable<string> WorkflowFiles
         {
             get
             {
@@ -56,28 +56,27 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         public void Run()
         {
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "START WORKFLOW TASKS");
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
+            CliLog.WriteLine(CliLog.ColorGreen, "START WORKFLOW TASKS");
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             foreach (var workflowFile in WorkflowFiles) RegisterWorkflow(workflowFile);
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
-            CliLog.WriteLine(CliLog.COLOR_GREEN, "END WORKFLOW TASKS");
-            CliLog.WriteLine(CliLog.COLOR_GREEN, new string('*', CliLog.STAR_LENGTH));
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
+            CliLog.WriteLine(CliLog.ColorGreen, "END WORKFLOW TASKS");
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
         }
 
         private void RegisterWorkflow(string workflowFile)
         {
             var assemblyFilePath = new FileInfo(workflowFile);
-            Assembly assembly = null;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-            assembly = Assembly.ReflectionOnlyLoadFrom(workflowFile);
+            var assembly = Assembly.ReflectionOnlyLoadFrom(workflowFile);
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
             if (assembly == null) return;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
             var workflowTypes = assembly.DefinedTypes.Where(p =>
-                p.BaseType != null ? p.BaseType.Name == typeof(CodeActivity).Name : false);
+                p.BaseType != null && p.BaseType.Name == typeof(CodeActivity).Name).ToList();
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
-            if (workflowTypes.Count() == 0) return;
+            if (!workflowTypes.Any()) return;
             var workflowEntity = RegisterAssembly(assemblyFilePath, assembly, workflowTypes);
             if (workflowEntity == null) return;
             AddAssemblyToSolution(workflowEntity);
@@ -98,24 +97,21 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     assembly = Assembly.ReflectionOnlyLoad(args.Name);
                     break;
             }
-
             return assembly;
         }
 
-        private Entity RegisterAssembly(FileInfo assemblyFilePath, Assembly assembly, IEnumerable<Type> workflowTypes)
+        private Entity RegisterAssembly(FileSystemInfo assemblyFilePath, Assembly assembly, IEnumerable<Type> workflowTypes)
         {
             var firstType = GetAttributes(workflowTypes, typeof(CrmPluginRegistrationAttribute).Name).FirstOrDefault();
             if (firstType == null)
             {
                 var message = "Workflow Assembly don't have any type: CrmPluginRegistrationAttribute";
-                CliLog.WriteLine(CliLog.COLOR_ERROR, message);
+                CliLog.WriteLine(CliLog.ColorError, message);
                 throw new Exception(message);
             }
-
             var firstTypeAttribute = firstType.CreateFromData();
             var assemblyProperties = assembly.GetName().FullName
                 .Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            var assemblyName = assembly.GetName().Name;
             var fetchData = new
             {
                 name = assemblyProperties[0]
@@ -142,32 +138,28 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
             var content = Convert.ToBase64String(File.ReadAllBytes(assemblyFilePath.FullName));
             if (content == existingContent) return null;
-            var plugin = new Entity("pluginassembly");
-            plugin["content"] = content;
-            plugin["name"] = assemblyProperties[0];
-            plugin["culture"] = assemblyProperties[4];
-            plugin["version"] = assemblyProperties[2];
-            plugin["publickeytoken"] = assemblyProperties[6];
-            plugin["sourcetype"] = new OptionSetValue(0); // database
-            plugin["isolationmode"] = firstTypeAttribute.IsolationMode == IsolationModeEnum.Sandbox
-                ? new OptionSetValue(2)
-                : // 2 = sandbox
-                new OptionSetValue(1); // 1 = none
+            var plugin = new Entity("pluginassembly")
+            {
+                ["content"] = content,
+                ["name"] = assemblyProperties[0],
+                ["culture"] = assemblyProperties[4],
+                ["version"] = assemblyProperties[2],
+                ["publickeytoken"] = assemblyProperties[6],
+                ["sourcetype"] = new OptionSetValue(0),
+                ["isolationmode"] = firstTypeAttribute.IsolationMode == IsolationModeEnum.Sandbox ? new OptionSetValue(2) : new OptionSetValue(1)
+            };
             if (pluginAssemblyId == Guid.Empty)
             {
-                CliLog.WriteLine(CliLog.COLOR_GREEN, "Registering Assembly: ", CliLog.COLOR_CYAN,
-                    $"{assemblyProperties[0]}");
+                CliLog.WriteLine(CliLog.ColorGreen, "Registering Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
                 pluginAssemblyId = CrmServiceClient.Create(plugin);
                 plugin["pluginassemblyid"] = pluginAssemblyId;
             }
             else
             {
-                CliLog.WriteLine(CliLog.COLOR_BLUE, "Updating Assembly: ", CliLog.COLOR_CYAN,
-                    $"{assemblyProperties[0]}");
+                CliLog.WriteLine(CliLog.ColorBlue, "Updating Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
                 plugin["pluginassemblyid"] = pluginAssemblyId;
                 CrmServiceClient.Update(plugin);
             }
-
             return plugin;
         }
 
@@ -179,7 +171,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var data = type.GetCustomAttributesData().Where(a => a.AttributeType.Name == attributeName);
                 attributes.AddRange(data);
             }
-
             return attributes;
         }
 
@@ -207,26 +198,24 @@ namespace PL.DynamicsCrm.DevKit.Cli
   </entity>
 </fetch>";
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (rows.Entities.Count == 0)
+            if (rows.Entities.Count != 0) return;
+            var request = new AddSolutionComponentRequest
             {
-                var request = new AddSolutionComponentRequest
-                {
-                    AddRequiredComponents = true,
-                    ComponentType = 91,
-                    ComponentId = Guid.Parse(workflow["pluginassemblyid"].ToString()),
-                    SolutionUniqueName = WorkflowJson.solution
-                };
-                CliLog.WriteLine(CliLog.COLOR_GREEN, "Adding Assembly: ", CliLog.COLOR_CYAN, $"{workflow["name"]} ",
-                    CliLog.COLOR_GREEN, "to solution: ", CliLog.COLOR_CYAN, $"{WorkflowJson.solution}");
-                CrmServiceClient.Execute(request);
-            }
+                AddRequiredComponents = true,
+                ComponentType = 91,
+                ComponentId = Guid.Parse(workflow["pluginassemblyid"].ToString()),
+                SolutionUniqueName = WorkflowJson.solution
+            };
+            CliLog.WriteLine(CliLog.ColorGreen, "Adding Assembly: ", CliLog.ColorCyan, $"{workflow["name"]} ",
+                CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{WorkflowJson.solution}");
+            CrmServiceClient.Execute(request);
         }
 
         private void RegisterWorkflowType(Entity workflowEntity, TypeInfo workflow)
         {
             var workflowAttributes = workflow.GetCustomAttributesData()
-                .Where(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name);
-            if (workflowAttributes.Count() == 0) return;
+                .Where(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name).ToList();
+            if (!workflowAttributes.Any()) return;
             foreach (var workflowAttribute in workflowAttributes)
             {
                 var attribute = workflowAttribute.CreateFromData();
@@ -244,19 +233,17 @@ namespace PL.DynamicsCrm.DevKit.Cli
   </entity>
 </fetch>";
                 var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                if (rows.Entities.Count == 0)
+                if (rows.Entities.Count != 0) continue;
+                var pluginType = new Entity("plugintype")
                 {
-                    var pluginType = new Entity("plugintype");
-                    pluginType["name"] = workflow.FullName;
-                    pluginType["friendlyname"] = workflow.FullName;
-                    pluginType["pluginassemblyid"] = new EntityReference("pluginassembly",
-                        Guid.Parse(workflowEntity["pluginassemblyid"].ToString()));
-                    pluginType["typename"] = workflow.FullName;
-                    pluginType["workflowactivitygroupname"] = attribute.GroupName;
-                    CliLog.WriteLine(CliLog.COLOR_GREEN, "\tRegistering Type: ", CliLog.COLOR_CYAN,
-                        $"{workflow.FullName}");
-                    CrmServiceClient.Create(pluginType);
-                }
+                    ["name"] = workflow.FullName,
+                    ["friendlyname"] = workflow.FullName,
+                    ["pluginassemblyid"] = new EntityReference("pluginassembly", Guid.Parse(workflowEntity["pluginassemblyid"].ToString())),
+                    ["typename"] = workflow.FullName,
+                    ["workflowactivitygroupname"] = attribute.GroupName
+                };
+                CliLog.WriteLine(CliLog.ColorGreen, "\tRegistering Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
+                CrmServiceClient.Create(pluginType);
             }
         }
     }
