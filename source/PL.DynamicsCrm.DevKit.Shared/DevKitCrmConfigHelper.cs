@@ -8,7 +8,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
 {
     public static class DevKitCrmConfigHelper
     {
-        private const string INDENT_STRING = "    ";
+        private const string IndentString = "    ";
 
         private static string FormatJson(string json)
         {
@@ -18,19 +18,17 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 from ch in json
                 let quotes = ch == '"' ? quoteCount++ : quoteCount
                 let lineBreak = ch == ',' && quotes % 2 == 0
-                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(INDENT_STRING, indentation))
+                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, indentation))
                     : null
                 let openChar = ch == '{' || ch == '['
-                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(INDENT_STRING, ++indentation))
+                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, ++indentation))
                     : ch.ToString()
                 let closeChar = ch == '}' || ch == ']'
-                    ? Environment.NewLine + string.Concat(Enumerable.Repeat(INDENT_STRING, --indentation)) + ch
+                    ? Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, --indentation)) + ch
                     : ch.ToString()
-                select lineBreak == null
-                    ? openChar.Length > 1
-                        ? openChar
-                        : closeChar
-                    : lineBreak;
+                select lineBreak ?? (openChar.Length > 1
+                           ? openChar
+                           : closeChar);
 
             return string.Concat(result);
         }

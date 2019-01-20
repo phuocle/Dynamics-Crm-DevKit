@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -32,7 +33,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var projectFullName = Project.FullName;
             Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
+            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
             var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
             Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
@@ -41,7 +42,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var tfs = new Tfs(Dte);
             tfs.Undo(fInfoProject.DirectoryName);
             tfs.Add(dInfoProject.FullName);
-            //Dte.ExecuteCommand("SolutionExplorer.Refresh");
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
@@ -49,15 +49,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Dte = (DTE) automationObject;
             var solutionFullName = Dte?.Solution?.FullName;
             ProjectName = Utility.GetSharedProject(solutionFullName);
-            var fInfo = new FileInfo(solutionFullName);
-            if (!Directory.Exists(Path.Combine(fInfo.DirectoryName, ProjectName)))
+            var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
+            if (!Directory.Exists(Path.Combine(fInfo.DirectoryName ?? throw new InvalidOperationException(), ProjectName)))
             {
-                replacementsDictionary.Add("$DevKitVersion$", Const.VERSION);
+                replacementsDictionary.Add("$DevKitVersion$", Const.Version);
                 replacementsDictionary.Add("$rootnamespace$", ProjectName);
                 replacementsDictionary.Add("$namespace$", ProjectName);
                 return;
             }
-            MessageBox.Show($"{FormType.Shared.ToString()} project exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($@"{FormType.Shared.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }

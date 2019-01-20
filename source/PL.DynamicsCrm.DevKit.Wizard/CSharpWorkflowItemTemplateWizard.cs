@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -41,7 +42,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$class$", form.ProjectName);
                     replacementsDictionary.Add("$EntityName$", entityName);
                     var solutionFullName = Dte?.Solution?.FullName;
-                    var fInfo = new FileInfo(solutionFullName);
+                    var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
                     var parts = fInfo.Name.Split(".".ToCharArray());
                     replacementsDictionary.Add("$DevKitShared$", $"{GetName(parts)}Shared");
                 }

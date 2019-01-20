@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -83,13 +84,13 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            if (DeleteFile != null && DeleteFile.Length > 0)
+            if (!string.IsNullOrEmpty(DeleteFile))
             {
-                if (filePath.ToLower() == "JavascriptFormIntellisense.js".ToLower())
+                if (string.Equals(filePath, "JavascriptFormIntellisense.js", StringComparison.CurrentCultureIgnoreCase))
                     return true;
-                if (filePath.ToLower() == "JavascriptForm.js".ToLower())
+                if (string.Equals(filePath, "JavascriptForm.js", StringComparison.CurrentCultureIgnoreCase))
                     return true;
-                if (filePath.ToLower() == "Javascript.js".ToLower())
+                if (string.Equals(filePath, "Javascript.js", StringComparison.CurrentCultureIgnoreCase))
                     return false;
             }
 

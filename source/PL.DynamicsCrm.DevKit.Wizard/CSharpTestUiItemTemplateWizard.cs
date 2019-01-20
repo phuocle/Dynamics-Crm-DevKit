@@ -33,7 +33,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 Dte = (DTE) automationObject;
                 var projects = (object[]) Dte.ActiveSolutionProjects;
                 var project = (Project) projects[0];
-                var entityName = string.Empty;
+                string entityName;
                 if (project.Name.Split('.').Length == 3)
                     entityName = "none";
                 else
@@ -41,7 +41,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         entityName = project.Name.Split('.')[3];
                     else
                         entityName = "none";
-                var logicalName = entityName.ToLower();
                 var form = new FormProject(FormType.UiTestItem, Dte, entityName);
                 if (form.ShowDialog() == DialogResult.OK)
                     replacementsDictionary.Add("$class$", form.ProjectName);
