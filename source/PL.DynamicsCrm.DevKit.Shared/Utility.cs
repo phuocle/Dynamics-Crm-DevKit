@@ -1,5 +1,5 @@
-﻿using EnvDTE;
-using System;
+﻿using System;
+using EnvDTE;
 using System.IO;
 using System.Reflection;
 
@@ -14,7 +14,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 string data;
                 var assembly = Assembly.GetExecutingAssembly();
                 using (var stream = assembly.GetManifestResourceStream(path))
-                using (var reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
                 {
                     data = reader.ReadToEnd();
                 }
@@ -22,20 +22,17 @@ namespace PL.DynamicsCrm.DevKit.Shared
             }
             catch
             {
-                if (path == "PL.DynamicsCrm.DevKit.Wizard.data.WebApi.js")
+                switch (path)
                 {
-                    path = "PL.DynamicsCrm.DevKit.Cli.Data.WebApi.js";
-                    return ReadEmbeddedResource(path);
-                }
-                else if (path == "PL.DynamicsCrm.DevKit.Wizard.data.DevKit.js")
-                {
-                    path = "PL.DynamicsCrm.DevKit.Cli.Data.DevKit.js";
-                    return ReadEmbeddedResource(path);
-                }
-                else if (path == "PL.DynamicsCrm.DevKit.Wizard.data.OptionSet.js")
-                {
-                    path = "PL.DynamicsCrm.DevKit.Cli.Data.OptionSet.js";
-                    return ReadEmbeddedResource(path);
+                    case "PL.DynamicsCrm.DevKit.Wizard.data.WebApi.js":
+                        path = "PL.DynamicsCrm.DevKit.Cli.Data.WebApi.js";
+                        return ReadEmbeddedResource(path);
+                    case "PL.DynamicsCrm.DevKit.Wizard.data.DevKit.js":
+                        path = "PL.DynamicsCrm.DevKit.Cli.Data.DevKit.js";
+                        return ReadEmbeddedResource(path);
+                    case "PL.DynamicsCrm.DevKit.Wizard.data.OptionSet.js":
+                        path = "PL.DynamicsCrm.DevKit.Cli.Data.OptionSet.js";
+                        return ReadEmbeddedResource(path);
                 }
             }
             return string.Empty;
@@ -46,8 +43,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             var items = @namespace.Split('.');
             for (var i = 0; i < items.Length; i++)
             {
-                int output = -1;
-                if (int.TryParse(items[i], out output))
+                if (int.TryParse(items[i], out _))
                 {
                     items[i] = $"_{items[i]}";
                 }
@@ -79,7 +75,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     File.Delete(file);
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
             }
         }
 
@@ -91,7 +90,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     Directory.Delete(directory, true);
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
             }
         }
 
@@ -108,7 +110,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
         public static string GetFolderProject(string solutionFullName, string projectName)
         {
             var fInfo = new FileInfo(solutionFullName);
-            return fInfo.Directory.FullName + "\\" + projectName;
+            return fInfo.Directory?.FullName + "\\" + projectName;
         }
     }
 }

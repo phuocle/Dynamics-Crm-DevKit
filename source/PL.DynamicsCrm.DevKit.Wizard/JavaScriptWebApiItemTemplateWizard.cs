@@ -9,7 +9,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
     internal class JavaScriptWebApiItemTemplateWizard : IWizard
     {
         private DTE Dte { get; set; }
-        private string DeleteFile { get; set; }
 
         private string WebApiCodeProjectItem { get; set; }
         private string WebApiCodeIntellisenseProjectItem { get; set; }
@@ -25,13 +24,13 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
-        private ProjectItem formProjectItem = null;
+        private ProjectItem _formProjectItem;
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
             WebApiCodeProjectItem = projectItem.FileNames[0];
             CreateWebApiCode();
-            formProjectItem.ProjectItems.AddFromFile(WebApiCodeProjectItem);
+            _formProjectItem.ProjectItems.AddFromFile(WebApiCodeProjectItem);
             projectItem.ContainingProject.Save();
         }
 
@@ -48,10 +47,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 var form = new FormProject(FormType.JsWebApiItem, Dte);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    formProjectItem = GetFormProjectItem(Dte, form.Class);
-                    if (formProjectItem == null)
+                    _formProjectItem = GetFormProjectItem(Dte, form.Class);
+                    if (_formProjectItem == null)
                     {
-                        MessageBox.Show($"Not found: {form.Class}.js file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($@"Not found: {form.Class}.js file!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         throw new WizardCancelledException($"Not found: {form.Class}.js file!");
                     }
                     GeneratedJsWebApiCode = form.GeneratedJsWebApiCode;

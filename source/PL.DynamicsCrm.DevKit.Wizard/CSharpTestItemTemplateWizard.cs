@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
-using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
@@ -35,8 +35,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 Dte = (DTE) automationObject;
                 var projects = (object[]) Dte.ActiveSolutionProjects;
                 var project = (Project) projects[0];
-                var entityName = string.Empty;
-                entityName = project.Name.Split('.')[project.Name.Split('.').Length - 2];
+                var entityName = project.Name.Split('.')[project.Name.Split('.').Length - 2];
                 var logicalName = entityName.ToLower();
                 var form = new FormProject(FormType.TestItem, Dte, entityName);
                 if (form.ShowDialog() == DialogResult.OK)
@@ -70,7 +69,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$FormType$", "false");
                     }
                     var solutionFullName = Dte?.Solution?.FullName;
-                    var fInfo = new FileInfo(solutionFullName);
+                    var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
                     var parts = fInfo.Name.Split(".".ToCharArray());
                     replacementsDictionary.Add("$DevKitShared$", $"{GetName(parts)}Shared");
                 }
@@ -91,14 +90,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             for (var i = 0; i < parts.Length - 1; i++)
                 data += parts[i] + ".";
             return data;
-        }
-
-        private string GetName2(string[] parts)
-        {
-            var data = string.Empty;
-            for (var i = 0; i < parts.Length - 1; i++)
-                data += parts[i] + ".";
-            return data.TrimEnd(".".ToCharArray());
         }
 
         public bool ShouldAddProjectItem(string filePath)

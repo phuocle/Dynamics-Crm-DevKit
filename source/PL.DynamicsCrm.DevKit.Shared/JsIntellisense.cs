@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -12,11 +11,8 @@ namespace PL.DynamicsCrm.DevKit.Shared
 {
     public class JsIntellisense
     {
-        private OrganizationServiceProxy CrmService { get; }
-
         public JsIntellisense(OrganizationServiceProxy crmService)
         {
-            CrmService = crmService;
         }
 
         public string Intellisense

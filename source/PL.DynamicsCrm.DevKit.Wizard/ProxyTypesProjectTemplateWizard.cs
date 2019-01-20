@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -32,7 +33,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var projectFullName = Project.FullName;
             Dte.Solution.Remove(Project);
             var fInfoProject = new FileInfo(projectFullName);
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName);
+            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
             var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
             Utility.TryDeleteDirectory(folder);
             dInfoProject.MoveTo(folder);
@@ -55,7 +56,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     ProjectName = form.ProjectName;
                     if (!Utility.ExistProject(Dte, ProjectName))
                     {
-                        replacementsDictionary.Add("$DevKitVersion$", Const.VERSION);
+                        replacementsDictionary.Add("$DevKitVersion$", Const.Version);
                         replacementsDictionary.Remove("$projectname$");
                         replacementsDictionary.Add("$projectname$", ProjectName);
                         replacementsDictionary.Add("$version$", form.CrmVersion);
@@ -78,7 +79,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     }
                 }
             }
-            MessageBox.Show($"{FormType.ProxyTypes.ToString()} project exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($@"{FormType.ProxyTypes.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }
