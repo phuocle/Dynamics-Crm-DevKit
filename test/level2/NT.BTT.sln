@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT.BTT.DataProvider", "NT.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT.BTT.DataProvider.Sql", "NT.BTT.DataProvider.Sql\NT.BTT.DataProvider.Sql.csproj", "{BE411054-234D-40EB-A9A8-614AA285E81B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT.BTT.ProxyTypes", "NT.BTT.ProxyTypes\NT.BTT.ProxyTypes.csproj", "{6CF0CFB1-35B1-4975-8547-BB3F0A4B8E13}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		NT.BTT.Shared\NT.BTT.Shared.projitems*{094406d6-d720-4d98-834e-dbdf770a0b09}*SharedItemsImports = 4
@@ -104,6 +106,10 @@ Global
 		{BE411054-234D-40EB-A9A8-614AA285E81B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE411054-234D-40EB-A9A8-614AA285E81B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE411054-234D-40EB-A9A8-614AA285E81B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CF0CFB1-35B1-4975-8547-BB3F0A4B8E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CF0CFB1-35B1-4975-8547-BB3F0A4B8E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CF0CFB1-35B1-4975-8547-BB3F0A4B8E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CF0CFB1-35B1-4975-8547-BB3F0A4B8E13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
