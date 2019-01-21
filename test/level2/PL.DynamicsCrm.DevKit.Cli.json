@@ -111,23 +111,23 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "PLDynamicsCrmDevKit",
       "includefiles": [
-        "???.dll"
+        "NT.BTT.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.dll"
+        "NT.BTT.*.Test.dll"
       ]
     },
     {
       "profile": "RELEASE",
       "folder": "Release\\dll",
-      "solution": "???",
+      "solution": "PLDynamicsCrmDevKit",
       "includefiles": [
-        "???.dll"
+        "NT.BTT.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.dll"
+        "NT.BTT.*.Test.dll"
       ]
     }
   ],
