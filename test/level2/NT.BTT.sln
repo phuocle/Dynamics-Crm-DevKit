@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NT.BTT.Shared", "NT.BTT.Shared\NT.BTT.Shared.shproj", "{6D04D567-DA64-412D-B95B-888D6739D738}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		NT.BTT.Shared\NT.BTT.Shared.projitems*{6d04d567-da64-412d-b95b-888d6739d738}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2D5A29F-D46F-443E-9999-F01CB4717CC5}
+	EndGlobalSection
+EndGlobal
