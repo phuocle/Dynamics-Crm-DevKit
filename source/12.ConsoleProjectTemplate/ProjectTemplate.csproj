@@ -28,7 +28,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Release\exe\$ProjectName$</OutputPath>
+    <OutputPath>..\Release\console\$ProjectName$</OutputPath>
     <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -61,4 +61,12 @@
   </ItemGroup>
   <Import Project="..\$ShareProject$\$ShareProject$.projitems" Label="Shared" Condition="Exists('..\$ShareProject$\$ShareProject$.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+      if $(ConfigurationName)==Release (
+        DEL $(TargetDir)*.xml
+        DEL $(TargetDir)*.pdb
+      )
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

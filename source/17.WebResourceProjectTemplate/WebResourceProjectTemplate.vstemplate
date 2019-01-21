@@ -26,7 +26,7 @@
       <Folder Name="css" TargetFolderName="css" />
       <Folder Name="js" TargetFolderName="js" />
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="deploy.bat">deploy.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="chutzpah.json">chutzpah.json</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="test\mock.intellisense.js">mock.intellisense.js</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="test\DevKitMock.js">DevKitMock.js</ProjectItem>

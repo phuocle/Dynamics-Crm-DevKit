@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\sources\phuocle\tfs\CDS-CRMGRIDPLUS\CRM";
+                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\level2\NT.BTT.CustomAction";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -66,7 +66,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             Run(arguments);
 #if DEBUG
-            CliLog.WriteLine(CliLog.COLOR_RED, "!!! FINISHED !!!");
+            CliLog.WriteLine(CliLog.ColorRed, "!!! FINISHED !!!");
             Console.ReadKey();
 #endif
 #if !DEBUG

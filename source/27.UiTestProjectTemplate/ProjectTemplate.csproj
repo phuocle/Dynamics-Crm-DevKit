@@ -131,4 +131,13 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Selenium.Chrome.WebDriver.2.45\build\Selenium.Chrome.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.Chrome.WebDriver.2.45\build\Selenium.Chrome.WebDriver.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+      if $(ConfigurationName)==Release (
+      DEL $(TargetDir)*.xml
+      DEL $(TargetDir)*.pdb
+      DEL $(TargetDir)Microsoft.*.dll
+      )
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

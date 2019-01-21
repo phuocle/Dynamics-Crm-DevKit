@@ -47,7 +47,7 @@
 	</ItemGroup>
 	<ItemGroup>
     <None Include="packages.config" />
-    <None Include="deploy.bat" />
+    <None Include="deploy.debug.bat" />
     <None Include="$ProjectName$.snk" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
 	</ItemGroup>
@@ -59,4 +59,13 @@
     <AssemblyOriginatorKeyFile>$ProjectName$.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+      if $(ConfigurationName)==Release (
+      DEL $(TargetDir)*.xml
+      DEL $(TargetDir)*.pdb
+      DEL $(TargetDir)Microsoft.*.dll
+      )
+    </PostBuildEvent>
+  </PropertyGroup>
  </Project>

@@ -50,7 +50,7 @@
     <Compile Include="Retrieve.cs" />
     <Compile Include="RetrieveMultiple.cs" />
     <None Include="packages.config" />
-    <None Include="deploy.bat" />
+    <None Include="deploy.debug.bat" />
     <None Include="$ProjectName$.snk" />
   </ItemGroup>
   <PropertyGroup>
@@ -61,4 +61,13 @@
   </PropertyGroup>
   <Import Project="..\$ShareProject$\$ShareProject$.projitems" Label="Shared" Condition="Exists('..\$ShareProject$\$ShareProject$.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+      if $(ConfigurationName)==Release (
+      DEL $(TargetDir)*.xml
+      DEL $(TargetDir)*.pdb
+      DEL $(TargetDir)Microsoft.*.dll
+      )
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

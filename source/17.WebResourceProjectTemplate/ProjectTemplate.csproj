@@ -55,7 +55,7 @@
     <Folder Include="test\"/>
     <Folder Include="resources\"/>
 		<Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="deploy.bat" />
+    <None Include="deploy.debug.bat" />
     <None Include="test.bat" />
     <None Include="chutzpah.json" />
     <None Include="package.json" />
