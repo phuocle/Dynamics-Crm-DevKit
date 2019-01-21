@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT.BTT.CustomAction", "NT.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT.BTT.CustomAction.Account", "NT.BTT.CustomAction.Account\NT.BTT.CustomAction.Account.csproj", "{397E9E61-8D28-4447-8AB7-411F261AD76A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT.BTT.CustomAction.2", "NT.BTT.CustomAction.2\NT.BTT.CustomAction.2.csproj", "{B7654CF5-E552-4E82-A407-6E1009F9EA78}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		NT.BTT.Shared\NT.BTT.Shared.projitems*{2050f6b6-bc73-4c30-b41b-04d9b0fbd410}*SharedItemsImports = 4
@@ -28,6 +30,7 @@ Global
 		NT.BTT.Shared\NT.BTT.Shared.projitems*{65c9cb14-2fc5-4c5d-b82c-48e1bd08ae5b}*SharedItemsImports = 4
 		NT.BTT.Shared\NT.BTT.Shared.projitems*{6d04d567-da64-412d-b95b-888d6739d738}*SharedItemsImports = 13
 		NT.BTT.Shared\NT.BTT.Shared.projitems*{93377105-9774-46b4-be2f-d66179c34faa}*SharedItemsImports = 4
+		NT.BTT.Shared\NT.BTT.Shared.projitems*{b7654cf5-e552-4e82-a407-6e1009f9ea78}*SharedItemsImports = 4
 		NT.BTT.Shared\NT.BTT.Shared.projitems*{dc56c40c-deb5-4c44-8d54-59e8b2bde2bf}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +58,10 @@ Global
 		{397E9E61-8D28-4447-8AB7-411F261AD76A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{397E9E61-8D28-4447-8AB7-411F261AD76A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{397E9E61-8D28-4447-8AB7-411F261AD76A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7654CF5-E552-4E82-A407-6E1009F9EA78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7654CF5-E552-4E82-A407-6E1009F9EA78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7654CF5-E552-4E82-A407-6E1009F9EA78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7654CF5-E552-4E82-A407-6E1009F9EA78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
