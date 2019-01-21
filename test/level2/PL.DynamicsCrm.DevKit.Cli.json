@@ -6,7 +6,8 @@
       "solution": "PLDynamicsCrmDevKit",
       "includefiles": [
         "NT.BTT.CustomAction.dll",
-        "NT.BTT.CustomAction.*.dll"
+        "NT.BTT.CustomAction.*.dll",
+        "NT.BTT.Plugin.*.dll"
       ],
       "excludefiles": [
         "NT.BTT.*.Test.dll"
@@ -18,7 +19,8 @@
       "solution": "PLDynamicsCrmDevKit",
       "includefiles": [
         "NT.BTT.CustomAction.dll",
-        "NT.BTT.CustomAction.*.dll"
+        "NT.BTT.CustomAction.*.dll",
+        "NT.BTT.Plugin.*.dll"
       ],
       "excludefiles": [
         "NT.BTT.*.Test.dll"

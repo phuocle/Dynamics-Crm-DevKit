@@ -23,8 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT.BTT.CustomAction.Account
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT.BTT.CustomAction.2", "NT.BTT.CustomAction.2\NT.BTT.CustomAction.2.csproj", "{B7654CF5-E552-4E82-A407-6E1009F9EA78}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NT.BTT.Plugin.Account", "NT.BTT.Plugin.Account\NT.BTT.Plugin.Account.csproj", "{094406D6-D720-4D98-834E-DBDF770A0B09}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		NT.BTT.Shared\NT.BTT.Shared.projitems*{094406d6-d720-4d98-834e-dbdf770a0b09}*SharedItemsImports = 4
 		NT.BTT.Shared\NT.BTT.Shared.projitems*{2050f6b6-bc73-4c30-b41b-04d9b0fbd410}*SharedItemsImports = 4
 		NT.BTT.Shared\NT.BTT.Shared.projitems*{397e9e61-8d28-4447-8ab7-411f261ad76a}*SharedItemsImports = 4
 		NT.BTT.Shared\NT.BTT.Shared.projitems*{65c9cb14-2fc5-4c5d-b82c-48e1bd08ae5b}*SharedItemsImports = 4
@@ -62,6 +65,10 @@ Global
 		{B7654CF5-E552-4E82-A407-6E1009F9EA78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7654CF5-E552-4E82-A407-6E1009F9EA78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7654CF5-E552-4E82-A407-6E1009F9EA78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{094406D6-D720-4D98-834E-DBDF770A0B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{094406D6-D720-4D98-834E-DBDF770A0B09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{094406D6-D720-4D98-834E-DBDF770A0B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{094406D6-D720-4D98-834E-DBDF770A0B09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
