@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>6cf0cfb1-35b1-4975-8547-bb3f0a4b8e13</ProjectGuid>
+    <ProjectGuid>{24F931D0-A884-4354-B3C5-47AC3A575D6A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NT.BTT.ProxyTypes</RootNamespace>

@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{$guid1$}</ProjectGuid>
+    <ProjectGuid>{1869ce14-94f4-489f-8e94-b4a0bbf8a1c1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$SafeNamespace$</RootNamespace>
-    <AssemblyName>$AssemblyName$</AssemblyName>
-    <TargetFrameworkVersion>$NetVersion$</TargetFrameworkVersion>
+    <RootNamespace>NT.BTT.CustomAction._2.Test</RootNamespace>
+    <AssemblyName>NT.BTT.CustomAction.2.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -101,15 +101,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\$ProjectTestName$\$ProjectTestName$.csproj">
-      <Project>{$ProjectTestGuid$}</Project>
-      <Name>$ProjectTestName$</Name>
+    <ProjectReference Include="..\NT.BTT.CustomAction.2\NT.BTT.CustomAction.2.csproj">
+      <Project>{b7654cf5-e552-4e82-a407-6e1009f9ea78}</Project>
+      <Name>NT.BTT.CustomAction.2</Name>
     </ProjectReference>
-$if$($ProxyTypes$==true)    <ProjectReference Include="..\$ProjectProxyTypesName$\$ProjectProxyTypesName$.csproj">
+    <ProjectReference Include="..\NT.BTT.ProxyTypes\NT.BTT.ProxyTypes.csproj">
       <Project>{24F931D0-A884-4354-B3C5-47AC3A575D6A}</Project>
-      <Name>$ProjectProxyTypesName$</Name>
+      <Name>NT.BTT.ProxyTypes</Name>
     </ProjectReference>
-$endif$
+
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -121,7 +121,7 @@ $endif$
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets'))" />
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" />
-  <Import Project="..\$ShareProject$\$ShareProject$.projitems" Label="Shared" Condition="Exists('..\$ShareProject$\$ShareProject$.projitems')" />
+  <Import Project="..\NT.BTT.Shared\NT.BTT.Shared.projitems" Label="Shared" Condition="Exists('..\NT.BTT.Shared\NT.BTT.Shared.projitems')" />
   <PropertyGroup>
     <PostBuildEvent>
       if $(ConfigurationName)==Release (

@@ -990,6 +990,14 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     btnCancel.Enabled = true;
                     return;
                 }
+                else
+                {
+                    ProxyTypes = new ProjectData
+                    {
+                        Id = Const.ProxyTypesGuid.ToString(),
+                        Name = $"{GetName(parts)}ProxyTypes"
+                    };
+                }
                 DialogResult = DialogResult.OK;
                 Close();
             }
