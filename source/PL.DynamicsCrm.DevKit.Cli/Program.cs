@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\sources\phuocle\tfs\CDS-CRMGRIDPLUS\CRM";
+                return @"D:\src\vsts\tfs\CDS-CRMGRIDPLUS\ADDON\Source\AddOn.WebResource";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

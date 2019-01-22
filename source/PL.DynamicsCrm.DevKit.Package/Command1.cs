@@ -134,7 +134,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                 goto CLEAR_STATUS;
             }
 
-            if (string.IsNullOrEmpty(config.SolutionPrefix))
+            if (config.SolutionPrefix == null)
             {
                 ShowError("PL.DynamicsCrm.DevKit.json config not found SolutionPrefix data");
                 goto CLEAR_STATUS;
@@ -172,6 +172,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                 for (var j = i + 1; j < parts.Length; j++)
                     value += $"{parts[j]}/";
                 if (value.EndsWith("/")) value = value.TrimEnd("/".ToCharArray());
+                if (value.StartsWith("/")) value = value.Substring(1);
                 condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>";
             }
 
