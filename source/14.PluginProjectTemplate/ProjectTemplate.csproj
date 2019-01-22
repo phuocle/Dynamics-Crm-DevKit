@@ -59,6 +59,9 @@
     <AssemblyOriginatorKeyFile>$ProjectName$.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Cli.$PLDynamicsCrmDevKitCliVersion$\tools\PL.DynamicsCrm.DevKit.Analyzer.dll" />
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
       if $(ConfigurationName)==Release (

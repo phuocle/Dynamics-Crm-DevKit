@@ -122,6 +122,9 @@ $endif$
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" />
   <Import Project="..\$ShareProject$\$ShareProject$.projitems" Label="Shared" Condition="Exists('..\$ShareProject$\$ShareProject$.projitems')" />
+  <ItemGroup>
+    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Cli.$PLDynamicsCrmDevKitCliVersion$\tools\PL.DynamicsCrm.DevKit.Analyzer.dll" />
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
       if $(ConfigurationName)==Release (

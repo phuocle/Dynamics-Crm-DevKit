@@ -131,6 +131,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Selenium.Chrome.WebDriver.2.45\build\Selenium.Chrome.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.Chrome.WebDriver.2.45\build\Selenium.Chrome.WebDriver.targets'))" />
   </Target>
+  <ItemGroup>
+    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Cli.$PLDynamicsCrmDevKitCliVersion$\tools\PL.DynamicsCrm.DevKit.Analyzer.dll" />
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
       if $(ConfigurationName)==Release (
