@@ -203,6 +203,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private Entity DeployWebResource(WebResourceFile webResourceFile, int current, int totalWebResources)
         {
             var len = totalWebResources.ToString().Length;
+            if (webResourceFile.uniquename.StartsWith("/")) webResourceFile.uniquename = webResourceFile.uniquename.Substring(1);
             var fetchData = new
             {
                 name = webResourceFile.uniquename
