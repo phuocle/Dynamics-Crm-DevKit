@@ -39,6 +39,14 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public string ResourceStringName => txtName.Text;
         public string CrmVersion => cboCrmVersion.Text;
 
+        public NuGetPackage CoreToolsVersion
+        {
+            get
+            {
+                return NuGetHelper.GetMicrosoftCrmSdkCoreToolsPackages().FirstOrDefault();
+            }
+        }
+
         public string NetVersion => cboNetVersion.Text;
 
         public string ProjectName => lblProjectName.Text;
