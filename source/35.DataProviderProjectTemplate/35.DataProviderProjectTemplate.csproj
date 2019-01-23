@@ -52,7 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="deploy.bat" />
+    <None Include="deploy.debug.bat" />
     <None Include="key.snk" />
     <None Include="Retrieve.cs" />
     <None Include="RetrieveMultiple.cs" />

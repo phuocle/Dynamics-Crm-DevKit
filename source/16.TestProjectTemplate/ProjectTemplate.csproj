@@ -106,7 +106,7 @@
       <Name>$ProjectTestName$</Name>
     </ProjectReference>
 $if$($ProxyTypes$==true)    <ProjectReference Include="..\$ProjectProxyTypesName$\$ProjectProxyTypesName$.csproj">
-      <Project>{$ProjectProxyTypesGuid$}</Project>
+      <Project>{24F931D0-A884-4354-B3C5-47AC3A575D6A}</Project>
       <Name>$ProjectProxyTypesName$</Name>
     </ProjectReference>
 $endif$
@@ -121,4 +121,17 @@ $endif$
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets'))" />
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" />
+  <Import Project="..\$ShareProject$\$ShareProject$.projitems" Label="Shared" Condition="Exists('..\$ShareProject$\$ShareProject$.projitems')" />
+  <ItemGroup>
+    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Cli.$PLDynamicsCrmDevKitCliVersion$\tools\PL.DynamicsCrm.DevKit.Analyzer.dll" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+      if $(ConfigurationName)==Release (
+      DEL $(TargetDir)*.xml
+      DEL $(TargetDir)*.pdb
+      DEL $(TargetDir)Microsoft.*.dll
+      )
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

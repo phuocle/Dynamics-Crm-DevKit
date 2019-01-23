@@ -66,16 +66,17 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         {
                             replacementsDictionary.Add("$ProxyTypes$", "true");
                             replacementsDictionary.Add("$ProjectProxyTypesName$", form.ProxyTypes.Name);
-                            replacementsDictionary.Add("$ProjectProxyTypesGuid$", form.ProxyTypes.Id);
+                            //replacementsDictionary.Add("$ProjectProxyTypesGuid$", form.ProxyTypes.Id);
                         }
                         else
                         {
                             replacementsDictionary.Add("$ProxyTypes$", "false");
                         }
-
+                        replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
                         replacementsDictionary.Add("$ProjectTestName$", form.SelectedProjectData.Name);
                         replacementsDictionary.Add("$ProjectTestGuid$", form.SelectedProjectData.Id);
-
+                        var solutionFullName = Dte?.Solution?.FullName;
+                        replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
                         return;
                     }
                 }

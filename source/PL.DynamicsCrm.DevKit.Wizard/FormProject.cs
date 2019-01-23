@@ -39,6 +39,14 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public string ResourceStringName => txtName.Text;
         public string CrmVersion => cboCrmVersion.Text;
 
+        public NuGetPackage CoreToolsVersion
+        {
+            get
+            {
+                return NuGetHelper.GetMicrosoftCrmSdkCoreToolsPackages().FirstOrDefault();
+            }
+        }
+
         public string NetVersion => cboNetVersion.Text;
 
         public string ProjectName => lblProjectName.Text;
@@ -990,6 +998,14 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     btnCancel.Enabled = true;
                     return;
                 }
+                else
+                {
+                    ProxyTypes = new ProjectData
+                    {
+                        Id = Const.ProxyTypesGuid.ToString(),
+                        Name = $"{GetName(parts)}ProxyTypes"
+                    };
+                }
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -1217,7 +1233,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
             btnOk.Enabled = btnConnection.Visible && CrmConnection != null && txtName.Text.Length > 0 ||
                             !btnConnection.Visible && txtName.Text.Length > 0;
-            if (FormType == FormType.Workflow || FormType == FormType.CustomAction || FormType == FormType.Report)
+            if (FormType == FormType.Workflow || FormType == FormType.CustomAction || FormType == FormType.Report || FormType == FormType.DataProvider)
                 btnOk.Enabled = true;
         }
 

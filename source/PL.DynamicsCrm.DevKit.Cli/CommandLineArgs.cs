@@ -6,18 +6,18 @@ namespace PL.DynamicsCrm.DevKit.Cli
     public class CommandLineArgs
     {
         [CommandLineParameter(Command = "conn", Name = "Connection", Required = true, Description = "Dynamics 365 Connection String")]
-        public string Connection => null;
+        public string Connection { get; set; }
 
         [CommandLineParameter(Command = "json", Name = "Json", Required = true, Description = "PL.DynamicsCrm.DevKit.Cli json file")]
-        public string Json => null;
+        public string Json { get; set; }
 
         [CommandLineParameter(Command = "type", Name = "Type", Required = true, Description = "Type task")]
-        public string Type => null;
+        public string Type { get; set; }
 
         [CommandLineParameter(Command = "profile", Name = "Profile", Required = true, Description = "Profile of task")]
-        public string Profile => null;
+        public string Profile { get; set; }
 
         [CommandLineParameter(Command = "version", Name = "Version", Required = true, Description = "Version number")]
-        public string Version => null;
+        public string Version { get; set; }
     }
 }

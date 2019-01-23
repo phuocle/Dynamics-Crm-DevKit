@@ -71,6 +71,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary["$destinationdirectory$"] = Utility.GetFolderProject(solutionFullName, ProjectName);
                         replacementsDictionary["$safeprojectname$"] = ProjectName;
                         replacementsDictionary["$projectname$"] = ProjectName;
+                        replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
                         return;
                     }
                 }
