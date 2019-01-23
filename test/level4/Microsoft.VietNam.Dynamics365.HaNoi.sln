@@ -11,9 +11,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VietNam.Dynamics3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VietNam.Dynamics365.HaNoi.Console.Azure", "Microsoft.VietNam.Dynamics365.HaNoi.Console.Azure\Microsoft.VietNam.Dynamics365.HaNoi.Console.Azure.csproj", "{2FA4C750-816A-47B1-8891-6E7511A4CC8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VietNam.Dynamics365.HaNoi.Plugin.Account", "Microsoft.VietNam.Dynamics365.HaNoi.Plugin.Account\Microsoft.VietNam.Dynamics365.HaNoi.Plugin.Account.csproj", "{9BF8B7F8-D467-4A25-BF2A-EA7CFE002C43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VietNam.Dynamics365.HaNoi.Plugin.Opportunity", "Microsoft.VietNam.Dynamics365.HaNoi.Plugin.Opportunity\Microsoft.VietNam.Dynamics365.HaNoi.Plugin.Opportunity.csproj", "{6AA6DC96-D8DC-4E3F-92BA-6C22BB7876F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VietNam.Dynamics365.HaNoi.Plugin.Contact", "Microsoft.VietNam.Dynamics365.HaNoi.Plugin.Contact\Microsoft.VietNam.Dynamics365.HaNoi.Plugin.Contact.csproj", "{AD18108A-8FAB-4F25-AF26-95494010BD89}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Microsoft.VietNam.Dynamics365.HaNoi.Shared\Microsoft.VietNam.Dynamics365.HaNoi.Shared.projitems*{2fa4c750-816a-47b1-8891-6e7511a4cc8f}*SharedItemsImports = 4
+		Microsoft.VietNam.Dynamics365.HaNoi.Shared\Microsoft.VietNam.Dynamics365.HaNoi.Shared.projitems*{6aa6dc96-d8dc-4e3f-92ba-6c22bb7876f0}*SharedItemsImports = 4
+		Microsoft.VietNam.Dynamics365.HaNoi.Shared\Microsoft.VietNam.Dynamics365.HaNoi.Shared.projitems*{9bf8b7f8-d467-4a25-bf2a-ea7cfe002c43}*SharedItemsImports = 4
+		Microsoft.VietNam.Dynamics365.HaNoi.Shared\Microsoft.VietNam.Dynamics365.HaNoi.Shared.projitems*{ad18108a-8fab-4f25-af26-95494010bd89}*SharedItemsImports = 4
 		Microsoft.VietNam.Dynamics365.HaNoi.Shared\Microsoft.VietNam.Dynamics365.HaNoi.Shared.projitems*{ca376a8b-30be-4ea9-ac24-1bd410311b86}*SharedItemsImports = 4
 		Microsoft.VietNam.Dynamics365.HaNoi.Shared\Microsoft.VietNam.Dynamics365.HaNoi.Shared.projitems*{df0fd940-23a1-45d9-8a20-81bad6cf589e}*SharedItemsImports = 13
 		Microsoft.VietNam.Dynamics365.HaNoi.Shared\Microsoft.VietNam.Dynamics365.HaNoi.Shared.projitems*{fe3725aa-64b3-4f58-9edb-01de21b98e0c}*SharedItemsImports = 4
@@ -35,6 +44,18 @@ Global
 		{2FA4C750-816A-47B1-8891-6E7511A4CC8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FA4C750-816A-47B1-8891-6E7511A4CC8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FA4C750-816A-47B1-8891-6E7511A4CC8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BF8B7F8-D467-4A25-BF2A-EA7CFE002C43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BF8B7F8-D467-4A25-BF2A-EA7CFE002C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BF8B7F8-D467-4A25-BF2A-EA7CFE002C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BF8B7F8-D467-4A25-BF2A-EA7CFE002C43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AA6DC96-D8DC-4E3F-92BA-6C22BB7876F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AA6DC96-D8DC-4E3F-92BA-6C22BB7876F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AA6DC96-D8DC-4E3F-92BA-6C22BB7876F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AA6DC96-D8DC-4E3F-92BA-6C22BB7876F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD18108A-8FAB-4F25-AF26-95494010BD89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD18108A-8FAB-4F25-AF26-95494010BD89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD18108A-8FAB-4F25-AF26-95494010BD89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD18108A-8FAB-4F25-AF26-95494010BD89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
