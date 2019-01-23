@@ -51,6 +51,7 @@
     <None Include="deploy.debug.bat" />
     <None Include="NT.BTT.Plugin.Account.snk" />
     <Compile Include="PostAccountCreateAsynchronous.cs" />
+    <Compile Include="PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\NT.BTT.Shared\NT.BTT.Shared.projitems" Label="Shared" Condition="Exists('..\NT.BTT.Shared\NT.BTT.Shared.projitems')" />
