@@ -79,7 +79,7 @@
       "profile": "RELEASE",
       "solution": "???",
       "prefix": "???",
-      "rootfolder": "???.WebResource",
+      "rootfolder": "???",
       "includefiles": [
         "css\\**.css",
         "entities\\*.js",
@@ -176,21 +176,21 @@
   "generators": [
     {
       "profile": "LATEBOUND",
-      "rootnamespace": "PL.CrmGridPlus",
-      "rootfolder": "PL.CrmGridPlus.Shared\\Entities",
+      "rootnamespace": "???",
+      "rootfolder": "???",
       "type": "CSharp"
     },
     {
       "profile": "JS-FORM",
-      "rootnamespace": "PL.CrmGridPlus",
-      "rootfolder": "PL.CrmGridPlus.Shared\\Entities",
+      "rootnamespace": "???",
+      "rootfolder": "???",
       "type": "JsForm"
     },
     {
-      "profile": "WEBAPI",
-      "rootnamespace": "PL.CrmGridPlus",
-      "rootfolder": "PL.CrmGridPlus.Shared\\Entities",
-      "type": "WebApi"
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "JsWebApi"
     }
   ]
 }

@@ -69,6 +69,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$CrmPassword$", form.CrmConnection.Password);
                         var solutionFullName = Dte?.Solution?.FullName;
                         replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
+                        replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
                         return;
                     }
                 }

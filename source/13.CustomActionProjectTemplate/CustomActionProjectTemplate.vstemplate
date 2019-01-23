@@ -20,7 +20,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="$ProjectName$.snk">key.snk</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="deploy.bat">deploy.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

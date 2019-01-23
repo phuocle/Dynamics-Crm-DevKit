@@ -38,10 +38,23 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
             return packages;
         }
 
+        public static List<NuGetPackage> GetMicrosoftCrmSdkCoreToolsPackages()
+        {
+            var list = GetPackages("Microsoft.CrmSdk.CoreTools");
+            if (list == null) return new List<NuGetPackage> { new NuGetPackage { Version = "9.0.2.6" } };
+            var packages = (from item in list
+                            orderby item.Version.ToOriginalString() descending
+                            select new NuGetPackage
+                            {
+                                Version = item.Version.ToOriginalString()
+                            }).ToList();
+            return packages;
+        }
+
         public static NuGetPackage GetPLDynamicsCrmDevKitCliPackage()
         {
             var list = GetPackages("PL.DynamicsCrm.DevKit.Cli");
-            if (list == null) return new NuGetPackage { Version = "1.1.4" };
+            if (list == null) return new NuGetPackage { Version = Const.Version };
             var packages = (from item in list
                 orderby item.Version.ToOriginalString() descending
                 select new NuGetPackage

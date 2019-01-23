@@ -1,0 +1,200 @@
+{
+  "plugins": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "PLDynamicsCrmDevKit",
+      "includefiles": [
+        "NT.BTT.CustomAction.dll",
+        "NT.BTT.CustomAction.*.dll",
+        "NT.BTT.Plugin.*.dll"
+      ],
+      "excludefiles": [
+        "NT.BTT.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "PLDynamicsCrmDevKit",
+      "includefiles": [
+        "NT.BTT.CustomAction.dll",
+        "NT.BTT.CustomAction.*.dll",
+        "NT.BTT.Plugin.*.dll"
+      ],
+      "excludefiles": [
+        "NT.BTT.*.Test.dll"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "PLDynamicsCrmDevKit",
+      "includefiles": [
+        "NT.BTT.Workflow.*.dll"
+      ],
+      "excludefiles": [
+        "NT.BTT.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "PLDynamicsCrmDevKit",
+      "includefiles": [
+        "NT.BTT.Workflow.*.dll"
+      ],
+      "excludefiles": [
+        "NT.BTT.*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "entities\\*.intellisense.js",
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+          ],
+          "dependencies": [
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "???",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "entities\\*.intellisense.js",
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+          ],
+          "dependencies": [
+          ]
+        }
+      ]
+    }
+  ],
+  "dataproviders": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "PLDynamicsCrmDevKit",
+      "includefiles": [
+        "NT.BTT.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "NT.BTT.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "PLDynamicsCrmDevKit",
+      "includefiles": [
+        "NT.BTT.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "NT.BTT.*.Test.dll"
+      ]
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "rootfolder": "",
+      "profile": "Extract-Unmanaged",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "rootfolder": "",
+      "profile": "Extract-Managed",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "rootfolder": "",
+      "profile": "Pack-Unmanaged",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    },
+    {
+      "rootfolder": "",
+      "profile": "Pack-Managed",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "CSharp"
+    },
+    {
+      "profile": "JS-FORM",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "JsForm"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "JsWebApi"
+    }
+  ]
+}
