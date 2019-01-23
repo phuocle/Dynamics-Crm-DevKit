@@ -73,6 +73,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                             replacementsDictionary.Add("$ProxyTypes$", "false");
                         }
                         replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
+                        replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
                         replacementsDictionary.Add("$ProjectTestName$", form.SelectedProjectData.Name);
                         replacementsDictionary.Add("$ProjectTestGuid$", form.SelectedProjectData.Id);
                         var solutionFullName = Dte?.Solution?.FullName;

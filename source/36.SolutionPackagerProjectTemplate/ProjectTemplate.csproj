@@ -41,6 +41,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Cli.$PLDynamicsCrmDevKitCliVersion$\tools\PL.DynamicsCrm.DevKit.Analyzer.dll" />
+    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.$PLDynamicsCrmDevKitAnalyzersVersion$\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
 </Project>

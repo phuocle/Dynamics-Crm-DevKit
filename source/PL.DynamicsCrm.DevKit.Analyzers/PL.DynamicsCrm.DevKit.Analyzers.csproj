@@ -26,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>analyzers\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -180,12 +180,28 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Nuget\pack.bat" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.2.0.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.nuspec" />
     <None Include="packages.config" />
     <None Include="PL.DynamicsCrm.DevKit.Analyzers.snk" />
+    <None Include="tools\install.ps1" />
+    <None Include="tools\uninstall.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="analyzers\PL.DynamicsCrm.DevKit.Analyzers.dll" />
+    <Content Include="Nuget\nuget.exe" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName)==Release (
+      DEL $(TargetDir)*.xml
+      DEL $(TargetDir)*.pdb
+      DEL $(TargetDir)Microsoft.*.dll
+      )</PostBuildEvent>
+  </PropertyGroup>
 </Project>

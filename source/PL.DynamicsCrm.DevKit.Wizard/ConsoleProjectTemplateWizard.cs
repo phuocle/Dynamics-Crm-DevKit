@@ -72,6 +72,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary["$safeprojectname$"] = ProjectName;
                         replacementsDictionary["$projectname$"] = ProjectName;
                         replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
+                        replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
                         return;
                     }
                 }

@@ -70,7 +70,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$ProjectNameJs$", $"{parts[1]}");
                         replacementsDictionary.Add("$WebApiClientMin$", GetWebApiClientMin(parts[1]));
                         replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
-
+                        replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
                         return;
                     }
                 }

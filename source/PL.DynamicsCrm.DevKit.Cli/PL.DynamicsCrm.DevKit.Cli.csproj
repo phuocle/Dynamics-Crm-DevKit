@@ -168,6 +168,18 @@
     <Compile Include="WorkflowTask.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Release\CmdLine.dll" />
+    <Content Include="Release\Microsoft.Crm.Sdk.Proxy.dll" />
+    <Content Include="Release\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
+    <Content Include="Release\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll" />
+    <Content Include="Release\Microsoft.Rest.ClientRuntime.dll" />
+    <Content Include="Release\Microsoft.Xrm.Sdk.Deployment.dll" />
+    <Content Include="Release\Microsoft.Xrm.Sdk.dll" />
+    <Content Include="Release\Microsoft.Xrm.Sdk.Workflow.dll" />
+    <Content Include="Release\Microsoft.Xrm.Tooling.Connector.dll" />
+    <Content Include="Release\Newtonsoft.Json.dll" />
+    <Content Include="Release\NUglify.dll" />
+    <Content Include="Release\PL.DynamicsCrm.DevKit.Cli.exe" />
     <None Include="App.config" />
     <None Include="Nuget\pack.bat" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.0.nupkg" />
@@ -189,6 +201,8 @@
     <Content Include="PL.DynamicsCrm.DevKit.Cli.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Release\PL.DynamicsCrm.DevKit.Cli.exe.config" />
+    <None Include="Release\PL.DynamicsCrm.DevKit.Cli.json" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -205,12 +219,13 @@
   <ItemGroup>
     <Content Include="Nuget\nuget.exe" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Release\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>DEL $(TargetDir)*.xml
-DEL $(TargetDir)*.pdb</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName)==Release (
+      DEL $(TargetDir)*.xml
+      DEL $(TargetDir)*.pdb
+      )
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -748,6 +748,16 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
         }
 
+        public string PLDynamicsCrmDevKitAnalyzersVersion
+        {
+            get
+            {
+                var package = NuGetHelper.GetPLDynamicsCrmDevKitAnalyzersPackage();
+                return package.Version;
+            }
+        }
+
+
         private JsForm JsForm { get; set; }
 
         public void DoGeneratorCodeWebApi(string entityName, bool isDebug, string file)
