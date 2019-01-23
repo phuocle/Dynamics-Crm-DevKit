@@ -10,12 +10,12 @@ namespace PL.DynamicsCrm.DevKit.Analyzers
         /// <summary>DEVKIT1001</summary>
         public static readonly DiagnosticDescriptor UpdateMessageShouldHaveFilteringAttributes = new DiagnosticDescriptor(
             id: DiagnosticIdentifiers.UpdateMessageShouldHaveFilteringAttributes,
-            title: "UpdateMessageShouldHaveFilteringAttributes title",
-            messageFormat: "UpdateMessageShouldHaveFilteringAttributes messageFormat",
+            title: "Update Message Should Have Filtering Attributes",
+            messageFormat: "Update Message Should Have Filtering Attributes [[messageFormat]]",
             category: DiagnosticCategories.Require,
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
-            description: "UpdateMessageShouldHaveFilteringAttributes description",
+            description: "Update Message Should Have Filtering Attributes [[description]]",
             helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.UpdateMessageShouldHaveFilteringAttributes}",
             customTags: Array.Empty<string>()
             );

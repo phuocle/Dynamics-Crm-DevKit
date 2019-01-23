@@ -752,8 +752,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                var package = NuGetHelper.GetPLDynamicsCrmDevKitAnalyzersPackage();
-                return package.Version;
+                try
+                {
+                    var package = NuGetHelper.GetPLDynamicsCrmDevKitAnalyzersPackage();
+                    return package.Version;
+                }
+                catch
+                {
+                    return "1.2.0";
+                }
             }
         }
 

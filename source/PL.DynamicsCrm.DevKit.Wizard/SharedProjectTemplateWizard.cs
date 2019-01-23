@@ -31,17 +31,16 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public void RunFinished()
         {
             var projectFullName = Project.FullName;
+            var projectFolder = Path.GetDirectoryName(projectFullName);
+            var solutionFullName = Dte?.Solution?.FullName;
+            var solutionFolder = Path.GetDirectoryName(solutionFullName) + "\\" + ProjectName;
             Dte.Solution.Remove(Project);
-            var fInfoProject = new FileInfo(projectFullName);
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
-            var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
-            Utility.TryDeleteDirectory(folder);
-            dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".shproj");
+            Directory.Move(projectFolder, solutionFolder);
+            Dte.Solution.AddFromFile(solutionFolder + "\\" + ProjectName + ".shproj");
             Dte.Solution.SaveAs(Dte.Solution.FullName);
             var tfs = new Tfs(Dte);
-            tfs.Undo(fInfoProject.DirectoryName);
-            tfs.Add(dInfoProject.FullName);
+            tfs.Undo(projectFolder);
+            tfs.Add(solutionFolder);
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
