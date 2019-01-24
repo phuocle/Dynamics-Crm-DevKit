@@ -25,8 +25,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>analyzers\</OutputPath>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -172,11 +172,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDiagnosticAnalyzer.cs" />
+    <Compile Include="CrmAnalyzers\NotUseColumnSetTrueAnalyzer.cs" />
     <Compile Include="CrmAnalyzers\UpdateMessageShouldHaveFilteringAttributesAnalyzer.cs" />
     <Compile Include="DiagnosticCategories.cs" />
     <Compile Include="DiagnosticDescriptors.cs" />
     <Compile Include="DiagnosticHelpers.cs" />
     <Compile Include="DiagnosticIdentifiers.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -199,10 +201,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName)==Release (
-      DEL $(TargetDir)*.xml
-      DEL $(TargetDir)*.pdb
-      DEL $(TargetDir)Microsoft.*.dll
-      )</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

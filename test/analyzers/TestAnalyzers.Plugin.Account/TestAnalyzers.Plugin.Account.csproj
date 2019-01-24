@@ -52,8 +52,8 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
-    <None Include="TestAnalyzers.Plugin.Account.ruleset" />
     <None Include="TestAnalyzers.Plugin.Account.snk" />
+    <Compile Include="NotUseColumnSetTrue.cs" />
     <Compile Include="PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,9 +65,6 @@
     <AssemblyOriginatorKeyFile>TestAnalyzers.Plugin.Account.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.1.2.0\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
       if $(ConfigurationName)==Release (

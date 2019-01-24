@@ -17,31 +17,21 @@ namespace PL.DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
 
         public override void Initialize(AnalysisContext context)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
+            if (context == null) throw new ArgumentNullException(nameof(context));
             base.Initialize(context);
-            context.RegisterSyntaxNodeAction(AnalyzerUpdateMessageShouldHaveFilteringAttributes, SyntaxKind.AttributeList);
+            context.RegisterSyntaxNodeAction(AnalyzerUpdateMessageShouldHaveFilteringAttributes, SyntaxKind.Attribute);
         }
 
-        private void AnalyzerUpdateMessageShouldHaveFilteringAttributes(SyntaxNodeAnalysisContext contexts)
+        private void AnalyzerUpdateMessageShouldHaveFilteringAttributes(SyntaxNodeAnalysisContext context)
         {
-            var attributeListSyntax = (AttributeListSyntax)contexts.Node;
-            if (attributeListSyntax == null) return;
-            foreach(var attributeSyntax in attributeListSyntax.Attributes)
+            if (
+                context.Node is AttributeSyntax attribute &&
+                attribute?.Name?.ToFullString() == "CrmPluginRegistration" &&
+                attribute.TryFindArgument(0, "message", out var argurment0) && argurment0?.ToFullString() == "\"Update\"" &&
+                attribute.TryFindArgument(4, "filteringAttributes", out var argurment4) && argurment4?.ToFullString() == "\"\""
+               )
             {
-                AnalyzerAttribute(contexts, attributeSyntax);
-            }
-        }
-
-        private void AnalyzerAttribute(SyntaxNodeAnalysisContext contexts, AttributeSyntax attributeSyntax)
-        {
-            if (attributeSyntax?.Name?.ToFullString() != "CrmPluginRegistration") return;
-            var argurment = attributeSyntax?.ArgumentList?.Arguments[0];
-            if (argurment?.ToFullString() != "\"Update\"") return;
-            argurment = attributeSyntax?.ArgumentList?.Arguments[5];
-            if (argurment?.ToFullString() == "\"\"")
-            {
-                DiagnosticHelpers.ReportDiagnostic(contexts, DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes, argurment.GetLocation());
+                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes, argurment4.GetLocation());
             }
         }
     }
