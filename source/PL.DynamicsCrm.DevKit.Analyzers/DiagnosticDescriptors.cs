@@ -11,7 +11,7 @@ namespace PL.DynamicsCrm.DevKit.Analyzers
         public static readonly DiagnosticDescriptor UpdateMessageShouldHaveFilteringAttributes = new DiagnosticDescriptor(
             id: DiagnosticIdentifiers.UpdateMessageShouldHaveFilteringAttributes,
             title: "Update Message Should Have Filtering Attributes",
-            messageFormat: "Update Message Should Have Filtering Attributes [[messageFormat]]",
+            messageFormat: "Update Message Should Have Filtering Attributes {0}",
             category: DiagnosticCategories.Require,
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,

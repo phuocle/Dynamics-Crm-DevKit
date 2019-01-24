@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PL.DynamicsCrm.DevKit.Analyzers2")]
+[assembly: AssemblyTitle("PL.DynamicsCrm.DevKit.Analyzers")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PL.DynamicsCrm.DevKit.Analyzers2")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("PhuocLe")]
+[assembly: AssemblyProduct("PL.DynamicsCrm.DevKit.Analyzers")]
+[assembly: AssemblyCopyright("Copyright © 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

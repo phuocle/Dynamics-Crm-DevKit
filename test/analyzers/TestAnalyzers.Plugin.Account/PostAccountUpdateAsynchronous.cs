@@ -6,8 +6,8 @@ namespace TestAnalyzers.PluginAccount
 {
     [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
     "TestAnalyzers.PluginAccount.PostAccountUpdateAsynchronous", 1, IsolationModeEnum.Sandbox,
-    Image1Name = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "",
-    Image2Name = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "")]
+    Image1Name = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "", 
+    Image2Name = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "") ]
     public class PostAccountUpdateAsynchronous : IPlugin
     {
         /*

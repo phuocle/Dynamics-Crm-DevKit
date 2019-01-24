@@ -6,7 +6,7 @@
         <Identity Id="PL.DynamicsCrm.DevKit.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="1.2.0" Language="en-US"
                   Publisher="PhuocLe" />
         <DisplayName>PL.DynamicsCrm.DevKit</DisplayName>
-        <Description xml:space="preserve">A collection of projects and items template for develop Dynamics 365 Crm</Description>
+        <Description xml:space="preserve">A collection of projects and items template for develop Dynamics 365 Crm (Jan-23-2019)</Description>
         <MoreInfo>https://github.com/phuocle/Dynamics-Crm-DevKit</MoreInfo>
         <License>License.txt</License>
         <Icon>icon.png</Icon>
@@ -87,6 +87,7 @@
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="34.ResourceStringItemTemplate" d:TargetPath="|34.ResourceStringItemTemplate;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="35.DataProviderProjectTemplate" d:TargetPath="|35.DataProviderProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="36.SolutionPackagerProjectTemplate" d:TargetPath="|36.SolutionPackagerProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+        <Asset Type="Microsoft.VisualStudio.Analyzer" d:Source="Project" d:ProjectName="%CurrentProject%.Analyzers" Path="|PL.DynamicsCrm.DevKit.Analyzers|" />
 
     </Assets>
     <Prerequisites>
