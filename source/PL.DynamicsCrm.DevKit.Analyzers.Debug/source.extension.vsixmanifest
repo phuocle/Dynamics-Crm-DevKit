@@ -3,7 +3,7 @@
     <Metadata>
         <Identity Id="PL.DynamicsCrm.DevKit.Analyzers.Debug.0db7164a-412d-4484-bbbf-da44f3a032e1" Version="1.0" Language="en-US" Publisher="PhuocLe" />
         <DisplayName>PL.DynamicsCrm.DevKit.Analyzers.Debug</DisplayName>
-        <Description>Empty VSIX Project.</Description>
+        <Description xml:space="preserve">PL.DynamicsCrm.DevKit.Analyzers.Debug VSIX Project.</Description>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0, 16.0)" />

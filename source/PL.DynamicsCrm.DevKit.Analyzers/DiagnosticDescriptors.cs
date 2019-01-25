@@ -24,12 +24,12 @@ namespace PL.DynamicsCrm.DevKit.Analyzers
         /// <summary>DEVKIT1002</summary>
         public static readonly DiagnosticDescriptor NotUseColumnSetTrue = new DiagnosticDescriptor(
             id: DiagnosticIdentifiers.NotUseColumnSetTrue,
-            title: "Not Use ColumnSet(true)",
-            messageFormat: DevKit + "Not Use ColumnSet(true)",
+            title: "Not Use Microsoft.Xrm.Sdk.Query.ColumnSet(true)",
+            messageFormat: DevKit + "Not Use Microsoft.Xrm.Sdk.Query.ColumnSetv(true)",
             category: DiagnosticCategories.Require,
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
-            description: DevKit + "Not Use ColumnSet(true)",
+            description: DevKit + "Not Use Microsoft.Xrm.Sdk.Query.ColumnSet(true)",
             helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.NotUseColumnSetTrue}",
             customTags: Array.Empty<string>()
             );
