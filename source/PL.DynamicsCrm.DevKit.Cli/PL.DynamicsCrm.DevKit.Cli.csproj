@@ -53,6 +53,12 @@
     <WarningLevel>4</WarningLevel>
     <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\PL.DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CmdLine, Version=1.0.7.509, Culture=neutral, PublicKeyToken=e6ac9ead3d3b48e4, processorArchitecture=MSIL">
       <HintPath>..\packages\CmdLine.1.0.7.509\lib\net40-Client\CmdLine.dll</HintPath>
@@ -169,6 +175,7 @@
     <Compile Include="WorkflowTask.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="license\LICENSE.txt" />
     <Content Include="Release\CmdLine.dll" />
     <Content Include="Release\Microsoft.Crm.Sdk.Proxy.dll" />
     <Content Include="Release\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
@@ -181,6 +188,9 @@
     <Content Include="Release\Newtonsoft.Json.dll" />
     <Content Include="Release\NUglify.dll" />
     <Content Include="Release\PL.DynamicsCrm.DevKit.Cli.exe" />
+    <None Include="..\PL.DynamicsCrm.DevKit.pfx">
+      <Link>PL.DynamicsCrm.DevKit.pfx</Link>
+    </None>
     <None Include="App.config" />
     <None Include="Nuget\pack.bat" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.0.nupkg" />

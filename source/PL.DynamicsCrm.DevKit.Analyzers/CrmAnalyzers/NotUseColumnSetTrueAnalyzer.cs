@@ -34,29 +34,29 @@ namespace PL.DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             var cancellationToken = context.CancellationToken;
             if (
                 context.Node is ObjectCreationExpressionSyntax objectCreationExpression &&
-                objectCreationExpression.ArgumentList.Arguments.Count == 1
+                objectCreationExpression?.ArgumentList?.Arguments.Count == 1
                 )
             {
-                var typeInfo = semanticModel.GetTypeInfo(objectCreationExpression, cancellationToken);
-                if (typeInfo.Type.ToDisplayString() != MicrosoftXrmSdkQueryColumnSet) return;
-                var argument = objectCreationExpression.ArgumentList.Arguments[0];
-                if (argument.Expression is LiteralExpressionSyntax literalExpression &&
+                var typeInfo = semanticModel?.GetTypeInfo(objectCreationExpression, cancellationToken);
+                if (typeInfo?.Type?.ToDisplayString() != MicrosoftXrmSdkQueryColumnSet) return;
+                var argument = objectCreationExpression?.ArgumentList?.Arguments[0];
+                if (argument?.Expression is LiteralExpressionSyntax literalExpression &&
                     literalExpression.Token.IsKind(SyntaxKind.TrueKeyword)
                     )
                 {
-                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, objectCreationExpression.GetLocation());
+                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, objectCreationExpression?.GetLocation());
                 }
             }
             else if (
                 context.Node is AssignmentExpressionSyntax assignmentExpressionSyntax &&
-                assignmentExpressionSyntax.Right is LiteralExpressionSyntax right &&
+                assignmentExpressionSyntax?.Right is LiteralExpressionSyntax right &&
                 right.Token.IsKind(SyntaxKind.TrueKeyword) &&
-                assignmentExpressionSyntax.Left is MemberAccessExpressionSyntax left
+                assignmentExpressionSyntax?.Left is MemberAccessExpressionSyntax left
                 )
             {
-                var typeInfo = semanticModel.GetTypeInfo(left.Expression, cancellationToken);
-                if (typeInfo.Type.ToDisplayString() != MicrosoftXrmSdkQueryColumnSet) return;
-                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, assignmentExpressionSyntax.GetLocation());
+                var typeInfo = semanticModel?.GetTypeInfo(left?.Expression, cancellationToken);
+                if (typeInfo?.Type?.ToDisplayString() != MicrosoftXrmSdkQueryColumnSet) return;
+                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, assignmentExpressionSyntax?.GetLocation());
             }
             else if (
                 context.Node is LiteralExpressionSyntax @string &&
@@ -65,9 +65,9 @@ namespace PL.DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             {
                 var position = @string?.ToString()?.ToLower()?.IndexOf("<all-attributes");
                 if (!position.HasValue) return;
-                var start = @string.GetLocation().SourceSpan.Start;
-                var textSpan = new TextSpan(start + position.Value + 1, "all-attributes".Length);
-                var location = Location.Create(@string.SyntaxTree, textSpan);
+                var start = @string?.GetLocation()?.SourceSpan.Start;
+                var textSpan = new TextSpan(start.Value + position.Value + 1, "all-attributes".Length);
+                var location = Location.Create(@string?.SyntaxTree, textSpan);
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, location);
             }
             else if (
@@ -77,9 +77,9 @@ namespace PL.DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             {
                 var position = interpolatedString?.ToString()?.ToLower()?.IndexOf("<all-attributes");
                 if (!position.HasValue) return;
-                var start = interpolatedString.GetLocation().SourceSpan.Start;
-                var textSpan = new TextSpan(start + position.Value + 1, "all-attributes".Length);
-                var location = Location.Create(interpolatedString.SyntaxTree, textSpan);
+                var start = interpolatedString?.GetLocation()?.SourceSpan.Start;
+                var textSpan = new TextSpan(start.Value + position.Value + 1, "all-attributes".Length);
+                var location = Location.Create(interpolatedString?.SyntaxTree, textSpan);
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, location);
             }
         }
