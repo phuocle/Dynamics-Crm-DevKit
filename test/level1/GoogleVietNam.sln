@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "GoogleVietNam.Shared", "GoogleVietNam.Shared\GoogleVietNam.Shared.shproj", "{4AB9DBA3-BA8F-4FAA-97AD-CB57D47E895D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Console", "GoogleVietNam.Console\GoogleVietNam.Console.csproj", "{39F8B68C-BD79-4374-A3C7-916B88C36069}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{39f8b68c-bd79-4374-a3c7-916b88c36069}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{4ab9dba3-ba8f-4faa-97ad-cb57d47e895d}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CF030E81-A504-483B-842D-33248CBD4A34}
+	EndGlobalSection
+EndGlobal
