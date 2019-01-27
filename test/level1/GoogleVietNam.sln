@@ -7,10 +7,16 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "GoogleVietNam.Shared", "Goo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Console", "GoogleVietNam.Console\GoogleVietNam.Console.csproj", "{39F8B68C-BD79-4374-A3C7-916B88C36069}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Console.2", "GoogleVietNam.Console.2\GoogleVietNam.Console.2.csproj", "{A947D06D-F575-4C14-99DA-49581C7F8FF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Console.Azure", "GoogleVietNam.Console.Azure\GoogleVietNam.Console.Azure.csproj", "{3D5EDE1C-D785-4706-9F74-CB204B8E403B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{39f8b68c-bd79-4374-a3c7-916b88c36069}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{3d5ede1c-d785-4706-9f74-cb204b8e403b}*SharedItemsImports = 4
 		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{4ab9dba3-ba8f-4faa-97ad-cb57d47e895d}*SharedItemsImports = 13
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{a947d06d-f575-4c14-99da-49581c7f8ff6}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,14 @@ Global
 		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A947D06D-F575-4C14-99DA-49581C7F8FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A947D06D-F575-4C14-99DA-49581C7F8FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A947D06D-F575-4C14-99DA-49581C7F8FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A947D06D-F575-4C14-99DA-49581C7F8FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
