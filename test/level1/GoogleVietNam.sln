@@ -33,11 +33,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.DataProvider.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.DataProvider.Azure", "GoogleVietNam.DataProvider.Azure\GoogleVietNam.DataProvider.Azure.csproj", "{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.ProxyTypes", "GoogleVietNam.ProxyTypes\GoogleVietNam.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Plugin.Account.Test", "GoogleVietNam.Plugin.Account.Test\GoogleVietNam.Plugin.Account.Test.csproj", "{4BCC27B1-03C8-4123-9879-6199D08359A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.UiTest", "GoogleVietNam.UiTest\GoogleVietNam.UiTest.csproj", "{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.UiTest.2", "GoogleVietNam.UiTest.2\GoogleVietNam.UiTest.2.csproj", "{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{0951d9fe-0e46-4ae1-a319-c67d517d6ecf}*SharedItemsImports = 4
 		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{39f8b68c-bd79-4374-a3c7-916b88c36069}*SharedItemsImports = 4
 		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{3d5ede1c-d785-4706-9f74-cb204b8e403b}*SharedItemsImports = 4
 		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{4ab9dba3-ba8f-4faa-97ad-cb57d47e895d}*SharedItemsImports = 13
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{5ac0c4ff-bf3d-487b-8402-6f828f5ec355}*SharedItemsImports = 4
 		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{5bdfd8fd-80b5-467b-add1-f297d9c973dd}*SharedItemsImports = 4
 		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{66ab6b9c-8d3d-4cdd-83d9-697300137691}*SharedItemsImports = 4
 		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{70d6b0f2-06ec-487b-ba54-256cb64586cc}*SharedItemsImports = 4
@@ -112,6 +122,22 @@ Global
 		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

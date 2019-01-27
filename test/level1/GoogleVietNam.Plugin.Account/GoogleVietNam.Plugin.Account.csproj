@@ -50,6 +50,7 @@
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="GoogleVietNam.Plugin.Account.snk" />
+    <Compile Include="PreAccountCreateSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
