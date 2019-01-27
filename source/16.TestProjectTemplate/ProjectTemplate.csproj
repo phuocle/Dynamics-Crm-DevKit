@@ -33,7 +33,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Release\dll\</OutputPath>
+    <OutputPath>..\Release\test\</OutputPath>
     <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -121,17 +121,13 @@ $endif$
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets'))" />
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" />
-  <Import Project="..\$ShareProject$\$ShareProject$.projitems" Label="Shared" Condition="Exists('..\$ShareProject$\$ShareProject$.projitems')" />
   <ItemGroup>
     <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.$PLDynamicsCrmDevKitAnalyzersVersion$\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-      if $(ConfigurationName)==Release (
-      DEL $(TargetDir)*.xml
-      DEL $(TargetDir)*.pdb
-      DEL $(TargetDir)Microsoft.*.dll
-      )
-    </PostBuildEvent>
+    <PostBuildEvent>if$(ConfigurationName)==Release(
+    DEL $(TargetDir)*.xml
+    DEL $(TargetDir)*.pdb
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>

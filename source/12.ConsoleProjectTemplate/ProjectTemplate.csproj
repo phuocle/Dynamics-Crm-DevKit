@@ -65,11 +65,10 @@
     <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.$PLDynamicsCrmDevKitAnalyzersVersion$\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-      if $(ConfigurationName)==Release (
-        DEL $(TargetDir)*.xml
-        DEL $(TargetDir)*.pdb
-      )
-    </PostBuildEvent>
+    <PostBuildEvent>if$(ConfigurationName)==Release(
+    DEL $(TargetDir)*.xml
+    DEL $(TargetDir)*.pdb
+    DEL $(TargetDir)Microsoft.*.dll
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>
