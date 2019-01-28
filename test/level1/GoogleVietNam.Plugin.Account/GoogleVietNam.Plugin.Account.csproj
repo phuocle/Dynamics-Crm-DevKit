@@ -50,7 +50,10 @@
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="GoogleVietNam.Plugin.Account.snk" />
+    <Compile Include="PostAccountDeleteSynchronous.cs" />
+    <Compile Include="PostAccountdevkit_AjaxAccountAsynchronous.cs" />
     <Compile Include="PreAccountCreateSynchronous.cs" />
+    <Compile Include="PreAccountUpdateSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,7 +68,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if$(ConfigurationName)==Release(
+    <PostBuildEvent>if $(ConfigurationName)==Release (
     DEL $(TargetDir)*.xml
     DEL $(TargetDir)*.pdb
     DEL $(TargetDir)Microsoft.*.dll

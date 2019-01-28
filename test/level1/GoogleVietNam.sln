@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Console.2", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Console.Azure", "GoogleVietNam.Console.Azure\GoogleVietNam.Console.Azure.csproj", "{3D5EDE1C-D785-4706-9F74-CB204B8E403B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Plugin.Account", "GoogleVietNam.Plugin.Account\GoogleVietNam.Plugin.Account.csproj", "{AEEE0268-8623-40E3-AE4B-80AA9E683539}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Plugin.Contact", "GoogleVietNam.Plugin.Contact\GoogleVietNam.Plugin.Contact.csproj", "{70D6B0F2-06EC-487B-BA54-256CB64586CC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.CustomAction", "GoogleVietNam.CustomAction\GoogleVietNam.CustomAction.csproj", "{8A77D099-9297-463F-8ED7-2AC7A543982E}"
@@ -32,8 +30,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.DataProvider.2", "GoogleVietNam.DataProvider.2\GoogleVietNam.DataProvider.2.csproj", "{5BDFD8FD-80B5-467B-ADD1-F297D9C973DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.DataProvider.Azure", "GoogleVietNam.DataProvider.Azure\GoogleVietNam.DataProvider.Azure.csproj", "{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.ProxyTypes", "GoogleVietNam.ProxyTypes\GoogleVietNam.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Plugin.Account.Test", "GoogleVietNam.Plugin.Account.Test\GoogleVietNam.Plugin.Account.Test.csproj", "{4BCC27B1-03C8-4123-9879-6199D08359A5}"
 EndProject
@@ -87,6 +83,16 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GoogleVietNam.SolutionPacka
 		SlnRelativePath = "GoogleVietNam.SolutionPackager.2\"
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8653A087-DC48-4188-9099-07EA61A3B157}"
+	ProjectSection(SolutionItems) = preProject
+		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
+		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Plugin.Account", "GoogleVietNam.Plugin.Account\GoogleVietNam.Plugin.Account.csproj", "{AEEE0268-8623-40E3-AE4B-80AA9E683539}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.ProxyTypes", "GoogleVietNam.ProxyTypes\GoogleVietNam.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{0951d9fe-0e46-4ae1-a319-c67d517d6ecf}*SharedItemsImports = 4
@@ -124,10 +130,6 @@ Global
 		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Release|Any CPU.Build.0 = Release|Any CPU
 		{70D6B0F2-06EC-487B-BA54-256CB64586CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{70D6B0F2-06EC-487B-BA54-256CB64586CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70D6B0F2-06EC-487B-BA54-256CB64586CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -168,10 +170,6 @@ Global
 		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -200,6 +198,14 @@ Global
 		{AC13B377-29DE-4FE4-9AE0-0DCA1212DCD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC13B377-29DE-4FE4-9AE0-0DCA1212DCD5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC13B377-29DE-4FE4-9AE0-0DCA1212DCD5}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

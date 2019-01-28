@@ -56,6 +56,32 @@
     <None Include="package.json" />
     <None Include="package-lock.json" />
     <None Include="packages.config" />
+    <Content Include="css\custom.css" />
+    <Content Include="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
+    <None Include="entities\Account.intellisense.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <Content Include="entities\Account.js" />
+    <Content Include="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Lead.form.js">
+      <DependentUpon>Lead.js</DependentUpon>
+    </Content>
+    <None Include="entities\Lead.intellisense.js">
+      <DependentUpon>Lead.js</DependentUpon>
+    </None>
+    <Content Include="entities\Lead.js" />
+    <Content Include="html\custom.html" />
+    <Content Include="images\16x16\default.png" />
+    <Content Include="images\32x32\default.png" />
+    <Content Include="images\icon.png" />
+    <Content Include="images\svg\default.svg" />
+    <Content Include="js\custom.js" />
+    <Content Include="lib\dayjs.min.js" />
+    <Content Include="test\Account.test.js" />
     <Content Include="test\DevKitMock.js" />
     <Content Include="test\requireConfig.js" />
     <Content Include="test\mock.intellisense.js" />
@@ -73,12 +99,10 @@
   <ItemGroup>
     <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.1.1.5\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="css\" />
-    <Folder Include="html\" />
-    <Folder Include="images\" />
-    <Folder Include="js\" />
-    <Folder Include="resources\" />
+    <EmbeddedResource Include="resources\resource.1033.resx" />
+    <EmbeddedResource Include="resources\resource.1066.resx" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
@@ -99,7 +123,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>If exist $(ProjectDir)node_modules\dayjs\dayjs.min.js (
+  copy $(ProjectDir)node_modules\dayjs\dayjs.min.js $(ProjectDir)lib\dayjs.min.js
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -107,6 +107,8 @@
       <Project>{aeee0268-8623-40e3-ae4b-80aa9e683539}</Project>
       <Name>GoogleVietNam.Plugin.Account</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\GoogleVietNam.ProxyTypes\GoogleVietNam.ProxyTypes.csproj">
       <Project>{24F931D0-A884-4354-B3C5-47AC3A575D6A}</Project>
       <Name>GoogleVietNam.ProxyTypes</Name>

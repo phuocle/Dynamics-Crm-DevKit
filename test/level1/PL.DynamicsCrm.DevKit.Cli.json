@@ -3,14 +3,13 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "PLDynamicsCrmDevKit",
+      "solution": "LEVEL1",
       "includefiles": [
-        "NT.BTT.CustomAction.dll",
-        "NT.BTT.CustomAction.*.dll",
-        "NT.BTT.Plugin.*.dll"
+        "GoogleVietNam.Plugin.*.dll",
+        "GoogleVietNam.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "NT.BTT.*.Test.dll"
+        "GoogleVietNam.*.Test.dll"
       ]
     },
     {
@@ -31,12 +30,12 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "PLDynamicsCrmDevKit",
+      "solution": "LEVEL1",
       "includefiles": [
-        "NT.BTT.Workflow.*.dll"
+        "GoogleVietNam.Workflow.*.dll"
       ],
       "excludefiles": [
-        "NT.BTT.*.Test.dll"
+        "GoogleVietNam.*.Test.dll"
       ]
     },
     {
@@ -54,8 +53,8 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???",
+      "solution": "LEVEL1",
+      "prefix": "devkit_",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -73,8 +72,29 @@
       "dependencies": [
         {
           "webresources": [
+            "devkit_/entities/[entity].js"
           ],
           "dependencies": [
+            "devkit_/entities/[entity].form.js",
+            "devkit_/entities/[entity].webapi.js",
+            "devkit_/resources/resource.1033.resx",
+            "devkit_/resources/resource.1066.resx"
+          ]
+        },
+        {
+          "webresources": [
+            "devkit_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "devkit_/lib/WebApiClient.js"
+          ]
+        },
+        {
+          "webresources": [
+            "devkit_/entities/Account.js"
+          ],
+          "dependencies": [
+            "devkit_/lib/dayjs.min.js"
           ]
         }
       ]
@@ -111,12 +131,12 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "PLDynamicsCrmDevKit",
+      "solution": "LEVEL1",
       "includefiles": [
-        "NT.BTT.DataProvider.*.dll"
+        "GoogleVietNam.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "NT.BTT.*.Test.dll"
+        "GoogleVietNam.*.Test.dll"
       ]
     },
     {

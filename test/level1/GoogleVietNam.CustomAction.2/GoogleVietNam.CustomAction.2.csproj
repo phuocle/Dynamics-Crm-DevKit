@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>c735be42-783e-45d5-8757-56edc557b975</ProjectGuid>
+    <ProjectGuid>{C735BE42-783E-45D5-8757-56EDC557B975}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GoogleVietNam.CustomAction._2</RootNamespace>
@@ -26,7 +26,8 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\Release\dll\</OutputPath>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -49,6 +50,8 @@
     <None Include="packages.config" />
     <None Include="GoogleVietNam.CustomAction.2.snk" />
     <None Include="deploy.debug.bat" />
+    <Compile Include="PostNonedevkit_AjaxAdminSynchronous.cs" />
+    <Compile Include="PostNonedevkit_AjaxSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\GoogleVietNam.Shared\GoogleVietNam.Shared.projitems" Label="Shared" Condition="Exists('..\GoogleVietNam.Shared\GoogleVietNam.Shared.projitems')" />

@@ -14,7 +14,7 @@ if exist "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" (
 if %MsBuild%=="" (
 	echo Please build project before deploy!
 ) else (
-	call %MsBuild% /nologo /noautorsp /verbosity:minimal /p:Configuration=Debug GoogleVietNam.CustomAction.Account.csproj
+	call %MsBuild% /nologo /noautorsp /verbosity:minimal /p:DefineConstants="DEBUG" /p:Configuration=Debug GoogleVietNam.CustomAction.Account.csproj
 )
 for /f "delims=" %%d in ('dir /a:d /o:-n /s ..\packages\PL.DynamicsCrm.DevKit.Cli.* /b') do (
     set PLDynamicsCrmDevKitCli=%%d
