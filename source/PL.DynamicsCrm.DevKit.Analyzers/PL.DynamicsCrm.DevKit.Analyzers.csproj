@@ -193,6 +193,8 @@
     <None Include="app.config" />
     <None Include="Nuget\pack.bat" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.1.4.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.1.5.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.2.0.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.nuspec" />
     <None Include="packages.config" />
     <None Include="tools\install.ps1" />
