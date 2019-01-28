@@ -1,13 +1,13 @@
-{
+﻿{
     "DefaultCrmVersion":"9.0.2.5",
     "DefaultNetVersion":"v4.5.2",
-    "DefaultCrmConnection":"crm304614",
-    "SolutionPrefix":"new_",
+    "DefaultCrmConnection":"test-level2.api.crm.dynamics.com",
+    "SolutionPrefix":"devkit_",
     "CrmConnections":[
         {
-            "Name":"crm304614",
-            "Url":"https://crm304614.api.crm5.dynamics.com/XRMServices/2011/Organization.svc",
-            "UserName":"admin@crm304614.onmicrosoft.com",
+            "Name":"test-level2.api.crm.dynamics.com",
+            "Url":"https://test-level2.api.crm.dynamics.com/XRMServices/2011/Organization.svc",
+            "UserName":"admin@crm091817.onmicrosoft.com",
             "Password":"XVYcZiFupBAhk4bbedwoiA=="
         }
     ]

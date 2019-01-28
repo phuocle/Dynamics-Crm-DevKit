@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>4ab9dba3-ba8f-4faa-97ad-cb57d47e895d</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>GoogleVietNam.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
+      <DependentUpon>Account.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.cs" />
+  <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.generated.cs">
+    <DependentUpon>Contact.cs</DependentUpon>
+  </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\EntityBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
+  </ItemGroup>
+</Project>

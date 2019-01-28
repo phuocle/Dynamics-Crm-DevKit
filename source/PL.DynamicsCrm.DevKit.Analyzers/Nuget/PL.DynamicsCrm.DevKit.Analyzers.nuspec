@@ -2,19 +2,20 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>PL.DynamicsCrm.DevKit.Analyzers</id>
-    <version>1.2.0</version>
+    <version>1.1.5</version>
     <title>PL.DynamicsCrm.DevKit.Analyzers</title>
     <authors>PhuocLe</authors>
-    <licenseUrl>https://raw.githubusercontent.com/phuocle/Dynamics-Crm-DevKit/master/LICENSE</licenseUrl>
+    <license type="file">license\LICENSE.txt</license>
     <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/phuocle/Dynamics-Crm-DevKit/master/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A collection of Dynamics 365 Roslyn Analyers</description>
+    <description>A collection of Dynamics 365 Roslyn Analyzers</description>
     <language>en-US</language>
-    <tags>PL, Dynamics, Dynamics365, CRM, CLI, DevKit, Analyzers</tags>
+    <tags>PL; Dynamics; Dynamics365; CRM; CLI; DevKit; Analyzers</tags>
   </metadata>
   <files>
-    <file src="..\analyzers\*.dll" target="analyzers\dotnet\cs" exclude="**\Microsoft.CodeAnalysis.*;**\System.*;**\netstandard.dll" />
+    <file src="..\bin\Release\PL.DynamicsCrm.DevKit.Analyzers.dll" target="analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
     <file src="..\tools\*.ps1" target="tools\" />
+    <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
   </files>
 </package>

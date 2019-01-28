@@ -24,22 +24,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>analyzers\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>PL.DynamicsCrm.DevKit.Analyzers.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\PL.DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeAnalysis, Version=2.10.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -188,10 +192,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Nuget\pack.bat" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.2.0.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.1.4.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.nuspec" />
     <None Include="packages.config" />
-    <None Include="PL.DynamicsCrm.DevKit.Analyzers.snk" />
     <None Include="tools\install.ps1" />
     <None Include="tools\uninstall.ps1" />
   </ItemGroup>
@@ -200,16 +203,12 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="analyzers\PL.DynamicsCrm.DevKit.Analyzers.dll" />
+    <Content Include="license\LICENSE.txt" />
     <Content Include="Nuget\nuget.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set folder="$(ProjectDir)analyzers"
-cd /d %25folder%25
-for /F "delims=" %25%25i in ('dir /b /a:d') do rmdir "%25%25i" /s/q
-for /F "delims=" %25%25i in ('dir /b *.*') do if not "%25%25i"=="PL.DynamicsCrm.DevKit.Analyzers.dll" del "%25%25i" /s/q
-cd /d $(ProjectDir)Nuget
-call pack.bat</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

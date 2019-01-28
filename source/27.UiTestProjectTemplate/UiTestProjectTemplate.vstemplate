@@ -19,13 +19,13 @@
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="TestSettings.cs">TestSettings.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="packages.config">_packages.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
       <ProjectItem ReplaceParameters="true">AppSettings.cs</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.2.0.0, Culture=neutral, PublicKeyToken=93b9df07fea4eb7d</Assembly>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>PL.DynamicsCrm.DevKit.Wizard.UiTestProjectTemplateWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>
