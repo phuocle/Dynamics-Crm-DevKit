@@ -9,7 +9,8 @@
         "MyCompanyName.MyProjectName.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "MyCompanyName.MyProjectName.*.Test.dll"
+        "MyCompanyName.MyProjectName.Plugin.*.Test.dll",
+        "MyCompanyName.MyProjectName.CustomAction.*.Test.dll"
       ]
     },
     {
@@ -29,12 +30,12 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "LEVEL2",
       "includefiles": [
-        "???.Workflow.*.dll"
+        "MyCompanyName.MyProjectName.Workflow.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "MyCompanyName.MyProjectName.Workflow.*.Test.dll"
       ]
     },
     {
