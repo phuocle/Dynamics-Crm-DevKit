@@ -234,9 +234,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName)==Release (
-      DEL $(TargetDir)*.xml
-      DEL $(TargetDir)*.pdb
-      )
+  del $(TargetDir)*.xml
+  del $(TargetDir)*.pdb
+  cd $(ProjectDir)Nuget
+  call $(ProjectDir)Nuget\pack.bat
+)
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

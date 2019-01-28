@@ -5,10 +5,11 @@
       "folder": "bin\\Debug",
       "solution": "???",
       "includefiles": [
-        "???.*.dll"
+        "???.Plugin.*.dll",
+        "???.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "*.Test.dll"
+        "???.*.Test.dll"
       ]
     },
     {
@@ -16,10 +17,11 @@
       "folder": "Release\\dll",
       "solution": "???",
       "includefiles": [
-        "???.*.dll"
+        "???.Plugin.*.dll",
+        "???.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "*.Test.dll"
+        "???.*.Test.dll"
       ]
     }
   ],
@@ -29,10 +31,10 @@
       "folder": "bin\\Debug",
       "solution": "???",
       "includefiles": [
-        "???.*.dll"
+        "???.Workflow.*.dll"
       ],
       "excludefiles": [
-        "*.Test.dll"
+        "???.*.Test.dll"
       ]
     },
     {
@@ -40,10 +42,10 @@
       "folder": "Release\\dll",
       "solution": "???",
       "includefiles": [
-        "???.*.dll"
+        "???.Workflow.*.dll"
       ],
       "excludefiles": [
-        "*.Test.dll"
+        "???.*.Test.dll"
       ]
     }
   ],
@@ -69,8 +71,19 @@
       "dependencies": [
         {
           "webresources": [
+            "???_/entities/[entity].js"
           ],
           "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "???_/lib/WebApiClient.js"
           ]
         }
       ]
@@ -96,8 +109,19 @@
       "dependencies": [
         {
           "webresources": [
+            "???_/entities/[entity].js"
           ],
           "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "???_/lib/WebApiClient.js"
           ]
         }
       ]
@@ -109,10 +133,10 @@
       "folder": "bin\\Debug",
       "solution": "???",
       "includefiles": [
-        "???.dll"
+        "???.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.dll"
+        "???.*.Test.dll"
       ]
     },
     {
@@ -120,17 +144,17 @@
       "folder": "Release\\dll",
       "solution": "???",
       "includefiles": [
-        "???.dll"
+        "???.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.dll"
+        "???.*.Test.dll"
       ]
     }
   ],
   "solutionpackagers": [
     {
-      "rootfolder": "",
       "profile": "Extract-Unmanaged",
+      "rootfolder": "",
       "solution": "???",
       "solutiontype": "Unmanaged",
       "folder": "???",
@@ -140,8 +164,8 @@
       "mapfile": ""
     },
     {
-      "rootfolder": "",
       "profile": "Extract-Managed",
+      "rootfolder": "",
       "solution": "???",
       "solutiontype": "Managed",
       "folder": "???",
@@ -151,8 +175,8 @@
       "mapfile": ""
     },
     {
-      "rootfolder": "",
       "profile": "Pack-Unmanaged",
+      "rootfolder": "",
       "solution": "???",
       "solutiontype": "Unmanaged",
       "folder": "???",
@@ -162,8 +186,8 @@
       "mapfile": ""
     },
     {
-      "rootfolder": "",
       "profile": "Pack-Managed",
+      "rootfolder": "",
       "solution": "???",
       "solutiontype": "Managed",
       "folder": "???",
