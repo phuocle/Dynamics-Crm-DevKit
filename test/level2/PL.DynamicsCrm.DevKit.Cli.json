@@ -132,12 +132,12 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "LEVEL2",
       "includefiles": [
-        "???.DataProvider.*.dll"
+        "MyCompanyName.MyProjectName.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "MyCompanyName.MyProjectName.DataProvider.*.Test.dll"
       ]
     },
     {
