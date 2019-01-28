@@ -7,6 +7,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using PL.DynamicsCrm.DevKit.Cli.Models;
+using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Cli
 {
@@ -81,7 +82,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             if (IsSupportWebResourceDependency)
             {
-                var dependencies = MergeDependencies(WebResourceJson.dependencies);
+                var dependencies = MergeDependencies(WebResourceJson.dependencies, files);
                 CliLog.WriteLine(CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, dependencies.Count, CliLog.ColorGreen, " dependencies");
                 var j = 1;
                 foreach (var dependency in dependencies)
@@ -97,8 +98,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
         }
 
-        private List<Dependency> MergeDependencies(IEnumerable<Dependency> dependencies)
+        private List<Dependency> MergeDependencies(IEnumerable<Dependency> dependencies, IEnumerable<WebResourceFile> webResourceFiles)
         {
+            dependencies = TransformPattern(dependencies, webResourceFiles);
             var list = new List<Dependency>();
             foreach(var dependency in dependencies)
             {
@@ -124,6 +126,36 @@ namespace PL.DynamicsCrm.DevKit.Cli
             return list;
         }
 
+        private List<Dependency> TransformPattern(IEnumerable<Dependency> dependencies, IEnumerable<WebResourceFile> webResourceFiles)
+        {
+            var list = new List<Dependency>();
+            var entities = webResourceFiles
+                .Where(w => w.file.EndsWith(".form.js"))
+                .Select(s => Path.GetFileName(s.file))
+                .Select(s => s.Substring(0, s.Length - ".form.js".Length))
+                .ToList();
+            foreach (var dependency in dependencies)
+            {
+                if(!dependency.webresources.Where(w => w.Contains("[entity]")).Any() &&
+                   !dependency.dependencies.Where(w => w.Contains("[entity]")).Any())
+                {
+                    list.Add(dependency);
+                }
+                else
+                {
+                    foreach(var entity in entities)
+                    {
+                        list.Add(new Dependency
+                        {
+                            dependencies = dependency.dependencies.Select(s => s.Replace("[entity]", entity)).ToList(),
+                            webresources = dependency.webresources.Select(s => s.Replace("[entity]", entity)).ToList(),
+                        });
+                    }
+                }
+            }
+            return list;
+        }
+
         private void UpdateDependency(Dependency dependency, int j, int count)
         {
             var len = count.ToString().Length;
@@ -143,6 +175,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var existingDependencyXml = string.Empty;
                 if (rows.Entities.Count > 0)
                     existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
+                else
+                    return;
                 if (existingDependencyXml != dependencyXml)
                 {
                     var webResourceId = rows.Entities[0].Id;
@@ -151,6 +185,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                         ["dependencyxml"] = dependencyXml
                     };
                     CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", j), ": ", CliLog.ColorBlue, "Updated Dependency Webresource ", CliLog.ColorCyan, webResourceName);
+                    foreach(var d in dependency.dependencies)
+                        CliLog.WriteLine(CliLog.ColorWhite, "\t" + d);
                     CrmServiceClient.Update(enttiy);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
