@@ -95,6 +95,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PostAccountdevkit_AjaxAccountSynchronousTest.cs" />
+    <Compile Include="PostNonedevkit_AjaxAdminSynchronousTest.cs" />
     <Compile Include="PostNonedevkit_AjaxSynchronousTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

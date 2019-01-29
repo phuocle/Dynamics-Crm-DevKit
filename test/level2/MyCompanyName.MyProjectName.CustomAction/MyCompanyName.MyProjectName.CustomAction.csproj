@@ -50,6 +50,8 @@
     <None Include="packages.config" />
     <None Include="MyCompanyName.MyProjectName.CustomAction.snk" />
     <None Include="deploy.debug.bat" />
+    <Compile Include="PostAccountdevkit_AjaxAccountSynchronous.cs" />
+    <Compile Include="PostNonedevkit_AjaxAdminSynchronous.cs" />
     <Compile Include="PostNonedevkit_AjaxSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

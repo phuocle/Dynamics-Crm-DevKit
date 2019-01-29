@@ -6,8 +6,8 @@ namespace MyCompanyName.MyProjectName.PluginAccount
 {
     [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "name",
     "MyCompanyName.MyProjectName.PluginAccount.PreAccountUpdateSynchronous", 1, IsolationModeEnum.Sandbox,
-    Image1Name = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "",
-    Image2Name = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "")]
+    Image1Name = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name",
+    Image2Name = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "name")]
     public class PreAccountUpdateSynchronous : IPlugin
     {
         /*

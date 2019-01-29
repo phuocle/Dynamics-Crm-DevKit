@@ -52,6 +52,18 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public string ProjectName => lblProjectName.Text;
 
         public string EntityName { get; set; }
+        public string EntityNameTest
+        {
+            get
+            {
+                var name = cboEntity.Text;
+                if (name.StartsWith("PostNone")) return "None";
+                var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+                name = name.Substring(0, name.IndexOf(config.SolutionPrefix));
+                return name.Substring("Post".Length);
+
+            }
+        }
         public string AssemblyName => ProjectName;
 
         public string RootNameSpace { get; set; }
@@ -695,7 +707,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                             return @class.Substring(0, @class.Length - "Synchronous".Length);
                         return "_";
                     }
-                    var temp = @class.Substring((stage + EntityName).Length);
+                    var temp = @class.Substring((stage + EntityNameTest).Length);
                     return temp.Substring(0, temp.Length - Execution.Length);
                 }
                 catch

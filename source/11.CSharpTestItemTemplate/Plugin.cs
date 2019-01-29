@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Reflection;
 using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-$if$($FormType$==true)using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk;
+using $ProxyTypes$;
 using $DevKitShared$;
 
 namespace $rootnamespace$
@@ -16,11 +18,26 @@ namespace $rootnamespace$
         public static void ClassInit(TestContext context)
         {
             Context = new XrmFakedContext();
+            Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
             PluginContext = Context.GetDefaultPluginContext();
             PluginContext.MessageName = "$message$";
             PluginContext.Stage = (int) StageEnum.$stage_string$;
             PluginContext.Mode = (int) ExecutionModeEnum.$execution$;
             PluginContext.InputParameters["Target"] = null;
+        }
+
+        [TestMethod]
+        public void $class$_UnsecureString_And_SecureString()
+        {
+            var target = new Entity("$logicalname$")
+            {
+                ["$logicalname$id"] = Guid.NewGuid()
+            };
+            PluginContext.InputParameters["Target"] = target;
+            var unsecureString = "UnsecureString";
+            var secureString = "SecureString";
+            Context.ExecutePluginWithConfigurations<$class$$execution$>(PluginContext, unsecureString, secureString);
+            Assert.IsTrue(target != null);
         }
 
         [TestMethod]
@@ -106,31 +123,7 @@ $FilteringAttributes$
         [TestMethod]
         public void $class$_Test_01()
         {
-            Assert.Fail();
+            Assert.IsTrue(true);
         }
     }
 }
-$else$
-namespace $rootnamespace$
-{
-    [TestClass]
-    public class $class$Test
-    {
-        public static XrmFakedContext Context { get; set; }
-        public static XrmFakedWorkflowContext WorkflowContext { get; set; }
-
-        [ClassInitialize()]
-        public static void ClassInit(TestContext context)
-        {
-            Context = new XrmFakedContext();
-            WorkflowContext = Context.GetDefaultWorkflowContext();
-        }
-
-        [TestMethod]
-        public void $class$_Test_01()
-        {
-            Assert.Fail();
-        }
-    }
-}
-$endif$

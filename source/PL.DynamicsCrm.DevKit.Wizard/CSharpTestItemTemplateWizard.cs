@@ -10,6 +10,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
     internal class CSharpTestItemTemplateWizard : IWizard
     {
         private DTE Dte { get; set; }
+        private string ClassType { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -27,8 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
-            WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewItem)
             {
@@ -40,38 +40,32 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 var form = new FormProject(FormType.TestItem, Dte, entityName);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
+                    var entityName2 = form.EntityNameTest;// logicalName.ToLower()=="customaction" ? "None" : entityName;
+                    if (entityName2 == "None") logicalName = "none"; else logicalName = entityName2.ToLower();
                     replacementsDictionary.Add("$class$", form.Class);
-                    replacementsDictionary.Add("$entityname$", entityName);
+                    replacementsDictionary.Add("$entityname$", entityName2);
                     replacementsDictionary.Add("$message$", form.Message);
                     replacementsDictionary.Add("$stage_string$", form.StageString);
                     replacementsDictionary.Add("$execution$", form.Execution);
                     var cols = project.Name.Split(".".ToCharArray());
                     replacementsDictionary.Add("$namespace2$", $"{cols[0]}.{cols[1]}.{cols[2]}");
                     replacementsDictionary.Add("$namespace3$", $"{cols[0]}.{cols[1]}");
-                    replacementsDictionary.Add("$PrimaryEntityName$", entityName);
+                    replacementsDictionary.Add("$PrimaryEntityName$", entityName2);
                     replacementsDictionary.Add("$FilteringAttributes$", form.FilteringAttributes);
                     replacementsDictionary.Add("$logicalname$", logicalName);
-                    if (project.Name.Contains(".Plugin") ||
-                        project.Name.Contains(".CustomAction.") ||
-                        project.Name.EndsWith(".CustomAction") ||
-                        project.Name.Contains(".DataProvider.") ||
-                        project.Name.EndsWith(".DataProvider"))
-                    {
-                        replacementsDictionary.Add("$FormType$", "true");
-                        if (project.Name.Contains(".CustomAction.") ||
-                            project.Name.EndsWith(".CustomAction"))
-                            replacementsDictionary.Add("$Plugin$", "false");
-                        else
-                            replacementsDictionary.Add("$Plugin$", "true");
-                    }
-                    else
-                    {
-                        replacementsDictionary.Add("$FormType$", "false");
-                    }
-                    var solutionFullName = Dte?.Solution?.FullName;
+                    if (project.Name.Contains(".Plugin") || project.Name.Contains(".Plugin."))
+                        ClassType = "Plugin";
+                    else if (project.Name.Contains(".CustomAction") || project.Name.EndsWith(".CustomAction."))
+                        ClassType = "CustomAction";
+                    else if (project.Name.Contains(".Workflow") || project.Name.EndsWith(".Workflow."))
+                        ClassType = "Workflow";
+                    else if (project.Name.Contains(".DataProvider") || project.Name.EndsWith(".DataProvider."))
+                        ClassType = "DataProvider";
+                        var solutionFullName = Dte?.Solution?.FullName;
                     var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
                     var parts = fInfo.Name.Split(".".ToCharArray());
                     replacementsDictionary.Add("$DevKitShared$", $"{GetName(parts)}Shared");
+                    replacementsDictionary.Add("$ProxyTypes$", $"{GetName(parts)}ProxyTypes");
                 }
                 else
                 {
@@ -94,7 +88,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return true;
+            return filePath.ToLower().Contains(ClassType.ToLower());
         }
     }
 }

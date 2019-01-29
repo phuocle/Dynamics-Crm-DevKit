@@ -11,7 +11,8 @@
     <DefaultName>Class.cs</DefaultName>
   </TemplateData>
   <TemplateContent>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">Class.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">Plugin.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">CustomAction.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
     <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>

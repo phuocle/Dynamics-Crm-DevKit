@@ -1,18 +1,24 @@
 ﻿using System;
 using Microsoft.Xrm.Sdk;
-using $DevKitShared$;
+using MyCompanyName.MyProjectName.Shared;
 
-namespace $rootnamespace$
+namespace MyCompanyName.MyProjectName.CustomAction
 {
-    [CrmPluginRegistration("$message$", "$logicalname$", StageEnum.$stage_string$, ExecutionModeEnum.$execution$, "",
-    "$rootnamespace$.$entityname$.$class$$execution$", 1, IsolationModeEnum.Sandbox)]
-    public class $class$$execution$ : IPlugin
+    [CrmPluginRegistration("devkit_AjaxAccount", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
+    "MyCompanyName.MyProjectName.CustomAction.Account.PostAccountdevkit_AjaxAccountSynchronous", 1, IsolationModeEnum.Sandbox)]
+    public class PostAccountdevkit_AjaxAccountSynchronous : IPlugin
     {
-$privateclass$
+        /*
+          InputParameters:
+              i         System.String - require
+              Target    Microsoft.Xrm.Sdk.EntityReference - require
+           OutputParameters:
+              o         System.String - require
+        */
         private readonly string _unsecureString = null;
         private readonly string _secureString = null;
 
-        public $class$$execution$(string unsecureString, string secureString)
+        public PostAccountdevkit_AjaxAccountSynchronous(string unsecureString, string secureString)
         {
             if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
             if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -24,10 +30,10 @@ $privateclass$
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            if (context.Stage != (int)StageEnum.$stage_string$) throw new InvalidPluginExecutionException("Stage does not equals $stage_string$");
-            if (context.PrimaryEntityName.ToLower() != "$logicalname$".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals $logicalname$");
-            if (context.MessageName.ToLower() != "$message$".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals $message$");
-            if (context.Mode != (int)ExecutionModeEnum.$execution$) throw new InvalidPluginExecutionException("Execution does not equals $execution$");
+            if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
+            if (context.PrimaryEntityName.ToLower() != "account".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
+            if (context.MessageName.ToLower() != "devkit_AjaxAccount".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals devkit_AjaxAccount");
+            if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
             //Debugger.Begin(tracing, context);
 

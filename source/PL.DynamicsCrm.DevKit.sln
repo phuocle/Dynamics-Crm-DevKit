@@ -143,16 +143,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PL.DynamicsCrm.DevKit.Documents", "PL.DynamicsCrm.DevKit.Documents", "{A434AC9E-B703-4ACB-89DC-BA5725F7FB1D}"
-	ProjectSection(SolutionItems) = preProject
-		..\docs\README.md = ..\docs\README.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analyzers", "analyzers", "{F480DA07-92B4-432F-A41B-DE8741C39469}"
-	ProjectSection(SolutionItems) = preProject
-		..\docs\analyzers\README.md = ..\docs\analyzers\README.md
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems*{aa712c45-5dec-46e5-9e02-497b2ebf9cab}*SharedItemsImports = 4
@@ -299,7 +289,6 @@ Global
 		{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0} = {B1343D31-8F4B-4A27-8F37-A0B75A8D5BED}
 		{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
 		{C555420B-02D8-4388-AADF-375A9809ACDA} = {27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}
-		{F480DA07-92B4-432F-A41B-DE8741C39469} = {A434AC9E-B703-4ACB-89DC-BA5725F7FB1D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}
