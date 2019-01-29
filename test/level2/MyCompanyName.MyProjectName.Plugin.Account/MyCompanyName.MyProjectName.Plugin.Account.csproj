@@ -66,9 +66,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName)==Release (
-    DEL $(TargetDir)*.xml
-    DEL $(TargetDir)*.pdb
-    DEL $(TargetDir)Microsoft.*.dll
+    DEL "$(TargetDir)*.xml"
+    DEL "$(TargetDir)*.pdb"
+    DEL "$(TargetDir)Microsoft.*.dll"
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>

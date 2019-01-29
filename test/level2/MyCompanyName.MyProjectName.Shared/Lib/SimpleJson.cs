@@ -58,6 +58,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 #endif
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 #if SIMPLE_JSON_DYNAMIC
 using System.Dynamic;
@@ -79,6 +80,7 @@ namespace MyCompanyName.MyProjectName.Shared
     [GeneratedCode("simple-json", "1.0.0")]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [DebuggerNonUserCode()]
 #if SIMPLE_JSON_OBJARRAYINTERNAL
     internal
 #else
@@ -113,6 +115,7 @@ namespace MyCompanyName.MyProjectName.Shared
     [GeneratedCode("simple-json", "1.0.0")]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [DebuggerNonUserCode()]
 #if SIMPLE_JSON_OBJARRAYINTERNAL
     internal
 #else
@@ -494,6 +497,7 @@ namespace MyCompanyName.MyProjectName.Shared
     /// All numbers are parsed to doubles.
     /// </summary>
     [GeneratedCode("simple-json", "1.0.0")]
+    [DebuggerNonUserCode()]
 #if SIMPLE_JSON_INTERNAL
     internal
 #else
@@ -1237,6 +1241,7 @@ namespace MyCompanyName.MyProjectName.Shared
     }
 
     [GeneratedCode("simple-json", "1.0.0")]
+    [DebuggerNonUserCode()]
 #if SIMPLE_JSON_INTERNAL
     internal
 #else
@@ -1598,6 +1603,7 @@ namespace MyCompanyName.MyProjectName.Shared
         // This class is meant to be copied into other libraries. So we want to exclude it from Code Analysis rules
         // that might be in place in the target project.
         [GeneratedCode("reflection-utils", "1.0.0")]
+        [DebuggerNonUserCode()]
 #if SIMPLE_JSON_REFLECTION_UTILS_PUBLIC
         public
 #else
