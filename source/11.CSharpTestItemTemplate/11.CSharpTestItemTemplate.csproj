@@ -73,6 +73,7 @@
   <ItemGroup>
     <None Include="Plugin.cs" />
     <None Include="CustomAction.cs" />
+    <None Include="Workflow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

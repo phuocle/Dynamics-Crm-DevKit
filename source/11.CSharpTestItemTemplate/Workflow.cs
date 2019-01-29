@@ -2,10 +2,10 @@
 using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MyCompanyName.MyProjectName.Workflow.Test
+namespace $rootnamespace$
 {
     [TestClass]
-    public class CommonTest
+    public class $class$Test
     {
         public static XrmFakedContext Context { get; set; }
         public static XrmFakedWorkflowContext WorkflowContext { get; set; }
@@ -18,15 +18,15 @@ namespace MyCompanyName.MyProjectName.Workflow.Test
         }
 
         [TestMethod]
-        public void Common_Test_Execute()
+        public void $class$_Test_Execute()
         {
-            var inputs = new Dictionary<string, object>() { };
-            var outputs = Context.ExecuteCodeActivity<Common>(inputs);
+            var inputs = new Dictionary<string, object>() {};
+            var outputs = Context.ExecuteCodeActivity<$class$>(inputs);
             Assert.IsTrue(true);
         }
 
         [TestMethod]
-        public void Common_Test_01()
+        public void $class$_Test_01()
         {
             Assert.IsTrue(true);
         }

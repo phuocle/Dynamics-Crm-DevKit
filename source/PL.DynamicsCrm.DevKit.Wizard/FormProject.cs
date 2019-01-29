@@ -56,12 +56,18 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                var name = cboEntity.Text;
-                if (name.StartsWith("PostNone")) return "None";
-                var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-                name = name.Substring(0, name.IndexOf(config.SolutionPrefix));
-                return name.Substring("Post".Length);
-
+                try
+                {
+                    var name = cboEntity.Text;
+                    if (name.StartsWith("PostNone")) return "None";
+                    var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+                    name = name.Substring(0, name.IndexOf(config.SolutionPrefix));
+                    return name.Substring("Post".Length);
+                }
+                catch
+                {
+                    return EntityName;
+                }
             }
         }
         public string AssemblyName => ProjectName;
