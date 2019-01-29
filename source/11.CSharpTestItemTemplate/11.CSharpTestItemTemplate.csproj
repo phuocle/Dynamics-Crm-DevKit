@@ -74,6 +74,7 @@
     <None Include="Plugin.cs" />
     <None Include="CustomAction.cs" />
     <None Include="Workflow.cs" />
+    <None Include="DataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

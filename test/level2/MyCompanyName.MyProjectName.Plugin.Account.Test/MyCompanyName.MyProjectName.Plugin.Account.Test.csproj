@@ -95,6 +95,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PreAccountRetrieveMultipleSynchronousTest.cs" />
+    <Compile Include="PreAccountRetrieveSynchronousTest.cs" />
     <Compile Include="PreAccountUpdateSynchronousTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

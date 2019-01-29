@@ -26,22 +26,17 @@ namespace MyCompanyName.MyProjectName.DataProvider
         public void Execute(IServiceProvider serviceProvider)
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
-            if (context == null) throw new InvalidPluginExecutionException("Initialize IPluginExecutionContext fail.");
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
-            if (serviceFactory == null) throw new InvalidPluginExecutionException("Initialize IOrganizationServiceFactory fail.");
             var service = serviceFactory.CreateOrganizationService(context.UserId);
-            if (service == null) throw new InvalidPluginExecutionException("Initialize IOrganizationService fail.");
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            if (tracing == null) throw new InvalidPluginExecutionException("Initialize ITracingService fail.");
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
-            if (retriever == null) throw new InvalidPluginExecutionException("Initialize IEntityDataSourceRetrieverService fail.");
             var dataSource = retriever.RetrieveEntityDataSource();
-            if (dataSource == null) throw new InvalidPluginExecutionException("Initialize Entity fail.");
-            Debugger.Begin(tracing, context);
+
+            //Debugger.Begin(tracing, context);
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            Debugger.End(tracing, context);
+            //Debugger.End(tracing, context);
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)

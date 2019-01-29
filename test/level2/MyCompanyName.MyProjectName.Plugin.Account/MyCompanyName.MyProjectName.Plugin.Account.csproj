@@ -50,6 +50,8 @@
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="MyCompanyName.MyProjectName.Plugin.Account.snk" />
+    <Compile Include="PreAccountRetrieveMultipleSynchronous.cs" />
+    <Compile Include="PreAccountRetrieveSynchronous.cs" />
     <Compile Include="PreAccountUpdateSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
