@@ -66,7 +66,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         {
                             replacementsDictionary.Add("$ProxyTypes$", "true");
                             replacementsDictionary.Add("$ProjectProxyTypesName$", form.ProxyTypes.Name);
-                            //replacementsDictionary.Add("$ProjectProxyTypesGuid$", form.ProxyTypes.Id);
                         }
                         else
                         {
@@ -78,6 +77,17 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$ProjectTestGuid$", form.SelectedProjectData.Id);
                         var solutionFullName = Dte?.Solution?.FullName;
                         replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
+
+                        var dir = Path.GetDirectoryName(solutionFullName);
+                        var solutionName = Path.GetFileNameWithoutExtension(solutionFullName);
+                        var file = $"{dir}\\VsTest.runsettings";
+                        if (!File.Exists(file))
+                        {
+                            var text = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.VsTest.runsettings");
+                            text = text.Replace("[[ProxyTypes.dll]]", form.ProxyTypes.Name + ".dll");
+                            text = text.Replace("[[Namespace]]", solutionName);
+                            File.WriteAllText(file, text);
+                        }
                         return;
                     }
                 }

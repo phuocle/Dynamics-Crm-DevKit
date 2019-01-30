@@ -131,6 +131,10 @@
     <Compile Include="ProxyTypesProjectTemplateWizard.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\PL.DynamicsCrm.DevKit.Cli\PL.DynamicsCrm.DevKit.Cli.json">
+      <Link>data\PL.DynamicsCrm.DevKit.Cli.json</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="data\VsTest.runsettings" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

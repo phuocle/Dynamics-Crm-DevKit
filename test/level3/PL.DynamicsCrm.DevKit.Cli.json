@@ -3,27 +3,25 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "PLDynamicsCrmDevKit",
+      "solution": "???",
       "includefiles": [
-        "NT.BTT.CustomAction.dll",
-        "NT.BTT.CustomAction.*.dll",
-        "NT.BTT.Plugin.*.dll"
+        "???.Plugin.*.dll",
+        "???.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "NT.BTT.*.Test.dll"
+        "???.*.Test.dll"
       ]
     },
     {
       "profile": "RELEASE",
       "folder": "Release\\dll",
-      "solution": "PLDynamicsCrmDevKit",
+      "solution": "???",
       "includefiles": [
-        "NT.BTT.CustomAction.dll",
-        "NT.BTT.CustomAction.*.dll",
-        "NT.BTT.Plugin.*.dll"
+        "???.Plugin.*.dll",
+        "???.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "NT.BTT.*.Test.dll"
+        "???.*.Test.dll"
       ]
     }
   ],
@@ -31,23 +29,23 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "PLDynamicsCrmDevKit",
+      "solution": "???",
       "includefiles": [
-        "NT.BTT.Workflow.*.dll"
+        "???.Workflow.*.dll"
       ],
       "excludefiles": [
-        "NT.BTT.*.Test.dll"
+        "???.*.Test.dll"
       ]
     },
     {
       "profile": "RELEASE",
       "folder": "Release\\dll",
-      "solution": "PLDynamicsCrmDevKit",
+      "solution": "???",
       "includefiles": [
-        "NT.BTT.Workflow.*.dll"
+        "???.Workflow.*.dll"
       ],
       "excludefiles": [
-        "NT.BTT.*.Test.dll"
+        "???.*.Test.dll"
       ]
     }
   ],
@@ -73,8 +71,19 @@
       "dependencies": [
         {
           "webresources": [
+            "???_/entities/[entity].js"
           ],
           "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "???_/lib/WebApiClient.js"
           ]
         }
       ]
@@ -100,8 +109,19 @@
       "dependencies": [
         {
           "webresources": [
+            "???_/entities/[entity].js"
           ],
           "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "???_/lib/WebApiClient.js"
           ]
         }
       ]
@@ -111,30 +131,30 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "PLDynamicsCrmDevKit",
+      "solution": "???",
       "includefiles": [
-        "NT.BTT.DataProvider.*.dll"
+        "???.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "NT.BTT.*.Test.dll"
+        "???.*.Test.dll"
       ]
     },
     {
       "profile": "RELEASE",
       "folder": "Release\\dll",
-      "solution": "PLDynamicsCrmDevKit",
+      "solution": "???",
       "includefiles": [
-        "NT.BTT.DataProvider.*.dll"
+        "???.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "NT.BTT.*.Test.dll"
+        "???.*.Test.dll"
       ]
     }
   ],
   "solutionpackagers": [
     {
-      "rootfolder": "",
       "profile": "Extract-Unmanaged",
+      "rootfolder": "",
       "solution": "???",
       "solutiontype": "Unmanaged",
       "folder": "???",
@@ -144,8 +164,8 @@
       "mapfile": ""
     },
     {
-      "rootfolder": "",
       "profile": "Extract-Managed",
+      "rootfolder": "",
       "solution": "???",
       "solutiontype": "Managed",
       "folder": "???",
@@ -155,8 +175,8 @@
       "mapfile": ""
     },
     {
-      "rootfolder": "",
       "profile": "Pack-Unmanaged",
+      "rootfolder": "",
       "solution": "???",
       "solutiontype": "Unmanaged",
       "folder": "???",
@@ -166,8 +186,8 @@
       "mapfile": ""
     },
     {
-      "rootfolder": "",
       "profile": "Pack-Managed",
+      "rootfolder": "",
       "solution": "???",
       "solutiontype": "Managed",
       "folder": "???",

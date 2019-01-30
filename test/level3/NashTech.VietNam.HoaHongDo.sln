@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NashTech.VietNam.HoaHongDo.Shared", "NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.shproj", "{FE9BFE4F-82B2-4645-A239-536294FB5163}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{181598D1-1AA8-4643-AD85-310E548E5A44}"
+	ProjectSection(SolutionItems) = preProject
+		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
+		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
+		VsTest.runsettings = VsTest.runsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.Plugin.Account", "NashTech.VietNam.HoaHongDo.Plugin.Account\NashTech.VietNam.HoaHongDo.Plugin.Account.csproj", "{088A3881-BDAF-42A0-BF86-504AE6BEF983}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.ProxyTypes", "NashTech.VietNam.HoaHongDo.ProxyTypes\NashTech.VietNam.HoaHongDo.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.Plugin.Account.Test", "NashTech.VietNam.HoaHongDo.Plugin.Account.Test\NashTech.VietNam.HoaHongDo.Plugin.Account.Test.csproj", "{0F10255F-2CD2-443F-82C9-403E4DA33B2F}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.projitems*{088a3881-bdaf-42a0-bf86-504ae6bef983}*SharedItemsImports = 4
+		NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.projitems*{fe9bfe4f-82b2-4645-a239-536294fb5163}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{088A3881-BDAF-42A0-BF86-504AE6BEF983}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{088A3881-BDAF-42A0-BF86-504AE6BEF983}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{088A3881-BDAF-42A0-BF86-504AE6BEF983}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{088A3881-BDAF-42A0-BF86-504AE6BEF983}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F10255F-2CD2-443F-82C9-403E4DA33B2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F10255F-2CD2-443F-82C9-403E4DA33B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F10255F-2CD2-443F-82C9-403E4DA33B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F10255F-2CD2-443F-82C9-403E4DA33B2F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B783E85-1F4E-499B-9D17-1B896F261A9D}
+	EndGlobalSection
+EndGlobal
