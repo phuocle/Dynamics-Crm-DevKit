@@ -20,9 +20,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.UiTest", "NashTech.VietNam.HoaHongDo.UiTest\NashTech.VietNam.HoaHongDo.UiTest.csproj", "{E400E9BD-E238-4345-9482-440276DA20E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.DataProvider", "NashTech.VietNam.HoaHongDo.DataProvider\NashTech.VietNam.HoaHongDo.DataProvider.csproj", "{2805316B-E477-4DC0-B5A0-8A51529EA3A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.DataProvider.Test", "NashTech.VietNam.HoaHongDo.DataProvider.Test\NashTech.VietNam.HoaHongDo.DataProvider.Test.csproj", "{3C5AC729-13E8-4383-AD9C-052E43751CB2}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.projitems*{088a3881-bdaf-42a0-bf86-504ae6bef983}*SharedItemsImports = 4
+		NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.projitems*{2805316b-e477-4dc0-b5a0-8a51529ea3a6}*SharedItemsImports = 4
 		NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.projitems*{e400e9bd-e238-4345-9482-440276da20e1}*SharedItemsImports = 4
 		NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.projitems*{fe9bfe4f-82b2-4645-a239-536294fb5163}*SharedItemsImports = 13
 	EndGlobalSection
@@ -47,6 +52,14 @@ Global
 		{E400E9BD-E238-4345-9482-440276DA20E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E400E9BD-E238-4345-9482-440276DA20E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E400E9BD-E238-4345-9482-440276DA20E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2805316B-E477-4DC0-B5A0-8A51529EA3A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2805316B-E477-4DC0-B5A0-8A51529EA3A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2805316B-E477-4DC0-B5A0-8A51529EA3A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2805316B-E477-4DC0-B5A0-8A51529EA3A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C5AC729-13E8-4383-AD9C-052E43751CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C5AC729-13E8-4383-AD9C-052E43751CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C5AC729-13E8-4383-AD9C-052E43751CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C5AC729-13E8-4383-AD9C-052E43751CB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

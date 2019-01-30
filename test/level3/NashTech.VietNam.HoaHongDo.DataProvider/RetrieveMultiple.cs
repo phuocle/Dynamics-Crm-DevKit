@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.Query;
-using $ShareProject$;
+using NashTech.VietNam.HoaHongDo.Shared;
 using System;
 
-namespace $SafeNamespace$
+namespace NashTech.VietNam.HoaHongDo.DataProvider
 {
     public class RetrieveMultiple : IPlugin
     {

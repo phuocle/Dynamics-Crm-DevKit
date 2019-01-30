@@ -1,23 +1,23 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
-using Microsoft.Xrm.Sdk.Query;
-using $ShareProject$;
+using NashTech.VietNam.HoaHongDo.Shared;
 using System;
 
-namespace $SafeNamespace$
+namespace NashTech.VietNam.HoaHongDo.DataProvider
 {
-    public class RetrieveMultiple : IPlugin
+    public class Retrieve : IPlugin
     {
         /*
           InputParameters:
-              Query                 Microsoft.Xrm.Sdk.Query.QueryBase - require
+              Target                  Microsoft.Xrm.Sdk.EntityReference - require
+              ColumnSet               Microsoft.Xrm.Sdk.Query.ColumnSet - require
            OutputParameters:
-              EntityCollection      Microsoft.Xrm.Sdk.EntityCollection - require
+              Entity                  Microsoft.Xrm.Sdk.Entity - require
         */
         private readonly string _unsecureString = null;
         private readonly string _secureString = null;
 
-        public RetrieveMultiple(string unsecureString, string secureString)
+        public Retrieve(string unsecureString, string secureString)
         {
             if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
             if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -45,13 +45,13 @@ namespace $SafeNamespace$
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var query = context.InputParameterOrDefault<QueryExpression>("Query");
+            var target = context.InputParameterOrDefault<EntityReference>("Target");
 
-            var entities = new EntityCollection();
-            entities.EntityName = "???";
+            var entity = new Entity("???", target.Id);
+
             //YOUR CODE ...
 
-            context.OutputParameters["BusinessEntityCollection"] = entities;
+            context.OutputParameters["BusinessEntity"] = entity;
         }
     }
 }
