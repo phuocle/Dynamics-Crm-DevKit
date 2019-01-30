@@ -18,9 +18,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.Plugin.Account.Test", "NashTech.VietNam.HoaHongDo.Plugin.Account.Test\NashTech.VietNam.HoaHongDo.Plugin.Account.Test.csproj", "{0F10255F-2CD2-443F-82C9-403E4DA33B2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NashTech.VietNam.HoaHongDo.UiTest", "NashTech.VietNam.HoaHongDo.UiTest\NashTech.VietNam.HoaHongDo.UiTest.csproj", "{E400E9BD-E238-4345-9482-440276DA20E1}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.projitems*{088a3881-bdaf-42a0-bf86-504ae6bef983}*SharedItemsImports = 4
+		NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.projitems*{e400e9bd-e238-4345-9482-440276da20e1}*SharedItemsImports = 4
 		NashTech.VietNam.HoaHongDo.Shared\NashTech.VietNam.HoaHongDo.Shared.projitems*{fe9bfe4f-82b2-4645-a239-536294fb5163}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +43,10 @@ Global
 		{0F10255F-2CD2-443F-82C9-403E4DA33B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F10255F-2CD2-443F-82C9-403E4DA33B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F10255F-2CD2-443F-82C9-403E4DA33B2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E400E9BD-E238-4345-9482-440276DA20E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E400E9BD-E238-4345-9482-440276DA20E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E400E9BD-E238-4345-9482-440276DA20E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E400E9BD-E238-4345-9482-440276DA20E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
