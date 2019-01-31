@@ -238,7 +238,6 @@
   del $(TargetDir)*.pdb
   cd $(ProjectDir)Nuget
   call $(ProjectDir)Nuget\pack.bat
-)
-</PostBuildEvent>
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>

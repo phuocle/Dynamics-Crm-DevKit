@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
@@ -194,6 +194,7 @@
     <None Include="Nuget\pack.bat" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.1.4.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.1.5.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.1.6.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.2.0.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.nuspec" />
     <None Include="packages.config" />
@@ -210,7 +211,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName)==Release (
+  del $(TargetDir)*.xml
+  del $(TargetDir)*.pdb
+  cd $(ProjectDir)Nuget
+  call $(ProjectDir)Nuget\pack.bat 
+)</PostBuildEvent>
   </PropertyGroup>
 </Project>
