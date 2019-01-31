@@ -70,6 +70,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         var solutionFullName = Dte?.Solution?.FullName;
                         replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
                         replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
+                        replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
                         return;
                     }
                 }

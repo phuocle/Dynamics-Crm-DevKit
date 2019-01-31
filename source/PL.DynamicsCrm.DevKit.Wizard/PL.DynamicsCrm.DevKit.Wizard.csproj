@@ -40,7 +40,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>PL.DynamicsCrm.DevKit.Wizard.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\PL.DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -131,8 +131,11 @@
     <Compile Include="ProxyTypesProjectTemplateWizard.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\PL.DynamicsCrm.DevKit.Cli\PL.DynamicsCrm.DevKit.Cli.json">
+      <Link>data\PL.DynamicsCrm.DevKit.Cli.json</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="data\VsTest.runsettings" />
     <None Include="packages.config" />
-    <None Include="PL.DynamicsCrm.DevKit.Wizard.snk" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormClassPlugin.resx">
@@ -157,7 +160,7 @@
   </ItemGroup>
   <Import Project="..\PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

@@ -24,10 +24,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -35,7 +36,14 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>PL.DynamicsCrm.DevKit.Analyzers.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\PL.DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeAnalysis, Version=2.10.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -172,20 +180,42 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDiagnosticAnalyzer.cs" />
+    <Compile Include="CrmAnalyzers\NotUseColumnSetTrueAnalyzer.cs" />
     <Compile Include="CrmAnalyzers\UpdateMessageShouldHaveFilteringAttributesAnalyzer.cs" />
     <Compile Include="DiagnosticCategories.cs" />
     <Compile Include="DiagnosticDescriptors.cs" />
+    <Compile Include="DiagnosticHelpers.cs" />
     <Compile Include="DiagnosticIdentifiers.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Nuget\pack.bat" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.1.4.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.1.5.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.1.6.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.2.0.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.nuspec" />
     <None Include="packages.config" />
-    <None Include="PL.DynamicsCrm.DevKit.Analyzers.snk" />
+    <None Include="tools\install.ps1" />
+    <None Include="tools\uninstall.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.1\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="license\LICENSE.txt" />
+    <Content Include="Nuget\nuget.exe" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName)==Release (
+  del $(TargetDir)*.xml
+  del $(TargetDir)*.pdb
+  cd $(ProjectDir)Nuget
+  call $(ProjectDir)Nuget\pack.bat 
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

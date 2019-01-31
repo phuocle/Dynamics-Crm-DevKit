@@ -3,27 +3,26 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "Temp",
+      "solution": "LEVEL1",
       "includefiles": [
-        "DevKitLevel1.Plugin.*.dll",
-        "DevKitLevel1.CustomAction.*.dll"
+        "GoogleVietNam.Plugin.*.dll",
+        "GoogleVietNam.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "DevKitLevel1.Plugin.*.Test.dll",
-        "DevKitLevel1.CustomAction.*.Test.dll"
+        "GoogleVietNam.*.Test.dll"
       ]
     },
     {
       "profile": "RELEASE",
       "folder": "Release\\dll",
-      "solution": "Temp",
+      "solution": "PLDynamicsCrmDevKit",
       "includefiles": [
-        "DevKitLevel1.Plugin.*.dll",
-        "DevKitLevel1.CustomAction.*.dll"
+        "NT.BTT.CustomAction.dll",
+        "NT.BTT.CustomAction.*.dll",
+        "NT.BTT.Plugin.*.dll"
       ],
       "excludefiles": [
-        "DevKitLevel1.Plugin.*.Test.dll",
-        "DevKitLevel1.CustomAction.*.Test.dll"
+        "NT.BTT.*.Test.dll"
       ]
     }
   ],
@@ -31,31 +30,31 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "Temp",
+      "solution": "LEVEL1",
       "includefiles": [
-        "DevKitLevel1.Workflow.*.dll"
+        "GoogleVietNam.Workflow.*.dll"
       ],
       "excludefiles": [
-        "DevKitLevel1.Workflow.*.Test.dll"
+        "GoogleVietNam.*.Test.dll"
       ]
     },
     {
       "profile": "RELEASE",
       "folder": "Release\\dll",
-      "solution": "???",
+      "solution": "PLDynamicsCrmDevKit",
       "includefiles": [
-        "???.*.dll"
+        "NT.BTT.Workflow.*.dll"
       ],
       "excludefiles": [
-        "*.Test.dll"
+        "NT.BTT.*.Test.dll"
       ]
     }
   ],
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "Temp",
-      "prefix": "new_",
+      "solution": "LEVEL1",
+      "prefix": "devkit_",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -73,38 +72,29 @@
       "dependencies": [
         {
           "webresources": [
-            "new_/entities/Account.js",
-            "new_/entities/Lead.js"
+            "devkit_/entities/[entity].js"
           ],
           "dependencies": [
-            "new_/resources/Resource.1033.resx"
+            "devkit_/entities/[entity].form.js",
+            "devkit_/entities/[entity].webapi.js",
+            "devkit_/resources/resource.1033.resx",
+            "devkit_/resources/resource.1066.resx"
           ]
         },
         {
           "webresources": [
-            "new_/entities/Account.webapi.js",
-            "new_/entities/Lead.webapi.js"
+            "devkit_/entities/[entity].webapi.js"
           ],
           "dependencies": [
-            "new_/lib/WebApiClient.js"
+            "devkit_/lib/WebApiClient.js"
           ]
         },
         {
           "webresources": [
-            "new_/entities/Account.js"
+            "devkit_/entities/Account.js"
           ],
           "dependencies": [
-            "new_/entities/Account.form.js",
-            "new_/entities/Account.webapi.js"
-          ]
-        },
-        {
-          "webresources": [
-            "new_/entities/Lead.js"
-          ],
-          "dependencies": [
-            "new_/entities/Lead.form.js",
-            "new_/entities/Lead.webapi.js"
+            "devkit_/lib/dayjs.min.js"
           ]
         }
       ]
@@ -113,11 +103,15 @@
       "profile": "RELEASE",
       "solution": "???",
       "prefix": "???",
-      "rootfolder": "???.WebResource",
+      "rootfolder": "???",
       "includefiles": [
+        "css\\**.css",
         "entities\\*.js",
-        "lib\\*.js",
-        "images\\*.png"
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
       ],
       "excludefiles": [
         "entities\\*.intellisense.js",
@@ -137,23 +131,23 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "Temp",
+      "solution": "LEVEL1",
       "includefiles": [
-        "DevKitLevel1.DataProvider.*.dll"
+        "GoogleVietNam.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "DevKitLevel1.DataProvider.*.Test.dll"
+        "GoogleVietNam.*.Test.dll"
       ]
     },
     {
       "profile": "RELEASE",
       "folder": "Release\\dll",
-      "solution": "???",
+      "solution": "PLDynamicsCrmDevKit",
       "includefiles": [
-        "???.dll"
+        "NT.BTT.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.dll"
+        "NT.BTT.*.Test.dll"
       ]
     }
   ],
@@ -161,46 +155,66 @@
     {
       "rootfolder": "",
       "profile": "Extract-Unmanaged",
-      "solution": "Temp",
+      "solution": "???",
       "solutiontype": "Unmanaged",
-      "folder": "Extract",
-      "solutionzipfolder": "zip",
-      "logfolder": "log",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "rootfolder": "",
       "profile": "Extract-Managed",
-      "solution": "Temp",
+      "solution": "???",
       "solutiontype": "Managed",
-      "folder": "Extract",
-      "solutionzipfolder": "zip",
-      "logfolder": "log",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "rootfolder": "",
       "profile": "Pack-Unmanaged",
-      "solution": "Temp",
+      "solution": "???",
       "solutiontype": "Unmanaged",
-      "folder": "Extract",
-      "solutionzipfolder": "zip",
-      "logfolder": "log",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
       "type": "Pack",
       "mapfile": ""
     },
     {
       "rootfolder": "",
       "profile": "Pack-Managed",
-      "solution": "Temp",
+      "solution": "???",
       "solutiontype": "Managed",
-      "folder": "Extract",
-      "solutionzipfolder": "zip",
-      "logfolder": "log",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
       "type": "Pack",
       "mapfile": ""
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "CSharp"
+    },
+    {
+      "profile": "JS-FORM",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "JsForm"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "JsWebApi"
     }
   ]
 }

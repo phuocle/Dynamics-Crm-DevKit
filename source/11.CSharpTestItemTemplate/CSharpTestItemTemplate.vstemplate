@@ -11,10 +11,13 @@
     <DefaultName>Class.cs</DefaultName>
   </TemplateData>
   <TemplateContent>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">Class.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">Plugin.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">CustomAction.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">Workflow.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">DataProvider.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.2.0.0, Culture=neutral, PublicKeyToken=93b9df07fea4eb7d</Assembly>
+    <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>PL.DynamicsCrm.DevKit.Wizard.CSharpTestItemTemplateWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>

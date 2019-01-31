@@ -63,5 +63,18 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                 }).ToList();
             return packages.FirstOrDefault();
         }
+
+        public static NuGetPackage GetPLDynamicsCrmDevKitAnalyzersPackage()
+        {
+            var list = GetPackages("PL.DynamicsCrm.DevKit.Analyzers");
+            if (list == null) return new NuGetPackage { Version = Const.Version };
+            var packages = (from item in list
+                            orderby item.Version.ToOriginalString() descending
+                            select new NuGetPackage
+                            {
+                                Version = item.Version.ToOriginalString()
+                            }).ToList();
+            return packages.FirstOrDefault();
+        }
     }
 }

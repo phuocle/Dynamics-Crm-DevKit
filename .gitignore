@@ -162,6 +162,7 @@ PublishScripts/
 # NuGet v3's project.json files produces more ignoreable files
 *.nuget.props
 *.nuget.targets
+!nuget.exe
 
 # Microsoft Azure Build Output
 csx/
@@ -191,6 +192,7 @@ ClientBin/
 *.dbproj.schemaview
 *.jfm
 *.pfx
+!PL.DynamicsCrm.DevKit.pfx
 *.publishsettings
 node_modules/
 orleans.codegen.cs
@@ -259,3 +261,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/source/PL.DynamicsCrm.DevKit.Analyzers/analyzers

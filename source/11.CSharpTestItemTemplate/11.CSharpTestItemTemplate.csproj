@@ -71,7 +71,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Class.cs" />
+    <None Include="Plugin.cs" />
+    <None Include="CustomAction.cs" />
+    <None Include="Workflow.cs" />
+    <None Include="DataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,216 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "GoogleVietNam.Shared", "GoogleVietNam.Shared\GoogleVietNam.Shared.shproj", "{4AB9DBA3-BA8F-4FAA-97AD-CB57D47E895D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Console", "GoogleVietNam.Console\GoogleVietNam.Console.csproj", "{39F8B68C-BD79-4374-A3C7-916B88C36069}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Console.2", "GoogleVietNam.Console.2\GoogleVietNam.Console.2.csproj", "{A947D06D-F575-4C14-99DA-49581C7F8FF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Console.Azure", "GoogleVietNam.Console.Azure\GoogleVietNam.Console.Azure.csproj", "{3D5EDE1C-D785-4706-9F74-CB204B8E403B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Plugin.Contact", "GoogleVietNam.Plugin.Contact\GoogleVietNam.Plugin.Contact.csproj", "{70D6B0F2-06EC-487B-BA54-256CB64586CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.CustomAction", "GoogleVietNam.CustomAction\GoogleVietNam.CustomAction.csproj", "{8A77D099-9297-463F-8ED7-2AC7A543982E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.CustomAction.2", "GoogleVietNam.CustomAction.2\GoogleVietNam.CustomAction.2.csproj", "{C735BE42-783E-45D5-8757-56EDC557B975}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.CustomAction.Account", "GoogleVietNam.CustomAction.Account\GoogleVietNam.CustomAction.Account.csproj", "{9E437141-1174-4C09-BFCE-4B3FF85BE877}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Workflow", "GoogleVietNam.Workflow\GoogleVietNam.Workflow.csproj", "{D62D16E5-CC49-4F2D-B554-38D44118C7C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Workflow.2", "GoogleVietNam.Workflow.2\GoogleVietNam.Workflow.2.csproj", "{B1A2423B-3442-4ED0-80BC-E0E7B4A3CCD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Workflow.Account", "GoogleVietNam.Workflow.Account\GoogleVietNam.Workflow.Account.csproj", "{66AB6B9C-8D3D-4CDD-83D9-697300137691}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.DataProvider", "GoogleVietNam.DataProvider\GoogleVietNam.DataProvider.csproj", "{E604F2F0-58DB-4C06-A64E-7AFA27FB93AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.DataProvider.2", "GoogleVietNam.DataProvider.2\GoogleVietNam.DataProvider.2.csproj", "{5BDFD8FD-80B5-467B-ADD1-F297D9C973DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.DataProvider.Azure", "GoogleVietNam.DataProvider.Azure\GoogleVietNam.DataProvider.Azure.csproj", "{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Plugin.Account.Test", "GoogleVietNam.Plugin.Account.Test\GoogleVietNam.Plugin.Account.Test.csproj", "{4BCC27B1-03C8-4123-9879-6199D08359A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.UiTest", "GoogleVietNam.UiTest\GoogleVietNam.UiTest.csproj", "{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.UiTest.2", "GoogleVietNam.UiTest.2\GoogleVietNam.UiTest.2.csproj", "{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.WebResource", "GoogleVietNam.WebResource\GoogleVietNam.WebResource.csproj", "{C6A7E275-380B-46CD-B5A2-EE501CEDDAC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.WebResource.Azure", "GoogleVietNam.WebResource.Azure\GoogleVietNam.WebResource.Azure.csproj", "{334297AF-3505-4240-BABB-C4DB5F2FC91A}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GoogleVietNam.SolutionPackager", "GoogleVietNam.SolutionPackager\", "{FA358699-05CB-4774-B482-9D03E8328BA0}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		Debug.AspNetCompiler.VirtualPath = "/GoogleVietNam.SolutionPackager"
+		Debug.AspNetCompiler.PhysicalPath = "GoogleVietNam.SolutionPackager\"
+		Debug.AspNetCompiler.TargetPath = "GoogleVietNam.SolutionPackager\"
+		Debug.AspNetCompiler.Updateable = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/GoogleVietNam.SolutionPackager"
+		Release.AspNetCompiler.PhysicalPath = "GoogleVietNam.SolutionPackager\"
+		Release.AspNetCompiler.TargetPath = "GoogleVietNam.SolutionPackager\"
+		Release.AspNetCompiler.Updateable = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "58456"
+		SlnRelativePath = "GoogleVietNam.SolutionPackager\"
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "GoogleVietNam.SolutionPackager.2", "GoogleVietNam.SolutionPackager.2\", "{AC13B377-29DE-4FE4-9AE0-0DCA1212DCD5}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		Debug.AspNetCompiler.VirtualPath = "/GoogleVietNam.SolutionPackager.2"
+		Debug.AspNetCompiler.PhysicalPath = "GoogleVietNam.SolutionPackager.2\"
+		Debug.AspNetCompiler.TargetPath = "GoogleVietNam.SolutionPackager.2\"
+		Debug.AspNetCompiler.Updateable = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/GoogleVietNam.SolutionPackager.2"
+		Release.AspNetCompiler.PhysicalPath = "GoogleVietNam.SolutionPackager.2\"
+		Release.AspNetCompiler.TargetPath = "GoogleVietNam.SolutionPackager.2\"
+		Release.AspNetCompiler.Updateable = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "58466"
+		SlnRelativePath = "GoogleVietNam.SolutionPackager.2\"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8653A087-DC48-4188-9099-07EA61A3B157}"
+	ProjectSection(SolutionItems) = preProject
+		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
+		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.Plugin.Account", "GoogleVietNam.Plugin.Account\GoogleVietNam.Plugin.Account.csproj", "{AEEE0268-8623-40E3-AE4B-80AA9E683539}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleVietNam.ProxyTypes", "GoogleVietNam.ProxyTypes\GoogleVietNam.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{0951d9fe-0e46-4ae1-a319-c67d517d6ecf}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{39f8b68c-bd79-4374-a3c7-916b88c36069}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{3d5ede1c-d785-4706-9f74-cb204b8e403b}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{4ab9dba3-ba8f-4faa-97ad-cb57d47e895d}*SharedItemsImports = 13
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{5ac0c4ff-bf3d-487b-8402-6f828f5ec355}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{5bdfd8fd-80b5-467b-add1-f297d9c973dd}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{66ab6b9c-8d3d-4cdd-83d9-697300137691}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{70d6b0f2-06ec-487b-ba54-256cb64586cc}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{8a77d099-9297-463f-8ed7-2ac7a543982e}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{9e437141-1174-4c09-bfce-4b3ff85be877}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{a947d06d-f575-4c14-99da-49581c7f8ff6}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{aeee0268-8623-40e3-ae4b-80aa9e683539}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{b1a2423b-3442-4ed0-80bc-e0e7b4a3ccd8}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{c735be42-783e-45d5-8757-56edc557b975}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{cb043263-b1c4-49a4-a9b6-6b196a9a72fe}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{d62d16e5-cc49-4f2d-b554-38d44118c7c1}*SharedItemsImports = 4
+		GoogleVietNam.Shared\GoogleVietNam.Shared.projitems*{e604f2f0-58db-4c06-a64e-7afa27fb93ae}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39F8B68C-BD79-4374-A3C7-916B88C36069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A947D06D-F575-4C14-99DA-49581C7F8FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A947D06D-F575-4C14-99DA-49581C7F8FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A947D06D-F575-4C14-99DA-49581C7F8FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A947D06D-F575-4C14-99DA-49581C7F8FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D5EDE1C-D785-4706-9F74-CB204B8E403B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70D6B0F2-06EC-487B-BA54-256CB64586CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70D6B0F2-06EC-487B-BA54-256CB64586CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70D6B0F2-06EC-487B-BA54-256CB64586CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70D6B0F2-06EC-487B-BA54-256CB64586CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A77D099-9297-463F-8ED7-2AC7A543982E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A77D099-9297-463F-8ED7-2AC7A543982E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A77D099-9297-463F-8ED7-2AC7A543982E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A77D099-9297-463F-8ED7-2AC7A543982E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C735BE42-783E-45D5-8757-56EDC557B975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C735BE42-783E-45D5-8757-56EDC557B975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C735BE42-783E-45D5-8757-56EDC557B975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C735BE42-783E-45D5-8757-56EDC557B975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E437141-1174-4C09-BFCE-4B3FF85BE877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E437141-1174-4C09-BFCE-4B3FF85BE877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E437141-1174-4C09-BFCE-4B3FF85BE877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E437141-1174-4C09-BFCE-4B3FF85BE877}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D62D16E5-CC49-4F2D-B554-38D44118C7C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D62D16E5-CC49-4F2D-B554-38D44118C7C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D62D16E5-CC49-4F2D-B554-38D44118C7C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D62D16E5-CC49-4F2D-B554-38D44118C7C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1A2423B-3442-4ED0-80BC-E0E7B4A3CCD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1A2423B-3442-4ED0-80BC-E0E7B4A3CCD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1A2423B-3442-4ED0-80BC-E0E7B4A3CCD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1A2423B-3442-4ED0-80BC-E0E7B4A3CCD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66AB6B9C-8D3D-4CDD-83D9-697300137691}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66AB6B9C-8D3D-4CDD-83D9-697300137691}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66AB6B9C-8D3D-4CDD-83D9-697300137691}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66AB6B9C-8D3D-4CDD-83D9-697300137691}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E604F2F0-58DB-4C06-A64E-7AFA27FB93AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E604F2F0-58DB-4C06-A64E-7AFA27FB93AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E604F2F0-58DB-4C06-A64E-7AFA27FB93AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E604F2F0-58DB-4C06-A64E-7AFA27FB93AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BDFD8FD-80B5-467B-ADD1-F297D9C973DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BDFD8FD-80B5-467B-ADD1-F297D9C973DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BDFD8FD-80B5-467B-ADD1-F297D9C973DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BDFD8FD-80B5-467B-ADD1-F297D9C973DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB043263-B1C4-49A4-A9B6-6B196A9A72FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BCC27B1-03C8-4123-9879-6199D08359A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AC0C4FF-BF3D-487B-8402-6F828F5EC355}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0951D9FE-0E46-4AE1-A319-C67D517D6ECF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6A7E275-380B-46CD-B5A2-EE501CEDDAC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6A7E275-380B-46CD-B5A2-EE501CEDDAC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6A7E275-380B-46CD-B5A2-EE501CEDDAC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6A7E275-380B-46CD-B5A2-EE501CEDDAC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{334297AF-3505-4240-BABB-C4DB5F2FC91A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{334297AF-3505-4240-BABB-C4DB5F2FC91A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{334297AF-3505-4240-BABB-C4DB5F2FC91A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{334297AF-3505-4240-BABB-C4DB5F2FC91A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA358699-05CB-4774-B482-9D03E8328BA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA358699-05CB-4774-B482-9D03E8328BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA358699-05CB-4774-B482-9D03E8328BA0}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA358699-05CB-4774-B482-9D03E8328BA0}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{AC13B377-29DE-4FE4-9AE0-0DCA1212DCD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC13B377-29DE-4FE4-9AE0-0DCA1212DCD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC13B377-29DE-4FE4-9AE0-0DCA1212DCD5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC13B377-29DE-4FE4-9AE0-0DCA1212DCD5}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEEE0268-8623-40E3-AE4B-80AA9E683539}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CF030E81-A504-483B-842D-33248CBD4A34}
+	EndGlobalSection
+EndGlobal

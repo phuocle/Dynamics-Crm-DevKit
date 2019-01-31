@@ -49,9 +49,13 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\PL.DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -250,14 +254,15 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup>
-    <PostBuildEvent>DEL $(TargetDir)*.xml
-DEL $(TargetDir)*.pdb
-DEL $(TargetDir)*.dll
-DEL $(TargetDir)*.txt
-DEL $(TargetDir)*.png
-DEL $(TargetDir)*.vsixmanifest</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName)==Release (
+    set folder="$(ProjectDir)Release"
+    cd /d %25folder%25
+    for /F "delims=" %25%25i in ('dir /b /a:d') do rmdir "%25%25i" /s/q
+    for /F "delims=" %25%25i in ('dir /b *.*') do if not "%25%25i"=="PL.DynamicsCrm.DevKit.vsix" del "%25%25i" /s/q
+    copy PL.DynamicsCrm.DevKit.vsix ..\..\Published\1.2.0\PL.DynamicsCrm.DevKit.vsix /y
+)</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

@@ -24,15 +24,18 @@ namespace $rootnamespace$
             var serviceFactory = executionContext.GetExtension<IOrganizationServiceFactory>();
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
+
+            //Debugger.Begin(tracing, executionContext);
+
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
+
+            //Debugger.Begin(tracing, executionContext);
         }
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            Debugger.Trace(tracing, "Begin Execute Workflow: $class$");
-            //YOUR CUSTOM-WORKFLOW-CODE GO HERE
+            //YOUR WORKFLOW-CODE GO HERE
 
-            Debugger.Trace(tracing, "End Execute Workflow: $class$");
         }
     }
 }

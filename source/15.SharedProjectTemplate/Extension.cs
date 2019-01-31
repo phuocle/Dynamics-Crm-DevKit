@@ -16,7 +16,6 @@ namespace Microsoft.Xrm.Sdk
         public static bool Delete(this IOrganizationService service, string entityName, KeyAttributeCollection keys)
         {
             var qe = new QueryExpression(entityName);
-            qe.ColumnSet = new ColumnSet(true);
             foreach (var key in keys)
                 qe.Criteria.AddCondition(key.Key, ConditionOperator.Equal, key.Value);
             var rows = service.RetrieveMultiple(qe);
@@ -25,11 +24,11 @@ namespace Microsoft.Xrm.Sdk
             return true;
         }
 
-        public static T RetrieveByGuid<T>(this IOrganizationService service, string entityName, Guid id)
+        public static T RetrieveByGuid<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)
         {
             try
             {
-                var entity = service.Retrieve(entityName, id, new ColumnSet(true));
+                var entity = service.Retrieve(entityName, id, columns);
                 object[] args = new object[] { entity };
                 return (T)Activator.CreateInstance(typeof(T), args);
             }
@@ -39,10 +38,12 @@ namespace Microsoft.Xrm.Sdk
             }
         }
 
-        public static T RetrieveByKeyAttributeCollection<T>(this IOrganizationService service, string entityName, KeyAttributeCollection keys)
+        public static T RetrieveByKeyAttributeCollection<T>(this IOrganizationService service, string entityName, ColumnSet columns, KeyAttributeCollection keys)
         {
-            var qe = new QueryExpression(entityName);
-            qe.ColumnSet = new ColumnSet(true);
+            var qe = new QueryExpression(entityName)
+            {
+                ColumnSet = columns
+            };
             foreach (var key in keys)
                 qe.Criteria.AddCondition(key.Key, ConditionOperator.Equal, key.Value);
             var rows = service.RetrieveMultiple(qe);
@@ -52,13 +53,15 @@ namespace Microsoft.Xrm.Sdk
             return (T)Activator.CreateInstance(typeof(T), args);
         }
 
-        public static List<T> RetrieveNewOrUpdatedChanges<T>(this IOrganizationService service, string entityName, ref string dataToken)
+        public static List<T> RetrieveNewOrUpdatedChanges<T>(this IOrganizationService service, string entityName, ColumnSet columns, ref string dataToken)
         {
-            var request = new RetrieveEntityChangesRequest();
-            request.EntityName = entityName;
-            request.DataVersion = dataToken;
-            request.Columns = new ColumnSet(true);
-            request.PageInfo = new PagingInfo() { Count = 5000, PageNumber = 1, ReturnTotalRecordCount = false };
+            var request = new RetrieveEntityChangesRequest
+            {
+                EntityName = entityName,
+                DataVersion = dataToken,
+                Columns = columns,
+                PageInfo = new PagingInfo() { Count = 5000, PageNumber = 1, ReturnTotalRecordCount = false }
+            };
             var lists = new List<T>();
             while (true)
             {
@@ -83,13 +86,15 @@ namespace Microsoft.Xrm.Sdk
             return lists;
         }
 
-        public static List<EntityReference> RetrieveRemovedOrDeletedChanges(this IOrganizationService service, string entityName, ref string dataToken)
+        public static List<EntityReference> RetrieveRemovedOrDeletedChanges(this IOrganizationService service, string entityName, ColumnSet columns, ref string dataToken)
         {
-            var request = new RetrieveEntityChangesRequest();
-            request.EntityName = entityName;
-            request.DataVersion = dataToken;
-            request.Columns = new ColumnSet(true);
-            request.PageInfo = new PagingInfo() { Count = 5000, PageNumber = 1, ReturnTotalRecordCount = false };
+            var request = new RetrieveEntityChangesRequest
+            {
+                EntityName = entityName,
+                DataVersion = dataToken,
+                Columns = columns,
+                PageInfo = new PagingInfo() { Count = 5000, PageNumber = 1, ReturnTotalRecordCount = false }
+            };
             var lists = new List<EntityReference>();
             while (true)
             {
@@ -113,13 +118,8 @@ namespace Microsoft.Xrm.Sdk
             return lists;
         }
 
-        public static List<T> RetrieveAll<T>(this IOrganizationService service, string fetchXml = null) where T : EntityBase
+        public static List<T> RetrieveAll<T>(this IOrganizationService service, string fetchXml) where T : EntityBase
         {
-            if (fetchXml == null)
-            {
-                var entityLogicalName = typeof(T).GetField("EntityLogicalName").GetRawConstantValue().ToString();
-                fetchXml = BuildFetchXmlRetrieveAll(entityLogicalName);
-            }
             var lists = new List<T>();
             string pagingCookie = null;
             var pageNumber = 1;
@@ -142,18 +142,6 @@ namespace Microsoft.Xrm.Sdk
                     break;
             }
             return lists;
-        }
-
-        private static string BuildFetchXmlRetrieveAll(string entityLogicalName)
-        {
-            var fetchXml = $@"
-<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-  <entity name='{entityLogicalName}'>
-    <all-attributes />
-  </entity>
-</fetch>
-";
-            return fetchXml;
         }
 
         private static string CreateXml(string xml, string cookie, int page, int count)
