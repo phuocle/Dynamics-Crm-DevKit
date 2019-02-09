@@ -60,7 +60,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     File.WriteAllText(file, Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.PL.DynamicsCrm.DevKit.Cli.json"));
                 return;
             }
-            MessageBox.Show($@"{FormType.Shared.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                MessageBox.Show($@"{FormType.Shared.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }

@@ -74,8 +74,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         return;
                     }
                 }
+                else
+                {
+                    MessageBox.Show($@"{FormType.UiTest.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            MessageBox.Show($@"{FormType.UiTest.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }

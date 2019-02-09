@@ -43,6 +43,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
             EntityName = entityName;
             FormType = formType;
+            if (formType == FormType.DataProvider)
+            {
+                cboCrmName.Text = "Dynamics 365";
+                cboCrmName_SelectedIndexChanged(null, null);
+                cboCrmName.Enabled = false;
+            }
         }
         public string LanguageCode => cboEntity.SelectedValue.ToString();
         public string ResourceStringName => txtName.Text;

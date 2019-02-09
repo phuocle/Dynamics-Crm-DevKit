@@ -65,6 +65,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                 if (_microsoftCrmSdkCoreToolsPackages != null)
                     return _microsoftCrmSdkCoreToolsPackages;
                 var list = GetPackages("Microsoft.CrmSdk.CoreTools");
+                list = null;
                 if (list == null)
                 {
                     return new List<NuGetPackage> { new NuGetPackage {
