@@ -1062,6 +1062,10 @@ namespace $rootnamespace$
             {
                 object key = ke.Current;
                 object value = ve.Current;
+                if (key?.ToString() == "Item" && value == null)
+                {
+                    continue;
+                }
                 if (!first)
                     builder.Append(",");
                 string stringKey = key as string;
@@ -1865,7 +1869,7 @@ namespace $rootnamespace$
                 NewExpression newExp = Expression.New(constructorInfo, argsExp);
                 Expression<Func<object[], object>> lambda = Expression.Lambda<Func<object[], object>>(newExp, param);
                 Func<object[], object> compiledLambda = lambda.Compile();
-                return delegate(object[] args) { return compiledLambda(args); };
+                return delegate (object[] args) { return compiledLambda(args); };
             }
 
             public static ConstructorDelegate GetConstructorByExpression(Type type, params Type[] argsType)
@@ -1897,7 +1901,11 @@ namespace $rootnamespace$
             public static GetDelegate GetGetMethodByReflection(PropertyInfo propertyInfo)
             {
                 MethodInfo methodInfo = GetGetterMethodInfo(propertyInfo);
-                return delegate (object source) { return methodInfo.Invoke(source, EmptyObjects); };
+                return delegate (object source) {
+                    if (methodInfo.Name == "get_Item")
+                        return null;
+                    return methodInfo.Invoke(source, EmptyObjects);
+                };
             }
 
             public static GetDelegate GetGetMethodByReflection(FieldInfo fieldInfo)
@@ -1913,7 +1921,7 @@ namespace $rootnamespace$
                 ParameterExpression instance = Expression.Parameter(typeof(object), "instance");
                 UnaryExpression instanceCast = (!IsValueType(propertyInfo.DeclaringType)) ? Expression.TypeAs(instance, propertyInfo.DeclaringType) : Expression.Convert(instance, propertyInfo.DeclaringType);
                 Func<object, object> compiled = Expression.Lambda<Func<object, object>>(Expression.TypeAs(Expression.Call(instanceCast, getMethodInfo), typeof(object)), instance).Compile();
-                return delegate(object source) { return compiled(source); };
+                return delegate (object source) { return compiled(source); };
             }
 
             public static GetDelegate GetGetMethodByExpression(FieldInfo fieldInfo)
@@ -1921,7 +1929,7 @@ namespace $rootnamespace$
                 ParameterExpression instance = Expression.Parameter(typeof(object), "instance");
                 MemberExpression member = Expression.Field(Expression.Convert(instance, fieldInfo.DeclaringType), fieldInfo);
                 GetDelegate compiled = Expression.Lambda<GetDelegate>(Expression.Convert(member, typeof(object)), instance).Compile();
-                return delegate(object source) { return compiled(source); };
+                return delegate (object source) { return compiled(source); };
             }
 
 #endif
@@ -1965,7 +1973,7 @@ namespace $rootnamespace$
                 UnaryExpression instanceCast = (!IsValueType(propertyInfo.DeclaringType)) ? Expression.TypeAs(instance, propertyInfo.DeclaringType) : Expression.Convert(instance, propertyInfo.DeclaringType);
                 UnaryExpression valueCast = (!IsValueType(propertyInfo.PropertyType)) ? Expression.TypeAs(value, propertyInfo.PropertyType) : Expression.Convert(value, propertyInfo.PropertyType);
                 Action<object, object> compiled = Expression.Lambda<Action<object, object>>(Expression.Call(instanceCast, setMethodInfo, valueCast), new ParameterExpression[] { instance, value }).Compile();
-                return delegate(object source, object val) { compiled(source, val); };
+                return delegate (object source, object val) { compiled(source, val); };
             }
 
             public static SetDelegate GetSetMethodByExpression(FieldInfo fieldInfo)
@@ -1974,7 +1982,7 @@ namespace $rootnamespace$
                 ParameterExpression value = Expression.Parameter(typeof(object), "value");
                 Action<object, object> compiled = Expression.Lambda<Action<object, object>>(
                     Assign(Expression.Field(Expression.Convert(instance, fieldInfo.DeclaringType), fieldInfo), Expression.Convert(value, fieldInfo.FieldType)), instance, value).Compile();
-                return delegate(object source, object val) { compiled(source, val); };
+                return delegate (object source, object val) { compiled(source, val); };
             }
 
             public static BinaryExpression Assign(Expression left, Expression right)

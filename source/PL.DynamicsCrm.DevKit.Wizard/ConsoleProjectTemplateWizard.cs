@@ -59,6 +59,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$DevKitVersion$", Const.Version);
                         replacementsDictionary.Add("$version$", form.CrmVersion);
                         replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                        replacementsDictionary.Add("$NugetNetVersion$", form.NetVersion.Replace(".", string.Empty));
                         replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                         replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
                         replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));

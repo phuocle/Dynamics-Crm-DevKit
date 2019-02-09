@@ -3,10 +3,10 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PL.DynamicsCrm.DevKit.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="1.2.0" Language="en-US"
+        <Identity Id="PL.DynamicsCrm.DevKit.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="1.2.1" Language="en-US"
                   Publisher="PhuocLe" />
         <DisplayName>PL.DynamicsCrm.DevKit</DisplayName>
-        <Description xml:space="preserve">A collection of projects and items template for develop Dynamics 365 Crm (Jan-31-2019)</Description>
+        <Description xml:space="preserve">A collection of projects and items template for develop Dynamics 365 Crm (Feb-28-2019)</Description>
         <MoreInfo>https://github.com/phuocle/Dynamics-Crm-DevKit</MoreInfo>
         <License>License.txt</License>
         <Icon>icon.png</Icon>
