@@ -259,7 +259,7 @@
     cd /d %25folder%25
     for /F "delims=" %25%25i in ('dir /b /a:d') do rmdir "%25%25i" /s/q
     for /F "delims=" %25%25i in ('dir /b *.*') do if not "%25%25i"=="PL.DynamicsCrm.DevKit.vsix" del "%25%25i" /s/q
-    copy PL.DynamicsCrm.DevKit.vsix ..\..\Published\1.2.0\PL.DynamicsCrm.DevKit.vsix /y
+    copy PL.DynamicsCrm.DevKit.vsix ..\..\Published\1.2.1\PL.DynamicsCrm.DevKit.vsix /y
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
