@@ -90,15 +90,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$projectname$", ProjectName);
                         replacementsDictionary.Add("$version$", form.CrmVersion);
                         replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                        replacementsDictionary.Add("$NugetNetVersion$", form.NetVersion.Replace(".", string.Empty));
                         replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                         replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
                         replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
                         replacementsDictionary.Add("$ProjectName$", ProjectName);
                         replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
-                        if (replacementsDictionary.ContainsKey("$ProjectName$"))
-                        {
-                        }
-
                         var solutionFullName = Dte?.Solution?.FullName;
                         replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
                         replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
