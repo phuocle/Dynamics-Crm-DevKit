@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>$SafeNamespace$</RootNamespace>
     <AssemblyName>$AssemblyName$</AssemblyName>
-    <TargetFrameworkVersion>$NetVersion$</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v$NetVersion$</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

@@ -16,6 +16,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 {
     public partial class FormProject : Form
     {
+        private NuGetHelper nuget = null;
+
         private FormType _formType;
 
         private List<ProjectItem> projectItems = new List<ProjectItem>();
@@ -26,28 +28,40 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             InitializeComponent();
 
             DTE = dte;
+            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+            nuget = new NuGetHelper();
+            cboCrmName.DataSource = nuget.CrmNameDataSource;
+            if (!string.IsNullOrEmpty(config.DefaultCrmName))
+            {
+                cboCrmName.Text = config.DefaultCrmName;
+                cboCrmName_SelectedIndexChanged(null, null);
+                if (!string.IsNullOrEmpty(config.DefaultCrmVersion))
+                {
+                    cboCrmVersion.Text = config.DefaultCrmVersion;
+                    cboCrmVersion_SelectedIndexChanged(null, null);
+                }
+            }
             EntityName = entityName;
             FormType = formType;
-
-            cboCrmVersion.DataSource = NuGetHelper.GetMicrosoftCrmSdkCoreAssembliesPackages();
-
-            cboNetVersion.DataSource = new List<string> {"v4.5.2", "v4.6.2"};
-
-            LoadDefault();
+            if (formType == FormType.DataProvider)
+            {
+                cboCrmName.Text = "Dynamics 365";
+                cboCrmName_SelectedIndexChanged(null, null);
+                cboCrmName.Enabled = false;
+            }
         }
         public string LanguageCode => cboEntity.SelectedValue.ToString();
         public string ResourceStringName => txtName.Text;
-        public string CrmVersion => cboCrmVersion.Text;
+        public string CrmVersion { get; set; }
+        public string NetVersion { get; set; }
 
         public NuGetPackage CoreToolsVersion
         {
             get
             {
-                return NuGetHelper.GetMicrosoftCrmSdkCoreToolsPackages().FirstOrDefault();
+                return nuget.MicrosoftCrmSdkCoreToolsPackages.FirstOrDefault();
             }
         }
-
-        public string NetVersion => cboNetVersion.Text;
 
         public string ProjectName => lblProjectName.Text;
 
@@ -60,9 +74,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 {
                     var name = cboEntity.Text;
                     if (name.StartsWith("PostNone")) return "None";
-                    var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-                    name = name.Substring(0, name.IndexOf(config.SolutionPrefix));
-                    return name.Substring("Post".Length);
+                    return EntityName;
                 }
                 catch
                 {
@@ -142,10 +154,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         txtName.Visible = true;
                         btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
-                        lblNetVersion.Visible = true;
-                        cboNetVersion.Visible = true;
 
                         txtName.Enabled = false;
                         btnOk.Enabled = false;
@@ -160,10 +172,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         txtName.Visible = true;
                         btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
-                        lblNetVersion.Visible = true;
-                        cboNetVersion.Visible = true;
 
                         txtName.Enabled = false;
                         btnOk.Enabled = false;
@@ -178,10 +190,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
-                        lblNetVersion.Visible = true;
-                        cboNetVersion.Visible = true;
 
                         cboEntity.Enabled = false;
                         btnOk.Enabled = false;
@@ -224,10 +236,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
-                        lblNetVersion.Visible = true;
-                        cboNetVersion.Visible = true;
                         chkOthers.Visible = true;
                         chkOthers.Enabled = false;
 
@@ -259,10 +271,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         cboEntity.Visible = true;
                         btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
-                        lblNetVersion.Visible = true;
-                        cboNetVersion.Visible = true;
                         chkOthers.Visible = true;
                         chkOthers.Enabled = false;
 
@@ -333,10 +345,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         txtName.Enabled = false;
 
                         btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
-                        lblNetVersion.Visible = true;
-                        cboNetVersion.Visible = true;
 
                         cboEntity.Enabled = false;
                         btnOk.Enabled = false;
@@ -352,10 +364,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         txtName.Visible = true;
                         txtName.Enabled = false;
                         btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
-                        lblNetVersion.Visible = true;
-                        cboNetVersion.Visible = true;
                         btnOk.Enabled = false;
 
                         break;
@@ -445,10 +457,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         txtName.Visible = true;
                         txtName.Enabled = false;
                         btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
-                        lblNetVersion.Visible = true;
-                        cboNetVersion.Visible = true;
                         btnOk.Enabled = false;
 
                         break;
@@ -462,10 +474,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         txtName.Visible = true;
                         txtName.Enabled = false;
                         btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
                         lblCrmVersion.Visible = true;
                         cboCrmVersion.Visible = true;
-                        lblNetVersion.Visible = true;
-                        cboNetVersion.Visible = true;
                         btnOk.Enabled = false;
 
                         break;
@@ -761,7 +773,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                var package = NuGetHelper.GetPLDynamicsCrmDevKitCliPackage();
+                var package = nuget.PLDynamicsCrmDevKitCliPackage;
                 return package.Version;
             }
         }
@@ -772,12 +784,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             {
                 try
                 {
-                    var package = NuGetHelper.GetPLDynamicsCrmDevKitAnalyzersPackage();
+                    var package = nuget.PLDynamicsCrmDevKitAnalyzersPackage;
                     return package.Version;
                 }
                 catch
                 {
-                    return "1.2.0";
+                    return Const.Version;
                 }
             }
         }
@@ -949,12 +961,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             return false;
         }
 
-        private void LoadDefault()
-        {
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            cboCrmVersion.Text = config.DefaultCrmVersion;
-            cboNetVersion.Text = config.DefaultNetVersion;
-        }
+        //private void LoadDefault()
+        //{
+        //    var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+        //    cboCrmName.Text = config.DefaultCrmVersion;
+        //    cboCrmVersion.Text = config.DefaultNetVersion;
+        //}
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -964,12 +976,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            if (cboCrmVersion.Visible && cboCrmVersion.Enabled && cboCrmVersion.Text.Length == 0)
+            if (cboCrmName.Visible && cboCrmName.Enabled && cboCrmName.Text.Length == 0)
             {
                 MessageBox.Show(@"Please select Crm Version!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (cboNetVersion.Visible && cboNetVersion.Enabled && cboNetVersion.Text.Length == 0)
+            if (cboCrmVersion.Visible && cboCrmVersion.Enabled && cboCrmVersion.Text.Length == 0)
             {
                 MessageBox.Show(@"Please select .NET Version!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -984,6 +996,13 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 MessageBox.Show(@"Please enter data!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+            config.DefaultCrmName = cboCrmName.Text;
+            config.DefaultCrmVersion = cboCrmVersion.Text;
+            config.DefaultNetVersion = NetVersion;
+            DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
+
             if (FormType == FormType.Console ||
                 FormType == FormType.CustomAction ||
                 FormType == FormType.Plugin ||
@@ -1003,8 +1022,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 btnConnection.Enabled = false;
                 btnOk.Enabled = false;
                 btnCancel.Enabled = false;
+                cboCrmName.Enabled = false;
                 cboCrmVersion.Enabled = false;
-                cboNetVersion.Enabled = false;
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -1019,8 +1038,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             else if (FormType == FormType.Test)
             {
                 cboEntity.Enabled = false;
+                cboCrmName.Enabled = false;
                 cboCrmVersion.Enabled = false;
-                cboNetVersion.Enabled = false;
                 btnOk.Enabled = false;
                 btnCancel.Enabled = false;
                 var solutionFullName = DTE?.Solution?.FullName;
@@ -1152,8 +1171,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             else if (FormType == FormType.ProxyTypes)
             {
                 btnConnection.Enabled = false;
+                cboCrmName.Enabled = false;
                 cboCrmVersion.Enabled = false;
-                cboNetVersion.Enabled = false;
                 btnOk.Enabled = false;
                 btnCancel.Enabled = false;
                 DialogResult = DialogResult.OK;
@@ -1170,8 +1189,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             else if (FormType == FormType.UiTest)
             {
                 txtName.Enabled = false;
+                cboCrmName.Enabled = false;
                 cboCrmVersion.Enabled = false;
-                cboNetVersion.Enabled = false;
                 btnOk.Enabled = false;
                 btnCancel.Enabled = false;
                 DialogResult = DialogResult.OK;
@@ -1188,8 +1207,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             else if (FormType == FormType.WebResource)
             {
                 txtName.Enabled = false;
+                cboCrmName.Enabled = false;
                 cboCrmVersion.Enabled = false;
-                cboNetVersion.Enabled = false;
                 btnOk.Enabled = false;
                 btnCancel.Enabled = false;
                 btnConnection.Enabled = false;
@@ -1208,8 +1227,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             else if (FormType == FormType.Report)
             {
                 txtName.Enabled = false;
+                cboCrmName.Enabled = false;
                 cboCrmVersion.Enabled = false;
-                cboNetVersion.Enabled = false;
                 btnOk.Enabled = false;
                 btnCancel.Enabled = false;
                 DialogResult = DialogResult.OK;
@@ -1229,8 +1248,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             else if (FormType == FormType.DataProvider)
             {
                 txtName.Enabled = false;
+                cboCrmName.Enabled = false;
                 cboCrmVersion.Enabled = false;
-                cboNetVersion.Enabled = false;
                 btnOk.Enabled = false;
                 btnCancel.Enabled = false;
                 DialogResult = DialogResult.OK;
@@ -1239,8 +1258,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             else if (FormType == FormType.SolutionPackager)
             {
                 txtName.Enabled = false;
+                cboCrmName.Enabled = false;
                 cboCrmVersion.Enabled = false;
-                cboNetVersion.Enabled = false;
                 btnOk.Enabled = false;
                 btnCancel.Enabled = false;
                 DialogResult = DialogResult.OK;
@@ -1306,8 +1325,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     btnCancel.Enabled = cboEntity.Enabled;
                     chkOthers.Enabled = cboEntity.Enabled;
                     chkListForm.Enabled = cboEntity.Enabled;
+                    cboCrmName.Enabled = cboEntity.Enabled;
                     cboCrmVersion.Enabled = cboEntity.Enabled;
-                    cboNetVersion.Enabled = cboEntity.Enabled;
                     cboEntity.SelectedIndex = 0;
                     txtName_TextChanged(null, null);
                     cboEntity_SelectedIndexChanged(null, null);
@@ -1321,8 +1340,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     btnCancel.Enabled = true;
                     txtName.Enabled = true;
                     cboEntity.Enabled = true;
-                    cboNetVersion.Enabled = true;
                     cboCrmVersion.Enabled = true;
+                    cboCrmName.Enabled = true;
                     if (FormType == FormType.ProxyTypes)
                     {
                         txtName.Enabled = false;
@@ -1378,19 +1397,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 cboEntity_SelectedIndexChanged(null, null);
         }
 
-        private void cboCrmVersion_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            config.DefaultCrmVersion = cboCrmVersion.Text;
-            DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
-        }
 
-        private void cboNetVersion_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            config.DefaultNetVersion = cboNetVersion.Text;
-            DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
-        }
 
         private void btnLoadForms_Click(object sender, EventArgs e)
         {
@@ -1458,6 +1465,21 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             link.LinkVisited = true;
             System.Diagnostics.Process.Start((string)link.Tag);
+        }
+
+        private void cboCrmName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var crmName = cboCrmName.Text;
+            cboCrmVersion.DisplayMember = "Version";
+            cboCrmVersion.ValueMember = "Version";
+            cboCrmVersion.DataSource = nuget.CrmVersionDataSource(crmName);
+        }
+
+        private void cboCrmVersion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var item = cboCrmVersion.SelectedItem as NuGetPackage;
+            CrmVersion = item.Version;
+            NetVersion = item.NetVersion;
         }
     }
 }

@@ -63,6 +63,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
                         replacementsDictionary.Add("$version$", form.CrmVersion);
                         replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                        replacementsDictionary.Add("$NugetNetVersion$", form.NetVersion.Replace(".", string.Empty));
                         replacementsDictionary.Add("$ProjectName$", form.ProjectName);
                         replacementsDictionary.Add("$CrmUrl$", form.CrmConnection.Url);
                         replacementsDictionary.Add("$CrmUserName$", form.CrmConnection.UserName);
@@ -74,8 +75,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         return;
                     }
                 }
+                else
+                {
+                    MessageBox.Show($@"{FormType.UiTest.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            MessageBox.Show($@"{FormType.UiTest.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }

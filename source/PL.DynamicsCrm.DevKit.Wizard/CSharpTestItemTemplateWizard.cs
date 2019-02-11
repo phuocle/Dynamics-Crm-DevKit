@@ -41,16 +41,16 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     var entityName2 = form.EntityNameTest;// logicalName.ToLower()=="customaction" ? "None" : entityName;
-                    if (entityName2 == "None") logicalName = "none"; else logicalName = entityName2.ToLower();
+                    if (entityName2 == "None") logicalName = "none"; else logicalName = entityName.ToLower();
                     replacementsDictionary.Add("$class$", form.Class);
-                    replacementsDictionary.Add("$entityname$", entityName2);
+                    replacementsDictionary.Add("$entityname$", entityName);
                     replacementsDictionary.Add("$message$", form.Message);
                     replacementsDictionary.Add("$stage_string$", form.StageString);
                     replacementsDictionary.Add("$execution$", form.Execution);
                     var cols = project.Name.Split(".".ToCharArray());
                     replacementsDictionary.Add("$namespace2$", $"{cols[0]}.{cols[1]}.{cols[2]}");
                     replacementsDictionary.Add("$namespace3$", $"{cols[0]}.{cols[1]}");
-                    replacementsDictionary.Add("$PrimaryEntityName$", entityName2);
+                    replacementsDictionary.Add("$PrimaryEntityName$", entityName);
                     replacementsDictionary.Add("$FilteringAttributes$", form.FilteringAttributes);
                     replacementsDictionary.Add("$logicalname$", logicalName);
                     if (project.Name.Contains(".Plugin") || project.Name.Contains(".Plugin."))
