@@ -11,14 +11,14 @@ namespace $rootnamespace$
     public class $class$$execution$ : IPlugin
     {
 $privateclass$
-        private readonly string _unsecureString = null;
-        private readonly string _secureString = null;
+        //private readonly string _unsecureString = null;
+        //private readonly string _secureString = null;
 
-        public $class$$execution$(string unsecureString, string secureString)
-        {
-            if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-            if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
-        }
+        //public $class$$execution$(string unsecureString, string secureString)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
+        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //}
 
         public void Execute(IServiceProvider serviceProvider)
         {

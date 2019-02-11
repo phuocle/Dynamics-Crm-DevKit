@@ -74,9 +74,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 {
                     var name = cboEntity.Text;
                     if (name.StartsWith("PostNone")) return "None";
-                    var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-                    name = name.Substring(0, name.IndexOf(config.SolutionPrefix));
-                    return name.Substring("Post".Length);
+                    return EntityName;
                 }
                 catch
                 {
