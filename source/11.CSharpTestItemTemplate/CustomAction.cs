@@ -19,6 +19,7 @@ namespace $rootnamespace$
             Context = new XrmFakedContext();
             Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
             PluginContext = Context.GetDefaultPluginContext();
+            PluginContext.PrimaryEntityName = "$logicalname$";
             PluginContext.MessageName = "$message$";
             PluginContext.Stage = (int) StageEnum.$stage_string$;
             PluginContext.Mode = (int) ExecutionModeEnum.$execution$;

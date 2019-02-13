@@ -31,7 +31,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\Release\test\</OutputPath>
     <DefineConstants></DefineConstants>
@@ -127,7 +127,6 @@ $endif$
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName)==Release (
     DEL $(TargetDir)*.xml
-    DEL $(TargetDir)*.pdb
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
