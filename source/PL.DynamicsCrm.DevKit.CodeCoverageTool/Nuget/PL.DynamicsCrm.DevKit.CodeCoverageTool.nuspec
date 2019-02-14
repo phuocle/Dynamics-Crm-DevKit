@@ -15,9 +15,9 @@
   </metadata>
   <files>
     <file src="..\bin\Release\PL.DynamicsCrm.DevKit.CodeCoverageTool.exe" target="tools\PL.DynamicsCrm.DevKit.CodeCoverageTool.exe" />
-    <file src="..\bin\Release\lib\Microsoft.VisualStudio.Coverage.Analysis.dll" target="tools\lib\Microsoft.VisualStudio.Coverage.Analysis.dll" />
-    <file src="..\bin\Release\lib\Microsoft.VisualStudio.Coverage.Interop.dll" target="tools\lib\Microsoft.VisualStudio.Coverage.Interop.dll" />
-    <file src="..\bin\Release\lib\Microsoft.VisualStudio.Coverage.Symbols.dll" target="tools\lib\Microsoft.VisualStudio.Coverage.Symbols.dll" />
+    <file src="..\bin\Release\Microsoft.VisualStudio.Coverage.Analysis.dll" target="tools\Microsoft.VisualStudio.Coverage.Analysis.dll" />
+    <file src="..\bin\Release\Microsoft.VisualStudio.Coverage.Interop.dll" target="tools\Microsoft.VisualStudio.Coverage.Interop.dll" />
+    <file src="..\bin\Release\Microsoft.VisualStudio.Coverage.Symbols.dll" target="tools\Microsoft.VisualStudio.Coverage.Symbols.dll" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
   </files>
 </package>
