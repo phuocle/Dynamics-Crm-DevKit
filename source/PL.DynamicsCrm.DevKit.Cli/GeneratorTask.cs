@@ -69,7 +69,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         private void GeneratorJsWebApi(string entity, int i, int count)
         {
-            CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity);
+            CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".webapi.js");
             var fileIntellisense = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.intellisense.js";
             var lines = File.ReadAllLines(fileIntellisense);
             var json = lines[lines.Length - 1];
@@ -117,7 +117,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         private void GeneratorJsForm(string entity, int i, int count)
         {
-            CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity);
+            CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".form.js");
             var fileIntellisense = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.intellisense.js";
             var lines = File.ReadAllLines(fileIntellisense);
             var json = lines[lines.Length - 1];
@@ -164,7 +164,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         private void GeneratorLateBound(string entity, int i, int count)
         {
-            CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity);
+            CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".generated.cs");
 
             var lateBound = new GeneratedCSharpLateBound();
             var rootNameSpace = GeneratorJson.rootnamespace + ".Shared.Entities";
