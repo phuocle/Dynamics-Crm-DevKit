@@ -794,6 +794,21 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
         }
 
+        public string PLDynamicsCrmDevKitCodeCoverageToolVersion
+        {
+            get
+            {
+                try
+                {
+                    var package = nuget.PLDynamicsCrmDevKitCodeCoverageToolPackage;
+                    return package.Version;
+                }
+                catch
+                {
+                    return Const.Version;
+                }
+            }
+        }
 
         private JsForm JsForm { get; set; }
 

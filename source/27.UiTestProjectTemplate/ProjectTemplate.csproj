@@ -140,7 +140,6 @@
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName)==Release (
     DEL $(TargetDir)*.xml
-    DEL $(TargetDir)*.pdb
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>

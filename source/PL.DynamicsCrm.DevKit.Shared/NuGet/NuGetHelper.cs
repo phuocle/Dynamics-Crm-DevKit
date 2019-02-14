@@ -118,6 +118,22 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
             }
         }
 
+        public NuGetPackage PLDynamicsCrmDevKitCodeCoverageToolPackage
+        {
+            get
+            {
+                var list = GetPackages("PL.DynamicsCrm.DevKit.CodeCoverageTool");
+                if (list == null) return new NuGetPackage { Version = Const.Version };
+                var packages = (from item in list
+                                orderby item.Version.ToOriginalString() descending
+                                select new NuGetPackage
+                                {
+                                    Version = item.Version.ToOriginalString()
+                                }).ToList();
+                return packages.FirstOrDefault();
+            }
+        }
+
         private List<IPackage> GetPackages(string packageId)
         {
             try
