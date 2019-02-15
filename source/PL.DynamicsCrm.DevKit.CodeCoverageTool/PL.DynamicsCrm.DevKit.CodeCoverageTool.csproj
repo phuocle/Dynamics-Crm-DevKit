@@ -98,4 +98,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\ReportGenerator.4.0.12\build\netstandard2.0\ReportGenerator.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ReportGenerator.4.0.12\build\netstandard2.0\ReportGenerator.props'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName)==Release (
+  del $(TargetDir)*.xml
+  del $(TargetDir)*.pdb
+  cd $(ProjectDir)Nuget
+  call $(ProjectDir)Nuget\pack.bat
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>
