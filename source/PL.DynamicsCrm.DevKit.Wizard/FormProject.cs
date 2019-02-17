@@ -687,7 +687,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     code += $"\t\t[TestMethod]\r\n";
                     code += $"\t\tpublic void {Class}_CrmPluginRegistration_Check_FilteringAttributes()\r\n";
                     code += $"\t\t{{\r\n";
-                    code += $"\t\t\tvar @class = new {cboEntity.Text}(null, null);\r\n";
+                    code += $"\t\t\tvar @class = new {cboEntity.Text}();\r\n";
                     code += $"\t\t\tforeach(var attribute in Attribute.GetCustomAttributes(@class.GetType()))\r\n";
                     code += $"\t\t\t{{\r\n";
                     code += $"\t\t\t\tif (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))\r\n";

@@ -46,7 +46,7 @@
       <HintPath>..\packages\FakeItEasy.3.2.0\lib\net40\FakeItEasy.dll</HintPath>
     </Reference>
     <Reference Include="FakeXrmEasy">
-      <HintPath>..\packages\FakeXrmEasy.9.1.50.1\lib\net452\FakeXrmEasy.dll</HintPath>
+      <HintPath>..\packages\FakeXrmEasy.9.1.51.1\lib\net452\FakeXrmEasy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>

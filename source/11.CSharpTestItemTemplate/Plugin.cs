@@ -1,7 +1,8 @@
-﻿using System.Reflection;
-using FakeXrmEasy;
+﻿using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using System;
+using System.Reflection;
 using $ProxyTypes$;
 using $DevKitShared$;
 
@@ -96,7 +97,7 @@ namespace $rootnamespace$
         [TestMethod]
         public void $class$_CrmPluginRegistration_Check_Image1()
         {
-            var @class = new $class$$execution$(null, null);
+            var @class = new $class$$execution$();
             foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
             {
                 if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
@@ -114,7 +115,7 @@ namespace $rootnamespace$
         [TestMethod]
         public void $class$_CrmPluginRegistration_Check_Image2()
         {
-            var @class = new $class$$execution$(null, null);
+            var @class = new $class$$execution$();
             foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
             {
                 if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
