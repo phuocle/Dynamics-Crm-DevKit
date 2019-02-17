@@ -73,7 +73,7 @@
     <None Include="App.config" />
     <None Include="GeneratorReport.bat" />
     <None Include="Nuget\pack.bat" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.CodeCoverageTool.1.2.1.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.CodeCoverageTool.1.2.2.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.CodeCoverageTool.nuspec" />
     <None Include="packages.config" />
     <None Include="..\PL.DynamicsCrm.DevKit.pfx">

@@ -213,12 +213,9 @@
     </None>
     <None Include="App.config" />
     <None Include="Nuget\pack.bat" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.0.nupkg" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.2.nupkg" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.3.nupkg" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.1.4.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.0.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.1.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.2.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.nuspec" />
     <None Include="packages.config" />
     <EmbeddedResource Include="..\PL.DynamicsCrm.DevKit.Wizard\data\WebApi.js">
