@@ -1,4 +1,4 @@
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +22,7 @@ namespace $rootnamespace$
         }
 
         public Entity Entity { get; set; }
-        public Entity PreEntity { get; set; }
+        protected Entity PreEntity { get; set; }
         public Guid Id { get { return Entity.Id; } }
 
         protected object CloneAttribute(object value)

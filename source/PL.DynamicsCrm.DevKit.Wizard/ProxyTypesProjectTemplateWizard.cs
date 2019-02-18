@@ -76,7 +76,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         replacementsDictionary.Add("$CrmUserName$", crmUserName);
                         replacementsDictionary.Add("$CrmPassword$", connection[2]);
                         replacementsDictionary.Add("$versionCoreTools$", form.CoreToolsVersion.Version);
-                        replacementsDictionary.Add("$PLDynamicsCrmDevKitCodeCoverageToolVersion$", form.PLDynamicsCrmDevKitCodeCoverageToolVersion);
                         return;
                     }
                 }

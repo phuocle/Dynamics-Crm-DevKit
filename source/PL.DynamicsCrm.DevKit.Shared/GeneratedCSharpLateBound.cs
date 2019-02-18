@@ -82,10 +82,16 @@ namespace PL.DynamicsCrm.DevKit.Shared
             code += $"\t\t}}\r\n";
             code += $"\r\n";
             code += $"\t\t[DebuggerNonUserCode()]\r\n";
-            code += $"\t\tpublic {entity}(Entity entity, Entity preEntity)\r\n";
+            code += $"\t\tpublic {entity}(Entity entity, Entity merge)\r\n";
             code += $"\t\t{{\r\n";
             code += $"\t\t\tEntity = entity;\r\n";
-            code += $"\t\t\tPreEntity = preEntity;\r\n";
+            code += $"\t\t\tforeach (var property in merge.Attributes)\r\n";
+            code += $"\t\t\t{{\r\n";
+            code += $"\t\t\t\tvar key = property.Key;\r\n";
+            code += $"\t\t\t\tvar value = property.Value;\r\n";
+            code += $"\t\t\t\tEntity[key] = value;\r\n";
+            code += $"\t\t\t}}\r\n";
+            code += $"\t\t\tPreEntity = CloneThisEntity(Entity);\r\n";
             code += $"\t\t}}\r\n";
             code += $"\r\n";
             code += $"\t\t[DebuggerNonUserCode()]\r\n";
