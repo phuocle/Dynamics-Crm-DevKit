@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("PL.DynamicsCrm.DevKit.CodeCoverageTool")]
-[assembly: AssemblyDescription("PL.DynamicsCrm.DevKit.CodeCoverageTool")]
+[assembly: AssemblyTitle("PL.DynamicsCrm.DevKit.Tools")]
+[assembly: AssemblyDescription("PL.DynamicsCrm.DevKit.Tools")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
@@ -14,6 +14,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-[assembly: Guid("dcabff65-e182-4f1f-b805-a34ff1d2ac35")]
+[assembly: Guid("7C6FD23B-A91E-4AA9-8E40-C1CD790EC2CC")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.2.2.0")]
