@@ -193,7 +193,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 }
                 else
                 {
-                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", j) + ": No Change");
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", j) + ": No Change ", CliLog.ColorGreen, webResourceName);
                 }
             }
         }
@@ -266,7 +266,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var fileContent = Convert.ToBase64String(File.ReadAllBytes(webResourceFile.file));
             if (fileContent == content)
             {
-                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", current) + ": No Change");
+                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", current) + ": No Change ", CliLog.ColorGreen, webResourceFile.file);
                 return null;
             }
             var webResource = new Entity("webresource")

@@ -57,7 +57,19 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 var dir = Path.GetDirectoryName(solutionFullName);
                 var file = $"{dir}\\PL.DynamicsCrm.DevKit.Cli.json";
                 if (!File.Exists(file))
-                    File.WriteAllText(file, Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.PL.DynamicsCrm.DevKit.Cli.json"));
+                {
+                    var temp = ProjectName.Substring(0, ProjectName.Length - FormType.Shared.ToString().Length);
+                    var json = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.PL.DynamicsCrm.DevKit.Cli.json");
+
+                    json = json
+                        .Replace("???.Plugin.*.dll", $"{temp}Plugin.*.dll")
+                        .Replace("???.CustomAction.*.dll", $"{temp}CustomAction.*.dll")
+                        .Replace("???.Workflow.*.dll", $"{temp}Workflow.*.dll")
+                        .Replace("???.DataProvider.*.dll", $"{temp}DataProvider.*.dll")
+                        .Replace("???.*.Test.dll", $"{temp}*.Test.dll")
+                        ;
+                    File.WriteAllText(file, json);
+                }
                 return;
             }
             else
