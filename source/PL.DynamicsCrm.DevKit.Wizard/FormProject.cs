@@ -59,7 +59,31 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                return nuget.MicrosoftCrmSdkCoreToolsPackages.FirstOrDefault();
+                return nuget.MicrosoftCrmSdkCoreToolsPackages.Where(w => w.CrmName == cboCrmName.Text).FirstOrDefault();
+            }
+        }
+
+        public NuGetPackage FakeXrmEasy
+        {
+            get
+            {
+                return nuget.FakeXrmEasy(FakeXrmEasyShortName);
+            }
+        }
+
+        public NuGetPackage MicrosoftCrmSdkXrmToolingCoreAssembly
+        {
+            get
+            {
+                return nuget.MicrosoftCrmSdkXrmToolingCoreAssembly(cboCrmName.Text);
+            }
+        }
+
+        public NuGetPackage MicrosoftCrmSdkDeployment
+        {
+            get
+            {
+                return nuget.MicrosoftCrmSdkDeployment(cboCrmName.Text);
             }
         }
 
@@ -81,6 +105,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             {
                 if (CrmName == "2015") return "45";
                 return NetVersion.Replace(".", string.Empty);
+            }
+        }
+
+        public string FakeXrmEasyShortName
+        {
+            get
+            {
+                if (CrmName == "365") return "9";
+                return CrmName;
             }
         }
 
@@ -114,13 +147,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                var url = CrmConnection.Url.Substring(0,
-                    CrmConnection.Url.Length - "/XRMServices/2011/Organization.svc".Length);
+                var url = CrmConnection.Url.Substring(0, CrmConnection.Url.Length - "/XRMServices/2011/Organization.svc".Length);
                 url = url.Replace(".api.", ".");
                 if (CrmConnection.Url.Contains(".dynamics.com"))
-                    return
-                        $"AuthType=Office365;Url={url};Username={CrmConnection.UserName};Password={CrmConnection.Password};";
-
+                    return $"AuthType=Office365;Url={url};Username={CrmConnection.UserName};Password={CrmConnection.Password};";
                 var domain = CrmConnection.UserName.Split("\\".ToCharArray())[0];
                 var user = CrmConnection.UserName.Split("\\".ToCharArray())[1];
                 return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={CrmConnection.Password};";
@@ -131,8 +161,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                var url = CrmConnection.Url.Substring(0,
-                    CrmConnection.Url.Length - "/XRMServices/2011/Organization.svc".Length);
+                var url = CrmConnection.Url.Substring(0, CrmConnection.Url.Length - "/XRMServices/2011/Organization.svc".Length);
                 url = url.Replace(".api.", ".");
                 return $"{url}\t{CrmConnection.UserName}\t{CrmConnection.Password}";
             }
@@ -226,11 +255,18 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         lblProjectName.Text = $@"???.Test";
 
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
+                        cboCrmName.Enabled = false;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        cboCrmVersion.Enabled = false;
+
                         LoadProjects();
                         cboEntity.Visible = true;
 
-                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
-                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
+                        //btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        //btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
 
                         break;
                     case FormType.TestItem:

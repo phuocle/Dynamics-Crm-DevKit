@@ -33,6 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Beta.CustomAction.Acc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Beta.CustomAction.Admin", "Delta.Beta.CustomAction.Admin\Delta.Beta.CustomAction.Admin.csproj", "{55CE4F49-168D-41A4-A3C8-F9207A252A29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Beta.ProxyTypes", "Delta.Beta.ProxyTypes\Delta.Beta.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Beta.Plugin.Account.Test", "Delta.Beta.Plugin.Account.Test\Delta.Beta.Plugin.Account.Test.csproj", "{B74884E7-5E70-4A0D-8955-6DF6709CD53C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Delta.Beta.Shared\Delta.Beta.Shared.projitems*{11073b3a-492d-49b0-a407-a71e7334fad1}*SharedItemsImports = 4
@@ -97,6 +101,14 @@ Global
 		{55CE4F49-168D-41A4-A3C8-F9207A252A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55CE4F49-168D-41A4-A3C8-F9207A252A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55CE4F49-168D-41A4-A3C8-F9207A252A29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B74884E7-5E70-4A0D-8955-6DF6709CD53C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B74884E7-5E70-4A0D-8955-6DF6709CD53C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B74884E7-5E70-4A0D-8955-6DF6709CD53C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B74884E7-5E70-4A0D-8955-6DF6709CD53C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

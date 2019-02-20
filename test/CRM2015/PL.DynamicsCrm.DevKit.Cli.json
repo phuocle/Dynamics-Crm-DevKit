@@ -3,7 +3,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "DevKit",
       "includefiles": [
         "Delta.Beta.Plugin.*.dll",
         "Delta.Beta.CustomAction.*.dll"
@@ -29,7 +29,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "DevKit",
       "includefiles": [
         "Delta.Beta.Workflow.*.dll"
       ],

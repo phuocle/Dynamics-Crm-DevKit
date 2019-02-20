@@ -66,7 +66,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
                     replacementsDictionary.Add("$ProjectName$", ProjectName);
                     var connection = form.CrmConnectionString2.Split("\t".ToCharArray());
-                    replacementsDictionary.Add("$CrmUrl$", connection[0]);
+                    var url = string.Empty;
+                    if (!connection[0].Contains(".dynamics.com"))
+                        url = connection[0] + "/XRMServices/2011/Organization.svc";
+                    else
+                        url = connection[0];
+                    replacementsDictionary.Add("$CrmUrl$", url);
                     var crmUserName = connection[1];
                     if (crmUserName.Contains("\\"))
                     {

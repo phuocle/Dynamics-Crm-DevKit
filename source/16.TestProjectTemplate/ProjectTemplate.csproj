@@ -46,7 +46,7 @@
       <HintPath>..\packages\FakeItEasy.3.2.0\lib\net40\FakeItEasy.dll</HintPath>
     </Reference>
     <Reference Include="FakeXrmEasy">
-      <HintPath>..\packages\FakeXrmEasy.9.1.51.1\lib\net452\FakeXrmEasy.dll</HintPath>
+      <HintPath>..\packages\FakeXrmEasy.$FakeXrmEasy$.$FakeXrmEasyVersion$\lib\net$FakeXrmEasyNetVersion$\FakeXrmEasy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
@@ -70,10 +70,10 @@
       <HintPath>..\packages\Microsoft.CrmSdk.Workflow.$version$\lib\net$NugetNetVersion$\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Deployment">
-      <HintPath>..\packages\Microsoft.CrmSdk.Deployment.9.0.2.9\lib\net462\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.Deployment.$CrmSdkDeploymentVersion$\lib\net$CrmSdkDeploymentNetVersion$\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.Connector">
-      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.0.2.11\lib\net462\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.$XrmToolingCoreAssemblyVersion$\lib\net$XrmToolingCoreAssemblyNetVersion$\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />

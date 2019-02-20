@@ -185,7 +185,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 xml += "\t\t/// <para>" + XmlEscape(description) + "</para>\r\n";
             }
             xml += "\t\t/// <para>" + dataType + "</para>\r\n";
-            xml += "\t\t/// <para>" + crmAttribute.DisplayName + "</para>\r\n";
+            xml += "\t\t/// <para>" + crmAttribute?.DisplayName?.Replace("\n", "") + "</para>\r\n";
             xml += "\t\t/// </summary>\r\n";
             xml += "\t\t[DebuggerNonUserCode()]\r\n";
             return xml;

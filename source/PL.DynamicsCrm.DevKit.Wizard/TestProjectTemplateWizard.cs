@@ -67,6 +67,19 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 ProjectName = form.ProjectName;
                 if (!Utility.ExistProject(Dte, ProjectName))
                 {
+                    var fakeXrmEasy = form.FakeXrmEasy;
+                    replacementsDictionary.Add("$FakeXrmEasy$", form.FakeXrmEasyShortName);
+                    replacementsDictionary.Add("$FakeXrmEasyVersion$", fakeXrmEasy.Version);
+                    replacementsDictionary.Add("$FakeXrmEasyNetVersion$", fakeXrmEasy.NetVersion.Replace(".", string.Empty));
+
+                    var deployment = form.MicrosoftCrmSdkDeployment;
+                    replacementsDictionary.Add("$CrmSdkDeploymentVersion$", deployment.Version);
+                    replacementsDictionary.Add("$CrmSdkDeploymentNetVersion$", deployment.NetVersion.Replace(".", string.Empty));
+
+                    var xrmToolingCoreAssembly = form.MicrosoftCrmSdkXrmToolingCoreAssembly;
+                    replacementsDictionary.Add("$XrmToolingCoreAssemblyVersion$", xrmToolingCoreAssembly.Version);
+                    replacementsDictionary.Add("$XrmToolingCoreAssemblyNetVersion$", xrmToolingCoreAssembly.NetVersion.Replace(".", string.Empty));
+
                     replacementsDictionary.Add("$CrmName$", form.CrmName);
                     replacementsDictionary.Add("$DevKitVersion$", Const.Version);
                     replacementsDictionary.Add("$version$", form.CrmVersion);
