@@ -47,37 +47,36 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            if (runKind == WizardRunKind.AsNewProject)
+            if (runKind != WizardRunKind.AsNewProject) return;
+            Dte = (DTE)automationObject;
+            var form = new FormProject(FormType.ProxyTypes, Dte);
+            if (form.ShowDialog() == DialogResult.OK)
             {
-                Dte = (DTE)automationObject;
-                var form = new FormProject(FormType.ProxyTypes, Dte);
-                if (form.ShowDialog() == DialogResult.OK)
+                ProjectName = form.ProjectName;
+                if (!Utility.ExistProject(Dte, ProjectName))
                 {
-                    ProjectName = form.ProjectName;
-                    if (!Utility.ExistProject(Dte, ProjectName))
+                    replacementsDictionary.Add("$CrmName$", form.CrmName);
+                    replacementsDictionary.Add("$DevKitVersion$", Const.Version);
+                    replacementsDictionary.Remove("$projectname$");
+                    replacementsDictionary.Add("$projectname$", ProjectName);
+                    replacementsDictionary.Add("$version$", form.CrmVersion);
+                    replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                    replacementsDictionary.Add("$NugetNetVersion$", form.NugetNetVersion);
+                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                    replacementsDictionary.Add("$ProjectName$", ProjectName);
+                    var connection = form.CrmConnectionString2.Split("\t".ToCharArray());
+                    replacementsDictionary.Add("$CrmUrl$", connection[0]);
+                    var crmUserName = connection[1];
+                    if (crmUserName.Contains("\\"))
                     {
-                        replacementsDictionary.Add("$DevKitVersion$", Const.Version);
-                        replacementsDictionary.Remove("$projectname$");
-                        replacementsDictionary.Add("$projectname$", ProjectName);
-                        replacementsDictionary.Add("$version$", form.CrmVersion);
-                        replacementsDictionary.Add("$NetVersion$", form.NetVersion);
-                        replacementsDictionary.Add("$NugetNetVersion$", form.NetVersion.Replace(".", string.Empty));
-                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                        replacementsDictionary.Add("$ProjectName$", ProjectName);
-                        var connection = form.CrmConnectionString2.Split("\t".ToCharArray());
-                        replacementsDictionary.Add("$CrmUrl$", connection[0]);
-                        var crmUserName = connection[1];
-                        if (crmUserName.Contains("\\"))
-                        {
-                            var arr = crmUserName.Split("\\".ToCharArray());
-                            crmUserName = $"{arr[1]} /domain:{arr[0]}";
-                        }
-                        replacementsDictionary.Add("$CrmUserName$", crmUserName);
-                        replacementsDictionary.Add("$CrmPassword$", connection[2]);
-                        replacementsDictionary.Add("$versionCoreTools$", form.CoreToolsVersion.Version);
-                        return;
+                        var arr = crmUserName.Split("\\".ToCharArray());
+                        crmUserName = $"{arr[1]} /domain:{arr[0]}";
                     }
+                    replacementsDictionary.Add("$CrmUserName$", crmUserName);
+                    replacementsDictionary.Add("$CrmPassword$", connection[2]);
+                    replacementsDictionary.Add("$versionCoreTools$", form.CoreToolsVersion.Version);
+                    return;
                 }
                 else
                 {

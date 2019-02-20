@@ -63,6 +63,27 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
         }
 
+        public string CrmName
+        {
+            get
+            {
+                if (cboCrmName.Text == "Dynamics Crm 2011") return "2011";
+                if (cboCrmName.Text == "Dynamics Crm 2013") return "2013";
+                if (cboCrmName.Text == "Dynamics Crm 2015") return "2015";
+                if (cboCrmName.Text == "Dynamics Crm 2016") return "2016";
+                return "365";
+            }
+        }
+
+        public string NugetNetVersion
+        {
+            get
+            {
+                if (CrmName == "2015") return "45";
+                return NetVersion.Replace(".", string.Empty);
+            }
+        }
+
         public string ProjectName => lblProjectName.Text;
 
         public string EntityName { get; set; }
@@ -340,6 +361,26 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         lblProjectName.Tag = $"{GetName(parts).Substring(0, GetName(parts).Length - 1)}";
                         txtName.Text = @"ProxyTypes";
+
+                        txtName.Visible = true;
+                        txtName.Enabled = false;
+
+                        btnConnection.Visible = true;
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+
+                        cboEntity.Enabled = false;
+                        btnOk.Enabled = false;
+
+                        break;
+                    case FormType.Shared:
+                        link.Text = @"Add New Shared Project";
+                        link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Shared-Project-Template";
+
+                        lblProjectName.Tag = $"{GetName(parts).Substring(0, GetName(parts).Length - 1)}";
+                        txtName.Text = @"Shared";
 
                         txtName.Visible = true;
                         txtName.Enabled = false;
@@ -794,21 +835,21 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
         }
 
-        public string PLDynamicsCrmDevKitCodeCoverageToolVersion
-        {
-            get
-            {
-                try
-                {
-                    var package = nuget.PLDynamicsCrmDevKitCodeCoverageToolPackage;
-                    return package.Version;
-                }
-                catch
-                {
-                    return Const.Version;
-                }
-            }
-        }
+        //public string PLDynamicsCrmDevKitCodeCoverageToolVersion
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            var package = nuget.PLDynamicsCrmDevKitCodeCoverageToolPackage;
+        //            return package.Version;
+        //        }
+        //        catch
+        //        {
+        //            return Const.Version;
+        //        }
+        //    }
+        //}
 
         private JsForm JsForm { get; set; }
 
@@ -1023,16 +1064,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 FormType == FormType.Plugin ||
                 FormType == FormType.Workflow)
             {
-                var solutionFullName = DTE?.Solution?.FullName;
-                var fInfo = new FileInfo(solutionFullName);
-                var parts = fInfo?.Name?.Split(".".ToCharArray());
-                var sharedProject = $"{fInfo.DirectoryName}\\{GetName(parts)}Shared\\{GetName(parts)}Shared.shproj";
-                if (!File.Exists(sharedProject))
-                {
-                    MessageBox.Show(@"Please add Shared project and try again!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    btnCancel.Enabled = true;
-                    return;
-                }
                 cboEntity.Enabled = false;
                 btnConnection.Enabled = false;
                 btnOk.Enabled = false;
@@ -1058,23 +1089,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 btnOk.Enabled = false;
                 btnCancel.Enabled = false;
                 var solutionFullName = DTE?.Solution?.FullName;
-                var fInfo = new FileInfo(solutionFullName);
-                var parts = fInfo?.Name?.Split(".".ToCharArray());
-                var sharedProject = $"{fInfo.DirectoryName}\\{GetName(parts)}ProxyTypes\\{GetName(parts)}ProxyTypes.csproj";
-                if (!File.Exists(sharedProject))
+                ProxyTypes = new ProjectData
                 {
-                    MessageBox.Show(@"Please add ProxyTypes project and try again!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    btnCancel.Enabled = true;
-                    return;
-                }
-                else
-                {
-                    ProxyTypes = new ProjectData
-                    {
-                        Id = Const.ProxyTypesGuid.ToString(),
-                        Name = $"{GetName(parts)}ProxyTypes"
-                    };
-                }
+                    Id = Const.ProxyTypesGuid.ToString(),
+                    Name = Utility.GetProxyTypesProject(solutionFullName)
+                };
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -1184,6 +1203,16 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 Close();
             }
             else if (FormType == FormType.ProxyTypes)
+            {
+                btnConnection.Enabled = false;
+                cboCrmName.Enabled = false;
+                cboCrmVersion.Enabled = false;
+                btnOk.Enabled = false;
+                btnCancel.Enabled = false;
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else if (FormType == FormType.Shared)
             {
                 btnConnection.Enabled = false;
                 cboCrmName.Enabled = false;
@@ -1348,7 +1377,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     btnOk.Focus();
                 }
 
-                if (FormType == FormType.ProxyTypes || FormType == FormType.WebResource ||
+                if (FormType == FormType.ProxyTypes || FormType == FormType.WebResource || FormType == FormType.Shared ||
                     FormType == FormType.Console || FormType == FormType.UiTest || FormType == FormType.DataProvider || FormType == FormType.SolutionPackager)
                 {
                     btnOk.Enabled = true;
@@ -1357,7 +1386,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     cboEntity.Enabled = true;
                     cboCrmVersion.Enabled = true;
                     cboCrmName.Enabled = true;
-                    if (FormType == FormType.ProxyTypes)
+                    if (FormType == FormType.ProxyTypes || FormType == FormType.Shared)
                     {
                         txtName.Enabled = false;
                     }

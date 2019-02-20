@@ -28,11 +28,17 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                                                           select new NuGetPackage
                                                           {
                                                               Version = item.Version.ToOriginalString(),
-                                                              NetVersion = item.GetSupportedFrameworks().FirstOrDefault()?.Version.ToString(),
+                                                              NetVersion = GetSupportedFrameworks(item),
                                                               CrmName = GetCrmName(item.Version.Version)
                                                           }).ToList();
                 return _microsoftCrmSdkCoreAssembliesPackages;
             }
+        }
+
+        private string GetSupportedFrameworks(IPackage item)
+        {
+            var supportedFrameworks = item.GetSupportedFrameworks();
+            return supportedFrameworks?.FirstOrDefault()?.Version?.ToString();
         }
 
         private string GetCrmName(Version version)
@@ -118,21 +124,21 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
             }
         }
 
-        public NuGetPackage PLDynamicsCrmDevKitCodeCoverageToolPackage
-        {
-            get
-            {
-                var list = GetPackages("PL.DynamicsCrm.DevKit.CodeCoverageTool");
-                if (list == null) return new NuGetPackage { Version = Const.Version };
-                var packages = (from item in list
-                                orderby item.Version.ToOriginalString() descending
-                                select new NuGetPackage
-                                {
-                                    Version = item.Version.ToOriginalString()
-                                }).ToList();
-                return packages.FirstOrDefault();
-            }
-        }
+        //public NuGetPackage PLDynamicsCrmDevKitCodeCoverageToolPackage
+        //{
+        //    get
+        //    {
+        //        var list = GetPackages("PL.DynamicsCrm.DevKit.CodeCoverageTool");
+        //        if (list == null) return new NuGetPackage { Version = Const.Version };
+        //        var packages = (from item in list
+        //                        orderby item.Version.ToOriginalString() descending
+        //                        select new NuGetPackage
+        //                        {
+        //                            Version = item.Version.ToOriginalString()
+        //                        }).ToList();
+        //        return packages.FirstOrDefault();
+        //    }
+        //}
 
         private List<IPackage> GetPackages(string packageId)
         {

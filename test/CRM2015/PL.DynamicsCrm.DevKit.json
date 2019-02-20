@@ -1,0 +1,15 @@
+﻿{
+    "DefaultCrmVersion":"7.1.1",
+    "DefaultNetVersion":"4.5.2",
+    "DefaultCrmName":"Dynamics Crm 2015",
+    "DefaultCrmConnection":"crm2015.southeastasia.cloudapp.azure.com",
+    "SolutionPrefix":null,
+    "CrmConnections":[
+        {
+            "Name":"crm2015.southeastasia.cloudapp.azure.com",
+            "Url":"http://crm2015.southeastasia.cloudapp.azure.com/G16/XRMServices/2011/Organization.svc",
+            "UserName":"crm\\crmadmin",
+            "Password":"67ubH5C8nrSvsmDAv/Zixw=="
+        }
+    ]
+}

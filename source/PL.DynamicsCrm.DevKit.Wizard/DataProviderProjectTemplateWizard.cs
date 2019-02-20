@@ -50,45 +50,50 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            if (runKind == WizardRunKind.AsNewProject)
+            if (runKind != WizardRunKind.AsNewProject) return;
+            Dte = (DTE)automationObject;
+            if (!Utility.SharedProjectExist(Dte))
             {
-                Dte = (DTE)automationObject;
-                var form = new FormProject(FormType.DataProvider, Dte);
-                if (form.ShowDialog() == DialogResult.OK)
-                {
-                    ProjectName = form.ProjectName;
-                    if (!Utility.ExistProject(Dte, ProjectName))
-                    {
-                        replacementsDictionary.Add("$DevKitVersion$", Const.Version);
-                        replacementsDictionary.Remove("$projectname$");
-                        replacementsDictionary.Add("$projectname$", ProjectName);
-                        replacementsDictionary.Add("$version$", form.CrmVersion);
-                        replacementsDictionary.Add("$NetVersion$", form.NetVersion);
-                        replacementsDictionary.Add("$NugetNetVersion$", form.NetVersion.Replace(".", string.Empty));
-                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                        replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
-                        replacementsDictionary.Add("$ProjectName$", ProjectName);
-                        replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
-                        if (replacementsDictionary.ContainsKey("$ProjectName$"))
-                            _keyName = replacementsDictionary["$ProjectName$"] + ".snk";
-                        var solutionFullName = Dte?.Solution?.FullName;
-                        replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
-                        replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
-                        replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
-                        NewFolder = Utility.GetFolderProject(solutionFullName, ProjectName);
-                        replacementsDictionary.Remove("$destinationdirectory$");
-                        replacementsDictionary["$destinationdirectory$"] = NewFolder;
-                        return;
-                    }
-                    else
-                    {
-                        MessageBox.Show($@"{FormType.DataProvider.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+                MessageBox.Show(@"Please add shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
+                throw new WizardCancelledException("Shared project should exist");
             }
-            Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
-            throw new WizardCancelledException("Cancel Click");
+            var form = new FormProject(FormType.DataProvider, Dte);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                ProjectName = form.ProjectName;
+                if (!Utility.ExistProject(Dte, ProjectName))
+                {
+                    replacementsDictionary.Add("$CrmName$", form.CrmName);
+                    replacementsDictionary.Add("$DevKitVersion$", Const.Version);
+                    replacementsDictionary.Remove("$projectname$");
+                    replacementsDictionary.Add("$projectname$", ProjectName);
+                    replacementsDictionary.Add("$version$", form.CrmVersion);
+                    replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                    replacementsDictionary.Add("$NugetNetVersion$", form.NugetNetVersion);
+                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                    replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
+                    replacementsDictionary.Add("$ProjectName$", ProjectName);
+                    replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
+                    if (replacementsDictionary.ContainsKey("$ProjectName$"))
+                        _keyName = replacementsDictionary["$ProjectName$"] + ".snk";
+                    var solutionFullName = Dte?.Solution?.FullName;
+                    replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
+                    replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
+                    replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
+                    NewFolder = Utility.GetFolderProject(solutionFullName, ProjectName);
+                    replacementsDictionary.Remove("$destinationdirectory$");
+                    replacementsDictionary["$destinationdirectory$"] = NewFolder;
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show($@"{FormType.DataProvider.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
+                throw new WizardCancelledException("Cancel Click");
+            }
         }
 
         public bool ShouldAddProjectItem(string filePath)

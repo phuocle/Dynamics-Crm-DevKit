@@ -40,12 +40,12 @@ namespace $rootnamespace$
             if (optionSetValue != null)
             {
                 return new OptionSetValue(optionSetValue.Value);
-            }
+            }$if$ ( $CrmName$ == 365 )
             var optionSetValueCollection = value as OptionSetValueCollection;
             if (optionSetValueCollection != null)
             {
                 return new OptionSetValueCollection(optionSetValueCollection);
-            }
+            }$endif$
             var entityReferenceValue = value as EntityReference;
             if (entityReferenceValue != null)
             {

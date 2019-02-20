@@ -67,6 +67,20 @@ namespace PL.DynamicsCrm.DevKit.Shared
             return false;
         }
 
+        public static bool SharedProjectExist(DTE dte)
+        {
+            var solutionFullName = dte?.Solution?.FullName;
+            var sharedProjectName = Utility.GetSharedProject(solutionFullName);
+            return Utility.ExistProject(dte, sharedProjectName);
+        }
+
+        public static bool ProxyTypesProjectExist(DTE dte)
+        {
+            var solutionFullName = dte?.Solution?.FullName;
+            var proxyTypesProjectName = Utility.GetProxyTypesProject(solutionFullName);
+            return Utility.ExistProject(dte, proxyTypesProjectName);
+        }
+
         public static void TryDeleteFile(string file)
         {
             if (File.Exists(file))
@@ -105,6 +119,16 @@ namespace PL.DynamicsCrm.DevKit.Shared
             for (var i = 0; i < parts.Length - 1; i++)
                 value += parts[i] + ".";
             return value + $"{FormType.Shared.ToString()}";
+        }
+
+        public static string GetProxyTypesProject(string solutionFullName)
+        {
+            var fInfo = new FileInfo(solutionFullName);
+            var parts = fInfo.Name.Split(".".ToCharArray());
+            var value = string.Empty;
+            for (var i = 0; i < parts.Length - 1; i++)
+                value += parts[i] + ".";
+            return value + $"{FormType.ProxyTypes.ToString()}";
         }
 
         public static string GetFolderProject(string solutionFullName, string projectName)
