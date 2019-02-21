@@ -9,9 +9,9 @@ if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild
 if %MsBuild%=="" (
 	echo msbuild.exe not found !!!
 ) else (
-	del Published\1.2.1\*.* /f /q
+	del Published\1.2.2\*.* /f /q
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal /p:Configuration=Release -target:Clean;Build PL.DynamicsCrm.DevKit.sln
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal /p:Configuration=Release -target:Clean;Build PL.DynamicsCrm.DevKit.Analyzers.sln
-	call %MsBuild% /nologo /noautorsp /verbosity:minimal /p:Configuration=Release -target:Clean;Build PL.DynamicsCrm.DevKit.CodeCoverageTool.sln
+	call %MsBuild% /nologo /noautorsp /verbosity:minimal /p:Configuration=Release -target:Clean;Build PL.DynamicsCrm.DevKit.Tools.sln
 )
 rem exit
