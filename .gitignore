@@ -163,7 +163,9 @@ PublishScripts/
 *.nuget.props
 *.nuget.targets
 !nuget.exe
-
+!Microsoft.VisualStudio.Coverage.Analysis.dll
+!Microsoft.VisualStudio.Coverage.Interop.dll
+!Microsoft.VisualStudio.Coverage.Symbols.dll
 # Microsoft Azure Build Output
 csx/
 *.build.csdef
