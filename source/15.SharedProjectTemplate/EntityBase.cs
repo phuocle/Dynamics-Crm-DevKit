@@ -40,7 +40,7 @@ namespace $rootnamespace$
             if (optionSetValue != null)
             {
                 return new OptionSetValue(optionSetValue.Value);
-            }$if$ ( $CrmName$ == 365 )
+            }$if$($CrmName$==365)
             var optionSetValueCollection = value as OptionSetValueCollection;
             if (optionSetValueCollection != null)
             {

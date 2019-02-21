@@ -7,7 +7,7 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 
-namespace $SafeNamespace$
+namespace Delta.Beta.UiTest
 {
     public class AppSettings
     {
@@ -18,8 +18,8 @@ namespace $SafeNamespace$
             var uri = new Uri(CrmUrl);
             var clientCredentials = new ClientCredentials();
             clientCredentials.UserName.UserName = UserName;
-            clientCredentials.UserName.Password = Password;$if$($CrmName$==365)
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;$endif$
+            clientCredentials.UserName.Password = Password;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             CrmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
             CurrentUserId = new EntityReference
             {

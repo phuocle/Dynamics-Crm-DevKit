@@ -13,8 +13,8 @@ using System.Security;
 [assembly: AssemblyProduct("$AssemblyName$")]
 [assembly: AssemblyCopyright("Copyright © $year$")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-[assembly: SecurityRules(SecurityRuleSet.Level2)]
+[assembly: AssemblyCulture("")]$if$($CrmName$==365)
+[assembly: SecurityRules(SecurityRuleSet.Level2)]$endif$
 [assembly: ComVisible(false)]
 [assembly: Guid("$guid1$")]
 [assembly: AssemblyVersion("1.0.0.0")]
