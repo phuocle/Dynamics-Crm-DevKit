@@ -20,8 +20,8 @@
       <Folder Name="lib" TargetFolderName="lib" />
       <Folder Name="entities" TargetFolderName="entities" />
       <Folder Name="images" TargetFolderName="images" />
-      <Folder Name="test" TargetFolderName="test" />
-      <Folder Name="resources" TargetFolderName="resources" />
+      <Folder Name="test" TargetFolderName="test" />$if$($CrmName$==365)
+      <Folder Name="resources" TargetFolderName="resources" />$endif$
       <Folder Name="html" TargetFolderName="html" />
       <Folder Name="css" TargetFolderName="css" />
       <Folder Name="js" TargetFolderName="js" />

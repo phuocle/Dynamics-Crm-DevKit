@@ -39,6 +39,31 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Beta.Plugin.Account.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Beta.UiTest", "Delta.Beta.UiTest\Delta.Beta.UiTest.csproj", "{B84FFB2B-E75B-4FF2-B5D9-AB0D62B6783D}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Delta.Beta.SolutionPackager", "Delta.Beta.SolutionPackager\", "{0881E85B-64D9-4431-9521-028ACD77DBE2}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3D4.5.2"
+		Debug.AspNetCompiler.VirtualPath = "/Delta.Beta.SolutionPackager"
+		Debug.AspNetCompiler.PhysicalPath = "Delta.Beta.SolutionPackager\"
+		Debug.AspNetCompiler.TargetPath = "Delta.Beta.SolutionPackager\"
+		Debug.AspNetCompiler.Updateable = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Delta.Beta.SolutionPackager"
+		Release.AspNetCompiler.PhysicalPath = "Delta.Beta.SolutionPackager\"
+		Release.AspNetCompiler.TargetPath = "Delta.Beta.SolutionPackager\"
+		Release.AspNetCompiler.Updateable = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "55822"
+		SlnRelativePath = "Delta.Beta.SolutionPackager\"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Beta.WebResource", "Delta.Beta.WebResource\Delta.Beta.WebResource.csproj", "{46571764-30EF-4936-9C4D-DBCBC72EF577}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.Beta.WebResource.2", "Delta.Beta.WebResource.2\Delta.Beta.WebResource.2.csproj", "{F0B5C245-3C8E-44E4-ABCB-14C83C48FAC5}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Delta.Beta.Shared\Delta.Beta.Shared.projitems*{11073b3a-492d-49b0-a407-a71e7334fad1}*SharedItemsImports = 4
@@ -116,6 +141,18 @@ Global
 		{B84FFB2B-E75B-4FF2-B5D9-AB0D62B6783D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B84FFB2B-E75B-4FF2-B5D9-AB0D62B6783D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B84FFB2B-E75B-4FF2-B5D9-AB0D62B6783D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0881E85B-64D9-4431-9521-028ACD77DBE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0881E85B-64D9-4431-9521-028ACD77DBE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0881E85B-64D9-4431-9521-028ACD77DBE2}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{0881E85B-64D9-4431-9521-028ACD77DBE2}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{46571764-30EF-4936-9C4D-DBCBC72EF577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46571764-30EF-4936-9C4D-DBCBC72EF577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46571764-30EF-4936-9C4D-DBCBC72EF577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46571764-30EF-4936-9C4D-DBCBC72EF577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0B5C245-3C8E-44E4-ABCB-14C83C48FAC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0B5C245-3C8E-44E4-ABCB-14C83C48FAC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0B5C245-3C8E-44E4-ABCB-14C83C48FAC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0B5C245-3C8E-44E4-ABCB-14C83C48FAC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

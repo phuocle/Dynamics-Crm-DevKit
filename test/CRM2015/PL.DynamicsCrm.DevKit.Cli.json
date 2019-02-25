@@ -52,8 +52,8 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???",
+      "solution": "DevKit",
+      "prefix": "devkit_",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -71,19 +71,19 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "devkit_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "devkit_/entities/[entity].form.js",
+            "devkit_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].webapi.js"
+            "devkit_/entities/[entity].webapi.js"
           ],
           "dependencies": [
-            "???_/lib/WebApiClient.js"
+            "devkit_/lib/WebApiClient.js"
           ]
         }
       ]

@@ -43,12 +43,12 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
             EntityName = entityName;
             FormType = formType;
-            if (formType == FormType.DataProvider)
-            {
-                cboCrmName.Text = "Dynamics 365";
-                cboCrmName_SelectedIndexChanged(null, null);
-                cboCrmName.Enabled = false;
-            }
+            //if (formType == FormType.DataProvider)
+            //{
+            //    cboCrmName.Text = "Dynamics 365";
+            //    cboCrmName_SelectedIndexChanged(null, null);
+            //    cboCrmName.Enabled = false;
+            //}
         }
         public string LanguageCode => cboEntity.SelectedValue.ToString();
         public string ResourceStringName => txtName.Text;
@@ -519,9 +519,27 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         txtName.Visible = true;
                         cboEntity.Visible = true;
 
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+
                         cboEntity.Location = new Point(txtName.Location.X, txtName.Location.Y + txtName.Height + 8);
-                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y + cboEntity.Height );
-                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y + cboEntity.Height);
+                        btnOk.Location = new Point(btnOk.Location.X, cboEntity.Location.Y + cboEntity.Height + 12);
+                        btnCancel.Location = new Point(btnOk.Location.X + btnOk.Width + 12, btnOk.Location.Y);
+                        cboCrmName.Location = new Point(cboCrmName.Location.X, btnOk.Location.Y);
+                        lblCrmName.Location = new Point(lblCrmName.Location.X, cboCrmName.Location.Y + 3);
+
+                        cboCrmVersion.Location = new Point(cboCrmVersion.Location.X, cboCrmVersion.Location.Y + 16);
+                        lblCrmVersion.Location = new Point(lblCrmVersion.Location.X, cboCrmVersion.Location.Y + 3);
+
+                        if (cboCrmName.Text != "Dynamics 365")
+                        {
+                            btnOk.Enabled = false;
+                            cboCrmName.Enabled = false;
+                            cboCrmVersion.Enabled = false;
+                        }
+
 
                         break;
                     case FormType.DataProvider:
@@ -1416,7 +1434,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 if (FormType == FormType.ProxyTypes || FormType == FormType.WebResource || FormType == FormType.Shared ||
                     FormType == FormType.Console || FormType == FormType.UiTest || FormType == FormType.DataProvider || FormType == FormType.SolutionPackager)
                 {
-                    btnOk.Enabled = true;
+                    if (FormType == FormType.DataProvider)
+                        btnOk.Enabled = CrmName == "365";
+                    else
+                        btnOk.Enabled = true;
                     btnCancel.Enabled = true;
                     txtName.Enabled = true;
                     cboEntity.Enabled = true;

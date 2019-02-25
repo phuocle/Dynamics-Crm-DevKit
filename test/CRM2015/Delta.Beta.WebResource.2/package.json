@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "delta.beta.webresource.2",
+  "version": "1.0.0",
+  "description": "delta.beta.webresource.2",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jasmine": "^2.8.8",
+    "@types/xrm": "^9.0.6",
+    "jasmine": "^3.1.0",
+    "requirejs": "^2.3.5",
+    "sinon": "^6.1.4",
+    "xrm-mock": "^3.4.7",
+    "xrm-webapi-client": "^3.6.11"
+  }
+}

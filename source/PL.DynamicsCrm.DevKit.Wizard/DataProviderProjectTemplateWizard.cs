@@ -91,9 +91,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 {
                     MessageBox.Show($@"{FormType.DataProvider.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
-                throw new WizardCancelledException("Cancel Click");
             }
+            Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
+            throw new WizardCancelledException("Cancel Click");
         }
 
         public bool ShouldAddProjectItem(string filePath)

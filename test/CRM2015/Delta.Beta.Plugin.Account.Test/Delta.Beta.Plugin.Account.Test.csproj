@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{b74884e7-5e70-4a0d-8955-6df6709cd53c}</ProjectGuid>
+    <ProjectGuid>{B74884E7-5E70-4A0D-8955-6DF6709CD53C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Delta.Beta.PluginAccount.Test</RootNamespace>
@@ -34,7 +34,8 @@
     <OutputPath>..\Release\test\</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -96,6 +97,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PostAccountRevokeAccessAsynchronousTest.cs" />
+    <Compile Include="PreAccountCreateSynchronousTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -111,7 +114,6 @@
       <Project>{24F931D0-A884-4354-B3C5-47AC3A575D6A}</Project>
       <Name>Delta.Beta.ProxyTypes</Name>
     </ProjectReference>
-
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
