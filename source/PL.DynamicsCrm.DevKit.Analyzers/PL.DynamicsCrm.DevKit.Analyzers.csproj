@@ -202,12 +202,16 @@
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.2.0.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.2.1.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.2.2.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.1.2.3.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Analyzers.nuspec" />
     <None Include="packages.config" />
     <None Include="tools\install.ps1" />
     <None Include="tools\uninstall.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\version.txt">
+      <Link>Nuget\version.txt</Link>
+    </Content>
     <Content Include="license\LICENSE.txt" />
     <Content Include="Nuget\nuget.exe" />
   </ItemGroup>
@@ -217,12 +221,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName)==Release (
-  del $(TargetDir)*.xml
-  del $(TargetDir)*.pdb
-  cd $(ProjectDir)Nuget
-  call $(ProjectDir)Nuget\pack.bat 
-)</PostBuildEvent>
+    <PostBuildEvent>if exist $(TargetDir)*.xml del $(TargetDir)*.xml
+if exist $(TargetDir)*.pdb del $(TargetDir)*.pdb</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

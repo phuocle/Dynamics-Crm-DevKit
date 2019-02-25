@@ -195,6 +195,9 @@
     <Compile Include="WorkflowTask.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\version.txt">
+      <Link>Nuget\version.txt</Link>
+    </Content>
     <Content Include="license\LICENSE.txt" />
     <Content Include="Release\CmdLine.dll" />
     <Content Include="Release\Microsoft.Crm.Sdk.Proxy.dll" />
@@ -216,6 +219,7 @@
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.0.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.1.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.2.nupkg" />
+    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.3.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.nuspec" />
     <None Include="packages.config" />
     <EmbeddedResource Include="..\PL.DynamicsCrm.DevKit.Wizard\data\WebApi.js">
@@ -251,11 +255,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName)==Release (
-  del "$(TargetDir)*.xml"
-  del "$(TargetDir)*.pdb"
-  cd "$(ProjectDir)Nuget"
-  call pack.bat
-)</PostBuildEvent>
+    <PostBuildEvent>if exist "$(TargetDir)*.xml" del "$(TargetDir)*.xml"
+if exist "$(TargetDir)*.pdb" del "$(TargetDir)*.pdb"</PostBuildEvent>
   </PropertyGroup>
 </Project>
