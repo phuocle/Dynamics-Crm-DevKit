@@ -1,4 +1,4 @@
-using Microsoft.Xrm.Sdk.Messages;
+﻿using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace Microsoft.Xrm.Sdk
 {
     [DebuggerNonUserCode()]
     public static class Extension
-    {
+    {   $if$($CrmName$!=2013)
         public static bool Delete(this IOrganizationService service, string entityName, KeyAttributeCollection keys)
         {
             var qe = new QueryExpression(entityName);
@@ -24,6 +24,7 @@ namespace Microsoft.Xrm.Sdk
             return true;
         }
 
+        $endif$
         public static T RetrieveByGuid<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)
         {
             try
@@ -38,6 +39,7 @@ namespace Microsoft.Xrm.Sdk
             }
         }
 
+        $if$($CrmName$!=2013)
         public static T RetrieveByKeyAttributeCollection<T>(this IOrganizationService service, string entityName, ColumnSet columns, KeyAttributeCollection keys)
         {
             var qe = new QueryExpression(entityName)
@@ -53,6 +55,7 @@ namespace Microsoft.Xrm.Sdk
             return (T)Activator.CreateInstance(typeof(T), args);
         }
 
+        $endif$$if$($CrmName$!=2013)
         public static List<T> RetrieveNewOrUpdatedChanges<T>(this IOrganizationService service, string entityName, ColumnSet columns, ref string dataToken)
         {
             var request = new RetrieveEntityChangesRequest
@@ -86,6 +89,7 @@ namespace Microsoft.Xrm.Sdk
             return lists;
         }
 
+        $endif$$if$($CrmName$!=2013)
         public static List<EntityReference> RetrieveRemovedOrDeletedChanges(this IOrganizationService service, string entityName, ColumnSet columns, ref string dataToken)
         {
             var request = new RetrieveEntityChangesRequest
@@ -118,6 +122,7 @@ namespace Microsoft.Xrm.Sdk
             return lists;
         }
 
+        $endif$
         public static List<T> RetrieveAll<T>(this IOrganizationService service, string fetchXml) where T : EntityBase
         {
             var lists = new List<T>();

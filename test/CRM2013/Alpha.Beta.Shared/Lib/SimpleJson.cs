@@ -67,12 +67,12 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using $rootnamespace$.Reflection;
+using Alpha.Beta.Shared.Reflection;
 
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable RedundantExplicitArrayCreation
 // ReSharper disable SuggestUseVarKeywordEvident
-namespace $rootnamespace$
+namespace Alpha.Beta.Shared
 {
     /// <summary>
     /// Represents the json array.
@@ -487,7 +487,7 @@ namespace $rootnamespace$
     }
 }
 
-namespace $rootnamespace$
+namespace Alpha.Beta.Shared
 {
     /// <summary>
     /// This class encodes and decodes JSON strings.
@@ -1706,7 +1706,7 @@ namespace $rootnamespace$
                     || genericDefinition == typeof(ICollection<>)
                     || genericDefinition == typeof(IEnumerable<>)
 #if SIMPLE_JSON_READONLY_COLLECTIONS
-                    || genericDefinition == typeof(IReadOnlyCollection<>)
+                    || genericDefinition == typeof(ReadOnlyCollection<>)
                     || genericDefinition == typeof(IReadOnlyList<>)
 #endif
                     );
@@ -1901,7 +1901,8 @@ namespace $rootnamespace$
             public static GetDelegate GetGetMethodByReflection(PropertyInfo propertyInfo)
             {
                 MethodInfo methodInfo = GetGetterMethodInfo(propertyInfo);
-                return delegate (object source) {
+                return delegate (object source)
+                {
                     if (methodInfo.Name == "get_Item")
                         return null;
                     return methodInfo.Invoke(source, EmptyObjects);

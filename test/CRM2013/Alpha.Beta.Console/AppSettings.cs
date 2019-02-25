@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Configuration;$if$($CrmName$==365)
-using System.Net;$endif$
+using System.Configuration;
+using System.Net;
 using System.ServiceModel.Description;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 
-namespace $SafeNamespace$
+namespace Alpha.Beta.Console
 {
     public class AppSettings
     {
@@ -18,8 +18,7 @@ namespace $SafeNamespace$
             var uri = new Uri(CrmUrl);
             var clientCredentials = new ClientCredentials();
             clientCredentials.UserName.UserName = UserName;
-            clientCredentials.UserName.Password = Password;$if$($CrmName$==365)
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;$endif$
+            clientCredentials.UserName.Password = Password;
             CrmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
             CurrentUserId = new EntityReference
             {
