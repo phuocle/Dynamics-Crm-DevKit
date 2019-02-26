@@ -108,7 +108,6 @@ namespace Alpha.Beta.Shared
 
         public Entity GetUpdateEntity()
         {
-            //var update = Entity.KeyAttributes.Count > 0 ? new Entity(Entity.LogicalName, Entity.KeyAttributes) : new Entity { Id = Entity.Id, LogicalName = Entity.LogicalName };
             var update = new Entity(Entity.LogicalName);
             update.Id = Entity.Id;
             foreach (var property in Entity.Attributes)

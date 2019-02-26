@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Net;
 using System.ServiceModel.Description;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;

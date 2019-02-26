@@ -3,7 +3,7 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>3a79e82c-7257-4bb5-9c37-f01c4b413663</SharedGUID>
+    <SharedGUID>519fdb3e-2f3d-4ddc-b584-419d2e101696</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Alpha.Beta.Shared</Import_RootNamespace>

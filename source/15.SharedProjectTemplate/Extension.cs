@@ -38,8 +38,8 @@ namespace Microsoft.Xrm.Sdk
                 return default(T);
             }
         }
-
         $if$($CrmName$!=2013)
+
         public static T RetrieveByKeyAttributeCollection<T>(this IOrganizationService service, string entityName, ColumnSet columns, KeyAttributeCollection keys)
         {
             var qe = new QueryExpression(entityName)

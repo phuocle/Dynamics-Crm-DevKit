@@ -1,4 +1,4 @@
-using Microsoft.Xrm.Sdk.Messages;
+﻿using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -13,17 +13,6 @@ namespace Microsoft.Xrm.Sdk
     [DebuggerNonUserCode()]
     public static class Extension
     {
-        //public static bool Delete(this IOrganizationService service, string entityName, KeyAttributeCollection keys)
-        //{
-        //    var qe = new QueryExpression(entityName);
-        //    foreach (var key in keys)
-        //        qe.Criteria.AddCondition(key.Key, ConditionOperator.Equal, key.Value);
-        //    var rows = service.RetrieveMultiple(qe);
-        //    if (rows.Entities.Count != 1) return false;
-        //    service.Delete(entityName, rows.Entities[0].Id);
-        //    return true;
-        //}
-
         public static T RetrieveByGuid<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)
         {
             try
@@ -37,86 +26,6 @@ namespace Microsoft.Xrm.Sdk
                 return default(T);
             }
         }
-
-        //public static T RetrieveByKeyAttributeCollection<T>(this IOrganizationService service, string entityName, ColumnSet columns, KeyAttributeCollection keys)
-        //{
-        //    var qe = new QueryExpression(entityName)
-        //    {
-        //        ColumnSet = columns
-        //    };
-        //    foreach (var key in keys)
-        //        qe.Criteria.AddCondition(key.Key, ConditionOperator.Equal, key.Value);
-        //    var rows = service.RetrieveMultiple(qe);
-        //    if (rows.Entities.Count != 1) return default(T);
-        //    var entity = rows.Entities[0];
-        //    object[] args = new object[] { entity };
-        //    return (T)Activator.CreateInstance(typeof(T), args);
-        //}
-
-        //public static List<T> RetrieveNewOrUpdatedChanges<T>(this IOrganizationService service, string entityName, ColumnSet columns, ref string dataToken)
-        //{
-        //    var request = new RetrieveEntityChangesRequest
-        //    {
-        //        EntityName = entityName,
-        //        DataVersion = dataToken,
-        //        Columns = columns,
-        //        PageInfo = new PagingInfo() { Count = 5000, PageNumber = 1, ReturnTotalRecordCount = false }
-        //    };
-        //    var lists = new List<T>();
-        //    while (true)
-        //    {
-        //        var response = (RetrieveEntityChangesResponse)service.Execute(request);
-        //        foreach (var change in response.EntityChanges.Changes)
-        //        {
-        //            if (change.Type == ChangeType.NewOrUpdated)
-        //            {
-        //                var changedItem = (NewOrUpdatedItem)change;
-        //                object[] args = new object[] { changedItem.NewOrUpdatedEntity };
-        //                lists.Add((T)Activator.CreateInstance(typeof(T), args));
-        //            }
-        //        }
-        //        if (!response.EntityChanges.MoreRecords)
-        //        {
-        //            dataToken = response.EntityChanges.DataToken;
-        //            break;
-        //        }
-        //        request.PageInfo.PageNumber++;
-        //        request.PageInfo.PagingCookie = response.EntityChanges.PagingCookie;
-        //    }
-        //    return lists;
-        //}
-
-        //public static List<EntityReference> RetrieveRemovedOrDeletedChanges(this IOrganizationService service, string entityName, ColumnSet columns, ref string dataToken)
-        //{
-        //    var request = new RetrieveEntityChangesRequest
-        //    {
-        //        EntityName = entityName,
-        //        DataVersion = dataToken,
-        //        Columns = columns,
-        //        PageInfo = new PagingInfo() { Count = 5000, PageNumber = 1, ReturnTotalRecordCount = false }
-        //    };
-        //    var lists = new List<EntityReference>();
-        //    while (true)
-        //    {
-        //        var response = (RetrieveEntityChangesResponse)service.Execute(request);
-        //        foreach (var change in response.EntityChanges.Changes)
-        //        {
-        //            if (change.Type == ChangeType.RemoveOrDeleted)
-        //            {
-        //                var changedItem = (RemovedOrDeletedItem)change;
-        //                lists.Add(changedItem.RemovedItem);
-        //            }
-        //        }
-        //        if (!response.EntityChanges.MoreRecords)
-        //        {
-        //            dataToken = response.EntityChanges.DataToken;
-        //            break;
-        //        }
-        //        request.PageInfo.PageNumber++;
-        //        request.PageInfo.PagingCookie = response.EntityChanges.PagingCookie;
-        //    }
-        //    return lists;
-        //}
 
         public static List<T> RetrieveAll<T>(this IOrganizationService service, string fetchXml) where T : EntityBase
         {

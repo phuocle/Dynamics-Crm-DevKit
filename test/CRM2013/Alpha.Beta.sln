@@ -3,30 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Alpha.Beta.Shared", "Alpha.Beta.Shared\Alpha.Beta.Shared.shproj", "{3A79E82C-7257-4BB5-9C37-F01C4B413663}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C9157A9B-499F-4C21-B7E5-78DED0301B0C}"
 	ProjectSection(SolutionItems) = preProject
 		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
 		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpha.Beta.Console", "Alpha.Beta.Console\Alpha.Beta.Console.csproj", "{8A4E67B2-AAC8-4E81-B858-D65E6A865148}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Alpha.Beta.Shared", "Alpha.Beta.Shared\Alpha.Beta.Shared.shproj", "{519FDB3E-2F3D-4DDC-B584-419D2E101696}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpha.Beta.Console", "Alpha.Beta.Console\Alpha.Beta.Console.csproj", "{837B3D33-85C9-48C6-B990-B67BA4BC5411}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Alpha.Beta.Shared\Alpha.Beta.Shared.projitems*{3a79e82c-7257-4bb5-9c37-f01c4b413663}*SharedItemsImports = 13
-		Alpha.Beta.Shared\Alpha.Beta.Shared.projitems*{8a4e67b2-aac8-4e81-b858-d65e6a865148}*SharedItemsImports = 4
+		Alpha.Beta.Shared\Alpha.Beta.Shared.projitems*{519fdb3e-2f3d-4ddc-b584-419d2e101696}*SharedItemsImports = 13
+		Alpha.Beta.Shared\Alpha.Beta.Shared.projitems*{837b3d33-85c9-48c6-b990-b67ba4bc5411}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8A4E67B2-AAC8-4E81-B858-D65E6A865148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A4E67B2-AAC8-4E81-B858-D65E6A865148}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A4E67B2-AAC8-4E81-B858-D65E6A865148}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A4E67B2-AAC8-4E81-B858-D65E6A865148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{837B3D33-85C9-48C6-B990-B67BA4BC5411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{837B3D33-85C9-48C6-B990-B67BA4BC5411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{837B3D33-85C9-48C6-B990-B67BA4BC5411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{837B3D33-85C9-48C6-B990-B67BA4BC5411}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
