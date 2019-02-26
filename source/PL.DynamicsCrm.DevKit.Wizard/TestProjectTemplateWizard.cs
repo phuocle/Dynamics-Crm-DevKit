@@ -76,6 +76,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$CrmSdkDeploymentVersion$", deployment.Version);
                     replacementsDictionary.Add("$CrmSdkDeploymentNetVersion$", deployment.NetVersion.Replace(".", string.Empty));
 
+                    replacementsDictionary.Add("$versionWorkflow$", form.MicrosoftCrmSdkWorkflow.Version);
+                    replacementsDictionary.Add("$NugetNetWorkflowVersion$", form.MicrosoftCrmSdkWorkflow.NetVersion.Replace(".", string.Empty));
+
                     var xrmToolingCoreAssembly = form.MicrosoftCrmSdkXrmToolingCoreAssembly;
                     replacementsDictionary.Add("$XrmToolingCoreAssemblyVersion$", xrmToolingCoreAssembly.Version);
                     replacementsDictionary.Add("$XrmToolingCoreAssemblyNetVersion$", xrmToolingCoreAssembly.NetVersion.Replace(".", string.Empty));

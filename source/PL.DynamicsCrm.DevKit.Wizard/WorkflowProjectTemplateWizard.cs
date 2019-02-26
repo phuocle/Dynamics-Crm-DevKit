@@ -86,6 +86,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
                     replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
                     replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
+                    replacementsDictionary.Add("$versionWorkflow$", form.MicrosoftCrmSdkWorkflow.Version);
+                    replacementsDictionary.Add("$NugetNetWorkflowVersion$", form.MicrosoftCrmSdkWorkflow.NetVersion.Replace(".", string.Empty));
                     NewFolder = Utility.GetFolderProject(solutionFullName, ProjectName);
                     replacementsDictionary.Remove("$destinationdirectory$");
                     replacementsDictionary["$destinationdirectory$"] = NewFolder;

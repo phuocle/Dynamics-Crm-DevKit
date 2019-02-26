@@ -123,6 +123,21 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
             return @return;
         }
 
+        public NuGetPackage MicrosoftCrmSdkWorkflow(string crmName)
+        {
+            var list = GetPackages("Microsoft.CrmSdk.Workflow");
+            var item = (from i in list
+                        where crmName == GetCrmName(i.Version.Version)
+                        orderby i.Version.ToOriginalString() descending
+                        select i).First();
+            var @return = new NuGetPackage
+            {
+                Version = item.Version.ToOriginalString(),
+                NetVersion = item.GetSupportedFrameworks().FirstOrDefault()?.Version.ToString()
+            };
+            return @return;
+        }
+
         public NuGetPackage MicrosoftCrmSdkXrmToolingCoreAssembly(string crmName)
         {
             var list = GetPackages("Microsoft.CrmSdk.XrmTooling.CoreAssembly");

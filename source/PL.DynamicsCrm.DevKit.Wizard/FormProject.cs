@@ -53,7 +53,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                return nuget.MicrosoftCrmSdkCoreToolsPackages.Where(w => w.CrmName == cboCrmName.Text).FirstOrDefault();
+                var name = cboCrmName.Text;
+                if (cboCrmName.Text == "Dynamics Crm 2013")
+                    name = "Dynamics Crm 2015";
+                return nuget.MicrosoftCrmSdkCoreToolsPackages.Where(w => w.CrmName == name).FirstOrDefault();
             }
         }
 
@@ -78,6 +81,14 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             get
             {
                 return nuget.MicrosoftCrmSdkDeployment(cboCrmName.Text);
+            }
+        }
+
+        public NuGetPackage MicrosoftCrmSdkWorkflow
+        {
+            get
+            {
+                return nuget.MicrosoftCrmSdkWorkflow(cboCrmName.Text);
             }
         }
 

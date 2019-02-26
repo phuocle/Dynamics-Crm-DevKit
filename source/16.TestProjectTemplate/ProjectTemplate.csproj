@@ -67,7 +67,7 @@
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$version$\lib\net$NugetNetVersion$\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Workflow">
-      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.$version$\lib\net$NugetNetVersion$\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.$versionWorkflow$\lib\net$NugetNetWorkflowVersion$\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Deployment">
       <HintPath>..\packages\Microsoft.CrmSdk.Deployment.$CrmSdkDeploymentVersion$\lib\net$CrmSdkDeploymentNetVersion$\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
