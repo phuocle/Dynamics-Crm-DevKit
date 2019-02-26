@@ -165,11 +165,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private void GeneratorLateBound(string entity, int i, int count)
         {
             CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".generated.cs");
-
             var lateBound = new GeneratedCSharpLateBound();
             var rootNameSpace = GeneratorJson.rootnamespace + ".Shared.Entities";
             var sharedNameSpace = GeneratorJson.rootnamespace + ".";
-            var generated = lateBound.Go(CrmServiceClient.OrganizationServiceProxy, entity, rootNameSpace, sharedNameSpace);
+            var crmVersionName = (CrmVersionName)int.Parse(GeneratorJson.crmversion);
+            var generated = lateBound.Go(CrmServiceClient.OrganizationServiceProxy, crmVersionName, entity, rootNameSpace, sharedNameSpace);
             var file = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.generated.cs";
             File.WriteAllText(file, generated, System.Text.Encoding.UTF8);
         }
