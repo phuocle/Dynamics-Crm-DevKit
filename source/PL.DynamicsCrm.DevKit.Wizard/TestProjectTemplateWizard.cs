@@ -86,7 +86,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$CrmName$", form.CrmName);
                     replacementsDictionary.Add("$DevKitVersion$", Const.Version);
                     replacementsDictionary.Add("$version$", form.CrmVersion);
-                    replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                    replacementsDictionary.Add("$NetTestVersion$", form.NetVersion);
+                    if (form.CrmName == "2013")
+                        replacementsDictionary["$NetTestVersion$"] = "4.5.2";
                     replacementsDictionary.Add("$NugetNetVersion$", form.NugetNetVersion);
                     replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
                     replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
