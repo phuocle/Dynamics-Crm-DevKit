@@ -5,7 +5,7 @@
     <Description>C# Test Project Template</Description>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
-    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <TemplateID>6e4fe9bc-0c96-4081-a92e-6f55961b2588</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>TestProject</DefaultName>

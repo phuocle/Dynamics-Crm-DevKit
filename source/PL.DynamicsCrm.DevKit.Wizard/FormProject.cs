@@ -43,12 +43,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
             EntityName = entityName;
             FormType = formType;
-            //if (formType == FormType.DataProvider)
-            //{
-            //    cboCrmName.Text = "Dynamics 365";
-            //    cboCrmName_SelectedIndexChanged(null, null);
-            //    cboCrmName.Enabled = false;
-            //}
         }
         public string LanguageCode => cboEntity.SelectedValue.ToString();
         public string ResourceStringName => txtName.Text;
@@ -265,9 +259,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         LoadProjects();
                         cboEntity.Visible = true;
 
-                        //btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
-                        //btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
-
                         break;
                     case FormType.TestItem:
                         link.Text = @"Add New Test Class";
@@ -351,8 +342,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                         btnOk.Enabled = false;
                         cboEntity.Enabled = false;
 
-                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
-                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        cboCrmName.Enabled = false;
+                        cboCrmVersion.Enabled = false;
+
+                        //btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        //btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
 
                         break;
                 case FormType.JsTestItem:
@@ -1423,8 +1421,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     btnCancel.Enabled = cboEntity.Enabled;
                     chkOthers.Enabled = cboEntity.Enabled;
                     chkListForm.Enabled = cboEntity.Enabled;
-                    cboCrmName.Enabled = cboEntity.Enabled;
-                    cboCrmVersion.Enabled = cboEntity.Enabled;
+                    if (FormType != FormType.LateBoundClass)
+                    {
+                        cboCrmName.Enabled = cboEntity.Enabled;
+                        cboCrmVersion.Enabled = cboEntity.Enabled;
+                    }
                     cboEntity.SelectedIndex = 0;
                     txtName_TextChanged(null, null);
                     cboEntity_SelectedIndexChanged(null, null);

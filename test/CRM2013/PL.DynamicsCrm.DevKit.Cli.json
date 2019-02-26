@@ -3,7 +3,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "AlphaBeta",
       "includefiles": [
         "Alpha.Beta.Plugin.*.dll",
         "Alpha.Beta.CustomAction.*.dll"
