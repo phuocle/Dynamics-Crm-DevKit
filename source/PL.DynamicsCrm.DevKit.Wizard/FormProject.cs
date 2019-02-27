@@ -1394,8 +1394,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
             btnOk.Enabled = btnConnection.Visible && CrmConnection != null && txtName.Text.Length > 0 ||
                             !btnConnection.Visible && txtName.Text.Length > 0;
-            if (FormType == FormType.Workflow || FormType == FormType.CustomAction || FormType == FormType.Report || FormType == FormType.DataProvider)
+            if (FormType == FormType.Workflow || FormType == FormType.CustomAction || FormType == FormType.Report)
                 btnOk.Enabled = true;
+            if (FormType == FormType.DataProvider && CrmName != "365")
+                btnOk.Enabled = false;
         }
 
         private void btnConnection_ClickAsync(object sender, EventArgs e)
