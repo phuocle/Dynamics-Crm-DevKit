@@ -61,6 +61,16 @@
     <None Include="package.json" />
     <None Include="package-lock.json" />
     <None Include="packages.config" />
+    <Content Include="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
+    <None Include="entities\Account.intellisense.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </None>
+    <Content Include="entities\Account.js" />
+    <Content Include="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
     <Content Include="test\DevKitMock.js" />
     <Content Include="test\requireConfig.js" />
     <Content Include="test\mock.intellisense.js" />

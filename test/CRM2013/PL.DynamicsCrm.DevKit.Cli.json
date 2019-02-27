@@ -29,7 +29,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "AlphaBeta",
       "includefiles": [
         "Alpha.Beta.Workflow.*.dll"
       ],
@@ -52,8 +52,8 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???",
+      "solution": "AlphaBeta",
+      "prefix": "alpha_",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -71,19 +71,19 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "alpha_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "alpha__/entities/[entity].form.js",
+            "alpha__/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].webapi.js"
+            "alpha__/entities/[entity].webapi.js"
           ],
           "dependencies": [
-            "???_/lib/WebApiClient.js"
+            "alpha__/lib/WebApiClient.js"
           ]
         }
       ]
@@ -155,11 +155,11 @@
     {
       "profile": "Extract-Unmanaged",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "AlphaBeta",
       "solutiontype": "Unmanaged",
-      "folder": "???",
-      "solutionzipfolder": "???",
-      "logfolder": "???",
+      "folder": "AlphaBeta",
+      "solutionzipfolder": "zip",
+      "logfolder": "log",
       "type": "Extract",
       "mapfile": ""
     },
