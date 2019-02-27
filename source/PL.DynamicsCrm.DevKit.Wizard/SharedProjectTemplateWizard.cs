@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using EnvDTE;
@@ -45,24 +44,40 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
+            if (runKind != WizardRunKind.AsNewProject) return;
             Dte = (DTE) automationObject;
-            var solutionFullName = Dte?.Solution?.FullName;
-            ProjectName = Utility.GetSharedProject(solutionFullName);
-            var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
-            if (!Directory.Exists(Path.Combine(fInfo.DirectoryName ?? throw new InvalidOperationException(), ProjectName)))
+            var form = new FormProject(FormType.Shared, Dte);
+            if (form.ShowDialog() == DialogResult.OK)
             {
-                replacementsDictionary.Add("$DevKitVersion$", Const.Version);
-                replacementsDictionary.Add("$rootnamespace$", ProjectName);
-                replacementsDictionary.Add("$namespace$", ProjectName);
-                var dir = Path.GetDirectoryName(solutionFullName);
-                var file = $"{dir}\\PL.DynamicsCrm.DevKit.Cli.json";
-                if (!File.Exists(file))
-                    File.WriteAllText(file, Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.PL.DynamicsCrm.DevKit.Cli.json"));
-                return;
-            }
-            else
-            {
-                MessageBox.Show($@"{FormType.Shared.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ProjectName = form.ProjectName;
+                if (!Utility.ExistProject(Dte, ProjectName))
+                {
+                    replacementsDictionary.Add("$CrmName$", form.CrmName);
+                    replacementsDictionary.Add("$DevKitVersion$", Const.Version);
+                    replacementsDictionary.Add("$rootnamespace$", ProjectName);
+                    replacementsDictionary.Add("$namespace$", ProjectName);
+                    var solutionFullName = Dte?.Solution?.FullName;
+                    var dir = Path.GetDirectoryName(solutionFullName);
+                    var file = $"{dir}\\PL.DynamicsCrm.DevKit.Cli.json";
+                    if (!File.Exists(file))
+                    {
+                        var temp = ProjectName.Substring(0, ProjectName.Length - FormType.Shared.ToString().Length);
+                        var json = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.PL.DynamicsCrm.DevKit.Cli.json");
+                        json = json
+                            .Replace("???.Plugin.*.dll", $"{temp}Plugin.*.dll")
+                            .Replace("???.CustomAction.*.dll", $"{temp}CustomAction.*.dll")
+                            .Replace("???.Workflow.*.dll", $"{temp}Workflow.*.dll")
+                            .Replace("???.DataProvider.*.dll", $"{temp}DataProvider.*.dll")
+                            .Replace("???.*.Test.dll", $"{temp}*.Test.dll")
+                            ;
+                        File.WriteAllText(file, json);
+                    }
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show($@"{FormType.Shared.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");

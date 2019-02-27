@@ -18,8 +18,8 @@ namespace $SafeNamespace$
             var uri = new Uri(CrmUrl);
             var clientCredentials = new ClientCredentials();
             clientCredentials.UserName.UserName = UserName;
-            clientCredentials.UserName.Password = Password;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            clientCredentials.UserName.Password = Password;$if$($CrmName$== 365)
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;$endif$
             CrmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
             CurrentUserId = new EntityReference
             {

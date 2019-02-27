@@ -23,13 +23,15 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\Release\dll\</OutputPath>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
+    <NoWarn>CS8032</NoWarn>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
@@ -67,7 +69,6 @@
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName)==Release (
     DEL $(TargetDir)*.xml
-    DEL $(TargetDir)*.pdb
     DEL $(TargetDir)Microsoft.*.dll
 )</PostBuildEvent>
   </PropertyGroup>

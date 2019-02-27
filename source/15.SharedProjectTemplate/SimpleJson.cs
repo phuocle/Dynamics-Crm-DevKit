@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright file="SimpleJson.cs" company="The Outercurve Foundation">
 //    Copyright (c) 2011, The Outercurve Foundation.
 //
@@ -20,10 +20,10 @@
 // VERSION: 0.38.0
 
 // NOTE: uncomment the following line to make SimpleJson class internal.
-#define SIMPLE_JSON_INTERNAL
+//#define SIMPLE_JSON_INTERNAL
 
 // NOTE: uncomment the following line to make JsonArray and JsonObject class internal.
-#define SIMPLE_JSON_OBJARRAYINTERNAL
+//#define SIMPLE_JSON_OBJARRAYINTERNAL
 
 // NOTE: uncomment the following line to enable dynamic support.
 //#define SIMPLE_JSON_DYNAMIC
@@ -32,11 +32,11 @@
 //#define SIMPLE_JSON_DATACONTRACT
 
 // NOTE: uncomment the following line to enable IReadOnlyCollection<T> and IReadOnlyList<T> support.
-#define SIMPLE_JSON_READONLY_COLLECTIONS
+//#define SIMPLE_JSON_READONLY_COLLECTIONS
 
 // NOTE: uncomment the following line to disable linq expressions/compiled lambda (better performance) instead of method.invoke().
 // define if you are using .net framework <= 3.0 or < WP7.5
-#define SIMPLE_JSON_NO_LINQ_EXPRESSION
+//#define SIMPLE_JSON_NO_LINQ_EXPRESSION
 
 // NOTE: uncomment the following line if you are compiling under Window Metro style application/library.
 // usually already defined in properties

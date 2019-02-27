@@ -15,7 +15,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
         private int ObjectTypeCode { get; set; }
         private bool HasImage { get; set; }
 
-        internal string Go(OrganizationServiceProxy crmService, string entity, string rootNameSpace, string sharedNameSpace)
+        internal string Go(OrganizationServiceProxy crmService, CrmVersionName crmVersionName, string entity, string rootNameSpace, string sharedNameSpace)
         {
             _crmService = crmService;
             LoadData(entity);
@@ -63,17 +63,30 @@ namespace PL.DynamicsCrm.DevKit.Shared
             code += $"\t\t[DebuggerNonUserCode()]\r\n";
             code += $"\t\tpublic {entity}(Guid {entity}Id)\r\n";
             code += $"\t\t{{\r\n";
-            code += $"\t\t\tEntity = new Entity(EntityLogicalName, {entity}Id);\r\n";
+            if(crmVersionName == CrmVersionName._2011 || crmVersionName == CrmVersionName._2013)
+            {
+                code += $"\t\t\tEntity = new Entity(EntityLogicalName);\r\n";
+                code += $"\t\t\tEntity.Id = {entity}Id;\r\n";
+            }
+            else
+                code += $"\t\t\tEntity = new Entity(EntityLogicalName, {entity}Id);\r\n";
             code += $"\t\t\tPreEntity = CloneThisEntity(Entity);\r\n";
             code += $"\t\t}}\r\n";
             code += $"\r\n";
-            code += $"\t\t[DebuggerNonUserCode()]\r\n";
-            code += $"\t\tpublic {entity}(string keyName, object keyValue)\r\n";
-            code += $"\t\t{{\r\n";
-            code += $"\t\t\tEntity = new Entity(EntityLogicalName, keyName, keyValue);\r\n";
-            code += $"\t\t\tPreEntity = CloneThisEntity(Entity);\r\n";
-            code += $"\t\t}}\r\n";
-            code += $"\r\n";
+            if (crmVersionName == CrmVersionName._2011 || crmVersionName == CrmVersionName._2013)
+            {
+                ;
+            }
+            else
+            {
+                code += $"\t\t[DebuggerNonUserCode()]\r\n";
+                code += $"\t\tpublic {entity}(string keyName, object keyValue)\r\n";
+                code += $"\t\t{{\r\n";
+                code += $"\t\t\tEntity = new Entity(EntityLogicalName, keyName, keyValue);\r\n";
+                code += $"\t\t\tPreEntity = CloneThisEntity(Entity);\r\n";
+                code += $"\t\t}}\r\n";
+                code += $"\r\n";
+            }
             code += $"\t\t[DebuggerNonUserCode()]\r\n";
             code += $"\t\tpublic {entity}(Entity entity)\r\n";
             code += $"\t\t{{\r\n";
@@ -82,19 +95,32 @@ namespace PL.DynamicsCrm.DevKit.Shared
             code += $"\t\t}}\r\n";
             code += $"\r\n";
             code += $"\t\t[DebuggerNonUserCode()]\r\n";
-            code += $"\t\tpublic {entity}(Entity entity, Entity preEntity)\r\n";
+            code += $"\t\tpublic {entity}(Entity entity, Entity merge)\r\n";
             code += $"\t\t{{\r\n";
             code += $"\t\t\tEntity = entity;\r\n";
-            code += $"\t\t\tPreEntity = preEntity;\r\n";
-            code += $"\t\t}}\r\n";
-            code += $"\r\n";
-            code += $"\t\t[DebuggerNonUserCode()]\r\n";
-            code += $"\t\tpublic {entity}(KeyAttributeCollection keys)\r\n";
-            code += $"\t\t{{\r\n";
-            code += $"\t\t\tEntity = new Entity(EntityLogicalName, keys);\r\n";
+            code += $"\t\t\tforeach (var property in merge.Attributes)\r\n";
+            code += $"\t\t\t{{\r\n";
+            code += $"\t\t\t\tvar key = property.Key;\r\n";
+            code += $"\t\t\t\tvar value = property.Value;\r\n";
+            code += $"\t\t\t\tEntity[key] = value;\r\n";
+            code += $"\t\t\t}}\r\n";
             code += $"\t\t\tPreEntity = CloneThisEntity(Entity);\r\n";
             code += $"\t\t}}\r\n";
             code += $"\r\n";
+            if (crmVersionName == CrmVersionName._2011 || crmVersionName == CrmVersionName._2013)
+            {
+                ;
+            }
+            else
+            {
+                code += $"\t\t[DebuggerNonUserCode()]\r\n";
+                code += $"\t\tpublic {entity}(KeyAttributeCollection keys)\r\n";
+                code += $"\t\t{{\r\n";
+                code += $"\t\t\tEntity = new Entity(EntityLogicalName, keys);\r\n";
+                code += $"\t\t\tPreEntity = CloneThisEntity(Entity);\r\n";
+                code += $"\t\t}}\r\n";
+                code += $"\r\n";
+            }
             code += GeneratorCode() + "\r\n";
             if (HasImage) code += GeneratorEntityImageCode();
             code += $"\t}}\r\n";
@@ -179,7 +205,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 xml += "\t\t/// <para>" + XmlEscape(description) + "</para>\r\n";
             }
             xml += "\t\t/// <para>" + dataType + "</para>\r\n";
-            xml += "\t\t/// <para>" + crmAttribute.DisplayName + "</para>\r\n";
+            xml += "\t\t/// <para>" + crmAttribute?.DisplayName?.Replace("\n", "") + "</para>\r\n";
             xml += "\t\t/// </summary>\r\n";
             xml += "\t\t[DebuggerNonUserCode()]\r\n";
             return xml;

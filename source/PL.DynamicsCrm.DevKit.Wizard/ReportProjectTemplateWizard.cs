@@ -48,31 +48,27 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            if (runKind == WizardRunKind.AsNewProject)
+            if (runKind != WizardRunKind.AsNewProject) return;
+            Dte = (DTE)automationObject;
+            var form = new FormProject(FormType.Report, Dte);
+            if (form.ShowDialog() == DialogResult.OK)
             {
-                Dte = (DTE)automationObject;
-                var form = new FormProject(FormType.Report, Dte);
-                if (form.ShowDialog() == DialogResult.OK)
+                ProjectName = form.ProjectName;
+                if (!Utility.ExistProject(Dte, ProjectName))
                 {
-                    ProjectName = form.ProjectName;
-                    if (!Utility.ExistProject(Dte, ProjectName))
-                    {
-                        replacementsDictionary.Add("$DevKitVersion$", Const.Version);
-                        replacementsDictionary.Add("$ProjectName$", ProjectName);
-                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                        return;
-                    }
+                    replacementsDictionary.Add("$CrmName$", form.CrmName);
+                    replacementsDictionary.Add("$DevKitVersion$", Const.Version);
+                    replacementsDictionary.Add("$ProjectName$", ProjectName);
+                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show($@"{FormType.Report.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            try
-            {
-                Directory.Delete(replacementsDictionary["$destinationdirectory$"], true);
-            }
-            catch
-            {
-                // ignored
-            }
+            Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
         }
 

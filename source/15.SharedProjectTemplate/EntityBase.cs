@@ -1,4 +1,4 @@
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +22,7 @@ namespace $rootnamespace$
         }
 
         public Entity Entity { get; set; }
-        public Entity PreEntity { get; set; }
+        protected Entity PreEntity { get; set; }
         public Guid Id { get { return Entity.Id; } }
 
         protected object CloneAttribute(object value)
@@ -40,12 +40,12 @@ namespace $rootnamespace$
             if (optionSetValue != null)
             {
                 return new OptionSetValue(optionSetValue.Value);
-            }
+            }$if$($CrmName$==365)
             var optionSetValueCollection = value as OptionSetValueCollection;
             if (optionSetValueCollection != null)
             {
                 return new OptionSetValueCollection(optionSetValueCollection);
-            }
+            }$endif$
             var entityReferenceValue = value as EntityReference;
             if (entityReferenceValue != null)
             {
@@ -112,8 +112,9 @@ namespace $rootnamespace$
         }
 
         public Entity GetUpdateEntity()
-        {
-            var update = Entity.KeyAttributes.Count > 0 ? new Entity(Entity.LogicalName, Entity.KeyAttributes) :  new Entity { Id = Entity.Id, LogicalName = Entity.LogicalName };
+        {   $if$($CrmName$!=2013)
+            var update = Entity.KeyAttributes.Count > 0 ? new Entity(Entity.LogicalName, Entity.KeyAttributes) :  new Entity { Id = Entity.Id, LogicalName = Entity.LogicalName };$else$            var update = new Entity(Entity.LogicalName);
+            update.Id = Entity.Id;$endif$
             foreach (var property in Entity.Attributes)
             {
                 var key = property.Key;

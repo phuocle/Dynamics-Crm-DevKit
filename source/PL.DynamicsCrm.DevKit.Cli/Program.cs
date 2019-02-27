@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\level1\GoogleVietNam.WebResource";
+                return @"D:\src\vsts\tfs\CDS-CRMGRIDPLUS\CRM\PL.CrmGridPlus.SolutionPackager";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

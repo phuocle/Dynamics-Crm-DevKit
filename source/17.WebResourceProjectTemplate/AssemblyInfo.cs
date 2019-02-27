@@ -13,7 +13,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("$AssemblyName$")]
 [assembly: AssemblyCopyright("Copyright © $year$")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("en")]
+[assembly: AssemblyCulture("en")]$if$($CrmName$==365)
+[assembly: SecurityRules(SecurityRuleSet.Level2)]$endif$
 [assembly: ComVisible(false)]
 [assembly: Guid("$guid1$")]
 [assembly: AssemblyVersion("1.0.0.0")]

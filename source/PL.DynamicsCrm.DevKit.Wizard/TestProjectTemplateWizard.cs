@@ -47,50 +47,78 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            if (runKind == WizardRunKind.AsNewProject)
+            if (runKind != WizardRunKind.AsNewProject) return;
+            Dte = (DTE)automationObject;
+            if (!Utility.SharedProjectExist(Dte))
             {
-                Dte = (DTE)automationObject;
-                var form = new FormProject(FormType.Test, Dte);
-                if (form.ShowDialog() == DialogResult.OK)
+                MessageBox.Show(@"Please add shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
+                throw new WizardCancelledException("Shared project should exist");
+            }
+            if (!Utility.ProxyTypesProjectExist(Dte))
+            {
+                MessageBox.Show(@"Please add ProxyTypes project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
+                throw new WizardCancelledException("ProxyTypes project should exist");
+            }
+            var form = new FormProject(FormType.Test, Dte);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                ProjectName = form.ProjectName;
+                if (!Utility.ExistProject(Dte, ProjectName))
                 {
-                    ProjectName = form.ProjectName;
-                    if (!Utility.ExistProject(Dte, ProjectName))
-                    {
-                        replacementsDictionary.Add("$DevKitVersion$", Const.Version);
-                        replacementsDictionary.Add("$version$", form.CrmVersion);
-                        replacementsDictionary.Add("$NetVersion$", form.NetVersion);
-                        replacementsDictionary.Add("$NugetNetVersion$", form.NetVersion.Replace(".", string.Empty));
-                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                        replacementsDictionary.Add("$SafeNamespace$", form.SelectedProjectData.Namespace + ".Test");
-                        if (form.ProxyTypes != null)
-                        {
-                            replacementsDictionary.Add("$ProxyTypes$", "true");
-                            replacementsDictionary.Add("$ProjectProxyTypesName$", form.ProxyTypes.Name);
-                        }
-                        else
-                        {
-                            replacementsDictionary.Add("$ProxyTypes$", "false");
-                        }
-                        replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
-                        replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
-                        replacementsDictionary.Add("$ProjectTestName$", form.SelectedProjectData.Name);
-                        replacementsDictionary.Add("$ProjectTestGuid$", form.SelectedProjectData.Id);
-                        var solutionFullName = Dte?.Solution?.FullName;
-                        replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
+                    var fakeXrmEasy = form.FakeXrmEasy;
+                    replacementsDictionary.Add("$FakeXrmEasy$", form.FakeXrmEasyShortName);
+                    replacementsDictionary.Add("$FakeXrmEasyVersion$", fakeXrmEasy.Version);
+                    replacementsDictionary.Add("$FakeXrmEasyNetVersion$", fakeXrmEasy.NetVersion.Replace(".", string.Empty));
 
-                        var dir = Path.GetDirectoryName(solutionFullName);
-                        var solutionName = Path.GetFileNameWithoutExtension(solutionFullName);
-                        var file = $"{dir}\\VsTest.runsettings";
-                        if (!File.Exists(file))
-                        {
-                            var text = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.VsTest.runsettings");
-                            text = text.Replace("[[ProxyTypes.dll]]", form.ProxyTypes.Name + ".dll");
-                            text = text.Replace("[[Namespace]]", solutionName);
-                            File.WriteAllText(file, text);
-                        }
-                        return;
+                    var deployment = form.MicrosoftCrmSdkDeployment;
+                    replacementsDictionary.Add("$CrmSdkDeploymentVersion$", deployment.Version);
+                    replacementsDictionary.Add("$CrmSdkDeploymentNetVersion$", deployment.NetVersion.Replace(".", string.Empty));
+
+                    replacementsDictionary.Add("$versionWorkflow$", form.MicrosoftCrmSdkWorkflow.Version);
+                    replacementsDictionary.Add("$NugetNetWorkflowVersion$", form.MicrosoftCrmSdkWorkflow.NetVersion.Replace(".", string.Empty));
+
+                    var xrmToolingCoreAssembly = form.MicrosoftCrmSdkXrmToolingCoreAssembly;
+                    replacementsDictionary.Add("$XrmToolingCoreAssemblyVersion$", xrmToolingCoreAssembly.Version);
+                    replacementsDictionary.Add("$XrmToolingCoreAssemblyNetVersion$", xrmToolingCoreAssembly.NetVersion.Replace(".", string.Empty));
+
+                    replacementsDictionary.Add("$CrmName$", form.CrmName);
+                    replacementsDictionary.Add("$DevKitVersion$", Const.Version);
+                    replacementsDictionary.Add("$version$", form.CrmVersion);
+                    replacementsDictionary.Add("$NetTestVersion$", form.NetVersion);
+                    if (form.CrmName == "2013")
+                        replacementsDictionary["$NetTestVersion$"] = "4.5.2";
+                    replacementsDictionary.Add("$NugetNetVersion$", form.NugetNetVersion);
+                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                    replacementsDictionary.Add("$SafeNamespace$", form.SelectedProjectData.Namespace + ".Test");
+                    if (form.ProxyTypes != null)
+                    {
+                        replacementsDictionary.Add("$ProxyTypes$", "true");
+                        replacementsDictionary.Add("$ProjectProxyTypesName$", form.ProxyTypes.Name);
                     }
+                    else
+                    {
+                        replacementsDictionary.Add("$ProxyTypes$", "false");
+                    }
+                    replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
+                    replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
+                    replacementsDictionary.Add("$ProjectTestName$", form.SelectedProjectData.Name);
+                    replacementsDictionary.Add("$ProjectTestGuid$", form.SelectedProjectData.Id);
+                    var solutionFullName = Dte?.Solution?.FullName;
+                    replacementsDictionary.Add("$ShareProject$", Utility.GetSharedProject(solutionFullName));
+                    var dir = Path.GetDirectoryName(solutionFullName);
+                    var solutionName = Path.GetFileNameWithoutExtension(solutionFullName);
+                    var file = $"{dir}\\VsTest.runsettings";
+                    if (!File.Exists(file))
+                    {
+                        var text = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.VsTest.runsettings");
+                        text = text.Replace("[[ProxyTypes.dll]]", form.ProxyTypes.Name + ".dll");
+                        text = text.Replace("[[Namespace]]", solutionName);
+                        File.WriteAllText(file, text);
+                    }
+                    return;
                 }
                 else
                 {

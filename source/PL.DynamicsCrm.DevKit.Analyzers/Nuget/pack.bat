@@ -1,4 +1,5 @@
 @echo off
-nuget pack PL.DynamicsCrm.DevKit.Analyzers.nuspec -Tool
-copy PL.DynamicsCrm.DevKit.Analyzers.1.2.0.nupkg ..\..\Published\1.2.0\PL.DynamicsCrm.DevKit.Analyzers.1.2.0.nupkg /y
-exit
+set /p VERSION=<..\..\version.txt
+nuget pack PL.DynamicsCrm.DevKit.Analyzers.nuspec -Tool -Version %VERSION%
+if not exist ..\..\Published\%VERSION% mkdir ..\..\Published\%VERSION%
+copy PL.DynamicsCrm.DevKit.Analyzers.%VERSION%.nupkg ..\..\Published\%VERSION%\PL.DynamicsCrm.DevKit.Analyzers.%VERSION%.nupkg /y

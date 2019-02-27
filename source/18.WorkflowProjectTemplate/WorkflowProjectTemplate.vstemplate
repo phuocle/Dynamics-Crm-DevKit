@@ -5,7 +5,7 @@
     <Description>C# Workflow Project Template</Description>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
-    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <TemplateID>81716eca-ac92-4ef6-9728-592c2b9edd19</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>WorkflowProject</DefaultName>

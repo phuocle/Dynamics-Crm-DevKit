@@ -28,9 +28,8 @@ namespace PL.DynamicsCrm.DevKit.Package
 
         private Command1(Microsoft.VisualStudio.Shell.Package package)
         {
-            this.package = package ?? throw new ArgumentNullException("package");
-            var commandService = ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-            if (commandService != null)
+            this.package = package ?? throw new ArgumentNullException(nameof(package));
+            if (ServiceProvider.GetService(typeof(IMenuCommandService)) is OleMenuCommandService commandService)
             {
                 var menuCommandID = new CommandID(CommandSet, CommandId);
                 var menuItem = new OleMenuCommand(MenuItemCallback, menuCommandID);
@@ -47,7 +46,9 @@ namespace PL.DynamicsCrm.DevKit.Package
         private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
         {
             var menuCommand = sender as OleMenuCommand;
+            if (ServiceProvider == null) return;
             var dte = (DTE) ServiceProvider.GetService(typeof(DTE));
+            if (dte == null) return;
             var item = dte.SelectedItems.Item(1);
             if (item == null) return;
             if (item.Name == null) return;
@@ -117,7 +118,9 @@ namespace PL.DynamicsCrm.DevKit.Package
 
         private void MenuItemCallback(object sender, EventArgs e)
         {
+            if (ServiceProvider == null) return;
             var dte = (DTE) ServiceProvider.GetService(typeof(DTE));
+            if (dte == null) return;
             dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
             var activeDocument = dte.ActiveDocument;
             var solutionFullName = dte.Solution.FullName;
@@ -248,7 +251,7 @@ namespace PL.DynamicsCrm.DevKit.Package
             dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
         }
 
-        private string EncodeString(string value)
+        private static string EncodeString(string value)
         {
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(value));
         }

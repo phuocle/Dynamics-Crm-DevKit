@@ -147,9 +147,31 @@ namespace PL.DynamicsCrm.DevKit.Shared
     </filter>
   </entity>
 </fetch>";
-                var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
-                _processes = rows.Entities;
-                return _processes;
+                try
+                {
+                    var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
+                    _processes = rows.Entities;
+                    return _processes;
+                }
+                catch
+                {
+                    var fetchXml2 = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+  <entity name='workflow'>
+    <attribute name='name' />
+    <attribute name='uniquename' />
+    <attribute name='xaml' />
+    <filter type='and'>
+      <condition attribute='category' operator='eq' value='{fetchData.category /*4*/}'/>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode /*1*/}'/>
+      <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity /*4*/}'/>
+    </filter>
+  </entity>
+</fetch>";
+                    var rows2 = CrmService.RetrieveMultiple(new FetchExpression(fetchXml2));
+                    _processes = rows2.Entities;
+                    return _processes;
+                }
             }
         }
 

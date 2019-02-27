@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>PL.DynamicsCrm.DevKit.Cli</id>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <title>PL.DynamicsCrm.DevKit.Cli - CLI for PL.DynamicsCrm.DevKit tool</title>
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>
@@ -19,7 +19,6 @@
     <file src="..\Release\PL.DynamicsCrm.DevKit.Cli.json" target="tools\PL.DynamicsCrm.DevKit.Cli.json" />
     <file src="..\Release\Microsoft.Crm.Sdk.Proxy.dll" target="tools\Microsoft.Crm.Sdk.Proxy.dll" />
     <file src="..\Release\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" target="tools\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
-    <file src="..\Release\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll" target="tools\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll" />
     <file src="..\Release\Microsoft.Xrm.Sdk.Deployment.dll" target="tools\Microsoft.Xrm.Sdk.Deployment.dll" />
     <file src="..\Release\Microsoft.Xrm.Sdk.dll" target="tools\Microsoft.Xrm.Sdk.dll" />
     <file src="..\Release\Microsoft.Xrm.Sdk.Workflow.dll" target="tools\Microsoft.Xrm.Sdk.Workflow.dll" />

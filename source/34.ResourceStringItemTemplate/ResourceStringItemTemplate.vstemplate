@@ -6,7 +6,7 @@
     <Icon>icon.png</Icon>
     <TemplateID>0ff99023-2c48-4360-98ca-d7a770534a65</TemplateID>
     <ProjectType>CSharp</ProjectType>
-    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
     <DefaultName>ResourceString.resx</DefaultName>
   </TemplateData>

@@ -5,7 +5,7 @@
     <Description>C# Console Project Template</Description>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
-    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <TemplateID>ae0ddb0b-ef16-4c6f-9065-eb77fea2ba14</TemplateID>
     <CreateNewFolder>false</CreateNewFolder>
     <DefaultName>ConsoleProject</DefaultName>

@@ -6,7 +6,7 @@
     <Icon>icon.png</Icon>
     <TemplateID>33cf3373-dcd8-4ff7-879b-fd71ef16c5c3</TemplateID>
     <ProjectType>CSharp</ProjectType>
-    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
     <DefaultName>Class.cs</DefaultName>
   </TemplateData>

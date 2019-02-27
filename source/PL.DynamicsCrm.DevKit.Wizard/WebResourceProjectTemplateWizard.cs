@@ -48,31 +48,36 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-            if (runKind == WizardRunKind.AsNewProject)
+            if (runKind != WizardRunKind.AsNewProject) return;
+            Dte = (DTE)automationObject;
+            if (!Utility.SharedProjectExist(Dte))
             {
-                Dte = (DTE)automationObject;
-                var form = new FormProject(FormType.WebResource, Dte);
-                if (form.ShowDialog() == DialogResult.OK)
+                MessageBox.Show(@"Please add shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
+                throw new WizardCancelledException("Shared project should exist");
+            }
+            var form = new FormProject(FormType.WebResource, Dte);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                ProjectName = form.ProjectName;
+                if (!Utility.ExistProject(Dte, ProjectName))
                 {
-                    ProjectName = form.ProjectName;
-                    if (!Utility.ExistProject(Dte, ProjectName))
-                    {
-                        replacementsDictionary.Add("$DevKitVersion$", Const.Version);
-                        replacementsDictionary.Add("$version$", form.CrmVersion);
-                        replacementsDictionary.Add("$NetVersion$", form.NetVersion);
-                        replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
-                        replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
-                        replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
-                        replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
-                        replacementsDictionary.Add("$ProjectName$", form.ProjectName);
-                        replacementsDictionary.Add("$packagename$", form.AssemblyName.ToLower());
-                        var parts = replacementsDictionary["$RootNamespace$"].Split(".".ToCharArray());
-                        replacementsDictionary.Add("$ProjectNameJs$", $"{parts[1]}");
-                        replacementsDictionary.Add("$WebApiClientMin$", GetWebApiClientMin(parts[1]));
-                        replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
-                        replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
-                        return;
-                    }
+                    replacementsDictionary.Add("$CrmName$", form.CrmName);
+                    replacementsDictionary.Add("$DevKitVersion$", Const.Version);
+                    replacementsDictionary.Add("$version$", form.CrmVersion);
+                    replacementsDictionary.Add("$NetVersion$", form.NetVersion);
+                    replacementsDictionary.Add("$AssemblyName$", form.AssemblyName);
+                    replacementsDictionary.Add("$RootNamespace$", form.RootNamespace);
+                    replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
+                    replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
+                    replacementsDictionary.Add("$ProjectName$", form.ProjectName);
+                    replacementsDictionary.Add("$packagename$", form.AssemblyName.ToLower());
+                    var parts = replacementsDictionary["$RootNamespace$"].Split(".".ToCharArray());
+                    replacementsDictionary.Add("$ProjectNameJs$", $"{parts[1]}");
+                    replacementsDictionary.Add("$WebApiClientMin$", GetWebApiClientMin(parts[1]));
+                    replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
+                    replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
+                    return;
                 }
                 else
                 {

@@ -34,7 +34,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
     <filter type='and'>
       <condition attribute='customizationlevel' operator='eq' value='{fetchData.customizationlevel}'/>
     </filter>
-    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid'>
+    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid' link-type='outer'>
       <filter type='and'>
         <condition attribute='endpoint' operator='eq' value='{fetchData.endpoint}'/>
       </filter>

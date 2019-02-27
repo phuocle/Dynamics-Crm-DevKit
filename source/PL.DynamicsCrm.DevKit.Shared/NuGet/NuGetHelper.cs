@@ -28,11 +28,17 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                                                           select new NuGetPackage
                                                           {
                                                               Version = item.Version.ToOriginalString(),
-                                                              NetVersion = item.GetSupportedFrameworks().FirstOrDefault()?.Version.ToString(),
+                                                              NetVersion = GetSupportedFrameworks(item),
                                                               CrmName = GetCrmName(item.Version.Version)
                                                           }).ToList();
                 return _microsoftCrmSdkCoreAssembliesPackages;
             }
+        }
+
+        private string GetSupportedFrameworks(IPackage item)
+        {
+            var supportedFrameworks = item.GetSupportedFrameworks();
+            return supportedFrameworks?.FirstOrDefault()?.Version?.ToString();
         }
 
         private string GetCrmName(Version version)
@@ -65,7 +71,6 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                 if (_microsoftCrmSdkCoreToolsPackages != null)
                     return _microsoftCrmSdkCoreToolsPackages;
                 var list = GetPackages("Microsoft.CrmSdk.CoreTools");
-                list = null;
                 if (list == null)
                 {
                     return new List<NuGetPackage> { new NuGetPackage {
@@ -100,6 +105,64 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                                 }).ToList();
                 return packages.FirstOrDefault();
             }
+        }
+
+        public NuGetPackage MicrosoftCrmSdkDeployment(string crmName)
+        {
+            var list = GetPackages("Microsoft.CrmSdk.Deployment");
+            var item = (from i in list
+                        where crmName == GetCrmName(i.Version.Version)
+                        orderby i.Version.ToOriginalString() descending
+                        select i).First();
+            var @return = new NuGetPackage
+            {
+                Version = item.Version.ToOriginalString(),
+                NetVersion = item.GetSupportedFrameworks().FirstOrDefault()?.Version.ToString()
+            };
+            if (crmName == "Dynamics Crm 2015") @return.NetVersion = "4.5";
+            return @return;
+        }
+
+        public NuGetPackage MicrosoftCrmSdkWorkflow(string crmName)
+        {
+            var list = GetPackages("Microsoft.CrmSdk.Workflow");
+            var item = (from i in list
+                        where crmName == GetCrmName(i.Version.Version)
+                        orderby i.Version.ToOriginalString() descending
+                        select i).First();
+            var @return = new NuGetPackage
+            {
+                Version = item.Version.ToOriginalString(),
+                NetVersion = item.GetSupportedFrameworks().FirstOrDefault()?.Version.ToString()
+            };
+            return @return;
+        }
+
+        public NuGetPackage MicrosoftCrmSdkXrmToolingCoreAssembly(string crmName)
+        {
+            var list = GetPackages("Microsoft.CrmSdk.XrmTooling.CoreAssembly");
+            var item = (from i in list
+                        where crmName == GetCrmName(i.Version.Version)
+                        orderby i.Version.ToOriginalString() descending
+                        select i).First();
+            return new NuGetPackage
+            {
+                Version = item.Version.ToOriginalString(),
+                NetVersion = item.GetSupportedFrameworks().FirstOrDefault()?.Version.ToString()
+            };
+        }
+
+        public NuGetPackage FakeXrmEasy(string shortName)
+        {
+            var list = GetPackages($"FakeXrmEasy.{shortName}");
+            var item = (from i in list
+                        orderby i.Version descending
+                        select i).First();
+            return new NuGetPackage
+            {
+                Version = item.Version.ToOriginalString(),
+                NetVersion = item.GetSupportedFrameworks().FirstOrDefault()?.Version.ToString()
+            };
         }
 
         public NuGetPackage PLDynamicsCrmDevKitAnalyzersPackage

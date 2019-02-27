@@ -5,7 +5,7 @@
     <Description>C# Report Project Template</Description>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
-    <RequiredFrameworkVersion>4.5.2</RequiredFrameworkVersion>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <TemplateID>3a28de4f-2b6e-401f-a152-0dd26a9c78ba</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>ReportProject</DefaultName>
