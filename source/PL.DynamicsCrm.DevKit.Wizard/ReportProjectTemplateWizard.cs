@@ -30,20 +30,24 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunFinished()
         {
-            var projectFullName = Project.FullName;
-            Dte.Solution.Remove(Project);
-            File.WriteAllText(projectFullName, Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.ReportProjectTemplate.csproj"), System.Text.Encoding.UTF8);
-            var fInfoProject = new FileInfo(projectFullName);
-            fInfoProject.MoveTo(fInfoProject.DirectoryName + "\\" + ProjectName + ".rptproj");
-            var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
-            var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
-            Utility.TryDeleteDirectory(folder);
-            dInfoProject.MoveTo(folder);
-            Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".rptproj");
-            Dte.Solution.SaveAs(Dte.Solution.FullName);
-            var tfs = new Tfs(Dte);
-            tfs.Undo(fInfoProject.DirectoryName);
-            tfs.Add(dInfoProject.FullName);
+            try
+            {
+                var projectFullName = Project.FullName;
+                Dte.Solution.Remove(Project);
+                File.WriteAllText(projectFullName, Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.ReportProjectTemplate.csproj"), System.Text.Encoding.UTF8);
+                var fInfoProject = new FileInfo(projectFullName);
+                fInfoProject.MoveTo(fInfoProject.DirectoryName + "\\" + ProjectName + ".rptproj");
+                var dInfoProject = new DirectoryInfo(fInfoProject.DirectoryName ?? throw new InvalidOperationException());
+                var folder = dInfoProject.Parent?.FullName + "\\" + ProjectName;
+                Utility.TryDeleteDirectory(folder);
+                dInfoProject.MoveTo(folder);
+                Dte.Solution.AddFromFile(dInfoProject.Parent?.FullName + "\\" + ProjectName + "\\" + ProjectName + ".rptproj");
+                Dte.Solution.SaveAs(Dte.Solution.FullName);
+                var tfs = new Tfs(Dte);
+                tfs.Undo(fInfoProject.DirectoryName);
+                tfs.Add(dInfoProject.FullName);
+            }
+            catch { }
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)

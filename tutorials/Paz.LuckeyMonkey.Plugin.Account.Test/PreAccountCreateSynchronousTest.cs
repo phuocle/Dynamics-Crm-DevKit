@@ -1,14 +1,13 @@
 ﻿using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
-using Paz.LuckeyMonkey.Plugin.Account;
+using System;
+using System.Reflection;
 using Paz.LuckeyMonkey.ProxyTypes;
 using Paz.LuckeyMonkey.Shared;
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 
-namespace Paz.LuckeyMonkey.Plugin
+namespace Paz.LuckeyMonkey.PluginAccount.Test
 {
     [TestClass]
     public class PreAccountCreateSynchronousTest
@@ -20,12 +19,30 @@ namespace Paz.LuckeyMonkey.Plugin
         public static void ClassInit(TestContext context)
         {
             Context = new XrmFakedContext();
+            Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
             PluginContext = Context.GetDefaultPluginContext();
+            PluginContext.PrimaryEntityName = "account";
             PluginContext.MessageName = "Create";
             PluginContext.Stage = (int)StageEnum.PreOperation;
             PluginContext.Mode = (int)ExecutionModeEnum.Synchronous;
             PluginContext.InputParameters["Target"] = null;
         }
+
+        /*
+        [TestMethod]
+        public void PreAccountCreate_UnsecureString_And_SecureString()
+        {
+            var target = new Entity("account")
+            {
+                ["accountid"] = Guid.NewGuid()
+            };
+            PluginContext.InputParameters["Target"] = target;
+            var unsecureString = "UnsecureString";
+            var secureString = "SecureString";
+            Context.ExecutePluginWithConfigurations<PreAccountCreateSynchronous>(PluginContext, unsecureString, secureString);
+            Assert.IsTrue(target != null);
+        }
+        */
 
         [TestMethod]
         public void PreAccountCreate_Stage_Does_Not_Equals_PreOperation()
@@ -33,7 +50,10 @@ namespace Paz.LuckeyMonkey.Plugin
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = -1;
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PreAccountCreateSynchronous>(plugin, null, null), "Stage does not equals PreOperation");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PreAccountCreateSynchronous>(plugin);
+            }, "Stage does not equals PreOperation");
         }
 
         [TestMethod]
@@ -43,7 +63,10 @@ namespace Paz.LuckeyMonkey.Plugin
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int)StageEnum.PreOperation;
             plugin.PrimaryEntityName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PreAccountCreateSynchronous>(plugin, null, null), "PrimaryEntityName does not equals account");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PreAccountCreateSynchronous>(plugin);
+            }, "Stage does not equals account");
         }
 
         [TestMethod]
@@ -54,7 +77,10 @@ namespace Paz.LuckeyMonkey.Plugin
             plugin.Stage = (int)StageEnum.PreOperation;
             plugin.PrimaryEntityName = "account";
             plugin.MessageName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PreAccountCreateSynchronous>(plugin, null, null), "MessageName does not equals Create");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PreAccountCreateSynchronous>(plugin);
+            }, "Stage does not equals Create");
         }
 
         [TestMethod]
@@ -66,7 +92,10 @@ namespace Paz.LuckeyMonkey.Plugin
             plugin.PrimaryEntityName = "account";
             plugin.MessageName = "Create";
             plugin.Mode = -1;
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PreAccountCreateSynchronous>(plugin, null, null), "Execution does not equal Synchronous");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PreAccountCreateSynchronous>(plugin);
+            }, "Stage does not equals Synchronous");
         }
 
         /*

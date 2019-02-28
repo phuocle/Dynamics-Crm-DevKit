@@ -1,13 +1,9 @@
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Query;
+﻿using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml;
 
 namespace Paz.LuckeyMonkey.Shared
 {
@@ -26,7 +22,7 @@ namespace Paz.LuckeyMonkey.Shared
         }
 
         public Entity Entity { get; set; }
-        public Entity PreEntity { get; set; }
+        protected Entity PreEntity { get; set; }
         public Guid Id { get { return Entity.Id; } }
 
         protected object CloneAttribute(object value)

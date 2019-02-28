@@ -57,21 +57,21 @@
             this.groupBox.Controls.Add(this.label4);
             this.groupBox.Controls.Add(this.ddlMessage);
             this.groupBox.Controls.Add(this.label3);
-            this.groupBox.Location = new System.Drawing.Point(9, 29);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(1);
+            this.groupBox.Location = new System.Drawing.Point(14, 45);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(2, 15, 4, 0);
-            this.groupBox.Size = new System.Drawing.Size(311, 112);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(3, 23, 6, 0);
+            this.groupBox.Size = new System.Drawing.Size(466, 167);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             // 
             // btnConnection
             // 
             this.btnConnection.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnection.Location = new System.Drawing.Point(279, 17);
+            this.btnConnection.Location = new System.Drawing.Point(418, 26);
             this.btnConnection.Margin = new System.Windows.Forms.Padding(0);
             this.btnConnection.Name = "btnConnection";
-            this.btnConnection.Size = new System.Drawing.Size(28, 28);
+            this.btnConnection.Size = new System.Drawing.Size(42, 43);
             this.btnConnection.TabIndex = 17;
             this.btnConnection.Text = "><";
             this.btnConnection.UseVisualStyleBackColor = true;
@@ -84,19 +84,19 @@
             this.ddlExecution.Items.AddRange(new object[] {
             "Synchronous",
             "Asynchronous"});
-            this.ddlExecution.Location = new System.Drawing.Point(71, 77);
-            this.ddlExecution.Margin = new System.Windows.Forms.Padding(1);
+            this.ddlExecution.Location = new System.Drawing.Point(106, 118);
+            this.ddlExecution.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ddlExecution.Name = "ddlExecution";
-            this.ddlExecution.Size = new System.Drawing.Size(202, 21);
+            this.ddlExecution.Size = new System.Drawing.Size(301, 28);
             this.ddlExecution.TabIndex = 12;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 80);
-            this.label1.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.label1.Location = new System.Drawing.Point(10, 123);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(57, 13);
+            this.label1.Size = new System.Drawing.Size(83, 20);
             this.label1.TabIndex = 13;
             this.label1.Text = "Execution:";
             // 
@@ -108,20 +108,20 @@
             "PreValidation",
             "PreOperation",
             "PostOperation"});
-            this.ddlStage.Location = new System.Drawing.Point(71, 48);
-            this.ddlStage.Margin = new System.Windows.Forms.Padding(1);
+            this.ddlStage.Location = new System.Drawing.Point(106, 74);
+            this.ddlStage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ddlStage.Name = "ddlStage";
-            this.ddlStage.Size = new System.Drawing.Size(202, 21);
+            this.ddlStage.Size = new System.Drawing.Size(301, 28);
             this.ddlStage.TabIndex = 5;
             this.ddlStage.SelectedIndexChanged += new System.EventHandler(this.ddlStage_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 51);
-            this.label4.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+            this.label4.Location = new System.Drawing.Point(10, 78);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(38, 13);
+            this.label4.Size = new System.Drawing.Size(56, 20);
             this.label4.TabIndex = 11;
             this.label4.Text = "Stage:";
             // 
@@ -129,30 +129,30 @@
             // 
             this.ddlMessage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddlMessage.FormattingEnabled = true;
-            this.ddlMessage.Location = new System.Drawing.Point(71, 21);
+            this.ddlMessage.Location = new System.Drawing.Point(106, 32);
             this.ddlMessage.Margin = new System.Windows.Forms.Padding(0);
             this.ddlMessage.Name = "ddlMessage";
-            this.ddlMessage.Size = new System.Drawing.Size(202, 21);
+            this.ddlMessage.Size = new System.Drawing.Size(301, 28);
             this.ddlMessage.TabIndex = 4;
             this.ddlMessage.SelectedIndexChanged += new System.EventHandler(this.ddlMessage_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 24);
+            this.label3.Location = new System.Drawing.Point(10, 37);
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.Size = new System.Drawing.Size(78, 20);
             this.label3.TabIndex = 8;
             this.label3.Text = "Message:";
             // 
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(10, 144);
+            this.progressBar.Location = new System.Drawing.Point(15, 221);
             this.progressBar.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(405, 3);
+            this.progressBar.Size = new System.Drawing.Size(607, 5);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 25;
             this.progressBar.Visible = false;
@@ -160,10 +160,9 @@
             // link
             // 
             this.link.AutoSize = true;
-            this.link.Location = new System.Drawing.Point(7, 10);
-            this.link.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.link.Location = new System.Drawing.Point(10, 15);
             this.link.Name = "link";
-            this.link.Size = new System.Drawing.Size(55, 13);
+            this.link.Size = new System.Drawing.Size(80, 20);
             this.link.TabIndex = 26;
             this.link.TabStop = true;
             this.link.Text = "linkLabel1";
@@ -171,10 +170,10 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(330, 54);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
+            this.btnCancel.Location = new System.Drawing.Point(495, 83);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(80, 28);
+            this.btnCancel.Size = new System.Drawing.Size(120, 43);
             this.btnCancel.TabIndex = 28;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -183,10 +182,10 @@
             // btnOk
             // 
             this.btnOk.Enabled = false;
-            this.btnOk.Location = new System.Drawing.Point(330, 22);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(1);
+            this.btnOk.Location = new System.Drawing.Point(495, 34);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(80, 28);
+            this.btnOk.Size = new System.Drawing.Size(120, 43);
             this.btnOk.TabIndex = 27;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -194,23 +193,24 @@
             // 
             // FormClassPlugin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(420, 152);
+            this.ClientSize = new System.Drawing.Size(630, 234);
             this.ControlBox = false;
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.link);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormClassPlugin";
-            this.Padding = new System.Windows.Forms.Padding(10, 3, 5, 5);
+            this.Padding = new System.Windows.Forms.Padding(15, 5, 8, 8);
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add New Plugin Class";

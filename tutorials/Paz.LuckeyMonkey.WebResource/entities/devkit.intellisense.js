@@ -63,6 +63,15 @@ var OptionSet = {
         ///<field name='Collapsed' type='PickListValue'>collapsed</field>
         Collapsed: 'collapsed'
     },
+    ///<field name='ProcessDisplayState' type='PickList'></field>
+    ProcessDisplayState: {
+        ///<field name='Expanded' type='PickListValue'>expanded</field>
+        Expanded: 'expanded',
+        ///<field name='Collapsed' type='PickListValue'>collapsed</field>
+        Collapsed: 'collapsed',
+        ///<field name='Floating' type='PickListValue'>floating</field>
+        Floating: 'floating'
+    },
     ///<field name='AttributeType' type='PickList'></field>
     FieldAttributeType: {
         ///<field name='Boolean' type='PickListValue'>boolean</field>
@@ -231,6 +240,15 @@ var OptionSet = {
         Research: 5,
         ///<field name='Resolve' type='PickListValue'>Resolve</field>
         Resolve: 6
+    },
+    ///<field name='ProcessStatus' type='PickList'></field>
+    ProcessStatus: {
+        ///<field name='Active' type='PickListValue'>Active</field>
+        Active: 'active',
+        ///<field name='Aborted' type='PickListValue'>Aborted</field>
+        Aborted: 'aborted',
+        ///<field name='Finished' type='PickListValue'>Finished</field>
+        Finished: 'finished'
     },
     ///<field name='TimerState' type='PickList'></field>
     TimerState: {
@@ -658,7 +676,17 @@ intellisense.Process = {
     ///<field name='AddOnStageSelected' type='Function'></field>
     AddOnStageSelected: intellisense.FunctionProcessAddOnStageSelected,
     ///<field name='RemoveOnStageSelected' type='Function'></field>
-    RemoveOnStageSelected: intellisense.FunctionProcessRemoveOnStageSelected
+    RemoveOnStageSelected: intellisense.FunctionProcessRemoveOnStageSelected,
+    ///<field name='Visible' type='Boolean'>[GetSet] returns a value that indicates whether the control is currently visible.</field>
+    Visible: '',
+    ///<field name='DisplayState' type='OptionSet.ProcessDisplayState'>[GetSet] a value that indicates whether the tab is collapsed or expanded.</field>
+    DisplayState: '',
+    ///<field name='InstanceId' type='String'>[Get] returns the unique identifier of the process instance.</field>
+    InstanceId: '',
+    ///<field name='InstanceName' type='String'>[Get] returns the name of the process instance.</field>
+    InstanceName: '',
+    ///<field name='Status' type='OptionSet.ProcessStatus'>[GetSet] a value that indicates whether the tab is collapsed or expanded.</field>
+    Status: ''
 }
 intellisense.FunctionUtilityCloseProgressIndicator = function () {
     ///<summary>
@@ -700,6 +728,13 @@ intellisense.FunctionUtilityResourceString = function (webResourceName, key) {
     ///Returns the localized string for a given key associated with the specified web resource.
     ///</summary>
     ///<param name='webResourceName' type='String'>The name of the web resource.</param>
+    ///<param name='key' type='String'>The key for the localized string.</param>
+    ///<returns type='void' />
+}
+intellisense.FunctionUtilityResource = function (key) {
+    ///<summary>
+    ///Returns the localized string for a given key associated with the default web resource name
+    ///</summary>
     ///<param name='key' type='String'>The key for the localized string.</param>
     ///<returns type='void' />
 }
@@ -1090,6 +1125,8 @@ intellisense.Utility = {
     LearningPathAttributeName: '',
     ///<field name='ResourceString' type='Function'></field>
     ResourceString: intellisense.FunctionUtilityResourceString,
+    ///<field name='Resource' type='Function'></field>
+    Resource: intellisense.FunctionUtilityResource,
     ///<field name='InvokeProcessAction' type='Function'></field>
     InvokeProcessAction: intellisense.FunctionUtilityInvokeProcessAction,
     ///<field name='LookupObjects' type='Function'></field>
@@ -3214,7 +3251,7 @@ var WebApiClient = {
     'Response': function () { },
     ///<field name='Retrieve' type='Function'></field>
     'Retrieve': function (request) {
-        ///<param name='request' type='LuckeyMonkey2.WebApi.RetrieveRequest'></param>
+        ///<param name='request' type='LuckeyMonkey.WebApi.RetrieveRequest'></param>
         return {
             ///<field name='then' type='Function'></field>
             then: intellisense.WebApiCatch,
@@ -3232,7 +3269,7 @@ var WebApiClient = {
     'Token': '',
     ///<field name='Update' type='Function'></field>
     'Update': function (request) {
-        ///<param name='request' type='LuckeyMonkey2.WebApi.UpdateRequest'></param>
+        ///<param name='request' type='LuckeyMonkey.WebApi.UpdateRequest'></param>
         return {
             ///<field name='then' type='Function'></field>
             then: intellisense.WebApiCatch

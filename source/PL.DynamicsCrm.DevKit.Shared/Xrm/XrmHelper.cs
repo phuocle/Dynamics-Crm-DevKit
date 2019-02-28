@@ -34,7 +34,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
     <filter type='and'>
       <condition attribute='customizationlevel' operator='eq' value='{fetchData.customizationlevel}'/>
     </filter>
-    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid' link-type='outer'>
+    <link-entity name='sdkmessagepair' from='sdkmessagepairid' to='sdkmessagepairid' link-type='inner'>
       <filter type='and'>
         <condition attribute='endpoint' operator='eq' value='{fetchData.endpoint}'/>
       </filter>
@@ -50,7 +50,6 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
                 }).ToList();
             return list;
         }
-
 
         public List<XrmEntity> GetAllEntities()
         {

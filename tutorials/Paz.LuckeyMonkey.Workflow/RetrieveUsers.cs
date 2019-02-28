@@ -10,9 +10,14 @@ namespace Paz.LuckeyMonkey.Workflow
     [CrmPluginRegistration("RetrieveUsers", "RetrieveUsers", "", "Paz.LuckeyMonkey.Workflow", IsolationModeEnum.Sandbox)]
     public class RetrieveUsers : CodeActivity
     {
+        //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity
+
         [Output("UserIds")]
         [RequiredArgument]
         public OutArgument<string> UserIds { get; set; }
+
+        //[Default("Default OutputValue"), Output("OutputValue")]
+        //public OutArgument<string> OutputValue { get; set; }
 
         protected override void Execute(CodeActivityContext executionContext)
         {
@@ -20,12 +25,16 @@ namespace Paz.LuckeyMonkey.Workflow
             var serviceFactory = executionContext.GetExtension<IOrganizationServiceFactory>();
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
+
+            //Debugger.Begin(tracing, executionContext);
+
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
+
+            //Debugger.Begin(tracing, executionContext);
         }
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            Debugger.Trace(tracing, "Begin Execute Workflow: RetrieveUsers");
             //YOUR CUSTOM-WORKFLOW-CODE GO HERE
             var fetchData = new
             {
@@ -58,7 +67,6 @@ namespace Paz.LuckeyMonkey.Workflow
                 .Select(u => u.Id).Distinct().ToList());
             UserIds.Set(executionContext, userIds);
 
-            Debugger.Trace(tracing, "End Execute Workflow: RetrieveUsers");
         }
     }
 }

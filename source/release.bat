@@ -1,7 +1,7 @@
 @echo off
 set /p VERSION=<version.txt
 echo ************************************************************
-echo Building solutions in DEPLOY version: %VERSION%
+echo Building solution: DEPLOY - version: %VERSION%
 echo ************************************************************
 set MsBuild=""
 if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe" (

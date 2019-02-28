@@ -273,7 +273,7 @@
             this.Controls.Add(this.link);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

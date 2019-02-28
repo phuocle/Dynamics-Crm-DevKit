@@ -42,7 +42,6 @@ $privateclass$
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
             var outputs = new ParameterCollection();
-            //var input = (string)context.InputParameters?["input"];
             //YOUR CUSTOM ACTION BEGIN HERE
 
             return outputs;

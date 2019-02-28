@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EnvDTE;
+using PL.DynamicsCrm.DevKit.Shared;
 using PL.DynamicsCrm.DevKit.Shared.Xrm;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
@@ -15,6 +16,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public FormClassPlugin(DTE dte, FormType formType, string entityName, string logicalName)
         {
             InitializeComponent();
+
+            Text = "PL.DynamicsCrm.DevKit - v." + Const.Version;
 
             Dte = dte;
 

@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright file="SimpleJson.cs" company="The Outercurve Foundation">
 //    Copyright (c) 2011, The Outercurve Foundation.
 //
@@ -58,6 +58,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 #endif
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 #if SIMPLE_JSON_DYNAMIC
 using System.Dynamic;
@@ -79,6 +80,7 @@ namespace Paz.LuckeyMonkey.Shared
     [GeneratedCode("simple-json", "1.0.0")]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [DebuggerNonUserCode()]
 #if SIMPLE_JSON_OBJARRAYINTERNAL
     internal
 #else
@@ -113,6 +115,7 @@ namespace Paz.LuckeyMonkey.Shared
     [GeneratedCode("simple-json", "1.0.0")]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [DebuggerNonUserCode()]
 #if SIMPLE_JSON_OBJARRAYINTERNAL
     internal
 #else
@@ -494,6 +497,7 @@ namespace Paz.LuckeyMonkey.Shared
     /// All numbers are parsed to doubles.
     /// </summary>
     [GeneratedCode("simple-json", "1.0.0")]
+    [DebuggerNonUserCode()]
 #if SIMPLE_JSON_INTERNAL
     internal
 #else
@@ -1058,6 +1062,10 @@ namespace Paz.LuckeyMonkey.Shared
             {
                 object key = ke.Current;
                 object value = ve.Current;
+                if (key?.ToString() == "Item" && value == null)
+                {
+                    continue;
+                }
                 if (!first)
                     builder.Append(",");
                 string stringKey = key as string;
@@ -1237,6 +1245,7 @@ namespace Paz.LuckeyMonkey.Shared
     }
 
     [GeneratedCode("simple-json", "1.0.0")]
+    [DebuggerNonUserCode()]
 #if SIMPLE_JSON_INTERNAL
     internal
 #else
@@ -1506,7 +1515,7 @@ namespace Paz.LuckeyMonkey.Shared
             IDictionary<string, ReflectionUtils.GetDelegate> getters = GetCache[type];
             foreach (KeyValuePair<string, ReflectionUtils.GetDelegate> getter in getters)
             {
-                if (getter.Value != null)
+                if (getter.Value != null && getter.Key != "Item")
                     obj.Add(MapClrMemberNameToJsonFieldName(getter.Key), getter.Value(input));
             }
             output = obj;
@@ -1598,6 +1607,7 @@ namespace Paz.LuckeyMonkey.Shared
         // This class is meant to be copied into other libraries. So we want to exclude it from Code Analysis rules
         // that might be in place in the target project.
         [GeneratedCode("reflection-utils", "1.0.0")]
+        [DebuggerNonUserCode()]
 #if SIMPLE_JSON_REFLECTION_UTILS_PUBLIC
         public
 #else
@@ -1891,7 +1901,12 @@ namespace Paz.LuckeyMonkey.Shared
             public static GetDelegate GetGetMethodByReflection(PropertyInfo propertyInfo)
             {
                 MethodInfo methodInfo = GetGetterMethodInfo(propertyInfo);
-                return delegate (object source) { return methodInfo.Invoke(source, EmptyObjects); };
+                return delegate (object source)
+                {
+                    if (methodInfo.Name == "get_Item")
+                        return null;
+                    return methodInfo.Invoke(source, EmptyObjects);
+                };
             }
 
             public static GetDelegate GetGetMethodByReflection(FieldInfo fieldInfo)

@@ -462,7 +462,7 @@ namespace Paz.LuckeyMonkey.Shared
         public string Image2Name { get; set; }
         public string Image2Attributes { get; set; }
         public string Description { get; set; }
-        public bool? DeleteAsyncOperation { get; set; }
+        public bool DeleteAsyncOperation { get; set; } = false;
         public string UnSecureConfiguration { get; set; }
         public string SecureConfiguration { get; set; }
         public bool Offline { get; set; }
@@ -536,13 +536,15 @@ namespace Paz.LuckeyMonkey.Shared
             {
                 return $"{ind}<null>";
             }
-            else if (v is Entity e)
+            else if (v is Entity)
             {
+                var e = (Entity)v;
                 var keylen = e.Attributes.Count > 0 ? e.Attributes.Max(p => p.Key.Length) : 50;
                 return $"{e.LogicalName} {e.Id}\n{ind}" + string.Join($"\n{ind}", e.Attributes.OrderBy(a => a.Key).Select(a => $"{a.Key}{new string(' ', keylen - a.Key.Length)} = {ValueToString(a.Value, indent + 1)}"));
             }
-            else if (v is ColumnSet c)
+            else if (v is ColumnSet)
             {
+                var c = (ColumnSet)v;
                 var a = new List<string>(c.Columns);
                 a.Sort();
                 return $"\n{ind}" + string.Join($"\n{ind}", a);
@@ -550,16 +552,19 @@ namespace Paz.LuckeyMonkey.Shared
             else
             {
                 var r = string.Empty;
-                if (v is EntityReference er)
+                if (v is EntityReference)
                 {
+                    var er = (EntityReference)v;
                     r = $"{er.LogicalName} {er.Id} {er.Name}";
                 }
-                else if (v is OptionSetValue o)
+                else if (v is OptionSetValue)
                 {
+                    var o = (OptionSetValue)v;
                     r = ((OptionSetValue)v).Value.ToString();
                 }
-                else if (v is Money m)
+                else if (v is Money)
                 {
+                    var m = (Money)v;
                     r = ((Money)m).Value.ToString();
                 }
                 else

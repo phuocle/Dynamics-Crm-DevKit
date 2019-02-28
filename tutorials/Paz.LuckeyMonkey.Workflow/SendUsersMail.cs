@@ -1,8 +1,4 @@
-﻿using System;
-using System.Activities;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -11,12 +7,18 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk.Workflow;
 using Paz.LuckeyMonkey.Shared;
 using Paz.LuckeyMonkey.Shared.Entities;
+using System;
+using System.Activities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Paz.LuckeyMonkey.Workflow
 {
     [CrmPluginRegistration("SendUsersMail", "SendUsersMail", "", "Paz.LuckeyMonkey.Workflow", IsolationModeEnum.Sandbox)]
     public class SendUsersMail : CodeActivity
     {
+        //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity
+
         [Input("List UserIds")]
         [RequiredArgument]
         public InArgument<string> UserIds { get; set; }
@@ -35,13 +37,17 @@ namespace Paz.LuckeyMonkey.Workflow
             var serviceFactory = executionContext.GetExtension<IOrganizationServiceFactory>();
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
+
+            //Debugger.Begin(tracing, executionContext);
+
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
+
+            //Debugger.Begin(tracing, executionContext);
         }
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            Debugger.Trace(tracing, "Begin Execute Workflow: SendUsersMail");
-            //YOUR CUSTOM-WORKFLOW-CODE GO HERE
+            //YOUR WORKFLOW-CODE GO HERE
             var templateId = GetTemplateId(executionContext, service);
             if (templateId == Guid.Empty) return;
             var objectId = GetRecordId(executionContext);
@@ -71,7 +77,6 @@ namespace Paz.LuckeyMonkey.Workflow
                 };
                 service.Execute(sendRequest);
             }
-            Debugger.Trace(tracing, "End Execute Workflow: SendUsersMail");
         }
 
         private List<ActivityParty> GetToEmail(CodeActivityContext executionContext)

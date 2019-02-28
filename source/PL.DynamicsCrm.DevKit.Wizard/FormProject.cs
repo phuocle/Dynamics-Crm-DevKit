@@ -197,7 +197,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 txtName.Visible = false;
                 cboEntity.Visible = false;
                 btnConnection.Visible = false;
-
+                Text = "PL.DynamicsCrm.DevKit - v." + Const.Version;
                 switch (_formType)
                 {
                     case FormType.Console:
@@ -480,8 +480,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
                         txtName.Visible = true;
 
-                        btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
-                        btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
+                        lblCrmName.Visible = true;
+                        cboCrmName.Visible = true;
+                        lblCrmVersion.Visible = true;
+                        cboCrmVersion.Visible = true;
+                        cboCrmName.Enabled = false;
+                        cboCrmVersion.Enabled = false;
+
+                        //btnOk.Location = new Point(txtName.Location.X, btnOk.Location.Y);
+                        //btnCancel.Location = new Point(txtName.Location.X + btnOk.Width + 20, btnCancel.Location.Y);
 
                         break;
                     case FormType.JsFormItem:

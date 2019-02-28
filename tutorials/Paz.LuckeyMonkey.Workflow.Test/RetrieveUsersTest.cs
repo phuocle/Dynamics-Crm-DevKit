@@ -1,12 +1,12 @@
-﻿using FakeXrmEasy;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Paz.LuckeyMonkey.ProxyTypes;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
 
-namespace Paz.LuckeyMonkey.Workflow
+namespace Paz.LuckeyMonkey.Workflow.Test
 {
     [TestClass]
     public class RetrieveUsersTest
@@ -64,18 +64,18 @@ namespace Paz.LuckeyMonkey.Workflow
                 Entity2Attribute = "teamid",
                 Entity2LogicalName = "team"
             });
-            Context.GetFakedOrganizationService().Associate("team", TEAM_ID_1, new Relationship("teammembership"), new EntityReferenceCollection() {
+            Context.GetOrganizationService().Associate("team", TEAM_ID_1, new Relationship("teammembership"), new EntityReferenceCollection() {
                 currentUser.ToEntityReference(),
                 user1.ToEntityReference(),
                 user2.ToEntityReference(),
                 user3.ToEntityReference()
             });
-            Context.GetFakedOrganizationService().Associate("team", TEAM_ID_2, new Relationship("teammembership"), new EntityReferenceCollection() {
+            Context.GetOrganizationService().Associate("team", TEAM_ID_2, new Relationship("teammembership"), new EntityReferenceCollection() {
                 currentUser.ToEntityReference(),
                 user3.ToEntityReference(),
                 user4.ToEntityReference()
             });
-            Context.GetFakedOrganizationService().Associate("team", TEAM_ID_3, new Relationship("teammembership"), new EntityReferenceCollection() {
+            Context.GetOrganizationService().Associate("team", TEAM_ID_3, new Relationship("teammembership"), new EntityReferenceCollection() {
                 user1.ToEntityReference(),
                 user5.ToEntityReference()
             });

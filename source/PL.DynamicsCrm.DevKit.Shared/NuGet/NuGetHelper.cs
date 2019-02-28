@@ -24,7 +24,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                     }};
                 }
                 _microsoftCrmSdkCoreAssembliesPackages = (from item in list
-                                                          orderby item.Version.ToOriginalString() descending
+                                                          orderby item.Version descending
                                                           select new NuGetPackage
                                                           {
                                                               Version = item.Version.ToOriginalString(),
@@ -80,7 +80,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                     }};
                 }
                 _microsoftCrmSdkCoreToolsPackages = (from item in list
-                                                     orderby item.Version.ToOriginalString() descending
+                                                     orderby item.Version descending
                                                      select new NuGetPackage
                                                      {
                                                          Version = item.Version.ToOriginalString(),
@@ -98,7 +98,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                 var list = GetPackages("PL.DynamicsCrm.DevKit.Cli");
                 if (list == null) return new NuGetPackage { Version = Const.Version };
                 var packages = (from item in list
-                                orderby item.Version.ToOriginalString() descending
+                                orderby item.Version descending
                                 select new NuGetPackage
                                 {
                                     Version = item.Version.ToOriginalString()
@@ -112,7 +112,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
             var list = GetPackages("Microsoft.CrmSdk.Deployment");
             var item = (from i in list
                         where crmName == GetCrmName(i.Version.Version)
-                        orderby i.Version.ToOriginalString() descending
+                        orderby i.Version descending
                         select i).First();
             var @return = new NuGetPackage
             {
@@ -128,7 +128,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
             var list = GetPackages("Microsoft.CrmSdk.Workflow");
             var item = (from i in list
                         where crmName == GetCrmName(i.Version.Version)
-                        orderby i.Version.ToOriginalString() descending
+                        orderby i.Version descending
                         select i).First();
             var @return = new NuGetPackage
             {
@@ -143,7 +143,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
             var list = GetPackages("Microsoft.CrmSdk.XrmTooling.CoreAssembly");
             var item = (from i in list
                         where crmName == GetCrmName(i.Version.Version)
-                        orderby i.Version.ToOriginalString() descending
+                        orderby i.Version descending
                         select i).First();
             return new NuGetPackage
             {
@@ -172,7 +172,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                 var list = GetPackages("PL.DynamicsCrm.DevKit.Analyzers");
                 if (list == null) return new NuGetPackage { Version = Const.Version };
                 var packages = (from item in list
-                                orderby item.Version.ToOriginalString() descending
+                                orderby item.Version descending
                                 select new NuGetPackage
                                 {
                                     Version = item.Version.ToOriginalString()
@@ -190,7 +190,7 @@ namespace PL.DynamicsCrm.DevKit.Shared.NuGet
                 var packages = repo
                     .FindPackagesById(packageId)
                     .Where(package => !package.Version.ToOriginalString().ToLower().Contains("preview"))
-                    .OrderByDescending(package => package.Version.ToOriginalString())
+                    .OrderByDescending(package => package.Version)
                     .ToList();
                 return packages;
             }

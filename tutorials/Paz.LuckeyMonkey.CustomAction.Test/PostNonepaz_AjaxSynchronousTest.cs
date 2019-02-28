@@ -1,10 +1,11 @@
-﻿using FakeXrmEasy;
+﻿using System.Reflection;
+using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using Paz.LuckeyMonkey.ProxyTypes;
 using Paz.LuckeyMonkey.Shared;
-using Paz.LuckeyMonkey.CustomAction;
 
-namespace Paz.LuckeyMonkey.CustomAction
+namespace Paz.LuckeyMonkey.CustomAction.Test
 {
     [TestClass]
     public class PostNonepaz_AjaxSynchronousTest
@@ -16,12 +17,30 @@ namespace Paz.LuckeyMonkey.CustomAction
         public static void ClassInit(TestContext context)
         {
             Context = new XrmFakedContext();
+            Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
             PluginContext = Context.GetDefaultPluginContext();
-            PluginContext.MessageName = "";
+            PluginContext.PrimaryEntityName = "none";
+            PluginContext.MessageName = "paz_Ajax";
             PluginContext.Stage = (int)StageEnum.PostOperation;
             PluginContext.Mode = (int)ExecutionModeEnum.Synchronous;
             PluginContext.InputParameters["Target"] = null;
         }
+
+        /*
+        [TestMethod]
+        public void PostNonepaz_Ajax_UnsecureString_And_SecureString()
+        {
+            var target = new Entity("none")
+            {
+                ["noneid"] = Guid.NewGuid()
+            };
+            PluginContext.InputParameters["Target"] = target;
+            var unsecureString = "UnsecureString";
+            var secureString = "SecureString";
+            Context.ExecutePluginWithConfigurations<PostNonepaz_AjaxSynchronous>(PluginContext, unsecureString, secureString);
+            Assert.IsTrue(target != null);
+        }
+        */
 
         [TestMethod]
         public void PostNonepaz_Ajax_Stage_Does_Not_Equals_PostOperation()
@@ -29,7 +48,10 @@ namespace Paz.LuckeyMonkey.CustomAction
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = -1;
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PostNonepaz_AjaxSynchronous>(plugin, null, null), "Stage does not equals PostOperation");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PostNonepaz_AjaxSynchronous>(plugin);
+            }, "Stage does not equals PostOperation");
         }
 
         [TestMethod]
@@ -39,18 +61,24 @@ namespace Paz.LuckeyMonkey.CustomAction
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int)StageEnum.PostOperation;
             plugin.PrimaryEntityName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PostNonepaz_AjaxSynchronous>(plugin, null, null), "PrimaryEntityName does not equals customaction");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PostNonepaz_AjaxSynchronous>(plugin);
+            }, "Stage does not equals none");
         }
 
         [TestMethod]
-        public void PostNonepaz_Ajax_MessageName_Does_Not_Equals_()
+        public void PostNonepaz_Ajax_MessageName_Does_Not_Equals_paz_Ajax()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int)StageEnum.PostOperation;
-            plugin.PrimaryEntityName = "customaction";
+            plugin.PrimaryEntityName = "none";
             plugin.MessageName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PostNonepaz_AjaxSynchronous>(plugin, null, null), "MessageName does not equals ");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PostNonepaz_AjaxSynchronous>(plugin);
+            }, "Stage does not equals paz_Ajax");
         }
 
         [TestMethod]
@@ -59,49 +87,14 @@ namespace Paz.LuckeyMonkey.CustomAction
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int)StageEnum.PostOperation;
-            plugin.PrimaryEntityName = "customaction";
-            plugin.MessageName = "";
+            plugin.PrimaryEntityName = "none";
+            plugin.MessageName = "paz_Ajax";
             plugin.Mode = -1;
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PostNonepaz_AjaxSynchronous>(plugin, null, null), "Execution does not equal Synchronous");
-        }
-
-        /*
-        [TestMethod]
-        public void PostNonepaz_Ajax_CrmPluginRegistration_Check_Image1()
-        {
-            var @class = new PostNonepaz_AjaxSynchronous();
-            foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
             {
-                if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
-                {
-                    var check = attribute as CrmPluginRegistrationAttribute;
-                    Assert.IsNotNull(check.Image1Attributes);
-                    Assert.IsNotNull(check.Image1Name);
-                    Assert.IsNotNull(check.Image1Type);
-                }
-                else
-                    Assert.Fail();
-            }
+                context.ExecutePluginWith<PostNonepaz_AjaxSynchronous>(plugin);
+            }, "Stage does not equals Synchronous");
         }
-
-        [TestMethod]
-        public void PostNonepaz_Ajax_CrmPluginRegistration_Check_Image2()
-        {
-            var @class = new PostNonepaz_AjaxSynchronous();
-            foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
-            {
-                if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
-                {
-                    var check = attribute as CrmPluginRegistrationAttribute;
-                    Assert.IsNotNull(check.Image2Attributes);
-                    Assert.IsNotNull(check.Image2Name);
-                    Assert.IsNotNull(check.Image2Type);
-                }
-                else
-                    Assert.Fail();
-            }
-        }
-        */
 
         [TestMethod]
         public void PostNonepaz_Ajax_Test_01()

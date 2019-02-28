@@ -1,0 +1,11 @@
+2019-02-28 20:05:49.251 - Warning	Read-only files will be over-written or deleted.
+2019-02-28 20:05:49.283 - Info	
+Packing C:\sources\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.SolutionPackager\extract\Unmanaged\Managed to C:\sources\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.SolutionPackager\zip_pack\20190228-LuckeyMonkey_0_1_0_0_managed.zip
+
+2019-02-28 20:05:49.299 - Error	Cannot find required file 'C:\sources\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.SolutionPackager\extract\Unmanaged\Managed\Other\Customizations.xml'.
+2019-02-28 20:05:49.300 - Error	See log file 'C:\sources\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.SolutionPackager\\extract\Unmanaged\log_pack\2019-02-28 08-05.Managed.txt' for details.
+2019-02-28 20:05:49.305 - Error	Microsoft.Crm.Tools.SolutionPackager.DiskReaderException: Cannot find required file 'C:\sources\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.SolutionPackager\extract\Unmanaged\Managed\Other\Customizations.xml'.
+   at Microsoft.Crm.Tools.SolutionPackager.DiskReader.Load()
+   at Microsoft.Crm.Tools.SolutionPackager.SolutionPackager.Run(IPackageReader reader, IPackageWriter writer)
+   at Microsoft.Crm.Tools.SolutionPackager.SolutionPackager.Run()
+   at Microsoft.Crm.Tools.SolutionPackager.Program.Main(String[] args)

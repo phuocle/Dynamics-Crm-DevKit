@@ -1,20 +1,15 @@
-{
-    "DefaultCrmVersion":"9.0.2.5",
-    "DefaultNetVersion":"v4.5.2",
-    "DefaultCrmConnection":"crm304614.api.crm5.dynamics.com",
-    "SolutionPrefix":"paz_",
+﻿{
+    "DefaultCrmVersion":"9.0.2.12",
+    "DefaultNetVersion":"4.6.2",
+    "DefaultCrmName":"Dynamics 365",
+    "DefaultCrmConnection":"pl-dynamicscrm-devkit.api.crm.dynamics.com",
+    "SolutionPrefix":null,
     "CrmConnections":[
         {
-            "Name":"Paz.LuckeyMonkey",
-            "Url":"https://demodevkit.api.crm.dynamics.com/XRMServices/2011/Organization.svc",
-            "UserName":"admin@crm290456.onmicrosoft.com",
-            "Password":"phuoc.levan@1180"
-        },
-        {
-            "Name":"crm304614.api.crm5.dynamics.com",
-            "Url":"https://crm304614.api.crm5.dynamics.com/XRMServices/2011/Organization.svc",
-            "UserName":"admin@crm304614.onmicrosoft.com",
-            "Password":"XVYcZiFupBAhk4bbedwoiA=="
+            "Name":"pl-dynamicscrm-devkit.api.crm.dynamics.com",
+            "Url":"https://pl-dynamicscrm-devkit.api.crm.dynamics.com/XRMServices/2011/Organization.svc",
+            "UserName":"admin@CRM831571.onmicrosoft.com",
+            "Password":"rZwesSzW1Pr5LquT+sk1ng=="
         }
     ]
 }

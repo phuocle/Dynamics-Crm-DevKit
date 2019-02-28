@@ -1,10 +1,8 @@
-﻿using FakeXrmEasy;
+﻿using System.Collections.Generic;
+using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xrm.Sdk;
-using Paz.LuckeyMonkey.Shared;
-using Paz.LuckeyMonkey.Workflow;
 
-namespace Paz.LuckeyMonkey.Workflow
+namespace Paz.LuckeyMonkey.Workflow.Test
 {
     [TestClass]
     public class SendUsersMailTest
@@ -17,6 +15,14 @@ namespace Paz.LuckeyMonkey.Workflow
         {
             Context = new XrmFakedContext();
             WorkflowContext = Context.GetDefaultWorkflowContext();
+        }
+
+        [TestMethod]
+        public void SendUsersMail_Test_Execute()
+        {
+            var inputs = new Dictionary<string, object>() { };
+            var outputs = Context.ExecuteCodeActivity<SendUsersMail>(inputs);
+            Assert.IsTrue(true);
         }
 
         [TestMethod]

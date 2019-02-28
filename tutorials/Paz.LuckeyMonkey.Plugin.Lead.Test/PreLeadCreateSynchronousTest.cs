@@ -1,13 +1,12 @@
 ﻿using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
-using Paz.LuckeyMonkey.Shared;
-using Paz.LuckeyMonkey.Plugin.Lead;
+using System;
 using System.Reflection;
 using Paz.LuckeyMonkey.ProxyTypes;
-using System;
+using Paz.LuckeyMonkey.Shared;
 
-namespace Paz.LuckeyMonkey.Plugin
+namespace Paz.LuckeyMonkey.PluginLead.Test
 {
     [TestClass]
     public class PreLeadCreateSynchronousTest
@@ -19,12 +18,30 @@ namespace Paz.LuckeyMonkey.Plugin
         public static void ClassInit(TestContext context)
         {
             Context = new XrmFakedContext();
+            Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
             PluginContext = Context.GetDefaultPluginContext();
+            PluginContext.PrimaryEntityName = "lead";
             PluginContext.MessageName = "Create";
             PluginContext.Stage = (int)StageEnum.PreOperation;
             PluginContext.Mode = (int)ExecutionModeEnum.Synchronous;
             PluginContext.InputParameters["Target"] = null;
         }
+
+        /*
+        [TestMethod]
+        public void PreLeadCreate_UnsecureString_And_SecureString()
+        {
+            var target = new Entity("lead")
+            {
+                ["leadid"] = Guid.NewGuid()
+            };
+            PluginContext.InputParameters["Target"] = target;
+            var unsecureString = "UnsecureString";
+            var secureString = "SecureString";
+            Context.ExecutePluginWithConfigurations<PreLeadCreateSynchronous>(PluginContext, unsecureString, secureString);
+            Assert.IsTrue(target != null);
+        }
+        */
 
         [TestMethod]
         public void PreLeadCreate_Stage_Does_Not_Equals_PreOperation()
@@ -32,7 +49,10 @@ namespace Paz.LuckeyMonkey.Plugin
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = -1;
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PreLeadCreateSynchronous>(plugin, null, null), "Stage does not equals PreOperation");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PreLeadCreateSynchronous>(plugin);
+            }, "Stage does not equals PreOperation");
         }
 
         [TestMethod]
@@ -42,7 +62,10 @@ namespace Paz.LuckeyMonkey.Plugin
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int)StageEnum.PreOperation;
             plugin.PrimaryEntityName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PreLeadCreateSynchronous>(plugin, null, null), "PrimaryEntityName does not equals lead");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PreLeadCreateSynchronous>(plugin);
+            }, "Stage does not equals lead");
         }
 
         [TestMethod]
@@ -53,7 +76,10 @@ namespace Paz.LuckeyMonkey.Plugin
             plugin.Stage = (int)StageEnum.PreOperation;
             plugin.PrimaryEntityName = "lead";
             plugin.MessageName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PreLeadCreateSynchronous>(plugin, null, null), "MessageName does not equals Create");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PreLeadCreateSynchronous>(plugin);
+            }, "Stage does not equals Create");
         }
 
         [TestMethod]
@@ -65,7 +91,10 @@ namespace Paz.LuckeyMonkey.Plugin
             plugin.PrimaryEntityName = "lead";
             plugin.MessageName = "Create";
             plugin.Mode = -1;
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => context.ExecutePluginWithConfigurations<PreLeadCreateSynchronous>(plugin, null, null), "Execution does not equal Synchronous");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PreLeadCreateSynchronous>(plugin);
+            }, "Stage does not equals Synchronous");
         }
 
         /*

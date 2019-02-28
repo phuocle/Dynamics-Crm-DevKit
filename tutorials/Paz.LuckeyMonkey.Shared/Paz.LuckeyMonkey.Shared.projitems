@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Label="SharedProjectFile_SccProperties">
-    <SharedProjectFile_ProjectGuid>{2c8fd2f6-c9e0-4c41-ae79-c486e4db4449}</SharedProjectFile_ProjectGuid>
-  </PropertyGroup>
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>563b3ce6-31fd-47be-8f9d-5b2738b9178d</SharedGUID>
+    <SharedGUID>e497086c-38fb-460c-b7dd-dfe824cd4202</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Paz.LuckeyMonkey.Shared</Import_RootNamespace>
@@ -32,15 +29,17 @@
       <DependentUpon>Email.cs</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.generated.cs"><DependentUpon>Lead.cs</DependentUpon></Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Lead.generated.cs">
+      <DependentUpon>Lead.cs</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SystemUser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SystemUser.generated.cs">
       <DependentUpon>SystemUser.cs</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Template.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\Template.generated.cs">
-      <DependentUpon>Template.cs</DependentUpon>
-    </Compile>
+  <Compile Include="$(MSBuildThisFileDirectory)Entities\Template.generated.cs">
+    <DependentUpon>Template.cs</DependentUpon>
+  </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />

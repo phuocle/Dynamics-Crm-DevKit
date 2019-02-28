@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security;
-using Microsoft.Dynamics365.UIAutomation.Api;
+﻿using Microsoft.Dynamics365.UIAutomation.Api;
 using Microsoft.Dynamics365.UIAutomation.Browser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Paz.LuckeyMonkey.Shared.Entities;
+using System;
+using System.Collections.Generic;
+using System.Security;
 
 namespace Paz.LuckeyMonkey.UiTest
 {
@@ -21,8 +21,8 @@ namespace Paz.LuckeyMonkey.UiTest
         {
             using (var chrome = new Browser(TestSettings.Options))
             {
+                chrome.LoginPage.Login(_xrmUri, _username, _password);
                 var key = $"key{new Random().Next().ToString("000000")}";
-                chrome.LoginPage.Login(_xrmUri, _username, _password);                
                 chrome.Navigation.OpenSubArea("Sales", "Leads");
                 chrome.Grid.SwitchView("All Leads");
                 chrome.CommandBar.ClickCommand("New");
@@ -33,7 +33,7 @@ namespace Paz.LuckeyMonkey.UiTest
                     new Field() {Id = "lastname", Value = key}
                 };
                 chrome.Entity.SetValue(new CompositeControl() { Id = "fullname", Fields = fields });
-                chrome.Entity.SetValue("paz_field1", key);                
+                chrome.Entity.SetValue("paz_field1", key);
                 chrome.Entity.SetValue("companyname", key);
                 chrome.CommandBar.ClickCommand("Save & Close");
                 chrome.Grid.SwitchView("Open Leads");

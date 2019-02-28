@@ -1,0 +1,56 @@
+2019-02-28 20:03:02.520 - Warning	Read-only files will be over-written or deleted.
+2019-02-28 20:03:02.526 - Info	
+Extracting C:\sources\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.SolutionPackager\zip_extract\20190228-LuckeyMonkey_0_1_0_0_managed.zip to C:\sources\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.SolutionPackager\extract\Managed\Managed
+
+2019-02-28 20:03:02.628 - Info	Localizing Assets...
+2019-02-28 20:03:02.641 - Info	Localizing component: SolutionManifest
+2019-02-28 20:03:02.642 - Info	Localizing component: EntityMaps
+2019-02-28 20:03:02.643 - Info	Localizing component: WebResources
+2019-02-28 20:03:02.643 - Info	Localizing component: Workflows
+2019-02-28 20:03:02.649 - Info	Localizing component: SdkMessageProcessingSteps
+2019-02-28 20:03:02.649 - Info	Localizing component: EntityDataProviders
+2019-02-28 20:03:02.650 - Info	Localizing component: Entities
+2019-02-28 20:03:02.652 - Info	Localizing component: EntityRelationships
+2019-02-28 20:03:02.654 - Info	Localizing component: optionsets
+2019-02-28 20:03:02.658 - Info	Localizing component: FieldSecurityProfiles
+2019-02-28 20:03:02.659 - Info	Localizing component: Templates
+2019-02-28 20:03:02.659 - Info	Localizing component: CustomControls
+2019-02-28 20:03:02.660 - Info	Localizing component: SolutionPluginAssemblies
+2019-02-28 20:03:02.707 - Info	Localizing component: Roles
+2019-02-28 20:03:02.712 - Info	Writing string resources...
+2019-02-28 20:03:02.808 - Info	
+2019-02-28 20:03:02.812 - Info	Processing Component: Entities
+2019-02-28 20:03:02.815 - Info	 - Account
+2019-02-28 20:03:02.855 - Info	 - Lead
+2019-02-28 20:03:02.881 - Info	 - Opportunity
+2019-02-28 20:03:02.929 - Info	Processing Component: Roles
+2019-02-28 20:03:02.932 - Info	Processing Component: Workflows
+2019-02-28 20:03:02.932 - Info	 - Ajax
+2019-02-28 20:03:02.975 - Info	Processing Component: FieldSecurityProfiles
+2019-02-28 20:03:02.975 - Info	Processing Component: Templates
+2019-02-28 20:03:02.977 - Info	Processing Component: EntityMaps
+2019-02-28 20:03:02.977 - Info	Processing Component: EntityRelationships
+2019-02-28 20:03:03.009 - Info	Processing Component: optionsets
+2019-02-28 20:03:03.009 - Info	Processing Component: WebResources
+2019-02-28 20:03:03.009 - Info	 - paz_/entities/Lead.webapi.js
+2019-02-28 20:03:03.109 - Info	 - paz_/entities/Lead.form.js
+2019-02-28 20:03:03.233 - Info	 - paz_/entities/Opportunity.form.js
+2019-02-28 20:03:03.366 - Info	 - paz_/lib/WebApiClient.js
+2019-02-28 20:03:03.821 - Info	 - paz_/resources/resource.1033.resx
+2019-02-28 20:03:03.888 - Info	 - paz_/entities/Lead.js
+2019-02-28 20:03:03.939 - Info	 - paz_/entities/Opportunity.js
+2019-02-28 20:03:03.992 - Info	 - paz_/entities/Opportunity.webapi.js
+2019-02-28 20:03:04.145 - Info	Processing Component: CustomControls
+2019-02-28 20:03:04.145 - Info	Processing Component: SolutionPluginAssemblies
+2019-02-28 20:03:04.146 - Info	 - Paz.LuckeyMonkey.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=cd90d0996a785c10
+2019-02-28 20:03:04.311 - Info	 - Paz.LuckeyMonkey.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=8a7d5e3a2612a23d
+2019-02-28 20:03:04.455 - Info	 - Paz.LuckeyMonkey.Plugin.Lead, Version=1.0.0.0, Culture=en, PublicKeyToken=8a7d5e3a2612a23d
+2019-02-28 20:03:04.564 - Info	Processing Component: SdkMessageProcessingSteps
+2019-02-28 20:03:04.564 - Info	 - 8140ba44-f83a-e911-a82c-000d3a17c513
+2019-02-28 20:03:04.587 - Info	 - 80c0b037-fb3a-e911-a823-000d3a17c443
+2019-02-28 20:03:04.613 - Info	 - d17877ee-fb3a-e911-a830-000d3a19c80e
+2019-02-28 20:03:04.633 - Info	Processing Component: EntityDataProviders
+2019-02-28 20:03:04.686 - Info	
+Managed Extract complete.
+
+2019-02-28 20:03:04.694 - Warning	1 warnings encountered

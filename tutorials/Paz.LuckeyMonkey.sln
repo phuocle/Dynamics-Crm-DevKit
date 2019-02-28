@@ -1,108 +1,140 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28010.2003
+VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Paz.LuckeyMonkey.Shared", "Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.shproj", "{563B3CE6-31FD-47BE-8F9D-5B2738B9178D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Lead", "Paz.LuckeyMonkey.Plugin.Lead\Paz.LuckeyMonkey.Plugin.Lead.csproj", "{4476761E-00A8-4B70-8691-59163723B1A3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{993CB83E-2325-44D1-BAA3-69C67C4716D6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{984BD682-94D1-4CAD-AA87-B96225C0C823}"
 	ProjectSection(SolutionItems) = preProject
 		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
 		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.ProxyTypes", "Paz.LuckeyMonkey.ProxyTypes\Paz.LuckeyMonkey.ProxyTypes.csproj", "{502C29C0-F5ED-4606-9456-A6E61A642F55}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Paz.LuckeyMonkey.Shared", "Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.shproj", "{E497086C-38FB-460C-B7DD-DFE824CD4202}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Lead.Test", "Paz.LuckeyMonkey.Plugin.Lead.Test\Paz.LuckeyMonkey.Plugin.Lead.Test.csproj", "{1D9DE1BA-B68B-441D-85CF-4B84EB02EF8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Console", "Paz.LuckeyMonkey.Console\Paz.LuckeyMonkey.Console.csproj", "{F378ACD5-1741-484E-B7E4-9AE74F208C2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.WebResource", "Paz.LuckeyMonkey.WebResource\Paz.LuckeyMonkey.WebResource.csproj", "{56263EF0-668C-462D-9AC3-BA4BED862969}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.CustomAction", "Paz.LuckeyMonkey.CustomAction\Paz.LuckeyMonkey.CustomAction.csproj", "{4DAD7458-DA64-4132-84AA-E1733922D6CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Workflow", "Paz.LuckeyMonkey.Workflow\Paz.LuckeyMonkey.Workflow.csproj", "{EF3CC828-2549-48AC-8BF8-F9E53A00B78F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Account", "Paz.LuckeyMonkey.Plugin.Account\Paz.LuckeyMonkey.Plugin.Account.csproj", "{2065A8EA-E72F-4764-8198-C2DF2A9A5F5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.CustomAction", "Paz.LuckeyMonkey.CustomAction\Paz.LuckeyMonkey.CustomAction.csproj", "{BC6351A2-482E-4EEC-80DE-68FC3E8DE5E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Lead", "Paz.LuckeyMonkey.Plugin.Lead\Paz.LuckeyMonkey.Plugin.Lead.csproj", "{8534B09D-6D1F-49BD-BE4F-6727155BA811}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Account", "Paz.LuckeyMonkey.Plugin.Account\Paz.LuckeyMonkey.Plugin.Account.csproj", "{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Workflow", "Paz.LuckeyMonkey.Workflow\Paz.LuckeyMonkey.Workflow.csproj", "{600EB6AE-E8A6-4AC3-9E46-700B25167DB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Account.Test", "Paz.LuckeyMonkey.Plugin.Account.Test\Paz.LuckeyMonkey.Plugin.Account.Test.csproj", "{7F735985-F175-40D3-9CEC-73FD79E4C8E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.ProxyTypes", "Paz.LuckeyMonkey.ProxyTypes\Paz.LuckeyMonkey.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Workflow.Test", "Paz.LuckeyMonkey.Workflow.Test\Paz.LuckeyMonkey.Workflow.Test.csproj", "{DED3E501-F452-4272-A237-108DA37986E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.WebResource", "Paz.LuckeyMonkey.WebResource\Paz.LuckeyMonkey.WebResource.csproj", "{06DDEEB7-3757-4CEA-85A1-8B2BCE82724D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.CustomAction.Test", "Paz.LuckeyMonkey.CustomAction.Test\Paz.LuckeyMonkey.CustomAction.Test.csproj", "{E677DEF7-FB68-4D54-A373-EEF09B29676D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.CustomAction.Test", "Paz.LuckeyMonkey.CustomAction.Test\Paz.LuckeyMonkey.CustomAction.Test.csproj", "{C5513EA0-9FA1-4D1A-B8B2-07A3B2A9882C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.UiTest", "Paz.LuckeyMonkey.UiTest\Paz.LuckeyMonkey.UiTest.csproj", "{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Account.Test", "Paz.LuckeyMonkey.Plugin.Account.Test\Paz.LuckeyMonkey.Plugin.Account.Test.csproj", "{D8A61D36-138C-421E-9B5B-FD7D6AE3D67E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Console", "Paz.LuckeyMonkey.Console\Paz.LuckeyMonkey.Console.csproj", "{0E57BB78-B56E-486F-9C3B-135F99515AE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Lead.Test", "Paz.LuckeyMonkey.Plugin.Lead.Test\Paz.LuckeyMonkey.Plugin.Lead.Test.csproj", "{5075AB74-0C16-400E-87CF-9BD9CEA93C34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Workflow.Test", "Paz.LuckeyMonkey.Workflow.Test\Paz.LuckeyMonkey.Workflow.Test.csproj", "{4DE217A7-A972-4DA5-9536-09DF3DD8C829}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.UiTest", "Paz.LuckeyMonkey.UiTest\Paz.LuckeyMonkey.UiTest.csproj", "{4252B2F6-6E10-4A84-AD4A-2B6C99045FE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.DataProvider", "Paz.LuckeyMonkey.DataProvider\Paz.LuckeyMonkey.DataProvider.csproj", "{F2B1406C-68BA-4697-AD01-C86EECD73EFD}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Paz.LuckeyMonkey.SolutionPackager", "Paz.LuckeyMonkey.SolutionPackager\", "{E95FFEE2-CEE5-4A7D-A120-917E8A6EE8FC}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3D4.6.2"
+		Debug.AspNetCompiler.VirtualPath = "/Paz.LuckeyMonkey.SolutionPackager"
+		Debug.AspNetCompiler.PhysicalPath = "Paz.LuckeyMonkey.SolutionPackager\"
+		Debug.AspNetCompiler.TargetPath = "Paz.LuckeyMonkey.SolutionPackager\"
+		Debug.AspNetCompiler.Updateable = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Paz.LuckeyMonkey.SolutionPackager"
+		Release.AspNetCompiler.PhysicalPath = "Paz.LuckeyMonkey.SolutionPackager\"
+		Release.AspNetCompiler.TargetPath = "Paz.LuckeyMonkey.SolutionPackager\"
+		Release.AspNetCompiler.Updateable = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "51974"
+		SlnRelativePath = "Paz.LuckeyMonkey.SolutionPackager\"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{0e57bb78-b56e-486f-9c3b-135f99515ae1}*SharedItemsImports = 4
-		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{4476761e-00a8-4b70-8691-59163723b1a3}*SharedItemsImports = 4
-		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{563b3ce6-31fd-47be-8f9d-5b2738b9178d}*SharedItemsImports = 13
-		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{9c35d944-7d2e-4b01-8a80-0b9f1347e81b}*SharedItemsImports = 4
-		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{bc6351a2-482e-4eec-80de-68fc3e8de5e2}*SharedItemsImports = 4
-		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{dad85432-fa5f-43dc-8a39-d101b9edc24e}*SharedItemsImports = 4
-		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{ef3cc828-2549-48ac-8bf8-f9e53a00b78f}*SharedItemsImports = 4
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{2065a8ea-e72f-4764-8198-c2df2a9a5f5f}*SharedItemsImports = 4
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{4252b2f6-6e10-4a84-ad4a-2b6c99045fe9}*SharedItemsImports = 4
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{4dad7458-da64-4132-84aa-e1733922d6cc}*SharedItemsImports = 4
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{600eb6ae-e8a6-4ac3-9e46-700b25167db4}*SharedItemsImports = 4
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{8534b09d-6d1f-49bd-be4f-6727155ba811}*SharedItemsImports = 4
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{e497086c-38fb-460c-b7dd-dfe824cd4202}*SharedItemsImports = 13
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{f2b1406c-68ba-4697-ad01-c86eecd73efd}*SharedItemsImports = 4
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{f378acd5-1741-484e-b7e4-9ae74f208c2d}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4476761E-00A8-4B70-8691-59163723B1A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4476761E-00A8-4B70-8691-59163723B1A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4476761E-00A8-4B70-8691-59163723B1A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4476761E-00A8-4B70-8691-59163723B1A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{502C29C0-F5ED-4606-9456-A6E61A642F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{502C29C0-F5ED-4606-9456-A6E61A642F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{502C29C0-F5ED-4606-9456-A6E61A642F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{502C29C0-F5ED-4606-9456-A6E61A642F55}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1D9DE1BA-B68B-441D-85CF-4B84EB02EF8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D9DE1BA-B68B-441D-85CF-4B84EB02EF8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D9DE1BA-B68B-441D-85CF-4B84EB02EF8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D9DE1BA-B68B-441D-85CF-4B84EB02EF8B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56263EF0-668C-462D-9AC3-BA4BED862969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56263EF0-668C-462D-9AC3-BA4BED862969}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56263EF0-668C-462D-9AC3-BA4BED862969}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56263EF0-668C-462D-9AC3-BA4BED862969}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF3CC828-2549-48AC-8BF8-F9E53A00B78F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF3CC828-2549-48AC-8BF8-F9E53A00B78F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF3CC828-2549-48AC-8BF8-F9E53A00B78F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF3CC828-2549-48AC-8BF8-F9E53A00B78F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC6351A2-482E-4EEC-80DE-68FC3E8DE5E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC6351A2-482E-4EEC-80DE-68FC3E8DE5E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC6351A2-482E-4EEC-80DE-68FC3E8DE5E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC6351A2-482E-4EEC-80DE-68FC3E8DE5E2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C35D944-7D2E-4B01-8A80-0B9F1347E81B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F735985-F175-40D3-9CEC-73FD79E4C8E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F735985-F175-40D3-9CEC-73FD79E4C8E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F735985-F175-40D3-9CEC-73FD79E4C8E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F735985-F175-40D3-9CEC-73FD79E4C8E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DED3E501-F452-4272-A237-108DA37986E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DED3E501-F452-4272-A237-108DA37986E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DED3E501-F452-4272-A237-108DA37986E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DED3E501-F452-4272-A237-108DA37986E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E677DEF7-FB68-4D54-A373-EEF09B29676D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E677DEF7-FB68-4D54-A373-EEF09B29676D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E677DEF7-FB68-4D54-A373-EEF09B29676D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E677DEF7-FB68-4D54-A373-EEF09B29676D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DAD85432-FA5F-43DC-8A39-D101B9EDC24E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E57BB78-B56E-486F-9C3B-135F99515AE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E57BB78-B56E-486F-9C3B-135F99515AE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E57BB78-B56E-486F-9C3B-135F99515AE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E57BB78-B56E-486F-9C3B-135F99515AE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F378ACD5-1741-484E-B7E4-9AE74F208C2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F378ACD5-1741-484E-B7E4-9AE74F208C2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F378ACD5-1741-484E-B7E4-9AE74F208C2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F378ACD5-1741-484E-B7E4-9AE74F208C2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DAD7458-DA64-4132-84AA-E1733922D6CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DAD7458-DA64-4132-84AA-E1733922D6CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DAD7458-DA64-4132-84AA-E1733922D6CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DAD7458-DA64-4132-84AA-E1733922D6CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2065A8EA-E72F-4764-8198-C2DF2A9A5F5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2065A8EA-E72F-4764-8198-C2DF2A9A5F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2065A8EA-E72F-4764-8198-C2DF2A9A5F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2065A8EA-E72F-4764-8198-C2DF2A9A5F5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8534B09D-6D1F-49BD-BE4F-6727155BA811}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8534B09D-6D1F-49BD-BE4F-6727155BA811}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8534B09D-6D1F-49BD-BE4F-6727155BA811}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8534B09D-6D1F-49BD-BE4F-6727155BA811}.Release|Any CPU.Build.0 = Release|Any CPU
+		{600EB6AE-E8A6-4AC3-9E46-700B25167DB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{600EB6AE-E8A6-4AC3-9E46-700B25167DB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{600EB6AE-E8A6-4AC3-9E46-700B25167DB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{600EB6AE-E8A6-4AC3-9E46-700B25167DB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06DDEEB7-3757-4CEA-85A1-8B2BCE82724D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06DDEEB7-3757-4CEA-85A1-8B2BCE82724D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06DDEEB7-3757-4CEA-85A1-8B2BCE82724D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06DDEEB7-3757-4CEA-85A1-8B2BCE82724D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5513EA0-9FA1-4D1A-B8B2-07A3B2A9882C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5513EA0-9FA1-4D1A-B8B2-07A3B2A9882C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5513EA0-9FA1-4D1A-B8B2-07A3B2A9882C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5513EA0-9FA1-4D1A-B8B2-07A3B2A9882C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8A61D36-138C-421E-9B5B-FD7D6AE3D67E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8A61D36-138C-421E-9B5B-FD7D6AE3D67E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8A61D36-138C-421E-9B5B-FD7D6AE3D67E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8A61D36-138C-421E-9B5B-FD7D6AE3D67E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5075AB74-0C16-400E-87CF-9BD9CEA93C34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5075AB74-0C16-400E-87CF-9BD9CEA93C34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5075AB74-0C16-400E-87CF-9BD9CEA93C34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5075AB74-0C16-400E-87CF-9BD9CEA93C34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE217A7-A972-4DA5-9536-09DF3DD8C829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE217A7-A972-4DA5-9536-09DF3DD8C829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE217A7-A972-4DA5-9536-09DF3DD8C829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE217A7-A972-4DA5-9536-09DF3DD8C829}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4252B2F6-6E10-4A84-AD4A-2B6C99045FE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4252B2F6-6E10-4A84-AD4A-2B6C99045FE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4252B2F6-6E10-4A84-AD4A-2B6C99045FE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4252B2F6-6E10-4A84-AD4A-2B6C99045FE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2B1406C-68BA-4697-AD01-C86EECD73EFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2B1406C-68BA-4697-AD01-C86EECD73EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2B1406C-68BA-4697-AD01-C86EECD73EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2B1406C-68BA-4697-AD01-C86EECD73EFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E95FFEE2-CEE5-4A7D-A120-917E8A6EE8FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E95FFEE2-CEE5-4A7D-A120-917E8A6EE8FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E95FFEE2-CEE5-4A7D-A120-917E8A6EE8FC}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{E95FFEE2-CEE5-4A7D-A120-917E8A6EE8FC}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {252B3F2F-D5A5-4221-9313-36B804834933}
+		SolutionGuid = {17C31529-95AA-4981-8EDC-824C95E92C5F}
 	EndGlobalSection
 EndGlobal
