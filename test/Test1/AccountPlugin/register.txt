@@ -1,0 +1,24 @@
+﻿+ AccountPlugin.PostDeleteAccount
+	Message: Delete
+	Primary Entity: account
+	Secondary Entity: none
+	Filtering Attributes: NULL
+	Event Handler: AccountPlugin.PostDeleteAccount
+	Step Name: AccountPlugin.PostDeleteAccount: Delete of account
+	Run in: Calling User
+	Execution Order: 1
+	Description: AccountPlugin.PostDeleteAccount: Delete of account
+	PostOperation - Asynchronous - Server - Delete AsyncOperation
+	Unsecure: AA
+	Secure: BB
+		PreImage
+			Name: FirstImage
+			Enttiy Alias: FirstAlias
+			Parameters: name, accountnumber, accountcategorycode
+		PreImage
+			Name: SecondPreImage
+			Entity Alias: second
+			Parameters: fax, paz_field1, paz_field2, paz_field3
++ AccountPlugin.PostUpdateAccount
++ AccountPlugin.PreCreateAccount
++ AccountPlugin.PreUpdateAccount

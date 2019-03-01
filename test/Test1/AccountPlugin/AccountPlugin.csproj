@@ -52,11 +52,15 @@
   <ItemGroup>
     <Compile Include="PostDeleteAccount.cs" />
     <Compile Include="PreCreateAccount.cs" />
+    <Compile Include="PostUpdateAccount.cs" />
     <Compile Include="PreUpdateAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AccountPlugin.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="register.txt" />
   </ItemGroup>
   <Import Project="..\Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems" Label="Shared" Condition="Exists('..\Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems')" />
   <PropertyGroup>
