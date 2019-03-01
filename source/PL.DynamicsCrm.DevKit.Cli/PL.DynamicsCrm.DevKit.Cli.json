@@ -202,21 +202,21 @@
       "profile": "LATEBOUND",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "2013",
+      "crmversion": "365",
       "type": "CSharp"
     },
     {
       "profile": "JS-FORM",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "2013",
+      "crmversion": "365",
       "type": "JsForm"
     },
     {
       "profile": "JS-WEBAPI",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "2013",
+      "crmversion": "365",
       "type": "JsWebApi"
     }
   ]
