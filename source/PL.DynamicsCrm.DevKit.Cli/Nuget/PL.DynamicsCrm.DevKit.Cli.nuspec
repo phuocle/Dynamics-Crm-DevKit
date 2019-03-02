@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>PL.DynamicsCrm.DevKit.Cli</id>
-    <version>1.2.2</version>
+    <version>1.3.0</version>
     <title>PL.DynamicsCrm.DevKit.Cli - CLI for PL.DynamicsCrm.DevKit tool</title>
     <authors>PhuocLe</authors>
     <license type="file">license\LICENSE.txt</license>

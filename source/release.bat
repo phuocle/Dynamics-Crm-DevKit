@@ -9,11 +9,11 @@ if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild
 )
 if %MsBuild%=="" (
 	echo msbuild.exe not found !!!
-) else (	
+) else (
 	if exist  Published\%VERSION%\ (
 		del Published\%VERSION%\*.* /f /q
 	)
-	
+
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build PL.DynamicsCrm.DevKit.sln
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build PL.DynamicsCrm.DevKit.Analyzers\PL.DynamicsCrm.DevKit.Analyzers.csproj
 	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build PL.DynamicsCrm.DevKit.Tools.sln
