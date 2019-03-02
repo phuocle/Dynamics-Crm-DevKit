@@ -3,7 +3,7 @@
     "DefaultNetVersion":"4.6.2",
     "DefaultCrmName":"Dynamics 365",
     "DefaultCrmConnection":"pl-dynamicscrm-devkit.api.crm.dynamics.com",
-    "SolutionPrefix":null,
+    "SolutionPrefix":"paz_",
     "CrmConnections":[
         {
             "Name":"pl-dynamicscrm-devkit.api.crm.dynamics.com",

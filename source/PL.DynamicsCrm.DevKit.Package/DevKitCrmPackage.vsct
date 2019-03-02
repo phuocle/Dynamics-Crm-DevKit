@@ -13,7 +13,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>PL.DynamicsCrm.DevKit - Publish WebResource</ButtonText>
+          <ButtonText>Publish WebResource</ButtonText>
         </Strings>
       </Button>
     </Buttons>

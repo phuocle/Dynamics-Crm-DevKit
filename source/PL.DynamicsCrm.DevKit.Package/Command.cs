@@ -9,47 +9,37 @@ using System.Text;
 using EnvDTE;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using PL.DynamicsCrm.DevKit.Shared;
+using Task = System.Threading.Tasks.Task;
 
 namespace PL.DynamicsCrm.DevKit.Package
 {
-    internal sealed class Command1
+    internal sealed class Command
     {
         public const int CommandId = 0x0100;
-
         public static readonly Guid CommandSet = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
+        private static IMenuCommandService MenuService;
+        private static DTE Dte;
 
-        private readonly Microsoft.VisualStudio.Shell.Package package;
-
-        private Command1(Microsoft.VisualStudio.Shell.Package package)
+        public static async Task InitializeAsync(AsyncPackage package)
         {
-            this.package = package ?? throw new ArgumentNullException(nameof(package));
-            if (ServiceProvider.GetService(typeof(IMenuCommandService)) is OleMenuCommandService commandService)
-            {
-                var menuCommandID = new CommandID(CommandSet, CommandId);
-                var menuItem = new OleMenuCommand(MenuItemCallback, menuCommandID);
-                menuItem.BeforeQueryStatus += MenuItem_BeforeQueryStatus;
-                menuItem.Visible = false;
-                commandService.AddCommand(menuItem);
-            }
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            MenuService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService ?? throw new ArgumentNullException(nameof(MenuService));
+            Dte = await package.GetServiceAsync(typeof(DTE)) as DTE ?? throw new ArgumentNullException(nameof(Dte));
+            var cmdId = new CommandID(CommandSet, CommandId);
+            var cmd = new OleMenuCommand((s, e) => Execute(package), cmdId);
+            cmd.BeforeQueryStatus += cmd_BeforeQueryStatus;
+            MenuService.AddCommand(cmd);
         }
 
-        public static Command1 Instance { get; private set; }
-
-        private IServiceProvider ServiceProvider => package;
-
-        private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
+        private static void cmd_BeforeQueryStatus(object sender, EventArgs e)
         {
             var menuCommand = sender as OleMenuCommand;
-            if (ServiceProvider == null) return;
-            var dte = (DTE) ServiceProvider.GetService(typeof(DTE));
-            if (dte == null) return;
-            var item = dte.SelectedItems.Item(1);
+            var item =  Dte.SelectedItems.Item(1);
             if (item == null) return;
             if (item.Name == null) return;
             var extension = item.Name.Substring(item.Name.LastIndexOf(".") + 1);
@@ -81,7 +71,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                 return;
             }
 
-            var solutionFullName = dte?.Solution?.FullName;
+            var solutionFullName = Dte.Solution.FullName;
             var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
             if (!File.Exists(devKitCrmConfigFile))
@@ -89,62 +79,34 @@ namespace PL.DynamicsCrm.DevKit.Package
                 menuCommand.Visible = false;
                 return;
             }
-
             menuCommand.Visible = true;
         }
 
-        public static void Initialize(Microsoft.VisualStudio.Shell.Package package)
+        private static void Execute(AsyncPackage package)
         {
-            Instance = new Command1(package);
-        }
-
-        private void ShowError(string message)
-        {
-            VsShellUtilities.ShowMessageBox(ServiceProvider, message, "ERROR", OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-        }
-
-        private static string TryDecryptPassword(string password)
-        {
-            try
-            {
-                password = EncryptDecrypt.DecryptString(password);
-            }
-            catch
-            {
-            }
-            return password;
-        }
-
-        private void MenuItemCallback(object sender, EventArgs e)
-        {
-            if (ServiceProvider == null) return;
-            var dte = (DTE) ServiceProvider.GetService(typeof(DTE));
-            if (dte == null) return;
-            dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
-            var activeDocument = dte.ActiveDocument;
-            var solutionFullName = dte.Solution.FullName;
+            Dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
+            var activeDocument = Dte.ActiveDocument;
+            var solutionFullName = Dte.Solution.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
-
-            dte.StatusBar.Text = "Read PL.DynamicsCrm.DevKit.json config";
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(dte);
+            Dte.StatusBar.Text = "Read PL.DynamicsCrm.DevKit.json config";
+            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
             var defaultConnection = config.CrmConnections.Where(conn => conn.Name == config.DefaultCrmConnection)
                 .FirstOrDefault();
             if (defaultConnection == null)
             {
-                ShowError("Default Crm connection not found!");
-                goto CLEAR_STATUS;
+                Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                Dte.StatusBar.Text = "Default Crm connection not found!";
+                return;
             }
-
             if (config.SolutionPrefix == null)
             {
-                ShowError("PL.DynamicsCrm.DevKit.json config not found SolutionPrefix data");
-                goto CLEAR_STATUS;
+                Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                Dte.StatusBar.Text = "PL.DynamicsCrm.DevKit.json config not found SolutionPrefix data";
+                return;
             }
-
-            dte.StatusBar.Text = "Connecting ...";
-            var check = SharedGlobals.GetGlobal("CrmService", dte);
+            Dte.StatusBar.Text = "Connecting";
+            var check = SharedGlobals.GetGlobal("CrmService", Dte);
             if (check == null)
             {
                 try
@@ -154,18 +116,17 @@ namespace PL.DynamicsCrm.DevKit.Package
                     clientCredentials.UserName.UserName = defaultConnection.UserName;
                     clientCredentials.UserName.Password = TryDecryptPassword(defaultConnection.Password);
                     check = new OrganizationServiceProxy(uri, null, clientCredentials, null);
-                    SharedGlobals.SetGlobal("CrmService", check, dte);
+                    SharedGlobals.SetGlobal("CrmService", check, Dte);
                 }
                 catch
                 {
-                    ShowError("Connecting Fail!");
-                    goto CLEAR_STATUS;
+                    Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                    Dte.StatusBar.Text = "Connecting Fail!";
+                    return;
                 }
             }
-
-            var crmService = (OrganizationServiceProxy) SharedGlobals.GetGlobal("CrmService", dte);
-            dte.StatusBar.Text = "Connected ...";
-
+            var crmService = (OrganizationServiceProxy)SharedGlobals.GetGlobal("CrmService", Dte);
+            Dte.StatusBar.Text = "Connected";
             var fileName = activeDocument.FullName;
             var parts = fileName.Split("\\".ToCharArray());
             var condition = string.Empty;
@@ -178,7 +139,6 @@ namespace PL.DynamicsCrm.DevKit.Package
                 if (value.StartsWith("/")) value = value.Substring(1);
                 condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>";
             }
-
             var fetchXml = $@"
 <fetch>
   <entity name='webresource'>
@@ -191,8 +151,9 @@ namespace PL.DynamicsCrm.DevKit.Package
             var rows = crmService.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0)
             {
-                ShowError("Web resource not found!");
-                goto CLEAR_STATUS;
+                Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                Dte.StatusBar.Text = "Web resource not found!";
+                return;
             }
 
             var webResourceId = rows.Entities[0].Id;
@@ -209,46 +170,62 @@ namespace PL.DynamicsCrm.DevKit.Package
                 };
                 var requests = new OrganizationRequestCollection();
                 var publishXml = "<importexportxml><webresources>";
-                var webResource = new Entity("webresource") {Id = webResourceId};
+                var webResource = new Entity("webresource") { Id = webResourceId };
                 var content = File.ReadAllText(fileName);
                 webResource["content"] = EncodeString(content);
-                var request = new UpdateRequest {Target = webResource};
+                var request = new UpdateRequest { Target = webResource };
                 requests.Add(request);
                 publishXml += "<webresource>{" + webResource.Id + "}</webresource>";
                 publishXml += "</webresources></importexportxml>";
-                var pubRequest = new PublishXmlRequest {ParameterXml = publishXml};
+                var pubRequest = new PublishXmlRequest { ParameterXml = publishXml };
                 requests.Add(pubRequest);
                 emRequest.Requests = requests;
-                dte.StatusBar.Text = "Updating & publishing web resource...";
-
-                var emResponse = (ExecuteMultipleResponse) crmService.Execute(emRequest);
+                Dte.StatusBar.Text = "Updating & publishing web resource";
+                var emResponse = (ExecuteMultipleResponse)crmService.Execute(emRequest);
                 var wasError = false;
                 foreach (var responseItem in emResponse.Responses)
                 {
                     if (responseItem.Fault == null) continue;
                     wasError = true;
                 }
-
                 if (wasError)
-                    ShowError(
-                        "Error Updating And Publishing Web Resources To CRM. See the Output Window for additional details.");
+                {
+                    Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                    Dte.StatusBar.Text = "Error Updating And Publishing Web Resources To CRM. See the Output Window for additional details.";
+                    return;
+                }
                 else
-                    dte.StatusBar.Text = "Updated And Published Web Resource";
+                {
+                    Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                    Dte.StatusBar.Text = "Updated And Published Web Resource";
+                    Dte.StatusBar.Text = "";
+                    return;
+                }
             }
-            catch (FaultException<OrganizationServiceFault> crmEx)
+            catch (FaultException<OrganizationServiceFault>)
             {
-                ShowError("Error Updating And Publishing Web Resource To CRM: " + crmEx.Message + Environment.NewLine +
-                          crmEx.StackTrace);
+                Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                Dte.StatusBar.Text = "Updated And Published Web Resource fail";
+                return;
             }
-            catch (Exception ex)
+            catch
             {
-                ShowError("Error Updating And Publishing Web Resource To CRM: " + ex.Message + Environment.NewLine +
-                          ex.StackTrace);
+                Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                Dte.StatusBar.Text = "Updated And Published Web Resource fail";
+                return;
             }
+        }
 
-            CLEAR_STATUS:
-            dte.StatusBar.Clear();
-            dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+        private static string TryDecryptPassword(string password)
+        {
+            try
+            {
+                password = EncryptDecrypt.DecryptString(password);
+            }
+            catch
+            {
+            }
+            return password;
         }
 
         private static string EncodeString(string value)
