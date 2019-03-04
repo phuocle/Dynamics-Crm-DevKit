@@ -21,7 +21,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Mapping Plugin</ButtonText>
+          <ButtonText>Add CrmPluginRegistration</ButtonText>
         </Strings>
       </Button>
     </Buttons>

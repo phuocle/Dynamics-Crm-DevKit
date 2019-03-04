@@ -8,6 +8,7 @@ using System.ServiceModel.Description;
 using System.Text;
 using System.Windows.Forms;
 using EnvDTE;
+using EnvDTE80;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk;
@@ -120,7 +121,6 @@ namespace PL.DynamicsCrm.DevKit.Package
             var textDocument = (TextDocument)Dte.ActiveDocument.Object();
             var activePoint = textDocument.Selection.ActivePoint;
             var currentClass = Dte.ActiveDocument.ProjectItem.FileCodeModel.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
-
             if (!(currentClass is CodeClass @class)) return;
             if (!Utility.SharedProjectExist(Dte))
             {
@@ -137,12 +137,34 @@ namespace PL.DynamicsCrm.DevKit.Package
                 MessageBox.Show("Please install PL.DynamicsCrm.DevKit.Cli from Nuget and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            @class.AddAttribute("CrmPluginRegistration", CrmPluginRegistrationData());
+            var attributes = CrmPluginRegistrationData();
+            foreach(var attribute in attributes)
+                @class.AddAttribute("CrmPluginRegistration", attribute);
+            AddImportSharedProjectIfNeed();
         }
 
-        private static string CrmPluginRegistrationData()
+        private static void AddImportSharedProjectIfNeed()
         {
-            return "ABCDEF";
+            if (!(Dte.ActiveDocument.ProjectItem.FileCodeModel is FileCodeModel2 fileCodeModel2)) return;
+            var solutionFullName = Dte.Solution.FullName;
+            var shareProjectName = Utility.GetSharedProject(solutionFullName);
+            var foundNamespace = false;
+            foreach (var element in fileCodeModel2.CodeElements)
+            {
+                if (!(element is CodeImport codeImport)) continue;
+                if (codeImport.Namespace == shareProjectName)
+                {
+                    foundNamespace = true;
+                    break;
+                }
+            }
+            if (foundNamespace) return;
+            fileCodeModel2.AddImport(shareProjectName);
+        }
+
+        private static List<string> CrmPluginRegistrationData()
+        {
+            return new List<string>() { "ABCDEDF" };
         }
 
         private static void CommandWebResource_BeforeQueryStatus(object sender, EventArgs e)
