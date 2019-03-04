@@ -58,7 +58,7 @@
             this.groupBox.Controls.Add(this.ddlMessage);
             this.groupBox.Controls.Add(this.label3);
             this.groupBox.Location = new System.Drawing.Point(14, 45);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox.Name = "groupBox";
             this.groupBox.Padding = new System.Windows.Forms.Padding(3, 23, 6, 0);
             this.groupBox.Size = new System.Drawing.Size(466, 167);
@@ -85,7 +85,7 @@
             "Synchronous",
             "Asynchronous"});
             this.ddlExecution.Location = new System.Drawing.Point(106, 118);
-            this.ddlExecution.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddlExecution.Margin = new System.Windows.Forms.Padding(2);
             this.ddlExecution.Name = "ddlExecution";
             this.ddlExecution.Size = new System.Drawing.Size(301, 28);
             this.ddlExecution.TabIndex = 12;
@@ -109,7 +109,7 @@
             "PreOperation",
             "PostOperation"});
             this.ddlStage.Location = new System.Drawing.Point(106, 74);
-            this.ddlStage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddlStage.Margin = new System.Windows.Forms.Padding(2);
             this.ddlStage.Name = "ddlStage";
             this.ddlStage.Size = new System.Drawing.Size(301, 28);
             this.ddlStage.TabIndex = 5;
@@ -171,7 +171,7 @@
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(495, 83);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(120, 43);
             this.btnCancel.TabIndex = 28;
@@ -183,7 +183,7 @@
             // 
             this.btnOk.Enabled = false;
             this.btnOk.Location = new System.Drawing.Point(495, 34);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(2);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(120, 43);
             this.btnOk.TabIndex = 27;
@@ -211,9 +211,9 @@
             this.Name = "FormClassPlugin";
             this.Padding = new System.Windows.Forms.Padding(15, 5, 8, 8);
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add New Plugin Class";
+            this.TopMost = true;
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);

@@ -1,54 +1,72 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
   <Extern href="stdidcmd.h"/>
   <Extern href="vsshlids.h"/>
   <Commands package="guidVSPackageCommandCodeWindowContextMenu">
     <Groups>
-      <Group guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="MyGroupForCommands" />
+      <Group guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="DevKitGroupCommands" />
+      <Group guid="guidVSPackageCommandCodeWindowContextMenuCmdSet2" id="DevKitGroupCommands2" />
     </Groups>
     <Buttons>
-      <Button guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="Command1Id" type="Button">
-        <Icon guid="guidImages" id="bmpPic1" />
+      <Button guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="CommandWebResourceId" type="Button">
+        <Icon guid="guidImages" id="bmpPicPL" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
           <ButtonText>Publish WebResource</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidVSPackageCommandCodeWindowContextMenuCmdSet2" id="CommandPluginId" type="Button">
+        <Icon guid="guidImages" id="bmpPicPL" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>Mapping Plugin</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
     <Bitmaps>
-      <Bitmap guid="guidImages" href="Resources\icon.png" usedList="bmpPic1"/>
+      <Bitmap guid="guidImages" href="Resources\icon.png" usedList="bmpPicPL"/>
     </Bitmaps>
   </Commands>
   <CommandPlacements>
-    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="MyGroupForCommands" priority="0xFFFF">
+    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="DevKitGroupCommands" priority="0xFFFF">
       <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="MyGroupForCommands" priority="0xFFFF">
+    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="DevKitGroupCommands" priority="0xFFFF">
       <Parent guid="CssEditorWindows" id="IDMX_HTM_SOURCE_CSS" />
     </CommandPlacement>
-    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="MyGroupForCommands" priority="0xFFFF">
+    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="DevKitGroupCommands" priority="0xFFFF">
       <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_BASIC" />
     </CommandPlacement>
-    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="MyGroupForCommands" priority="0xFFFF">
+    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="DevKitGroupCommands" priority="0xFFFF">
       <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML" />
     </CommandPlacement>
-    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="MyGroupForCommands" priority="0xFFFF">
+    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="DevKitGroupCommands" priority="0xFFFF">
       <Parent guid="HtmlEditorWindows2" id="IDMX_HTM_SOURCE_HTML"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="Command1Id" priority="0x0001" >
-      <Parent guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="MyGroupForCommands"/>
+    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="CommandWebResourceId" priority="0x0001" >
+      <Parent guid="guidVSPackageCommandCodeWindowContextMenuCmdSet" id="DevKitGroupCommands"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet2" id="DevKitGroupCommands2" priority="0xFFFF">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSPackageCommandCodeWindowContextMenuCmdSet2" id="CommandPluginId" priority="0x0002" >
+      <Parent guid="guidVSPackageCommandCodeWindowContextMenuCmdSet2" id="DevKitGroupCommands2"/>
     </CommandPlacement>
   </CommandPlacements>
   <Symbols>
     <GuidSymbol name="guidVSPackageCommandCodeWindowContextMenu" value="{7e37eef9-8cbe-4b10-81f7-66413cd2c9d3}" />
     <GuidSymbol name="guidVSPackageCommandCodeWindowContextMenuCmdSet" value="{0c1acc31-15ac-417c-86b2-eefdc669e8bf}">
-      <IDSymbol name="MyGroupForCommands" value="0x1020" />
-      <IDSymbol name="Command1Id" value="0x0100" />
+      <IDSymbol name="DevKitGroupCommands" value="0x1020" />
+      <IDSymbol name="CommandWebResourceId" value="0x0100" />
+    </GuidSymbol>
+    <GuidSymbol name="guidVSPackageCommandCodeWindowContextMenuCmdSet2" value="{0c1acc31-15ac-417c-86b2-eefdc669e8be}">
+      <IDSymbol name="DevKitGroupCommands2" value="0x1030" />
+      <IDSymbol name="CommandPluginId" value="0x0200" />
     </GuidSymbol>
     <GuidSymbol name="guidImages" value="{68759f95-6f1d-4a77-87ea-192fc8d811f1}" >
-      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPicPL" value="1" />
     </GuidSymbol>
     <GuidSymbol name="HtmlEditorWindows" value="{D7E8C5E1-BDB8-11D0-9C88-0000F8040A53}">
       <IDSymbol name="IDMX_HTM_SOURCE_BASIC" value="0x32" />
