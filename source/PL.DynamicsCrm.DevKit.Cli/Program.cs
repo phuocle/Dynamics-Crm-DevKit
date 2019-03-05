@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"D:\src\vsts\tfs\CDS-CRMGRIDPLUS\CRM\PL.CrmGridPlus.SolutionPackager";
+                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\Test1\AccountPlugin";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

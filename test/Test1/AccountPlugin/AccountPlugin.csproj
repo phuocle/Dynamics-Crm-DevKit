@@ -53,10 +53,12 @@
     <Compile Include="BasePlugin.cs" />
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="PostDeleteAccount.cs" />
-    <Compile Include="PreCreateAccount.cs" />
-    <Compile Include="PostUpdateAccount.cs" />
+    <None Include="deploy.debug.bat" />
+    <None Include="packages.config" />
+    <None Include="PreCreateAccount.cs" />
+    <None Include="PostUpdateAccount.cs" />
     <Compile Include="PreDeleteAccount.cs" />
-    <Compile Include="PreUpdateAccount.cs" />
+    <None Include="PreUpdateAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +67,7 @@
   <ItemGroup>
     <Content Include="register.txt" />
   </ItemGroup>
+  <Import Project="..\SunFlower.Shared\SunFlower.Shared.projitems" Label="Shared" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>

@@ -16,12 +16,29 @@ using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using PL.DynamicsCrm.DevKit.Shared;
+using PL.DynamicsCrm.DevKit.Shared.Xrm;
+using PL.DynamicsCrm.DevKit.Wizard;
 using Task = System.Threading.Tasks.Task;
 
 namespace PL.DynamicsCrm.DevKit.Package
 {
     internal sealed class Command
     {
+        private enum ImageTypeEnum
+        {
+            PreImage = 0,
+            PostImage = 1,
+            Both = 2
+        }
+
+        private class CrmPluginImage
+        {
+            public string Name { get; set; }
+            public string Alias { get; set; }
+            public ImageTypeEnum Type { get; set; }
+            public string Attributes { get; set; }
+        }
+
         public const int CommandWebResourceId = 0x0100;
         public const int CommandPluginId = 0x0200;
         public static readonly Guid CommandSetWebResource = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
@@ -95,21 +112,16 @@ namespace PL.DynamicsCrm.DevKit.Package
 
         private static bool IsAddReferenceToSharedProject()
         {
-            var projects = (object[])Dte.ActiveSolutionProjects;
-            if (projects.Count() == 0) return false;
-            var project = (Project)projects[0];
             var solutionFullName = Dte.Solution.FullName;
             var shareProjectName = Utility.GetSharedProject(solutionFullName);
-            var content = File.ReadAllText(project.FullName);
+            Dte.ActiveDocument.ProjectItem.ContainingProject.Save();
+            var content = File.ReadAllText(Dte.ActiveDocument.ProjectItem.ContainingProject.FullName);
             return content.IndexOf($"{shareProjectName}.projitems") > 0;
         }
 
         private static bool IsAddPackagesConfigAndInstall()
         {
-            var projects = (object[])Dte.ActiveSolutionProjects;
-            if (projects.Count() == 0) return false;
-            var project = (Project)projects[0];
-            var package = $"{Path.GetDirectoryName(project.FullName)}\\packages.config";
+            var package = $"{Path.GetDirectoryName(Dte.ActiveDocument.ProjectItem.ContainingProject.FullName)}\\packages.config";
             if (!File.Exists(package)) return false;
             var context = File.ReadAllText(package);
             return context.IndexOf("PL.DynamicsCrm.DevKit.Cli") > 0;
@@ -137,10 +149,19 @@ namespace PL.DynamicsCrm.DevKit.Package
                 MessageBox.Show("Please install PL.DynamicsCrm.DevKit.Cli from Nuget and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var attributes = CrmPluginRegistrationData();
+            var attributes = CrmPluginRegistrationData(currentClass.FullName);
             foreach(var attribute in attributes)
                 @class.AddAttribute("CrmPluginRegistration", attribute);
             AddImportSharedProjectIfNeed();
+        }
+
+        private static void AddDeployBatIfNeed(string content)
+        {
+            var deploy = $"{Path.GetDirectoryName(Dte.ActiveDocument.ProjectItem.ContainingProject.FullName)}\\deploy.debug.bat";
+            if (File.Exists(deploy)) return;
+            File.WriteAllText(deploy, content);
+            Dte.ActiveDocument.ProjectItem.ContainingProject.ProjectItems.AddFromFile(deploy);
+            Dte.ActiveDocument.ProjectItem.ContainingProject.Save();
         }
 
         private static void AddImportSharedProjectIfNeed()
@@ -162,9 +183,211 @@ namespace PL.DynamicsCrm.DevKit.Package
             fileCodeModel2.AddImport(shareProjectName);
         }
 
-        private static List<string> CrmPluginRegistrationData()
+        private static List<string> CrmPluginRegistrationData(string fullName)
         {
-            return new List<string>() { "ABCDEDF" };
+            var form = new FormConnection(Dte);
+            var list = new List<string>();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                var crmConnectionString = CrmConnectionString(form.CrmConnection);
+                var deployText = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Package.Data.Plugin.deploy.debug.bat");
+                deployText = deployText
+                    .Replace("$CrmConnectionString$", crmConnectionString)
+                    .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(Dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
+                AddDeployBatIfNeed(deployText);
+
+                var fetchData = new
+                {
+                    ismanaged = "0",
+                    iscustomizable = "1",
+                    typename = fullName
+                };
+                var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstep'>
+    <attribute name='filteringattributes' />
+    <attribute name='name' />
+    <attribute name='impersonatinguserid' />
+    <attribute name='rank' />
+    <attribute name='description' />
+    <attribute name='stage' />
+    <attribute name='supporteddeployment' />
+    <attribute name='componentstate' />
+    <attribute name='asyncautodelete' />
+    <attribute name='mode' />
+    <attribute name='configuration' />
+    <attribute name='statecode' />
+    <filter type='and'>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
+      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable/*1*/}'/>
+    </filter>
+    <link-entity name='sdkmessage' from='sdkmessageid' to='sdkmessageid' alias='m'>
+      <attribute name='name' />
+    </link-entity>
+    <link-entity name='plugintype' from='plugintypeid' to='plugintypeid' link-type='inner' alias='t'>
+      <filter type='and'>
+        <condition attribute='typename' operator='eq' value='{fetchData.typename/*AccountPlugin.PostDeleteAccount*/}'/>
+      </filter>
+      <link-entity name='pluginassembly' from='pluginassemblyid' to='pluginassemblyid' link-type='inner' alias='p'>
+        <attribute name='isolationmode' />
+      </link-entity>
+    </link-entity>
+    <link-entity name='sdkmessagefilter' from='sdkmessagefilterid' to='sdkmessagefilterid' link-type='inner' alias='f'>
+      <attribute name='primaryobjecttypecode' />
+    </link-entity>
+    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='s'>
+      <attribute name='secureconfig' />
+    </link-entity>
+  </entity>
+</fetch>";
+
+                var rows = form.CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (rows.Entities.Count == 0) return list;
+                foreach(var row in rows.Entities)
+                {
+                    var message = GetAliasedValue<string>(row, "m.name");
+                    var entity = GetAliasedValue<string>(row, "f.primaryobjecttypecode");
+                    var stage = row.GetAttributeValue<OptionSetValue>("stage").Value;
+                    var stageName = stage == 10 ? "StageEnum.PreValidation" : (stage == 20 ? "StageEnum.PreOperation" : "StageEnum.PostOperation");
+                    var mode = row.GetAttributeValue<OptionSetValue>("mode").Value;
+                    var modeName = mode == 0 ? "ExecutionModeEnum.Synchronous" : "ExecutionModeEnum.Asynchronous";
+                    var filteringAttributes = row.GetAttributeValue<string>("filteringattributes");
+                    var name = row.GetAttributeValue<string>("name");
+                    var rank = row.GetAttributeValue<int>("rank");
+                    var isolationMode = GetAliasedValue<OptionSetValue>(row, "p.isolationmode").Value;
+                    var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
+                    var asyncautodelete = row.GetAttributeValue<bool>("asyncautodelete");
+                    var description = row.GetAttributeValue<string>("description");
+                    var supportedDeployment = row.GetAttributeValue<OptionSetValue>("supporteddeployment").Value;
+                    var status = row.GetAttributeValue<OptionSetValue>("statecode").Value;
+                    var configuration = row.GetAttributeValue<string>("configuration");
+                    var secureconfig = GetAliasedValue<string>(row, "s.secureconfig");
+
+                    var attribute = string.Empty;
+                    attribute += $"\"{message}\"";
+                    attribute += $", \"{entity}\"";
+                    attribute += $", {stageName}";
+                    attribute += $", {modeName}";
+                    attribute += $", \"{filteringAttributes}\",\r\n\t";
+                    attribute += $"\"{name}\"";
+                    attribute += $", {rank}";
+                    attribute += $", {isolationModeName},\r\n\t";
+                    if (asyncautodelete)
+                        attribute += $"DeleteAsyncOperation = true, ";
+                    if (description != null)
+                        attribute += $"Description = \"{description}\", ";
+                    if (supportedDeployment == 2)
+                    {
+                        attribute += $"Server = true, Offline = true, ";
+                    }
+                    else if (supportedDeployment == 1)
+                    {
+                        attribute += $"Server = false, Offline = true, ";
+                    }
+                    if (status == 1)
+                    {
+                        attribute += $"Action = PluginStepOperationEnum.Deactivate, ";
+                    }
+                    if (configuration != null)
+                    {
+                        attribute += $"UnSecureConfiguration = \"{configuration}\", ";
+                    }
+                    if (secureconfig != null)
+                    {
+                        attribute += $"SecureConfiguration = \"{secureconfig}\", ";
+                    }
+                    if (attribute.EndsWith(", ")) {
+                        attribute = attribute.TrimEnd();
+                        attribute += "\r\n\t";
+                    }
+                    var images = GetPluginImages(form.CrmService, fullName, row.Id);
+                    var image = "Image{0}Name = \"{1}\", Image{0}Alias = \"{2}\", Image{0}Type = ImageTypeEnum.{3}, Image{0}Attributes = \"{4}\",\r\n\t";
+                    if (images.Count > 0)
+                    {
+                        var i = 1;
+                        foreach (var item in images)
+                        {
+                            attribute += string.Format(image, i, item.Name, item.Alias, item.Type.ToString(), item.Attributes);
+                            i++;
+                        }
+                        attribute = attribute.TrimEnd(",\r\n\t".ToCharArray());
+                    }
+                    else
+                    {
+                        attribute += string.Format(image, 1, string.Empty, string.Empty, "PreImage", string.Empty);
+                        attribute = attribute.TrimEnd(",\r\n\t".ToCharArray());
+                    }
+                    list.Add(attribute);
+                }
+                return list;
+            }
+            return list;
+        }
+
+        private static List<CrmPluginImage> GetPluginImages(OrganizationServiceProxy crmService, string fullName, Guid sdkMessageProcessingStepId)
+        {
+            var list = new List<CrmPluginImage>();
+            var fetchData = new
+            {
+                ismanaged = "0",
+                iscustomizable = "1",
+                sdkmessageprocessingstepid = sdkMessageProcessingStepId,
+                typename = fullName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstepimage'>
+    <attribute name='entityalias' />
+    <attribute name='name' />
+    <attribute name='imagetype' />
+    <attribute name='attributes' />
+    <filter type='and'>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
+      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable/*1*/}'/>
+      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid/*87862893-2f3c-e911-a81f-000d3a17c02e*/}'/>
+    </filter>
+    <link-entity name='sdkmessageprocessingstep' from='sdkmessageprocessingstepid' to='sdkmessageprocessingstepid' link-type='inner' alias='a'>
+      <link-entity name='plugintype' from='plugintypeid' to='plugintypeid' link-type='inner' alias='b'>
+        <filter type='and'>
+          <condition attribute='typename' operator='eq' value='{fetchData.typename/*AccountPlugin.PostDeleteAccount*/}'/>
+        </filter>
+      </link-entity>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = crmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            foreach(var row in rows.Entities)
+            {
+                list.Add(new CrmPluginImage {
+                    Alias = row.GetAttributeValue<string>("entityalias"),
+                    Name = row.GetAttributeValue<string>("name"),
+                    Attributes = row.GetAttributeValue<string>("attributes"),
+                    Type = (ImageTypeEnum)row.GetAttributeValue<OptionSetValue>("imagetype").Value
+                });
+            }
+            return list;
+        }
+
+        private static T GetAliasedValue<T>(Entity entity, string name)
+        {
+            var aliased = entity.GetAttributeValue<AliasedValue>(name);
+            if (aliased == null) return default(T);
+            if (typeof(T) == typeof(EntityReference) && aliased.Value is Guid)
+                return (T)(object)new EntityReference(aliased.EntityLogicalName, (Guid)aliased.Value);
+            if (typeof(T) == typeof(Guid) && aliased.Value is EntityReference)
+                return (T)(object)((EntityReference)aliased.Value).Id;
+            return (T)aliased.Value;
+        }
+
+        private static string CrmConnectionString(CrmConnection CrmConnection)
+        {
+            var url = CrmConnection.Url.Substring(0, CrmConnection.Url.Length - "/XRMServices/2011/Organization.svc".Length);
+            url = url.Replace(".api.", ".");
+            if (CrmConnection.Url.Contains(".dynamics.com"))
+                return $"AuthType=Office365;Url={url};Username={CrmConnection.UserName};Password={CrmConnection.Password};";
+            var domain = CrmConnection.UserName.Split("\\".ToCharArray())[0];
+            var user = CrmConnection.UserName.Split("\\".ToCharArray())[1];
+            return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={CrmConnection.Password};";
         }
 
         private static void CommandWebResource_BeforeQueryStatus(object sender, EventArgs e)

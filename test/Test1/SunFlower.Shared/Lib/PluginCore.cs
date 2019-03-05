@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Paz.LuckeyMonkey.Shared
+namespace SunFlower.Shared
 {
     public enum ImageType
     {
@@ -49,8 +49,7 @@ namespace Paz.LuckeyMonkey.Shared
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public class CrmPluginRegistrationAttribute : Attribute
     {
-        public CrmPluginRegistrationAttribute(string message, string entityLogicalName, StageEnum stage, ExecutionModeEnum executionMode, string filteringAttributes, 
-            string stepName, int executionOrder, IsolationModeEnum isolationModel)
+        public CrmPluginRegistrationAttribute(string message, string entityLogicalName, StageEnum stage, ExecutionModeEnum executionMode, string filteringAttributes, string stepName, int executionOrder, IsolationModeEnum isolationModel)
         {
             Message = message;
             EntityLogicalName = entityLogicalName;
