@@ -47,6 +47,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         {
         }
 
+        public string RunAs { get; set; } = string.Empty;
         public string FriendlyName { get; set; } = string.Empty;
         public string GroupName { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

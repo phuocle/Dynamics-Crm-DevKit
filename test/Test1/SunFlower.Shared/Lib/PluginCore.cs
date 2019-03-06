@@ -35,7 +35,7 @@ namespace SunFlower.Shared
     public enum PluginStepOperationEnum
     {
         Activate = 0,
-        Deactivate = 1,
+        Deactivate = 1
     }
 
     public enum StageEnum
@@ -70,6 +70,7 @@ namespace SunFlower.Shared
             IsolationMode = isolationModel;
         }
 
+        public string RunAs { get; set; }
         public string FriendlyName { get; set; }
         public string GroupName { get; set; }
         public string Description { get; set; }

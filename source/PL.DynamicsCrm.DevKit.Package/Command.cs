@@ -262,6 +262,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                     var status = row.GetAttributeValue<OptionSetValue>("statecode").Value;
                     var configuration = row.GetAttributeValue<string>("configuration");
                     var secureconfig = GetAliasedValue<string>(row, "s.secureconfig");
+                    var impersonatinguserid = row.GetAttributeValue<EntityReference>("impersonatinguserid");
 
                     var attribute = string.Empty;
                     attribute += $"\"{message}\"";
@@ -296,6 +297,10 @@ namespace PL.DynamicsCrm.DevKit.Package
                     {
                         attribute += $"SecureConfiguration = \"{secureconfig}\", ";
                     }
+                    if (impersonatinguserid != null)
+                    {
+                        attribute += $"RunAs = \"{impersonatinguserid.Name}\", ";
+                    }
                     if (attribute.EndsWith(", ")) {
                         attribute = attribute.TrimEnd();
                         attribute += "\r\n\t";
@@ -309,6 +314,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                         {
                             attribute += string.Format(image, i, item.Name, item.Alias, item.Type.ToString(), item.Attributes);
                             i++;
+                            if (i == 5) break;
                         }
                         attribute = attribute.TrimEnd(",\r\n\t".ToCharArray());
                     }

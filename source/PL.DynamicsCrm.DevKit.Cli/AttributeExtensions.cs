@@ -33,6 +33,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
             {
                 switch (namedArgument.MemberName)
                 {
+                    case "RunAs":
+                        attribute.RunAs = (string)namedArgument.TypedValue.Value;
+                        break;
                     case "FriendlyName":
                         attribute.FriendlyName = (string)namedArgument.TypedValue.Value;
                         break;
