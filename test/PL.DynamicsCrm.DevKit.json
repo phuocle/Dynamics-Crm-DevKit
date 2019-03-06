@@ -2,11 +2,11 @@
     "DefaultCrmVersion":"9.0.2.12",
     "DefaultNetVersion":"4.6.2",
     "DefaultCrmName":"Dynamics 365",
-    "DefaultCrmConnection":"pl-dynamicscrm-devkit.api.crm.dynamics.com",
-    "SolutionPrefix":"paz_",
+    "DefaultCrmConnection":"pl-dynamicscrm-devkit",
+    "SolutionPrefix":null,
     "CrmConnections":[
         {
-            "Name":"pl-dynamicscrm-devkit.api.crm.dynamics.com",
+            "Name":"pl-dynamicscrm-devkit",
             "Url":"https://pl-dynamicscrm-devkit.api.crm.dynamics.com/XRMServices/2011/Organization.svc",
             "UserName":"admin@CRM831571.onmicrosoft.com",
             "Password":"rZwesSzW1Pr5LquT+sk1ng=="

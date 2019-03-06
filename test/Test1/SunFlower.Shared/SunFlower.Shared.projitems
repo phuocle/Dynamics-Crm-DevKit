@@ -3,7 +3,7 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>3c23f108-bbc5-4984-b2a4-670970229702</SharedGUID>
+    <SharedGUID>b02e4d93-e989-4b50-915f-0a288c93e9f2</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>SunFlower.Shared</Import_RootNamespace>

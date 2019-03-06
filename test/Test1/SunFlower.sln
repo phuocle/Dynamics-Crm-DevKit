@@ -5,17 +5,18 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountPlugin", "AccountPlugin\AccountPlugin.csproj", "{2065A8EA-E72F-4764-8198-C2DF2A9A5F5F}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SunFlower.Shared", "SunFlower.Shared\SunFlower.Shared.shproj", "{3C23F108-BBC5-4984-B2A4-670970229702}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SunFlower.Shared", "SunFlower.Shared\SunFlower.Shared.shproj", "{B02E4D93-E989-4B50-915F-0A288C93E9F2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F211B7E6-EF93-44CF-B2B9-304B493A1226}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{98815FF0-B3DE-4328-BA42-BE404BFE86BB}"
 	ProjectSection(SolutionItems) = preProject
 		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
+		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
 	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SunFlower.Shared\SunFlower.Shared.projitems*{2065a8ea-e72f-4764-8198-c2df2a9a5f5f}*SharedItemsImports = 4
-		SunFlower.Shared\SunFlower.Shared.projitems*{3c23f108-bbc5-4984-b2a4-670970229702}*SharedItemsImports = 13
+		SunFlower.Shared\SunFlower.Shared.projitems*{b02e4d93-e989-4b50-915f-0a288c93e9f2}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

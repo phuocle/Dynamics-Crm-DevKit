@@ -3,10 +3,11 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "LuckeyMonkey",
       "includefiles": [
         "SunFlower.Plugin.*.dll",
-        "SunFlower.CustomAction.*.dll"
+        "SunFlower.CustomAction.*.dll",
+        "AccountPlugin.dll"
       ],
       "excludefiles": [
         "SunFlower.*.Test.dll"

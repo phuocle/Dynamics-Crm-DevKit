@@ -59,6 +59,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             CliLog.WriteLine(CliLog.ColorGreen, "START PLUGIN TASKS");
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
+            if (PluginFiles.Count() == 0) throw new Exception("No plugin files found. Please check PL.DynamicsCrm.DevKit.Cli.json file!!");
+            if (PluginJson.solution.Length == 0 || PluginJson.solution == "???") throw new Exception("No solution found in plugin profile. Please check PL.DynamicsCrm.DevKit.Cli.json file!!");
             foreach (var pluginFile in PluginFiles) RegisterPlugin(pluginFile);
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             CliLog.WriteLine(CliLog.ColorGreen, "END PLUGIN TASKS");
@@ -161,11 +163,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                         throw new Exception(message);
                     }
                 }
-
                 var sdkMessageFilterId = GetSdkMessageFilterId(attribute.EntityLogicalName, attribute.Message);
                 var sdkMessageId = GetSdkMessageId(attribute.EntityLogicalName, attribute.Message);
                 var impersonatingUserId = GetImpersonatingUserId(attribute.RunAs);
-
+                if (attribute.ExecutionMode == 0)
+                    attribute.DeleteAsyncOperation = false; //when ExecutionModeEnum.Synchronous this field always false;
                 var step = new Entity("sdkmessageprocessingstep")
                 {
                     ["name"] = attribute.Name,

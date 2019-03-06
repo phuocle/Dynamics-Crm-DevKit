@@ -64,9 +64,6 @@
   <ItemGroup>
     <None Include="AccountPlugin.snk" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="register.txt" />
-  </ItemGroup>
   <Import Project="..\SunFlower.Shared\SunFlower.Shared.projitems" Label="Shared" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

@@ -136,12 +136,12 @@ namespace PL.DynamicsCrm.DevKit.Package
             if (!(currentClass is CodeClass @class)) return;
             if (!Utility.SharedProjectExist(Dte))
             {
-                MessageBox.Show("Please add shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please add PL.DynamicsCrm.DevKit Shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (!IsAddReferenceToSharedProject())
             {
-                MessageBox.Show("Please add reference shared project to current project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please add reference PL.DynamicsCrm.DevKit Shared project to current project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if(!IsAddPackagesConfigAndInstall())
@@ -150,9 +150,12 @@ namespace PL.DynamicsCrm.DevKit.Package
                 return;
             }
             var attributes = CrmPluginRegistrationData(currentClass.FullName);
-            foreach(var attribute in attributes)
-                @class.AddAttribute("CrmPluginRegistration", attribute);
-            AddImportSharedProjectIfNeed();
+            if (attributes.Count > 0)
+            {
+                foreach (var attribute in attributes)
+                    @class.AddAttribute("CrmPluginRegistration", attribute);
+                AddImportSharedProjectIfNeed();
+            }
         }
 
         private static void AddDeployBatIfNeed(string content)
