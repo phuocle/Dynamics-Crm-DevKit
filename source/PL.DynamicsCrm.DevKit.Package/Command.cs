@@ -71,7 +71,8 @@ namespace PL.DynamicsCrm.DevKit.Package
             if (!(Dte.ActiveDocument.Language.Equals("CSharp", StringComparison.OrdinalIgnoreCase))) return;
             var textDocument = (TextDocument)Dte.ActiveDocument.Object();
             var activePoint = textDocument.Selection.ActivePoint;
-            var currentClass = Dte.ActiveDocument.ProjectItem.FileCodeModel.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
+            var currentClass = Dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
+            if (currentClass == null) return;
             if (!(currentClass is CodeClass @class)) return;
             if (!IsImplementedInterface(@class)) return;
             if (HasAttributeCrmPluginRegistration(@class)) return;
