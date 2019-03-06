@@ -139,6 +139,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, $"\tRegistering Type: ", CliLog.ColorCyan, $"{plugin.FullName}");
             var pluginTypeId = CrmServiceClient.Create(pluginType);
             pluginType["plugintypeid"] = pluginTypeId;
+            pluginType.Id = pluginTypeId;
             return pluginType;
         }
 
@@ -163,6 +164,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
                 var sdkMessageFilterId = GetSdkMessageFilterId(attribute.EntityLogicalName, attribute.Message);
                 var sdkMessageId = GetSdkMessageId(attribute.EntityLogicalName, attribute.Message);
+
                 var step = new Entity("sdkmessageprocessingstep")
                 {
                     ["name"] = attribute.Name,
@@ -185,16 +187,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 else
                     supportDeployment = 0; // Server Only
                 step["supporteddeployment"] = new OptionSetValue(supportDeployment);
-                if(attribute.Action == PluginStepOperationEnum.Deactivate)
-                {
-                    step["statecode"] = new OptionSetValue(1);
-                    step["statuscode"] = new OptionSetValue(2);
-                }
-                else
-                {
-                    step["statecode"] = new OptionSetValue(0);
-                    step["statuscode"] = new OptionSetValue(1);
-                }
+
                 var fetchData = new
                 {
                     plugintypeid = pluginTypeEntity["plugintypeid"].ToString(),
@@ -216,32 +209,112 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 Guid sdkMessageProcessingStepId;
                 if (rows.Entities.Count > 0)
                 {
+                    if (attribute.Action == PluginStepOperationEnum.Deactivate)
+                    {
+                        step["statecode"] = new OptionSetValue(1);
+                        step["statuscode"] = new OptionSetValue(2);
+                    }
+                    else
+                    {
+                        step["statecode"] = new OptionSetValue(0);
+                        step["statuscode"] = new OptionSetValue(1);
+                    }
                     sdkMessageProcessingStepId = rows.Entities[0].Id;
                     step["sdkmessageprocessingstepid"] = sdkMessageProcessingStepId;
+                    var entity = GetSecureEntity(attribute);
+                    if (entity != null)
+                    {
+                        var secureconfig = entity.GetAttributeValue<AliasedValue>("s.secureconfig");
+                        if (secureconfig == null)
+                        {
+                            if (attribute.SecureConfiguration.Length > 0)
+                            {
+                                var secureEntity = new Entity("sdkmessageprocessingstepsecureconfig");
+                                secureEntity["secureconfig"] = attribute.SecureConfiguration;
+                                var sdkmessageprocessingstepsecureconfigid = CrmServiceClient.Create(secureEntity);
+                                step["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
+                            }
+                        }
+                        else
+                        {
+                            var sdkmessageprocessingstepsecureconfigid = (Guid)entity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid").Value;
+                            if (secureconfig.Value.ToString() != attribute.SecureConfiguration)
+                            {
+                                var update = new Entity("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
+                                update["secureconfig"] = attribute.SecureConfiguration;
+                                CrmServiceClient.Update(update);
+                            }
+                            else if (attribute.SecureConfiguration.Length == 0)
+                            {
+                                CrmServiceClient.Delete("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
+                            }
+                        }
+                    }
                     CliLog.WriteLine(CliLog.ColorBlue, $"\t\tUpdating Step: ", CliLog.ColorCyan, $"{attribute.Name}");
                     CrmServiceClient.Update(step);
                 }
                 else
                 {
+                    if (attribute.SecureConfiguration.Length > 0)
+                    {
+                        var secureEntity = new Entity("sdkmessageprocessingstepsecureconfig");
+                        secureEntity["secureconfig"] = attribute.SecureConfiguration;
+                        var sdkmessageprocessingstepsecureconfigid = CrmServiceClient.Create(secureEntity);
+                        step["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
+                    }
                     CliLog.WriteLine(CliLog.ColorGreen, $"\t\tRegistering Step: ", CliLog.ColorCyan, $"{attribute.Name}");
                     sdkMessageProcessingStepId = CrmServiceClient.Create(step);
                     step["sdkmessageprocessingstepid"] = sdkMessageProcessingStepId;
+                    if (attribute.Action == PluginStepOperationEnum.Deactivate)
+                    {
+                        var update = new Entity("sdkmessageprocessingstep", sdkMessageProcessingStepId);
+                        update["statecode"] = new OptionSetValue(1);
+                        update["statuscode"] = new OptionSetValue(2);
+                        CrmServiceClient.Update(update);
+                    }
                 }
                 AddStepToSolution(step);
-                if (attribute?.Image1Attributes?.Length > 0 || attribute?.Image2Attributes?.Length > 0)
-                    GetPluginStepImages(attribute, sdkMessageProcessingStepId);
+                ProcessPluginImages(attribute, sdkMessageProcessingStepId);
             }
         }
 
-        private void GetPluginStepImages(CrmPluginRegistrationAttribute attribute, Guid sdkMessageProcessingStepId)
+        private Entity GetSecureEntity(CrmPluginRegistrationAttribute attribute)
         {
-            if (attribute.Image1Attributes.Length > 0)
+            var fetchData = new
+            {
+                typename = attribute.Name
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstep'>
+    <attribute name='name' />
+    <attribute name='sdkmessageprocessingstepid' />
+    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='s'>
+      <attribute name='secureconfig' />
+      <attribute name='sdkmessageprocessingstepsecureconfigid' />
+    </link-entity>
+    <link-entity name='plugintype' from='plugintypeid' to='plugintypeid' link-type='inner' alias='p'>
+      <attribute name='plugintypeid' />
+      <filter type='and'>
+        <condition attribute='typename' operator='eq' value='{fetchData.typename/*AccountPlugin.PostDeleteAccount*/}'/>
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return null;
+            return rows.Entities[0];
+        }
+
+        private void ProcessPluginImages(CrmPluginRegistrationAttribute attribute, Guid sdkMessageProcessingStepId)
+        {
+            if (attribute.Image1Name.Length > 0)
                 RegisterImage(attribute.Message, attribute.Image1Name, attribute.Image1Alias, attribute.Image1Type, attribute.Image1Attributes, sdkMessageProcessingStepId);
-            if (attribute.Image2Attributes.Length > 0)
+            if (attribute.Image2Name.Length > 0)
                 RegisterImage(attribute.Message, attribute.Image2Name, attribute.Image2Alias, attribute.Image2Type, attribute.Image2Attributes, sdkMessageProcessingStepId);
-            if (attribute.Image3Attributes.Length > 0)
+            if (attribute.Image3Name.Length > 0)
                 RegisterImage(attribute.Message, attribute.Image3Name, attribute.Image3Alias, attribute.Image3Type, attribute.Image3Attributes, sdkMessageProcessingStepId);
-            if (attribute.Image4Attributes.Length > 0)
+            if (attribute.Image4Name.Length > 0)
                 RegisterImage(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, sdkMessageProcessingStepId);
         }
 
@@ -300,10 +373,17 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 }
                 else
                 {
-
-                    image["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
-                    CliLog.WriteLine(CliLog.ColorBlue, "\t\t\tUpdating Image: ", CliLog.ColorCyan, $"{imageName}");
-                    CrmServiceClient.Update(image);
+                    if (attributes != imageAttributes.Replace(" ", "") && imageAttributes.Replace(" ", "").Length != 0)
+                    {
+                        image["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
+                        CliLog.WriteLine(CliLog.ColorBlue, "\t\t\tUpdating Image: ", CliLog.ColorCyan, $"{imageName}");
+                        CrmServiceClient.Update(image);
+                    }
+                    else if (imageAttributes.Replace(" ", "").Length == 0)
+                    {
+                        CliLog.WriteLine(CliLog.ColorBlue, "\t\t\tDeleting Image: ", CliLog.ColorCyan, $"{imageName}");
+                        CrmServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
+                    }
                 }
             }
         }
