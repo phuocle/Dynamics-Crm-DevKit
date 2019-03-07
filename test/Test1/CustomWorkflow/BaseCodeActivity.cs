@@ -4,5 +4,6 @@ namespace CustomWorkflow
 {
     public abstract class BaseCodeActivity : CodeActivity
     {
+
     }
 }

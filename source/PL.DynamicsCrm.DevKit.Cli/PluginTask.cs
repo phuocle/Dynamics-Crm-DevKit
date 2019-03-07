@@ -80,8 +80,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 p.GetInterfaces().FirstOrDefault(a => a.Name == typeof(IPlugin).Name) != null);
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
             var plugins = (from pluginType in pluginTypes
-                    where pluginType.IsAbstract == false
-                    select pluginType
+                           where pluginType.IsAbstract == false
+                           select pluginType
                 ).ToList();
             if (!plugins.Any()) return;
             var pluginEntity = RegisterAssembly(assemblyFilePath, assembly, plugins);
@@ -89,6 +89,10 @@ namespace PL.DynamicsCrm.DevKit.Cli
             AddAssemblyToSolution(pluginEntity);
             foreach (var plugin in plugins)
             {
+                var pluginAttributes = plugin.GetCustomAttributesData()
+                                      .Where(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name);
+                var customAttributeDatas = pluginAttributes as CustomAttributeData[] ?? pluginAttributes.ToArray();
+                if (!customAttributeDatas.Any()) continue;
                 var pluginTypeEntity = RegisterPluginType(pluginEntity, plugin);
                 RegisterPluginSteps(pluginTypeEntity, plugin);
             }

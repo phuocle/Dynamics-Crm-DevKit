@@ -74,7 +74,7 @@ namespace PL.DynamicsCrm.DevKit.Package
             var currentClass = Dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
             if (currentClass == null) return;
             if (!(currentClass is CodeClass @class)) return;
-            if (!IsImplementedInterface(@class)) return;
+            if (!HasImplementedPlugin(@class) && !HasImplementedWorkflow(@class)) return;
             if (HasAttributeCrmPluginRegistration(@class)) return;
             menuCommand.Visible = true;
         }
@@ -88,19 +88,35 @@ namespace PL.DynamicsCrm.DevKit.Package
             return false;
         }
 
-        private static bool IsImplementedInterface(CodeClass @class)
+        private static bool HasImplementedPlugin(CodeClass @class)
         {
             foreach (CodeInterface @interface in @class.ImplementedInterfaces)
             {
-                if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin") return true;
+                if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin")
+                    return true;
             }
             foreach (var @base in @class.Bases)
             {
                 if (!(@base is CodeClass baseClass)) continue;
-                if (IsImplementedInterface(baseClass)) return true;
+                if (HasImplementedPlugin(baseClass))
+                    return true;
             }
             return false;
         }
+
+        private static bool HasImplementedWorkflow(CodeClass @class)
+        {
+            foreach (var @base in @class.Bases)
+            {
+                if (!(@base is CodeClass baseClass)) continue;
+                if (baseClass.FullName == "System.Activities.CodeActivity")
+                    return true;
+                if (HasImplementedWorkflow(baseClass))
+                    return true;
+            }
+            return false;
+        }
+
 
         private static bool IsImplementedAttribute(CodeClass @class)
         {
@@ -150,12 +166,25 @@ namespace PL.DynamicsCrm.DevKit.Package
                 MessageBox.Show("Please install PL.DynamicsCrm.DevKit.Cli from Nuget and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var attributes = CrmPluginRegistrationData(currentClass.FullName);
-            if (attributes.Count > 0)
+            if (HasImplementedPlugin(@class))
             {
-                foreach (var attribute in attributes)
-                    @class.AddAttribute("CrmPluginRegistration", attribute);
-                AddImportSharedProjectIfNeed();
+                var attributes = CrmPluginRegistrationDataForPlugin(currentClass.FullName);
+                if (attributes.Count > 0)
+                {
+                    foreach (var attribute in attributes)
+                        @class.AddAttribute("CrmPluginRegistration", attribute);
+                    AddImportSharedProjectIfNeed();
+                }
+            }
+            else if (HasImplementedWorkflow(@class))
+            {
+                var attributes = CrmPluginRegistrationDataForWorkflow(currentClass.FullName);
+                if (attributes.Count > 0)
+                {
+                    foreach (var attribute in attributes)
+                        @class.AddAttribute("CrmPluginRegistration", attribute);
+                    AddImportSharedProjectIfNeed();
+                }
             }
         }
 
@@ -187,7 +216,69 @@ namespace PL.DynamicsCrm.DevKit.Package
             fileCodeModel2.AddImport(shareProjectName);
         }
 
-        private static List<string> CrmPluginRegistrationData(string fullName)
+        private static List<string> CrmPluginRegistrationDataForWorkflow(string fullName)
+        {
+            var form = new FormConnection(Dte);
+            var list = new List<string>();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                var crmConnectionString = CrmConnectionString(form.CrmConnection);
+                var deployText = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Package.Data.Workflow.deploy.debug.bat");
+                deployText = deployText
+                    .Replace("$CrmConnectionString$", crmConnectionString)
+                    .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(Dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
+                AddDeployBatIfNeed(deployText);
+                var fetchData = new
+                {
+                    ismanaged = "0",
+                    isworkflowactivity = "1",
+                    typename = fullName
+                };
+                var fetchXml = $@"
+<fetch>
+  <entity name='plugintype'>
+    <attribute name='name' />
+    <attribute name='workflowactivitygroupname' />
+    <attribute name='description' />
+    <attribute name='typename' />
+    <attribute name='assemblyname' />
+    <attribute name='friendlyname' />
+    <filter type='and'>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
+      <condition attribute='isworkflowactivity' operator='eq' value='{fetchData.isworkflowactivity/*1*/}'/>
+      <condition attribute='typename' operator='eq' value='{fetchData.typename/*CustomWorkflow.RetrieveUsers*/}'/>
+    </filter>
+    <link-entity name='pluginassembly' from='pluginassemblyid' to='pluginassemblyid' alias='a'>
+      <attribute name='isolationmode' />
+    </link-entity>
+  </entity>
+</fetch>";
+
+                var rows = form.CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
+                if (rows.Entities.Count == 0) return list;
+                foreach (var row in rows.Entities)
+                {
+                    var name = row.GetAttributeValue<string>("name");
+                    var friendlyname = row.GetAttributeValue<string>("friendlyname");
+                    var description = row.GetAttributeValue<string>("description");
+                    var workflowactivitygroupname = row.GetAttributeValue<string>("workflowactivitygroupname");
+                    var isolationMode = GetAliasedValue<OptionSetValue>(row, "a.isolationmode").Value;
+                    var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
+                    var attribute = string.Empty;
+                    attribute += $"\"{name}\"";
+                    attribute += $", \"{friendlyname}\"";
+                    attribute += $", \"{description}\"";
+                    attribute += $", \"{workflowactivitygroupname}\"";
+                    attribute += $", {isolationModeName}";
+                    list.Add(attribute);
+                }
+                return list;
+            }
+            return list;
+        }
+
+
+        private static List<string> CrmPluginRegistrationDataForPlugin(string fullName)
         {
             var form = new FormConnection(Dte);
             var list = new List<string>();
