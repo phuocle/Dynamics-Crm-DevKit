@@ -7,20 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountPlugin", "AccountPlu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWorkflow", "CustomWorkflow\CustomWorkflow.csproj", "{600EB6AE-E8A6-4AC3-9E46-700B25167DB4}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SunFlower.Shared", "SunFlower.Shared\SunFlower.Shared.shproj", "{F7BD09F6-C1D2-47F2-9E0F-7813718BD555}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0D530B2B-9874-4884-9C5D-4AEEEA6C4EE6}"
-	ProjectSection(SolutionItems) = preProject
-		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
-		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
-	EndProjectSection
-EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		SunFlower.Shared\SunFlower.Shared.projitems*{2065a8ea-e72f-4764-8198-c2df2a9a5f5f}*SharedItemsImports = 4
-		SunFlower.Shared\SunFlower.Shared.projitems*{600eb6ae-e8a6-4ac3-9e46-700b25167db4}*SharedItemsImports = 4
-		SunFlower.Shared\SunFlower.Shared.projitems*{f7bd09f6-c1d2-47f2-9e0f-7813718bd555}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

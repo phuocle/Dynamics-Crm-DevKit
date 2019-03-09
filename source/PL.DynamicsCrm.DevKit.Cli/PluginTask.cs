@@ -111,7 +111,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     assembly = Assembly.ReflectionOnlyLoad(args.Name);
                     break;
             }
-
             return assembly;
         }
 
@@ -155,9 +154,38 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 .Where(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name);
             var customAttributeDatas = pluginAttributes as CustomAttributeData[] ?? pluginAttributes.ToArray();
             if (!customAttributeDatas.Any()) return;
+
             foreach (var pluginAttribute in customAttributeDatas)
             {
                 var attribute = pluginAttribute.CreateFromData();
+                var fetchData = new
+                {
+                    plugintypeid = pluginTypeEntity["plugintypeid"].ToString(),
+                    name = attribute.Name,
+                    sdkmessageidname = attribute.Message
+                };
+                var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstep'>
+    <all-attributes />
+    <filter type='and'>
+      <condition attribute='plugintypeid' operator='eq' value='{fetchData.plugintypeid}'/>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+      <condition attribute='sdkmessageidname' operator='eq' value='{fetchData.sdkmessageidname}'/>
+    </filter>
+  </entity>
+</fetch>";
+                var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+                Entity check = null;
+                if (rows.Entities.Count == 0)
+                {
+                    check = new Entity("sdkmessageprocessingstep", Guid.Empty);
+                }
+                else if (rows.Entities.Count == 1)
+                {
+                    check = rows.Entities[0];
+                }
+                else throw new Exception("sdkmessageprocessingstep return more than 1 rows");
                 if (attribute.Message.ToLower() == "update")
                 {
                     if (attribute.FilteringAttributes.Length == 0)
@@ -195,25 +223,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 else
                     supportDeployment = 0; // Server Only
                 step["supporteddeployment"] = new OptionSetValue(supportDeployment);
-
-                var fetchData = new
-                {
-                    plugintypeid = pluginTypeEntity["plugintypeid"].ToString(),
-                    name = attribute.Name,
-                    sdkmessageidname = attribute.Message
-                };
-                var fetchXml = $@"
-<fetch>
-  <entity name='sdkmessageprocessingstep'>
-    <attribute name='sdkmessageprocessingstepid' />
-    <filter type='and'>
-      <condition attribute='plugintypeid' operator='eq' value='{fetchData.plugintypeid}'/>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
-      <condition attribute='sdkmessageidname' operator='eq' value='{fetchData.sdkmessageidname}'/>
-    </filter>
-  </entity>
-</fetch>";
-                var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
                 Guid sdkMessageProcessingStepId;
                 if (rows.Entities.Count > 0)
                 {
@@ -259,7 +268,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                             }
                         }
                     }
-                    if (!IsChangedPluginStep(step))
+                    if (!IsChangedPluginStep(check, step))
                     {
                         CliLog.WriteLine(CliLog.ColorGreen, $"\t\tNo Change Step: ", CliLog.ColorCyan, $"{attribute.Name}");
                     }
@@ -294,9 +303,34 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
         }
 
-        private bool IsChangedPluginStep(Entity step)
+        private bool IsChangedPluginStep(Entity check, Entity step)
         {
-            return true;//TODO: ??
+            foreach(var key in check.Attributes.Keys)
+            {
+                if (step.Attributes.Contains(key))
+                {
+                    object checkValue = null;
+                    object stepValue = null;
+                    if (check.Attributes[key] is OptionSetValue && step.Attributes[key] is OptionSetValue)
+                    {
+                        checkValue = ((OptionSetValue)check.Attributes[key]).Value;
+                        stepValue = ((OptionSetValue)step.Attributes[key]).Value;
+                    }
+                    else if (check.Attributes[key] is EntityReference && step.Attributes[key] is EntityReference)
+                    {
+                        checkValue = ((EntityReference)check.Attributes[key]).Id;
+                        stepValue = ((EntityReference)step.Attributes[key]).Id;
+                    }
+                    else
+                    {
+                        stepValue = step.Attributes[key];
+                        checkValue = check.Attributes[key];
+                    }
+                    if (stepValue?.ToString() != checkValue?.ToString())
+                        return true;
+                }
+            }
+            return false;
         }
 
         private Guid? GetImpersonatingUserId(string runAs)

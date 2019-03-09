@@ -53,8 +53,6 @@
     <Compile Include="BasePlugin.cs" />
     <Compile Include="BusinessLogic.cs" />
     <Compile Include="PostDeleteAccount.cs" />
-    <None Include="deploy.debug.bat" />
-    <None Include="packages.config" />
     <None Include="PreCreateAccount.cs" />
     <Compile Include="PostUpdateAccount.cs" />
     <Compile Include="PreAccountMergeSynchronous.cs" />
@@ -65,7 +63,6 @@
   <ItemGroup>
     <None Include="AccountPlugin.snk" />
   </ItemGroup>
-  <Import Project="..\SunFlower.Shared\SunFlower.Shared.projitems" Label="Shared" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>

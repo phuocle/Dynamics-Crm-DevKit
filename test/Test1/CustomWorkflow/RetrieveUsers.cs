@@ -1,11 +1,9 @@
-﻿using SunFlower.Shared;
-using System.Activities;
+﻿using System.Activities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 
 namespace CustomWorkflow
 {
-    [CrmPluginRegistration("RetrieveUsers", "RetrieveUsers", "", "CustomWorkflow", IsolationModeEnum.Sandbox)]
     public class RetrieveUsers : CodeActivity
     {
         [Input("Email Template Title")]
