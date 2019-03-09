@@ -74,6 +74,8 @@ namespace PL.DynamicsCrm.DevKit.Package
             var currentClass = Dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
             if (currentClass == null) return;
             if (!(currentClass is CodeClass @class)) return;
+            if (@class.IsAbstract) return;
+            if (!@class.IsCodeType) return;
             if (!HasImplementedPlugin(@class) && !HasImplementedWorkflow(@class)) return;
             if (HasAttributeCrmPluginRegistration(@class)) return;
             menuCommand.Visible = true;
@@ -117,7 +119,6 @@ namespace PL.DynamicsCrm.DevKit.Package
             return false;
         }
 
-
         private static bool IsImplementedAttribute(CodeClass @class)
         {
             if (@class.Attributes.Count == 0) return false;
@@ -144,7 +145,6 @@ namespace PL.DynamicsCrm.DevKit.Package
             return context.IndexOf("PL.DynamicsCrm.DevKit.Cli") > 0;
         }
 
-
         private static void ExecutePlugin(AsyncPackage package)
         {
             var textDocument = (TextDocument)Dte.ActiveDocument.Object();
@@ -153,17 +153,17 @@ namespace PL.DynamicsCrm.DevKit.Package
             if (!(currentClass is CodeClass @class)) return;
             if (!Utility.SharedProjectExist(Dte))
             {
-                MessageBox.Show("Please add PL.DynamicsCrm.DevKit Shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please add PL.DynamicsCrm.DevKit Shared project and try it again.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (!IsAddReferenceToSharedProject())
             {
-                MessageBox.Show("Please add reference PL.DynamicsCrm.DevKit Shared project to current project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please add reference PL.DynamicsCrm.DevKit Shared project to current project and try it again.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if(!IsAddPackagesConfigAndInstall())
             {
-                MessageBox.Show("Please install PL.DynamicsCrm.DevKit.Cli from Nuget and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please install PL.DynamicsCrm.DevKit.Cli from Nuget and try it again.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (HasImplementedPlugin(@class))
@@ -175,6 +175,8 @@ namespace PL.DynamicsCrm.DevKit.Package
                         @class.AddAttribute("CrmPluginRegistration", attribute);
                     AddImportSharedProjectIfNeed();
                 }
+                else
+                    MessageBox.Show("PL.DynamicsCrm.DevKit not found any plugin step register with this class.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (HasImplementedWorkflow(@class))
             {
@@ -185,6 +187,8 @@ namespace PL.DynamicsCrm.DevKit.Package
                         @class.AddAttribute("CrmPluginRegistration", attribute);
                     AddImportSharedProjectIfNeed();
                 }
+                else
+                    MessageBox.Show("PL.DynamicsCrm.DevKit not found any workflow step register with this class.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

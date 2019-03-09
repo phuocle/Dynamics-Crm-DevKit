@@ -131,7 +131,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
 </fetch>";
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 0) {
-                CliLog.WriteLine(CliLog.ColorGreen, $"\tNo Change Type: ", CliLog.ColorCyan, $"{plugin.FullName}");
+                CliLog.WriteLine(CliLog.ColorRed, "\tNo Change", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{plugin.FullName}");
                 return rows.Entities[0];
             }
             var pluginType = new Entity("plugintype")
@@ -141,7 +141,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 ["typename"] = plugin.FullName,
                 ["friendlyname"] = plugin.FullName
             };
-            CliLog.WriteLine(CliLog.ColorGreen, $"\tRegistering Type: ", CliLog.ColorCyan, $"{plugin.FullName}");
+            CliLog.WriteLine(CliLog.ColorRed, "\tRegistering", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{plugin.FullName}");
             var pluginTypeId = CrmServiceClient.Create(pluginType);
             pluginType["plugintypeid"] = pluginTypeId;
             pluginType.Id = pluginTypeId;
@@ -191,7 +191,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     if (attribute.FilteringAttributes.Length == 0)
                     {
                         const string message = "Update Message should have FilteringAttributes value";
-                        CliLog.WriteLine(CliLog.ColorError, message);
                         throw new Exception(message);
                     }
                 }
@@ -270,11 +269,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     }
                     if (!IsChangedPluginStep(check, step))
                     {
-                        CliLog.WriteLine(CliLog.ColorGreen, $"\t\tNo Change Step: ", CliLog.ColorCyan, $"{attribute.Name}");
+                        CliLog.WriteLine(CliLog.ColorRed, "\t\tNo Change", CliLog.ColorGreen, $" Step: ", CliLog.ColorCyan, $"{attribute.Name}");
                     }
                     else
                     {
-                        CliLog.WriteLine(CliLog.ColorGreen, $"\t\tUpdating Step: ", CliLog.ColorCyan, $"{attribute.Name}");
+                        CliLog.WriteLine(CliLog.ColorRed, "\t\tUpdating", CliLog.ColorGreen, $" Step: ", CliLog.ColorCyan, $"{attribute.Name}");
                         CrmServiceClient.Update(step);
                     }
                 }
@@ -287,7 +286,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                         var sdkmessageprocessingstepsecureconfigid = CrmServiceClient.Create(secureEntity);
                         step["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
                     }
-                    CliLog.WriteLine(CliLog.ColorGreen, $"\t\tRegistering Step: ", CliLog.ColorCyan, $"{attribute.Name}");
+                    CliLog.WriteLine(CliLog.ColorRed, "\t\tRegistering", CliLog.ColorGreen, $" Step: ", CliLog.ColorCyan, $"{attribute.Name}");
                     sdkMessageProcessingStepId = CrmServiceClient.Create(step);
                     step["sdkmessageprocessingstepid"] = sdkMessageProcessingStepId;
                     if (attribute.Action == PluginStepOperationEnum.Deactivate)
@@ -433,7 +432,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             {
                 if (imageAttributes.Replace(" ", "").Length > 0)
                 {
-                    CliLog.WriteLine(CliLog.ColorGreen, "\t\t\tRegistering Image: ", CliLog.ColorCyan, $"{imageName}");
+                    CliLog.WriteLine(CliLog.ColorRed, "\t\t\tRegistering", CliLog.ColorGreen, " Image: ", CliLog.ColorCyan, $"{imageName}");
                     CrmServiceClient.Create(image);
                 }
             }
@@ -449,19 +448,19 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     attributes == imageAttributes.Replace(" ", "") &&
                     imagetype == (int)imageType)
                 {
-                    CliLog.WriteLine(CliLog.ColorGreen, "\t\t\tNo Change Image: ", CliLog.ColorCyan, $"{imageName}");
+                    CliLog.WriteLine(CliLog.ColorRed, "\t\t\tNo Change", CliLog.ColorGreen, " Image: ", CliLog.ColorCyan, $"{imageName}");
                 }
                 else
                 {
                     if (attributes != imageAttributes.Replace(" ", "") && imageAttributes.Replace(" ", "").Length != 0)
                     {
                         image["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
-                        CliLog.WriteLine(CliLog.ColorGreen, "\t\t\tUpdating Image: ", CliLog.ColorCyan, $"{imageName}");
+                        CliLog.WriteLine(CliLog.ColorRed, "\t\t\tUpdating", CliLog.ColorGreen, " Image: ", CliLog.ColorCyan, $"{imageName}");
                         CrmServiceClient.Update(image);
                     }
                     else if (imageAttributes.Replace(" ", "").Length == 0)
                     {
-                        CliLog.WriteLine(CliLog.ColorGreen, "\t\t\tDeleting Image: ", CliLog.ColorCyan, $"{imageName}");
+                        CliLog.WriteLine(CliLog.ColorRed, "\t\t\tDeleting", CliLog.ColorGreen, " Image: ", CliLog.ColorCyan, $"{imageName}");
                         CrmServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
                     }
                 }
@@ -582,7 +581,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 ComponentId = Guid.Parse(plugin["pluginassemblyid"].ToString()),
                 SolutionUniqueName = PluginJson.solution
             };
-            CliLog.WriteLine(CliLog.ColorGreen, "Adding Assembly: ", CliLog.ColorCyan, $"{plugin["name"]} ", CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{PluginJson.solution}");
+            CliLog.WriteLine(CliLog.ColorRed, "Adding", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{plugin["name"]} ", CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{PluginJson.solution}");
             CrmServiceClient.Execute(request);
         }
 
@@ -618,7 +617,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 ComponentId = Guid.Parse(step["sdkmessageprocessingstepid"].ToString()),
                 SolutionUniqueName = PluginJson.solution
             };
-            CliLog.WriteLine(CliLog.ColorGreen, "\t\tAdding Step: ", CliLog.ColorCyan, $"{step["name"]} ", CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{PluginJson.solution}");
+            CliLog.WriteLine(CliLog.ColorRed, "\t\tAdding", CliLog.ColorGreen, " Step: ", CliLog.ColorCyan, $"{step["name"]} ", CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{PluginJson.solution}");
             CrmServiceClient.Execute(request);
         }
 
@@ -638,8 +637,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var firstType = GetAttributes(plugins, typeof(CrmPluginRegistrationAttribute).Name).FirstOrDefault();
             if (firstType == null)
             {
-                const string message = "Plugin Assembly don't have any type: CrmPluginRegistrationAttribute";
-                CliLog.WriteLine(CliLog.ColorError, message);
+                const string message = "Plugin Assembly don't have any type: CrmPluginRegistration Attribute";
                 throw new Exception(message);
             }
             var firstTypeAttribute = firstType.CreateFromData();
@@ -682,13 +680,13 @@ namespace PL.DynamicsCrm.DevKit.Cli
             };
             if (pluginAssemblyId == Guid.Empty)
             {
-                CliLog.WriteLine(CliLog.ColorGreen, "Registering Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
+                CliLog.WriteLine(CliLog.ColorRed, "Registering", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
                 pluginAssemblyId = CrmServiceClient.Create(plugin);
                 plugin["pluginassemblyid"] = pluginAssemblyId;
             }
             else
             {
-                CliLog.WriteLine(CliLog.ColorGreen, "Updating Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
+                CliLog.WriteLine(CliLog.ColorRed, "Updating", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
                 plugin["pluginassemblyid"] = pluginAssemblyId;
                 CrmServiceClient.Update(plugin);
             }

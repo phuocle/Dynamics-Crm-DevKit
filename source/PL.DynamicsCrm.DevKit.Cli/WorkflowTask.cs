@@ -74,8 +74,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
             if (assembly == null) return;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-            //var workflowTypes = assembly.DefinedTypes.Where(p =>
-            //    p.BaseType != null && p.BaseType.Name == typeof(CodeActivity).Name).ToList();
             var workflowTypes = assembly.DefinedTypes.Where(p => IsCodeActivity(p));
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
             if (!workflowTypes.Any()) return;
@@ -121,8 +119,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var firstType = GetAttributes(workflowTypes, typeof(CrmPluginRegistrationAttribute).Name).FirstOrDefault();
             if (firstType == null)
             {
-                var message = "Workflow Assembly don't have any type: CrmPluginRegistrationAttribute";
-                CliLog.WriteLine(CliLog.ColorError, message);
+                var message = "Workflow Assembly don't have any type: CrmPluginRegistration Attribute";
                 throw new Exception(message);
             }
             var firstTypeAttribute = firstType.CreateFromData();
@@ -166,13 +163,13 @@ namespace PL.DynamicsCrm.DevKit.Cli
             };
             if (pluginAssemblyId == Guid.Empty)
             {
-                CliLog.WriteLine(CliLog.ColorGreen, "Registering Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
+                CliLog.WriteLine(CliLog.ColorRed, "Registering", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
                 pluginAssemblyId = CrmServiceClient.Create(plugin);
                 plugin["pluginassemblyid"] = pluginAssemblyId;
             }
             else
             {
-                CliLog.WriteLine(CliLog.ColorGreen, "Updating Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
+                CliLog.WriteLine(CliLog.ColorRed, "Updating", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
                 plugin["pluginassemblyid"] = pluginAssemblyId;
                 CrmServiceClient.Update(plugin);
             }
@@ -222,7 +219,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 ComponentId = Guid.Parse(workflow["pluginassemblyid"].ToString()),
                 SolutionUniqueName = WorkflowJson.solution
             };
-            CliLog.WriteLine(CliLog.ColorGreen, "Adding Assembly: ", CliLog.ColorCyan, $"{workflow["name"]} ",
+            CliLog.WriteLine(CliLog.ColorRed, "Adding", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{workflow["name"]} ",
                 CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{WorkflowJson.solution}");
             CrmServiceClient.Execute(request);
         }
@@ -242,7 +239,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var fetchXml = $@"
 <fetch>
   <entity name='plugintype'>
-    <attribute name='plugintypeid' />
+    <all-attributes />
     <filter type='and'>
       <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
     </filter>
@@ -260,16 +257,54 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 };
                 if (rows.Entities.Count == 0)
                 {
-                    CliLog.WriteLine(CliLog.ColorGreen, "\tRegistering Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
+                    CliLog.WriteLine(CliLog.ColorRed, "\tRegistering", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
                     CrmServiceClient.Create(pluginType);
                 }
                 else
                 {
-                    pluginType["plugintypeid"] = rows.Entities[0].Id;
-                    CliLog.WriteLine(CliLog.ColorGreen, "\tUpdating Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
-                    CrmServiceClient.Update(pluginType);
+                    var check = rows.Entities[0];
+                    if (!IsChangedPluginType(check, pluginType))
+                    {
+                        CliLog.WriteLine(CliLog.ColorRed, "\tNo Change", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
+                    }
+                    else
+                    {
+                        pluginType["plugintypeid"] = rows.Entities[0].Id;
+                        CliLog.WriteLine(CliLog.ColorRed, "\tUpdating", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
+                        CrmServiceClient.Update(pluginType);
+                    }
                 }
             }
+        }
+
+        private bool IsChangedPluginType(Entity check, Entity step)
+        {
+            foreach (var key in check.Attributes.Keys)
+            {
+                if (step.Attributes.Contains(key))
+                {
+                    object checkValue = null;
+                    object stepValue = null;
+                    if (check.Attributes[key] is OptionSetValue && step.Attributes[key] is OptionSetValue)
+                    {
+                        checkValue = ((OptionSetValue)check.Attributes[key]).Value;
+                        stepValue = ((OptionSetValue)step.Attributes[key]).Value;
+                    }
+                    else if (check.Attributes[key] is EntityReference && step.Attributes[key] is EntityReference)
+                    {
+                        checkValue = ((EntityReference)check.Attributes[key]).Id;
+                        stepValue = ((EntityReference)step.Attributes[key]).Id;
+                    }
+                    else
+                    {
+                        stepValue = step.Attributes[key];
+                        checkValue = check.Attributes[key];
+                    }
+                    if (stepValue?.ToString() != checkValue?.ToString())
+                        return true;
+                }
+            }
+            return false;
         }
     }
 }

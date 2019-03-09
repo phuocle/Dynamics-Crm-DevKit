@@ -28,7 +28,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\Test1\CustomWorkflow";
+                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\TestAddCrmPluginRegistration\2.after\CustomWorkflow";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
