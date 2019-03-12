@@ -3,13 +3,14 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "TestAddCrmPluginRegistration",
       "includefiles": [
-        "???.Plugin.*.dll",
-        "???.CustomAction.*.dll"
+        "SunFlower.Plugin.*.dll",
+        "SunFlower.CustomAction.*.dll",
+        "AccountPlugin.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "SunFlower.*.Test.dll"
       ]
     },
     {
@@ -17,11 +18,11 @@
       "folder": "Release\\dll",
       "solution": "???",
       "includefiles": [
-        "???.Plugin.*.dll",
-        "???.CustomAction.*.dll"
+        "SunFlower.Plugin.*.dll",
+        "SunFlower.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "SunFlower.*.Test.dll"
       ]
     }
   ],
@@ -29,12 +30,13 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "TestAddCrmPluginRegistration",
       "includefiles": [
-        "???.Workflow.*.dll"
+        "SunFlower.Workflow.*.dll",
+        "CustomWorkflow.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "SunFlower.*.Test.dll"
       ]
     },
     {
@@ -42,10 +44,10 @@
       "folder": "Release\\dll",
       "solution": "???",
       "includefiles": [
-        "???.Workflow.*.dll"
+        "SunFlower.Workflow.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "SunFlower.*.Test.dll"
       ]
     }
   ],
@@ -133,10 +135,10 @@
       "folder": "bin\\Debug",
       "solution": "???",
       "includefiles": [
-        "???.DataProvider.*.dll"
+        "SunFlower.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "SunFlower.*.Test.dll"
       ]
     },
     {
@@ -144,10 +146,10 @@
       "folder": "Release\\dll",
       "solution": "???",
       "includefiles": [
-        "???.DataProvider.*.dll"
+        "SunFlower.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "SunFlower.*.Test.dll"
       ]
     }
   ],
@@ -223,8 +225,8 @@
   "downloadwebresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???",
+      "solution": "TestWebResources",
+      "prefix": "paz_",
       "profilewebresources": "DEBUG"
     }
   ]

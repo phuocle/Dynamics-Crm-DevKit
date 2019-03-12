@@ -178,10 +178,12 @@
     <Compile Include="CrmPluginRegistrationAttribute.cs" />
     <Compile Include="CliLog.cs" />
     <Compile Include="DataProviderTask.cs" />
+    <Compile Include="DownloadWebResourceTask.cs" />
     <Compile Include="GeneratorTask.cs" />
     <Compile Include="Models\CliJson.cs" />
     <Compile Include="Models\DataProvider.cs" />
     <Compile Include="Models\Dependency.cs" />
+    <Compile Include="Models\DownloadWebResource.cs" />
     <Compile Include="Models\Generator.cs" />
     <Compile Include="Models\Plugin.cs" />
     <Compile Include="Models\SolutionPackager.cs" />

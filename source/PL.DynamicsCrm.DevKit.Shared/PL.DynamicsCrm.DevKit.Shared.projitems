@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GeneratedCSharpLateBound.cs" />
