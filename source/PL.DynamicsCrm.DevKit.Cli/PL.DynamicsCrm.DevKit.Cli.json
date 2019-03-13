@@ -225,7 +225,19 @@
       "profile": "DEBUG",
       "solution": "???",
       "prefix": "???",
-      "profilewebresources": "DEBUG"
+      "rootfolder": "",
+      "includefiles": [
+      ],
+      "excludefiles": [
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+          ],
+          "dependencies": [
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("CSharpLateBoundClassItemTemplate2")]
-[assembly: AssemblyDescription("CSharpLateBoundClassItemTemplate2")]
+[assembly: AssemblyTitle("DownloadWebResourcesItemTemplate")]
+[assembly: AssemblyDescription("DownloadWebResourcesItemTemplate")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
@@ -14,6 +14,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
-[assembly: Guid("921403be-b301-40d8-b023-083c4747b50d")]
+[assembly: Guid("921403be-b301-40d8-b023-083c4747b50a")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.3.0.0")]

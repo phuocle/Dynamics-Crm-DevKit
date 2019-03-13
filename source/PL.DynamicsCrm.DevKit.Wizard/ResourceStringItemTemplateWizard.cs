@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
-    public class ResourceStringItemTemplateItemTemplateWizard : IWizard
+    public class ResourceStringItemTemplateWizard : IWizard
     {
         private DTE Dte { get; set; }
 

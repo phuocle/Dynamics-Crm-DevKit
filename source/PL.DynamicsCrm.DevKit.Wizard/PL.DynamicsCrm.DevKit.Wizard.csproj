@@ -93,6 +93,7 @@
     <Compile Include="CSharpTestUiItemTemplateWizard.cs" />
     <Compile Include="CustomActionProjectTemplateWizard.cs" />
     <Compile Include="DataProviderProjectTemplateWizard.cs" />
+    <Compile Include="DownloadWebResourcesItemTemplateWizard.cs" />
     <Compile Include="JavaScriptFormItemTemplateWizard.cs" />
     <Compile Include="JavaScriptTestItemTemplateWizard.cs" />
     <Compile Include="JavaScriptWebApiItemTemplateWizard.cs" />
@@ -100,7 +101,7 @@
     <Compile Include="CSharpPluginItemTemplateWizard.cs" />
     <Compile Include="PluginProjectTemplateWizard.cs" />
     <Compile Include="ReportProjectTemplateWizard.cs" />
-    <Compile Include="ResourceStringItemTemplateItemTemplateWizard.cs" />
+    <Compile Include="ResourceStringItemTemplateWizard.cs" />
     <Compile Include="SharedProjectTemplateWizard.cs" />
     <Compile Include="CSharpTestItemTemplateWizard.cs" />
     <Compile Include="SolutionPackagerProjectTemplateWizard.cs" />
@@ -135,6 +136,15 @@
       <Link>data\PL.DynamicsCrm.DevKit.Cli.json</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="data\VsTest.runsettings" />
+    <EmbeddedResource Include="..\37.DownloadWebResourcesItemTemplate\_packages.config">
+      <Link>data\DownloadWebResources\_packages.config</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\37.DownloadWebResourcesItemTemplate\deploy.debug.bat">
+      <Link>data\DownloadWebResources\deploy.debug.bat</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\37.DownloadWebResourcesItemTemplate\download.webresources.bat">
+      <Link>data\DownloadWebResources\download.webresources.bat</Link>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

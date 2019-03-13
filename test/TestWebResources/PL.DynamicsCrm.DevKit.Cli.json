@@ -3,14 +3,13 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "TestAddCrmPluginRegistration",
+      "solution": "???",
       "includefiles": [
-        "SunFlower.Plugin.*.dll",
-        "SunFlower.CustomAction.*.dll",
-        "AccountPlugin.dll"
+        "???.Plugin.*.dll",
+        "???.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "SunFlower.*.Test.dll"
+        "???.*.Test.dll"
       ]
     },
     {
@@ -18,11 +17,11 @@
       "folder": "Release\\dll",
       "solution": "???",
       "includefiles": [
-        "SunFlower.Plugin.*.dll",
-        "SunFlower.CustomAction.*.dll"
+        "???.Plugin.*.dll",
+        "???.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "SunFlower.*.Test.dll"
+        "???.*.Test.dll"
       ]
     }
   ],
@@ -30,13 +29,12 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "TestAddCrmPluginRegistration",
+      "solution": "???",
       "includefiles": [
-        "SunFlower.Workflow.*.dll",
-        "CustomWorkflow.dll"
+        "???.Workflow.*.dll"
       ],
       "excludefiles": [
-        "SunFlower.*.Test.dll"
+        "???.*.Test.dll"
       ]
     },
     {
@@ -44,10 +42,10 @@
       "folder": "Release\\dll",
       "solution": "???",
       "includefiles": [
-        "SunFlower.Workflow.*.dll"
+        "???.Workflow.*.dll"
       ],
       "excludefiles": [
-        "SunFlower.*.Test.dll"
+        "???.*.Test.dll"
       ]
     }
   ],
@@ -135,10 +133,10 @@
       "folder": "bin\\Debug",
       "solution": "???",
       "includefiles": [
-        "SunFlower.DataProvider.*.dll"
+        "???.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "SunFlower.*.Test.dll"
+        "???.*.Test.dll"
       ]
     },
     {
@@ -146,10 +144,10 @@
       "folder": "Release\\dll",
       "solution": "???",
       "includefiles": [
-        "SunFlower.DataProvider.*.dll"
+        "???.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "SunFlower.*.Test.dll"
+        "???.*.Test.dll"
       ]
     }
   ],
@@ -225,9 +223,21 @@
   "downloadwebresources": [
     {
       "profile": "DEBUG",
-      "solution": "TestWebResources",
-      "prefix": "paz_",
-      "profilewebresources": "DEBUG"
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "",
+      "includefiles": [
+      ],
+      "excludefiles": [
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+          ],
+          "dependencies": [
+          ]
+        }
+      ]
     }
   ]
 }

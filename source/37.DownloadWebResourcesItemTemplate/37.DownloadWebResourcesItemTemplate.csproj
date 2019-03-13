@@ -34,11 +34,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{94B6AC50-3D82-4060-9C1D-3486F2046EEA}</ProjectGuid>
+    <ProjectGuid>{99DD3CAE-6D04-4BDA-BB2D-C4D7B28CA1E0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSharpLateBoundClassItemTemplate2</RootNamespace>
-    <AssemblyName>CSharpLateBoundClassItemTemplate2</AssemblyName>
+    <RootNamespace>DownloadWebResourcesItemTemplate</RootNamespace>
+    <AssemblyName>DownloadWebResourcesItemTemplate</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
@@ -71,14 +71,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Class.cs" />
-    <None Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="CSharpLateBoundClassItemTemplate2.vstemplate">
+    <VSTemplate Include="DownloadWebResourcesItemTemplate.vstemplate">
       <OutputSubPath>PL.DynamicsCrm.DevKit</OutputSubPath>
-      <SubType>Designer</SubType>
+      <SubType>CSharp</SubType>
     </VSTemplate>
   </ItemGroup>
   <ItemGroup>
@@ -94,7 +92,16 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <VSTemplate Include="DownloadWebResourcesItemTemplate2.vstemplate">
+      <OutputSubPath>PL.DynamicsCrm.DevKit</OutputSubPath>
+      <SubType>Designer</SubType>
+    </VSTemplate>
     <Content Include="icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="download.webresources.bat" />
+    <None Include="deploy.debug.bat" />
+    <None Include="_packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

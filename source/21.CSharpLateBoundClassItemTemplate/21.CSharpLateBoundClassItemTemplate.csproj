@@ -94,6 +94,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <VSTemplate Include="CSharpLateBoundClassItemTemplate2.vstemplate">
+      <SubType>Designer</SubType>
+      <OutputSubPath>PL.DynamicsCrm.DevKit</OutputSubPath>
+    </VSTemplate>
     <Content Include="icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

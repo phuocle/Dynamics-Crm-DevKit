@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>10. Resource String</Name>
-    <Description>Resource String Template</Description>
+    <Name>11. Download WebResources</Name>
+    <Description>Download WebResources Template</Description>
     <Icon>icon.png</Icon>
-    <TemplateID>0ff99023-2c48-4360-98ca-d7a770534a65</TemplateID>
+    <TemplateID>0ff99023-2c48-4360-98ca-d7a770534a6a</TemplateID>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-    <DefaultName>ResourceString.resx</DefaultName>
+    <DefaultName>download.webresources.bat</DefaultName>
   </TemplateData>
   <TemplateContent>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$ResourceStringName$.$LanguageCode$.resx">ResourceString.resx</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="download.webresources.bat">download.webresources.bat</ProjectItem>
   </TemplateContent>
   <WizardExtension>
     <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
-    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.ResourceStringItemTemplateWizard</FullClassName>
+    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.DownloadWebResourcesItemTemplateWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>

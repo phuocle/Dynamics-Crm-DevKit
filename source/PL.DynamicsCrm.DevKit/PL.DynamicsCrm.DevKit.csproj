@@ -212,13 +212,6 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\33.CSharpLateBoundClassItemTemplate2\33.CSharpLateBoundClassItemTemplate2.csproj">
-      <Project>{94B6AC50-3D82-4060-9C1D-3486F2046EEA}</Project>
-      <Name>33.CSharpLateBoundClassItemTemplate2</Name>
-      <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
     <ProjectReference Include="..\34.ResourceStringItemTemplate\34.ResourceStringItemTemplate.csproj">
       <Project>{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}</Project>
       <Name>34.ResourceStringItemTemplate</Name>
@@ -237,6 +230,13 @@
       <Project>{C555420B-02D8-4388-AADF-375A9809ACDA}</Project>
       <Name>36.SolutionPackagerProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\37.DownloadWebResourcesItemTemplate\37.DownloadWebResourcesItemTemplate.csproj">
+      <Project>{99DD3CAE-6D04-4BDA-BB2D-C4D7B28CA1E0}</Project>
+      <Name>37.DownloadWebResourcesItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>

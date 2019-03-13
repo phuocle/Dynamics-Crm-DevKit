@@ -26,7 +26,12 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebSite", "WebSite\", "{EB0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebResource", "WebProject\WebResource.csproj", "{A9DB07F8-2090-483A-8335-B3F8DDA8853A}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "WebResources.Shared", "WebResources.Shared\WebResources.Shared.shproj", "{E52B1832-6A83-463D-B7CD-DB1373FC592E}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		WebResources.Shared\WebResources.Shared.projitems*{e52b1832-6a83-463d-b7cd-db1373fc592e}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
