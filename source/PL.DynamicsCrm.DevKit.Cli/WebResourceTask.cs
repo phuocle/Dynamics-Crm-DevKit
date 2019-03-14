@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using PL.DynamicsCrm.DevKit.Cli.Models;
+using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Cli
 {
@@ -254,10 +256,10 @@ namespace PL.DynamicsCrm.DevKit.Cli
             };
             var fetchXml = $@"
 <fetch>
-  <entity name='webresource
+  <entity name='webresource'>
     <attribute name='content' />
     <attribute name='webresourceid' />
-    <attribute name='content' />
+    <attribute name='name' />
     <filter type='or'>
       <condition attribute='name' operator='eq' value='{fetchData.name}'/>
       <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
@@ -269,9 +271,23 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var webResourceId = Guid.Empty;
             if (rows.Entities.Count > 0)
             {
-                var entity = rows.Entities[0];
-                webResourceId = entity.Id;
-                content = entity?["content"]?.ToString();
+                if (rows.Entities.Count == 1)
+                {
+                    var entity = rows.Entities[0];
+                    webResourceId = entity.Id;
+                    content = entity?["content"]?.ToString();
+                }
+                else
+                {
+                    foreach(var row in rows.Entities)
+                    {
+                        if(row.GetAttributeValue<string>("name") == fetchData.name)
+                        {
+                            webResourceId = row.Id;
+                            content = row?["content"]?.ToString();
+                        }
+                    }
+                }
             }
             var fileContent = Convert.ToBase64String(File.ReadAllBytes(webResourceFile.file));
             if (fileContent == content)

@@ -46,8 +46,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="deploy.debug.bat" />
-    <Content Include="download.webresources.bat" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

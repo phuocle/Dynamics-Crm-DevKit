@@ -63,7 +63,19 @@
         "js\\**.js",
         "lib\\**.js",
         "resources\\*.resx",
-        "paz_abc\\def\\hello.svg"
+        "entities\\Lead.form.js",
+        "entities\\Lead.js",
+        "entities\\Lead.webapi.js",
+        "entities\\Opportunity.form.js",
+        "entities\\Opportunity.js",
+        "entities\\Opportunity.webapi.js",
+        "lib\\WebApiClient.js",
+        "resources\\resource.1033.resx",
+        "paz_abc\\def\\hello.svg",
+        "paz_HelloWorld.html",
+        "paz_HelloWorld2.html",
+        "paz_icon.png",
+        "paz_icon\\logo.png"
       ],
       "excludefiles":[
         "entities\\*.intellisense.js",
@@ -72,19 +84,19 @@
       "dependencies":[
         {
           "webresources":[
-            "paz_/entities/[entity].js"
+            "???_/entities/[entity].js"
           ],
           "dependencies":[
-            "paz_/entities/[entity].form.js",
-            "paz_/entities/[entity].webapi.js"
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources":[
-            "paz_/entities/[entity].webapi.js"
+            "???_/entities/[entity].webapi.js"
           ],
           "dependencies":[
-            "paz_/lib/WebApiClient.js"
+            "???_/lib/WebApiClient.js"
           ]
         }
       ]
@@ -224,7 +236,7 @@
   "downloadwebresources":[
     {
       "profile":"DEBUG",
-      "solution":"TestWebResources",
+      "solution":"",
       "prefix":"paz_"
     }
   ]

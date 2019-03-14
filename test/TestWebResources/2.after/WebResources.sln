@@ -26,7 +26,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebSite", "WebSite\", "{EB0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebResource", "WebProject\WebResource.csproj", "{A9DB07F8-2090-483A-8335-B3F8DDA8853A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F19D2803-AF13-40AD-BE9B-85971AF07A7E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FD4345C1-43FC-4E69-AEFD-5EC835E0F33E}"
 	ProjectSection(SolutionItems) = preProject
 		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
 		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
