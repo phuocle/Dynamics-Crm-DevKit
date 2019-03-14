@@ -68,16 +68,22 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             downloadFileContent = downloadFileContent
                 .Replace("$CrmConnectionString$", crmConnectionString)
                 .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(project.FullName));
-            File.WriteAllText(downloadFile, downloadFileContent);
-            project.ProjectItems.AddFromFile(downloadFile);
+            if (!File.Exists(downloadFile))
+            {
+                File.WriteAllText(downloadFile, downloadFileContent);
+                project.ProjectItems.AddFromFile(downloadFile);
+            }
 
             var deployFile = Path.Combine(dir, "deploy.debug.bat");
             var deployFileContent = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.DownloadWebResources.deploy.debug.bat");
             deployFileContent = deployFileContent
                 .Replace("$CrmConnectionString$", crmConnectionString)
                 .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(project.FullName));
-            File.WriteAllText(deployFile, deployFileContent);
-            project.ProjectItems.AddFromFile(deployFile);
+            if (!File.Exists(deployFile))
+            {
+                File.WriteAllText(deployFile, deployFileContent);
+                project.ProjectItems.AddFromFile(deployFile);
+            }
 
             var packagesFile = Path.Combine(dir, "packages.config");
             var nuget = new NuGetHelper();

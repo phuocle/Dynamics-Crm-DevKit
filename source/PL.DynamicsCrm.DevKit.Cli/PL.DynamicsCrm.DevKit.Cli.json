@@ -224,20 +224,7 @@
     {
       "profile": "DEBUG",
       "solution": "???",
-      "prefix": "???",
-      "rootfolder": "",
-      "includefiles": [
-      ],
-      "excludefiles": [
-      ],
-      "dependencies": [
-        {
-          "webresources": [
-          ],
-          "dependencies": [
-          ]
-        }
-      ]
+      "prefix": "???"
     }
   ]
 }

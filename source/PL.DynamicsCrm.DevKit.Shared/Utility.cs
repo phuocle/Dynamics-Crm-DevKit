@@ -2,6 +2,7 @@
 using EnvDTE;
 using System.IO;
 using System.Reflection;
+using System.Linq;
 
 namespace PL.DynamicsCrm.DevKit.Shared
 {
@@ -136,5 +137,31 @@ namespace PL.DynamicsCrm.DevKit.Shared
             var fInfo = new FileInfo(solutionFullName);
             return fInfo.Directory?.FullName + "\\" + projectName;
         }
+
+        private const string IndentString = "  ";
+
+        public static string FormatJson(string json)
+        {
+            var indentation = 0;
+            var quoteCount = 0;
+            var result =
+                from ch in json
+                let quotes = ch == '"' ? quoteCount++ : quoteCount
+                let lineBreak = ch == ',' && quotes % 2 == 0
+                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, indentation))
+                    : null
+                let openChar = ch == '{' || ch == '['
+                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, ++indentation))
+                    : ch.ToString()
+                let closeChar = ch == '}' || ch == ']'
+                    ? Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, --indentation)) + ch
+                    : ch.ToString()
+                select lineBreak ?? (openChar.Length > 1
+                           ? openChar
+                           : closeChar);
+
+            return string.Concat(result);
+        }
+
     }
 }

@@ -29,7 +29,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\TestWebResources\WebProject";
+                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\TestWebResources\2.after\WebSite";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -123,7 +123,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             else if (arguments.Type == TaskType.DownloadWebResources.ToString().ToLower())
             {
-                var task = new DownloadWebResourceTask(CrmServiceClient, CurrentDirectory, DownloadWebResourceJson, arguments.Version);
+                var task = new DownloadWebResourceTask(CrmServiceClient, CurrentDirectory, DownloadWebResourceJson, arguments.Version, Path.Combine(CurrentDirectory, arguments.Json));
                 task.Run();
             }
         }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
@@ -10,49 +12,77 @@ namespace PL.DynamicsCrm.DevKit.Cli
 {
     public class DownloadWebResourceTask
     {
-        public DownloadWebResourceTask(CrmServiceClient crmServiceClient, string currentDirectory, DownloadWebResource downloadWebResourceJson, string version)
+        public DownloadWebResourceTask(CrmServiceClient crmServiceClient, string currentDirectory, DownloadWebResource downloadWebResourceJson, string version, string cliJsonFile)
         {
             CrmServiceClient = crmServiceClient;
             CurrentDirectory = currentDirectory;
             DownloadWebResourceJson = downloadWebResourceJson;
             Version = version;
+            CliJsonFile = cliJsonFile;
         }
 
         private CrmServiceClient CrmServiceClient { get; }
         private DownloadWebResource DownloadWebResourceJson { get; }
         private string CurrentDirectory { get; }
         private string Version { get; }
-
+        private string CliJsonFile { get; set; }
 
         public void Run()
         {
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             CliLog.WriteLine(CliLog.ColorGreen, "START DOWNLOAD WEBRESOURCES TASKS");
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
-
-            DownloadWebResources();
-
+            if (DownloadWebResourceJson.solution == "???") throw new Exception("No solution found in download webresources profile. Please check PL.DynamicsCrm.DevKit.Cli.json file!!");
+            if (DownloadWebResourceJson.prefix.Length == 0 || DownloadWebResourceJson.prefix == "???") throw new Exception("No prefix found in download webresources profile. Please check PL.DynamicsCrm.DevKit.Cli.json file!!");
+            var list = DownloadWebResources();
+            var json = SimpleJson.DeserializeObject<CliJson>(File.ReadAllText(CliJsonFile));
+            var update = json.webresources.FirstOrDefault(x => x.profile == "DEBUG");
+            if (update != null)
+            {
+                var flag = false;
+                foreach(var item in list)
+                {
+                    if(!update.includefiles.Contains(item))
+                    {
+                        update.includefiles.Add(item);
+                        flag = true;
+                    }
+                }
+                if (flag)
+                {
+                    var updateJson = SimpleJson.SerializeObject(json);
+                    updateJson = updateJson.Replace("[entity]", "__entity__");
+                    updateJson = Utility.FormatJson(updateJson);
+                    updateJson = updateJson.Replace("__entity__", "[entity]");
+                    File.WriteAllText(CliJsonFile, updateJson);
+                }
+            }
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             CliLog.WriteLine(CliLog.ColorGreen, "END DOWNLOAD WEBRESOURCES TASKS");
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
         }
 
-        private void DownloadWebResources()
+        private List<string> DownloadWebResources()
         {
+            var list = new List<string>();
             var fetchData = new
             {
                 ismanaged = "0",
-                uniquename = DownloadWebResourceJson.solution
+                uniquename = DownloadWebResourceJson.solution,
+                name = DownloadWebResourceJson.prefix
             };
-            var fetchXml = $@"
+            var fetchXml = string.Empty;
+            if (DownloadWebResourceJson.solution.Length > 0)
+            {
+                fetchXml = $@"
 <fetch>
   <entity name='webresource'>
     <attribute name='name' />
-    <attribute name='displayname' />
     <attribute name='webresourcetype' />
     <attribute name='content' />
     <filter type='and'>
       <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
+      <condition attribute='name' operator='begins-with' value='{fetchData.name}'/>
     </filter>
     <order attribute='name' />
     <link-entity name='solutioncomponent' from='objectid' to='webresourceid' link-type='inner' alias='sc'>
@@ -64,47 +94,107 @@ namespace PL.DynamicsCrm.DevKit.Cli
     </link-entity>
   </entity>
 </fetch>";
+            }
+            else
+            {
+                fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='name' />
+    <attribute name='webresourcetype' />
+    <attribute name='content' />
+    <filter type='and'>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
+      <condition attribute='name' operator='begins-with' value='{fetchData.name}'/>
+    </filter>
+    <order attribute='name' />
+  </entity>
+</fetch>";
+            }
             var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0)
                 throw new Exception("Not found any webresources to download");
-            foreach(var row in rows.Entities)
+            var downloadFiles = DownloadFiles(rows.Entities);
+
+            var totalDownloadWebResources = downloadFiles.Count;
+            var len = totalDownloadWebResources.ToString().Length;
+            CliLog.WriteLine(CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, totalDownloadWebResources, CliLog.ColorGreen, " webresources");
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
+            //DELETE first
+            foreach (var downloadFile in downloadFiles)
             {
-                DownloadWebResource(row);
+                Utility.TryDeleteFile(downloadFile.FileName);
             }
+            CliLog.WriteLine(CliLog.ColorRed, "   !!!   Deleted ", CliLog.ColorWhite, totalDownloadWebResources, CliLog.ColorRed, " existing files   !!!   ");
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
+
+            var i = 1;
+            foreach (var downloadFile in downloadFiles)
+            {
+                var isOk = DownloadWebResourceFile(downloadFile.Name, downloadFile.FileName, downloadFile.Content, i, totalDownloadWebResources);
+                if (isOk)
+                {
+                    var shortFileName = downloadFile.FileName.Substring(CurrentDirectory.Length + 1);
+                    list.Add(shortFileName);
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Downloaded: ", CliLog.ColorGreen, downloadFile.Name, CliLog.ColorWhite, " to: ", CliLog.ColorGreen, shortFileName);
+                }
+                i++;
+            }
+            return list;
         }
 
-        private void DownloadWebResource(Entity row)
+        private class DownloadFile
         {
-            var name = row.GetAttributeValue<string>("name"); //paz_/entities/Lead.form.js
-            var displayname = row.GetAttributeValue<string>("displayname"); //paz_/entities/Lead.form.js
-            var webresourcetype = (WebResourceWebResourceType)row.GetAttributeValue<OptionSetValue>("webresourcetype").Value;
-            var content = row.GetAttributeValue<string>("content");
-            //C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\TestWebResources\WebProject
-            if (!name.StartsWith(DownloadWebResourceJson.prefix)) {
-                CliLog.WriteLine(CliLog.ColorGreen, "WebResource name: ", CliLog.ColorWhite, name, CliLog.ColorGreen, " not begin with: ", CliLog.ColorRed, DownloadWebResourceJson.prefix);
-                return;
+            public string FileName { get; set; }
+            public string Content { get; set; }
+            public string Name { get; set; }
+        }
+
+        private List<DownloadFile> DownloadFiles(DataCollection<Entity> entities)
+        {
+            var list = new List<DownloadFile>();
+            foreach(var entity in entities)
+            {
+                var name = entity.GetAttributeValue<string>("name");
+                var webresourcetype = (WebResourceWebResourceType)entity.GetAttributeValue<OptionSetValue>("webresourcetype").Value;
+                var content = entity.GetAttributeValue<string>("content");
+                var extension = GetExtension(webresourcetype);
+                if (name.StartsWith("/")) name = name.Substring(1);
+                if (name.StartsWith(DownloadWebResourceJson.prefix))
+                    name = name.Substring(DownloadWebResourceJson.prefix.Length);
+                if (name.StartsWith("/"))
+                    name = name.Substring(1);
+                else
+                    name = DownloadWebResourceJson.prefix + name;
+                if (name.EndsWith(extension))
+                    name = name.Substring(0, name.Length - extension.Length);
+                var fileName = $"{CurrentDirectory}\\{name.Replace("/", "\\")}{extension}";
+                list.Add(new DownloadFile
+                {
+                    Content = content,
+                    FileName = fileName,
+                    Name = entity.GetAttributeValue<string>("name")
+                });
             }
-            var extension = GetExtension(webresourcetype);
-            if (name.StartsWith("/")) name = name.Substring(1);
-            if (name.StartsWith(DownloadWebResourceJson.prefix))
-                name = name.Substring(DownloadWebResourceJson.prefix.Length);
-            if (name.StartsWith("/"))
-                name = name.Substring(1);
+            return list;
+        }
+
+        private bool DownloadWebResourceFile(string name, string fileName, string content, int i, int totalDownloadWebResources)
+        {
+            if (File.Exists(fileName))
+            {
+                var len = totalDownloadWebResources.ToString().Length;
+                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", i) + ": ", CliLog.ColorRed, "Failed: ", CliLog.ColorGreen, name, CliLog.ColorWhite, " to: ", CliLog.ColorGreen, fileName);
+                return false;
+            }
             else
-                name = DownloadWebResourceJson.prefix + name;
-            if (name.EndsWith(extension))
-                name = name.Substring(0, name.Length - extension.Length);
-            var fileName = $"{CurrentDirectory}\\{name.Replace("/", "\\")}{extension}";
-            DownloadFile(fileName, content);
-        }
-
-        private void DownloadFile(string fileName, string content)
-        {
-            if (File.Exists(fileName)) Utility.TryDeleteFile(fileName);
-            var directoryName = Path.GetDirectoryName(fileName);
-            if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName ?? throw new InvalidOperationException());
-            byte[] decode = Convert.FromBase64String(content);
-            File.WriteAllBytes(fileName, decode);
+            {
+                var directoryName = Path.GetDirectoryName(fileName);
+                if (!Directory.Exists(directoryName)) Directory.CreateDirectory(directoryName ?? throw new InvalidOperationException());
+                byte[] decode = Convert.FromBase64String(content);
+                File.WriteAllBytes(fileName, decode);
+                return true;
+            }
         }
 
         private string GetExtension(WebResourceWebResourceType webresourcetype)

@@ -7,7 +7,6 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using PL.DynamicsCrm.DevKit.Cli.Models;
-using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Cli
 {
@@ -40,6 +39,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     filePattern = filePattern.Replace(@"\\", @"\");
                     includefiles.AddRange(GetFiles(filePattern));
                 }
+                includefiles = includefiles.Distinct<string>().ToList();
                 var excludefiles = new List<string>();
                 foreach (var pattern in WebResourceJson.excludefiles)
                 {
@@ -50,9 +50,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var files = includefiles.Where(file => !excludefiles.Contains(file)).ToList();
                 foreach (var file in files)
                 {
-                    var name = WebResourceJson.prefix + "/" + file
-                                   .Substring($"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\".Replace(@"\\", @"\")
-                                       .Length).Replace("\\", "/");
+                    var name = file
+                        .Substring($"{CurrentDirectory}\\{WebResourceJson.rootfolder}\\".Replace(@"\\", @"\").Length)
+                        .Replace("\\", "/");
+                    if (!name.StartsWith(WebResourceJson.prefix))
+                        name = WebResourceJson.prefix + "/" + name;
                     var webResourceFile = new WebResourceFile
                     {
                         file = file,
@@ -242,18 +244,23 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private Entity DeployWebResource(WebResourceFile webResourceFile, int current, int totalWebResources)
         {
             var len = totalWebResources.ToString().Length;
-            if (webResourceFile.uniquename.StartsWith("/")) webResourceFile.uniquename = webResourceFile.uniquename.Substring(1);
+            if (webResourceFile.uniquename.StartsWith("/"))
+                webResourceFile.uniquename = webResourceFile.uniquename.Substring(1);
+
             var fetchData = new
             {
-                name = webResourceFile.uniquename
+                name = webResourceFile.uniquename,
+                name2 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.'))
             };
             var fetchXml = $@"
 <fetch>
-  <entity name='webresource'>
+  <entity name='webresource
+    <attribute name='content' />
     <attribute name='webresourceid' />
     <attribute name='content' />
-    <filter type='and'>
+    <filter type='or'>
       <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+      <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
     </filter>
   </entity>
 </fetch>";
@@ -417,10 +424,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var pattern = filePattern.Substring(folder.Length + 1);
             if (!pattern.Contains("**")) return Directory.Exists(folder) ? Directory.GetFiles(folder, pattern, SearchOption.TopDirectoryOnly).ToList() : new List<string>();
             pattern = pattern.Replace("**", "*");
+            if (!Directory.Exists(folder)) return new List<string>();
             return Directory.GetFiles(folder, pattern, SearchOption.AllDirectories).ToList();
         }
-
-
 
         private bool? _isSupportWebResourceDependency = null;
         private bool IsSupportWebResourceDependency
