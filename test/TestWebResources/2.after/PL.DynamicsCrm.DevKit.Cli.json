@@ -253,7 +253,7 @@
   "downloadwebresources": [
     {
       "profile": "DEBUG",
-      "solution": "TestWebResources",
+      "solution": "",
       "prefix": "paz_"
     }
   ]

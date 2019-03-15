@@ -3,7 +3,7 @@ var formLead = (function () {
 	function onLoad(executionContext) {
 	    var form = new LuckeyMonkey.FormLead(executionContext);
 	    if (form.FormType !== OptionSet.FormType.Create) {
-	        form.Body.Subject.Disabled = true;
+	        form.Body.Subject.Disabled = true;;
 	    }
 	    else {
 	        form.Body.Subject.AddOnChange(SubjectAddOnChange);
