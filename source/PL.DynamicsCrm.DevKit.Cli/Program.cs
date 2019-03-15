@@ -76,7 +76,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             catch (Exception e)
             {
-                CliLog.WriteLine(CliLog.ColorError, $"Reading arguments fail:\r\n{e.Message}");
+                CliLog.WriteLine(CliLog.ColorError, $"{e.Message}");
                 Console.ReadKey();
             }
 #endif

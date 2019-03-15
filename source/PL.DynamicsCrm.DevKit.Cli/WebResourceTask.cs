@@ -184,7 +184,10 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 if (rows.Entities.Count > 0)
                     existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
                 else
+                {
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", j) + ": ", CliLog.ColorRed, "No Change ", CliLog.ColorGreen, webResourceName);
                     return;
+                }
                 if (existingDependencyXml != dependencyXml)
                 {
                     var webResourceId = rows.Entities[0].Id;
@@ -253,7 +256,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var fetchData = new
             {
                 name = webResourceFile.uniquename,
-                name2 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.'))
+                name2 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.')),
+                name3 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.'))
             };
             var fetchXml = $@"
 <fetch>
@@ -265,6 +269,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
     <filter type='or'>
       <condition attribute='name' operator='eq' value='{fetchData.name}'/>
       <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
+      <condition attribute='name' operator='like' value='%{fetchData.name3}%'/>
     </filter>
   </entity>
 </fetch>";
@@ -305,7 +310,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var fileContent = Convert.ToBase64String(File.ReadAllBytes(webResourceFile.file));
             if (fileContent == content)
             {
-                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", current) + ": ", CliLog.ColorRed, "No Change ", CliLog.ColorGreen, webResourceFile.file);
+                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", current) + ": ", CliLog.ColorRed, "No Change ", CliLog.ColorGreen, webResourceFile.file.Substring(CurrentDirectory.Length + 1));
                 return;
             }
             var webResource = new Entity("webresource")
