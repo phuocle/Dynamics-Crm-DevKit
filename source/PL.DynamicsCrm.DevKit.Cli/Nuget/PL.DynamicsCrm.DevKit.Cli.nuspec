@@ -22,6 +22,7 @@
     <file src="..\Release\Microsoft.Xrm.Sdk.dll" target="tools\Microsoft.Xrm.Sdk.dll" />
     <file src="..\Release\Microsoft.Xrm.Sdk.Workflow.dll" target="tools\Microsoft.Xrm.Sdk.Workflow.dll" />
     <file src="..\Release\Microsoft.Xrm.Tooling.Connector.dll" target="tools\Microsoft.Xrm.Tooling.Connector.dll" />
+    <file src="..\Release\Microsoft.Xrm.Sdk.Deployment.dll" target="tools\Microsoft.Xrm.Sdk.Deployment.dll" />
     <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
     <file src="..\Release\NUglify.dll" target="tools\NUglify.dll" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />

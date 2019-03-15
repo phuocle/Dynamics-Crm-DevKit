@@ -71,6 +71,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var i = 1;
             var total = downloadedFiles.Count;
             var len = total.ToString().Length;
+            CliLog.WriteLine(CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, total, CliLog.ColorGreen, " webresources");
+            CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             foreach (var downloadedFile in downloadedFiles)
             {
                 var fetchData = new
@@ -103,13 +105,21 @@ namespace PL.DynamicsCrm.DevKit.Cli
                                     {
                                         name = x?.Attribute("name")?.Value
                                     }).ToList();
+                if (webResources.Count == 0)
+                {
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Dependency: ", CliLog.ColorGreen, name, CliLog.ColorWhite, " not found");
+                    i++;
+                    continue;
+                }
                 var existing = dependencies.FirstOrDefault(d => d.webresources.Contains(name));
+                List<string> dependenciesLog;
                 if (existing == null)
                 {
+                    dependenciesLog = webResources.Select(w => w.name).ToList();
                     dependencies.Add(new Dependency
                     {
                         webresources = new List<string> { name },
-                        dependencies = webResources.Select(w => w.name).ToList()
+                        dependencies = dependenciesLog
                     });
                 }
                 else
@@ -118,9 +128,10 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     update.AddRange(webResources.Select(w => w.name).ToList());
                     update = update.Distinct().ToList();
                     existing.dependencies = update;
+                    dependenciesLog = update;
                 }
                 CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Dependency: ", CliLog.ColorGreen, name, CliLog.ColorWhite, " dependencies");
-                foreach (var dependency in dependencies.FirstOrDefault(d => d.webresources.Contains(name)).dependencies)
+                foreach (var dependency in dependenciesLog)
                 {
                     CliLog.WriteLine(CliLog.ColorGreen, "\t", CliLog.ColorGreen, dependency);
                 }
@@ -135,6 +146,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var fetchData = new
             {
                 ismanaged = "0",
+                iscustomizable = "1",
                 uniquename = DownloadWebResourceJson.solution,
                 name = DownloadWebResourceJson.prefix
             };
@@ -148,6 +160,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
     <attribute name='webresourcetype' />
     <attribute name='content' />
     <filter type='and'>
+      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable}'/>
       <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
       <condition attribute='name' operator='begins-with' value='{fetchData.name}'/>
     </filter>
@@ -171,8 +184,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
     <attribute name='webresourcetype' />
     <attribute name='content' />
     <filter type='and'>
+      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable}'/>
       <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
-      <condition attribute='name' operator='begins-with' value='{fetchData.name}'/>
     </filter>
     <order attribute='name' />
   </entity>
