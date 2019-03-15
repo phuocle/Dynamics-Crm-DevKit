@@ -240,7 +240,6 @@
             this.MinimizeBox = false;
             this.Name = "FormConnection";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Crm Connection";
             this.groupBox1.ResumeLayout(false);

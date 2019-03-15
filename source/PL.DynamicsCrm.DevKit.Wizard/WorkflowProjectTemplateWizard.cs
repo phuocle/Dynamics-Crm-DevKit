@@ -55,7 +55,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Dte = (DTE)automationObject;
             if (!Utility.SharedProjectExist(Dte))
             {
-                MessageBox.Show(@"Please add shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(@"Please add PL.DynamicsCrm.DevKit Shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
                 throw new WizardCancelledException("Shared project should exist");
             }

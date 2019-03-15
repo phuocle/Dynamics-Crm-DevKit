@@ -15,6 +15,6 @@
   </TemplateContent>
   <WizardExtension>
     <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
-    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.ResourceStringItemTemplateItemTemplateWizard</FullClassName>
+    <FullClassName>PL.DynamicsCrm.DevKit.Wizard.ResourceStringItemTemplateWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>

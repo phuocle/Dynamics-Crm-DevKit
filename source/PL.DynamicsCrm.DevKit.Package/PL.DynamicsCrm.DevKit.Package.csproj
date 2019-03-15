@@ -66,19 +66,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\DevKitCrmConfig.cs">
-      <Link>DevKitCrmConfig.cs</Link>
+      <Link>Links\DevKitCrmConfig.cs</Link>
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\DevKitCrmConfigHelper.cs">
-      <Link>DevKitCrmConfigHelper.cs</Link>
+      <Link>Links\DevKitCrmConfigHelper.cs</Link>
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
-      <Link>EncryptDecrypt.cs</Link>
+      <Link>Links\EncryptDecrypt.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Enum.cs">
+      <Link>Links\Enum.cs</Link>
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\SimpleJson.cs">
-      <Link>SimpleJson.cs</Link>
+      <Link>Links\SimpleJson.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Utility.cs">
+      <Link>Links\Utility.cs</Link>
     </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Xrm\CrmConnection.cs">
-      <Link>CrmConnection.cs</Link>
+      <Link>Links\CrmConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Wizard\FormConnection.cs">
+      <Link>Links\FormConnection.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Wizard\FormConnection.Designer.cs">
+      <Link>Links\FormConnection.Designer.cs</Link>
+      <DependentUpon>FormConnection.cs</DependentUpon>
     </Compile>
     <Compile Include="Command.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,6 +100,12 @@
     <Compile Include="SharedGlobals.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\14.PluginProjectTemplate\deploy.debug.bat">
+      <Link>Data\Plugin\deploy.debug.bat</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\18.WorkflowProjectTemplate\deploy.debug.bat">
+      <Link>Data\Workflow\deploy.debug.bat</Link>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
@@ -98,6 +118,10 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\PL.DynamicsCrm.DevKit.Wizard\FormConnection.resx">
+      <Link>Links\FormConnection.resx</Link>
+      <DependentUpon>FormConnection.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
@@ -108,28 +132,34 @@
     <Content Include="Resources\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.VisualStudio.SDK.Analyzers.15.8.36\analyzers\cs\Microsoft.VisualStudio.SDK.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.0.102\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.0.102\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
+    <Reference Include="envdte80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.12\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.CoreUtility.15.6.27740\lib\net46\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <Reference Include="Microsoft.VisualStudio.Threading, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Threading, Version=15.8.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.12\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Nerdbank.Streams, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cac503e1823ce71c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nerdbank.Streams.2.0.225\lib\net46\Nerdbank.Streams.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.9\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.9\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.7.10.6072\lib\net11\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
@@ -142,6 +172,8 @@
       <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.10.0.10.0.30320\lib\net20\Microsoft.VisualStudio.Shell.Interop.10.0.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

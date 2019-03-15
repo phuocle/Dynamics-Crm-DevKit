@@ -7,7 +7,7 @@ using Paz.LuckeyMonkey.Shared.Entities;
 
 namespace Paz.LuckeyMonkey.Workflow
 {
-    [CrmPluginRegistration("RetrieveUsers", "RetrieveUsers", "", "Paz.LuckeyMonkey.Workflow", IsolationModeEnum.Sandbox)]
+    [CrmPluginRegistration("RetrieveUsers111", "RetrieveUsers111", "BBB", "Paz.LuckeyMonkey.Workflow", IsolationModeEnum.Sandbox)]
     public class RetrieveUsers : CodeActivity
     {
         //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity

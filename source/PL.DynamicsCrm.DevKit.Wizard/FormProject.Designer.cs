@@ -279,7 +279,6 @@
             this.MinimizeBox = false;
             this.Name = "FormProject";
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add new Console Project";
             this.groupBox.ResumeLayout(false);

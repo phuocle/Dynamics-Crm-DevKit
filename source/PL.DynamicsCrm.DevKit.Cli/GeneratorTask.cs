@@ -53,7 +53,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             if (entities.Count == 0)
             {
-                CliLog.WriteLine(CliLog.ColorRed, "NOT FOUND ENTIIES!!!!");
+                CliLog.WriteLine(CliLog.ColorRed, "NOT FOUND ENTIIES !!!");
                 return;
             }
             CliLog.WriteLine(CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, entities.Count, CliLog.ColorGreen, " entities");
@@ -100,7 +100,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             if (entities.Count == 0)
             {
-                CliLog.WriteLine(CliLog.ColorRed, "NOT FOUND ENTIIES!!!!");
+                CliLog.WriteLine(CliLog.ColorRed, "NOT FOUND ENTIIES !!!");
                 return;
             }
 
@@ -147,7 +147,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             if (entities.Count == 0)
             {
-                CliLog.WriteLine(CliLog.ColorRed, "NOT FOUND ENTIIES!!!!");
+                CliLog.WriteLine(CliLog.ColorRed, "NOT FOUND ENTIIES !!!");
                 return;
             }
 

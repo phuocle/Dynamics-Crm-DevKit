@@ -15,10 +15,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
     {
         Plugins,
         Workflows,
-        Webresources,
-        Solutionpackagers,
-        Dataproviders,
-        Generators
+        WebResources,
+        SolutionPackagers,
+        DataProviders,
+        Generators,
+        DownloadWebResources
     }
 
     public class Program
@@ -28,7 +29,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"D:\src\vsts\tfs\CDS-CRMGRIDPLUS\CRM\PL.CrmGridPlus.SolutionPackager";
+                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\TestWebResources\2.after\WebSite";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -41,7 +42,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private static WebResource WebResourceJson { get; set; }
         private static SolutionPackager SolutionPackagerJson { get; set; }
         private static DataProvider DataProviderJson { get; set; }
-        private static Generator GeneratorJson {get;set;}
+        private static Generator GeneratorJson { get; set; }
+        private static DownloadWebResource DownloadWebResourceJson { get; set; }
+
         private static CrmServiceClient CrmServiceClient { get; set; }
 
         public static void Main(string[] args)
@@ -98,17 +101,17 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var task = new WorkflowTask(CrmServiceClient, CurrentDirectory, WorkflowJson, arguments.Version);
                 task.Run();
             }
-            else if (arguments.Type == TaskType.Webresources.ToString().ToLower())
+            else if (arguments.Type == TaskType.WebResources.ToString().ToLower())
             {
                 var task = new WebResourceTask(CrmServiceClient, CurrentDirectory, WebResourceJson, arguments.Version);
                 task.Run();
             }
-            else if (arguments.Type == TaskType.Solutionpackagers.ToString().ToLower())
+            else if (arguments.Type == TaskType.SolutionPackagers.ToString().ToLower())
             {
                 var task = new SolutionPackagerTask(CrmServiceClient, CurrentDirectory, SolutionPackagerJson, arguments.Version);
                 task.Run();
             }
-            else if (arguments.Type == TaskType.Dataproviders.ToString().ToLower())
+            else if (arguments.Type == TaskType.DataProviders.ToString().ToLower())
             {
                 var task = new DataProviderTask(CrmServiceClient, CurrentDirectory, DataProviderJson, arguments.Version);
                 task.Run();
@@ -116,6 +119,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
             else if (arguments.Type == TaskType.Generators.ToString().ToLower())
             {
                 var task = new GeneratorTask(CrmServiceClient, CurrentDirectory, GeneratorJson, arguments.Version);
+                task.Run();
+            }
+            else if (arguments.Type == TaskType.DownloadWebResources.ToString().ToLower())
+            {
+                var task = new DownloadWebResourceTask(CrmServiceClient, CurrentDirectory, DownloadWebResourceJson, arguments.Version, Path.Combine(CurrentDirectory, arguments.Json));
                 task.Run();
             }
         }
@@ -150,15 +158,21 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 {
                     TaskType.Plugins.ToString().ToLower(),
                     TaskType.Workflows.ToString().ToLower(),
-                    TaskType.Webresources.ToString().ToLower(),
-                    TaskType.Solutionpackagers.ToString().ToLower(),
-                    TaskType.Dataproviders.ToString().ToLower(),
-                    TaskType.Generators.ToString().ToLower()
+                    TaskType.WebResources.ToString().ToLower(),
+                    TaskType.SolutionPackagers.ToString().ToLower(),
+                    TaskType.DataProviders.ToString().ToLower(),
+                    TaskType.Generators.ToString().ToLower(),
+                    TaskType.DownloadWebResources.ToString().ToLower()
                 };
                 if (!types.Contains(arguments.Type))
                 {
-                    CliLog.WriteLine(CliLog.ColorError, $"/type: should be: plugins or workflows or webresources or solutionpackagers or dataproviders or generators");
-                    return false;
+                    throw new Exception($"/type: should be: {TaskType.Plugins.ToString().ToLower()}/" +
+                        $"{TaskType.Workflows.ToString().ToLower()}/" +
+                        $"{TaskType.WebResources.ToString().ToLower()}/" +
+                        $"{TaskType.SolutionPackagers.ToString().ToLower()}/" +
+                        $"{TaskType.DataProviders.ToString().ToLower()}/" +
+                        $"{TaskType.Generators.ToString().ToLower()}/" +
+                        $"{TaskType.DownloadWebResources.ToString().ToLower()}");
                 }
             }
             else
@@ -169,6 +183,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 SolutionPackagerJson = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
                 DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
                 GeneratorJson = json.generators.FirstOrDefault(x => x.profile == arguments.Profile);
+                DownloadWebResourceJson = json.downloadwebresources.FirstOrDefault(x => x.profile == arguments.Profile);
             }
             if (arguments.Profile.Length == 0)
             {
@@ -198,7 +213,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     return false;
                 }
             }
-            else if (arguments.Type == TaskType.Webresources.ToString().ToLower())
+            else if (arguments.Type == TaskType.WebResources.ToString().ToLower())
             {
                 WebResourceJson = json.webresources.FirstOrDefault(x => x.profile == arguments.Profile);
                 if (WebResourceJson == null)
@@ -207,7 +222,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     return false;
                 }
             }
-            else if (arguments.Type == TaskType.Solutionpackagers.ToString().ToLower())
+            else if (arguments.Type == TaskType.SolutionPackagers.ToString().ToLower())
             {
                 SolutionPackagerJson = json.solutionpackagers.FirstOrDefault(x => x.profile == arguments.Profile);
                 if (SolutionPackagerJson == null)
@@ -216,7 +231,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     return false;
                 }
             }
-            else if (arguments.Type == TaskType.Dataproviders.ToString().ToLower())
+            else if (arguments.Type == TaskType.DataProviders.ToString().ToLower())
             {
                 DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
                 if (DataProviderJson == null)
@@ -234,12 +249,21 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     return false;
                 }
             }
+            else if (arguments.Type == TaskType.DownloadWebResources.ToString().ToLower())
+            {
+                DownloadWebResourceJson = json.downloadwebresources.FirstOrDefault(x => x.profile == arguments.Profile);
+                if (DownloadWebResourceJson == null)
+                {
+                    CliLog.WriteLine(CliLog.ColorError, $"/profile: not found profile: {arguments.Profile}");
+                    return false;
+                }
+            }
             if (!IsConnectedDynamics365(arguments.Connection))
             {
                 CliLog.WriteLine(CliLog.ColorError, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
                 return false;
             }
-            CliLog.WriteLine(CliLog.ColorYellow, "Connected ", CliLog.ColorMagenta, "Dynamics CRM: ", CliLog.ColorRed, CrmConnectOrgUriActual );
+            CliLog.WriteLine(CliLog.ColorYellow, "Connected ", CliLog.ColorMagenta, "Dynamics CRM: ", CliLog.ColorRed, CrmConnectOrgUriActual);
             return true;
         }
 

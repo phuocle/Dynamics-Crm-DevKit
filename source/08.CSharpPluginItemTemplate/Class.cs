@@ -6,8 +6,7 @@ namespace $rootnamespace$
 {
     [CrmPluginRegistration("$message$", "$logicalname$", StageEnum.$stage_string$, ExecutionModeEnum.$execution$, "",
     "$rootnamespace$.$class$$execution$", 1, IsolationModeEnum.Sandbox,
-    Image1Name = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "",
-    Image2Name = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "")]
+    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class $class$$execution$ : IPlugin
     {
 $privateclass$
