@@ -58,8 +58,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             CliLog.WriteLine(CliLog.ColorGreen, "START WORKFLOW TASKS");
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
-            if (WorkflowFiles.Count() == 0) throw new Exception("No workflow files found. Please check PL.DynamicsCrm.DevKit.Cli.json file!!");
-            if (WorkflowJson.solution.Length == 0 || WorkflowJson.solution == "???") throw new Exception("No solution found in workflow profile. Please check PL.DynamicsCrm.DevKit.Cli.json file!!");
+            if (WorkflowFiles.Count() == 0) throw new Exception("No workflow files found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
+            if (WorkflowJson.solution.Length == 0 || WorkflowJson.solution == "???") throw new Exception("No solution found in workflow profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
             foreach (var workflowFile in WorkflowFiles) RegisterWorkflow(workflowFile);
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             CliLog.WriteLine(CliLog.ColorGreen, "END WORKFLOW TASKS");

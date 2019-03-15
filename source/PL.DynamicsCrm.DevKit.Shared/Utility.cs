@@ -160,7 +160,9 @@ namespace PL.DynamicsCrm.DevKit.Shared
                            ? openChar
                            : closeChar);
 
-            return string.Concat(result);
+            var @return = string.Concat(result);
+            @return = @return.Replace("\":[", "\": [").Replace("\":\"", "\": \"");
+            return @return;
         }
 
     }

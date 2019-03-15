@@ -72,6 +72,9 @@
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.12\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.4.5.1\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.12\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
       <Private>True</Private>
@@ -184,10 +187,6 @@
     </None>
     <None Include="App.config" />
     <None Include="Nuget\pack.bat" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.0.nupkg" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.1.nupkg" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.2.nupkg" />
-    <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.1.2.3.nupkg" />
     <None Include="Nuget\PL.DynamicsCrm.DevKit.Cli.nuspec" />
     <None Include="packages.config" />
     <EmbeddedResource Include="..\PL.DynamicsCrm.DevKit.Wizard\data\WebApi.js">
