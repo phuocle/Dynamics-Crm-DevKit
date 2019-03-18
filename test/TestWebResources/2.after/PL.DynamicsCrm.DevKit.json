@@ -1,7 +1,7 @@
 ﻿{
-  "DefaultCrmVersion":null,
-  "DefaultNetVersion":null,
-  "DefaultCrmName":null,
+  "DefaultCrmVersion": "9.0.2.12",
+  "DefaultNetVersion": "4.6.2",
+  "DefaultCrmName": "Dynamics 365",
   "DefaultCrmConnection": "pl-dynamicscrm-devkit.api.crm.dynamics.com",
   "SolutionPrefix":null,
   "CrmConnections": [
