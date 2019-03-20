@@ -76,6 +76,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\CliJson.cs">
+      <Link>LinkFiles\CliJson.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\DataProvider.cs">
+      <Link>LinkFiles\DataProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\Dependency.cs">
+      <Link>LinkFiles\Dependency.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\DownloadWebResource.cs">
+      <Link>LinkFiles\DownloadWebResource.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\Generator.cs">
+      <Link>LinkFiles\Generator.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\Plugin.cs">
+      <Link>LinkFiles\Plugin.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\Portal.cs">
+      <Link>LinkFiles\Portal.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\SolutionPackager.cs">
+      <Link>LinkFiles\SolutionPackager.cs</Link>
+    </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\WebResource.cs">
+      <Link>LinkFiles\WebResource.cs</Link>
+    </Compile>
     <Compile Include="ConsoleProjectTemplateWizard.cs" />
     <Compile Include="CSharpCustomActionItemTemplateWizard.cs" />
     <Compile Include="CSharpTestUiItemTemplateWizard.cs" />
@@ -88,6 +115,7 @@
     <Compile Include="CSharpLateBoundClassItemTemplateWizard.cs" />
     <Compile Include="CSharpPluginItemTemplateWizard.cs" />
     <Compile Include="PluginProjectTemplateWizard.cs" />
+    <Compile Include="PortalProjectTemplateWizard.cs" />
     <Compile Include="ReportProjectTemplateWizard.cs" />
     <Compile Include="ResourceStringItemTemplateWizard.cs" />
     <Compile Include="SharedProjectTemplateWizard.cs" />

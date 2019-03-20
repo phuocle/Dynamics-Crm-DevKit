@@ -9,13 +9,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion></ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{$guid1$}</ProjectGuid>
+    <ProjectGuid>{5c340443-8871-4e8b-9959-936b6952635c}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$SafeNamespace$</RootNamespace>
-    <AssemblyName>$AssemblyName$</AssemblyName>
-    <TargetFrameworkVersion>$NetVersion$</TargetFrameworkVersion>
+    <RootNamespace>Abc.Def.Portal</RootNamespace>
+    <AssemblyName>Abc.Def.Portal</AssemblyName>
+    <TargetFrameworkVersion>4.6.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -37,7 +37,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\Release\web\$ProjectName$</OutputPath>
+    <OutputPath>..\Release\web\Abc.Def.Portal</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants></DefineConstants>
@@ -47,32 +47,15 @@
     <NoWarn>CS8032</NoWarn>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-	<ItemGroup>
-    <Folder Include="html\" />
-    <Folder Include="css\" />
-    <Folder Include="js\" />
-		<Folder Include="entities\" />
-		<Folder Include="lib\" />
-    <Folder Include="images\"/>
-    <Folder Include="test\"/>$if$($CrmName$==365)
-    <Folder Include="resources\"/>$endif$
-		<Compile Include="Properties\AssemblyInfo.cs" />
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="download.webresources.bat" />
-    <None Include="test.bat" />
-    <None Include="chutzpah.json" />
-    <None Include="package.json" />
-    <None Include="package-lock.json" />
     <None Include="packages.config" />
-    <Content Include="test\DevKitMock.js" />
-    <Content Include="test\requireConfig.js" />
-    <Content Include="test\mock.intellisense.js" />
-    <Content Include="lib\WebApiClient.js" />
-    <Content Include="entities\devkit.intellisense.js" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.$PLDynamicsCrmDevKitAnalyzersVersion$\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.1.2.2\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

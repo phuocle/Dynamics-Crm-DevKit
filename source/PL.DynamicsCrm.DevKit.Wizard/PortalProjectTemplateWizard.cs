@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
-using NUglify;
+using PL.DynamicsCrm.DevKit.Cli.Models;
 using PL.DynamicsCrm.DevKit.Shared;
 
 namespace PL.DynamicsCrm.DevKit.Wizard
 {
-    internal class WebResourceProjectTemplateWizard : IWizard
+    public class PortalProjectTemplateWizard : IWizard
     {
         private DTE Dte { get; set; }
         private Project Project { get; set; }
@@ -50,7 +51,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
             if (runKind != WizardRunKind.AsNewProject) return;
             Dte = (DTE)automationObject;
-            var form = new FormProject(FormType.WebResource, Dte);
+            var form = new FormProject(FormType.Portal, Dte);
             if (form.ShowDialog() == DialogResult.OK)
             {
                 ProjectName = form.ProjectName;
@@ -84,12 +85,20 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$SafeNamespace$", Utility.SafeNamespace(form.RootNamespace));
                     replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
                     replacementsDictionary.Add("$ProjectName$", form.ProjectName);
-                    replacementsDictionary.Add("$packagename$", form.AssemblyName.ToLower());
-                    var parts = replacementsDictionary["$RootNamespace$"].Split(".".ToCharArray());
-                    replacementsDictionary.Add("$ProjectNameJs$", $"{parts[1]}");
-                    replacementsDictionary.Add("$WebApiClientMin$", GetWebApiClientMin(parts[1]));
                     replacementsDictionary.Add("$PLDynamicsCrmDevKitCliVersion$", form.PLDynamicsCrmDevKitCliVersion);
                     replacementsDictionary.Add("$PLDynamicsCrmDevKitAnalyzersVersion$", form.PLDynamicsCrmDevKitAnalyzersVersion);
+
+                    var cliJson = SimpleJson.DeserializeObject<CliJson>(File.ReadAllText(file));
+                    var update = cliJson.portals.FirstOrDefault(x => x.profile == "DEBUG");
+                    if (update != null)
+                    {
+                        update.name = form.PortalName;
+                        var updateJson = SimpleJson.SerializeObject(cliJson);
+                        updateJson = updateJson.Replace("[entity]", "__entity__");
+                        updateJson = Utility.FormatJson(updateJson);
+                        updateJson = updateJson.Replace("__entity__", "[entity]");
+                        File.WriteAllText(file, updateJson);
+                    }
                     return;
                 }
                 else
@@ -99,17 +108,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
             Utility.TryDeleteDirectory(replacementsDictionary["$destinationdirectory$"]);
             throw new WizardCancelledException("Cancel Click");
-        }
-
-        private string GetWebApiClientMin(string projectName)
-        {
-            if (projectName == "sln") projectName = "WebResource";
-            var code = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.WebApiClient.min.js");
-            code += "\r\n";
-            var webApiClient = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.WebApiClient.js");
-            webApiClient = webApiClient.Replace("DevKit", projectName);
-            webApiClient = Uglify.Js(webApiClient).Code;
-            return code + webApiClient;
         }
 
         public bool ShouldAddProjectItem(string filePath)

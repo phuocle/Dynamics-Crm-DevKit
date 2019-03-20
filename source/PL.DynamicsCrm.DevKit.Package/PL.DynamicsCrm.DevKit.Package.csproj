@@ -77,6 +77,9 @@
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Enum.cs">
       <Link>Links\Enum.cs</Link>
     </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\NameValue.cs">
+      <Link>Links\NameValue.cs</Link>
+    </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\SimpleJson.cs">
       <Link>Links\SimpleJson.cs</Link>
     </Compile>

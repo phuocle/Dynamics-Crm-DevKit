@@ -9,13 +9,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion></ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{$guid1$}</ProjectGuid>
+    <ProjectGuid>{966f627b-1532-4e8e-8cae-ad24fe8734c8}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$SafeNamespace$</RootNamespace>
-    <AssemblyName>$AssemblyName$</AssemblyName>
-    <TargetFrameworkVersion>$NetVersion$</TargetFrameworkVersion>
+    <RootNamespace>Abc.Def.WebResource</RootNamespace>
+    <AssemblyName>Abc.Def.WebResource</AssemblyName>
+    <TargetFrameworkVersion>4.6.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -37,7 +37,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\Release\web\$ProjectName$</OutputPath>
+    <OutputPath>..\Release\web\Abc.Def.WebResource</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants></DefineConstants>
@@ -54,8 +54,8 @@
 		<Folder Include="entities\" />
 		<Folder Include="lib\" />
     <Folder Include="images\"/>
-    <Folder Include="test\"/>$if$($CrmName$==365)
-    <Folder Include="resources\"/>$endif$
+    <Folder Include="test\"/>
+    <Folder Include="resources\"/>
 		<Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="download.webresources.bat" />
@@ -72,7 +72,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.$PLDynamicsCrmDevKitAnalyzersVersion$\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.1.2.2\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

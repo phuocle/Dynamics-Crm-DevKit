@@ -217,5 +217,26 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
             var response = (RetrieveEntityResponse) CrmService.Execute(request);
             return response.EntityMetadata.SchemaName;
         }
+
+        public List<string> GetAllPortals()
+        {
+            var list = new List<string>();
+            var fetchXml = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+  <entity name='adx_website'>
+    <attribute name='adx_name'/>
+    <order attribute='adx_name' descending='false'/>
+  </entity>
+</fetch>
+";
+            var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return list;
+            foreach(var row in rows.Entities)
+            {
+                var name = row.GetAttributeValue<string>("adx_name");
+                list.Add(name);
+            }
+            return list;
+        }
     }
 }

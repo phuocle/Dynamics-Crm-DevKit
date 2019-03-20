@@ -11,5 +11,6 @@ namespace PL.DynamicsCrm.DevKit.Cli.Models
         public List<DataProvider> dataproviders { get; set; }
         public List<Generator> generators { get; set; }
         public List<DownloadWebResource> downloadwebresources { get; set; }
+        public List<Portal> portals { get; set; }
     }
 }

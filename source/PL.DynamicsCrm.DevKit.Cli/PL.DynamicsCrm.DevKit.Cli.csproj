@@ -133,6 +133,9 @@
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\JsWebApi.cs">
       <Link>LinkFiles\JsWebApi.cs</Link>
     </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\NameValue.cs">
+      <Link>LinkFiles\NameValue.cs</Link>
+    </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\SimpleJson.cs">
       <Link>LinkFiles\SimpleJson.cs</Link>
     </Compile>
@@ -158,6 +161,7 @@
     <Compile Include="Models\DownloadWebResource.cs" />
     <Compile Include="Models\Generator.cs" />
     <Compile Include="Models\Plugin.cs" />
+    <Compile Include="Models\Portal.cs" />
     <Compile Include="Models\SolutionPackager.cs" />
     <Compile Include="Models\WebResource.cs" />
     <Compile Include="Models\WebResourceFile.cs" />

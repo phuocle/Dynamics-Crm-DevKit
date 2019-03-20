@@ -23,7 +23,8 @@
     SelectEntity,
     ResourceString,
     DataProvider,
-    SolutionPackager
+    SolutionPackager,
+    Portal
 }
 
 public enum ParameterType

@@ -127,11 +127,57 @@
       ]
     }
   ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Unmanaged",
+      "solution": "???",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "type": "Extract",
+      "mapfile": "",
+      "logfolder": "???",
+      "solutiontype": "Unmanaged",
+      "rootfolder": ""
+    },
+    {
+      "profile": "Extract-Managed",
+      "solution": "???",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "type": "Extract",
+      "mapfile": "",
+      "logfolder": "???",
+      "solutiontype": "Managed",
+      "rootfolder": ""
+    },
+    {
+      "profile": "Pack-Unmanaged",
+      "solution": "???",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "type": "Pack",
+      "mapfile": "",
+      "logfolder": "???",
+      "solutiontype": "Unmanaged",
+      "rootfolder": ""
+    },
+    {
+      "profile": "Pack-Managed",
+      "solution": "???",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "type": "Pack",
+      "mapfile": "",
+      "logfolder": "???",
+      "solutiontype": "Managed",
+      "rootfolder": ""
+    }
+  ],
   "dataproviders": [
     {
       "profile": "DEBUG",
-      "folder": "bin\\Debug",
       "solution": "???",
+      "folder": "bin\\Debug",
       "includefiles": [
         "???.DataProvider.*.dll"
       ],
@@ -141,8 +187,8 @@
     },
     {
       "profile": "RELEASE",
-      "folder": "Release\\dll",
       "solution": "???",
+      "folder": "Release\\dll",
       "includefiles": [
         "???.DataProvider.*.dll"
       ],
@@ -151,73 +197,27 @@
       ]
     }
   ],
-  "solutionpackagers": [
-    {
-      "profile": "Extract-Unmanaged",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "solutionzipfolder": "???",
-      "logfolder": "???",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Extract-Managed",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Managed",
-      "folder": "???",
-      "solutionzipfolder": "???",
-      "logfolder": "???",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Unmanaged",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "solutionzipfolder": "???",
-      "logfolder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Managed",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Managed",
-      "folder": "???",
-      "solutionzipfolder": "???",
-      "logfolder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    }
-  ],
   "generators": [
     {
       "profile": "LATEBOUND",
-      "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "365",
-      "type": "CSharp"
+      "rootnamespace": "???",
+      "type": "CSharp",
+      "crmversion": "365"
     },
     {
       "profile": "JS-FORM",
-      "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "365",
-      "type": "JsForm"
+      "rootnamespace": "???",
+      "type": "JsForm",
+      "crmversion": "365"
     },
     {
       "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "365",
-      "type": "JsWebApi"
+      "rootnamespace": "???",
+      "type": "JsWebApi",
+      "crmversion": "365"
     }
   ],
   "downloadwebresources": [
@@ -230,7 +230,7 @@
   "portals": [
     {
       "profile": "DEBUG",
-      "name": "???"
+      "name": "Custom Portal"
     }
   ]
 }

@@ -240,6 +240,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\38.PortalProjectTemplate\38.PortalProjectTemplate.csproj">
+      <Project>{ED644B61-A8B9-4DCC-B735-42BBD63C58DC}</Project>
+      <Name>38.PortalProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PL.DynamicsCrm.DevKit.Package\PL.DynamicsCrm.DevKit.Package.csproj">
       <Project>{6302EA70-637D-4FDC-B169-1493427DD8D2}</Project>
       <Name>PL.DynamicsCrm.DevKit.Package</Name>
