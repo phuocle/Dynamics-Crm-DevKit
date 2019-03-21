@@ -29,7 +29,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\TestWebResources\2.after\WebSite";
+                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\TestWebResources\2.after\WebProject";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

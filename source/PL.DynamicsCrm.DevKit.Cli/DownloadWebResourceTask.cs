@@ -55,9 +55,44 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 updateJson = updateJson.Replace("__entity__", "[entity]");
                 File.WriteAllText(CliJsonFile, updateJson);
             }
+            AddProjectItemGroup(list);
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             CliLog.WriteLine(CliLog.ColorGreen, "END DOWNLOAD WEBRESOURCES TASKS");
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
+        }
+
+        private void AddProjectItemGroup(List<string> list)
+        {
+            var t = CurrentDirectory;
+            var projects = Directory.GetFiles(CurrentDirectory, "*.csproj");
+            foreach(var project in projects)
+            {
+                var content = File.ReadAllText(project);
+                if (content.IndexOf("download.webresources.bat") > 0)
+                {
+                    var xdoc = XDocument.Parse(content);
+                    var items = (from x in xdoc.Descendants()
+                                 where x?.Attribute("Include")?.Value != null
+                                 select x?.Attribute("Include")?.Value
+                                ).ToList();
+                    var lines = from item in list
+                                where !items.Contains(item)
+                                select item;
+                    if (lines.Count() == 0) break;
+                    var itemGroup = "\t<ItemGroup>\r\n";
+                    foreach (var item in lines)
+                    {
+                        if (item.EndsWith(".resx"))
+                            itemGroup += $"\t\t<None Include=\"{item}\" />\r\n";
+                        else
+                            itemGroup += $"\t\t<Content Include=\"{item}\" />\r\n";
+                    }
+                    itemGroup += "\t</ItemGroup>\r\n";
+                    content = content.Replace("</Project>", itemGroup + "</Project>");
+                    File.WriteAllText(project, content);
+                    break;
+                }
+            }
         }
 
         private List<Dependency> GetUpdateDependencies(List<Dependency> dependencies)
