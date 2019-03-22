@@ -19,7 +19,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
         SolutionPackagers,
         DataProviders,
         Generators,
-        DownloadWebResources
+        DownloadWebResources,
+        DownloadPortalWebResources
     }
 
     public class Program
@@ -29,7 +30,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\TestWebResources\2.after\WebProject";
+                return @"C:\sources\github\phuocle\Dynamics-Crm-DevKit\test\TestPortal\Abc.Def.Portal";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -44,6 +45,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private static DataProvider DataProviderJson { get; set; }
         private static Generator GeneratorJson { get; set; }
         private static DownloadWebResource DownloadWebResourceJson { get; set; }
+        private static Portal PortalJson { get; set; }
 
         private static CrmServiceClient CrmServiceClient { get; set; }
 
@@ -126,6 +128,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var task = new DownloadWebResourceTask(CrmServiceClient, CurrentDirectory, DownloadWebResourceJson, arguments.Version, Path.Combine(CurrentDirectory, arguments.Json));
                 task.Run();
             }
+            else if (arguments.Type == TaskType.DownloadPortalWebResources.ToString().ToLower())
+            {
+                var task = new PortalTask(CrmServiceClient, CurrentDirectory, PortalJson, arguments.Version);
+                task.Run();
+            }
         }
 
         private static bool IsValid(CommandLineArgs arguments)
@@ -162,7 +169,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     TaskType.SolutionPackagers.ToString().ToLower(),
                     TaskType.DataProviders.ToString().ToLower(),
                     TaskType.Generators.ToString().ToLower(),
-                    TaskType.DownloadWebResources.ToString().ToLower()
+                    TaskType.DownloadWebResources.ToString().ToLower(),
+                    TaskType.DownloadPortalWebResources.ToString().ToLower()
                 };
                 if (!types.Contains(arguments.Type))
                 {
@@ -172,7 +180,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                         $"{TaskType.SolutionPackagers.ToString().ToLower()}/" +
                         $"{TaskType.DataProviders.ToString().ToLower()}/" +
                         $"{TaskType.Generators.ToString().ToLower()}/" +
-                        $"{TaskType.DownloadWebResources.ToString().ToLower()}");
+                        $"{TaskType.DownloadWebResources.ToString().ToLower()}/" +
+                        $"{TaskType.DownloadPortalWebResources.ToString().ToLower()}");
                 }
             }
             else
@@ -184,6 +193,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 DataProviderJson = json.dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
                 GeneratorJson = json.generators.FirstOrDefault(x => x.profile == arguments.Profile);
                 DownloadWebResourceJson = json.downloadwebresources.FirstOrDefault(x => x.profile == arguments.Profile);
+                PortalJson = json.portals.FirstOrDefault(x => x.profile == arguments.Profile);
             }
             if (arguments.Profile.Length == 0)
             {
@@ -253,6 +263,15 @@ namespace PL.DynamicsCrm.DevKit.Cli
             {
                 DownloadWebResourceJson = json.downloadwebresources.FirstOrDefault(x => x.profile == arguments.Profile);
                 if (DownloadWebResourceJson == null)
+                {
+                    CliLog.WriteLine(CliLog.ColorError, $"/profile: not found profile: {arguments.Profile}");
+                    return false;
+                }
+            }
+            else if (arguments.Type == TaskType.DownloadPortalWebResources.ToString().ToLower())
+            {
+                PortalJson = json.portals.FirstOrDefault(x => x.profile == arguments.Profile);
+                if (PortalJson == null)
                 {
                     CliLog.WriteLine(CliLog.ColorError, $"/profile: not found profile: {arguments.Profile}");
                     return false;

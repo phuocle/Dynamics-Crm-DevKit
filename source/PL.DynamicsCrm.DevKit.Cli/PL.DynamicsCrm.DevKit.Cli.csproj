@@ -153,6 +153,7 @@
     <Compile Include="CrmPluginRegistrationAttribute.cs" />
     <Compile Include="CliLog.cs" />
     <Compile Include="DataProviderTask.cs" />
+    <Compile Include="PortalTask.cs" />
     <Compile Include="DownloadWebResourceTask.cs" />
     <Compile Include="GeneratorTask.cs" />
     <Compile Include="Models\CliJson.cs" />
