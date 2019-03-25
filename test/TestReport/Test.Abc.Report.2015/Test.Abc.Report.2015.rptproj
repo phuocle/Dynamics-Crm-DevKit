@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns:xsi="http://schemas.microsoft.com/developer/msbuild/2003-instance" xmlns:xsd="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="2.0">
   <DataSources />
   <DataSets />
@@ -16,7 +16,6 @@
     <Configuration>
       <Name>Debug</Name>
       <Platform>Win32</Platform>
-      <PlatformTarget>x86</PlatformTarget>
       <Options>
         <OutputPath>bin\Debug</OutputPath>
         <TargetServerVersion>SSRS2008R2</TargetServerVersion>
@@ -29,7 +28,6 @@
     <Configuration>
       <Name>Release</Name>
       <Platform>Win32</Platform>
-      <PlatformTarget>x86</PlatformTarget>
       <Options>
         <OutputPath>bin\Release</OutputPath>
         <TargetServerVersion>SSRS2008R2</TargetServerVersion>

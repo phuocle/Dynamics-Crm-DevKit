@@ -11,7 +11,7 @@ namespace PL.DynamicsCrm.DevKit.Package
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PackageGuidString)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
     public sealed class DevKitCrmPackage : AsyncPackage
     {
         public const string PackageGuidString = "7e37eef9-8cbe-4b10-81f7-66413cd2c9d3";

@@ -41,8 +41,10 @@ namespace PL.DynamicsCrm.DevKit.Package
 
         public const int CommandWebResourceId = 0x0100;
         public const int CommandPluginId = 0x0200;
+        public const int CommandReportId = 0x0300;
         public static readonly Guid CommandSetWebResource = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
         public static readonly Guid CommandSetPlugin = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8be");
+        public static readonly Guid CommandSetReport = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bd");
 
         private static IMenuCommandService MenuService;
         private static DTE Dte;
@@ -62,6 +64,29 @@ namespace PL.DynamicsCrm.DevKit.Package
             var cmdPlugin = new OleMenuCommand((s, e) => ExecutePlugin(package), cmdPluginId);
             cmdPlugin.BeforeQueryStatus += CommandPlugin_BeforeQueryStatus;
             MenuService.AddCommand(cmdPlugin);
+
+            var cmdReportId = new CommandID(CommandSetReport, CommandReportId);
+            var cmdReport = new OleMenuCommand((s, e) => ExecuteReport(package), cmdReportId);
+            cmdReport.BeforeQueryStatus += CommandReport_BeforeQueryStatus;
+            MenuService.AddCommand(cmdReport);
+        }
+
+        private static void CommandReport_BeforeQueryStatus(object sender, EventArgs e)
+        {
+            var menuCommand = sender as OleMenuCommand;
+            menuCommand.Visible = false;
+            if (Dte == null || Dte.SelectedItems == null || Dte.SelectedItems.Count != 1) return;
+            var selectedItem = Dte.SelectedItems.Item(1);
+            if (selectedItem.ProjectItem == null) return;
+            var fileName = selectedItem.ProjectItem.FileNames[0];
+            var extension = Path.GetExtension(fileName);
+            if (extension != ".rdl") return;
+            menuCommand.Visible = true;
+        }
+
+        private static void ExecuteReport(AsyncPackage package)
+        {
+            MessageBox.Show("A");
         }
 
         private static void CommandPlugin_BeforeQueryStatus(object sender, EventArgs e)

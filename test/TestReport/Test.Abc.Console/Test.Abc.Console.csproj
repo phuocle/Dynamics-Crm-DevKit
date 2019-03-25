@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>$guid1$</ProjectGuid>
+    <ProjectGuid>490000cb-a3a7-4cf2-aae5-1ccb6b250743</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$SafeNamespace$</RootNamespace>
-    <AssemblyName>$AssemblyName$</AssemblyName>
-    <TargetFrameworkVersion>v$NetVersion$</TargetFrameworkVersion>
+    <RootNamespace>Test.Abc.Console</RootNamespace>
+    <AssemblyName>Test.Abc.Console</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -24,7 +24,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\Release\console\$ProjectName$</OutputPath>
+    <OutputPath>..\Release\console\Test.Abc.Console</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants></DefineConstants>
@@ -36,10 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$version$\lib\net$NugetNetVersion$\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.12\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$version$\lib\net$NugetNetVersion$\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.12\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -59,10 +59,10 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\$ShareProject$\$ShareProject$.projitems" Label="Shared" Condition="Exists('..\$ShareProject$\$ShareProject$.projitems')" />
+  <Import Project="..\Test.Abc.Shared\Test.Abc.Shared.projitems" Label="Shared" Condition="Exists('..\Test.Abc.Shared\Test.Abc.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.$PLDynamicsCrmDevKitAnalyzersVersion$\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.1.2.2\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName)==Release (
