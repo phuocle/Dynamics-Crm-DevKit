@@ -18,5 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\EntityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
+     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
   </ItemGroup>
 </Project>

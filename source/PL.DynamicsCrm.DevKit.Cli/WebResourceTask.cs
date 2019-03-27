@@ -74,7 +74,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, "START WEBRESOURCE TASKS");
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             var files = WebResourceFiles;
-            if (!WebResourceFiles.Any()) throw new Exception("No webresource files found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
+            if (!files.Any()) throw new Exception("No webresource files found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
             if (WebResourceJson.solution.Length == 0 || WebResourceJson.solution == "???") throw new Exception("No solution found in webresource profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
             if (WebResourceJson.prefix.Length == 0 || WebResourceJson.prefix == "???") throw new Exception("No prefix found in webresource profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
             var totalWebResources = files.Count;
@@ -233,15 +233,18 @@ namespace PL.DynamicsCrm.DevKit.Cli
   </entity>
 </fetch>";
                 var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                if (rows.Entities.Count == 0) return string.Empty;
-                var entity = rows.Entities[0];
-                var name = entity.GetAttributeValue<string>("name");
-                var displayname = entity.GetAttributeValue<string>("displayname");
-                var description = entity.GetAttributeValue<string>("description");
-                var webresourceidunique = entity.GetAttributeValue<Guid>("webresourceidunique");
-                var languagecode = entity.GetAttributeValue<int?>("languagecode");
-                library += $"<Library name='{name}' displayName='{displayname}' languagecode='{languagecode}' description='{description}' libraryUniqueId='{{{webresourceidunique}}}'/>";
+                if (rows.Entities.Count > 0)
+                {
+                    var entity = rows.Entities[0];
+                    var name = entity.GetAttributeValue<string>("name");
+                    var displayname = entity.GetAttributeValue<string>("displayname");
+                    var description = entity.GetAttributeValue<string>("description");
+                    var webresourceidunique = entity.GetAttributeValue<Guid>("webresourceidunique");
+                    var languagecode = entity.GetAttributeValue<int?>("languagecode");
+                    library += $"<Library name='{name}' displayName='{displayname}' languagecode='{languagecode}' description='{description}' libraryUniqueId='{{{webresourceidunique}}}'/>";
+                }
             }
+            if (library.Length == 0) return library;
             var dependencyXml = $"<Dependencies><Dependency componentType='WebResource'>{library}</Dependency></Dependencies>";
             dependencyXml = dependencyXml.Replace("'", "\"");
             return dependencyXml;
@@ -256,8 +259,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             var fetchData = new
             {
                 name = webResourceFile.uniquename,
-                name2 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.')),
-                name3 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.'))
+                name2 = webResourceFile.uniquename.Substring(0, webResourceFile.uniquename.LastIndexOf('.'))
             };
             var fetchXml = $@"
 <fetch>
@@ -269,7 +271,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
     <filter type='or'>
       <condition attribute='name' operator='eq' value='{fetchData.name}'/>
       <condition attribute='name' operator='eq' value='{fetchData.name2}'/>
-      <condition attribute='name' operator='like' value='%{fetchData.name3}%'/>
     </filter>
   </entity>
 </fetch>";

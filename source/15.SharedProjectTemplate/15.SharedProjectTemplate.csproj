@@ -71,6 +71,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="generator.bat" />
     <None Include="SimpleJson.cs" />
     <None Include="Date.cs" />
     <None Include="PluginCore.cs" />

@@ -147,7 +147,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             }
             if (entities.Count == 0)
             {
-                CliLog.WriteLine(CliLog.ColorRed, "NOT FOUND ENTIIES !!!");
+                CliLog.WriteLine(CliLog.ColorRed, "NOT FOUND ENTITIES !!!");
                 return;
             }
 
@@ -164,14 +164,24 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         private void GeneratorLateBound(string entity, int i, int count)
         {
-            CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".generated.cs");
             var lateBound = new GeneratedCSharpLateBound();
             var rootNameSpace = GeneratorJson.rootnamespace + ".Shared.Entities";
             var sharedNameSpace = GeneratorJson.rootnamespace + ".";
             var crmVersionName = (CrmVersionName)int.Parse(GeneratorJson.crmversion);
             var generated = lateBound.Go(CrmServiceClient.OrganizationServiceProxy, crmVersionName, entity, rootNameSpace, sharedNameSpace);
             var file = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.generated.cs";
-            File.WriteAllText(file, generated, System.Text.Encoding.UTF8);
+            var old = File.ReadAllText(file);
+            var check1 = old.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+            var check2 = generated.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t",string.Empty);
+            if (check1 != check2)
+            {
+                File.WriteAllText(file, generated, System.Text.Encoding.UTF8);
+                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".generated.cs");
+            }
+            else
+            {
+                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": No change ", CliLog.ColorGreen, entity);
+            }
         }
     }
 }
