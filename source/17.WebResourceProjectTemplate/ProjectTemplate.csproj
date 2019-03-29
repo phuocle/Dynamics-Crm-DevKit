@@ -69,6 +69,8 @@
     <Content Include="test\mock.intellisense.js" />
     <Content Include="lib\WebApiClient.js" />
     <Content Include="entities\devkit.intellisense.js" />
+    <None Include="entities\generator.form.bat" />
+    <None Include="entities\generator.webapi.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

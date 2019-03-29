@@ -56,6 +56,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     replacementsDictionary.Add("$DevKitVersion$", Const.Version);
                     replacementsDictionary.Add("$rootnamespace$", ProjectName);
                     replacementsDictionary.Add("$namespace$", ProjectName);
+                    replacementsDictionary.Add("$CrmConnectionString$", form.CrmConnectionString);
                     var solutionFullName = Dte?.Solution?.FullName;
                     var dir = Path.GetDirectoryName(solutionFullName);
                     var file = $"{dir}\\PL.DynamicsCrm.DevKit.Cli.json";

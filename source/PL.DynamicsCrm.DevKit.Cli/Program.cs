@@ -9,10 +9,6 @@ using Microsoft.Xrm.Tooling.Connector;
 using PL.DynamicsCrm.DevKit.Cli.Models;
 using PL.DynamicsCrm.DevKit.Shared;
 
-
-///conn:"AuthType=Office365;Url=https://viags-sandbox.crm5.dynamics.com;Username=admin@CRM250871.onmicrosoft.com;Password=CBm3sylhBSrGta0fjaLoCA==;" /json:"..\PL.DynamicsCrm.DevKit.Cli.json" /type:"webresources" /profile:"DEBUG" /version:"1.0.0.0"
-///conn:"AuthType=Office365;Url=https://org8882a78d.crm5.dynamics.com;Username=admin@PLDynamicsCrmDevKit.onmicrosoft.com;Password=cec28WudQhKlIJe8yD7hJg==;" /json:"..\PL.DynamicsCrm.DevKit.Cli.json" /type:"downloadwebresources" /profile:"DEBUG" /version:"1.0.0.0"
-
 namespace PL.DynamicsCrm.DevKit.Cli
 {
     public enum TaskType
@@ -34,8 +30,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                //return @"C:\src\abiz\git\ABIZ_VIAGS\src\Abiz.Viags.WebResource";
-                return @"C:\src\abizco\git\ABIZ_VIAGS\src\Abiz.Viags.Shared\Entities";
+                return @"C:\src\abizco\git\ABIZ_VIAGS\src\Abiz.Viags.CustomAction.Admin";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

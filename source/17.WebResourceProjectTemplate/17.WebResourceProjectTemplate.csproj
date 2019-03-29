@@ -78,6 +78,8 @@
     <None Include="chutzpah.json" />
     <None Include="deploy.debug.bat" />
     <None Include="download.webresources.bat" />
+    <None Include="generator.form.bat" />
+    <None Include="generator.webapi.bat" />
     <None Include="package-lock.json" />
     <None Include="package.json" />
     <None Include="_packages.config" />

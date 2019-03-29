@@ -38,6 +38,8 @@
       <ProjectItem ReplaceParameters="false" TargetFileName="test\requireConfig.js">requireConfig.js</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="entities\devkit.intellisense.js">devkit.intellisense.js</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="lib\WebApiClient.js">WebApiClient.js</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="entities\generator.form.bat">generator.form.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="entities\generator.webapi.bat">generator.webapi.bat</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

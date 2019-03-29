@@ -7,6 +7,7 @@ using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.Crm.Sdk.Messages;
@@ -84,10 +85,55 @@ namespace PL.DynamicsCrm.DevKit.Package
             menuCommand.Visible = true;
         }
 
+        private static string ProjectUniqueName { get; set; }
         private static void ExecuteReport(AsyncPackage package)
         {
-            MessageBox.Show("A");
+            var selectedItem = Dte.SelectedItems.Item(1);
+            ProjectUniqueName = selectedItem.ProjectItem.ContainingProject.UniqueName;
+            var activeConfiguration = Dte.Solution.SolutionBuild.ActiveConfiguration.Name;
+            Dte.Events.BuildEvents.OnBuildProjConfigDone += BuildEvents_OnBuildProjConfigDone;
+            try
+            {
+                Dte.Solution.SolutionBuild.BuildProject(activeConfiguration, ProjectUniqueName, true);
+            }
+            catch
+            {
+                MessageBox.Show("Build report fail. Please double check and try it again.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
         }
+
+        private static void BuildEvents_OnBuildProjConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
+        {
+            if(!Success || !ProjectUniqueName.EndsWith(Project))
+            {
+                Dte.Events.BuildEvents.OnBuildProjConfigDone -= BuildEvents_OnBuildProjConfigDone;
+                return;
+            }
+#if DEBUG
+            //ProjectUniqueName = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\TestReport\Test.Abc.Report.2015\Test.Abc.Report.2015.rptproj";
+#endif
+            var xml = File.ReadAllText(ProjectUniqueName);
+            var xdoc = XDocument.Parse(xml);
+            //Fist check for project VS2015
+            var node = (from x in xdoc?.Descendants("Project")?.Descendants("Configurations")?.Elements("Configuration")
+                       where x?.Element("Name")?.Value == ProjectConfig
+                       select x)?.FirstOrDefault();
+            var outputPath = node?.Descendants("Options")?.FirstOrDefault()?.Element("OutputPath")?.Value;
+            //if null, then check for project VS2017
+            if (outputPath == null)
+            {
+                node = (from x in xdoc?.Descendants("Projects")?.Elements("PropertyGroup")
+                        where x?.Element("FullPath")?.Value == ProjectConfig
+                        select x)?.FirstOrDefault();
+                if (node == null) throw new Exception("Cannot read the Output directory of the current report project");
+                outputPath = node?.Element("OutputPath")?.Value;
+            }
+            var t = string.Empty;
+
+        }
+
+
 
         private static void CommandPlugin_BeforeQueryStatus(object sender, EventArgs e)
         {
