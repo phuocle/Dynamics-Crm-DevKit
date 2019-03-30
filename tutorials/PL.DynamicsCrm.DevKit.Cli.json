@@ -3,7 +3,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "LuckeyMonkey",
       "includefiles": [
         "Paz.LuckeyMonkey.Plugin.*.dll",
         "Paz.LuckeyMonkey.CustomAction.*.dll"
