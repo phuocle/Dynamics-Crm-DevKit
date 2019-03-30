@@ -14,7 +14,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Publish WebResource</ButtonText>
+          <ButtonText>Deploy WebResource</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidVSPackageCommandCodeWindowContextMenuCmdSet2" id="CommandPluginId" type="Button">
@@ -30,7 +30,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
-          <ButtonText>Deploy Report 2</ButtonText>
+          <ButtonText>Deploy Report</ButtonText>
         </Strings>
       </Button>
     </Buttons>

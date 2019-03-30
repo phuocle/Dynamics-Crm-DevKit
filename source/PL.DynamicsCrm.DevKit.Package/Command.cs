@@ -88,52 +88,125 @@ namespace PL.DynamicsCrm.DevKit.Package
         private static string ProjectUniqueName { get; set; }
         private static void ExecuteReport(AsyncPackage package)
         {
+            Dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
             var selectedItem = Dte.SelectedItems.Item(1);
             ProjectUniqueName = selectedItem.ProjectItem.ContainingProject.UniqueName;
             var activeConfiguration = Dte.Solution.SolutionBuild.ActiveConfiguration.Name;
-            Dte.Events.BuildEvents.OnBuildProjConfigDone += BuildEvents_OnBuildProjConfigDone;
             try
             {
+                Dte.StatusBar.Text = "Building project report...";
+                Dte.Events.BuildEvents.OnBuildProjConfigDone += BuildEvents_OnBuildProjConfigDone;
                 Dte.Solution.SolutionBuild.BuildProject(activeConfiguration, ProjectUniqueName, true);
             }
             catch
             {
-                MessageBox.Show("Build report fail. Please double check and try it again.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                Dte.Events.BuildEvents.OnBuildProjConfigDone -= BuildEvents_OnBuildProjConfigDone;
+                Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                Dte.StatusBar.Text = "   !!!   Building project report fail   !!!   ";
+                MessageBox.Show("Build report project fail. Please double check and try it again.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private static void BuildEvents_OnBuildProjConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
         {
-            if(!Success || !ProjectUniqueName.EndsWith(Project))
-            {
-                Dte.Events.BuildEvents.OnBuildProjConfigDone -= BuildEvents_OnBuildProjConfigDone;
-                return;
-            }
+            Dte.Events.BuildEvents.OnBuildProjConfigDone -= BuildEvents_OnBuildProjConfigDone;
+            if (!Success || !ProjectUniqueName.EndsWith(Project)) return;
+            Dte.StatusBar.Text = "Build project report succeeded!";
 #if DEBUG
-            //ProjectUniqueName = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\TestReport\Test.Abc.Report.2015\Test.Abc.Report.2015.rptproj";
+            ProjectUniqueName = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\TestReport\Test.Abc.Report.2015\Test.Abc.Report.2015.rptproj";
 #endif
             var xml = File.ReadAllText(ProjectUniqueName);
             var xdoc = XDocument.Parse(xml);
             //Fist check for project VS2015
             var node = (from x in xdoc?.Descendants("Project")?.Descendants("Configurations")?.Elements("Configuration")
-                       where x?.Element("Name")?.Value == ProjectConfig
-                       select x)?.FirstOrDefault();
+                        where x?.Element("Name")?.Value == ProjectConfig
+                        select x)?.FirstOrDefault();
             var outputPath = node?.Descendants("Options")?.FirstOrDefault()?.Element("OutputPath")?.Value;
             //if null, then check for project VS2017
             if (outputPath == null)
             {
-                node = (from x in xdoc?.Descendants("Projects")?.Elements("PropertyGroup")
-                        where x?.Element("FullPath")?.Value == ProjectConfig
-                        select x)?.FirstOrDefault();
-                if (node == null) throw new Exception("Cannot read the Output directory of the current report project");
-                outputPath = node?.Element("OutputPath")?.Value;
+                var nodes = (from x in xdoc?.Root.Elements()
+                             where x?.Name?.LocalName == "PropertyGroup"
+                             select x);
+                foreach (var n in nodes)
+                {
+                    if (n.Elements().Where(x => x?.Name?.LocalName == "FullPath" && x?.Value == "Debug").Any())
+                    {
+                        outputPath = n.Elements().Where(x => x?.Name?.LocalName == "OutputPath").FirstOrDefault()?.Value;
+                        break;
+                    }
+                }
             }
-            var t = string.Empty;
+            if (outputPath == null) throw new Exception("Cannot read the Output directory of the current report project");
+            var folderOutput = Path.Combine(Path.GetDirectoryName(ProjectUniqueName), outputPath);
+            var fileName = Path.GetFileName(Dte.SelectedItems.Item(1).ProjectItem.FileNames[0]);
+            var deployFile = Path.Combine(folderOutput, fileName);
+            if (!File.Exists(deployFile)) throw new Exception($"Cannot find deployable report: {deployFile}");
+            Dte.StatusBar.Text = "Connecting to Dynamics 365";
+            var check = SharedGlobals.GetGlobal("CrmService", Dte);
+            if (check == null)
+            {
+                var activeDocument = Dte.ActiveDocument;
+                var solutionFullName = Dte.Solution.FullName;
+                var fInfo = new FileInfo(solutionFullName);
+                var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
+                Dte.StatusBar.Text = "Reading PL.DynamicsCrm.DevKit.json config";
+                var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
+                var defaultConnection = config.CrmConnections.Where(conn => conn.Name == config.DefaultCrmConnection).FirstOrDefault();
+                if (defaultConnection == null)
+                {
+                    Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                    Dte.StatusBar.Text = "   !!! Connection to Dynamics 365 failed   !!!   ";
+                    MessageBox.Show("Default Crm connection not found!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                try
+                {
+                    var uri = new Uri(defaultConnection.Url);
+                    var clientCredentials = new ClientCredentials();
+                    clientCredentials.UserName.UserName = defaultConnection.UserName;
+                    clientCredentials.UserName.Password = TryDecryptPassword(defaultConnection.Password);
+                    check = new OrganizationServiceProxy(uri, null, clientCredentials, null);
+                    SharedGlobals.SetGlobal("CrmService", check, Dte);
+                    Dte.StatusBar.Text = "   !!!   Connected Dynamics 365  !!!   ";
+                }
+                catch
+                {
+                    Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
+                    Dte.StatusBar.Text = "   !!! Connection to Dynamics 365 failed   !!!   ";
+                    MessageBox.Show("Connecting to Dynamics 365 failed!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            else
+                Dte.StatusBar.Text = "   !!!   Connected Dynamics 365   !!!   ";
+            var crmService = (OrganizationServiceProxy)SharedGlobals.GetGlobal("CrmService", Dte);
+            var fetchData = new
+            {
+                ismanaged = "0",
+                filename = fileName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='report'>
+    <attribute name='reportid' />
+    <filter type='and'>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
+      <condition attribute='filename' operator='eq' value='{fetchData.filename/*ReportTemplate.rdl*/}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = crmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) throw new Exception("Please deploy this report first by Dynamics 365");
+            if (rows.Entities.Count != 1) throw new Exception($"Found {rows.Entities.Count} reports file name: {fileName} in the system. Cannot deploy.");
+            Dte.StatusBar.Text = "Deploying Report ...";
+            var update = new Entity("report", rows.Entities[0].Id);
+            update["bodytext"] = File.ReadAllText(deployFile);
+            crmService.Update(update);
+            Dte.StatusBar.Text = "   !!!   Deploy Report succeeded   !!!   ";
+            Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
 
         }
-
-
 
         private static void CommandPlugin_BeforeQueryStatus(object sender, EventArgs e)
         {
@@ -351,7 +424,6 @@ namespace PL.DynamicsCrm.DevKit.Package
             }
             return list;
         }
-
 
         private static List<string> CrmPluginRegistrationDataForPlugin(string fullName)
         {
@@ -577,7 +649,7 @@ namespace PL.DynamicsCrm.DevKit.Package
             if (!allowExtions.Contains(extension)) return;
             if (item.Name.EndsWith(".intellisense.js")) return;
             var solutionFullName = Dte.Solution.FullName;
-            var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
+            var fInfo = new FileInfo(solutionFullName);
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
             if (!File.Exists(devKitCrmConfigFile)) return;
             menuCommand.Visible = true;
@@ -590,25 +662,24 @@ namespace PL.DynamicsCrm.DevKit.Package
             var solutionFullName = Dte.Solution.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
-            Dte.StatusBar.Text = "Read PL.DynamicsCrm.DevKit.json config";
+            Dte.StatusBar.Text = "Reading PL.DynamicsCrm.DevKit.json config";
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
-            var defaultConnection = config.CrmConnections.Where(conn => conn.Name == config.DefaultCrmConnection)
-                .FirstOrDefault();
+            var defaultConnection = config.CrmConnections.Where(conn => conn.Name == config.DefaultCrmConnection).FirstOrDefault();
+            Dte.StatusBar.Text = "Connecting to Dynamics 365";
             if (defaultConnection == null)
             {
                 Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
-                Dte.StatusBar.Text = "";
+                Dte.StatusBar.Text = "   !!! Connection to Dynamics 365 failed   !!!   ";
                 MessageBox.Show("Default Crm connection not found!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (config.SolutionPrefix == null)
             {
                 Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
-                Dte.StatusBar.Text = "";
+                Dte.StatusBar.Text = "   !!! Connection to Dynamics 365 failed   !!!   ";
                 MessageBox.Show("PL.DynamicsCrm.DevKit.json config not found SolutionPrefix data", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            Dte.StatusBar.Text = "Connecting";
             var check = SharedGlobals.GetGlobal("CrmService", Dte);
             if (check == null)
             {
@@ -624,13 +695,13 @@ namespace PL.DynamicsCrm.DevKit.Package
                 catch
                 {
                     Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
-                    Dte.StatusBar.Text = "";
-                    MessageBox.Show("Connecting Fail!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Dte.StatusBar.Text = "   !!! Connection to Dynamics 365 fail   !!!   ";
+                    MessageBox.Show("Connection to Dynamics 365 fail!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
             var crmService = (OrganizationServiceProxy)SharedGlobals.GetGlobal("CrmService", Dte);
-            Dte.StatusBar.Text = "Connected";
+            Dte.StatusBar.Text = "   !!!   Connected Dynamics 365  !!!   ";
             var fileName = activeDocument.FullName;
             var parts = fileName.Split("\\".ToCharArray());
             var condition = string.Empty;
@@ -656,8 +727,8 @@ namespace PL.DynamicsCrm.DevKit.Package
             if (rows.Entities.Count == 0)
             {
                 Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
-                Dte.StatusBar.Text = "";
-                MessageBox.Show("Web resource not found!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Dte.StatusBar.Text = "   !!!   WebResource not found   !!!   ";
+                MessageBox.Show("WebResource not found!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -685,7 +756,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                 var pubRequest = new PublishXmlRequest { ParameterXml = publishXml };
                 requests.Add(pubRequest);
                 emRequest.Requests = requests;
-                Dte.StatusBar.Text = "Updating & publishing web resource";
+                Dte.StatusBar.Text = "Updating & publishing WebResource ... ";
                 var emResponse = (ExecuteMultipleResponse)crmService.Execute(emRequest);
                 var wasError = false;
                 foreach (var responseItem in emResponse.Responses)
@@ -696,30 +767,29 @@ namespace PL.DynamicsCrm.DevKit.Package
                 if (wasError)
                 {
                     Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
-                    Dte.StatusBar.Text = "";
-                    MessageBox.Show("Error Updating And Publishing Web Resources To CRM.See the Output Window for additional details.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Dte.StatusBar.Text = "   !!!   Deploy WebResource failed   !!!   ";
+                    MessageBox.Show("Deploy WebResource failed.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 else
                 {
                     Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
-                    Dte.StatusBar.Text = "Updated And Published Web Resource";
+                    Dte.StatusBar.Text = "   !!!   Deploy WebResource succeeded   !!!   ";
                     return;
                 }
             }
             catch (FaultException<OrganizationServiceFault>)
             {
                 Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
-                Dte.StatusBar.Text = "";
-                MessageBox.Show("Updated And Published Web Resource fail.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Dte.StatusBar.Text = "   !!!   Deploy WebResource failed   !!!   ";
+                MessageBox.Show("Deploy WebResource failed.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             catch
             {
                 Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
-                Dte.StatusBar.Text = "";
-                MessageBox.Show("Updated And Published Web Resource fail.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                Dte.StatusBar.Text = "   !!!   Deploy WebResource failed   !!!   ";
+                MessageBox.Show("Deploy WebResource failed.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }
