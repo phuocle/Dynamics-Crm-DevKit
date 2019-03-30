@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "Paz.LuckeyMonkey.Report", "Paz.LuckeyMonkey.Report\Paz.LuckeyMonkey.Report.rptproj", "{6C9327EB-684B-4EA5-9760-17ED34B832D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C9327EB-684B-4EA5-9760-17ED34B832D6}.Debug|Default.ActiveCfg = Debug
+		{6C9327EB-684B-4EA5-9760-17ED34B832D6}.Debug|Default.Build.0 = Debug
+		{6C9327EB-684B-4EA5-9760-17ED34B832D6}.Debug|Default.Deploy.0 = Debug
+		{6C9327EB-684B-4EA5-9760-17ED34B832D6}.Release|Default.ActiveCfg = Release
+		{6C9327EB-684B-4EA5-9760-17ED34B832D6}.Release|Default.Build.0 = Release
+		{6C9327EB-684B-4EA5-9760-17ED34B832D6}.Release|Default.Deploy.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
