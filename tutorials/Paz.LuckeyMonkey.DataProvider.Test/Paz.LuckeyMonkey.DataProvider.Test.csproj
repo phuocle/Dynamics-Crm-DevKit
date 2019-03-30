@@ -115,6 +115,9 @@
       <Name>Paz.LuckeyMonkey.ProxyTypes</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.1.3.0\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -125,9 +128,6 @@
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets'))" />
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.4.0\build\net45\MSTest.TestAdapter.targets')" />
-  <ItemGroup>
-    <Analyzer Include="..\packages\PL.DynamicsCrm.DevKit.Analyzers.1.2.2\analyzers\dotnet\cs\PL.DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName)==Release (
     DEL $(TargetDir)*.xml

@@ -441,6 +441,22 @@ namespace Paz.LuckeyMonkey.Shared.Entities.AccountOptionSets
 		Net_60 = 4
 	}
 
+	public enum paz_RatingCode
+	{
+		/// <summary>
+		/// _1 = 500000000
+		/// </summary>
+		_1 = 500000000,
+		/// <summary>
+		/// _2 = 500000001
+		/// </summary>
+		_2 = 500000001,
+		/// <summary>
+		/// _3 = 500000002
+		/// </summary>
+		_3 = 500000002
+	}
+
 	public enum PreferredAppointmentDayCode
 	{
 		/// <summary>
@@ -732,6 +748,7 @@ namespace Paz.LuckeyMonkey.Shared.Entities
 			public const string paz_Field1 = "paz_field1";
 			public const string paz_Field2 = "paz_field2";
 			public const string paz_Field3 = "paz_field3";
+			public const string paz_RatingCode = "paz_ratingcode";
 			public const string PreferredAppointmentDayCode = "preferredappointmentdaycode";
 			public const string PreferredAppointmentTimeCode = "preferredappointmenttimecode";
 			public const string PreferredContactMethodCode = "preferredcontactmethodcode";
@@ -3132,6 +3149,28 @@ namespace Paz.LuckeyMonkey.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.paz_Field3); }
 			set { Entity.Attributes[Fields.paz_Field3] = value; }
+		}
+
+		/// <summary>
+		/// <para>Picklist</para>
+		/// <para>Rating</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public paz_RatingCode? paz_RatingCode
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.paz_RatingCode);
+				if (value == null) return null;
+				return (paz_RatingCode)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.paz_RatingCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.paz_RatingCode] = null;
+			}
 		}
 
 		/// <summary>
