@@ -200,8 +200,8 @@
   "generators": [
     {
       "profile": "LATEBOUND",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Paz.LuckeyMonkey",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "CSharp"
     },

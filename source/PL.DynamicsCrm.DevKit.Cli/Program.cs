@@ -30,7 +30,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\abizco\git\ABIZ_VIAGS\src\Abiz.Viags.CustomAction.Admin";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.Shared\Entities";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

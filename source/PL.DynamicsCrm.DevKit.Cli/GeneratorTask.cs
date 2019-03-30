@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xrm.Tooling.Connector;
 using PL.DynamicsCrm.DevKit.Cli.Models;
@@ -24,6 +25,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
         internal void Run()
         {
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
+            if (GeneratorJson.rootnamespace.Length == 0 || GeneratorJson.rootnamespace == "???")
+                throw new Exception("No rootnamespace found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
+            if (GeneratorJson.rootfolder == "???")
+                throw new Exception("No rootfolder found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
+            if (GeneratorJson.crmversion.Length == 0 || GeneratorJson.crmversion == "???")
+                throw new Exception("No crmversion found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
 
 
             if (GeneratorJson.type.ToLower() == "csharp" || GeneratorJson.type.ToLower() == "c#")
