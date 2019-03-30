@@ -78,8 +78,10 @@ namespace PL.DynamicsCrm.DevKit.Package
             menuCommand.Visible = false;
             if (Dte == null || Dte.SelectedItems == null || Dte.SelectedItems.Count != 1) return;
             var selectedItem = Dte.SelectedItems.Item(1);
-            if (selectedItem.ProjectItem == null) return;
+            if (selectedItem?.ProjectItem == null) return;
+            if (selectedItem.ProjectItem.ProjectItems == null) return;
             var fileName = selectedItem.ProjectItem.FileNames[0];
+            if (fileName == null) return;
             var extension = Path.GetExtension(fileName);
             if (extension != ".rdl") return;
             menuCommand.Visible = true;

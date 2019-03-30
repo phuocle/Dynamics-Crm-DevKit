@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xrm.Sdk;
+using Paz.LuckeyMonkey.CustomAction.BusinessLogic;
 using Paz.LuckeyMonkey.Shared;
 
 namespace Paz.LuckeyMonkey.CustomAction
@@ -49,7 +51,17 @@ namespace Paz.LuckeyMonkey.CustomAction
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE
-
+            var function = (string)context.InputParameters["function"];
+            var jsonInput = (string)context.InputParameters["jsonInput"];
+            var @return = string.Empty;
+            switch (function)
+            {
+                case "QualifyLead":
+                    var qualifyLead = new QualifyLead();
+                    @return = qualifyLead.Do(context, service, tracing, jsonInput);
+                    break;
+            }
+            outputs.Add(new KeyValuePair<string, object>("jsonOutput", @return));
             return outputs;
         }
     }
