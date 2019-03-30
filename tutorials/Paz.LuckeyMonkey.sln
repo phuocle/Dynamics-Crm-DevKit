@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Acc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Lead.Test", "Paz.LuckeyMonkey.Plugin.Lead.Test\Paz.LuckeyMonkey.Plugin.Lead.Test.csproj", "{D945D412-69E7-4E9E-8757-C28FE2BF68A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Workflow.Test", "Paz.LuckeyMonkey.Workflow.Test\Paz.LuckeyMonkey.Workflow.Test.csproj", "{F4E06ED4-88DD-4335-B22B-BFB827D8884F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{00d5c31e-7361-4601-b7fe-bca91f09b618}*SharedItemsImports = 13
@@ -80,6 +82,10 @@ Global
 		{D945D412-69E7-4E9E-8757-C28FE2BF68A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D945D412-69E7-4E9E-8757-C28FE2BF68A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D945D412-69E7-4E9E-8757-C28FE2BF68A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4E06ED4-88DD-4335-B22B-BFB827D8884F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4E06ED4-88DD-4335-B22B-BFB827D8884F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4E06ED4-88DD-4335-B22B-BFB827D8884F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4E06ED4-88DD-4335-B22B-BFB827D8884F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
