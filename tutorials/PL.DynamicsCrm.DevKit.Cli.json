@@ -1,0 +1,236 @@
+{
+  "plugins": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "includefiles": [
+        "Paz.LuckeyMonkey.Plugin.*.dll",
+        "Paz.LuckeyMonkey.CustomAction.*.dll"
+      ],
+      "excludefiles": [
+        "Paz.LuckeyMonkey.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "Paz.LuckeyMonkey.Plugin.*.dll",
+        "Paz.LuckeyMonkey.CustomAction.*.dll"
+      ],
+      "excludefiles": [
+        "Paz.LuckeyMonkey.*.Test.dll"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "includefiles": [
+        "Paz.LuckeyMonkey.Workflow.*.dll"
+      ],
+      "excludefiles": [
+        "Paz.LuckeyMonkey.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "Paz.LuckeyMonkey.Workflow.*.dll"
+      ],
+      "excludefiles": [
+        "Paz.LuckeyMonkey.*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "entities\\*.intellisense.js",
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "???_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "???_/lib/WebApiClient.js"
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "???",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "entities\\*.intellisense.js",
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "???_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "???_/lib/WebApiClient.js"
+          ]
+        }
+      ]
+    }
+  ],
+  "dataproviders": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "includefiles": [
+        "Paz.LuckeyMonkey.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "Paz.LuckeyMonkey.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "Paz.LuckeyMonkey.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "Paz.LuckeyMonkey.*.Test.dll"
+      ]
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Unmanaged",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Extract-Managed",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Unmanaged",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Managed",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "crmversion": "365",
+      "type": "CSharp"
+    },
+    {
+      "profile": "JS-FORM",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "crmversion": "365",
+      "type": "JsForm"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "crmversion": "365",
+      "type": "JsWebApi"
+    }
+  ],
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???"
+    }
+  ],
+  "portals": [
+    {
+      "profile": "DEBUG",
+      "name": "???"
+    }
+  ]
+}
