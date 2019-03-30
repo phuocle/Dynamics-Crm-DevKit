@@ -1,0 +1,59 @@
+2019-03-30 16:16:28.745 - Warning	Read-only files will be over-written or deleted.
+2019-03-30 16:16:28.749 - Info	
+Extracting C:\src\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.SolutionPackager\zip_extract\20190330-LuckeyMonkey_0_1_0_0.zip to C:\src\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.SolutionPackager\extract\Unmanaged\Unmanaged
+
+2019-03-30 16:16:28.822 - Info	Localizing Assets...
+2019-03-30 16:16:28.831 - Info	Localizing component: EntityMaps
+2019-03-30 16:16:28.831 - Info	Localizing component: Templates
+2019-03-30 16:16:28.831 - Info	Localizing component: SolutionManifest
+2019-03-30 16:16:28.831 - Info	Localizing component: Workflows
+2019-03-30 16:16:28.832 - Info	Localizing component: Roles
+2019-03-30 16:16:28.832 - Info	Localizing component: optionsets
+2019-03-30 16:16:28.833 - Info	Localizing component: EntityRelationships
+2019-03-30 16:16:28.835 - Info	Localizing component: Entities
+2019-03-30 16:16:28.836 - Info	Localizing component: FieldSecurityProfiles
+2019-03-30 16:16:28.837 - Info	Localizing component: WebResources
+2019-03-30 16:16:28.837 - Info	Localizing component: EntityDataProviders
+2019-03-30 16:16:28.838 - Info	Localizing component: CustomControls
+2019-03-30 16:16:28.839 - Info	Localizing component: SolutionPluginAssemblies
+2019-03-30 16:16:28.839 - Info	Localizing component: SdkMessageProcessingSteps
+2019-03-30 16:16:29.028 - Info	Writing string resources...
+2019-03-30 16:16:29.323 - Info	
+2019-03-30 16:16:29.325 - Info	Processing Component: Entities
+2019-03-30 16:16:29.327 - Info	 - Account
+2019-03-30 16:16:29.337 - Info	 - Lead
+2019-03-30 16:16:29.343 - Info	 - Opportunity
+2019-03-30 16:16:29.389 - Info	Processing Component: Roles
+2019-03-30 16:16:29.390 - Info	Processing Component: Workflows
+2019-03-30 16:16:29.390 - Info	 - Ajax
+2019-03-30 16:16:29.398 - Info	Processing Component: FieldSecurityProfiles
+2019-03-30 16:16:29.398 - Info	Processing Component: Templates
+2019-03-30 16:16:29.399 - Info	Processing Component: EntityMaps
+2019-03-30 16:16:29.399 - Info	Processing Component: EntityRelationships
+2019-03-30 16:16:29.410 - Info	Processing Component: optionsets
+2019-03-30 16:16:29.410 - Info	 - paz_ratingcode
+2019-03-30 16:16:29.420 - Info	Processing Component: WebResources
+2019-03-30 16:16:29.421 - Info	 - paz_/entities/Lead.form.js
+2019-03-30 16:16:29.470 - Info	 - paz_/entities/Opportunity.form.js
+2019-03-30 16:16:29.522 - Info	 - paz_/resources/Resource.1033.resx
+2019-03-30 16:16:29.529 - Info	 - paz_/lib/WebApiClient.js
+2019-03-30 16:16:29.665 - Info	 - paz_/entities/Opportunity.webapi.js
+2019-03-30 16:16:29.693 - Info	 - paz_/entities/Opportunity.js
+2019-03-30 16:16:29.699 - Info	 - paz_/entities/Lead.webapi.js
+2019-03-30 16:16:29.729 - Info	 - paz_/entities/Lead.js
+2019-03-30 16:16:29.735 - Info	Processing Component: CustomControls
+2019-03-30 16:16:29.735 - Info	Processing Component: SolutionPluginAssemblies
+2019-03-30 16:16:29.735 - Info	 - Paz.LuckeyMonkey.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=cd90d0996a785c10
+2019-03-30 16:16:29.777 - Info	 - Paz.LuckeyMonkey.DataProvider, Version=1.0.0.0, Culture=en, PublicKeyToken=8a7d5e3a2612a23d
+2019-03-30 16:16:29.817 - Info	 - Paz.LuckeyMonkey.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=8a7d5e3a2612a23d
+2019-03-30 16:16:29.855 - Info	 - Paz.LuckeyMonkey.Plugin.Lead, Version=1.0.0.0, Culture=en, PublicKeyToken=8a7d5e3a2612a23d
+2019-03-30 16:16:29.892 - Info	 - Paz.LuckeyMonkey.Workflow, Version=1.0.0.0, Culture=en, PublicKeyToken=bf1473f2815eb4a6
+2019-03-30 16:16:29.926 - Info	Processing Component: SdkMessageProcessingSteps
+2019-03-30 16:16:29.927 - Info	 - d168e984-b752-e911-a994-000d3aa0f6ff
+2019-03-30 16:16:29.931 - Info	 - 75295003-ba52-e911-a989-000d3aa0f3aa
+2019-03-30 16:16:29.936 - Info	 - dd50dc28-bb52-e911-a988-000d3aa0f6ca
+2019-03-30 16:16:29.939 - Info	Processing Component: EntityDataProviders
+2019-03-30 16:16:29.955 - Info	
+Unmanaged Extract complete.
+
+2019-03-30 16:16:29.981 - Warning	1 warnings encountered

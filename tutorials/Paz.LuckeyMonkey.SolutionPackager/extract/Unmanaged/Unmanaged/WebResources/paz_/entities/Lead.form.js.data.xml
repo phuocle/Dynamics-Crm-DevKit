@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource>
+  <WebResourceId>{f261972d-cb52-e911-a989-000d3aa0f171}</WebResourceId>
+  <Name>paz_/entities/Lead.form.js</Name>
+  <DisplayName>paz_/entities/Lead.form.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/paz_entitiesLeadformjsF261972D-CB52-E911-A989-000D3AA0F171</FileName>
+</WebResource>

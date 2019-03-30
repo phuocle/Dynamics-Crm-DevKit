@@ -39,6 +39,27 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.DataProvid
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.WebResource", "Paz.LuckeyMonkey.WebResource\Paz.LuckeyMonkey.WebResource.csproj", "{EC5793D2-947C-492A-BA63-6F633023474C}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Paz.LuckeyMonkey.SolutionPackager", "Paz.LuckeyMonkey.SolutionPackager\", "{9424756D-DD28-463B-BCBF-B33FCB2A0484}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3D4.6.2"
+		Debug.AspNetCompiler.VirtualPath = "/Paz.LuckeyMonkey.SolutionPackager"
+		Debug.AspNetCompiler.PhysicalPath = "Paz.LuckeyMonkey.SolutionPackager\"
+		Debug.AspNetCompiler.TargetPath = "Paz.LuckeyMonkey.SolutionPackager\"
+		Debug.AspNetCompiler.Updateable = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/Paz.LuckeyMonkey.SolutionPackager"
+		Release.AspNetCompiler.PhysicalPath = "Paz.LuckeyMonkey.SolutionPackager\"
+		Release.AspNetCompiler.TargetPath = "Paz.LuckeyMonkey.SolutionPackager\"
+		Release.AspNetCompiler.Updateable = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "57265"
+		SlnRelativePath = "Paz.LuckeyMonkey.SolutionPackager\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{00d5c31e-7361-4601-b7fe-bca91f09b618}*SharedItemsImports = 13
@@ -111,6 +132,10 @@ Global
 		{EC5793D2-947C-492A-BA63-6F633023474C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC5793D2-947C-492A-BA63-6F633023474C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC5793D2-947C-492A-BA63-6F633023474C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9424756D-DD28-463B-BCBF-B33FCB2A0484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9424756D-DD28-463B-BCBF-B33FCB2A0484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9424756D-DD28-463B-BCBF-B33FCB2A0484}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{9424756D-DD28-463B-BCBF-B33FCB2A0484}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

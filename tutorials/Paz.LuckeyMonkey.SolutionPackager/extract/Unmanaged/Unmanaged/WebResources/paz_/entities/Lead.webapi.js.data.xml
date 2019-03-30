@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource>
+  <WebResourceId>{a86d042e-cb52-e911-a988-000d3aa0f6ca}</WebResourceId>
+  <Name>paz_/entities/Lead.webapi.js</Name>
+  <DisplayName>paz_/entities/Lead.webapi.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="paz_/lib/WebApiClient.js" displayName="paz_/lib/WebApiClient.js" languagecode="" description="1.0.0.0" libraryUniqueId="{6ff42bff-a67b-4742-83c5-83884de4b669}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/paz_entitiesLeadwebapijsA86D042E-CB52-E911-A988-000D3AA0F6CA</FileName>
+</WebResource>

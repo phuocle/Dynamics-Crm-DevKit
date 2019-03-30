@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms>
+  <systemform>
+    <formid>{a837e4a7-01b8-4f82-a475-be9abd67e667}</formid>
+    <IntroducedVersion>5.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="true" showImage="false" maxWidth="1900">
+      <tabs>
+        <tab name="Product_Line_Items" verticallayout="true" id="{79548060-31f7-4646-8c08-0296ecd4113b}" visible="true" expanded="true" IsUserDefined="0" ordinalvalue="3">
+          <columns>
+            <column width="100%" id="0">
+              <sections>
+                <section name="opportunityproducts" showlabel="false" showbar="false" id="{2b1ed7f7-3ebb-42f3-809f-94eba9f94fb2}" height="auto" IsUserDefined="0" layout="varheight" columns="11" ordinalvalue="0">
+                  <rows />
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="QUOTES" verticallayout="true" id="{af8380da-5492-4a69-8a36-b1beff121e95}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true" ordinalvalue="5">
+          <columns>
+            <column width="100%" id="0">
+              <sections>
+                <section name="opportunityquotes" showlabel="false" showbar="false" id="{40e2e47e-716a-4fe8-9fc0-e0341303c7a3}" height="auto" IsUserDefined="0" layout="varheight" columns="11" ordinalvalue="0">
+                  <rows />
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab id="{a9dd8610-71e3-4fe3-93d6-cee419cd614d}" name="Partner_Details" showlabel="true" locklevel="0" expanded="true" IsUserDefined="0" verticallayout="true" labelid="{50c5b0e8-32d6-1a97-3cb1-b76596adca77}" ordinalvalue="6">
+          <columns>
+            <column width="100%" id="0">
+              <sections>
+                <section id="{4078013e-a827-4bec-bd46-97340b1e0785}" name="internal_information" showlabel="false" IsUserDefined="0" showbar="false" labelid="{2406d7a0-c952-ccc1-7c41-d428cd8123e3}" columns="11" locklevel="0" labelwidth="130" celllabelalignment="Left" celllabelposition="Left" ordinalvalue="3" solutionaction="Modified" />
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="FieldService" id="{9b4c804b-e760-8e4b-ac62-e05b1313beeb}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true" ordinalvalue="7">
+          <columns>
+            <column width="50%" id="1">
+              <sections>
+                <section name="tab_4_section_2" showlabel="false" showbar="false" locklevel="0" id="{d6c34771-dc4c-0741-64a2-219901375436}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{91cea453-5d4e-4116-9019-ef75a34619bd}" ordinalvalue="10000" solutionaction="Added">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <Navigation>
+        <NavBar />
+      </Navigation>
+    </form>
+    <LocalizedNames>
+      <LocalizedName description="Opportunity" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Updated default Opportunity form" languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

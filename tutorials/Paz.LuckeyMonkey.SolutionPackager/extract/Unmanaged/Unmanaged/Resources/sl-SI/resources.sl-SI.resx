@@ -1,0 +1,723 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="Source LCID" xml:space="preserve">
+    <value>1060</value>
+  </metadata>
+  <metadata name="Source file" xml:space="preserve">
+    <value>20190330-LuckeyMonkey_0_1_0_0.zip</value>
+  </metadata>
+  <metadata name="Source package type" xml:space="preserve">
+    <value>Unmanaged</value>
+  </metadata>
+  <metadata name="SolutionPackager Version" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAEAQAAAA5TeXN0ZW0uVmVyc2lvbgQAAAAGX01ham9yBl9NaW5vcgZfQnVp
+        bGQJX1JldmlzaW9uAAAAAAgICAgJAAAAAAAAAAAAAAAAAAAACw==
+</value>
+  </metadata>
+  <data name="15062:LocalizedName,LuckeyMonkey" xml:space="preserve">
+    <value />
+    <comment> 'LuckeyMonkey' : LocalizedName for Solution</comment>
+  </data>
+  <data name="15062:LocalizedName,pazpaz50000" xml:space="preserve">
+    <value />
+    <comment> 'paz' : LocalizedName for Solution Publisher</comment>
+  </data>
+  <data name="1:Description,Accountpaz_Field1" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'paz_Field1' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountpaz_Field2" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'paz_Field2' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountpaz_Field3" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'paz_Field3' on Entity</comment>
+  </data>
+  <data name="1:Description,Accountpaz_RatingCode" xml:space="preserve">
+    <value />
+    <comment>'Account' : Description for Attribute 'paz_RatingCode' on Entity</comment>
+  </data>
+  <data name="1:Description,Leadpaz_Field1" xml:space="preserve">
+    <value />
+    <comment>'Lead' : Description for Attribute 'paz_Field1' on Entity</comment>
+  </data>
+  <data name="1:Description,Leadpaz_Field2" xml:space="preserve">
+    <value />
+    <comment>'Lead' : Description for Attribute 'paz_Field2' on Entity</comment>
+  </data>
+  <data name="1:Description,Leadpaz_Field3" xml:space="preserve">
+    <value />
+    <comment>'Lead' : Description for Attribute 'paz_Field3' on Entity</comment>
+  </data>
+  <data name="1:Description,Opportunity{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Description for systemform in Entity FormXml ID: '{a837e4a7-01b8-4f82-a475-be9abd67e667}'</comment>
+  </data>
+  <data name="1:Description,Opportunity{e3c588ee-8e11-49da-a5fe-3800f3f683de}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Description for systemform in Entity FormXml ID: '{e3c588ee-8e11-49da-a5fe-3800f3f683de}'</comment>
+  </data>
+  <data name="1:displayname,Accountpaz_Field1" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'paz_Field1' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountpaz_Field2" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'paz_Field2' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountpaz_Field3" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'paz_Field3' on Entity</comment>
+  </data>
+  <data name="1:displayname,Accountpaz_RatingCode" xml:space="preserve">
+    <value />
+    <comment>'Account' : displayname for Attribute 'paz_RatingCode' on Entity</comment>
+  </data>
+  <data name="1:displayname,Leadpaz_Field1" xml:space="preserve">
+    <value />
+    <comment>'Lead' : displayname for Attribute 'paz_Field1' on Entity</comment>
+  </data>
+  <data name="1:displayname,Leadpaz_Field2" xml:space="preserve">
+    <value />
+    <comment>'Lead' : displayname for Attribute 'paz_Field2' on Entity</comment>
+  </data>
+  <data name="1:displayname,Leadpaz_Field3" xml:space="preserve">
+    <value />
+    <comment>'Lead' : displayname for Attribute 'paz_Field3' on Entity</comment>
+  </data>
+  <data name="1:label,Opportunity{05a38f4d-1649-4741-84b6-d6de2db78048}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{05a38f4d-1649-4741-84b6-d6de2db78048}'</comment>
+  </data>
+  <data name="1:label,Opportunity{05f0b856-e494-4522-b6cc-355391ac5c87}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{05f0b856-e494-4522-b6cc-355391ac5c87}'</comment>
+  </data>
+  <data name="1:label,Opportunity{08041ef6-f9f8-44b4-b84b-94e0250dcac8}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{08041ef6-f9f8-44b4-b84b-94e0250dcac8}'</comment>
+  </data>
+  <data name="1:label,Opportunity{09519ff9-e8b9-4f1b-949a-fe6a1c0b0ddc}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{09519ff9-e8b9-4f1b-949a-fe6a1c0b0ddc}'</comment>
+  </data>
+  <data name="1:label,Opportunity{0a7128e6-09d3-9b5a-4858-05b145e4bc7b}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{0a7128e6-09d3-9b5a-4858-05b145e4bc7b}'</comment>
+  </data>
+  <data name="1:label,Opportunity{0B8DF861-AE32-4C79-9C4E-2ECAA9F74712}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{0B8DF861-AE32-4C79-9C4E-2ECAA9F74712}'</comment>
+  </data>
+  <data name="1:label,Opportunity{0d87a817-02d2-8b1a-6e3b-5dc709857d45}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{0d87a817-02d2-8b1a-6e3b-5dc709857d45}'</comment>
+  </data>
+  <data name="1:label,Opportunity{17a95e0e-476c-43cf-b6e9-c112fa6c25ec}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{17a95e0e-476c-43cf-b6e9-c112fa6c25ec}'</comment>
+  </data>
+  <data name="1:label,Opportunity{181e7f45-3819-40c3-bdf3-1c892d53f35d}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{181e7f45-3819-40c3-bdf3-1c892d53f35d}'</comment>
+  </data>
+  <data name="1:label,Opportunity{1ad5ca9d-d2ce-accb-5390-d2d67180a678}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{1ad5ca9d-d2ce-accb-5390-d2d67180a678}'</comment>
+  </data>
+  <data name="1:label,Opportunity{1bc21bed-1e7d-49b7-8223-72ba1cda8019}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{1bc21bed-1e7d-49b7-8223-72ba1cda8019}'</comment>
+  </data>
+  <data name="1:label,Opportunity{1e18329b-32aa-e120-e49b-e8b47bd6313c}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for tab in Entity FormXml ID: '{1e18329b-32aa-e120-e49b-e8b47bd6313c}'</comment>
+  </data>
+  <data name="1:label,Opportunity{206b8a9b-5740-d3c4-40e0-bb5e785560a8}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{206b8a9b-5740-d3c4-40e0-bb5e785560a8}'</comment>
+  </data>
+  <data name="1:label,Opportunity{212844be-d5a3-18a6-1cd4-8a1417d36b9c}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{212844be-d5a3-18a6-1cd4-8a1417d36b9c}'</comment>
+  </data>
+  <data name="1:label,Opportunity{219ae953-a7d6-b3e5-571d-d2806b44713a}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{219ae953-a7d6-b3e5-571d-d2806b44713a}'</comment>
+  </data>
+  <data name="1:label,Opportunity{22108a02-0885-203e-9300-408893b83c7e}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{22108a02-0885-203e-9300-408893b83c7e}'</comment>
+  </data>
+  <data name="1:label,Opportunity{22177595-7784-43da-9af2-50e9115b956e}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{22177595-7784-43da-9af2-50e9115b956e}'</comment>
+  </data>
+  <data name="1:label,Opportunity{242b3188-a89a-dc9b-b031-78e91268dbc3}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{242b3188-a89a-dc9b-b031-78e91268dbc3}'</comment>
+  </data>
+  <data name="1:label,Opportunity{2b1ed7f7-3ebb-42f3-809f-94eba9f94fb2}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{2b1ed7f7-3ebb-42f3-809f-94eba9f94fb2}'</comment>
+  </data>
+  <data name="1:label,Opportunity{3171dc7c-474e-d43d-c352-50673e11bc04}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{3171dc7c-474e-d43d-c352-50673e11bc04}'</comment>
+  </data>
+  <data name="1:label,Opportunity{345a0808-882a-ad31-08c1-aee061a9cd43}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{345a0808-882a-ad31-08c1-aee061a9cd43}'</comment>
+  </data>
+  <data name="1:label,Opportunity{3b1918c7-511e-d5a6-70c0-29d55e913b63}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{3b1918c7-511e-d5a6-70c0-29d55e913b63}'</comment>
+  </data>
+  <data name="1:label,Opportunity{4078013e-a827-4bec-bd46-97340b1e0785}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{4078013e-a827-4bec-bd46-97340b1e0785}'</comment>
+  </data>
+  <data name="1:label,Opportunity{40e2e47e-716a-4fe8-9fc0-e0341303c7a3}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{40e2e47e-716a-4fe8-9fc0-e0341303c7a3}'</comment>
+  </data>
+  <data name="1:label,Opportunity{4343680f-7e56-4968-90fe-814e52f6e2a7}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{4343680f-7e56-4968-90fe-814e52f6e2a7}'</comment>
+  </data>
+  <data name="1:label,Opportunity{439e0732-3f3a-409d-98ba-83d3251cb64b}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{439e0732-3f3a-409d-98ba-83d3251cb64b}'</comment>
+  </data>
+  <data name="1:label,Opportunity{49a3e4cc-dabe-16b4-0ad6-b011d4750726}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{49a3e4cc-dabe-16b4-0ad6-b011d4750726}'</comment>
+  </data>
+  <data name="1:label,Opportunity{49d44617-c298-3411-bc25-a083d6a66365}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{49d44617-c298-3411-bc25-a083d6a66365}'</comment>
+  </data>
+  <data name="1:label,Opportunity{4c69d917-e84e-4c9d-ba14-f7bb5bc0a51f}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{4c69d917-e84e-4c9d-ba14-f7bb5bc0a51f}'</comment>
+  </data>
+  <data name="1:label,Opportunity{51ca4041-cc02-d3b1-b625-bb330c03adbe}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{51ca4041-cc02-d3b1-b625-bb330c03adbe}'</comment>
+  </data>
+  <data name="1:label,Opportunity{52babf2f-d598-41df-9754-dfebfc94b670}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for tab in Entity FormXml ID: '{52babf2f-d598-41df-9754-dfebfc94b670}'</comment>
+  </data>
+  <data name="1:label,Opportunity{55988d72-9e9e-0968-dc28-7ecb6b0051e3}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{55988d72-9e9e-0968-dc28-7ecb6b0051e3}'</comment>
+  </data>
+  <data name="1:label,Opportunity{55a3bd0d-e608-7969-c87a-6362c0512896}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{55a3bd0d-e608-7969-c87a-6362c0512896}'</comment>
+  </data>
+  <data name="1:label,Opportunity{5a99e6c7-78cc-9056-3140-bddeed83e416}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{5a99e6c7-78cc-9056-3140-bddeed83e416}'</comment>
+  </data>
+  <data name="1:label,Opportunity{5b78d293-803a-ed67-38d4-84d150b2a932}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{5b78d293-803a-ed67-38d4-84d150b2a932}'</comment>
+  </data>
+  <data name="1:label,Opportunity{5d1cf874-b807-4158-b230-1a13c1db73ad}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{5d1cf874-b807-4158-b230-1a13c1db73ad}'</comment>
+  </data>
+  <data name="1:label,Opportunity{5d946dc3-8850-4e43-a6d4-7b5ceaa4d013}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{5d946dc3-8850-4e43-a6d4-7b5ceaa4d013}'</comment>
+  </data>
+  <data name="1:label,Opportunity{61aee087-89b8-d9b0-01ee-4bb4d2251d8b}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{61aee087-89b8-d9b0-01ee-4bb4d2251d8b}'</comment>
+  </data>
+  <data name="1:label,Opportunity{6200bb3e-dec8-4f40-bf00-f2aec26058d3}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{6200bb3e-dec8-4f40-bf00-f2aec26058d3}'</comment>
+  </data>
+  <data name="1:label,Opportunity{6862197e-b146-47ce-afc2-3f02b06ca0c4}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{6862197e-b146-47ce-afc2-3f02b06ca0c4}'</comment>
+  </data>
+  <data name="1:label,Opportunity{6BD9F746-A850-4D84-8716-748AA91EC1BC}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{6BD9F746-A850-4D84-8716-748AA91EC1BC}'</comment>
+  </data>
+  <data name="1:label,Opportunity{6ef46c40-8ca5-4039-8812-49d08ad74431}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{6ef46c40-8ca5-4039-8812-49d08ad74431}'</comment>
+  </data>
+  <data name="1:label,Opportunity{736e5dc8-6758-42ee-8e28-812ec6f75abd}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{736e5dc8-6758-42ee-8e28-812ec6f75abd}'</comment>
+  </data>
+  <data name="1:label,Opportunity{73bdcb49-1d33-c581-bd27-d3d658342cb8}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{73bdcb49-1d33-c581-bd27-d3d658342cb8}'</comment>
+  </data>
+  <data name="1:label,Opportunity{74794dae-95cf-413e-9472-699e76e1e1a0}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{74794dae-95cf-413e-9472-699e76e1e1a0}'</comment>
+  </data>
+  <data name="1:label,Opportunity{75F85D03-7267-4C05-B5DE-B00C49595864}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{75F85D03-7267-4C05-B5DE-B00C49595864}'</comment>
+  </data>
+  <data name="1:label,Opportunity{79548060-31f7-4646-8c08-0296ecd4113b}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for tab in Entity FormXml ID: '{79548060-31f7-4646-8c08-0296ecd4113b}'</comment>
+  </data>
+  <data name="1:label,Opportunity{798de0be-acfe-4480-b3f7-69312505588a}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{798de0be-acfe-4480-b3f7-69312505588a}'</comment>
+  </data>
+  <data name="1:label,Opportunity{7ee1bca7-43e9-4bf7-bbdd-32df7279d236}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{7ee1bca7-43e9-4bf7-bbdd-32df7279d236}'</comment>
+  </data>
+  <data name="1:label,Opportunity{7f5a51a0-115c-4f72-a2f3-7d963e7fa664}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{7f5a51a0-115c-4f72-a2f3-7d963e7fa664}'</comment>
+  </data>
+  <data name="1:label,Opportunity{86d68687-d31b-4529-8f26-93f86be83c9d}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{86d68687-d31b-4529-8f26-93f86be83c9d}'</comment>
+  </data>
+  <data name="1:label,Opportunity{874a6537-44cb-2e44-6037-db3dcad8c123}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{874a6537-44cb-2e44-6037-db3dcad8c123}'</comment>
+  </data>
+  <data name="1:label,Opportunity{87dcd152-568e-2cd1-d419-6e0eee9d6593}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{87dcd152-568e-2cd1-d419-6e0eee9d6593}'</comment>
+  </data>
+  <data name="1:label,Opportunity{889bb629-4686-8bc9-b646-a55bba725605}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{889bb629-4686-8bc9-b646-a55bba725605}'</comment>
+  </data>
+  <data name="1:label,Opportunity{9169e6c4-7351-d39b-ec74-40e560b37ea4}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{9169e6c4-7351-d39b-ec74-40e560b37ea4}'</comment>
+  </data>
+  <data name="1:label,Opportunity{91C4D5D8-FDBC-4F1A-8A91-753A1AE4E376}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{91C4D5D8-FDBC-4F1A-8A91-753A1AE4E376}'</comment>
+  </data>
+  <data name="1:label,Opportunity{91cea453-5d4e-4116-9019-ef75a34619bd}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{91cea453-5d4e-4116-9019-ef75a34619bd}'</comment>
+  </data>
+  <data name="1:label,Opportunity{92822c63-42c0-4b31-8cb5-8ce123553796}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{92822c63-42c0-4b31-8cb5-8ce123553796}'</comment>
+  </data>
+  <data name="1:label,Opportunity{93860c62-4108-6534-bb78-a9543b111bee}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{93860c62-4108-6534-bb78-a9543b111bee}'</comment>
+  </data>
+  <data name="1:label,Opportunity{9665b409-e439-cb10-e334-8899aeeb5cce}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{9665b409-e439-cb10-e334-8899aeeb5cce}'</comment>
+  </data>
+  <data name="1:label,Opportunity{9a29c680-0d68-409e-9657-ea87cfca3b85}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{9a29c680-0d68-409e-9657-ea87cfca3b85}'</comment>
+  </data>
+  <data name="1:label,Opportunity{9b4c804b-e760-8e4b-ac62-e05b1313beeb}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for tab in Entity FormXml ID: '{9b4c804b-e760-8e4b-ac62-e05b1313beeb}'</comment>
+  </data>
+  <data name="1:label,Opportunity{9B6E1519-AB19-4AD6-976E-8A0D5754AE0C}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{9B6E1519-AB19-4AD6-976E-8A0D5754AE0C}'</comment>
+  </data>
+  <data name="1:label,Opportunity{9D5B59C2-3DF3-4437-AC5D-3A6E36866000}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{9D5B59C2-3DF3-4437-AC5D-3A6E36866000}'</comment>
+  </data>
+  <data name="1:label,Opportunity{9e5a363b-c45a-aac2-125e-b81950190414}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for tab in Entity FormXml ID: '{9e5a363b-c45a-aac2-125e-b81950190414}'</comment>
+  </data>
+  <data name="1:label,Opportunity{a236691e-a64a-4125-a380-6f59c1ca5eca}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{a236691e-a64a-4125-a380-6f59c1ca5eca}'</comment>
+  </data>
+  <data name="1:label,Opportunity{a3a88380-bb25-3989-166d-109aead94074}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{a3a88380-bb25-3989-166d-109aead94074}'</comment>
+  </data>
+  <data name="1:label,Opportunity{a58c5a0c-7bd3-c241-aaa0-5a4917d73029}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{a58c5a0c-7bd3-c241-aaa0-5a4917d73029}'</comment>
+  </data>
+  <data name="1:label,Opportunity{a9dd8610-71e3-4fe3-93d6-cee419cd614d}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for tab in Entity FormXml ID: '{a9dd8610-71e3-4fe3-93d6-cee419cd614d}'</comment>
+  </data>
+  <data name="1:label,Opportunity{aab9d0b6-0442-46b4-c083-8ad5a193cc1e}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{aab9d0b6-0442-46b4-c083-8ad5a193cc1e}'</comment>
+  </data>
+  <data name="1:label,Opportunity{af8380da-5492-4a69-8a36-b1beff121e95}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for tab in Entity FormXml ID: '{af8380da-5492-4a69-8a36-b1beff121e95}'</comment>
+  </data>
+  <data name="1:label,Opportunity{b017d693-ca9c-6686-e109-707c772cd78b}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{b017d693-ca9c-6686-e109-707c772cd78b}'</comment>
+  </data>
+  <data name="1:label,Opportunity{b060498e-5853-4382-8ea2-26ba7883f4da}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{b060498e-5853-4382-8ea2-26ba7883f4da}'</comment>
+  </data>
+  <data name="1:label,Opportunity{b0e21400-f671-46d7-a9c3-1a6c61e4ef1c}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{b0e21400-f671-46d7-a9c3-1a6c61e4ef1c}'</comment>
+  </data>
+  <data name="1:label,Opportunity{b6580e08-1820-8e8a-6361-8c8876527613}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{b6580e08-1820-8e8a-6361-8c8876527613}'</comment>
+  </data>
+  <data name="1:label,Opportunity{b6a005fd-5964-4427-b39b-6750e1a5fa6f}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for tab in Entity FormXml ID: '{b6a005fd-5964-4427-b39b-6750e1a5fa6f}'</comment>
+  </data>
+  <data name="1:label,Opportunity{b795cea3-6c74-625e-1c4a-e57e15d9a888}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{b795cea3-6c74-625e-1c4a-e57e15d9a888}'</comment>
+  </data>
+  <data name="1:label,Opportunity{ba131dc7-aa7c-4d8b-9c94-421ed8a7ddaf}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{ba131dc7-aa7c-4d8b-9c94-421ed8a7ddaf}'</comment>
+  </data>
+  <data name="1:label,Opportunity{c03918d8-d714-7b95-3083-443db3e303c8}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{c03918d8-d714-7b95-3083-443db3e303c8}'</comment>
+  </data>
+  <data name="1:label,Opportunity{c24606c3-83d5-e148-8961-2da65071aa47}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{c24606c3-83d5-e148-8961-2da65071aa47}'</comment>
+  </data>
+  <data name="1:label,Opportunity{c2dce13b-c84d-4ee1-d32d-ea734b4c01eb}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for tab in Entity FormXml ID: '{c2dce13b-c84d-4ee1-d32d-ea734b4c01eb}'</comment>
+  </data>
+  <data name="1:label,Opportunity{c3096d7c-d4ab-95a9-4ebb-5a18169dd972}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{c3096d7c-d4ab-95a9-4ebb-5a18169dd972}'</comment>
+  </data>
+  <data name="1:label,Opportunity{c352ee62-86ca-4e90-8492-dc5bbe0dc8cb}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{c352ee62-86ca-4e90-8492-dc5bbe0dc8cb}'</comment>
+  </data>
+  <data name="1:label,Opportunity{c427ba49-bb36-5084-d32a-37eb531d7c17}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{c427ba49-bb36-5084-d32a-37eb531d7c17}'</comment>
+  </data>
+  <data name="1:label,Opportunity{ca5b703d-320c-b998-26ee-d467286d4091}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{ca5b703d-320c-b998-26ee-d467286d4091}'</comment>
+  </data>
+  <data name="1:label,Opportunity{cb71ebc2-bee9-740e-2b29-09278aaad258}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{cb71ebc2-bee9-740e-2b29-09278aaad258}'</comment>
+  </data>
+  <data name="1:label,Opportunity{cbe1fe44-90c3-40f3-9307-2e72bdefe443}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{cbe1fe44-90c3-40f3-9307-2e72bdefe443}'</comment>
+  </data>
+  <data name="1:label,Opportunity{cc010ea5-ccc5-99c6-6612-0be0793dd938}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{cc010ea5-ccc5-99c6-6612-0be0793dd938}'</comment>
+  </data>
+  <data name="1:label,Opportunity{d4962dcf-e1f0-4158-8439-f49597a92b78}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{d4962dcf-e1f0-4158-8439-f49597a92b78}'</comment>
+  </data>
+  <data name="1:label,Opportunity{d6c34771-dc4c-0741-64a2-219901375436}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{d6c34771-dc4c-0741-64a2-219901375436}'</comment>
+  </data>
+  <data name="1:label,Opportunity{d9002ebe-3d57-445d-8fb7-459cfb40f437}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{d9002ebe-3d57-445d-8fb7-459cfb40f437}'</comment>
+  </data>
+  <data name="1:label,Opportunity{D96BA356-1581-46E0-937C-49033D55E3A2}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{D96BA356-1581-46E0-937C-49033D55E3A2}'</comment>
+  </data>
+  <data name="1:label,Opportunity{dcb63b8d-f689-44b1-a009-292bff328340}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{dcb63b8d-f689-44b1-a009-292bff328340}'</comment>
+  </data>
+  <data name="1:label,Opportunity{e3e4b83c-a753-49d5-4666-e93b06410bdd}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{e3e4b83c-a753-49d5-4666-e93b06410bdd}'</comment>
+  </data>
+  <data name="1:label,Opportunity{E59C312B-32A1-4441-9E54-4F4292E8E60C}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{E59C312B-32A1-4441-9E54-4F4292E8E60C}'</comment>
+  </data>
+  <data name="1:label,Opportunity{e8813fe3-3ad9-4afd-94c2-52e8d1627a59}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{e8813fe3-3ad9-4afd-94c2-52e8d1627a59}'</comment>
+  </data>
+  <data name="1:label,Opportunity{E91D45ED-89A7-48A2-8B9E-B16EF4DE2815}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{E91D45ED-89A7-48A2-8B9E-B16EF4DE2815}'</comment>
+  </data>
+  <data name="1:label,Opportunity{ea3bb0a6-b9dc-1b0e-5e7d-74a380ee79a3}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{ea3bb0a6-b9dc-1b0e-5e7d-74a380ee79a3}'</comment>
+  </data>
+  <data name="1:label,Opportunity{ea88f7fa-aa19-4995-9b04-f1c724b52e39}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{ea88f7fa-aa19-4995-9b04-f1c724b52e39}'</comment>
+  </data>
+  <data name="1:label,Opportunity{ee5d4aa4-e0b5-4822-ba14-49c1c8430a86}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{ee5d4aa4-e0b5-4822-ba14-49c1c8430a86}'</comment>
+  </data>
+  <data name="1:label,Opportunity{EFE4D5AB-D23D-4C88-A906-4646F3B28B45}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{EFE4D5AB-D23D-4C88-A906-4646F3B28B45}'</comment>
+  </data>
+  <data name="1:label,Opportunity{f961b0a9-2637-4fd3-a4d7-8e55b5246727}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for section in Entity FormXml ID: '{f961b0a9-2637-4fd3-a4d7-8e55b5246727}'</comment>
+  </data>
+  <data name="1:label,Opportunity{f9bdae13-ecd5-4eb7-b71f-f14b9619f7c5}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : label for cell in Entity FormXml ID: '{f9bdae13-ecd5-4eb7-b71f-f14b9619f7c5}'</comment>
+  </data>
+  <data name="1:LocalizedName,Opportunity{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : LocalizedName for systemform in Entity FormXml ID: '{a837e4a7-01b8-4f82-a475-be9abd67e667}'</comment>
+  </data>
+  <data name="1:LocalizedName,Opportunity{e3c588ee-8e11-49da-a5fe-3800f3f683de}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : LocalizedName for systemform in Entity FormXml ID: '{e3c588ee-8e11-49da-a5fe-3800f3f683de}'</comment>
+  </data>
+  <data name="1:Title,OpportunityInfo{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarArea in Entity FormXml ID: 'Info'</comment>
+  </data>
+  <data name="1:Title,OpportunityMarketing{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarArea in Entity FormXml ID: 'Marketing'</comment>
+  </data>
+  <data name="1:Title,OpportunitynavActivities{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navActivities'</comment>
+  </data>
+  <data name="1:Title,OpportunitynavAsyncOperations{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navAsyncOperations'</comment>
+  </data>
+  <data name="1:Title,OpportunitynavAudit{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navAudit'</comment>
+  </data>
+  <data name="1:Title,OpportunitynavComp{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navComp'</comment>
+  </data>
+  <data name="1:Title,OpportunitynavConnections{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navConnections'</comment>
+  </data>
+  <data name="1:Title,OpportunitynavInvoices{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navInvoices'</comment>
+  </data>
+  <data name="1:Title,OpportunitynavOrders{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navOrders'</comment>
+  </data>
+  <data name="1:Title,OpportunitynavProcessSessions{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navProcessSessions'</comment>
+  </data>
+  <data name="1:Title,OpportunitynavRelationship{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navRelationship'</comment>
+  </data>
+  <data name="1:Title,Opportunitynav_msdyn_opportunity_msdyn_workorder{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value>Delovni nalogi</value>
+    <comment>'Opportunity' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'nav_msdyn_opportunity_msdyn_workorder'</comment>
+  </data>
+  <data name="1:Title,OpportunityProcessCenter{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarArea in Entity FormXml ID: 'ProcessCenter'</comment>
+  </data>
+  <data name="1:Title,OpportunitySales{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarArea in Entity FormXml ID: 'Sales'</comment>
+  </data>
+  <data name="1:Title,OpportunityService{a837e4a7-01b8-4f82-a475-be9abd67e667}" xml:space="preserve">
+    <value />
+    <comment>'Opportunity' : Title for NavBarArea in Entity FormXml ID: 'Service'</comment>
+  </data>
+  <data name="29:LocalizedName,{33e117cc-79d5-4258-88c4-8d2e44db28b3}" xml:space="preserve">
+    <value />
+    <comment>'Ajax' : LocalizedName for Workflow</comment>
+  </data>
+  <data name="9:Description,paz_ratingcode" xml:space="preserve">
+    <value />
+    <comment>'paz_ratingcode' : Description for OptionSet</comment>
+  </data>
+  <data name="9:Description,paz_ratingcode500000000" xml:space="preserve">
+    <value />
+    <comment>'paz_ratingcode' : Description for OptionSet Value '500000000'</comment>
+  </data>
+  <data name="9:Description,paz_ratingcode500000001" xml:space="preserve">
+    <value />
+    <comment>'paz_ratingcode' : Description for OptionSet Value '500000001'</comment>
+  </data>
+  <data name="9:Description,paz_ratingcode500000002" xml:space="preserve">
+    <value />
+    <comment>'paz_ratingcode' : Description for OptionSet Value '500000002'</comment>
+  </data>
+  <data name="9:displayname,paz_ratingcode" xml:space="preserve">
+    <value />
+    <comment>'paz_ratingcode' : displayname for OptionSet</comment>
+  </data>
+  <data name="9:label,paz_ratingcode500000000" xml:space="preserve">
+    <value />
+    <comment>'paz_ratingcode' : label for OptionSet Value '500000000'</comment>
+  </data>
+  <data name="9:label,paz_ratingcode500000001" xml:space="preserve">
+    <value />
+    <comment>'paz_ratingcode' : label for OptionSet Value '500000001'</comment>
+  </data>
+  <data name="9:label,paz_ratingcode500000002" xml:space="preserve">
+    <value />
+    <comment>'paz_ratingcode' : label for OptionSet Value '500000002'</comment>
+  </data>
+</root>

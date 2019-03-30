@@ -1,0 +1,496 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.1.0.3436" SolutionPackageVersion="9.1" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SolutionManifest>
+    <UniqueName>LuckeyMonkey</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="LuckeyMonkey" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions />
+    <Version>0.1.0.0</Version>
+    <Managed>0</Managed>
+    <Publisher>
+      <UniqueName>paz</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="PAZ" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions />
+      <EMailAddress xsi:nil="true"></EMailAddress>
+      <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
+      <CustomizationPrefix>paz</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>50000</CustomizationOptionValuePrefix>
+      <Addresses>
+        <Address>
+          <AddressNumber>1</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+        <Address>
+          <AddressNumber>2</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+      </Addresses>
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="1" schemaName="account" behavior="2" />
+      <RootComponent type="1" schemaName="lead" behavior="2" />
+      <RootComponent type="1" schemaName="opportunity" behavior="2" />
+      <RootComponent type="9" schemaName="paz_ratingcode" behavior="0" />
+      <RootComponent type="29" id="{33e117cc-79d5-4258-88c4-8d2e44db28b3}" behavior="0" />
+      <RootComponent type="60" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      <RootComponent type="60" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      <RootComponent type="61" schemaName="paz_/entities/Lead.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="paz_/entities/Lead.js" behavior="0" />
+      <RootComponent type="61" schemaName="paz_/entities/Lead.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="paz_/entities/Opportunity.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="paz_/entities/Opportunity.js" behavior="0" />
+      <RootComponent type="61" schemaName="paz_/entities/Opportunity.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="paz_/lib/WebApiClient.js" behavior="0" />
+      <RootComponent type="61" schemaName="paz_/resources/Resource.1033.resx" behavior="0" />
+      <RootComponent type="91" id="{3501d887-b752-e911-a98a-000d3aa0f423}" schemaName="Paz.LuckeyMonkey.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=cd90d0996a785c10" behavior="0" />
+      <RootComponent type="91" id="{a67eeba2-bc52-e911-a98a-000d3aa0f423}" schemaName="Paz.LuckeyMonkey.DataProvider, Version=1.0.0.0, Culture=en, PublicKeyToken=8a7d5e3a2612a23d" behavior="0" />
+      <RootComponent type="91" id="{c4f71102-ba52-e911-a98a-000d3aa0f423}" schemaName="Paz.LuckeyMonkey.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=8a7d5e3a2612a23d" behavior="0" />
+      <RootComponent type="91" id="{958d4428-bb52-e911-a994-000d3aa0f6ff}" schemaName="Paz.LuckeyMonkey.Plugin.Lead, Version=1.0.0.0, Culture=en, PublicKeyToken=8a7d5e3a2612a23d" behavior="0" />
+      <RootComponent type="91" id="{6804bede-ba52-e911-a992-000d3aa0f55c}" schemaName="Paz.LuckeyMonkey.Workflow, Version=1.0.0.0, Culture=en, PublicKeyToken=bf1473f2815eb4a6" behavior="0" />
+      <RootComponent type="92" id="{75295003-ba52-e911-a989-000d3aa0f3aa}" behavior="0" />
+      <RootComponent type="92" id="{d168e984-b752-e911-a994-000d3aa0f6ff}" behavior="0" />
+      <RootComponent type="92" id="{dd50dc28-bb52-e911-a988-000d3aa0f6ca}" behavior="0" />
+    </RootComponents>
+    <MissingDependencies>
+      <MissingDependency>
+        <Required key="0" type="1" schemaName="opportunity" displayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="0" type="1" schemaName="opportunity" displayName="Opportunity" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="1" type="1" schemaName="lead" displayName="Lead" solution="msdynce_LeadManagement (9.0.4.0066)" />
+        <Dependent key="1" type="1" schemaName="lead" displayName="Lead" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="2" type="1" schemaName="opportunityproduct" displayName="Opportunity Line" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="4" type="1" schemaName="competitor" displayName="Competitor" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="5" type="1" schemaName="quote" displayName="Quote" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="6" type="2" schemaName="adx_feedbackyet" displayName="Feedback Yet?" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="7" type="2" schemaName="estimatedvalue" displayName="Est. Revenue" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="9" type="2" schemaName="parentcontactid" displayName="Contact" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="10" type="2" schemaName="budgetamount" displayName="Budget Amount" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="11" type="2" schemaName="msdyn_contractorganizationalunitid" displayName="Contracting Unit" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="ProjectService (3.4.0.37)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="12" type="2" schemaName="parentaccountid" displayName="Account" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="13" type="2" schemaName="name" displayName="Topic" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="14" type="2" schemaName="customerneed" displayName="Customer Need" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="15" type="2" schemaName="estimatedclosedate" displayName="Est. Close Date" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="16" type="2" schemaName="msdyn_ordertype" displayName="Order Type" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="ProjectService (3.4.0.37)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="9" type="2" schemaName="parentcontactid" displayName="Contact" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="17" type="2" schemaName="isrevenuesystemcalculated" displayName="Revenue" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="18" type="2" schemaName="totaltax" displayName="Total Tax" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="19" type="2" schemaName="proposedsolution" displayName="Proposed Solution" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="20" type="2" schemaName="freightamount" displayName="Freight Amount" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="21" type="2" schemaName="totallineitemamount" displayName="Total Detail Amount" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="16" type="2" schemaName="msdyn_ordertype" displayName="Order Type" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="ProjectService (3.4.0.37)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="15" type="2" schemaName="estimatedclosedate" displayName="Est. Close Date" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="7" type="2" schemaName="estimatedvalue" displayName="Est. Revenue" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="22" type="2" schemaName="totalamount" displayName="Total Amount" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="23" type="2" schemaName="adx_delivereddate" displayName="Delivered Date" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="13" type="2" schemaName="name" displayName="Topic" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="24" type="2" schemaName="transactioncurrencyid" displayName="Currency" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="25" type="2" schemaName="totalamountlessfreight" displayName="Total Pre-Freight Amount" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="26" type="2" schemaName="statuscode" displayName="Status Reason" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="10" type="2" schemaName="budgetamount" displayName="Budget Amount" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="27" type="2" schemaName="adx_dealregistrationrequestid" displayName="Deal Registration Request" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="28" type="2" schemaName="adx_territoryid" displayName="Territory" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="29" type="2" schemaName="msa_partneroppid" displayName="Partner Contact" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftCrmPortalDependencies (9.0.12.10)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="30" type="2" schemaName="ownerid" displayName="Owner" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="31" type="2" schemaName="currentsituation" displayName="Current Situation" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="14" type="2" schemaName="customerneed" displayName="Customer Need" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="32" type="2" schemaName="originatingleadid" displayName="Originating Lead" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="33" type="2" schemaName="campaignid" displayName="Source Campaign" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_MarketingSales (9.0.4.29)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="34" type="2" schemaName="adx_wondate" displayName="Won Date" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="35" type="2" schemaName="msdyn_workordertype" displayName="Work Order Type" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="36" type="2" schemaName="adx_leadtypeid" displayName="Lead Type" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="37" type="2" schemaName="adx_reasonforreturn" displayName="Reason for Return" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="38" type="2" schemaName="purchaseprocess" displayName="Purchase Process" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="39" type="2" schemaName="discountpercentage" displayName="Opportunity Discount (%)" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="12" type="2" schemaName="parentaccountid" displayName="Account" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="40" type="2" schemaName="adx_partnercollaboration" displayName="Partner Collaboration" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="41" type="2" schemaName="adx_partnercreated" displayName="Partner Created" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="42" type="2" schemaName="discountamount" displayName="Opportunity Discount Amount" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="43" type="2" schemaName="msa_partnerid" displayName="Partner" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftCrmPortalDependencies (9.0.12.10)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="44" type="2" schemaName="pricelevelid" displayName="Price List" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="45" type="2" schemaName="adx_readyfordistribution" displayName="Ready for Distribution" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="46" type="2" schemaName="purchasetimeframe" displayName="Purchase Timeframe" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="47" type="2" schemaName="adx_accepteddate" displayName="Accepted Date" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="48" type="2" schemaName="adx_expirydate" displayName="Expiry Date" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="49" type="10" schemaName="msa_contact_opportunity" displayName="msa_contact_opportunity" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftCrmPortalDependencies (9.0.12.10)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="50" type="10" schemaName="msdyn_opportunity_msdyn_workorder" displayName="msdyn_opportunity_msdyn_workorder" parentSchemaName="msdyn_workorder" parentDisplayName="Work Order" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="51" type="10" schemaName="msa_partner_opportunity" displayName="msa_partner_opportunity" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftCrmPortalDependencies (9.0.12.10)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="52" type="10" schemaName="adx_opportunity_account" displayName="adx_opportunity_account" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="53" type="10" schemaName="adx_leadtype_opportunity" displayName="adx_leadtype_opportunity" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="54" type="10" schemaName="adx_internal_collaboration" displayName="adx_internal_collaboration" parentSchemaName="contact" parentDisplayName="Contact" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="55" type="10" schemaName="adx_territory_opportunity" displayName="adx_territory_opportunity" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="56" type="10" schemaName="adx_adx_dealregistrationrequest_opportunity_DealRegistrationRequestId" displayName="adx_adx_dealregistrationrequest_opportunity_DealRegistrationRequestId" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="57" type="10" schemaName="msdyn_msdyn_workordertype_opportunity_WorkOrderType" displayName="msdyn_msdyn_workordertype_opportunity_WorkOrderType" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="58" type="10" schemaName="msdyn_organizationalunit_opportunity" displayName="msdyn_organizationalunit_opportunity" parentSchemaName="opportunity" parentDisplayName="Opportunity" solution="ProjectService (3.4.0.37)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="59" type="26" schemaName="Opportunity Quotes" displayName="Opportunity Quotes" parentSchemaName="quote" parentDisplayName="Quote" solution="msdynce_Sales (9.0.4.0076)" id="{61a4c932-d775-e211-b420-00155d806600}" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="60" type="26" schemaName="Opportunity Product Inline Edit View" displayName="Opportunity Product Inline Edit View" parentSchemaName="opportunityproduct" parentDisplayName="Opportunity Line" solution="msdynce_Sales (9.0.4.0076)" id="{01010de7-749e-4fe6-8037-aca560a4fcbe}" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="61" type="26" schemaName="Deal Registration Request Lookup View" displayName="Deal Registration Request Lookup View" parentSchemaName="adx_dealregistrationrequest" parentDisplayName="Deal Registration Request" solution="MicrosoftPartnerPipeline (8.3.0.3)" id="{65170606-8da7-45d3-a713-379ead841e57}" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="62" type="26" schemaName="Work Order Type Lookup View" displayName="Work Order Type Lookup View" parentSchemaName="msdyn_workordertype" parentDisplayName="Work Order Type" solution="FieldService (8.4.0.338)" id="{8f0514ca-d271-46cc-b531-41791c56949a}" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="63" type="26" schemaName="All Competitors (summary)" displayName="All Competitors (summary)" parentSchemaName="competitor" parentDisplayName="Competitor" solution="msdynce_Sales (9.0.4.0076)" id="{57bca9ac-87a0-4c28-adc8-2d0a4645f29e}" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" solution="msdynce_Sales (9.0.4.0076)" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="64" type="66" schemaName="MscrmControls.CardFeedContainer.CardFeedContainer" displayName="MscrmControls.CardFeedContainer.CardFeedContainer" solution="CustomControlsCore (9.1.0000.3436)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="65" type="61" schemaName="msdyn_/SDK/SOAP/Sdk_Soap_min.js" displayName="msdyn_/SDK/SOAP/Sdk_Soap_min.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="66" type="61" schemaName="adx_resources/ResourcesManager.js" displayName="adx_resources/ResourcesManager.js" solution="MicrosoftCrmPortalBase (9.0.12.10)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="67" type="61" schemaName="msdyn_/Utils/jquery.min.js" displayName="msdyn_/Utils/jquery.min.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="68" type="61" schemaName="msdyn_/LocalizationLibrary/Localization.Library.js" displayName="msdyn_/LocalizationLibrary/Localization.Library.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="69" type="61" schemaName="msdyn_/Opportunity/Opportunity.Library.js" displayName="msdyn_/Opportunity/Opportunity.Library.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="70" type="61" schemaName="new_VersiumPredictInsights.html" displayName="new_VersiumPredictInsights.html" solution="VersiumPredict (7.0.0.0)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="71" type="61" schemaName="msdyn_/Libraries/require/require.js" displayName="msdyn_/Libraries/require/require.js" solution="ProjectService (3.4.0.37)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="72" type="61" schemaName="li_/Scripts/Forms/liProfileHelper.js" displayName="li_/Scripts/Forms/liProfileHelper.js" solution="LinkedIn (2.3.0.6)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="73" type="61" schemaName="msdyn_/Action/FieldServiceSystemAction/Sdk_msdyn_FieldServiceSystemAction_min.js" displayName="msdyn_/Action/FieldServiceSystemAction/Sdk_msdyn_FieldServiceSystemAction_min.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="74" type="61" schemaName="msdyn_/Opportunity/Scripts/OpportunityCoreCrmInitialization.js" displayName="msdyn_/Opportunity/Scripts/OpportunityCoreCrmInitialization.js" solution="ProjectService (3.4.0.37)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="75" type="61" schemaName="adx_opportunity/adx.xrm.opportunity.handlers.js" displayName="adx_opportunity/adx.xrm.opportunity.handlers.js" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="76" type="61" schemaName="msdyn_/SalesDocument/SalesDocumentFormLoader.Library.js" displayName="msdyn_/SalesDocument/SalesDocumentFormLoader.Library.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="77" type="61" schemaName="li_/Pages/CompanyProfile.html" displayName="li_/Pages/CompanyProfile.html" solution="LinkedIn (2.3.0.6)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="78" type="61" schemaName="li_/Pages/MemberProfile.html" displayName="li_/Pages/MemberProfile.html" solution="LinkedIn (2.3.0.6)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="79" type="61" schemaName="msdyn_/Utils/EntityDictionary.js" displayName="msdyn_/Utils/EntityDictionary.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="80" type="61" schemaName="adx_scripts/jquery1.9.1.min.js" displayName="adx_scripts/jquery1.9.1.min.js" solution="MicrosoftCrmPortalBase (9.0.12.10)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="81" type="61" schemaName="msdyn_/Utils/sdk.jquery.js" displayName="msdyn_/Utils/sdk.jquery.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="82" type="61" schemaName="adx_partnercollaborationscript.js" displayName="adx_partnercollaborationscript.js" solution="MicrosoftPartnerPipeline (8.3.0.3)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="81" type="61" schemaName="msdyn_/Utils/sdk.jquery.js" displayName="msdyn_/Utils/sdk.jquery.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="79" type="61" schemaName="msdyn_/Utils/EntityDictionary.js" displayName="msdyn_/Utils/EntityDictionary.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="83" type="61" schemaName="msdyn_/Recurrence/Recurrence.Library.js" displayName="msdyn_/Recurrence/Recurrence.Library.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="84" type="61" schemaName="new_VersiumPredictHeadsup.html" displayName="new_VersiumPredictHeadsup.html" solution="VersiumPredict (7.0.0.0)" />
+        <Dependent key="3" type="60" displayName="Opportunity" parentDisplayName="Opportunity" id="{a837e4a7-01b8-4f82-a475-be9abd67e667}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="67" type="61" schemaName="msdyn_/Utils/jquery.min.js" displayName="msdyn_/Utils/jquery.min.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="69" type="61" schemaName="msdyn_/Opportunity/Opportunity.Library.js" displayName="msdyn_/Opportunity/Opportunity.Library.js" solution="FieldService (8.4.0.338)" />
+        <Dependent key="8" type="60" displayName="Quick Create" parentDisplayName="Opportunity" id="{e3c588ee-8e11-49da-a5fe-3800f3f683de}" />
+      </MissingDependency>
+    </MissingDependencies>
+  </SolutionManifest>
+</ImportExportXml>
