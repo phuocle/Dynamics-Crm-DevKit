@@ -80,6 +80,8 @@
       <DependentUpon>Opportunity.js</DependentUpon>
     </Content>
     <Content Include="test\DevKitMock.js" />
+    <Content Include="test\Lead.test.js" />
+    <Content Include="test\Opportunity.test.js" />
     <Content Include="test\requireConfig.js" />
     <Content Include="test\mock.intellisense.js" />
     <Content Include="lib\WebApiClient.js" />
@@ -95,7 +97,9 @@
     <Folder Include="html\" />
     <Folder Include="images\" />
     <Folder Include="js\" />
-    <Folder Include="resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\Resource.1033.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

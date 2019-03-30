@@ -30,7 +30,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.DataProvider";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\tutorials\Paz.LuckeyMonkey.WebResource\entities";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

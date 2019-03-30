@@ -4,6 +4,6 @@ for /f "delims=" %%d in ('dir /a:d /o:-n /s ..\..\packages\PL.DynamicsCrm.DevKit
     goto break
 )
 :break
-set CrmConnection="CrmConnectionString$"
+set CrmConnection="$CrmConnectionString$"
 "%PLDynamicsCrmDevKitCli%\tools\PL.DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"..\..\PL.DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"JS-WEBAPI" /version:"1.0.0.0"
 exit

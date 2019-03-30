@@ -52,8 +52,8 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???",
+      "solution": "LuckeyMonkey",
+      "prefix": "paz_",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -71,19 +71,19 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "paz_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "paz_/entities/[entity].form.js",
+            "paz_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].webapi.js"
+            "paz_/entities/[entity].webapi.js"
           ],
           "dependencies": [
-            "???_/lib/WebApiClient.js"
+            "paz_/lib/WebApiClient.js"
           ]
         }
       ]
@@ -207,15 +207,15 @@
     },
     {
       "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Paz.LuckeyMonkey",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm"
     },
     {
       "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Paz.LuckeyMonkey",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsWebApi"
     }
