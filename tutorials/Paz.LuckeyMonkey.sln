@@ -21,10 +21,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Workflow",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.Plugin.Lead", "Paz.LuckeyMonkey.Plugin.Lead\Paz.LuckeyMonkey.Plugin.Lead.csproj", "{F6522538-2547-4782-9E4F-ADFE63BF08C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paz.LuckeyMonkey.DataProvider", "Paz.LuckeyMonkey.DataProvider\Paz.LuckeyMonkey.DataProvider.csproj", "{366E7EAE-EF02-42E2-BC75-2DEC2C62656E}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{00d5c31e-7361-4601-b7fe-bca91f09b618}*SharedItemsImports = 13
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{1d9acd9e-ec2c-413d-8ea8-008add6962c2}*SharedItemsImports = 4
+		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{366e7eae-ef02-42e2-bc75-2dec2c62656e}*SharedItemsImports = 4
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{42c5c997-93bd-45ef-91c1-35232e8ff31d}*SharedItemsImports = 4
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{905b0e85-95f2-42c4-844a-977561c3539f}*SharedItemsImports = 4
 		Paz.LuckeyMonkey.Shared\Paz.LuckeyMonkey.Shared.projitems*{adb39b03-ab13-4bce-96c9-aa19b9ecc040}*SharedItemsImports = 4
@@ -55,6 +58,10 @@ Global
 		{F6522538-2547-4782-9E4F-ADFE63BF08C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6522538-2547-4782-9E4F-ADFE63BF08C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6522538-2547-4782-9E4F-ADFE63BF08C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{366E7EAE-EF02-42E2-BC75-2DEC2C62656E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{366E7EAE-EF02-42E2-BC75-2DEC2C62656E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{366E7EAE-EF02-42E2-BC75-2DEC2C62656E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{366E7EAE-EF02-42E2-BC75-2DEC2C62656E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

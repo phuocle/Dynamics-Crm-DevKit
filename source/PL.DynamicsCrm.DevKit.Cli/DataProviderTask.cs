@@ -58,6 +58,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, "START DATA PROVIDER TASKS");
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
 
+            if (DataProviderJson.solution.Length == 0 || DataProviderJson.solution == "???")
+                throw new Exception("No solution found in plugin profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
+
             foreach (var pluginFile in DataProviderFiles)
                 RegisterDataProvider(pluginFile);
 

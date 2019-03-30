@@ -131,7 +131,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "LuckeyMonkey",
       "includefiles": [
         "Paz.LuckeyMonkey.DataProvider.*.dll"
       ],
