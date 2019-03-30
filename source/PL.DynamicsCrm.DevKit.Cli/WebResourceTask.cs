@@ -77,6 +77,19 @@ namespace PL.DynamicsCrm.DevKit.Cli
             if (!files.Any()) throw new Exception("No webresource files found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
             if (WebResourceJson.solution.Length == 0 || WebResourceJson.solution == "???") throw new Exception("No solution found in webresource profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
             if (WebResourceJson.prefix.Length == 0 || WebResourceJson.prefix == "???") throw new Exception("No prefix found in webresource profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
+            var isSupportWebResourceDependency = IsSupportWebResourceDependency;
+            var dependencies = new List<Dependency>();
+            if (isSupportWebResourceDependency)
+            {
+                dependencies = MergeDependencies(WebResourceJson.dependencies, files);
+                foreach(var dependency in dependencies)
+                {
+                    var check = dependency.dependencies.Where(x => x.StartsWith("???_/")).Any();
+                    if (check) throw new Exception("Found ???_/ in webresource dependencies. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
+                    var check2 = dependency.webresources.Where(x => x.StartsWith("???_/")).Any();
+                    if (check2) throw new Exception("Found ???_/ in webresource dependencies. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
+                }
+            }
             var totalWebResources = files.Count;
             CliLog.WriteLine(CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, totalWebResources, CliLog.ColorGreen, " webresources");
             var i = 1;
@@ -85,9 +98,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 DeployWebResource(webResourceFile, i, totalWebResources);
                 i++;
             }
-            if (IsSupportWebResourceDependency)
+            if (isSupportWebResourceDependency)
             {
-                var dependencies = MergeDependencies(WebResourceJson.dependencies, files);
                 CliLog.WriteLine(CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, dependencies.Count, CliLog.ColorGreen, " dependencies");
                 var j = 1;
                 foreach (var dependency in dependencies)
