@@ -76,15 +76,17 @@ namespace PL.DynamicsCrm.DevKit.Package
         {
             var menuCommand = sender as OleMenuCommand;
             menuCommand.Visible = false;
-            if (Dte == null || Dte.SelectedItems == null || Dte.SelectedItems.Count != 1) return;
-            var selectedItem = Dte.SelectedItems.Item(1);
-            if (selectedItem?.ProjectItem == null) return;
-            if (selectedItem.ProjectItem.ProjectItems == null) return;
-            var fileName = selectedItem.ProjectItem.FileNames[0];
-            if (fileName == null) return;
-            var extension = Path.GetExtension(fileName);
-            if (extension != ".rdl") return;
-            menuCommand.Visible = true;
+            try
+            {
+                if (Dte == null || Dte.SelectedItems == null || Dte.SelectedItems.Count != 1) return;
+                var selectedItem = Dte.SelectedItems.Item(1);
+                if (selectedItem.ProjectItem == null) return;
+                var fileName = selectedItem.ProjectItem.FileNames[0];
+                var extension = Path.GetExtension(fileName);
+                if (extension != ".rdl") return;
+                menuCommand.Visible = true;
+            }
+            catch { }
         }
 
         private static string ProjectUniqueName { get; set; }
