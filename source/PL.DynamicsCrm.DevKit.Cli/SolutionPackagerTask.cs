@@ -52,7 +52,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
             if (SolutionPackagerJson.solution.Length == 0 || SolutionPackagerJson.solution == "???")
                 throw new Exception("No solution found in solution packager profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
-            if (SolutionPackagerJson.solutiontype != "Managed" || SolutionPackagerJson.solutiontype != "Unmanaged")
+            if (SolutionPackagerJson.solutiontype != "Managed" && SolutionPackagerJson.solutiontype != "Unmanaged")
                 throw new Exception("solutiontype should be: Managed/Unmanaged. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
             if (SolutionPackagerJson.folder == "???")
                 throw new Exception("No folder found in solution packager profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
@@ -60,7 +60,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 throw new Exception("No solution zip folder found in solution packager profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
             if (SolutionPackagerJson.logfolder == "???")
                 throw new Exception("No log folder found in solution packager profile. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
-            if (SolutionPackagerJson.type != "Extract" || SolutionPackagerJson.type != "Pack")
+            if (SolutionPackagerJson.type != "Extract" && SolutionPackagerJson.type != "Pack")
                 throw new Exception("type should be: Extract/Pack. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
 
             var solution = GetSolutionFromCrm();
