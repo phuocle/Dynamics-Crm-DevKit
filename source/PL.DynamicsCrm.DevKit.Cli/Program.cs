@@ -30,7 +30,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\DownloadWebResources\2.after\WebProject";
+                return @"C:\sources\abiz\git\ABIZ_CDS\src\JsLibrary\Abiz.Module.JsLibrary.WebResource";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

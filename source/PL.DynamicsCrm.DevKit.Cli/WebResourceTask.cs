@@ -27,6 +27,14 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private string Version { get; }
         private List<Guid> WebResourcesToPublish { get; }
 
+        private bool IsSupportedExtensions(string fileName)
+        {
+            var list = new List<string> { ".html", ".htm", ".js", ".png", ".gif", ".jpg", ".jpeg", ".css", ".ico", ".xml", ".xsl", ".xslt", ".xap", ".resx", ".svg" };
+            foreach (var item in list)
+                if (fileName.EndsWith(item)) return true;
+            return false;
+        }
+
         private List<WebResourceFile> WebResourceFiles
         {
             get
@@ -64,6 +72,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     };
                     items.Add(webResourceFile);
                 }
+                items = items.Where(i => IsSupportedExtensions(i.file)).ToList();
                 return items;
             }
         }
