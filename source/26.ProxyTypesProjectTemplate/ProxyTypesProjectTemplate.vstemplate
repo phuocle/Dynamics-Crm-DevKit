@@ -7,7 +7,7 @@
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <TemplateID>29714d87-d360-4c15-83f1-12120aab43dd</TemplateID>
-    <CreateNewFolder>true</CreateNewFolder>
+    <CreateNewFolder>false</CreateNewFolder>
     <DefaultName>ProxyTypesProject</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Disabled</LocationField>
