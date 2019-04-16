@@ -316,8 +316,17 @@ namespace PL.DynamicsCrm.DevKit.Shared
                             code += "\t\t\t{{\r\n";
                             code += "\t\t\t\tvar data = new OptionSetValueCollection();\r\n";
                             code += "\t\t\t\tforeach (var item in value)\r\n";
+                            code += "\t\t\t\t{{\r\n";
                             code += "\t\t\t\t\tdata.Add(new OptionSetValue((int)item));\r\n";
-                            code += "\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name + "] = data;\r\n";
+                            code += "\t\t\t\t}}\r\n";
+                            code += "\t\t\t\tif (data.Count == 0)\r\n";
+                            code += "\t\t\t\t{{\r\n";
+                            code += "\t\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name + "] = null;\r\n";
+                            code += "\t\t\t\t}}\r\n";
+                            code += "\t\t\t\telse\r\n";
+                            code += "\t\t\t\t{{\r\n";
+                            code += "\t\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name + "] = data;\r\n";
+                            code += "\t\t\t\t}}\r\n";
                             code += "\t\t\t}}";
                             return code;
                         }
@@ -422,8 +431,14 @@ namespace PL.DynamicsCrm.DevKit.Shared
                         code += "get\r\n";
                         code += "\t\t\t{{\r\n";
                         code += "\t\t\t\tvar data = new List<" + crmAttribute.Name + ">();\r\n";
-                        code += "\t\t\t\tforeach (OptionSetValue item in Entity.GetAttributeValue<OptionSetValueCollection>(Fields." + crmAttribute.Name + "))\r\n";
-                        code += "\t\t\t\t\tdata.Add((" + crmAttribute.Name + ")item.Value);\r\n";
+                        code += "\t\t\t\tvar items = Entity.GetAttributeValue<OptionSetValueCollection>(Fields." + crmAttribute.Name + ");\r\n";
+                        code += "\t\t\t\tif (items != null)\r\n";
+                        code += "\t\t\t\t{{\r\n";
+                        code += "\t\t\t\t\tforeach (OptionSetValue item in items)\r\n";
+                        code += "\t\t\t\t\t{{\r\n";
+                        code += "\t\t\t\t\t\tdata.Add((" + crmAttribute.Name + ")item.Value);\r\n";
+                        code += "\t\t\t\t\t}}\r\n";
+                        code += "\t\t\t\t}}\r\n";
                         code += "\t\t\t\treturn data;\r\n";
                         code += "\t\t\t}}";
                         return code;
