@@ -232,5 +232,12 @@
       "profile": "DEBUG",
       "name": "???"
     }
+  ],
+  "proxytypes": [
+    {
+      "profile": "DEBUG",
+      "namespace": "???",
+      "output":  "GeneratedCode.cs"
+    }
   ]
 }

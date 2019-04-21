@@ -20,7 +20,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
         DataProviders,
         Generators,
         DownloadWebResources,
-        DownloadPortalWebResources
+        DownloadPortalWebResources,
+        ProxyTypes
     }
 
     public class Program
@@ -30,7 +31,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\sources\abiz\git\ABIZ_CDS\src\JsLibrary\Abiz.Module.JsLibrary.WebResource";
+                return @"C:\src\azure\phuocle\tfs\CDS-CRMGRIDPLUS\CRM\PL.CrmGridPlus.ProxyTypes";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -46,6 +47,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
         private static Generator GeneratorJson { get; set; }
         private static DownloadWebResource DownloadWebResourceJson { get; set; }
         private static Portal PortalJson { get; set; }
+        private static ProxyType ProxyTypeJson { get; set; }
 
         private static CrmServiceClient CrmServiceClient { get; set; }
 
@@ -138,6 +140,11 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 var task = new PortalTask(CrmServiceClient, CurrentDirectory, PortalJson, arguments.Version);
                 task.Run();
             }
+            else if (arguments.Type == TaskType.ProxyTypes.ToString().ToLower())
+            {
+                var task = new ProxyTypesTask(CrmServiceClient, CurrentDirectory, ProxyTypeJson, arguments.Version);
+                task.Run();
+            }
         }
 
         private static bool IsValid(CommandLineArgs arguments)
@@ -175,7 +182,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     TaskType.DataProviders.ToString().ToLower(),
                     TaskType.Generators.ToString().ToLower(),
                     TaskType.DownloadWebResources.ToString().ToLower(),
-                    TaskType.DownloadPortalWebResources.ToString().ToLower()
+                    TaskType.DownloadPortalWebResources.ToString().ToLower(),
+                    TaskType.ProxyTypes.ToString().ToLower()
                 };
                 if (!types.Contains(arguments.Type))
                 {
@@ -186,7 +194,9 @@ namespace PL.DynamicsCrm.DevKit.Cli
                         $"{TaskType.DataProviders.ToString().ToLower()}/" +
                         $"{TaskType.Generators.ToString().ToLower()}/" +
                         $"{TaskType.DownloadWebResources.ToString().ToLower()}/" +
-                        $"{TaskType.DownloadPortalWebResources.ToString().ToLower()}");
+                        $"{TaskType.DownloadPortalWebResources.ToString().ToLower()}" +
+                        $"{TaskType.ProxyTypes.ToString().ToLower()}"
+                        );
                 }
             }
             else
@@ -199,6 +209,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 GeneratorJson = json.generators.FirstOrDefault(x => x.profile == arguments.Profile);
                 DownloadWebResourceJson = json.downloadwebresources.FirstOrDefault(x => x.profile == arguments.Profile);
                 PortalJson = json.portals.FirstOrDefault(x => x.profile == arguments.Profile);
+                ProxyTypeJson = json.proxytypes.FirstOrDefault(x => x.profile == arguments.Profile);
             }
             if (arguments.Profile.Length == 0)
             {
@@ -281,6 +292,16 @@ namespace PL.DynamicsCrm.DevKit.Cli
                     CliLog.WriteLine(CliLog.ColorError, $"/profile: not found profile: {arguments.Profile}");
                     return false;
                 }
+            }
+            else if (arguments.Type == TaskType.ProxyTypes.ToString().ToLower())
+            {
+                ProxyTypeJson = json.proxytypes.FirstOrDefault(x => x.profile == arguments.Profile);
+                if (ProxyTypeJson == null)
+                {
+                    CliLog.WriteLine(CliLog.ColorError, $"/profile: not found profile: {arguments.Profile}");
+                    return false;
+                }
+                ProxyTypeJson.connection = arguments.Connection;
             }
             if (!IsConnectedDynamics365(arguments.Connection))
             {

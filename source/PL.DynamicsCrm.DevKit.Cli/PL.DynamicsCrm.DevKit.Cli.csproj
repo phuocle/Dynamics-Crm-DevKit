@@ -156,6 +156,7 @@
     <Compile Include="CrmPluginRegistrationAttribute.cs" />
     <Compile Include="CliLog.cs" />
     <Compile Include="DataProviderTask.cs" />
+    <Compile Include="Models\ProxyType.cs" />
     <Compile Include="PortalTask.cs" />
     <Compile Include="DownloadWebResourceTask.cs" />
     <Compile Include="GeneratorTask.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="PluginTask.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProxyTypesTask.cs" />
     <Compile Include="SolutionPackagerTask.cs" />
     <Compile Include="WebResourceTask.cs" />
     <Compile Include="WorkflowTask.cs" />

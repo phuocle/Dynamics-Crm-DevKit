@@ -93,6 +93,9 @@
     <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\Portal.cs">
       <Link>LinkFiles\Portal.cs</Link>
     </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\ProxyType.cs">
+      <Link>LinkFiles\ProxyType.cs</Link>
+    </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Cli\Models\SolutionPackager.cs">
       <Link>LinkFiles\SolutionPackager.cs</Link>
     </Compile>
