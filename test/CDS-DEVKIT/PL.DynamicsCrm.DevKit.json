@@ -1,0 +1,15 @@
+﻿{
+  "DefaultCrmVersion": "9.0.2.12",
+  "DefaultNetVersion": "4.6.2",
+  "DefaultCrmName": "Dynamics 365",
+  "DefaultCrmConnection": "DEVKIT",
+  "SolutionPrefix":null,
+  "CrmConnections": [
+    {
+      "Name": "DEVKIT",
+      "Url": "https://pl-dynamicscrm-devkit.api.crm5.dynamics.com/XRMServices/2011/Organization.svc",
+      "UserName": "devkit@crmgridplus.com",
+      "Password": "6nsOvMN2+a0tj7XiT1ipLKYsZLgYDyayjRIZequzUis="
+    }
+  ]
+}
