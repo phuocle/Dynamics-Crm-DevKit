@@ -12,9 +12,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private string WebApiCodeProjectItem { get; set; }
         private string WebApiCodeIntellisenseProjectItem { get; set; }
+        private string WebApiCodeIntellisenseProjectItem2 { get; set; }
 
         private string GeneratedJsWebApiCode { get; set; }
         private string GeneratedJsWebApiCodeIntellisense { get; set; }
+        private string GeneratedJsWebApiCodeIntellisense2 { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -24,6 +26,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
+        private bool IsFirstTypeScriptDeclaration { get; set; } = false;
+
         private ProjectItem _formProjectItem;
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
@@ -31,6 +35,37 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             WebApiCodeProjectItem = projectItem.FileNames[0];
             CreateWebApiCode();
             _formProjectItem.ProjectItems.AddFromFile(WebApiCodeProjectItem);
+            if (IsFirstTypeScriptDeclaration)
+            {
+                var checkExistFile = WebApiCodeIntellisenseProjectItem2.Replace(".d.ts", ".js");
+                if (File.Exists(checkExistFile))
+                {
+                    var fileName = Path.GetFileName(checkExistFile);
+                    var selectItem = projectItem.DTE.SelectedItems.Item(1);
+                    ProjectItems projectItems = null;
+                    if (selectItem.Project != null)
+                        projectItems = selectItem.Project.ProjectItems;
+                    else if (selectItem.ProjectItem != null)
+                        projectItems = selectItem.ProjectItem.ProjectItems;
+                    if (projectItems == null) return;
+                    foreach (ProjectItem projectItem2 in projectItems)
+                    {
+                        if (fileName == projectItem2.Name)
+                        {
+                            projectItem2.ProjectItems.AddFromFile(WebApiCodeIntellisenseProjectItem2);
+                            break;
+                        }
+                        foreach (ProjectItem childProjectItem in projectItem2.ProjectItems)
+                        {
+                            if (fileName == childProjectItem.Name)
+                            {
+                                childProjectItem.ProjectItems.AddFromFile(WebApiCodeIntellisenseProjectItem2);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
             projectItem.ContainingProject.Save();
         }
 
@@ -38,8 +73,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         {
         }
 
-        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary,
-            WizardRunKind runKind, object[] customParams)
+        public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             if (runKind == WizardRunKind.AsNewItem)
             {
@@ -55,6 +89,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     }
                     GeneratedJsWebApiCode = form.GeneratedJsWebApiCode;
                     GeneratedJsWebApiCodeIntellisense = form.GeneratedJsWebApiCodeIntellisense;
+                    GeneratedJsWebApiCodeIntellisense2 = form.GeneratedJsWebApiCodeIntellisense2;
                     replacementsDictionary.Add("$class$", form.Class);
                 }
                 else
@@ -99,13 +134,21 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             var fInfo = new FileInfo(WebApiCodeProjectItem);
             var entityName = fInfo.Name.Substring(0, fInfo.Name.Length - ".webapi.js".Length);
             WebApiCodeIntellisenseProjectItem = $"{fInfo.DirectoryName}\\{entityName}.intellisense.js";
+            WebApiCodeIntellisenseProjectItem2 = $"{fInfo.DirectoryName}\\{entityName}.d.ts";
             CreateWebApiCodeIntellisense();
+            CreateWebApiCodeIntellisense2();
 
         }
 
         private void CreateWebApiCodeIntellisense()
         {
             File.WriteAllText(WebApiCodeIntellisenseProjectItem, GeneratedJsWebApiCodeIntellisense, System.Text.Encoding.UTF8);
+        }
+
+        private void CreateWebApiCodeIntellisense2()
+        {
+            if (!File.Exists(WebApiCodeIntellisenseProjectItem2)) IsFirstTypeScriptDeclaration = true;
+            File.WriteAllText(WebApiCodeIntellisenseProjectItem2, GeneratedJsWebApiCodeIntellisense2, System.Text.Encoding.UTF8);
         }
     }
 }

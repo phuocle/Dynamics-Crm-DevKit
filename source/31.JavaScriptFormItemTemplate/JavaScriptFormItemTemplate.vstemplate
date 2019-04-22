@@ -11,6 +11,7 @@
     <DefaultName>Javascript.cs</DefaultName>
   </TemplateData>
   <TemplateContent>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$.d.ts">Javascript.d.ts</ProjectItem>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$.intellisense.js">JavascriptFormIntellisense.js</ProjectItem>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$.form.js">JavascriptForm.js</ProjectItem>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$.js">Javascript.js</ProjectItem>

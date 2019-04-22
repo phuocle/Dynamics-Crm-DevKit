@@ -116,6 +116,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
         public string Message { get; private set; } = string.Empty;
         public string WebApiCode { get; private set; } = string.Empty;
         public string WebApiCodeIntellisense { get; private set; } = string.Empty;
+        public string WebApiCodeIntellisense2 { get; private set; } = string.Empty;
         public void GeneratorCode()
         {
             var webApiCode = string.Empty;
@@ -246,6 +247,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 if (CheckedItems.Contains($"{form.Name}"))
                     processForms.Add(form);
             WebApiCodeIntellisense = GetIntellisense(processForms, IsDebugForm, true, IsDebugWebApi);
+            WebApiCodeIntellisense2 = GetIntellisense2(processForms, IsDebugForm, true, IsDebugWebApi);
         }
         private string _jsOptionSetFormCode = null;
         private string JsOptionSetFormCode
@@ -406,6 +408,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 Processes = Processes
             };
             return jsIntellisense.Intellisense;
+        }
+        private string GetIntellisense2(List<SystemForm> processForms, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
+        {
+            return "///";
         }
     }
 }

@@ -202,7 +202,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
         public string Form { get; private set; } = string.Empty;
         public string FormCode { get; private set; } = string.Empty;
         public string FormCodeIntellisense { get; private set; } = string.Empty;
-
+        public string FormCodeIntellisense2 { get; private set; } = string.Empty;
         private string IsValidFormData(IEnumerable<SystemForm> forms)
         {
             var message = string.Empty;
@@ -692,6 +692,11 @@ namespace PL.DynamicsCrm.DevKit.Shared
             return jsIntellisense.Intellisense;
         }
 
+        private string GetIntellisense2(List<SystemForm> processForms, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
+        {
+            return "//";
+        }
+
         public IEnumerable<string> GetForms()
         {
             return Forms.Select(f => f.Name).ToList();
@@ -713,6 +718,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             Form = GetForm(processForms);
             FormCode = GetFormCode(processForms, isDebugForm);
             FormCodeIntellisense = GetIntellisense(processForms, isDebugForm, isJsWebApi, isDebugWebApi);
+            FormCodeIntellisense2 = GetIntellisense2(processForms, isDebugForm, isJsWebApi, isDebugWebApi);
         }
     }
 }

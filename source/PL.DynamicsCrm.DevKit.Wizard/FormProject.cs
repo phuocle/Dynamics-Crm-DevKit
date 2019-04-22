@@ -679,7 +679,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public string GeneratedJsWebApiCode { get; set; }
 
         public string GeneratedJsFormCodeIntellisense { get; set; }
+        public string GeneratedJsFormCodeIntellisense2 { get; set; }
         public string GeneratedJsWebApiCodeIntellisense { get; set; }
+        public string GeneratedJsWebApiCodeIntellisense2 { get; set; }
 
         public string FilteringAttributes
         {
@@ -817,6 +819,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             MessageError = JsWebApi.Message;
             GeneratedJsWebApiCode = JsWebApi.WebApiCode;
             GeneratedJsWebApiCodeIntellisense = JsWebApi.WebApiCodeIntellisense;
+            GeneratedJsWebApiCodeIntellisense2 = JsWebApi.WebApiCodeIntellisense2;
         }
 
         public void DoGeneratorCodeForm(CheckedItemCollection lists, bool isDebugForm, string file)
@@ -836,6 +839,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             GeneratedJsForm = JsForm.Form;
             GeneratedJsFormCode = JsForm.FormCode;
             GeneratedJsFormCodeIntellisense = JsForm.FormCodeIntellisense;
+            GeneratedJsFormCodeIntellisense2 = JsForm.FormCodeIntellisense2;
         }
 
         private ProjectItem GetFiles(ProjectItem item)
