@@ -133,6 +133,9 @@
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\JsIntellisense.cs">
       <Link>LinkFiles\JsIntellisense.cs</Link>
     </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\JsIntellisense2.cs">
+      <Link>LinkFiles\JsIntellisense2.cs</Link>
+    </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\JsWebApi.cs">
       <Link>LinkFiles\JsWebApi.cs</Link>
     </Compile>

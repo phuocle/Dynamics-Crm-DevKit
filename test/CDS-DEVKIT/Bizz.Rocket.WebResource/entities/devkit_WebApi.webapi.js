@@ -4,7 +4,7 @@ var Rocket;
 	'use strict';
 	Rocket.devkit_WebApiApi = function (e) {
 		var EMPTY_STRING = '';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity) {
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
             var f = '@OData.Community.Display.V1.FormattedValue';
             var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
             var property = {};
@@ -18,6 +18,9 @@ var Rocket;
                     }
                     return EMPTY_STRING;
                 }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';');
+                }
                 return entity[logicalName + f];
             };
             var getValue = function () {
@@ -29,6 +32,9 @@ var Rocket;
                         return entity[logicalName];
                     }
                     return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',');
                 }
                 return entity[logicalName];
             };
@@ -62,6 +68,7 @@ var Rocket;
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			devkit_CalculatedSingleOptionSetCalculated: { a: 'devkit_calculatedsingleoptionsetcalculated', r: true },
+			devkit_MultiOptionSetCode: { a: 'devkit_multioptionsetcode', f: true },
 			devkit_Name: { a: 'devkit_name' },
 			devkit_SingleOptionSetCode: { a: 'devkit_singleoptionsetcode' },
 			devkit_WebApiId: { a: 'devkit_webapiid' },
@@ -93,8 +100,9 @@ var Rocket;
 			var b = devkit_webapi[field].b;
 			var c = devkit_webapi[field].c;
 			var d = devkit_webapi[field].d;
+			var f = devkit_webapi[field].f;
 			var r = devkit_webapi[field].r;
-			devkit_webapi[field] = webApiField(e, a, b, c, d, r, u);
+			devkit_webapi[field] = webApiField(e, a, b, c, d, r, u, f);
 		}
 		devkit_webapi.Entity = u;
 		devkit_webapi.EntityName = 'devkit_webapi';

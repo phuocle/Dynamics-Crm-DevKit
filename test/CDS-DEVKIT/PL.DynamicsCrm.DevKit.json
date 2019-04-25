@@ -3,7 +3,7 @@
   "DefaultNetVersion": "4.6.2",
   "DefaultCrmName": "Dynamics 365",
   "DefaultCrmConnection": "DEVKIT",
-  "SolutionPrefix":null,
+  "SolutionPrefix": "devkit_",
   "CrmConnections": [
     {
       "Name": "DEVKIT",
@@ -11,5 +11,6 @@
       "UserName": "devkit@crmgridplus.com",
       "Password": "6nsOvMN2+a0tj7XiT1ipLKYsZLgYDyayjRIZequzUis="
     }
-  ]
+  ],
+  "UseTypeScriptDeclaration": "true"
 }

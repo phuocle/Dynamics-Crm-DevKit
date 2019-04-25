@@ -974,6 +974,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Close();
         }
 
+        public string UseTypeScriptDeclaration { get; set; }
+
         private void btnOk_Click(object sender, EventArgs e)
         {
             if (cboCrmName.Visible && cboCrmName.Enabled && cboCrmName.Text.Length == 0)
@@ -997,7 +999,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 return;
             }
 
+
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+            UseTypeScriptDeclaration = config.UseTypeScriptDeclaration;
             config.DefaultCrmName = cboCrmName.Text;
             config.DefaultCrmVersion = cboCrmVersion.Text;
             config.DefaultNetVersion = NetVersion;
@@ -1050,7 +1054,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 btnCancel.Enabled = false;
                 chkOthers.Enabled = false;
                 var entityName = lblProjectName.Text;
-                var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+                var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+                var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+                var file = File.Exists(file2) ? file2 : file1;
                 if (!File.Exists(file))
                 {
                     MessageBox.Show($@"File not found: {file}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

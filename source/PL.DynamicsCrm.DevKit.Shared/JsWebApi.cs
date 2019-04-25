@@ -151,6 +151,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
                 }
+                else if (crmAttribute.IsMultiSelectPicklist)
+                {
+                    webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: \"{crmAttribute.LogicalName}\", f: true }},\r\n";
+                }
                 else if (crmAttribute.FieldType == AttributeTypeCode.DateTime)
                 {
                     if (crmAttribute.DateTimeBehavior == DateTimeBehavior.DateOnly)
@@ -220,8 +224,9 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t\tvar b = {@class}[field].b;\r\n";
             webApiCode += $"\t\t\tvar c = {@class}[field].c;\r\n";
             webApiCode += $"\t\t\tvar d = {@class}[field].d;\r\n";
+            webApiCode += $"\t\t\tvar f = {@class}[field].f;\r\n";
             webApiCode += $"\t\t\tvar r = {@class}[field].r;\r\n";
-            webApiCode += $"\t\t\t{@class}[field] = webApiField(e, a, b, c, d, r, u);\r\n";
+            webApiCode += $"\t\t\t{@class}[field] = webApiField(e, a, b, c, d, r, u, f);\r\n";
             webApiCode += $"\t\t}}\r\n";
             webApiCode += $"\t\t{@class}.Entity = u;\r\n";
             webApiCode += $"\t\t{@class}.EntityName = \"{@class}\";\r\n";
@@ -230,7 +235,6 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t{@class}.OptionSet = optionSet;\r\n";
             webApiCode += $"\t\treturn {@class};\r\n";
             webApiCode += $"\t}};\r\n";
-
             webApiCode += $"}})({ProjectName} || ({ProjectName} = {{}}));";
             webApiCode = webApiCode.Replace("\"", "'");
             webApiCode = webApiCode.Replace("'*'", "\"*\"");
@@ -241,7 +245,6 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 webApiCode = webApiCode.Replace("'*'", "\"*\"");
             }
             WebApiCode = webApiCode;
-
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)
                 if (CheckedItems.Contains($"{form.Name}"))
@@ -411,7 +414,18 @@ namespace PL.DynamicsCrm.DevKit.Shared
         }
         private string GetIntellisense2(List<SystemForm> processForms, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
         {
-            return "///";
+            var jsIntellisense = new JsIntellisense2(CrmService)
+            {
+                ProcessForms = processForms,
+                IsDebugForm = isDebugForm,
+                IsDebugWebApi = isDebugWebApi,
+                IsJsWebApi = isJsWebApi,
+                ProjectName = ProjectName,
+                EntityName = EntityName,
+                Fields = Fields,
+                Processes = Processes
+            };
+            return jsIntellisense.Intellisense;
         }
     }
 }

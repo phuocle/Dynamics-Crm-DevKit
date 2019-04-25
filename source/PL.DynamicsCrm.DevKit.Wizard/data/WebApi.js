@@ -1,4 +1,4 @@
-﻿        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity) {
+﻿        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
             var f = '@OData.Community.Display.V1.FormattedValue';
             var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
             var property = {};
@@ -12,6 +12,9 @@
                     }
                     return EMPTY_STRING;
                 }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';');
+                }
                 return entity[logicalName + f];
             };
             var getValue = function () {
@@ -23,6 +26,9 @@
                         return entity[logicalName];
                     }
                     return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',');
                 }
                 return entity[logicalName];
             };
