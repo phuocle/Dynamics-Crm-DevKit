@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Bizz.Rocket.Shared", "Bizz.Rocket.Shared\Bizz.Rocket.Shared.shproj", "{4D79A87A-8A34-49F4-9895-9E1F5D75F2A9}"
 EndProject
@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
 		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
+		ReadMe.txt = ReadMe.txt
 	EndProjectSection
 EndProject
 Global

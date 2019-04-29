@@ -151,7 +151,6 @@
             value: string;
         }
 
-        /**  Return an object WebApiClient.RetrieveRequest */
         class RetrieveRequest {
             constructor();
             /** The entity name. */
@@ -175,5 +174,13 @@
             /** Default false, there is support for sending multiple requests as a batch */
             asBatch: boolean;
         }
+        class RetrieveResponse {
+            constructor();
+            value: Array<object>;
+        }
     }
+}
+
+declare namespace WebApiClient {
+    function Retrieve(request: Rocket.WebApi.RetrieveRequest): Rocket.WebApi.RetrieveResponse;
 }

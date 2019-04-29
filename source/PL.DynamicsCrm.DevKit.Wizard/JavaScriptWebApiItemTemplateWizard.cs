@@ -36,13 +36,13 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             WebApiCodeProjectItem = projectItem.FileNames[0];
             CreateWebApiCode();
             _formProjectItem.ProjectItems.AddFromFile(WebApiCodeProjectItem);
-            if (GeneratedJsWebApiCodeIntellisenseTypeScript.Length == 0)
+            if (GeneratedJsWebApiCodeIntellisenseTypeScript == null)
             {
-                _formProjectItem.ProjectItems.AddFromFile(GeneratedJsWebApiCodeIntellisense);
+                _formProjectItem.ProjectItems.AddFromFile(WebApiCodeIntellisenseProjectItem);
             }
             else
             {
-                _formProjectItem.ProjectItems.AddFromFile(GeneratedJsWebApiCodeIntellisenseTypeScript);
+                _formProjectItem.ProjectItems.AddFromFile(WebApiCodeIntellisenseProjectItemTypeScript);
             }
             projectItem.ContainingProject.Save();
         }
@@ -115,13 +115,13 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private void CreateWebApiCodeIntellisense()
         {
-            if (GeneratedJsWebApiCodeIntellisense.Length == 0)
+            if (GeneratedJsWebApiCodeIntellisense == null)
             {
                 if (!File.Exists(WebApiCodeIntellisenseProjectItem)) return;
                 var fileName = Path.GetFileName(WebApiCodeIntellisenseProjectItem);
                 var projectItem = GetFormProjectItem(fileName);
                 if (projectItem != null) projectItem.Remove();
-                Utility.TryDeleteFile(GeneratedJsWebApiCodeIntellisense);
+                Utility.TryDeleteFile(WebApiCodeIntellisenseProjectItem);
             }
             else
                 File.WriteAllText(WebApiCodeIntellisenseProjectItem, GeneratedJsWebApiCodeIntellisense, System.Text.Encoding.UTF8);
@@ -129,7 +129,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private void CreateWebApiCodeIntellisenseTypeScript()
         {
-            if (GeneratedJsWebApiCodeIntellisenseTypeScript.Length == 0)
+            if (GeneratedJsWebApiCodeIntellisenseTypeScript == null)
             {
                 if (!File.Exists(WebApiCodeIntellisenseProjectItemTypeScript)) return;
                 var fileName = Path.GetFileName(WebApiCodeIntellisenseProjectItemTypeScript);
