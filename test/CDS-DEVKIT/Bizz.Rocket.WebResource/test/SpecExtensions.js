@@ -1,12 +1,16 @@
 ﻿beforeEach(function () {
     jasmine.addMatchers({
-        demoExtension: function () {
+        toStartsWith: function () {
             return {
                 compare: function (actual, expected) {
-                    var component = actual;
-                    return {
-                        pass: typeof (component) !== "undefined"
-                    };
+                    var value = false;
+                    if (actual === undefined || actual === null) {
+                        value = false;
+                    }
+                    else {
+                        value = actual.slice(0, expected.length) === expected;
+                    }
+                    return { pass: value }
                 }
             };
         }

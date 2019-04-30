@@ -66,6 +66,8 @@ declare namespace Rocket {
 		EntityCollectionName: string;
 		/** A collection OptionSet of devkit_WebApi enttiy */
 		OptionSet: devkit_WebApiOptionSet;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
 		/** ReadOnly - Unique identifier of the user who created the record. */
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly */

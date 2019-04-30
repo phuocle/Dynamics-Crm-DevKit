@@ -176,6 +176,16 @@
         }
         class RetrieveResponse {
             constructor();
+            "@odata.context": string;
+            /** Use the value of the @odata.nextLink property to request the next set of records. Don’t change or append any additional system query options to the value */
+            "@odata.nextLink": string;
+            "@odata.count": number;
+            /** A paging cookie must be requested as an annotation. And a @Microsoft.Dynamics.CRM.fetchxmlpagingcookie property will be returned with the result */
+            "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": string;
+            "@Microsoft.Dynamics.CRM.morerecords": boolean;
+            /** When you set returntotalrecordcount="true" in FetchXml, this value return the count */
+            "@Microsoft.Dynamics.CRM.totalrecordcount": number;
+            "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": boolean;
             value: Array<object>;
         }
     }

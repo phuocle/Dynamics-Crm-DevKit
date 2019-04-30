@@ -99,6 +99,8 @@ namespace PL.DynamicsCrm.DevKit.Shared
             _d_ts += $"\t\tEntityCollectionName: string;\r\n";
             _d_ts += $"\t\t/** A collection OptionSet of {Class} enttiy */\r\n";
             _d_ts += $"\t\tOptionSet: {Class}OptionSet;\r\n";
+            _d_ts += $"\t\t/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */\r\n";
+            _d_ts += $"\t\t\"@odata.etag\": string;\r\n";
             foreach (var crmAttribute in Fields)
             {
                 if (crmAttribute.FieldType == AttributeTypeCode.Virtual && !crmAttribute.IsMultiSelectPicklist) continue;

@@ -231,6 +231,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t{@class}.Entity = u;\r\n";
             webApiCode += $"\t\t{@class}.EntityName = \"{@class}\";\r\n";
             webApiCode += $"\t\t{@class}.EntityCollectionName = \"{GetLogicalCollectionName(@class)}\";\r\n";
+            webApiCode += $"\t\t{@class}[\"@odata.etag\"] = e[\"@odata.etag\"];\r\n";
             webApiCode += JsOptionSetFormCode;
             webApiCode += $"\t\t{@class}.OptionSet = optionSet;\r\n";
             webApiCode += $"\t\treturn {@class};\r\n";

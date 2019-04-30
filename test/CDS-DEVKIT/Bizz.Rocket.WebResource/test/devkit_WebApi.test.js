@@ -53,6 +53,7 @@ describe("devkit_WebApi.test", function () {
                 "@Microsoft.Dynamics.CRM.morerecords": false,
                 "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": "<cookie pagenumber=\"1\" pagingcookie=\"%3ccookie%20page%3d%221%22%3e%3cstatuscodename%20last%3d%22Active%22%20first%3d%22Active%22%20%2f%3e%3cdevkit_webapiid%20last%3d%22%7bD7F649CA-D864-E911-A991-000D3A802AB7%7d%22%20first%3d%22%7bD7F649CA-D864-E911-A991-000D3A802AB7%7d%22%20%2f%3e%3c%2fcookie%3e\" istracking=\"False\" />",
                 "value": [{
+                    "@odata.etag": "W/\"569129\"",
                     "statecode@OData.Community.Display.V1.FormattedValue": "Active",
                     "statecode": 0,
                     "devkit_webapiid": "d7f649ca-d864-e911-a991-000d3a802ab7",
@@ -115,6 +116,16 @@ describe("devkit_WebApi.test", function () {
             expect(webapi.devkit_MultiOptionSetCode.FormattedValue[0].trim()).toEqual("Crm 4");
             expect(webapi.devkit_MultiOptionSetCode.FormattedValue[1].trim()).toEqual("Crm 2011");
             expect(webapi.devkit_MultiOptionSetCode.FormattedValue[2].trim()).toEqual("Crm 2013");
+            expect(webapi["@odata.etag"]).not.toBeUndefined();
+
+            expect(res.value.length).toBeGreaterThan(0);
+            expect(res["@odata.context"]).toStartsWith(fakeUrl);
+            expect(parseInt(res["@Microsoft.Dynamics.CRM.totalrecordcount"])).toEqual(-1);
+            expect(res["@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.morerecords"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"]).not.toBeNull();
+            expect(res["@odata.nextLink"]).toBeUndefined();
+            expect(res["@odata.count"]).toBeUndefined();
         });
     });
 });
