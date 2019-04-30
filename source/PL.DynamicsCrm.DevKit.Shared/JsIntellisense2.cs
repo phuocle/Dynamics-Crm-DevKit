@@ -91,6 +91,17 @@ namespace PL.DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             _d_ts += $"\tclass {Class}Api {{\r\n";
             _d_ts += $"\t\tconstructor(entity?: object);\r\n";
+            _d_ts += $"\t\t/**\r\n";
+            _d_ts += $"\t\t * Get the value of alias\r\n";
+            _d_ts += $"\t\t * @param alias the alias value\r\n";
+            _d_ts += $"\t\t * @param isMultiOptionSet true if the alias is multi optionset\r\n";
+            _d_ts += $"\t\t */\r\n";
+            _d_ts += $"\t\tgetAliasedValue(alias: string, isMultiOptionSet?: boolean): object;\r\n";
+            _d_ts += $"\t\t/**\r\n";
+            _d_ts += $"\t\t * Get the formatted value of alias\r\n";
+            _d_ts += $"\t\t * @param alias the alias value\r\n";
+            _d_ts += $"\t\t */\r\n";
+            _d_ts += $"\t\tgetAliasedFormattedValue(alias: string): string;\r\n";
             _d_ts += $"\t\t/** The entity of ODATA */\r\n";
             _d_ts += $"\t\tEntity: object;\r\n";
             _d_ts += $"\t\t/** The entity name */\r\n";

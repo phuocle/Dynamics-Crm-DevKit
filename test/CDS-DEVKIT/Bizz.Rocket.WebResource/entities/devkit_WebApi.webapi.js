@@ -19,7 +19,7 @@ var Rocket;
                     return EMPTY_STRING;
                 }
                 if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';');
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
                 }
                 return entity[logicalName + f];
             };
@@ -34,7 +34,7 @@ var Rocket;
                     return null;
                 }
                 if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',');
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
                 }
                 return entity[logicalName];
             };
@@ -69,6 +69,7 @@ var Rocket;
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			devkit_DateOnlyDateOnly_DateOnly: { a: 'devkit_dateonlydateonly' },
 			devkit_DateOnlyDateOnlyCalculated_DateOnly: { a: 'devkit_dateonlydateonlycalculated', r: true },
+			devkit_LinkWebApiId: { b: 'devkit_LinkWebApiId', a: '_devkit_linkwebapiid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			devkit_MultiOptionSetCode: { a: 'devkit_multioptionsetcode', f: true },
 			devkit_Name: { a: 'devkit_name' },
 			devkit_ParentWebApiId: { b: 'devkit_ParentWebApiId', a: '_devkit_parentwebapiid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
@@ -107,11 +108,6 @@ var Rocket;
 			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' },
 			VersionNumber: { a: 'versionnumber', r: true }
 		};
-		if (arguments.length > 1) {
-			for (var i = 1; i < arguments.length; i++) {
-				Object.assign(devkit_webapi, arguments[i]);
-			}
-		}
 		if (e === undefined) e = {};
 		var u = {};
 		for (var field in devkit_webapi) {
@@ -154,6 +150,18 @@ var Rocket;
 			}
 		};
 		devkit_webapi.OptionSet = optionSet;
+		devkit_webapi.getAliasedValue = function (alias, isMultiOptionSet) {
+			if (e[alias] === undefined || e[alias] === null) {
+				return null;
+			}
+			if (isMultiOptionSet) {
+				return e[alias].toString().split(',').map(function (item) { return parseInt(item, 10); });
+			}
+			return e[alias];
+		}
+		devkit_webapi.getAliasedFormattedValue = function (alias) {
+			return e[alias];
+		}
 		return devkit_webapi;
 	};
 })(Rocket || (Rocket = {}));

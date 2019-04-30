@@ -212,11 +212,11 @@ namespace PL.DynamicsCrm.DevKit.Shared
             }
             webApiCode = webApiCode.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             webApiCode += $"\t\t}};\r\n";
-            webApiCode += $"\t\tif (arguments.length > 1) {{\r\n";
-            webApiCode += $"\t\t\tfor (var i = 1; i < arguments.length; i++) {{\r\n";
-            webApiCode += $"\t\t\t\tObject.assign({@class}, arguments[i]);\r\n";
-            webApiCode += $"\t\t\t}}\r\n";
-            webApiCode += $"\t\t}}\r\n";
+            //webApiCode += $"\t\tif (arguments.length > 1) {{\r\n";
+            //webApiCode += $"\t\t\tfor (var i = 1; i < arguments.length; i++) {{\r\n";
+            //webApiCode += $"\t\t\t\tObject.assign({@class}, arguments[i]);\r\n";
+            //webApiCode += $"\t\t\t}}\r\n";
+            //webApiCode += $"\t\t}}\r\n";
             webApiCode += $"\t\tif (e === undefined) e = {{}};\r\n";
             webApiCode += $"\t\tvar u = {{}};\r\n";
             webApiCode += $"\t\tfor (var field in {@class}) {{\r\n";
@@ -234,6 +234,20 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t{@class}[\"@odata.etag\"] = e[\"@odata.etag\"];\r\n";
             webApiCode += JsOptionSetFormCode;
             webApiCode += $"\t\t{@class}.OptionSet = optionSet;\r\n";
+
+            webApiCode += $"\t\t{@class}.getAliasedValue = function (alias, isMultiOptionSet) {{\r\n";
+            webApiCode += $"\t\t\tif (e[alias] === undefined || e[alias] === null) {{\r\n";
+            webApiCode += $"\t\t\t\treturn null;\r\n";
+            webApiCode += $"\t\t\t}}\r\n";
+            webApiCode += $"\t\t\tif (isMultiOptionSet) {{\r\n";
+            webApiCode += $"\t\t\t\treturn e[alias].toString().split(',').map(function (item) {{ return parseInt(item, 10); }});\r\n";
+            webApiCode += $"\t\t\t}}\r\n";
+            webApiCode += $"\t\t\treturn e[alias];\r\n";
+            webApiCode += $"\t\t}}\r\n";
+            webApiCode += $"\t\t{@class}.getAliasedFormattedValue = function (alias) {{\r\n";
+            webApiCode += $"\t\t\treturn e[alias];\r\n";
+            webApiCode += $"\t\t}}\r\n";
+
             webApiCode += $"\t\treturn {@class};\r\n";
             webApiCode += $"\t}};\r\n";
             webApiCode += $"}})({ProjectName} || ({ProjectName} = {{}}));";

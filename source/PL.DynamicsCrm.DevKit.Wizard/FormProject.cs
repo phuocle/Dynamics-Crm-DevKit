@@ -16,6 +16,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 {
     public partial class FormProject : Form
     {
+        private DevKitCrmConfig Config = null;
         private NuGetHelper nuget = null;
 
         private FormType _formType;
@@ -28,16 +29,16 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             InitializeComponent();
 
             DTE = dte;
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+            Config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
             nuget = new NuGetHelper();
             cboCrmName.DataSource = nuget.CrmNameDataSource;
-            if (!string.IsNullOrEmpty(config.DefaultCrmName))
+            if (!string.IsNullOrEmpty(Config.DefaultCrmName))
             {
-                cboCrmName.Text = config.DefaultCrmName;
+                cboCrmName.Text = Config.DefaultCrmName;
                 cboCrmName_SelectedIndexChanged(null, null);
-                if (!string.IsNullOrEmpty(config.DefaultCrmVersion))
+                if (!string.IsNullOrEmpty(Config.DefaultCrmVersion))
                 {
-                    cboCrmVersion.Text = config.DefaultCrmVersion;
+                    cboCrmVersion.Text = Config.DefaultCrmVersion;
                     cboCrmVersion_SelectedIndexChanged(null, null);
                 }
             }
@@ -999,13 +1000,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 return;
             }
 
-
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            UseTypeScriptDeclaration = config.UseTypeScriptDeclaration;
-            config.DefaultCrmName = cboCrmName.Text;
-            config.DefaultCrmVersion = cboCrmVersion.Text;
-            config.DefaultNetVersion = NetVersion;
-            DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
+            UseTypeScriptDeclaration = Config.UseTypeScriptDeclaration;
+            Config.DefaultCrmName = cboCrmName.Text;
+            Config.DefaultCrmVersion = cboCrmVersion.Text;
+            Config.DefaultNetVersion = NetVersion;
+            DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
 
             if (FormType == FormType.Console ||
                 FormType == FormType.CustomAction ||
@@ -1390,7 +1389,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 if (FormType == FormType.JsWebApiItem)
                 {
                     var file = string.Empty;
-                    if (this.UseTypeScriptDeclaration == "true")
+                    if (Config.UseTypeScriptDeclaration == "true")
                         file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{cboEntity.Text}.d.ts";
                     else
                         file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{cboEntity.Text}.intellisense.js";

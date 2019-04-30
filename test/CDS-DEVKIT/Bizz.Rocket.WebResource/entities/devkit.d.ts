@@ -1,41 +1,41 @@
 ﻿declare namespace Rocket {
     module WebApi {
-        type Guid = object
-        type DateOnly = string;
-        type DateAndTime = string;
         interface OptionSetValue {
-            /** The string value of integer type. Use parseInt(...) to get the integer */
+            /** The optionset item value - integer type */
             Value: number;
-            /** The string formatted value */
+            /** The optionset label text - string type */
             FormattedValue: string;
         }
         interface MultiOptionSetValue {
-            /** The array string of integer type. Use parseInt(...) to get the integer for each item */
+            /** The array optionset item value - array of integer type */
             Value: Array<number>;
-            /** The array string formatted value */
+            /** The array optionset label text - array of string type */
             FormattedValue: Array<string>;
         }
+
+
+
         interface LookupValue {
             /** The object value of field */
-            Value: Guid;
+            Value: string;
             /** The string formatted value of field */
             FormattedValue: string;
         }
         interface CustomerValue {
             /** The object value of field*/
-            Value: Guid;
+            Value: string;
             /** The string formatted value of field*/
             FormattedValue: string;
         }
         interface OwnerUserValue {
             /** The object value of field */
-            Value: Guid;
+            Value: string;
             /** The string formatted value of field */
             FormattedValue: string;
         }
         interface OwnerTeamValue {
             /** The object value of field */
-            Value: Guid;
+            Value: string;
             /** The string formatted value of field */
             FormattedValue: string;
         }
@@ -53,31 +53,31 @@
         }
         interface DateOnlyValue {
             /** The object value of field */
-            Value: DateOnly;
+            Value: string;
             /** The string formatted value of field */
             FormattedValue: string;
         }
         interface TimezoneDateOnlyValue {
             /** The object value of field */
-            Value: DateOnly;
+            Value: string;
             /** The string formatted value of field */
             FormattedValue: string;
         }
         interface TimezoneDateAndTimeValue {
             /** The object value of field */
-            Value: DateAndTime;
+            Value: string;
             /** The string formatted value of field */
             FormattedValue: string;
         }
         interface UtcDateOnlyValue {
             /** The object value of field */
-            Value: DateOnly;
+            Value: string;
             /** The string formatted value of field */
             FormattedValue: string;
         }
         interface UtcDateAndTimeValue {
             /** The object value of field */
-            Value: DateAndTime;
+            Value: string;
             /** The string formatted value of field */
             FormattedValue: string;
         }
@@ -113,7 +113,7 @@
         }
         interface GuidValue {
             /** The object value of field */
-            Value: Guid;
+            Value: string;
             /** The string formatted value of field */
             FormattedValue: string;
         }

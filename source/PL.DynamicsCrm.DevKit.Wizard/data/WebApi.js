@@ -13,7 +13,7 @@
                     return EMPTY_STRING;
                 }
                 if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';');
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
                 }
                 return entity[logicalName + f];
             };
@@ -28,7 +28,7 @@
                     return null;
                 }
                 if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',');
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
                 }
                 return entity[logicalName];
             };

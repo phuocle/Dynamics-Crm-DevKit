@@ -58,6 +58,17 @@ declare namespace Rocket {
 	}
 	class devkit_WebApiApi {
 		constructor(entity?: object);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi optionset
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): object;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 */
+		getAliasedFormattedValue(alias: string): string;
 		/** The entity of ODATA */
 		Entity: object;
 		/** The entity name */
@@ -85,6 +96,9 @@ declare namespace Rocket {
 		devkit_DateOnlyDateOnly_DateOnly: WebApi.DateOnlyValue;
 		/** ReadOnly */
 		devkit_DateOnlyDateOnlyCalculated_DateOnly: WebApi.DateOnlyValue;
+		devkit_LinkWebApiId: WebApi.LookupValue;
+		/** ReadOnly */
+		devkit_LinkWebApiIdName: WebApi.StringValue;
 		devkit_MultiOptionSetCode: WebApi.MultiOptionSetValue;
 		/** The name of the custom entity. */
 		devkit_Name: WebApi.StringValue;

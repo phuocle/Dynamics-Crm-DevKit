@@ -34,6 +34,15 @@ var formWebApi = (function () {
             "    <filter type='and'>",
             "      <condition attribute='devkit_name' operator='like' value='", fetchData.devkit_name, "'/>",
             "    </filter>",
+            "    <link-entity name='devkit_webapi' from='devkit_webapiid' to='devkit_linkwebapiid' visible='false' link-type='outer' alias='a'>",
+            "      <attribute name='devkit_singleoptionsetcode'/>",
+            "      <attribute name='devkit_multioptionsetcode'/>",
+            "      <attribute name='devkit_yesandnocalculated'/>",
+            "      <attribute name='devkit_yesandno'/>",
+            "      <attribute name='statuscode'/>",
+            "      <attribute name='statecode'/>",
+            "      <attribute name='devkit_singleoptionsetcodecalculated'/>",
+            "    </link-entity>",
             "  </entity>",
             "</fetch>",
         ].join("");
@@ -43,6 +52,7 @@ var formWebApi = (function () {
         req.async = false;
         var res = WebApiClient.Retrieve(req);
         var api = new Rocket.devkit_WebApiApi(res.value[0]);
+        console.log(JSON.stringify(res));
         debugger;
     }
 	return {

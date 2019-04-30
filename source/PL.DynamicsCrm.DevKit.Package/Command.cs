@@ -47,6 +47,7 @@ namespace PL.DynamicsCrm.DevKit.Package
         public static readonly Guid CommandSetPlugin = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8be");
         public static readonly Guid CommandSetReport = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bd");
 
+        private static DevKitCrmConfig Config = null;
         private static IMenuCommandService MenuService;
         private static DTE Dte;
 
@@ -155,8 +156,8 @@ namespace PL.DynamicsCrm.DevKit.Package
                 var fInfo = new FileInfo(solutionFullName);
                 var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
                 Dte.StatusBar.Text = "Reading PL.DynamicsCrm.DevKit.json config";
-                var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
-                var defaultConnection = config.CrmConnections.Where(conn => conn.Name == config.DefaultCrmConnection).FirstOrDefault();
+                if (Config == null) Config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
+                var defaultConnection = Config.CrmConnections.Where(conn => conn.Name == Config.DefaultCrmConnection).FirstOrDefault();
                 if (defaultConnection == null)
                 {
                     Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
@@ -667,8 +668,8 @@ namespace PL.DynamicsCrm.DevKit.Package
             var fInfo = new FileInfo(solutionFullName);
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
             Dte.StatusBar.Text = "Reading PL.DynamicsCrm.DevKit.json config";
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
-            var defaultConnection = config.CrmConnections.Where(conn => conn.Name == config.DefaultCrmConnection).FirstOrDefault();
+            if (Config == null) Config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
+            var defaultConnection = Config.CrmConnections.Where(conn => conn.Name == Config.DefaultCrmConnection).FirstOrDefault();
             Dte.StatusBar.Text = "Connecting to Dynamics 365";
             if (defaultConnection == null)
             {
@@ -677,7 +678,7 @@ namespace PL.DynamicsCrm.DevKit.Package
                 MessageBox.Show("Default Crm connection not found!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (config.SolutionPrefix == null)
+            if (Config.SolutionPrefix == null)
             {
                 Dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
                 Dte.StatusBar.Text = "   !!! Connection to Dynamics 365 failed   !!!   ";
@@ -711,7 +712,7 @@ namespace PL.DynamicsCrm.DevKit.Package
             var condition = string.Empty;
             for (var i = 1; i < parts.Length; i++)
             {
-                var value = $"{config.SolutionPrefix}/{parts[i]}/";
+                var value = $"{Config.SolutionPrefix}/{parts[i]}/";
                 for (var j = i + 1; j < parts.Length; j++)
                     value += $"{parts[j]}/";
                 if (value.EndsWith("/")) value = value.TrimEnd("/".ToCharArray());
