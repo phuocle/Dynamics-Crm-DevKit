@@ -186,6 +186,7 @@
             /** When you set returntotalrecordcount="true" in FetchXml, this value return the count */
             "@Microsoft.Dynamics.CRM.totalrecordcount": number;
             "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": boolean;
+            /** An array object of ODATA value*/
             value: Array<object>;
         }
     }

@@ -162,7 +162,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     else if (crmAttribute.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                     {
                         if (crmAttribute.DateTimeFormat == DateTimeFormat.DateOnly)
-                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_TimezoneDateOnly: {{ L=a: \"{crmAttribute.LogicalName}\" }},\r\n";
+                            webApiCode += $"\t\t\t{crmAttribute.SchemaName}_TimezoneDateOnly: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
                         else
                             webApiCode += $"\t\t\t{crmAttribute.SchemaName}_TimezoneDateAndTime: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
                     }

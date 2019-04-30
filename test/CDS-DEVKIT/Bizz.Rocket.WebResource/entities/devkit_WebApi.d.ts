@@ -82,14 +82,47 @@ declare namespace Rocket {
 		CreatedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
+		devkit_DateOnlyDateOnly_DateOnly: WebApi.DateOnlyValue;
+		/** ReadOnly */
+		devkit_DateOnlyDateOnlyCalculated_DateOnly: WebApi.DateOnlyValue;
 		devkit_MultiOptionSetCode: WebApi.MultiOptionSetValue;
 		/** The name of the custom entity. */
 		devkit_Name: WebApi.StringValue;
+		devkit_ParentWebApiId: WebApi.LookupValue;
+		/** ReadOnly */
+		devkit_ParentWebApiIdName: WebApi.StringValue;
 		devkit_SingleOptionSetCode: WebApi.OptionSetValue;
 		/** ReadOnly */
 		devkit_SingleOptionSetCodeCalculated: WebApi.OptionSetValue;
+		devkit_TimeZoneDateAndTime_TimezoneDateAndTime: WebApi.TimezoneDateAndTimeValue;
+		/** ReadOnly */
+		devkit_TimeZoneDateAndTimeCalculated_TimezoneDateAndTime: WebApi.TimezoneDateAndTimeValue;
+		devkit_TimeZoneDateOnly_TimezoneDateOnly: WebApi.TimezoneDateOnlyValue;
+		/** ReadOnly */
+		devkit_TimeZoneDateOnlyCalculated_TimezoneDateOnly: WebApi.TimezoneDateOnlyValue;
+		devkit_UserLocalDateAndTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** ReadOnly */
+		devkit_UserLocalDateAndTimeCalculated_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** ReadOnly */
+		devkit_UserLocalDateAndTimeRollup_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** ReadOnly - Last Updated time of rollup field User Local Date And Time Rollup. */
+		devkit_UserLocalDateAndTimeRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** ReadOnly - State of rollup field User Local Date And Time Rollup. */
+		devkit_UserLocalDateAndTimeRollup_State: WebApi.IntegerValue;
+		devkit_UserLocalDateOnly_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		/** ReadOnly */
+		devkit_UserLocalDateOnlyCalculated_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		/** ReadOnly */
+		devkit_UserLocalDateOnlyRollup_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		/** ReadOnly - Last Updated time of rollup field User Local Date Only Rollup. */
+		devkit_UserLocalDateOnlyRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** ReadOnly - State of rollup field User Local Date Only Rollup. */
+		devkit_UserLocalDateOnlyRollup_State: WebApi.IntegerValue;
 		/** Unique identifier for entity instances */
 		devkit_WebApiId: WebApi.GuidValue;
+		devkit_YesAndNo: WebApi.BooleanValue;
+		/** ReadOnly */
+		devkit_YesAndNoCalculated: WebApi.BooleanValue;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: WebApi.IntegerValue;
 		/** ReadOnly - Unique identifier of the user who modified the record. */
@@ -136,4 +169,4 @@ declare namespace Rocket {
 		VersionNumber: WebApi.BigIntValue;
 	}
 }
-//{'JsForm':['WebApi'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['WebApi'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

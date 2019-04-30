@@ -1389,7 +1389,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             {
                 if (FormType == FormType.JsWebApiItem)
                 {
-                    var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{cboEntity.Text}.intellisense.js";
+                    var file = string.Empty;
+                    if (this.UseTypeScriptDeclaration == "true")
+                        file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{cboEntity.Text}.d.ts";
+                    else
+                        file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{cboEntity.Text}.intellisense.js";
                     if (File.Exists(file))
                     {
                         try
