@@ -67,8 +67,9 @@ declare namespace Rocket {
 		/**
 		 * Get the formatted value of alias
 		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi optionset
 		 */
-		getAliasedFormattedValue(alias: string): string;
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
 		/** The entity of ODATA */
 		Entity: object;
 		/** The entity name */

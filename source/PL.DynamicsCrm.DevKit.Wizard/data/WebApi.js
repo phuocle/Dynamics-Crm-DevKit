@@ -1,5 +1,4 @@
 ﻿        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var f = '@OData.Community.Display.V1.FormattedValue';
             var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
             var property = {};
             var getFormattedValue = function () {

@@ -128,6 +128,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t'use strict';\r\n";
             webApiCode += $"\t{ProjectName}.{Class}Api = function (e) {{\r\n";
             webApiCode += $"\t\tvar EMPTY_STRING = '';\r\n";
+            webApiCode += $"\t\tvar f = '@OData.Community.Display.V1.FormattedValue';\r\n";
             var webapi = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.WebApi.js");
             webApiCode += webapi;
             webApiCode += $"\t\tvar {@class} = {{\r\n";
@@ -153,7 +154,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 }
                 else if (crmAttribute.IsMultiSelectPicklist)
                 {
-                    webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: \"{crmAttribute.LogicalName}\", f: true }},\r\n";
+                    webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: \"{crmAttribute.LogicalName}\", g: true }},\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.DateTime)
                 {
@@ -224,9 +225,9 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t\tvar b = {@class}[field].b;\r\n";
             webApiCode += $"\t\t\tvar c = {@class}[field].c;\r\n";
             webApiCode += $"\t\t\tvar d = {@class}[field].d;\r\n";
-            webApiCode += $"\t\t\tvar f = {@class}[field].f;\r\n";
+            webApiCode += $"\t\t\tvar g = {@class}[field].g;\r\n";
             webApiCode += $"\t\t\tvar r = {@class}[field].r;\r\n";
-            webApiCode += $"\t\t\t{@class}[field] = webApiField(e, a, b, c, d, r, u, f);\r\n";
+            webApiCode += $"\t\t\t{@class}[field] = webApiField(e, a, b, c, d, r, u, g);\r\n";
             webApiCode += $"\t\t}}\r\n";
             webApiCode += $"\t\t{@class}.Entity = u;\r\n";
             webApiCode += $"\t\t{@class}.EntityName = \"{@class}\";\r\n";
@@ -244,10 +245,15 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t\t}}\r\n";
             webApiCode += $"\t\t\treturn e[alias];\r\n";
             webApiCode += $"\t\t}}\r\n";
-            webApiCode += $"\t\t{@class}.getAliasedFormattedValue = function (alias) {{\r\n";
-            webApiCode += $"\t\t\treturn e[alias];\r\n";
+            webApiCode += $"\t\t{@class}.getAliasedFormattedValue = function (alias, isMultiOptionSet) {{\r\n";
+            webApiCode += $"\t\t\tif (e[alias + f] === undefined || e[alias + f] === null) {{\r\n";
+            webApiCode += $"\t\t\t\treturn EMPTY_STRING;\r\n";
+            webApiCode += $"\t\t\t}}\r\n";
+            webApiCode += $"\t\t\tif (isMultiOptionSet) {{\r\n";
+            webApiCode += $"\t\t\t\treturn e[alias + f].toString().split(';').map(function (item) {{ return item.trim(); }});\r\n";
+            webApiCode += $"\t\t\t}}\r\n";
+            webApiCode += $"\t\t\treturn e[alias + f];\r\n";
             webApiCode += $"\t\t}}\r\n";
-
             webApiCode += $"\t\treturn {@class};\r\n";
             webApiCode += $"\t}};\r\n";
             webApiCode += $"}})({ProjectName} || ({ProjectName} = {{}}));";

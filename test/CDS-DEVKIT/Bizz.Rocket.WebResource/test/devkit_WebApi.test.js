@@ -159,14 +159,17 @@ describe("devkit_WebApi.test", function () {
             expect(webapi.devkit_YesAndNo.FormattedValue).toEqual("Yes");
             expect(webapi.devkit_YesAndNoCalculated.Value).toBeTruthy();
             expect(webapi.devkit_YesAndNoCalculated.FormattedValue).toEqual("Yes");
-
             expect(webapi.getAliasedValue("a.devkit_singleoptionsetcode")).toEqual(100000000);
             var multi = webapi.getAliasedValue("a.devkit_multioptionsetcode", true);
             expect(multi.length).toEqual(3);
             expect(multi[0]).toEqual(100000000);
             expect(multi[1]).toEqual(100000001);
             expect(multi[2]).toEqual(100000002);
-
+            var multi2 = webapi.getAliasedFormattedValue("a.devkit_multioptionsetcode", true);
+            expect(multi2.length).toEqual(3);
+            expect(multi2[0]).toEqual("Crm 4");
+            expect(multi2[1]).toEqual("Crm 2011");
+            expect(multi2[2]).toEqual("Crm 2013");
             expect(webapi["@odata.etag"]).not.toBeUndefined();
             expect(res.value.length).toBeGreaterThan(0);
             expect(res["@odata.context"]).toStartsWith(fakeUrl);

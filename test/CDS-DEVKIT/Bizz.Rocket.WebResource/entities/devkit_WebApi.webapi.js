@@ -4,8 +4,8 @@ var Rocket;
 	'use strict';
 	Rocket.devkit_WebApiApi = function (e) {
 		var EMPTY_STRING = '';
+		var f = '@OData.Community.Display.V1.FormattedValue';
         function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var f = '@OData.Community.Display.V1.FormattedValue';
             var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
             var property = {};
             var getFormattedValue = function () {
@@ -70,7 +70,7 @@ var Rocket;
 			devkit_DateOnlyDateOnly_DateOnly: { a: 'devkit_dateonlydateonly' },
 			devkit_DateOnlyDateOnlyCalculated_DateOnly: { a: 'devkit_dateonlydateonlycalculated', r: true },
 			devkit_LinkWebApiId: { b: 'devkit_LinkWebApiId', a: '_devkit_linkwebapiid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
-			devkit_MultiOptionSetCode: { a: 'devkit_multioptionsetcode', f: true },
+			devkit_MultiOptionSetCode: { a: 'devkit_multioptionsetcode', g: true },
 			devkit_Name: { a: 'devkit_name' },
 			devkit_ParentWebApiId: { b: 'devkit_ParentWebApiId', a: '_devkit_parentwebapiid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			devkit_SingleOptionSetCode: { a: 'devkit_singleoptionsetcode' },
@@ -115,9 +115,9 @@ var Rocket;
 			var b = devkit_webapi[field].b;
 			var c = devkit_webapi[field].c;
 			var d = devkit_webapi[field].d;
-			var f = devkit_webapi[field].f;
+			var g = devkit_webapi[field].g;
 			var r = devkit_webapi[field].r;
-			devkit_webapi[field] = webApiField(e, a, b, c, d, r, u, f);
+			devkit_webapi[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
 		devkit_webapi.Entity = u;
 		devkit_webapi.EntityName = 'devkit_webapi';
@@ -159,8 +159,14 @@ var Rocket;
 			}
 			return e[alias];
 		}
-		devkit_webapi.getAliasedFormattedValue = function (alias) {
-			return e[alias];
+		devkit_webapi.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+			if (e[alias + f] === undefined || e[alias + f] === null) {
+				return EMPTY_STRING;
+			}
+			if (isMultiOptionSet) {
+				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
+			}
+			return e[alias + f];
 		}
 		return devkit_webapi;
 	};
