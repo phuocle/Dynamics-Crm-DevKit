@@ -5,13 +5,63 @@ var formWebApi = (function () {
 	}
     function onSave(executionContext) {
         console.clear();
-        TestReadOptionSet();
+        //TestReadOptionSet();
         TestReadDateTime();
 
     }
 
     function TestReadDateTime() {
+        var fetchData = {
+            devkit_name: "DATETIME"
+        };
+        var fetchXml = [
+            "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+            "  <entity name='devkit_webapi'>",
+            "    <attribute name='devkit_dateonlydateonly'/>",
+            "    <attribute name='devkit_dateonlydateonlycalculated'/>",
+            "    <attribute name='devkit_dateonlydateonlyrollup'/>",
+            "    <attribute name='devkit_dateonlydateonlyrollup_state'/>",
+            "    <attribute name='devkit_dateonlydateonlyrollup_date'/>",
 
+            "    <attribute name='devkit_userlocaldateonly'/>",
+            "    <attribute name='devkit_userlocaldateonlycalculated'/>",
+            "    <attribute name='devkit_userlocaldateonlyrollup'/>",
+            "    <attribute name='devkit_userlocaldateonlyrollup_state'/>",
+            "    <attribute name='devkit_userlocaldateonlyrollup_date'/>",
+
+            "    <attribute name='devkit_userlocaldateandtime'/>",
+            "    <attribute name='devkit_userlocaldateandtimecalculated'/>",
+            "    <attribute name='devkit_userlocaldateandtimerollup'/>",
+            "    <attribute name='devkit_userlocaldateandtimerollup_state'/>",
+            "    <attribute name='devkit_userlocaldateandtimerollup_date'/>",
+
+            "    <attribute name='devkit_timezonedateonly'/>",
+            "    <attribute name='devkit_timezonedateonlycalculated'/>",
+            "    <attribute name='devkit_timezonedateonlyrollup'/>",
+            "    <attribute name='devkit_timezonedateonlyrollup_state'/>",
+            "    <attribute name='devkit_timezonedateonlyrollup_date'/>",
+
+            "    <attribute name='devkit_timezonedateandtime'/>",
+            "    <attribute name='devkit_timezonedateandtimecalculated'/>",
+            "    <attribute name='devkit_timezonedateandtimerollup'/>",
+            "    <attribute name='devkit_timezonedateandtimerollup_state'/>",
+            "    <attribute name='devkit_timezonedateandtimerollup_date'/>",
+
+            "    <filter type='and'>",
+            "      <condition attribute='devkit_name' operator='eq' value='", fetchData.devkit_name, "'/>",
+            "    </filter>",
+            "  </entity>",
+            "</fetch>",
+        ].join("");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.async = false;
+        req.entityName = "devkit_webapi";
+        req.fetchXml = fetchXml;
+        req.returnAllPages = true;
+        var res = WebApiClient.Retrieve(req);
+        var api = new Rocket.devkit_WebApiApi(res.value[0]);
+        console.log(JSON.stringify(res));
+        debugger;
     }
 
     function TestReadOptionSet() {
@@ -32,7 +82,7 @@ var formWebApi = (function () {
             "    <attribute name='devkit_webapiid'/>",
             "    <order attribute='devkit_name' descending='false'/>",
             "    <filter type='and'>",
-            "      <condition attribute='devkit_name' operator='like' value='", fetchData.devkit_name, "'/>",
+            "      <condition attribute='devkit_name' operator='eq' value='", fetchData.devkit_name, "'/>",
             "    </filter>",
             "    <link-entity name='devkit_webapi' from='devkit_webapiid' to='devkit_linkwebapiid' visible='false' link-type='outer' alias='a'>",
             "      <attribute name='devkit_singleoptionsetcode'/>",
@@ -50,6 +100,7 @@ var formWebApi = (function () {
         req.entityName = "devkit_webapi";
         req.fetchXml = fetchXml;
         req.async = false;
+        req.returnAllPages = true;
         var res = WebApiClient.Retrieve(req);
         var api = new Rocket.devkit_WebApiApi(res.value[0]);
         console.log(JSON.stringify(res));

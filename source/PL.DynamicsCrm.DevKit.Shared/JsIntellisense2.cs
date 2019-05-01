@@ -62,6 +62,22 @@ namespace PL.DynamicsCrm.DevKit.Shared
         {
             var _d_ts = string.Empty;
             _d_ts += $"\tinterface {Class}OptionSet {{\r\n";
+            _d_ts += $"\t\tRollupState: {{\r\n";
+            _d_ts += $"\t\t\t/** 0 - Attribute value is yet to be calculated */\r\n";
+            _d_ts += $"\t\t\tNotCalculated: number,\r\n";
+            _d_ts += $"\t\t\t/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */\r\n";
+            _d_ts += $"\t\t\tCalculated: number,\r\n";
+            _d_ts += $"\t\t\t/** 2 - Attribute value calculation lead to overflow error */\r\n";
+            _d_ts += $"\t\t\tOverflowError: number,\r\n";
+            _d_ts += $"\t\t\t/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */\r\n";
+            _d_ts += $"\t\t\tOtherError: number,\r\n";
+            _d_ts += $"\t\t\t/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */\r\n";
+            _d_ts += $"\t\t\tRetryLimitExceeded: number,\r\n";
+            _d_ts += $"\t\t\t/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */\r\n";
+            _d_ts += $"\t\t\tHierarchicalRecursionLimitReached: number,\r\n";
+            _d_ts += $"\t\t\t/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */\r\n";
+            _d_ts += $"\t\t\tLoopDetected: number\r\n";
+            _d_ts += $"\t\t}},\r\n";
             foreach (var crmAttribute in Fields)
             {
                 if (!crmAttribute.IsValidForRead) continue;

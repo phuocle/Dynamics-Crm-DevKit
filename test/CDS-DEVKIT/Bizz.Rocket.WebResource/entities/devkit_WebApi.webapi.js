@@ -69,6 +69,9 @@ var Rocket;
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			devkit_DateOnlyDateOnly_DateOnly: { a: 'devkit_dateonlydateonly' },
 			devkit_DateOnlyDateOnlyCalculated_DateOnly: { a: 'devkit_dateonlydateonlycalculated', r: true },
+			devkit_DateOnlyDateOnlyRollup_DateOnly: { a: 'devkit_dateonlydateonlyrollup', r: true },
+			devkit_DateOnlyDateOnlyRollup_Date_UtcDateAndTime: { a: 'devkit_dateonlydateonlyrollup_date', r: true },
+			devkit_DateOnlyDateOnlyRollup_State: { a: 'devkit_dateonlydateonlyrollup_state', r: true },
 			devkit_LinkWebApiId: { b: 'devkit_LinkWebApiId', a: '_devkit_linkwebapiid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			devkit_MultiOptionSetCode: { a: 'devkit_multioptionsetcode', g: true },
 			devkit_Name: { a: 'devkit_name' },
@@ -77,8 +80,14 @@ var Rocket;
 			devkit_SingleOptionSetCodeCalculated: { a: 'devkit_singleoptionsetcodecalculated', r: true },
 			devkit_TimeZoneDateAndTime_TimezoneDateAndTime: { a: 'devkit_timezonedateandtime' },
 			devkit_TimeZoneDateAndTimeCalculated_TimezoneDateAndTime: { a: 'devkit_timezonedateandtimecalculated', r: true },
+			devkit_TimeZoneDateAndTimeRollup_TimezoneDateAndTime: { a: 'devkit_timezonedateandtimerollup', r: true },
+			devkit_TimeZoneDateAndTimeRollup_Date_UtcDateAndTime: { a: 'devkit_timezonedateandtimerollup_date', r: true },
+			devkit_TimeZoneDateAndTimeRollup_State: { a: 'devkit_timezonedateandtimerollup_state', r: true },
 			devkit_TimeZoneDateOnly_TimezoneDateOnly: { a: 'devkit_timezonedateonly' },
 			devkit_TimeZoneDateOnlyCalculated_TimezoneDateOnly: { a: 'devkit_timezonedateonlycalculated', r: true },
+			devkit_TimeZoneDateOnlyRollup_TimezoneDateOnly: { a: 'devkit_timezonedateonlyrollup', r: true },
+			devkit_TimeZoneDateOnlyRollup_Date_UtcDateAndTime: { a: 'devkit_timezonedateonlyrollup_date', r: true },
+			devkit_TimeZoneDateOnlyRollup_State: { a: 'devkit_timezonedateonlyrollup_state', r: true },
 			devkit_UserLocalDateAndTime_UtcDateAndTime: { a: 'devkit_userlocaldateandtime' },
 			devkit_UserLocalDateAndTimeCalculated_UtcDateAndTime: { a: 'devkit_userlocaldateandtimecalculated', r: true },
 			devkit_UserLocalDateAndTimeRollup_UtcDateAndTime: { a: 'devkit_userlocaldateandtimerollup', r: true },
@@ -124,7 +133,16 @@ var Rocket;
 		devkit_webapi.EntityCollectionName = 'devkit_webapis';
 		devkit_webapi['@odata.etag'] = e['@odata.etag'];
 		var optionSet = {
-			devkit_SingleOptionSetCode : {
+			RollupState: {
+				NotCalculated: 0,
+				Calculated: 1,
+				OverflowError: 2,
+				OtherError: 3,
+				RetryLimitExceeded: 4,
+				HierarchicalRecursionLimitReached: 5,
+				LoopDetected: 6
+			},
+			devkit_MultiOptionSetCode: {
 				Crm_4: 100000000,
 				Crm_2011: 100000001,
 				Crm_2013: 100000002,
@@ -132,7 +150,7 @@ var Rocket;
 				Crm_2016: 100000004,
 				Dynamics_365: 100000005
 			},
-			devkit_SingleOptionSetCodeCalculated : {
+			devkit_SingleOptionSetCode: {
 				Crm_4: 100000000,
 				Crm_2011: 100000001,
 				Crm_2013: 100000002,
@@ -140,11 +158,19 @@ var Rocket;
 				Crm_2016: 100000004,
 				Dynamics_365: 100000005
 			},
-			statecode : {
+			devkit_SingleOptionSetCodeCalculated: {
+				Crm_4: 100000000,
+				Crm_2011: 100000001,
+				Crm_2013: 100000002,
+				Crm_2015: 100000003,
+				Crm_2016: 100000004,
+				Dynamics_365: 100000005
+			},
+			statecode: {
 				Active: 0,
 				Inactive: 1
 			},
-			statuscode : {
+			statuscode: {
 				Active: 1,
 				Inactive: 2
 			}

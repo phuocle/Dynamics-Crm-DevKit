@@ -213,11 +213,6 @@ namespace PL.DynamicsCrm.DevKit.Shared
             }
             webApiCode = webApiCode.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             webApiCode += $"\t\t}};\r\n";
-            //webApiCode += $"\t\tif (arguments.length > 1) {{\r\n";
-            //webApiCode += $"\t\t\tfor (var i = 1; i < arguments.length; i++) {{\r\n";
-            //webApiCode += $"\t\t\t\tObject.assign({@class}, arguments[i]);\r\n";
-            //webApiCode += $"\t\t\t}}\r\n";
-            //webApiCode += $"\t\t}}\r\n";
             webApiCode += $"\t\tif (e === undefined) e = {{}};\r\n";
             webApiCode += $"\t\tvar u = {{}};\r\n";
             webApiCode += $"\t\tfor (var field in {@class}) {{\r\n";
@@ -281,11 +276,23 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 if (_jsOptionSetFormCode != null) return _jsOptionSetFormCode;
                 _jsOptionSetFormCode = string.Empty;
                 _jsOptionSetFormCode += $"\t\tvar optionSet = {{\r\n";
+                _jsOptionSetFormCode += $"\t\t\tRollupState: {{\r\n";
+                _jsOptionSetFormCode += $"\t\t\t\tNotCalculated: 0,\r\n";
+                _jsOptionSetFormCode += $"\t\t\t\tCalculated: 1,\r\n";
+                _jsOptionSetFormCode += $"\t\t\t\tOverflowError: 2,\r\n";
+                _jsOptionSetFormCode += $"\t\t\t\tOtherError: 3,\r\n";
+                _jsOptionSetFormCode += $"\t\t\t\tRetryLimitExceeded: 4,\r\n";
+                _jsOptionSetFormCode += $"\t\t\t\tHierarchicalRecursionLimitReached: 5,\r\n";
+                _jsOptionSetFormCode += $"\t\t\t\tLoopDetected: 6\r\n";
+                _jsOptionSetFormCode += $"\t\t\t}},\r\n";
                 foreach (var crmAttribute in Fields)
                 {
                     if (!crmAttribute.IsValidForRead) continue;
-                    if (crmAttribute.FieldType != AttributeTypeCode.Picklist && crmAttribute.FieldType != AttributeTypeCode.State && crmAttribute.FieldType != AttributeTypeCode.Status) continue;
-                    _jsOptionSetFormCode += $"\t\t\t{crmAttribute.SchemaName} : {{\r\n";
+                    if (crmAttribute.FieldType != AttributeTypeCode.Picklist &&
+                        crmAttribute.FieldType != AttributeTypeCode.State &&
+                        crmAttribute.FieldType != AttributeTypeCode.Status &&
+                        !crmAttribute.IsMultiSelectPicklist) continue;
+                    _jsOptionSetFormCode += $"\t\t\t{crmAttribute.SchemaName}: {{\r\n";
                     foreach (string nvc in crmAttribute.OptionSetValues)
                         _jsOptionSetFormCode += $"\t\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
                     _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray()) + "\r\n";

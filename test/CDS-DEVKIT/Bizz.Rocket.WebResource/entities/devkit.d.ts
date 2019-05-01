@@ -12,6 +12,36 @@
             /** The array optionset label text - array of string type */
             FormattedValue: Array<string>;
         }
+        interface DateOnlyValue {
+            /** The date only value of field. Always format yyyy-MM-dd */
+            Value: string;
+            /** The date only string formatted of field base on user setting format */
+            FormattedValue: string;
+        }
+        interface UtcDateOnlyValue {
+            /** The UTC date only value of field. E.g.: "2019-04-29T17:00:00Z" */
+            Value: string;
+            /** The UTC date only string formatted of field. E.g.: "30.04.2019" */
+            FormattedValue: string;
+        }
+        interface UtcDateAndTimeValue {
+            /** The UTC date and time value of field. E.g.: "2019-04-27T07:30:00Z" */
+            Value: string;
+            /** The UTC date and time string formatted of field. E.g.: "27.04.2019 02:30 CH" */
+            FormattedValue: string;
+        }
+        interface TimezoneDateOnlyValue {
+            /** The time-zone date only value of field. E.g.: "2019-04-26T00:00:00Z" */
+            Value: string;
+            /** The time-zone date string formatted of field. E.g.: "26.04.2019" */
+            FormattedValue: string;
+        }
+        interface TimezoneDateAndTimeValue {
+            /** The time-zone date and time value of field. E.g.: "2019-04-28T15:30:00Z" */
+            Value: string;
+            /** The time-zone date and time string formatted of field. E.g.: "28.04.2019 03:30 CH" */
+            FormattedValue: string;
+        }
 
 
 
@@ -51,36 +81,11 @@
             /** The string formatted value of field */
             FormattedValue: string;
         }
-        interface DateOnlyValue {
-            /** The object value of field */
-            Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface TimezoneDateOnlyValue {
-            /** The object value of field */
-            Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface TimezoneDateAndTimeValue {
-            /** The object value of field */
-            Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface UtcDateOnlyValue {
-            /** The object value of field */
-            Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface UtcDateAndTimeValue {
-            /** The object value of field */
-            Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
+
+
+
+
+
         interface IntegerValue {
             /** The object value of field */
             Value: number;

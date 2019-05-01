@@ -1,6 +1,22 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
 	interface devkit_WebApiOptionSet {
+		RollupState: {
+			/** 0 - Attribute value is yet to be calculated */
+			NotCalculated: number,
+			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+			Calculated: number,
+			/** 2 - Attribute value calculation lead to overflow error */
+			OverflowError: number,
+			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+			OtherError: number,
+			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+			RetryLimitExceeded: number,
+			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+			HierarchicalRecursionLimitReached: number,
+			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+			LoopDetected: number
+		},
 		devkit_MultiOptionSetCode: {
 			/** 100000000 */
 			Crm_4: number,
@@ -97,6 +113,12 @@ declare namespace Rocket {
 		devkit_DateOnlyDateOnly_DateOnly: WebApi.DateOnlyValue;
 		/** ReadOnly */
 		devkit_DateOnlyDateOnlyCalculated_DateOnly: WebApi.DateOnlyValue;
+		/** ReadOnly */
+		devkit_DateOnlyDateOnlyRollup_DateOnly: WebApi.DateOnlyValue;
+		/** ReadOnly - Last Updated time of rollup field Date Only Date Only Rollup. */
+		devkit_DateOnlyDateOnlyRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** ReadOnly - State of rollup field Date Only Date Only Rollup. */
+		devkit_DateOnlyDateOnlyRollup_State: WebApi.IntegerValue;
 		devkit_LinkWebApiId: WebApi.LookupValue;
 		/** ReadOnly */
 		devkit_LinkWebApiIdName: WebApi.StringValue;
@@ -112,9 +134,21 @@ declare namespace Rocket {
 		devkit_TimeZoneDateAndTime_TimezoneDateAndTime: WebApi.TimezoneDateAndTimeValue;
 		/** ReadOnly */
 		devkit_TimeZoneDateAndTimeCalculated_TimezoneDateAndTime: WebApi.TimezoneDateAndTimeValue;
+		/** ReadOnly */
+		devkit_TimeZoneDateAndTimeRollup_TimezoneDateAndTime: WebApi.TimezoneDateAndTimeValue;
+		/** ReadOnly - Last Updated time of rollup field TimeZone Date And Time Rollup. */
+		devkit_TimeZoneDateAndTimeRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** ReadOnly - State of rollup field TimeZone Date And Time Rollup. */
+		devkit_TimeZoneDateAndTimeRollup_State: WebApi.IntegerValue;
 		devkit_TimeZoneDateOnly_TimezoneDateOnly: WebApi.TimezoneDateOnlyValue;
 		/** ReadOnly */
 		devkit_TimeZoneDateOnlyCalculated_TimezoneDateOnly: WebApi.TimezoneDateOnlyValue;
+		/** ReadOnly */
+		devkit_TimeZoneDateOnlyRollup_TimezoneDateOnly: WebApi.TimezoneDateOnlyValue;
+		/** ReadOnly - Last Updated time of rollup field TimeZone Date Only Rollup. */
+		devkit_TimeZoneDateOnlyRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** ReadOnly - State of rollup field TimeZone Date Only Rollup. */
+		devkit_TimeZoneDateOnlyRollup_State: WebApi.IntegerValue;
 		devkit_UserLocalDateAndTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly */
 		devkit_UserLocalDateAndTimeCalculated_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
