@@ -1056,9 +1056,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
                 var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
                 var file = File.Exists(file2) ? file2 : file1;
-                if (!File.Exists(file))
+                if (!File.Exists($"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.js"))
                 {
-                    MessageBox.Show($@"File not found: {file}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Please add Form Js first. And then try add the webapi again !!!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    btnCancel.Enabled = true;
                     return;
                 }
                 progressBar.Visible = true;

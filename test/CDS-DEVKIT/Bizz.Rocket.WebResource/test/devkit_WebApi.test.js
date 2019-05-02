@@ -365,7 +365,91 @@ describe("devkit_WebApi.test", function () {
             expect(res["@odata.nextLink"]).toBeUndefined();
             expect(res["@odata.count"]).toBeUndefined();
         });
-        it("Retrieve Number", function () { });
+        it("Retrieve Number", function () {
+            //setup
+            var data = {
+                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis(devkit_wholenumbernone,_transactioncurrencyid_value,transactioncurrencyid,devkit_webapiid,devkit_wholenumbertimezone,devkit_wholenumberduration,devkit_currency_base,devkit_currency,devkit_decimalnumber,exchangerate,devkit_wholenumberlanguage,devkit_floatingpointnumber)",
+                "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
+                "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
+                "@Microsoft.Dynamics.CRM.morerecords": false,
+                "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": "<cookie pagenumber=\"1\" pagingcookie=\"%3ccookie%20page%3d%221%22%3e%3cdevkit_webapiid%20last%3d%22%7b9670BBC4-2B6C-E911-A997-000D3A802135%7d%22%20first%3d%22%7b9670BBC4-2B6C-E911-A997-000D3A802135%7d%22%20%2f%3e%3c%2fcookie%3e\" istracking=\"False\" />",
+                "value": [{
+                    "@odata.etag": "W/\"586414\"",
+                    "devkit_wholenumbernone@OData.Community.Display.V1.FormattedValue": "1.234",
+                    "devkit_wholenumbernone": 1234,
+                    "_transactioncurrencyid_value@OData.Community.Display.V1.FormattedValue": "US Dollar",
+                    "_transactioncurrencyid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "transactioncurrencyid",
+                    "_transactioncurrencyid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "transactioncurrency",
+                    "_transactioncurrencyid_value": "08a827ca-9063-e911-a836-000d3a80e227",
+                    "devkit_webapiid": "9670bbc4-2b6c-e911-a997-000d3a802135",
+                    "devkit_wholenumbertimezone@OData.Community.Display.V1.FormattedValue": "205",
+                    "devkit_wholenumbertimezone": 205,
+                    "devkit_wholenumberduration@OData.Community.Display.V1.FormattedValue": "480",
+                    "devkit_wholenumberduration": 480,
+                    "devkit_currency_base@OData.Community.Display.V1.FormattedValue": "123.456,35 $",
+                    "devkit_currency_base": 123456.35,
+                    "devkit_currency@OData.Community.Display.V1.FormattedValue": "123.456,35 $",
+                    "devkit_currency": 123456.35,
+                    "devkit_decimalnumber@OData.Community.Display.V1.FormattedValue": "1.234.567,89",
+                    "devkit_decimalnumber": 1234567.89,
+                    "exchangerate@OData.Community.Display.V1.FormattedValue": "1,0000000000",
+                    "exchangerate": 1,
+                    "devkit_wholenumberlanguage@OData.Community.Display.V1.FormattedValue": "1.033",
+                    "devkit_wholenumberlanguage": 1033,
+                    "devkit_floatingpointnumber@OData.Community.Display.V1.FormattedValue": "1.234,57",
+                    "devkit_floatingpointnumber": 1234.57
+                }]
+            };
+            var fetchData = {
+                devkit_name: "NUMBER"
+            };
+            var fetchXml = [
+                "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+                "  <entity name='devkit_webapi'>",
+                "    <attribute name='devkit_wholenumbertimezone'/>",
+                "    <attribute name='devkit_wholenumbernone'/>",
+                "    <attribute name='devkit_wholenumberlanguage'/>",
+                "    <attribute name='devkit_wholenumberduration'/>",
+                "    <attribute name='devkit_floatingpointnumber'/>",
+                "    <attribute name='exchangerate'/>",
+                "    <attribute name='devkit_decimalnumber'/>",
+                "    <attribute name='devkit_currency_base'/>",
+                "    <attribute name='devkit_currency'/>",
+                "    <attribute name='transactioncurrencyid'/>",
+                "    <filter type='and'>",
+                "      <condition attribute='devkit_name' operator='eq' value='", fetchData.devkit_name, "'/>",
+                "    </filter>",
+                "  </entity>",
+                "</fetch>",
+            ].join("");
+            fetchXml = removeWhitespaces(fetchXml);
+            var url = RegExp.escape(fakeUrl + "/api/data/v9.1/devkit_webapis?fetchXml=") + escape(fetchXml);
+            xhr.respondWith("GET", RegExp(url),
+                [200, { "Content-Type": "application/json" }, JSON.stringify(data)]
+            );
+            //run
+            var req = new Rocket.WebApi.RetrieveRequest();
+            req.entityName = "devkit_webapi";
+            req.fetchXml = fetchXml;
+            req.returnAllPages = true;
+            req.async = false;
+            var res = WebApiClient.Retrieve(req);
+            //result
+            var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
+            //whole number
+            expect(webapi.devkit_W)
+            //others
+            expect(webapi["@odata.etag"]).not.toBeUndefined();
+            expect(res.value.length).toBeGreaterThan(0);
+            expect(res["@odata.context"]).toStartsWith(fakeUrl);
+            expect(res["@Microsoft.Dynamics.CRM.totalrecordcount"]).toEqual(-1);
+            expect(res["@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.morerecords"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"]).not.toBeNull();
+            expect(res["@odata.nextLink"]).toBeUndefined();
+            expect(res["@odata.count"]).toBeUndefined();
+
+        });
         it("Retrieve String", function () { });
     });
 });

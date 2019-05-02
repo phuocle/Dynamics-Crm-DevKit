@@ -110,6 +110,9 @@ declare namespace Rocket {
 		CreatedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
+		devkit_Currency: WebApi.MoneyValue;
+		/** ReadOnly - Value of the Currency in base currency. */
+		devkit_currency_Base: WebApi.MoneyValue;
 		devkit_DateOnlyDateOnly_DateOnly: WebApi.DateOnlyValue;
 		/** ReadOnly */
 		devkit_DateOnlyDateOnlyCalculated_DateOnly: WebApi.DateOnlyValue;
@@ -119,6 +122,8 @@ declare namespace Rocket {
 		devkit_DateOnlyDateOnlyRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - State of rollup field Date Only Date Only Rollup. */
 		devkit_DateOnlyDateOnlyRollup_State: WebApi.IntegerValue;
+		devkit_DecimalNumber: WebApi.DecimalValue;
+		devkit_FloatingPointNumber: WebApi.DoubleValue;
 		devkit_LinkWebApiId: WebApi.LookupValue;
 		/** ReadOnly */
 		devkit_LinkWebApiIdName: WebApi.StringValue;
@@ -169,9 +174,15 @@ declare namespace Rocket {
 		devkit_UserLocalDateOnlyRollup_State: WebApi.IntegerValue;
 		/** Unique identifier for entity instances */
 		devkit_WebApiId: WebApi.GuidValue;
+		devkit_WholeNumberDuration: WebApi.IntegerValue;
+		devkit_WholeNumberLanguage: WebApi.IntegerValue;
+		devkit_WholeNumberNone: WebApi.IntegerValue;
+		devkit_WholeNumberTimeZone: WebApi.IntegerValue;
 		devkit_YesAndNo: WebApi.BooleanValue;
 		/** ReadOnly */
 		devkit_YesAndNoCalculated: WebApi.BooleanValue;
+		/** ReadOnly - Exchange rate for the currency associated with the entity with respect to the base currency. */
+		ExchangeRate: WebApi.DecimalValue;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: WebApi.IntegerValue;
 		/** ReadOnly - Unique identifier of the user who modified the record. */
@@ -212,6 +223,10 @@ declare namespace Rocket {
 		statuscode: WebApi.OptionSetValue;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
+		/** Unique identifier of the currency associated with the entity. */
+		TransactionCurrencyId: WebApi.LookupValue;
+		/** ReadOnly */
+		TransactionCurrencyIdName: WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: WebApi.IntegerValue;
 		/** ReadOnly - Version Number */

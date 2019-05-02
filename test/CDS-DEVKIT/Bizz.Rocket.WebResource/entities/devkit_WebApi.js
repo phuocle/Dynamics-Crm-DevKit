@@ -6,8 +6,42 @@ var formWebApi = (function () {
     function onSave(executionContext) {
         console.clear();
         //TestReadOptionSet();
-        TestReadDateTime();
+        //TestReadDateTime();
+        TestReadNumber();
+    }
 
+    function TestReadNumber() {
+        var fetchData = {
+            devkit_name: "NUMBER"
+        };
+        var fetchXml = [
+            "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+            "  <entity name='devkit_webapi'>",
+            "    <attribute name='devkit_wholenumbertimezone'/>",
+            "    <attribute name='devkit_wholenumbernone'/>",
+            "    <attribute name='devkit_wholenumberlanguage'/>",
+            "    <attribute name='devkit_wholenumberduration'/>",
+            "    <attribute name='devkit_floatingpointnumber'/>",
+            "    <attribute name='exchangerate'/>",
+            "    <attribute name='devkit_decimalnumber'/>",
+            "    <attribute name='devkit_currency_base'/>",
+            "    <attribute name='devkit_currency'/>",
+            "    <attribute name='transactioncurrencyid'/>",
+            "    <filter type='and'>",
+            "      <condition attribute='devkit_name' operator='eq' value='", fetchData.devkit_name, "'/>",
+            "    </filter>",
+            "  </entity>",
+            "</fetch>",
+        ].join("");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.async = false;
+        req.entityName = "devkit_webapi";
+        req.fetchXml = fetchXml;
+        req.returnAllPages = true;
+        var res = WebApiClient.Retrieve(req);
+        var api = new Rocket.devkit_WebApiApi(res.value[0]);
+        console.log(JSON.stringify(res));
+        debugger;
     }
 
     function TestReadDateTime() {
