@@ -623,4 +623,4 @@ declare namespace Rocket {
 		YomiName: WebApi.StringValue;
 	}
 }
-//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':false}

@@ -11,7 +11,7 @@
     <DefaultName>Javascript.cs</DefaultName>
   </TemplateData>
   <TemplateContent>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$class$.webapi.js">JavascriptWebApi.js</ProjectItem>
+    <ProjectItem ReplaceParameters="false" TargetFileName="Javascript.js">Javascript.js</ProjectItem>
   </TemplateContent>
   <WizardExtension>
     <Assembly>PL.DynamicsCrm.DevKit.Wizard, Version=1.0.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>

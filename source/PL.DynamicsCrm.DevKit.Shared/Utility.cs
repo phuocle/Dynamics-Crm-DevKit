@@ -100,6 +100,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
 
         public static bool CanWriteAllText(string file)
         {
+            if (!File.Exists(file)) return true;
             var attributes = File.GetAttributes(file);
             if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
             {

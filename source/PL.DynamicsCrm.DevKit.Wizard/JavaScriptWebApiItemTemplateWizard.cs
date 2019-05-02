@@ -15,7 +15,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         private ProjectItem SelectedProjectItem { get; set; }
         private string GeneratedJsWebApiCode { get; set; }
         private string GeneratedJsWebApiCodeIntellisense { get; set; }
-        private string GeneratedJsWebApiCodeIntellisenseTypeScript { get; set; }
+        private string GeneratedJsWebApiCodeTypeScriptDeclaration { get; set; }
         private string CurrentFolder { get; set; } = string.Empty;
         private string EntityName { get; set; }
         private string WebApiFileName
@@ -54,7 +54,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunFinished()
         {
-            if (CurrentFolder.Length == 0) throw new Exception(nameof(CurrentFolder));
             if (Utility.CanWriteAllText(WebApiFileName))
             {
                 File.WriteAllText(WebApiFileName, GeneratedJsWebApiCode, Encoding.UTF8);
@@ -64,7 +63,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             {
                 if (Utility.CanWriteAllText(TypeScriptDeclarationFileName))
                 {
-                    File.WriteAllText(TypeScriptDeclarationFileName, GeneratedJsWebApiCodeIntellisenseTypeScript, Encoding.UTF8);
+                    File.WriteAllText(TypeScriptDeclarationFileName, GeneratedJsWebApiCodeTypeScriptDeclaration, Encoding.UTF8);
                 }
                 SelectedProjectItem.ProjectItems.AddFromFile(TypeScriptDeclarationFileName);
                 if (File.Exists(IntellisenseFileName))
@@ -85,7 +84,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 {
                     var projectItem = GetProjectItem($"{EntityName}.d.ts");
                     if (projectItem != null) projectItem.Remove();
-                    Utility.TryDeleteFile(IntellisenseFileName);
+                    Utility.TryDeleteFile(TypeScriptDeclarationFileName);
                 }
             }
             SelectedProjectItem.ContainingProject.Save();
@@ -99,7 +98,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             if (form.ShowDialog() == DialogResult.OK)
             {
                 EntityName = form.Class;
-                replacementsDictionary.Add("$class$", EntityName);
                 SelectedProjectItem = GetProjectItem($"{EntityName}.js");
                 if (SelectedProjectItem != null)
                 {
@@ -107,7 +105,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     GeneratedJsWebApiCode = form.GeneratedJsWebApiCode;
                     if (form.UseTypeScriptDeclaration == "true")
                     {
-                        GeneratedJsWebApiCodeIntellisenseTypeScript = form.GeneratedJsWebApiCodeIntellisense2;
+                        GeneratedJsWebApiCodeTypeScriptDeclaration = form.GeneratedJsWebApiCodeIntellisense2;
                     }
                     else
                     {
