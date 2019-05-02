@@ -68,10 +68,10 @@
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
-    <None Include="entities\Account.intellisense.js">
-      <DependentUpon>Account.js</DependentUpon>
-    </None>
     <Content Include="entities\Account.js" />
+    <Content Include="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
     <Content Include="test\devkit_WebApi.test.js">
       <DependentUpon>devkit_WebApi.test.html</DependentUpon>
     </Content>
@@ -107,6 +107,9 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="entities\Account.d.ts">
+      <DependentUpon>Account.js</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="entities\devkit.d.ts" />
     <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
       <DependentUpon>devkit_WebApi.js</DependentUpon>

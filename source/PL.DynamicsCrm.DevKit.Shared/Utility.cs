@@ -98,6 +98,16 @@ namespace PL.DynamicsCrm.DevKit.Shared
             }
         }
 
+        public static bool CanWriteAllText(string file)
+        {
+            var attributes = File.GetAttributes(file);
+            if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+            {
+                File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
+            }
+            return true;
+        }
+
         public static void TryDeleteDirectory(string directory)
         {
             if (Directory.Exists(directory))

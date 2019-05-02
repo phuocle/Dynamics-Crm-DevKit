@@ -233,4 +233,4 @@ declare namespace Rocket {
 		VersionNumber: WebApi.BigIntValue;
 	}
 }
-//{'JsForm':['WebApi'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}
+//{'JsForm':['WebApi'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':false}
