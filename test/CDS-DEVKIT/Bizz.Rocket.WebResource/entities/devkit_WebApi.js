@@ -7,7 +7,46 @@ var formWebApi = (function () {
         console.clear();
         //TestReadOptionSet();
         //TestReadDateTime();
-        TestReadNumber();
+        //TestReadNumber();
+        TestString();
+    }
+
+    function TestString() {
+        var fetchData = {
+            devkit_name: "STRING"
+        };
+        var fetchXml = [
+            "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+            "  <entity name='devkit_webapi'>",
+            "    <attribute name='devkit_name'/>",
+            "    <attribute name='devkit_singlelineoftexturl'/>",
+            "    <attribute name='devkit_singlelineoftexttickersymbol'/>",
+            "    <attribute name='devkit_singlelineoftexttextarea'/>",
+            "    <attribute name='devkit_singlelineoftexttext'/>",
+            "    <attribute name='devkit_singlelineoftextphone'/>",
+            "    <attribute name='devkit_singlelineoftextemail'/>",
+            "    <attribute name='ownerid'/>",
+            "    <attribute name='devkit_multipleliniesoftext'/>",
+            "    <attribute name='devkit_linkwebapiid'/>",
+            "    <attribute name='devkit_linkwebapiidname'/>",
+            "    <attribute name='devkit_customerid'/>",
+            "    <attribute name='devkit_webapiid'/>",
+            "    <order attribute='devkit_name' descending='false'/>",
+            "    <filter type='and'>",
+            "      <condition attribute='devkit_name' operator='eq' value='", fetchData.devkit_name, "'/>",
+            "    </filter>",
+            "  </entity>",
+            "</fetch>",
+        ].join("");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.async = false;
+        req.entityName = "devkit_webapi";
+        req.fetchXml = fetchXml;
+        req.returnAllPages = true;
+        var res = WebApiClient.Retrieve(req);
+        var api = new Rocket.devkit_WebApiApi(res.value[0]);
+        console.log(JSON.stringify(res));
+        debugger;
     }
 
     function TestReadNumber() {

@@ -113,6 +113,13 @@ declare namespace Rocket {
 		devkit_Currency: WebApi.MoneyValue;
 		/** ReadOnly - Value of the Currency in base currency. */
 		devkit_currency_Base: WebApi.MoneyValue;
+		devkit_CustomerId_account: WebApi.CustomerValue;
+		devkit_CustomerId_contact: WebApi.CustomerValue;
+		/** ReadOnly */
+		devkit_CustomerIdName: WebApi.StringValue;
+		devkit_CustomerIdType: WebApi.StringValue;
+		/** ReadOnly */
+		devkit_CustomerIdYomiName: WebApi.StringValue;
 		devkit_DateOnlyDateOnly_DateOnly: WebApi.DateOnlyValue;
 		/** ReadOnly */
 		devkit_DateOnlyDateOnlyCalculated_DateOnly: WebApi.DateOnlyValue;
@@ -128,11 +135,18 @@ declare namespace Rocket {
 		/** ReadOnly */
 		devkit_LinkWebApiIdName: WebApi.StringValue;
 		devkit_MultiOptionSetCode: WebApi.MultiOptionSetValue;
+		devkit_MultipleLiniesofText: WebApi.StringValue;
 		/** The name of the custom entity. */
 		devkit_Name: WebApi.StringValue;
 		devkit_ParentWebApiId: WebApi.LookupValue;
 		/** ReadOnly */
 		devkit_ParentWebApiIdName: WebApi.StringValue;
+		devkit_SingleLineofTextEmail: WebApi.StringValue;
+		devkit_SingleLineofTextPhone: WebApi.StringValue;
+		devkit_SingleLineofTextText: WebApi.StringValue;
+		devkit_SingleLineofTextTextArea: WebApi.StringValue;
+		devkit_SingleLineofTextTickerSymbol: WebApi.StringValue;
+		devkit_SingleLineofTextUrl: WebApi.StringValue;
 		devkit_SingleOptionSetCode: WebApi.OptionSetValue;
 		/** ReadOnly */
 		devkit_SingleOptionSetCodeCalculated: WebApi.OptionSetValue;
@@ -181,6 +195,12 @@ declare namespace Rocket {
 		devkit_YesAndNo: WebApi.BooleanValue;
 		/** ReadOnly */
 		devkit_YesAndNoCalculated: WebApi.BooleanValue;
+		/** ReadOnly */
+		EntityImage_Timestamp: WebApi.BigIntValue;
+		/** ReadOnly */
+		EntityImage_URL: WebApi.StringValue;
+		/** ReadOnly */
+		EntityImageId: WebApi.GuidValue;
 		/** ReadOnly - Exchange rate for the currency associated with the entity with respect to the base currency. */
 		ExchangeRate: WebApi.DecimalValue;
 		/** Sequence number of the import that created this record. */
@@ -233,4 +253,4 @@ declare namespace Rocket {
 		VersionNumber: WebApi.BigIntValue;
 	}
 }
-//{'JsForm':['WebApi'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['WebApi'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

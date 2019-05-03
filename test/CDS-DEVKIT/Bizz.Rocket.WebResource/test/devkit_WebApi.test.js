@@ -437,7 +437,27 @@ describe("devkit_WebApi.test", function () {
             //result
             var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
             //whole number
-            expect(webapi.devkit_W)
+            expect(webapi.devkit_WholeNumberNone.Value).toEqual(1234);
+            expect(webapi.devkit_WholeNumberNone.FormattedValue).toEqual("1.234");
+            expect(webapi.devkit_WholeNumberDuration.Value).toEqual(480);
+            expect(webapi.devkit_WholeNumberDuration.FormattedValue).toEqual("480");
+            expect(webapi.devkit_WholeNumberLanguage.Value).toEqual(1033);
+            expect(webapi.devkit_WholeNumberLanguage.FormattedValue).toEqual("1.033");
+            expect(webapi.devkit_WholeNumberTimeZone.Value).toEqual(205);
+            expect(webapi.devkit_WholeNumberTimeZone.FormattedValue).toEqual("205");
+            //floating point number
+            expect(webapi.devkit_FloatingPointNumber.Value).toEqual(1234.57);
+            expect(webapi.devkit_FloatingPointNumber.FormattedValue).toEqual("1.234,57");
+            //decimal
+            expect(webapi.devkit_DecimalNumber.Value).toEqual(1234567.89);
+            expect(webapi.devkit_DecimalNumber.FormattedValue).toEqual("1.234.567,89");
+            //currency
+            expect(webapi.devkit_Currency.Value).toEqual(123456.35);
+            expect(webapi.devkit_Currency.FormattedValue).toEqual("123.456,35 $");
+            expect(webapi.devkit_currency_Base.Value).toEqual(123456.35);
+            expect(webapi.devkit_currency_Base.FormattedValue).toEqual("123.456,35 $");
+            expect(webapi.ExchangeRate.Value).toEqual(1);
+            expect(webapi.ExchangeRate.FormattedValue).toEqual("1,0000000000");
             //others
             expect(webapi["@odata.etag"]).not.toBeUndefined();
             expect(res.value.length).toBeGreaterThan(0);
@@ -448,8 +468,101 @@ describe("devkit_WebApi.test", function () {
             expect(res["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"]).not.toBeNull();
             expect(res["@odata.nextLink"]).toBeUndefined();
             expect(res["@odata.count"]).toBeUndefined();
-
         });
-        it("Retrieve String", function () { });
+        it("Retrieve String", function () {
+            //setup
+            var data = {
+                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis(devkit_singlelineoftexttickersymbol,devkit_singlelineoftextphone,_ownerid_value,ownerid,devkit_multipleliniesoftext,devkit_singlelineoftextemail,devkit_singlelineoftexturl,devkit_name,devkit_webapiid,devkit_singlelineoftexttextarea,_devkit_linkwebapiid_value,devkit_LinkWebApiId,_devkit_customerid_value,devkit_CustomerId_account,devkit_singlelineoftexttext)",
+                "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
+                "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
+                "@Microsoft.Dynamics.CRM.morerecords": false,
+                "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": "<cookie pagenumber=\"1\" pagingcookie=\"%3ccookie%20page%3d%221%22%3e%3cdevkit_name%20last%3d%22STRING%22%20first%3d%22STRING%22%20%2f%3e%3cdevkit_webapiid%20last%3d%22%7b3C254671-456D-E911-A98D-000D3A80280E%7d%22%20first%3d%22%7b3C254671-456D-E911-A98D-000D3A80280E%7d%22%20%2f%3e%3c%2fcookie%3e\" istracking=\"False\" />",
+                "value": [{
+                    "@odata.etag": "W/\"588561\"",
+                    "devkit_singlelineoftexttickersymbol": "APP",
+                    "devkit_singlelineoftextphone": "84 0907952232",
+                    "devkit_singlelineoftextemail": "a@a.a",
+                    "devkit_singlelineoftexturl": "https://google.com",
+                    "devkit_singlelineoftexttextarea": "Single\nline\nof\ntext\ntext\narea",
+                    "devkit_singlelineoftexttext": "abcd",
+                    "devkit_multipleliniesoftext": "multiple\nlines\nof\ntext",
+                    "_ownerid_value@OData.Community.Display.V1.FormattedValue": "dev kit",
+                    "_ownerid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "ownerid",
+                    "_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
+                    "_ownerid_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                    "_devkit_linkwebapiid_value@OData.Community.Display.V1.FormattedValue": "DATETIME",
+                    "_devkit_linkwebapiid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "devkit_LinkWebApiId",
+                    "_devkit_linkwebapiid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "devkit_webapi",
+                    "_devkit_linkwebapiid_value": "f55a0d1e-286b-e911-a997-000d3a802135",
+                    "_devkit_customerid_value@OData.Community.Display.V1.FormattedValue": "A. Datum Corporation (sample)",
+                    "_devkit_customerid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "devkit_CustomerId_account",
+                    "_devkit_customerid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "account",
+                    "_devkit_customerid_value": "928d37ec-9e66-e911-a993-000d3a804bc9",
+                    "devkit_name": "STRING",
+                    "devkit_webapiid": "3c254671-456d-e911-a98d-000d3a80280e"
+                }]
+            };
+            var fetchData = {
+                devkit_name: "STRING"
+            };
+            var fetchXml = [
+                "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+                "  <entity name='devkit_webapi'>",
+                "    <attribute name='devkit_name'/>",
+                "    <attribute name='devkit_singlelineoftexturl'/>",
+                "    <attribute name='devkit_singlelineoftexttickersymbol'/>",
+                "    <attribute name='devkit_singlelineoftexttextarea'/>",
+                "    <attribute name='devkit_singlelineoftexttext'/>",
+                "    <attribute name='devkit_singlelineoftextphone'/>",
+                "    <attribute name='devkit_singlelineoftextemail'/>",
+                "    <attribute name='ownerid'/>",
+                "    <attribute name='devkit_multipleliniesoftext'/>",
+                "    <attribute name='devkit_linkwebapiid'/>",
+                "    <attribute name='devkit_customerid'/>",
+                "    <attribute name='devkit_webapiid'/>",
+                "    <order attribute='devkit_name' descending='false'/>",
+                "    <filter type='and'>",
+                "      <condition attribute='devkit_name' operator='eq' value='", fetchData.devkit_name, "'/>",
+                "    </filter>",
+                "  </entity>",
+                "</fetch>",
+            ].join("");
+            fetchXml = removeWhitespaces(fetchXml);
+            var url = RegExp.escape(fakeUrl + "/api/data/v9.1/devkit_webapis?fetchXml=") + escape(fetchXml);
+            xhr.respondWith("GET", RegExp(url),
+                [200, { "Content-Type": "application/json" }, JSON.stringify(data)]
+            );
+            //run
+            var req = new Rocket.WebApi.RetrieveRequest();
+            req.entityName = "devkit_webapi";
+            req.fetchXml = fetchXml;
+            req.returnAllPages = true;
+            req.async = false;
+            var res = WebApiClient.Retrieve(req);
+            //result
+            var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
+            //single line of text
+            expect(webapi.devkit_SingleLineofTextText.Value).toEqual("abcd");
+            expect(webapi.devkit_SingleLineofTextEmail.Value).toEqual("a@a.a");
+            expect(webapi.devkit_SingleLineofTextPhone.Value).toEqual("84 0907952232");
+            expect(webapi.devkit_SingleLineofTextTickerSymbol.Value).toEqual("APP");
+            expect(webapi.devkit_SingleLineofTextUrl.Value).toEqual("https://google.com");
+            expect(webapi.devkit_SingleLineofTextTextArea.Value).toEqual("Single\nline\nof\ntext\ntext\narea");
+            //multiple lilnes of text
+            expect(webapi.devkit_MultipleLiniesofText.Value).toEqual("multiple\nlines\nof\ntext");
+            //loolup
+            expect(webapi.devkit_LinkWebApiIdName)
+
+            //others
+            expect(webapi["@odata.etag"]).not.toBeUndefined();
+            expect(res.value.length).toBeGreaterThan(0);
+            expect(res["@odata.context"]).toStartsWith(fakeUrl);
+            expect(res["@Microsoft.Dynamics.CRM.totalrecordcount"]).toEqual(-1);
+            expect(res["@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.morerecords"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"]).not.toBeNull();
+            expect(res["@odata.nextLink"]).toBeUndefined();
+            expect(res["@odata.count"]).toBeUndefined();
+        });
     });
 });

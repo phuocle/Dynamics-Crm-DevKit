@@ -12,6 +12,12 @@
             /** The array optionset label text - array of string type */
             FormattedValue: Array<string>;
         }
+        interface BooleanValue {
+            /** The bool value of field. E.g.: true */
+            Value: boolean;
+            /** The label text of field. E.g.: "Yes" */
+            FormattedValue: string;
+        }
         interface DateOnlyValue {
             /** The date only value of field. Always format yyyy-MM-dd */
             Value: string;
@@ -42,7 +48,34 @@
             /** The time-zone date and time string formatted of field. E.g.: "28.04.2019 03:30 CH" */
             FormattedValue: string;
         }
-
+        interface IntegerValue {
+            /** The integer value of field. E.g.: 1234567 */
+            Value: number;
+            /** The string formatted value of field. E.g.: "1.234.567" */
+            FormattedValue: string;
+        }
+        interface DoubleValue {
+            /** The double value of field. E.g.: 1234.57 */
+            Value: number;
+            /** The string formatted value of field. E.g.: "1.234,57" */
+            FormattedValue: string;
+        }
+        interface DecimalValue {
+            /** The decimal value of field. E.g.: 1234567.89 */
+            Value: number;
+            /** The string formatted value of field. E.g.: "1.234.567,89" */
+            FormattedValue: string;
+        }
+        interface MoneyValue {
+            /** The currency value of field. E.g.: 123456.35 */
+            Value: number;
+            /** The string formatted value of field. E.g.: "123.456,35 $" */
+            FormattedValue: string;
+        }
+        interface StringValue {
+            /** The string value of field */
+            Value: string;
+        }
 
 
         interface LookupValue {
@@ -75,47 +108,22 @@
             /** The string formatted value of field */
             FormattedValue: string;
         }
-        interface BooleanValue {
-            /** The object value of field */
-            Value: boolean;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
 
 
 
 
 
-        interface IntegerValue {
-            /** The object value of field */
-            Value: number;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
+
+
         interface BigIntValue {
             /** The object value of field */
             Value: number;
             /** The string formatted value of field */
             FormattedValue: string;
         }
-        interface DecimalValue {
-            /** The object value of field */
-            Value: number;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface DoubleValue {
-            /** The object value of field */
-            Value: number;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface MoneyValue {
-            /** The object value of field */
-            Value: number;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
+
+
+
         interface GuidValue {
             /** The object value of field */
             Value: string;
@@ -140,12 +148,7 @@
             /** The string formatted value of field */
             FormattedValue: string;
         }
-        interface StringValue {
-            /** The object value of field */
-            Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
+
 
         interface AlternateKey {
             property: string;

@@ -131,6 +131,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             _d_ts += $"\t\t\"@odata.etag\": string;\r\n";
             foreach (var crmAttribute in Fields)
             {
+                if (crmAttribute.AttributeOf != null && !crmAttribute.IsValidForCreate && !crmAttribute.IsValidForUpdate && crmAttribute.SchemaName.ToLower().EndsWith("name")) continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.Virtual && !crmAttribute.IsMultiSelectPicklist) continue;
                 var jdoc = string.Empty;
                 if (crmAttribute.FieldType != AttributeTypeCode.Owner)
