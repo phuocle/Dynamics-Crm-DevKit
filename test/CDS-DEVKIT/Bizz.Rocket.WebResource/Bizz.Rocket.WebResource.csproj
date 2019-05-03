@@ -72,6 +72,39 @@
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
+    <Content Include="entities\ActivityParty.form.js" />
+    <Content Include="entities\ActivityParty.js" />
+    <Content Include="entities\ActivityParty.webapi.js">
+      <DependentUpon>ActivityParty.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Email.form.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Email.js" />
+    <Content Include="entities\Email.webapi.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
+    <Content Include="entities\PhoneCall.form.js">
+      <DependentUpon>PhoneCall.js</DependentUpon>
+    </Content>
+    <Content Include="entities\PhoneCall.js" />
+    <Content Include="entities\PhoneCall.webapi.js">
+      <DependentUpon>PhoneCall.js</DependentUpon>
+    </Content>
+    <Content Include="entities\SystemUser.form.js">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </Content>
+    <Content Include="entities\SystemUser.js" />
+    <Content Include="entities\SystemUser.webapi.js">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Task.form.js">
+      <DependentUpon>Task.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Task.js" />
+    <Content Include="entities\Task.webapi.js">
+      <DependentUpon>Task.js</DependentUpon>
+    </Content>
     <Content Include="test\devkit_WebApi.test.js">
       <DependentUpon>devkit_WebApi.test.html</DependentUpon>
     </Content>
@@ -110,9 +143,24 @@
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\ActivityParty.d.ts">
+      <DependentUpon>ActivityParty.js</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="entities\devkit.d.ts" />
     <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
       <DependentUpon>devkit_WebApi.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Email.d.ts">
+      <DependentUpon>Email.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\PhoneCall.d.ts">
+      <DependentUpon>PhoneCall.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\SystemUser.d.ts">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Task.d.ts">
+      <DependentUpon>Task.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

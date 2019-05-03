@@ -8,7 +8,70 @@ var formWebApi = (function () {
         //TestReadOptionSet();
         //TestReadDateTime();
         //TestReadNumber();
-        TestString();
+        //TestString();
+        //TestEntityImage();
+        TestPartyList();
+    }
+
+    function TestPartyList() {
+        var fetchData = {
+            subject: "EMAIL"
+        };
+        var fetchXml = [
+            "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+            "  <entity name='email'>",
+            "    <attribute name='subject'/>",
+            "    <attribute name='regardingobjectid'/>",
+            "    <attribute name='from'/>",
+            "    <attribute name='to'/>",
+            "    <attribute name='prioritycode'/>",
+            "    <attribute name='statuscode'/>",
+            "    <attribute name='modifiedon'/>",
+            "    <attribute name='activityid'/>",
+            "    <order attribute='subject' descending='false'/>",
+            "    <filter type='and'>",
+            "      <condition attribute='subject' operator='eq' value='", fetchData.subject, "'/>",
+            "    </filter>",
+            "  </entity>",
+            "</fetch>",
+        ].join("");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.async = false;
+        req.entityName = "email";
+        req.fetchXml = fetchXml;
+        req.returnAllPages = true;
+        var res = WebApiClient.Retrieve(req);
+        var api = new Rocket.devkit_WebApiApi(res.value[0]);
+        console.log(JSON.stringify(res));
+        debugger;
+    }
+
+    function TestEntityImage() {
+        var fetchData = {
+            devkit_name: "IMAGE"
+        };
+        var fetchXml = [
+            "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+            "  <entity name='devkit_webapi'>",
+            "    <attribute name='owneridtype'/>",
+            "    <attribute name='entityimageid'/>",
+            "    <attribute name='entityimage_url'/>",
+            "    <attribute name='entityimage_timestamp'/>",
+            "    <filter type='and'>",
+            "      <condition attribute='devkit_name' operator='eq' value='", fetchData.devkit_name, "'/>",
+            "    </filter>",
+            "  </entity>",
+            "</fetch>",
+        ].join("");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.async = false;
+        req.entityName = "devkit_webapi";
+        req.fetchXml = fetchXml;
+        req.returnAllPages = true;
+        var res = WebApiClient.Retrieve(req);
+        var api = new Rocket.devkit_WebApiApi(res.value[0]);
+        console.log(JSON.stringify(res));
+        debugger;
     }
 
     function TestString() {

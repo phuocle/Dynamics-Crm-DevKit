@@ -551,8 +551,80 @@ describe("devkit_WebApi.test", function () {
             //multiple lilnes of text
             expect(webapi.devkit_MultipleLiniesofText.Value).toEqual("multiple\nlines\nof\ntext");
             //loolup
-            expect(webapi.devkit_LinkWebApiIdName)
-
+            expect(webapi.devkit_LinkWebApiId.Value).toEqual("f55a0d1e-286b-e911-a997-000d3a802135");
+            expect(webapi.devkit_LinkWebApiId.FormattedValue).toEqual("DATETIME");
+            expect(webapi.OwnerId_systemuser.Value).toEqual("739d2b22-5f57-42f9-9a17-ebad89799e7e");
+            expect(webapi.OwnerId_systemuser.FormattedValue).toEqual("dev kit");
+            expect(webapi.OwnerId_team.Value).toBeNull();
+            expect(webapi.OwnerId_team.FormattedValue).toEqual("");
+            expect(webapi.devkit_CustomerId_account.Value).toEqual("928d37ec-9e66-e911-a993-000d3a804bc9");
+            expect(webapi.devkit_CustomerId_account.FormattedValue).toEqual("A. Datum Corporation (sample)");
+            expect(webapi.devkit_CustomerId_contact.Value).toBeNull();
+            expect(webapi.devkit_CustomerId_contact.FormattedValue).toEqual("");
+            //guid
+            expect(webapi.devkit_WebApiId.Value).toEqual("3c254671-456d-e911-a98d-000d3a80280e");
+            //others
+            expect(webapi["@odata.etag"]).not.toBeUndefined();
+            expect(res.value.length).toBeGreaterThan(0);
+            expect(res["@odata.context"]).toStartsWith(fakeUrl);
+            expect(res["@Microsoft.Dynamics.CRM.totalrecordcount"]).toEqual(-1);
+            expect(res["@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.morerecords"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"]).not.toBeNull();
+            expect(res["@odata.nextLink"]).toBeUndefined();
+            expect(res["@odata.count"]).toBeUndefined();
+        });
+        it("Retrieve Image", function () {
+            //setup
+            var data = {
+                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis(entityimageid,devkit_webapiid,entityimage,entityimage_url,entityimage_timestamp)",
+                "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
+                "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
+                "@Microsoft.Dynamics.CRM.morerecords": false,
+                "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": "<cookie pagenumber=\"1\" pagingcookie=\"%3ccookie%20page%3d%221%22%3e%3cdevkit_webapiid%20last%3d%22%7bC9C7D336-456D-E911-A98D-000D3A80280E%7d%22%20first%3d%22%7bC9C7D336-456D-E911-A98D-000D3A80280E%7d%22%20%2f%3e%3c%2fcookie%3e\" istracking=\"False\" />",
+                "value": [{
+                    "@odata.etag": "W/\"588558\"",
+                    "entityimageid": "cbc7d336-456d-e911-a98d-000d3a80280e",
+                    "devkit_webapiid": "c9c7d336-456d-e911-a98d-000d3a80280e",
+                    "entityimage": "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",
+                    "entityimage_url": "/Image/download.aspx?Entity=devkit_webapi&Attribute=entityimage&Id=c9c7d336-456d-e911-a98d-000d3a80280e&Timestamp=636924447719637143",
+                    "entityimage_timestamp@OData.Community.Display.V1.FormattedValue": "636.924.447.719.637.000",
+                    "entityimage_timestamp": 636924447719637100
+                }]
+            };
+            var fetchData = {
+                devkit_name: "IMAGE"
+            };
+            var fetchXml = [
+                "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+                "  <entity name='devkit_webapi'>",
+                "    <attribute name='entityimage'/>",
+                "    <attribute name='entityimageid'/>",
+                "    <attribute name='entityimage_url'/>",
+                "    <attribute name='entityimage_timestamp'/>",
+                "    <filter type='and'>",
+                "      <condition attribute='devkit_name' operator='eq' value='", fetchData.devkit_name, "'/>",
+                "    </filter>",
+                "  </entity>",
+                "</fetch>",
+            ].join("");
+            fetchXml = removeWhitespaces(fetchXml);
+            var url = RegExp.escape(fakeUrl + "/api/data/v9.1/devkit_webapis?fetchXml=") + escape(fetchXml);
+            xhr.respondWith("GET", RegExp(url),
+                [200, { "Content-Type": "application/json" }, JSON.stringify(data)]
+            );
+            //run
+            var req = new Rocket.WebApi.RetrieveRequest();
+            req.entityName = "devkit_webapi";
+            req.fetchXml = fetchXml;
+            req.returnAllPages = true;
+            req.async = false;
+            var res = WebApiClient.Retrieve(req);
+            //result
+            debugger;
+            var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
+            //image
+            expect(webapi.EntityImageId.Value).toStartsWith("/9j/4AAQSkZJRgABAQEAYABgAAD");
             //others
             expect(webapi["@odata.etag"]).not.toBeUndefined();
             expect(res.value.length).toBeGreaterThan(0);

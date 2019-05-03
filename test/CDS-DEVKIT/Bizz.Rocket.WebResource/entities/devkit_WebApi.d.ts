@@ -113,11 +113,10 @@ declare namespace Rocket {
 		devkit_Currency: WebApi.MoneyValue;
 		/** ReadOnly - Value of the Currency in base currency. */
 		devkit_currency_Base: WebApi.MoneyValue;
-		devkit_CustomerId_account: WebApi.CustomerValue;
-		devkit_CustomerId_contact: WebApi.CustomerValue;
+		devkit_CustomerId_account: WebApi.LookupValue;
+		devkit_CustomerId_contact: WebApi.LookupValue;
 		/** ReadOnly */
 		devkit_CustomerIdName: WebApi.StringValue;
-		devkit_CustomerIdType: WebApi.StringValue;
 		/** ReadOnly */
 		devkit_CustomerIdYomiName: WebApi.StringValue;
 		devkit_DateOnlyDateOnly_DateOnly: WebApi.DateOnlyValue;
@@ -195,6 +194,7 @@ declare namespace Rocket {
 		devkit_YesAndNo: WebApi.BooleanValue;
 		/** ReadOnly */
 		devkit_YesAndNoCalculated: WebApi.BooleanValue;
+		EntityImage: WebApi.StringValue;
 		/** ReadOnly */
 		EntityImage_Timestamp: WebApi.BigIntValue;
 		/** ReadOnly */
@@ -222,13 +222,11 @@ declare namespace Rocket {
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-		OwnerId_systemuser: WebApi.OwnerUserValue;
+		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
-		OwnerId_team: WebApi.OwnerTeamValue;
+		OwnerId_team: WebApi.LookupValue;
 		/** ReadOnly - Name of the owner */
 		OwnerIdName: WebApi.StringValue;
-		/** Owner Id Type */
-		OwnerIdType: WebApi.StringValue;
 		/** ReadOnly - Yomi name of the owner */
 		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier for the business unit that owns the record */

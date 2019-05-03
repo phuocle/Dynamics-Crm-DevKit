@@ -54,6 +54,12 @@
             /** The string formatted value of field. E.g.: "1.234.567" */
             FormattedValue: string;
         }
+        interface BigIntValue {
+            /** The big integer value of field. E.g.: 1234567 */
+            Value: number;
+            /** The string formatted value of field. E.g.: "1.234.567" */
+            FormattedValue: string;
+        }
         interface DoubleValue {
             /** The double value of field. E.g.: 1234.57 */
             Value: number;
@@ -76,60 +82,32 @@
             /** The string value of field */
             Value: string;
         }
-
-
         interface LookupValue {
-            /** The object value of field */
+            /** The Guid value of field. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
             Value: string;
-            /** The string formatted value of field */
+            /** The string formatted value of field. E.g.: "A. Datum Corporation (sample)" */
             FormattedValue: string;
         }
-        interface CustomerValue {
-            /** The object value of field*/
-            Value: string;
-            /** The string formatted value of field*/
-            FormattedValue: string;
-        }
-        interface OwnerUserValue {
-            /** The object value of field */
-            Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface OwnerTeamValue {
-            /** The object value of field */
-            Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface OwnerStringValue {
-            /** The object value of field */
-            Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-
-
-
-
-
-
-
-        interface BigIntValue {
-            /** The object value of field */
-            Value: number;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-
-
-
         interface GuidValue {
-            /** The object value of field */
+            /** The Guid value of field. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
             Value: string;
-            /** The string formatted value of field */
-            FormattedValue: string;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         interface EntityCollectionValue {
             /** The object value of field */
             Value: Array<object>;

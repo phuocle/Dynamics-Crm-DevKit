@@ -450,6 +450,8 @@ declare namespace Rocket {
 		EMailAddress2: WebApi.StringValue;
 		/** Type an alternate email address for the account. */
 		EMailAddress3: WebApi.StringValue;
+		/** Shows the default image for the record. */
+		EntityImage: WebApi.StringValue;
 		/** ReadOnly */
 		EntityImage_Timestamp: WebApi.BigIntValue;
 		/** ReadOnly */
@@ -517,12 +519,11 @@ declare namespace Rocket {
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-		OwnerId_systemuser: WebApi.OwnerUserValue;
+		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
-		OwnerId_team: WebApi.OwnerTeamValue;
+		OwnerId_team: WebApi.LookupValue;
 		/** ReadOnly */
 		OwnerIdName: WebApi.StringValue;
-		OwnerIdType: WebApi.StringValue;
 		/** ReadOnly */
 		OwnerIdYomiName: WebApi.StringValue;
 		/** Select the account's ownership structure, such as public or private. */
@@ -623,4 +624,4 @@ declare namespace Rocket {
 		YomiName: WebApi.StringValue;
 	}
 }
-//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':false}
+//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

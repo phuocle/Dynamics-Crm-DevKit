@@ -134,8 +134,11 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\tvar {@class} = {{\r\n";
             foreach (var crmAttribute in Fields)
             {
-                if (crmAttribute.AttributeOf != null) continue;
-                if (crmAttribute.IsDeprecated) continue;
+                if (crmAttribute.AttributeOf != null && crmAttribute.FieldType == AttributeTypeCode.Virtual && crmAttribute.LogicalName != "entityimage") continue;
+                if (crmAttribute.FieldType == AttributeTypeCode.EntityName || crmAttribute.FieldType == AttributeTypeCode.PartyList) continue;
+                //if (crmAttribute.AttributeOf != null) continue;
+                //if (crmAttribute.IsDeprecated) continue;
+                //if (crmAttribute.FieldType == AttributeTypeCode.Virtual && !crmAttribute.IsMultiSelectPicklist) continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.Memo ||
                     crmAttribute.FieldType == AttributeTypeCode.String ||
                     crmAttribute.FieldType == AttributeTypeCode.Picklist ||
@@ -195,7 +198,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                         var j = 0;
                         foreach (var e in entities)
                         {
-                            webApiCode += $"\t\t\t{navigations[j]}: {{ b: \"{navigations[j]}\", a: \"_{navigations[j].Split("_".ToCharArray())[0]}_value\", c: \"{collections[j]}\", d: \"{entities[j]}\" }},\r\n";
+                            webApiCode += $"\t\t\t{navigations[j]}: {{ b: \"{navigations[j]}\", a: \"_{crmAttribute.LogicalName}_value\", c: \"{collections[j]}\", d: \"{entities[j]}\" }},\r\n";
                             j++;
                         }
                     }
@@ -204,6 +207,17 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     webApiCode += $"\t\t\tOwnerId_systemuser: {{ b: \"ownerid\", a: \"_ownerid_value\", c: \"systemusers\", d: \"systemuser\" }},\r\n";
                     webApiCode += $"\t\t\tOwnerId_team: {{ b: \"ownerid\", a: \"_ownerid_value\", c: \"teams\", d: \"team\" }},\r\n";
+                }
+                else
+                {
+                    if (crmAttribute.LogicalName == "entityimage")
+                    {
+                        webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
+                    }
+                    else
+                    {
+                        webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: ??? }},\r\n";
+                    }
                 }
                 if (!(crmAttribute.IsValidForCreate || crmAttribute.IsValidForUpdate))
                 {

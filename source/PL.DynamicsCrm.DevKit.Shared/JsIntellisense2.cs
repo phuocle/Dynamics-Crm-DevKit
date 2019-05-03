@@ -131,8 +131,11 @@ namespace PL.DynamicsCrm.DevKit.Shared
             _d_ts += $"\t\t\"@odata.etag\": string;\r\n";
             foreach (var crmAttribute in Fields)
             {
-                if (crmAttribute.AttributeOf != null && !crmAttribute.IsValidForCreate && !crmAttribute.IsValidForUpdate && crmAttribute.SchemaName.ToLower().EndsWith("name")) continue;
-                if (crmAttribute.FieldType == AttributeTypeCode.Virtual && !crmAttribute.IsMultiSelectPicklist) continue;
+                //if (crmAttribute.AttributeOf != null) continue;
+                //if (crmAttribute.IsDeprecated) continue;
+                //if (crmAttribute.FieldType == AttributeTypeCode.Virtual && !crmAttribute.IsMultiSelectPicklist) continue;
+                if (crmAttribute.AttributeOf != null && crmAttribute.FieldType == AttributeTypeCode.Virtual && crmAttribute.LogicalName != "entityimage") continue;
+                if (crmAttribute.FieldType == AttributeTypeCode.EntityName || crmAttribute.FieldType == AttributeTypeCode.PartyList) continue;
                 var jdoc = string.Empty;
                 if (crmAttribute.FieldType != AttributeTypeCode.Owner)
                 {
@@ -166,19 +169,18 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     var navigations = crmAttribute.NavigationPropertyName.Split(";".ToCharArray());
                     for (var j = 0; j < entities.Length; j++)
                     {
-                        _d_ts += $"\t\t{navigations[j]}: WebApi.CustomerValue;\r\n";
+                        _d_ts += $"\t\t{navigations[j]}: WebApi.LookupValue;\r\n";
                     }
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Owner)
                 {
                     _d_ts += $"\t\t/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */\r\n";
-                    _d_ts += $"\t\tOwnerId_systemuser: WebApi.OwnerUserValue;\r\n";
+                    _d_ts += $"\t\tOwnerId_systemuser: WebApi.LookupValue;\r\n";
                     _d_ts += $"\t\t/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */\r\n";
-                    _d_ts += $"\t\tOwnerId_team: WebApi.OwnerTeamValue;\r\n";
+                    _d_ts += $"\t\tOwnerId_team: WebApi.LookupValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Memo ||
-                    crmAttribute.FieldType == AttributeTypeCode.String ||
-                    crmAttribute.FieldType == AttributeTypeCode.EntityName)
+                    crmAttribute.FieldType == AttributeTypeCode.String)
                 {
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.StringValue;\r\n";
                 }
@@ -239,14 +241,24 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 {
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.GuidValue;\r\n";
                 }
-                else if (crmAttribute.FieldType == AttributeTypeCode.CalendarRules ||
-                    crmAttribute.FieldType == AttributeTypeCode.PartyList)
+                else if (crmAttribute.FieldType == AttributeTypeCode.CalendarRules)
                 {
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.EntityCollectionValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.ManagedProperty)
                 {
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.ManagedPropertyValue;\r\n";
+                }
+                else
+                {
+                    if (crmAttribute.LogicalName == "entityimage")
+                    {
+                        _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.StringValue;\r\n";
+                    }
+                    else
+                    {
+                        _d_ts += $"\t\t{crmAttribute.SchemaName}: ???;\r\n";
+                    }
                 }
             }
             _d_ts += $"\t}}\r\n";
