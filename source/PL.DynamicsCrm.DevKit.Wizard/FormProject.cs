@@ -826,7 +826,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             MessageError = JsWebApi.Message;
             GeneratedJsWebApiCode = JsWebApi.WebApiCode;
             GeneratedJsWebApiCodeIntellisense = JsWebApi.WebApiCodeIntellisense;
-            GeneratedJsWebApiCodeIntellisense2 = JsWebApi.WebApiCodeIntellisense2;
+            GeneratedJsWebApiCodeIntellisense2 = JsWebApi.WebApiCodeTypeScriptDeclaration;
         }
 
         public void DoGeneratorCodeForm(CheckedItemCollection lists, bool isDebugForm, string file)
