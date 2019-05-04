@@ -203,21 +203,24 @@
       "rootnamespace": "???",
       "rootfolder": "???",
       "crmversion": "365",
-      "type": "CSharp"
+      "type": "CSharp",
+      "usetypescriptdeclaration": "false"
     },
     {
       "profile": "JS-FORM",
       "rootnamespace": "???",
       "rootfolder": "???",
       "crmversion": "365",
-      "type": "JsForm"
+      "type": "JsForm",
+      "usetypescriptdeclaration": "false"
     },
     {
       "profile": "JS-WEBAPI",
       "rootnamespace": "???",
       "rootfolder": "???",
       "crmversion": "365",
-      "type": "JsWebApi"
+      "type": "JsWebApi",
+      "usetypescriptdeclaration": "false"
     }
   ],
   "downloadwebresources": [

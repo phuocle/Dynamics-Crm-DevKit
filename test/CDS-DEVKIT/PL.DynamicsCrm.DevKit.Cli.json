@@ -214,10 +214,11 @@
     },
     {
       "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Bizz.Rocket",
+      "rootfolder": "",
       "crmversion": "365",
-      "type": "JsWebApi"
+      "type": "JsWebApi",
+      "usetypescriptdeclaration": "true"
     }
   ],
   "downloadwebresources": [

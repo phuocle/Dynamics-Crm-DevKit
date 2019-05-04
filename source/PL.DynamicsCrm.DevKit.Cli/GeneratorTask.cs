@@ -24,6 +24,7 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         internal void Run()
         {
+            throw new Exception("AAAAAAAAAAAAA");
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
             if (GeneratorJson.rootnamespace.Length == 0 || GeneratorJson.rootnamespace == "???")
                 throw new Exception("No rootnamespace found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
@@ -31,7 +32,8 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 throw new Exception("No rootfolder found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
             if (GeneratorJson.crmversion.Length == 0 || GeneratorJson.crmversion == "???")
                 throw new Exception("No crmversion found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
-
+            if (GeneratorJson.usetypescriptdeclaration != "true" || GeneratorJson.usetypescriptdeclaration != "false")
+                throw new Exception("No usetypescriptdeclaration found. Please check PL.DynamicsCrm.DevKit.Cli.json file !!!");
 
             if (GeneratorJson.type.ToLower() == "csharp" || GeneratorJson.type.ToLower() == "c#")
                 GeneratorLateBound();
@@ -39,7 +41,6 @@ namespace PL.DynamicsCrm.DevKit.Cli
                 GeneratorJsForm();
             else if (GeneratorJson.type.ToLower() == "jswebapi")
                 GeneratorWebApi();
-
 
             CliLog.WriteLine(CliLog.ColorGreen, new string('*', CliLog.StarLength));
         }
@@ -76,8 +77,15 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         private void GeneratorJsWebApi(string entity, int i, int count)
         {
+            var file = string.Empty;
             var fileIntellisense = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.intellisense.js";
-            var lines = File.ReadAllLines(fileIntellisense);
+            var fileTypeScriptDeclaration = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.d.ts";
+            if (GeneratorJson.usetypescriptdeclaration == "true")
+                file = fileTypeScriptDeclaration;
+            else
+                file = fileIntellisense;
+
+            var lines = File.ReadAllLines(file);
             var json = lines[lines.Length - 1];
             var comment = SimpleJson.DeserializeObject<CommentIntellisense>(json.Substring("//".Length).Replace("'", "\""));
             var parts = GeneratorJson.rootnamespace.Split(".".ToCharArray());
@@ -86,12 +94,12 @@ namespace PL.DynamicsCrm.DevKit.Cli
             jsWebApi.GeneratorCode();
             var fileWebApi = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.webapi.js";
 
-            var old = File.ReadAllText(fileIntellisense).Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+            var old = File.ReadAllText(file).Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
             var @new = jsWebApi.WebApiCodeIntellisense.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
             if (old != @new)
             {
                 CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".intellisense.js");
-                File.WriteAllText(fileIntellisense, jsWebApi.WebApiCodeIntellisense, System.Text.Encoding.UTF8);
+                File.WriteAllText(file, jsWebApi.WebApiCodeIntellisense, System.Text.Encoding.UTF8);
             }
             else
                 CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": No change ", CliLog.ColorGreen, entity, ".intellisense.js");

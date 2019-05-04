@@ -113,15 +113,11 @@ declare namespace Rocket {
 		/** ReadOnly - Unique identifier of the user who created the activity. */
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		CreatedByName: WebApi.StringValue;
-		/** ReadOnly */
 		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the activity was created. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who created the activitypointer. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the delivery of the activity was last attempted. */
@@ -155,15 +151,11 @@ declare namespace Rocket {
 		/** ReadOnly - Unique identifier of user who last modified the activity. */
 		ModifiedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		ModifiedByName: WebApi.StringValue;
-		/** ReadOnly */
 		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when activity was last modified. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who last modified the activitypointer. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
@@ -174,8 +166,6 @@ declare namespace Rocket {
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly */
-		OwnerIdName: WebApi.StringValue;
 		/** ReadOnly */
 		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the activity. */
@@ -191,8 +181,15 @@ declare namespace Rocket {
 		/** Unique identifier of the Process. */
 		ProcessId: WebApi.GuidValue;
 		/** Unique identifier of the object with which the activity is associated. */
-		RegardingObjectId: WebApi.LookupValue;
-		RegardingObjectIdName: WebApi.StringValue;
+		regardingobjectid_account_devkit_customactivity: WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_contact_devkit_customactivity: WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_new_interactionforemail_devkit_customactivity: WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_knowledgearticle_devkit_customactivity: WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_knowledgebaserecord_devkit_customactivity: WebApi.LookupValue;
 		RegardingObjectIdYomiName: WebApi.StringValue;
 		/** Scheduled duration of the activity, specified in minutes. */
 		ScheduledDurationMinutes: WebApi.IntegerValue;
@@ -202,8 +199,6 @@ declare namespace Rocket {
 		ScheduledStart_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the mailbox associated with the sender of the email message. */
 		SenderMailboxId: WebApi.LookupValue;
-		/** ReadOnly */
-		SenderMailboxIdName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the activity was sent. */
 		SentOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Uniqueidentifier specifying the id of recurring series of an instance. */
@@ -212,8 +207,6 @@ declare namespace Rocket {
 		SLAId: WebApi.LookupValue;
 		/** ReadOnly - Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: WebApi.LookupValue;
-		/** ReadOnly */
-		SLAInvokedIdName: WebApi.StringValue;
 		/** ReadOnly */
 		SLAName: WebApi.StringValue;
 		/** Shows the date and time by which the activities are sorted. */
@@ -230,8 +223,6 @@ declare namespace Rocket {
 		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
 		/** Unique identifier of the currency associated with the activitypointer. */
 		TransactionCurrencyId: WebApi.LookupValue;
-		/** ReadOnly */
-		TransactionCurrencyIdName: WebApi.StringValue;
 		/** For internal use only. */
 		TraversedPath: WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */

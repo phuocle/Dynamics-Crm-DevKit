@@ -87,15 +87,11 @@ declare namespace Rocket {
 		/** ReadOnly - Shows who created the record. */
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		CreatedByName: WebApi.StringValue;
-		/** ReadOnly */
 		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** Assigned Task Unique Id */
@@ -117,15 +113,11 @@ declare namespace Rocket {
 		/** ReadOnly - Shows who last updated the record. */
 		ModifiedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		ModifiedByName: WebApi.StringValue;
-		/** ReadOnly */
 		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
@@ -136,8 +128,6 @@ declare namespace Rocket {
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly */
-		OwnerIdName: WebApi.StringValue;
 		/** ReadOnly */
 		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the record owner's business unit. */
@@ -153,9 +143,13 @@ declare namespace Rocket {
 		/** Shows the ID of the process. */
 		ProcessId: WebApi.GuidValue;
 		/** Choose the record that the task relates to. */
-		RegardingObjectId: WebApi.LookupValue;
-		/** ReadOnly */
-		RegardingObjectIdName: WebApi.StringValue;
+		regardingobjectid_account_task: WebApi.LookupValue;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_contact_task: WebApi.LookupValue;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_knowledgearticle_task: WebApi.LookupValue;
+		/** Choose the record that the task relates to. */
+		regardingobjectid_knowledgebaserecord_task: WebApi.LookupValue;
 		/** ReadOnly */
 		RegardingObjectIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Scheduled duration of the task, specified in minutes. */
@@ -168,8 +162,6 @@ declare namespace Rocket {
 		SLAId: WebApi.LookupValue;
 		/** ReadOnly - Last SLA that was applied to this Task. This field is for internal use only. */
 		SLAInvokedId: WebApi.LookupValue;
-		/** ReadOnly */
-		SLAInvokedIdName: WebApi.StringValue;
 		/** ReadOnly */
 		SLAName: WebApi.StringValue;
 		/** Shows the date and time by which the activities are sorted. */
@@ -190,8 +182,6 @@ declare namespace Rocket {
 		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 		TransactionCurrencyId: WebApi.LookupValue;
-		/** ReadOnly */
-		TransactionCurrencyIdName: WebApi.StringValue;
 		/** For internal use only. */
 		TraversedPath: WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */

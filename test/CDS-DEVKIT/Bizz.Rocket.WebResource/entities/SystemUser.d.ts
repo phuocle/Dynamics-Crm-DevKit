@@ -264,8 +264,6 @@ declare namespace Rocket {
 		AzureActiveDirectoryObjectId: WebApi.GuidValue;
 		/** Unique identifier of the business unit with which the user is associated. */
 		BusinessUnitId: WebApi.LookupValue;
-		/** ReadOnly */
-		BusinessUnitIdName: WebApi.StringValue;
 		/** Fiscal calendar associated with the user. */
 		CalendarId: WebApi.LookupValue;
 		/** License type of user. */
@@ -273,23 +271,17 @@ declare namespace Rocket {
 		/** ReadOnly - Unique identifier of the user who created the user. */
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		CreatedByName: WebApi.StringValue;
-		/** ReadOnly */
 		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the user was created. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who created the systemuser. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
 		/** ReadOnly */
-		CreatedOnBehalfByName: WebApi.StringValue;
-		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** ReadOnly - Indicates if default outlook filters have been populated. */
 		DefaultFiltersPopulated: WebApi.BooleanValue;
 		/** ReadOnly - Select the mailbox associated with this user. */
 		DefaultMailbox: WebApi.LookupValue;
-		/** ReadOnly */
-		DefaultMailboxName: WebApi.StringValue;
 		/** ReadOnly - Type a default folder name for the user's OneDrive For Business location. */
 		DefaultOdbFolderName: WebApi.StringValue;
 		/** ReadOnly - Reason for disabling the user. */
@@ -354,13 +346,10 @@ declare namespace Rocket {
 		MobileAlertEMail: WebApi.StringValue;
 		/** Items contained with a particular SystemUser. */
 		MobileOfflineProfileId: WebApi.LookupValue;
-		MobileOfflineProfileIdName: WebApi.StringValue;
 		/** Mobile phone number for the user. */
 		MobilePhone: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the user who last modified the user. */
 		ModifiedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the user was last modified. */
@@ -368,23 +357,17 @@ declare namespace Rocket {
 		/** ReadOnly - Unique identifier of the delegate user who last modified the systemuser. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
 		/** ReadOnly */
-		ModifiedOnBehalfByName: WebApi.StringValue;
-		/** ReadOnly */
 		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** Nickname of the user. */
 		NickName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the organization associated with the user. */
 		OrganizationId: WebApi.GuidValue;
-		/** ReadOnly */
-		OrganizationIdName: WebApi.StringValue;
 		/** Outgoing email delivery method for the user. */
 		OutgoingEmailDeliveryMethod: WebApi.OptionSetValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: WebApi.UtcDateOnlyValue;
 		/** Unique identifier of the manager of the user. */
 		ParentSystemUserId: WebApi.LookupValue;
-		/** ReadOnly */
-		ParentSystemUserIdName: WebApi.StringValue;
 		/** ReadOnly */
 		ParentSystemUserIdYomiName: WebApi.StringValue;
 		/** For internal use only. */
@@ -397,8 +380,6 @@ declare namespace Rocket {
 		PhotoUrl: WebApi.StringValue;
 		/** User's position in hierarchical security model. */
 		PositionId: WebApi.LookupValue;
-		/** ReadOnly */
-		PositionIdName: WebApi.StringValue;
 		/** Preferred address for the user. */
 		PreferredAddressCode: WebApi.OptionSetValue;
 		/** Preferred email address for the user. */
@@ -409,8 +390,6 @@ declare namespace Rocket {
 		ProcessId: WebApi.GuidValue;
 		/** Unique identifier of the default queue for the user. */
 		QueueId: WebApi.LookupValue;
-		/** ReadOnly */
-		QueueIdName: WebApi.StringValue;
 		/** Salutation for correspondence with the user. */
 		Salutation: WebApi.StringValue;
 		/** Check if user is a setup user. */
@@ -425,16 +404,12 @@ declare namespace Rocket {
 		SystemUserId: WebApi.GuidValue;
 		/** Unique identifier of the territory to which the user is assigned. */
 		TerritoryId: WebApi.LookupValue;
-		/** ReadOnly */
-		TerritoryIdName: WebApi.StringValue;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
 		/** Title of the user. */
 		Title: WebApi.StringValue;
 		/** Unique identifier of the currency associated with the systemuser. */
 		TransactionCurrencyId: WebApi.LookupValue;
-		/** ReadOnly */
-		TransactionCurrencyIdName: WebApi.StringValue;
 		/** For internal use only. */
 		TraversedPath: WebApi.StringValue;
 		/** Shows the type of user license. */

@@ -99,15 +99,11 @@ declare namespace Rocket {
 		/** ReadOnly - Unique identifier of the user who created the record. */
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		CreatedByName: WebApi.StringValue;
-		/** ReadOnly */
 		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the record was created. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who created the record. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		devkit_Currency: WebApi.MoneyValue;
@@ -115,8 +111,6 @@ declare namespace Rocket {
 		devkit_currency_Base: WebApi.MoneyValue;
 		devkit_CustomerId_account: WebApi.LookupValue;
 		devkit_CustomerId_contact: WebApi.LookupValue;
-		/** ReadOnly */
-		devkit_CustomerIdName: WebApi.StringValue;
 		/** ReadOnly */
 		devkit_CustomerIdYomiName: WebApi.StringValue;
 		devkit_DateOnlyDateOnly_DateOnly: WebApi.DateOnlyValue;
@@ -131,15 +125,11 @@ declare namespace Rocket {
 		devkit_DecimalNumber: WebApi.DecimalValue;
 		devkit_FloatingPointNumber: WebApi.DoubleValue;
 		devkit_LinkWebApiId: WebApi.LookupValue;
-		/** ReadOnly */
-		devkit_LinkWebApiIdName: WebApi.StringValue;
 		devkit_MultiOptionSetCode: WebApi.MultiOptionSetValue;
 		devkit_MultipleLiniesofText: WebApi.StringValue;
 		/** The name of the custom entity. */
 		devkit_Name: WebApi.StringValue;
 		devkit_ParentWebApiId: WebApi.LookupValue;
-		/** ReadOnly */
-		devkit_ParentWebApiIdName: WebApi.StringValue;
 		devkit_SingleLineofTextEmail: WebApi.StringValue;
 		devkit_SingleLineofTextPhone: WebApi.StringValue;
 		devkit_SingleLineofTextText: WebApi.StringValue;
@@ -208,15 +198,11 @@ declare namespace Rocket {
 		/** ReadOnly - Unique identifier of the user who modified the record. */
 		ModifiedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		ModifiedByName: WebApi.StringValue;
-		/** ReadOnly */
 		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the record was modified. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who modified the record. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** Date and time that the record was migrated. */
@@ -225,8 +211,6 @@ declare namespace Rocket {
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly - Name of the owner */
-		OwnerIdName: WebApi.StringValue;
 		/** ReadOnly - Yomi name of the owner */
 		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier for the business unit that owns the record */
@@ -243,8 +227,6 @@ declare namespace Rocket {
 		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
 		/** Unique identifier of the currency associated with the entity. */
 		TransactionCurrencyId: WebApi.LookupValue;
-		/** ReadOnly */
-		TransactionCurrencyIdName: WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: WebApi.IntegerValue;
 		/** ReadOnly - Version Number */

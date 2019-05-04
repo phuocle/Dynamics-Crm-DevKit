@@ -83,15 +83,11 @@ declare namespace Rocket {
 		/** ReadOnly - Shows who created the record. */
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		CreatedByName: WebApi.StringValue;
-		/** ReadOnly */
 		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
@@ -115,15 +111,11 @@ declare namespace Rocket {
 		/** ReadOnly - Shows who last updated the record. */
 		ModifiedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		ModifiedByName: WebApi.StringValue;
-		/** ReadOnly */
 		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
@@ -134,8 +126,6 @@ declare namespace Rocket {
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly */
-		OwnerIdName: WebApi.StringValue;
 		/** ReadOnly */
 		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the phone call activity. */
@@ -151,9 +141,13 @@ declare namespace Rocket {
 		/** Shows the ID of the process. */
 		ProcessId: WebApi.GuidValue;
 		/** Choose the record that the phone call relates to. */
-		RegardingObjectId: WebApi.LookupValue;
-		/** ReadOnly */
-		RegardingObjectIdName: WebApi.StringValue;
+		regardingobjectid_account_phonecall: WebApi.LookupValue;
+		/** Choose the record that the phone call relates to. */
+		regardingobjectid_contact_phonecall: WebApi.LookupValue;
+		/** Choose the record that the phone call relates to. */
+		regardingobjectid_knowledgearticle_phonecall: WebApi.LookupValue;
+		/** Choose the record that the phone call relates to. */
+		regardingobjectid_knowledgebaserecord_phonecall: WebApi.LookupValue;
 		/** ReadOnly */
 		RegardingObjectIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Scheduled duration of the phone call activity, specified in minutes. */
@@ -166,8 +160,6 @@ declare namespace Rocket {
 		SLAId: WebApi.LookupValue;
 		/** ReadOnly - Last SLA that was applied to this Phone Call. This field is for internal use only. */
 		SLAInvokedId: WebApi.LookupValue;
-		/** ReadOnly */
-		SLAInvokedIdName: WebApi.StringValue;
 		/** ReadOnly */
 		SLAName: WebApi.StringValue;
 		/** Shows the date and time by which the activities are sorted. */
@@ -188,8 +180,6 @@ declare namespace Rocket {
 		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 		TransactionCurrencyId: WebApi.LookupValue;
-		/** ReadOnly */
-		TransactionCurrencyIdName: WebApi.StringValue;
 		/** For internal use only. */
 		TraversedPath: WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */

@@ -7,5 +7,6 @@
         public string rootnamespace { get; set; }
         public string type { get; set; }
         public string crmversion { get; set; }
+        public string usetypescriptdeclaration { get; set; }
     }
 }

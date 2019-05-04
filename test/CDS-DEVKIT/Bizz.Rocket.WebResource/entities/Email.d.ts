@@ -157,15 +157,11 @@ declare namespace Rocket {
 		/** ReadOnly - Shows who created the record. */
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly */
-		CreatedByName: WebApi.StringValue;
-		/** ReadOnly */
 		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** Enter the expected date and time when email will be sent. */
@@ -189,9 +185,13 @@ declare namespace Rocket {
 		/** Shows the type of the email reminder. */
 		EmailReminderType: WebApi.OptionSetValue;
 		/** ReadOnly - Shows the sender of the email. */
-		EmailSender: WebApi.LookupValue;
-		/** Shows the name of the sender of the email. */
-		EmailSenderName: WebApi.StringValue;
+		emailsender_account: WebApi.LookupValue;
+		/** ReadOnly - Shows the sender of the email. */
+		emailsender_contact: WebApi.LookupValue;
+		/** ReadOnly - Shows the sender of the email. */
+		emailsender_queue: WebApi.LookupValue;
+		/** ReadOnly - Shows the sender of the email. */
+		emailsender_systemuser: WebApi.LookupValue;
 		/** ReadOnly - Shows the yomi name of the email sender */
 		EmailSenderYomiName: WebApi.StringValue;
 		/** Email Tracking Id. */
@@ -224,22 +224,16 @@ declare namespace Rocket {
 		LinksClickedCount: WebApi.IntegerValue;
 		/** Unique identifier of the email message. Used only for email that is received. */
 		MessageId: WebApi.StringValue;
-		/** For internal use only. */
-		MessageIdDupCheck: WebApi.GuidValue;
 		/** MIME type of the email message data. */
 		MimeType: WebApi.StringValue;
 		/** ReadOnly - Shows who last updated the record. */
 		ModifiedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** Select the notification code to identify issues with the email recipients or attachments, such as blocked attachments. */
@@ -255,8 +249,6 @@ declare namespace Rocket {
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
 		/** ReadOnly */
-		OwnerIdName: WebApi.StringValue;
-		/** ReadOnly */
 		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the email activity. */
 		OwningBusinessUnit: WebApi.LookupValue;
@@ -266,8 +258,6 @@ declare namespace Rocket {
 		OwningUser: WebApi.LookupValue;
 		/** Select the activity that the email is associated with. */
 		ParentActivityId: WebApi.LookupValue;
-		/** ReadOnly - Parent Activity Name */
-		ParentActivityIdName: WebApi.StringValue;
 		/** ReadOnly - For internal use only. */
 		PostponeEmailProcessingUntil_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
@@ -276,10 +266,16 @@ declare namespace Rocket {
 		ProcessId: WebApi.GuidValue;
 		/** Indicates that a read receipt is requested. */
 		ReadReceiptRequested: WebApi.BooleanValue;
-		/** Unique identifier of the object with which the activity is associated. */
-		RegardingObjectId: WebApi.LookupValue;
-		/** ReadOnly */
-		RegardingObjectIdName: WebApi.StringValue;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_account_email: WebApi.LookupValue;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_asyncoperation: WebApi.LookupValue;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_contact_email: WebApi.LookupValue;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_knowledgearticle_email: WebApi.LookupValue;
+		/** Choose the record that the email relates to. */
+		regardingobjectid_knowledgebaserecord_email: WebApi.LookupValue;
 		/** ReadOnly */
 		RegardingObjectIdYomiName: WebApi.StringValue;
 		/** Reminder Action Card Id. */
@@ -298,12 +294,8 @@ declare namespace Rocket {
 		Sender: WebApi.StringValue;
 		/** ReadOnly - Select the mailbox associated with the sender of the email message. */
 		SenderMailboxId: WebApi.LookupValue;
-		/** ReadOnly */
-		SenderMailboxIdName: WebApi.StringValue;
 		/** ReadOnly - Shows the parent account of the sender of the email. */
 		SendersAccount: WebApi.LookupValue;
-		/** Shows the name of the sender account of the email. */
-		SendersAccountName: WebApi.StringValue;
 		/** ReadOnly - Shows the name of the sender account yomi name  */
 		SendersAccountYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time that the email was sent. */
@@ -312,8 +304,6 @@ declare namespace Rocket {
 		SLAId: WebApi.LookupValue;
 		/** ReadOnly - Last SLA that was applied to this email. This field is for internal use only. */
 		SLAInvokedId: WebApi.LookupValue;
-		/** ReadOnly */
-		SLAInvokedIdName: WebApi.StringValue;
 		/** ReadOnly */
 		SLAName: WebApi.StringValue;
 		/** Shows the date and time by which the activities are sorted. */
@@ -332,8 +322,6 @@ declare namespace Rocket {
 		SubmittedBy: WebApi.StringValue;
 		/** For internal use only. ID for template used in email. */
 		TemplateId: WebApi.LookupValue;
-		/** ReadOnly */
-		TemplateIdName: WebApi.StringValue;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
 		/** Shows the email addresses corresponding to the recipients. */
@@ -342,8 +330,6 @@ declare namespace Rocket {
 		TrackingToken: WebApi.StringValue;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 		TransactionCurrencyId: WebApi.LookupValue;
-		/** ReadOnly */
-		TransactionCurrencyIdName: WebApi.StringValue;
 		/** For internal use only. */
 		TraversedPath: WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
