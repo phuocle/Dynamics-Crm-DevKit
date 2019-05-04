@@ -403,19 +403,13 @@ declare namespace Rocket {
 		/** ReadOnly - Shows the external party who created the record. */
 		CreatedByExternalParty: WebApi.LookupValue;
 		/** ReadOnly */
-		CreatedByExternalPartyName: WebApi.StringValue;
-		/** ReadOnly */
 		CreatedByExternalPartyYomiName: WebApi.StringValue;
-		/** ReadOnly */
-		CreatedByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
@@ -495,19 +489,13 @@ declare namespace Rocket {
 		/** ReadOnly - Shows the external party who modified the record. */
 		ModifiedByExternalParty: WebApi.LookupValue;
 		/** ReadOnly */
-		ModifiedByExternalPartyName: WebApi.StringValue;
-		/** ReadOnly */
 		ModifiedByExternalPartyYomiName: WebApi.StringValue;
-		/** ReadOnly */
-		ModifiedByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** Type the company or business name. */
@@ -523,8 +511,6 @@ declare namespace Rocket {
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
 		/** ReadOnly */
-		OwnerIdName: WebApi.StringValue;
-		/** ReadOnly */
 		OwnerIdYomiName: WebApi.StringValue;
 		/** Select the account's ownership structure, such as public or private. */
 		OwnershipCode: WebApi.OptionSetValue;
@@ -536,8 +522,6 @@ declare namespace Rocket {
 		OwningUser: WebApi.LookupValue;
 		/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
 		ParentAccountId: WebApi.LookupValue;
-		/** ReadOnly */
-		ParentAccountIdName: WebApi.StringValue;
 		/** ReadOnly */
 		ParentAccountIdYomiName: WebApi.StringValue;
 		/** For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data. */
@@ -553,13 +537,9 @@ declare namespace Rocket {
 		/** Choose the preferred service representative for reference when you schedule service activities for the account. */
 		PreferredSystemUserId: WebApi.LookupValue;
 		/** ReadOnly */
-		PreferredSystemUserIdName: WebApi.StringValue;
-		/** ReadOnly */
 		PreferredSystemUserIdYomiName: WebApi.StringValue;
 		/** Choose the primary contact for the account to provide quick access to contact details. */
 		PrimaryContactId: WebApi.LookupValue;
-		/** ReadOnly */
-		PrimaryContactIdName: WebApi.StringValue;
 		/** ReadOnly */
 		PrimaryContactIdYomiName: WebApi.StringValue;
 		/** Primary Satori ID for Account */
@@ -582,8 +562,6 @@ declare namespace Rocket {
 		SLAId: WebApi.LookupValue;
 		/** ReadOnly - Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: WebApi.LookupValue;
-		/** ReadOnly */
-		SLAInvokedIdName: WebApi.StringValue;
 		/** ReadOnly */
 		SLAName: WebApi.StringValue;
 		/** Shows the ID of the stage. */
@@ -610,8 +588,6 @@ declare namespace Rocket {
 		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 		TransactionCurrencyId: WebApi.LookupValue;
-		/** ReadOnly */
-		TransactionCurrencyIdName: WebApi.StringValue;
 		/** For internal use only. */
 		TraversedPath: WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */

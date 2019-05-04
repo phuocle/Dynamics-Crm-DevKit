@@ -2,7 +2,7 @@
 var Rocket;
 (function (Rocket) {
 	'use strict';
-	Rocket.EmailApi = function (e) {
+	Rocket.devkit_CustomActivityApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
         function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
@@ -63,20 +63,13 @@ var Rocket;
             }
             return property;
         }
-		var email = {
+		var devkit_customactivity = {
 			ActivityAdditionalParams: { a: 'activityadditionalparams' },
 			ActivityId: { a: 'activityid' },
 			ActualDurationMinutes: { a: 'actualdurationminutes' },
-			ActualEnd_UtcDateOnly: { a: 'actualend' },
-			ActualStart_UtcDateOnly: { a: 'actualstart' },
-			AttachmentCount: { a: 'attachmentcount', r: true },
-			AttachmentOpenCount: { a: 'attachmentopencount' },
-			BaseConversationIndexHash: { a: 'baseconversationindexhash' },
-			Category: { a: 'category' },
-			Compressed: { a: 'compressed', r: true },
-			ConversationIndex: { a: 'conversationindex', r: true },
-			ConversationTrackingId: { a: 'conversationtrackingid' },
-			CorrelationMethod: { a: 'correlationmethod', r: true },
+			ActualEnd_UtcDateAndTime: { a: 'actualend' },
+			ActualStart_UtcDateAndTime: { a: 'actualstart' },
+			Community: { a: 'community' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedByName: { a: 'createdbyname', r: true },
 			CreatedByYomiName: { a: 'createdbyyominame', r: true },
@@ -84,39 +77,20 @@ var Rocket;
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOnBehalfByName: { a: 'createdonbehalfbyname', r: true },
 			CreatedOnBehalfByYomiName: { a: 'createdonbehalfbyyominame', r: true },
-			DelayedEmailSendTime_UtcDateAndTime: { a: 'delayedemailsendtime' },
-			DeliveryAttempts: { a: 'deliveryattempts' },
+			DeliveryLastAttemptedOn_UtcDateAndTime: { a: 'deliverylastattemptedon', r: true },
 			DeliveryPriorityCode: { a: 'deliveryprioritycode' },
-			DeliveryReceiptRequested: { a: 'deliveryreceiptrequested' },
 			Description: { a: 'description' },
-			DirectionCode: { a: 'directioncode' },
-			EmailReminderExpiryTime_UtcDateAndTime: { a: 'emailreminderexpirytime' },
-			EmailReminderStatus: { a: 'emailreminderstatus', r: true },
-			EmailReminderText: { a: 'emailremindertext' },
-			EmailReminderType: { a: 'emailremindertype' },
-			emailsender_account: { b: 'emailsender_account', a: '_emailsender_value', c: 'accounts', d: 'account' },
-			emailsender_contact: { b: 'emailsender_contact', a: '_emailsender_value', c: 'contacts', d: 'contact' },
-			emailsender_queue: { b: 'emailsender_queue', a: '_emailsender_value', c: 'queues', d: 'queue' },
-			emailsender_systemuser: { b: 'emailsender_systemuser', a: '_emailsender_value', c: 'systemusers', d: 'systemuser', r: true },
-			EmailSenderName: { a: 'emailsendername' },
-			EmailSenderYomiName: { a: 'emailsenderyominame', r: true },
-			EmailTrackingId: { a: 'emailtrackingid' },
+			ExchangeItemId: { a: 'exchangeitemid' },
 			ExchangeRate: { a: 'exchangerate', r: true },
-			FollowEmailUserPreference: { a: 'followemailuserpreference' },
+			ExchangeWebLink: { a: 'exchangeweblink' },
 			ImportSequenceNumber: { a: 'importsequencenumber' },
-			InReplyTo: { a: 'inreplyto', r: true },
+			InstanceTypeCode: { a: 'instancetypecode', r: true },
 			IsBilled: { a: 'isbilled' },
-			IsEmailFollowed: { a: 'isemailfollowed', r: true },
-			IsEmailReminderSet: { a: 'isemailreminderset', r: true },
+			IsMapiPrivate: { a: 'ismapiprivate' },
 			IsRegularActivity: { a: 'isregularactivity', r: true },
-			IsUnsafe: { a: 'isunsafe', r: true },
 			IsWorkflowCreated: { a: 'isworkflowcreated' },
 			LastOnHoldTime_UtcDateAndTime: { a: 'lastonholdtime' },
-			LastOpenedTime_UtcDateAndTime: { a: 'lastopenedtime' },
-			LinksClickedCount: { a: 'linksclickedcount' },
-			MessageId: { a: 'messageid' },
-			MessageIdDupCheck: { a: 'messageiddupcheck' },
-			MimeType: { a: 'mimetype' },
+			LeftVoiceMail: { a: 'leftvoicemail' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedByName: { a: 'modifiedbyname', r: true },
 			ModifiedByYomiName: { a: 'modifiedbyyominame', r: true },
@@ -124,9 +98,7 @@ var Rocket;
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOnBehalfByName: { a: 'modifiedonbehalfbyname', r: true },
 			ModifiedOnBehalfByYomiName: { a: 'modifiedonbehalfbyyominame', r: true },
-			Notifications: { a: 'notifications' },
 			OnHoldTime: { a: 'onholdtime', r: true },
-			OpenCount: { a: 'opencount' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
@@ -135,32 +107,23 @@ var Rocket;
 			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
 			OwningTeam: { b: 'owningteam', a: '_owningteam_value', c: 'teams', d: 'team', r: true },
 			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
-			ParentActivityId: { b: 'parentactivityid', a: '_parentactivityid_value', c: 'emails', d: 'email' },
-			ParentActivityIdName: { a: 'parentactivityidname', r: true },
-			PostponeEmailProcessingUntil_UtcDateAndTime: { a: 'postponeemailprocessinguntil', r: true },
+			PostponeActivityProcessingUntil_UtcDateAndTime: { a: 'postponeactivityprocessinguntil', r: true },
 			PriorityCode: { a: 'prioritycode' },
 			ProcessId: { a: 'processid' },
-			ReadReceiptRequested: { a: 'readreceiptrequested' },
-			regardingobjectid_account_email: { b: 'regardingobjectid_account_email', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
-			regardingobjectid_asyncoperation: { b: 'regardingobjectid_asyncoperation', a: '_regardingobjectid_value', c: 'asyncoperations', d: 'asyncoperation' },
-			regardingobjectid_contact_email: { b: 'regardingobjectid_contact_email', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
-			regardingobjectid_knowledgearticle_email: { b: 'regardingobjectid_knowledgearticle_email', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
-			regardingobjectid_knowledgebaserecord_email: { b: 'regardingobjectid_knowledgebaserecord_email', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
-			RegardingObjectIdName: { a: 'regardingobjectidname', r: true },
-			RegardingObjectIdYomiName: { a: 'regardingobjectidyominame', r: true },
-			ReminderActionCardId: { a: 'reminderactioncardid' },
-			ReplyCount: { a: 'replycount', r: true },
-			SafeDescription: { a: 'safedescription', r: true },
-			ScheduledDurationMinutes: { a: 'scheduleddurationminutes', r: true },
+			regardingobjectid_account_devkit_customactivity: { b: 'regardingobjectid_account_devkit_customactivity', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
+			regardingobjectid_contact_devkit_customactivity: { b: 'regardingobjectid_contact_devkit_customactivity', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
+			regardingobjectid_new_interactionforemail_devkit_customactivity: { b: 'regardingobjectid_new_interactionforemail_devkit_customactivity', a: '_regardingobjectid_value', c: 'interactionforemails', d: 'interactionforemail' },
+			regardingobjectid_knowledgearticle_devkit_customactivity: { b: 'regardingobjectid_knowledgearticle_devkit_customactivity', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
+			regardingobjectid_knowledgebaserecord_devkit_customactivity: { b: 'regardingobjectid_knowledgebaserecord_devkit_customactivity', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
+			RegardingObjectIdName: { a: 'regardingobjectidname' },
+			RegardingObjectIdYomiName: { a: 'regardingobjectidyominame' },
+			ScheduledDurationMinutes: { a: 'scheduleddurationminutes' },
 			ScheduledEnd_UtcDateAndTime: { a: 'scheduledend' },
 			ScheduledStart_UtcDateAndTime: { a: 'scheduledstart' },
-			Sender: { a: 'sender' },
 			SenderMailboxId: { b: 'sendermailboxid', a: '_sendermailboxid_value', c: 'mailboxes', d: 'mailbox', r: true },
 			SenderMailboxIdName: { a: 'sendermailboxidname', r: true },
-			SendersAccount: { b: 'sendersaccount', a: '_sendersaccount_value', c: 'accounts', d: 'account', r: true },
-			SendersAccountName: { a: 'sendersaccountname' },
-			SendersAccountYomiName: { a: 'sendersaccountyominame', r: true },
 			SentOn_UtcDateAndTime: { a: 'senton', r: true },
+			SeriesId: { a: 'seriesid', r: true },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
 			SLAInvokedIdName: { a: 'slainvokedidname', r: true },
@@ -169,14 +132,8 @@ var Rocket;
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
 			StatusCode: { a: 'statuscode' },
-			Subcategory: { a: 'subcategory' },
 			Subject: { a: 'subject' },
-			SubmittedBy: { a: 'submittedby' },
-			TemplateId: { b: 'templateid', a: '_templateid_value', c: 'templates', d: 'template' },
-			TemplateIdName: { a: 'templateidname', r: true },
 			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber' },
-			ToRecipients: { a: 'torecipients' },
-			TrackingToken: { a: 'trackingtoken' },
 			TransactionCurrencyId: { b: 'transactioncurrencyid', a: '_transactioncurrencyid_value', c: 'transactioncurrencies', d: 'transactioncurrency' },
 			TransactionCurrencyIdName: { a: 'transactioncurrencyidname', r: true },
 			TraversedPath: { a: 'traversedpath' },
@@ -185,20 +142,20 @@ var Rocket;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in email) {
-			var a = email[field].a;
-			var b = email[field].b;
-			var c = email[field].c;
-			var d = email[field].d;
-			var g = email[field].g;
-			var r = email[field].r;
-			email[field] = webApiField(e, a, b, c, d, r, u, g);
+		for (var field in devkit_customactivity) {
+			var a = devkit_customactivity[field].a;
+			var b = devkit_customactivity[field].b;
+			var c = devkit_customactivity[field].c;
+			var d = devkit_customactivity[field].d;
+			var g = devkit_customactivity[field].g;
+			var r = devkit_customactivity[field].r;
+			devkit_customactivity[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
-		email.Entity = u;
-		email.EntityName = 'email';
-		email.EntityCollectionName = 'emails';
-		email['@odata.etag'] = e['@odata.etag'];
-		email.ActivityParties = e['email_activity_parties'];
+		devkit_customactivity.Entity = u;
+		devkit_customactivity.EntityName = 'devkit_customactivity';
+		devkit_customactivity.EntityCollectionName = 'devkit_customactivities';
+		devkit_customactivity['@odata.etag'] = e['@odata.etag'];
+		devkit_customactivity.ActivityParties = e['devkit_CustomActivity_activity_parties'];
 		var optionSet = {
 			RollupState: {
 				NotCalculated: 0,
@@ -209,36 +166,22 @@ var Rocket;
 				HierarchicalRecursionLimitReached: 5,
 				LoopDetected: 6
 			},
-			CorrelationMethod: {
-				None: 0,
-				Skipped: 1,
-				XHeader: 2,
-				InReplyTo: 3,
-				TrackingToken: 4,
-				ConversationIndex: 5,
-				SmartMatching: 6,
-				CustomCorrelation: 7
+			Community: {
+				Facebook: 1,
+				Twitter: 2,
+				Other: 0
 			},
 			DeliveryPriorityCode: {
 				Low: 0,
 				Normal: 1,
 				High: 2
 			},
-			EmailReminderStatus: {
-				NotSet: 0,
-				ReminderSet: 1,
-				ReminderExpired: 2,
-				ReminderInvalid: 3
-			},
-			EmailReminderType: {
-				If_I_do_not_receive_a_reply_by: 0,
-				If_the_email_is_not_opened_by: 1,
-				Remind_me_anyways_at: 2
-			},
-			Notifications: {
-				None: 0,
-				The_message_was_saved_as_a_Microsoft_Dynamics_365_email_record_but_not_all_the_attachments_could_be_saved_with_it_An_attachment_cannot_be_saved_if_it_is_blocked_or_if_its_file_type_is_invalid: 1,
-				Truncated_body: 2
+			InstanceTypeCode: {
+				Not_Recurring: 0,
+				Recurring_Master: 1,
+				Recurring_Instance: 2,
+				Recurring_Exception: 3,
+				Recurring_Future_Exception: 4
 			},
 			PriorityCode: {
 				Low: 0,
@@ -248,21 +191,18 @@ var Rocket;
 			StateCode: {
 				Open: 0,
 				Completed: 1,
-				Canceled: 2
+				Canceled: 2,
+				Scheduled: 3
 			},
 			StatusCode: {
-				Draft: 1,
+				Open: 1,
 				Completed: 2,
-				Sent: 3,
-				Received: 4,
-				Canceled: 5,
-				Pending_Send: 6,
-				Sending: 7,
-				Failed: 8
+				Canceled: 3,
+				Scheduled: 4
 			}
 		};
-		email.OptionSet = optionSet;
-		email.getAliasedValue = function (alias, isMultiOptionSet) {
+		devkit_customactivity.OptionSet = optionSet;
+		devkit_customactivity.getAliasedValue = function (alias, isMultiOptionSet) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -271,7 +211,7 @@ var Rocket;
 			}
 			return e[alias];
 		}
-		email.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		devkit_customactivity.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
@@ -280,6 +220,6 @@ var Rocket;
 			}
 			return e[alias + f];
 		}
-		return email;
+		return devkit_customactivity;
 	};
 })(Rocket || (Rocket = {}));

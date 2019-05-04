@@ -776,12 +776,10 @@ describe("devkit_WebApi.test", function () {
             var ActivityParties = webapi.ActivityParties;
             var party0 = new Rocket.ActivityPartyApi(ActivityParties[0]);
             expect(party0.ParticipationTypeMask.Value).toEqual(party0.OptionSet.ParticipationTypeMask.To_Recipient);
-
-
-
-
-            //image
-
+            expect(party0.partyid_account.FormattedValue).toEqual("A. Datum Corporation (sample)");
+            expect(party0.AddressUsed.Value).toEqual("someone9@example.com");
+            var party2 = new Rocket.ActivityPartyApi(ActivityParties[2]);
+            expect(party2.partyid_systemuser.FormattedValue).toEqual("dev kit");
             //others
             expect(webapi["@odata.etag"]).not.toBeUndefined();
             expect(res.value.length).toBeGreaterThan(0);

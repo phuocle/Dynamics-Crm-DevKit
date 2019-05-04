@@ -138,8 +138,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\tvar {@class} = {{\r\n";
             foreach (var crmAttribute in Fields)
             {
+                if (crmAttribute.IsDeprecated) continue;
                 if (crmAttribute.AttributeOf != null && crmAttribute.FieldType == AttributeTypeCode.Virtual && crmAttribute.LogicalName != "entityimage") continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.EntityName || crmAttribute.FieldType == AttributeTypeCode.PartyList) continue;
+                if (crmAttribute.AttributeOf != null && crmAttribute.AttributeOf.ToLower() + "name" == crmAttribute.LogicalName) continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.Memo ||
                     crmAttribute.FieldType == AttributeTypeCode.String ||
                     crmAttribute.FieldType == AttributeTypeCode.Picklist ||

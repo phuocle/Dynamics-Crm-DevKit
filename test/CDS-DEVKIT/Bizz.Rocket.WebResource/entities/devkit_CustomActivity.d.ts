@@ -1,6 +1,6 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
-	interface PhoneCallOptionSet {
+	interface devkit_CustomActivityOptionSet {
 		RollupState: {
 			/** 0 - Attribute value is yet to be calculated */
 			NotCalculated: number,
@@ -17,6 +17,34 @@ declare namespace Rocket {
 			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
 			LoopDetected: number
 		},
+		Community: {
+			/** 1 */
+			Facebook: number,
+			/** 2 */
+			Twitter: number,
+			/** 0 */
+			Other: number
+		},
+		DeliveryPriorityCode: {
+			/** 0 */
+			Low: number,
+			/** 1 */
+			Normal: number,
+			/** 2 */
+			High: number
+		},
+		InstanceTypeCode: {
+			/** 0 */
+			Not_Recurring: number,
+			/** 1 */
+			Recurring_Master: number,
+			/** 2 */
+			Recurring_Instance: number,
+			/** 3 */
+			Recurring_Exception: number,
+			/** 4 */
+			Recurring_Future_Exception: number
+		},
 		PriorityCode: {
 			/** 0 */
 			Low: number,
@@ -31,20 +59,22 @@ declare namespace Rocket {
 			/** 1 */
 			Completed: number,
 			/** 2 */
-			Canceled: number
+			Canceled: number,
+			/** 3 */
+			Scheduled: number
 		},
 		StatusCode: {
 			/** 1 */
 			Open: number,
 			/** 2 */
-			Made: number,
+			Completed: number,
 			/** 3 */
 			Canceled: number,
 			/** 4 */
-			Received: number
+			Scheduled: number
 		}
 	}
-	class PhoneCallApi {
+	class devkit_CustomActivityApi {
 		constructor(entity?: object);
 		/**
 		 * Get the value of alias
@@ -64,63 +94,73 @@ declare namespace Rocket {
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
-		/** A collection OptionSet of PhoneCall enttiy */
-		OptionSet: PhoneCallOptionSet;
+		/** A collection OptionSet of devkit_CustomActivity enttiy */
+		OptionSet: devkit_CustomActivityOptionSet;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
-		/** For internal use only. */
+		/** Additional information provided by the external application as JSON. For internal use only. */
 		ActivityAdditionalParams: WebApi.StringValue;
-		/** Unique identifier of the phone call activity. */
+		/** Unique identifier of the activity. */
 		ActivityId: WebApi.GuidValue;
-		/** Type the number of minutes spent on the phone call. The duration is used in reporting. */
+		/** Actual duration of the activity in minutes. */
 		ActualDurationMinutes: WebApi.IntegerValue;
-		/** Enter the actual end date and time of the phone call. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual duration of the phone call. */
-		ActualEnd_UtcDateOnly: WebApi.UtcDateOnlyValue;
-		/** Enter the actual start date and time for the phone call. By default, it displays the date and time when the activity was created, but can be edited to capture the actual duration of the phone call. */
-		ActualStart_UtcDateOnly: WebApi.UtcDateOnlyValue;
-		/** Type a category to identify the phone call type, such as lead gathering or customer follow-up, to tie the phone call to a business group or function. */
-		Category: WebApi.StringValue;
-		/** ReadOnly - Shows who created the record. */
+		/** Actual end time of the activity. */
+		ActualEnd_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** Actual start time of the activity. */
+		ActualStart_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
+		Community: WebApi.OptionSetValue;
+		/** ReadOnly - Unique identifier of the user who created the activity. */
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly */
 		CreatedByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedByYomiName: WebApi.StringValue;
-		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		/** ReadOnly - Date and time when the activity was created. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Shows who created the record on behalf of another user. */
+		/** ReadOnly - Unique identifier of the delegate user who created the activitypointer. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
 		/** ReadOnly */
 		CreatedOnBehalfByName: WebApi.StringValue;
 		/** ReadOnly */
 		CreatedOnBehalfByYomiName: WebApi.StringValue;
-		/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
+		/** ReadOnly - Date and time when the delivery of the activity was last attempted. */
+		DeliveryLastAttemptedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** Priority of delivery of the activity to the email server. */
+		DeliveryPriorityCode: WebApi.OptionSetValue;
+		/** Description of the activity. */
 		Description: WebApi.StringValue;
-		/** Select the direction of the phone call as incoming or outbound. */
-		DirectionCode: WebApi.BooleanValue;
-		/** ReadOnly - Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+		/** The message id of activity which is returned from Exchange Server. */
+		ExchangeItemId: WebApi.StringValue;
+		/** ReadOnly - Exchange rate for the currency associated with the activitypointer with respect to the base currency. */
 		ExchangeRate: WebApi.DecimalValue;
-		/** Unique identifier of the data import or data migration that created this record. */
+		/** Shows the web link of Activity of type email. */
+		ExchangeWebLink: WebApi.StringValue;
+		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: WebApi.IntegerValue;
-		/** Information which specifies whether the phone call activity was billed as part of resolving a case. */
+		/** ReadOnly - Type of instance of a recurring series. */
+		InstanceTypeCode: WebApi.OptionSetValue;
+		/** Information regarding whether the activity was billed as part of resolving a case. */
 		IsBilled: WebApi.BooleanValue;
+		/** For internal use only. */
+		IsMapiPrivate: WebApi.BooleanValue;
 		/** ReadOnly - Information regarding whether the activity is a regular activity type or event type. */
 		IsRegularActivity: WebApi.BooleanValue;
-		/** Indication which specifies if the phone call activity was created by a workflow rule. */
+		/** Information regarding whether the activity was created from a workflow rule. */
 		IsWorkflowCreated: WebApi.BooleanValue;
 		/** Contains the date and time stamp of the last on hold time. */
 		LastOnHoldTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
-		/** Select whether a voice mail was left for the person. */
+		/** Left the voice mail */
 		LeftVoiceMail: WebApi.BooleanValue;
-		/** ReadOnly - Shows who last updated the record. */
+		/** ReadOnly - Unique identifier of user who last modified the activity. */
 		ModifiedBy: WebApi.LookupValue;
 		/** ReadOnly */
 		ModifiedByName: WebApi.StringValue;
 		/** ReadOnly */
 		ModifiedByYomiName: WebApi.StringValue;
-		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		/** ReadOnly - Date and time when activity was last modified. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Shows who last updated the record on behalf of another user. */
+		/** ReadOnly - Unique identifier of the delegate user who last modified the activitypointer. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
 		/** ReadOnly */
 		ModifiedOnBehalfByName: WebApi.StringValue;
@@ -138,33 +178,39 @@ declare namespace Rocket {
 		OwnerIdName: WebApi.StringValue;
 		/** ReadOnly */
 		OwnerIdYomiName: WebApi.StringValue;
-		/** ReadOnly - Unique identifier of the business unit that owns the phone call activity. */
+		/** ReadOnly - Unique identifier of the business unit that owns the activity. */
 		OwningBusinessUnit: WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the team that owns the phone call activity. */
+		/** ReadOnly - Unique identifier of the team that owns the activity. */
 		OwningTeam: WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the user that owns the phone call activity. */
+		/** ReadOnly - Unique identifier of the user that owns the activity. */
 		OwningUser: WebApi.LookupValue;
-		/** Type the phone number. */
-		PhoneNumber: WebApi.StringValue;
-		/** Select the priority so that preferred customers or critical issues are handled quickly. */
+		/** ReadOnly - For internal use only. */
+		PostponeActivityProcessingUntil_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** Priority of the activity. */
 		PriorityCode: WebApi.OptionSetValue;
-		/** Shows the ID of the process. */
+		/** Unique identifier of the Process. */
 		ProcessId: WebApi.GuidValue;
-		/** Choose the record that the phone call relates to. */
+		/** Unique identifier of the object with which the activity is associated. */
 		RegardingObjectId: WebApi.LookupValue;
-		/** ReadOnly */
 		RegardingObjectIdName: WebApi.StringValue;
-		/** ReadOnly */
 		RegardingObjectIdYomiName: WebApi.StringValue;
-		/** ReadOnly - Scheduled duration of the phone call activity, specified in minutes. */
+		/** Scheduled duration of the activity, specified in minutes. */
 		ScheduledDurationMinutes: WebApi.IntegerValue;
-		/** Enter the expected due date and time. */
+		/** Scheduled end time of the activity. */
 		ScheduledEnd_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
-		/** Enter the expected due date and time. */
+		/** Scheduled start time of the activity. */
 		ScheduledStart_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
-		/** Choose the service level agreement (SLA) that you want to apply to the Phone Call record. */
+		/** ReadOnly - Unique identifier of the mailbox associated with the sender of the email message. */
+		SenderMailboxId: WebApi.LookupValue;
+		/** ReadOnly */
+		SenderMailboxIdName: WebApi.StringValue;
+		/** ReadOnly - Date and time when the activity was sent. */
+		SentOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		/** ReadOnly - Uniqueidentifier specifying the id of recurring series of an instance. */
+		SeriesId: WebApi.GuidValue;
+		/** Choose the service level agreement (SLA) that you want to apply to the case record. */
 		SLAId: WebApi.LookupValue;
-		/** ReadOnly - Last SLA that was applied to this Phone Call. This field is for internal use only. */
+		/** ReadOnly - Last SLA that was applied to this case. This field is for internal use only. */
 		SLAInvokedId: WebApi.LookupValue;
 		/** ReadOnly */
 		SLAInvokedIdName: WebApi.StringValue;
@@ -172,21 +218,17 @@ declare namespace Rocket {
 		SLAName: WebApi.StringValue;
 		/** Shows the date and time by which the activities are sorted. */
 		SortDate_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
-		/** Shows the ID of the stage. */
+		/** Unique identifier of the Stage. */
 		StageId: WebApi.GuidValue;
-		/** Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can't be edited. */
+		/** Status of the activity. */
 		StateCode: WebApi.OptionSetValue;
-		/** Select the phone call's status. */
+		/** Reason for the status of the activity. */
 		StatusCode: WebApi.OptionSetValue;
-		/** Type a subcategory to identify the phone call type and relate the activity to a specific product, sales region, business group, or other function. */
-		Subcategory: WebApi.StringValue;
-		/** Type a short description about the objective or primary topic of the phone call. */
+		/** Subject associated with the activity. */
 		Subject: WebApi.StringValue;
 		/** For internal use only. */
-		SubscriptionId: WebApi.GuidValue;
-		/** For internal use only. */
 		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
-		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+		/** Unique identifier of the currency associated with the activitypointer. */
 		TransactionCurrencyId: WebApi.LookupValue;
 		/** ReadOnly */
 		TransactionCurrencyIdName: WebApi.StringValue;
@@ -194,10 +236,10 @@ declare namespace Rocket {
 		TraversedPath: WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: WebApi.IntegerValue;
-		/** ReadOnly - Version number of the phone call activity. */
+		/** ReadOnly - Version number of the activity. */
 		VersionNumber: WebApi.BigIntValue;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<object>;
 	}
 }
-//{'JsForm':['Phone Call'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
+//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

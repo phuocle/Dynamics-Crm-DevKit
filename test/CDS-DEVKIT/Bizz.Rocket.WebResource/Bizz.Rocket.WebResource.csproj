@@ -76,6 +76,10 @@
     <Content Include="entities\ActivityParty.webapi.js">
       <DependentUpon>ActivityParty.js</DependentUpon>
     </Content>
+    <Content Include="entities\devkit_CustomActivity.js" />
+    <Content Include="entities\devkit_CustomActivity.webapi.js">
+      <DependentUpon>devkit_CustomActivity.js</DependentUpon>
+    </Content>
     <Content Include="entities\Email.form.js">
       <DependentUpon>Email.js</DependentUpon>
     </Content>
@@ -146,6 +150,9 @@
       <DependentUpon>ActivityParty.js</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\devkit.d.ts" />
+    <TypeScriptCompile Include="entities\devkit_CustomActivity.d.ts">
+      <DependentUpon>devkit_CustomActivity.js</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
       <DependentUpon>devkit_WebApi.js</DependentUpon>
     </TypeScriptCompile>

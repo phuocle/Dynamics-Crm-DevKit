@@ -113,8 +113,15 @@ declare namespace Rocket {
 		/** Role of the person in the activity, such as sender, to, cc, bcc, required, optional, organizer, regarding, or owner. */
 		ParticipationTypeMask: WebApi.OptionSetValue;
 		/** Unique identifier of the party associated with the activity. */
-		PartyId: WebApi.LookupValue;
-		PartyIdName: WebApi.StringValue;
+		partyid_account: WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_contact: WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_knowledgearticle: WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_queue: WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_systemuser: WebApi.LookupValue;
 		/** ReadOnly - Scheduled end time of the activity. */
 		ScheduledEnd_UtcDateOnly: WebApi.UtcDateOnlyValue;
 		/** ReadOnly - Scheduled start time of the activity. */

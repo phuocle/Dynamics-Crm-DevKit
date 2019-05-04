@@ -9,8 +9,8 @@ var formWebApi = (function () {
         //TestReadDateTime();
         //TestReadNumber();
         //TestString();
-        //TestEntityImage();
-        TestPartyList();
+        TestEntityImage();
+        //TestPartyList();
     }
 
     function TestPartyList() {
@@ -93,7 +93,7 @@ var formWebApi = (function () {
         var fetchXml = [
             "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
             "  <entity name='devkit_webapi'>",
-            "    <attribute name='owneridtype'/>",
+            "    <attribute name='owneridname'/>",
             "    <attribute name='entityimageid'/>",
             "    <attribute name='entityimage_url'/>",
             "    <attribute name='entityimage_timestamp'/>",

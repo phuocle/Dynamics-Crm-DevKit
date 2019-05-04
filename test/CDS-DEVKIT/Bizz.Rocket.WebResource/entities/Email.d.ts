@@ -276,7 +276,7 @@ declare namespace Rocket {
 		ProcessId: WebApi.GuidValue;
 		/** Indicates that a read receipt is requested. */
 		ReadReceiptRequested: WebApi.BooleanValue;
-		/** Choose the record that the email relates to. */
+		/** Unique identifier of the object with which the activity is associated. */
 		RegardingObjectId: WebApi.LookupValue;
 		/** ReadOnly */
 		RegardingObjectIdName: WebApi.StringValue;
@@ -350,7 +350,7 @@ declare namespace Rocket {
 		UTCConversionTimeZoneCode: WebApi.IntegerValue;
 		/** ReadOnly - Version number of the email message. */
 		VersionNumber: WebApi.BigIntValue;
-        /** The array of object that can cast object to ActivityPartyApi class */
+		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<object>;
 	}
 }

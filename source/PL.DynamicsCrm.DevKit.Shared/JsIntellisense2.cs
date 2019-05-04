@@ -131,41 +131,60 @@ namespace PL.DynamicsCrm.DevKit.Shared
             _d_ts += $"\t\t\"@odata.etag\": string;\r\n";
             foreach (var crmAttribute in Fields)
             {
+                if (crmAttribute.IsDeprecated) continue;
                 if (crmAttribute.AttributeOf != null && crmAttribute.FieldType == AttributeTypeCode.Virtual && crmAttribute.LogicalName != "entityimage") continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.EntityName || crmAttribute.FieldType == AttributeTypeCode.PartyList) continue;
+                if (crmAttribute.AttributeOf != null && crmAttribute.AttributeOf.ToLower() + "name" == crmAttribute.LogicalName) continue;
                 var jdoc = string.Empty;
-                if (crmAttribute.FieldType != AttributeTypeCode.Owner)
-                {
-                    if (!crmAttribute.IsValidForCreate && !crmAttribute.IsValidForUpdate)
-                        jdoc = "ReadOnly - ";
-                    if (crmAttribute.FieldType != AttributeTypeCode.Customer && crmAttribute?.Description?.Length > 0)
-                        jdoc += crmAttribute.Description;
-                    if (jdoc.EndsWith(" - ")) jdoc = jdoc.Substring(0, jdoc.Length - " - ".Length);
-                    if (jdoc.Length > 0)
-                        _d_ts += $"\t\t/** {jdoc} */\r\n";
-                }
+                if (!crmAttribute.IsValidForCreate && !crmAttribute.IsValidForUpdate)
+                    jdoc = "ReadOnly - ";
+                if (crmAttribute.FieldType != AttributeTypeCode.Customer && crmAttribute?.Description?.Length > 0)
+                    jdoc += crmAttribute.Description;
+                if (jdoc.EndsWith(" - "))
+                    jdoc = jdoc.Substring(0, jdoc.Length - " - ".Length);
                 if (crmAttribute.FieldType == AttributeTypeCode.Picklist ||
                     crmAttribute.FieldType == AttributeTypeCode.State ||
                     crmAttribute.FieldType == AttributeTypeCode.Status
                     )
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.OptionSetValue;\r\n";
                 }
                 else if (crmAttribute.IsMultiSelectPicklist)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.MultiOptionSetValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Lookup)
                 {
-                    _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.LookupValue;\r\n";
+                    var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
+                    if (entities.Length == 1)
+                    {
+                        if (jdoc.Length > 0)
+                            _d_ts += $"\t\t/** {jdoc} */\r\n";
+                        _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.LookupValue;\r\n";
+                    }
+                    else
+                    {
+                        var navigations = crmAttribute.NavigationPropertyName.Split(";".ToCharArray());
+                        for (var j = 0; j < entities.Length; j++)
+                        {
+                            if (jdoc.Length > 0)
+                                _d_ts += $"\t\t/** {jdoc} */\r\n";
+                            _d_ts += $"\t\t{navigations[j]}: WebApi.LookupValue;\r\n";
+                        }
+                    }
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Customer)
                 {
                     var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
-                    var collections = crmAttribute.LogicalCollectionName.Split(";".ToCharArray());
                     var navigations = crmAttribute.NavigationPropertyName.Split(";".ToCharArray());
                     for (var j = 0; j < entities.Length; j++)
                     {
+                        if (jdoc.Length > 0)
+                            _d_ts += $"\t\t/** {jdoc} */\r\n";
                         _d_ts += $"\t\t{navigations[j]}: WebApi.LookupValue;\r\n";
                     }
                 }
@@ -179,26 +198,36 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 else if (crmAttribute.FieldType == AttributeTypeCode.Memo ||
                     crmAttribute.FieldType == AttributeTypeCode.String)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.StringValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Boolean)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.BooleanValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.DateTime)
                 {
                     if (crmAttribute.DateTimeBehavior == DateTimeBehavior.DateOnly)
                     {
+                        if (jdoc.Length > 0)
+                            _d_ts += $"\t\t/** {jdoc} */\r\n";
                         _d_ts += $"\t\t{crmAttribute.SchemaName}_DateOnly: WebApi.DateOnlyValue;\r\n";
                     }
                     else if (crmAttribute.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                     {
                         if (crmAttribute.DateTimeFormat == DateTimeFormat.DateOnly)
                         {
+                            if (jdoc.Length > 0)
+                                _d_ts += $"\t\t/** {jdoc} */\r\n";
                             _d_ts += $"\t\t{crmAttribute.SchemaName}_TimezoneDateOnly: WebApi.TimezoneDateOnlyValue;\r\n";
                         }
                         else
                         {
+                            if (jdoc.Length > 0)
+                                _d_ts += $"\t\t/** {jdoc} */\r\n";
                             _d_ts += $"\t\t{crmAttribute.SchemaName}_TimezoneDateAndTime: WebApi.TimezoneDateAndTimeValue;\r\n";
                         }
                     }
@@ -206,54 +235,78 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     {
                         if (crmAttribute.DateTimeFormat == DateTimeFormat.DateOnly)
                         {
+                            if (jdoc.Length > 0)
+                                _d_ts += $"\t\t/** {jdoc} */\r\n";
                             _d_ts += $"\t\t{crmAttribute.SchemaName}_UtcDateOnly: WebApi.UtcDateOnlyValue;\r\n";
                         }
                         else
                         {
+                            if (jdoc.Length > 0)
+                                _d_ts += $"\t\t/** {jdoc} */\r\n";
                             _d_ts += $"\t\t{crmAttribute.SchemaName}_UtcDateAndTime: WebApi.UtcDateAndTimeValue;\r\n";
                         }
                     }
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Integer)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.IntegerValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.BigInt)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.BigIntValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Decimal)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.DecimalValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Double)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.DoubleValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Money)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.MoneyValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Uniqueidentifier)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.GuidValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.CalendarRules)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.EntityCollectionValue;\r\n";
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.ManagedProperty)
                 {
+                    if (jdoc.Length > 0)
+                        _d_ts += $"\t\t/** {jdoc} */\r\n";
                     _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.ManagedPropertyValue;\r\n";
                 }
                 else
                 {
                     if (crmAttribute.LogicalName == "entityimage")
                     {
+                        if (jdoc.Length > 0)
+                            _d_ts += $"\t\t/** {jdoc} */\r\n";
                         _d_ts += $"\t\t{crmAttribute.SchemaName}: WebApi.StringValue;\r\n";
                     }
                     else
                     {
+                        if (jdoc.Length > 0)
+                            _d_ts += $"\t\t/** {jdoc} */\r\n";
                         _d_ts += $"\t\t{crmAttribute.SchemaName}: ??????????;\r\n";
                     }
                 }

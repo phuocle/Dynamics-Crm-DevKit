@@ -147,6 +147,7 @@ var Rocket;
 		phonecall.EntityName = 'phonecall';
 		phonecall.EntityCollectionName = 'phonecalls';
 		phonecall['@odata.etag'] = e['@odata.etag'];
+		phonecall.ActivityParties = e['phonecall_activity_parties'];
 		var optionSet = {
 			RollupState: {
 				NotCalculated: 0,

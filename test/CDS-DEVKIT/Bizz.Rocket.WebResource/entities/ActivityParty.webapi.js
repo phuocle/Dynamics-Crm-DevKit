@@ -86,7 +86,6 @@ var Rocket;
 			partyid_knowledgearticle: { b: 'partyid_knowledgearticle', a: '_partyid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			partyid_queue: { b: 'partyid_queue', a: '_partyid_value', c: 'queues', d: 'queue' },
 			partyid_systemuser: { b: 'partyid_systemuser', a: '_partyid_value', c: 'systemusers', d: 'systemuser' },
-			PartyIdName: { a: 'partyidname' },
 			ScheduledEnd_UtcDateOnly: { a: 'scheduledend', r: true },
 			ScheduledStart_UtcDateOnly: { a: 'scheduledstart', r: true },
 			VersionNumber: { a: 'versionnumber', r: true }
