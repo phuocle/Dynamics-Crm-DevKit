@@ -50,6 +50,9 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 return _fields;
             }
         }
+
+        private bool IsCustomEntity { get; set; }
+
         private string GetLogicalCollectionName(string entity)
         {
             var request = new RetrieveEntityRequest
@@ -58,6 +61,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 LogicalName = entity
             };
             var response = (RetrieveEntityResponse)CrmService.Execute(request);
+            IsCustomEntity = response.EntityMetadata.IsCustomEntity ?? false;
             return response.EntityMetadata.LogicalCollectionName;
         }
         private string GetLogicalCollectionName(CrmAttribute crmAttribute)
@@ -136,9 +140,6 @@ namespace PL.DynamicsCrm.DevKit.Shared
             {
                 if (crmAttribute.AttributeOf != null && crmAttribute.FieldType == AttributeTypeCode.Virtual && crmAttribute.LogicalName != "entityimage") continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.EntityName || crmAttribute.FieldType == AttributeTypeCode.PartyList) continue;
-                //if (crmAttribute.AttributeOf != null) continue;
-                //if (crmAttribute.IsDeprecated) continue;
-                //if (crmAttribute.FieldType == AttributeTypeCode.Virtual && !crmAttribute.IsMultiSelectPicklist) continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.Memo ||
                     crmAttribute.FieldType == AttributeTypeCode.String ||
                     crmAttribute.FieldType == AttributeTypeCode.Picklist ||
@@ -216,7 +217,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     }
                     else
                     {
-                        webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: ??? }},\r\n";
+                        webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: ?????????? }},\r\n";
                     }
                 }
                 if (!(crmAttribute.IsValidForCreate || crmAttribute.IsValidForUpdate))
@@ -242,6 +243,18 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t{@class}.EntityName = \"{@class}\";\r\n";
             webApiCode += $"\t\t{@class}.EntityCollectionName = \"{GetLogicalCollectionName(@class)}\";\r\n";
             webApiCode += $"\t\t{@class}[\"@odata.etag\"] = e[\"@odata.etag\"];\r\n";
+            var hasPartyList = Fields.Where(f => f.FieldType == AttributeTypeCode.PartyList).Any();
+            if (hasPartyList)
+            {
+                if (IsCustomEntity)
+                {
+                    webApiCode += $"\t\t{@class}.ActivityParties = e[\"{Class}_activity_parties\"];\r\n";
+                }
+                else
+                {
+                    webApiCode += $"\t\t{@class}.ActivityParties = e[\"{@class}_activity_parties\"];\r\n";
+                }
+            }
             webApiCode += JsOptionSetFormCode;
             webApiCode += $"\t\t{@class}.OptionSet = optionSet;\r\n";
 

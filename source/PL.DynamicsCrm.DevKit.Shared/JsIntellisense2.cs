@@ -131,9 +131,6 @@ namespace PL.DynamicsCrm.DevKit.Shared
             _d_ts += $"\t\t\"@odata.etag\": string;\r\n";
             foreach (var crmAttribute in Fields)
             {
-                //if (crmAttribute.AttributeOf != null) continue;
-                //if (crmAttribute.IsDeprecated) continue;
-                //if (crmAttribute.FieldType == AttributeTypeCode.Virtual && !crmAttribute.IsMultiSelectPicklist) continue;
                 if (crmAttribute.AttributeOf != null && crmAttribute.FieldType == AttributeTypeCode.Virtual && crmAttribute.LogicalName != "entityimage") continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.EntityName || crmAttribute.FieldType == AttributeTypeCode.PartyList) continue;
                 var jdoc = string.Empty;
@@ -257,9 +254,15 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     }
                     else
                     {
-                        _d_ts += $"\t\t{crmAttribute.SchemaName}: ???;\r\n";
+                        _d_ts += $"\t\t{crmAttribute.SchemaName}: ??????????;\r\n";
                     }
                 }
+            }
+            var hasPartyList = Fields.Where(f => f.FieldType == AttributeTypeCode.PartyList).Any();
+            if (hasPartyList)
+            {
+                _d_ts += $"\t\t/** The array of object that can cast object to ActivityPartyApi class */\r\n";;
+                _d_ts += $"\t\tActivityParties: Array<object>;\r\n";
             }
             _d_ts += $"\t}}\r\n";
             return _d_ts;

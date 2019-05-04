@@ -197,7 +197,8 @@ var Rocket;
 		email.Entity = u;
 		email.EntityName = 'email';
 		email.EntityCollectionName = 'emails';
-		email['@odata.etag'] = e['@odata.etag'];
+        email['@odata.etag'] = e['@odata.etag'];
+        email.ActivityParties = e['email_activity_parties'];
 		var optionSet = {
 			RollupState: {
 				NotCalculated: 0,

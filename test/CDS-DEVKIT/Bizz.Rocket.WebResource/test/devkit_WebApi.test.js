@@ -621,10 +621,167 @@ describe("devkit_WebApi.test", function () {
             req.async = false;
             var res = WebApiClient.Retrieve(req);
             //result
-            debugger;
             var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
             //image
-            expect(webapi.EntityImageId.Value).toStartsWith("/9j/4AAQSkZJRgABAQEAYABgAAD");
+            expect(webapi.EntityImageId.Value).toEqual("cbc7d336-456d-e911-a98d-000d3a80280e");
+            expect(webapi.EntityImage.Value).toStartsWith("/9j/4AAQSkZJRgABAQEAYABgAAD");
+            expect(webapi.EntityImage_URL.Value).toEqual("/Image/download.aspx?Entity=devkit_webapi&Attribute=entityimage&Id=c9c7d336-456d-e911-a98d-000d3a80280e&Timestamp=636924447719637143");
+            expect(webapi.EntityImage_Timestamp.Value).toEqual(636924447719637100);
+            expect(webapi.EntityImage_Timestamp.FormattedValue).toEqual("636.924.447.719.637.000");
+            //others
+            expect(webapi["@odata.etag"]).not.toBeUndefined();
+            expect(res.value.length).toBeGreaterThan(0);
+            expect(res["@odata.context"]).toStartsWith(fakeUrl);
+            expect(res["@Microsoft.Dynamics.CRM.totalrecordcount"]).toEqual(-1);
+            expect(res["@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.morerecords"]).toBeFalsy();
+            expect(res["@Microsoft.Dynamics.CRM.fetchxmlpagingcookie"]).not.toBeNull();
+            expect(res["@odata.nextLink"]).toBeUndefined();
+            expect(res["@odata.count"]).toBeUndefined();
+        });
+        it("Retrieve PartyList", function () {
+            //setup
+            var data = {
+                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#emails(subject,prioritycode,statuscode,modifiedon,activityid,email_activity_parties)",
+                "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
+                "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
+                "@Microsoft.Dynamics.CRM.morerecords": false,
+                "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": "<cookie pagenumber=\"1\" pagingcookie=\"%3ccookie%20page%3d%221%22%3e%3csubject%20last%3d%22EMAIL%22%20first%3d%22EMAIL%22%20%2f%3e%3cactivityid%20last%3d%22%7bDF6BEC1B-C26D-E911-A98D-000D3A80280E%7d%22%20first%3d%22%7bDF6BEC1B-C26D-E911-A98D-000D3A80280E%7d%22%20%2f%3e%3c%2fcookie%3e\" istracking=\"False\" />",
+                "value": [{
+                    "@odata.etag": "W/\"591128\"",
+                    "subject": "EMAIL",
+                    "prioritycode@OData.Community.Display.V1.FormattedValue": "Normal",
+                    "prioritycode": 1,
+                    "statuscode@OData.Community.Display.V1.FormattedValue": "Draft",
+                    "statuscode": 1,
+                    "modifiedon@OData.Community.Display.V1.FormattedValue": "03.05.2019 11:40 CH",
+                    "modifiedon": "2019-05-03T16:40:20Z",
+                    "activityid": "df6bec1b-c26d-e911-a98d-000d3a80280e",
+                    "email_activity_parties": [{
+                        "@odata.etag": "W/\"591126\"",
+                        "addressusedemailcolumnnumber@OData.Community.Display.V1.FormattedValue": "35",
+                        "addressusedemailcolumnnumber": 35,
+                        "donotemail@OData.Community.Display.V1.FormattedValue": "Allow",
+                        "donotemail": false,
+                        "instancetypecode@OData.Community.Display.V1.FormattedValue": "Not Recurring",
+                        "instancetypecode": 0,
+                        "donotfax@OData.Community.Display.V1.FormattedValue": "Allow",
+                        "donotfax": false,
+                        "addressused": "someone9@example.com",
+                        "_activityid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "activityid_activitypointer",
+                        "_activityid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "activitypointer",
+                        "_activityid_value": "df6bec1b-c26d-e911-a98d-000d3a80280e",
+                        "_partyid_value@OData.Community.Display.V1.FormattedValue": "A. Datum Corporation (sample)",
+                        "_partyid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "partyid_account",
+                        "_partyid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "account",
+                        "_partyid_value": "928d37ec-9e66-e911-a993-000d3a804bc9",
+                        "donotphone@OData.Community.Display.V1.FormattedValue": "Allow",
+                        "donotphone": false,
+                        "participationtypemask@OData.Community.Display.V1.FormattedValue": "To Recipient",
+                        "participationtypemask": 2,
+                        "ispartydeleted@OData.Community.Display.V1.FormattedValue": "No",
+                        "ispartydeleted": false,
+                        "_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
+                        "_ownerid_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                        "donotpostalmail@OData.Community.Display.V1.FormattedValue": "Allow",
+                        "donotpostalmail": false,
+                        "activitypartyid": "e16bec1b-c26d-e911-a98d-000d3a80280e"
+                    }, {
+                        "@odata.etag": "W/\"591127\"",
+                        "addressusedemailcolumnnumber@OData.Community.Display.V1.FormattedValue": "35",
+                        "addressusedemailcolumnnumber": 35,
+                        "donotemail@OData.Community.Display.V1.FormattedValue": "Allow",
+                        "donotemail": false,
+                        "instancetypecode@OData.Community.Display.V1.FormattedValue": "Not Recurring",
+                        "instancetypecode": 0,
+                        "donotfax@OData.Community.Display.V1.FormattedValue": "Allow",
+                        "donotfax": false,
+                        "addressused": "someone8@example.com",
+                        "_activityid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "activityid_activitypointer",
+                        "_activityid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "activitypointer",
+                        "_activityid_value": "df6bec1b-c26d-e911-a98d-000d3a80280e",
+                        "_partyid_value@OData.Community.Display.V1.FormattedValue": "Alpine Ski House (sample)",
+                        "_partyid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "partyid_account",
+                        "_partyid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "account",
+                        "_partyid_value": "908d37ec-9e66-e911-a993-000d3a804bc9",
+                        "donotphone@OData.Community.Display.V1.FormattedValue": "Allow",
+                        "donotphone": false,
+                        "participationtypemask@OData.Community.Display.V1.FormattedValue": "To Recipient",
+                        "participationtypemask": 2,
+                        "ispartydeleted@OData.Community.Display.V1.FormattedValue": "No",
+                        "ispartydeleted": false,
+                        "_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
+                        "_ownerid_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                        "donotpostalmail@OData.Community.Display.V1.FormattedValue": "Allow",
+                        "donotpostalmail": false,
+                        "activitypartyid": "e26bec1b-c26d-e911-a98d-000d3a80280e"
+                    }, {
+                        "@odata.etag": "W/\"591125\"",
+                        "addressusedemailcolumnnumber@OData.Community.Display.V1.FormattedValue": "15",
+                        "addressusedemailcolumnnumber": 15,
+                        "instancetypecode@OData.Community.Display.V1.FormattedValue": "Not Recurring",
+                        "instancetypecode": 0,
+                        "addressused": "devkit@crmgridplus.com",
+                        "_activityid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "activityid_activitypointer",
+                        "_activityid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "activitypointer",
+                        "_activityid_value": "df6bec1b-c26d-e911-a98d-000d3a80280e",
+                        "_partyid_value@OData.Community.Display.V1.FormattedValue": "dev kit",
+                        "_partyid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
+                        "_partyid_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                        "participationtypemask@OData.Community.Display.V1.FormattedValue": "Sender",
+                        "participationtypemask": 1,
+                        "ispartydeleted@OData.Community.Display.V1.FormattedValue": "No",
+                        "ispartydeleted": false,
+                        "_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
+                        "_ownerid_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                        "activitypartyid": "e06bec1b-c26d-e911-a98d-000d3a80280e"
+                    }]
+                }]
+            };
+            var fetchData = {
+                subject: "EMAIL"
+            };
+            var fetchXml = [
+                "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+                "  <entity name='email'>",
+                "    <attribute name='subject'/>",
+                "    <attribute name='regardingobjectid'/>",
+                "    <attribute name='from'/>",
+                "    <attribute name='to'/>",
+                "    <attribute name='prioritycode'/>",
+                "    <attribute name='statuscode'/>",
+                "    <attribute name='modifiedon'/>",
+                "    <attribute name='activityid'/>",
+                "    <order attribute='subject' descending='false'/>",
+                "    <filter type='and'>",
+                "      <condition attribute='subject' operator='eq' value='", fetchData.subject, "'/>",
+                "    </filter>",
+                "  </entity>",
+                "</fetch>",
+            ].join("");
+            fetchXml = removeWhitespaces(fetchXml);
+            var url = RegExp.escape(fakeUrl + "/api/data/v9.1/emails?fetchXml=") + escape(fetchXml);
+            xhr.respondWith("GET", RegExp(url),
+                [200, { "Content-Type": "application/json" }, JSON.stringify(data)]
+            );
+            //run
+            var req = new Rocket.WebApi.RetrieveRequest();
+            req.entityName = "email";
+            req.fetchXml = fetchXml;
+            req.returnAllPages = true;
+            req.async = false;
+            var res = WebApiClient.Retrieve(req);
+            //result
+            var webapi = new Rocket.EmailApi(res.value[0]);
+            var ActivityParties = webapi.ActivityParties;
+            var party0 = new Rocket.ActivityPartyApi(ActivityParties[0]);
+            expect(party0.ParticipationTypeMask.Value).toEqual(party0.OptionSet.ParticipationTypeMask.To_Recipient);
+
+
+
+
+            //image
+
             //others
             expect(webapi["@odata.etag"]).not.toBeUndefined();
             expect(res.value.length).toBeGreaterThan(0);

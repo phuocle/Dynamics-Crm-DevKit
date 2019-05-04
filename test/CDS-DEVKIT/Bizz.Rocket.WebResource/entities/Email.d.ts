@@ -350,6 +350,8 @@ declare namespace Rocket {
 		UTCConversionTimeZoneCode: WebApi.IntegerValue;
 		/** ReadOnly - Version number of the email message. */
 		VersionNumber: WebApi.BigIntValue;
+        /** The array of object that can cast object to ActivityPartyApi class */
+		ActivityParties: Array<object>;
 	}
 }
 //{'JsForm':['Email'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
