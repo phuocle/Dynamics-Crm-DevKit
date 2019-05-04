@@ -805,16 +805,22 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void DoGeneratorCodeWebApi(string entityName, bool isDebug, string file)
         {
-            var lines = File.ReadAllLines(file);
-            var json = lines[lines.Length - 1];
-            var comment = SimpleJson.DeserializeObject<CommentIntellisense>(json.Substring("//".Length).Replace("'", "\""));
-
+            var isDebugForm = false;
+            var jsForm = new List<string>();
+            if (File.Exists(file))
+            {
+                var lines = File.ReadAllLines(file);
+                var json = lines[lines.Length - 1];
+                var comment = SimpleJson.DeserializeObject<CommentIntellisense>(json.Substring("//".Length).Replace("'", "\""));
+                isDebugForm = comment.IsDebugForm;
+                jsForm = comment.JsForm;
+            }
             var solutionFullName = DTE?.Solution?.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var parts = fInfo?.Name?.Split(".".ToCharArray());
             var projectName = parts[1];
             if (projectName == "sln") projectName = "WebResource";
-            var JsWebApi = new JsWebApi(CrmService, projectName, entityName, chkOthers.Checked, comment.JsForm, comment.IsDebugForm);
+            var JsWebApi = new JsWebApi(CrmService, projectName, entityName, isDebug, jsForm, isDebugForm);
             JsWebApi.GeneratorCode();
 
             MessageError = JsWebApi.Message;
@@ -1056,12 +1062,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
                 var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
                 var file = File.Exists(file2) ? file2 : file1;
-                if (!File.Exists($"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.js"))
-                {
-                    MessageBox.Show("Please add Form Js first. And then try add the webapi again !!!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    btnCancel.Enabled = true;
-                    return;
-                }
                 progressBar.Visible = true;
                 var debug = chkOthers.Checked;
                 Task task = Task.Factory.StartNew(() =>
@@ -1379,6 +1379,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private void cboEntity_SelectedIndexChanged(object sender, EventArgs e)
         {
+            chkOthers.Checked = false;
             if (FormType == FormType.Portal) return;
             if (FormType == FormType.Test)
                 lblProjectName.Text = $"{cboEntity.Text}.Test";

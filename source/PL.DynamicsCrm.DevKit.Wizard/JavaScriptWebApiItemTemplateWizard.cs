@@ -13,11 +13,19 @@ namespace PL.DynamicsCrm.DevKit.Wizard
     {
         private DTE Dte { get; set; }
         private ProjectItem SelectedProjectItem { get; set; }
+        private string GeneratedJsCode { get; set; }
         private string GeneratedJsWebApiCode { get; set; }
         private string GeneratedJsWebApiCodeIntellisense { get; set; }
         private string GeneratedJsWebApiCodeTypeScriptDeclaration { get; set; }
         private string CurrentFolder { get; set; } = string.Empty;
         private string EntityName { get; set; }
+        private string JsCodeFileName
+        {
+            get
+            {
+                return Path.Combine(CurrentFolder, EntityName + ".js");
+            }
+        }
         private string WebApiFileName
         {
             get
@@ -54,6 +62,15 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void RunFinished()
         {
+            if (!File.Exists(JsCodeFileName))
+            {
+                if (Utility.CanWriteAllText(JsCodeFileName))
+                {
+                    File.WriteAllText(JsCodeFileName, GeneratedJsCode, Encoding.UTF8);
+                    SelectedProjectItem.ProjectItems.AddFromFile(JsCodeFileName);
+                }
+            }
+            SelectedProjectItem = GetProjectItem($"{EntityName}.js");
             if (Utility.CanWriteAllText(WebApiFileName))
             {
                 File.WriteAllText(WebApiFileName, GeneratedJsWebApiCode, Encoding.UTF8);
@@ -98,18 +115,21 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             if (form.ShowDialog() == DialogResult.OK)
             {
                 EntityName = form.Class;
-                SelectedProjectItem = GetProjectItem($"{EntityName}.js");
+                SelectedProjectItem = GetProjectItem();
                 if (SelectedProjectItem != null)
                 {
                     CurrentFolder = Path.GetDirectoryName(SelectedProjectItem.FileNames[0]);
+                    GeneratedJsCode = $"///<reference path='[[{EntityName}]]' />\r\n";
                     GeneratedJsWebApiCode = form.GeneratedJsWebApiCode;
                     if (form.UseTypeScriptDeclaration == "true")
                     {
                         GeneratedJsWebApiCodeTypeScriptDeclaration = form.GeneratedJsWebApiCodeIntellisense2;
+                        GeneratedJsCode = GeneratedJsCode.Replace($"[[{EntityName}]]", $"{EntityName}.d.ts");
                     }
                     else
                     {
                         GeneratedJsWebApiCodeIntellisense = form.GeneratedJsWebApiCodeIntellisense;
+                        GeneratedJsCode = GeneratedJsCode.Replace($"[[{EntityName}]]", $"{EntityName}.intellisense.js");
                     }
                 }
             }
@@ -117,6 +137,17 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             {
                 throw new WizardCancelledException("Cancel Click");
             }
+        }
+
+        private ProjectItem GetProjectItem()
+        {
+            var selectItem = Dte.SelectedItems.Item(1);
+            ProjectItems projectItems = null;
+            if (selectItem.Project != null)
+                projectItems = selectItem.Project.ProjectItems;
+            else if (selectItem.ProjectItem != null)
+                projectItems = selectItem.ProjectItem.ProjectItems;
+            return projectItems.Parent as ProjectItem;
         }
 
         private ProjectItem GetProjectItem(string item)

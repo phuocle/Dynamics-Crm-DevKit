@@ -72,7 +72,6 @@
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
-    <Content Include="entities\ActivityParty.form.js" />
     <Content Include="entities\ActivityParty.js" />
     <Content Include="entities\ActivityParty.webapi.js">
       <DependentUpon>ActivityParty.js</DependentUpon>
