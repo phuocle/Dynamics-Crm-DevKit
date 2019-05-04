@@ -9,7 +9,7 @@ var formWebApi = (function () {
         //TestReadDateTime();
         //TestReadNumber();
         //TestString();
-        TestEntityImage();
+        //TestEntityImage();
         //TestPartyList();
     }
 
@@ -35,46 +35,6 @@ var formWebApi = (function () {
             "  </entity>",
             "</fetch>",
         ].join("");
-        //var fetchData = {
-        //    subject: "PHONECALL"
-        //};
-        //var fetchXml = [
-        //    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
-        //    "  <entity name='phonecall'>",
-        //    "    <attribute name='subject'/>",
-        //    "    <attribute name='statecode'/>",
-        //    "    <attribute name='prioritycode'/>",
-        //    "    <attribute name='scheduledend'/>",
-        //    "    <attribute name='createdby'/>",
-        //    "    <attribute name='regardingobjectid'/>",
-        //    "    <attribute name='activityid'/>",
-        //    "    <attribute name='to'/>",
-        //    "    <attribute name='from'/>",
-        //    "    <order attribute='subject' descending='false'/>",
-        //    "    <filter type='and'>",
-        //    "      <condition attribute='subject' operator='eq' value='", fetchData.subject, "'/>",
-        //    "    </filter>",
-        //    "  </entity>",
-        //    "</fetch>",
-        //].join("");
-        //var fetchData = {
-        //    subject: "CUSTOM ACTIVITY"
-        //};
-        //var fetchXml = [
-        //    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
-        //    "  <entity name='devkit_customactivity'>",
-        //    "    <attribute name='activityid'/>",
-        //    "    <attribute name='subject'/>",
-        //    "    <attribute name='createdon'/>",
-        //    "    <attribute name='to'/>",
-        //    "    <attribute name='from'/>",
-        //    "    <order attribute='subject' descending='false'/>",
-        //    "    <filter type='and'>",
-        //    "      <condition attribute='subject' operator='eq' value='", fetchData.subject, "'/>",
-        //    "    </filter>",
-        //    "  </entity>",
-        //    "</fetch>",
-        //].join("");
         var req = new Rocket.WebApi.RetrieveRequest();
         req.async = false;
         req.entityName = "email";
@@ -198,31 +158,26 @@ var formWebApi = (function () {
             "    <attribute name='devkit_dateonlydateonlyrollup'/>",
             "    <attribute name='devkit_dateonlydateonlyrollup_state'/>",
             "    <attribute name='devkit_dateonlydateonlyrollup_date'/>",
-
             "    <attribute name='devkit_userlocaldateonly'/>",
             "    <attribute name='devkit_userlocaldateonlycalculated'/>",
             "    <attribute name='devkit_userlocaldateonlyrollup'/>",
             "    <attribute name='devkit_userlocaldateonlyrollup_state'/>",
             "    <attribute name='devkit_userlocaldateonlyrollup_date'/>",
-
             "    <attribute name='devkit_userlocaldateandtime'/>",
             "    <attribute name='devkit_userlocaldateandtimecalculated'/>",
             "    <attribute name='devkit_userlocaldateandtimerollup'/>",
             "    <attribute name='devkit_userlocaldateandtimerollup_state'/>",
             "    <attribute name='devkit_userlocaldateandtimerollup_date'/>",
-
             "    <attribute name='devkit_timezonedateonly'/>",
             "    <attribute name='devkit_timezonedateonlycalculated'/>",
             "    <attribute name='devkit_timezonedateonlyrollup'/>",
             "    <attribute name='devkit_timezonedateonlyrollup_state'/>",
             "    <attribute name='devkit_timezonedateonlyrollup_date'/>",
-
             "    <attribute name='devkit_timezonedateandtime'/>",
             "    <attribute name='devkit_timezonedateandtimecalculated'/>",
             "    <attribute name='devkit_timezonedateandtimerollup'/>",
             "    <attribute name='devkit_timezonedateandtimerollup_state'/>",
             "    <attribute name='devkit_timezonedateandtimerollup_date'/>",
-
             "    <filter type='and'>",
             "      <condition attribute='devkit_name' operator='eq' value='", fetchData.devkit_name, "'/>",
             "    </filter>",

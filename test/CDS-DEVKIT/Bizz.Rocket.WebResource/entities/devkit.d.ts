@@ -108,24 +108,7 @@
 
 
 
-        interface EntityCollectionValue {
-            /** The object value of field */
-            Value: Array<object>;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface VirtualValue {
-            /** The object value of field */
-            Value: object;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
-        interface ManagedPropertyValue {
-            /** The object value of field */
-            Value: object;
-            /** The string formatted value of field */
-            FormattedValue: string;
-        }
+
 
 
         interface AlternateKey {
