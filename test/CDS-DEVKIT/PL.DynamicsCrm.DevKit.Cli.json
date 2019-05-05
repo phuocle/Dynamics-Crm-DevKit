@@ -85,6 +85,15 @@
           "dependencies": [
             "devkit_/lib/WebApiClient.js"
           ]
+        },
+        {
+          "webresources": [
+            "devkit_/entities/devkit_WebApi.js"
+          ],
+          "dependencies": [
+            "devkit_/entities/Email.webapi.js",
+            "devkit_/entities/SystemUser.webapi.js"
+          ]
         }
       ]
     },

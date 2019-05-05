@@ -8,12 +8,110 @@ var formWebApi = (function () {
         //TestReadOptionSet();
         //TestReadDateTime();
         //TestReadNumber();
-        //TestString();
-        //TestEntityImage();
-        //TestPartyList();
+        //TestReadString();
+        //TestReadEntityImage();
+        //TestReadPartyList();
+        //TestReadAlternateKey();
+
+        //TestInsertOptionSet();
+        TestCreateEmail();
     }
 
-    function TestPartyList() {
+    function GetCurrentUserId() {
+        var fetchXml = [
+            "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+            "  <entity name='systemuser'>",
+            "    <attribute name='systemuserid'/>",
+            "    <filter type='and'>",
+            "      <condition attribute='systemuserid' operator='eq-userid'/>",
+            "    </filter>",
+            "  </entity>",
+            "</fetch>",
+        ].join("");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.entityName = "systemuser";
+        req.fetchXml = fetchXml;
+        var res = WebApiClient.Retrieve(req);
+        if (res.value.length != 1) throw new Error("Cannot read CurrentUserId");
+        var user = new Rocket.SystemUserApi(res.value[0]);
+        return user.SystemUserId.Value;
+    }
+
+    function GetAccountId() {
+        var fetchData = {
+            name: "A. Datum Corporation (sample)"
+        };
+        var fetchXml = [
+            "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+            "  <entity name='account'>",
+            "    <attribute name='accountid'/>",
+            "    <filter type='and'>",
+            "      <condition attribute='name' operator='eq' value='", fetchData.name, "'/>",
+            "    </filter>",
+            "  </entity>",
+            "</fetch>",
+        ].join("");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.entityName = "account";
+        req.fetchXml = fetchXml;
+        var res = WebApiClient.Retrieve(req);
+        if (res.value.length != 1) throw new Error("Cannot read AcountId");
+        var account = new Rocket.AccountApi(res.value[0]);
+        return account.AccountId.Value;
+    }
+
+    function TestCreateEmail() {
+        var currentUserId = GetCurrentUserId();
+        var accountId = GetAccountId();
+
+        var from = new Rocket.ActivityPartyApi();
+        from.ParticipationTypeMask.Value = from.OptionSet.ParticipationTypeMask.Sender;
+        from.partyid_systemuser.Value = currentUserId;
+
+        var to = new Rocket.ActivityPartyApi();
+        to.ParticipationTypeMask.Value = from.OptionSet.ParticipationTypeMask.To_Recipient;
+        to.partyid_systemuser.Value = currentUserId;
+
+        var email = new Rocket.EmailApi();
+        email.Subject.Value = "TEST EMAIL";
+        email.Description.Value= "BODY";
+        email.ActivityParties = [from.Entity, to.Entity];
+        email.regardingobjectid_account_email.Value = accountId;
+
+        var create = new Rocket.WebApi.CreateRequest();
+        create.entity = email.Entity;
+        create.entityName = "email";
+        var res = WebApiClient.Create(create);
+    }
+
+    function TestInsertOptionSet() {
+        //the object you want to insert
+        var api = new Rocket.devkit_WebApiApi();
+        api.devkit_Name.Value = "OPTIONSET - INSERT";
+        api.devkit_SingleOptionSetCode.Value = api.OptionSet.devkit_SingleOptionSetCode.Dynamics_365;
+        api.devkit_MultiOptionSetCode.Value = [api.OptionSet.devkit_MultiOptionSetCode.Crm_2015, api.OptionSet.devkit_MultiOptionSetCode.Crm_2016];
+        api.devkit_YesAndNo.Value = false;
+        //the request
+        var req = new Rocket.WebApi.CreateRequest();
+        req.async = false;
+        req.entity = api.Entity;
+        req.entityName = api.EntityName;
+        //execute request with object
+        var res = WebApiClient.Create(req);
+        debugger;
+    }
+
+    function TestReadAlternateKey() {
+        var key = new Rocket.WebApi.AlternateKey("devkit_alternatekey", "KEY-0001");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.alternateKey = [key];
+        req.entityName = "devkit_webapi";
+        var res = WebApiClient.Retrieve(req);
+        console.log(JSON.stringify(res));
+        debugger;
+    }
+
+    function TestReadPartyList() {
         var fetchData = {
             subject: "EMAIL"
         };
@@ -46,7 +144,7 @@ var formWebApi = (function () {
         debugger;
     }
 
-    function TestEntityImage() {
+    function TestReadEntityImage() {
         var fetchData = {
             devkit_name: "IMAGE"
         };
@@ -74,7 +172,7 @@ var formWebApi = (function () {
         debugger;
     }
 
-    function TestString() {
+    function TestReadString() {
         var fetchData = {
             devkit_name: "STRING"
         };
@@ -237,6 +335,7 @@ var formWebApi = (function () {
         console.log(JSON.stringify(res));
         debugger;
     }
+
 	return {
 		OnLoad: onLoad,
 		OnSave: onSave

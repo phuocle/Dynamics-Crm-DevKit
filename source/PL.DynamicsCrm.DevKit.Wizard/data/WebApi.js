@@ -32,6 +32,7 @@
                 return entity[logicalName];
             };
             var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(",");
                 if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
                     value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
                     upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';

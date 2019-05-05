@@ -791,5 +791,139 @@ describe("devkit_WebApi.test", function () {
             expect(res["@odata.nextLink"]).toBeUndefined();
             expect(res["@odata.count"]).toBeUndefined();
         });
+        it("Retrieve Alternate Key", function () {
+            //setup
+            var data = {
+                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis/$entity",
+                "@odata.etag": "W/\"596155\"",
+                "devkit_singleoptionsetcodecalculated@OData.Community.Display.V1.FormattedValue": "Dynamics 365",
+                "devkit_singleoptionsetcodecalculated": 100000005,
+                "statecode@OData.Community.Display.V1.FormattedValue": "Active",
+                "statecode": 0,
+                "devkit_name": "OPTIONSET - INSERT",
+                "statuscode@OData.Community.Display.V1.FormattedValue": "Active",
+                "statuscode": 1,
+                "devkit_dateonlydateonlyrollup_date@OData.Community.Display.V1.FormattedValue": "04.05.2019 06:05 CH",
+                "devkit_dateonlydateonlyrollup_date": "2019-05-04T11:05:11Z",
+                "devkit_yesandno@OData.Community.Display.V1.FormattedValue": "No",
+                "devkit_yesandno": false,
+                "devkit_alternatekey": "KEY-0001",
+                "createdon@OData.Community.Display.V1.FormattedValue": "04.05.2019 06:05 CH",
+                "createdon": "2019-05-04T11:05:11Z",
+                "devkit_timezonedateonlyrollup_state@OData.Community.Display.V1.FormattedValue": "1",
+                "devkit_timezonedateonlyrollup_state": 1,
+                "devkit_userlocaldateandtimerollup_date@OData.Community.Display.V1.FormattedValue": "04.05.2019 06:05 CH",
+                "devkit_userlocaldateandtimerollup_date": "2019-05-04T11:05:11Z",
+                "devkit_userlocaldateonlyrollup_state@OData.Community.Display.V1.FormattedValue": "1",
+                "devkit_userlocaldateonlyrollup_state": 1,
+                "devkit_singleoptionsetcode@OData.Community.Display.V1.FormattedValue": "Dynamics 365",
+                "devkit_singleoptionsetcode": 100000005,
+                "devkit_dateonlydateonlyrollup_state@OData.Community.Display.V1.FormattedValue": "1",
+                "devkit_dateonlydateonlyrollup_state": 1,
+                "_ownerid_value@OData.Community.Display.V1.FormattedValue": "dev kit",
+                "_ownerid_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "ownerid",
+                "_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
+                "_ownerid_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "modifiedon@OData.Community.Display.V1.FormattedValue": "04.05.2019 09:07 CH",
+                "modifiedon": "2019-05-04T14:07:08Z",
+                "devkit_multioptionsetcode@OData.Community.Display.V1.FormattedValue": "Crm, 2015; Crm 2016",
+                "devkit_multioptionsetcode": "100000003,100000004",
+                "versionnumber@OData.Community.Display.V1.FormattedValue": "596.155",
+                "versionnumber": 596155,
+                "devkit_yesandnocalculated@OData.Community.Display.V1.FormattedValue": "No",
+                "devkit_yesandnocalculated": false,
+                "devkit_userlocaldateandtimerollup_state@OData.Community.Display.V1.FormattedValue": "1",
+                "devkit_userlocaldateandtimerollup_state": 1,
+                "devkit_webapiid": "f4378d7b-5c6e-e911-a991-000d3a802ab7",
+                "devkit_timezonedateandtimerollup_date@OData.Community.Display.V1.FormattedValue": "04.05.2019 06:05 CH",
+                "devkit_timezonedateandtimerollup_date": "2019-05-04T11:05:11Z",
+                "_modifiedby_value@OData.Community.Display.V1.FormattedValue": "dev kit",
+                "_modifiedby_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
+                "_modifiedby_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "devkit_timezonedateonlyrollup_date@OData.Community.Display.V1.FormattedValue": "04.05.2019 06:05 CH",
+                "devkit_timezonedateonlyrollup_date": "2019-05-04T11:05:11Z",
+                "devkit_timezonedateandtimerollup_state@OData.Community.Display.V1.FormattedValue": "1",
+                "devkit_timezonedateandtimerollup_state": 1,
+                "devkit_userlocaldateonlyrollup_date@OData.Community.Display.V1.FormattedValue": "04.05.2019 06:05 CH",
+                "devkit_userlocaldateonlyrollup_date": "2019-05-04T11:05:11Z",
+                "_createdby_value@OData.Community.Display.V1.FormattedValue": "dev kit",
+                "_createdby_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
+                "_createdby_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "_owningbusinessunit_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "owningbusinessunit",
+                "_owningbusinessunit_value@Microsoft.Dynamics.CRM.lookuplogicalname": "businessunit",
+                "_owningbusinessunit_value": "3394d17f-8b63-e911-a836-000d3a80e227",
+                "_owninguser_value@Microsoft.Dynamics.CRM.lookuplogicalname": "systemuser",
+                "_owninguser_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e"
+            }
+            var url = RegExp.escape(fakeUrl + "/api/data/v9.1/devkit_webapis(devkit_alternatekey='KEY-0001')");
+            xhr.respondWith("GET", new RegExp(url),
+                [200, { "Content-Type": "application/json" }, JSON.stringify(data)]
+            );
+            //run
+            var key = new Rocket.WebApi.AlternateKey("devkit_alternatekey", "KEY-0001");
+            var req = new Rocket.WebApi.RetrieveRequest();
+            req.alternateKey = [key];
+            req.entityName = "devkit_webapi";
+            var res = WebApiClient.Retrieve(req);
+            //result
+            var webapi = new Rocket.devkit_WebApiApi(res);
+            expect(webapi.devkit_Name.Value).toEqual("OPTIONSET - INSERT");
+        });
+    });
+
+    describe("Insert", function () {
+        it("Insert name", function () {
+            //setup
+            var data = {
+                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis/$entity",
+                "@odata.etag": "W/\"596043\"",
+                "devkit_singleoptionsetcodecalculated": 100000005,
+                "statecode": 0,
+                "devkit_name": "OPTIONSET - INSERT",
+                "statuscode": 1,
+                "devkit_dateonlydateonlyrollup_date": "2019-05-04T11:05:11Z",
+                "devkit_yesandno": false,
+                "createdon": "2019-05-04T11:05:11Z",
+                "devkit_timezonedateonlyrollup_state": 1,
+                "devkit_userlocaldateandtimerollup_date": "2019-05-04T11:05:11Z",
+                "devkit_userlocaldateonlyrollup_state": 1,
+                "devkit_singleoptionsetcode": 100000005,
+                "devkit_dateonlydateonlyrollup_state": 1,
+                "_ownerid_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "modifiedon": "2019-05-04T11:05:11Z",
+                "devkit_multioptionsetcode": "100000003,100000004",
+                "versionnumber": 596043,
+                "devkit_yesandnocalculated": false,
+                "devkit_userlocaldateandtimerollup_state": 1,
+                "devkit_webapiid": "f4378d7b-5c6e-e911-a991-000d3a802ab7",
+                "devkit_timezonedateandtimerollup_date": "2019-05-04T11:05:11Z",
+                "_modifiedby_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "devkit_timezonedateonlyrollup_date": "2019-05-04T11:05:11Z",
+                "devkit_timezonedateandtimerollup_state": 1,
+                "devkit_userlocaldateonlyrollup_date": "2019-05-04T11:05:11Z",
+                "_createdby_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "_owningbusinessunit_value": "3394d17f-8b63-e911-a836-000d3a80e227",
+                "_owninguser_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e"
+            }
+            var url = RegExp.escape(fakeUrl + "/api/data/v9.1/devkit_webapis");
+            xhr.respondWith("POST", url,
+                [201, { "Content-Type": "application/json" }, JSON.stringify(data)]
+            );
+            //run
+            var api = new Rocket.devkit_WebApiApi();
+            api.devkit_Name.Value = "OPTIONSET - INSERT";
+            api.devkit_SingleOptionSetCode.Value = api.OptionSet.devkit_SingleOptionSetCode.Dynamics_365;
+            api.devkit_MultiOptionSetCode.Value = [api.OptionSet.devkit_MultiOptionSetCode.Crm_2015, api.OptionSet.devkit_MultiOptionSetCode.Crm_2016];
+            api.devkit_YesAndNo.Value = false;
+
+            var req = new Rocket.WebApi.CreateRequest();
+            req.async = false;
+            req.entity = api.Entity;
+            req.entityName = api.EntityName;
+            var res = WebApiClient.Create(req);
+            //result
+            expect(JSON.stringify(api.Entity)).toEqual('{"devkit_name":"OPTIONSET - INSERT","devkit_singleoptionsetcode":100000005,"devkit_multioptionsetcode":"100000003,100000004","devkit_yesandno":false}');
+
+        });
     });
 });

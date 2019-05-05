@@ -111,9 +111,13 @@
 
 
 
-        interface AlternateKey {
-            property: string;
-            value: object;
+        class AlternateKey {
+            /**
+             * Return an object { property, value } for retrieve data
+             * @param property the alternate logical name
+             * @param value the value query
+             */
+            constructor(property: string, value: object);
         }
         interface Header {
             key: string;
@@ -122,7 +126,7 @@
 
         class RetrieveRequest {
             constructor();
-            /** The entity name. */
+            /** The entity name */
             entityName: string;
             /** Plural name of entity, if not according to plural rules */
             overriddenSetName: string;
@@ -158,9 +162,33 @@
             /** An array object of ODATA value*/
             value: Array<object>;
         }
+        class CreateRequest {
+            constructor();
+            /** The entity name */
+            entityName: string;
+            /** Plural name of entity, if not according to plural rules */
+            overriddenSetName: string;
+            /** The entity object */
+            entity: object;
+            /** Default true, requests are sent asynchronously */
+            async: boolean;
+            /** Default { key: 'Prefer', value: 'odata.include-annotations='*'' }, request header */
+            headers: Array<Header>;
+            /** Default false, there is support for sending multiple requests as a batch */
+            asBatch: boolean;
+        }
     }
 }
 
 declare namespace WebApiClient {
+    /**
+     * return an object or array of objects ODATA value
+     * @param request the retrieve request
+     */
     function Retrieve(request: Rocket.WebApi.RetrieveRequest): Rocket.WebApi.RetrieveResponse;
+    /**
+     * Return an object that you can pass to the *Api class. E.g.: var account = new AccountApi(object);
+     * @param request the create request
+     */
+    function Create(request: Rocket.WebApi.CreateRequest): object;
 }
