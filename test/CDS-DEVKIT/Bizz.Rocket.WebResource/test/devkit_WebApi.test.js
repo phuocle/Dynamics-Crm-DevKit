@@ -24,6 +24,59 @@ describe("devkit_WebApi.test", function () {
         return s;
     }
 
+    function getFromUserId() {
+        var fetchXml = [
+            "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+            "  <entity name='systemuser'>",
+            "    <attribute name='systemuserid'/>",
+            "    <filter type='and'>",
+            "      <condition attribute='systemuserid' operator='eq-userid'/>",
+            "    </filter>",
+            "  </entity>",
+            "</fetch>",
+        ].join("");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.entityName = "systemuser";
+        req.fetchXml = fetchXml;
+        var res = WebApiClient.Retrieve(req);
+        var user = new Rocket.SystemUserApi(res.value[0]);
+        return user.SystemUserId.Value;
+    }
+
+    function getToContactId() {
+        var key = new Rocket.WebApi.AlternateKey("emailaddress1", "someone_a@example.com");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.alternateKey = [key];
+        req.entityName = "contact";
+        req.queryParams = "?$select=contactid";
+        var res = WebApiClient.Retrieve(req);
+        console.log(JSON.stringify(res));
+        var contact = new Rocket.ContactApi(res);
+        return contact.ContactId.Value;
+    }
+
+    function getToAccountId() {
+        var fetchData = {
+            name: "A. Datum Corporation (sample)"
+        };
+        var fetchXml = [
+            "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+            "  <entity name='account'>",
+            "    <attribute name='accountid'/>",
+            "    <filter type='and'>",
+            "      <condition attribute='name' operator='eq' value='", fetchData.name, "'/>",
+            "    </filter>",
+            "  </entity>",
+            "</fetch>",
+        ].join("");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.entityName = "account";
+        req.fetchXml = fetchXml;
+        var res = WebApiClient.Retrieve(req);
+        var account = new Rocket.AccountApi(res.value[0]);
+        return account.AccountId.Value;
+    }
+
     var defaults = {
         ApiVersion: "9.1",
         ReturnAllPages: true,
@@ -47,7 +100,7 @@ describe("devkit_WebApi.test", function () {
         it("Retrieve OptionSet", function () {
             //setup
             var data = {
-                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis(devkit_yesandnocalculated,devkit_singleoptionsetcodecalculated,statuscode,devkit_singleoptionsetcode,devkit_name,devkit_webapiid,devkit_yesandno,statecode,devkit_multioptionsetcode)",
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#devkit_webapis(devkit_yesandnocalculated,devkit_singleoptionsetcodecalculated,statuscode,devkit_singleoptionsetcode,devkit_name,devkit_webapiid,devkit_yesandno,statecode,devkit_multioptionsetcode)",
                 "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
                 "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
                 "@Microsoft.Dynamics.CRM.morerecords": false,
@@ -183,7 +236,7 @@ describe("devkit_WebApi.test", function () {
         it("Retrieve DateTime", function () {
             //setup
             var data = {
-                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis(devkit_dateonlydateonlyrollup,devkit_dateonlydateonly,devkit_userlocaldateonly,devkit_timezonedateandtimecalculated,devkit_userlocaldateandtimerollup_date,devkit_timezonedateandtimerollup_date,devkit_userlocaldateonlyrollup_state,devkit_userlocaldateonlyrollup_date,devkit_dateonlydateonlyrollup_date,devkit_userlocaldateandtime,devkit_timezonedateonlyrollup_state,devkit_timezonedateonly,devkit_dateonlydateonlyrollup_state,devkit_timezonedateonlyrollup_date,devkit_userlocaldateandtimerollup_state,devkit_userlocaldateandtimecalculated,devkit_webapiid,devkit_userlocaldateandtimerollup,devkit_dateonlydateonlycalculated,devkit_timezonedateandtimerollup,devkit_userlocaldateonlyrollup,devkit_timezonedateonlycalculated,devkit_userlocaldateonlycalculated,devkit_timezonedateonlyrollup,devkit_timezonedateandtime,devkit_timezonedateandtimerollup_state)",
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#devkit_webapis(devkit_dateonlydateonlyrollup,devkit_dateonlydateonly,devkit_userlocaldateonly,devkit_timezonedateandtimecalculated,devkit_userlocaldateandtimerollup_date,devkit_timezonedateandtimerollup_date,devkit_userlocaldateonlyrollup_state,devkit_userlocaldateonlyrollup_date,devkit_dateonlydateonlyrollup_date,devkit_userlocaldateandtime,devkit_timezonedateonlyrollup_state,devkit_timezonedateonly,devkit_dateonlydateonlyrollup_state,devkit_timezonedateonlyrollup_date,devkit_userlocaldateandtimerollup_state,devkit_userlocaldateandtimecalculated,devkit_webapiid,devkit_userlocaldateandtimerollup,devkit_dateonlydateonlycalculated,devkit_timezonedateandtimerollup,devkit_userlocaldateonlyrollup,devkit_timezonedateonlycalculated,devkit_userlocaldateonlycalculated,devkit_timezonedateonlyrollup,devkit_timezonedateandtime,devkit_timezonedateandtimerollup_state)",
                 "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
                 "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
                 "@Microsoft.Dynamics.CRM.morerecords": false,
@@ -368,7 +421,7 @@ describe("devkit_WebApi.test", function () {
         it("Retrieve Number", function () {
             //setup
             var data = {
-                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis(devkit_wholenumbernone,_transactioncurrencyid_value,transactioncurrencyid,devkit_webapiid,devkit_wholenumbertimezone,devkit_wholenumberduration,devkit_currency_base,devkit_currency,devkit_decimalnumber,exchangerate,devkit_wholenumberlanguage,devkit_floatingpointnumber)",
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#devkit_webapis(devkit_wholenumbernone,_transactioncurrencyid_value,transactioncurrencyid,devkit_webapiid,devkit_wholenumbertimezone,devkit_wholenumberduration,devkit_currency_base,devkit_currency,devkit_decimalnumber,exchangerate,devkit_wholenumberlanguage,devkit_floatingpointnumber)",
                 "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
                 "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
                 "@Microsoft.Dynamics.CRM.morerecords": false,
@@ -472,7 +525,7 @@ describe("devkit_WebApi.test", function () {
         it("Retrieve String", function () {
             //setup
             var data = {
-                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis(devkit_singlelineoftexttickersymbol,devkit_singlelineoftextphone,_ownerid_value,ownerid,devkit_multipleliniesoftext,devkit_singlelineoftextemail,devkit_singlelineoftexturl,devkit_name,devkit_webapiid,devkit_singlelineoftexttextarea,_devkit_linkwebapiid_value,devkit_LinkWebApiId,_devkit_customerid_value,devkit_CustomerId_account,devkit_singlelineoftexttext)",
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#devkit_webapis(devkit_singlelineoftexttickersymbol,devkit_singlelineoftextphone,_ownerid_value,ownerid,devkit_multipleliniesoftext,devkit_singlelineoftextemail,devkit_singlelineoftexturl,devkit_name,devkit_webapiid,devkit_singlelineoftexttextarea,_devkit_linkwebapiid_value,devkit_LinkWebApiId,_devkit_customerid_value,devkit_CustomerId_account,devkit_singlelineoftexttext)",
                 "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
                 "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
                 "@Microsoft.Dynamics.CRM.morerecords": false,
@@ -577,7 +630,7 @@ describe("devkit_WebApi.test", function () {
         it("Retrieve Image", function () {
             //setup
             var data = {
-                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis(entityimageid,devkit_webapiid,entityimage,entityimage_url,entityimage_timestamp)",
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#devkit_webapis(entityimageid,devkit_webapiid,entityimage,entityimage_url,entityimage_timestamp)",
                 "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
                 "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
                 "@Microsoft.Dynamics.CRM.morerecords": false,
@@ -642,7 +695,7 @@ describe("devkit_WebApi.test", function () {
         it("Retrieve PartyList", function () {
             //setup
             var data = {
-                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#emails(subject,prioritycode,statuscode,modifiedon,activityid,email_activity_parties)",
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#emails(subject,prioritycode,statuscode,modifiedon,activityid,email_activity_parties)",
                 "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
                 "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
                 "@Microsoft.Dynamics.CRM.morerecords": false,
@@ -794,7 +847,7 @@ describe("devkit_WebApi.test", function () {
         it("Retrieve Alternate Key", function () {
             //setup
             var data = {
-                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis/$entity",
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#devkit_webapis/$entity",
                 "@odata.etag": "W/\"596155\"",
                 "devkit_singleoptionsetcodecalculated@OData.Community.Display.V1.FormattedValue": "Dynamics 365",
                 "devkit_singleoptionsetcodecalculated": 100000005,
@@ -875,7 +928,7 @@ describe("devkit_WebApi.test", function () {
         it("Insert name", function () {
             //setup
             var data = {
-                "@odata.context": "https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#devkit_webapis/$entity",
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#devkit_webapis/$entity",
                 "@odata.etag": "W/\"596043\"",
                 "devkit_singleoptionsetcodecalculated": 100000005,
                 "statecode": 0,
@@ -923,6 +976,157 @@ describe("devkit_WebApi.test", function () {
             var res = WebApiClient.Create(req);
             //result
             expect(JSON.stringify(api.Entity)).toEqual('{"devkit_name":"OPTIONSET - INSERT","devkit_singleoptionsetcode":100000005,"devkit_multioptionsetcode":"100000003,100000004","devkit_yesandno":false}');
+        });
+
+        it("Insert with Activity Party", function () {
+            //setup fromUserId
+            var dataFromUserId = {
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#systemusers(systemuserid,ownerid)",
+                "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
+                "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
+                "@Microsoft.Dynamics.CRM.morerecords": false,
+                "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": "<cookie pagenumber=\"1\" pagingcookie=\"%3ccookie%20page%3d%221%22%3e%3csystemuserid%20last%3d%22%7b739D2B22-5F57-42F9-9A17-EBAD89799E7E%7d%22%20first%3d%22%7b739D2B22-5F57-42F9-9A17-EBAD89799E7E%7d%22%20%2f%3e%3c%2fcookie%3e\" istracking=\"False\" />",
+                "value": [{
+                    "@odata.etag": "W/\"565063\"",
+                    "systemuserid": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                    "ownerid": "739d2b22-5f57-42f9-9a17-ebad89799e7e"
+                }]
+            }
+            var fetchXmlFromUserId = [
+                "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+                "  <entity name='systemuser'>",
+                "    <attribute name='systemuserid'/>",
+                "    <filter type='and'>",
+                "      <condition attribute='systemuserid' operator='eq-userid'/>",
+                "    </filter>",
+                "  </entity>",
+                "</fetch>",
+            ].join("");
+            var urlFromUserId = RegExp.escape(fakeUrl + "/api/data/v9.1/systemusers?fetchXml=") + escape(fetchXmlFromUserId);
+            xhr.respondWith("GET", RegExp(urlFromUserId),
+                [200, { "Content-Type": "application/json" }, JSON.stringify(dataFromUserId)]
+            );
+            //-- setup toContactId
+            var dataToContactId = {
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#contacts(contactid)/$entity",
+                "@odata.etag": "W/\"568359\"",
+                "contactid": "968d37ec-9e66-e911-a993-000d3a804bc9"
+            }
+            var urlToContactId = RegExp.escape(fakeUrl + "/api/data/v9.1/contacts(emailaddress1='someone_a@example.com')?$select=contactid");
+            xhr.respondWith("GET", RegExp(urlToContactId),
+                [200, { "Content-Type": "application/json" }, JSON.stringify(dataToContactId)]
+            );
+            //-- setup toAccountId
+            var dataToAccountId = {
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#accounts(accountid)",
+                "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
+                "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
+                "@Microsoft.Dynamics.CRM.morerecords": false,
+                "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": "<cookie pagenumber=\"1\" pagingcookie=\"%3ccookie%20page%3d%221%22%3e%3caccountid%20last%3d%22%7b928D37EC-9E66-E911-A993-000D3A804BC9%7d%22%20first%3d%22%7b928D37EC-9E66-E911-A993-000D3A804BC9%7d%22%20%2f%3e%3c%2fcookie%3e\" istracking=\"False\" />",
+                "value": [{
+                    "@odata.etag": "W/\"568808\"",
+                    "accountid": "928d37ec-9e66-e911-a993-000d3a804bc9"
+                }]
+            }
+            var fetchData = {
+                name: "A. Datum Corporation (sample)"
+            };
+            var fetchXmlToAccountId = [
+                "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
+                "  <entity name='account'>",
+                "    <attribute name='accountid'/>",
+                "    <filter type='and'>",
+                "      <condition attribute='name' operator='eq' value='", fetchData.name, "'/>",
+                "    </filter>",
+                "  </entity>",
+                "</fetch>",
+            ].join("");
+            var urlToAccountId = RegExp.escape(fakeUrl + "/api/data/v9.1/accounts?fetchXml=") + escape(fetchXmlToAccountId);
+            xhr.respondWith("GET", RegExp(urlToAccountId),
+                [200, { "Content-Type": "application/json" }, JSON.stringify(dataToAccountId)]
+            );
+            // setup email
+            var dataEmail = {
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#emails/$entity",
+                "@odata.etag": "W/\"668705\"",
+                "notifications": 0,
+                "isunsafe": 0,
+                "correlationmethod": 0,
+                "statuscode": 1,
+                "description": "EMAIL BODY",
+                "isemailfollowed": false,
+                "createdon": "2019-05-06T08:17:39Z",
+                "attachmentcount": 0,
+                "followemailuserpreference": false,
+                "statecode": 0,
+                "isbilled": false,
+                "subject": "EMAIL SUBJECT",
+                "_ownerid_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "deliveryreceiptrequested": false,
+                "directioncode": true,
+                "compressed": false,
+                "modifiedon": "2019-05-06T08:17:39Z",
+                "emailremindertype": 0,
+                "versionnumber": 668705,
+                "prioritycode": 2,
+                "_owningbusinessunit_value": "3394d17f-8b63-e911-a836-000d3a80e227",
+                "isregularactivity": true,
+                "isemailreminderset": false,
+                "_modifiedby_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "readreceiptrequested": false,
+                "activitytypecode": "email",
+                "_regardingobjectid_value": "928d37ec-9e66-e911-a993-000d3a804bc9",
+                "sender": "devkit@crmgridplus.com",
+                "isworkflowcreated": false,
+                "deliveryprioritycode": 1,
+                "_createdby_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "emailreminderstatus": 0,
+                "torecipients": "someone_a@example.com;someone9@example.com;",
+                "_owninguser_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                "activityid": "2d65ef68-d76f-e911-a998-000d3a802135"
+            }
+            var url = RegExp.escape(fakeUrl + "/api/data/v9.1/emails");
+            xhr.respondWith("POST", url,
+                [201, { "Content-Type": "application/json" }, JSON.stringify(dataEmail)]
+            );
+            //run
+
+            var fromUserId = getFromUserId();
+            var toContactId = getToContactId();
+            var toAccountId = getToAccountId();
+
+            var from = new Rocket.ActivityPartyApi();
+            from.ParticipationTypeMask.Value = from.OptionSet.ParticipationTypeMask.Sender;
+            from.partyid_systemuser.Value = fromUserId;
+            var to1 = new Rocket.ActivityPartyApi();
+            to1.ParticipationTypeMask.Value = to1.OptionSet.ParticipationTypeMask.To_Recipient;
+            to1.partyid_contact.Value = toContactId;
+            var to2 = new Rocket.ActivityPartyApi();
+            to2.ParticipationTypeMask.Value = to2.OptionSet.ParticipationTypeMask.To_Recipient;
+            to2.partyid_account.Value = toAccountId;
+
+            var email = new Rocket.EmailApi();
+            email.ActivityParties = [from.Entity, to1.Entity, to2.Entity];
+            email.Subject.Value = "EMAIL SUBJECT";
+            email.Description.Value = "EMAIL BODY";
+            email.regardingobjectid_account_email.Value = toAccountId;
+            email.PriorityCode.Value = email.OptionSet.PriorityCode.High;
+
+            var req = new Rocket.WebApi.CreateRequest();
+            req.entityName = email.EntityName;
+            req.entity = email.Entity;
+
+            var res = WebApiClient.Create(req);
+            //result
+            var email = new Rocket.EmailApi(res);
+
+            expect(email.Subject.Value).toEqual("EMAIL SUBJECT");
+            expect(email.Description.Value).toEqual("EMAIL BODY");
+            expect(email.StateCode.Value).toEqual(email.OptionSet.StateCode.Open);
+            expect(email.StatusCode.Value).toEqual(email.OptionSet.StatusCode.Draft);
+            expect(email.PriorityCode.Value).toEqual(email.OptionSet.PriorityCode.High);
+            expect(email.ToRecipients.Value).toEqual("someone_a@example.com;someone9@example.com;");
+            expect(email.Sender.Value).toEqual("devkit@crmgridplus.com");
 
         });
     });

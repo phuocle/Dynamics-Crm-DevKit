@@ -92,57 +92,50 @@
             /** The Guid value of field. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
             Value: string;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        class EntityReference {
+            constructor();
+            /** Plural name of entity, if not according to plural rules */
+            overriddenSetName: string;
+            /** The entity name */
+            entityName: string;
+            /** The entity Guid Id */
+            entityId: string;
+        }
         class AlternateKey {
             /**
-             * Return an object { property, value } for retrieve data
+             * Return a alternate key object { property, value }
              * @param property the alternate logical name
              * @param value the value query
              */
             constructor(property: string, value: object);
         }
-        interface Header {
-            key: string;
-            value: string;
+        class Header {
+            /**
+             * Retrun a header object { key, value }
+             * @param key the header key
+             * @param value the header value
+             */
+            constructor(key: string, value: string);
         }
-
         class RetrieveRequest {
             constructor();
-            /** The entity name */
+            /** Entity name of records that should be retrieved */
             entityName: string;
             /** Plural name of entity, if not according to plural rules */
             overriddenSetName: string;
-            /** The entity Guid Id */
+            /** ID of entity to retrieve, will return single record */
             entityId: string;
-            /** The array of alternate key */
+            /** Alternate key array for retrieving single record */
             alternateKey: Array<AlternateKey>;
-            /** The ODATA query parameters */
+            /** Query Parameters to append to URL, such as ?$select=* */
             queryParams: string;
-            /** The FetchXml string */
+            /** Fetch XML query */
             fetchXml: string;
-            /** Default false, if true return all records of all pages */
+            /** Default false, checks for more pages when retrieving results. If set to true, all pages will be retrieved, if set to false, only the first page will be retrieved */
             returnAllPages: boolean;
-            /** Default true, requests are sent asynchronously */
+            /** Set to false for sending all requests synchronously. True by default */
             async: boolean;
-            /** Default { key: 'Prefer', value: 'odata.include-annotations='*'' }, request header */
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
             headers: Array<Header>;
             /** Default false, there is support for sending multiple requests as a batch */
             asBatch: boolean;
@@ -164,15 +157,127 @@
         }
         class CreateRequest {
             constructor();
-            /** The entity name */
+            /** Entity name of record that should be created */
             entityName: string;
             /** Plural name of entity, if not according to plural rules */
             overriddenSetName: string;
-            /** The entity object */
+            /** Object containing record data */
             entity: object;
-            /** Default true, requests are sent asynchronously */
+            /** Set to false for sending all requests synchronously. True by default */
             async: boolean;
-            /** Default { key: 'Prefer', value: 'odata.include-annotations='*'' }, request header */
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers: Array<Header>;
+            /** Default false, there is support for sending multiple requests as a batch */
+            asBatch: boolean;
+        }
+        class DeleteRequest {
+            constructor();
+            /** Entity name of records that should be deleted */
+            entityName: string;
+            /** Plural name of entity, if not according to plural rules */
+            overriddenSetName: string;
+            /** ID of entity to delete */
+            entityId: string;
+            /** Alternate key array for deleting record */
+            alternateKey: Array<AlternateKey>;
+            /** Set to false for sending all requests synchronously. True by default */
+            async: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers: Array<Header>;
+            /** Default false, there is support for sending multiple requests as a batch */
+            asBatch: boolean;
+        }
+        class UpdateRequest {
+            constructor();
+            /** Entity name of records that should be updated */
+            entityName: string;
+            /** Plural name of entity, if not according to plural rules */
+            overriddenSetName: string;
+            /** Object containing record data */
+            entity: object;
+            /** ID of entity to update */
+            entityId: string;
+            /** Alternate key array for updating record */
+            alternateKey: Array<AlternateKey>;
+            /** Set to false for sending all requests synchronously. True by default */
+            async: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers: Array<Header>;
+            /** Default false, there is support for sending multiple requests as a batch */
+            asBatch: boolean;
+        }
+        class WithRequest {
+            constructor();
+            /** The HTTP method of the request, such as GET / POST / ... */
+            method: string;
+            /** The name of the request */
+            name: string;
+            /** Determines if request is bound, i.e. always executed regarding a distinct record, or not. Defaults to false */
+            bound: boolean;
+            /** Name of the request if it is bound to an entity */
+            entityName: string;
+            /** Record ID if bound to an entity */
+            entityId: string;
+            /** Message body for this request */
+            payload: object;
+            /** Object with key-value pairs that will be appended to the URL of a GET request. Used for calling functions with parameters */
+            urlParams: string;
+            /** Set to false for sending all requests synchronously. True by default */
+            async: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers: Array<Header>;
+            /** Default false, there is support for sending multiple requests as a batch */
+            asBatch: boolean;
+        }
+        class CustomRequest {
+            constructor();
+            /** The HTTP method of the request, such as GET / POST / ... */
+            method: string;
+            /** The name of the request */
+            name: string;
+            /** Determines if request is bound, i.e. always executed regarding a distinct record, or not. Defaults to false */
+            bound: boolean;
+            /** Name of the request if it is bound to an entity */
+            entityName: string;
+            /** Record ID if bound to an entity */
+            entityId: string;
+            /** Message body for this request */
+            payload: object;
+            /** Object with key-value pairs that will be appended to the URL of a GET request. Used for calling functions with parameters */
+            urlParams: string;
+            /** Set to false for sending all requests synchronously. True by default */
+            async: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers: Array<Header>;
+            /** Default false, there is support for sending multiple requests as a batch */
+            asBatch: boolean;
+        }
+        class AssociateRequest {
+            constructor();
+            /** Name of relation ship to use for associating */
+            relationShip: string;
+            /** Source entity for associating */
+            source: EntityReference;
+            /** Target entity for associating */
+            target: EntityReference;
+            /** Set to false for sending all requests synchronously. True by default */
+            async: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers: Array<Header>;
+            /** Default false, there is support for sending multiple requests as a batch */
+            asBatch: boolean;
+        }
+        class DisassociateRequest {
+            constructor();
+            /** Name of relation ship to use for disassociating */
+            relationShip: string;
+            /** Source entity for disassociating */
+            source: EntityReference;
+            /** Target entity for disassociating */
+            target: EntityReference;
+            /** Set to false for sending all requests synchronously. True by default */
+            async: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
             headers: Array<Header>;
             /** Default false, there is support for sending multiple requests as a batch */
             asBatch: boolean;
@@ -180,15 +285,41 @@
     }
 }
 
+/** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client */
 declare namespace WebApiClient {
     /**
-     * return an object or array of objects ODATA value
-     * @param request the retrieve request
+     * Retrieves records from CRM
+     * @param request the RetrieveRequest object
      */
     function Retrieve(request: Rocket.WebApi.RetrieveRequest): Rocket.WebApi.RetrieveResponse;
     /**
-     * Return an object that you can pass to the *Api class. E.g.: var account = new AccountApi(object);
-     * @param request the create request
+     * Creates a given record in CRM
+     * @param request the CreateRequest object
      */
     function Create(request: Rocket.WebApi.CreateRequest): object;
+    /**
+     * Updates a given record in CRM
+     * @param request the UpdateRequest object
+     */
+    function Update(request: Rocket.WebApi.UpdateRequest): object;
+    /**
+     * Deletes a given record in CRM
+     * @param request the DeleteRequest object
+     */
+    function Delete(request: Rocket.WebApi.DeleteRequest): object;
+    /**
+     * Associates given records in CRM
+     * @param request the AssociateRequest object
+     */
+    function Associate(request: Rocket.WebApi.AssociateRequest): object;
+    /**
+     * Disassociates given records in CRM
+     * @param request the DisassociateRequest object
+     */
+    function Disassociate(request: Rocket.WebApi.DisassociateRequest): object;
+    /**
+     * Executes the given request in CRM
+     * @param request Request to send, must be in prototype chain of WebApiClient.Requests.Request
+     */
+    function Execute(request: object): object;
 }

@@ -17,7 +17,7 @@ var formWebApi = (function () {
         TestCreateEmail();
     }
 
-    function GetCurrentUserId() {
+    function getFromUserId() {
         var fetchXml = [
             "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>",
             "  <entity name='systemuser'>",
@@ -32,12 +32,24 @@ var formWebApi = (function () {
         req.entityName = "systemuser";
         req.fetchXml = fetchXml;
         var res = WebApiClient.Retrieve(req);
-        if (res.value.length != 1) throw new Error("Cannot read CurrentUserId");
+        console.log(JSON.stringify(res));
         var user = new Rocket.SystemUserApi(res.value[0]);
         return user.SystemUserId.Value;
     }
 
-    function GetAccountId() {
+    function getToContactId() {
+        var key = new Rocket.WebApi.AlternateKey("emailaddress1", "someone_a@example.com");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.alternateKey = [key];
+        req.entityName = "contact";
+        req.queryParams = "?$select=contactid";
+        var res = WebApiClient.Retrieve(req);
+        console.log(JSON.stringify(res));
+        var contact = new Rocket.ContactApi(res);
+        return contact.ContactId.Value;
+    }
+
+    function getToAccountId() {
         var fetchData = {
             name: "A. Datum Corporation (sample)"
         };
@@ -55,33 +67,45 @@ var formWebApi = (function () {
         req.entityName = "account";
         req.fetchXml = fetchXml;
         var res = WebApiClient.Retrieve(req);
-        if (res.value.length != 1) throw new Error("Cannot read AcountId");
+        console.log(JSON.stringify(res));
         var account = new Rocket.AccountApi(res.value[0]);
         return account.AccountId.Value;
     }
 
     function TestCreateEmail() {
-        var currentUserId = GetCurrentUserId();
-        var accountId = GetAccountId();
+        console.clear();
+        var fromUserId = getFromUserId();
+        var toContactId = getToContactId();
+        var toAccountId = getToAccountId();
+
+        debugger;
 
         var from = new Rocket.ActivityPartyApi();
         from.ParticipationTypeMask.Value = from.OptionSet.ParticipationTypeMask.Sender;
-        from.partyid_systemuser.Value = currentUserId;
-
-        var to = new Rocket.ActivityPartyApi();
-        to.ParticipationTypeMask.Value = from.OptionSet.ParticipationTypeMask.To_Recipient;
-        to.partyid_systemuser.Value = currentUserId;
+        from.partyid_systemuser.Value = fromUserId;
+        var to1 = new Rocket.ActivityPartyApi();
+        to1.ParticipationTypeMask.Value = to1.OptionSet.ParticipationTypeMask.To_Recipient;
+        to1.partyid_contact.Value = toContactId;
+        var to2 = new Rocket.ActivityPartyApi();
+        to2.ParticipationTypeMask.Value = to2.OptionSet.ParticipationTypeMask.To_Recipient;
+        to2.partyid_account.Value = toAccountId;
 
         var email = new Rocket.EmailApi();
-        email.Subject.Value = "TEST EMAIL";
-        email.Description.Value= "BODY";
-        email.ActivityParties = [from.Entity, to.Entity];
-        email.regardingobjectid_account_email.Value = accountId;
+        email.ActivityParties = [from.Entity, to1.Entity, to2.Entity];
+        email.Subject.Value = "EMAIL SUBJECT";
+        email.Description.Value = "EMAIL BODY";
+        email.regardingobjectid_account_email.Value = toAccountId;
+        email.PriorityCode.Value = email.OptionSet.PriorityCode.High;
 
-        var create = new Rocket.WebApi.CreateRequest();
-        create.entity = email.Entity;
-        create.entityName = "email";
-        var res = WebApiClient.Create(create);
+        var req = new Rocket.WebApi.CreateRequest();
+        req.entityName = email.EntityName;
+        req.entity = email.Entity;
+
+        var res = WebApiClient.Create(req);
+
+        console.clear();
+        console.log(JSON.stringify(res));
+        debugger;
     }
 
     function TestInsertOptionSet() {

@@ -73,6 +73,10 @@
     <Content Include="entities\ActivityParty.webapi.js">
       <DependentUpon>ActivityParty.js</DependentUpon>
     </Content>
+    <Content Include="entities\Contact.js" />
+    <Content Include="entities\Contact.webapi.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
     <Content Include="entities\devkit_CustomActivity.js" />
     <Content Include="entities\devkit_CustomActivity.webapi.js">
       <DependentUpon>devkit_CustomActivity.js</DependentUpon>
@@ -133,6 +137,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\ActivityParty.d.ts">
       <DependentUpon>ActivityParty.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Contact.d.ts">
+      <DependentUpon>Contact.js</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\devkit.d.ts" />
     <TypeScriptCompile Include="entities\devkit_CustomActivity.d.ts">

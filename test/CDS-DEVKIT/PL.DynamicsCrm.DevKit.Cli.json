@@ -91,6 +91,9 @@
             "devkit_/entities/devkit_WebApi.js"
           ],
           "dependencies": [
+            "devkit_/entities/Contact.webapi.js",
+            "devkit_/entities/ActivityParty.webapi.js",
+            "devkit_/entities/Account.webapi.js",
             "devkit_/entities/Email.webapi.js",
             "devkit_/entities/SystemUser.webapi.js"
           ]

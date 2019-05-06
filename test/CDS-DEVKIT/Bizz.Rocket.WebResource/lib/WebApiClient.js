@@ -90,6 +90,9 @@ var Rocket;
         WebApi.AlternateKey = function(property, value) {
             return { property: property, value: value };
         };
+        WebApi.Header = function (key, value) {
+            return { key: key, value: value };
+        };
         WebApi.WithRequest = function() {
             return {};
         };
