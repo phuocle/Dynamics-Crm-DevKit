@@ -402,16 +402,10 @@ declare namespace Rocket {
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly - Shows the external party who created the record. */
 		CreatedByExternalParty: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedByExternalPartyYomiName: WebApi.StringValue;
-		/** ReadOnly */
-		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
 		CreditLimit: WebApi.MoneyValue;
 		/** ReadOnly - Shows the credit limit converted to the system's default base currency for reporting purposes. */
@@ -478,8 +472,6 @@ declare namespace Rocket {
 		MarketingOnly: WebApi.BooleanValue;
 		/** ReadOnly */
 		MasterAccountIdName: WebApi.StringValue;
-		/** ReadOnly */
-		MasterAccountIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the master account that the account was merged with. */
 		MasterId: WebApi.LookupValue;
 		/** ReadOnly - Shows whether the account has been merged with another account. */
@@ -488,16 +480,10 @@ declare namespace Rocket {
 		ModifiedBy: WebApi.LookupValue;
 		/** ReadOnly - Shows the external party who modified the record. */
 		ModifiedByExternalParty: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedByExternalPartyYomiName: WebApi.StringValue;
-		/** ReadOnly */
-		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** Type the company or business name. */
 		Name: WebApi.StringValue;
 		/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
@@ -510,8 +496,6 @@ declare namespace Rocket {
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly */
-		OwnerIdYomiName: WebApi.StringValue;
 		/** Select the account's ownership structure, such as public or private. */
 		OwnershipCode: WebApi.OptionSetValue;
 		/** ReadOnly - Shows the business unit that the record owner belongs to. */
@@ -522,8 +506,6 @@ declare namespace Rocket {
 		OwningUser: WebApi.LookupValue;
 		/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
 		ParentAccountId: WebApi.LookupValue;
-		/** ReadOnly */
-		ParentAccountIdYomiName: WebApi.StringValue;
 		/** For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data. */
 		ParticipatesInWorkflow: WebApi.BooleanValue;
 		/** Select the payment terms to indicate when the customer needs to pay the total amount. */
@@ -536,12 +518,8 @@ declare namespace Rocket {
 		PreferredContactMethodCode: WebApi.OptionSetValue;
 		/** Choose the preferred service representative for reference when you schedule service activities for the account. */
 		PreferredSystemUserId: WebApi.LookupValue;
-		/** ReadOnly */
-		PreferredSystemUserIdYomiName: WebApi.StringValue;
 		/** Choose the primary contact for the account to provide quick access to contact details. */
 		PrimaryContactId: WebApi.LookupValue;
-		/** ReadOnly */
-		PrimaryContactIdYomiName: WebApi.StringValue;
 		/** Primary Satori ID for Account */
 		PrimarySatoriId: WebApi.StringValue;
 		/** Primary Twitter ID for Account */

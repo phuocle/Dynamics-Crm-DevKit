@@ -39,7 +39,7 @@ var Rocket;
                 return entity[logicalName];
             };
             var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(",");
+                if (isMultiOptionSet) value = value.join(',');
                 if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
                     value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
                     upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
@@ -66,15 +66,13 @@ var Rocket;
         }
 		var devkit_webapi = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
-			CreatedByYomiName: { a: 'createdbyyominame', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			CreatedOnBehalfByYomiName: { a: 'createdonbehalfbyyominame', r: true },
+			devkit_AlternateKey: { a: 'devkit_alternatekey' },
 			devkit_Currency: { a: 'devkit_currency' },
 			devkit_currency_Base: { a: 'devkit_currency_base', r: true },
 			devkit_CustomerId_account: { b: 'devkit_CustomerId_account', a: '_devkit_customerid_value', c: 'accounts', d: 'account' },
 			devkit_CustomerId_contact: { b: 'devkit_CustomerId_contact', a: '_devkit_customerid_value', c: 'contacts', d: 'contact' },
-			devkit_CustomerIdYomiName: { a: 'devkit_customeridyominame', r: true },
 			devkit_DateOnlyDateOnly_DateOnly: { a: 'devkit_dateonlydateonly' },
 			devkit_DateOnlyDateOnlyCalculated_DateOnly: { a: 'devkit_dateonlydateonlycalculated', r: true },
 			devkit_DateOnlyDateOnlyRollup_DateOnly: { a: 'devkit_dateonlydateonlyrollup', r: true },
@@ -129,14 +127,11 @@ var Rocket;
 			ExchangeRate: { a: 'exchangerate', r: true },
 			ImportSequenceNumber: { a: 'importsequencenumber' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
-			ModifiedByYomiName: { a: 'modifiedbyyominame', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			ModifiedOnBehalfByYomiName: { a: 'modifiedonbehalfbyyominame', r: true },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
-			OwnerIdYomiName: { a: 'owneridyominame', r: true },
 			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
 			OwningTeam: { b: 'owningteam', a: '_owningteam_value', c: 'teams', d: 'team', r: true },
 			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },

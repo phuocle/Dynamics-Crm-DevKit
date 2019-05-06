@@ -2,7 +2,7 @@
 var Rocket;
 (function (Rocket) {
 	'use strict';
-	Rocket.ActivityPartyApi = function (e) {
+	Rocket.ActivityMimeAttachmentApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
         function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
@@ -64,48 +64,48 @@ var Rocket;
             }
             return property;
         }
-		var activityparty = {
-			ActivityId: { b: 'activityid', a: '_activityid_value', c: 'activitypointers', d: 'activitypointer' },
-			ActivityPartyId: { a: 'activitypartyid' },
-			AddressUsed: { a: 'addressused' },
-			AddressUsedEmailColumnNumber: { a: 'addressusedemailcolumnnumber', r: true },
-			DoNotEmail: { a: 'donotemail', r: true },
-			DoNotFax: { a: 'donotfax', r: true },
-			DoNotPhone: { a: 'donotphone', r: true },
-			DoNotPostalMail: { a: 'donotpostalmail', r: true },
-			Effort: { a: 'effort' },
-			ExchangeEntryId: { a: 'exchangeentryid' },
-			InstanceTypeCode: { a: 'instancetypecode', r: true },
-			IsPartyDeleted: { a: 'ispartydeleted', r: true },
+		var activitymimeattachment = {
+			ActivityMimeAttachmentId: { a: 'activitymimeattachmentid' },
+			ActivityMimeAttachmentIdUnique: { a: 'activitymimeattachmentidunique' },
+			ActivitySubject: { a: 'activitysubject', r: true },
+			AnonymousLink: { a: 'anonymouslink', r: true },
+			AttachmentContentId: { a: 'attachmentcontentid' },
+			AttachmentId: { b: 'attachmentid', a: '_attachmentid_value', c: 'attachments', d: 'attachment' },
+			AttachmentNumber: { a: 'attachmentnumber' },
+			Body: { a: 'body' },
+			ComponentState: { a: 'componentstate', r: true },
+			FileName: { a: 'filename' },
+			FileSize: { a: 'filesize', r: true },
+			IsFollowed: { a: 'isfollowed', r: true },
+			IsManaged: { a: 'ismanaged', r: true },
+			MimeType: { a: 'mimetype' },
+			objectid_activitypointer: { b: 'objectid_activitypointer', a: '_objectid_value', c: 'activitypointers', d: 'activitypointer' },
+			objectid_template: { b: 'objectid_template', a: '_objectid_value', c: 'templates', d: 'template' },
+			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team', r: true },
-			OwningBusinessUnit: { a: 'owningbusinessunit', r: true },
-			OwningUser: { a: 'owninguser', r: true },
-			ParticipationTypeMask: { a: 'participationtypemask' },
-			partyid_account: { b: 'partyid_account', a: '_partyid_value', c: 'accounts', d: 'account' },
-			partyid_contact: { b: 'partyid_contact', a: '_partyid_value', c: 'contacts', d: 'contact' },
-			partyid_knowledgearticle: { b: 'partyid_knowledgearticle', a: '_partyid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
-			partyid_queue: { b: 'partyid_queue', a: '_partyid_value', c: 'queues', d: 'queue' },
-			partyid_systemuser: { b: 'partyid_systemuser', a: '_partyid_value', c: 'systemusers', d: 'systemuser' },
-			ScheduledEnd_UtcDateOnly: { a: 'scheduledend', r: true },
-			ScheduledStart_UtcDateOnly: { a: 'scheduledstart', r: true },
+			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
+			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
+			SolutionId: { a: 'solutionid', r: true },
+			Subject: { a: 'subject' },
+			SupportingSolutionId: { a: 'supportingsolutionid', r: true },
 			VersionNumber: { a: 'versionnumber', r: true }
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in activityparty) {
-			var a = activityparty[field].a;
-			var b = activityparty[field].b;
-			var c = activityparty[field].c;
-			var d = activityparty[field].d;
-			var g = activityparty[field].g;
-			var r = activityparty[field].r;
-			activityparty[field] = webApiField(e, a, b, c, d, r, u, g);
+		for (var field in activitymimeattachment) {
+			var a = activitymimeattachment[field].a;
+			var b = activitymimeattachment[field].b;
+			var c = activitymimeattachment[field].c;
+			var d = activitymimeattachment[field].d;
+			var g = activitymimeattachment[field].g;
+			var r = activitymimeattachment[field].r;
+			activitymimeattachment[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
-		activityparty.Entity = u;
-		activityparty.EntityName = 'activityparty';
-		activityparty.EntityCollectionName = 'activityparties';
-		activityparty['@odata.etag'] = e['@odata.etag'];
+		activitymimeattachment.Entity = u;
+		activitymimeattachment.EntityName = 'activitymimeattachment';
+		activitymimeattachment.EntityCollectionName = 'activitymimeattachments';
+		activitymimeattachment['@odata.etag'] = e['@odata.etag'];
 		var optionSet = {
 			RollupState: {
 				NotCalculated: 0,
@@ -116,29 +116,15 @@ var Rocket;
 				HierarchicalRecursionLimitReached: 5,
 				LoopDetected: 6
 			},
-			InstanceTypeCode: {
-				Not_Recurring: 0,
-				Recurring_Master: 1,
-				Recurring_Instance: 2,
-				Recurring_Exception: 3,
-				Recurring_Future_Exception: 4
-			},
-			ParticipationTypeMask: {
-				Sender: 1,
-				To_Recipient: 2,
-				CC_Recipient: 3,
-				BCC_Recipient: 4,
-				Required_attendee: 5,
-				Optional_attendee: 6,
-				Organizer: 7,
-				Regarding: 8,
-				Owner: 9,
-				Resource: 10,
-				Customer: 11
+			ComponentState: {
+				Published: 0,
+				Unpublished: 1,
+				Deleted: 2,
+				Deleted_Unpublished: 3
 			}
 		};
-		activityparty.OptionSet = optionSet;
-		activityparty.getAliasedValue = function (alias, isMultiOptionSet) {
+		activitymimeattachment.OptionSet = optionSet;
+		activitymimeattachment.getAliasedValue = function (alias, isMultiOptionSet) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -147,7 +133,7 @@ var Rocket;
 			}
 			return e[alias];
 		}
-		activityparty.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		activitymimeattachment.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
@@ -156,6 +142,6 @@ var Rocket;
 			}
 			return e[alias + f];
 		}
-		return activityparty;
+		return activitymimeattachment;
 	};
 })(Rocket || (Rocket = {}));

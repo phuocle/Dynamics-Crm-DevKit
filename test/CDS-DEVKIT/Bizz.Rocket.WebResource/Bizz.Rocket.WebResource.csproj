@@ -69,6 +69,10 @@
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
+    <Content Include="entities\ActivityMimeAttachment.js" />
+    <Content Include="entities\ActivityMimeAttachment.webapi.js">
+      <DependentUpon>ActivityMimeAttachment.js</DependentUpon>
+    </Content>
     <Content Include="entities\ActivityParty.js" />
     <Content Include="entities\ActivityParty.webapi.js">
       <DependentUpon>ActivityParty.js</DependentUpon>
@@ -134,6 +138,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\ActivityMimeAttachment.d.ts">
+      <DependentUpon>ActivityMimeAttachment.js</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\ActivityParty.d.ts">
       <DependentUpon>ActivityParty.js</DependentUpon>

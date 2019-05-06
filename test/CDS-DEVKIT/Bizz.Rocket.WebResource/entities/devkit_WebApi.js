@@ -14,8 +14,14 @@ var formWebApi = (function () {
         //TestReadAlternateKey();
 
         //TestInsertOptionSet();
-        TestCreateEmail();
+        //TestCreateEmail();
+        //TestCreateEmailWithAttachedFile();
+        //SendEmail();
     }
+
+    function SendEmail() {
+    }
+
 
     function getFromUserId() {
         var fetchXml = [
@@ -32,7 +38,6 @@ var formWebApi = (function () {
         req.entityName = "systemuser";
         req.fetchXml = fetchXml;
         var res = WebApiClient.Retrieve(req);
-        console.log(JSON.stringify(res));
         var user = new Rocket.SystemUserApi(res.value[0]);
         return user.SystemUserId.Value;
     }
@@ -44,7 +49,6 @@ var formWebApi = (function () {
         req.entityName = "contact";
         req.queryParams = "?$select=contactid";
         var res = WebApiClient.Retrieve(req);
-        console.log(JSON.stringify(res));
         var contact = new Rocket.ContactApi(res);
         return contact.ContactId.Value;
     }
@@ -67,18 +71,14 @@ var formWebApi = (function () {
         req.entityName = "account";
         req.fetchXml = fetchXml;
         var res = WebApiClient.Retrieve(req);
-        console.log(JSON.stringify(res));
         var account = new Rocket.AccountApi(res.value[0]);
         return account.AccountId.Value;
     }
 
     function TestCreateEmail() {
-        console.clear();
         var fromUserId = getFromUserId();
         var toContactId = getToContactId();
         var toAccountId = getToAccountId();
-
-        debugger;
 
         var from = new Rocket.ActivityPartyApi();
         from.ParticipationTypeMask.Value = from.OptionSet.ParticipationTypeMask.Sender;
@@ -102,10 +102,7 @@ var formWebApi = (function () {
         req.entity = email.Entity;
 
         var res = WebApiClient.Create(req);
-
-        console.clear();
-        console.log(JSON.stringify(res));
-        debugger;
+        var email = new Rocket.EmailApi(res);
     }
 
     function TestInsertOptionSet() {
@@ -122,7 +119,7 @@ var formWebApi = (function () {
         req.entityName = api.EntityName;
         //execute request with object
         var res = WebApiClient.Create(req);
-        debugger;
+        var webapi = new Rocket.devkit_WebApiApi(res);
     }
 
     function TestReadAlternateKey() {
@@ -131,8 +128,7 @@ var formWebApi = (function () {
         req.alternateKey = [key];
         req.entityName = "devkit_webapi";
         var res = WebApiClient.Retrieve(req);
-        console.log(JSON.stringify(res));
-        debugger;
+        var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
     }
 
     function TestReadPartyList() {
@@ -163,9 +159,7 @@ var formWebApi = (function () {
         req.fetchXml = fetchXml;
         req.returnAllPages = true;
         var res = WebApiClient.Retrieve(req);
-        var api = new Rocket.devkit_WebApiApi(res.value[0]);
-        console.log(JSON.stringify(res));
-        debugger;
+        var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
     }
 
     function TestReadEntityImage() {
@@ -191,9 +185,7 @@ var formWebApi = (function () {
         req.fetchXml = fetchXml;
         req.returnAllPages = true;
         var res = WebApiClient.Retrieve(req);
-        var api = new Rocket.devkit_WebApiApi(res.value[0]);
-        console.log(JSON.stringify(res));
-        debugger;
+        var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
     }
 
     function TestReadString() {
@@ -229,9 +221,8 @@ var formWebApi = (function () {
         req.fetchXml = fetchXml;
         req.returnAllPages = true;
         var res = WebApiClient.Retrieve(req);
-        var api = new Rocket.devkit_WebApiApi(res.value[0]);
-        console.log(JSON.stringify(res));
         debugger;
+        var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
     }
 
     function TestReadNumber() {
@@ -263,9 +254,7 @@ var formWebApi = (function () {
         req.fetchXml = fetchXml;
         req.returnAllPages = true;
         var res = WebApiClient.Retrieve(req);
-        var api = new Rocket.devkit_WebApiApi(res.value[0]);
-        console.log(JSON.stringify(res));
-        debugger;
+        var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
     }
 
     function TestReadDateTime() {
@@ -312,9 +301,7 @@ var formWebApi = (function () {
         req.fetchXml = fetchXml;
         req.returnAllPages = true;
         var res = WebApiClient.Retrieve(req);
-        var api = new Rocket.devkit_WebApiApi(res.value[0]);
-        console.log(JSON.stringify(res));
-        debugger;
+        var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
     }
 
     function TestReadOptionSet() {
@@ -355,9 +342,7 @@ var formWebApi = (function () {
         req.async = false;
         req.returnAllPages = true;
         var res = WebApiClient.Retrieve(req);
-        var api = new Rocket.devkit_WebApiApi(res.value[0]);
-        console.log(JSON.stringify(res));
-        debugger;
+        var webapi = new Rocket.devkit_WebApiApi(res.value[0]);
     }
 
 	return {

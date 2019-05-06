@@ -82,14 +82,10 @@ declare namespace Rocket {
 		Category: WebApi.StringValue;
 		/** ReadOnly - Shows who created the record. */
 		CreatedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
 		Description: WebApi.StringValue;
 		/** Select the direction of the phone call as incoming or outbound. */
@@ -110,14 +106,10 @@ declare namespace Rocket {
 		LeftVoiceMail: WebApi.BooleanValue;
 		/** ReadOnly - Shows who last updated the record. */
 		ModifiedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
 		OnHoldTime: WebApi.IntegerValue;
 		/** Date and time that the record was migrated. */
@@ -126,8 +118,6 @@ declare namespace Rocket {
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly */
-		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the phone call activity. */
 		OwningBusinessUnit: WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the team that owns the phone call activity. */
@@ -148,8 +138,6 @@ declare namespace Rocket {
 		regardingobjectid_knowledgearticle_phonecall: WebApi.LookupValue;
 		/** Choose the record that the phone call relates to. */
 		regardingobjectid_knowledgebaserecord_phonecall: WebApi.LookupValue;
-		/** ReadOnly */
-		RegardingObjectIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Scheduled duration of the phone call activity, specified in minutes. */
 		ScheduledDurationMinutes: WebApi.IntegerValue;
 		/** Enter the expected due date and time. */

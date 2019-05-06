@@ -156,14 +156,10 @@ declare namespace Rocket {
 		CorrelationMethod: WebApi.OptionSetValue;
 		/** ReadOnly - Shows who created the record. */
 		CreatedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** Enter the expected date and time when email will be sent. */
 		DelayedEmailSendTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** Shows the count of the number of attempts made to send the email. The count is used as an indicator of email routing issues. */
@@ -192,8 +188,6 @@ declare namespace Rocket {
 		emailsender_queue: WebApi.LookupValue;
 		/** ReadOnly - Shows the sender of the email. */
 		emailsender_systemuser: WebApi.LookupValue;
-		/** ReadOnly - Shows the yomi name of the email sender */
-		EmailSenderYomiName: WebApi.StringValue;
 		/** Email Tracking Id. */
 		EmailTrackingId: WebApi.GuidValue;
 		/** ReadOnly - Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
@@ -228,14 +222,10 @@ declare namespace Rocket {
 		MimeType: WebApi.StringValue;
 		/** ReadOnly - Shows who last updated the record. */
 		ModifiedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** Select the notification code to identify issues with the email recipients or attachments, such as blocked attachments. */
 		Notifications: WebApi.OptionSetValue;
 		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
@@ -248,8 +238,6 @@ declare namespace Rocket {
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly */
-		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the email activity. */
 		OwningBusinessUnit: WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the team who owns the email activity. */
@@ -276,8 +264,6 @@ declare namespace Rocket {
 		regardingobjectid_knowledgearticle_email: WebApi.LookupValue;
 		/** Choose the record that the email relates to. */
 		regardingobjectid_knowledgebaserecord_email: WebApi.LookupValue;
-		/** ReadOnly */
-		RegardingObjectIdYomiName: WebApi.StringValue;
 		/** Reminder Action Card Id. */
 		ReminderActionCardId: WebApi.GuidValue;
 		/** ReadOnly - Shows the number of replies received for an email. */
@@ -296,8 +282,6 @@ declare namespace Rocket {
 		SenderMailboxId: WebApi.LookupValue;
 		/** ReadOnly - Shows the parent account of the sender of the email. */
 		SendersAccount: WebApi.LookupValue;
-		/** ReadOnly - Shows the name of the sender account yomi name  */
-		SendersAccountYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time that the email was sent. */
 		SentOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** Choose the service level agreement (SLA) that you want to apply to the email record. */

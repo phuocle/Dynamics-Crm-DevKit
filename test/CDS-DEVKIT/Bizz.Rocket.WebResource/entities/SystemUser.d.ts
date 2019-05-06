@@ -270,14 +270,10 @@ declare namespace Rocket {
 		CALType: WebApi.OptionSetValue;
 		/** ReadOnly - Unique identifier of the user who created the user. */
 		CreatedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the user was created. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who created the systemuser. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** ReadOnly - Indicates if default outlook filters have been populated. */
 		DefaultFiltersPopulated: WebApi.BooleanValue;
 		/** ReadOnly - Select the mailbox associated with this user. */
@@ -350,14 +346,10 @@ declare namespace Rocket {
 		MobilePhone: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the user who last modified the user. */
 		ModifiedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the user was last modified. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who last modified the systemuser. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** Nickname of the user. */
 		NickName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the organization associated with the user. */
@@ -368,8 +360,6 @@ declare namespace Rocket {
 		OverriddenCreatedOn_UtcDateOnly: WebApi.UtcDateOnlyValue;
 		/** Unique identifier of the manager of the user. */
 		ParentSystemUserId: WebApi.LookupValue;
-		/** ReadOnly */
-		ParentSystemUserIdYomiName: WebApi.StringValue;
 		/** For internal use only. */
 		PassportHi: WebApi.IntegerValue;
 		/** For internal use only. */

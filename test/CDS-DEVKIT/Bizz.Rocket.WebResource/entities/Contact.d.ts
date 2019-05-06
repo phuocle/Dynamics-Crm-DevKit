@@ -210,8 +210,6 @@ declare namespace Rocket {
 		"@odata.etag": string;
 		/** ReadOnly - Unique identifier of the account with which the contact is associated. */
 		AccountId: WebApi.LookupValue;
-		/** ReadOnly */
-		AccountIdYomiName: WebApi.StringValue;
 		/** Select the contact's role within the company or sales process, such as decision maker, employee, or influencer. */
 		AccountRoleCode: WebApi.OptionSetValue;
 		/** Unique identifier for address 1. */
@@ -396,16 +394,10 @@ declare namespace Rocket {
 		CreatedBy: WebApi.LookupValue;
 		/** ReadOnly - Shows the external party who created the record. */
 		CreatedByExternalParty: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedByExternalPartyYomiName: WebApi.StringValue;
-		/** ReadOnly */
-		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer. */
 		CreditLimit: WebApi.MoneyValue;
 		/** ReadOnly - Shows the Credit Limit field converted to the system's default base currency for reporting purposes. The calculations use the exchange rate specified in the Currencies area. */
@@ -502,8 +494,6 @@ declare namespace Rocket {
 		MarketingOnly: WebApi.BooleanValue;
 		/** ReadOnly */
 		MasterContactIdName: WebApi.StringValue;
-		/** ReadOnly */
-		MasterContactIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the master contact for merge. */
 		MasterId: WebApi.LookupValue;
 		/** ReadOnly - Shows whether the account has been merged with a master contact. */
@@ -516,16 +506,10 @@ declare namespace Rocket {
 		ModifiedBy: WebApi.LookupValue;
 		/** ReadOnly - Shows the external party who modified the record. */
 		ModifiedByExternalParty: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedByExternalPartyYomiName: WebApi.StringValue;
-		/** ReadOnly */
-		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** Type the contact's nickname. */
 		NickName: WebApi.StringValue;
 		/** Type the number of children the contact has for reference in follow-up phone calls and other communications. */
@@ -538,8 +522,6 @@ declare namespace Rocket {
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly */
-		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the contact. */
 		OwningBusinessUnit: WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the team who owns the contact. */
@@ -550,12 +532,8 @@ declare namespace Rocket {
 		Pager: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the parent contact. */
 		ParentContactId: WebApi.LookupValue;
-		/** ReadOnly */
-		ParentContactIdYomiName: WebApi.StringValue;
 		parentcustomerid_account: WebApi.LookupValue;
 		parentcustomerid_contact: WebApi.LookupValue;
-		/** ReadOnly */
-		ParentCustomerIdYomiName: WebApi.StringValue;
 		/** Shows whether the contact participates in workflow rules. */
 		ParticipatesInWorkflow: WebApi.BooleanValue;
 		/** Select the payment terms to indicate when the customer needs to pay the total amount. */
@@ -568,8 +546,6 @@ declare namespace Rocket {
 		PreferredContactMethodCode: WebApi.OptionSetValue;
 		/** Choose the regular or preferred customer service representative for reference when scheduling service activities for the contact. */
 		PreferredSystemUserId: WebApi.LookupValue;
-		/** ReadOnly */
-		PreferredSystemUserIdYomiName: WebApi.StringValue;
 		/** Shows the ID of the process. */
 		ProcessId: WebApi.GuidValue;
 		/** Type the salutation of the contact to make sure the contact is addressed correctly in sales calls, email messages, and marketing campaigns. */

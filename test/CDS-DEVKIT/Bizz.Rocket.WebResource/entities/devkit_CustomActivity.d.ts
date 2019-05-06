@@ -112,14 +112,10 @@ declare namespace Rocket {
 		Community: WebApi.OptionSetValue;
 		/** ReadOnly - Unique identifier of the user who created the activity. */
 		CreatedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the activity was created. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who created the activitypointer. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the delivery of the activity was last attempted. */
 		DeliveryLastAttemptedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** Priority of delivery of the activity to the email server. */
@@ -150,14 +146,10 @@ declare namespace Rocket {
 		LeftVoiceMail: WebApi.BooleanValue;
 		/** ReadOnly - Unique identifier of user who last modified the activity. */
 		ModifiedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when activity was last modified. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who last modified the activitypointer. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
 		OnHoldTime: WebApi.IntegerValue;
 		/** Date and time that the record was migrated. */
@@ -166,8 +158,6 @@ declare namespace Rocket {
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly */
-		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the activity. */
 		OwningBusinessUnit: WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the team that owns the activity. */

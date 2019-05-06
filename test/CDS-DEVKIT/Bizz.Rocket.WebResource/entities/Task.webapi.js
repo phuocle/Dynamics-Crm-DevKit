@@ -39,6 +39,7 @@ var Rocket;
                 return entity[logicalName];
             };
             var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
                 if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
                     value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
                     upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
@@ -71,10 +72,8 @@ var Rocket;
 			ActualStart_UtcDateOnly: { a: 'actualstart' },
 			Category: { a: 'category' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
-			CreatedByYomiName: { a: 'createdbyyominame', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			CreatedOnBehalfByYomiName: { a: 'createdonbehalfbyyominame', r: true },
 			CrmTaskAssignedUniqueId: { a: 'crmtaskassigneduniqueid' },
 			Description: { a: 'description' },
 			ExchangeRate: { a: 'exchangerate', r: true },
@@ -84,15 +83,12 @@ var Rocket;
 			IsWorkflowCreated: { a: 'isworkflowcreated' },
 			LastOnHoldTime_UtcDateAndTime: { a: 'lastonholdtime' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
-			ModifiedByYomiName: { a: 'modifiedbyyominame', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			ModifiedOnBehalfByYomiName: { a: 'modifiedonbehalfbyyominame', r: true },
 			OnHoldTime: { a: 'onholdtime', r: true },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
-			OwnerIdYomiName: { a: 'owneridyominame', r: true },
 			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
 			OwningTeam: { b: 'owningteam', a: '_owningteam_value', c: 'teams', d: 'team', r: true },
 			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -103,7 +99,6 @@ var Rocket;
 			regardingobjectid_contact_task: { b: 'regardingobjectid_contact_task', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
 			regardingobjectid_knowledgearticle_task: { b: 'regardingobjectid_knowledgearticle_task', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			regardingobjectid_knowledgebaserecord_task: { b: 'regardingobjectid_knowledgebaserecord_task', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
-			RegardingObjectIdYomiName: { a: 'regardingobjectidyominame', r: true },
 			ScheduledDurationMinutes: { a: 'scheduleddurationminutes', r: true },
 			ScheduledEnd_UtcDateAndTime: { a: 'scheduledend' },
 			ScheduledStart_UtcDateAndTime: { a: 'scheduledstart' },

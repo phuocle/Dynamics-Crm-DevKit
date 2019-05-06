@@ -39,6 +39,7 @@ var Rocket;
                 return entity[logicalName];
             };
             var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
                 if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
                     value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
                     upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
@@ -117,10 +118,8 @@ var Rocket;
 			CalendarId: { b: 'calendarid', a: '_calendarid_value', c: 'calendars', d: 'calendar' },
 			CALType: { a: 'caltype' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
-			CreatedByYomiName: { a: 'createdbyyominame', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			CreatedOnBehalfByYomiName: { a: 'createdonbehalfbyyominame', r: true },
 			DefaultFiltersPopulated: { a: 'defaultfilterspopulated', r: true },
 			DefaultMailbox: { b: 'defaultmailbox', a: '_defaultmailbox_value', c: 'mailboxes', d: 'mailbox', r: true },
 			DefaultOdbFolderName: { a: 'defaultodbfoldername', r: true },
@@ -157,16 +156,13 @@ var Rocket;
 			MobileOfflineProfileId: { b: 'mobileofflineprofileid', a: '_mobileofflineprofileid_value', c: 'mobileofflineprofiles', d: 'mobileofflineprofile' },
 			MobilePhone: { a: 'mobilephone' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
-			ModifiedByYomiName: { a: 'modifiedbyyominame', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			ModifiedOnBehalfByYomiName: { a: 'modifiedonbehalfbyyominame', r: true },
 			NickName: { a: 'nickname' },
 			OrganizationId: { a: 'organizationid', r: true },
 			OutgoingEmailDeliveryMethod: { a: 'outgoingemaildeliverymethod' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			ParentSystemUserId: { b: 'parentsystemuserid', a: '_parentsystemuserid_value', c: 'systemusers', d: 'systemuser' },
-			ParentSystemUserIdYomiName: { a: 'parentsystemuseridyominame', r: true },
 			PassportHi: { a: 'passporthi' },
 			PassportLo: { a: 'passportlo' },
 			PersonalEMailAddress: { a: 'personalemailaddress' },

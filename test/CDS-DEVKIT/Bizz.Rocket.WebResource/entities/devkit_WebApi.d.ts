@@ -98,21 +98,16 @@ declare namespace Rocket {
 		"@odata.etag": string;
 		/** ReadOnly - Unique identifier of the user who created the record. */
 		CreatedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the record was created. */
 		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who created the record. */
 		CreatedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		CreatedOnBehalfByYomiName: WebApi.StringValue;
+		devkit_AlternateKey: WebApi.StringValue;
 		devkit_Currency: WebApi.MoneyValue;
 		/** ReadOnly - Value of the Currency in base currency. */
 		devkit_currency_Base: WebApi.MoneyValue;
 		devkit_CustomerId_account: WebApi.LookupValue;
 		devkit_CustomerId_contact: WebApi.LookupValue;
-		/** ReadOnly */
-		devkit_CustomerIdYomiName: WebApi.StringValue;
 		devkit_DateOnlyDateOnly_DateOnly: WebApi.DateOnlyValue;
 		/** ReadOnly */
 		devkit_DateOnlyDateOnlyCalculated_DateOnly: WebApi.DateOnlyValue;
@@ -197,22 +192,16 @@ declare namespace Rocket {
 		ImportSequenceNumber: WebApi.IntegerValue;
 		/** ReadOnly - Unique identifier of the user who modified the record. */
 		ModifiedBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedByYomiName: WebApi.StringValue;
 		/** ReadOnly - Date and time when the record was modified. */
 		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who modified the record. */
 		ModifiedOnBehalfBy: WebApi.LookupValue;
-		/** ReadOnly */
-		ModifiedOnBehalfByYomiName: WebApi.StringValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 		OwnerId_systemuser: WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
 		OwnerId_team: WebApi.LookupValue;
-		/** ReadOnly - Yomi name of the owner */
-		OwnerIdYomiName: WebApi.StringValue;
 		/** ReadOnly - Unique identifier for the business unit that owns the record */
 		OwningBusinessUnit: WebApi.LookupValue;
 		/** ReadOnly - Unique identifier for the team that owns the record. */
