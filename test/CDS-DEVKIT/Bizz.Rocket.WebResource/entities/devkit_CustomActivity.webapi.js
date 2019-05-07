@@ -138,11 +138,17 @@ var Rocket;
 			var r = devkit_customactivity[field].r;
 			devkit_customactivity[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
+		Object.defineProperty(devkit_customactivity, 'ActivityParties', {
+			get: function () { return e['devkit_customactivity_activity_parties']; },
+			set: function (value) {
+				e['devkit_customactivity_activity_parties'] = value;
+				u['devkit_customactivity_activity_parties'] = value;
+			}
+		});
 		devkit_customactivity.Entity = u;
 		devkit_customactivity.EntityName = 'devkit_customactivity';
 		devkit_customactivity.EntityCollectionName = 'devkit_customactivities';
 		devkit_customactivity['@odata.etag'] = e['@odata.etag'];
-		devkit_customactivity.ActivityParties = e['devkit_CustomActivity_activity_parties'];
 		var optionSet = {
 			RollupState: {
 				NotCalculated: 0,

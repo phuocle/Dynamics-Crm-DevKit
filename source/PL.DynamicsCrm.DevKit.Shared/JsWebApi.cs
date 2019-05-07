@@ -242,22 +242,22 @@ namespace PL.DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t\tvar r = {@class}[field].r;\r\n";
             webApiCode += $"\t\t\t{@class}[field] = webApiField(e, a, b, c, d, r, u, g);\r\n";
             webApiCode += $"\t\t}}\r\n";
+            var hasPartyList = Fields.Where(f => f.FieldType == AttributeTypeCode.PartyList).Any();
+            if (hasPartyList)
+            {
+                var logicalName = IsCustomEntity ? $"{Class}_activity_parties" : $"{@class}_activity_parties";
+                webApiCode += $"\t\tObject.defineProperty({@class}, 'ActivityParties', {{\r\n";
+                webApiCode += $"\t\t\tget: function () {{ return e['{logicalName}']; }},\r\n";
+                webApiCode += $"\t\t\tset: function (value) {{\r\n";
+                webApiCode += $"\t\t\t\te['{logicalName}'] = value;\r\n";
+                webApiCode += $"\t\t\t\tu['{logicalName}'] = value;\r\n";
+                webApiCode += $"\t\t\t}}\r\n";
+                webApiCode += $"\t\t}});\r\n";
+            }
             webApiCode += $"\t\t{@class}.Entity = u;\r\n";
             webApiCode += $"\t\t{@class}.EntityName = \"{@class}\";\r\n";
             webApiCode += $"\t\t{@class}.EntityCollectionName = \"{GetLogicalCollectionName(@class)}\";\r\n";
             webApiCode += $"\t\t{@class}[\"@odata.etag\"] = e[\"@odata.etag\"];\r\n";
-            var hasPartyList = Fields.Where(f => f.FieldType == AttributeTypeCode.PartyList).Any();
-            if (hasPartyList)
-            {
-                if (IsCustomEntity)
-                {
-                    webApiCode += $"\t\t{@class}.ActivityParties = e[\"{Class}_activity_parties\"];\r\n";
-                }
-                else
-                {
-                    webApiCode += $"\t\t{@class}.ActivityParties = e[\"{@class}_activity_parties\"];\r\n";
-                }
-            }
             webApiCode += JsOptionSetFormCode;
             webApiCode += $"\t\t{@class}.OptionSet = optionSet;\r\n";
 

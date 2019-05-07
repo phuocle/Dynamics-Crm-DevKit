@@ -14,14 +14,52 @@ var formWebApi = (function () {
         //TestReadAlternateKey();
 
         //TestInsertOptionSet();
-        //TestCreateEmail();
-        //TestCreateEmailWithAttachedFile();
-        //SendEmail();
+        TestCreateEmailAndSend();
+        //TestUpdate();
+        //TestDelete();
     }
 
-    function SendEmail() {
+    function TestDelete() {
+        var contact = new Rocket.ContactApi();
+        contact.FirstName.Value = "DELETE";
+        contact.LastName.Value = "TEST";
+        var createRequest = new Rocket.WebApi.CreateRequest();
+        createRequest.entity = contact.Entity;
+        createRequest.entityName = contact.EntityName;
+        var res = WebApiClient.Create(createRequest);
+        var createdContact = new Rocket.ContactApi(res);
+
+        var deleteRequest = new Rocket.WebApi.DeleteRequest();
+        deleteRequest.entityId = createdContact.ContactId.Value;
+        deleteRequest.entityName = createdContact.EntityName;
+
+        var res2 = WebApiClient.Delete(deleteRequest);
     }
 
+    function TestUpdate() {
+        //read contact id
+        var key = new Rocket.WebApi.AlternateKey("emailaddress1", "someone_a@example.com");
+        var req = new Rocket.WebApi.RetrieveRequest();
+        req.alternateKey = [key];
+        req.entityName = "contact";
+        req.queryParams = "?$select=contactid";
+        var res = WebApiClient.Retrieve(req);
+        var contact = new Rocket.ContactApi(res);
+        var contactId = contact.ContactId.Value;
+
+        //update contact
+        var update = new Rocket.ContactApi();
+        update.FirstName.Value = "FIRST NAME";
+        update.LastName.Value = "LAST NAME";
+        update.Telephone1.Value = "123456789";
+
+        var updateRequest = new Rocket.WebApi.UpdateRequest();
+        updateRequest.entityId = contactId;
+        updateRequest.entity = update.Entity;
+        updateRequest.entityName = update.EntityName;
+
+        var res = WebApiClient.Update(updateRequest);
+    }
 
     function getFromUserId() {
         var fetchXml = [
@@ -43,7 +81,7 @@ var formWebApi = (function () {
     }
 
     function getToContactId() {
-        var key = new Rocket.WebApi.AlternateKey("emailaddress1", "someone_a@example.com");
+        var key = new Rocket.WebApi.AlternateKey("emailaddress1", "vanphuoc@gmail.com");
         var req = new Rocket.WebApi.RetrieveRequest();
         req.alternateKey = [key];
         req.entityName = "contact";
@@ -75,7 +113,8 @@ var formWebApi = (function () {
         return account.AccountId.Value;
     }
 
-    function TestCreateEmail() {
+    function TestCreateEmailAndSend() {
+        debugger;
         var fromUserId = getFromUserId();
         var toContactId = getToContactId();
         var toAccountId = getToAccountId();
@@ -103,6 +142,24 @@ var formWebApi = (function () {
 
         var res = WebApiClient.Create(req);
         var email = new Rocket.EmailApi(res);
+
+        //send mail ??
+        var customRequest = new Rocket.WebApi.CustomRequest();
+        customRequest.method = "POST";
+        customRequest.async = true;
+        customRequest.bound = true;
+        customRequest.entityId = email.ActivityId.Value;
+        customRequest.entityName = email.EntityName;
+        customRequest.name = "SendEmail";
+        customRequest.payload = {
+            IssueSend: true,
+            TrackingToken: "[DEVKIT]"
+        }
+        WebApiClient.Execute(customRequest).then(function (res3) {
+            debugger;
+            console.clear();
+            console.log(JSON.stringify(res3));
+        });
     }
 
     function TestInsertOptionSet() {

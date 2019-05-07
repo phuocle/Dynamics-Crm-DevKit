@@ -173,11 +173,17 @@ var Rocket;
 			var r = email[field].r;
 			email[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
+		Object.defineProperty(email, 'ActivityParties', {
+			get: function () { return e['email_activity_parties']; },
+			set: function (value) {
+				e['email_activity_parties'] = value;
+				u['email_activity_parties'] = value;
+			}
+		});
 		email.Entity = u;
 		email.EntityName = 'email';
 		email.EntityCollectionName = 'emails';
 		email['@odata.etag'] = e['@odata.etag'];
-		email.ActivityParties = e['email_activity_parties'];
 		var optionSet = {
 			RollupState: {
 				NotCalculated: 0,

@@ -130,11 +130,17 @@ var Rocket;
 			var r = phonecall[field].r;
 			phonecall[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
+		Object.defineProperty(phonecall, 'ActivityParties', {
+			get: function () { return e['phonecall_activity_parties']; },
+			set: function (value) {
+				e['phonecall_activity_parties'] = value;
+				u['phonecall_activity_parties'] = value;
+			}
+		});
 		phonecall.Entity = u;
 		phonecall.EntityName = 'phonecall';
 		phonecall.EntityCollectionName = 'phonecalls';
 		phonecall['@odata.etag'] = e['@odata.etag'];
-		phonecall.ActivityParties = e['phonecall_activity_parties'];
 		var optionSet = {
 			RollupState: {
 				NotCalculated: 0,
