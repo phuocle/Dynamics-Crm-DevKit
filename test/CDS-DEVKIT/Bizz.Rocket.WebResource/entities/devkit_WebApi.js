@@ -12,9 +12,8 @@ var formWebApi = (function () {
         //TestReadEntityImage();
         //TestReadPartyList();
         //TestReadAlternateKey();
-
         //TestInsertOptionSet();
-        TestCreateEmailAndSend();
+        //TestCreateEmailAndSend();
         //TestUpdate();
         //TestDelete();
     }
@@ -33,7 +32,8 @@ var formWebApi = (function () {
         deleteRequest.entityId = createdContact.ContactId.Value;
         deleteRequest.entityName = createdContact.EntityName;
 
-        var res2 = WebApiClient.Delete(deleteRequest);
+        var res2 = WebApiClient.Delete(deleteRequest)
+
     }
 
     function TestUpdate() {
@@ -146,7 +146,7 @@ var formWebApi = (function () {
         //send mail ??
         var customRequest = new Rocket.WebApi.CustomRequest();
         customRequest.method = "POST";
-        customRequest.async = true;
+        customRequest.async = false;
         customRequest.bound = true;
         customRequest.entityId = email.ActivityId.Value;
         customRequest.entityName = email.EntityName;
@@ -155,11 +155,10 @@ var formWebApi = (function () {
             IssueSend: true,
             TrackingToken: "[DEVKIT]"
         }
-        WebApiClient.Execute(customRequest).then(function (res3) {
-            debugger;
-            console.clear();
-            console.log(JSON.stringify(res3));
-        });
+        debugger;
+        var res2 = WebApiClient.Execute(customRequest)
+        console.clear();
+        console.log(JSON.stringify(res2));
     }
 
     function TestInsertOptionSet() {

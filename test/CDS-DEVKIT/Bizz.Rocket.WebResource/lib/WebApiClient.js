@@ -93,9 +93,6 @@ var Rocket;
         WebApi.Header = function (key, value) {
             return { key: key, value: value };
         };
-        WebApi.WithRequest = function() {
-            return {};
-        };
         WebApi.CustomRequest = function() {
             return WebApiClient.Requests.Request.prototype.with({});
         };

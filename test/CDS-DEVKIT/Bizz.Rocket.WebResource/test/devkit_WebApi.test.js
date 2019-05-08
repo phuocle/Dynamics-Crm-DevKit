@@ -196,6 +196,7 @@ describe("devkit_WebApi.test", function () {
             expect(webapi.statuscode.FormattedValue).toEqual("Active");
             expect(webapi.statecode.Value).toEqual(0);
             expect(webapi.statecode.FormattedValue).toEqual("Active");
+            webapi.devkit_SingleOptionSetCode.
             expect(webapi.devkit_SingleOptionSetCode.Value).toEqual(webapi.OptionSet.devkit_SingleOptionSetCode.Crm_4);
             expect(webapi.devkit_SingleOptionSetCode.FormattedValue).toEqual("Crm 4");
             expect(webapi.devkit_SingleOptionSetCodeCalculated.Value).toEqual(webapi.OptionSet.devkit_SingleOptionSetCode.Crm_4);
@@ -1089,8 +1090,15 @@ describe("devkit_WebApi.test", function () {
             xhr.respondWith("POST", url,
                 [201, { "Content-Type": "application/json" }, JSON.stringify(dataEmail)]
             );
+            var sendData = {
+                "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.SendEmailResponse",
+                "Subject": "EMAIL SUBJECT [DEVKIT]"
+            }
+            var urlSend = RegExp.escape(fakeUrl + "/api/data/v9.1/emails(2d65ef68-d76f-e911-a998-000d3a802135)/Microsoft.Dynamics.CRM.SendEmail()");
+            xhr.respondWith("POST", urlSend,
+                [201, { "Content-Type": "application/json" }, JSON.stringify(sendData)]
+            );
             //run
-
             var fromUserId = getFromUserId();
             var toContactId = getToContactId();
             var toAccountId = getToAccountId();
@@ -1117,9 +1125,21 @@ describe("devkit_WebApi.test", function () {
             req.entity = email.Entity;
 
             var res = WebApiClient.Create(req);
-            //result
             var email = new Rocket.EmailApi(res);
-
+            //send email
+            var customRequest = new Rocket.WebApi.CustomRequest();
+            customRequest.method = "POST";
+            customRequest.async = false;
+            customRequest.bound = true;
+            customRequest.entityId = email.ActivityId.Value;
+            customRequest.entityName = email.EntityName;
+            customRequest.name = "SendEmail";
+            customRequest.payload = {
+                IssueSend: true,
+                TrackingToken: "[DEVKIT]"
+            }
+            var res2 = WebApiClient.Execute(customRequest)
+            //result
             expect(email.Subject.Value).toEqual("EMAIL SUBJECT");
             expect(email.Description.Value).toEqual("EMAIL BODY");
             expect(email.StateCode.Value).toEqual(email.OptionSet.StateCode.Open);
@@ -1127,9 +1147,7 @@ describe("devkit_WebApi.test", function () {
             expect(email.PriorityCode.Value).toEqual(email.OptionSet.PriorityCode.High);
             expect(email.ToRecipients.Value).toEqual("someone_a@example.com;someone9@example.com;");
             expect(email.Sender.Value).toEqual("devkit@crmgridplus.com");
-
-            //data sendemail: {"isFulfilled":false,"isRejected":false}
-            //{"@odata.context":"https://pl-dynamicscrm-devkit.crm5.dynamics.com/api/data/v9.1/$metadata#Microsoft.Dynamics.CRM.SendEmailResponse","Subject":"EMAIL SUBJECT [DEVKIT]"}
+            expect(res2.Subject).toEqual("EMAIL SUBJECT [DEVKIT]");
         });
     });
 
