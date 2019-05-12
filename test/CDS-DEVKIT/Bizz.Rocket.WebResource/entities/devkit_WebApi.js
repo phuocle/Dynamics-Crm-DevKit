@@ -1,10 +1,10 @@
 ﻿///<reference path='devkit_WebApi.d.ts' />
 var formWebApi = (function () {
 	function onLoad(executionContext) {
-
+        OptionSet.
 	}
     function onSave(executionContext) {
-        console.clear();
+        //console.clear();
         //TestReadOptionSet();
         //TestReadDateTime();
         //TestReadNumber();
@@ -16,6 +16,11 @@ var formWebApi = (function () {
         //TestCreateEmailAndSend();
         //TestUpdate();
         //TestDelete();
+        Xrm.Utility.getAllowedStatusTransitions("devkit_webapi", 100000001).then(
+            function (data) {
+                debugger;
+            }, function (data) {
+            });
     }
 
     function TestDelete() {

@@ -576,6 +576,18 @@ declare namespace Rocket {
 		WebSiteURL: WebApi.StringValue;
 		/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
 		YomiName: WebApi.StringValue;
-	}
+    }
+    /** Dynamics 365 form Account */
+    class FormAccount {
+        /**
+         *
+         * @param executionContext the execution context
+         * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+         */
+        constructor(executionContext: object, defaultWebResourceName?: string);
+        /** All supported utility functions/methods/objects for Dynamics 365 from */
+        Utility: Rocket.Form.Utility;
+        //OptionSet: Rocket.OptionSet;
+    }
 }
 //{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
