@@ -330,6 +330,490 @@ declare namespace Rocket {
         }
     }
     module Form {
+        interface ImageOption {
+            /**  Indicates whether to edit the image before saving. */
+            allowEdit: boolean;
+            /** Height of the image to capture. */
+            height: number;
+            /** Indicates whether to capture image using the front camera of the device. */
+            preferFrontCamera: boolean;
+            /** Quality of the image file in percentage. */
+            quality: number;
+            /** Width of the image to capture. */
+            width: number;
+        }
+        /** The strings to be used in the alert dialog. */
+        interface DialogAlertStrings {
+            /** The confirm button label.If you do not specify the button label, OK is used as the button label. */
+            confirmButtonLabel: string;
+            /** The message to be displyed in the alert dialog. */
+            text: string;
+        }
+        /** The height and width options for alert dialog. */
+        interface DialogOptions {
+            /** Number.Height of the alert dialog in pixels. */
+            height: number;
+            /** Number.Width of the alert dialog pixels. */
+            width: number;
+        }
+        interface FileData {
+            /** Contents of the audio file. */
+            fileContent: string;
+            /** Name of the audio file. */
+            fileName: string;
+            /** Size of the audio file in KB. */
+            fileSize: number;
+            /** Audio file MIME type. */
+            mimeType: string;
+        }
+        /** An object describing whether to open or save the file.  */
+        interface OpenFileOption {
+            openMode: OptionSet.OpenFileOption
+        }
+        interface EntityReference {
+            /** Entity type of the record selected in the lookup control. */
+            entityType: string;
+            /** ID of the record selected in the lookup control. */
+            id: string;
+            /** Name of the record selected in the lookup control. */
+            name: string;
+        }
+        interface OpenFormRelationship {
+            /** Name of the attribute used for relationship. */
+            attributeName: string;
+            /** Name of the relationship. */
+            name: string;
+            /** Name of the navigation property for this relationship. */
+            navigationPropertyName: string;
+            /** Relationship type. */
+            relationshipType: OptionSet.OpenFormRelationshipType;
+            /** Role type in relationship.  */
+            roleType: OptionSet.OpenFormRelationshipRoleType;
+        }
+        /** The form options for opening the form. */
+        interface OpenFormOption {
+            /** Indicates whether to display the command bar. If you do not specify this parameter, the command bar is displayed by default. */
+            cmdbar?: boolean;
+            /** Designates a record that will provide default values based on mapped attribute values.  */
+            createFromEntity?: EntityReference;
+            /** ID of the entity record to display the form for. */
+            entityId?: string;
+            /** Logical name of the entity to display the form for. */
+            entityName?: string;
+            /** ID of the form instance to be displayed. */
+            formId?: string;
+            /** Height of the form window to be displayed in pixels. */
+            height?: number;
+            /** Controls whether the navigation bar is displayed and whether application navigation is available using the areas and subareas defined in the sitemap. */
+            navbar?: OptionSet.OpenFormNavBar;
+            /** Indicates whether to display form in a new window. */
+            openInNewWindow?: boolean;
+            /** Specify one of the following values for the window position of the form on the screen. */
+            windowPosition: OptionSet.OpenFormWindowPosition;
+            /**  ID of the business process to be displayed on the form. */
+            processId?: string;
+            /** ID of the business process instance to be displayed on the form. */
+            processInstanceId?: string;
+            /** Define a relationship object to display the related records on the form. */
+            relationship: OpenFormRelationship;
+            /** ID of the selected stage in business process instance. */
+            selectedStageId?: string;
+            /** Indicates whether to open a quick create form. If you do not specify this, by default false is passed. */
+            useQuickCreateForm?: boolean;
+            /**  Width of the form window to be displayed in pixels. */
+            width?: number;
+        }
+        /** The strings to be used in the confirmation dialog. */
+        interface DialogConfirmStrings {
+            /** The cancel button label.If you do not specify the cancel button label, Cancel is used as the button label. */
+            cancelButtonLabel: string;
+            /** The confirm button label.If you do not specify the confirm button label, OK is used as the button label. */
+            confirmButtonLabel: string;
+            /** The subtitle to be displayed in the confirmation dialog. */
+            subtitle: string;
+            /** The message to be displayed in the confirmation dialog. */
+            text: string;
+            /** The title to be displayed in the confirmation dialog. */
+            title: string;
+        }
+        interface WindowOption {
+            /** Height of the window to display the resultant page in pixels. */
+            height?: number;
+            /** Width of the window to display the resultant page in pixels. */
+            width?: number;
+        }
+        /** An object to specify the options for error dialog. */
+        interface DialogErrorOptions {
+            /** Details about the error. When you specify this, the Download Log File button is available in the error message, and clicking it will let users download a text file with the content specified in this attribute. */
+            details: string;
+            /** The error code. If you just set errorCode, the message for the error code is automatically retrieved from the server and displayed in the error dialog.If you specify an invalid errorCode value, an error dialog with a default error message is displayed. */
+            errorCode: number;
+            /** The message to be displayed in the error dialog. */
+            message: string;
+        }
+        interface PickFileOption {
+            /** Image file types to select. */
+            accept: OptionSet.PickFileAccept;
+            /** Indicates whether to allow selecting multiple files.  */
+            allowMultipleFiles: boolean;
+            /** Maximum size of the files(s) to be selected.  */
+            maximumAllowedFileSize: number;
+        }
+        /**
+         * Provides a container for useful methods.
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility
+         * */
+        interface Utility {
+            /**
+             * Returns information about the advanced configuration settings for the organization
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getadvancedconfigsetting
+             * */
+            AdvancedConfigSetting: OptionSet.AdvancedConfigSetting;
+            /**
+             * Returns the valid state transitions for the specified entity type and state code.
+             * @param entityName The logical name of the entity.
+             * @param statusCode The status code to find out the allowed status transition values.
+             * @param successCallback The function to execute when the operation succeeds.
+             * @param errorCallback The function to execute when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getallowedstatustransitions
+             */
+            AllowedStatusTransitions(entityName: string, statusCode: number, successCallback: (statusCodes: Array<number>) => void, errorCallback: (error: object) => void): void;
+            /**
+             * Invokes the device camera to scan the barcode information, such as a product number. Note: This method is supported only for the mobile clients.
+             * @param successCallback A function to call when the barcode value is returned as a String.
+             * @param errorCallback A function to call when the operation fails. An error object with the message property (String) will be passed that describes the error details.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/getbarcodevalue
+             */
+            BarcodeValue(successCallback: (data: string) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             * Invokes the device microphone to record audio.
+             * @param successCallback A function to call when audio is returned. A base64 encoded audio object attributes is passed to the function.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/captureaudio
+             */
+            CaptureAudio(successCallback: (data: FileData) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             * Invokes the device camera to capture an image. Note: This method is supported only for the mobile clients.
+             * @param imageOptions The image option.
+             * @param successCallback A function to call when image is returned. A base64 encoded image object attributes is passed to the function.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/captureimage
+             */
+            CaptureImage(imageOptions: ImageOption, successCallback: (data: FileData) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             * Invokes the device camera to record video. Note: This method is supported only for the mobile clients.
+             * @param successCallback A function to call when Video is returned. A base64 encoded video object attributes is passed to the function.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/capturevideo
+             */
+            CaptureVideo(successCallback: (data: FileData) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             *  Provides access to the methods to determine which client is being used, whether the client is connected to the server, and what kind of device is being used.
+             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client
+             * */
+            Client: DevKit.Form.Utility.Client;
+            /**
+             * Returns the base URL that was used to access the application
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getclienturl
+             * */
+            ClientUrl: string;
+            /**
+             * Closes a progress dialog box. If no progress dialog is displayed currently, this method will do nothing. You can display a progress dialog using the ShowProgressIndicator method.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/closeprogressindicator
+             * */
+            CloseProgressIndicator(): void;
+            /**
+             * Returns the name of the current business app in Customer Engagement
+             * @param successCallback A function to call when the business app name is returned
+             * @param errorCallback A function to call when the operation fails
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappname
+             */
+            CurrentAppName(successCallback: (data: object) => void, errorCallback: (error: object) => void): void;
+            /**
+             * Returns the properties of the current business app in Customer Engagement
+             * @param successCallback A function to call when the business app property information is returned
+             * @param errorCallback A function to call when the operation fails
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
+             */
+            CurrentAppProperties(successCallback: (data: DevKit.Form.AppProperty) => void, errorCallback: (error: object) => void): void;
+            /**
+             * Returns the URL of the current business app in Customer Engagement
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappurl
+             * */
+            CurrentAppUrl: string;
+            /**
+             * Returns the current location using the device geolocation capability. Note: For the CurrentPosition method to work, the geolocation capability must be enabled on your mobile device, and the Dynamics 365 for Customer Engagement mobile clients must have permissions to access the device location, which isn't enabled by default. This method is supported only for the mobile clients.
+             * @param successCallback A function to call when the current geolocation information is returned. A geolocation object attributes is passed to the function
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/getcurrentposition
+             */
+            CurrentPosition(successCallback: (data: DevKit.Form.PositionData) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             * Returns the entity metadata for the specified entity.
+             * @param entityName The logical name of the entity.
+             * @param attributes The attributes to get metadata for.
+             * @param successCallback A function to call when the entity metadata is returned.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getentitymetadata
+             */
+            EntityMetadata(entityName: string, attributes?: Array<string>, successCallback: (meta: DevKit.Form.EntityMetadata) => void, errorCallback: (error: object) => void): void;
+            /**
+             * Encodes the specified string so that it can be used in an HTML attribute.
+             * @param arg String to be encoded.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-encoding/xmlencode
+             */
+            HtmlAttributeEncode(arg: string): void;
+            /**
+             * Converts a string that has been HTML-encoded into a decoded string.
+             * @param arg HTML-encoded string to be decoded.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-encoding/htmldecode
+             */
+            HtmlDecode(arg: string): void;
+            /**
+             * Converts a string to an HTML-encoded string.
+             * @param arg String to be encoded.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-encoding/htmlattributeencode
+             */
+            HtmlEncode(arg: string): void;
+            /**
+             * Invokes an action based on the specified parameters
+             * @param name Name of the process action to invoke
+             * @param parameter An object containing input parameters for the action. You define an object using key:value pairs of items, where key is of String type
+             * @param successCallback A function to call when the action is invoked
+             * @param errorCallback A function to call when the operation fails
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/invokeprocessaction
+             */
+            InvokeProcessAction(name, parameter?: object, successCallback: (data: object) => void, errorCallback: (error: object) => void): void;
+            /**
+             * Returns a boolean value indicating if the Customer Engagement instance is hosted on-premises or online
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/isonpremises
+             * */
+            IsOnPremise: boolean;
+            /**
+             * Returns the name of the DOM attribute expected by the Learning Path (guided help) Content Designer for identifying UI controls in the Dynamics 365 for Customer Engagement apps form. An attribute by this name must be added to the UI element that needs to be exposed to Learning Path (guided help)
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getlearningpathattributename
+             * */
+            LearningPathAttributeName: string;
+            /**
+             * Displays the web page represented by a URL in the static area in the side pane, which appears on all pages in the Dynamics 365 for Customer Engagement apps web client.
+             * @param url URL of the page to be loaded in the side pane static area.
+             * @param title Title of the side pane static area.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-panel/loadpanel
+             */
+            LoadPanel(url: string, title: string): void;
+            /**
+             * Defines the options for opening the lookup dialog
+             * @param lookupOptions
+             * @param successCallback A function to call when the lookup control is invoked. An array of objects properties is passed
+             * @param cancelCallback A function to call when you cancel the lookup control or the operation fails
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/lookupobjects
+             */
+            LookupObjects(lookupOptions: LookupOption, successCallback: (data: EntityReference) => void, errorCallback: (error: object) => void): void;
+            /**
+             * Displays an alert dialog containing a message and a button.
+             * @param alertStrings The strings to be used in the alert dialog.
+             * @param dialogOptions The height and width options for alert dialog.
+             * @param successCallback A function to execute when the alert dialog is closed by either clicking the confirm button or canceled by pressing ESC.
+             * @param errorCallback A function to execute when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openalertdialog
+             */
+            OpenAlertDialog(alertStrings: DialogAlertStrings, dialogOptions: DialogOptions, successCallback: (data: string) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             * Displays a confirmation dialog box containing a message and two buttons.
+             * @param confirmStrings The strings to be used in the confirmation dialog.
+             * @param dialogOptions The height and width options for confirmation dialog.
+             * @param successCallback A function to execute when the confirmation dialog is closed by clicking the confirm, cancel, or X in the top-right corner of the dialog. An object with the confirmed (Boolean) attribute is passed that indicates whether the confirm button was clicked to close the dialog.
+             * @param errorCallback A function to execute when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openconfirmdialog
+             */
+            OpenConfirmDialog(confirmStrings: DialogConfirmStrings, dialogOptions: DialogOptions, successCallback: (data: DevKit.Form.ConfirmDialogData) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             * Displays an error dialog.
+             * @param errorOptions An object to specify the options for error dialog.
+             * @param successCallback A function to execute when the error dialog is closed.
+             * @param errorCallback A function to execute when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openerrordialog
+             */
+            OpenErrorDialog(errorOptions: DialogErrorOptions, successCallback: (data: object) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             * Opens a file.
+             * @param file An object describing the file to open.
+             * @param openFileOption An object describing whether to open or save the file.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openfile
+             */
+            OpenFile(file: FileData, openFileOption: OpenFileOption): void;
+            /**
+             * Opens an entity form or a quick create form.
+             * @param openFormOption The open form option for opening the form.
+             * @param formParameters A dictionary object that passes extra parameters to the form. Invalid parameters will cause an error.
+             * @param successCallback A function to execute when the record is saved in the quick create form. This function is passed an object as a parameter.
+             * @param errorCallback A function to execute when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openform
+             */
+            OpenForm(openFormOption: OpenFormOption, formParameters, successCallback: (data: EntityReference) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             * Opens a URL, including file URLs.
+             * @param url URL to open.
+             * @param windowOption Options to open the URL.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openurl
+             */
+            OpenUrl(url: string, windowOption: WindowOption): void;
+            /**
+             * Opens an HTML web resource.
+             * @param webResourceName Name of the HTML web resource to open.
+             * @param windowOption Window options for opening the web resource.
+             * @param data Data to be passed into the data parameter.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openwebresource
+             */
+            OpenWebResource(webResourceName: string, windowOption: WindowOption, data: string): void;
+            /**
+             *  Returns information about the current organization settings
+             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
+             * */
+            OrganizationSettings: DevKit.Form.Utility.OrganizationSettings;
+            /**
+             * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients).
+             * @param pickFileOption An object pick file option
+             * @param successCallback A function to call when selected files are returned. An array of objects with each object having the following attributes is passed to the function.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/pickfile
+             */
+            PickFile(pickFileOption: PickFileOption, successCallback: (data: Array<FileData>) => void, errorCallback: (error: DevKit.Form.ErrorObject) => void): void;
+            /**
+             * Prefixes the current organization's unique name to a string, typically a URL path
+             * @param sPath A local path to a resource
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/prependorgname
+             */
+            PrependOrgName(sPath: string): string;
+            /**
+             * Refreshes the parent grid containing the specified record
+             * @param lookupOptions An object with the following properties to specify the record
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/refreshparentgrid
+             */
+            RefreshParentGrid(lookupOptions: EntityReference): void;
+            /**
+             * Returns the localized string for a given key associated with the default web resource
+             * @param key The key for the localized string
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getresourcestring
+             */
+            Resource(key: string): string;
+            /**
+             * Returns the localized string for a given key associated with the specified web resource
+             * @param webResourceName The name of the web resource. E.g.: "devkit_/resources/Resource"
+             * @param key The key for the localized string
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getresourcestring
+             */
+            ResourceString(webResourceName: string, key: string): string;
+            /**
+             * Displays a progress dialog with the specified message. Any subsequent call to this method will update the displayed message in the existing progress dialog with the message specified in the latest method call. The progress dialog blocks the UI until it is closed using the CloseProgressIndicator method. So, you must use this method with caution
+             * @param message The message to be displayed in the progress dialog
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/showprogressindicator
+             */
+            ShowProgressIndicator(message: string): void;
+            /**
+             * Returns information about the current user settings
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings
+             * */
+            UserSettings: {
+                /**
+                 * Returns the date formatting information for the current user
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
+                 * */
+                DateFormattingInfo: DevKit.Form.Utility.UserSettings.DateFormattingInfo;
+                /**
+                 * Returns the ID of the default dashboard for the current user
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#defaultdashboardid
+                 * */
+                DefaultDashboardId: string;
+                /**
+                 * Indicates whether guided help is enabled for the current user
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
+                 * */
+                IsGuidedHelpEnabled: boolean;
+                /**
+                 * Indicates whether high contrast is enabled for the current user
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#ishighcontrastenabled
+                 * */
+                IsHighContrastEnabled: boolean;
+                /**
+                 * Indicates whether the language for the current user is a right-to-left (RTL) language
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isrtl
+                 * */
+                IsRTL: boolean;
+                /**
+                 * Returns the language ID for the current user
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#languageid
+                 * */
+                LanguageId: number;
+                /**
+                 * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
+                 * */
+                SecurityRolePrivileges: Array<string>;
+                /**
+                 * Returns an array of strings that represent the GUID values of each of the security role that the user is associated with or any teams that the user is associated with
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
+                 * */
+                SecurityRoles: Array<string>;
+                /**
+                 * Returns the transaction currency ID for the current user
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
+                 * */
+                TransactionCurrencyId: string;
+                /**
+                 * Returns the GUID of the SystemUser.Id value for the current user
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
+                 * */
+                UserId: string;
+                /**
+                 * Returns the name of the current user
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#username
+                 * */
+                UserName: string;
+                /**
+                 * Returns the difference in minutes between the local time and Coordinated Universal Time (UTC)
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#gettimezoneoffsetminutes-method
+                 * */
+                TimeZoneOffsetMinutes: number;
+            };
+            /**
+             * Returns the version number of the Dynamics 365 for Customer Engagement apps instance. E.g.: "9.0.0.1103"
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getversion
+             * */
+            Version: string;
+            /**
+             * Encodes the specified string so that it can be used in an XML attribute.
+             * @param arg String to be encoded.
+             */
+            XmlAttributeEncode(arg: string): void;
+            /**
+             * Converts a string to an XML-encoded string.
+             * @param arg String to be encoded.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-encoding/xmlattributeencode
+             */
+            XmlEncode(arg: string): void;
+        }
+    }
+}
+/** PL.DynamicsCrm.DevKit for d.ts */
+declare namespace DevKit {
+    module Form {
+        interface ErrorObject {
+            /** Localized message describing the error details. */
+            message: string;
+            /** The error code.  */
+            code: number;
+        }
+        interface PositionData {
+            /** Contains a set of geographic coordinates along with associated accuracy as well as a set of other optional attributes such as altitude and speed. */
+            coords: object;
+            /** Represents the time when the object was acquired and is represented as DOMTimeStamp. */
+            timestamp: object;
+        }
+        interface ConfirmDialogData {
+            /** Indicates whether the confirm button was clicked to close the dialog. */
+            confirmed: boolean;
+        }
         interface KeyValueObject {
             key: string,
             value: object
@@ -404,18 +888,8 @@ declare namespace Rocket {
             Name: string;
             /** The ID of the privilege. */
             PrivilegeId: string;
-            /** The type of privilege, which is one of the following: */
-            PrivilegeType: {
-                None: number;
-                Create: number;
-                Read: number;
-                Write: number;
-                Delete: number;
-                Assign: number;
-                Share: number;
-                Append: number;
-                AppendTo: number;
-            }
+            /** The type of operation for the privilege */
+            PrivilegeType: OptionSet.PrivilegeType
         }
         interface EntityMetadata {
             /** Whether a custom activity should appear in the activity menus in the Web application. 0 indicates that the custom activity doesn't appear; 1 indicates that it does appear. */
@@ -517,70 +991,114 @@ declare namespace Rocket {
             /** The entity types to display */
             entityTypes: Array<string>;
             /** Used to filter the results */
-            filters: Array<{ filterXml: string, entityLogicalName: string }>;
+            filters: Array<LookupFilter>;
             /** Indicates whether the lookup control should show the barcode scanner in mobile clients */
             showBarcodeScanner: boolean;
             /** The views to be available in the view picker. Only system views are supported */
             viewIds: Array<string>;
         }
-        interface Utility {
+        /** Used to filter the results. */
+        interface LookupFilter {
+            /** The FetchXML filter element to apply. */
+            filterXml: string;
+            /** The entity type to which to apply this filter. */
+            entityLogicalName: string
+        }
+
+        /** The App property object data */
+        interface AppProperty {
+            appId: string;
+            displayName: string;
+            uniqueName: string;
+            url: string;
+            webResourceId: string;
+            webResourceName: string;
+            welcomePageId: string;
+            welcomePageName: string;
+        }
+        module Utility {
             /**
-             * Closes a progress dialog box. If no progress dialog is displayed currently, this method will do nothing. You can display a progress dialog using the ShowProgressIndicator method.
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/closeprogressindicator
+             *  Provides access to the methods to determine which client is being used, whether the client is connected to the server, and what kind of device is being used.
+             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client
              * */
-            CloseProgressIndicator(): void;
-            /**
-             * Returns the valid state transitions for the specified entity type and state code.
-             * @param entityName The logical name of the entity.
-             * @param statusCode The status code to find out the allowed status transition values.
-             * @param successCallback The function to execute when the operation succeeds.
-             * @param errorCallback The function to execute when the operation fails.
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getallowedstatustransitions
-             */
-            AllowedStatusTransitions(entityName: string, statusCode: number, successCallback: (statusCodes: Array<number>) => void, errorCallback: (error: object) => void): void;
-            /**
-             * Returns the entity metadata for the specified entity.
-             * @param entityName The logical name of the entity.
-             * @param attributes The attributes to get metadata for.
-             * @param successCallback A function to call when the entity metadata is returned.
-             * @param errorCallback A function to call when the operation fails.
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getentitymetadata
-             */
-            EntityMetadata(entityName: string, attributes?: Array<string>, successCallback: (meta: EntityMetadata) => void, errorCallback: (error: object) => void): void;
-            /** Provides access to the methods to determine which client is being used, whether the client is connected to the server, and what kind of device is being used. */
-            Client: {
-                /** Returns a value to indicate which client the script is executing in. */
+            interface Client {
+                /**
+                 *  Returns a value to indicate which client the script is executing in.
+                 *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#getclient
+                 * */
                 ClientName: OptionSet.ClientName;
-                /** Returns a value to indicate the state of the client. */
+                /**
+                 *  Returns a value to indicate the state of the client.
+                 *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#getclientstate
+                 * */
                 ClientState: OptionSet.ClientState;
-                /** Returns information about the kind of device the user is using. */
+                /**
+                 *  Returns information about the kind of device the user is using.
+                 *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#getformfactor
+                 * */
                 FormFactor: OptionSet.FormFactor;
-                /** Returns information whether the server is online or offline */
+                /**
+                 *  Returns information whether the server is online or offline
+                 *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#isoffline
+                 * */
                 IsOffline(): boolean;
-            };
-            /** Returns information about the current organization settings */
-            OrganizationSettings: {
-                /** Returns attributes and their values as key:value pairs that are available for the organization entity. Additional values will be available as attributes if they are specified as attribute dependencies in the web resource dependency list. The key will be the attribute logical name */
+            }
+            /**
+             *  Returns information about the current organization settings
+             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
+             * */
+            interface OrganizationSettings {
+                /**
+                 * Returns attributes and their values as key:value pairs that are available for the organization entity. Additional values will be available as attributes if they are specified as attribute dependencies in the web resource dependency list. The key will be the attribute logical name
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#attributes
+                 * */
                 Attributes: Array<KeyValueObject>;
-                /** Returns the ID of the base currency for the current organization */
+                /**
+                 * Returns the ID of the base currency for the current organization
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
+                 * */
                 BaseCurrencyId: string;
-                /** Returns the default country/region code for phone numbers for the current organization */
+                /**
+                 * Returns the default country/region code for phone numbers for the current organization
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#defaultcountrycode
+                 * */
                 DefaultCountryCode: string;
-                /** Indicates whether the auto-save option is enabled for the current organization */
+                /**
+                 * Indicates whether the auto-save option is enabled for the current organization
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#isautosaveenabled
+                 * */
                 IsAutoSaveEnabled: boolean;
-                /** Returns the preferred language ID for the current organization */
+                /**
+                 * Returns the preferred language ID for the current organization
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#languageid
+                 * */
                 LanguageId: number;
-                /** Returns the ID of the current organization */
+                /**
+                 * Returns the ID of the current organization
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationid
+                 * */
                 OrganizationId: string;
-                /** Returns the unique name of the current organization */
+                /**
+                 * Returns the unique name of the current organization
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
+                 * */
                 UniqueName: string;
-                /** Indicates whether the Skype protocol is used for the current organization */
+                /**
+                 * Indicates whether the Skype protocol is used for the current organization
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
+                 * */
                 UseSkypeProtocol: boolean;
-            };
-            /** Returns information about the current user settings */
-            UserSettings: {
-                /** Returns the date formatting information for the current user */
-                DateFormattingInfo: {
+            }
+            /**
+             * Returns information about the current user settings
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings
+             * */
+            module UserSettings {
+                /**
+                 * Returns the date formatting information for the current user.
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
+                 * */
+                interface DateFormattingInfo {
                     AMDesignator: object,
                     AbbreviatedDayNames: object,
                     AbbreviatedMonthGenitiveNames: object,
@@ -606,94 +1124,7 @@ declare namespace Rocket {
                     UniversalSortableDateTimePattern: object,
                     YearMonthPattern: object
                 };
-                /** Returns the ID of the default dashboard for the current user */
-                DefaultDashboardId: string;
-                /** Indicates whether guided help is enabled for the current user */
-                IsGuidedHelpEnabled: boolean;
-                /** Indicates whether high contrast is enabled for the current user */
-                IsHighContrastEnabled: boolean;
-                /** Indicates whether the language for the current user is a right-to-left (RTL) language */
-                IsRTL: boolean;
-                /** Returns the language ID for the current user */
-                LanguageId: number;
-                /** Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with */
-                SecurityRolePrivileges: Array<string>;
-                /** Returns an array of strings that represent the GUID values of each of the security role that the user is associated with or any teams that the user is associated with */
-                SecurityRoles: Array<string>;
-                /** Returns the transaction currency ID for the current user */
-                TransactionCurrencyId: string;
-                /** Returns the GUID of the SystemUser.Id value for the current user */
-                UserId: string;
-                /** Returns the name of the current user */
-                UserName: string;
-                /** Returns the difference in minutes between the local time and Coordinated Universal Time (UTC) */
-                TimeZoneOffsetMinutes: number;
-            };
-            /** Returns information about the advanced configuration settings for the organization */
-            AdvancedConfigSetting: OptionSet.AdvancedConfigSetting;
-            /** Returns the base URL that was used to access the application */
-            ClientUrl: string;
-            /**
-             * Returns the name of the current business app in Customer Engagement
-             * @param successCallback A function to call when the business app name is returned
-             * @param errorCallback A function to call when the operation fails
-             */
-            CurrentAppName(successCallback: (data: object) => void, errorCallback: (error: object) => void): void;
-            /**
-             * Returns the properties of the current business app in Customer Engagement
-             * @param successCallback A function to call when the business app property information is returned
-             * @param errorCallback A function to call when the operation fails
-             */
-            CurrentAppProperties(successCallback: (data: { appId: string, displayName: string, uniqueName: string, url: string, webResourceId: string, webResourceName: string, welcomePageId: string, welcomePageName: string }) => void, errorCallback: (error: object) => void): void;
-            /** Returns the URL of the current business app in Customer Engagement */
-            CurrentAppUrl: string;
-            /** Returns the version number of the Dynamics 365 for Customer Engagement apps instance. E.g.: "9.0.0.1103" */
-            Version: string;
-            /** Returns a boolean value indicating if the Customer Engagement instance is hosted on-premises or online */
-            IsOnPremise: boolean;
-            /**
-             * Prefixes the current organization's unique name to a string, typically a URL path
-             * @param sPath A local path to a resource
-             */
-            PrependOrgName(sPath: string): string;
-            /** Returns the name of the DOM attribute expected by the Learning Path (guided help) Content Designer for identifying UI controls in the Dynamics 365 for Customer Engagement apps form. An attribute by this name must be added to the UI element that needs to be exposed to Learning Path (guided help) */
-            LearningPathAttributeName: string;
-            /**
-             * Returns the localized string for a given key associated with the specified web resource
-             * @param webResourceName The name of the web resource. E.g.: "devkit_/resources/Resource"
-             * @param key The key for the localized string
-             */
-            ResourceString(webResourceName: string, key: string): string;
-            /**
-             * Returns the localized string for a given key associated with the default web resource
-             * @param key The key for the localized string
-             */
-            Resource(key: string): string;
-            /**
-             * Invokes an action based on the specified parameters
-             * @param name Name of the process action to invoke
-             * @param parameter An object containing input parameters for the action. You define an object using key:value pairs of items, where key is of String type
-             * @param successCallback A function to call when the action is invoked
-             * @param errorCallback A function to call when the operation fails
-             */
-            InvokeProcessAction(name, parameter?: object, successCallback: (data: object) => void, errorCallback: (error: object) => void): void;
-            /**
-             * Defines the options for opening the lookup dialog
-             * @param lookupOptions
-             * @param successCallback A function to call when the lookup control is invoked. An array of objects properties is passed
-             * @param cancelCallback A function to call when you cancel the lookup control or the operation fails
-             */
-            LookupObjects(lookupOptions: LookupOption, successCallback: (data: { entityType: string, id: string, name: string }) => void, errorCallback: (error: object) => void): void;
-            /**
-             * Refreshes the parent grid containing the specified record
-             * @param lookupOptions An object with the following properties to specify the record
-             */
-            RefreshParentGrid(lookupOptions: { entityType: string, id: string, name: string }): void;
-            /**
-             * Displays a progress dialog with the specified message. Any subsequent call to this method will update the displayed message in the existing progress dialog with the message specified in the latest method call. The progress dialog blocks the UI until it is closed using the CloseProgressIndicator method. So, you must use this method with caution
-             * @param message The message to be displayed in the progress dialog
-             */
-            ShowProgressIndicator(message: string): void;
+            }
         }
     }
 }
@@ -961,6 +1392,61 @@ declare namespace OptionSet {
         Open,
         /** 2 */
         Save
+    }
+    /** Describes the type of operation for the privilege */
+    enum PrivilegeType {
+        /** 0 - Specifies no privilege. */
+        None,
+        /** 1 - The create privilege. */
+        Create,
+        /** 2 - The read privilege. */
+        Read,
+        /** 3 - The write privilege. */
+        Write,
+        /** 4 -  The delete privilege. */
+        Delete,
+        /** 5 - The assign privilege. */
+        Assign,
+        /** 6 - The share privilege. */
+        Share,
+        /** 7 - The append privilege. */
+        Append,
+        /** 8 - The append to privilege. */
+        AppendTo
+    }
+    enum OpenFormNavBar {
+        /** "on" - The navigation bar is displayed. This is the default behavior if the navbar parameter is not used. */
+        On,
+        /** "off" - The navigation bar is not displayed. People can navigate using other user interface elements or the back and forward buttons. */
+        Off,
+        /** "entity" - On an entity form, only the navigation options for related entities are available. After navigating to a related entity, a back button is displayed in the navigation bar to allow returning to the original record. */
+        Entity
+    }
+    enum OpenFormWindowPosition {
+        /** 1 */
+        Center,
+        /** 2 */
+        Side
+    }
+    enum OpenFormRelationshipType {
+        /** 0 */
+        OneToMany,
+        /** 1 */
+        ManyToMany
+    }
+    enum OpenFormRelationshipRoleType {
+        /** 1 */
+        Referencing,
+        /** 2 */
+        AssociationEntity
+    }
+    enum PickFileAccept {
+        /** "audio" */
+        Audio,
+        /** "video" */
+        Video,
+        /** "image" */
+        Image
     }
 }
 /** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client */
