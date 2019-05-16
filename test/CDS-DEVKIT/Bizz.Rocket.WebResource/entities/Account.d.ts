@@ -253,8 +253,12 @@ declare namespace Rocket {
 			/** 1 */
 			Default_Value: number
 		}
-	}
-	class AccountApi {
+    }
+    class AccountApi {
+        /**
+         * PL.DynamicsCrm.DevKit AccountApi
+         * @param entity The enity object.
+         */
 		constructor(entity?: object);
 		/**
 		 * Get the value of alias
@@ -577,17 +581,19 @@ declare namespace Rocket {
 		/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
 		YomiName: WebApi.StringValue;
     }
-    /** Dynamics 365 form Account */
     class FormAccount {
         /**
-         *
+         * PL.DynamicsCrm.DevKit Form Account
          * @param executionContext the execution context
          * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
          */
         constructor(executionContext: object, defaultWebResourceName?: string);
-        /** All supported utility functions/methods/objects for Dynamics 365 from */
+        /** OptionSet fields in Account */
+        OptionSet: AccountOptionSet;
+        /** Utility functions/methods/objects for Dynamics 365 from */
         Utility: Rocket.Form.Utility;
-        //OptionSet: Rocket.OptionSet;
+        ///** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement.*/
+        //WebApi: Rocket.Form.WebApi;
     }
 }
 //{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
