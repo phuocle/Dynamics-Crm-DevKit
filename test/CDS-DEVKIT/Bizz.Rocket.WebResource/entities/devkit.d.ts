@@ -614,12 +614,72 @@ declare namespace Rocket {
              * Creates an entity record.
              * @param entityLogicalName Logical name of the entity you want to create. For example: "account".
              * @param data A JSON object defining the attributes and values for the new entity record.
-             * @param successCallback A function to call when a record is created. An object  will be passed to identify the new record
+             * @param successCallback A function to call when a record is created. An object will be passed to identify the new record.
              * @param errorCallback
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/createrecord
              */
-            CreateRecord(entityLogicalName: string, data: object, successCallback: (result: EntityReference) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
-
-
+            CreateRecord(entityLogicalName: string, data: object, successCallback: (result: DevKit.Form.WebApi.EntityReference) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            /**
+             *
+             * @param entityLogicalName The entity logical name of the record you want to delete. For example: "account".
+             * @param id GUID of the entity record you want to delete.
+             * @param successCallback A function to call when a record is deleted. An object will be passed to identify the deleted record.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/deleterecord
+             */
+            DeleteRecord(entityLogicalName: string, id: string, successCallback: (result: DevKit.Form.WebApi.EntityReference) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            /**
+             *
+             * @param entityLogicalName The entity logical name of the record you want to retrieve. For example: "account".
+             * @param id GUID of the entity record you want to retrieve.
+             * @param options OData system query options, $select and $expand, to retrieve your data.
+             * @param successCallback A function to call when a record is retrieved. A JSON object with the retrieved properties and values will be passed to the function.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/retrieverecord
+             */
+            RetrieveRecord(entityLogicalName: string, id: string, options?: string, successCallback: (result: object) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            /**
+             * Retrieves a collection of entity records.
+             * @param entityLogicalName The entity logical name of the records you want to retrieve. For example: "account".
+             * @param options OData system query options or FetchXML query to retrieve your data.
+             * @param maxPageSize Specify a positive number that indicates the number of entity records to be returned per page. If you do not specify this parameter, the default value is passed as 5000.
+             * @param successCallback A function to call when entity records are retrieved. An object is passed to the function
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/retrievemultiplerecords
+             */
+            RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number, successCallback: (result: DevKit.Form.WebApi.RetrieveMultipleResponse) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            /**
+             * Updates an entity record.
+             * @param entityLogicalName The entity logical name of the record you want to update. For example: "account".
+             * @param id GUID of the entity record you want to update.
+             * @param data A JSON object containing key: value pairs, where key is the property of the entity and value is the value of the property you want to update.
+             * @param successCallback A function to call when a record is updated. An object will be passed to identify the updated record.
+             * @param errorCallback
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/updaterecord
+             */
+            UpdateRecord(entityLogicalName: string, id: string, data: object, successCallback: (result: DevKit.Form.WebApi.EntityReference) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            /**
+             * Returns a boolean value indicating whether an entity is present in user’s profile and is currently available for use in offline mode.
+             * @param entityLogicalName Logical name of the entity. For example: "account".
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/isavailableoffline
+             */
+            IsAvailableOffline(entityLogicalName: string): boolean;
+            /**
+             * Execute a single action, function, or CRUD operation.
+             * @param request Object that will be passed to the Web API endpoint to execute an action, function, or CRUD request.
+             * @param successCallback A function to call when operation is executed successfully. A response object is passed to the function.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/online/execute
+             */
+            Execute(request: DevKit.Form.WebApi.ExecuteRequest, successCallback: (result: DevKit.Form.WebApi.ExecuteResponse) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            /**
+             * Execute a collection of action, function, or CRUD operations.
+             * @param requests An array of one of object types.
+             * @param successCallback A function to call when operation is executed suucessfully. An array of response objects are passed to the function.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/online/executemultiple
+             */
+            ExecuteMultiple(requests: Array<DevKit.Form.WebApi.ExecuteRequest | DevKit.Form.WebApi.ChangeSetRequest>, successCallback: (result: Array<DevKit.Form.WebApi.ExecuteResponse>) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
         }
         //==============================================================================================================
     }
@@ -627,6 +687,84 @@ declare namespace Rocket {
 /** PL.DynamicsCrm.DevKit for d.ts */
 declare namespace DevKit {
     module Form {
+        module WebApi {
+            interface RetrieveMultipleResponse {
+                /** An array of JSON objects, where each object represents the retrieved entity record containing attributes and their values as key: value pairs. The Id of the entity record is retrieved by default. */
+                entities: Array<KeyValueObject>;
+                /** If the number of records being retrieved is more than the value specified in the maxPageSize parameter in the request, this attribute returns the URL to return next set of records. */
+                nextLink: string;
+            }
+            interface ChangeSetRequest {
+
+            }
+            interface ExecuteRequest {
+                /**
+                 * The name of the bound parameter for the action or function to execute. Specify undefined if you are executing a CRUD request. Specify null if the action or function to execute is not bound to any entity. Specify entity in case the action or function to execute is bound to an entity.
+                 * */
+                boundParameter?: undefined | null | "entity";
+                /** Name of the action, function, or one of the following values if you are executing a CRUD request. */
+                operationName?: "Create" | "Retrieve" | "RetrieveMultiple" | "Update" | "Delete" | string;
+                /** Indicates the type of operation you are executing */
+                operationType?: DevKit.Form.WebApi.OperationType;
+                /** The metadata for parameter types. */
+                parameterTypes: {
+                    /**  The metadata for enum types. The object has two string attributes: name and value */
+                    enumProperties?: Array<KeyValueObject>;
+                    /** The category of the parameter type.  */
+                    structuralProperty: DevKit.Form.WebApi.StructuralProperty;
+                }
+            }
+            interface ExecuteResponse {
+                /** Response body. */
+                body?: object;
+                /** Response headers. */
+                headers: object;
+                /** Indicates whether the request was successful. */
+                ok: boolean;
+                /** Numeric value in the response status code.For example: 200 */
+                status: number;
+                /** Description of the response status code.For example: OK */
+                statusText: string;
+                /** Response type */
+                type: "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+                /** Request URL of the action, function, or CRUD request that was sent to the Web API endpoint. */
+                url: string;
+            }
+            interface EntityReference {
+                /** The entity type of the updated record. */
+                entityType: string;
+                /** GUID of the updated record. */
+                id: string;
+            }
+            interface Error {
+                /** The error code. */
+                errorCode: number;
+                /** An error message describing the issue. */
+                message: string;
+            }
+            enum StructuralProperty {
+                /** 0 */
+                Unknown,
+                /** 1 */
+                PrimitiveType,
+                /** 2 */
+                ComplexType,
+                /** 3 */
+                EnumerationType,
+                /** 4 */
+                Collection,
+                /** 5 */
+                EntityType
+            }
+            enum OperationType {
+                /** 0 */
+                Action,
+                /** 1 */
+                Function,
+                /** 2 */
+                CRUD
+            }
+        }
         /** The strings to be used in the alert dialog. */
         interface DialogAlertOption {
             /** The confirm button label.If you do not specify the button label, OK is used as the button label. */

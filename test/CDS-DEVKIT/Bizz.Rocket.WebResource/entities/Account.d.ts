@@ -593,7 +593,7 @@ declare namespace Rocket {
         /** Utility functions/methods/objects for Dynamics 365 from */
         Utility: Rocket.Form.Utility;
         ///** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement.*/
-        //WebApi: Rocket.Form.WebApi;
+        WebApi: Rocket.Form.WebApi;
     }
 }
 //{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
