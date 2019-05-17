@@ -1,289 +1,35 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
-	interface AccountOptionSet {
-		RollupState: {
-			/** 0 - Attribute value is yet to be calculated */
-			NotCalculated: number,
-			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-			Calculated: number,
-			/** 2 - Attribute value calculation lead to overflow error */
-			OverflowError: number,
-			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-			OtherError: number,
-			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-			RetryLimitExceeded: number,
-			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-			HierarchicalRecursionLimitReached: number,
-			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-			LoopDetected: number
-		},
-		AccountCategoryCode: {
-			/** 1 */
-			Preferred_Customer: number,
-			/** 2 */
-			Standard: number
-		},
-		AccountClassificationCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		AccountRatingCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address1_AddressTypeCode: {
-			/** 1 */
-			Bill_To: number,
-			/** 2 */
-			Ship_To: number,
-			/** 3 */
-			Primary: number,
-			/** 4 */
-			Other: number
-		},
-		Address1_FreightTermsCode: {
-			/** 1 */
-			FOB: number,
-			/** 2 */
-			No_Charge: number
-		},
-		Address1_ShippingMethodCode: {
-			/** 1 */
-			Airborne: number,
-			/** 2 */
-			DHL: number,
-			/** 3 */
-			FedEx: number,
-			/** 4 */
-			UPS: number,
-			/** 5 */
-			Postal_Mail: number,
-			/** 6 */
-			Full_Load: number,
-			/** 7 */
-			Will_Call: number
-		},
-		Address2_AddressTypeCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address2_FreightTermsCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address2_ShippingMethodCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		BusinessTypeCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		CustomerSizeCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		CustomerTypeCode: {
-			/** 1 */
-			Competitor: number,
-			/** 2 */
-			Consultant: number,
-			/** 3 */
-			Customer: number,
-			/** 4 */
-			Investor: number,
-			/** 5 */
-			Partner: number,
-			/** 6 */
-			Influencer: number,
-			/** 7 */
-			Press: number,
-			/** 8 */
-			Prospect: number,
-			/** 9 */
-			Reseller: number,
-			/** 10 */
-			Supplier: number,
-			/** 11 */
-			Vendor: number,
-			/** 12 */
-			Other: number
-		},
-		IndustryCode: {
-			/** 1 */
-			Accounting: number,
-			/** 2 */
-			Agriculture_and_Non_petrol_Natural_Resource_Extraction: number,
-			/** 3 */
-			Broadcasting_Printing_and_Publishing: number,
-			/** 4 */
-			Brokers: number,
-			/** 5 */
-			Building_Supply_Retail: number,
-			/** 6 */
-			Business_Services: number,
-			/** 7 */
-			Consulting: number,
-			/** 8 */
-			Consumer_Services: number,
-			/** 9 */
-			Design_Direction_and_Creative_Management: number,
-			/** 10 */
-			Distributors_Dispatchers_and_Processors: number,
-			/** 11 */
-			Doctors_Offices_and_Clinics: number,
-			/** 12 */
-			Durable_Manufacturing: number,
-			/** 13 */
-			Eating_and_Drinking_Places: number,
-			/** 14 */
-			Entertainment_Retail: number,
-			/** 15 */
-			Equipment_Rental_and_Leasing: number,
-			/** 16 */
-			Financial: number,
-			/** 17 */
-			Food_and_Tobacco_Processing: number,
-			/** 18 */
-			Inbound_Capital_Intensive_Processing: number,
-			/** 19 */
-			Inbound_Repair_and_Services: number,
-			/** 20 */
-			Insurance: number,
-			/** 21 */
-			Legal_Services: number,
-			/** 22 */
-			Non_Durable_Merchandise_Retail: number,
-			/** 23 */
-			Outbound_Consumer_Service: number,
-			/** 24 */
-			Petrochemical_Extraction_and_Distribution: number,
-			/** 25 */
-			Service_Retail: number,
-			/** 26 */
-			SIG_Affiliations: number,
-			/** 27 */
-			Social_Services: number,
-			/** 28 */
-			Special_Outbound_Trade_Contractors: number,
-			/** 29 */
-			Specialty_Realty: number,
-			/** 30 */
-			Transportation: number,
-			/** 31 */
-			Utility_Creation_and_Distribution: number,
-			/** 32 */
-			Vehicle_Retail: number,
-			/** 33 */
-			Wholesale: number
-		},
-		OwnershipCode: {
-			/** 1 */
-			Public: number,
-			/** 2 */
-			Private: number,
-			/** 3 */
-			Subsidiary: number,
-			/** 4 */
-			Other: number
-		},
-		PaymentTermsCode: {
-			/** 1 */
-			Net_30: number,
-			/** 2 */
-			_2_10_Net_30: number,
-			/** 3 */
-			Net_45: number,
-			/** 4 */
-			Net_60: number
-		},
-		PreferredAppointmentDayCode: {
-			/** 0 */
-			Sunday: number,
-			/** 1 */
-			Monday: number,
-			/** 2 */
-			Tuesday: number,
-			/** 3 */
-			Wednesday: number,
-			/** 4 */
-			Thursday: number,
-			/** 5 */
-			Friday: number,
-			/** 6 */
-			Saturday: number
-		},
-		PreferredAppointmentTimeCode: {
-			/** 1 */
-			Morning: number,
-			/** 2 */
-			Afternoon: number,
-			/** 3 */
-			Evening: number
-		},
-		PreferredContactMethodCode: {
-			/** 1 */
-			Any: number,
-			/** 2 */
-			Email: number,
-			/** 3 */
-			Phone: number,
-			/** 4 */
-			Fax: number,
-			/** 5 */
-			Mail: number
-		},
-		ShippingMethodCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		StateCode: {
-			/** 0 */
-			Active: number,
-			/** 1 */
-			Inactive: number
-		},
-		StatusCode: {
-			/** 1 */
-			Active: number,
-			/** 2 */
-			Inactive: number
-		},
-		TerritoryCode: {
-			/** 1 */
-			Default_Value: number
-		}
-    }
     class AccountApi {
         /**
-         * PL.DynamicsCrm.DevKit AccountApi
+         * PL.DynamicsCrm.DevKit AccountApi.
          * @param entity The enity object.
          */
 		constructor(entity?: object);
 		/**
-		 * Get the value of alias
-		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * Get the value of alias.
+		 * @param alias the alias value.
+		 * @param isMultiOptionSet true if the alias is multi optionset.
 		 */
 		getAliasedValue(alias: string, isMultiOptionSet?: boolean): object;
 		/**
-		 * Get the formatted value of alias
-		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * Get the formatted value of alias.
+		 * @param alias the alias value.
+		 * @param isMultiOptionSet true if the alias is multi optionset.
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity of ODATA */
+		/** The entity object. */
 		Entity: object;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
 		/** A collection OptionSet of Account enttiy */
-		OptionSet: AccountOptionSet;
+        OptionSet: AccountOptionSet;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Select a category to indicate whether the customer account is standard or preferred. */
-		AccountCategoryCode: WebApi.OptionSetValue;
+		AccountCategoryCode: DevKit.WebApi.OptionSetValue;
 		/** Select a classification code to indicate the potential value of the customer account based on the projected return on investment, cooperation level, sales cycle length or other criteria. */
 		AccountClassificationCode: WebApi.OptionSetValue;
 		/** Unique identifier of the account. */
@@ -583,17 +329,65 @@ declare namespace Rocket {
     }
     class FormAccount {
         /**
-         * PL.DynamicsCrm.DevKit Form Account
-         * @param executionContext the execution context
-         * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+         * PL.DynamicsCrm.DevKit form Account.
+         * @param executionContext the execution context.
+         * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource".
          */
         constructor(executionContext: object, defaultWebResourceName?: string);
-        /** OptionSet fields in Account */
+        /** OptionSet fields in entity Account. */
         OptionSet: AccountOptionSet;
-        /** Utility functions/methods/objects for Dynamics 365 from */
+        /** Utility functions/methods/objects for Dynamics 365 from. */
         Utility: Rocket.Form.Utility;
-        ///** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement.*/
+        /** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement. */
         WebApi: Rocket.Form.WebApi;
+        /**
+        * Adds a function to be called when the record is saved.
+        * @param successCallback The function to be executed when the record is saved. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function.
+        * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/addonsave
+        */
+        AddOnSave(successCallback: (executionContext: object) => void): void;
+        /**
+         *  The Attributes collections of form Account.
+         *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes
+         * */
+        Attributes: Rocket.Form.Collections;
+        /** The body of form Account. */
+        Body: FormAccountBody;
+    }
+    /** @deprecated */
+    interface AccountOptionSet {
+        RollupState: {
+            /** 0 - Attribute value is yet to be calculated */
+            NotCalculated: number;
+            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+            Calculated: number;
+            /** 2 - Attribute value calculation lead to overflow error */
+            OverflowError: number;
+            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+            OtherError: number;
+            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+            RetryLimitExceeded: number;
+            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+            HierarchicalRecursionLimitReached: number;
+            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+            LoopDetected: number;
+        };
+        AccountCategoryCode: {
+            /** 1 */
+            Preferred_Customer: number;
+            /** 2 */
+            Standard: number;
+        }
+    }
+}
+declare namespace OptionSet {
+    declare namespace AccountOptionSet {
+        enum AccountCategoryCode {
+            /** 1 */
+            Preferred_Customer,
+            /** 2 */
+            Standard
+        }
     }
 }
 //{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

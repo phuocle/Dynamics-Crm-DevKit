@@ -1,252 +1,259 @@
-﻿/** PL.DynamicsCrm.DevKit global variable */
-declare namespace Rocket {
+﻿declare namespace Rocket {
+    declare namespace WebApi {
+        class Header {
+            /**
+             * Return a header object.
+             * @param key the header key.
+             * @param value the header value.
+             */
+            constructor(key: string, value: string);
+        }
+        class CreateRequest {
+            constructor();
+            /** Entity name of record that should be created. */
+            entityName?: string;
+            /** Plural name of entity, if not according to plural rules. */
+            overriddenSetName?: string;
+            /** Object containing record data. */
+            entity?: object;
+            /** Set to false for sending all requests synchronously. True by default. */
+            async?: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers?: Array<Header>;
+            /** Default false, there is support for sending multiple requests as a batch. */
+            asBatch?: boolean;
+        }
+        class CreateResponse {
+            constructor();
+            /**
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
+             */
+            then(callback: (result: object) => void): CatchRespone;
+        }
+    }
+}
+/** PL.DynamicsCrm.DevKit for d.ts. */
+declare namespace DevKit {
     module WebApi {
         interface OptionSetValue {
-            /** The optionset item value. E.g.: 1000000001 */
+            /** The optionset number value. E.g.: 1000000001 */
             Value: number;
-            /** The optionset label text. E.g. "Dynamics 365" */
+            /** The optionset formatted text. E.g. "Dynamics 365" */
             FormattedValue: string;
         }
         interface MultiOptionSetValue {
-            /** The array optionset item value [array integer type] E.g.: [1000000001, 1000000003]*/
+            /** The optionset number values. E.g.: [1000000001, 1000000003]*/
             Value: Array<number>;
-            /** The array optionset label text [array string type] E.g.: ["Dynamics 2011", "Dynamics 365"] */
+            /** The optionset formatted texts. E.g.: ["Dynamics 2011", "Dynamics 365"] */
             FormattedValue: Array<string>;
         }
         interface BooleanValue {
-            /** The bool value of field [boolean type] E.g.: true */
+            /** The boollean value. E.g.: true */
             Value: boolean;
-            /** The label text of field [string type] E.g.: "Yes" */
+            /** The boolean formatted text. E.g.: "Yes" */
             FormattedValue: string;
         }
         interface DateOnlyValue {
-            /** The date only value of field. Always format yyyy-MM-dd [string type] E.g.: "2019-04-30" */
+            /** The date only value. Always format yyyy-MM-dd. E.g.: "2019-04-30" */
             Value: string;
-            /** The date only string formatted of field base on user setting format [string type] E.g.: "2019.04.30" */
+            /** The date only formatted text, base on user setting format. E.g.: "2019.04.30" */
             FormattedValue: string;
         }
         interface UtcDateOnlyValue {
-            /** The UTC date only value of field [string type] E.g.: "2019-04-29T17:00:00Z" */
+            /** The UTC date only value. E.g.: "2019-04-29T17:00:00Z" */
             Value: string;
-            /** The UTC date only string formatted of field base on user setting format [string type] E.g.: "30.04.2019" */
+            /** The UTC date formatted text, base on user setting format. E.g.: "30.04.2019" */
             FormattedValue: string;
         }
         interface UtcDateAndTimeValue {
-            /** The UTC date and time value of field [string type] E.g.: "2019-04-27T07:30:00Z" */
+            /** The UTC date and time value. E.g.: "2019-04-27T07:30:00Z" */
             Value: string;
-            /** The UTC date and time string formatted of field base on user setting format [string type] E.g.: "27.04.2019 02:30 CH" */
+            /** The UTC date and time formatted text, base on user setting format. E.g.: "27.04.2019 02:30 CH" */
             FormattedValue: string;
         }
         interface TimezoneDateOnlyValue {
-            /** The time-zone date only value of field [string type] E.g.: "2019-04-26T00:00:00Z" */
+            /** The time-zone date only value. E.g.: "2019-04-26T00:00:00Z" */
             Value: string;
-            /** The time-zone date string formatted of field base on user setting format [string type] E.g.: "26.04.2019" */
+            /** The time-zone date formatted text, base on user setting format. E.g.: "26.04.2019" */
             FormattedValue: string;
         }
         interface TimezoneDateAndTimeValue {
-            /** The time-zone date and time value of field. E.g.: "2019-04-28T15:30:00Z" */
+            /** The time-zone date and time value. E.g.: "2019-04-28T15:30:00Z" */
             Value: string;
-            /** The time-zone date and time string formatted of field base on user setting format. E.g.: "28.04.2019 03:30 CH" */
+            /** The time-zone date and time formatted text, base on user setting format. E.g.: "28.04.2019 03:30 CH" */
             FormattedValue: string;
         }
         interface IntegerValue {
-            /** The integer value of field. E.g.: 1234567 */
+            /** The integer value. E.g.: 1234567 */
             Value: number;
-            /** The string formatted value of field base on user setting format. E.g.: "1.234.567" */
+            /** The integer formatted text, base on user setting format. E.g.: "1.234.567" */
             FormattedValue: string;
         }
         interface BigIntValue {
-            /** The big integer value of field. E.g.: 1234567 */
+            /** The big integer value. E.g.: 1234567 */
             Value: number;
-            /** The string formatted value of field base on user setting format. E.g.: "1.234.567" */
+            /** The big integer formatted text, base on user setting format. E.g.: "1.234.567" */
             FormattedValue: string;
         }
         interface DoubleValue {
-            /** The double value of field. E.g.: 1234.57 */
+            /** The double value. E.g.: 1234.57 */
             Value: number;
-            /** The string formatted value of field base on user setting format. E.g.: "1.234,57" */
+            /** The double formatted text, base on user setting format. E.g.: "1.234,57" */
             FormattedValue: string;
         }
         interface DecimalValue {
-            /** The decimal value of field. E.g.: 1234567.89 */
+            /** The decimal value. E.g.: 1234567.89 */
             Value: number;
-            /** The string formatted value of field base on user setting format. E.g.: "1.234.567,89" */
+            /** The decimal formatted text, base on user setting format. E.g.: "1.234.567,89" */
             FormattedValue: string;
         }
         interface MoneyValue {
             /** The currency value of field. E.g.: 123456.35 */
             Value: number;
-            /** The string formatted value of field base on user setting format. E.g.: "123.456,35 $" */
+            /** The currency formatted text, base on user setting format. E.g.: "123.456,35 $" */
             FormattedValue: string;
         }
         interface StringValue {
-            /** The string value of field. E.g.: "A. Datum Corporation (sample)" */
+            /** The string value. E.g.: "A. Datum Corporation (sample)" */
             Value: string;
         }
         interface LookupValue {
-            /** The guid value of field. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
+            /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
             Value: string;
-            /** The string formatted value of field. E.g.: "A. Datum Corporation (sample)" */
+            /** The name formatted text. E.g.: "A. Datum Corporation (sample)" */
             FormattedValue: string;
         }
         interface GuidValue {
-            /** The guid value of field. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
+            /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
             Value: string;
         }
         class EntityReference {
             constructor();
-            /** Plural name of entity, if not according to plural rules */
+            /** Plural name of entity, if not according to plural rules. */
             overriddenSetName: string;
-            /** The entity name */
+            /** The entity name. */
             entityName: string;
-            /** The entity Guid Id */
+            /** The entity Guid Id. */
             entityId: string;
         }
         class AlternateKey {
             /**
-             * Return a alternate key object { property, value }
-             * @param property the alternate logical name
-             * @param value the value query
+             * Return a alternate key object.
+             * @param property the alternate logical name.
+             * @param value the value query.
              */
             constructor(property: string, value: object);
         }
-        class Header {
-            /**
-             * Retrun a header object { key, value }
-             * @param key the header key
-             * @param value the header value
-             */
-            constructor(key: string, value: string);
-        }
+
         class RetrieveRequest {
             constructor();
-            /** Entity name of records that should be retrieved */
+            /** Entity name of records that should be retrieved. */
             entityName: string;
-            /** Plural name of entity, if not according to plural rules */
+            /** Plural name of entity, if not according to plural rules. */
             overriddenSetName: string;
-            /** ID of entity to retrieve, will return single record */
+            /** ID of entity to retrieve, will return single record. */
             entityId: string;
-            /** Alternate key array for retrieving single record */
+            /** Alternate key array for retrieving single record. */
             alternateKey: Array<AlternateKey>;
             /** Query Parameters to append to URL, such as ?$select=* */
             queryParams: string;
-            /** Fetch XML query */
+            /** Fetch XML query. */
             fetchXml: string;
-            /** Default false, checks for more pages when retrieving results. If set to true, all pages will be retrieved, if set to false, only the first page will be retrieved */
+            /** Default false, checks for more pages when retrieving results. If set to true, all pages will be retrieved, if set to false, only the first page will be retrieved. */
             returnAllPages: boolean;
-            /** Set to false for sending all requests synchronously. True by default */
+            /** Set to false for sending all requests synchronously. True by default. */
             async: boolean;
             /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
             headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch */
+            /** Default false, there is support for sending multiple requests as a batch. */
             asBatch: boolean;
         }
         class RetrieveResponse {
             constructor();
             /**
-             * Use with asynchronous request
-             * @param callback the callback for asynchronous request
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
              */
-            then(callback: (result: object) => void) : Rocket.WebApi.CatchRespone;
+            then(callback: (result: object) => void) : CatchRespone;
             "@odata.context": string;
-            /** Use the value of the @odata.nextLink property to request the next set of records. Don’t change or append any additional system query options to the value */
+            /** Use the value of the @odata.nextLink property to request the next set of records. Don’t change or append any additional system query options to the value. */
             "@odata.nextLink": string;
-            /** The response @odata.count property will contain the number of entities that match the filter criteria irrespective of an odata.maxpagesize preference limitation */
+            /** The response @odata.count property will contain the number of entities that match the filter criteria irrespective of an odata.maxpagesize preference limitation. */
             "@odata.count": number;
-            /** A paging cookie must be requested as an annotation. And a @Microsoft.Dynamics.CRM.fetchxmlpagingcookie property will be returned with the result */
+            /** A paging cookie must be requested as an annotation. And a @Microsoft.Dynamics.CRM.fetchxmlpagingcookie property will be returned with the result. */
             "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": string;
-            /** Set to true if you want retrieve more records */
+            /** Set to true if you want retrieve more records. */
             "@Microsoft.Dynamics.CRM.morerecords": boolean;
-            /** When you set returntotalrecordcount="true" in FetchXml, this value return the count */
+            /** When you set returntotalrecordcount="true" in FetchXml, this value return the count. */
             "@Microsoft.Dynamics.CRM.totalrecordcount": number;
-            /** The total record count limit exceeded value */
+            /** The total record count limit exceeded value. */
             "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": boolean;
-            /** An array object of ODATA value*/
+            /** An array object of ODATA value. */
             value: Array<object>;
         }
-        class CreateRequest {
-            constructor();
-            /** Entity name of record that should be created */
-            entityName: string;
-            /** Plural name of entity, if not according to plural rules */
-            overriddenSetName: string;
-            /** Object containing record data */
-            entity: object;
-            /** Set to false for sending all requests synchronously. True by default */
-            async: boolean;
-            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
-            headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch */
-            asBatch: boolean;
-        }
+
         class DeleteRequest {
             constructor();
-            /** Entity name of records that should be deleted */
+            /** Entity name of records that should be deleted. */
             entityName: string;
-            /** Plural name of entity, if not according to plural rules */
+            /** Plural name of entity, if not according to plural rules. */
             overriddenSetName: string;
-            /** ID of entity to delete */
+            /** ID of entity to delete. */
             entityId: string;
-            /** Alternate key array for deleting record */
+            /** Alternate key array for deleting record. */
             alternateKey: Array<AlternateKey>;
-            /** Set to false for sending all requests synchronously. True by default */
+            /** Set to false for sending all requests synchronously. True by default. */
             async: boolean;
             /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
             headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch */
+            /** Default false, there is support for sending multiple requests as a batch. */
             asBatch: boolean;
         }
-        class CreateResponse {
-            constructor();
-            /**
-             * Use with asynchronous request
-             * @param callback the callback for asynchronous request
-             */
-            then(callback: (result: object) => void): Rocket.WebApi.CatchRespone;
-        }
+
         class UpdateResponse {
             constructor();
             /**
-             * Use with asynchronous request
-             * @param callback the callback for asynchronous request
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
              */
-            then(callback: (result: object) => void): Rocket.WebApi.CatchRespone;
+            then(callback: (result: object) => void): CatchRespone;
         }
         class DeleteResponse {
             constructor();
             /**
-             * Use with asynchronous request
-             * @param callback the callback for asynchronous request
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
              */
-            then(callback: (result: object) => void): Rocket.WebApi.CatchRespone;
+            then(callback: (result: object) => void): CatchRespone;
         }
         class AssociateResponse {
             constructor();
             /**
-             * Use with asynchronous request
-             * @param callback the callback for asynchronous request
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
              */
-            then(callback: (result: object) => void): Rocket.WebApi.CatchRespone;
+            then(callback: (result: object) => void): CatchRespone;
         }
         class DisassociateResponse {
             constructor();
-            then(callback: (result: object) => void): Rocket.WebApi.CatchRespone;
+            then(callback: (result: object) => void): CatchRespone;
         }
         class CatchRespone {
             constructor();
             /**
-             * Use with asynchronous request
-             * @param callback the callback for asynchronous request
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
              */
-            catch(callback: (result: object) => void): Rocket.WebApi.FinallyRespone;
+            catch(callback: (result: object) => void): FinallyRespone;
         }
         class FinallyRespone {
             constructor();
             /**
-             * Use with asynchronous request
-             * @param callback the callback for asynchronous request
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
              */
-            finally(callback: (result: object) => void): Rocket.WebApi.DoneRespone;
+            finally(callback: (result: object) => void): DoneRespone;
         }
         class DoneRespone {
             constructor();
@@ -258,79 +265,180 @@ declare namespace Rocket {
         }
         class UpdateRequest {
             constructor();
-            /** Entity name of records that should be updated */
+            /** Entity name of records that should be updated. */
             entityName: string;
-            /** Plural name of entity, if not according to plural rules */
+            /** Plural name of entity, if not according to plural rules. */
             overriddenSetName: string;
-            /** Object containing record data */
+            /** Object containing record data. */
             entity: object;
-            /** ID of entity to update */
+            /** ID of entity to update. */
             entityId: string;
-            /** Alternate key array for updating record */
+            /** Alternate key array for updating record. */
             alternateKey: Array<AlternateKey>;
-            /** Set to false for sending all requests synchronously. True by default */
+            /** Set to false for sending all requests synchronously. True by default. */
             async: boolean;
             /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
             headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch */
+            /** Default false, there is support for sending multiple requests as a batch. */
             asBatch: boolean;
         }
         class CustomRequest {
             constructor();
             /** The HTTP method of the request, such as GET / POST / ... */
             method: string;
-            /** The name of the request */
+            /** The name of the request. */
             name: string;
-            /** Determines if request is bound, i.e. always executed regarding a distinct record, or not. Defaults to false */
+            /** Determines if request is bound, i.e. always executed regarding a distinct record, or not. Defaults to false. */
             bound: boolean;
-            /** Name of the request if it is bound to an entity */
+            /** Name of the request if it is bound to an entity. */
             entityName: string;
-            /** Record ID if bound to an entity */
+            /** Record ID if bound to an entity. */
             entityId: string;
-            /** Message body for this request */
+            /** Message body for this request. */
             payload: object;
-            /** Object with key-value pairs that will be appended to the URL of a GET request. Used for calling functions with parameters */
+            /** Object with key-value pairs that will be appended to the URL of a GET request. Used for calling functions with parameters. */
             urlParams: string;
-            /** Set to false for sending all requests synchronously. True by default */
+            /** Set to false for sending all requests synchronously. True by default. */
             async: boolean;
             /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
             headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch */
+            /** Default false, there is support for sending multiple requests as a batch. */
             asBatch: boolean;
         }
         class AssociateRequest {
             constructor();
-            /** Name of relation ship to use for associating */
+            /** Name of relation ship to use for associating. */
             relationShip: string;
-            /** Source entity for associating */
+            /** Source entity for associating. */
             source: EntityReference;
-            /** Target entity for associating */
+            /** Target entity for associating. */
             target: EntityReference;
-            /** Set to false for sending all requests synchronously. True by default */
+            /** Set to false for sending all requests synchronously. True by default. */
             async: boolean;
             /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
             headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch */
+            /** Default false, there is support for sending multiple requests as a batch. */
             asBatch: boolean;
         }
         class DisassociateRequest {
             constructor();
-            /** Name of relation ship to use for disassociating */
+            /** Name of relation ship to use for disassociating. */
             relationShip: string;
-            /** Source entity for disassociating */
+            /** Source entity for disassociating. */
             source: EntityReference;
-            /** Target entity for disassociating */
+            /** Target entity for disassociating. */
             target: EntityReference;
-            /** Set to false for sending all requests synchronously. True by default */
+            /** Set to false for sending all requests synchronously. True by default. */
             async: boolean;
             /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
             headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch */
+            /** Default false, there is support for sending multiple requests as a batch. */
             asBatch: boolean;
+        }
+        interface RetrieveMultipleResponse {
+            /** An array of JSON objects, where each object represents the retrieved entity record containing attributes and their values as key: value pairs. The Id of the entity record is retrieved by default. */
+            entities: Array<KeyValueObject>;
+            /** If the number of records being retrieved is more than the value specified in the maxPageSize parameter in the request, this attribute returns the URL to return next set of records. */
+            nextLink: string;
+        }
+        interface ChangeSetRequest {
+
+        }
+        interface ExecuteRequest {
+            /**
+             * The name of the bound parameter for the action or function to execute. Specify undefined if you are executing a CRUD request. Specify null if the action or function to execute is not bound to any entity. Specify entity in case the action or function to execute is bound to an entity.
+             * */
+            boundParameter?: "entity" | undefined | null;
+            /** Name of the action, function, or one of the following values if you are executing a CRUD request. */
+            operationName?: "Create" | "Retrieve" | "RetrieveMultiple" | "Update" | "Delete" | string;
+            /** Indicates the type of operation you are executing */
+            operationType?: DevKit.Form.WebApi.OperationType;
+            /** The metadata for parameter types. */
+            parameterTypes: {
+                /**  The metadata for enum types. The object has two string attributes: name and value */
+                enumProperties?: Array<KeyValueObject>;
+                /** The category of the parameter type.  */
+                structuralProperty: DevKit.Form.WebApi.StructuralProperty;
+            }
+        }
+        interface ExecuteResponse {
+            /** Response body. */
+            body?: object;
+            /** Response headers. */
+            headers: object;
+            /** Indicates whether the request was successful. */
+            ok: boolean;
+            /** Numeric value in the response status code.For example: 200 */
+            status: number;
+            /** Description of the response status code.For example: OK */
+            statusText: string;
+            /** Response type */
+            type: "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+            /** Request URL of the action, function, or CRUD request that was sent to the Web API endpoint. */
+            url: string;
+        }
+        interface EntityReference {
+            /** The entity type of the updated record. */
+            entityType: string;
+            /** GUID of the updated record. */
+            id: string;
+        }
+        interface Error {
+            /** The error code. */
+            errorCode: number;
+            /** An error message describing the issue. */
+            message: string;
+        }
+        enum StructuralProperty {
+            /** 0 */
+            Unknown,
+            /** 1 */
+            PrimitiveType,
+            /** 2 */
+            ComplexType,
+            /** 3 */
+            EnumerationType,
+            /** 4 */
+            Collection,
+            /** 5 */
+            EntityType
+        }
+        enum OperationType {
+            /** 0 */
+            Action,
+            /** 1 */
+            Function,
+            /** 2 */
+            CRUD
         }
     }
     module Form {
-        //==============================================================================================================
+        module Controls {
+            interface ControlNotification {
+
+            }
+            interface Control {
+                /**
+                 * Displays an error or recommendation notification for a control, and lets you specify actions to execute based on the notification. When you specify an error type of notification, a red "X" icon appears next to the control. When you specify a recommendation type of notification, an "i" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message, and let you perform the configured action by clicking the Apply button or dismiss the message.
+                 * @param notification The notification to add.
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addnotification
+                 */
+                AddNotification(notification: ControlNotification): void;
+            }
+            interface StandardControl extends Control {
+
+            }
+            interface DateTimeControl extends Control {
+
+            }
+            interface Lookup extends Control {
+
+            }
+            interface TwoOptions extends Control {
+
+            }
+        }
+
         /**
          * Provides a container for useful methods.
          * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility
@@ -604,12 +712,11 @@ declare namespace Rocket {
              */
             XmlEncode(arg: string): string;
         }
-        //==============================================================================================================
         /**
          * Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement.
          * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi
          * */
-        interface WebApi {
+        interface FormWebApi {
             /**
              * Creates an entity record.
              * @param entityLogicalName Logical name of the entity you want to create. For example: "account".
@@ -681,90 +788,50 @@ declare namespace Rocket {
              */
             ExecuteMultiple(requests: Array<DevKit.Form.WebApi.ExecuteRequest | DevKit.Form.WebApi.ChangeSetRequest>, successCallback: (result: Array<DevKit.Form.WebApi.ExecuteResponse>) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
         }
-        //==============================================================================================================
-    }
-}
-/** PL.DynamicsCrm.DevKit for d.ts */
-declare namespace DevKit {
-    module Form {
-        module WebApi {
-            interface RetrieveMultipleResponse {
-                /** An array of JSON objects, where each object represents the retrieved entity record containing attributes and their values as key: value pairs. The Id of the entity record is retrieved by default. */
-                entities: Array<KeyValueObject>;
-                /** If the number of records being retrieved is more than the value specified in the maxPageSize parameter in the request, this attribute returns the URL to return next set of records. */
-                nextLink: string;
-            }
-            interface ChangeSetRequest {
-
-            }
-            interface ExecuteRequest {
-                /**
-                 * The name of the bound parameter for the action or function to execute. Specify undefined if you are executing a CRUD request. Specify null if the action or function to execute is not bound to any entity. Specify entity in case the action or function to execute is bound to an entity.
-                 * */
-                boundParameter?: undefined | null | "entity";
-                /** Name of the action, function, or one of the following values if you are executing a CRUD request. */
-                operationName?: "Create" | "Retrieve" | "RetrieveMultiple" | "Update" | "Delete" | string;
-                /** Indicates the type of operation you are executing */
-                operationType?: DevKit.Form.WebApi.OperationType;
-                /** The metadata for parameter types. */
-                parameterTypes: {
-                    /**  The metadata for enum types. The object has two string attributes: name and value */
-                    enumProperties?: Array<KeyValueObject>;
-                    /** The category of the parameter type.  */
-                    structuralProperty: DevKit.Form.WebApi.StructuralProperty;
-                }
-            }
-            interface ExecuteResponse {
-                /** Response body. */
-                body?: object;
-                /** Response headers. */
-                headers: object;
-                /** Indicates whether the request was successful. */
-                ok: boolean;
-                /** Numeric value in the response status code.For example: 200 */
-                status: number;
-                /** Description of the response status code.For example: OK */
-                statusText: string;
-                /** Response type */
-                type: "" | "arraybuffer" | "blob" | "document" | "json" | "text";
-                /** Request URL of the action, function, or CRUD request that was sent to the Web API endpoint. */
-                url: string;
-            }
-            interface EntityReference {
-                /** The entity type of the updated record. */
-                entityType: string;
-                /** GUID of the updated record. */
-                id: string;
-            }
-            interface Error {
-                /** The error code. */
-                errorCode: number;
-                /** An error message describing the issue. */
-                message: string;
-            }
-            enum StructuralProperty {
-                /** 0 */
-                Unknown,
-                /** 1 */
-                PrimitiveType,
-                /** 2 */
-                ComplexType,
-                /** 3 */
-                EnumerationType,
-                /** 4 */
-                Collection,
-                /** 5 */
-                EntityType
-            }
-            enum OperationType {
-                /** 0 */
-                Action,
-                /** 1 */
-                Function,
-                /** 2 */
-                CRUD
-            }
+        /**
+         * Collections are structures to provide access to data that represent an array, but without the ability to modify the data in the array.
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections
+         * */
+        interface Collections {
+            /**
+             * Applies the action contained in a delegate function.
+             * @param successCallback Delegate function with parameters for item and index.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/foreach
+             */
+            forEach(successCallback: (item: object, index: number) => void): void;
+            /**
+             *  Get one or more objects from the collection depending on the arguments passed.
+             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
+             */
+            get(): Array<object>;
+            /**
+             * Get one or more objects from the collection depending on the arguments passed.
+             * @param item The object where the name matches the argument. The objects returned in the formContext.data.process namespace don’t contain names. So, using the string parameter for this method returns no objects.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
+             */
+            get(item: string): object;
+            /**
+             * Get one or more objects from the collection depending on the arguments passed.
+             * @param index The object where the index matches the number.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
+             */
+            get(index: number): object;
+            /**
+             * Get one or more objects from the collection depending on the arguments passed.
+             * @param successCallback Any objects that cause the delegate function to return true.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
+             */
+            get(successCallback: (item: object, index: number) => void): Array<object>;
+            /**
+             * Gets the count of items in the collection.
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/getlength
+             * */
+            getLength(): number;
         }
+
+
+
+
         /** The strings to be used in the alert dialog. */
         interface DialogAlertOption {
             /** The confirm button label.If you do not specify the button label, OK is used as the button label. */
@@ -1278,7 +1345,7 @@ declare namespace DevKit {
         };
     }
 }
-/** PL.DynamicsCrm.DevKit global variable */
+/** PL.DynamicsCrm.DevKit for OptionSet. */
 declare namespace OptionSet {
     /** Returns information about the kind of device the user is using. */
     enum FormFactor {
@@ -1370,6 +1437,7 @@ declare namespace OptionSet {
         /** collapsed */
         Collapsed
     }
+    /** */
     enum ProcessDisplayState {
         /** expanded */
         Expanded,
@@ -1564,6 +1632,7 @@ declare namespace OptionSet {
         /** 8 - The append to privilege. */
         AppendTo
     }
+    /**  */
     enum FormNavBar {
         /** "on" - The navigation bar is displayed. This is the default behavior if the navbar parameter is not used. */
         On,
@@ -1572,24 +1641,28 @@ declare namespace OptionSet {
         /** "entity" - On an entity form, only the navigation options for related entities are available. After navigating to a related entity, a back button is displayed in the navigation bar to allow returning to the original record. */
         Entity
     }
+    /**  */
     enum FormWindowPosition {
         /** 1 */
         Center,
         /** 2 */
         Side
     }
+    /**  */
     enum FormRelationshipType {
         /** 0 */
         OneToMany,
         /** 1 */
         ManyToMany
     }
+    /**  */
     enum FormRelationshipRoleType {
         /** 1 */
         Referencing,
         /** 2 */
         AssociationEntity
     }
+    /**  */
     enum FileAccept {
         /** "audio" */
         Audio,
@@ -1599,41 +1672,49 @@ declare namespace OptionSet {
         Image
     }
 }
-/** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client */
+/** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client. */
 declare namespace WebApiClient {
+    ///**
+    // * Retrieves records from CRM
+    // * @param request the RetrieveRequest object
+    // */
+    //function Retrieve(request: RetrieveRequest): RetrieveResponse;
+
     /**
-     * Retrieves records from CRM
-     * @param request the RetrieveRequest object
-     */
-    function Retrieve(request: Rocket.WebApi.RetrieveRequest): Rocket.WebApi.RetrieveResponse;
-    /**
-     * Creates a given record in CRM
+     * Creates a given record in CRM (async = true)
      * @param request the CreateRequest object
+     * @return {Rocket.WebApi.CreateResponse}
      */
     function Create(request: Rocket.WebApi.CreateRequest): Rocket.WebApi.CreateResponse;
     /**
-     * Updates a given record in CRM
-     * @param request the UpdateRequest object
+     * Creates a given record in CRM (async = false)
+     * @param request the CreateRequest object
+     * @return {Rocket.WebApi.CreateResponse}
      */
-    function Update(request: Rocket.WebApi.UpdateRequest): Rocket.WebApi.UpdateResponse;
-    /**
-     * Deletes a given record in CRM
-     * @param request the DeleteRequest object
-     */
-    function Delete(request: Rocket.WebApi.DeleteRequest): Rocket.WebApi.DeleteResponse;
-    /**
-     * Associates given records in CRM
-     * @param request the AssociateRequest object
-     */
-    function Associate(request: Rocket.WebApi.AssociateRequest): Rocket.WebApi.AssociateResponse;
-    /**
-     * Disassociates given records in CRM
-     * @param request the DisassociateRequest object
-     */
-    function Disassociate(request: Rocket.WebApi.DisassociateRequest): Rocket.WebApi.DisassociateResponse;
-    /**
-     * Executes the given request in CRM
-     * @param request Request to send, must be in prototype chain of WebApiClient.Requests.Request
-     */
-    function Execute(request: object): object;
+    function Create(request: Rocket.WebApi.CreateRequest): void;
+    ///**
+    // * Updates a given record in CRM
+    // * @param request the UpdateRequest object
+    // */
+    //function Update(request: UpdateRequest): UpdateResponse;
+    ///**
+    // * Deletes a given record in CRM
+    // * @param request the DeleteRequest object
+    // */
+    //function Delete(request: DeleteRequest): DeleteResponse;
+    ///**
+    // * Associates given records in CRM
+    // * @param request the AssociateRequest object
+    // */
+    //function Associate(request: AssociateRequest): AssociateResponse;
+    ///**
+    // * Disassociates given records in CRM
+    // * @param request the DisassociateRequest object
+    // */
+    //function Disassociate(request: DisassociateRequest): DisassociateResponse;
+    ///**
+    // * Executes the given request in CRM
+    // * @param request Request to send, must be in prototype chain of WebApiClient.Requests.Request
+    // */
+    //function Execute(request: object): object;
 }
