@@ -1,10 +1,8 @@
 ﻿///<reference path='Account.d.ts' />
 var formWebApi = (function () {
     function onLoad(executionContext) {
-        var api = new Rocket.AccountApi();
-        TestApi(api);
-        var form = new Rocket.FormAccount(executionContext, "");
-        TestForm(form);
+        TestApi();
+        TestForm();
 
 
         //var api = new Rocket.AccountApi();
@@ -119,20 +117,88 @@ var formWebApi = (function () {
     }
     function onSave(executionContext) {
     }
-    /**
-     *
-     * @param {Rocket.AccountApi} api
-     */
-    function TestApi(api) {
-        //var a = new Rocket.WebApi.
-        WebApiClient.
-    };
-    /**
-     *
-     * @param {Rocket.FormAccount} form
-     */
-    function TestForm(form) {
+    function TestApi() {
+        var account = new Rocket.AccountApi();
+        account.getAliasedValue("", true);
+        account.getAliasedFormattedValue("", true);
+        account.Entity;
+        account.EntityName = "";
+        account.EntityCollectionName = "";
 
+
+
+
+        var key = new Rocket.WebApi.AlternateKey("", "");
+
+        var associateRequest = new Rocket.WebApi.AssociateRequest();
+        associateRequest.asBatch = false;
+        associateRequest.async = false;
+        associateRequest.headers = [{ key="", value="" }];
+        associateRequest.relationShip = "";
+        associateRequest.source = { entityType = "account", id = "guid" };
+        associateRequest.target = { entityType = "contact", id = "guid" };
+
+        var createRequest = new Rocket.WebApi.CreateRequest();
+        createRequest.asBatch = false;
+        createRequest.async = false;
+        createRequest.entity = {};
+        createRequest.entityName = "account";
+        createRequest.headers = [{ key="", value="" }];
+        createRequest.overriddenSetName = "acccountes";
+
+        var customRequest = new Rocket.WebApi.CustomRequest();
+        customRequest.asBatch = false;
+        customRequest.async = false;
+        customRequest.bound = true;
+        customRequest.entityId = "guid";
+        customRequest.entityName = "account";
+        customRequest.headers = [{ key="", value="" }];
+        customRequest.method = "GET";
+        customRequest.name = "abc";
+        customRequest.payload = {};
+        customRequest.urlParams = "";
+
+        var deleteRequest = new Rocket.WebApi.DeleteRequest();
+        deleteRequest.alternateKey = new Rocket.WebApi.AlternateKey("", "");
+        deleteRequest.asBatch = false;
+        deleteRequest.async = false;
+        deleteRequest.entityId = "guid";
+        deleteRequest.entityName = "account";
+        deleteRequest.headers = [{ key="", value="" }];
+        deleteRequest.overriddenSetName = "accountes";
+
+        var disassociateRequest = new Rocket.WebApi.DisassociateRequest();
+        disassociateRequest.asBatch = false;
+        disassociateRequest.async = false;
+        disassociateRequest.headers = [{ key="", value="" }];
+        disassociateRequest.relationShip = "";
+        disassociateRequest.source = { entityType = "account", id = "guid" };
+        disassociateRequest.target = { entityType = "contact", id = "guid" };
+
+        var retrieveRequest = new Rocket.WebApi.RetrieveRequest();
+        retrieveRequest.alternateKey = new Rocket.WebApi.AlternateKey("", "");
+        retrieveRequest.asBatch = false;
+        retrieveRequest.async = false;
+        retrieveRequest.entityId = "guid";
+        retrieveRequest.entityName = "account";
+        retrieveRequest.fetchXml = "fetchxml";
+        retrieveRequest.headers = [{ key="", value="" }];
+        retrieveRequest.overriddenSetName = "accountes";
+        retrieveRequest.queryParams = "";
+        retrieveRequest.returnAllPages = true;
+
+        var updateRequest = new Rocket.WebApi.UpdateRequest();
+        updateRequest.alternateKey = new Rocket.WebApi.AlternateKey("", "");
+        updateRequest.asBatch = false;
+        updateRequest.async = false;
+        updateRequest.entity = {};
+        updateRequest.entityId = "guid";
+        updateRequest.entityName = "account";
+        updateRequest.headers = [{ key="", value="" }];
+        updateRequest.overriddenSetName = "accountes";
+    };
+    function TestForm() {
+        var form = new Rocket.FormAccount("", "");
     }
     return {
         OnLoad: onLoad,

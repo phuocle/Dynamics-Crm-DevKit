@@ -2,16 +2,16 @@
 declare namespace Rocket {
     class AccountApi {
         /**
-         * PL.DynamicsCrm.DevKit AccountApi.
-         * @param entity The enity object.
+         * PL.DynamicsCrm.DevKit AccountApi
+         * @param entity The entity object
          */
-		constructor(entity?: object);
+		constructor(entity?: any);
 		/**
 		 * Get the value of alias.
 		 * @param alias the alias value.
 		 * @param isMultiOptionSet true if the alias is multi optionset.
 		 */
-		getAliasedValue(alias: string, isMultiOptionSet?: boolean): object;
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
 		/**
 		 * Get the formatted value of alias.
 		 * @param alias the alias value.
@@ -19,7 +19,7 @@ declare namespace Rocket {
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
 		/** The entity object. */
-		Entity: object;
+		Entity: any;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
@@ -333,52 +333,25 @@ declare namespace Rocket {
          * @param executionContext the execution context.
          * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource".
          */
-        constructor(executionContext: object, defaultWebResourceName?: string);
-        /** OptionSet fields in entity Account. */
-        //OptionSet: AccountOptionSet;
+        constructor(executionContext: any, defaultWebResourceName?: string);
         /** Utility functions/methods/objects for Dynamics 365 from. */
         Utility: DevKit.Form.Utility;
-        /** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement. */
-        //WebApi: DevKit.WebApi;
-        /**
-        * Adds a function to be called when the record is saved.
-        * @param successCallback The function to be executed when the record is saved. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function.
-        * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/addonsave
-        */
-        AddOnSave(successCallback: (executionContext: object) => void): void;
-        /**
-         *  The Attributes collections of form Account.
-         *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes
-         * */
-        Attributes: DevKit.Form.Collections;
-        /** The body of form Account. */
-        //Body: FormAccountBody;
+        ///** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement. */
+        WebApi: DevKit.Form.WebApi;
+        ///**
+        //* Adds a function to be called when the record is saved.
+        //* @param successCallback The function to be executed when the record is saved. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function.
+        //* @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/addonsave
+        //*/
+        //AddOnSave(successCallback: (executionContext: object) => void): void;
+        ///**
+        // *  The Attributes collections of form Account.
+        // *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes
+        // * */
+        //Attributes: DevKit.Form.Collections;
+        ///** The body of form Account. */
+        ////Body: FormAccountBody;
     }
-    /** @deprecated */
-    //interface AccountOptionSet {
-    //    RollupState: {
-    //        /** 0 - Attribute value is yet to be calculated */
-    //        NotCalculated: number;
-    //        /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-    //        Calculated: number;
-    //        /** 2 - Attribute value calculation lead to overflow error */
-    //        OverflowError: number;
-    //        /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-    //        OtherError: number;
-    //        /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-    //        RetryLimitExceeded: number;
-    //        /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-    //        HierarchicalRecursionLimitReached: number;
-    //        /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-    //        LoopDetected: number;
-    //    };
-    //    AccountCategoryCode: {
-    //        /** 1 */
-    //        Preferred_Customer: number;
-    //        /** 2 */
-    //        Standard: number;
-    //    }
-    //}
 }
 declare namespace OptionSet {
     namespace AccountOptionSet {
