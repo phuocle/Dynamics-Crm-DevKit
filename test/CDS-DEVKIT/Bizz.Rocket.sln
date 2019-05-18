@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Bizz.Rocket.Shared", "Bizz.Rocket.Shared\Bizz.Rocket.Shared.shproj", "{4D79A87A-8A34-49F4-9895-9E1F5D75F2A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bizz.Rocket.WebResource", "Bizz.Rocket.WebResource\Bizz.Rocket.WebResource.csproj", "{5DDA18B9-DEA0-47EF-8F4A-F52C414A318A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5E610F4A-CE8A-482C-A1F3-680AD3925D8E}"
+	ProjectSection(SolutionItems) = preProject
+		PL.DynamicsCrm.DevKit.Cli.json = PL.DynamicsCrm.DevKit.Cli.json
+		PL.DynamicsCrm.DevKit.json = PL.DynamicsCrm.DevKit.json
+		ReadMe.txt = ReadMe.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Bizz.Rocket.Shared\Bizz.Rocket.Shared.projitems*{4d79a87a-8a34-49f4-9895-9e1f5d75f2a9}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5DDA18B9-DEA0-47EF-8F4A-F52C414A318A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DDA18B9-DEA0-47EF-8F4A-F52C414A318A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DDA18B9-DEA0-47EF-8F4A-F52C414A318A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DDA18B9-DEA0-47EF-8F4A-F52C414A318A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {36AF7CF0-561A-4C2A-B92C-850CC26676E1}
+	EndGlobalSection
+EndGlobal

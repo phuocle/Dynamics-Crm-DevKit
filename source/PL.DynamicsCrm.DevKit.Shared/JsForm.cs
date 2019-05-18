@@ -202,7 +202,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
         public string Form { get; private set; } = string.Empty;
         public string FormCode { get; private set; } = string.Empty;
         public string FormCodeIntellisense { get; private set; } = string.Empty;
-
+        public string FormCodeIntellisense2 { get; private set; } = string.Empty;
         private string IsValidFormData(IEnumerable<SystemForm> forms)
         {
             var message = string.Empty;
@@ -461,20 +461,17 @@ namespace PL.DynamicsCrm.DevKit.Shared
         private string GetForm(IEnumerable<SystemForm> processForms)
         {
             var code = string.Empty;
-            code += $"///<reference path='{EntityName}.intellisense.js' />\r\n";
+            code += $"///<reference path='[[{EntityName}]]' />\r\n";
             foreach (var form in processForms)
             {
                 code += $"var form{GetSafeName(form.Name)} = (function () {{\r\n";
                 code += $"\tfunction onLoad(executionContext) {{\r\n";
-                code += $"\t\r\n";
                 code += $"\t}}\r\n";
                 code += $"\tfunction onSave(executionContext) {{\r\n";
-                code += $"\t\r\n";
                 code += $"\t}}\r\n";
                 code += $"\treturn {{\r\n\t\tOnLoad: onLoad,\r\n\t\tOnSave: onSave\r\n\t}};\r\n";
                 code += $"}})();\r\n";
             }
-
             code = code.TrimEnd("\r\n".ToCharArray());
             return code;
         }
@@ -692,6 +689,33 @@ namespace PL.DynamicsCrm.DevKit.Shared
             return jsIntellisense.Intellisense;
         }
 
+        private string GetIntellisense2(List<SystemForm> processForms, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
+        {
+            if (isJsWebApi)
+            {
+                foreach (var crmAttribute in Fields)
+                {
+                    if (crmAttribute.FieldType == AttributeTypeCode.Lookup || crmAttribute.FieldType == AttributeTypeCode.Customer)
+                    {
+                        crmAttribute.LogicalCollectionName = GetLogicalCollectionName(crmAttribute);
+                        crmAttribute.NavigationPropertyName = GetNavigationPropertyName(crmAttribute);
+                    }
+                }
+            }
+            var jsIntellisense = new JsIntellisense2(CrmService)
+            {
+                ProcessForms = processForms,
+                IsDebugForm = isDebugForm,
+                IsDebugWebApi = isDebugWebApi,
+                IsJsWebApi = isJsWebApi,
+                ProjectName = ProjectName,
+                EntityName = EntityName,
+                Fields = Fields,
+                Processes = Processes
+            };
+            return jsIntellisense.Intellisense;
+        }
+
         public IEnumerable<string> GetForms()
         {
             return Forms.Select(f => f.Name).ToList();
@@ -713,6 +737,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
             Form = GetForm(processForms);
             FormCode = GetFormCode(processForms, isDebugForm);
             FormCodeIntellisense = GetIntellisense(processForms, isDebugForm, isJsWebApi, isDebugWebApi);
+            FormCodeIntellisense2 = GetIntellisense2(processForms, isDebugForm, isJsWebApi, isDebugWebApi);
         }
     }
 }

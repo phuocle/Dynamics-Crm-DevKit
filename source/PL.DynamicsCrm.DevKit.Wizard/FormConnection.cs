@@ -25,12 +25,13 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public OrganizationServiceProxy CrmService { get; private set; } = null;
 
         public CrmConnection CrmConnection { get; private set; }
+        private DevKitCrmConfig Config = null;
 
         private void LoadConnections()
         {
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
-            cboConnection.DataSource = config.CrmConnections;
-            cboConnection.Text = config.DefaultCrmConnection;
+            Config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
+            cboConnection.DataSource = Config.CrmConnections;
+            cboConnection.Text = Config.DefaultCrmConnection;
             btnOk.Enabled = cboConnection.Items.Count > 0;
         }
 
@@ -60,7 +61,6 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             }
             else
             {
-                var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
                 var crmConnection = new CrmConnection
                 {
                     Name = txtName.Text,
@@ -68,11 +68,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                     UserName = txtUserName.Text,
                     Password = EncryptDecrypt.EncryptString(txtPassword.Text)
                 };
-                if (config.CrmConnections == null)
-                    config.CrmConnections = new List<CrmConnection>();
-                config.CrmConnections.Add(crmConnection);
-                config.DefaultCrmConnection = txtName.Text;
-                DevKitCrmConfigHelper.SetDevKitCrmConfig(Dte, config);
+                if (Config.CrmConnections == null)
+                    Config.CrmConnections = new List<CrmConnection>();
+                Config.CrmConnections.Add(crmConnection);
+                Config.DefaultCrmConnection = txtName.Text;
+                DevKitCrmConfigHelper.SetDevKitCrmConfig(Dte, Config);
                 txtName.Text = "";
                 txtUrl.Text = @"http://???/XRMServices/2011/Organization.svc";
                 txtUserName.Text = "";
@@ -152,9 +152,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(Dte);
-            config.DefaultCrmConnection = cboConnection.Text;
-            DevKitCrmConfigHelper.SetDevKitCrmConfig(Dte, config);
+            Config.DefaultCrmConnection = cboConnection.Text;
+            DevKitCrmConfigHelper.SetDevKitCrmConfig(Dte, Config);
 
             Close();
         }
