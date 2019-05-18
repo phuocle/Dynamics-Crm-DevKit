@@ -124,9 +124,8 @@ var formWebApi = (function () {
      * @param {Rocket.AccountApi} api
      */
     function TestApi(api) {
-        var request = new Rocket.WebApi.CreateRequest();
-        var response = WebApiClient.Create(request).
-
+        //var a = new Rocket.WebApi.
+        WebApiClient.
     };
     /**
      *

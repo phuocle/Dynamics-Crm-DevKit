@@ -53,55 +53,55 @@ declare namespace Rocket {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the attachment. */
-		ActivityMimeAttachmentId: WebApi.GuidValue;
+		ActivityMimeAttachmentId: DevKit.WebApi.GuidValue;
 		/** For internal use only. */
-		ActivityMimeAttachmentIdUnique: WebApi.GuidValue;
+		ActivityMimeAttachmentIdUnique: DevKit.WebApi.GuidValue;
 		/** ReadOnly - Descriptive subject for the activity. */
-		ActivitySubject: WebApi.StringValue;
+		ActivitySubject: DevKit.WebApi.StringValue;
 		/** ReadOnly - anonymous link */
-		AnonymousLink: WebApi.StringValue;
+		AnonymousLink: DevKit.WebApi.StringValue;
 		/** For internal use only */
-		AttachmentContentId: WebApi.StringValue;
+		AttachmentContentId: DevKit.WebApi.StringValue;
 		/** Unique identifier of the attachment with which this activitymimeattachment is associated. */
-		AttachmentId: WebApi.LookupValue;
+		AttachmentId: DevKit.WebApi.LookupValue;
 		/** Number of the attachment. */
-		AttachmentNumber: WebApi.IntegerValue;
+		AttachmentNumber: DevKit.WebApi.IntegerValue;
 		/** Contents of the attachment. */
-		Body: WebApi.StringValue;
+		Body: DevKit.WebApi.StringValue;
 		/** ReadOnly - For internal use only. */
-		ComponentState: WebApi.OptionSetValue;
+		ComponentState: DevKit.WebApi.OptionSetValue;
 		/** File name of the attachment. */
-		FileName: WebApi.StringValue;
+		FileName: DevKit.WebApi.StringValue;
 		/** ReadOnly - File size of the attachment. */
-		FileSize: WebApi.IntegerValue;
+		FileSize: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Indicates if this attachment is followed. */
-		IsFollowed: WebApi.BooleanValue;
+		IsFollowed: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Indicates whether the solution component is part of a managed solution. */
-		IsManaged: WebApi.BooleanValue;
+		IsManaged: DevKit.WebApi.BooleanValue;
 		/** MIME type of the attachment. */
-		MimeType: WebApi.StringValue;
+		MimeType: DevKit.WebApi.StringValue;
 		/** Unique identifier of the record with which the attachment is associated */
-		objectid_activitypointer: WebApi.LookupValue;
+		objectid_activitypointer: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the record with which the attachment is associated */
-		objectid_template: WebApi.LookupValue;
+		objectid_template: DevKit.WebApi.LookupValue;
 		/** ReadOnly - For internal use only. */
-		OverwriteTime_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-		OwnerId_systemuser: WebApi.LookupValue;
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
-		OwnerId_team: WebApi.LookupValue;
+		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the activity mime attachment. */
-		OwningBusinessUnit: WebApi.LookupValue;
+		OwningBusinessUnit: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the user who owns the activity mime attachment. */
-		OwningUser: WebApi.LookupValue;
+		OwningUser: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the associated solution. */
-		SolutionId: WebApi.GuidValue;
+		SolutionId: DevKit.WebApi.GuidValue;
 		/** Descriptive subject for the attachment. */
-		Subject: WebApi.StringValue;
+		Subject: DevKit.WebApi.StringValue;
 		/** ReadOnly - For internal use only. */
-		SupportingSolutionId: WebApi.GuidValue;
+		SupportingSolutionId: DevKit.WebApi.GuidValue;
 		/** ReadOnly - Version number of the activity mime attachment. */
-		VersionNumber: WebApi.BigIntValue;
+		VersionNumber: DevKit.WebApi.BigIntValue;
 	}
 }
 //{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

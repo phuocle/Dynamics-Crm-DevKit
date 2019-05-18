@@ -1,7 +1,6 @@
 ﻿///<reference path='devkit_WebApi.d.ts' />
 var formWebApi = (function () {
 	function onLoad(executionContext) {
-        OptionSet.
 	}
     function onSave(executionContext) {
         //console.clear();
@@ -15,12 +14,7 @@ var formWebApi = (function () {
         //TestInsertOptionSet();
         //TestCreateEmailAndSend();
         //TestUpdate();
-        //TestDelete();
-        Xrm.Utility.getAllowedStatusTransitions("devkit_webapi", 100000001).then(
-            function (data) {
-                debugger;
-            }, function (data) {
-            });
+        //TestDelete();        
     }
 
     function TestDelete() {

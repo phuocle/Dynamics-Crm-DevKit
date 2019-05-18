@@ -97,129 +97,129 @@ declare namespace Rocket {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** ReadOnly - Unique identifier of the user who created the record. */
-		CreatedBy: WebApi.LookupValue;
+		CreatedBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Date and time when the record was created. */
-		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who created the record. */
-		CreatedOnBehalfBy: WebApi.LookupValue;
-		devkit_AlternateKey: WebApi.StringValue;
-		devkit_Currency: WebApi.MoneyValue;
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValue;
+		devkit_AlternateKey: DevKit.WebApi.StringValue;
+		devkit_Currency: DevKit.WebApi.MoneyValue;
 		/** ReadOnly - Value of the Currency in base currency. */
-		devkit_currency_Base: WebApi.MoneyValue;
-		devkit_CustomerId_account: WebApi.LookupValue;
-		devkit_CustomerId_contact: WebApi.LookupValue;
-		devkit_DateOnlyDateOnly_DateOnly: WebApi.DateOnlyValue;
+		devkit_currency_Base: DevKit.WebApi.MoneyValue;
+		devkit_CustomerId_account: DevKit.WebApi.LookupValue;
+		devkit_CustomerId_contact: DevKit.WebApi.LookupValue;
+		devkit_DateOnlyDateOnly_DateOnly: DevKit.WebApi.DateOnlyValue;
 		/** ReadOnly */
-		devkit_DateOnlyDateOnlyCalculated_DateOnly: WebApi.DateOnlyValue;
+		devkit_DateOnlyDateOnlyCalculated_DateOnly: DevKit.WebApi.DateOnlyValue;
 		/** ReadOnly */
-		devkit_DateOnlyDateOnlyRollup_DateOnly: WebApi.DateOnlyValue;
+		devkit_DateOnlyDateOnlyRollup_DateOnly: DevKit.WebApi.DateOnlyValue;
 		/** ReadOnly - Last Updated time of rollup field Date Only Date Only Rollup. */
-		devkit_DateOnlyDateOnlyRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		devkit_DateOnlyDateOnlyRollup_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - State of rollup field Date Only Date Only Rollup. */
-		devkit_DateOnlyDateOnlyRollup_State: WebApi.IntegerValue;
-		devkit_DecimalNumber: WebApi.DecimalValue;
-		devkit_FloatingPointNumber: WebApi.DoubleValue;
-		devkit_LinkWebApiId: WebApi.LookupValue;
-		devkit_MultiOptionSetCode: WebApi.MultiOptionSetValue;
-		devkit_MultipleLiniesofText: WebApi.StringValue;
+		devkit_DateOnlyDateOnlyRollup_State: DevKit.WebApi.IntegerValue;
+		devkit_DecimalNumber: DevKit.WebApi.DecimalValue;
+		devkit_FloatingPointNumber: DevKit.WebApi.DoubleValue;
+		devkit_LinkWebApiId: DevKit.WebApi.LookupValue;
+		devkit_MultiOptionSetCode: DevKit.WebApi.MultiOptionSetValue;
+		devkit_MultipleLiniesofText: DevKit.WebApi.StringValue;
 		/** The name of the custom entity. */
-		devkit_Name: WebApi.StringValue;
-		devkit_ParentWebApiId: WebApi.LookupValue;
-		devkit_SingleLineofTextEmail: WebApi.StringValue;
-		devkit_SingleLineofTextPhone: WebApi.StringValue;
-		devkit_SingleLineofTextText: WebApi.StringValue;
-		devkit_SingleLineofTextTextArea: WebApi.StringValue;
-		devkit_SingleLineofTextTickerSymbol: WebApi.StringValue;
-		devkit_SingleLineofTextUrl: WebApi.StringValue;
-		devkit_SingleOptionSetCode: WebApi.OptionSetValue;
+		devkit_Name: DevKit.WebApi.StringValue;
+		devkit_ParentWebApiId: DevKit.WebApi.LookupValue;
+		devkit_SingleLineofTextEmail: DevKit.WebApi.StringValue;
+		devkit_SingleLineofTextPhone: DevKit.WebApi.StringValue;
+		devkit_SingleLineofTextText: DevKit.WebApi.StringValue;
+		devkit_SingleLineofTextTextArea: DevKit.WebApi.StringValue;
+		devkit_SingleLineofTextTickerSymbol: DevKit.WebApi.StringValue;
+		devkit_SingleLineofTextUrl: DevKit.WebApi.StringValue;
+		devkit_SingleOptionSetCode: DevKit.WebApi.OptionSetValue;
 		/** ReadOnly */
-		devkit_SingleOptionSetCodeCalculated: WebApi.OptionSetValue;
-		devkit_TimeZoneDateAndTime_TimezoneDateAndTime: WebApi.TimezoneDateAndTimeValue;
+		devkit_SingleOptionSetCodeCalculated: DevKit.WebApi.OptionSetValue;
+		devkit_TimeZoneDateAndTime_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
 		/** ReadOnly */
-		devkit_TimeZoneDateAndTimeCalculated_TimezoneDateAndTime: WebApi.TimezoneDateAndTimeValue;
+		devkit_TimeZoneDateAndTimeCalculated_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
 		/** ReadOnly */
-		devkit_TimeZoneDateAndTimeRollup_TimezoneDateAndTime: WebApi.TimezoneDateAndTimeValue;
+		devkit_TimeZoneDateAndTimeRollup_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
 		/** ReadOnly - Last Updated time of rollup field TimeZone Date And Time Rollup. */
-		devkit_TimeZoneDateAndTimeRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		devkit_TimeZoneDateAndTimeRollup_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - State of rollup field TimeZone Date And Time Rollup. */
-		devkit_TimeZoneDateAndTimeRollup_State: WebApi.IntegerValue;
-		devkit_TimeZoneDateOnly_TimezoneDateOnly: WebApi.TimezoneDateOnlyValue;
+		devkit_TimeZoneDateAndTimeRollup_State: DevKit.WebApi.IntegerValue;
+		devkit_TimeZoneDateOnly_TimezoneDateOnly: DevKit.WebApi.TimezoneDateOnlyValue;
 		/** ReadOnly */
-		devkit_TimeZoneDateOnlyCalculated_TimezoneDateOnly: WebApi.TimezoneDateOnlyValue;
+		devkit_TimeZoneDateOnlyCalculated_TimezoneDateOnly: DevKit.WebApi.TimezoneDateOnlyValue;
 		/** ReadOnly */
-		devkit_TimeZoneDateOnlyRollup_TimezoneDateOnly: WebApi.TimezoneDateOnlyValue;
+		devkit_TimeZoneDateOnlyRollup_TimezoneDateOnly: DevKit.WebApi.TimezoneDateOnlyValue;
 		/** ReadOnly - Last Updated time of rollup field TimeZone Date Only Rollup. */
-		devkit_TimeZoneDateOnlyRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		devkit_TimeZoneDateOnlyRollup_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - State of rollup field TimeZone Date Only Rollup. */
-		devkit_TimeZoneDateOnlyRollup_State: WebApi.IntegerValue;
-		devkit_UserLocalDateAndTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		devkit_TimeZoneDateOnlyRollup_State: DevKit.WebApi.IntegerValue;
+		devkit_UserLocalDateAndTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly */
-		devkit_UserLocalDateAndTimeCalculated_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		devkit_UserLocalDateAndTimeCalculated_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly */
-		devkit_UserLocalDateAndTimeRollup_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		devkit_UserLocalDateAndTimeRollup_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Last Updated time of rollup field User Local Date And Time Rollup. */
-		devkit_UserLocalDateAndTimeRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		devkit_UserLocalDateAndTimeRollup_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - State of rollup field User Local Date And Time Rollup. */
-		devkit_UserLocalDateAndTimeRollup_State: WebApi.IntegerValue;
-		devkit_UserLocalDateOnly_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		devkit_UserLocalDateAndTimeRollup_State: DevKit.WebApi.IntegerValue;
+		devkit_UserLocalDateOnly_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** ReadOnly */
-		devkit_UserLocalDateOnlyCalculated_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		devkit_UserLocalDateOnlyCalculated_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** ReadOnly */
-		devkit_UserLocalDateOnlyRollup_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		devkit_UserLocalDateOnlyRollup_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** ReadOnly - Last Updated time of rollup field User Local Date Only Rollup. */
-		devkit_UserLocalDateOnlyRollup_Date_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		devkit_UserLocalDateOnlyRollup_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - State of rollup field User Local Date Only Rollup. */
-		devkit_UserLocalDateOnlyRollup_State: WebApi.IntegerValue;
+		devkit_UserLocalDateOnlyRollup_State: DevKit.WebApi.IntegerValue;
 		/** Unique identifier for entity instances */
-		devkit_WebApiId: WebApi.GuidValue;
-		devkit_WholeNumberDuration: WebApi.IntegerValue;
-		devkit_WholeNumberLanguage: WebApi.IntegerValue;
-		devkit_WholeNumberNone: WebApi.IntegerValue;
-		devkit_WholeNumberTimeZone: WebApi.IntegerValue;
-		devkit_YesAndNo: WebApi.BooleanValue;
+		devkit_WebApiId: DevKit.WebApi.GuidValue;
+		devkit_WholeNumberDuration: DevKit.WebApi.IntegerValue;
+		devkit_WholeNumberLanguage: DevKit.WebApi.IntegerValue;
+		devkit_WholeNumberNone: DevKit.WebApi.IntegerValue;
+		devkit_WholeNumberTimeZone: DevKit.WebApi.IntegerValue;
+		devkit_YesAndNo: DevKit.WebApi.BooleanValue;
 		/** ReadOnly */
-		devkit_YesAndNoCalculated: WebApi.BooleanValue;
-		EntityImage: WebApi.StringValue;
+		devkit_YesAndNoCalculated: DevKit.WebApi.BooleanValue;
+		EntityImage: DevKit.WebApi.StringValue;
 		/** ReadOnly */
-		EntityImage_Timestamp: WebApi.BigIntValue;
+		EntityImage_Timestamp: DevKit.WebApi.BigIntValue;
 		/** ReadOnly */
-		EntityImage_URL: WebApi.StringValue;
+		EntityImage_URL: DevKit.WebApi.StringValue;
 		/** ReadOnly */
-		EntityImageId: WebApi.GuidValue;
+		EntityImageId: DevKit.WebApi.GuidValue;
 		/** ReadOnly - Exchange rate for the currency associated with the entity with respect to the base currency. */
-		ExchangeRate: WebApi.DecimalValue;
+		ExchangeRate: DevKit.WebApi.DecimalValue;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: WebApi.IntegerValue;
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Unique identifier of the user who modified the record. */
-		ModifiedBy: WebApi.LookupValue;
+		ModifiedBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Date and time when the record was modified. */
-		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who modified the record. */
-		ModifiedOnBehalfBy: WebApi.LookupValue;
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValue;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-		OwnerId_systemuser: WebApi.LookupValue;
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
-		OwnerId_team: WebApi.LookupValue;
+		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier for the business unit that owns the record */
-		OwningBusinessUnit: WebApi.LookupValue;
+		OwningBusinessUnit: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier for the team that owns the record. */
-		OwningTeam: WebApi.LookupValue;
+		OwningTeam: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier for the user that owns the record. */
-		OwningUser: WebApi.LookupValue;
+		OwningUser: DevKit.WebApi.LookupValue;
 		/** Status of the WebApi */
-		statecode: WebApi.OptionSetValue;
+		statecode: DevKit.WebApi.OptionSetValue;
 		/** Reason for the status of the WebApi */
-		statuscode: WebApi.OptionSetValue;
+		statuscode: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
 		/** Unique identifier of the currency associated with the entity. */
-		TransactionCurrencyId: WebApi.LookupValue;
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Version Number */
-		VersionNumber: WebApi.BigIntValue;
+		VersionNumber: DevKit.WebApi.BigIntValue;
 	}
 }
 //{'JsForm':['WebApi'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

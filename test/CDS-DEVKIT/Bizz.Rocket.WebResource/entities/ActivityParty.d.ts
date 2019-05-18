@@ -79,55 +79,55 @@ declare namespace Rocket {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Unique identifier of the activity associated with the activity party. (A "party" is any person who is associated with an activity.) */
-		ActivityId: WebApi.LookupValue;
+		ActivityId: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the activity party. */
-		ActivityPartyId: WebApi.GuidValue;
+		ActivityPartyId: DevKit.WebApi.GuidValue;
 		/** Email address to which an email is delivered, and which is associated with the target entity. */
-		AddressUsed: WebApi.StringValue;
+		AddressUsed: DevKit.WebApi.StringValue;
 		/** ReadOnly - Email address column number from associated party. */
-		AddressUsedEmailColumnNumber: WebApi.IntegerValue;
+		AddressUsedEmailColumnNumber: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Information about whether to allow sending email to the activity party. */
-		DoNotEmail: WebApi.BooleanValue;
+		DoNotEmail: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Information about whether to allow sending faxes to the activity party. */
-		DoNotFax: WebApi.BooleanValue;
+		DoNotFax: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Information about whether to allow phone calls to the lead. */
-		DoNotPhone: WebApi.BooleanValue;
+		DoNotPhone: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Information about whether to allow sending postal mail to the lead. */
-		DoNotPostalMail: WebApi.BooleanValue;
+		DoNotPostalMail: DevKit.WebApi.BooleanValue;
 		/** Amount of effort used by the resource in a service appointment activity. */
-		Effort: WebApi.DoubleValue;
+		Effort: DevKit.WebApi.DoubleValue;
 		/** For internal use only. */
-		ExchangeEntryId: WebApi.StringValue;
+		ExchangeEntryId: DevKit.WebApi.StringValue;
 		/** ReadOnly - Type of instance of a recurring series. */
-		InstanceTypeCode: WebApi.OptionSetValue;
+		InstanceTypeCode: DevKit.WebApi.OptionSetValue;
 		/** ReadOnly - Information about whether the underlying entity record is deleted. */
-		IsPartyDeleted: WebApi.BooleanValue;
+		IsPartyDeleted: DevKit.WebApi.BooleanValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-		OwnerId_systemuser: WebApi.LookupValue;
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
-		OwnerId_team: WebApi.LookupValue;
+		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** ReadOnly */
-		OwningBusinessUnit: WebApi.GuidValue;
+		OwningBusinessUnit: DevKit.WebApi.GuidValue;
 		/** ReadOnly */
-		OwningUser: WebApi.GuidValue;
+		OwningUser: DevKit.WebApi.GuidValue;
 		/** Role of the person in the activity, such as sender, to, cc, bcc, required, optional, organizer, regarding, or owner. */
-		ParticipationTypeMask: WebApi.OptionSetValue;
+		ParticipationTypeMask: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_account: WebApi.LookupValue;
+		partyid_account: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_contact: WebApi.LookupValue;
+		partyid_contact: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_knowledgearticle: WebApi.LookupValue;
+		partyid_knowledgearticle: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_queue: WebApi.LookupValue;
+		partyid_queue: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_systemuser: WebApi.LookupValue;
+		partyid_systemuser: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Scheduled end time of the activity. */
-		ScheduledEnd_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		ScheduledEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** ReadOnly - Scheduled start time of the activity. */
-		ScheduledStart_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		ScheduledStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** ReadOnly */
-		VersionNumber: WebApi.BigIntValue;
+		VersionNumber: DevKit.WebApi.BigIntValue;
 	}
 }
 //{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

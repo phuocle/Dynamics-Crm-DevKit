@@ -165,265 +165,265 @@ declare namespace Rocket {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Type of user. */
-		AccessMode: WebApi.OptionSetValue;
+		AccessMode: DevKit.WebApi.OptionSetValue;
 		/** ReadOnly - Active Directory object GUID for the system user. */
-		ActiveDirectoryGuid: WebApi.GuidValue;
+		ActiveDirectoryGuid: DevKit.WebApi.GuidValue;
 		/** Unique identifier for address 1. */
-		Address1_AddressId: WebApi.GuidValue;
+		Address1_AddressId: DevKit.WebApi.GuidValue;
 		/** Type of address for address 1, such as billing, shipping, or primary address. */
-		Address1_AddressTypeCode: WebApi.OptionSetValue;
+		Address1_AddressTypeCode: DevKit.WebApi.OptionSetValue;
 		/** City name for address 1. */
-		Address1_City: WebApi.StringValue;
+		Address1_City: DevKit.WebApi.StringValue;
 		/** ReadOnly - Shows the complete primary address. */
-		Address1_Composite: WebApi.StringValue;
+		Address1_Composite: DevKit.WebApi.StringValue;
 		/** Country/region name in address 1. */
-		Address1_Country: WebApi.StringValue;
+		Address1_Country: DevKit.WebApi.StringValue;
 		/** County name for address 1. */
-		Address1_County: WebApi.StringValue;
+		Address1_County: DevKit.WebApi.StringValue;
 		/** Fax number for address 1. */
-		Address1_Fax: WebApi.StringValue;
+		Address1_Fax: DevKit.WebApi.StringValue;
 		/** Latitude for address 1. */
-		Address1_Latitude: WebApi.DoubleValue;
+		Address1_Latitude: DevKit.WebApi.DoubleValue;
 		/** First line for entering address 1 information. */
-		Address1_Line1: WebApi.StringValue;
+		Address1_Line1: DevKit.WebApi.StringValue;
 		/** Second line for entering address 1 information. */
-		Address1_Line2: WebApi.StringValue;
+		Address1_Line2: DevKit.WebApi.StringValue;
 		/** Third line for entering address 1 information. */
-		Address1_Line3: WebApi.StringValue;
+		Address1_Line3: DevKit.WebApi.StringValue;
 		/** Longitude for address 1. */
-		Address1_Longitude: WebApi.DoubleValue;
+		Address1_Longitude: DevKit.WebApi.DoubleValue;
 		/** Name to enter for address 1. */
-		Address1_Name: WebApi.StringValue;
+		Address1_Name: DevKit.WebApi.StringValue;
 		/** ZIP Code or postal code for address 1. */
-		Address1_PostalCode: WebApi.StringValue;
+		Address1_PostalCode: DevKit.WebApi.StringValue;
 		/** Post office box number for address 1. */
-		Address1_PostOfficeBox: WebApi.StringValue;
+		Address1_PostOfficeBox: DevKit.WebApi.StringValue;
 		/** Method of shipment for address 1. */
-		Address1_ShippingMethodCode: WebApi.OptionSetValue;
+		Address1_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
 		/** State or province for address 1. */
-		Address1_StateOrProvince: WebApi.StringValue;
+		Address1_StateOrProvince: DevKit.WebApi.StringValue;
 		/** First telephone number associated with address 1. */
-		Address1_Telephone1: WebApi.StringValue;
+		Address1_Telephone1: DevKit.WebApi.StringValue;
 		/** Second telephone number associated with address 1. */
-		Address1_Telephone2: WebApi.StringValue;
+		Address1_Telephone2: DevKit.WebApi.StringValue;
 		/** Third telephone number associated with address 1. */
-		Address1_Telephone3: WebApi.StringValue;
+		Address1_Telephone3: DevKit.WebApi.StringValue;
 		/** United Parcel Service (UPS) zone for address 1. */
-		Address1_UPSZone: WebApi.StringValue;
+		Address1_UPSZone: DevKit.WebApi.StringValue;
 		/** UTC offset for address 1. This is the difference between local time and standard Coordinated Universal Time. */
-		Address1_UTCOffset: WebApi.IntegerValue;
+		Address1_UTCOffset: DevKit.WebApi.IntegerValue;
 		/** Unique identifier for address 2. */
-		Address2_AddressId: WebApi.GuidValue;
+		Address2_AddressId: DevKit.WebApi.GuidValue;
 		/** Type of address for address 2, such as billing, shipping, or primary address. */
-		Address2_AddressTypeCode: WebApi.OptionSetValue;
+		Address2_AddressTypeCode: DevKit.WebApi.OptionSetValue;
 		/** City name for address 2. */
-		Address2_City: WebApi.StringValue;
+		Address2_City: DevKit.WebApi.StringValue;
 		/** ReadOnly - Shows the complete secondary address. */
-		Address2_Composite: WebApi.StringValue;
+		Address2_Composite: DevKit.WebApi.StringValue;
 		/** Country/region name in address 2. */
-		Address2_Country: WebApi.StringValue;
+		Address2_Country: DevKit.WebApi.StringValue;
 		/** County name for address 2. */
-		Address2_County: WebApi.StringValue;
+		Address2_County: DevKit.WebApi.StringValue;
 		/** Fax number for address 2. */
-		Address2_Fax: WebApi.StringValue;
+		Address2_Fax: DevKit.WebApi.StringValue;
 		/** Latitude for address 2. */
-		Address2_Latitude: WebApi.DoubleValue;
+		Address2_Latitude: DevKit.WebApi.DoubleValue;
 		/** First line for entering address 2 information. */
-		Address2_Line1: WebApi.StringValue;
+		Address2_Line1: DevKit.WebApi.StringValue;
 		/** Second line for entering address 2 information. */
-		Address2_Line2: WebApi.StringValue;
+		Address2_Line2: DevKit.WebApi.StringValue;
 		/** Third line for entering address 2 information. */
-		Address2_Line3: WebApi.StringValue;
+		Address2_Line3: DevKit.WebApi.StringValue;
 		/** Longitude for address 2. */
-		Address2_Longitude: WebApi.DoubleValue;
+		Address2_Longitude: DevKit.WebApi.DoubleValue;
 		/** Name to enter for address 2. */
-		Address2_Name: WebApi.StringValue;
+		Address2_Name: DevKit.WebApi.StringValue;
 		/** ZIP Code or postal code for address 2. */
-		Address2_PostalCode: WebApi.StringValue;
+		Address2_PostalCode: DevKit.WebApi.StringValue;
 		/** Post office box number for address 2. */
-		Address2_PostOfficeBox: WebApi.StringValue;
+		Address2_PostOfficeBox: DevKit.WebApi.StringValue;
 		/** Method of shipment for address 2. */
-		Address2_ShippingMethodCode: WebApi.OptionSetValue;
+		Address2_ShippingMethodCode: DevKit.WebApi.OptionSetValue;
 		/** State or province for address 2. */
-		Address2_StateOrProvince: WebApi.StringValue;
+		Address2_StateOrProvince: DevKit.WebApi.StringValue;
 		/** First telephone number associated with address 2. */
-		Address2_Telephone1: WebApi.StringValue;
+		Address2_Telephone1: DevKit.WebApi.StringValue;
 		/** Second telephone number associated with address 2. */
-		Address2_Telephone2: WebApi.StringValue;
+		Address2_Telephone2: DevKit.WebApi.StringValue;
 		/** Third telephone number associated with address 2. */
-		Address2_Telephone3: WebApi.StringValue;
+		Address2_Telephone3: DevKit.WebApi.StringValue;
 		/** United Parcel Service (UPS) zone for address 2. */
-		Address2_UPSZone: WebApi.StringValue;
+		Address2_UPSZone: DevKit.WebApi.StringValue;
 		/** UTC offset for address 2. This is the difference between local time and standard Coordinated Universal Time. */
-		Address2_UTCOffset: WebApi.IntegerValue;
+		Address2_UTCOffset: DevKit.WebApi.IntegerValue;
 		/** The identifier for the application. This is used to access data in another application. */
-		ApplicationId: WebApi.GuidValue;
+		ApplicationId: DevKit.WebApi.GuidValue;
 		/** ReadOnly - The URI used as a unique logical identifier for the external app. This can be used to validate the application. */
-		ApplicationIdUri: WebApi.StringValue;
+		ApplicationIdUri: DevKit.WebApi.StringValue;
 		/** ReadOnly - This is the application directory object Id. */
-		AzureActiveDirectoryObjectId: WebApi.GuidValue;
+		AzureActiveDirectoryObjectId: DevKit.WebApi.GuidValue;
 		/** Unique identifier of the business unit with which the user is associated. */
-		BusinessUnitId: WebApi.LookupValue;
+		BusinessUnitId: DevKit.WebApi.LookupValue;
 		/** Fiscal calendar associated with the user. */
-		CalendarId: WebApi.LookupValue;
+		CalendarId: DevKit.WebApi.LookupValue;
 		/** License type of user. */
-		CALType: WebApi.OptionSetValue;
+		CALType: DevKit.WebApi.OptionSetValue;
 		/** ReadOnly - Unique identifier of the user who created the user. */
-		CreatedBy: WebApi.LookupValue;
+		CreatedBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Date and time when the user was created. */
-		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who created the systemuser. */
-		CreatedOnBehalfBy: WebApi.LookupValue;
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Indicates if default outlook filters have been populated. */
-		DefaultFiltersPopulated: WebApi.BooleanValue;
+		DefaultFiltersPopulated: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Select the mailbox associated with this user. */
-		DefaultMailbox: WebApi.LookupValue;
+		DefaultMailbox: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Type a default folder name for the user's OneDrive For Business location. */
-		DefaultOdbFolderName: WebApi.StringValue;
+		DefaultOdbFolderName: DevKit.WebApi.StringValue;
 		/** ReadOnly - Reason for disabling the user. */
-		DisabledReason: WebApi.StringValue;
+		DisabledReason: DevKit.WebApi.StringValue;
 		/** Whether to display the user in service views. */
-		DisplayInServiceViews: WebApi.BooleanValue;
+		DisplayInServiceViews: DevKit.WebApi.BooleanValue;
 		/** Active Directory domain of which the user is a member. */
-		DomainName: WebApi.StringValue;
+		DomainName: DevKit.WebApi.StringValue;
 		/** Shows the status of the primary email address. */
-		EmailRouterAccessApproval: WebApi.OptionSetValue;
+		EmailRouterAccessApproval: DevKit.WebApi.OptionSetValue;
 		/** Employee identifier for the user. */
-		EmployeeId: WebApi.StringValue;
+		EmployeeId: DevKit.WebApi.StringValue;
 		/** Shows the default image for the record. */
-		EntityImage: WebApi.StringValue;
+		EntityImage: DevKit.WebApi.StringValue;
 		/** ReadOnly */
-		EntityImage_Timestamp: WebApi.BigIntValue;
+		EntityImage_Timestamp: DevKit.WebApi.BigIntValue;
 		/** ReadOnly */
-		EntityImage_URL: WebApi.StringValue;
+		EntityImage_URL: DevKit.WebApi.StringValue;
 		/** ReadOnly - For internal use only. */
-		EntityImageId: WebApi.GuidValue;
+		EntityImageId: DevKit.WebApi.GuidValue;
 		/** ReadOnly - Exchange rate for the currency associated with the systemuser with respect to the base currency. */
-		ExchangeRate: WebApi.DecimalValue;
+		ExchangeRate: DevKit.WebApi.DecimalValue;
 		/** First name of the user. */
-		FirstName: WebApi.StringValue;
+		FirstName: DevKit.WebApi.StringValue;
 		/** ReadOnly - Full name of the user. */
-		FullName: WebApi.StringValue;
+		FullName: DevKit.WebApi.StringValue;
 		/** Government identifier for the user. */
-		GovernmentId: WebApi.StringValue;
+		GovernmentId: DevKit.WebApi.StringValue;
 		/** Home phone number for the user. */
-		HomePhone: WebApi.StringValue;
+		HomePhone: DevKit.WebApi.StringValue;
 		/** ReadOnly - For internal use only. */
-		IdentityId: WebApi.IntegerValue;
+		IdentityId: DevKit.WebApi.IntegerValue;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: WebApi.IntegerValue;
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** Incoming email delivery method for the user. */
-		IncomingEmailDeliveryMethod: WebApi.OptionSetValue;
+		IncomingEmailDeliveryMethod: DevKit.WebApi.OptionSetValue;
 		/** Internal email address for the user. */
-		InternalEMailAddress: WebApi.StringValue;
+		InternalEMailAddress: DevKit.WebApi.StringValue;
 		/** User invitation status. */
-		InviteStatusCode: WebApi.OptionSetValue;
+		InviteStatusCode: DevKit.WebApi.OptionSetValue;
 		/** ReadOnly - Information about whether the user is an AD user. */
-		IsActiveDirectoryUser: WebApi.BooleanValue;
+		IsActiveDirectoryUser: DevKit.WebApi.BooleanValue;
 		/** Information about whether the user is enabled. */
-		IsDisabled: WebApi.BooleanValue;
+		IsDisabled: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Shows the status of approval of the email address by O365 Admin. */
-		IsEmailAddressApprovedByO365Admin: WebApi.BooleanValue;
+		IsEmailAddressApprovedByO365Admin: DevKit.WebApi.BooleanValue;
 		/** Check if user is an integration user. */
-		IsIntegrationUser: WebApi.BooleanValue;
+		IsIntegrationUser: DevKit.WebApi.BooleanValue;
 		/** Information about whether the user is licensed. */
-		IsLicensed: WebApi.BooleanValue;
+		IsLicensed: DevKit.WebApi.BooleanValue;
 		/** Information about whether the user is synced with the directory. */
-		IsSyncWithDirectory: WebApi.BooleanValue;
+		IsSyncWithDirectory: DevKit.WebApi.BooleanValue;
 		/** Job title of the user. */
-		JobTitle: WebApi.StringValue;
+		JobTitle: DevKit.WebApi.StringValue;
 		/** Last name of the user. */
-		LastName: WebApi.StringValue;
+		LastName: DevKit.WebApi.StringValue;
 		/** ReadOnly - Time stamp of the latest update for the user */
-		LatestUpdateTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		LatestUpdateTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Middle name of the user. */
-		MiddleName: WebApi.StringValue;
+		MiddleName: DevKit.WebApi.StringValue;
 		/** Mobile alert email address for the user. */
-		MobileAlertEMail: WebApi.StringValue;
+		MobileAlertEMail: DevKit.WebApi.StringValue;
 		/** Items contained with a particular SystemUser. */
-		MobileOfflineProfileId: WebApi.LookupValue;
+		MobileOfflineProfileId: DevKit.WebApi.LookupValue;
 		/** Mobile phone number for the user. */
-		MobilePhone: WebApi.StringValue;
+		MobilePhone: DevKit.WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the user who last modified the user. */
-		ModifiedBy: WebApi.LookupValue;
+		ModifiedBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Date and time when the user was last modified. */
-		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who last modified the systemuser. */
-		ModifiedOnBehalfBy: WebApi.LookupValue;
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValue;
 		/** Nickname of the user. */
-		NickName: WebApi.StringValue;
+		NickName: DevKit.WebApi.StringValue;
 		/** ReadOnly - Unique identifier of the organization associated with the user. */
-		OrganizationId: WebApi.GuidValue;
+		OrganizationId: DevKit.WebApi.GuidValue;
 		/** Outgoing email delivery method for the user. */
-		OutgoingEmailDeliveryMethod: WebApi.OptionSetValue;
+		OutgoingEmailDeliveryMethod: DevKit.WebApi.OptionSetValue;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Unique identifier of the manager of the user. */
-		ParentSystemUserId: WebApi.LookupValue;
+		ParentSystemUserId: DevKit.WebApi.LookupValue;
 		/** For internal use only. */
-		PassportHi: WebApi.IntegerValue;
+		PassportHi: DevKit.WebApi.IntegerValue;
 		/** For internal use only. */
-		PassportLo: WebApi.IntegerValue;
+		PassportLo: DevKit.WebApi.IntegerValue;
 		/** Personal email address of the user. */
-		PersonalEMailAddress: WebApi.StringValue;
+		PersonalEMailAddress: DevKit.WebApi.StringValue;
 		/** URL for the Website on which a photo of the user is located. */
-		PhotoUrl: WebApi.StringValue;
+		PhotoUrl: DevKit.WebApi.StringValue;
 		/** User's position in hierarchical security model. */
-		PositionId: WebApi.LookupValue;
+		PositionId: DevKit.WebApi.LookupValue;
 		/** Preferred address for the user. */
-		PreferredAddressCode: WebApi.OptionSetValue;
+		PreferredAddressCode: DevKit.WebApi.OptionSetValue;
 		/** Preferred email address for the user. */
-		PreferredEmailCode: WebApi.OptionSetValue;
+		PreferredEmailCode: DevKit.WebApi.OptionSetValue;
 		/** Preferred phone number for the user. */
-		PreferredPhoneCode: WebApi.OptionSetValue;
+		PreferredPhoneCode: DevKit.WebApi.OptionSetValue;
 		/** Shows the ID of the process. */
-		ProcessId: WebApi.GuidValue;
+		ProcessId: DevKit.WebApi.GuidValue;
 		/** Unique identifier of the default queue for the user. */
-		QueueId: WebApi.LookupValue;
+		QueueId: DevKit.WebApi.LookupValue;
 		/** Salutation for correspondence with the user. */
-		Salutation: WebApi.StringValue;
+		Salutation: DevKit.WebApi.StringValue;
 		/** Check if user is a setup user. */
-		SetupUser: WebApi.BooleanValue;
+		SetupUser: DevKit.WebApi.BooleanValue;
 		/** SharePoint Work Email Address */
-		SharePointEmailAddress: WebApi.StringValue;
+		SharePointEmailAddress: DevKit.WebApi.StringValue;
 		/** Skill set of the user. */
-		Skills: WebApi.StringValue;
+		Skills: DevKit.WebApi.StringValue;
 		/** Shows the ID of the stage. */
-		StageId: WebApi.GuidValue;
+		StageId: DevKit.WebApi.GuidValue;
 		/** Unique identifier for the user. */
-		SystemUserId: WebApi.GuidValue;
+		SystemUserId: DevKit.WebApi.GuidValue;
 		/** Unique identifier of the territory to which the user is assigned. */
-		TerritoryId: WebApi.LookupValue;
+		TerritoryId: DevKit.WebApi.LookupValue;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
 		/** Title of the user. */
-		Title: WebApi.StringValue;
+		Title: DevKit.WebApi.StringValue;
 		/** Unique identifier of the currency associated with the systemuser. */
-		TransactionCurrencyId: WebApi.LookupValue;
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
 		/** For internal use only. */
-		TraversedPath: WebApi.StringValue;
+		TraversedPath: DevKit.WebApi.StringValue;
 		/** Shows the type of user license. */
-		UserLicenseType: WebApi.IntegerValue;
+		UserLicenseType: DevKit.WebApi.IntegerValue;
 		/** ReadOnly -  User PUID User Identifiable Information */
-		UserPuid: WebApi.StringValue;
+		UserPuid: DevKit.WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Version number of the user. */
-		VersionNumber: WebApi.BigIntValue;
+		VersionNumber: DevKit.WebApi.BigIntValue;
 		/** Windows Live ID */
-		WindowsLiveID: WebApi.StringValue;
+		WindowsLiveID: DevKit.WebApi.StringValue;
 		/** User's Yammer login email address */
-		YammerEmailAddress: WebApi.StringValue;
+		YammerEmailAddress: DevKit.WebApi.StringValue;
 		/** User's Yammer ID */
-		YammerUserId: WebApi.StringValue;
+		YammerUserId: DevKit.WebApi.StringValue;
 		/** Pronunciation of the first name of the user, written in phonetic hiragana or katakana characters. */
-		YomiFirstName: WebApi.StringValue;
+		YomiFirstName: DevKit.WebApi.StringValue;
 		/** ReadOnly - Pronunciation of the full name of the user, written in phonetic hiragana or katakana characters. */
-		YomiFullName: WebApi.StringValue;
+		YomiFullName: DevKit.WebApi.StringValue;
 		/** Pronunciation of the last name of the user, written in phonetic hiragana or katakana characters. */
-		YomiLastName: WebApi.StringValue;
+		YomiLastName: DevKit.WebApi.StringValue;
 		/** Pronunciation of the middle name of the user, written in phonetic hiragana or katakana characters. */
-		YomiMiddleName: WebApi.StringValue;
+		YomiMiddleName: DevKit.WebApi.StringValue;
 	}
 }
 //{'JsForm':['User'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

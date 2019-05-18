@@ -1,12 +1,27 @@
 ﻿declare namespace Rocket {
-    declare namespace WebApi {
-        class Header {
+    namespace WebApi {
+        class AlternateKey {
             /**
-             * Return a header object.
-             * @param key the header key.
-             * @param value the header value.
+             * Return a alternate key object.
+             * @param property the alternate logical name.
+             * @param value the value query.
              */
-            constructor(key: string, value: string);
+            constructor(property: string, value: any);
+        }        
+        class AssociateRequest {
+            constructor();
+            /** Name of relation ship to use for associating. */
+            relationShip: string;
+            /** Source entity for associating. */
+            source: DevKit.WebApiClient.EntityReference;
+            /** Target entity for associating. */
+            target: DevKit.WebApiClient.EntityReference;
+            /** Set to false for sending all requests synchronously. True by default. */
+            async?: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers?: Array<DevKit.Core.KeyValueString>;
+            /** Default false, there is support for sending multiple requests as a batch. */
+            asBatch?: boolean;
         }
         class CreateRequest {
             constructor();
@@ -19,22 +34,254 @@
             /** Set to false for sending all requests synchronously. True by default. */
             async?: boolean;
             /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
-            headers?: Array<Header>;
+            headers?: Array<DevKit.Core.KeyValueString>;
             /** Default false, there is support for sending multiple requests as a batch. */
             asBatch?: boolean;
         }
-        class CreateResponse {
+        class CustomRequest {
             constructor();
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            then(callback: (result: object) => void): CatchRespone;
+            /** The HTTP method of the request, such as GET / POST / ... */
+            method: string;
+            /** The name of the request. */
+            name: string;
+            /** Determines if request is bound, i.e. always executed regarding a distinct record, or not. Defaults to false. */
+            bound: boolean;
+            /** Name of the request if it is bound to an entity. */
+            entityName: string;
+            /** Record ID if bound to an entity. */
+            entityId: string;
+            /** Message body for this request. */
+            payload: object;
+            /** Object with key-value pairs that will be appended to the URL of a GET request. Used for calling functions with parameters. */
+            urlParams: string;
+            /** Set to false for sending all requests synchronously. True by default. */
+            async?: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers?: Array<DevKit.Core.KeyValueString>;
+            /** Default false, there is support for sending multiple requests as a batch. */
+            asBatch?: boolean;
+        }
+        class DeleteRequest {
+            constructor();
+            /** Entity name of records that should be deleted. */
+            entityName: string;
+            /** Plural name of entity, if not according to plural rules. */
+            overriddenSetName: string;
+            /** ID of entity to delete. */
+            entityId: string;
+            /** Alternate key array for deleting record. */
+            alternateKey: Array<AlternateKey>;
+            /** Set to false for sending all requests synchronously. True by default. */
+            async?: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers?: Array<DevKit.Core.KeyValueString>;
+            /** Default false, there is support for sending multiple requests as a batch. */
+            asBatch?: boolean;
+        }
+        class DisassociateRequest {
+            constructor();
+            /** Name of relation ship to use for disassociating. */
+            relationShip: string;
+            /** Source entity for disassociating. */
+            source: DevKit.WebApiClient.EntityReference;
+            /** Target entity for disassociating. */
+            target: DevKit.WebApiClient.EntityReference;
+            /** Set to false for sending all requests synchronously. True by default. */
+            async?: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers?: Array<DevKit.Core.KeyValueString>;
+            /** Default false, there is support for sending multiple requests as a batch. */
+            asBatch?: boolean;
+        }
+        class RetrieveRequest {
+            constructor();
+            /** Entity name of records that should be retrieved. */
+            entityName: string;
+            /** Plural name of entity, if not according to plural rules. */
+            overriddenSetName: string;
+            /** ID of entity to retrieve, will return single record. */
+            entityId: string;
+            /** Alternate key array for retrieving single record. */
+            alternateKey: Array<AlternateKey>;
+            /** Query Parameters to append to URL, such as ?$select=* */
+            queryParams: string;
+            /** Fetch XML query. */
+            fetchXml: string;
+            /** Default false, checks for more pages when retrieving results. If set to true, all pages will be retrieved, if set to false, only the first page will be retrieved. */
+            returnAllPages: boolean;
+            /** Set to false for sending all requests synchronously. True by default. */
+            async: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers: Array<DevKit.Core.KeyValueString>;
+            /** Default false, there is support for sending multiple requests as a batch. */
+            asBatch: boolean;
+        }
+        class UpdateRequest {
+            constructor();
+            /** Entity name of records that should be updated. */
+            entityName: string;
+            /** Plural name of entity, if not according to plural rules. */
+            overriddenSetName: string;
+            /** Object containing record data. */
+            entity: object;
+            /** ID of entity to update. */
+            entityId: string;
+            /** Alternate key array for updating record. */
+            alternateKey: Array<AlternateKey>;
+            /** Set to false for sending all requests synchronously. True by default. */
+            async: boolean;
+            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
+            headers: Array<DevKit.Core.KeyValueString>;
+            /** Default false, there is support for sending multiple requests as a batch. */
+            asBatch: boolean;
         }
     }
 }
 /** PL.DynamicsCrm.DevKit for d.ts. */
 declare namespace DevKit {
+    namespace Core {
+        interface KeyValueString {
+            key: string;
+            value: string;
+        }
+
+
+
+        
+        
+
+
+        
+
+
+        
+
+
+        
+
+        interface ExecuteRequest {
+            /**
+             * The name of the bound parameter for the action or function to execute. Specify undefined if you are executing a CRUD request. Specify null if the action or function to execute is not bound to any entity. Specify entity in case the action or function to execute is bound to an entity.
+             * */
+            boundParameter?: "entity" | undefined | null;
+            /** Name of the action, function, or one of the following values if you are executing a CRUD request. */
+            operationName?: "Create" | "Retrieve" | "RetrieveMultiple" | "Update" | "Delete" | string;
+            /** Indicates the type of operation you are executing */
+            operationType?: OptionSet.WebApi.OperationType;
+            /** The metadata for parameter types. */
+            parameterTypes: {
+                /**  The metadata for enum types. The object has two string attributes: name and value */
+                enumProperties?: Array<DevKit.Form.KeyValueObject>;
+                /** The category of the parameter type.  */
+                structuralProperty: OptionSet.WebApi.StructuralProperty;
+            }
+        }
+        interface ExecuteResponse {
+            /** Response body. */
+            body?: object;
+            /** Response headers. */
+            headers: object;
+            /** Indicates whether the request was successful. */
+            ok: boolean;
+            /** Numeric value in the response status code.For example: 200 */
+            status: number;
+            /** Description of the response status code.For example: OK */
+            statusText: string;
+            /** Response type */
+            type: "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+            /** Request URL of the action, function, or CRUD request that was sent to the Web API endpoint. */
+            url: string;
+        }
+
+
+    }
+    namespace WebApiClient {
+        interface EntityReference {
+            /** The entity type of the updated record. */
+            entityType: string;
+            /** GUID of the updated record. */
+            id: string;
+        } 
+        interface RetrieveResponse {
+            /**
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
+             */
+            then(callback: (result: any) => void): CatchRespone;
+            "@odata.context": string;
+            /** Use the value of the @odata.nextLink property to request the next set of records. Don’t change or append any additional system query options to the value. */
+            "@odata.nextLink": string;
+            /** The response @odata.count property will contain the number of entities that match the filter criteria irrespective of an odata.maxpagesize preference limitation. */
+            "@odata.count": number;
+            /** A paging cookie must be requested as an annotation. And a @Microsoft.Dynamics.CRM.fetchxmlpagingcookie property will be returned with the result. */
+            "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": string;
+            /** Set to true if you want retrieve more records. */
+            "@Microsoft.Dynamics.CRM.morerecords": boolean;
+            /** When you set returntotalrecordcount="true" in FetchXml, this value return the count. */
+            "@Microsoft.Dynamics.CRM.totalrecordcount": number;
+            /** The total record count limit exceeded value. */
+            "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": boolean;
+            /** An array object of ODATA value. */
+            value: Array<any>;
+        }
+        interface CatchRespone {
+            /**
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
+             */
+            catch(callback: (result: any) => void): FinallyRespone;
+        }
+        interface FinallyRespone {
+            /**
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
+             */
+            finally(callback: (result: any) => void): DoneRespone;
+        }
+        interface DoneRespone {
+            /**
+             * Use with asynchronous request
+             * @param callback the callback for asynchronous request
+             */
+            done(callback: (result: any) => void);
+        }
+        interface UpdateResponse {
+            /**
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
+             */
+            then(callback: (result: any) => void): CatchRespone;
+        }
+        interface CreateResponse {
+            /**
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
+             */
+            then(callback: (result: any) => void): CatchRespone;
+        }
+        interface DeleteResponse {
+            /**
+             * Use with asynchronous request.
+             * @param callback the callback for asynchronous request.
+             */
+            then(callback: (result: any) => void): CatchRespone;
+        }
+        interface AssociateResponse {
+            /**
+             * Use with asynchronous request.
+             * @param callback The callback for asynchronous request.
+             */
+            then(callback: (result: any) => void): CatchRespone;
+        }
+        interface DisassociateResponse {
+            /**
+             * Use with asynchronous request.
+             * @param callback The callback for asynchronous request.
+             */
+            then(callback: (result: any) => void): CatchRespone;
+        }
+    }
+
     module WebApi {
         interface OptionSetValue {
             /** The optionset number value. E.g.: 1000000001 */
@@ -137,280 +384,36 @@ declare namespace DevKit {
             /** The entity Guid Id. */
             entityId: string;
         }
-        class AlternateKey {
-            /**
-             * Return a alternate key object.
-             * @param property the alternate logical name.
-             * @param value the value query.
-             */
-            constructor(property: string, value: object);
-        }
+        
 
-        class RetrieveRequest {
-            constructor();
-            /** Entity name of records that should be retrieved. */
-            entityName: string;
-            /** Plural name of entity, if not according to plural rules. */
-            overriddenSetName: string;
-            /** ID of entity to retrieve, will return single record. */
-            entityId: string;
-            /** Alternate key array for retrieving single record. */
-            alternateKey: Array<AlternateKey>;
-            /** Query Parameters to append to URL, such as ?$select=* */
-            queryParams: string;
-            /** Fetch XML query. */
-            fetchXml: string;
-            /** Default false, checks for more pages when retrieving results. If set to true, all pages will be retrieved, if set to false, only the first page will be retrieved. */
-            returnAllPages: boolean;
-            /** Set to false for sending all requests synchronously. True by default. */
-            async: boolean;
-            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
-            headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch. */
-            asBatch: boolean;
-        }
-        class RetrieveResponse {
-            constructor();
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            then(callback: (result: object) => void) : CatchRespone;
-            "@odata.context": string;
-            /** Use the value of the @odata.nextLink property to request the next set of records. Don’t change or append any additional system query options to the value. */
-            "@odata.nextLink": string;
-            /** The response @odata.count property will contain the number of entities that match the filter criteria irrespective of an odata.maxpagesize preference limitation. */
-            "@odata.count": number;
-            /** A paging cookie must be requested as an annotation. And a @Microsoft.Dynamics.CRM.fetchxmlpagingcookie property will be returned with the result. */
-            "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": string;
-            /** Set to true if you want retrieve more records. */
-            "@Microsoft.Dynamics.CRM.morerecords": boolean;
-            /** When you set returntotalrecordcount="true" in FetchXml, this value return the count. */
-            "@Microsoft.Dynamics.CRM.totalrecordcount": number;
-            /** The total record count limit exceeded value. */
-            "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": boolean;
-            /** An array object of ODATA value. */
-            value: Array<object>;
-        }
-
-        class DeleteRequest {
-            constructor();
-            /** Entity name of records that should be deleted. */
-            entityName: string;
-            /** Plural name of entity, if not according to plural rules. */
-            overriddenSetName: string;
-            /** ID of entity to delete. */
-            entityId: string;
-            /** Alternate key array for deleting record. */
-            alternateKey: Array<AlternateKey>;
-            /** Set to false for sending all requests synchronously. True by default. */
-            async: boolean;
-            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
-            headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch. */
-            asBatch: boolean;
-        }
-
-        class UpdateResponse {
-            constructor();
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            then(callback: (result: object) => void): CatchRespone;
-        }
-        class DeleteResponse {
-            constructor();
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            then(callback: (result: object) => void): CatchRespone;
-        }
-        class AssociateResponse {
-            constructor();
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            then(callback: (result: object) => void): CatchRespone;
-        }
-        class DisassociateResponse {
-            constructor();
-            then(callback: (result: object) => void): CatchRespone;
-        }
-        class CatchRespone {
-            constructor();
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            catch(callback: (result: object) => void): FinallyRespone;
-        }
-        class FinallyRespone {
-            constructor();
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            finally(callback: (result: object) => void): DoneRespone;
-        }
-        class DoneRespone {
-            constructor();
-            /**
-             * Use with asynchronous request
-             * @param callback the callback for asynchronous request
-             */
-            done(callback: (result: object) => void);
-        }
-        class UpdateRequest {
-            constructor();
-            /** Entity name of records that should be updated. */
-            entityName: string;
-            /** Plural name of entity, if not according to plural rules. */
-            overriddenSetName: string;
-            /** Object containing record data. */
-            entity: object;
-            /** ID of entity to update. */
-            entityId: string;
-            /** Alternate key array for updating record. */
-            alternateKey: Array<AlternateKey>;
-            /** Set to false for sending all requests synchronously. True by default. */
-            async: boolean;
-            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
-            headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch. */
-            asBatch: boolean;
-        }
-        class CustomRequest {
-            constructor();
-            /** The HTTP method of the request, such as GET / POST / ... */
-            method: string;
-            /** The name of the request. */
-            name: string;
-            /** Determines if request is bound, i.e. always executed regarding a distinct record, or not. Defaults to false. */
-            bound: boolean;
-            /** Name of the request if it is bound to an entity. */
-            entityName: string;
-            /** Record ID if bound to an entity. */
-            entityId: string;
-            /** Message body for this request. */
-            payload: object;
-            /** Object with key-value pairs that will be appended to the URL of a GET request. Used for calling functions with parameters. */
-            urlParams: string;
-            /** Set to false for sending all requests synchronously. True by default. */
-            async: boolean;
-            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
-            headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch. */
-            asBatch: boolean;
-        }
-        class AssociateRequest {
-            constructor();
-            /** Name of relation ship to use for associating. */
-            relationShip: string;
-            /** Source entity for associating. */
-            source: EntityReference;
-            /** Target entity for associating. */
-            target: EntityReference;
-            /** Set to false for sending all requests synchronously. True by default. */
-            async: boolean;
-            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
-            headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch. */
-            asBatch: boolean;
-        }
-        class DisassociateRequest {
-            constructor();
-            /** Name of relation ship to use for disassociating. */
-            relationShip: string;
-            /** Source entity for disassociating. */
-            source: EntityReference;
-            /** Target entity for disassociating. */
-            target: EntityReference;
-            /** Set to false for sending all requests synchronously. True by default. */
-            async: boolean;
-            /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
-            headers: Array<Header>;
-            /** Default false, there is support for sending multiple requests as a batch. */
-            asBatch: boolean;
-        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         interface RetrieveMultipleResponse {
             /** An array of JSON objects, where each object represents the retrieved entity record containing attributes and their values as key: value pairs. The Id of the entity record is retrieved by default. */
-            entities: Array<KeyValueObject>;
+            entities: Array<DevKit.Form.KeyValueObject>;
             /** If the number of records being retrieved is more than the value specified in the maxPageSize parameter in the request, this attribute returns the URL to return next set of records. */
             nextLink: string;
         }
         interface ChangeSetRequest {
 
         }
-        interface ExecuteRequest {
-            /**
-             * The name of the bound parameter for the action or function to execute. Specify undefined if you are executing a CRUD request. Specify null if the action or function to execute is not bound to any entity. Specify entity in case the action or function to execute is bound to an entity.
-             * */
-            boundParameter?: "entity" | undefined | null;
-            /** Name of the action, function, or one of the following values if you are executing a CRUD request. */
-            operationName?: "Create" | "Retrieve" | "RetrieveMultiple" | "Update" | "Delete" | string;
-            /** Indicates the type of operation you are executing */
-            operationType?: DevKit.Form.WebApi.OperationType;
-            /** The metadata for parameter types. */
-            parameterTypes: {
-                /**  The metadata for enum types. The object has two string attributes: name and value */
-                enumProperties?: Array<KeyValueObject>;
-                /** The category of the parameter type.  */
-                structuralProperty: DevKit.Form.WebApi.StructuralProperty;
-            }
-        }
-        interface ExecuteResponse {
-            /** Response body. */
-            body?: object;
-            /** Response headers. */
-            headers: object;
-            /** Indicates whether the request was successful. */
-            ok: boolean;
-            /** Numeric value in the response status code.For example: 200 */
-            status: number;
-            /** Description of the response status code.For example: OK */
-            statusText: string;
-            /** Response type */
-            type: "" | "arraybuffer" | "blob" | "document" | "json" | "text";
-            /** Request URL of the action, function, or CRUD request that was sent to the Web API endpoint. */
-            url: string;
-        }
-        interface EntityReference {
-            /** The entity type of the updated record. */
-            entityType: string;
-            /** GUID of the updated record. */
-            id: string;
-        }
+        
+        
         interface Error {
             /** The error code. */
             errorCode: number;
             /** An error message describing the issue. */
             message: string;
         }
-        enum StructuralProperty {
-            /** 0 */
-            Unknown,
-            /** 1 */
-            PrimitiveType,
-            /** 2 */
-            ComplexType,
-            /** 3 */
-            EnumerationType,
-            /** 4 */
-            Collection,
-            /** 5 */
-            EntityType
-        }
-        enum OperationType {
-            /** 0 */
-            Action,
-            /** 1 */
-            Function,
-            /** 2 */
-            CRUD
-        }
+        
     }
     module Form {
         module Controls {
@@ -479,7 +482,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/captureimage
              */
-            CaptureImage(imageOption?: DevKit.Form.ImageOption, successCallback: (result: DevKit.Form.FileData) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            CaptureImage(imageOption: DevKit.Form.ImageOption, successCallback: (result: DevKit.Form.FileData) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
             /**
              * Invokes the device camera to record video. Note: This method is supported only for the mobile clients.
              * @param successCallback A function to call when Video is returned. A base64 encoded video object attributes is passed to the function.
@@ -563,7 +566,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/invokeprocessaction
              */
-            InvokeProcessAction(name: string, parameter?: object, successCallback: (result: object) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            InvokeProcessAction(name: string, parameter: object, successCallback: (result: object) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
             /**
              * Returns a boolean value indicating if the Customer Engagement instance is hosted on-premises or online
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/isonpremises
@@ -630,7 +633,7 @@ declare namespace DevKit {
              * @param errorCallback A function to execute when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openform
              */
-            OpenForm(formOption: DevKit.Form.FormOption, formParameters?: object, successCallback: (result: DevKit.Form.EntityReference) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            OpenForm(formOption: DevKit.Form.FormOption, formParameters: any, successCallback: (result: DevKit.Form.EntityReference) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
             /**
              * Opens a URL, including file URLs.
              * @param url URL to open.
@@ -658,7 +661,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/pickfile
              */
-            PickFile(filePickOption?: DevKit.Form.FilePickOption, successCallback: (result: Array<DevKit.Form.FileData>) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            PickFile(filePickOption: DevKit.Form.FilePickOption, successCallback: (result: Array<DevKit.Form.FileData>) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
             /**
              * Prefixes the current organization's unique name to a string, typically a URL path
              * @param sPath A local path to a resource
@@ -725,7 +728,7 @@ declare namespace DevKit {
              * @param errorCallback
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/createrecord
              */
-            CreateRecord(entityLogicalName: string, data: object, successCallback: (result: DevKit.Form.WebApi.EntityReference) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            CreateRecord(entityLogicalName: string, data: object, successCallback: (result: DevKit.WebApi.EntityReference) => void, errorCallback: (error: DevKit.WebApi.Error) => void): void;
             /**
              *
              * @param entityLogicalName The entity logical name of the record you want to delete. For example: "account".
@@ -734,7 +737,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/deleterecord
              */
-            DeleteRecord(entityLogicalName: string, id: string, successCallback: (result: DevKit.Form.WebApi.EntityReference) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            DeleteRecord(entityLogicalName: string, id: string, successCallback: (result: DevKit.WebApi.EntityReference) => void, errorCallback: (error: DevKit.WebApi.Error) => void): void;
             /**
              *
              * @param entityLogicalName The entity logical name of the record you want to retrieve. For example: "account".
@@ -744,7 +747,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/retrieverecord
              */
-            RetrieveRecord(entityLogicalName: string, id: string, options?: string, successCallback: (result: object) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            RetrieveRecord(entityLogicalName: string, id: string, options: string, successCallback: (result: object) => void, errorCallback: (error: DevKit.WebApi.Error) => void): void;
             /**
              * Retrieves a collection of entity records.
              * @param entityLogicalName The entity logical name of the records you want to retrieve. For example: "account".
@@ -754,7 +757,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/retrievemultiplerecords
              */
-            RetrieveMultipleRecords(entityLogicalName: string, options?: string, maxPageSize?: number, successCallback: (result: DevKit.Form.WebApi.RetrieveMultipleResponse) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            RetrieveMultipleRecords(entityLogicalName: string, options: string, maxPageSize: number, successCallback: (result: DevKit.WebApi.RetrieveMultipleResponse) => void, errorCallback: (error: DevKit.WebApi.Error) => void): void;
             /**
              * Updates an entity record.
              * @param entityLogicalName The entity logical name of the record you want to update. For example: "account".
@@ -764,7 +767,7 @@ declare namespace DevKit {
              * @param errorCallback
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/updaterecord
              */
-            UpdateRecord(entityLogicalName: string, id: string, data: object, successCallback: (result: DevKit.Form.WebApi.EntityReference) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            UpdateRecord(entityLogicalName: string, id: string, data: object, successCallback: (result: DevKit.WebApi.EntityReference) => void, errorCallback: (error: DevKit.WebApi.Error) => void): void;
             /**
              * Returns a boolean value indicating whether an entity is present in user’s profile and is currently available for use in offline mode.
              * @param entityLogicalName Logical name of the entity. For example: "account".
@@ -778,7 +781,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/online/execute
              */
-            Execute(request: DevKit.Form.WebApi.ExecuteRequest, successCallback: (result: DevKit.Form.WebApi.ExecuteResponse) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            Execute(request: DevKit.WebApi.ExecuteRequest, successCallback: (result: DevKit.WebApi.ExecuteResponse) => void, errorCallback: (error: DevKit.WebApi.Error) => void): void;
             /**
              * Execute a collection of action, function, or CRUD operations.
              * @param requests An array of one of object types.
@@ -786,7 +789,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/online/executemultiple
              */
-            ExecuteMultiple(requests: Array<DevKit.Form.WebApi.ExecuteRequest | DevKit.Form.WebApi.ChangeSetRequest>, successCallback: (result: Array<DevKit.Form.WebApi.ExecuteResponse>) => void, errorCallback: (error: DevKit.Form.WebApi.Error) => void): void;
+            ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest | DevKit.WebApi.ChangeSetRequest>, successCallback: (result: Array<DevKit.WebApi.ExecuteResponse>) => void, errorCallback: (error: DevKit.WebApi.Error) => void): void;
         }
         /**
          * Collections are structures to provide access to data that represent an array, but without the ability to modify the data in the array.
@@ -1202,9 +1205,8 @@ declare namespace DevKit {
             UniversalSortableDateTimePattern: string,
             SortableDateTimePattern: string,
             TimeSeparator: string,
-            UniversalSortableDateTimePattern: string,
             YearMonthPattern: string
-        };
+        }
         /**
         *  Provides access to the methods to determine which client is being used, whether the client is connected to the server, and what kind of device is being used.
         *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client
@@ -1342,11 +1344,35 @@ declare namespace DevKit {
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#gettimezoneoffsetminutes-method
             * */
             TimeZoneOffsetMinutes: number;
-        };
+        }
     }
 }
 /** PL.DynamicsCrm.DevKit for OptionSet. */
 declare namespace OptionSet {
+    module WebApi {
+        enum StructuralProperty {
+            /** 0 */
+            Unknown,
+            /** 1 */
+            PrimitiveType,
+            /** 2 */
+            ComplexType,
+            /** 3 */
+            EnumerationType,
+            /** 4 */
+            Collection,
+            /** 5 */
+            EntityType
+        }
+        enum OperationType {
+            /** 0 */
+            Action,
+            /** 1 */
+            Function,
+            /** 2 */
+            CRUD
+        }
+    }
     /** Returns information about the kind of device the user is using. */
     enum FormFactor {
         /** 0 */
@@ -1674,47 +1700,75 @@ declare namespace OptionSet {
 }
 /** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client. */
 declare namespace WebApiClient {
-    ///**
-    // * Retrieves records from CRM
-    // * @param request the RetrieveRequest object
-    // */
-    //function Retrieve(request: RetrieveRequest): RetrieveResponse;
+    /**
+     * Retrieves records from CRM (async = true).
+     * @param request the Rocket.WebApi.RetrieveRequest object.
+     */
+    function Retrieve(request: Rocket.WebApi.RetrieveRequest): DevKit.WebApiClient.RetrieveResponse;
+    /**
+     * Retrieves records from CRM (async = false).
+     * @param request the Rocket.WebApi.RetrieveRequest object.
+     */
+    function Retrieve(request: Rocket.WebApi.RetrieveRequest): void;
 
     /**
-     * Creates a given record in CRM (async = true)
-     * @param request the CreateRequest object
-     * @return {Rocket.WebApi.CreateResponse}
+     * Creates a given record in CRM (async = true).
+     * @param request The Rocket.WebApi.CreateRequest object.
      */
-    function Create(request: Rocket.WebApi.CreateRequest): Rocket.WebApi.CreateResponse;
+    function Create(request: Rocket.WebApi.CreateRequest): DevKit.WebApiClient.CreateResponse;
     /**
-     * Creates a given record in CRM (async = false)
-     * @param request the CreateRequest object
-     * @return {Rocket.WebApi.CreateResponse}
+     * Creates a given record in CRM (async = false).
+     * @param request The Rocket.WebApi.CreateRequest object.
      */
     function Create(request: Rocket.WebApi.CreateRequest): void;
-    ///**
-    // * Updates a given record in CRM
-    // * @param request the UpdateRequest object
-    // */
-    //function Update(request: UpdateRequest): UpdateResponse;
-    ///**
-    // * Deletes a given record in CRM
-    // * @param request the DeleteRequest object
-    // */
-    //function Delete(request: DeleteRequest): DeleteResponse;
-    ///**
-    // * Associates given records in CRM
-    // * @param request the AssociateRequest object
-    // */
-    //function Associate(request: AssociateRequest): AssociateResponse;
-    ///**
-    // * Disassociates given records in CRM
-    // * @param request the DisassociateRequest object
-    // */
-    //function Disassociate(request: DisassociateRequest): DisassociateResponse;
-    ///**
-    // * Executes the given request in CRM
-    // * @param request Request to send, must be in prototype chain of WebApiClient.Requests.Request
-    // */
-    //function Execute(request: object): object;
+       
+    /**
+     * Updates a given record in CRM (async = true).
+     * @param request the Rocket.WebApi.UpdateRequest object.
+     */
+    function Update(request: Rocket.WebApi.UpdateRequest): DevKit.WebApiClient.UpdateResponse;
+    /**
+     * Updates a given record in CRM (async = false).
+     * @param request the Rocket.WebApi.UpdateRequest object.
+     */
+    function Update(request: Rocket.WebApi.UpdateRequest): void;
+         
+    /**
+     * Deletes a given record in CRM (async = true).
+     * @param request the Rocket.WebApi.DeleteRequest object.
+     */
+    function Delete(request: Rocket.WebApi.DeleteRequest): DevKit.WebApiClient.DeleteResponse;
+    /**
+     * Deletes a given record in CRM (async = false).
+     * @param request the Rocket.WebApi.DeleteRequest object.
+     */
+    function Delete(request: Rocket.WebApi.DeleteRequest): void;
+
+    /**
+     * Associates given records in CRM (async = true).
+     * @param request the Rocket.WebApi.AssociateRequest object.
+     */
+    function Associate(request: Rocket.WebApi.AssociateRequest): DevKit.WebApiClient.AssociateResponse;
+    /**
+     * Associates given records in CRM (async = false).
+     * @param request the Rocket.WebApi.AssociateRequest object.
+     */
+    function Associate(request: Rocket.WebApi.AssociateRequest): void;
+
+    /**
+     * Disassociates given records in CRM (async = true).
+     * @param request the Rocket.WebApi.DisassociateRequest object.
+     */
+    function Disassociate(request: Rocket.WebApi.DisassociateRequest): DevKit.WebApiClient.DisassociateResponse;
+    /**
+     * Disassociates given records in CRM (async = false).
+     * @param request the Rocket.WebApi.DisassociateRequest object.
+     */
+    function Disassociate(request: Rocket.WebApi.DisassociateRequest): void;
+
+    /**
+     * Executes the given request in CRM
+     * @param request Request to send, must be in prototype chain of WebApiClient.Requests.Request
+     */
+    function Execute(request: any): any;
 }

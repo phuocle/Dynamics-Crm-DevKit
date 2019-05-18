@@ -99,126 +99,126 @@ declare namespace Rocket {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Additional information provided by the external application as JSON. For internal use only. */
-		ActivityAdditionalParams: WebApi.StringValue;
+		ActivityAdditionalParams: DevKit.WebApi.StringValue;
 		/** Unique identifier of the activity. */
-		ActivityId: WebApi.GuidValue;
+		ActivityId: DevKit.WebApi.GuidValue;
 		/** Actual duration of the activity in minutes. */
-		ActualDurationMinutes: WebApi.IntegerValue;
+		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
 		/** Actual end time of the activity. */
-		ActualEnd_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ActualEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Actual start time of the activity. */
-		ActualStart_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ActualStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows how contact about the social activity originated, such as from Twitter or Facebook. This field is read-only. */
-		Community: WebApi.OptionSetValue;
+		Community: DevKit.WebApi.OptionSetValue;
 		/** ReadOnly - Unique identifier of the user who created the activity. */
-		CreatedBy: WebApi.LookupValue;
+		CreatedBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Date and time when the activity was created. */
-		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who created the activitypointer. */
-		CreatedOnBehalfBy: WebApi.LookupValue;
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Date and time when the delivery of the activity was last attempted. */
-		DeliveryLastAttemptedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		DeliveryLastAttemptedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Priority of delivery of the activity to the email server. */
-		DeliveryPriorityCode: WebApi.OptionSetValue;
+		DeliveryPriorityCode: DevKit.WebApi.OptionSetValue;
 		/** Description of the activity. */
-		Description: WebApi.StringValue;
+		Description: DevKit.WebApi.StringValue;
 		/** The message id of activity which is returned from Exchange Server. */
-		ExchangeItemId: WebApi.StringValue;
+		ExchangeItemId: DevKit.WebApi.StringValue;
 		/** ReadOnly - Exchange rate for the currency associated with the activitypointer with respect to the base currency. */
-		ExchangeRate: WebApi.DecimalValue;
+		ExchangeRate: DevKit.WebApi.DecimalValue;
 		/** Shows the web link of Activity of type email. */
-		ExchangeWebLink: WebApi.StringValue;
+		ExchangeWebLink: DevKit.WebApi.StringValue;
 		/** Sequence number of the import that created this record. */
-		ImportSequenceNumber: WebApi.IntegerValue;
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Type of instance of a recurring series. */
-		InstanceTypeCode: WebApi.OptionSetValue;
+		InstanceTypeCode: DevKit.WebApi.OptionSetValue;
 		/** Information regarding whether the activity was billed as part of resolving a case. */
-		IsBilled: WebApi.BooleanValue;
+		IsBilled: DevKit.WebApi.BooleanValue;
 		/** For internal use only. */
-		IsMapiPrivate: WebApi.BooleanValue;
+		IsMapiPrivate: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: WebApi.BooleanValue;
+		IsRegularActivity: DevKit.WebApi.BooleanValue;
 		/** Information regarding whether the activity was created from a workflow rule. */
-		IsWorkflowCreated: WebApi.BooleanValue;
+		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Left the voice mail */
-		LeftVoiceMail: WebApi.BooleanValue;
+		LeftVoiceMail: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Unique identifier of user who last modified the activity. */
-		ModifiedBy: WebApi.LookupValue;
+		ModifiedBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Date and time when activity was last modified. */
-		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the delegate user who last modified the activitypointer. */
-		ModifiedOnBehalfBy: WebApi.LookupValue;
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: WebApi.IntegerValue;
+		OnHoldTime: DevKit.WebApi.IntegerValue;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-		OwnerId_systemuser: WebApi.LookupValue;
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
-		OwnerId_team: WebApi.LookupValue;
+		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the activity. */
-		OwningBusinessUnit: WebApi.LookupValue;
+		OwningBusinessUnit: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the team that owns the activity. */
-		OwningTeam: WebApi.LookupValue;
+		OwningTeam: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the user that owns the activity. */
-		OwningUser: WebApi.LookupValue;
+		OwningUser: DevKit.WebApi.LookupValue;
 		/** ReadOnly - For internal use only. */
-		PostponeActivityProcessingUntil_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		PostponeActivityProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Priority of the activity. */
-		PriorityCode: WebApi.OptionSetValue;
+		PriorityCode: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the Process. */
-		ProcessId: WebApi.GuidValue;
+		ProcessId: DevKit.WebApi.GuidValue;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_account_devkit_customactivity: WebApi.LookupValue;
+		regardingobjectid_account_devkit_customactivity: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_contact_devkit_customactivity: WebApi.LookupValue;
+		regardingobjectid_contact_devkit_customactivity: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_new_interactionforemail_devkit_customactivity: WebApi.LookupValue;
+		regardingobjectid_new_interactionforemail_devkit_customactivity: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_knowledgearticle_devkit_customactivity: WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_devkit_customactivity: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_knowledgebaserecord_devkit_customactivity: WebApi.LookupValue;
-		RegardingObjectIdYomiName: WebApi.StringValue;
+		regardingobjectid_knowledgebaserecord_devkit_customactivity: DevKit.WebApi.LookupValue;
+		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;
 		/** Scheduled duration of the activity, specified in minutes. */
-		ScheduledDurationMinutes: WebApi.IntegerValue;
+		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
 		/** Scheduled end time of the activity. */
-		ScheduledEnd_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Scheduled start time of the activity. */
-		ScheduledStart_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Unique identifier of the mailbox associated with the sender of the email message. */
-		SenderMailboxId: WebApi.LookupValue;
+		SenderMailboxId: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Date and time when the activity was sent. */
-		SentOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Uniqueidentifier specifying the id of recurring series of an instance. */
-		SeriesId: WebApi.GuidValue;
+		SeriesId: DevKit.WebApi.GuidValue;
 		/** Choose the service level agreement (SLA) that you want to apply to the case record. */
-		SLAId: WebApi.LookupValue;
+		SLAId: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: WebApi.LookupValue;
+		SLAInvokedId: DevKit.WebApi.LookupValue;
 		/** ReadOnly */
-		SLAName: WebApi.StringValue;
+		SLAName: DevKit.WebApi.StringValue;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Unique identifier of the Stage. */
-		StageId: WebApi.GuidValue;
+		StageId: DevKit.WebApi.GuidValue;
 		/** Status of the activity. */
-		StateCode: WebApi.OptionSetValue;
+		StateCode: DevKit.WebApi.OptionSetValue;
 		/** Reason for the status of the activity. */
-		StatusCode: WebApi.OptionSetValue;
+		StatusCode: DevKit.WebApi.OptionSetValue;
 		/** Subject associated with the activity. */
-		Subject: WebApi.StringValue;
+		Subject: DevKit.WebApi.StringValue;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
 		/** Unique identifier of the currency associated with the activitypointer. */
-		TransactionCurrencyId: WebApi.LookupValue;
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
 		/** For internal use only. */
-		TraversedPath: WebApi.StringValue;
+		TraversedPath: DevKit.WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Version number of the activity. */
-		VersionNumber: WebApi.BigIntValue;
+		VersionNumber: DevKit.WebApi.BigIntValue;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<object>;
 	}

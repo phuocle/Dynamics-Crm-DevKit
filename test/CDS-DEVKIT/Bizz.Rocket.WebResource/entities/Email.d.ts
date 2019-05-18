@@ -129,197 +129,197 @@ declare namespace Rocket {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
-		ActivityAdditionalParams: WebApi.StringValue;
+		ActivityAdditionalParams: DevKit.WebApi.StringValue;
 		/** Unique identifier of the email activity. */
-		ActivityId: WebApi.GuidValue;
+		ActivityId: DevKit.WebApi.GuidValue;
 		/** Type the number of minutes spent creating and sending the email. The duration is used in reporting. */
-		ActualDurationMinutes: WebApi.IntegerValue;
+		ActualDurationMinutes: DevKit.WebApi.IntegerValue;
 		/** Enter the actual end date and time of the email. By default, it displays the date and time when the activity was completed or canceled, but can be edited to capture the actual time to create and send the email. */
-		ActualEnd_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		ActualEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the actual start date and time for the email. By default, it displays the date and time when the activity was created, but can be edited to capture the actual time to create and send the email. */
-		ActualStart_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		ActualStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** ReadOnly - Shows the umber of attachments of the email message. */
-		AttachmentCount: WebApi.IntegerValue;
+		AttachmentCount: DevKit.WebApi.IntegerValue;
 		/** Shows the number of times an email attachment has been viewed. */
-		AttachmentOpenCount: WebApi.IntegerValue;
+		AttachmentOpenCount: DevKit.WebApi.IntegerValue;
 		/** Hash of base of conversation index. */
-		BaseConversationIndexHash: WebApi.IntegerValue;
+		BaseConversationIndexHash: DevKit.WebApi.IntegerValue;
 		/** Type a category to identify the email type, such as lead outreach, customer follow-up, or service alert, to tie the email to a business group or function. */
-		Category: WebApi.StringValue;
+		Category: DevKit.WebApi.StringValue;
 		/** ReadOnly - Indicates if the body is compressed. */
-		Compressed: WebApi.BooleanValue;
+		Compressed: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Identifier for all the email responses for this conversation. */
-		ConversationIndex: WebApi.StringValue;
+		ConversationIndex: DevKit.WebApi.StringValue;
 		/** Conversation Tracking Id. */
-		ConversationTrackingId: WebApi.GuidValue;
+		ConversationTrackingId: DevKit.WebApi.GuidValue;
 		/** ReadOnly - Shows how an email is matched to an existing email in Microsoft Dynamics 365. For system use only. */
-		CorrelationMethod: WebApi.OptionSetValue;
+		CorrelationMethod: DevKit.WebApi.OptionSetValue;
 		/** ReadOnly - Shows who created the record. */
-		CreatedBy: WebApi.LookupValue;
+		CreatedBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: WebApi.LookupValue;
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValue;
 		/** Enter the expected date and time when email will be sent. */
-		DelayedEmailSendTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		DelayedEmailSendTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the count of the number of attempts made to send the email. The count is used as an indicator of email routing issues. */
-		DeliveryAttempts: WebApi.IntegerValue;
+		DeliveryAttempts: DevKit.WebApi.IntegerValue;
 		/** Select the priority of delivery of the email to the email server. */
-		DeliveryPriorityCode: WebApi.OptionSetValue;
+		DeliveryPriorityCode: DevKit.WebApi.OptionSetValue;
 		/** Select whether the sender should receive confirmation that the email was delivered. */
-		DeliveryReceiptRequested: WebApi.BooleanValue;
+		DeliveryReceiptRequested: DevKit.WebApi.BooleanValue;
 		/** Type the greeting and message text of the email. */
-		Description: WebApi.StringValue;
+		Description: DevKit.WebApi.StringValue;
 		/** Select the direction of the email as incoming or outbound. */
-		DirectionCode: WebApi.BooleanValue;
+		DirectionCode: DevKit.WebApi.BooleanValue;
 		/** Shows the date and time when an email reminder expires. */
-		EmailReminderExpiryTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		EmailReminderExpiryTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows the status of the email reminder. */
-		EmailReminderStatus: WebApi.OptionSetValue;
+		EmailReminderStatus: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
-		EmailReminderText: WebApi.StringValue;
+		EmailReminderText: DevKit.WebApi.StringValue;
 		/** Shows the type of the email reminder. */
-		EmailReminderType: WebApi.OptionSetValue;
+		EmailReminderType: DevKit.WebApi.OptionSetValue;
 		/** ReadOnly - Shows the sender of the email. */
-		emailsender_account: WebApi.LookupValue;
+		emailsender_account: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Shows the sender of the email. */
-		emailsender_contact: WebApi.LookupValue;
+		emailsender_contact: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Shows the sender of the email. */
-		emailsender_queue: WebApi.LookupValue;
+		emailsender_queue: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Shows the sender of the email. */
-		emailsender_systemuser: WebApi.LookupValue;
+		emailsender_systemuser: DevKit.WebApi.LookupValue;
 		/** Email Tracking Id. */
-		EmailTrackingId: WebApi.GuidValue;
+		EmailTrackingId: DevKit.WebApi.GuidValue;
 		/** ReadOnly - Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: WebApi.DecimalValue;
+		ExchangeRate: DevKit.WebApi.DecimalValue;
 		/** Select whether the email allows following recipient activities sent from Microsoft Dynamics 365.This is user preference state which can be overridden by system evaluated state. */
-		FollowEmailUserPreference: WebApi.BooleanValue;
+		FollowEmailUserPreference: DevKit.WebApi.BooleanValue;
 		/** Unique identifier of the data import or data migration that created this record. */
-		ImportSequenceNumber: WebApi.IntegerValue;
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Type the ID of the email message that this email activity is a response to. */
-		InReplyTo: WebApi.StringValue;
+		InReplyTo: DevKit.WebApi.StringValue;
 		/** Information regarding whether the email activity was billed as part of resolving a case. */
-		IsBilled: WebApi.BooleanValue;
+		IsBilled: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - For internal use only. Shows whether this email is followed. This is evaluated state which overrides user selection of follow email. */
-		IsEmailFollowed: WebApi.BooleanValue;
+		IsEmailFollowed: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - For internal use only. Shows whether this email Reminder is Set. */
-		IsEmailReminderSet: WebApi.BooleanValue;
+		IsEmailReminderSet: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: WebApi.BooleanValue;
+		IsRegularActivity: DevKit.WebApi.BooleanValue;
 		/** ReadOnly - For internal use only. */
-		IsUnsafe: WebApi.IntegerValue;
+		IsUnsafe: DevKit.WebApi.IntegerValue;
 		/** Indication if the email was created by a workflow rule. */
-		IsWorkflowCreated: WebApi.BooleanValue;
+		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
 		/** Contains the date and time stamp of the last on hold time. */
-		LastOnHoldTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the latest date and time when email was opened. */
-		LastOpenedTime_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		LastOpenedTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the number of times a link in an email has been clicked. */
-		LinksClickedCount: WebApi.IntegerValue;
+		LinksClickedCount: DevKit.WebApi.IntegerValue;
 		/** Unique identifier of the email message. Used only for email that is received. */
-		MessageId: WebApi.StringValue;
+		MessageId: DevKit.WebApi.StringValue;
 		/** MIME type of the email message data. */
-		MimeType: WebApi.StringValue;
+		MimeType: DevKit.WebApi.StringValue;
 		/** ReadOnly - Shows who last updated the record. */
-		ModifiedBy: WebApi.LookupValue;
+		ModifiedBy: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** ReadOnly - Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: WebApi.LookupValue;
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValue;
 		/** Select the notification code to identify issues with the email recipients or attachments, such as blocked attachments. */
-		Notifications: WebApi.OptionSetValue;
+		Notifications: DevKit.WebApi.OptionSetValue;
 		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: WebApi.IntegerValue;
+		OnHoldTime: DevKit.WebApi.IntegerValue;
 		/** Shows the number of times an email has been opened. */
-		OpenCount: WebApi.IntegerValue;
+		OpenCount: DevKit.WebApi.IntegerValue;
 		/** Date and time that the record was migrated. */
-		OverriddenCreatedOn_UtcDateOnly: WebApi.UtcDateOnlyValue;
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
-		OwnerId_systemuser: WebApi.LookupValue;
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
-		OwnerId_team: WebApi.LookupValue;
+		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the email activity. */
-		OwningBusinessUnit: WebApi.LookupValue;
+		OwningBusinessUnit: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the team who owns the email activity. */
-		OwningTeam: WebApi.LookupValue;
+		OwningTeam: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the user who owns the email activity. */
-		OwningUser: WebApi.LookupValue;
+		OwningUser: DevKit.WebApi.LookupValue;
 		/** Select the activity that the email is associated with. */
-		ParentActivityId: WebApi.LookupValue;
+		ParentActivityId: DevKit.WebApi.LookupValue;
 		/** ReadOnly - For internal use only. */
-		PostponeEmailProcessingUntil_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		PostponeEmailProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: WebApi.OptionSetValue;
+		PriorityCode: DevKit.WebApi.OptionSetValue;
 		/** Shows the ID of the process. */
-		ProcessId: WebApi.GuidValue;
+		ProcessId: DevKit.WebApi.GuidValue;
 		/** Indicates that a read receipt is requested. */
-		ReadReceiptRequested: WebApi.BooleanValue;
+		ReadReceiptRequested: DevKit.WebApi.BooleanValue;
 		/** Choose the record that the email relates to. */
-		regardingobjectid_account_email: WebApi.LookupValue;
+		regardingobjectid_account_email: DevKit.WebApi.LookupValue;
 		/** Choose the record that the email relates to. */
-		regardingobjectid_asyncoperation: WebApi.LookupValue;
+		regardingobjectid_asyncoperation: DevKit.WebApi.LookupValue;
 		/** Choose the record that the email relates to. */
-		regardingobjectid_contact_email: WebApi.LookupValue;
+		regardingobjectid_contact_email: DevKit.WebApi.LookupValue;
 		/** Choose the record that the email relates to. */
-		regardingobjectid_knowledgearticle_email: WebApi.LookupValue;
+		regardingobjectid_knowledgearticle_email: DevKit.WebApi.LookupValue;
 		/** Choose the record that the email relates to. */
-		regardingobjectid_knowledgebaserecord_email: WebApi.LookupValue;
+		regardingobjectid_knowledgebaserecord_email: DevKit.WebApi.LookupValue;
 		/** Reminder Action Card Id. */
-		ReminderActionCardId: WebApi.GuidValue;
+		ReminderActionCardId: DevKit.WebApi.GuidValue;
 		/** ReadOnly - Shows the number of replies received for an email. */
-		ReplyCount: WebApi.IntegerValue;
+		ReplyCount: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Safe body text of the e-mail. */
-		SafeDescription: WebApi.StringValue;
+		SafeDescription: DevKit.WebApi.StringValue;
 		/** ReadOnly - Scheduled duration of the email activity, specified in minutes. */
-		ScheduledDurationMinutes: WebApi.IntegerValue;
+		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
 		/** Enter the expected due date and time for the activity to be completed to provide details about when the email will be sent. */
-		ScheduledEnd_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Enter the expected start date and time for the activity to provide details about the tentative time when the email activity must be initiated. */
-		ScheduledStart_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Sender of the email. */
-		Sender: WebApi.StringValue;
+		Sender: DevKit.WebApi.StringValue;
 		/** ReadOnly - Select the mailbox associated with the sender of the email message. */
-		SenderMailboxId: WebApi.LookupValue;
+		SenderMailboxId: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Shows the parent account of the sender of the email. */
-		SendersAccount: WebApi.LookupValue;
+		SendersAccount: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Shows the date and time that the email was sent. */
-		SentOn_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Choose the service level agreement (SLA) that you want to apply to the email record. */
-		SLAId: WebApi.LookupValue;
+		SLAId: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Last SLA that was applied to this email. This field is for internal use only. */
-		SLAInvokedId: WebApi.LookupValue;
+		SLAInvokedId: DevKit.WebApi.LookupValue;
 		/** ReadOnly */
-		SLAName: WebApi.StringValue;
+		SLAName: DevKit.WebApi.StringValue;
 		/** Shows the date and time by which the activities are sorted. */
-		SortDate_UtcDateAndTime: WebApi.UtcDateAndTimeValue;
+		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the ID of the stage. */
-		StageId: WebApi.GuidValue;
+		StageId: DevKit.WebApi.GuidValue;
 		/** Shows whether the email is open, completed, or canceled. Completed and canceled email is read-only and can't be edited. */
-		StateCode: WebApi.OptionSetValue;
+		StateCode: DevKit.WebApi.OptionSetValue;
 		/** Select the email's status. */
-		StatusCode: WebApi.OptionSetValue;
+		StatusCode: DevKit.WebApi.OptionSetValue;
 		/** Type a subcategory to identify the email type and relate the activity to a specific product, sales region, business group, or other function. */
-		Subcategory: WebApi.StringValue;
+		Subcategory: DevKit.WebApi.StringValue;
 		/** Type a short description about the objective or primary topic of the email. */
-		Subject: WebApi.StringValue;
+		Subject: DevKit.WebApi.StringValue;
 		/** Shows the Microsoft Office Outlook account for the user who submitted the email to Microsoft Dynamics 365. */
-		SubmittedBy: WebApi.StringValue;
+		SubmittedBy: DevKit.WebApi.StringValue;
 		/** For internal use only. ID for template used in email. */
-		TemplateId: WebApi.LookupValue;
+		TemplateId: DevKit.WebApi.LookupValue;
 		/** For internal use only. */
-		TimeZoneRuleVersionNumber: WebApi.IntegerValue;
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
 		/** Shows the email addresses corresponding to the recipients. */
-		ToRecipients: WebApi.StringValue;
+		ToRecipients: DevKit.WebApi.StringValue;
 		/** Shows the tracking token assigned to the email to make sure responses are automatically tracked in Microsoft Dynamics 365. */
-		TrackingToken: WebApi.StringValue;
+		TrackingToken: DevKit.WebApi.StringValue;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
-		TransactionCurrencyId: WebApi.LookupValue;
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
 		/** For internal use only. */
-		TraversedPath: WebApi.StringValue;
+		TraversedPath: DevKit.WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
-		UTCConversionTimeZoneCode: WebApi.IntegerValue;
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Version number of the email message. */
-		VersionNumber: WebApi.BigIntValue;
+		VersionNumber: DevKit.WebApi.BigIntValue;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<object>;
 	}
