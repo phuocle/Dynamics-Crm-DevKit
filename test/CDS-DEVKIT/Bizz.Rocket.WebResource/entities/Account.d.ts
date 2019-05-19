@@ -15,6 +15,9 @@ declare namespace Rocket {
     interface FormAccountQuickForm {
 
     }
+    interface FormAccountComposite {
+
+    }
     class FormAccount {
         /**
          * PL.DynamicsCrm.DevKit form Account
@@ -32,10 +35,12 @@ declare namespace Rocket {
         Footer: FormAccountFooter;
         /** The Header section of form Account */
         Header: FormAccountHeader;
-        /** The Navigation section of form Account */
+        /** The Navigation of form Account */
         Navigation: FormAccountNavigation;
-        /** The QuickForm section of form Account */
+        /** The QuickForm of form Account */
         QuickForm: FormAccountQuickForm;
+        /** The Composite of form Account */
+        Composite: FormAccountComposite;
         /**
         * Adds a function to be called when the record is saved
         * @param successCallback The function to be executed when the record is saved. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function

@@ -109,7 +109,7 @@ declare namespace Rocket {
             entityId: string;
             /** Alternate key array for retrieving single record. */
             alternateKey: Array<AlternateKey>;
-            /** Query Parameters to append to URL, such as ?$select=* */
+            /** Query Parameters to append to URL, such as ?$select=*/
             queryParams: string;
             /** Fetch XML query. */
             fetchXml: string;
@@ -338,6 +338,10 @@ declare namespace DevKit {
             key: string,
             value: number
         }
+        interface TextValueNumber {
+            text: string,
+            value: number
+        }
         interface DialogAlertOption {
             /** The confirm button label.If you do not specify the button label, OK is used as the button label. */
             confirmButtonLabel: string;
@@ -516,6 +520,27 @@ declare namespace DevKit {
             /** Indicate whether to use the Book or Reschedule messages rather than the Create or Update messages. This option is only applicable when used with appointment, recurring appointment, or service activity records */
             useSchedulingEngine: boolean;
         }
+        interface FieldUserPrivilege {
+            canRead: boolean;
+            canUpdate: boolean;
+            canCreate: boolean;
+        }
+        interface FieldNotification {
+            /** A collection of objects */
+            actions: Array<FieldNotificationAction>;
+            /** The message to display in the notification. In the current release, only the first message specified in this array will be displayed. The string that you specify here appears as bold text in the notification, and is typically used for title or subject of the notification. You should limit your message to 50 characters for optimal user experience */
+            messages: Array<string>;
+            /** Defines the type of notification */
+            notificationLevel: OptionSet.FieldNotificationLevel;
+            /** The ID to use to clear this notification when using the clearNotification method */
+            uniqueId: string;
+        }
+        interface FieldNotificationAction {
+            /** The body message of the notification to be displayed to the user. Limit your message to 100 characters for optimal user experience */
+            message: string;
+            /** Array of functions. The corresponding actions for the message */
+            actions: Array<any>;
+        }
     }
     namespace WebApi {
         interface OptionSetValue {
@@ -619,7 +644,7 @@ declare namespace DevKit {
         interface ExecuteRequest {
             /**
              * The name of the bound parameter for the action or function to execute. Specify undefined if you are executing a CRUD request. Specify null if the action or function to execute is not bound to any entity. Specify entity in case the action or function to execute is bound to an entity.
-             * */
+             */
             boundParameter?: "entity" | undefined | null;
             /** Name of the action, function, or one of the following values if you are executing a CRUD request. */
             operationName?: "Create" | "Retrieve" | "RetrieveMultiple" | "Update" | "Delete" | string;
@@ -654,36 +679,444 @@ declare namespace DevKit {
         }
     }
     namespace Form {
+        /*
+Standard,                       Boolean,
+Iframe,                         DateTime,
+KbSearch,                       Decimal,
+Lookup,                         Double,
+MultiSelectOptionset,           Integer,
+Notes,                          Lookup,
+OptionSet,                      Memo,
+QuickForm,                      Money,
+SubGrid,                        MultiOptionSet,
+TimerControl,                   OptionSet,
+TimelineWall,                   String
+WebResource
+        */
         namespace Controls {
-            interface ControlNotification {
-
-            }
             interface Control {
                 /**
-                 * Displays an error or recommendation notification for a control, and lets you specify actions to execute based on the notification. When you specify an error type of notification, a red "X" icon appears next to the control. When you specify a recommendation type of notification, an "i" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message, and let you perform the configured action by clicking the Apply button or dismiss the message.
-                 * @param notification The notification to add.
+                 * Returns a string value that represents the type of control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getcontroltype
+                 */
+                ControlType: OptionSet.FieldControlType;
+                /**
+                 * Returns a string value that represents the type of attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getattributetype
+                 */
+                AttributeType: OptionSet.FieldAttributeType;
+                /**
+                 * Sets a function to be called when the OnChange event occurs
+                 * @param successCallback
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/addonchange
+                 */
+                AddOnChange(successCallback: (executionContext: any) => void): void;
+                /**
+                 * Causes the OnChange event to occur on the attribute so that any script associated to that event can execute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/fireonchange
+                 */
+                FireOnChange(): void;
+                /**
+                 * Returns a string value that represents formatting options for the attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getformat
+                 */
+                Format: OptionSet.FieldFormat;
+                /**
+                 * Returns a Boolean value indicating if there are unsaved changes to the attribute value
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getisdirty
+                 */
+                IsDirty: boolean;
+                /**
+                 * Returns a string representing the logical name of the attribute
+                 * Returns the name assigned to the control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getname
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getname
+                 */
+                Name: string;
+                /**
+                 * Returns the formContext.data.entity object that is the parent to all attributes
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getparent
+                 */
+                AttributeParent: any;
+                /**
+                 * Returns a string value indicating whether a value for the attribute is required or recommended
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getrequiredlevel
+                 */
+                RequiredLevel: OptionSet.FieldRequiredLevel;
+                /**
+                 * Returns a string indicating when data from the attribute will be submitted when the record is saved
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getsubmitmode
+                 */
+                SubmitMode: OptionSet.FieldSubmitMode;
+                /**
+                 * Returns a boolean value to indicate whether the value of an attribute is valid
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/isvalid
+                 */
+                Valid: boolean;
+                /**
+                 * Removes a function from the OnChange event hander for an attribute
+                 * @param callback Specifies the function to be removed from the OnChange event
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/removeonchange
+                 */
+                RemoveOnChange(callback: () => void): void;
+                /**
+                 * Displays an error or recommendation notification for a control, and lets you specify actions to execute based on the notification. When you specify an error type of notification, a red "X" icon appears next to the control. When you specify a recommendation type of notification, an "i" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message, and let you perform the configured action by clicking the Apply button or dismiss the message
+                 * @param notification The notification to add
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addnotification
                  */
-                AddNotification(notification: ControlNotification): void;
+                AddNotification(notification: DevKit.Core.FieldNotification): void;
+                /**
+                 * Remove a message already displayed for a control
+                 * @param uniqueId The ID to use to clear a specific message that was set using setNotification or addNotification. If the uniqueId parameter isn’t specified, the currently displayed notification will be cleared
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearnotification
+                 */
+                ClearNotification(uniqueId: string): void;
+                /**
+                 * Returns whether the control is disabled
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getdisabled
+                 */
+                Disabled: boolean;
+                /**
+                 * Returns the label for the control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getlabel
+                 */
+                Label: string;
+                /**
+                 * Returns a reference to the section object that contains the control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getparent
+                 */
+                ControlParent: any;
+                /**
+                 * Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control. The getValue method is different from the attribute getValue method because the control method retrieves the value from the control as the user is typing in the control as opposed to the attribute getValue method that retrieves the value after the user commits (saves) the field
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvalue
+                 */
+                Value2: string;
+                /**
+                 * Returns a value that indicates whether the control is currently visible
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvisible
+                 */
+                Visible: boolean;
             }
-            interface StandardControl extends Control {
+            //----------------------------------------------------------------------------------------------------
+            interface ControlDateTime extends Control {
+                /**
+                 * Get whether a date control shows the time portion of the date
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getshowtime
+                 */
+                ShowTime: boolean;
+            }
+            //----------------------------------------------------------------------------------------------------
+            interface Select extends Control {
+                /**
+                 * Returns a value that represents the value set for a Boolean, OptionSet or MultiOptionSet attribute when the form is opened
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getinitialvalue
+                 */
+                InitialValue: number;
+            }
+            interface ControlBoolean extends Select {
+                /**
+                 * Retrieves the data value for an attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 */
+                Value: boolean;
+            }
+            interface ControlOptionSet extends Select {
+                /**
+                 * Returns an option object with the value matching the argument (label or enumeration value) passed to the method
+                 * @param label The label of the option
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getoption
+                 */
+                Option(label: string): DevKit.Core.TextValueNumber;
+                /**
+                 * Returns an option object with the value matching the argument (label or enumeration value) passed to the method
+                 * @param value The enumeration value of the option
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getoption
+                 */
+                Option(value: number): DevKit.Core.TextValueNumber;
+                /**
+                 * Returns an array of option objects representing valid options for an attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getoptions
+                 */
+                Options: Array<DevKit.Core.TextValueNumber>;
+                /**
+                 * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getselectedoption
+                 */
+                SelectedOption: DevKit.Core.TextValueNumber;
+                /**
+                 * Returns a string value of the text for the currently selected option for an optionset or multiselectoptionset attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/gettext
+                 */
+                Text: string;
+                /**
+                 * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for an attribute. This function is intended for use when Field Level Security modifies a user’s privileges for a particular attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getuserprivilege
+                 */
+                UserPrivilege: DevKit.Core.FieldUserPrivilege;
+                /**
+                 * Retrieves the data value for an attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 */
+                Value: number;
+                /**
+                 * Adds an option to a control
+                 * @param option The option to add
+                 * @param index The index position to place the new option in. If not provided, the option will be added to the end
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addoption
+                 */
+                AddOption(option: DevKit.Core.TextValueNumber, index: number): void;
+                /**
+                 * Clears all options from a control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearoptions
+                 */
+                ClearOptions(): void;
+                /**
+                 * Removes an option from a control
+                 * @param value The value of the option you want to remove
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removeoption
+                 */
+                RemoveOption(value: number): void;
+            }
+            interface ControlMultiOptionSet extends ControlOptionSet {
+                /**
+                 * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getselectedoption
+                 */
+                SelectedOption: Array<DevKit.Core.TextValueNumber>
+                /**
+                 * Retrieves the data value for an attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 */
+                Value: Array<number>;
+            }
+            //----------------------------------------------------------------------------------------------------
+            interface Number extends Control {
+                /**
+                 * Returns a number indicating the maximum allowed value for an attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getmax
+                 */
+                Max: number;
+                /**
+                 * Returns a number indicating the minimum allowed value for an attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getmin
+                 */
+                Min: number;
+                /**
+                 * Returns the number of digits allowed to the right of the decimal point
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getprecision
+                 */
+                Precision: number;
+                /**
+                 * Retrieves the data value for an attribute.
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 */
+                Value: number;
+            }
+            interface ControlInteger extends Number {
 
             }
-            interface DateTimeControl extends Control {
+            interface ControlDecimal extends Number {
 
             }
-            interface Lookup extends Control {
+            interface ControlDouble extends Number {
 
             }
-            interface TwoOptions extends Control {
+            interface ControlMoney extends Number {
 
+            }
+            //----------------------------------------------------------------------------------------------------
+            interface Text extends Control {
+                /**
+                 *
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getmaxlength
+                 */
+                MaxLength: number;
+                /**
+                 * Retrieves the data value for an attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 */
+                Value: string;
+            }
+            interface ControlString extends Text {
+            }
+            interface ControlMemo extends Text {
+            }
+            //----------------------------------------------------------------------------------------------------
+            interface ControlLookup extends Control {
+                /**
+                 * Returns a Boolean value indicating whether the lookup represents a partylist lookup. Partylist lookups allow for multiple records to be set, such as the To: field for an email entity record
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getispartylist
+                 */
+                IsPartyList: boolean;
+                /**
+                 * Retrieves the data value for an attribute.
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 */
+                Value: Array<DevKit.Core.EntityReference>;
+                /**
+                 * Adds filters to the results displayed in the lookup. Each filter will be combined with any previously added filters as an “AND” condition. This method can only be used in a function in an event handler for the Lookup Control PreSearch Event
+                 * @param filter The fetchXml filter element to apply
+                 * @param entityLogicaName If this is set, the filter only applies to that entity type. Otherwise, it applies to all types of entities returned
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addcustomfilter
+                 */
+                AddCustomFilter(filter: string, entityLogicaName?: string): void;
+                /**
+                 * Adds a new view for the lookup dialog box. This method doesn’t work with Owner lookups. Owner lookups are used to assign user-owned records
+                 * @param viewId The string representation of a GUID for a view
+                 * @param entityName The name of the entity
+                 * @param viewDisplayName The name of the view
+                 * @param fetchXml The fetchXml query for the view
+                 * @param layoutXml The XML that defines the layout of the view
+                 * @param isDefault Indicates whether the view should be the default view
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addcustomview
+                 */
+                AddCustomView(viewId: string, entityName: string, viewDisplayName: string, fetchXml: string, layoutXml: string, isDefault: boolean): void;
+                /**
+                 * Applies changes to lookups based on values current just as the user is about to view results for the lookup
+                 * @param callback The function that will be run just before the search to provide results for a lookup occurs. You can use this function to call one of the other lookup control functions and improve the results to be displayed in the lookup. The execution context is automatically passed as the first parameter to this function
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addpresearch
+                 */
+                AddPreSearch(callback: (executionContext: any) => void): void;
+                /**
+                 * Returns the ID value of the default lookup dialog view
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getdefaultview
+                 */
+                DefaultView: string;
+                /**
+                 * Gets the types of entities allowed in the lookup control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getentitytypes
+                 */
+                EntityTypes: Array<string>;
+                /**
+                 * Removes event handler functions that have previously been set for the PreSearch event
+                 * @param callback The function to remove. The execution context is automatically passed as the first parameter to this function
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removepresearch
+                 */
+                RemovePreSearch(callback: (executionContext: any) => void): void;
+            }
+            //----------------------------------------------------------------------------------------------------
+            interface ControlKnowledge extends Control {
+                /**
+                 * Adds an event handler to the PostSearch event
+                 * @param callback The function to add to the PostSearch event. The execution context is automatically passed as the first parameter to this function
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addonpostsearch
+                 */
+                AddOnPostSearch(callback: (executionContext: any) => void): void;
+                /**
+                 * Adds an event handler to the OnResultOpened event
+                 * @param callback The function to add to the OnResultOpened event. The execution context is automatically passed as the first parameter to this function
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addonresultopened
+                 */
+                AddOnResultOpened(callback: (executionContext: any) => void): void;
+                /**
+                 * Adds an event handler to the OnSelection event
+                 * @param callback The function to add to the OnSelection event. The execution context is automatically passed as the first parameter to this function
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addonselection
+                 */
+                AddOnSelection(callback: (executionContext: any) => void): void;
+                /**
+                 * Gets the text used as the search criteria for the knowledge base management control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getsearchquery
+                 */
+                SearchQuery: string;
+                /**
+                 * Gets the count of results found in the search control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/gettotalresultcount
+                 */
+                TotalResultCount: number;
+                /**
+                 * Opens a search result in the search control by specifying the result number
+                 * @param resultNumber Numerical value specifying the result number to be opened. Result number starts from 1
+                 * @param mode Specify "Inline" or "Popout". If you do not specify a value for the argument, the default ("Inline") option is used. The "Inline" mode opens the result inline either in the reading pane of the control or in a reference panel tab in case of reference panel. The "Popout" mode opens the result in a pop-out window
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/opensearchresult
+                 */
+                OpenSearchResult(resultNumber: number, mode: string): boolean;
+                /**
+                 * Removes an event handler from the PostSearch event
+                 * @param callback The function to remove from the PostSearch event
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removeonpostsearch
+                 */
+                RemoveOnPostSearch(callback: () => void): void;
+                /**
+                 * Removes an event handler from the OnResultOpened event
+                 * @param callback The function to remove from the OnResultOpened event
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removeonresultopened
+                 */
+                RemoveOnResultOpened(callback: () => void): void;
+                /**
+                 * Removes an event handler from the OnSelection even
+                 * @param callback The function to remove from the OnSelection event
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removeonselection
+                 */
+                RemoveOnSelection(callback: () => void): void;
+
+
+
+            }
+
+            //----------------------------------------------------------------------------------------------------
+            interface ControlWebResource extends Control {
+                /**
+                 * Returns the value of the data query string parameter passed to a Silverlight web resource
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getdata
+                 */
+                Data: string;
+                /**
+                 * Returns the object in the form that represents an IFRAME or web resource
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getobject
+                 */
+                Object: any;
+                /**
+                 * Returns the current URL being displayed in an IFRAME or web resource
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getsrc
+                 */
+                Src: string;
+            }
+            //----------------------------------------------------------------------------------------------------
+            interface ControlIFrame extends Control {
+                /**
+                 * Returns the default URL that an IFRAME control is configured to display
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getinitialurl
+                 **/
+                InitialUrl: string;
+                /**
+                * Returns the object in the form that represents an IFRAME or web resource
+                * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getobject
+                */
+                Object: any;
+                /**
+                 * Returns the current URL being displayed in an IFRAME or web resource
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getsrc
+                 */
+                Src: string;
+            }
+            //----------------------------------------------------------------------------------------------------
+            interface ControlTimer extends Control {
+                /**
+                 * Returns the state of the timer control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getstate
+                 */
+                State: number;
+                /**
+                 * Refreshes the data displayed in a timelinewall and timer control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/refresh
+                 */
+                Refresh(): void;
+            }
+            //----------------------------------------------------------------------------------------------------
+            interface ControlTimelineWall extends Control {
+                /**
+                 * Refreshes the data displayed in a timelinewall and timer control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/refresh
+                 */
+                Refresh(): void;
             }
         }
         interface Utility {
             /**
              * Returns information about the advanced configuration settings for the organization
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getadvancedconfigsetting
-             * */
+             */
             readonly AdvancedConfigSetting: OptionSet.AdvancedConfigSetting;
             /**
              * Returns the valid state transitions for the specified entity type and state code.
@@ -726,17 +1159,17 @@ declare namespace DevKit {
             /**
              *  Provides access to the methods to determine which client is being used, whether the client is connected to the server, and what kind of device is being used.
              *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client
-             * */
+             */
             Client: DevKit.Form.Client;
             /**
              * Returns the base URL that was used to access the application
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getclienturl
-             * */
+             */
             ClientUrl: string;
             /**
              * Closes a progress dialog box. If no progress dialog is displayed currently, this method will do nothing. You can display a progress dialog using the ShowProgressIndicator method.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/closeprogressindicator
-             * */
+             */
             CloseProgressIndicator(): void;
             /**
              * Returns the name of the current business app in Customer Engagement
@@ -755,7 +1188,7 @@ declare namespace DevKit {
             /**
              * Returns the URL of the current business app in Customer Engagement
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappurl
-             * */
+             */
             CurrentAppUrl: string;
             /**
              * Returns the current location using the device geolocation capability. Note: For the CurrentPosition method to work, the geolocation capability must be enabled on your mobile device, and the Dynamics 365 for Customer Engagement mobile clients must have permissions to access the device location, which isn't enabled by default. This method is supported only for the mobile clients.
@@ -803,12 +1236,12 @@ declare namespace DevKit {
             /**
              * Returns a boolean value indicating if the Customer Engagement instance is hosted on-premises or online
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/isonpremises
-             * */
+             */
             IsOnPremise: boolean;
             /**
              * Returns the name of the DOM attribute expected by the Learning Path (guided help) Content Designer for identifying UI controls in the Dynamics 365 for Customer Engagement apps form. An attribute by this name must be added to the UI element that needs to be exposed to Learning Path (guided help)
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getlearningpathattributename
-             * */
+             */
             LearningPathAttributeName: string;
             /**
              * Displays the web page represented by a URL in the static area in the side pane, which appears on all pages in the Dynamics 365 for Customer Engagement apps web client.
@@ -885,7 +1318,7 @@ declare namespace DevKit {
             /**
              *  Returns information about the current organization settings
              *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
-             * */
+             */
             OrganizationSettings: DevKit.Form.OrganizationSettings;
             /**
              * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients).
@@ -929,12 +1362,12 @@ declare namespace DevKit {
             /**
              * Returns information about the current user settings
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings
-             * */
+             */
             UserSettings: DevKit.Form.UserSettings
             /**
              * Returns the version number of the Dynamics 365 for Customer Engagement apps instance. E.g.: "9.0.0.1103"
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getversion
-             * */
+             */
             Version: string;
             /**
              * Encodes the specified string so that it can be used in an XML attribute.
@@ -1053,133 +1486,133 @@ declare namespace DevKit {
             /**
              * Gets the count of items in the collection.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/getlength
-             * */
+             */
             getLength(): number;
         }
         interface Client {
             /**
             *  Returns a value to indicate which client the script is executing in.
             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#getclient
-            * */
+            */
             ClientName: OptionSet.ClientName;
             /**
             *  Returns a value to indicate the state of the client.
             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#getclientstate
-            * */
+            */
             ClientState: OptionSet.ClientState;
             /**
             *  Returns information about the kind of device the user is using.
             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#getformfactor
-            * */
+            */
             FormFactor: OptionSet.FormFactor;
             /**
             *  Returns information whether the server is online or offline
             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#isoffline
-            * */
+            */
             IsOffline(): boolean;
         }
         interface OrganizationSettings {
             /**
             * Returns attributes and their values as key:value pairs that are available for the organization entity. Additional values will be available as attributes if they are specified as attribute dependencies in the web resource dependency list. The key will be the attribute logical name
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#attributes
-            * */
+            */
             Attributes: Array<DevKit.Core.KeyValueObject>;
             /**
             * Returns the ID of the base currency for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
-            * */
+            */
             BaseCurrencyId: string;
             /**
             * Returns the default country/region code for phone numbers for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#defaultcountrycode
-            * */
+            */
             DefaultCountryCode: string;
             /**
             * Indicates whether the auto-save option is enabled for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#isautosaveenabled
-            * */
+            */
             IsAutoSaveEnabled: boolean;
             /**
             * Returns the preferred language ID for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#languageid
-            * */
+            */
             LanguageId: number;
             /**
             * Returns the ID of the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationid
-            * */
+            */
             OrganizationId: string;
             /**
             * Returns the unique name of the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
-            * */
+            */
             UniqueName: string;
             /**
             * Indicates whether the Skype protocol is used for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
-            * */
+            */
             UseSkypeProtocol: boolean;
         }
         interface UserSettings {
             /**
             * Returns the date formatting information for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
-            * */
+            */
             DateFormattingInfo: DevKit.Core.DateFormattingInfo;
             /**
             * Returns the ID of the default dashboard for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#defaultdashboardid
-            * */
+            */
             DefaultDashboardId: string;
             /**
             * Indicates whether guided help is enabled for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
-            * */
+            */
             IsGuidedHelpEnabled: boolean;
             /**
             * Indicates whether high contrast is enabled for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#ishighcontrastenabled
-            * */
+            */
             IsHighContrastEnabled: boolean;
             /**
             * Indicates whether the language for the current user is a right-to-left (RTL) language
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isrtl
-            * */
+            */
             IsRTL: boolean;
             /**
             * Returns the language ID for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#languageid
-            * */
+            */
             LanguageId: number;
             /**
             * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
-            * */
+            */
             SecurityRolePrivileges: Array<string>;
             /**
             * Returns an array of strings that represent the GUID values of each of the security role that the user is associated with or any teams that the user is associated with
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
-            * */
+            */
             SecurityRoles: Array<string>;
             /**
             * Returns the transaction currency ID for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
-            * */
+            */
             TransactionCurrencyId: string;
             /**
             * Returns the GUID of the SystemUser.Id value for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
-            * */
+            */
             UserId: string;
             /**
             * Returns the name of the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#username
-            * */
+            */
             UserName: string;
             /**
             * Returns the difference in minutes between the local time and Coordinated Universal Time (UTC)
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#gettimezoneoffsetminutes-method
-            * */
+            */
             TimeZoneOffsetMinutes: number;
         }
     }
@@ -1210,6 +1643,7 @@ declare namespace OptionSet {
         /** 2 */
         CRUD
     }
+    /**  */
     enum RollupState {
         /** 0 - Attribute value is yet to be calculated */
         NotCalculated,
@@ -1316,7 +1750,7 @@ declare namespace OptionSet {
         /** collapsed */
         Collapsed
     }
-    /** */
+    /**/
     enum ProcessDisplayState {
         /** expanded */
         Expanded,
