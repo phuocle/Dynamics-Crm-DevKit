@@ -338,12 +338,12 @@ declare namespace Rocket {
         Utility: DevKit.Form.Utility;
         ///** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement. */
         WebApi: DevKit.Form.WebApi;
-        ///**
-        //* Adds a function to be called when the record is saved.
-        //* @param successCallback The function to be executed when the record is saved. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function.
-        //* @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/addonsave
-        //*/
-        //AddOnSave(successCallback: (executionContext: object) => void): void;
+        /**
+        * Adds a function to be called when the record is saved.
+        * @param successCallback The function to be executed when the record is saved. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function.
+        * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/addonsave
+        */
+        AddOnSave(successCallback: (executionContext: any) => void): void;
         ///**
         // *  The Attributes collections of form Account.
         // *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes

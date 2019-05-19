@@ -1,27 +1,28 @@
-﻿declare namespace Rocket {
+﻿/** PL.DynamicsCrm.DevKit for namespace Rocket */
+declare namespace Rocket {
     namespace WebApi {
         class AlternateKey {
             /**
              * WebApiClient AlternateKey
-             * @param property the alternate logical name.
-             * @param value the value query.
+             * @param property the alternate logical name
+             * @param value the value query
              */
             constructor(property: string, value: any);
         }
         class AssociateRequest {
             /** WebApiClient AssociateRequest */
             constructor();
-            /** Name of relation ship to use for associating. */
+            /** Name of relation ship to use for associating */
             relationShip: string;
-            /** Source entity for associating. */
+            /** Source entity for associating */
             source: DevKit.Core.EntityReference;
-            /** Target entity for associating. */
+            /** Target entity for associating */
             target: DevKit.Core.EntityReference;
-            /** Set to false for sending all requests synchronously. True by default. */
+            /** Set to false for sending all requests synchronously. True by default */
             async?: boolean;
             /** Headers to attach to request. Default { key: 'Prefer', value: 'odata.include-annotations='*'' } */
             headers?: Array<DevKit.Core.KeyValueString>;
-            /** Default false, there is support for sending multiple requests as a batch. */
+            /** Default false, there is support for sending multiple requests as a batch */
             asBatch?: boolean;
         }
         class CreateRequest {
@@ -143,7 +144,7 @@
         }
     }
 }
-/** PL.DynamicsCrm.DevKit for d.ts. */
+/** PL.DynamicsCrm.DevKit for d.ts */
 declare namespace DevKit {
     namespace Core {
         interface Window {
@@ -331,7 +332,7 @@ declare namespace DevKit {
         }
         interface KeyValueObject {
             key: string,
-            value: object
+            value: any
         }
         interface KeyValueNumber {
             key: string,
@@ -510,86 +511,6 @@ declare namespace DevKit {
             welcomePageName: string;
         }
     }
-    namespace WebApiClient {
-        interface RetrieveResponse {
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            then(callback: (result: any) => void): CatchRespone;
-            "@odata.context": string;
-            /** Use the value of the @odata.nextLink property to request the next set of records. Don’t change or append any additional system query options to the value. */
-            "@odata.nextLink": string;
-            /** The response @odata.count property will contain the number of entities that match the filter criteria irrespective of an odata.maxpagesize preference limitation. */
-            "@odata.count": number;
-            /** A paging cookie must be requested as an annotation. And a @Microsoft.Dynamics.CRM.fetchxmlpagingcookie property will be returned with the result. */
-            "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": string;
-            /** Set to true if you want retrieve more records. */
-            "@Microsoft.Dynamics.CRM.morerecords": boolean;
-            /** When you set returntotalrecordcount="true" in FetchXml, this value return the count. */
-            "@Microsoft.Dynamics.CRM.totalrecordcount": number;
-            /** The total record count limit exceeded value. */
-            "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": boolean;
-            /** An array object of ODATA value. */
-            value: Array<any>;
-        }
-        interface CatchRespone {
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            catch(callback: (result: any) => void): FinallyRespone;
-        }
-        interface FinallyRespone {
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            finally(callback: (result: any) => void): DoneRespone;
-        }
-        interface DoneRespone {
-            /**
-             * Use with asynchronous request
-             * @param callback the callback for asynchronous request
-             */
-            done(callback: (result: any) => void);
-        }
-        interface UpdateResponse {
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            then(callback: (result: any) => void): CatchRespone;
-        }
-        interface CreateResponse {
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            then(callback: (result: any) => void): CatchRespone;
-        }
-        interface DeleteResponse {
-            /**
-             * Use with asynchronous request.
-             * @param callback the callback for asynchronous request.
-             */
-            then(callback: (result: any) => void): CatchRespone;
-        }
-        interface AssociateResponse {
-            /**
-             * Use with asynchronous request.
-             * @param callback The callback for asynchronous request.
-             */
-            then(callback: (result: any) => void): CatchRespone;
-        }
-        interface DisassociateResponse {
-            /**
-             * Use with asynchronous request.
-             * @param callback The callback for asynchronous request.
-             */
-            then(callback: (result: any) => void): CatchRespone;
-        }
-    }
     namespace WebApi {
         interface OptionSetValue {
             /** The optionset number value. E.g.: 1000000001 */
@@ -708,9 +629,9 @@ declare namespace DevKit {
         }
         interface ExecuteResponse {
             /** Response body. */
-            body?: object;
+            body?: any;
             /** Response headers. */
-            headers: object;
+            headers: any;
             /** Indicates whether the request was successful. */
             ok: boolean;
             /** Numeric value in the response status code.For example: 200 */
@@ -872,7 +793,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/invokeprocessaction
              */
-            InvokeProcessAction(name: string, parameter: any, successCallback: (result: object) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
+            InvokeProcessAction(name: string, parameter: any, successCallback: (result: any) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Returns a boolean value indicating if the Customer Engagement instance is hosted on-premises or online
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/isonpremises
@@ -1049,7 +970,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/retrieverecord
              */
-            RetrieveRecord(entityLogicalName: string, id: string, options: string, successCallback: (result: object) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
+            RetrieveRecord(entityLogicalName: string, id: string, options: string, successCallback: (result: any) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Retrieves a collection of entity records.
              * @param entityLogicalName The entity logical name of the records you want to retrieve. For example: "account".
@@ -1104,25 +1025,25 @@ declare namespace DevKit {
              *  Get one or more objects from the collection depending on the arguments passed.
              *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
              */
-            get(): Array<object>;
+            get(): Array<any>;
             /**
              * Get one or more objects from the collection depending on the arguments passed.
              * @param item The object where the name matches the argument. The objects returned in the formContext.data.process namespace don’t contain names. So, using the string parameter for this method returns no objects.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
              */
-            get(item: string): object;
+            get(item: string): any;
             /**
              * Get one or more objects from the collection depending on the arguments passed.
              * @param index The object where the index matches the number.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
              */
-            get(index: number): object;
+            get(index: number): any;
             /**
              * Get one or more objects from the collection depending on the arguments passed.
              * @param successCallback Any objects that cause the delegate function to return true.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
              */
-            get(successCallback: (item: any, index: number) => void): Array<object>;
+            get(successCallback: (item: any, index: number) => void): Array<any>;
             /**
              * Gets the count of items in the collection.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/getlength
@@ -1257,7 +1178,7 @@ declare namespace DevKit {
         }
     }
 }
-/** PL.DynamicsCrm.DevKit for OptionSet. */
+/** PL.DynamicsCrm.DevKit for namespace OptionSet */
 declare namespace OptionSet {
     namespace WebApi {
         /**  */
@@ -1610,13 +1531,91 @@ declare namespace OptionSet {
         Image
     }
 }
-/** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client. */
+/** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client */
 declare namespace WebApiClient {
+    interface RetrieveResponse {
+        /**
+         * Use with asynchronous request.
+         * @param callback the callback for asynchronous request.
+         */
+        then(callback: (result: any) => void): CatchRespone;
+        "@odata.context": string;
+        /** Use the value of the @odata.nextLink property to request the next set of records. Don’t change or append any additional system query options to the value. */
+        "@odata.nextLink": string;
+        /** The response @odata.count property will contain the number of entities that match the filter criteria irrespective of an odata.maxpagesize preference limitation. */
+        "@odata.count": number;
+        /** A paging cookie must be requested as an annotation. And a @Microsoft.Dynamics.CRM.fetchxmlpagingcookie property will be returned with the result. */
+        "@Microsoft.Dynamics.CRM.fetchxmlpagingcookie": string;
+        /** Set to true if you want retrieve more records. */
+        "@Microsoft.Dynamics.CRM.morerecords": boolean;
+        /** When you set returntotalrecordcount="true" in FetchXml, this value return the count. */
+        "@Microsoft.Dynamics.CRM.totalrecordcount": number;
+        /** The total record count limit exceeded value. */
+        "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": boolean;
+        /** An array object of ODATA value. */
+        value: Array<any>;
+    }
+    interface CatchRespone {
+        /**
+         * Use with asynchronous request.
+         * @param callback the callback for asynchronous request.
+         */
+        catch(callback: (result: any) => void): FinallyRespone;
+    }
+    interface FinallyRespone {
+        /**
+         * Use with asynchronous request.
+         * @param callback the callback for asynchronous request.
+         */
+        finally(callback: (result: any) => void): DoneRespone;
+    }
+    interface DoneRespone {
+        /**
+         * Use with asynchronous request
+         * @param callback the callback for asynchronous request
+         */
+        done(callback: (result: any) => void);
+    }
+    interface UpdateResponse {
+        /**
+         * Use with asynchronous request.
+         * @param callback the callback for asynchronous request.
+         */
+        then(callback: (result: any) => void): CatchRespone;
+    }
+    interface CreateResponse {
+        /**
+         * Use with asynchronous request.
+         * @param callback the callback for asynchronous request.
+         */
+        then(callback: (result: any) => void): CatchRespone;
+    }
+    interface DeleteResponse {
+        /**
+         * Use with asynchronous request.
+         * @param callback the callback for asynchronous request.
+         */
+        then(callback: (result: any) => void): CatchRespone;
+    }
+    interface AssociateResponse {
+        /**
+         * Use with asynchronous request.
+         * @param callback The callback for asynchronous request.
+         */
+        then(callback: (result: any) => void): CatchRespone;
+    }
+    interface DisassociateResponse {
+        /**
+         * Use with asynchronous request.
+         * @param callback The callback for asynchronous request.
+         */
+        then(callback: (result: any) => void): CatchRespone;
+    }
     /**
      * Retrieves records from CRM (async = true).
      * @param request the Rocket.WebApi.RetrieveRequest object.
      */
-    function Retrieve(request: Rocket.WebApi.RetrieveRequest): DevKit.WebApiClient.RetrieveResponse;
+    function Retrieve(request: Rocket.WebApi.RetrieveRequest): RetrieveResponse;
     /**
      * Retrieves records from CRM (async = false).
      * @param request the Rocket.WebApi.RetrieveRequest object.
@@ -1626,7 +1625,7 @@ declare namespace WebApiClient {
      * Creates a given record in CRM (async = true).
      * @param request The Rocket.WebApi.CreateRequest object.
      */
-    function Create(request: Rocket.WebApi.CreateRequest): DevKit.WebApiClient.CreateResponse;
+    function Create(request: Rocket.WebApi.CreateRequest): CreateResponse;
     /**
      * Creates a given record in CRM (async = false).
      * @param request The Rocket.WebApi.CreateRequest object.
@@ -1636,7 +1635,7 @@ declare namespace WebApiClient {
      * Updates a given record in CRM (async = true).
      * @param request the Rocket.WebApi.UpdateRequest object.
      */
-    function Update(request: Rocket.WebApi.UpdateRequest): DevKit.WebApiClient.UpdateResponse;
+    function Update(request: Rocket.WebApi.UpdateRequest): UpdateResponse;
     /**
      * Updates a given record in CRM (async = false).
      * @param request the Rocket.WebApi.UpdateRequest object.
@@ -1646,7 +1645,7 @@ declare namespace WebApiClient {
      * Deletes a given record in CRM (async = true).
      * @param request the Rocket.WebApi.DeleteRequest object.
      */
-    function Delete(request: Rocket.WebApi.DeleteRequest): DevKit.WebApiClient.DeleteResponse;
+    function Delete(request: Rocket.WebApi.DeleteRequest): DeleteResponse;
     /**
      * Deletes a given record in CRM (async = false).
      * @param request the Rocket.WebApi.DeleteRequest object.
@@ -1656,7 +1655,7 @@ declare namespace WebApiClient {
      * Associates given records in CRM (async = true).
      * @param request the Rocket.WebApi.AssociateRequest object.
      */
-    function Associate(request: Rocket.WebApi.AssociateRequest): DevKit.WebApiClient.AssociateResponse;
+    function Associate(request: Rocket.WebApi.AssociateRequest): AssociateResponse;
     /**
      * Associates given records in CRM (async = false).
      * @param request the Rocket.WebApi.AssociateRequest object.
@@ -1666,7 +1665,7 @@ declare namespace WebApiClient {
      * Disassociates given records in CRM (async = true).
      * @param request the Rocket.WebApi.DisassociateRequest object.
      */
-    function Disassociate(request: Rocket.WebApi.DisassociateRequest): DevKit.WebApiClient.DisassociateResponse;
+    function Disassociate(request: Rocket.WebApi.DisassociateRequest): DisassociateResponse;
     /**
      * Disassociates given records in CRM (async = false).
      * @param request the Rocket.WebApi.DisassociateRequest object.
