@@ -160,7 +160,6 @@ declare namespace DevKit {
             /** An error message describing the issue. */
             message: string;
         }
-
         interface EntityReference {
             /** Entity type of the record. */
             entityType: string;
@@ -326,7 +325,6 @@ declare namespace DevKit {
             /** A collection of attribute metadata objects. The object returned depends on the type of attribute metadata. */
             Attributes: Array<EntityBaseAttribute | EntityBooleanAttribute | EntityEnumAttribute | EntityPicklistAttribute | EntityStateAttribute | EntityStatusAttribute>;
         }
-
         interface KeyValueString {
             key: string;
             value: string;
@@ -339,7 +337,6 @@ declare namespace DevKit {
             key: string,
             value: number
         }
-
         interface DialogAlertOption {
             /** The confirm button label.If you do not specify the button label, OK is used as the button label. */
             confirmButtonLabel: string;
@@ -370,7 +367,6 @@ declare namespace DevKit {
             /** Indicates whether the confirm button was clicked to close the dialog. */
             confirmed: boolean;
         }
-
         interface FileData {
             /** Contents of the audio file. */
             fileContent: string;
@@ -391,6 +387,127 @@ declare namespace DevKit {
             allowMultipleFiles: boolean;
             /** Maximum size of the files(s) to be selected.  */
             maximumAllowedFileSize: number;
+        }
+        interface LookupOption {
+            /** Indicates whether the lookup allows more than one item to be selected */
+            allowMultiSelect?: boolean;
+            /** The default entity type to use */
+            defaultEntityType?: string;
+            /** The default view to use */
+            defaultViewId?: string;
+            /** Decides whether to display the most recently used(MRU) item. Available only for Unified Interface */
+            disableMru?: boolean;
+            /** The entity types to display */
+            entityTypes?: Array<string>;
+            /** Used to filter the results */
+            filters?: Array<LookupFilter>;
+            /** Indicates whether the lookup control should show the barcode scanner in mobile clients */
+            showBarcodeScanner?: boolean;
+            /** The views to be available in the view picker. Only system views are supported */
+            viewIds?: Array<string>;
+        }
+        interface LookupFilter {
+            /** The FetchXML filter element to apply. */
+            filterXml: string;
+            /** The entity type to which to apply this filter. */
+            entityLogicalName: string
+        }
+        interface DateFormattingInfo {
+            AMDesignator: string,
+            AbbreviatedDayNames: Array<string>,
+            AbbreviatedMonthGenitiveNames: Array<string>,
+            AbbreviatedMonthNames: Array<string>,
+            CalendarWeekRule: number,
+            Calendar: any,
+            DateSeparator: string,
+            DayNames: Array<string>,
+            FirstDayOfWeek: number,
+            FullDateTimePattern: string,
+            LongDatePattern: string,
+            LongTimePattern: string,
+            MonthDayPattern: string,
+            MonthGenitiveNames: Array<string>,
+            MonthNames: Array<string>,
+            PMDesignator: string,
+            ShortDatePattern: string,
+            ShortTimePattern: string,
+            ShortestDayNames: Array<string>,
+            UniversalSortableDateTimePattern: string,
+            SortableDateTimePattern: string,
+            TimeSeparator: string,
+            YearMonthPattern: string
+        }
+        interface FormOption {
+            /** Indicates whether to display the command bar. If you do not specify this parameter, the command bar is displayed by default. */
+            cmdbar?: boolean;
+            /** Designates a record that will provide default values based on mapped attribute values.  */
+            createFromEntity?: EntityReference;
+            /** ID of the entity record to display the form for. */
+            entityId?: string;
+            /** Logical name of the entity to display the form for. */
+            entityName?: string;
+            /** ID of the form instance to be displayed. */
+            formId?: string;
+            /** Height of the form window to be displayed in pixels. */
+            height?: number;
+            /** Controls whether the navigation bar is displayed and whether application navigation is available using the areas and subareas defined in the sitemap. */
+            navbar?: OptionSet.FormNavBar;
+            /** Indicates whether to display form in a new window. */
+            openInNewWindow?: boolean;
+            /** Specify one of the following values for the window position of the form on the screen. */
+            windowPosition: OptionSet.FormWindowPosition;
+            /**  ID of the business process to be displayed on the form. */
+            processId?: string;
+            /** ID of the business process instance to be displayed on the form. */
+            processInstanceId?: string;
+            /** Define a relationship object to display the related records on the form. */
+            relationship: FormRelationship;
+            /** ID of the selected stage in business process instance. */
+            selectedStageId?: string;
+            /** Indicates whether to open a quick create form. If you do not specify this, by default false is passed. */
+            useQuickCreateForm?: boolean;
+            /**  Width of the form window to be displayed in pixels. */
+            width?: number;
+        }
+        interface FormRelationship {
+            /** Name of the attribute used for relationship. */
+            attributeName: string;
+            /** Name of the relationship. */
+            name: string;
+            /** Name of the navigation property for this relationship. */
+            navigationPropertyName: string;
+            /** Relationship type. */
+            relationshipType: OptionSet.FormRelationshipType;
+            /** Role type in relationship.  */
+            roleType: OptionSet.FormRelationshipRoleType;
+        }
+        interface ImageOption {
+            /**  Indicates whether to edit the image before saving. */
+            allowEdit: boolean;
+            /** Height of the image to capture. */
+            height: number;
+            /** Indicates whether to capture image using the front camera of the device. */
+            preferFrontCamera: boolean;
+            /** Quality of the image file in percentage. */
+            quality: number;
+            /** Width of the image to capture. */
+            width: number;
+        }
+        interface PositionData {
+            /** Contains a set of geographic coordinates along with associated accuracy as well as a set of other optional attributes such as altitude and speed. */
+            coords: any;
+            /** Represents the time when the object was acquired and is represented as DOMTimeStamp. */
+            timestamp: any;
+        }
+        interface AppProperty {
+            appId: string;
+            displayName: string;
+            uniqueName: string;
+            url: string;
+            webResourceId: string;
+            webResourceName: string;
+            welcomePageId: string;
+            welcomePageName: string;
         }
     }
     namespace WebApiClient {
@@ -568,9 +685,42 @@ declare namespace DevKit {
         }
         interface RetrieveMultipleResponse {
             /** An array of JSON objects, where each object represents the retrieved entity record containing attributes and their values as key: value pairs. The Id of the entity record is retrieved by default. */
-            entities: Array<DevKit.Form.KeyValueObject>;
+            entities: Array<DevKit.Core.KeyValueObject>;
             /** If the number of records being retrieved is more than the value specified in the maxPageSize parameter in the request, this attribute returns the URL to return next set of records. */
             nextLink: string;
+        }
+        interface ExecuteRequest {
+            /**
+             * The name of the bound parameter for the action or function to execute. Specify undefined if you are executing a CRUD request. Specify null if the action or function to execute is not bound to any entity. Specify entity in case the action or function to execute is bound to an entity.
+             * */
+            boundParameter?: "entity" | undefined | null;
+            /** Name of the action, function, or one of the following values if you are executing a CRUD request. */
+            operationName?: "Create" | "Retrieve" | "RetrieveMultiple" | "Update" | "Delete" | string;
+            /** Indicates the type of operation you are executing */
+            operationType?: OptionSet.WebApi.OperationType;
+            /** The metadata for parameter types. */
+            parameterTypes: {
+                /**  The metadata for enum types. The object has two string attributes: name and value */
+                enumProperties?: Array<DevKit.Core.KeyValueObject>;
+                /** The category of the parameter type.  */
+                structuralProperty: OptionSet.WebApi.StructuralProperty;
+            }
+        }
+        interface ExecuteResponse {
+            /** Response body. */
+            body?: object;
+            /** Response headers. */
+            headers: object;
+            /** Indicates whether the request was successful. */
+            ok: boolean;
+            /** Numeric value in the response status code.For example: 200 */
+            status: number;
+            /** Description of the response status code.For example: OK */
+            statusText: string;
+            /** Response type */
+            type: "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+            /** Request URL of the action, function, or CRUD request that was sent to the Web API endpoint. */
+            url: string;
         }
         interface ChangeSetRequest {
 
@@ -602,7 +752,6 @@ declare namespace DevKit {
 
             }
         }
-
         interface Utility {
             /**
              * Returns information about the advanced configuration settings for the organization
@@ -617,21 +766,21 @@ declare namespace DevKit {
              * @param errorCallback The function to execute when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getallowedstatustransitions
              */
-            AllowedStatusTransitions(entityName: string, statusCode: number, successCallback?: (statusCodes: Array<number>) => void, errorCallback?: (error: DevKit.Form.Error) => void): void;
+            AllowedStatusTransitions(entityName: string, statusCode: number, successCallback?: (statusCodes: Array<number>) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
             /**
              * Invokes the device camera to scan the barcode information, such as a product number. Note: This method is supported only for the mobile clients.
              * @param successCallback A function to call when the barcode value is returned as a String.
              * @param errorCallback A function to call when the operation fails. An error object with the message property (String) will be passed that describes the error details.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/getbarcodevalue
              */
-            BarcodeValue(successCallback: (result: string) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            BarcodeValue(successCallback: (result: string) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Invokes the device microphone to record audio.
              * @param successCallback A function to call when audio is returned. A base64 encoded audio object attributes is passed to the function.
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/captureaudio
              */
-            CaptureAudio(successCallback: (result: DevKit.Form.FileData) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            CaptureAudio(successCallback: (result: DevKit.Core.FileData) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Invokes the device camera to capture an image. Note: This method is supported only for the mobile clients.
              * @param imageOption The image option.
@@ -639,14 +788,14 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/captureimage
              */
-            CaptureImage(imageOption: DevKit.Form.ImageOption, successCallback: (result: DevKit.Form.FileData) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            CaptureImage(imageOption: DevKit.Core.ImageOption, successCallback: (result: DevKit.Core.FileData) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Invokes the device camera to record video. Note: This method is supported only for the mobile clients.
              * @param successCallback A function to call when Video is returned. A base64 encoded video object attributes is passed to the function.
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/capturevideo
              */
-            CaptureVideo(successCallback: (result: DevKit.Form.FileData) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            CaptureVideo(successCallback: (result: DevKit.Core.FileData) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              *  Provides access to the methods to determine which client is being used, whether the client is connected to the server, and what kind of device is being used.
              *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client
@@ -668,14 +817,14 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappname
              */
-            CurrentAppName(successCallback: (result: string) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            CurrentAppName(successCallback: (result: string) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Returns the properties of the current business app in Customer Engagement
              * @param successCallback A function to call when the business app property information is returned
              * @param errorCallback A function to call when the operation fails
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappproperties
              */
-            CurrentAppProperties(successCallback: (result: DevKit.Form.AppProperty) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            CurrentAppProperties(successCallback: (result: DevKit.Core.AppProperty) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Returns the URL of the current business app in Customer Engagement
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/getcurrentappurl
@@ -687,7 +836,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/getcurrentposition
              */
-            CurrentPosition(successCallback: (result: DevKit.Form.PositionData) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            CurrentPosition(successCallback: (result: DevKit.Core.PositionData) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Returns the entity metadata for the specified entity.
              * @param entityName The logical name of the entity.
@@ -696,7 +845,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getentitymetadata
              */
-            EntityMetadata(entityName: string, attributes?: Array<string>, successCallback?: (result: DevKit.Form.EntityMetadata) => void, errorCallback?: (error: DevKit.Form.Error) => void): void;
+            EntityMetadata(entityName: string, attributes?: Array<string>, successCallback?: (result: DevKit.Core.EntityMetadata) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
             /**
              * Encodes the specified string so that it can be used in an HTML attribute.
              * @param arg String to be encoded.
@@ -723,7 +872,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/invokeprocessaction
              */
-            InvokeProcessAction(name: string, parameter: any, successCallback: (result: object) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            InvokeProcessAction(name: string, parameter: any, successCallback: (result: object) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Returns a boolean value indicating if the Customer Engagement instance is hosted on-premises or online
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/isonpremises
@@ -748,7 +897,7 @@ declare namespace DevKit {
              * @param cancelCallback A function to call when you cancel the lookup control or the operation fails
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/lookupobjects
              */
-            LookupObjects(lookupOption: DevKit.Form.LookupOption, successCallback: (results: Array<DevKit.Core.EntityReference>) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            LookupObjects(lookupOption: DevKit.Core.LookupOption, successCallback: (results: Array<DevKit.Core.EntityReference>) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Displays an alert dialog containing a message and a button.
              * @param alertOption The strings to be used in the alert dialog.
@@ -757,7 +906,7 @@ declare namespace DevKit {
              * @param errorCallback A function to execute when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openalertdialog
              */
-            OpenAlertDialog(alertOption: DevKit.Form.DialogAlertOption, window?: DevKit.Form.Window, successCallback?: (result: string) => void, errorCallback?: (error: DevKit.Form.Error) => void): void;
+            OpenAlertDialog(alertOption: DevKit.Core.DialogAlertOption, window?: DevKit.Core.Window, successCallback?: (result: string) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
             /**
              * Displays a confirmation dialog box containing a message and two buttons.
              * @param confirmOption The strings to be used in the confirmation dialog.
@@ -766,7 +915,7 @@ declare namespace DevKit {
              * @param errorCallback A function to execute when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openconfirmdialog
              */
-            OpenConfirmDialog(confirmOption: DevKit.Form.DialogConfirmOption, window?: DevKit.Form.Window, successCallback?: (result: DevKit.Form.DialogResult) => void, errorCallback?: (error: DevKit.Form.Error) => void): void;
+            OpenConfirmDialog(confirmOption: DevKit.Core.DialogConfirmOption, window?: DevKit.Core.Window, successCallback?: (result: DevKit.Core.DialogResult) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
             /**
              * Displays an error dialog.
              * @param errorOptions An object to specify the options for error dialog.
@@ -774,14 +923,14 @@ declare namespace DevKit {
              * @param errorCallback A function to execute when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openerrordialog
              */
-            OpenErrorDialog(errorOptions: DevKit.Form.DialogError, successCallback: (result: string) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            OpenErrorDialog(errorOptions: DevKit.Core.DialogError, successCallback: (result: string) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Opens a file.
              * @param file An object describing the file to open.
              * @param fileOption An object describing whether to open or save the file.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openfile
              */
-            OpenFile(file: DevKit.Form.FileData, fileOption?: DevKit.Form.FileOption): void;
+            OpenFile(file: DevKit.Core.FileData, fileOption?: DevKit.Core.FileOption): void;
             /**
              * Opens an entity form or a quick create form.
              * @param formOption The open form option for opening the form.
@@ -790,14 +939,14 @@ declare namespace DevKit {
              * @param errorCallback A function to execute when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openform
              */
-            OpenForm(formOption: DevKit.Form.FormOption, formParameters: any, successCallback: (result: DevKit.Core.EntityReference) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            OpenForm(formOption: DevKit.Core.FormOption, formParameters: any, successCallback: (result: DevKit.Core.EntityReference) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Opens a URL, including file URLs.
              * @param url URL to open.
              * @param window Options to open the URL.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openurl
              */
-            OpenUrl(url: string, window?: DevKit.Form.Window): void;
+            OpenUrl(url: string, window?: DevKit.Core.Window): void;
             /**
              * Opens an HTML web resource.
              * @param webResourceName Name of the HTML web resource to open.
@@ -805,7 +954,7 @@ declare namespace DevKit {
              * @param data Data to be passed into the data parameter.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-navigation/openwebresource
              */
-            OpenWebResource(webResourceName: string, window?: DevKit.Form.Window, data?: string): void;
+            OpenWebResource(webResourceName: string, window?: DevKit.Core.Window, data?: string): void;
             /**
              *  Returns information about the current organization settings
              *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings
@@ -818,7 +967,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-device/pickfile
              */
-            PickFile(filePickOption: DevKit.Form.FilePickOption, successCallback: (result: Array<DevKit.Form.FileData>) => void, errorCallback: (error: DevKit.Form.Error) => void): void;
+            PickFile(filePickOption: DevKit.Core.FilePickOption, successCallback: (result: Array<DevKit.Core.FileData>) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Prefixes the current organization's unique name to a string, typically a URL path
              * @param sPath A local path to a resource
@@ -934,7 +1083,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/online/execute
              */
-            Execute(request: ExecuteRequest, successCallback: (result: ExecuteResponse) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
+            Execute(request: DevKit.WebApi.ExecuteRequest, successCallback: (result: DevKit.WebApi.ExecuteResponse) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
              * Execute a collection of action, function, or CRUD operations.
              * @param requests An array of one of object types.
@@ -942,7 +1091,7 @@ declare namespace DevKit {
              * @param errorCallback A function to call when the operation fails.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-webapi/online/executemultiple
              */
-            ExecuteMultiple(requests: Array<ExecuteRequest | ChangeSetRequest>, successCallback: (result: Array<ExecuteResponse>) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
+            ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest | DevKit.WebApi.ChangeSetRequest>, successCallback: (result: Array<DevKit.WebApi.ExecuteResponse>) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
         }
         interface Collections {
             /**
@@ -980,167 +1129,6 @@ declare namespace DevKit {
              * */
             getLength(): number;
         }
-
-        interface ExecuteRequest {
-            /**
-             * The name of the bound parameter for the action or function to execute. Specify undefined if you are executing a CRUD request. Specify null if the action or function to execute is not bound to any entity. Specify entity in case the action or function to execute is bound to an entity.
-             * */
-            boundParameter?: "entity" | undefined | null;
-            /** Name of the action, function, or one of the following values if you are executing a CRUD request. */
-            operationName?: "Create" | "Retrieve" | "RetrieveMultiple" | "Update" | "Delete" | string;
-            /** Indicates the type of operation you are executing */
-            operationType?: OptionSet.WebApi.OperationType;
-            /** The metadata for parameter types. */
-            parameterTypes: {
-                /**  The metadata for enum types. The object has two string attributes: name and value */
-                enumProperties?: Array<DevKit.Form.KeyValueObject>;
-                /** The category of the parameter type.  */
-                structuralProperty: OptionSet.WebApi.StructuralProperty;
-            }
-        }
-        interface ExecuteResponse {
-            /** Response body. */
-            body?: object;
-            /** Response headers. */
-            headers: object;
-            /** Indicates whether the request was successful. */
-            ok: boolean;
-            /** Numeric value in the response status code.For example: 200 */
-            status: number;
-            /** Description of the response status code.For example: OK */
-            statusText: string;
-            /** Response type */
-            type: "" | "arraybuffer" | "blob" | "document" | "json" | "text";
-            /** Request URL of the action, function, or CRUD request that was sent to the Web API endpoint. */
-            url: string;
-        }
-
-        interface FormOption {
-            /** Indicates whether to display the command bar. If you do not specify this parameter, the command bar is displayed by default. */
-            cmdbar?: boolean;
-            /** Designates a record that will provide default values based on mapped attribute values.  */
-            createFromEntity?: EntityReference;
-            /** ID of the entity record to display the form for. */
-            entityId?: string;
-            /** Logical name of the entity to display the form for. */
-            entityName?: string;
-            /** ID of the form instance to be displayed. */
-            formId?: string;
-            /** Height of the form window to be displayed in pixels. */
-            height?: number;
-            /** Controls whether the navigation bar is displayed and whether application navigation is available using the areas and subareas defined in the sitemap. */
-            navbar?: OptionSet.FormNavBar;
-            /** Indicates whether to display form in a new window. */
-            openInNewWindow?: boolean;
-            /** Specify one of the following values for the window position of the form on the screen. */
-            windowPosition: OptionSet.FormWindowPosition;
-            /**  ID of the business process to be displayed on the form. */
-            processId?: string;
-            /** ID of the business process instance to be displayed on the form. */
-            processInstanceId?: string;
-            /** Define a relationship object to display the related records on the form. */
-            relationship: FormRelationship;
-            /** ID of the selected stage in business process instance. */
-            selectedStageId?: string;
-            /** Indicates whether to open a quick create form. If you do not specify this, by default false is passed. */
-            useQuickCreateForm?: boolean;
-            /**  Width of the form window to be displayed in pixels. */
-            width?: number;
-        }
-        interface FormRelationship {
-            /** Name of the attribute used for relationship. */
-            attributeName: string;
-            /** Name of the relationship. */
-            name: string;
-            /** Name of the navigation property for this relationship. */
-            navigationPropertyName: string;
-            /** Relationship type. */
-            relationshipType: OptionSet.FormRelationshipType;
-            /** Role type in relationship.  */
-            roleType: OptionSet.FormRelationshipRoleType;
-        }
-        interface ImageOption {
-            /**  Indicates whether to edit the image before saving. */
-            allowEdit: boolean;
-            /** Height of the image to capture. */
-            height: number;
-            /** Indicates whether to capture image using the front camera of the device. */
-            preferFrontCamera: boolean;
-            /** Quality of the image file in percentage. */
-            quality: number;
-            /** Width of the image to capture. */
-            width: number;
-        }
-
-        interface PositionData {
-            /** Contains a set of geographic coordinates along with associated accuracy as well as a set of other optional attributes such as altitude and speed. */
-            coords: object;
-            /** Represents the time when the object was acquired and is represented as DOMTimeStamp. */
-            timestamp: object;
-        }
-
-        interface LookupOption {
-            /** Indicates whether the lookup allows more than one item to be selected */
-            allowMultiSelect?: boolean;
-            /** The default entity type to use */
-            defaultEntityType?: string;
-            /** The default view to use */
-            defaultViewId?: string;
-            /** Decides whether to display the most recently used(MRU) item. Available only for Unified Interface */
-            disableMru?: boolean;
-            /** The entity types to display */
-            entityTypes?: Array<string>;
-            /** Used to filter the results */
-            filters?: Array<LookupFilter>;
-            /** Indicates whether the lookup control should show the barcode scanner in mobile clients */
-            showBarcodeScanner?: boolean;
-            /** The views to be available in the view picker. Only system views are supported */
-            viewIds?: Array<string>;
-        }
-        interface LookupFilter {
-            /** The FetchXML filter element to apply. */
-            filterXml: string;
-            /** The entity type to which to apply this filter. */
-            entityLogicalName: string
-        }
-
-        interface AppProperty {
-            appId: string;
-            displayName: string;
-            uniqueName: string;
-            url: string;
-            webResourceId: string;
-            webResourceName: string;
-            welcomePageId: string;
-            welcomePageName: string;
-        }
-
-        interface DateFormattingInfo {
-            AMDesignator: string,
-            AbbreviatedDayNames: Array<string>,
-            AbbreviatedMonthGenitiveNames: Array<string>,
-            AbbreviatedMonthNames: Array<string>,
-            CalendarWeekRule: number,
-            Calendar: any,
-            DateSeparator: string,
-            DayNames: Array<string>,
-            FirstDayOfWeek: number,
-            FullDateTimePattern: string,
-            LongDatePattern: string,
-            LongTimePattern: string,
-            MonthDayPattern: string,
-            MonthGenitiveNames: Array<string>,
-            MonthNames: Array<string>,
-            PMDesignator: string,
-            ShortDatePattern: string,
-            ShortTimePattern: string,
-            ShortestDayNames: Array<string>,
-            UniversalSortableDateTimePattern: string,
-            SortableDateTimePattern: string,
-            TimeSeparator: string,
-            YearMonthPattern: string
-        }
-
         interface Client {
             /**
             *  Returns a value to indicate which client the script is executing in.
@@ -1163,13 +1151,12 @@ declare namespace DevKit {
             * */
             IsOffline(): boolean;
         }
-
         interface OrganizationSettings {
             /**
             * Returns attributes and their values as key:value pairs that are available for the organization entity. Additional values will be available as attributes if they are specified as attribute dependencies in the web resource dependency list. The key will be the attribute logical name
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#attributes
             * */
-            Attributes: Array<KeyValueObject>;
+            Attributes: Array<DevKit.Core.KeyValueObject>;
             /**
             * Returns the ID of the base currency for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
@@ -1211,7 +1198,7 @@ declare namespace DevKit {
             * Returns the date formatting information for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#dateformattinginfo
             * */
-            DateFormattingInfo: DateFormattingInfo;
+            DateFormattingInfo: DevKit.Core.DateFormattingInfo;
             /**
             * Returns the ID of the default dashboard for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#defaultdashboardid
