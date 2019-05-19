@@ -1,211 +1,29 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
-	interface ContactOptionSet {
-		RollupState: {
-			/** 0 - Attribute value is yet to be calculated */
-			NotCalculated: number,
-			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-			Calculated: number,
-			/** 2 - Attribute value calculation lead to overflow error */
-			OverflowError: number,
-			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-			OtherError: number,
-			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-			RetryLimitExceeded: number,
-			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-			HierarchicalRecursionLimitReached: number,
-			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-			LoopDetected: number
-		},
-		AccountRoleCode: {
-			/** 1 */
-			Decision_Maker: number,
-			/** 2 */
-			Employee: number,
-			/** 3 */
-			Influencer: number
-		},
-		Address1_AddressTypeCode: {
-			/** 1 */
-			Bill_To: number,
-			/** 2 */
-			Ship_To: number,
-			/** 3 */
-			Primary: number,
-			/** 4 */
-			Other: number
-		},
-		Address1_FreightTermsCode: {
-			/** 1 */
-			FOB: number,
-			/** 2 */
-			No_Charge: number
-		},
-		Address1_ShippingMethodCode: {
-			/** 1 */
-			Airborne: number,
-			/** 2 */
-			DHL: number,
-			/** 3 */
-			FedEx: number,
-			/** 4 */
-			UPS: number,
-			/** 5 */
-			Postal_Mail: number,
-			/** 6 */
-			Full_Load: number,
-			/** 7 */
-			Will_Call: number
-		},
-		Address2_AddressTypeCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address2_FreightTermsCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address2_ShippingMethodCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address3_AddressTypeCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address3_FreightTermsCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address3_ShippingMethodCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		CustomerSizeCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		CustomerTypeCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		EducationCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		FamilyStatusCode: {
-			/** 1 */
-			Single: number,
-			/** 2 */
-			Married: number,
-			/** 3 */
-			Divorced: number,
-			/** 4 */
-			Widowed: number
-		},
-		GenderCode: {
-			/** 1 */
-			Male: number,
-			/** 2 */
-			Female: number
-		},
-		HasChildrenCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		LeadSourceCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		PaymentTermsCode: {
-			/** 1 */
-			Net_30: number,
-			/** 2 */
-			_2_10_Net_30: number,
-			/** 3 */
-			Net_45: number,
-			/** 4 */
-			Net_60: number
-		},
-		PreferredAppointmentDayCode: {
-			/** 0 */
-			Sunday: number,
-			/** 1 */
-			Monday: number,
-			/** 2 */
-			Tuesday: number,
-			/** 3 */
-			Wednesday: number,
-			/** 4 */
-			Thursday: number,
-			/** 5 */
-			Friday: number,
-			/** 6 */
-			Saturday: number
-		},
-		PreferredAppointmentTimeCode: {
-			/** 1 */
-			Morning: number,
-			/** 2 */
-			Afternoon: number,
-			/** 3 */
-			Evening: number
-		},
-		PreferredContactMethodCode: {
-			/** 1 */
-			Any: number,
-			/** 2 */
-			Email: number,
-			/** 3 */
-			Phone: number,
-			/** 4 */
-			Fax: number,
-			/** 5 */
-			Mail: number
-		},
-		ShippingMethodCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		StateCode: {
-			/** 0 */
-			Active: number,
-			/** 1 */
-			Inactive: number
-		},
-		StatusCode: {
-			/** 1 */
-			Active: number,
-			/** 2 */
-			Inactive: number
-		},
-		TerritoryCode: {
-			/** 1 */
-			Default_Value: number
-		}
-	}
 	class ContactApi {
-		constructor(entity?: object);
+		/**
+		* PL.DynamicsCrm.DevKit ContactApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
 		/**
 		 * Get the value of alias
 		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
-		getAliasedValue(alias: string, isMultiOptionSet?: boolean): object;
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
 		/**
 		 * Get the formatted value of alias
 		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity of ODATA */
-		Entity: object;
+		/** The entity object */
+		Entity: any;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
-		/** A collection OptionSet of Contact enttiy */
-		OptionSet: ContactOptionSet;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** ReadOnly - Unique identifier of the account with which the contact is associated. */
@@ -518,9 +336,9 @@ declare namespace Rocket {
 		OnHoldTime: DevKit.WebApi.IntegerValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
 		OwnerId_systemuser: DevKit.WebApi.LookupValue;
-		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the contact. */
 		OwningBusinessUnit: DevKit.WebApi.LookupValue;
@@ -600,6 +418,176 @@ declare namespace Rocket {
 		YomiLastName: DevKit.WebApi.StringValue;
 		/** Type the phonetic spelling of the contact's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact. */
 		YomiMiddleName: DevKit.WebApi.StringValue;
+	}
+}
+declare namespace OptionSet {
+	namespace Contact {
+		enum AccountRoleCode {
+			/** 1 */
+			Decision_Maker,
+			/** 2 */
+			Employee,
+			/** 3 */
+			Influencer
+		}
+		enum Address1_AddressTypeCode {
+			/** 1 */
+			Bill_To,
+			/** 2 */
+			Ship_To,
+			/** 3 */
+			Primary,
+			/** 4 */
+			Other
+		}
+		enum Address1_FreightTermsCode {
+			/** 1 */
+			FOB,
+			/** 2 */
+			No_Charge
+		}
+		enum Address1_ShippingMethodCode {
+			/** 1 */
+			Airborne,
+			/** 2 */
+			DHL,
+			/** 3 */
+			FedEx,
+			/** 4 */
+			UPS,
+			/** 5 */
+			Postal_Mail,
+			/** 6 */
+			Full_Load,
+			/** 7 */
+			Will_Call
+		}
+		enum Address2_AddressTypeCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address2_FreightTermsCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address2_ShippingMethodCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address3_AddressTypeCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address3_FreightTermsCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address3_ShippingMethodCode {
+			/** 1 */
+			Default_Value
+		}
+		enum CustomerSizeCode {
+			/** 1 */
+			Default_Value
+		}
+		enum CustomerTypeCode {
+			/** 1 */
+			Default_Value
+		}
+		enum EducationCode {
+			/** 1 */
+			Default_Value
+		}
+		enum FamilyStatusCode {
+			/** 1 */
+			Single,
+			/** 2 */
+			Married,
+			/** 3 */
+			Divorced,
+			/** 4 */
+			Widowed
+		}
+		enum GenderCode {
+			/** 1 */
+			Male,
+			/** 2 */
+			Female
+		}
+		enum HasChildrenCode {
+			/** 1 */
+			Default_Value
+		}
+		enum LeadSourceCode {
+			/** 1 */
+			Default_Value
+		}
+		enum PaymentTermsCode {
+			/** 1 */
+			Net_30,
+			/** 2 */
+			_2_10_Net_30,
+			/** 3 */
+			Net_45,
+			/** 4 */
+			Net_60
+		}
+		enum PreferredAppointmentDayCode {
+			/** 0 */
+			Sunday,
+			/** 1 */
+			Monday,
+			/** 2 */
+			Tuesday,
+			/** 3 */
+			Wednesday,
+			/** 4 */
+			Thursday,
+			/** 5 */
+			Friday,
+			/** 6 */
+			Saturday
+		}
+		enum PreferredAppointmentTimeCode {
+			/** 1 */
+			Morning,
+			/** 2 */
+			Afternoon,
+			/** 3 */
+			Evening
+		}
+		enum PreferredContactMethodCode {
+			/** 1 */
+			Any,
+			/** 2 */
+			Email,
+			/** 3 */
+			Phone,
+			/** 4 */
+			Fax,
+			/** 5 */
+			Mail
+		}
+		enum ShippingMethodCode {
+			/** 1 */
+			Default_Value
+		}
+		enum StateCode {
+			/** 0 */
+			Active,
+			/** 1 */
+			Inactive
+		}
+		enum StatusCode {
+			/** 1 */
+			Active,
+			/** 2 */
+			Inactive
+		}
+		enum TerritoryCode {
+			/** 1 */
+			Default_Value
+		}
 	}
 }
 //{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

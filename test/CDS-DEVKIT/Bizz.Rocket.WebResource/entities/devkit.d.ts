@@ -618,13 +618,13 @@ declare namespace DevKit {
             /** Name of the action, function, or one of the following values if you are executing a CRUD request. */
             operationName?: "Create" | "Retrieve" | "RetrieveMultiple" | "Update" | "Delete" | string;
             /** Indicates the type of operation you are executing */
-            operationType?: OptionSet.WebApi.OperationType;
+            operationType?: OptionSet.OperationType;
             /** The metadata for parameter types. */
             parameterTypes: {
                 /**  The metadata for enum types. The object has two string attributes: name and value */
                 enumProperties?: Array<DevKit.Core.KeyValueObject>;
                 /** The category of the parameter type.  */
-                structuralProperty: OptionSet.WebApi.StructuralProperty;
+                structuralProperty: OptionSet.StructuralProperty;
             }
         }
         interface ExecuteResponse {
@@ -1180,31 +1180,45 @@ declare namespace DevKit {
 }
 /** PL.DynamicsCrm.DevKit for namespace OptionSet */
 declare namespace OptionSet {
-    namespace WebApi {
-        /**  */
-        enum StructuralProperty {
-            /** 0 */
-            Unknown,
-            /** 1 */
-            PrimitiveType,
-            /** 2 */
-            ComplexType,
-            /** 3 */
-            EnumerationType,
-            /** 4 */
-            Collection,
-            /** 5 */
-            EntityType
-        }
-        /**  */
-        enum OperationType {
-            /** 0 */
-            Action,
-            /** 1 */
-            Function,
-            /** 2 */
-            CRUD
-        }
+    /**  */
+    enum StructuralProperty {
+        /** 0 */
+        Unknown,
+        /** 1 */
+        PrimitiveType,
+        /** 2 */
+        ComplexType,
+        /** 3 */
+        EnumerationType,
+        /** 4 */
+        Collection,
+        /** 5 */
+        EntityType
+    }
+    /**  */
+    enum OperationType {
+        /** 0 */
+        Action,
+        /** 1 */
+        Function,
+        /** 2 */
+        CRUD
+    }
+    enum RollupState {
+        /** 0 - Attribute value is yet to be calculated */
+        NotCalculated,
+        /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+        Calculated,
+        /** 2 - Attribute value calculation lead to overflow error */
+        OverflowError,
+        /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+        OtherError,
+        /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+        RetryLimitExceeded,
+        /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+        HierarchicalRecursionLimitReached,
+        /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+        LoopDetected
     }
     /** Returns information about the kind of device the user is using. */
     enum FormFactor {

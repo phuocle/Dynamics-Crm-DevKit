@@ -1,99 +1,29 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
-	interface devkit_WebApiOptionSet {
-		RollupState: {
-			/** 0 - Attribute value is yet to be calculated */
-			NotCalculated: number,
-			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-			Calculated: number,
-			/** 2 - Attribute value calculation lead to overflow error */
-			OverflowError: number,
-			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-			OtherError: number,
-			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-			RetryLimitExceeded: number,
-			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-			HierarchicalRecursionLimitReached: number,
-			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-			LoopDetected: number
-		},
-		devkit_MultiOptionSetCode: {
-			/** 100000000 */
-			Crm_4: number,
-			/** 100000001 */
-			Crm_2011: number,
-			/** 100000002 */
-			Crm_2013: number,
-			/** 100000003 */
-			Crm_2015: number,
-			/** 100000004 */
-			Crm_2016: number,
-			/** 100000005 */
-			Dynamics_365: number
-		},
-		devkit_SingleOptionSetCode: {
-			/** 100000000 */
-			Crm_4: number,
-			/** 100000001 */
-			Crm_2011: number,
-			/** 100000002 */
-			Crm_2013: number,
-			/** 100000003 */
-			Crm_2015: number,
-			/** 100000004 */
-			Crm_2016: number,
-			/** 100000005 */
-			Dynamics_365: number
-		},
-		devkit_SingleOptionSetCodeCalculated: {
-			/** 100000000 */
-			Crm_4: number,
-			/** 100000001 */
-			Crm_2011: number,
-			/** 100000002 */
-			Crm_2013: number,
-			/** 100000003 */
-			Crm_2015: number,
-			/** 100000004 */
-			Crm_2016: number,
-			/** 100000005 */
-			Dynamics_365: number
-		},
-		statecode: {
-			/** 0 */
-			Active: number,
-			/** 1 */
-			Inactive: number
-		},
-		statuscode: {
-			/** 1 */
-			Active: number,
-			/** 2 */
-			Inactive: number
-		}
-	}
 	class devkit_WebApiApi {
-		constructor(entity?: object);
+		/**
+		* PL.DynamicsCrm.DevKit devkit_WebApiApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
 		/**
 		 * Get the value of alias
 		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
-		getAliasedValue(alias: string, isMultiOptionSet?: boolean): object;
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
 		/**
 		 * Get the formatted value of alias
 		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity of ODATA */
-		Entity: object;
+		/** The entity object */
+		Entity: any;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
-		/** A collection OptionSet of devkit_WebApi enttiy */
-		OptionSet: devkit_WebApiOptionSet;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** ReadOnly - Unique identifier of the user who created the record. */
@@ -198,9 +128,9 @@ declare namespace Rocket {
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
 		OwnerId_systemuser: DevKit.WebApi.LookupValue;
-		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier for the business unit that owns the record */
 		OwningBusinessUnit: DevKit.WebApi.LookupValue;
@@ -220,6 +150,72 @@ declare namespace Rocket {
 		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
 		/** ReadOnly - Version Number */
 		VersionNumber: DevKit.WebApi.BigIntValue;
+	}
+}
+declare namespace OptionSet {
+	namespace devkit_WebApi {
+		enum devkit_MultiOptionSetCode {
+			/** 100000000 */
+			Crm_4,
+			/** 100000001 */
+			Crm_2011,
+			/** 100000002 */
+			Crm_2013,
+			/** 100000003 */
+			Crm_2015,
+			/** 100000004 */
+			Crm_2016,
+			/** 100000005 */
+			Dynamics_365
+		}
+		enum devkit_SingleOptionSetCode {
+			/** 100000000 */
+			Crm_4,
+			/** 100000001 */
+			Crm_2011,
+			/** 100000002 */
+			Crm_2013,
+			/** 100000003 */
+			Crm_2015,
+			/** 100000004 */
+			Crm_2016,
+			/** 100000005 */
+			Dynamics_365
+		}
+		enum devkit_SingleOptionSetCodeCalculated {
+			/** 100000000 */
+			Crm_4,
+			/** 100000001 */
+			Crm_2011,
+			/** 100000002 */
+			Crm_2013,
+			/** 100000003 */
+			Crm_2015,
+			/** 100000004 */
+			Crm_2016,
+			/** 100000005 */
+			Dynamics_365
+		}
+		enum statecode {
+			/** 0 */
+			Active,
+			/** 1 */
+			Inactive
+		}
+		enum statuscode {
+			/** 1 */
+			Active,
+			/** 100000000 */
+			Active_2,
+			/** 100000001 */
+			Active_3,
+			/** 2 */
+			Inactive,
+			/** 100000002 */
+			Inactive_2,
+			/** 100000003 */
+			Inactive_3
+		}
 	}
 }
 //{'JsForm':['WebApi'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

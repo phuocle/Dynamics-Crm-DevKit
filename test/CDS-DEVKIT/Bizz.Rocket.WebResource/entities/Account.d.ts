@@ -1,31 +1,29 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
-    class AccountApi {
-        /**
-         * PL.DynamicsCrm.DevKit AccountApi
-         * @param entity The entity object
-         */
+	class AccountApi {
+		/**
+		* PL.DynamicsCrm.DevKit AccountApi
+		* @param entity The entity object
+		*/
 		constructor(entity?: any);
 		/**
-		 * Get the value of alias.
-		 * @param alias the alias value.
-		 * @param isMultiOptionSet true if the alias is multi optionset.
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
 		/**
-		 * Get the formatted value of alias.
-		 * @param alias the alias value.
-		 * @param isMultiOptionSet true if the alias is multi optionset.
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity object. */
+		/** The entity object */
 		Entity: any;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
-		/** A collection OptionSet of Account enttiy */
-        //OptionSet: AccountOptionSet;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Select a category to indicate whether the customer account is standard or preferred. */
@@ -242,9 +240,9 @@ declare namespace Rocket {
 		OnHoldTime: DevKit.WebApi.IntegerValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
 		OwnerId_systemuser: DevKit.WebApi.LookupValue;
-		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** Select the account's ownership structure, such as public or private. */
 		OwnershipCode: DevKit.WebApi.OptionSetValue;
@@ -326,41 +324,246 @@ declare namespace Rocket {
 		WebSiteURL: DevKit.WebApi.StringValue;
 		/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
 		YomiName: DevKit.WebApi.StringValue;
-    }
-    class FormAccount {
-        /**
-         * PL.DynamicsCrm.DevKit form Account.
-         * @param executionContext the execution context.
-         * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource".
-         */
-        constructor(executionContext: any, defaultWebResourceName?: string);
-        /** Utility functions/methods/objects for Dynamics 365 from. */
-        Utility: DevKit.Form.Utility;
-        ///** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement. */
-        WebApi: DevKit.Form.WebApi;
-        /**
-        * Adds a function to be called when the record is saved.
-        * @param successCallback The function to be executed when the record is saved. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function.
-        * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/addonsave
-        */
-        AddOnSave(successCallback: (executionContext: any) => void): void;
-        ///**
-        // *  The Attributes collections of form Account.
-        // *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes
-        // * */
-        //Attributes: DevKit.Form.Collections;
-        ///** The body of form Account. */
-        ////Body: FormAccountBody;
-    }
+	}
 }
 declare namespace OptionSet {
-    namespace AccountOptionSet {
-        enum AccountCategoryCode {
-            /** 1 */
-            Preferred_Customer,
-            /** 2 */
-            Standard
-        }
-    }
+	namespace Account {
+		enum AccountCategoryCode {
+			/** 1 */
+			Preferred_Customer,
+			/** 2 */
+			Standard
+		}
+		enum AccountClassificationCode {
+			/** 1 */
+			Default_Value
+		}
+		enum AccountRatingCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address1_AddressTypeCode {
+			/** 1 */
+			Bill_To,
+			/** 2 */
+			Ship_To,
+			/** 3 */
+			Primary,
+			/** 4 */
+			Other
+		}
+		enum Address1_FreightTermsCode {
+			/** 1 */
+			FOB,
+			/** 2 */
+			No_Charge
+		}
+		enum Address1_ShippingMethodCode {
+			/** 1 */
+			Airborne,
+			/** 2 */
+			DHL,
+			/** 3 */
+			FedEx,
+			/** 4 */
+			UPS,
+			/** 5 */
+			Postal_Mail,
+			/** 6 */
+			Full_Load,
+			/** 7 */
+			Will_Call
+		}
+		enum Address2_AddressTypeCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address2_FreightTermsCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address2_ShippingMethodCode {
+			/** 1 */
+			Default_Value
+		}
+		enum BusinessTypeCode {
+			/** 1 */
+			Default_Value
+		}
+		enum CustomerSizeCode {
+			/** 1 */
+			Default_Value
+		}
+		enum CustomerTypeCode {
+			/** 1 */
+			Competitor,
+			/** 2 */
+			Consultant,
+			/** 3 */
+			Customer,
+			/** 4 */
+			Investor,
+			/** 5 */
+			Partner,
+			/** 6 */
+			Influencer,
+			/** 7 */
+			Press,
+			/** 8 */
+			Prospect,
+			/** 9 */
+			Reseller,
+			/** 10 */
+			Supplier,
+			/** 11 */
+			Vendor,
+			/** 12 */
+			Other
+		}
+		enum IndustryCode {
+			/** 1 */
+			Accounting,
+			/** 2 */
+			Agriculture_and_Non_petrol_Natural_Resource_Extraction,
+			/** 3 */
+			Broadcasting_Printing_and_Publishing,
+			/** 4 */
+			Brokers,
+			/** 5 */
+			Building_Supply_Retail,
+			/** 6 */
+			Business_Services,
+			/** 7 */
+			Consulting,
+			/** 8 */
+			Consumer_Services,
+			/** 9 */
+			Design_Direction_and_Creative_Management,
+			/** 10 */
+			Distributors_Dispatchers_and_Processors,
+			/** 11 */
+			Doctors_Offices_and_Clinics,
+			/** 12 */
+			Durable_Manufacturing,
+			/** 13 */
+			Eating_and_Drinking_Places,
+			/** 14 */
+			Entertainment_Retail,
+			/** 15 */
+			Equipment_Rental_and_Leasing,
+			/** 16 */
+			Financial,
+			/** 17 */
+			Food_and_Tobacco_Processing,
+			/** 18 */
+			Inbound_Capital_Intensive_Processing,
+			/** 19 */
+			Inbound_Repair_and_Services,
+			/** 20 */
+			Insurance,
+			/** 21 */
+			Legal_Services,
+			/** 22 */
+			Non_Durable_Merchandise_Retail,
+			/** 23 */
+			Outbound_Consumer_Service,
+			/** 24 */
+			Petrochemical_Extraction_and_Distribution,
+			/** 25 */
+			Service_Retail,
+			/** 26 */
+			SIG_Affiliations,
+			/** 27 */
+			Social_Services,
+			/** 28 */
+			Special_Outbound_Trade_Contractors,
+			/** 29 */
+			Specialty_Realty,
+			/** 30 */
+			Transportation,
+			/** 31 */
+			Utility_Creation_and_Distribution,
+			/** 32 */
+			Vehicle_Retail,
+			/** 33 */
+			Wholesale
+		}
+		enum OwnershipCode {
+			/** 1 */
+			Public,
+			/** 2 */
+			Private,
+			/** 3 */
+			Subsidiary,
+			/** 4 */
+			Other
+		}
+		enum PaymentTermsCode {
+			/** 1 */
+			Net_30,
+			/** 2 */
+			_2_10_Net_30,
+			/** 3 */
+			Net_45,
+			/** 4 */
+			Net_60
+		}
+		enum PreferredAppointmentDayCode {
+			/** 0 */
+			Sunday,
+			/** 1 */
+			Monday,
+			/** 2 */
+			Tuesday,
+			/** 3 */
+			Wednesday,
+			/** 4 */
+			Thursday,
+			/** 5 */
+			Friday,
+			/** 6 */
+			Saturday
+		}
+		enum PreferredAppointmentTimeCode {
+			/** 1 */
+			Morning,
+			/** 2 */
+			Afternoon,
+			/** 3 */
+			Evening
+		}
+		enum PreferredContactMethodCode {
+			/** 1 */
+			Any,
+			/** 2 */
+			Email,
+			/** 3 */
+			Phone,
+			/** 4 */
+			Fax,
+			/** 5 */
+			Mail
+		}
+		enum ShippingMethodCode {
+			/** 1 */
+			Default_Value
+		}
+		enum StateCode {
+			/** 0 */
+			Active,
+			/** 1 */
+			Inactive
+		}
+		enum StatusCode {
+			/** 1 */
+			Active,
+			/** 2 */
+			Inactive
+		}
+		enum TerritoryCode {
+			/** 1 */
+			Default_Value
+		}
+	}
 }
 //{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

@@ -1,131 +1,29 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
-	interface EmailOptionSet {
-		RollupState: {
-			/** 0 - Attribute value is yet to be calculated */
-			NotCalculated: number,
-			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-			Calculated: number,
-			/** 2 - Attribute value calculation lead to overflow error */
-			OverflowError: number,
-			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-			OtherError: number,
-			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-			RetryLimitExceeded: number,
-			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-			HierarchicalRecursionLimitReached: number,
-			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-			LoopDetected: number
-		},
-		CorrelationMethod: {
-			/** 0 */
-			None: number,
-			/** 1 */
-			Skipped: number,
-			/** 2 */
-			XHeader: number,
-			/** 3 */
-			InReplyTo: number,
-			/** 4 */
-			TrackingToken: number,
-			/** 5 */
-			ConversationIndex: number,
-			/** 6 */
-			SmartMatching: number,
-			/** 7 */
-			CustomCorrelation: number
-		},
-		DeliveryPriorityCode: {
-			/** 0 */
-			Low: number,
-			/** 1 */
-			Normal: number,
-			/** 2 */
-			High: number
-		},
-		EmailReminderStatus: {
-			/** 0 */
-			NotSet: number,
-			/** 1 */
-			ReminderSet: number,
-			/** 2 */
-			ReminderExpired: number,
-			/** 3 */
-			ReminderInvalid: number
-		},
-		EmailReminderType: {
-			/** 0 */
-			If_I_do_not_receive_a_reply_by: number,
-			/** 1 */
-			If_the_email_is_not_opened_by: number,
-			/** 2 */
-			Remind_me_anyways_at: number
-		},
-		Notifications: {
-			/** 0 */
-			None: number,
-			/** 1 */
-			The_message_was_saved_as_a_Microsoft_Dynamics_365_email_record_but_not_all_the_attachments_could_be_saved_with_it_An_attachment_cannot_be_saved_if_it_is_blocked_or_if_its_file_type_is_invalid: number,
-			/** 2 */
-			Truncated_body: number
-		},
-		PriorityCode: {
-			/** 0 */
-			Low: number,
-			/** 1 */
-			Normal: number,
-			/** 2 */
-			High: number
-		},
-		StateCode: {
-			/** 0 */
-			Open: number,
-			/** 1 */
-			Completed: number,
-			/** 2 */
-			Canceled: number
-		},
-		StatusCode: {
-			/** 1 */
-			Draft: number,
-			/** 2 */
-			Completed: number,
-			/** 3 */
-			Sent: number,
-			/** 4 */
-			Received: number,
-			/** 5 */
-			Canceled: number,
-			/** 6 */
-			Pending_Send: number,
-			/** 7 */
-			Sending: number,
-			/** 8 */
-			Failed: number
-		}
-	}
 	class EmailApi {
-		constructor(entity?: object);
+		/**
+		* PL.DynamicsCrm.DevKit EmailApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
 		/**
 		 * Get the value of alias
 		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
-		getAliasedValue(alias: string, isMultiOptionSet?: boolean): object;
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
 		/**
 		 * Get the formatted value of alias
 		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity of ODATA */
-		Entity: object;
+		/** The entity object */
+		Entity: any;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
-		/** A collection OptionSet of Email enttiy */
-		OptionSet: EmailOptionSet;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** For internal use only. */
@@ -234,9 +132,9 @@ declare namespace Rocket {
 		OpenCount: DevKit.WebApi.IntegerValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
 		OwnerId_systemuser: DevKit.WebApi.LookupValue;
-		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team. */
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** ReadOnly - Unique identifier of the business unit that owns the email activity. */
 		OwningBusinessUnit: DevKit.WebApi.LookupValue;
@@ -321,7 +219,97 @@ declare namespace Rocket {
 		/** ReadOnly - Version number of the email message. */
 		VersionNumber: DevKit.WebApi.BigIntValue;
 		/** The array of object that can cast object to ActivityPartyApi class */
-		ActivityParties: Array<object>;
+		ActivityParties: Array<any>;
+	}
+}
+declare namespace OptionSet {
+	namespace Email {
+		enum CorrelationMethod {
+			/** 0 */
+			None,
+			/** 1 */
+			Skipped,
+			/** 2 */
+			XHeader,
+			/** 3 */
+			InReplyTo,
+			/** 4 */
+			TrackingToken,
+			/** 5 */
+			ConversationIndex,
+			/** 6 */
+			SmartMatching,
+			/** 7 */
+			CustomCorrelation
+		}
+		enum DeliveryPriorityCode {
+			/** 0 */
+			Low,
+			/** 1 */
+			Normal,
+			/** 2 */
+			High
+		}
+		enum EmailReminderStatus {
+			/** 0 */
+			NotSet,
+			/** 1 */
+			ReminderSet,
+			/** 2 */
+			ReminderExpired,
+			/** 3 */
+			ReminderInvalid
+		}
+		enum EmailReminderType {
+			/** 0 */
+			If_I_do_not_receive_a_reply_by,
+			/** 1 */
+			If_the_email_is_not_opened_by,
+			/** 2 */
+			Remind_me_anyways_at
+		}
+		enum Notifications {
+			/** 0 */
+			None,
+			/** 1 */
+			The_message_was_saved_as_a_Microsoft_Dynamics_365_email_record_but_not_all_the_attachments_could_be_saved_with_it_An_attachment_cannot_be_saved_if_it_is_blocked_or_if_its_file_type_is_invalid,
+			/** 2 */
+			Truncated_body
+		}
+		enum PriorityCode {
+			/** 0 */
+			Low,
+			/** 1 */
+			Normal,
+			/** 2 */
+			High
+		}
+		enum StateCode {
+			/** 0 */
+			Open,
+			/** 1 */
+			Completed,
+			/** 2 */
+			Canceled
+		}
+		enum StatusCode {
+			/** 1 */
+			Draft,
+			/** 2 */
+			Completed,
+			/** 3 */
+			Sent,
+			/** 4 */
+			Received,
+			/** 5 */
+			Canceled,
+			/** 6 */
+			Pending_Send,
+			/** 7 */
+			Sending,
+			/** 8 */
+			Failed
+		}
 	}
 }
 //{'JsForm':['Email'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

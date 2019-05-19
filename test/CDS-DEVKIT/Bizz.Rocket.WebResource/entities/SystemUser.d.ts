@@ -1,167 +1,29 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
-	interface SystemUserOptionSet {
-		RollupState: {
-			/** 0 - Attribute value is yet to be calculated */
-			NotCalculated: number,
-			/** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-			Calculated: number,
-			/** 2 - Attribute value calculation lead to overflow error */
-			OverflowError: number,
-			/** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-			OtherError: number,
-			/** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-			RetryLimitExceeded: number,
-			/** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-			HierarchicalRecursionLimitReached: number,
-			/** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-			LoopDetected: number
-		},
-		AccessMode: {
-			/** 0 */
-			Read_Write: number,
-			/** 1 */
-			Administrative: number,
-			/** 2 */
-			Read: number,
-			/** 3 */
-			Support_User: number,
-			/** 4 */
-			Non_interactive: number,
-			/** 5 */
-			Delegated_Admin: number
-		},
-		Address1_AddressTypeCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address1_ShippingMethodCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address2_AddressTypeCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		Address2_ShippingMethodCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		CALType: {
-			/** 0 */
-			Professional: number,
-			/** 1 */
-			Administrative: number,
-			/** 2 */
-			Basic: number,
-			/** 3 */
-			Device_Professional: number,
-			/** 4 */
-			Device_Basic: number,
-			/** 5 */
-			Essential: number,
-			/** 6 */
-			Device_Essential: number,
-			/** 7 */
-			Enterprise: number,
-			/** 8 */
-			Device_Enterprise: number,
-			/** 9 */
-			Sales: number,
-			/** 10 */
-			Service: number,
-			/** 11 */
-			Field_Service: number,
-			/** 12 */
-			Project_Service: number
-		},
-		EmailRouterAccessApproval: {
-			/** 0 */
-			Empty: number,
-			/** 1 */
-			Approved: number,
-			/** 2 */
-			Pending_Approval: number,
-			/** 3 */
-			Rejected: number
-		},
-		IncomingEmailDeliveryMethod: {
-			/** 0 */
-			None: number,
-			/** 1 */
-			Microsoft_Dynamics_365_for_Outlook: number,
-			/** 2 */
-			Server_Side_Synchronization_or_Email_Router: number,
-			/** 3 */
-			Forward_Mailbox: number
-		},
-		InviteStatusCode: {
-			/** 0 */
-			Invitation_Not_Sent: number,
-			/** 1 */
-			Invited: number,
-			/** 2 */
-			Invitation_Near_Expired: number,
-			/** 3 */
-			Invitation_Expired: number,
-			/** 4 */
-			Invitation_Accepted: number,
-			/** 5 */
-			Invitation_Rejected: number,
-			/** 6 */
-			Invitation_Revoked: number
-		},
-		OutgoingEmailDeliveryMethod: {
-			/** 0 */
-			None: number,
-			/** 1 */
-			Microsoft_Dynamics_365_for_Outlook: number,
-			/** 2 */
-			Server_Side_Synchronization_or_Email_Router: number
-		},
-		PreferredAddressCode: {
-			/** 1 */
-			Mailing_Address: number,
-			/** 2 */
-			Other_Address: number
-		},
-		PreferredEmailCode: {
-			/** 1 */
-			Default_Value: number
-		},
-		PreferredPhoneCode: {
-			/** 1 */
-			Main_Phone: number,
-			/** 2 */
-			Other_Phone: number,
-			/** 3 */
-			Home_Phone: number,
-			/** 4 */
-			Mobile_Phone: number
-		}
-	}
 	class SystemUserApi {
-		constructor(entity?: object);
+		/**
+		* PL.DynamicsCrm.DevKit SystemUserApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
 		/**
 		 * Get the value of alias
 		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
-		getAliasedValue(alias: string, isMultiOptionSet?: boolean): object;
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
 		/**
 		 * Get the formatted value of alias
 		 * @param alias the alias value
-		 * @param isMultiOptionSet true if the alias is multi optionset
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
 		 */
 		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
-		/** The entity of ODATA */
-		Entity: object;
+		/** The entity object */
+		Entity: any;
 		/** The entity name */
 		EntityName: string;
 		/** The entity collection name */
 		EntityCollectionName: string;
-		/** A collection OptionSet of SystemUser enttiy */
-		OptionSet: SystemUserOptionSet;
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** Type of user. */
@@ -424,6 +286,132 @@ declare namespace Rocket {
 		YomiLastName: DevKit.WebApi.StringValue;
 		/** Pronunciation of the middle name of the user, written in phonetic hiragana or katakana characters. */
 		YomiMiddleName: DevKit.WebApi.StringValue;
+	}
+}
+declare namespace OptionSet {
+	namespace SystemUser {
+		enum AccessMode {
+			/** 0 */
+			Read_Write,
+			/** 1 */
+			Administrative,
+			/** 2 */
+			Read,
+			/** 3 */
+			Support_User,
+			/** 4 */
+			Non_interactive,
+			/** 5 */
+			Delegated_Admin
+		}
+		enum Address1_AddressTypeCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address1_ShippingMethodCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address2_AddressTypeCode {
+			/** 1 */
+			Default_Value
+		}
+		enum Address2_ShippingMethodCode {
+			/** 1 */
+			Default_Value
+		}
+		enum CALType {
+			/** 0 */
+			Professional,
+			/** 1 */
+			Administrative,
+			/** 2 */
+			Basic,
+			/** 3 */
+			Device_Professional,
+			/** 4 */
+			Device_Basic,
+			/** 5 */
+			Essential,
+			/** 6 */
+			Device_Essential,
+			/** 7 */
+			Enterprise,
+			/** 8 */
+			Device_Enterprise,
+			/** 9 */
+			Sales,
+			/** 10 */
+			Service,
+			/** 11 */
+			Field_Service,
+			/** 12 */
+			Project_Service
+		}
+		enum EmailRouterAccessApproval {
+			/** 0 */
+			Empty,
+			/** 1 */
+			Approved,
+			/** 2 */
+			Pending_Approval,
+			/** 3 */
+			Rejected
+		}
+		enum IncomingEmailDeliveryMethod {
+			/** 0 */
+			None,
+			/** 1 */
+			Microsoft_Dynamics_365_for_Outlook,
+			/** 2 */
+			Server_Side_Synchronization_or_Email_Router,
+			/** 3 */
+			Forward_Mailbox
+		}
+		enum InviteStatusCode {
+			/** 0 */
+			Invitation_Not_Sent,
+			/** 1 */
+			Invited,
+			/** 2 */
+			Invitation_Near_Expired,
+			/** 3 */
+			Invitation_Expired,
+			/** 4 */
+			Invitation_Accepted,
+			/** 5 */
+			Invitation_Rejected,
+			/** 6 */
+			Invitation_Revoked
+		}
+		enum OutgoingEmailDeliveryMethod {
+			/** 0 */
+			None,
+			/** 1 */
+			Microsoft_Dynamics_365_for_Outlook,
+			/** 2 */
+			Server_Side_Synchronization_or_Email_Router
+		}
+		enum PreferredAddressCode {
+			/** 1 */
+			Mailing_Address,
+			/** 2 */
+			Other_Address
+		}
+		enum PreferredEmailCode {
+			/** 1 */
+			Default_Value
+		}
+		enum PreferredPhoneCode {
+			/** 1 */
+			Main_Phone,
+			/** 2 */
+			Other_Phone,
+			/** 3 */
+			Home_Phone,
+			/** 4 */
+			Mobile_Phone
+		}
 	}
 }
 //{'JsForm':['User'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}

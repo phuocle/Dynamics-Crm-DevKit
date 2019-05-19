@@ -197,7 +197,11 @@ var Rocket;
 			},
 			statuscode: {
 				Active: 1,
-				Inactive: 2
+				Active_2: 100000000,
+				Active_3: 100000001,
+				Inactive: 2,
+				Inactive_2: 100000002,
+				Inactive_3: 100000003
 			}
 		};
 		devkit_webapi.OptionSet = optionSet;

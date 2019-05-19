@@ -3,8 +3,7 @@ var formWebApi = (function () {
     function onLoad(executionContext) {
         TestApi();
         TestForm();
-
-
+        OptionSet.
         //var api = new Rocket.AccountApi();
         //api.AccountCategoryCode.Value = api.OptionSet.AccountCategoryCode.Preferred_Customer;
         //api.AccountCategoryCode.Value = OptionSet.AccountOptionSet.AccountCategoryCode.Preferred_Customer
