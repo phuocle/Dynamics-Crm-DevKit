@@ -510,6 +510,12 @@ declare namespace DevKit {
             welcomePageId: string;
             welcomePageName: string;
         }
+        interface SaveOption {
+            /** Specify a value indicating how the save event was initiated */
+            saveMode?: OptionSet.SaveMode;
+            /** Indicate whether to use the Book or Reschedule messages rather than the Create or Update messages. This option is only applicable when used with appointment, recurring appointment, or service activity records */
+            useSchedulingEngine: boolean;
+        }
     }
     namespace WebApi {
         interface OptionSetValue {

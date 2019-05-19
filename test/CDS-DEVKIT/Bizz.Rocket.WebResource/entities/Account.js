@@ -3,7 +3,6 @@ var formWebApi = (function () {
     function onLoad(executionContext) {
         TestApi();
         TestForm();
-        OptionSet.
         //var api = new Rocket.AccountApi();
         //api.AccountCategoryCode.Value = api.OptionSet.AccountCategoryCode.Preferred_Customer;
         //api.AccountCategoryCode.Value = OptionSet.AccountOptionSet.AccountCategoryCode.Preferred_Customer
@@ -198,6 +197,36 @@ var formWebApi = (function () {
     };
     function TestForm() {
         var form = new Rocket.FormAccount("", "");
+        form.AddOnSave(function (executionContext) { });
+        form.Attributes.forEach(function (item, index) { });
+        form.Attributes.get();
+        form.Attributes.get("");
+        form.Attributes.get(0);
+        form.Attributes.get(function (item, index) { });
+        form.Body = "";
+        form.ClearFormNotification("");
+        form.Close();
+        form.Controls.forEach(function (item, index) { });
+        form.Controls.get();
+        form.Controls.get("");
+        form.Controls.get(0);
+        form.Controls.get(function (item, index) { });
+        form.DataXml = "";
+        form.EntityId = "";
+        form.EntityIsDirty = false;
+        form.EntityIsValid = false;
+        form.EntityName = "";
+        form.EntityReference.entityType = "";
+        form.EntityReference.id = "";
+        form.EntityReference.name = "";
+        form.EntitySave(OptionSet.SaveOption.SaveAndClose);
+        form.Footer = "";
+        form.FormId = "";
+        form.FormLabel = "";
+        form.FormNavigate("");
+        form.FormType = OptionSet.FormType.Create;
+        form.Header = "";
+        form.WebApi.
     }
     return {
         OnLoad: onLoad,
