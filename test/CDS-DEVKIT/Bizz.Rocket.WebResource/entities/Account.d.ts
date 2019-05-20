@@ -1,7 +1,8 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
     interface FormAccountHeader {
-
+        OwnerId: DevKit.Form.Controls.ControlLookup;
+        abiz_Revision: DevKit.Form.Controls.ControlString;
     }
     interface FormAccountBody {
 

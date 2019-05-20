@@ -785,32 +785,18 @@ declare namespace DevKit {
         }
     }
     namespace Form {
-        /*
-Standard,                       Boolean,
-Iframe,                         DateTime,
-KbSearch,                       Decimal,
-Lookup,                         Double,
-MultiSelectOptionset,           Integer,
-Notes,                          Lookup,
-OptionSet,                      Memo,
-QuickForm,                      Money,
-SubGrid,                        MultiOptionSet,
-TimerControl,                   OptionSet,
-TimelineWall,                   String
-WebResource
-        */
         namespace Controls {
             interface Control {
                 /**
                  * Returns a string value that represents the type of control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getcontroltype
                  */
-                ControlType: OptionSet.FieldControlType;
+                readonly ControlType: OptionSet.FieldControlType;
                 /**
                  * Returns a string value that represents the type of attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getattributetype
                  */
-                AttributeType: OptionSet.FieldAttributeType;
+                readonly AttributeType: OptionSet.FieldAttributeType;
                 /**
                  * Sets a function to be called when the OnChange event occurs
                  * @param successCallback
@@ -823,48 +809,60 @@ WebResource
                  */
                 FireOnChange(): void;
                 /**
+                 * Sets the focus on the control
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setfocus
+                 */
+                Focus(): void;
+                /**
                  * Returns a string value that represents formatting options for the attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getformat
                  */
-                Format: OptionSet.FieldFormat;
+                readonly Format: OptionSet.FieldFormat;
                 /**
                  * Returns a Boolean value indicating if there are unsaved changes to the attribute value
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getisdirty
                  */
-                IsDirty: boolean;
+                readonly IsDirty: boolean;
                 /**
                  * Returns a string representing the logical name of the attribute
                  * Returns the name assigned to the control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getname
+                 */
+                readonly Name: string;
+                /**
+                 * Returns a string representing the logical name of the attribute
+                 * Returns the name assigned to the control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getname
                  */
-                Name: string;
+                readonly Name2: string;
                 /**
                  * Returns the formContext.data.entity object that is the parent to all attributes
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getparent
                  */
-                AttributeParent: any;
+                readonly AttributeParent: any;
                 /**
                  * Returns a string value indicating whether a value for the attribute is required or recommended
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getrequiredlevel
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setrequiredlevel
                  */
                 RequiredLevel: OptionSet.FieldRequiredLevel;
                 /**
                  * Returns a string indicating when data from the attribute will be submitted when the record is saved
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getsubmitmode
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setsubmitmode
                  */
                 SubmitMode: OptionSet.FieldSubmitMode;
                 /**
                  * Returns a boolean value to indicate whether the value of an attribute is valid
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/isvalid
                  */
-                Valid: boolean;
+                readonly Valid: boolean;
                 /**
                  * Removes a function from the OnChange event hander for an attribute
                  * @param callback Specifies the function to be removed from the OnChange event
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/removeonchange
                  */
-                RemoveOnChange(callback: () => void): void;
+                RemoveOnChange(callback: (executionContext: any) => void): void;
                 /**
                  * Displays an error or recommendation notification for a control, and lets you specify actions to execute based on the notification. When you specify an error type of notification, a red "X" icon appears next to the control. When you specify a recommendation type of notification, an "i" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message, and let you perform the configured action by clicking the Apply button or dismiss the message
                  * @param notification The notification to add
@@ -878,51 +876,61 @@ WebResource
                  */
                 ClearNotification(uniqueId: string): void;
                 /**
+                 * Displays an error message for the control to indicate that data isn’t valid. When this method is used,  a red "X" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message
+                 * @param message The message to display
+                 * @param uniqueId The ID to use to clear this message when using the clearNotification method
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setnotification
+                 */
+                SetNotification(message: string, uniqueId?: string): void;
+                /**
                  * Returns whether the control is disabled
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getdisabled
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setdisabled
                  */
                 Disabled: boolean;
                 /**
                  * Returns the label for the control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getlabel
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setlabel
                  */
                 Label: string;
                 /**
                  * Returns a reference to the section object that contains the control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getparent
                  */
-                ControlParent: any;
-                /**
-                 * Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control. The getValue method is different from the attribute getValue method because the control method retrieves the value from the control as the user is typing in the control as opposed to the attribute getValue method that retrieves the value after the user commits (saves) the field
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvalue
-                 */
-                Value2: string;
+                readonly ControlParent: any;
                 /**
                  * Returns a value that indicates whether the control is currently visible
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvisible
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setvisible
                  */
                 Visible: boolean;
+                /**
+                 * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for an attribute. This function is intended for use when Field Level Security modifies a user’s privileges for a particular attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getuserprivilege
+                 */
+                readonly UserPrivilege: DevKit.Core.FieldUserPrivilege;
             }
-            //----------------------------------------------------------------------------------------------------
             interface ControlDateTime extends Control {
                 /**
                  * Get whether a date control shows the time portion of the date
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getshowtime
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setshowtime
                  */
                 ShowTime: boolean;
             }
-            //----------------------------------------------------------------------------------------------------
             interface Select extends Control {
                 /**
                  * Returns a value that represents the value set for a Boolean, OptionSet or MultiOptionSet attribute when the form is opened
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getinitialvalue
                  */
-                InitialValue: number;
+                readonly InitialValue: number;
             }
             interface ControlBoolean extends Select {
                 /**
                  * Retrieves the data value for an attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
                  */
                 Value: boolean;
             }
@@ -943,25 +951,21 @@ WebResource
                  * Returns an array of option objects representing valid options for an attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getoptions
                  */
-                Options: Array<DevKit.Core.TextValueNumber>;
+                readonly Options: Array<DevKit.Core.TextValueNumber>;
                 /**
                  * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getselectedoption
                  */
-                SelectedOption: DevKit.Core.TextValueNumber;
+                readonly SelectedOption: DevKit.Core.TextValueNumber;
                 /**
                  * Returns a string value of the text for the currently selected option for an optionset or multiselectoptionset attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/gettext
                  */
-                Text: string;
-                /**
-                 * Returns an object with three Boolean properties corresponding to privileges indicating if the user can create, read or update data values for an attribute. This function is intended for use when Field Level Security modifies a user’s privileges for a particular attribute
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getuserprivilege
-                 */
-                UserPrivilege: DevKit.Core.FieldUserPrivilege;
+                readonly Text: string;
                 /**
                  * Retrieves the data value for an attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
                  */
                 Value: number;
                 /**
@@ -988,35 +992,42 @@ WebResource
                  * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getselectedoption
                  */
-                SelectedOption: Array<DevKit.Core.TextValueNumber>
+                readonly SelectedOption: Array<DevKit.Core.TextValueNumber>
                 /**
                  * Retrieves the data value for an attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
                  */
                 Value: Array<number>;
             }
-            //----------------------------------------------------------------------------------------------------
             interface Number extends Control {
                 /**
                  * Returns a number indicating the maximum allowed value for an attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getmax
                  */
-                Max: number;
+                readonly Max: number;
                 /**
                  * Returns a number indicating the minimum allowed value for an attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getmin
                  */
-                Min: number;
+                readonly Min: number;
                 /**
                  * Returns the number of digits allowed to the right of the decimal point
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getprecision
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setprecision
                  */
                 Precision: number;
                 /**
                  * Retrieves the data value for an attribute.
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
                  */
                 Value: number;
+                /**
+                 * Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control. The getValue method is different from the attribute getValue method because the control method retrieves the value from the control as the user is typing in the control as opposed to the attribute getValue method that retrieves the value after the user commits (saves) the field
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvalue
+                 */
+                Value2: string;
             }
             interface ControlInteger extends Number {
 
@@ -1030,33 +1041,38 @@ WebResource
             interface ControlMoney extends Number {
 
             }
-            //----------------------------------------------------------------------------------------------------
             interface Text extends Control {
                 /**
                  *
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getmaxlength
                  */
-                MaxLength: number;
+                readonly MaxLength: number;
                 /**
                  * Retrieves the data value for an attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
                  */
                 Value: string;
+                /**
+                 * Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control. The getValue method is different from the attribute getValue method because the control method retrieves the value from the control as the user is typing in the control as opposed to the attribute getValue method that retrieves the value after the user commits (saves) the field
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvalue
+                 */
+                Value2: string;
             }
             interface ControlString extends Text {
             }
             interface ControlMemo extends Text {
             }
-            //----------------------------------------------------------------------------------------------------
             interface ControlLookup extends Control {
                 /**
                  * Returns a Boolean value indicating whether the lookup represents a partylist lookup. Partylist lookups allow for multiple records to be set, such as the To: field for an email entity record
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getispartylist
                  */
-                IsPartyList: boolean;
+                readonly IsPartyList: boolean;
                 /**
                  * Retrieves the data value for an attribute.
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
                  */
                 Value: Array<DevKit.Core.EntityReference>;
                 /**
@@ -1086,11 +1102,13 @@ WebResource
                 /**
                  * Returns the ID value of the default lookup dialog view
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getdefaultview
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setdefaultview
                  */
                 DefaultView: string;
                 /**
                  * Gets the types of entities allowed in the lookup control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getentitytypes
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setentitytypes
                  */
                 EntityTypes: Array<string>;
                 /**
@@ -1100,7 +1118,6 @@ WebResource
                  */
                 RemovePreSearch(callback: (executionContext: any) => void): void;
             }
-            //----------------------------------------------------------------------------------------------------
             interface ControlKnowledge extends Control {
                 /**
                  * Adds an event handler to the PostSearch event
@@ -1123,13 +1140,14 @@ WebResource
                 /**
                  * Gets the text used as the search criteria for the knowledge base management control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getsearchquery
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setsearchquery
                  */
                 SearchQuery: string;
                 /**
                  * Gets the count of results found in the search control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/gettotalresultcount
                  */
-                TotalResultCount: number;
+                readonly TotalResultCount: number;
                 /**
                  * Opens a search result in the search control by specifying the result number
                  * @param resultNumber Numerical value specifying the result number to be opened. Result number starts from 1
@@ -1155,61 +1173,56 @@ WebResource
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removeonselection
                  */
                 RemoveOnSelection(callback: () => void): void;
-
-
-
             }
-
-            //----------------------------------------------------------------------------------------------------
             interface ControlWebResource extends Control {
                 /**
                  * Returns the value of the data query string parameter passed to a Silverlight web resource
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getdata
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setdata
                  */
                 Data: string;
                 /**
                  * Returns the object in the form that represents an IFRAME or web resource
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getobject
                  */
-                Object: any;
+                readonly Object: any;
                 /**
                  * Returns the current URL being displayed in an IFRAME or web resource
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getsrc
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setsrc
                  */
                 Src: string;
             }
-            //----------------------------------------------------------------------------------------------------
             interface ControlIFrame extends Control {
                 /**
                  * Returns the default URL that an IFRAME control is configured to display
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getinitialurl
                  **/
-                InitialUrl: string;
+                readonly InitialUrl: string;
                 /**
                 * Returns the object in the form that represents an IFRAME or web resource
                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getobject
                 */
-                Object: any;
+                readonly Object: any;
                 /**
                  * Returns the current URL being displayed in an IFRAME or web resource
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getsrc
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setsrc
                  */
                 Src: string;
             }
-            //----------------------------------------------------------------------------------------------------
             interface ControlTimer extends Control {
                 /**
                  * Returns the state of the timer control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getstate
                  */
-                State: number;
+                readonly State: number;
                 /**
                  * Refreshes the data displayed in a timelinewall and timer control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/refresh
                  */
                 Refresh(): void;
             }
-            //----------------------------------------------------------------------------------------------------
             interface ControlTimelineWall extends Control {
                 /**
                  * Refreshes the data displayed in a timelinewall and timer control

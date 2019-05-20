@@ -1,4 +1,5 @@
-﻿///<reference path='Account.d.ts' />
+﻿//@ts-check
+///<reference path='Account.d.ts' />
 var formWebApi = (function () {
     function onLoad(executionContext) {
         TestApi();
@@ -225,8 +226,61 @@ var formWebApi = (function () {
         form.FormLabel = "";
         form.FormNavigate("");
         form.FormType = OptionSet.FormType.Create;
-        form.Header = "";
-        form.WebApi.
+
+        //BEGIN LOOKUP
+        form.Header.OwnerId.AddCustomFilter("", "");
+        form.Header.OwnerId.AddCustomView("", "", "", "", "", false);
+        form.Header.OwnerId.AddNotification("");//CHANGE !!!!
+        form.Header.OwnerId.AddOnChange(function (a) { });
+        form.Header.OwnerId.AddPreSearch(function (a) { });
+        //form.Header.OwnerId.AttributeParent
+        form.Header.OwnerId.AttributeType = OptionSet.FieldAttributeType.Boolean;
+        form.Header.OwnerId.ClearNotification("");
+        //form.Header.OwnerId.ControlParent
+        form.Header.OwnerId.ControlParent = OptionSet.FieldControlType.Iframe;
+        form.Header.OwnerId.DefaultView = "";
+        form.Header.OwnerId.Disabled = false;
+        //form.Header.OwnerId.EntityTypes
+        form.Header.OwnerId.FireOnChange();
+        form.Header.OwnerId.Focus();
+        form.Header.OwnerId.Format = OptionSet.FieldFormat.Date;
+        form.Header.OwnerId.IsDirty = false;
+        form.Header.OwnerId.IsPartyList = false;
+        form.Header.OwnerId.Label = "";
+        form.Header.OwnerId.Name = "";
+        form.Header.OwnerId.RemoveOnChange(function (a) { });
+        form.Header.OwnerId.RemovePreSearch(function (a) { });
+        form.Header.OwnerId.RequiredLevel = OptionSet.FieldRequiredLevel.None;
+        form.Header.OwnerId.SetNotification("", "");
+        form.Header.OwnerId.SubmitMode = OptionSet.FieldSubmitMode.Always;
+        //form.Header.OwnerId.UserPrivilege
+        form.Header.OwnerId.Valid = false;
+        //form.Header.OwnerId.Value[0].id
+        form.Header.OwnerId.Visible = false;
+        //END LOOKUP
+
+        //BEGIN STRING
+        form.Header.abiz_Revision.AddNotification(null)//CHANGE !!!!
+        form.Header.abiz_Revision.AddOnChange(function (a) { });
+        //form.Header.abiz_Revision.AttributeParent
+        form.Header.abiz_Revision.AttributeType = OptionSet.FieldAttributeType.Boolean;
+        form.Header.abiz_Revision.ClearNotification("");
+        //form.Header.abiz_Revision.ControlParent
+        form.Header.abiz_Revision.ControlType = OptionSet.FieldControlType.Iframe;
+        form.Header.abiz_Revision.Disabled = false;
+        form.Header.abiz_Revision.FireOnChange();
+        form.Header.abiz_Revision.Focus();
+        form.Header.abiz_Revision.Format = OptionSet.FieldFormat.Date;
+        form.Header.abiz_Revision.IsDirty = false;
+        form.Header.abiz_Revision.Label = "";
+        form.Header.abiz_Revision.MaxLength = 0;
+        form.Header.abiz_Revision.Name = "";
+        form.Header.abiz_Revision.RemoveOnChange(function (a) { });
+        form.Header.abiz_Revision.Value2 = "";//CHANGE !!!
+
+        form.Header.abiz_Revision.ControlType = "";
+
+        //END STRING
     }
     return {
         OnLoad: onLoad,
