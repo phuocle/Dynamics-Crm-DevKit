@@ -18,6 +18,127 @@ declare namespace Rocket {
     interface FormAccountComposite {
 
     }
+    interface FormAccountProcess {
+        /**
+         * Progresses to the next stage. You can also move to a next stage in a different entity
+         * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/navigation/movenext
+         */
+        MoveNext(callback: (result: "success" | "crossEntity" | "end" | "invalid" | "dirtyForm") => void): void;
+        /**
+         * Moves to the previous stage. You can also move to a previous stage in a different entity
+         * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/navigation/moveprevious
+         */
+        MovePrevious(callback: (result: "success" | "crossEntity" | "beginning" | "invalid" | "dirtyForm") => void): void;
+        /**
+         * Gets a collection of stages currently in the active path with methods to interact with the stages displayed in the business process flow control. The active path represents stages currently rendered in the process control based on the branching rules and current data in the record
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activepath/getactivepath
+         */
+        ActivePath: DevKit.Form.Collections;
+        /**
+         * Asynchronously retrieves the business process flows enabled for an entity that the current user can switch to
+         * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user’s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getenabledprocesses
+         */
+        EnabledProcesses(callback: (result: Array<any>) => void): void;
+        /**
+         * Returns representing the active stage
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activestage/getactivestage
+         */
+        ActiveStage: DevKit.Core.ProcessStage;
+        /**
+         * Gets the currently selected stage
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getselectedstage
+         */
+        SelectedStage: DevKit.Core.ProcessStage;
+        /**
+         * Sets a completed stage as the active stage
+         * @param stageId The ID of the completed stage for the entity to make the active stage
+         * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activestage/setactivestage
+         */
+        SetActiveStage(stageId: string, callback: (result: "success" | "invalid" | "unreachable" | "dirtyForm") => void): void;
+        /**
+         * Returns all the process instances for the entity record that the calling user has access to.
+         * @param callback The callback function is passed an object with the following attributes and their corresponding values as the key:value pair. All returned values are of string type except for CreatedOnDate
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getprocessinstances
+         */
+        ProcessInstances(callback: (result: Array<DevKit.Core.ProcessInstance>) => void): void;
+        /**
+         * Sets a process instance as the active instance
+         * @param processInstanceId The Id of the process instance to set as the active instance
+         * @param callback A function to call when the operation is complete
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/setactiveprocessinstance
+         */
+        SetActiveProcessInstance(processInstanceId: string, callback: (result: "success" | "invalid") => void): void;
+        /**
+         * Returns a Process object representing the active process
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
+         */
+        ActiveProcess: DevKit.Core.ProcessStep;
+        /**
+         * Sets a Process as the active process. If there is an active instance of the process, the entity record is loaded with the process instance ID. If there is no active instance of the process, a new process instance is created and the entity record is loaded with the process instance ID. If there are multiple instances of the current process, the record is loaded with the first instance of the active process as per the defaulting logic, that is the most recently used process instance per user
+         * @param processId The Id of the process to set as the active process
+         * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate whether the operation succeeded
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activeprocess/setactiveprocess
+         */
+        SetActiveProcess(processId: string, callback: (result: "success" | "invalid") => void): void;
+        /**
+         * Adds a function as an event handler for the OnProcessStatusChange event so that it will be called when the business process flow status changes
+         * @param callback The function to be executed when the business process flow status changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonprocessstatuschange
+         */
+        AddOnProcessStatusChange(callback: (executionContext: any) => void): void;
+        /**
+         * Removes an event handler from the OnProcessStatusChange event
+         * @param callback The function to be removed from the OnProcessStatusChange event
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
+         */
+        RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
+        /**
+         * Adds a function as an event handler for the OnStageChange event so that it will be called when the business process flow stage changes
+         * @param callback The function to be executed when the business process flow stage changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonstagechange
+         */
+        AddOnStageChange(callback: (executionContext: any) => void): void;
+        /**
+         * Removes an event handler from the OnStageChange event
+         * @param callback The function to be removed from the OnStageChange event
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
+         */
+        RemoveOnStageChange(callback: (executionContext: any) => void): void;
+        /**
+         * Adds a function as an event handler for the OnStageSelected event so that it will be called when a business process flow stage is selected
+         * @param callback The function to be executed when the business process flow stage is selected. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonstageselected
+         */
+        AddOnStageSelected(callback: (executionContext: any) => void): void;
+        /**
+         * Removes an event handler from the OnStageSelected event
+         * @param callback The function to be removed from the OnStageSelected event
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
+         */
+        RemoveOnStageSelected(callback: (executionContext: any) => void): void;
+        /**
+         * Retrieves the display state for the business process control
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/getdisplaystate
+         */
+        DisplayState: OptionSet.ProcessDisplayState;
+        /**
+         * Returns a value indicating whether the business process control is visible
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/getvisible
+         */
+        Visible: boolean;
+        /**
+         * Reflows the UI of the business process control
+         * @param updateUI Specify true to update the UI of the process control; false otherwise
+         * @param parentStage Specify the ID of the parent stage in the GUID format
+         * @param nextStage Specify the ID of the next stage in the GUID format
+         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/reflow
+         */
+        Reflow(updateUI: boolean, parentStage: string, nextStage: string): void;
+    }
     class FormAccount {
         /**
          * PL.DynamicsCrm.DevKit form Account
@@ -41,6 +162,8 @@ declare namespace Rocket {
         QuickForm: FormAccountQuickForm;
         /** The Composite of form Account */
         Composite: FormAccountComposite;
+        /** The Process of form Account */
+        Process: FormAccountProcess;
         /**
         * Adds a function to be called when the record is saved
         * @param successCallback The function to be executed when the record is saved. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function

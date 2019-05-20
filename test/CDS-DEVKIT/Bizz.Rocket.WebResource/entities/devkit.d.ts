@@ -541,6 +541,112 @@ declare namespace DevKit {
             /** Array of functions. The corresponding actions for the message */
             actions: Array<any>;
         }
+        interface ProcessStage {
+            /**
+             * Returns the integer value of the business process flow category
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getcategory
+             */
+            Category: OptionSet.ProcessCategory;
+            /**
+             * Returns the logical name of the entity associated with the stage
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getentityname
+             */
+            EntityName: String;
+            /**
+             * Returns the unique identifier of the stage
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getid
+             */
+            Id: string;
+            /**
+             * Returns the name of the stage
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getname
+             */
+            Name: string;
+            /**
+             * Returns the status of the stage
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getstatus
+             */
+            Status: "active" | "inactive";
+            /**
+             * Returns a navigation behavior object for a stage that can be used to define whether the Create button is available for users to create other entity record in a cross-entity business process flow navigation scenario. This method is available only for Unified Interface
+             * @param callback The function to execute
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getnavigationbehavior
+             */
+            NavigationBehavior(callback: () => void): void;
+            /**
+             * Returns a collection of steps in the stage
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getsteps
+             */
+            Steps: Array<ProcessStep>;
+        }
+        interface ProcessStep {
+            /**
+             * Returns the logical name of the attribute associated to the step
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/step/getattribute
+             */
+            Attribute: string;
+            /**
+             * Returns the name of the step
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/step/getname
+             */
+            Name: string;
+            /**
+             * Returns the progress of the action step. This method is supported only for the action steps; not for the data steps. Action steps are buttons on the business process stages that users can click to trigger an on-demand workflow or action. Action step is a preview feature introduced in the Dynamics 365 for Customer Engagement apps version 9.0 release
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/step/getprogress
+             */
+            Progress: OptionSet.ProcessProgress;
+            /**
+             * Returns a boolean value indicating whether the step is required in the business process flow
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/step/isrequired
+             * */
+            Required: boolean;
+            /**
+             * Updates the progress of the action step. This method is supported only for the action steps. Action steps are buttons on the business process stages that users can click to trigger an on-demand workflow or action. Action step is a preview feature introduced in the Dynamics 365 for Customer Engagement apps version 9.0 release
+             * @param stepProgress Specify the step progress
+             * @param message An optional message that is set as the Alt text on the icon for the step
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/step/setprogress
+             */
+            SetProgress(stepProgress: OptionSet.ProcessProgress, message?: string): void;
+        }
+        interface ProcessInstance {
+            /**
+             * Returns the unique identifier of the process instance
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/instance/getinstanceid
+             */
+            InstanceId: string;
+            /**
+             * Returns the name of the process instance
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/instance/getinstancename
+             */
+            InstanceName: string;
+            /**
+             * Returns the current status of the process instance
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/instance/getstatus
+             */
+            Status: OptionSet.ProcessStatus;
+        }
+        interface ProcessProcess {
+            /**
+             * Returns the unique identifier of the process
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/getid
+             */
+            Id: string;
+            /**
+             * Returns the name of the process
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/getname
+             */
+            Name: string;
+            /**
+             * Returns a boolean value indicating whether the process is rendered
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/isrendered
+             */
+            Rendered: boolean;
+            /**
+             * Returns a collection of stages in the process
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/getstages
+             */
+            Stages: Array<ProcessStage>;
+        }
     }
     namespace WebApi {
         interface OptionSetValue {
@@ -1890,6 +1996,19 @@ declare namespace OptionSet {
         Aborted,
         /** finished */
         Finished
+    }
+    /** The progress of the action step */
+    enum ProcessProgress {
+        /** 0 */
+        None,
+        /** 1 */
+        Processing,
+        /** 2 */
+        Completed,
+        /** 3 */
+        Failure,
+        /** 4 */
+        Invalid
     }
     /** The state of the timer control - This method is only supported for Unified Interface */
     enum TimerState {
