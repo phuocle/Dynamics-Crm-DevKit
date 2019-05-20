@@ -169,7 +169,7 @@ declare namespace DevKit {
             /** Name of the record. */
             name?: string;
         }
-        interface EntityBaseAttribute {
+        interface IEntityBaseAttribute {
             /** Type of an attribute. */
             AttributeType: number;
             /** Display name for the attribute. */
@@ -179,23 +179,23 @@ declare namespace DevKit {
             /** Logical name for the attribute. */
             LogicalName: string;
         }
-        interface EntityBooleanAttribute extends EntityBaseAttribute {
+        interface EntityBooleanAttribute extends IEntityBaseAttribute {
             /** Default value for a Boolean option set. */
             DefaultFormValue: boolean;
             /** Options for the boolean attribute where each option is a key: value pair. */
             OptionSet: Array<KeyValueNumber>;
         }
-        interface EntityEnumAttribute extends EntityBaseAttribute {
+        interface EntityEnumAttribute extends IEntityBaseAttribute {
             /** Options for the boolean attribute where each option is a key: value pair. */
             OptionSet: Array<KeyValueNumber>;
         }
-        interface EntityPicklistAttribute extends EntityBaseAttribute {
+        interface EntityPicklistAttribute extends IEntityBaseAttribute {
             /** Default value for a Number option set. */
             DefaultFormValue: number;
             /** Options for the boolean attribute where each option is a key: value pair. */
             OptionSet: Array<KeyValueNumber>;
         }
-        interface EntityStateAttribute extends EntityBaseAttribute {
+        interface EntityStateAttribute extends IEntityBaseAttribute {
             /** Options for the boolean attribute where each option is a key: value pair. */
             OptionSet: Array<KeyValueNumber>;
             /**
@@ -209,7 +209,7 @@ declare namespace DevKit {
              */
             getStatusValuesForState(arg: number): Array<number>;
         }
-        interface EntityStatusAttribute extends EntityBaseAttribute {
+        interface EntityStatusAttribute extends IEntityBaseAttribute {
             /** Options for the boolean attribute where each option is a key: value pair. */
             OptionSet: Array<KeyValueNumber>;
             /**
@@ -324,7 +324,7 @@ declare namespace DevKit {
             /** The privilege metadata for the entity where each object contains the following attributes to define the security privilege for access to an entity */
             Privileges: Array<EntityPrivilege>;
             /** A collection of attribute metadata objects. The object returned depends on the type of attribute metadata. */
-            Attributes: Array<EntityBaseAttribute | EntityBooleanAttribute | EntityEnumAttribute | EntityPicklistAttribute | EntityStateAttribute | EntityStatusAttribute>;
+            Attributes: Array<IEntityBaseAttribute | EntityBooleanAttribute | EntityEnumAttribute | EntityPicklistAttribute | EntityStateAttribute | EntityStatusAttribute>;
         }
         interface KeyValueString {
             key: string;
@@ -786,7 +786,7 @@ declare namespace DevKit {
     }
     namespace Form {
         namespace Controls {
-            interface Control {
+            interface IControl {
                 /**
                  * Returns a string value that represents the type of control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getcontroltype
@@ -911,22 +911,14 @@ declare namespace DevKit {
                  */
                 readonly UserPrivilege: DevKit.Core.FieldUserPrivilege;
             }
-            interface ControlDateTime extends Control {
-                /**
-                 * Get whether a date control shows the time portion of the date
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getshowtime
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setshowtime
-                 */
-                ShowTime: boolean;
-            }
-            interface Select extends Control {
+            interface IControlBase extends IControl {
                 /**
                  * Returns a value that represents the value set for a Boolean, OptionSet or MultiOptionSet attribute when the form is opened
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getinitialvalue
                  */
                 readonly InitialValue: number;
             }
-            interface ControlBoolean extends Select {
+            interface ControlBoolean extends IControlBase {
                 /**
                  * Retrieves the data value for an attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
@@ -934,7 +926,7 @@ declare namespace DevKit {
                  */
                 Value: boolean;
             }
-            interface ControlOptionSet extends Select {
+            interface IControlSelect extends IControlBase {
                 /**
                  * Returns an option object with the value matching the argument (label or enumeration value) passed to the method
                  * @param label The label of the option
@@ -953,21 +945,10 @@ declare namespace DevKit {
                  */
                 readonly Options: Array<DevKit.Core.TextValueNumber>;
                 /**
-                 * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getselectedoption
-                 */
-                readonly SelectedOption: DevKit.Core.TextValueNumber;
-                /**
                  * Returns a string value of the text for the currently selected option for an optionset or multiselectoptionset attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/gettext
                  */
                 readonly Text: string;
-                /**
-                 * Retrieves the data value for an attribute
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
-                 */
-                Value: number;
                 /**
                  * Adds an option to a control
                  * @param option The option to add
@@ -987,7 +968,19 @@ declare namespace DevKit {
                  */
                 RemoveOption(value: number): void;
             }
-            interface ControlMultiOptionSet extends ControlOptionSet {
+            interface ControlOptionSet extends IControlSelect {
+                /**
+                 * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getselectedoption
+                 */
+                readonly SelectedOption: DevKit.Core.TextValueNumber;
+                /**
+                 * Retrieves the data value for an attribute
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
+                 */
+                Value: number;            }
+            interface ControlMultiOptionSet extends IControlSelect {
                 /**
                  * Returns the option object or an array of option objects selected in an optionset or multiselectoptionset attribute respectively
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getselectedoption
@@ -1000,7 +993,7 @@ declare namespace DevKit {
                  */
                 Value: Array<number>;
             }
-            interface Number extends Control {
+            interface IControlNumber extends IControl {
                 /**
                  * Returns a number indicating the maximum allowed value for an attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getmax
@@ -1029,19 +1022,19 @@ declare namespace DevKit {
                  */
                 Value2: string;
             }
-            interface ControlInteger extends Number {
+            interface ControlInteger extends IControlNumber {
 
             }
-            interface ControlDecimal extends Number {
+            interface ControlDecimal extends IControlNumber {
 
             }
-            interface ControlDouble extends Number {
+            interface ControlDouble extends IControlNumber {
 
             }
-            interface ControlMoney extends Number {
+            interface ControlMoney extends IControlNumber {
 
             }
-            interface Text extends Control {
+            interface IControlText extends IControl {
                 /**
                  *
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getmaxlength
@@ -1059,11 +1052,19 @@ declare namespace DevKit {
                  */
                 Value2: string;
             }
-            interface ControlString extends Text {
+            interface ControlString extends IControlText {
             }
-            interface ControlMemo extends Text {
+            interface ControlMemo extends IControlText {
             }
-            interface ControlLookup extends Control {
+            interface ControlDateTime extends IControl {
+                /**
+                 * Get whether a date control shows the time portion of the date
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getshowtime
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setshowtime
+                 */
+                ShowTime: boolean;
+            }
+            interface ControlLookup extends IControl {
                 /**
                  * Returns a Boolean value indicating whether the lookup represents a partylist lookup. Partylist lookups allow for multiple records to be set, such as the To: field for an email entity record
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getispartylist
@@ -1118,7 +1119,7 @@ declare namespace DevKit {
                  */
                 RemovePreSearch(callback: (executionContext: any) => void): void;
             }
-            interface ControlKnowledge extends Control {
+            interface ControlKnowledge extends IControl {
                 /**
                  * Adds an event handler to the PostSearch event
                  * @param callback The function to add to the PostSearch event. The execution context is automatically passed as the first parameter to this function
@@ -1174,7 +1175,7 @@ declare namespace DevKit {
                  */
                 RemoveOnSelection(callback: () => void): void;
             }
-            interface ControlWebResource extends Control {
+            interface ControlWebResource extends IControl {
                 /**
                  * Returns the value of the data query string parameter passed to a Silverlight web resource
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getdata
@@ -1193,7 +1194,7 @@ declare namespace DevKit {
                  */
                 Src: string;
             }
-            interface ControlIFrame extends Control {
+            interface ControlIFrame extends IControl {
                 /**
                  * Returns the default URL that an IFRAME control is configured to display
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getinitialurl
@@ -1211,7 +1212,7 @@ declare namespace DevKit {
                  */
                 Src: string;
             }
-            interface ControlTimer extends Control {
+            interface ControlTimer extends IControl {
                 /**
                  * Returns the state of the timer control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getstate
@@ -1223,13 +1224,160 @@ declare namespace DevKit {
                  */
                 Refresh(): void;
             }
-            interface ControlTimelineWall extends Control {
+            interface ControlTimelineWall extends IControl {
                 /**
                  * Refreshes the data displayed in a timelinewall and timer control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/refresh
                  */
                 Refresh(): void;
             }
+        }
+        abstract class FormBase {
+            /**
+            * Adds a function to be called when the record is saved
+            * @param successCallback The function to be executed when the record is saved. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
+            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/addonsave
+            */
+            AddOnSave(successCallback: (executionContext: any) => void): void;
+            /**
+             *  The Attributes collections of form Account
+             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes
+             * */
+            readonly Attributes: DevKit.Form.Collections;
+            /**
+             * Removes form level notifications
+             * @param uniqueId A unique identifier for the message to be cleared that was set using the SetFormNotification method
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/clearformnotification
+             */
+            ClearFormNotification(uniqueId: string): void;
+            /**
+             * Closes the form
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/close
+             * */
+            Close(): void;
+            /**
+             * A control represents an HTML element present on the form. Some controls are bound to a specific attribute, whereas others may represent unbound controls such as an IFRAME, Web resource, or a sub grid that has been added to the form
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls
+             */
+            readonly Controls: DevKit.Form.Collections;
+            /**
+             * Returns a string representing the XML that will be sent to the server when the record is saved. Only data in fields that have changed are set to the server
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/getdataxml
+             */
+            readonly DataXml: string;
+            /**
+             * Returns a string representing the GUID value for the record
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/getid
+             */
+            readonly EntityId: string;
+            /**
+             * Gets a boolean value indicating whether any fields in the form have been modified
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/getisdirty
+             */
+            readonly EntityIsDirty: boolean;
+            /**
+             * Gets a boolean value indicating whether all of the entity data is valid
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/isvalid
+             */
+            readonly EntityIsValid: boolean;
+            /**
+             * Returns a string representing the logical name of the entity for the record
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/getentityname
+             */
+            readonly EntityName: string;
+            /**
+             * Returns a lookup value that references the record
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/getentityreference
+             */
+            readonly EntityReference: DevKit.Core.EntityReference;
+            /**
+             * Saves the record synchronously with the options to close the form or open a new form after the save is completed
+             * @param saveOption Specify options for saving the record
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/save
+             */
+            EntitySave(saveOption: OptionSet.SaveOption): void;
+            /**
+             * Returns the ID of the form
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-formselector/getid
+             */
+            readonly FormId: string;
+            /**
+             * Returns the label of the form
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-formselector/getlabel
+             */
+            readonly FormLabel: string;
+            /**
+             * Opens the specified form. When you use the navigate method while unsaved changes exist, the user is prompted to save changes before the new form can be displayed. The Onload event occurs when the new form loads
+             * @param formId The form Id that you want navigate
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-formselector/navigate
+             */
+            FormNavigate(formId: string): void;
+            /**
+             * Gets the form type for the record
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/getformtype
+             */
+            readonly FormType: OptionSet.FormType;
+            /**
+             * Gets a boolean value indicating whether the form data has been modified
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data/getisdirty
+             */
+            readonly IsDirty: boolean;
+            /**
+             * Gets a boolean value indicating whether all of the form data is valid. This includes the main entity and any unbound attributes
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data/isvalid
+             */
+            readonly IsValid: boolean;
+            /**
+             * Gets a string for the value of the primary attribute of the entity
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/getprimaryattributevalue
+             */
+            readonly PrimaryAttributeValue: string;
+            /**
+             * Asynchronously refreshes and optionally saves all the data of the form without reloading the page
+             * @param save true if the data should be saved after it is refreshed, otherwise false
+             * @param successCallback A function to call when the operation succeeds
+             * @param errorCallback A function to call when the operation fails
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data/refresh
+             */
+            Refresh(save?: boolean, successCallback?: (executionContext: any) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
+            /**
+             * Causes the ribbon to re-evaluate data that controls what is displayed in it
+             * @param refreshAll Indicates whether all the ribbon command bars on the current page are refreshed. If you specify false, only the page-level ribbon command bar is refreshed. If you do not specify this parameter, by default false is passed
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/refreshribbon
+             */
+            RefreshRibbon(refreshAll: boolean): void;
+            /**
+             * Removes a function to be called when form data is loaded
+             * @param myFunction The function to be removed for the OnSave event
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/removeonsave
+             */
+            RemoveOnSave(myFunction: () => void): void;
+            /**
+             * Saves the record asynchronously with the option to set callback functions to be executed after the save operation is completed. You can also set an object to control how appointment, recurring appointment, or service activity records are processed
+             * @param saveOption An object for specifying options for saving the record
+             * @param successCallback A function to call when the operation succeeds
+             * @param errorCallback A function to call when the operation fails
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data/save
+             */
+            Save(saveOption?: DevKit.Core.SaveOption, successCallback?: (executionContext: any) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
+            /**
+             * Displays form level notifications
+             * @param message The text of the message
+             * @param level The level of the message, which defines how the message will be displayed
+             * @param uniqueId A unique identifier for the message that can be used later with ClearFormNotification to remove the notification
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/setformnotification
+             */
+            SetFormNotification(message: string, level: OptionSet.FormNotificationLevel, uniqueId: string): boolean;
+            /**
+             * Gets the height of the viewport in pixels. The viewport is the area of the page containing form data. It corresponds to the body of the form and does not include the navigation, header, footer or form assistant areas of the page
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/getviewportheight
+             * */
+            readonly ViewPortHeight: number;
+            /**
+             * Get the width of the viewport in pixels. The viewport is the area of the page containing form data. It corresponds to the body of the form and does not include the navigation, header, footer or form assistant areas of the page
+             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/getviewportwidth
+             * */
+            readonly ViewPortWidth: number;
         }
         interface Utility {
             /**
