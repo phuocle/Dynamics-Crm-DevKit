@@ -147,7 +147,7 @@ declare namespace Rocket {
 		/** ReadOnly - For internal use only. */
 		PostponeEmailProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValue;
+		PriorityCode: DevKit.WebApi.OptionSetValueReadonly;
 		/** Shows the ID of the process. */
 		ProcessId: DevKit.WebApi.GuidValue;
 		/** Indicates that a read receipt is requested. */

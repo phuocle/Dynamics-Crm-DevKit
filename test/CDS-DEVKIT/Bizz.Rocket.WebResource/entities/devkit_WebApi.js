@@ -1,4 +1,5 @@
-﻿///<reference path='devkit_WebApi.d.ts' />
+﻿//@ts-check
+///<reference path='devkit_WebApi.d.ts' />
 var formWebApi = (function () {
 	function onLoad(executionContext) {
 	}
@@ -119,13 +120,13 @@ var formWebApi = (function () {
         var toAccountId = getToAccountId();
 
         var from = new Rocket.ActivityPartyApi();
-        from.ParticipationTypeMask.Value = from.OptionSet.ParticipationTypeMask.Sender;
+        from.ParticipationTypeMask.Value = OptionSet.ActivityParty.ParticipationTypeMask.Sender;
         from.partyid_systemuser.Value = fromUserId;
         var to1 = new Rocket.ActivityPartyApi();
-        to1.ParticipationTypeMask.Value = to1.OptionSet.ParticipationTypeMask.To_Recipient;
+        to1.ParticipationTypeMask.Value = OptionSet.ActivityParty.ParticipationTypeMask.To_Recipient;
         to1.partyid_contact.Value = toContactId;
         var to2 = new Rocket.ActivityPartyApi();
-        to2.ParticipationTypeMask.Value = to2.OptionSet.ParticipationTypeMask.To_Recipient;
+        to2.ParticipationTypeMask.Value = OptionSet.ActivityParty.ParticipationTypeMask.To_Recipient;
         to2.partyid_account.Value = toAccountId;
 
         var email = new Rocket.EmailApi();
@@ -133,7 +134,7 @@ var formWebApi = (function () {
         email.Subject.Value = "EMAIL SUBJECT";
         email.Description.Value = "EMAIL BODY";
         email.regardingobjectid_account_email.Value = toAccountId;
-        email.PriorityCode.Value = email.OptionSet.PriorityCode.High;
+        email.PriorityCode.Value = OptionSet.Email.PriorityCode.High;
 
         var req = new Rocket.WebApi.CreateRequest();
         req.entityName = email.EntityName;
@@ -164,8 +165,8 @@ var formWebApi = (function () {
         //the object you want to insert
         var api = new Rocket.devkit_WebApiApi();
         api.devkit_Name.Value = "OPTIONSET - INSERT";
-        api.devkit_SingleOptionSetCode.Value = api.OptionSet.devkit_SingleOptionSetCode.Dynamics_365;
-        api.devkit_MultiOptionSetCode.Value = [api.OptionSet.devkit_MultiOptionSetCode.Crm_2015, api.OptionSet.devkit_MultiOptionSetCode.Crm_2016];
+        api.devkit_SingleOptionSetCode.Value = OptionSet.devkit_WebApi.devkit_SingleOptionSetCode.Dynamics_365;
+        api.devkit_MultiOptionSetCode.Value = [OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2015, OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2016];
         api.devkit_YesAndNo.Value = false;
         //the request
         var req = new Rocket.WebApi.CreateRequest();

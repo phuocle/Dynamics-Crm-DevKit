@@ -7,7 +7,7 @@ declare namespace Rocket {
              * @param property the alternate logical name
              * @param value the value query
              */
-            constructor(property: string, value: any);
+            constructor(property: string, value: any);            
         }
         class AssociateRequest {
             /** WebApiClient AssociateRequest */
@@ -653,91 +653,183 @@ declare namespace DevKit {
             /** The optionset number value. E.g.: 1000000001 */
             Value: number;
             /** The optionset formatted text. E.g. "Dynamics 365" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface OptionSetValueReadonly {
+            /** The optionset number value. E.g.: 1000000001 */
+            readonly Value: number;
+            /** The optionset formatted text. E.g. "Dynamics 365" */
+            readonly FormattedValue: string;
         }
         interface MultiOptionSetValue {
             /** The optionset number values. E.g.: [1000000001, 1000000003]*/
             Value: Array<number>;
             /** The optionset formatted texts. E.g.: ["Dynamics 2011", "Dynamics 365"] */
-            FormattedValue: Array<string>;
+            readonly FormattedValue: Array<string>;
+        }
+        interface MultiOptionSetValueReadonly {
+            /** The optionset number values. E.g.: [1000000001, 1000000003]*/
+            readonly Value: Array<number>;
+            /** The optionset formatted texts. E.g.: ["Dynamics 2011", "Dynamics 365"] */
+            readonly FormattedValue: Array<string>;
         }
         interface BooleanValue {
             /** The boollean value. E.g.: true */
             Value: boolean;
             /** The boolean formatted text. E.g.: "Yes" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface BooleanValueReadonly {
+            /** The boollean value. E.g.: true */
+            readonly Value: boolean;
+            /** The boolean formatted text. E.g.: "Yes" */
+            readonly FormattedValue: string;
         }
         interface DateOnlyValue {
             /** The date only value. Always format yyyy-MM-dd. E.g.: "2019-04-30" */
             Value: string;
             /** The date only formatted text, base on user setting format. E.g.: "2019.04.30" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface DateOnlyValueReadonly {
+            /** The date only value. Always format yyyy-MM-dd. E.g.: "2019-04-30" */
+            readonly Value: string;
+            /** The date only formatted text, base on user setting format. E.g.: "2019.04.30" */
+            readonly FormattedValue: string;
         }
         interface UtcDateOnlyValue {
             /** The UTC date only value. E.g.: "2019-04-29T17:00:00Z" */
             Value: string;
             /** The UTC date formatted text, base on user setting format. E.g.: "30.04.2019" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface UtcDateOnlyValueReadonly {
+            /** The UTC date only value. E.g.: "2019-04-29T17:00:00Z" */
+            readonly Value: string;
+            /** The UTC date formatted text, base on user setting format. E.g.: "30.04.2019" */
+            readonly FormattedValue: string;
         }
         interface UtcDateAndTimeValue {
             /** The UTC date and time value. E.g.: "2019-04-27T07:30:00Z" */
             Value: string;
             /** The UTC date and time formatted text, base on user setting format. E.g.: "27.04.2019 02:30 CH" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface UtcDateAndTimeValueReadonly {
+            /** The UTC date and time value. E.g.: "2019-04-27T07:30:00Z" */
+            readonly Value: string;
+            /** The UTC date and time formatted text, base on user setting format. E.g.: "27.04.2019 02:30 CH" */
+            readonly FormattedValue: string;
         }
         interface TimezoneDateOnlyValue {
             /** The time-zone date only value. E.g.: "2019-04-26T00:00:00Z" */
             Value: string;
             /** The time-zone date formatted text, base on user setting format. E.g.: "26.04.2019" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface TimezoneDateOnlyValueReadonly {
+            /** The time-zone date only value. E.g.: "2019-04-26T00:00:00Z" */
+            readonly Value: string;
+            /** The time-zone date formatted text, base on user setting format. E.g.: "26.04.2019" */
+            readonly FormattedValue: string;
         }
         interface TimezoneDateAndTimeValue {
             /** The time-zone date and time value. E.g.: "2019-04-28T15:30:00Z" */
             Value: string;
             /** The time-zone date and time formatted text, base on user setting format. E.g.: "28.04.2019 03:30 CH" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface TimezoneDateAndTimeValueReadonly {
+            /** The time-zone date and time value. E.g.: "2019-04-28T15:30:00Z" */
+            readonly Value: string;
+            /** The time-zone date and time formatted text, base on user setting format. E.g.: "28.04.2019 03:30 CH" */
+            readonly FormattedValue: string;
         }
         interface IntegerValue {
             /** The integer value. E.g.: 1234567 */
             Value: number;
             /** The integer formatted text, base on user setting format. E.g.: "1.234.567" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface IntegerValueReadonly {
+            /** The integer value. E.g.: 1234567 */
+            readonly Value: number;
+            /** The integer formatted text, base on user setting format. E.g.: "1.234.567" */
+            readonly FormattedValue: string;
         }
         interface BigIntValue {
             /** The big integer value. E.g.: 1234567 */
             Value: number;
             /** The big integer formatted text, base on user setting format. E.g.: "1.234.567" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface IntegerValueReadonly {
+            /** The integer value. E.g.: 1234567 */
+            readonly Value: number;
+            /** The integer formatted text, base on user setting format. E.g.: "1.234.567" */
+            readonly FormattedValue: string;
         }
         interface DoubleValue {
             /** The double value. E.g.: 1234.57 */
             Value: number;
             /** The double formatted text, base on user setting format. E.g.: "1.234,57" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface DoubleValueReadonly {
+            /** The double value. E.g.: 1234.57 */
+            readonly Value: number;
+            /** The double formatted text, base on user setting format. E.g.: "1.234,57" */
+            readonly FormattedValue: string;
         }
         interface DecimalValue {
             /** The decimal value. E.g.: 1234567.89 */
             Value: number;
             /** The decimal formatted text, base on user setting format. E.g.: "1.234.567,89" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface DecimalValueReadonly {
+            /** The decimal value. E.g.: 1234567.89 */
+            readonly Value: number;
+            /** The decimal formatted text, base on user setting format. E.g.: "1.234.567,89" */
+            readonly FormattedValue: string;
         }
         interface MoneyValue {
             /** The currency value of field. E.g.: 123456.35 */
             Value: number;
             /** The currency formatted text, base on user setting format. E.g.: "123.456,35 $" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface MoneyValueReadonly {
+            /** The currency value of field. E.g.: 123456.35 */
+            readonly Value: number;
+            /** The currency formatted text, base on user setting format. E.g.: "123.456,35 $" */
+            readonly FormattedValue: string;
         }
         interface StringValue {
             /** The string value. E.g.: "A. Datum Corporation (sample)" */
             Value: string;
         }
+        interface StringValueReadonly {
+            /** The string value. E.g.: "A. Datum Corporation (sample)" */
+            readonly Value: string;
+        }
         interface LookupValue {
             /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
             Value: string;
             /** The name formatted text. E.g.: "A. Datum Corporation (sample)" */
-            FormattedValue: string;
+            readonly FormattedValue: string;
+        }
+        interface LookupValueReadonly {
+            /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
+            readonly Value: string;
+            /** The name formatted text. E.g.: "A. Datum Corporation (sample)" */
+            readonly FormattedValue: string;
         }
         interface GuidValue {
+            /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
+            Value: string;
+        }
+        interface GuidValueReadonly {
             /** The guid value. E.g.: f55a0d1e-286b-e911-a997-000d3a802135 */
             Value: string;
         }

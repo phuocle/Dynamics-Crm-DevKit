@@ -132,17 +132,17 @@ var formWebApi = (function () {
         var associateRequest = new Rocket.WebApi.AssociateRequest();
         associateRequest.asBatch = false;
         associateRequest.async = false;
-        associateRequest.headers = [{ key="", value="" }];
+        associateRequest.headers = [{ key: "", value:"" }];
         associateRequest.relationShip = "";
-        associateRequest.source = { entityType = "account", id = "guid" };
-        associateRequest.target = { entityType = "contact", id = "guid" };
+        associateRequest.source = { entityType: "account", id: "guid" };
+        associateRequest.target = { entityType: "contact", id: "guid" };
 
         var createRequest = new Rocket.WebApi.CreateRequest();
         createRequest.asBatch = false;
         createRequest.async = false;
         createRequest.entity = {};
         createRequest.entityName = "account";
-        createRequest.headers = [{ key="", value="" }];
+        createRequest.headers = [{ key: "", value: "" }];
         createRequest.overriddenSetName = "acccountes";
 
         var customRequest = new Rocket.WebApi.CustomRequest();
@@ -151,49 +151,49 @@ var formWebApi = (function () {
         customRequest.bound = true;
         customRequest.entityId = "guid";
         customRequest.entityName = "account";
-        customRequest.headers = [{ key="", value="" }];
+        customRequest.headers = [{ key: "", value: "" }];
         customRequest.method = "GET";
         customRequest.name = "abc";
         customRequest.payload = {};
         customRequest.urlParams = "";
 
         var deleteRequest = new Rocket.WebApi.DeleteRequest();
-        deleteRequest.alternateKey = new Rocket.WebApi.AlternateKey("", "");
+        deleteRequest.alternateKey = [new Rocket.WebApi.AlternateKey("", "")];
         deleteRequest.asBatch = false;
         deleteRequest.async = false;
         deleteRequest.entityId = "guid";
         deleteRequest.entityName = "account";
-        deleteRequest.headers = [{ key="", value="" }];
+        deleteRequest.headers = [{ key: "", value: "" }];
         deleteRequest.overriddenSetName = "accountes";
 
         var disassociateRequest = new Rocket.WebApi.DisassociateRequest();
         disassociateRequest.asBatch = false;
         disassociateRequest.async = false;
-        disassociateRequest.headers = [{ key="", value="" }];
+        disassociateRequest.headers = [{ key: "", value: "" }];
         disassociateRequest.relationShip = "";
-        disassociateRequest.source = { entityType = "account", id = "guid" };
-        disassociateRequest.target = { entityType = "contact", id = "guid" };
+        disassociateRequest.source = { entityType: "account", id: "guid" };
+        disassociateRequest.target = { entityType: "contact", id: "guid" };
 
         var retrieveRequest = new Rocket.WebApi.RetrieveRequest();
-        retrieveRequest.alternateKey = new Rocket.WebApi.AlternateKey("", "");
+        retrieveRequest.alternateKey = [new Rocket.WebApi.AlternateKey("", "")];
         retrieveRequest.asBatch = false;
         retrieveRequest.async = false;
         retrieveRequest.entityId = "guid";
         retrieveRequest.entityName = "account";
         retrieveRequest.fetchXml = "fetchxml";
-        retrieveRequest.headers = [{ key="", value="" }];
+        retrieveRequest.headers = [{ key: "", value: "" }];
         retrieveRequest.overriddenSetName = "accountes";
         retrieveRequest.queryParams = "";
         retrieveRequest.returnAllPages = true;
 
         var updateRequest = new Rocket.WebApi.UpdateRequest();
-        updateRequest.alternateKey = new Rocket.WebApi.AlternateKey("", "");
+        updateRequest.alternateKey = [new Rocket.WebApi.AlternateKey("", "")];
         updateRequest.asBatch = false;
         updateRequest.async = false;
         updateRequest.entity = {};
         updateRequest.entityId = "guid";
         updateRequest.entityName = "account";
-        updateRequest.headers = [{ key="", value="" }];
+        updateRequest.headers = [{ key: "", value: "" }];
         updateRequest.overriddenSetName = "accountes";
     };
     function TestForm() {
@@ -230,7 +230,7 @@ var formWebApi = (function () {
         //BEGIN LOOKUP
         form.Header.OwnerId.AddCustomFilter("", "");
         form.Header.OwnerId.AddCustomView("", "", "", "", "", false);
-        form.Header.OwnerId.AddNotification("");//CHANGE !!!!
+        form.Header.OwnerId.AddNotification({ uniqueId: "" });//CHANGE !!!!
         form.Header.OwnerId.AddOnChange(function (a) { });
         form.Header.OwnerId.AddPreSearch(function (a) { });
         //form.Header.OwnerId.AttributeParent
