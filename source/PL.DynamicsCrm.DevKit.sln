@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplate", "ProjectTemplate", "{27DA47F8-6DE6-421B-8EB6-CFC33300D9DB}"
 EndProject
@@ -87,11 +87,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DynamicsCrm.DevKit.Cli", "PL.DynamicsCrm.DevKit.Cli\PL.DynamicsCrm.DevKit.Cli.csproj", "{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DynamicsCrm.DevKit", "PL.DynamicsCrm.DevKit\PL.DynamicsCrm.DevKit.csproj", "{36F40DF9-126F-47F2-98BF-5E42DE8B8D38}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ED644B61-A8B9-4DCC-B735-42BBD63C58DC} = {ED644B61-A8B9-4DCC-B735-42BBD63C58DC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL.DynamicsCrm.DevKit.Package", "PL.DynamicsCrm.DevKit.Package\PL.DynamicsCrm.DevKit.Package.csproj", "{6302EA70-637D-4FDC-B169-1493427DD8D2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D} = {2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "27.UiTestProjectTemplate", "27.UiTestProjectTemplate\27.UiTestProjectTemplate.csproj", "{5259082A-3733-4FBE-B50B-C9BBA22D95AA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -143,6 +143,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "37.DownloadWebResourcesItemTemplate", "37.DownloadWebResourcesItemTemplate\37.DownloadWebResourcesItemTemplate.csproj", "{99DD3CAE-6D04-4BDA-BB2D-C4D7B28CA1E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "38.PortalProjectTemplate", "38.PortalProjectTemplate\38.PortalProjectTemplate.csproj", "{ED644B61-A8B9-4DCC-B735-42BBD63C58DC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AA712C45-5DEC-46E5-9E02-497B2EBF9CAB} = {AA712C45-5DEC-46E5-9E02-497B2EBF9CAB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
