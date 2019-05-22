@@ -69,21 +69,20 @@
             this.groupBox.Controls.Add(this.lblProject);
             this.groupBox.Controls.Add(this.chkListForm);
             this.groupBox.Controls.Add(this.cboEntity);
-            this.groupBox.Location = new System.Drawing.Point(15, 40);
+            this.groupBox.Location = new System.Drawing.Point(10, 26);
             this.groupBox.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(10, 11, 10, 0);
-            this.groupBox.Size = new System.Drawing.Size(692, 345);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(7, 7, 7, 0);
+            this.groupBox.Size = new System.Drawing.Size(464, 224);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             // 
             // btnLoadForms
             // 
             this.btnLoadForms.Enabled = false;
-            this.btnLoadForms.Location = new System.Drawing.Point(14, 81);
-            this.btnLoadForms.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnLoadForms.Location = new System.Drawing.Point(9, 53);
             this.btnLoadForms.Name = "btnLoadForms";
-            this.btnLoadForms.Size = new System.Drawing.Size(120, 42);
+            this.btnLoadForms.Size = new System.Drawing.Size(80, 27);
             this.btnLoadForms.TabIndex = 28;
             this.btnLoadForms.Text = "Load Forms";
             this.btnLoadForms.UseVisualStyleBackColor = true;
@@ -93,10 +92,10 @@
             // chkOthers
             // 
             this.chkOthers.AutoSize = true;
-            this.chkOthers.Location = new System.Drawing.Point(598, 29);
+            this.chkOthers.Location = new System.Drawing.Point(399, 19);
             this.chkOthers.Margin = new System.Windows.Forms.Padding(1);
             this.chkOthers.Name = "chkOthers";
-            this.chkOthers.Size = new System.Drawing.Size(83, 24);
+            this.chkOthers.Size = new System.Drawing.Size(57, 17);
             this.chkOthers.TabIndex = 20;
             this.chkOthers.Text = "Others";
             this.chkOthers.UseVisualStyleBackColor = true;
@@ -107,10 +106,10 @@
             // 
             this.cboCrmVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboCrmVersion.FormattingEnabled = true;
-            this.cboCrmVersion.Location = new System.Drawing.Point(126, 122);
-            this.cboCrmVersion.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.cboCrmVersion.Location = new System.Drawing.Point(84, 79);
+            this.cboCrmVersion.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.cboCrmVersion.Name = "cboCrmVersion";
-            this.cboCrmVersion.Size = new System.Drawing.Size(273, 28);
+            this.cboCrmVersion.Size = new System.Drawing.Size(183, 21);
             this.cboCrmVersion.TabIndex = 18;
             this.cboCrmVersion.Visible = false;
             this.cboCrmVersion.SelectedIndexChanged += new System.EventHandler(this.cboCrmVersion_SelectedIndexChanged);
@@ -118,10 +117,9 @@
             // lblCrmVersion
             // 
             this.lblCrmVersion.AutoSize = true;
-            this.lblCrmVersion.Location = new System.Drawing.Point(15, 128);
-            this.lblCrmVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblCrmVersion.Location = new System.Drawing.Point(10, 83);
             this.lblCrmVersion.Name = "lblCrmVersion";
-            this.lblCrmVersion.Size = new System.Drawing.Size(100, 20);
+            this.lblCrmVersion.Size = new System.Drawing.Size(66, 13);
             this.lblCrmVersion.TabIndex = 17;
             this.lblCrmVersion.Text = "Crm Version:";
             this.lblCrmVersion.Visible = false;
@@ -129,10 +127,10 @@
             // btnConnection
             // 
             this.btnConnection.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnection.Location = new System.Drawing.Point(549, 19);
+            this.btnConnection.Location = new System.Drawing.Point(366, 12);
             this.btnConnection.Margin = new System.Windows.Forms.Padding(0);
             this.btnConnection.Name = "btnConnection";
-            this.btnConnection.Size = new System.Drawing.Size(42, 42);
+            this.btnConnection.Size = new System.Drawing.Size(28, 27);
             this.btnConnection.TabIndex = 16;
             this.btnConnection.Text = "><";
             this.btnConnection.UseVisualStyleBackColor = true;
@@ -143,19 +141,18 @@
             // 
             this.lblProjectName.AutoSize = true;
             this.lblProjectName.ForeColor = System.Drawing.Color.Red;
-            this.lblProjectName.Location = new System.Drawing.Point(125, 56);
+            this.lblProjectName.Location = new System.Drawing.Point(83, 38);
             this.lblProjectName.Margin = new System.Windows.Forms.Padding(0);
             this.lblProjectName.Name = "lblProjectName";
-            this.lblProjectName.Size = new System.Drawing.Size(36, 20);
+            this.lblProjectName.Size = new System.Drawing.Size(25, 13);
             this.lblProjectName.TabIndex = 13;
             this.lblProjectName.Text = "aaa";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(126, 25);
-            this.txtName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtName.Location = new System.Drawing.Point(84, 16);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(415, 26);
+            this.txtName.Size = new System.Drawing.Size(278, 20);
             this.txtName.TabIndex = 1;
             this.txtName.TabStop = false;
             this.txtName.Visible = false;
@@ -164,10 +161,9 @@
             // lblCrmName
             // 
             this.lblCrmName.AutoSize = true;
-            this.lblCrmName.Location = new System.Drawing.Point(15, 86);
-            this.lblCrmName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblCrmName.Location = new System.Drawing.Point(10, 56);
             this.lblCrmName.Name = "lblCrmName";
-            this.lblCrmName.Size = new System.Drawing.Size(88, 20);
+            this.lblCrmName.Size = new System.Drawing.Size(59, 13);
             this.lblCrmName.TabIndex = 11;
             this.lblCrmName.Text = "Crm Name:";
             this.lblCrmName.Visible = false;
@@ -176,20 +172,20 @@
             // 
             this.cboCrmName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboCrmName.FormattingEnabled = true;
-            this.cboCrmName.Location = new System.Drawing.Point(126, 81);
-            this.cboCrmName.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.cboCrmName.Location = new System.Drawing.Point(84, 53);
+            this.cboCrmName.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.cboCrmName.Name = "cboCrmName";
-            this.cboCrmName.Size = new System.Drawing.Size(273, 28);
+            this.cboCrmName.Size = new System.Drawing.Size(183, 21);
             this.cboCrmName.TabIndex = 2;
             this.cboCrmName.Visible = false;
             this.cboCrmName.SelectedIndexChanged += new System.EventHandler(this.cboCrmName_SelectedIndexChanged);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(555, 81);
+            this.btnCancel.Location = new System.Drawing.Point(370, 53);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(0);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(120, 42);
+            this.btnCancel.Size = new System.Drawing.Size(80, 27);
             this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -197,10 +193,10 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(426, 81);
+            this.btnOk.Location = new System.Drawing.Point(284, 53);
             this.btnOk.Margin = new System.Windows.Forms.Padding(0);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(120, 42);
+            this.btnOk.Size = new System.Drawing.Size(80, 27);
             this.btnOk.TabIndex = 0;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -209,20 +205,19 @@
             // lblProject
             // 
             this.lblProject.AutoSize = true;
-            this.lblProject.Location = new System.Drawing.Point(15, 29);
-            this.lblProject.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblProject.Location = new System.Drawing.Point(10, 19);
             this.lblProject.Name = "lblProject";
-            this.lblProject.Size = new System.Drawing.Size(108, 20);
+            this.lblProject.Size = new System.Drawing.Size(74, 13);
             this.lblProject.TabIndex = 2;
             this.lblProject.Text = "Project Name:";
             // 
             // chkListForm
             // 
             this.chkListForm.FormattingEnabled = true;
-            this.chkListForm.Location = new System.Drawing.Point(14, 132);
+            this.chkListForm.Location = new System.Drawing.Point(9, 86);
             this.chkListForm.Margin = new System.Windows.Forms.Padding(1);
             this.chkListForm.Name = "chkListForm";
-            this.chkListForm.Size = new System.Drawing.Size(401, 193);
+            this.chkListForm.Size = new System.Drawing.Size(269, 124);
             this.chkListForm.TabIndex = 21;
             this.chkListForm.Visible = false;
             this.chkListForm.SelectedIndexChanged += new System.EventHandler(this.chkListForm_SelectedIndexChanged);
@@ -232,10 +227,10 @@
             this.cboEntity.DisplayMember = "Name";
             this.cboEntity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboEntity.FormattingEnabled = true;
-            this.cboEntity.Location = new System.Drawing.Point(126, 25);
-            this.cboEntity.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.cboEntity.Location = new System.Drawing.Point(84, 16);
+            this.cboEntity.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.cboEntity.Name = "cboEntity";
-            this.cboEntity.Size = new System.Drawing.Size(415, 28);
+            this.cboEntity.Size = new System.Drawing.Size(278, 21);
             this.cboEntity.TabIndex = 15;
             this.cboEntity.Visible = false;
             this.cboEntity.SelectedIndexChanged += new System.EventHandler(this.cboEntity_SelectedIndexChanged);
@@ -243,10 +238,10 @@
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(0, 400);
+            this.progressBar.Location = new System.Drawing.Point(0, 260);
             this.progressBar.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(720, 5);
+            this.progressBar.Size = new System.Drawing.Size(480, 3);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 24;
             this.progressBar.Visible = false;
@@ -254,9 +249,10 @@
             // link
             // 
             this.link.AutoSize = true;
-            this.link.Location = new System.Drawing.Point(15, 15);
+            this.link.Location = new System.Drawing.Point(10, 10);
+            this.link.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.link.Name = "link";
-            this.link.Size = new System.Drawing.Size(80, 20);
+            this.link.Size = new System.Drawing.Size(55, 13);
             this.link.TabIndex = 25;
             this.link.TabStop = true;
             this.link.Text = "linkLabel1";
@@ -264,17 +260,17 @@
             // 
             // FormProject
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(720, 405);
+            this.ClientSize = new System.Drawing.Size(480, 263);
             this.ControlBox = false;
             this.Controls.Add(this.link);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
+            this.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormProject";

@@ -27,6 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -182,6 +183,7 @@
     <EmbeddedResource Include="data\ReportProjectTemplate.csproj" />
     <EmbeddedResource Include="data\WebApiClient.min.js" />
     <EmbeddedResource Include="data\WebSite.txt" />
+    <EmbeddedResource Include="data\FormBase.js" />
     <Content Include="icon.png" />
   </ItemGroup>
   <Import Project="..\PL.DynamicsCrm.DevKit.Shared\PL.DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />

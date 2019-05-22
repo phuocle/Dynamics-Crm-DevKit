@@ -1,146 +1,36 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
-    interface FormAccountHeader {
-        OwnerId: DevKit.Form.Controls.ControlLookup;
-        abiz_Revision: DevKit.Form.Controls.ControlString;
-    }
-    interface FormAccountBody {
+	namespace FormAccount {
+		interface Header {
+			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
+			NumberOfEmployees: DevKit.Form.Controls.ControlInteger;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Form.Controls.ControlLookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Form.Controls.ControlMoney;
+		}
+		interface Body {
+		}
+		interface Footer {
 
-    }
-    interface FormAccountFooter {
-
-    }
-    interface FormAccountNavigation {
-
-    }
-    interface FormAccountQuickForm {
-
-    }
-    interface FormAccountComposite {
-
-    }
-    interface FormAccountProcess {
-        /**
-         * Progresses to the next stage. You can also move to a next stage in a different entity
-         * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/navigation/movenext
-         */
-        MoveNext(callback: (result: "success" | "crossEntity" | "end" | "invalid" | "dirtyForm") => void): void;
-        /**
-         * Moves to the previous stage. You can also move to a previous stage in a different entity
-         * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/navigation/moveprevious
-         */
-        MovePrevious(callback: (result: "success" | "crossEntity" | "beginning" | "invalid" | "dirtyForm") => void): void;
-        /**
-         * Gets a collection of stages currently in the active path with methods to interact with the stages displayed in the business process flow control. The active path represents stages currently rendered in the process control based on the branching rules and current data in the record
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activepath/getactivepath
-         */
-        ActivePath: DevKit.Form.Collections;
-        /**
-         * Asynchronously retrieves the business process flows enabled for an entity that the current user can switch to
-         * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user’s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getenabledprocesses
-         */
-        EnabledProcesses(callback: (result: Array<any>) => void): void;
-        /**
-         * Returns representing the active stage
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activestage/getactivestage
-         */
-        ActiveStage: DevKit.Core.ProcessStage;
-        /**
-         * Gets the currently selected stage
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getselectedstage
-         */
-        SelectedStage: DevKit.Core.ProcessStage;
-        /**
-         * Sets a completed stage as the active stage
-         * @param stageId The ID of the completed stage for the entity to make the active stage
-         * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activestage/setactivestage
-         */
-        SetActiveStage(stageId: string, callback: (result: "success" | "invalid" | "unreachable" | "dirtyForm") => void): void;
-        /**
-         * Returns all the process instances for the entity record that the calling user has access to.
-         * @param callback The callback function is passed an object with the following attributes and their corresponding values as the key:value pair. All returned values are of string type except for CreatedOnDate
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getprocessinstances
-         */
-        ProcessInstances(callback: (result: Array<DevKit.Core.ProcessInstance>) => void): void;
-        /**
-         * Sets a process instance as the active instance
-         * @param processInstanceId The Id of the process instance to set as the active instance
-         * @param callback A function to call when the operation is complete
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/setactiveprocessinstance
-         */
-        SetActiveProcessInstance(processInstanceId: string, callback: (result: "success" | "invalid") => void): void;
-        /**
-         * Returns a Process object representing the active process
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
-         */
-        ActiveProcess: DevKit.Core.ProcessStep;
-        /**
-         * Sets a Process as the active process. If there is an active instance of the process, the entity record is loaded with the process instance ID. If there is no active instance of the process, a new process instance is created and the entity record is loaded with the process instance ID. If there are multiple instances of the current process, the record is loaded with the first instance of the active process as per the defaulting logic, that is the most recently used process instance per user
-         * @param processId The Id of the process to set as the active process
-         * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate whether the operation succeeded
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activeprocess/setactiveprocess
-         */
-        SetActiveProcess(processId: string, callback: (result: "success" | "invalid") => void): void;
-        /**
-         * Adds a function as an event handler for the OnProcessStatusChange event so that it will be called when the business process flow status changes
-         * @param callback The function to be executed when the business process flow status changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonprocessstatuschange
-         */
-        AddOnProcessStatusChange(callback: (executionContext: any) => void): void;
-        /**
-         * Removes an event handler from the OnProcessStatusChange event
-         * @param callback The function to be removed from the OnProcessStatusChange event
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
-         */
-        RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
-        /**
-         * Adds a function as an event handler for the OnStageChange event so that it will be called when the business process flow stage changes
-         * @param callback The function to be executed when the business process flow stage changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonstagechange
-         */
-        AddOnStageChange(callback: (executionContext: any) => void): void;
-        /**
-         * Removes an event handler from the OnStageChange event
-         * @param callback The function to be removed from the OnStageChange event
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
-         */
-        RemoveOnStageChange(callback: (executionContext: any) => void): void;
-        /**
-         * Adds a function as an event handler for the OnStageSelected event so that it will be called when a business process flow stage is selected
-         * @param callback The function to be executed when the business process flow stage is selected. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonstageselected
-         */
-        AddOnStageSelected(callback: (executionContext: any) => void): void;
-        /**
-         * Removes an event handler from the OnStageSelected event
-         * @param callback The function to be removed from the OnStageSelected event
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
-         */
-        RemoveOnStageSelected(callback: (executionContext: any) => void): void;
-        /**
-         * Retrieves the display state for the business process control
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/getdisplaystate
-         */
-        DisplayState: OptionSet.ProcessDisplayState;
-        /**
-         * Returns a value indicating whether the business process control is visible
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/getvisible
-         */
-        Visible: boolean;
-        /**
-         * Reflows the UI of the business process control
-         * @param updateUI Specify true to update the UI of the process control; false otherwise
-         * @param parentStage Specify the ID of the parent stage in the GUID format
-         * @param nextStage Specify the ID of the next stage in the GUID format
-         * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/reflow
-         */
-        Reflow(updateUI: boolean, parentStage: string, nextStage: string): void;
-    }
-    class FormAccount extends DevKit.Form.FormBase {
+		}
+		interface Navigation {
+			navRelationships: DevKit.Form.Controls.ControlNavigationItem,
+			navAddresses: DevKit.Form.Controls.ControlNavigationItem,
+			navSubAccts: DevKit.Form.Controls.ControlNavigationItem,
+			navCampaignsInSFA: DevKit.Form.Controls.ControlNavigationItem,
+			navAsyncOperations: DevKit.Form.Controls.ControlNavigationItem,
+			navProcessSessions: DevKit.Form.Controls.ControlNavigationItem,
+			nav_devkit_account_devkit_webapi_Customer: DevKit.Form.Controls.ControlNavigationItem
+		}
+		interface QuickForm {
+		}
+		interface Composite {
+		}
+		interface Process {
+		}
+	}
+    class FormAccount extends DevKit.Form.IForm {
         /**
          * PL.DynamicsCrm.DevKit form Account
          * @param executionContext the execution context.
@@ -152,19 +42,19 @@ declare namespace Rocket {
         /** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
         WebApi: DevKit.Form.WebApi;
         /** The Body section of form Account */
-        Body: FormAccountBody;
+        Body: Rocket.FormAccount.Body;
         /** The Footer section of form Account */
-        Footer: FormAccountFooter;
+        Footer: Rocket.FormAccount.Footer;
         /** The Header section of form Account */
-        Header: FormAccountHeader;
+        Header: Rocket.FormAccount.Header;
         /** The Navigation of form Account */
-        Navigation: FormAccountNavigation;
+        Navigation: Rocket.FormAccount.Navigation;
         /** The QuickForm of form Account */
-        QuickForm: FormAccountQuickForm;
+        QuickForm: Rocket.FormAccount.QuickForm;
         /** The Composite of form Account */
-        Composite: FormAccountComposite;
+        Composite: Rocket.FormAccount.Composite;
         /** The Process of form Account */
-        Process: FormAccountProcess;
+        Process: Rocket.FormAccount.Process;
     }
 	class AccountApi {
 		/**
@@ -208,8 +98,8 @@ declare namespace Rocket {
 		Address1_AddressTypeCode: DevKit.WebApi.OptionSetValue;
 		/** Type the city for the primary address. */
 		Address1_City: DevKit.WebApi.StringValue;
-		/** ReadOnly - Shows the complete primary address. */
-		Address1_Composite: DevKit.WebApi.StringValue;
+		/** Shows the complete primary address. */
+		Address1_Composite: DevKit.WebApi.StringValueReadonly;
 		/** Type the country or region for the primary address. */
 		Address1_Country: DevKit.WebApi.StringValue;
 		/** Type the county for the primary address. */
@@ -256,8 +146,8 @@ declare namespace Rocket {
 		Address2_AddressTypeCode: DevKit.WebApi.OptionSetValue;
 		/** Type the city for the secondary address. */
 		Address2_City: DevKit.WebApi.StringValue;
-		/** ReadOnly - Shows the complete secondary address. */
-		Address2_Composite: DevKit.WebApi.StringValue;
+		/** Shows the complete secondary address. */
+		Address2_Composite: DevKit.WebApi.StringValueReadonly;
 		/** Type the country or region for the secondary address. */
 		Address2_Country: DevKit.WebApi.StringValue;
 		/** Type the county for the secondary address. */
@@ -298,32 +188,32 @@ declare namespace Rocket {
 		Address2_UPSZone: DevKit.WebApi.StringValue;
 		/** Select the time zone, or UTC offset, for this address so that other people can reference it when they contact someone at this address. */
 		Address2_UTCOffset: DevKit.WebApi.IntegerValue;
-		/** ReadOnly - For system use only. */
-		Aging30: DevKit.WebApi.MoneyValue;
-		/** ReadOnly - The base currency equivalent of the aging 30 field. */
-		Aging30_Base: DevKit.WebApi.MoneyValue;
-		/** ReadOnly - For system use only. */
-		Aging60: DevKit.WebApi.MoneyValue;
-		/** ReadOnly - The base currency equivalent of the aging 60 field. */
-		Aging60_Base: DevKit.WebApi.MoneyValue;
-		/** ReadOnly - For system use only. */
-		Aging90: DevKit.WebApi.MoneyValue;
-		/** ReadOnly - The base currency equivalent of the aging 90 field. */
-		Aging90_Base: DevKit.WebApi.MoneyValue;
+		/** For system use only. */
+		Aging30: DevKit.WebApi.MoneyValueReadonly;
+		/** The base currency equivalent of the aging 30 field. */
+		Aging30_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** For system use only. */
+		Aging60: DevKit.WebApi.MoneyValueReadonly;
+		/** The base currency equivalent of the aging 60 field. */
+		Aging60_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** For system use only. */
+		Aging90: DevKit.WebApi.MoneyValueReadonly;
+		/** The base currency equivalent of the aging 90 field. */
+		Aging90_Base: DevKit.WebApi.MoneyValueReadonly;
 		/** Select the legal designation or other business type of the account for contracts or reporting purposes. */
 		BusinessTypeCode: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly - Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the external party who created the record. */
-		CreatedByExternalParty: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValue;
+		/** Shows who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the external party who created the record. */
+		CreatedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
 		CreditLimit: DevKit.WebApi.MoneyValue;
-		/** ReadOnly - Shows the credit limit converted to the system's default base currency for reporting purposes. */
-		CreditLimit_Base: DevKit.WebApi.MoneyValue;
+		/** Shows the credit limit converted to the system's default base currency for reporting purposes. */
+		CreditLimit_Base: DevKit.WebApi.MoneyValueReadonly;
 		/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
 		CreditOnHold: DevKit.WebApi.BooleanValue;
 		/** Select the size category or range of the account for segmentation and reporting purposes. */
@@ -354,14 +244,12 @@ declare namespace Rocket {
 		EMailAddress3: DevKit.WebApi.StringValue;
 		/** Shows the default image for the record. */
 		EntityImage: DevKit.WebApi.StringValue;
-		/** ReadOnly */
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValue;
-		/** ReadOnly */
-		EntityImage_URL: DevKit.WebApi.StringValue;
-		/** ReadOnly - For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValue;
-		/** ReadOnly - Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValue;
+		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
+		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		/** For internal use only. */
+		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
 		/** Type the fax number for the account. */
 		Fax: DevKit.WebApi.StringValue;
 		/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
@@ -372,38 +260,36 @@ declare namespace Rocket {
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
 		IndustryCode: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly */
-		IsPrivate: DevKit.WebApi.BooleanValue;
+		IsPrivate: DevKit.WebApi.BooleanValueReadonly;
 		/** Contains the date and time stamp of the last on hold time. */
 		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the date when the account was last included in a marketing campaign or quick campaign. */
 		LastUsedInCampaign_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Type the market capitalization of the account to identify the company's equity, used as an indicator in financial performance analysis. */
 		MarketCap: DevKit.WebApi.MoneyValue;
-		/** ReadOnly - Shows the market capitalization converted to the system's default base currency. */
-		MarketCap_Base: DevKit.WebApi.MoneyValue;
+		/** Shows the market capitalization converted to the system's default base currency. */
+		MarketCap_Base: DevKit.WebApi.MoneyValueReadonly;
 		/** Whether is only for marketing */
 		MarketingOnly: DevKit.WebApi.BooleanValue;
-		/** ReadOnly */
-		MasterAccountIdName: DevKit.WebApi.StringValue;
-		/** ReadOnly - Shows the master account that the account was merged with. */
-		MasterId: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows whether the account has been merged with another account. */
-		Merged: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the external party who modified the record. */
-		ModifiedByExternalParty: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Shows who created the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValue;
+		MasterAccountIdName: DevKit.WebApi.StringValueReadonly;
+		/** Shows the master account that the account was merged with. */
+		MasterId: DevKit.WebApi.LookupValueReadonly;
+		/** Shows whether the account has been merged with another account. */
+		Merged: DevKit.WebApi.BooleanValueReadonly;
+		/** Shows who last updated the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the external party who modified the record. */
+		ModifiedByExternalParty: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Type the company or business name. */
 		Name: DevKit.WebApi.StringValue;
 		/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
 		NumberOfEmployees: DevKit.WebApi.IntegerValue;
-		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValue;
+		/** Shows how long, in minutes, that the record was on hold. */
+		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
@@ -412,12 +298,12 @@ declare namespace Rocket {
 		OwnerId_team: DevKit.WebApi.LookupValue;
 		/** Select the account's ownership structure, such as public or private. */
 		OwnershipCode: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly - Shows the business unit that the record owner belongs to. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the team who owns the account. */
-		OwningTeam: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the user who owns the account. */
-		OwningUser: DevKit.WebApi.LookupValue;
+		/** Shows the business unit that the record owner belongs to. */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the team who owns the account. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the user who owns the account. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
 		ParentAccountId: DevKit.WebApi.LookupValue;
 		/** For system use only. Legacy Microsoft Dynamics CRM 3.0 workflow data. */
@@ -442,8 +328,8 @@ declare namespace Rocket {
 		ProcessId: DevKit.WebApi.GuidValue;
 		/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
 		Revenue: DevKit.WebApi.MoneyValue;
-		/** ReadOnly - Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
-		Revenue_Base: DevKit.WebApi.MoneyValue;
+		/** Shows the annual revenue converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area. */
+		Revenue_Base: DevKit.WebApi.MoneyValueReadonly;
 		/** Type the number of shares available to the public for the account. This number is used as an indicator in financial performance analysis. */
 		SharesOutstanding: DevKit.WebApi.IntegerValue;
 		/** Select a shipping method for deliveries sent to the account's address to designate the preferred carrier or other delivery option. */
@@ -452,10 +338,9 @@ declare namespace Rocket {
 		SIC: DevKit.WebApi.StringValue;
 		/** Choose the service level agreement (SLA) that you want to apply to the Account record. */
 		SLAId: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Last SLA that was applied to this case. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValue;
-		/** ReadOnly */
-		SLAName: DevKit.WebApi.StringValue;
+		/** Last SLA that was applied to this case. This field is for internal use only. */
+		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the ID of the stage. */
 		StageId: DevKit.WebApi.GuidValue;
 		/** Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated. */
@@ -474,8 +359,8 @@ declare namespace Rocket {
 		TerritoryCode: DevKit.WebApi.OptionSetValue;
 		/** Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
 		TickerSymbol: DevKit.WebApi.StringValue;
-		/** ReadOnly - Total time spent for emails (read and write) and meetings by me in relation to account record. */
-		TimeSpentByMeOnEmailAndMeetings: DevKit.WebApi.StringValue;
+		/** Total time spent for emails (read and write) and meetings by me in relation to account record. */
+		TimeSpentByMeOnEmailAndMeetings: DevKit.WebApi.StringValueReadonly;
 		/** For internal use only. */
 		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
 		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
@@ -484,8 +369,8 @@ declare namespace Rocket {
 		TraversedPath: DevKit.WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		/** ReadOnly - Version number of the account. */
-		VersionNumber: DevKit.WebApi.BigIntValue;
+		/** Version number of the account. */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
 		/** Type the account's website URL to get quick details about the company profile. */
 		WebSiteURL: DevKit.WebApi.StringValue;
 		/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
@@ -732,4 +617,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
+//{'JsForm':['Account'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}

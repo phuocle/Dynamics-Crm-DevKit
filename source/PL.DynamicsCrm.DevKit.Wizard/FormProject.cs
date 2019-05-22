@@ -1094,8 +1094,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 chkListForm.Enabled = false;
                 chkOthers.Enabled = false;
                 var entityName = lblProjectName.Text;
-                var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
-
+                //var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+                var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+                var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+                var file = File.Exists(file2) ? file2 : file1;
                 progressBar.Visible = true;
                 Task task = Task.Factory.StartNew(() =>
                 {
@@ -1452,7 +1454,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
             foreach (var form in forms)
                 chkListForm.Items.Add(form);
-            var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+
+            var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+            var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+            var file = File.Exists(file2) ? file2 : file1;
+
             if (File.Exists(file))
             {
                 try

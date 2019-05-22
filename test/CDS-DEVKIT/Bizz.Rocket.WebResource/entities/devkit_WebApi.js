@@ -1,7 +1,11 @@
 ﻿//@ts-check
 ///<reference path='devkit_WebApi.d.ts' />
 var formWebApi = (function () {
-	function onLoad(executionContext) {
+    function onLoad(executionContext) {
+        var form = new Rocket.FormWebApi(executionContext, "");
+        form.Body.Tab.Summary.Section.Account.
+
+
 	}
     function onSave(executionContext) {
         //console.clear();

@@ -65,6 +65,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
     <Content Include="entities\Account.js" />
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
@@ -101,6 +104,7 @@
     <Content Include="entities\Task.webapi.js">
       <DependentUpon>Task.js</DependentUpon>
     </Content>
+    <Content Include="html\HelloWorld.html" />
     <Content Include="test\devkit_WebApi.test.js">
       <DependentUpon>devkit_WebApi.test.html</DependentUpon>
     </Content>
@@ -127,7 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
-    <Folder Include="html\" />
     <Folder Include="images\" />
     <Folder Include="js\" />
     <Folder Include="resources\" />
