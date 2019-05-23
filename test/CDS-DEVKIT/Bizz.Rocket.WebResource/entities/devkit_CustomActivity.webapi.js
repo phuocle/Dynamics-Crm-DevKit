@@ -103,6 +103,7 @@ var Rocket;
 			ProcessId: { a: 'processid' },
 			regardingobjectid_account_devkit_customactivity: { b: 'regardingobjectid_account_devkit_customactivity', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
 			regardingobjectid_contact_devkit_customactivity: { b: 'regardingobjectid_contact_devkit_customactivity', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
+			regardingobjectid_devkit_webapi_devkit_customactivity: { b: 'regardingobjectid_devkit_webapi_devkit_customactivity', a: '_regardingobjectid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			regardingobjectid_new_interactionforemail_devkit_customactivity: { b: 'regardingobjectid_new_interactionforemail_devkit_customactivity', a: '_regardingobjectid_value', c: 'interactionforemails', d: 'interactionforemail' },
 			regardingobjectid_knowledgearticle_devkit_customactivity: { b: 'regardingobjectid_knowledgearticle_devkit_customactivity', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			regardingobjectid_knowledgebaserecord_devkit_customactivity: { b: 'regardingobjectid_knowledgebaserecord_devkit_customactivity', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },

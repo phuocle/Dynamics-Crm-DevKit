@@ -1,5 +1,144 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
+	namespace FormUser {
+		interface Header {
+
+		}
+		interface tab_SUMMARY_TAB_Sections {
+			onpremise_account_information: DevKit.Form.Controls.ControlSection;
+			online_account_information: DevKit.Form.Controls.ControlSection;
+			user_information: DevKit.Form.Controls.ControlSection;
+			SOCIAL_PANE_TAB: DevKit.Form.Controls.ControlSection;
+			teams_information: DevKit.Form.Controls.ControlSection;
+			organization_information: DevKit.Form.Controls.ControlSection;
+			queue_selection: DevKit.Form.Controls.ControlSection;
+			queue_information: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_DETAILS_TAB_Sections {
+			user_information_2: DevKit.Form.Controls.ControlSection;
+			mailing_address: DevKit.Form.Controls.ControlSection;
+			DirectReports: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_ADMINISTRATION_TAB_Sections {
+			administration: DevKit.Form.Controls.ControlSection;
+			e_mail_configuration: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_MobileOfflineProfile_TAB_Sections {
+			mobileofflineaccessinfo: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Form.Controls.IControlTab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface tab_DETAILS_TAB extends DevKit.Form.Controls.IControlTab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface tab_ADMINISTRATION_TAB extends DevKit.Form.Controls.IControlTab {
+			Section: tab_ADMINISTRATION_TAB_Sections;
+		}
+		interface tab_MobileOfflineProfile_TAB extends DevKit.Form.Controls.IControlTab {
+			Section: tab_MobileOfflineProfile_TAB_Sections;
+		}
+		interface Tabs {
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+			DETAILS_TAB: tab_DETAILS_TAB;
+			ADMINISTRATION_TAB: tab_ADMINISTRATION_TAB;
+			MobileOfflineProfile_TAB: tab_MobileOfflineProfile_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type of user. */
+			AccessMode: DevKit.Form.Controls.ControlOptionSet;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Form.Controls.ControlString;
+			/** Fax number for address 1. */
+			Address1_Fax: DevKit.Form.Controls.ControlString;
+			/** First telephone number associated with address 1. */
+			Address1_Telephone1: DevKit.Form.Controls.ControlString;
+			/** Second telephone number associated with address 1. */
+			Address1_Telephone2: DevKit.Form.Controls.ControlString;
+			/** Third telephone number associated with address 1. */
+			Address1_Telephone3: DevKit.Form.Controls.ControlString;
+			/** Shows the complete secondary address. */
+			Address2_Composite: DevKit.Form.Controls.ControlString;
+			/** Unique identifier of the business unit with which the user is associated. */
+			BusinessUnitId: DevKit.Form.Controls.ControlLookup;
+			/** License type of user. */
+			CALType: DevKit.Form.Controls.ControlOptionSet;
+			/** Select the mailbox associated with this user. */
+			DefaultMailbox: DevKit.Form.Controls.ControlLookup;
+			/** Active Directory domain of which the user is a member. */
+			DomainName: DevKit.Form.Controls.ControlString;
+			/** Full name of the user. */
+			FullName: DevKit.Form.Controls.ControlString;
+			/** Home phone number for the user. */
+			HomePhone: DevKit.Form.Controls.ControlString;
+			/** Internal email address for the user. */
+			InternalEMailAddress: DevKit.Form.Controls.ControlString;
+			/** User invitation status. */
+			InviteStatusCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Mobile alert email address for the user. */
+			MobileAlertEMail: DevKit.Form.Controls.ControlString;
+			/** Items contained with a particular SystemUser. */
+			MobileOfflineProfileId: DevKit.Form.Controls.ControlLookup;
+			/** Mobile phone number for the user. */
+			MobilePhone: DevKit.Form.Controls.ControlString;
+			/** Unique identifier of the manager of the user. */
+			ParentSystemUserId: DevKit.Form.Controls.ControlLookup;
+			/** Personal email address of the user. */
+			PersonalEMailAddress: DevKit.Form.Controls.ControlString;
+			/** User's position in hierarchical security model. */
+			PositionId: DevKit.Form.Controls.ControlLookup;
+			/** Preferred address for the user. */
+			PreferredAddressCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Preferred phone number for the user. */
+			PreferredPhoneCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Unique identifier of the default queue for the user. */
+			QueueId: DevKit.Form.Controls.ControlLookup;
+			/** Title of the user. */
+			Title: DevKit.Form.Controls.ControlString;
+			/** Windows Live ID */
+			WindowsLiveID: DevKit.Form.Controls.ControlString;
+			/** Pronunciation of the full name of the user, written in phonetic hiragana or katakana characters. */
+			YomiFullName: DevKit.Form.Controls.ControlString;
+		}
+		interface Footer {
+			/** Information about whether the user is enabled. */
+			IsDisabled: DevKit.Form.Controls.ControlBoolean;
+		}
+		interface Navigation {
+
+		}
+		interface QuickForm {
+		}
+		interface Process extends DevKit.Form.Controls.IControlProcess {
+		}
+	}
+    class FormUser extends DevKit.Form.IForm {
+        /**
+         * PL.DynamicsCrm.DevKit form User
+         * @param executionContext the execution context.
+         * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource".
+         */
+        constructor(executionContext: any, defaultWebResourceName?: string);
+        /** Utility functions/methods/objects for Dynamics 365 form */
+        Utility: DevKit.Form.Utility;
+        /** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+        WebApi: DevKit.Form.WebApi;
+        /** The Body section of form User */
+        Body: Rocket.FormUser.Body;
+        /** The Footer section of form User */
+        Footer: Rocket.FormUser.Footer;
+        /** The Header section of form User */
+        Header: Rocket.FormUser.Header;
+        /** The Navigation of form User */
+        Navigation: Rocket.FormUser.Navigation;
+        /** The QuickForm of form User */
+        QuickForm: Rocket.FormUser.QuickForm;
+        ///** The Composite of form User */
+        //Composite: Rocket.FormUser.Composite;
+        /** The Process of form User */
+        Process: Rocket.FormUser.Process;
+    }
 	class SystemUserApi {
 		/**
 		* PL.DynamicsCrm.DevKit SystemUserApi
@@ -28,16 +167,16 @@ declare namespace Rocket {
 		"@odata.etag": string;
 		/** Type of user. */
 		AccessMode: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly - Active Directory object GUID for the system user. */
-		ActiveDirectoryGuid: DevKit.WebApi.GuidValue;
+		/** Active Directory object GUID for the system user. */
+		ActiveDirectoryGuid: DevKit.WebApi.GuidValueReadonly;
 		/** Unique identifier for address 1. */
 		Address1_AddressId: DevKit.WebApi.GuidValue;
 		/** Type of address for address 1, such as billing, shipping, or primary address. */
 		Address1_AddressTypeCode: DevKit.WebApi.OptionSetValue;
 		/** City name for address 1. */
 		Address1_City: DevKit.WebApi.StringValue;
-		/** ReadOnly - Shows the complete primary address. */
-		Address1_Composite: DevKit.WebApi.StringValue;
+		/** Shows the complete primary address. */
+		Address1_Composite: DevKit.WebApi.StringValueReadonly;
 		/** Country/region name in address 1. */
 		Address1_Country: DevKit.WebApi.StringValue;
 		/** County name for address 1. */
@@ -80,8 +219,8 @@ declare namespace Rocket {
 		Address2_AddressTypeCode: DevKit.WebApi.OptionSetValue;
 		/** City name for address 2. */
 		Address2_City: DevKit.WebApi.StringValue;
-		/** ReadOnly - Shows the complete secondary address. */
-		Address2_Composite: DevKit.WebApi.StringValue;
+		/** Shows the complete secondary address. */
+		Address2_Composite: DevKit.WebApi.StringValueReadonly;
 		/** Country/region name in address 2. */
 		Address2_Country: DevKit.WebApi.StringValue;
 		/** County name for address 2. */
@@ -120,30 +259,30 @@ declare namespace Rocket {
 		Address2_UTCOffset: DevKit.WebApi.IntegerValue;
 		/** The identifier for the application. This is used to access data in another application. */
 		ApplicationId: DevKit.WebApi.GuidValue;
-		/** ReadOnly - The URI used as a unique logical identifier for the external app. This can be used to validate the application. */
-		ApplicationIdUri: DevKit.WebApi.StringValue;
-		/** ReadOnly - This is the application directory object Id. */
-		AzureActiveDirectoryObjectId: DevKit.WebApi.GuidValue;
+		/** The URI used as a unique logical identifier for the external app. This can be used to validate the application. */
+		ApplicationIdUri: DevKit.WebApi.StringValueReadonly;
+		/** This is the application directory object Id. */
+		AzureActiveDirectoryObjectId: DevKit.WebApi.GuidValueReadonly;
 		/** Unique identifier of the business unit with which the user is associated. */
 		BusinessUnitId: DevKit.WebApi.LookupValue;
 		/** Fiscal calendar associated with the user. */
 		CalendarId: DevKit.WebApi.LookupValue;
 		/** License type of user. */
 		CALType: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly - Unique identifier of the user who created the user. */
-		CreatedBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Date and time when the user was created. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Unique identifier of the delegate user who created the systemuser. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Indicates if default outlook filters have been populated. */
-		DefaultFiltersPopulated: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Select the mailbox associated with this user. */
-		DefaultMailbox: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Type a default folder name for the user's OneDrive For Business location. */
-		DefaultOdbFolderName: DevKit.WebApi.StringValue;
-		/** ReadOnly - Reason for disabling the user. */
-		DisabledReason: DevKit.WebApi.StringValue;
+		/** Unique identifier of the user who created the user. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the user was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the systemuser. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Indicates if default outlook filters have been populated. */
+		DefaultFiltersPopulated: DevKit.WebApi.BooleanValueReadonly;
+		/** Select the mailbox associated with this user. */
+		DefaultMailbox: DevKit.WebApi.LookupValueReadonly;
+		/** Type a default folder name for the user's OneDrive For Business location. */
+		DefaultOdbFolderName: DevKit.WebApi.StringValueReadonly;
+		/** Reason for disabling the user. */
+		DisabledReason: DevKit.WebApi.StringValueReadonly;
 		/** Whether to display the user in service views. */
 		DisplayInServiceViews: DevKit.WebApi.BooleanValue;
 		/** Active Directory domain of which the user is a member. */
@@ -154,24 +293,22 @@ declare namespace Rocket {
 		EmployeeId: DevKit.WebApi.StringValue;
 		/** Shows the default image for the record. */
 		EntityImage: DevKit.WebApi.StringValue;
-		/** ReadOnly */
-		EntityImage_Timestamp: DevKit.WebApi.BigIntValue;
-		/** ReadOnly */
-		EntityImage_URL: DevKit.WebApi.StringValue;
-		/** ReadOnly - For internal use only. */
-		EntityImageId: DevKit.WebApi.GuidValue;
-		/** ReadOnly - Exchange rate for the currency associated with the systemuser with respect to the base currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValue;
+		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
+		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		/** For internal use only. */
+		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		/** Exchange rate for the currency associated with the systemuser with respect to the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
 		/** First name of the user. */
 		FirstName: DevKit.WebApi.StringValue;
-		/** ReadOnly - Full name of the user. */
-		FullName: DevKit.WebApi.StringValue;
+		/** Full name of the user. */
+		FullName: DevKit.WebApi.StringValueReadonly;
 		/** Government identifier for the user. */
 		GovernmentId: DevKit.WebApi.StringValue;
 		/** Home phone number for the user. */
 		HomePhone: DevKit.WebApi.StringValue;
-		/** ReadOnly - For internal use only. */
-		IdentityId: DevKit.WebApi.IntegerValue;
+		/** For internal use only. */
+		IdentityId: DevKit.WebApi.IntegerValueReadonly;
 		/** Unique identifier of the data import or data migration that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** Incoming email delivery method for the user. */
@@ -180,12 +317,12 @@ declare namespace Rocket {
 		InternalEMailAddress: DevKit.WebApi.StringValue;
 		/** User invitation status. */
 		InviteStatusCode: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly - Information about whether the user is an AD user. */
-		IsActiveDirectoryUser: DevKit.WebApi.BooleanValue;
+		/** Information about whether the user is an AD user. */
+		IsActiveDirectoryUser: DevKit.WebApi.BooleanValueReadonly;
 		/** Information about whether the user is enabled. */
 		IsDisabled: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Shows the status of approval of the email address by O365 Admin. */
-		IsEmailAddressApprovedByO365Admin: DevKit.WebApi.BooleanValue;
+		/** Shows the status of approval of the email address by O365 Admin. */
+		IsEmailAddressApprovedByO365Admin: DevKit.WebApi.BooleanValueReadonly;
 		/** Check if user is an integration user. */
 		IsIntegrationUser: DevKit.WebApi.BooleanValue;
 		/** Information about whether the user is licensed. */
@@ -196,8 +333,8 @@ declare namespace Rocket {
 		JobTitle: DevKit.WebApi.StringValue;
 		/** Last name of the user. */
 		LastName: DevKit.WebApi.StringValue;
-		/** ReadOnly - Time stamp of the latest update for the user */
-		LatestUpdateTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Time stamp of the latest update for the user */
+		LatestUpdateTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Middle name of the user. */
 		MiddleName: DevKit.WebApi.StringValue;
 		/** Mobile alert email address for the user. */
@@ -206,16 +343,16 @@ declare namespace Rocket {
 		MobileOfflineProfileId: DevKit.WebApi.LookupValue;
 		/** Mobile phone number for the user. */
 		MobilePhone: DevKit.WebApi.StringValue;
-		/** ReadOnly - Unique identifier of the user who last modified the user. */
-		ModifiedBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Date and time when the user was last modified. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Unique identifier of the delegate user who last modified the systemuser. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the user who last modified the user. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the user was last modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who last modified the systemuser. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Nickname of the user. */
 		NickName: DevKit.WebApi.StringValue;
-		/** ReadOnly - Unique identifier of the organization associated with the user. */
-		OrganizationId: DevKit.WebApi.GuidValue;
+		/** Unique identifier of the organization associated with the user. */
+		OrganizationId: DevKit.WebApi.GuidValueReadonly;
 		/** Outgoing email delivery method for the user. */
 		OutgoingEmailDeliveryMethod: DevKit.WebApi.OptionSetValue;
 		/** Date and time that the record was migrated. */
@@ -266,12 +403,12 @@ declare namespace Rocket {
 		TraversedPath: DevKit.WebApi.StringValue;
 		/** Shows the type of user license. */
 		UserLicenseType: DevKit.WebApi.IntegerValue;
-		/** ReadOnly -  User PUID User Identifiable Information */
-		UserPuid: DevKit.WebApi.StringValue;
+		/**  User PUID User Identifiable Information */
+		UserPuid: DevKit.WebApi.StringValueReadonly;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		/** ReadOnly - Version number of the user. */
-		VersionNumber: DevKit.WebApi.BigIntValue;
+		/** Version number of the user. */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
 		/** Windows Live ID */
 		WindowsLiveID: DevKit.WebApi.StringValue;
 		/** User's Yammer login email address */
@@ -280,8 +417,8 @@ declare namespace Rocket {
 		YammerUserId: DevKit.WebApi.StringValue;
 		/** Pronunciation of the first name of the user, written in phonetic hiragana or katakana characters. */
 		YomiFirstName: DevKit.WebApi.StringValue;
-		/** ReadOnly - Pronunciation of the full name of the user, written in phonetic hiragana or katakana characters. */
-		YomiFullName: DevKit.WebApi.StringValue;
+		/** Pronunciation of the full name of the user, written in phonetic hiragana or katakana characters. */
+		YomiFullName: DevKit.WebApi.StringValueReadonly;
 		/** Pronunciation of the last name of the user, written in phonetic hiragana or katakana characters. */
 		YomiLastName: DevKit.WebApi.StringValue;
 		/** Pronunciation of the middle name of the user, written in phonetic hiragana or katakana characters. */
@@ -414,4 +551,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'JsForm':['User'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
+//{'JsForm':['User'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

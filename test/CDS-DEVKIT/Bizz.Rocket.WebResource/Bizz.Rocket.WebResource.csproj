@@ -25,7 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>3.4</TypeScriptToolsVersion>
     <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -38,8 +38,8 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
     <TypeScriptTarget>ES5</TypeScriptTarget>
-    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
-    <TypeScriptModuleKind />
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>None</TypeScriptModuleKind>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
@@ -72,6 +72,9 @@
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
+    <Content Include="entities\ActivityMimeAttachment.form.js">
+      <DependentUpon>ActivityMimeAttachment.js</DependentUpon>
+    </Content>
     <Content Include="entities\ActivityMimeAttachment.js" />
     <Content Include="entities\ActivityMimeAttachment.webapi.js">
       <DependentUpon>ActivityMimeAttachment.js</DependentUpon>
@@ -80,25 +83,43 @@
     <Content Include="entities\ActivityParty.webapi.js">
       <DependentUpon>ActivityParty.js</DependentUpon>
     </Content>
+    <Content Include="entities\Contact.form.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
     <Content Include="entities\Contact.js" />
     <Content Include="entities\Contact.webapi.js">
       <DependentUpon>Contact.js</DependentUpon>
+    </Content>
+    <Content Include="entities\devkit_CustomActivity.form.js">
+      <DependentUpon>devkit_CustomActivity.js</DependentUpon>
     </Content>
     <Content Include="entities\devkit_CustomActivity.js" />
     <Content Include="entities\devkit_CustomActivity.webapi.js">
       <DependentUpon>devkit_CustomActivity.js</DependentUpon>
     </Content>
+    <Content Include="entities\Email.form.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
     <Content Include="entities\Email.js" />
     <Content Include="entities\Email.webapi.js">
       <DependentUpon>Email.js</DependentUpon>
+    </Content>
+    <Content Include="entities\PhoneCall.form.js">
+      <DependentUpon>PhoneCall.js</DependentUpon>
     </Content>
     <Content Include="entities\PhoneCall.js" />
     <Content Include="entities\PhoneCall.webapi.js">
       <DependentUpon>PhoneCall.js</DependentUpon>
     </Content>
+    <Content Include="entities\SystemUser.form.js">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </Content>
     <Content Include="entities\SystemUser.js" />
     <Content Include="entities\SystemUser.webapi.js">
       <DependentUpon>SystemUser.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Task.form.js">
+      <DependentUpon>Task.js</DependentUpon>
     </Content>
     <Content Include="entities\Task.js" />
     <Content Include="entities\Task.webapi.js">
@@ -111,6 +132,7 @@
     <Content Include="test\SpecExtensions.js" />
     <Content Include="test\devkit_WebApi.test.html" />
     <Content Include="xml\devkit_WebApi.form.xml" />
+    <Content Include="xml\Email.form.xml" />
     <None Include="deploy.debug.bat" />
     <None Include="download.webresources.bat" />
     <None Include="packages.config" />

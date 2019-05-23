@@ -135,10 +135,13 @@ var Rocket;
 			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
 			OwningTeam: { b: 'owningteam', a: '_owningteam_value', c: 'teams', d: 'team', r: true },
 			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
+			processid: { a: 'processid' },
+			stageid: { a: 'stageid' },
 			statecode: { a: 'statecode' },
 			statuscode: { a: 'statuscode' },
 			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber' },
 			TransactionCurrencyId: { b: 'transactioncurrencyid', a: '_transactioncurrencyid_value', c: 'transactioncurrencies', d: 'transactioncurrency' },
+			traversedpath: { a: 'traversedpath' },
 			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' },
 			VersionNumber: { a: 'versionnumber', r: true }
 		};

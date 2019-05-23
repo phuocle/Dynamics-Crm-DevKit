@@ -187,9 +187,12 @@ declare namespace Rocket {
 		}
 		interface Body {
 			Tab: Tabs;
+			notescontrol: DevKit.Form.Controls.ControlNote;
+			tCreatedOn: DevKit.Form.Controls.ControlTimer;
 			WebResource_WORDHELLO: DevKit.Form.Controls.ControlWebResource;
 			IFRAME_GoogleGoogle: DevKit.Form.Controls.ControlIFrame;
 			IFRAME_ACIWIDGET: DevKit.Form.Controls.ControlIFrame;
+			gridSubGridParentWebApi: DevKit.Form.Controls.ControlGrid;
 			/** Unique identifier of the user who created the record. */
 			CreatedBy: DevKit.Form.Controls.ControlLookup;
 			/** Date and time when the record was created. */

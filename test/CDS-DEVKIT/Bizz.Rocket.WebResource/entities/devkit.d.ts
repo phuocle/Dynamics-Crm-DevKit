@@ -1563,6 +1563,21 @@ declare namespace DevKit {
                  */
                 Reflow(updateUI: boolean, parentStage: string, nextStage: string): void;
             }
+            interface ControlGrid {
+
+            }
+            interface ControlNote {
+
+            }
+            interface ControlEmailEngagement {
+
+            }
+            interface ControlEmailRecipient {
+
+            }
+            interface ControlTimer {
+
+            }
         }
         abstract class IForm {
             /**

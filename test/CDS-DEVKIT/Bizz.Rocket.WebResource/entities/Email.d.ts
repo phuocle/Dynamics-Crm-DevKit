@@ -1,5 +1,93 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
+	namespace FormEmail {
+		interface Header {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Form.Controls.ControlLookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Enter the expected due date and time for the activity to be completed to provide details about when the email will be sent. */
+			ScheduledEnd: DevKit.Form.Controls.ControlDateTime;
+			/** Select the email's status. */
+			StatusCode: DevKit.Form.Controls.ControlOptionSet;
+		}
+		interface tab_Email_Sections {
+			recipient_information: DevKit.Form.Controls.ControlSection;
+			email_description: DevKit.Form.Controls.ControlSection;
+			Regarding_information: DevKit.Form.Controls.ControlSection;
+			attachments: DevKit.Form.Controls.ControlSection;
+			emailengagementactions: DevKit.Form.Controls.ControlSection;
+			Emailrecipient_section_6: DevKit.Form.Controls.ControlSection;
+			tab_4_section_2: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_Email extends DevKit.Form.Controls.IControlTab {
+			Section: tab_Email_Sections;
+		}
+		interface Tabs {
+			Email: tab_Email;
+		}
+		interface Body {
+			Tab: Tabs;
+			attachmentsGrid: DevKit.Form.Controls.ControlGrid;
+			emailengagementactionscontrol: DevKit.Form.Controls.ControlEmailEngagement;
+			emailrecipientactivitycontrol: DevKit.Form.Controls.ControlEmailRecipient;
+			/** Type the number of minutes spent creating and sending the email. The duration is used in reporting. */
+			ActualDurationMinutes: DevKit.Form.Controls.ControlInteger;
+			/** Enter the recipients that are included on the email distribution, but are not displayed to other recipients. */
+			bcc: DevKit.Form.Controls.ControlLookup;
+			/** Enter the recipients that should be copied on the email. */
+			cc: DevKit.Form.Controls.ControlLookup;
+			/** Type the greeting and message text of the email. */
+			Description: DevKit.Form.Controls.ControlString;
+			/** Enter the sender of the email. */
+			from: DevKit.Form.Controls.ControlLookup;
+			/** Choose the record that the email relates to. */
+			RegardingObjectId: DevKit.Form.Controls.ControlLookup;
+			/** Type a short description about the objective or primary topic of the email. */
+			Subject: DevKit.Form.Controls.ControlString;
+			/** Enter the account, contact, lead, queue, or user recipients for the email. */
+			to: DevKit.Form.Controls.ControlLookup;
+		}
+		interface Footer {
+			/** For internal use only. Shows whether this email is followed. This is evaluated state which overrides user selection of follow email. */
+			IsEmailFollowed: DevKit.Form.Controls.ControlBoolean;
+			/** For internal use only. Shows whether this email Reminder is Set. */
+			IsEmailReminderSet: DevKit.Form.Controls.ControlBoolean;
+		}
+		interface Navigation {
+
+		}
+		interface QuickForm {
+		}
+		interface Process extends DevKit.Form.Controls.IControlProcess {
+		}
+	}
+    class FormEmail extends DevKit.Form.IForm {
+        /**
+         * PL.DynamicsCrm.DevKit form Email
+         * @param executionContext the execution context.
+         * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource".
+         */
+        constructor(executionContext: any, defaultWebResourceName?: string);
+        /** Utility functions/methods/objects for Dynamics 365 form */
+        Utility: DevKit.Form.Utility;
+        /** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+        WebApi: DevKit.Form.WebApi;
+        /** The Body section of form Email */
+        Body: Rocket.FormEmail.Body;
+        /** The Footer section of form Email */
+        Footer: Rocket.FormEmail.Footer;
+        /** The Header section of form Email */
+        Header: Rocket.FormEmail.Header;
+        /** The Navigation of form Email */
+        Navigation: Rocket.FormEmail.Navigation;
+        /** The QuickForm of form Email */
+        QuickForm: Rocket.FormEmail.QuickForm;
+        ///** The Composite of form Email */
+        //Composite: Rocket.FormEmail.Composite;
+        /** The Process of form Email */
+        Process: Rocket.FormEmail.Process;
+    }
 	class EmailApi {
 		/**
 		* PL.DynamicsCrm.DevKit EmailApi
@@ -36,28 +124,28 @@ declare namespace Rocket {
 		ActualEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the actual start date and time for the email. By default, it displays the date and time when the activity was created, but can be edited to capture the actual time to create and send the email. */
 		ActualStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		/** ReadOnly - Shows the umber of attachments of the email message. */
-		AttachmentCount: DevKit.WebApi.IntegerValue;
+		/** Shows the umber of attachments of the email message. */
+		AttachmentCount: DevKit.WebApi.IntegerValueReadonly;
 		/** Shows the number of times an email attachment has been viewed. */
 		AttachmentOpenCount: DevKit.WebApi.IntegerValue;
 		/** Hash of base of conversation index. */
 		BaseConversationIndexHash: DevKit.WebApi.IntegerValue;
 		/** Type a category to identify the email type, such as lead outreach, customer follow-up, or service alert, to tie the email to a business group or function. */
 		Category: DevKit.WebApi.StringValue;
-		/** ReadOnly - Indicates if the body is compressed. */
-		Compressed: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Identifier for all the email responses for this conversation. */
-		ConversationIndex: DevKit.WebApi.StringValue;
+		/** Indicates if the body is compressed. */
+		Compressed: DevKit.WebApi.BooleanValueReadonly;
+		/** Identifier for all the email responses for this conversation. */
+		ConversationIndex: DevKit.WebApi.StringValueReadonly;
 		/** Conversation Tracking Id. */
 		ConversationTrackingId: DevKit.WebApi.GuidValue;
-		/** ReadOnly - Shows how an email is matched to an existing email in Microsoft Dynamics 365. For system use only. */
-		CorrelationMethod: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly - Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValue;
+		/** Shows how an email is matched to an existing email in Microsoft Dynamics 365. For system use only. */
+		CorrelationMethod: DevKit.WebApi.OptionSetValueReadonly;
+		/** Shows who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Enter the expected date and time when email will be sent. */
 		DelayedEmailSendTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the count of the number of attempts made to send the email. The count is used as an indicator of email routing issues. */
@@ -72,40 +160,40 @@ declare namespace Rocket {
 		DirectionCode: DevKit.WebApi.BooleanValue;
 		/** Shows the date and time when an email reminder expires. */
 		EmailReminderExpiryTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Shows the status of the email reminder. */
-		EmailReminderStatus: DevKit.WebApi.OptionSetValue;
+		/** Shows the status of the email reminder. */
+		EmailReminderStatus: DevKit.WebApi.OptionSetValueReadonly;
 		/** For internal use only. */
 		EmailReminderText: DevKit.WebApi.StringValue;
 		/** Shows the type of the email reminder. */
 		EmailReminderType: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly - Shows the sender of the email. */
-		emailsender_account: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the sender of the email. */
-		emailsender_contact: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the sender of the email. */
-		emailsender_queue: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the sender of the email. */
-		emailsender_systemuser: DevKit.WebApi.LookupValue;
+		/** Shows the sender of the email. */
+		emailsender_account: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the sender of the email. */
+		emailsender_contact: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the sender of the email. */
+		emailsender_queue: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the sender of the email. */
+		emailsender_systemuser: DevKit.WebApi.LookupValueReadonly;
 		/** Email Tracking Id. */
 		EmailTrackingId: DevKit.WebApi.GuidValue;
-		/** ReadOnly - Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValue;
+		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
 		/** Select whether the email allows following recipient activities sent from Microsoft Dynamics 365.This is user preference state which can be overridden by system evaluated state. */
 		FollowEmailUserPreference: DevKit.WebApi.BooleanValue;
 		/** Unique identifier of the data import or data migration that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
-		/** ReadOnly - Type the ID of the email message that this email activity is a response to. */
-		InReplyTo: DevKit.WebApi.StringValue;
+		/** Type the ID of the email message that this email activity is a response to. */
+		InReplyTo: DevKit.WebApi.StringValueReadonly;
 		/** Information regarding whether the email activity was billed as part of resolving a case. */
 		IsBilled: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - For internal use only. Shows whether this email is followed. This is evaluated state which overrides user selection of follow email. */
-		IsEmailFollowed: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - For internal use only. Shows whether this email Reminder is Set. */
-		IsEmailReminderSet: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - For internal use only. */
-		IsUnsafe: DevKit.WebApi.IntegerValue;
+		/** For internal use only. Shows whether this email is followed. This is evaluated state which overrides user selection of follow email. */
+		IsEmailFollowed: DevKit.WebApi.BooleanValueReadonly;
+		/** For internal use only. Shows whether this email Reminder is Set. */
+		IsEmailReminderSet: DevKit.WebApi.BooleanValueReadonly;
+		/** Information regarding whether the activity is a regular activity type or event type. */
+		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
+		/** For internal use only. */
+		IsUnsafe: DevKit.WebApi.IntegerValueReadonly;
 		/** Indication if the email was created by a workflow rule. */
 		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
 		/** Contains the date and time stamp of the last on hold time. */
@@ -118,16 +206,16 @@ declare namespace Rocket {
 		MessageId: DevKit.WebApi.StringValue;
 		/** MIME type of the email message data. */
 		MimeType: DevKit.WebApi.StringValue;
-		/** ReadOnly - Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValue;
+		/** Shows who last updated the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who last updated the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Select the notification code to identify issues with the email recipients or attachments, such as blocked attachments. */
 		Notifications: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValue;
+		/** Shows how long, in minutes, that the record was on hold. */
+		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
 		/** Shows the number of times an email has been opened. */
 		OpenCount: DevKit.WebApi.IntegerValue;
 		/** Date and time that the record was migrated. */
@@ -136,18 +224,18 @@ declare namespace Rocket {
 		OwnerId_systemuser: DevKit.WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the business unit that owns the email activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the team who owns the email activity. */
-		OwningTeam: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the user who owns the email activity. */
-		OwningUser: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the business unit that owns the email activity. */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the team who owns the email activity. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the user who owns the email activity. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Select the activity that the email is associated with. */
 		ParentActivityId: DevKit.WebApi.LookupValue;
-		/** ReadOnly - For internal use only. */
-		PostponeEmailProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** For internal use only. */
+		PostponeEmailProcessingUntil_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
-		PriorityCode: DevKit.WebApi.OptionSetValueReadonly;
+		PriorityCode: DevKit.WebApi.OptionSetValue;
 		/** Shows the ID of the process. */
 		ProcessId: DevKit.WebApi.GuidValue;
 		/** Indicates that a read receipt is requested. */
@@ -159,35 +247,36 @@ declare namespace Rocket {
 		/** Choose the record that the email relates to. */
 		regardingobjectid_contact_email: DevKit.WebApi.LookupValue;
 		/** Choose the record that the email relates to. */
+		regardingobjectid_devkit_webapi_email: DevKit.WebApi.LookupValue;
+		/** Choose the record that the email relates to. */
 		regardingobjectid_knowledgearticle_email: DevKit.WebApi.LookupValue;
 		/** Choose the record that the email relates to. */
 		regardingobjectid_knowledgebaserecord_email: DevKit.WebApi.LookupValue;
 		/** Reminder Action Card Id. */
 		ReminderActionCardId: DevKit.WebApi.GuidValue;
-		/** ReadOnly - Shows the number of replies received for an email. */
-		ReplyCount: DevKit.WebApi.IntegerValue;
-		/** ReadOnly - Safe body text of the e-mail. */
-		SafeDescription: DevKit.WebApi.StringValue;
-		/** ReadOnly - Scheduled duration of the email activity, specified in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
+		/** Shows the number of replies received for an email. */
+		ReplyCount: DevKit.WebApi.IntegerValueReadonly;
+		/** Safe body text of the e-mail. */
+		SafeDescription: DevKit.WebApi.StringValueReadonly;
+		/** Scheduled duration of the email activity, specified in minutes. */
+		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
 		/** Enter the expected due date and time for the activity to be completed to provide details about when the email will be sent. */
 		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Enter the expected start date and time for the activity to provide details about the tentative time when the email activity must be initiated. */
 		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Sender of the email. */
 		Sender: DevKit.WebApi.StringValue;
-		/** ReadOnly - Select the mailbox associated with the sender of the email message. */
-		SenderMailboxId: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the parent account of the sender of the email. */
-		SendersAccount: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the date and time that the email was sent. */
-		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Select the mailbox associated with the sender of the email message. */
+		SenderMailboxId: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the parent account of the sender of the email. */
+		SendersAccount: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time that the email was sent. */
+		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Choose the service level agreement (SLA) that you want to apply to the email record. */
 		SLAId: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Last SLA that was applied to this email. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValue;
-		/** ReadOnly */
-		SLAName: DevKit.WebApi.StringValue;
+		/** Last SLA that was applied to this email. This field is for internal use only. */
+		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the date and time by which the activities are sorted. */
 		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the ID of the stage. */
@@ -216,8 +305,8 @@ declare namespace Rocket {
 		TraversedPath: DevKit.WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		/** ReadOnly - Version number of the email message. */
-		VersionNumber: DevKit.WebApi.BigIntValue;
+		/** Version number of the email message. */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<any>;
 	}
@@ -312,4 +401,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'JsForm':['Email'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
+//{'JsForm':['Email'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

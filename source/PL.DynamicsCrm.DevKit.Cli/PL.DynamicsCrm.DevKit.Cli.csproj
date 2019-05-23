@@ -148,6 +148,9 @@
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Utility.cs">
       <Link>LinkFiles\Utility.cs</Link>
     </Compile>
+    <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Xrm\ControlClassId.cs">
+      <Link>LinkFiles\ControlClassId.cs</Link>
+    </Compile>
     <Compile Include="..\PL.DynamicsCrm.DevKit.Shared\Xrm\CrmAttribute.cs">
       <Link>Xrm\CrmAttribute.cs</Link>
     </Compile>

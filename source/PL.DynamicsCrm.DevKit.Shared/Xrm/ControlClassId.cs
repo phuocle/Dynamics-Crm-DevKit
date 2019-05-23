@@ -25,6 +25,8 @@
         public const string BING_MAP = "{62B0DF79-0464-470F-8AF7-4483CFEA0C7D}";
         public const string COMPOSITE = MULTI_LINES_OF_TEXT;
         public const string NOTE = "{06375649-c143-495e-a496-c962e5b4488e}";
+        public const string EMAIL_ENGAGEMENT_ACTIONS = "{F454228D-1D25-4319-E12F-D27968BC0234}";
+        public const string EMAIL_RECIPIENT_ACTIVITY = "{26E9760F-7454-40DE-BB07-F6DCCCB82040}";
         //knowledge
     }
 }

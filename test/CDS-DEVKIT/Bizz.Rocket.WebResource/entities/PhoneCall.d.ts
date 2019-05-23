@@ -1,5 +1,84 @@
 ﻿///<reference path='devkit.d.ts' />
 declare namespace Rocket {
+	namespace FormPhoneCall {
+		interface Header {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Form.Controls.ControlLookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Enter the expected due date and time. */
+			ScheduledEnd: DevKit.Form.Controls.ControlDateTime;
+			/** Shows whether the phone call is open, completed, or canceled. Completed and canceled phone calls are read-only and can't be edited. */
+			StateCode: DevKit.Form.Controls.ControlOptionSet;
+		}
+		interface tab_phonecall_Sections {
+			general_information: DevKit.Form.Controls.ControlSection;
+			phone_call_description: DevKit.Form.Controls.ControlSection;
+			phone_call_details: DevKit.Form.Controls.ControlSection;
+			tab_2_section_2: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_phonecall extends DevKit.Form.Controls.IControlTab {
+			Section: tab_phonecall_Sections;
+		}
+		interface Tabs {
+			phonecall: tab_phonecall;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the number of minutes spent on the phone call. The duration is used in reporting. */
+			ActualDurationMinutes: DevKit.Form.Controls.ControlInteger;
+			/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
+			Description: DevKit.Form.Controls.ControlString;
+			/** Select the direction of the phone call as incoming or outbound. */
+			DirectionCode: DevKit.Form.Controls.ControlBoolean;
+			/** Enter the account, contact, lead, or user who made the phone call. */
+			from: DevKit.Form.Controls.ControlLookup;
+			/** Type the phone number. */
+			PhoneNumber: DevKit.Form.Controls.ControlString;
+			/** Choose the record that the phone call relates to. */
+			RegardingObjectId: DevKit.Form.Controls.ControlLookup;
+			/** Type a short description about the objective or primary topic of the phone call. */
+			Subject: DevKit.Form.Controls.ControlString;
+			/** Enter the account, contact, lead, or user recipients of the phone call. */
+			to: DevKit.Form.Controls.ControlLookup;
+		}
+		interface Footer {
+
+		}
+		interface Navigation {
+
+		}
+		interface QuickForm {
+		}
+		interface Process extends DevKit.Form.Controls.IControlProcess {
+		}
+	}
+    class FormPhoneCall extends DevKit.Form.IForm {
+        /**
+         * PL.DynamicsCrm.DevKit form PhoneCall
+         * @param executionContext the execution context.
+         * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource".
+         */
+        constructor(executionContext: any, defaultWebResourceName?: string);
+        /** Utility functions/methods/objects for Dynamics 365 form */
+        Utility: DevKit.Form.Utility;
+        /** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+        WebApi: DevKit.Form.WebApi;
+        /** The Body section of form PhoneCall */
+        Body: Rocket.FormPhoneCall.Body;
+        /** The Footer section of form PhoneCall */
+        Footer: Rocket.FormPhoneCall.Footer;
+        /** The Header section of form PhoneCall */
+        Header: Rocket.FormPhoneCall.Header;
+        /** The Navigation of form PhoneCall */
+        Navigation: Rocket.FormPhoneCall.Navigation;
+        /** The QuickForm of form PhoneCall */
+        QuickForm: Rocket.FormPhoneCall.QuickForm;
+        ///** The Composite of form PhoneCall */
+        //Composite: Rocket.FormPhoneCall.Composite;
+        /** The Process of form PhoneCall */
+        Process: Rocket.FormPhoneCall.Process;
+    }
 	class PhoneCallApi {
 		/**
 		* PL.DynamicsCrm.DevKit PhoneCallApi
@@ -38,50 +117,50 @@ declare namespace Rocket {
 		ActualStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Type a category to identify the phone call type, such as lead gathering or customer follow-up, to tie the phone call to a business group or function. */
 		Category: DevKit.WebApi.StringValue;
-		/** ReadOnly - Shows who created the record. */
-		CreatedBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Shows who created the record on behalf of another user. */
-		CreatedOnBehalfBy: DevKit.WebApi.LookupValue;
+		/** Shows who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Type additional information to describe the phone call, such as the primary message or the products and services discussed. */
 		Description: DevKit.WebApi.StringValue;
 		/** Select the direction of the phone call as incoming or outbound. */
 		DirectionCode: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
-		ExchangeRate: DevKit.WebApi.DecimalValue;
+		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
 		/** Unique identifier of the data import or data migration that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
 		/** Information which specifies whether the phone call activity was billed as part of resolving a case. */
 		IsBilled: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Information regarding whether the activity is a regular activity type or event type. */
-		IsRegularActivity: DevKit.WebApi.BooleanValue;
+		/** Information regarding whether the activity is a regular activity type or event type. */
+		IsRegularActivity: DevKit.WebApi.BooleanValueReadonly;
 		/** Indication which specifies if the phone call activity was created by a workflow rule. */
 		IsWorkflowCreated: DevKit.WebApi.BooleanValue;
 		/** Contains the date and time stamp of the last on hold time. */
 		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Select whether a voice mail was left for the person. */
 		LeftVoiceMail: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Shows who last updated the record. */
-		ModifiedBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
-		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
-		/** ReadOnly - Shows who last updated the record on behalf of another user. */
-		ModifiedOnBehalfBy: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Shows how long, in minutes, that the record was on hold. */
-		OnHoldTime: DevKit.WebApi.IntegerValue;
+		/** Shows who last updated the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who last updated the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows how long, in minutes, that the record was on hold. */
+		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
 		OwnerId_systemuser: DevKit.WebApi.LookupValue;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
 		OwnerId_team: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the business unit that owns the phone call activity. */
-		OwningBusinessUnit: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the team that owns the phone call activity. */
-		OwningTeam: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Unique identifier of the user that owns the phone call activity. */
-		OwningUser: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the business unit that owns the phone call activity. */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the team that owns the phone call activity. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the user that owns the phone call activity. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
 		/** Type the phone number. */
 		PhoneNumber: DevKit.WebApi.StringValue;
 		/** Select the priority so that preferred customers or critical issues are handled quickly. */
@@ -93,21 +172,22 @@ declare namespace Rocket {
 		/** Choose the record that the phone call relates to. */
 		regardingobjectid_contact_phonecall: DevKit.WebApi.LookupValue;
 		/** Choose the record that the phone call relates to. */
+		regardingobjectid_devkit_webapi_phonecall: DevKit.WebApi.LookupValue;
+		/** Choose the record that the phone call relates to. */
 		regardingobjectid_knowledgearticle_phonecall: DevKit.WebApi.LookupValue;
 		/** Choose the record that the phone call relates to. */
 		regardingobjectid_knowledgebaserecord_phonecall: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Scheduled duration of the phone call activity, specified in minutes. */
-		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
+		/** Scheduled duration of the phone call activity, specified in minutes. */
+		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
 		/** Enter the expected due date and time. */
 		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Enter the expected due date and time. */
 		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Choose the service level agreement (SLA) that you want to apply to the Phone Call record. */
 		SLAId: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Last SLA that was applied to this Phone Call. This field is for internal use only. */
-		SLAInvokedId: DevKit.WebApi.LookupValue;
-		/** ReadOnly */
-		SLAName: DevKit.WebApi.StringValue;
+		/** Last SLA that was applied to this Phone Call. This field is for internal use only. */
+		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		SLAName: DevKit.WebApi.StringValueReadonly;
 		/** Shows the date and time by which the activities are sorted. */
 		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the ID of the stage. */
@@ -130,8 +210,8 @@ declare namespace Rocket {
 		TraversedPath: DevKit.WebApi.StringValue;
 		/** Time zone code that was in use when the record was created. */
 		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
-		/** ReadOnly - Version number of the phone call activity. */
-		VersionNumber: DevKit.WebApi.BigIntValue;
+		/** Version number of the phone call activity. */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
 		/** The array of object that can cast object to ActivityPartyApi class */
 		ActivityParties: Array<any>;
 	}
@@ -166,4 +246,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'JsForm':['Phone Call'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
+//{'JsForm':['Phone Call'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

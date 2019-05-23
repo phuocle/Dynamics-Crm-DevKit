@@ -183,36 +183,74 @@ namespace PL.DynamicsCrm.DevKit.Cli
 
         private void GeneratorJsForm(string entity, int i, int count)
         {
-            var fileIntellisense = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.intellisense.js";
-            var lines = File.ReadAllLines(fileIntellisense);
-            var json = lines[lines.Length - 1];
-            var comment = SimpleJson.DeserializeObject<CommentIntellisense>(json.Substring("//".Length).Replace("'", "\""));
-            var parts = GeneratorJson.rootnamespace.Split(".".ToCharArray());
-            var projectName = parts.Length > 1 ? parts[1] : parts[0];
-            var jsForm = new JsForm(CrmServiceClient.OrganizationServiceProxy, projectName, entity);
-            jsForm.GeneratorCode(comment.JsForm, comment.IsDebugForm, comment.JsWebApi, comment.IsDebugWebApi);
-            var fileForm = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.form.js";
-
-            var old = File.ReadAllText(fileIntellisense).Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-            var @new = jsForm.FormCodeIntellisense.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-            if (old != @new)
+            if (GeneratorJson.usetypescriptdeclaration == "true")
             {
-                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".intellisense.js");
-                File.WriteAllText(fileIntellisense, jsForm.FormCodeIntellisense, System.Text.Encoding.UTF8);
+                var fileTypeScriptDeclaration = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.d.ts";
+                var lines = File.ReadAllLines(fileTypeScriptDeclaration);
+                var json = lines[lines.Length - 1];
+                var comment = SimpleJson.DeserializeObject<CommentIntellisense>(json.Substring("//".Length).Replace("'", "\""));
+                var parts = GeneratorJson.rootnamespace.Split(".".ToCharArray());
+                var projectName = parts.Length > 1 ? parts[1] : parts[0];
+                var jsForm = new JsForm(CrmServiceClient.OrganizationServiceProxy, projectName, entity);
+                jsForm.GeneratorCode(comment.JsForm, comment.IsDebugForm, comment.JsWebApi, comment.IsDebugWebApi);
+                var old = File.ReadAllText(fileTypeScriptDeclaration).Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+                var @new = jsForm.FormCodeIntellisense2.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+                if (old != @new)
+                {
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".d.ts");
+                    if (Utility.CanWriteAllText(fileTypeScriptDeclaration))
+                    {
+                        File.WriteAllText(fileTypeScriptDeclaration, jsForm.FormCodeIntellisense, System.Text.Encoding.UTF8);
+                    }
+                }
+                else
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": No change ", CliLog.ColorGreen, entity, ".d.ts");
+                var fileForm = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.form.js";
+                old = File.ReadAllText(fileForm).Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+                @new = jsForm.FormCode.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+                if (old != @new)
+                {
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".form.js");
+                    if (Utility.CanWriteAllText(fileForm))
+                    {
+                        File.WriteAllText(fileForm, jsForm.FormCode, System.Text.Encoding.UTF8);
+                    }
+                }
+                else
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": No change ", CliLog.ColorGreen, entity, ".form.js");
             }
             else
-                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": No change ", CliLog.ColorGreen, entity, ".intellisense.js");
-
-            old = File.ReadAllText(fileForm).Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-            @new = jsForm.FormCode.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-            if (old != @new)
             {
-                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".form.js");
-                File.WriteAllText(fileForm, jsForm.FormCode, System.Text.Encoding.UTF8);
-            }
-            else
-                CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": No change ", CliLog.ColorGreen, entity, ".form.js");
+                var fileIntellisense = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.intellisense.js";
+                var lines = File.ReadAllLines(fileIntellisense);
+                var json = lines[lines.Length - 1];
+                var comment = SimpleJson.DeserializeObject<CommentIntellisense>(json.Substring("//".Length).Replace("'", "\""));
+                var parts = GeneratorJson.rootnamespace.Split(".".ToCharArray());
+                var projectName = parts.Length > 1 ? parts[1] : parts[0];
+                var jsForm = new JsForm(CrmServiceClient.OrganizationServiceProxy, projectName, entity);
+                jsForm.GeneratorCode(comment.JsForm, comment.IsDebugForm, comment.JsWebApi, comment.IsDebugWebApi);
+                var fileForm = $"{CurrentDirectory}\\{GeneratorJson.rootfolder}\\{entity}.form.js";
 
+                var old = File.ReadAllText(fileIntellisense).Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+                var @new = jsForm.FormCodeIntellisense.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+                if (old != @new)
+                {
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".intellisense.js");
+                    File.WriteAllText(fileIntellisense, jsForm.FormCodeIntellisense, System.Text.Encoding.UTF8);
+                }
+                else
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": No change ", CliLog.ColorGreen, entity, ".intellisense.js");
+
+                old = File.ReadAllText(fileForm).Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+                @new = jsForm.FormCode.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+                if (old != @new)
+                {
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": Processing ", CliLog.ColorGreen, entity, ".form.js");
+                    File.WriteAllText(fileForm, jsForm.FormCode, System.Text.Encoding.UTF8);
+                }
+                else
+                    CliLog.WriteLine(CliLog.ColorCyan, string.Format("{0,0}|{1," + count.ToString().Length + "}", "", i) + ": No change ", CliLog.ColorGreen, entity, ".form.js");
+            }
         }
 
         private void GeneratorLateBound()

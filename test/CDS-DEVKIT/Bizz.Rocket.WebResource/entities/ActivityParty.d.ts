@@ -32,32 +32,30 @@ declare namespace Rocket {
 		ActivityPartyId: DevKit.WebApi.GuidValue;
 		/** Email address to which an email is delivered, and which is associated with the target entity. */
 		AddressUsed: DevKit.WebApi.StringValue;
-		/** ReadOnly - Email address column number from associated party. */
-		AddressUsedEmailColumnNumber: DevKit.WebApi.IntegerValue;
-		/** ReadOnly - Information about whether to allow sending email to the activity party. */
-		DoNotEmail: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Information about whether to allow sending faxes to the activity party. */
-		DoNotFax: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Information about whether to allow phone calls to the lead. */
-		DoNotPhone: DevKit.WebApi.BooleanValue;
-		/** ReadOnly - Information about whether to allow sending postal mail to the lead. */
-		DoNotPostalMail: DevKit.WebApi.BooleanValue;
+		/** Email address column number from associated party. */
+		AddressUsedEmailColumnNumber: DevKit.WebApi.IntegerValueReadonly;
+		/** Information about whether to allow sending email to the activity party. */
+		DoNotEmail: DevKit.WebApi.BooleanValueReadonly;
+		/** Information about whether to allow sending faxes to the activity party. */
+		DoNotFax: DevKit.WebApi.BooleanValueReadonly;
+		/** Information about whether to allow phone calls to the lead. */
+		DoNotPhone: DevKit.WebApi.BooleanValueReadonly;
+		/** Information about whether to allow sending postal mail to the lead. */
+		DoNotPostalMail: DevKit.WebApi.BooleanValueReadonly;
 		/** Amount of effort used by the resource in a service appointment activity. */
 		Effort: DevKit.WebApi.DoubleValue;
 		/** For internal use only. */
 		ExchangeEntryId: DevKit.WebApi.StringValue;
-		/** ReadOnly - Type of instance of a recurring series. */
-		InstanceTypeCode: DevKit.WebApi.OptionSetValue;
-		/** ReadOnly - Information about whether the underlying entity record is deleted. */
-		IsPartyDeleted: DevKit.WebApi.BooleanValue;
+		/** Type of instance of a recurring series. */
+		InstanceTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		/** Information about whether the underlying entity record is deleted. */
+		IsPartyDeleted: DevKit.WebApi.BooleanValueReadonly;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
-		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		OwnerId_systemuser: DevKit.WebApi.LookupValueReadonly;
 		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
-		OwnerId_team: DevKit.WebApi.LookupValue;
-		/** ReadOnly */
-		OwningBusinessUnit: DevKit.WebApi.GuidValue;
-		/** ReadOnly */
-		OwningUser: DevKit.WebApi.GuidValue;
+		OwnerId_team: DevKit.WebApi.LookupValueReadonly;
+		OwningBusinessUnit: DevKit.WebApi.GuidValueReadonly;
+		OwningUser: DevKit.WebApi.GuidValueReadonly;
 		/** Role of the person in the activity, such as sender, to, cc, bcc, required, optional, organizer, regarding, or owner. */
 		ParticipationTypeMask: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the party associated with the activity. */
@@ -65,17 +63,18 @@ declare namespace Rocket {
 		/** Unique identifier of the party associated with the activity. */
 		partyid_contact: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
+		partyid_devkit_webapi: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
 		partyid_knowledgearticle: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
 		partyid_queue: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
 		partyid_systemuser: DevKit.WebApi.LookupValue;
-		/** ReadOnly - Scheduled end time of the activity. */
-		ScheduledEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		/** ReadOnly - Scheduled start time of the activity. */
-		ScheduledStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
-		/** ReadOnly */
-		VersionNumber: DevKit.WebApi.BigIntValue;
+		/** Scheduled end time of the activity. */
+		ScheduledEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		/** Scheduled start time of the activity. */
+		ScheduledStart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
 	}
 }
 declare namespace OptionSet {

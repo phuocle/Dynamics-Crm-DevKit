@@ -219,10 +219,11 @@
     },
     {
       "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Bizz.Rocket",
+      "rootfolder": "",
       "crmversion": "365",
-      "type": "JsForm"
+      "type": "JsForm",
+      "usetypescriptdeclaration": "true"
     },
     {
       "profile": "JS-WEBAPI",

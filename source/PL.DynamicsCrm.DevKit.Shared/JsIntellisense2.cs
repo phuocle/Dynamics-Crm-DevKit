@@ -479,7 +479,8 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     }
                     else if (crmAttribute.FieldType == AttributeTypeCode.Lookup ||
                              crmAttribute.FieldType == AttributeTypeCode.Owner ||
-                             crmAttribute.FieldType == AttributeTypeCode.Customer)
+                             crmAttribute.FieldType == AttributeTypeCode.Customer ||
+                             crmAttribute.FieldType == AttributeTypeCode.PartyList)
                     {
                         _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Form.Controls.ControlLookup;\r\n";
                     }
@@ -515,6 +516,30 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 else if (item.Id.ToLower().StartsWith("WebResource_".ToLower()))
                 {
                     _d_ts += $"\t\t\t{item.Id}: DevKit.Form.Controls.ControlWebResource;\r\n";
+                }
+                else if(item.Id.ToLower() == "notescontrol" && item.ClassId.ToLower() == ControlClassId.NOTE.ToLower())
+                {
+                    _d_ts += $"\t\t\t{item.Id}: DevKit.Form.Controls.ControlNote;\r\n";
+                }
+                else if(item.ClassId.ToLower() == ControlClassId.SUB_GRID.ToLower())
+                {
+                    _d_ts += $"\t\t\t{item.Id}: DevKit.Form.Controls.ControlGrid;\r\n";
+                }
+                else if (item.ClassId.ToLower() == ControlClassId.EMAIL_ENGAGEMENT_ACTIONS.ToLower())
+                {
+                    _d_ts += $"\t\t\t{item.Id}: DevKit.Form.Controls.ControlEmailEngagement;\r\n";
+                }
+                else if (item.ClassId.ToLower() == ControlClassId.EMAIL_RECIPIENT_ACTIVITY.ToLower())
+                {
+                    _d_ts += $"\t\t\t{item.Id}: DevKit.Form.Controls.ControlEmailRecipient;\r\n";
+                }
+                else if (item.ClassId.ToLower() == ControlClassId.TIMER.ToLower())
+                {
+                    _d_ts += $"\t\t\t{item.Id}: DevKit.Form.Controls.ControlTimer;\r\n";
+                }
+                else
+                {
+                    _d_ts += $"\t\t\t{item.Id}: DevKit.Form.Controls.???;\r\n";
                 }
             }
             _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";

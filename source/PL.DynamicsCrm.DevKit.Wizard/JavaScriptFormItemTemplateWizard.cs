@@ -118,6 +118,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             if (form.ShowDialog() == DialogResult.OK)
             {
                 EntityName = form.Class;
+
                 SelectedProjectItem = GetProjectItem();
                 if (SelectedProjectItem != null)
                 {

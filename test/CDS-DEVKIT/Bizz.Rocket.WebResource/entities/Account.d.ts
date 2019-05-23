@@ -111,32 +111,6 @@ declare namespace Rocket {
 		interface Process extends DevKit.Form.Controls.IControlProcess {
 		}
 	}
-    class FormAccount extends DevKit.Form.IForm {
-        /**
-         * PL.DynamicsCrm.DevKit form Account
-         * @param executionContext the execution context.
-         * @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource".
-         */
-        constructor(executionContext: any, defaultWebResourceName?: string);
-        /** Utility functions/methods/objects for Dynamics 365 form */
-        Utility: DevKit.Form.Utility;
-        /** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
-        WebApi: DevKit.Form.WebApi;
-        /** The Body section of form Account */
-        Body: Rocket.FormAccount.Body;
-        /** The Footer section of form Account */
-        Footer: Rocket.FormAccount.Footer;
-        /** The Header section of form Account */
-        Header: Rocket.FormAccount.Header;
-        /** The Navigation of form Account */
-        Navigation: Rocket.FormAccount.Navigation;
-        /** The QuickForm of form Account */
-        QuickForm: Rocket.FormAccount.QuickForm;
-        ///** The Composite of form Account */
-        //Composite: Rocket.FormAccount.Composite;
-        /** The Process of form Account */
-        Process: Rocket.FormAccount.Process;
-    }
 	class AccountApi {
 		/**
 		* PL.DynamicsCrm.DevKit AccountApi
@@ -698,4 +672,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'JsForm':['Account'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':false}

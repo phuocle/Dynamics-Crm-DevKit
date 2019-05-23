@@ -97,6 +97,7 @@ var Rocket;
 			ProcessId: { a: 'processid' },
 			regardingobjectid_account_task: { b: 'regardingobjectid_account_task', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
 			regardingobjectid_contact_task: { b: 'regardingobjectid_contact_task', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
+			regardingobjectid_devkit_webapi_task: { b: 'regardingobjectid_devkit_webapi_task', a: '_regardingobjectid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			regardingobjectid_knowledgearticle_task: { b: 'regardingobjectid_knowledgearticle_task', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			regardingobjectid_knowledgebaserecord_task: { b: 'regardingobjectid_knowledgebaserecord_task', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
 			ScheduledDurationMinutes: { a: 'scheduleddurationminutes', r: true },
