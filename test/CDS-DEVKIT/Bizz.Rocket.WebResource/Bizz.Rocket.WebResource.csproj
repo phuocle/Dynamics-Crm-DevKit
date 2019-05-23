@@ -110,6 +110,7 @@
     </Content>
     <Content Include="test\SpecExtensions.js" />
     <Content Include="test\devkit_WebApi.test.html" />
+    <Content Include="xml\devkit_WebApi.form.xml" />
     <None Include="deploy.debug.bat" />
     <None Include="download.webresources.bat" />
     <None Include="packages.config" />

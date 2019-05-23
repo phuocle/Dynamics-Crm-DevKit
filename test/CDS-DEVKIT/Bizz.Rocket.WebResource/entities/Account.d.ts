@@ -9,7 +9,90 @@ declare namespace Rocket {
 			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
 			Revenue: DevKit.Form.Controls.ControlMoney;
 		}
+		interface tab_SUMMARY_TAB_Sections {
+			ACCOUNT_INFORMATION: DevKit.Form.Controls.ControlSection;
+			ADDRESS: DevKit.Form.Controls.ControlSection;
+			MapSection: DevKit.Form.Controls.ControlSection;
+			SOCIAL_PANE_TAB: DevKit.Form.Controls.ControlSection;
+			Summary_section_6: DevKit.Form.Controls.ControlSection;
+			SUMMARY_TAB_section_6: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_DETAILS_TAB_Sections {
+			COMPANY_PROFILE: DevKit.Form.Controls.ControlSection;
+			DETAILS_TAB_section_6: DevKit.Form.Controls.ControlSection;
+			CONTACT_PREFERENCES: DevKit.Form.Controls.ControlSection;
+			BILLING: DevKit.Form.Controls.ControlSection;
+			SHIPPING: DevKit.Form.Controls.ControlSection;
+			ChildAccounts: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Form.Controls.IControlTab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface tab_DETAILS_TAB extends DevKit.Form.Controls.IControlTab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface Tabs {
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+			DETAILS_TAB: tab_DETAILS_TAB;
+		}
 		interface Body {
+			Tab: Tabs;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Form.Controls.ControlString;
+			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
+			Address1_FreightTermsCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Select a shipping method for deliveries sent to this address. */
+			Address1_ShippingMethodCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Form.Controls.ControlMoney;
+			/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
+			CreditOnHold: DevKit.Form.Controls.ControlBoolean;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			Description: DevKit.Form.Controls.ControlString;
+			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
+			DoNotBulkEMail: DevKit.Form.Controls.ControlBoolean;
+			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
+			DoNotEMail: DevKit.Form.Controls.ControlBoolean;
+			/** Select whether the account allows faxes. If Do Not Allow is selected, the account will be excluded from fax activities distributed in marketing campaigns. */
+			DoNotFax: DevKit.Form.Controls.ControlBoolean;
+			/** Select whether the account allows phone calls. If Do Not Allow is selected, the account will be excluded from phone call activities distributed in marketing campaigns. */
+			DoNotPhone: DevKit.Form.Controls.ControlBoolean;
+			/** Select whether the account allows direct mail. If Do Not Allow is selected, the account will be excluded from letter activities distributed in marketing campaigns. */
+			DoNotPostalMail: DevKit.Form.Controls.ControlBoolean;
+			/** Type the primary email address for the account. */
+			EMailAddress1: DevKit.Form.Controls.ControlString;
+			/** Type the fax number for the account. */
+			Fax: DevKit.Form.Controls.ControlString;
+			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
+			FollowEmail: DevKit.Form.Controls.ControlBoolean;
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Type the company or business name. */
+			Name: DevKit.Form.Controls.ControlString;
+			/** Select the account's ownership structure, such as public or private. */
+			OwnershipCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
+			ParentAccountId: DevKit.Form.Controls.ControlLookup;
+			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+			PaymentTermsCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Select the preferred method of contact. */
+			PreferredContactMethodCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Form.Controls.ControlLookup;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId_1: DevKit.Form.Controls.ControlLookup;
+			/** Type the Standard Industrial Classification (SIC) code that indicates the account's primary industry of business, for use in marketing segmentation and demographic analysis. */
+			SIC: DevKit.Form.Controls.ControlString;
+			/** Type the main phone number for this account. */
+			Telephone1: DevKit.Form.Controls.ControlString;
+			/** Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money. */
+			TickerSymbol: DevKit.Form.Controls.ControlString;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Form.Controls.ControlLookup;
+			/** Type the account's website URL to get quick details about the company profile. */
+			WebSiteURL: DevKit.Form.Controls.ControlString;
+			/** Type the phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications. */
+			YomiName: DevKit.Form.Controls.ControlString;
 		}
 		interface Footer {
 
@@ -25,9 +108,7 @@ declare namespace Rocket {
 		}
 		interface QuickForm {
 		}
-		interface Composite {
-		}
-		interface Process {
+		interface Process extends DevKit.Form.Controls.IControlProcess {
 		}
 	}
     class FormAccount extends DevKit.Form.IForm {
@@ -51,8 +132,8 @@ declare namespace Rocket {
         Navigation: Rocket.FormAccount.Navigation;
         /** The QuickForm of form Account */
         QuickForm: Rocket.FormAccount.QuickForm;
-        /** The Composite of form Account */
-        Composite: Rocket.FormAccount.Composite;
+        ///** The Composite of form Account */
+        //Composite: Rocket.FormAccount.Composite;
         /** The Process of form Account */
         Process: Rocket.FormAccount.Process;
     }

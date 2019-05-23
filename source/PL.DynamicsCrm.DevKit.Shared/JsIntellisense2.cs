@@ -15,6 +15,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
         {
             public string Id { get; set; }
             public string Name { get; set; }
+            public string ClassId { get; set; }
         }
 
         public List<SystemForm> ProcessForms { get; internal set; }
@@ -26,9 +27,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
         public bool IsJsWebApi { get; internal set; }
         public bool IsDebugWebApi { get; internal set; }
 
-
         private string Class { get { return EntityName; } }
-
 
         public JsIntellisense2(OrganizationServiceProxy crmService)
         {
@@ -322,7 +321,8 @@ namespace PL.DynamicsCrm.DevKit.Shared
                             select new IdName
                             {
                                 Name = x?.Attribute("datafieldname")?.Value,
-                                Id = x?.Attribute("id").Value
+                                Id = x?.Attribute("id").Value,
+                                ClassId = x?.Attribute("classid")?.Value
                             }).ToList();
             headers = headers.OrderBy(x => x.Name).ToList();
             var _d_ts = Get_d_ts_ForListFields(headers);
@@ -339,7 +339,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                                .Descendants("NavBarByRelationshipItem")
                                select (string)x?.Attribute("Id")).ToList();
             foreach (var navigation in navigations)
-                _d_ts += $"\t\t\t{navigation}: DevKit.Form.Controls.NavigationItem,\r\n";
+                _d_ts += $"\t\t\t{navigation}: DevKit.Form.Controls.ControlNavigationItem,\r\n";
             _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
@@ -355,11 +355,74 @@ namespace PL.DynamicsCrm.DevKit.Shared
                            select new IdName
                            {
                                Name = x?.Attribute("datafieldname")?.Value,
-                               Id = x?.Attribute("id").Value
+                               Id = x?.Attribute("id").Value,
+                               ClassId = x?.Attribute("classid")?.Value
                            }).ToList();
             headers = headers.OrderBy(x => x.Name).ToList();
             var _d_ts = Get_d_ts_ForListFields(headers);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            return _d_ts;
+        }
+
+        private string GetForm_d_ts_Body(string formXml)
+        {
+            var part1 = string.Empty;
+            var part2 = string.Empty;
+            var part3 = $"\t\tinterface Tabs {{\r\n";
+            var xdoc = XDocument.Parse(formXml);
+            var rows = from x in xdoc.Descendants("tabs").Elements("tab")
+                       select new
+                       {
+                           Name = x?.Attribute("name")?.Value,
+                           InnerText = x?.ToString()
+                       };
+            foreach (var row in rows)
+            {
+                part1 += $"\t\tinterface tab_{row.Name}_Sections {{\r\n";
+                var xdoc2 = XDocument.Parse(row.InnerText);
+                var rows2 = from x2 in xdoc2.Descendants("columns").Descendants("column").Descendants("sections")
+                        .Elements("section")
+                            select new
+                            {
+                                name = x2.Attribute("name")?.Value
+                            };
+                foreach (var row2 in rows2)
+                {
+                    if (row2.name.StartsWith("ref_pan")) continue;
+                    part1 += $"\t\t\t{row2.name}: DevKit.Form.Controls.ControlSection;\r\n";
+                }
+                part1 += $"\t\t}}\r\n";
+                part2 += $"\t\tinterface tab_{row.Name} extends DevKit.Form.Controls.IControlTab {{\r\n";
+                part2 += $"\t\t\tSection: tab_{row.Name}_Sections;\r\n";
+                part2 += $"\t\t}}\r\n";
+                part3 += $"\t\t\t{row.Name}: tab_{row.Name};\r\n";
+            }
+            part3 += $"\t\t}}\r\n";
+            var _d_ts = string.Empty;
+            _d_ts = $"{part1}{part2}{part3}";
+            _d_ts += $"\t\tinterface Body {{\r\n";
+            _d_ts += $"\t\t\tTab: Tabs;\r\n";
+            var body = (from x in xdoc
+                          .Descendants("tabs")
+                          .Descendants("tab")
+                          .Descendants("columns")
+                          .Descendants("column")
+                          .Descendants("sections")
+                          .Descendants("section")
+                          .Descendants("rows")
+                          .Descendants("row")
+                          .Descendants("cell")
+                          .Descendants("control")
+                          select new IdName
+                          {
+                              Name = x?.Attribute("datafieldname")?.Value,
+                              Id = x?.Attribute("id").Value,
+                              ClassId = x?.Attribute("classid")?.Value
+                          }).Distinct().ToList();
+            body = body.OrderBy(x => x.Name).ToList();
+            _d_ts += Get_d_ts_ForListFields(body);
+            if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            _d_ts += $"\t\t}}\r\n";
             return _d_ts;
         }
 
@@ -442,7 +505,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     }
                     else
                     {
-                        _d_ts += $"//{jsdoc}\t\t\t{name}: DevKit.Form.Controls.???;\r\n";
+                        _d_ts += $"{jsdoc}\t\t\t{name}: DevKit.Form.Controls.???;\r\n";
                     }
                 }
                 else if (item.Id.ToLower().StartsWith("IFRAME_".ToLower()))
@@ -472,10 +535,11 @@ namespace PL.DynamicsCrm.DevKit.Shared
                     _d_ts += form_d_ts_Header;
                     _d_ts += $"\t\t}}\r\n";
                 }
-
-                _d_ts += $"\t\tinterface Body {{\r\n";
-                _d_ts += $"\t\t}}\r\n";
-
+                var form_d_ts_Body = GetForm_d_ts_Body(form.FormXml);
+                if (form_d_ts_Body.Length > 0)
+                {
+                    _d_ts += form_d_ts_Body;
+                }
                 var form_d_ts_Footer = GetForm_d_ts_Footer(form.FormXml);
                 if (form_d_ts_Footer.Length > 0)
                 {
@@ -496,7 +560,7 @@ namespace PL.DynamicsCrm.DevKit.Shared
                 _d_ts += $"\t\t}}\r\n";
                 //_d_ts += $"\t\tinterface Composite {{\r\n";
                 //_d_ts += $"\t\t}}\r\n";
-                _d_ts += $"\t\tinterface Process extends DevKit.Form.Controls.ProcessBase {{\r\n";
+                _d_ts += $"\t\tinterface Process extends DevKit.Form.Controls.IControlProcess {{\r\n";
                 _d_ts += $"\t\t}}\r\n";
                 _d_ts += $"\t}}\r\n";
                 var formBase = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.FormBase.js");

@@ -1,4 +1,4 @@
-﻿    class Form{0} extends DevKit.Form.FormBase {
+﻿    class Form{0} extends DevKit.Form.IForm {
         /**
          * PL.DynamicsCrm.DevKit form {0}
          * @param executionContext the execution context.
@@ -19,8 +19,8 @@
         Navigation: {1}.Form{0}.Navigation;
         /** The QuickForm of form {0} */
         QuickForm: {1}.Form{0}.QuickForm;
-        /** The Composite of form {0} */
-        Composite: {1}.Form{0}.Composite;
+        ///** The Composite of form {0} */
+        //Composite: {1}.Form{0}.Composite;
         /** The Process of form {0} */
         Process: {1}.Form{0}.Process;
     }

@@ -38,6 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Tfs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommentIntellisense.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Xrm\ControlClassId.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Xrm\CrmAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Xrm\CrmConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Xrm\PluginInputOutputParameter.cs" />
