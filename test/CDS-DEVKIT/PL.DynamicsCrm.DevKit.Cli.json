@@ -1,0 +1,257 @@
+{
+  "plugins": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "includefiles": [
+        "Bizz.Rocket.Plugin.*.dll",
+        "Bizz.Rocket.CustomAction.*.dll"
+      ],
+      "excludefiles": [
+        "Bizz.Rocket.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "Bizz.Rocket.Plugin.*.dll",
+        "Bizz.Rocket.CustomAction.*.dll"
+      ],
+      "excludefiles": [
+        "Bizz.Rocket.*.Test.dll"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "includefiles": [
+        "Bizz.Rocket.Workflow.*.dll"
+      ],
+      "excludefiles": [
+        "Bizz.Rocket.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "Bizz.Rocket.Workflow.*.dll"
+      ],
+      "excludefiles": [
+        "Bizz.Rocket.*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "DEVKIT",
+      "prefix": "devkit_",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "entities\\*.intellisense.js",
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "devkit_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "devkit_/entities/[entity].form.js",
+            "devkit_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "devkit_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "devkit_/lib/WebApiClient.js"
+          ]
+        },
+        {
+          "webresources": [
+            "devkit_/entities/devkit_WebApi.js"
+          ],
+          "dependencies": [
+            "devkit_/entities/Contact.webapi.js",
+            "devkit_/entities/ActivityParty.webapi.js",
+            "devkit_/entities/Account.webapi.js",
+            "devkit_/entities/Email.webapi.js",
+            "devkit_/entities/SystemUser.webapi.js"
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "???",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "entities\\*.intellisense.js",
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "???_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "???_/lib/WebApiClient.js"
+          ]
+        }
+      ]
+    }
+  ],
+  "dataproviders": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "includefiles": [
+        "Bizz.Rocket.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "Bizz.Rocket.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "???",
+      "includefiles": [
+        "Bizz.Rocket.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "Bizz.Rocket.*.Test.dll"
+      ]
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Unmanaged",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Extract-Managed",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Unmanaged",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Managed",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "solutionzipfolder": "???",
+      "logfolder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "crmversion": "365",
+      "type": "CSharp"
+    },
+    {
+      "profile": "JS-FORM",
+      "rootnamespace": "Bizz.Rocket",
+      "rootfolder": "",
+      "crmversion": "365",
+      "type": "JsForm",
+      "usetypescriptdeclaration": "true"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "Bizz.Rocket",
+      "rootfolder": "",
+      "crmversion": "365",
+      "type": "JsWebApi",
+      "usetypescriptdeclaration": "true"
+    }
+  ],
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???"
+    }
+  ],
+  "portals": [
+    {
+      "profile": "DEBUG",
+      "name": "???"
+    }
+  ],
+  "proxytypes": [
+    {
+      "profile": "DEBUG",
+      "namespace": "???",
+      "output":  "GeneratedCode.cs"
+    }
+  ]
+}

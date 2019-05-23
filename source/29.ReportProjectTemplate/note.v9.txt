@@ -11,3 +11,13 @@ Download Report Authoring Extension
 
 Microsoft.Crm.Reporting.RdlHelper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
 Microsoft.Crm.Reporting.RdlHelper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+
+How to fixed when save report "Unknown Report Version: 9.0"
+1. Use VS2017 install 2 extensions
+    a. Microsoft Reporting Services Projects (https://marketplace.visualstudio.com/items?itemName=ProBITools.MicrosoftReportProjectsforVisualStudio)
+    b. Microsoft RDLC Report Designer (https://marketplace.visualstudio.com/items?itemName=ProBITools.MicrosoftRdlcReportDesignerforVisualStudio-18001)
+2. Create a report project in VS2017
+3. Add existing error .rdl file to this project
+4. Open .rdl file and then save --> the magaic here, it automatic covert everything here !!!
+5. Now, back to VS2015 (the latest VS support SSRS with FetchXMl) and add the saved file to project.
+6. I tested and worked

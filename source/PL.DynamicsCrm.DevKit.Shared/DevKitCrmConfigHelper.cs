@@ -37,7 +37,10 @@ namespace PL.DynamicsCrm.DevKit.Shared
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\PL.DynamicsCrm.DevKit.json";
             if (!File.Exists(devKitCrmConfigFile)) return new DevKitCrmConfig();
             var json = File.ReadAllText(devKitCrmConfigFile);
-            return SimpleJson.DeserializeObject<DevKitCrmConfig>(json);
+            var config = SimpleJson.DeserializeObject<DevKitCrmConfig>(json);
+            if (config.UseTypeScriptDeclaration == null || config.UseTypeScriptDeclaration == "null")
+                config.UseTypeScriptDeclaration = "false";
+            return config;
         }
     }
 }

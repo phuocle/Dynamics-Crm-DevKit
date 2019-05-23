@@ -11,5 +11,6 @@ namespace PL.DynamicsCrm.DevKit.Shared
         public string DefaultCrmConnection { get; set; }
         public string SolutionPrefix { get; set; }
         public List<CrmConnection> CrmConnections { get; set; }
+        public string UseTypeScriptDeclaration { get; set; }
     }
 }

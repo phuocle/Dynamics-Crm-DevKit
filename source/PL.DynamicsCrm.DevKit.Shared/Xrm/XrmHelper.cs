@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
@@ -66,7 +65,8 @@ namespace PL.DynamicsCrm.DevKit.Shared.Xrm
                     Name = entity.SchemaName,
                     LogicalName = entity.LogicalName,
                     HasImage = !string.IsNullOrEmpty(entity.PrimaryImageAttribute),
-                    EntityTypeCode = entity.ObjectTypeCode ?? -1
+                    EntityTypeCode = entity.ObjectTypeCode ?? -1,
+                    IsCustomEntity = entity.IsCustomEntity ?? false
                 });
             entities = entities.OrderBy(entity => entity.Name).ToList();
             return entities;

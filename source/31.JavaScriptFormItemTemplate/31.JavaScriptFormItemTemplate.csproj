@@ -88,8 +88,6 @@
   <ItemGroup>
     <Content Include="icon.png" />
     <Content Include="Javascript.js" />
-    <Content Include="JavaScriptForm.js" />
-    <Content Include="JavaScriptFormIntellisense.js" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="JavaScriptFormItemTemplate.vstemplate">

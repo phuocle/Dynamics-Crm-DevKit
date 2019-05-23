@@ -16,6 +16,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 {
     public partial class FormProject : Form
     {
+        private DevKitCrmConfig Config = null;
         private NuGetHelper nuget = null;
 
         private FormType _formType;
@@ -28,16 +29,16 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             InitializeComponent();
 
             DTE = dte;
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+            Config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
             nuget = new NuGetHelper();
             cboCrmName.DataSource = nuget.CrmNameDataSource;
-            if (!string.IsNullOrEmpty(config.DefaultCrmName))
+            if (!string.IsNullOrEmpty(Config.DefaultCrmName))
             {
-                cboCrmName.Text = config.DefaultCrmName;
+                cboCrmName.Text = Config.DefaultCrmName;
                 cboCrmName_SelectedIndexChanged(null, null);
-                if (!string.IsNullOrEmpty(config.DefaultCrmVersion))
+                if (!string.IsNullOrEmpty(Config.DefaultCrmVersion))
                 {
-                    cboCrmVersion.Text = config.DefaultCrmVersion;
+                    cboCrmVersion.Text = Config.DefaultCrmVersion;
                     cboCrmVersion_SelectedIndexChanged(null, null);
                 }
             }
@@ -679,7 +680,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
         public string GeneratedJsWebApiCode { get; set; }
 
         public string GeneratedJsFormCodeIntellisense { get; set; }
+        public string GeneratedJsFormCodeIntellisense2 { get; set; }
         public string GeneratedJsWebApiCodeIntellisense { get; set; }
+        public string GeneratedJsWebApiCodeIntellisense2 { get; set; }
 
         public string FilteringAttributes
         {
@@ -802,21 +805,28 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         public void DoGeneratorCodeWebApi(string entityName, bool isDebug, string file)
         {
-            var lines = File.ReadAllLines(file);
-            var json = lines[lines.Length - 1];
-            var comment = SimpleJson.DeserializeObject<CommentIntellisense>(json.Substring("//".Length).Replace("'", "\""));
-
+            var isDebugForm = false;
+            var jsForm = new List<string>();
+            if (File.Exists(file))
+            {
+                var lines = File.ReadAllLines(file);
+                var json = lines[lines.Length - 1];
+                var comment = SimpleJson.DeserializeObject<CommentIntellisense>(json.Substring("//".Length).Replace("'", "\""));
+                isDebugForm = comment.IsDebugForm;
+                jsForm = comment.JsForm;
+            }
             var solutionFullName = DTE?.Solution?.FullName;
             var fInfo = new FileInfo(solutionFullName);
             var parts = fInfo?.Name?.Split(".".ToCharArray());
             var projectName = parts[1];
             if (projectName == "sln") projectName = "WebResource";
-            var JsWebApi = new JsWebApi(CrmService, projectName, entityName, chkOthers.Checked, comment.JsForm, comment.IsDebugForm);
+            var JsWebApi = new JsWebApi(CrmService, projectName, entityName, isDebug, jsForm, isDebugForm);
             JsWebApi.GeneratorCode();
 
             MessageError = JsWebApi.Message;
             GeneratedJsWebApiCode = JsWebApi.WebApiCode;
             GeneratedJsWebApiCodeIntellisense = JsWebApi.WebApiCodeIntellisense;
+            GeneratedJsWebApiCodeIntellisense2 = JsWebApi.WebApiCodeTypeScriptDeclaration;
         }
 
         public void DoGeneratorCodeForm(CheckedItemCollection lists, bool isDebugForm, string file)
@@ -836,6 +846,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             GeneratedJsForm = JsForm.Form;
             GeneratedJsFormCode = JsForm.FormCode;
             GeneratedJsFormCodeIntellisense = JsForm.FormCodeIntellisense;
+            GeneratedJsFormCodeIntellisense2 = JsForm.FormCodeIntellisense2;
         }
 
         private ProjectItem GetFiles(ProjectItem item)
@@ -970,6 +981,8 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             Close();
         }
 
+        public string UseTypeScriptDeclaration { get; set; }
+
         private void btnOk_Click(object sender, EventArgs e)
         {
             if (cboCrmName.Visible && cboCrmName.Enabled && cboCrmName.Text.Length == 0)
@@ -993,11 +1006,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 return;
             }
 
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            config.DefaultCrmName = cboCrmName.Text;
-            config.DefaultCrmVersion = cboCrmVersion.Text;
-            config.DefaultNetVersion = NetVersion;
-            DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
+            UseTypeScriptDeclaration = Config.UseTypeScriptDeclaration;
+            Config.DefaultCrmName = cboCrmName.Text;
+            Config.DefaultCrmVersion = cboCrmVersion.Text;
+            Config.DefaultNetVersion = NetVersion;
+            DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
 
             if (FormType == FormType.Console ||
                 FormType == FormType.CustomAction ||
@@ -1046,12 +1059,9 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 btnCancel.Enabled = false;
                 chkOthers.Enabled = false;
                 var entityName = lblProjectName.Text;
-                var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
-                if (!File.Exists(file))
-                {
-                    MessageBox.Show($@"File not found: {file}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+                var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+                var file = File.Exists(file2) ? file2 : file1;
                 progressBar.Visible = true;
                 var debug = chkOthers.Checked;
                 Task task = Task.Factory.StartNew(() =>
@@ -1084,8 +1094,10 @@ namespace PL.DynamicsCrm.DevKit.Wizard
                 chkListForm.Enabled = false;
                 chkOthers.Enabled = false;
                 var entityName = lblProjectName.Text;
-                var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
-
+                //var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+                var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+                var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+                var file = File.Exists(file2) ? file2 : file1;
                 progressBar.Visible = true;
                 Task task = Task.Factory.StartNew(() =>
                 {
@@ -1369,6 +1381,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
         private void cboEntity_SelectedIndexChanged(object sender, EventArgs e)
         {
+            chkOthers.Checked = false;
             if (FormType == FormType.Portal) return;
             if (FormType == FormType.Test)
                 lblProjectName.Text = $"{cboEntity.Text}.Test";
@@ -1379,7 +1392,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             {
                 if (FormType == FormType.JsWebApiItem)
                 {
-                    var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{cboEntity.Text}.intellisense.js";
+                    var file = string.Empty;
+                    if (Config.UseTypeScriptDeclaration == "true")
+                        file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{cboEntity.Text}.d.ts";
+                    else
+                        file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{cboEntity.Text}.intellisense.js";
                     if (File.Exists(file))
                     {
                         try
@@ -1437,7 +1454,11 @@ namespace PL.DynamicsCrm.DevKit.Wizard
 
             foreach (var form in forms)
                 chkListForm.Items.Add(form);
-            var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+
+            var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.intellisense.js";
+            var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
+            var file = File.Exists(file2) ? file2 : file1;
+
             if (File.Exists(file))
             {
                 try

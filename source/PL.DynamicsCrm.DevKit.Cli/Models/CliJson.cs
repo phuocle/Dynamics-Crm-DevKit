@@ -12,5 +12,6 @@ namespace PL.DynamicsCrm.DevKit.Cli.Models
         public List<Generator> generators { get; set; }
         public List<DownloadWebResource> downloadwebresources { get; set; }
         public List<Portal> portals { get; set; }
+        public List<ProxyType> proxytypes { get; set; }
     }
 }

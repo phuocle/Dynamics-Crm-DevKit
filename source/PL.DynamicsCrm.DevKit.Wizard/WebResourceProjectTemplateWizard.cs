@@ -108,7 +108,7 @@ namespace PL.DynamicsCrm.DevKit.Wizard
             code += "\r\n";
             var webApiClient = Utility.ReadEmbeddedResource("PL.DynamicsCrm.DevKit.Wizard.data.WebApiClient.js");
             webApiClient = webApiClient.Replace("DevKit", projectName);
-            webApiClient = Uglify.Js(webApiClient).Code;
+            //webApiClient = Uglify.Js(webApiClient).Code;
             return code + webApiClient;
         }
 
