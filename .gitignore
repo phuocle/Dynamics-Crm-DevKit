@@ -264,3 +264,6 @@ paket-files/
 __pycache__/
 *.pyc
 /source/PL.DynamicsCrm.DevKit.Analyzers/analyzers
+/source/PL.DynamicsCrm.DevKit.Analyzers/Nuget/nuget.exe
+/source/PL.DynamicsCrm.DevKit.Cli/Nuget/nuget.exe
+/source/PL.DynamicsCrm.DevKit.Tools/Nuget/nuget.exe
