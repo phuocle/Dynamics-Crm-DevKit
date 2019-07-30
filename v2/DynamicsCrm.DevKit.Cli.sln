@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DynamicsCrm.DevKit.Shared", "DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.shproj", "{D92F5473-E2A4-416E-8D80-CF3D48A48C6D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2C53DEC1-C9EE-45AF-9BAC-5318C66D6F1A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		DynamicsCrm.DevKit.pfx = DynamicsCrm.DevKit.pfx
+		release.bat = release.bat
+		version.txt = version.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Resources", "DynamicsCrm.DevKit.Resources\DynamicsCrm.DevKit.Resources.csproj", "{C3D692C7-4D23-4F68-AF38-AC9B375E4A56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Cli", "DynamicsCrm.DevKit.Cli\DynamicsCrm.DevKit.Cli.csproj", "{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems*{2d2b6c4b-f543-42b2-ad2e-46b2f9b8494d}*SharedItemsImports = 4
+		DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems*{d92f5473-e2a4-416e-8d80-cf3d48a48c6d}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3D692C7-4D23-4F68-AF38-AC9B375E4A56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3D692C7-4D23-4F68-AF38-AC9B375E4A56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3D692C7-4D23-4F68-AF38-AC9B375E4A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3D692C7-4D23-4F68-AF38-AC9B375E4A56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D2B6C4B-F543-42B2-AD2E-46B2F9B8494D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+    <Metadata>
+        <Identity Id="DynamicsCrm.DevKit.Package.AD2B93A1-104B-4A17-856F-157B6C0BDE32" Version="1.0" Language="en-US" Publisher="Carlos Quintero" />
+        <DisplayName>DynamicsCrm.DevKit.Package</DisplayName>
+        <Description xml:space="preserve">DynamicsCrm.DevKit.PackageDynamicsCrm.DevKit.Package</Description>
+        <Icon>icon.png</Icon>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0,17.0]" />
+        <InstallationTarget Version="[14.0,17.0]" Id="Microsoft.VisualStudio.Community" />
+        <InstallationTarget Version="[14.0,17.0]" Id="Microsoft.VisualStudio.Enterprise" />
+    </Installation>
+    <Dependencies>
+    </Dependencies>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    </Assets>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.Net.Component.4.5.2.TargetingPack" Version="[14.0,17.0]" DisplayName=".NET Framework 4.5.2 targeting pack" />
+        <Prerequisite Id="Microsoft.Net.Component.4.6.2.TargetingPack" Version="[14.0,17.0]" DisplayName=".NET Framework 4.6.2 targeting pack" />
+        <Prerequisite Id="Microsoft.Net.Component.4.TargetingPack" Version="[14.0,17.0]" DisplayName=".NET Framework 4 targeting pack" />
+    </Prerequisites>
+</PackageManifest>

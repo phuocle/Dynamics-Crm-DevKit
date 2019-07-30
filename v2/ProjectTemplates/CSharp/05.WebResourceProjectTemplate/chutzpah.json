@@ -1,0 +1,38 @@
+{
+  "Framework": "jasmine",
+  "FrameworkVersion": "3.4.0",
+  "TestHarnessReferenceMode": "AMD",
+  "TestHarnessLocationMode": "SettingsFileAdjacent",
+  "CodeCoverageExecutionMode": "Manual",
+  "CodeCoverageExcludes": [
+    "*.form.js",
+    "*.webapi.js",
+    "*.test.js",
+    "requirejsConfig.js",
+    "*\\node_modules\\*"
+  ],
+  "References": [
+    {
+      "Path": "lib/WebApiClient.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "node_modules/requirejs/require.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "test/requirejsConfig.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "entities",
+      "Includes": [ "*.js" ]
+    }
+  ],
+  "Tests": [
+    {
+      "Path": "test",
+      "Includes": [ "*.test.js" ]
+    }
+  ]
+}

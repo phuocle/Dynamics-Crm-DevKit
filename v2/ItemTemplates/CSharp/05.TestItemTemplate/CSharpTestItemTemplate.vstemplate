@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>05. C# Test Class</Name>
+    <Description>C# Test Class Template</Description>
+    <DefaultName>Class.cs</DefaultName>
+    <TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000005</TemplateID>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>Visual C#</ProjectSubType>
+    <AppliesTo>CSharp</AppliesTo>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">Plugin.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">CustomAction.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">Workflow.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">DataProvider.cs</ProjectItem>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.0.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.Test</FullClassName>
+  </WizardExtension>
+</VSTemplate>

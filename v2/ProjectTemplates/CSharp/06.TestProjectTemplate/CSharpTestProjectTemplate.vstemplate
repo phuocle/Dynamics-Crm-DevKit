@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <SortOrder>1060</SortOrder>
+    <Name>06. C# Test Project</Name>
+    <Description>C# Test Project Template</Description>
+    <DefaultName>TestProject</DefaultName>
+    <TemplateID>AAAAAAAA-AAAA-AAAA-AAAA-000000000006</TemplateID>
+    <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
+    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <CreateNewFolder>true</CreateNewFolder>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Disabled</LocationField>
+    <EnableLocationBrowseButton>false</EnableLocationBrowseButton>
+    <EnableEditOfLocationField>false</EnableEditOfLocationField>
+    <CreateInPlace>true</CreateInPlace>
+    <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.0.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Test</FullClassName>
+  </WizardExtension>
+</VSTemplate>
