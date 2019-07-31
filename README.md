@@ -1,14 +1,14 @@
-# PL.DynamicsCrm.DevKit contains:
-* [19 projects/items template.](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-and-Items-Template)
-* [Integrated with Visual Studio](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Integrated-with-Visual-Studio) for deploy WebResource.
-* [PL.DynamicsCrm.DevKit.Cli](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CLI) for deploy plugins, workflows, custom actions, webresources.
+# DynamicsCrm.DevKit contains:
+* [23 projects/items template.](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-and-Items-Template)
+* [Integrated with Visual Studio](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Integrated-with-Visual-Studio) for deploy WebResources, Reports.
+* [DynamicsCrm.DevKit.Cli](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CLI) for deploy plugins, workflows, custom actions, data provider, webresources, download webresources, download reports.
 
-[Install PL.DynamicsCrm.DevKit](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Install) and check our [tutorials](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Tutorials).
+[Install DynamicsCrm.DevKit](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Install) and check our [tutorials](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Tutorials).
 
-# PL.DynamicsCrm.DevKit Keys
-* No need ~~Plugin Registration Tool~~ because it have a **deploy.bat**
-* No need ~~WebResource deploy Tool or manualy do it~~ because it have a **deploy.bat** and **integrated with Visual Studio tool**
-* **JavaScript intellisense**
+# DynamicsCrm.DevKit Keys
+* No need ~~Plugin Registration Tool~~ because using **deploy.debug.bat**
+* No need ~~WebResource deploy Tool or manualy do it~~ because it have a **deploy.debug.bat** and **integrated with Visual Studio tool**
+* **JavaScript intellisense with d.ts**
 ![Intellisense](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/master/wiki/images/js_intellisense.gif)
 * **Automation deploy plugin**
 ![Intellisense](https://github.com/phuocle/Dynamics-Crm-DevKit/blob/master/wiki/images/plugin_deploy.gif)
