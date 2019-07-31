@@ -9,6 +9,5 @@ namespace DynamicsCrm.DevKit.Shared.Models.Cli
         public string rootnamespace { get; set; }
         public string type { get; set; }
         public string crmversion { get; set; }
-        public List<string> entities { get; set; }
     }
 }

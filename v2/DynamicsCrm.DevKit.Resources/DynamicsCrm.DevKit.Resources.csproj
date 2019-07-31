@@ -66,9 +66,6 @@
     <EmbeddedResource Include="webresource.packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DevKit.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="OptionSet.js" />
   </ItemGroup>
   <ItemGroup>
@@ -81,7 +78,7 @@
     <EmbeddedResource Include="workflow.deploy.debug.bat" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DevKit.2.js" />
+    <EmbeddedResource Include="DevKit.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

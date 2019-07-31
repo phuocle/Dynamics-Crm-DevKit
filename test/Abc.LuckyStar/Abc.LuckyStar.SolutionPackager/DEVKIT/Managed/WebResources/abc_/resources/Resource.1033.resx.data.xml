@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{d6ca5f26-64b3-e911-a99b-000d3a828cb5}</WebResourceId>
+  <Name>abc_/resources/Resource.1033.resx</Name>
+  <DisplayName>abc_/resources/Resource.1033.resx</DisplayName>
+  <Description>1.0.0.0</Description>
+  <LanguageCode>1033</LanguageCode>
+  <WebResourceType>12</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/abc_resourcesResource1033resxD6CA5F26-64B3-E911-A99B-000D3A828CB5</FileName>
+</WebResource>

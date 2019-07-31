@@ -56,10 +56,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'solutiontype' should be: 'Managed' or 'Unmanaged'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.folder.Length == 0 || json.folder == "???")
                 throw new Exception($"{LOG} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.solutionzipfolder.Length == 0 || json.solutionzipfolder == "???")
-                throw new Exception($"{LOG} 'solutionzipfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.logfolder.Length == 0 || json.logfolder == "???")
-                throw new Exception($"{LOG} 'logfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.type.Length == 0 || json.type == "???")
                 throw new Exception($"{LOG} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.type.ToLower() != "Extract".ToLower() && json.type.ToLower() != "Pack".ToLower())
@@ -71,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"Exporting {json.solutiontype} solution: ", CliLog.ColorCyan, json.solution, CliLog.ColorGreen, " to:");
             var fileName = Utility.FormatSolutionVersionString(json.solution, System.Version.Parse(CrmVersion), json.solutiontype);
-            var solutionFile = Path.Combine(currentDirectory, json.solutionzipfolder, DateTime.Now.ToString("yyyyMMdd") + "-" + fileName);
+            var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", json.type + "_" + DateTime.Now.ToString("yyyyMMdd") + "-" + fileName);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + solutionFile);
             var request = new ExportSolutionRequest
             {
@@ -161,10 +157,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     command.Append($" /map: \"{map}\"");
                 }
             }
-            if (json.logfolder != null)
-            {
-                command.Append($" /log:\"{currentDirectory}\\{json.folder}\\{json.logfolder}\\{DateTime.Now.ToString("yyyy-MM-dd hh-mm") + "." + json.solutiontype + ".txt"}\"");
-            }
+            command.Append($" /log:\"{currentDirectory}\\{json.folder}\\log\\{DateTime.Now.ToString("yyyy-MM-dd hh-mm") + "." + json.solutiontype + ".txt"}\"");
             command.Append($" /packagetype:{json.solutiontype}");
             return command.ToString();
         }

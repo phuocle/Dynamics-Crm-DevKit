@@ -70,9 +70,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "GENERATOR CSHARP LATE BOUND");
 
             var entities = new List<string>();
-            const string pattern = "*.generated.cs";
+            string[] files;
             var folder = $"{currentDirectory}\\{json.rootfolder}";
-            var files = Directory.GetFiles(folder, pattern);
+            //if (json.entities == null || json.entities.Count == 0)
+            //{
+                var pattern = "*.generated.js";
+                files = Directory.GetFiles(folder, pattern);
+            //}
+            //else
+            //{
+            //    //if (json.entities.Count == 1 && json.entities[0].ToLower() == "all")
+            //    //    files = GetAllEntitiesForWebApi();
+            //    //else
+            //        files = json.entities.Select(e => $"{folder}{e}.generated.js").ToArray();
+            //}
             foreach (var file in files)
             {
                 var fInfo = new FileInfo(file);
@@ -81,11 +92,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (entities.Count == 0)
             {
-                CliLog.WriteLine(CliLog.ColorRed, "NOT FOUND ENTITIES !!!");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "NOT FOUND ", CliLog.ColorMagenta, " ENTIIES !!!");
                 return;
             }
-
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, entities.Count, CliLog.ColorGreen, " entities");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorMagenta, entities.Count, CliLog.ColorGreen, " entities");
             var i = 1;
             foreach (var entity in entities)
             {
@@ -93,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 i++;
             }
 
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "GENERATOR CSHARP LATE BOUND");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR CSHARP LATE BOUND");
         }
 
         private void GeneratorLateBound(string entity, int i, int count)
@@ -104,7 +114,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var crmVersionName = (CrmVersionName)int.Parse(json.crmversion);
             var generated = lateBound.Go(crmServiceClient.OrganizationServiceProxy, crmVersionName, entity, rootNameSpace, sharedNameSpace);
             var file = $"{currentDirectory}\\{json.rootfolder}\\{entity}.generated.cs";
-            var old = File.ReadAllText(file).Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
+            var old = string.Empty;
+            if (File.Exists(file))
+                old = File.ReadAllText(file).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
             var @new = generated.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
             if (old != @new)
             {
@@ -133,19 +145,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var entities = new List<string>();
             string[] files;
             var folder = $"{currentDirectory}\\{json.rootfolder}";
-            if (json.entities == null || json.entities.Count == 0)
-            {
+            //if (json.entities == null || json.entities.Count == 0)
+            //{
                 var pattern = "*.webapi.js";
                 files = Directory.GetFiles(folder, pattern);
-            }
-            else
-            {
-                if (json.entities.Count == 1 && json.entities[0].ToLower() == "all")
-                    files = GetAllEntitiesForWebApi();
-                else
-                    files = json.entities.Select(e => $"{folder}{e}.webapi.js").ToArray();
-            }
-
+            //}
+            //else
+            //{
+            //    //if (json.entities.Count == 1 && json.entities[0].ToLower() == "all")
+            //    //    files = GetAllEntitiesForWebApi();
+            //    //else
+            //        files = json.entities.Select(e => $"{folder}{e}.webapi.js").ToArray();
+            //}
             foreach (var file in files)
             {
                 var fInfo = new FileInfo(file);
@@ -170,7 +181,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private void GeneratorJsWebApi(string entity, int i, int count)
         {
-
             var jsForm = new List<string>();
             var isDebugForm = true;
             var isDebugWebApi = true;
@@ -249,18 +259,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var entities = new List<string>();
             string[] files;
             var folder = $"{currentDirectory}\\{json.rootfolder}";
-            if (json.entities == null || json.entities.Count == 0)
-            {
+            //if (json.entities == null || json.entities.Count == 0)
+            //{
                 var pattern = "*.form.js";
                 files = Directory.GetFiles(folder, pattern);
-            }
-            else
-            {
-                if (json.entities.Count == 1 && json.entities[0].ToLower() == "all")
-                    files = GetAllEntities();
-                else
-                    files = json.entities.Select(e => $"{folder}{e}.webapi.js").ToArray();
-            }
+            //}
+            //else
+            //{
+            //    //if (json.entities.Count == 1 && json.entities[0].ToLower() == "all")
+            //    //    files = GetAllEntities();
+            //    //else
+            //        files = json.entities.Select(e => $"{folder}{e}.form.js").ToArray();
+            //}
 
             foreach (var file in files)
             {

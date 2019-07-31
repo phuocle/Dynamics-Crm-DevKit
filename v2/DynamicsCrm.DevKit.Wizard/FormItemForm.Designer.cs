@@ -56,7 +56,7 @@
             // buttonConnection
             // 
             this.buttonConnection.Location = new System.Drawing.Point(400, 0);
-            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2);
             this.buttonConnection.Name = "buttonConnection";
             this.buttonConnection.Size = new System.Drawing.Size(73, 29);
             this.buttonConnection.TabIndex = 0;
@@ -87,9 +87,9 @@
             this.groupBox.Controls.Add(this.labelItemName);
             this.groupBox.Controls.Add(this.labelItem);
             this.groupBox.Location = new System.Drawing.Point(6, 16);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox.Size = new System.Drawing.Size(387, 178);
             this.groupBox.TabIndex = 5;
             this.groupBox.TabStop = false;
@@ -110,7 +110,7 @@
             this.checkBoxDebug.AutoSize = true;
             this.checkBoxDebug.Enabled = false;
             this.checkBoxDebug.Location = new System.Drawing.Point(305, 39);
-            this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDebug.Name = "checkBoxDebug";
             this.checkBoxDebug.Size = new System.Drawing.Size(64, 17);
             this.checkBoxDebug.TabIndex = 5;
@@ -130,7 +130,7 @@
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
             this.comboBoxEntity.Location = new System.Drawing.Point(70, 16);
-            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxEntity.Name = "comboBoxEntity";
             this.comboBoxEntity.Size = new System.Drawing.Size(299, 21);
             this.comboBoxEntity.TabIndex = 4;
@@ -149,7 +149,7 @@
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
             this.comboBoxCrmName.Location = new System.Drawing.Point(57, 216);
-            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxCrmName.Name = "comboBoxCrmName";
             this.comboBoxCrmName.Size = new System.Drawing.Size(194, 21);
             this.comboBoxCrmName.TabIndex = 2;
@@ -169,10 +169,10 @@
             this.labelItemName.AutoSize = true;
             this.labelItemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelItemName.ForeColor = System.Drawing.Color.Blue;
-            this.labelItemName.Location = new System.Drawing.Point(57, 27);
+            this.labelItemName.Location = new System.Drawing.Point(70, 39);
             this.labelItemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItemName.Name = "labelItemName";
-            this.labelItemName.Size = new System.Drawing.Size(0, 13);
+            this.labelItemName.Size = new System.Drawing.Size(32, 13);
             this.labelItemName.TabIndex = 2;
             // 
             // labelItem
@@ -189,7 +189,7 @@
             // 
             this.buttonOk.Enabled = false;
             this.buttonOk.Location = new System.Drawing.Point(400, 48);
-            this.buttonOk.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonOk.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(73, 29);
             this.buttonOk.TabIndex = 3;
@@ -200,7 +200,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Location = new System.Drawing.Point(400, 81);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(73, 29);
             this.buttonCancel.TabIndex = 4;
@@ -222,7 +222,7 @@
             this.Controls.Add(this.link);
             this.Controls.Add(this.progressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormItemForm";

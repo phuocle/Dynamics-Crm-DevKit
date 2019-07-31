@@ -463,7 +463,7 @@ namespace DynamicsCrm.DevKit.Shared
             formCode += $"var {ProjectName};\r\n";
             formCode += $"(function ({ProjectName}) {{\r\n";
             formCode += $"\t'use strict';\r\n";
-            var devKit = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.DevKit.2.js");
+            var devKit = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.DevKit.js");
             if (!isDebug)
             {
                 devKit = devKit.Replace("else { throw new Error(", "//else { throw new Error(");

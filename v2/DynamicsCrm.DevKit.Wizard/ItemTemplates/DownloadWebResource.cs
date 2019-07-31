@@ -47,6 +47,21 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 if (form.ShowDialog() != DialogResult.OK) return;
                 var crmConnectionString = CrmConnectionString(form.CrmConnection);
 
+                var file = Utility.GetDevKitCliJsonFile(DTE);
+                if (!File.Exists(file))
+                {
+                    var solutionName = Utility.GetSolutionName(DTE);
+                    var json = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.DynamicsCrm.DevKit.Cli.json");
+                    json = json
+                        .Replace("???.Plugin.*.dll", $"{solutionName}.Plugin.*.dll")
+                        .Replace("???.CustomAction.*.dll", $"{solutionName}.CustomAction.*.dll")
+                        .Replace("???.Workflow.*.dll", $"{solutionName}.Workflow.*.dll")
+                        .Replace("???.DataProvider.*.dll", $"{solutionName}.DataProvider.*.dll")
+                        .Replace("???.*.Test.dll", $"{solutionName}.*.Test.dll")
+                        ;
+                    Utility.ForceWriteAllText(file, json);
+                }
+
                 var downloadContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.webresource.download.webresources.bat");
                 downloadContent = downloadContent.Replace("$CrmConnectionString$", crmConnectionString);
                 Utility.ForceWriteAllTextWithoutUTF8(downloadFile, downloadContent);

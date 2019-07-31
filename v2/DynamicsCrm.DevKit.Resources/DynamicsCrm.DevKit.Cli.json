@@ -42,7 +42,6 @@
         "resources\\*.resx"
       ],
       "excludefiles": [
-        "entities\\*.intellisense.js",
         "test\\**.js"
       ],
       "dependencies": [
@@ -86,8 +85,6 @@
       "solution": "???",
       "solutiontype": "Unmanaged",
       "folder": "???",
-      "solutionzipfolder": "???",
-      "logfolder": "???",
       "type": "Extract",
       "mapfile": ""
     },
@@ -97,8 +94,6 @@
       "solution": "???",
       "solutiontype": "Managed",
       "folder": "???",
-      "solutionzipfolder": "???",
-      "logfolder": "???",
       "type": "Extract",
       "mapfile": ""
     },
@@ -108,8 +103,6 @@
       "solution": "???",
       "solutiontype": "Unmanaged",
       "folder": "???",
-      "solutionzipfolder": "???",
-      "logfolder": "???",
       "type": "Pack",
       "mapfile": ""
     },
@@ -119,8 +112,6 @@
       "solution": "???",
       "solutiontype": "Managed",
       "folder": "???",
-      "solutionzipfolder": "???",
-      "logfolder": "???",
       "type": "Pack",
       "mapfile": ""
     }
@@ -131,30 +122,21 @@
       "rootnamespace": "???",
       "rootfolder": "???",
       "crmversion": "365",
-      "type": "CSharp",
-      "entities": [
-
-      ]
+      "type": "CSharp"
     },
     {
       "profile": "JS-FORM",
       "rootnamespace": "???",
       "rootfolder": "???",
       "crmversion": "365",
-      "type": "JsForm",
-      "entities": [
-
-      ]
+      "type": "JsForm"
     },
     {
       "profile": "JS-WEBAPI",
       "rootnamespace": "???",
       "rootfolder": "???",
       "crmversion": "365",
-      "type": "JsWebApi",
-      "entities": [
-
-      ]
+      "type": "JsWebApi"
     }
   ],
   "downloadwebresources": [

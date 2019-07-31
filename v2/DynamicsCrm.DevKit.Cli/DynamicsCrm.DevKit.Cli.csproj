@@ -127,12 +127,10 @@
     <Content Include="..\version.txt">
       <Link>Nuget\version.txt</Link>
     </Content>
-    <Content Include="Nuget\nuget.exe" />
     <None Include="..\DynamicsCrm.DevKit.pfx">
       <Link>DynamicsCrm.DevKit.pfx</Link>
     </None>
     <None Include="App.config" />
-    <None Include="Nuget\DynamicsCrm.DevKit.Cli.2.0.0.nupkg" />
     <None Include="Nuget\pack.bat" />
     <None Include="Nuget\DynamicsCrm.DevKit.Cli.nuspec" />
     <None Include="packages.config" />
