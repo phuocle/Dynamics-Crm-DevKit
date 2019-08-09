@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var folder = $"{currentDirectory}\\{json.rootfolder}";
             //if (json.entities == null || json.entities.Count == 0)
             //{
-                var pattern = "*.generated.js";
+                var pattern = "*.generated.cs";
                 files = Directory.GetFiles(folder, pattern);
             //}
             //else
