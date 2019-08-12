@@ -2,6 +2,7 @@
         'use strict';
         var EMPTY_STRING = '';
         var EMPTY_GUID = '{00000000-0000-0000-0000-000000000000}';
+        var N = null;
         function loadForm(formContext) {
             var form = {};
             var contextData = (function () {
