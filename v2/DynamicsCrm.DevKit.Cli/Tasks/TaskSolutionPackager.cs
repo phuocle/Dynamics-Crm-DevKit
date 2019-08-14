@@ -138,6 +138,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private string GetParentFolder(string currentDirectory)
         {
+            if (json.rootfolder.Length > 0)
+                currentDirectory += "\\" + json.rootfolder;
             var directory = new DirectoryInfo(currentDirectory);
             return directory.Parent != null ? directory.Parent.FullName : string.Empty;
         }
