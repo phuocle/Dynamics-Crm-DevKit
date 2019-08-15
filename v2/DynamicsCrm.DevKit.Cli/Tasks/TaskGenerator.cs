@@ -207,6 +207,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             var parts = json.rootnamespace.Split(".".ToCharArray());
             var projectName = parts.Length > 1 ? parts[1] : parts[0];
+            if (json.debug.Length > 0) isDebugWebApi = json.debug == "yes" ? true : false;
             var jsWebApi = new JsWebApi(crmServiceClient.OrganizationServiceProxy, projectName, entity, isDebugWebApi, jsForm, isDebugForm);
             jsWebApi.GeneratorCode();
             var old = string.Empty;
@@ -338,6 +339,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var parts = json.rootnamespace.Split(".".ToCharArray());
             var projectName = parts.Length > 1 ? parts[1] : parts[0];
             var jsForm = new JsForm(crmServiceClient.OrganizationServiceProxy, projectName, entity);
+            if (json.debug.Length > 0) isDebugForm = json.debug == "yes" ? true : false;
             jsForm.GeneratorCode(forms, isDebugForm, webApi, isDebugWebApi);
             if (!File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.js"))
             {
