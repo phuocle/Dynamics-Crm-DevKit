@@ -5,7 +5,7 @@
     <ResultsDirectory>.\TestResults</ResultsDirectory>
     <TargetPlatform>x64</TargetPlatform>
     <TargetFrameworkVersion>Framework45</TargetFrameworkVersion>
-    <TestAdaptersPaths>%SystemDrive%\Temp\foo;%SystemDrive%\Temp\bar</TestAdaptersPaths>
+    <TestAdaptersPaths>Release\test</TestAdaptersPaths>
   </RunConfiguration>
   <DataCollectionRunSettings>
     <DataCollectors>

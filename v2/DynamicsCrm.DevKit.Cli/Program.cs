@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using CmdLine;
+using DynamicsCrm.DevKit.Cli.Commands;
 using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
@@ -17,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.SolutionPackager";
+                return @"C:\src\azure\phuocle\git\D365ICONSCRM\src\PL.D365Icons.SolutionPackager";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -27,7 +28,7 @@ namespace DynamicsCrm.DevKit.Cli
         private static CrmServiceClient CrmServiceClient { get; set; }
         private static string CrmConnectOrgUriActual { get; set; }
 
-        public static void Main(string[] args)
+        private static void CrmCli(CommandLineArgs arguments)
         {
             CliLog.WriteLine(CliLog.ColorGreen, "╔", new string('═', CliLog.StarLength), "╗");
             CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
@@ -35,16 +36,15 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
             CliLog.WriteLine(CliLog.ColorGreen, "╚", new string('═', CliLog.StarLength), "╝");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Path: ", CliLog.ColorWhite, Assembly.GetExecutingAssembly().Location);
-//#if DEBUG
-//            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
-//            CliLog.WriteLine(CliLog.ColorRed, " DEBUG MODE");
-//            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
-//#endif
+#if DEBUG
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
+            CliLog.WriteLine(CliLog.ColorRed, " DEBUG MODE");
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
+#endif
 #if !DEBUG
             try
             {
 #endif
-            var arguments = CommandLine.Parse<CommandLineArgs>();
             var jsonFile = Path.Combine(CurrentDirectory, arguments.Json);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.json path: ", CliLog.ColorWhite, jsonFile);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Arguments: ",
@@ -53,7 +53,6 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, arguments.Type, " ",
                 CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, arguments.Profile
                 );
-            //CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, new string('═', CliLog.StarLength * 2));
             Run(arguments);
 #if DEBUG
             CliLog.WriteLine(CliLog.ColorRed, "!!! FINISHED !!!");
@@ -67,6 +66,25 @@ namespace DynamicsCrm.DevKit.Cli
                 Console.ReadKey();
             }
 #endif
+        }
+
+
+        public static void Main(string[] args)
+        {
+            var arguments = CommandLine.Parse<CommandLineArgs>();
+            if (arguments.Connection != null)
+            {
+                CrmCli(arguments);
+            }
+            else
+            {
+                switch (arguments.Type)
+                {
+                    case "nuglify":
+                        TaskNUglify.Run(arguments.Command);
+                        break;
+                }
+            }
         }
         private static string HidePassword(string connection)
         {
@@ -134,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli
                 CrmConnectOrgUriActual = CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri;
                 return true;
             }
-            catch
+            catch(Exception e)
             {
                 return false;
             }

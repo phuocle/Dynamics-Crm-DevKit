@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"Exporting {json.solutiontype} solution: ", CliLog.ColorCyan, json.solution, CliLog.ColorGreen, " to:");
             var fileName = Utility.FormatSolutionVersionString(json.solution, System.Version.Parse(CrmVersion), json.solutiontype);
-            var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", json.type + "_" + DateTime.Now.ToString("yyyyMMdd") + "-" + fileName);
+            var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", fileName);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + solutionFile);
             var request = new ExportSolutionRequest
             {
