@@ -269,3 +269,4 @@ __pycache__/
 /source/PL.DynamicsCrm.DevKit.Tools/Nuget/nuget.exe
 /v2/DynamicsCrm.DevKit.Analyzers/Nuget/nuget.exe
 /v2/DynamicsCrm.DevKit.Cli/Nuget/nuget.exe
+/v2/Published/2.1.0/DynamicsCrm.DevKit.Cli.exe
