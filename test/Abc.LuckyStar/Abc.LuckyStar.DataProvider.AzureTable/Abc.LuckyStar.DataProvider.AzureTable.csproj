@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>$guid1$</ProjectGuid>
+    <ProjectGuid>0688f027-19b8-477c-a0e4-cfe250cf52f4</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$NameSpace$</RootNamespace>
-    <AssemblyName>$ProjectName$</AssemblyName>
-    <TargetFrameworkVersion>v$ProjectNetVersion$</TargetFrameworkVersion>
+    <RootNamespace>Abc.LuckyStar.DataProvider.AzureTable</RootNamespace>
+    <AssemblyName>Abc.LuckyStar.DataProvider.AzureTable</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -35,13 +35,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.Version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.TargetFramework$\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.17\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.Version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.TargetFramework$\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.17\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Data">
-      <HintPath>..\packages\Microsoft.CrmSdk.Data.$Microsoft.CrmSdk.Data.Version$\lib\net$Microsoft.CrmSdk.Data.TargetFramework$\Microsoft.Xrm.Sdk.Data.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.Data.9.0.2.17\lib\net462\Microsoft.Xrm.Sdk.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,17 +56,17 @@
     <Compile Include="RetrieveMultiple.cs" />
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
-    <None Include="$ProjectName$.snk" />
+    <None Include="Abc.LuckyStar.DataProvider.AzureTable.snk" />
   </ItemGroup>
-  <Import Project="..\$SharedProject$\$SharedProject$.projitems" Label="Shared" Condition="Exists('..\$SharedProject$\$SharedProject$.projitems')" />
+  <Import Project="..\Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems" Label="Shared" Condition="Exists('..\Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>$ProjectName$.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Abc.LuckyStar.DataProvider.AzureTable.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.Version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.0.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
 </Project>

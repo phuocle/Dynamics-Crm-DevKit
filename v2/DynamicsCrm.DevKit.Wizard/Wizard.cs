@@ -26,8 +26,8 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$CrmUrl$", form.CrmConnection.Url);
             replacementsDictionary.Add("$CrmUserName$", form.CrmConnection.UserName);
 #if DEBUG
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", Const.Version);
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", Const.Version);
+            replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", "2.0.0");
+            replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", "2.0.0");
 #else
             replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", NugetHelper.GetLatestPackageVersion(Const.PLDynamicsCrmDevKitCli));
             replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", NugetHelper.GetLatestPackageVersion(Const.PLDynamicsCrmDevKitAnalyzers));
@@ -44,6 +44,10 @@ namespace DynamicsCrm.DevKit.Wizard
             var Workflow = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkWorkflow, form.ComboBoxCrmName);
             replacementsDictionary.Add("$Microsoft.CrmSdk.Workflow.Version$", Workflow.Version);
             replacementsDictionary.Add("$Microsoft.CrmSdk.Workflow.TargetFramework$", Workflow.TargetFramework);
+
+            var Data = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkData, form.ComboBoxCrmName);
+            replacementsDictionary.Add("$Microsoft.CrmSdk.Data.Version$", Data.Version);
+            replacementsDictionary.Add("$Microsoft.CrmSdk.Data.TargetFramework$", Data.TargetFramework);
 
             var coreToolsVersion = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkCoreTools);
             replacementsDictionary.Add("$Microsoft.CrmSdk.CoreTools.Version$", coreToolsVersion);
