@@ -16,10 +16,11 @@ namespace $NameSpace$
         [TestMethod]
         public void Test()
         {
-            using (var chrome = new Browser(TestSettings.Options))
+            var client = new WebClient(TestSettings.Options);
+            using (var xrmApp = new XrmApp(client))
             {
-                chrome.LoginPage.Login(_xrmUri, _username, _password);
-
+                xrmApp.OnlineLogin.Login(_xrmUri, _username, _password);
+                Assert.IsTrue(true);
             }
         }
     }

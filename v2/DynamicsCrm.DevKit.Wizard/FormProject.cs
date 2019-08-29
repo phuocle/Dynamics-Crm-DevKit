@@ -405,9 +405,10 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             if (ProjectType == ProjectType.Test || ProjectType == ProjectType.UiTest)
             {
-                var temp = $@"{text}.Test";
-                if (temp.StartsWith("."))
-                    temp = temp.Substring(1);
+                var solutionName = Utility.GetSolutionName(DTE);
+                if (!text.StartsWith(solutionName)) text = solutionName + "." + text;
+                var temp = $@"{text}.{ProjectType.ToString()}";
+                temp = temp.Replace("..", ".");
                 labelProjectName.Text = temp;
             }
             else if (ProjectType == ProjectType.Report)
