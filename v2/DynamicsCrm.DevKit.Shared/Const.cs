@@ -16,7 +16,7 @@ namespace DynamicsCrm.DevKit.Shared
             new DataSourceCrm{ Version = "4.0", Name = $"{Const.DynamicsCrm2011} - 4.0"}
         };
         public const string PLDynamicsCrmDevKitResourcesDll = "DynamicsCrm.DevKit.Resources.dll";
-        public const string Version = "2.0.0";
+        public const string Version = "2.1.0";
 
         public const string Chutzpah = "Chutzpah";
         public const string MicrosoftCrmSdkCoreAssemblies = "Microsoft.CrmSdk.CoreAssemblies";
