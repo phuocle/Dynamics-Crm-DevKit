@@ -308,7 +308,7 @@ namespace DynamicsCrm.DevKit.Shared
                 };
             foreach (var tab in tabs)
             {
-                code += $"\t\t\t{tab.Name}: {{\r\n";
+                code += $"\t\t\t{Utility.SafeName(tab.Name)}: {{\r\n";
                 code += $"\t\t\t\tSection: {{\r\n";
                 var xdoc2 = XDocument.Parse(tab.InnerText);
                 var sections = from x2 in xdoc2
@@ -325,7 +325,7 @@ namespace DynamicsCrm.DevKit.Shared
                     if (section == null) continue;
                     if (section.Name == null) continue;
                     if (section.Name.StartsWith("ref_pan")) continue;
-                    code += $"\t\t\t\t\t{section.Name}: {{}},\r\n";
+                    code += $"\t\t\t\t\t{Utility.SafeName(section.Name)}: {{}},\r\n";
                 }
                 code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
                 code += $"\t\t\t\t}}\r\n";

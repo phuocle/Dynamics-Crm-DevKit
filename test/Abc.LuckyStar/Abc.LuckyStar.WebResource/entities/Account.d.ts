@@ -26,15 +26,24 @@ declare namespace LuckyStar {
 			SHIPPING: DevKit.Form.Controls.ControlSection;
 			ChildAccounts: DevKit.Form.Controls.ControlSection;
 		}
+		interface tab__64BC19B9_1311_4B93_BE4C_6407B98D2AB3_Sections {
+			_64BC19B9_1311_4B93_BE4C_6407B98D2AB4: DevKit.Form.Controls.ControlSection;
+			tab_3_section_2: DevKit.Form.Controls.ControlSection;
+			tab_3_section_3: DevKit.Form.Controls.ControlSection;
+		}
 		interface tab_SUMMARY_TAB extends DevKit.Form.Controls.IControlTab {
 			Section: tab_SUMMARY_TAB_Sections;
 		}
 		interface tab_DETAILS_TAB extends DevKit.Form.Controls.IControlTab {
 			Section: tab_DETAILS_TAB_Sections;
 		}
+		interface tab__64BC19B9_1311_4B93_BE4C_6407B98D2AB3 extends DevKit.Form.Controls.IControlTab {
+			Section: tab__64BC19B9_1311_4B93_BE4C_6407B98D2AB3_Sections;
+		}
 		interface Tabs {
 			SUMMARY_TAB: tab_SUMMARY_TAB;
 			DETAILS_TAB: tab_DETAILS_TAB;
+			_64BC19B9_1311_4B93_BE4C_6407B98D2AB3: tab__64BC19B9_1311_4B93_BE4C_6407B98D2AB3;
 		}
 		interface Body {
 			Tab: Tabs;
@@ -96,12 +105,12 @@ declare namespace LuckyStar {
 			WebSiteURL: DevKit.Form.Controls.ControlString;
 		}
 		interface Navigation {
+			navRelationships: DevKit.Form.Controls.ControlNavigationItem,
 			navAddresses: DevKit.Form.Controls.ControlNavigationItem,
 			navSubAccts: DevKit.Form.Controls.ControlNavigationItem,
-			navRelationships: DevKit.Form.Controls.ControlNavigationItem,
 			navCampaignsInSFA: DevKit.Form.Controls.ControlNavigationItem,
-			navProcessSessions: DevKit.Form.Controls.ControlNavigationItem,
-			navAsyncOperations: DevKit.Form.Controls.ControlNavigationItem
+			navAsyncOperations: DevKit.Form.Controls.ControlNavigationItem,
+			navProcessSessions: DevKit.Form.Controls.ControlNavigationItem
 		}
 	}
 	class FormAccount extends DevKit.Form.IForm {
@@ -683,4 +692,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':false}
+//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':false}
