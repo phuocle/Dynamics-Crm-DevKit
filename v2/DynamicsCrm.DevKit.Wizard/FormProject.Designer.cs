@@ -55,7 +55,7 @@
             // buttonConnection
             // 
             this.buttonConnection.Location = new System.Drawing.Point(400, 0);
-            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2);
             this.buttonConnection.Name = "buttonConnection";
             this.buttonConnection.Size = new System.Drawing.Size(73, 29);
             this.buttonConnection.TabIndex = 0;
@@ -85,9 +85,9 @@
             this.groupBox.Controls.Add(this.textProjectName);
             this.groupBox.Controls.Add(this.label1);
             this.groupBox.Location = new System.Drawing.Point(6, 16);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox.Size = new System.Drawing.Size(387, 94);
             this.groupBox.TabIndex = 5;
             this.groupBox.TabStop = false;
@@ -104,7 +104,7 @@
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
             this.comboBoxEntity.Location = new System.Drawing.Point(87, 12);
-            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxEntity.Name = "comboBoxEntity";
             this.comboBoxEntity.Size = new System.Drawing.Size(286, 21);
             this.comboBoxEntity.TabIndex = 4;
@@ -125,7 +125,7 @@
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
             this.comboBoxCrmName.Location = new System.Drawing.Point(87, 62);
-            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxCrmName.Name = "comboBoxCrmName";
             this.comboBoxCrmName.Size = new System.Drawing.Size(286, 21);
             this.comboBoxCrmName.TabIndex = 2;
@@ -143,8 +143,6 @@
             // labelProjectName
             // 
             this.labelProjectName.AutoSize = true;
-            this.labelProjectName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelProjectName.ForeColor = System.Drawing.Color.Blue;
             this.labelProjectName.Location = new System.Drawing.Point(84, 32);
             this.labelProjectName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelProjectName.Name = "labelProjectName";
@@ -156,7 +154,7 @@
             // 
             this.textProjectName.Enabled = false;
             this.textProjectName.Location = new System.Drawing.Point(87, 12);
-            this.textProjectName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textProjectName.Margin = new System.Windows.Forms.Padding(2);
             this.textProjectName.Name = "textProjectName";
             this.textProjectName.Size = new System.Drawing.Size(286, 20);
             this.textProjectName.TabIndex = 1;
@@ -176,7 +174,7 @@
             // 
             this.buttonOk.Enabled = false;
             this.buttonOk.Location = new System.Drawing.Point(400, 48);
-            this.buttonOk.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonOk.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(73, 29);
             this.buttonOk.TabIndex = 3;
@@ -187,7 +185,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Location = new System.Drawing.Point(400, 81);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(73, 29);
             this.buttonCancel.TabIndex = 4;
@@ -198,8 +196,7 @@
             // FormProject
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(481, 120);
             this.ControlBox = false;
@@ -210,7 +207,7 @@
             this.Controls.Add(this.link);
             this.Controls.Add(this.progressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormProject";

@@ -172,7 +172,7 @@
             this.labelItemName.Location = new System.Drawing.Point(70, 39);
             this.labelItemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItemName.Name = "labelItemName";
-            this.labelItemName.Size = new System.Drawing.Size(32, 13);
+            this.labelItemName.Size = new System.Drawing.Size(0, 13);
             this.labelItemName.TabIndex = 2;
             // 
             // labelItem
@@ -211,8 +211,7 @@
             // FormItemForm
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(481, 203);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);

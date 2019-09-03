@@ -50,7 +50,7 @@
             // buttonConnection
             // 
             this.buttonConnection.Location = new System.Drawing.Point(400, 0);
-            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2);
             this.buttonConnection.Name = "buttonConnection";
             this.buttonConnection.Size = new System.Drawing.Size(73, 29);
             this.buttonConnection.TabIndex = 0;
@@ -71,9 +71,9 @@
             this.groupBox.Controls.Add(this.comboBoxEntity);
             this.groupBox.Controls.Add(this.labelEntity);
             this.groupBox.Location = new System.Drawing.Point(6, 16);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox.Size = new System.Drawing.Size(387, 178);
             this.groupBox.TabIndex = 11;
             this.groupBox.TabStop = false;
@@ -112,7 +112,7 @@
             // 
             this.textPluginClass.Enabled = false;
             this.textPluginClass.Location = new System.Drawing.Point(70, 49);
-            this.textPluginClass.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textPluginClass.Margin = new System.Windows.Forms.Padding(2);
             this.textPluginClass.Name = "textPluginClass";
             this.textPluginClass.Size = new System.Drawing.Size(299, 20);
             this.textPluginClass.TabIndex = 2;
@@ -136,7 +136,7 @@
             "Synchronous",
             "Asynchronous"});
             this.comboBoxExecution.Location = new System.Drawing.Point(70, 145);
-            this.comboBoxExecution.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxExecution.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxExecution.Name = "comboBoxExecution";
             this.comboBoxExecution.Size = new System.Drawing.Size(299, 21);
             this.comboBoxExecution.TabIndex = 5;
@@ -152,7 +152,7 @@
             "PreOperation",
             "PostOperation"});
             this.comboBoxStage.Location = new System.Drawing.Point(70, 112);
-            this.comboBoxStage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxStage.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxStage.Name = "comboBoxStage";
             this.comboBoxStage.Size = new System.Drawing.Size(299, 21);
             this.comboBoxStage.TabIndex = 4;
@@ -164,7 +164,7 @@
             this.comboBoxMessage.Enabled = false;
             this.comboBoxMessage.FormattingEnabled = true;
             this.comboBoxMessage.Location = new System.Drawing.Point(70, 80);
-            this.comboBoxMessage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxMessage.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxMessage.Name = "comboBoxMessage";
             this.comboBoxMessage.Size = new System.Drawing.Size(299, 21);
             this.comboBoxMessage.TabIndex = 3;
@@ -183,7 +183,7 @@
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
             this.comboBoxEntity.Location = new System.Drawing.Point(70, 16);
-            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxEntity.Name = "comboBoxEntity";
             this.comboBoxEntity.Size = new System.Drawing.Size(299, 21);
             this.comboBoxEntity.TabIndex = 1;
@@ -224,7 +224,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Location = new System.Drawing.Point(400, 81);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(73, 29);
             this.buttonCancel.TabIndex = 7;
@@ -236,7 +236,7 @@
             // 
             this.buttonOk.Enabled = false;
             this.buttonOk.Location = new System.Drawing.Point(400, 48);
-            this.buttonOk.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonOk.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(73, 29);
             this.buttonOk.TabIndex = 6;
@@ -247,8 +247,7 @@
             // FormPlugin
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(481, 203);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
@@ -258,7 +257,7 @@
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormPlugin";
