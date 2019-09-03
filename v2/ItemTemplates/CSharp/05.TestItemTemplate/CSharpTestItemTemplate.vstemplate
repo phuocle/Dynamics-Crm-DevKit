@@ -14,8 +14,8 @@
   </TemplateData>
   <TemplateContent>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">Plugin.cs</ProjectItem>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">CustomAction.cs</ProjectItem>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$class$$execution$Test.cs">Workflow.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">CustomAction.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">Workflow.cs</ProjectItem>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">DataProvider.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
