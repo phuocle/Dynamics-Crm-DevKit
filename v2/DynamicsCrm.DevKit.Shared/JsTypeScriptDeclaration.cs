@@ -7,6 +7,7 @@ using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Helper;
+using System;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -21,6 +22,7 @@ namespace DynamicsCrm.DevKit.Shared
             public string Id { get; set; }
             public string Name { get; set; }
             public string ClassId { get; set; }
+            public string ControlId { get; set; }
         }
         public List<SystemForm> ProcessForms { get; internal set; }
         public bool IsDebugForm { get; internal set; }
@@ -50,8 +52,6 @@ namespace DynamicsCrm.DevKit.Shared
                 return _d_ts;
             }
         }
-
-
 
         private string GetSavedComment()
         {
@@ -334,11 +334,12 @@ namespace DynamicsCrm.DevKit.Shared
                            {
                                Name = x?.Attribute("datafieldname")?.Value,
                                Id = x?.Attribute("id").Value,
-                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper())
+                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                               ControlId = x?.Attribute("uniqueid")?.Value
                            }).ToList();
             headers = headers.OrderBy(x => x.Name).ToList();
             if (headers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(headers);
+            var _d_ts = Get_d_ts_ForListFields(formXml, headers);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
@@ -369,11 +370,12 @@ namespace DynamicsCrm.DevKit.Shared
                            {
                                Name = x?.Attribute("datafieldname")?.Value,
                                Id = x?.Attribute("id").Value,
-                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper())
+                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                               ControlId = x?.Attribute("uniqueid")?.Value
                            }).ToList();
             footers = footers.OrderBy(x => x.Name).ToList();
             if (footers.Count() == 0) return string.Empty;
-            var _d_ts = Get_d_ts_ForListFields(footers);
+            var _d_ts = Get_d_ts_ForListFields(formXml, footers);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
@@ -410,13 +412,14 @@ namespace DynamicsCrm.DevKit.Shared
                         {
                             ClassId = ControlClassId.SINGLE_LINE_OF_TEXT,
                             Name = fieldName,
-                            Id = null
+                            Id = null,
+                            ControlId = null
                         };
                         fields.Add(field);
                     }
                 }
                 fields = fields.OrderBy(f => f.Name).ToList();
-                _d_ts += Get_d_ts_ForListFields(fields);
+                _d_ts += Get_d_ts_ForListFields(formXml, fields);
                 _d_ts += $"\t\t}}\r\n";
                 part1 += $"\t\t\t{name}: Process{name};\r\n";
             }
@@ -517,21 +520,23 @@ namespace DynamicsCrm.DevKit.Shared
                         {
                             Name = x?.Attribute("datafieldname")?.Value,
                             Id = x?.Attribute("id").Value,
-                            ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper())
+                            ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                            ControlId = x?.Attribute("uniqueid")?.Value
                         }).Distinct().ToList();
             body = body.OrderBy(x => x.Name).ToList();
-            _d_ts += Get_d_ts_ForListFields(body);
+            _d_ts += Get_d_ts_ForListFields(formXml, body);
             if (_d_ts.EndsWith(",\r\n")) _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             _d_ts += $"\t\t}}\r\n";
             return _d_ts;
         }
-        private string Get_d_ts_ForListFields(List<IdName> list)
+        private string Get_d_ts_ForListFields(string formXml, List<IdName> list)
         {
             var _d_ts = string.Empty;
             var previousName = string.Empty;
             var previousCount = 0;
             foreach (var item in list)
             {
+                item.ClassId = GetARealClassId(formXml, item.ClassId, item.ControlId);
                 if (item.Name != null && ControlClassId.CONTROLS.Contains(item.ClassId))
                 {
                     var crmAttribute = Fields.FirstOrDefault(x => x.LogicalName == item.Name);
@@ -685,6 +690,34 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }
+
+        private string GetARealClassId(string formXml, string classId, string controlId)
+        {
+            if (controlId == null || controlId.Length == 0) return classId;
+            var xdoc = XDocument.Parse(formXml);
+            var rows = from x in xdoc
+                       .Descendants("controlDescriptions")
+                       .Elements("controlDescription")
+                       where x?.Attribute("forControl")?.Value == controlId
+                       select x;
+            if (rows == null) return classId;
+            var rows2 = (from x in rows.Elements("customControl")
+                        where x?.Attribute("id")?.Value != null
+                        select new
+                        {
+                            id = x?.Attribute("id")?.Value?.ToString()
+                        }).ToList();
+            if (rows2.Count() == 0) return classId;
+            foreach(var row in rows2)
+            {
+                if(Guid.TryParse(row.id, out var guid))
+                {
+                    return guid.ToString().ToUpper();
+                }
+            }
+            return classId;
+        }
+
         private string GetForm_d_ts()
         {
             var _d_ts = string.Empty;
