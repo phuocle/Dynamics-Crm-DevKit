@@ -117,6 +117,7 @@
     <Compile Include="Tasks\TaskDownloadReport.cs" />
     <Compile Include="Tasks\TaskDownloadWebResource.cs" />
     <Compile Include="Tasks\TaskGenerator.cs" />
+    <Compile Include="Tasks\TaskInitialize.cs" />
     <Compile Include="Tasks\TaskPlugin.cs" />
     <Compile Include="Tasks\TaskPortal.cs" />
     <Compile Include="Tasks\TaskProxyType.cs" />
