@@ -16,7 +16,7 @@
     <ProjectItem ReplaceParameters="false" TargetFileName="download.webresources.bat">download.webresources.bat</ProjectItem>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.0.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.1.0.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.DownloadWebResource</FullClassName>
   </WizardExtension>
 </VSTemplate>

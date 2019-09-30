@@ -102,9 +102,9 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             switch (packageId)
             {
                 case Const.PLDynamicsCrmDevKitCli:
-                    return "2.0.0";
+                    return Const.Version;
                 case Const.PLDynamicsCrmDevKitAnalyzers:
-                    return "2.0.0";
+                    return Const.Version;
             }
             return "0.0.0.0";
         }

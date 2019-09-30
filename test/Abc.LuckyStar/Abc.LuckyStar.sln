@@ -38,8 +38,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.WebResource",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.SolutionPackager", "Abc.LuckyStar.SolutionPackager\Abc.LuckyStar.SolutionPackager.csproj", "{79F69307-96CF-4DEF-9DAB-25BD5BAE9AC6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.DataProvider.AzureTable", "Abc.LuckyStar.DataProvider.AzureTable\Abc.LuckyStar.DataProvider.AzureTable.csproj", "{0688F027-19B8-477C-A0E4-CFE250CF52F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.Others.UiTest", "Abc.LuckyStar.Others.UiTest\Abc.LuckyStar.Others.UiTest.csproj", "{A60B4C4B-ECD9-41C2-B168-E6A53B86FC9F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{0688f027-19b8-477c-a0e4-cfe250cf52f4}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{2de9fd5f-e0ab-4670-8618-4312aa7951c2}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{32c49ea2-ed4f-4565-9ee2-66287b931bf2}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{52937ac1-1079-40f6-b566-9bad869f4262}*SharedItemsImports = 4
@@ -101,9 +106,15 @@ Global
 		{0DD4C078-7695-4083-AE4F-3AC153935D56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DD4C078-7695-4083-AE4F-3AC153935D56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{79F69307-96CF-4DEF-9DAB-25BD5BAE9AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79F69307-96CF-4DEF-9DAB-25BD5BAE9AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79F69307-96CF-4DEF-9DAB-25BD5BAE9AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79F69307-96CF-4DEF-9DAB-25BD5BAE9AC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0688F027-19B8-477C-A0E4-CFE250CF52F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0688F027-19B8-477C-A0E4-CFE250CF52F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0688F027-19B8-477C-A0E4-CFE250CF52F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0688F027-19B8-477C-A0E4-CFE250CF52F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A60B4C4B-ECD9-41C2-B168-E6A53B86FC9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A60B4C4B-ECD9-41C2-B168-E6A53B86FC9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A60B4C4B-ECD9-41C2-B168-E6A53B86FC9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A60B4C4B-ECD9-41C2-B168-E6A53B86FC9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

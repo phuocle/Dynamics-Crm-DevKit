@@ -56,6 +56,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var downloadreport = new TaskDownloadReport(crmServiceClient, currentDirectory, arguments);
                     downloadreport.Run();
                     break;
+                case "initialize":
+                    var initialize = new TaskInitialize(crmServiceClient, currentDirectory, arguments);
+                    initialize.Run();
+                    break;
                 //case "portals":
                 //    var portal = new TaskPortal(crmServiceClient, currentDirectory, arguments);
                 //    portal.Run();

@@ -1183,6 +1183,17 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/reflow
                  */
                 Reflow(updateUI: boolean, parentStage: string, nextStage: string): void;
+                /**
+                 * Returns the unique identifier of the process instance. Value represents the string representation of a GUID value.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstanceid
+                 */
+                readonly InstanceId: string;
+                /**
+                 * Get/Set the current status of the process instance.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getstatus
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/setstatus
+                 */
+                Status: OptionSet.ProcessStatus;
             }
             interface IControlSelect extends IControlSelectBase {
                 /**
@@ -1715,7 +1726,7 @@ declare namespace DevKit {
              * @param refreshAll Indicates whether all the ribbon command bars on the current page are refreshed. If you specify false, only the page-level ribbon command bar is refreshed. If you do not specify this parameter, by default false is passed
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/refreshribbon
              */
-            RefreshRibbon(refreshAll: boolean): void;
+            RefreshRibbon(refreshAll?: boolean): void;
             /**
              * Removes a function to be called when form data is loaded
              * @param myFunction The function to be removed for the OnSave event

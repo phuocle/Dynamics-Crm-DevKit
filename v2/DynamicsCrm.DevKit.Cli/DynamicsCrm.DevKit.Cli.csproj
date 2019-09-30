@@ -109,6 +109,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\TaskNUglify.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Tasks\TaskDownloadReport.cs" />
     <Compile Include="Tasks\TaskDownloadWebResource.cs" />
     <Compile Include="Tasks\TaskGenerator.cs" />
+    <Compile Include="Tasks\TaskInitialize.cs" />
     <Compile Include="Tasks\TaskPlugin.cs" />
     <Compile Include="Tasks\TaskPortal.cs" />
     <Compile Include="Tasks\TaskProxyType.cs" />
@@ -147,7 +149,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicsCrm.DevKit.Resources\DynamicsCrm.DevKit.Resources.csproj">
+      <Project>{c3d692c7-4d23-4f68-af38-ac9b375e4a56}</Project>
+      <Name>DynamicsCrm.DevKit.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

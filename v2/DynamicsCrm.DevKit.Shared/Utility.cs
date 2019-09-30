@@ -633,7 +633,10 @@ namespace DynamicsCrm.DevKit.Shared
         {
             StringBuilder result = new StringBuilder();
             result.Append($"{solutionName}_");
-            result.Append(version.ToString().Replace(".", "_"));
+            //result.Append(version.ToString().Replace(".", "_"));
+            var build = "00000" + version.Build.ToString();
+            build = build.Substring(build.Length - 4);
+            result.Append($"{version.Major}.{version.Minor}.{build}.{version.Revision}");
             if (solutionType.ToLower() == "managed")
                 result.Append("_managed");
             result.Append(".zip");
@@ -697,6 +700,31 @@ namespace DynamicsCrm.DevKit.Shared
             var domain = CrmConnection.UserName.Split("\\".ToCharArray())[0];
             var user = CrmConnection.UserName.Split("\\".ToCharArray())[1];
             return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={CrmConnection.Password};";
+        }
+
+        public static string[] ParseArguments(string commandLine)
+        {
+            char[] parmChars = commandLine.ToCharArray();
+            bool inQuote = false;
+            for (int index = 0; index < parmChars.Length; index++)
+            {
+                if (parmChars[index] == '"')
+                    inQuote = !inQuote;
+                if (!inQuote && parmChars[index] == ' ')
+                    parmChars[index] = '\n';
+            }
+            return (new string(parmChars)).Split('\n');
+        }
+
+        public static string GetArgumentValue(string[] arguments, string argument)
+        {
+            var value = arguments.Where(x => x.StartsWith(argument)).FirstOrDefault();
+            if (value == null)
+                throw new Exception($"Cannot read value of: {argument}");
+            value = value.Substring(argument.Length);
+            if (value.StartsWith("\""))
+                value = value.Substring(1, value.Length - 2);
+            return value;
         }
     }
 }
