@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\azure\phuocle\git\D365ICONSCRM\src\PL.D365Icons.SolutionPackager";
+                return @"C:\src\azure\abiz\git\ABIZ_NTGROUP\src\Abiz.NTGroup.SolutionPackager";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

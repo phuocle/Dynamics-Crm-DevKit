@@ -634,7 +634,7 @@ namespace DynamicsCrm.DevKit.Shared
             StringBuilder result = new StringBuilder();
             result.Append($"{solutionName}_");
             //result.Append(version.ToString().Replace(".", "_"));
-            var build = "0" + version.Build.ToString();
+            var build = "00000" + version.Build.ToString();
             build = build.Substring(build.Length - 4);
             result.Append($"{version.Major}.{version.Minor}.{build}.{version.Revision}");
             if (solutionType.ToLower() == "managed")
