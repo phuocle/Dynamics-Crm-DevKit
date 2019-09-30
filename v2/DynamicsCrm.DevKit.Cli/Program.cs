@@ -152,7 +152,7 @@ namespace DynamicsCrm.DevKit.Cli
                 CrmConnectOrgUriActual = CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri;
                 return true;
             }
-            catch(Exception e)
+            catch
             {
                 return false;
             }
