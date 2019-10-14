@@ -1,33 +1,24 @@
-﻿using System;
-using System.Linq;
+﻿using System.IO;
 
 namespace DynamicsCrm.DevKit.Tool
 {
-    class Utility
+    public class Utility
     {
-        public static string[] ParseArguments(string commandLine)
+        public static void ForceWriteAllText(string file, string content)
         {
-            char[] parmChars = commandLine.ToCharArray();
-            bool inQuote = false;
-            for (int index = 0; index < parmChars.Length; index++)
+            if (!File.Exists(file))
             {
-                if (parmChars[index] == '"')
-                    inQuote = !inQuote;
-                if (!inQuote && parmChars[index] == ' ')
-                    parmChars[index] = '\n';
+                File.WriteAllText(file, content, System.Text.Encoding.UTF8);
             }
-            return (new string(parmChars)).Split('\n');
-        }
-
-        public static string GetArgumentValue(string[] arguments, string argument)
-        {
-            var value = arguments.Where(x => x.StartsWith(argument)).FirstOrDefault();
-            if (value == null)
-                throw new Exception($"Cannot read value of: {argument}");
-            value = value.Substring(argument.Length);
-            if (value.StartsWith("\""))
-                value = value.Substring(1, value.Length - 2);
-            return value;
+            else
+            {
+                var attributes = File.GetAttributes(file);
+                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                {
+                    File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
+                }
+                File.WriteAllText(file, content, System.Text.Encoding.UTF8);
+            }
         }
     }
 }

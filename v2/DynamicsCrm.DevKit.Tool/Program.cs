@@ -11,10 +11,13 @@ namespace DynamicsCrm.DevKit.Tool
             var type = CommandLine.Tokenize().Where(x => x.Command == "type").FirstOrDefault();
             if (type == null)
                 throw new System.Exception("Not found /type switch");
-            switch (type.Value)
+            switch (type.Value.ToLower())
             {
-                case "CoverageToXml":
+                case "coveragetoxml":
                     TaskCoverageToXml.Run();
+                    break;
+                case "nuglify":
+                    TaskNUglify.Run();
                     break;
             }
         }

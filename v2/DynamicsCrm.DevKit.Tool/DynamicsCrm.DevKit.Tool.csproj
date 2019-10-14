@@ -39,6 +39,9 @@
     <Reference Include="Microsoft.VisualStudio.Coverage.Analysis">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\PrivateAssemblies\Microsoft.VisualStudio.Coverage.Analysis.dll</HintPath>
     </Reference>
+    <Reference Include="NUglify, Version=1.5.13.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUglify.1.5.13\lib\net40\NUglify.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,15 +53,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Args\CoverageToXmlArgs.cs" />
+    <Compile Include="Args\NUglifyArgs.cs" />
     <Compile Include="Commands\TaskCoverageToXml.cs" />
+    <Compile Include="Commands\TaskNUglify.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Nuget\DynamicsCrm.DevKit.Tool.nuspec" />
+    <None Include="Nuget\pack.bat" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Nuget\nuget.exe" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

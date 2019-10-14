@@ -4,7 +4,7 @@ namespace DynamicsCrm.DevKit.Tool.Args
 {
     public class CoverageToXmlArgs
     {
-        [CommandLineParameter(Command = "type", Name = "Type", Required = true, Description = "Type task")]
+        [CommandLineParameter(Command = "type", Name = "Type", Required = true, Description = "CoverageToXm type task")]
         public string Type { get; set; }
 
         [CommandLineParameter(Command = "xml", Name = "Xml", Required = true, Description = "Xml file. Absolute path.")]
