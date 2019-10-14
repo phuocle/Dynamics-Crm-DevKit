@@ -26,6 +26,10 @@ if %MsBuild%=="" (
 	call pack.bat
 
 	cd ..\..
+	cd DynamicsCrm.DevKit.Tool\Nuget
+	call pack.bat
+
+	cd ..\..
 	copy DynamicsCrm.DevKit\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 )
-exit
+rem exit
