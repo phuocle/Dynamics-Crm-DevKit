@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
@@ -156,7 +154,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var map = $"{currentDirectory}\\{json.mapfile}";
                 if (File.Exists(map))
                 {
-                    command.Append($" /map: \"{map}\"");
+                    command.Append($" /map:\"{map}\"");
                 }
             }
             command.Append($" /log:\"{currentDirectory}\\{json.folder}\\log\\{DateTime.Now.ToString("yyyy-MM-dd hh-mm") + "." + json.solutiontype + ".txt"}\"");

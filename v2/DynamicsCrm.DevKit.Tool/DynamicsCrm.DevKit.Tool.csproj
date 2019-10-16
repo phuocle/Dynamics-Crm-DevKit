@@ -13,6 +13,9 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +34,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CmdLine, Version=1.0.7.509, Culture=neutral, PublicKeyToken=e6ac9ead3d3b48e4, processorArchitecture=MSIL">
@@ -65,6 +71,9 @@
     <None Include="Nuget\DynamicsCrm.DevKit.Tool.nuspec" />
     <None Include="Nuget\pack.bat" />
     <None Include="packages.config" />
+    <None Include="..\DynamicsCrm.DevKit.pfx">
+      <Link>DynamicsCrm.DevKit.pfx</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="license\LICENSE.txt" />
