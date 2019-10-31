@@ -175,6 +175,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\12.JsDevkitItemTemplate\12.JsDevkitItemTemplate.csproj">
+      <Project>{CCBD1381-E6A6-4A57-9853-E93A27A33F12}</Project>
+      <Name>12.JsDevkitItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\ProjectTemplates\CSharp\01.ConsoleProjectTemplate\01.ConsoleProjectTemplate.csproj">
       <Project>{2C597B0B-F648-486D-BC45-593F584B8BCC}</Project>
       <Name>01.ConsoleProjectTemplate</Name>
