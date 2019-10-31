@@ -4,332 +4,110 @@
     var EMPTY_GUID = "{00000000-0000-0000-0000-000000000000}";
     var N = null;
     function loadForm(formContext) {
+        const contextData = formContext.data;
+        const contextDataEntity = formContext.data.entity;
+        const contextUi = formContext.ui;
+        const contextUiFormSelector = formContext.ui.formSelector;
         var form = {};
-        var contextData = (function() {
-            if (formContext)
-                if (formContext.data)
-                    return formContext.data;
-        })();
-        var contextDataEntity = (function() {
-            if (formContext)
-                if (formContext.data)
-                    if (formContext.data.entity)
-                        return formContext.data.entity;
-        })();
-        var contextUi = (function() {
-            if (formContext)
-                if (formContext.ui)
-                    return formContext.ui;
-        })();
-        var contextUiFormSelector = (function() {
-            if (formContext)
-                if (formContext.ui)
-                    if(formContext.ui.formSelector)
-                        return formContext.ui.formSelector;
-        })();
-        Object.defineProperty(form, "IsDirty", {
-            get: function() {
-                return contextData.getIsDirty();
-            }
-        });
-        Object.defineProperty(form, "IsValid", {
-            get: function() {
-                return contextData.isValid();
-            }
-        });
-        Object.defineProperty(form, "DataXml", {
-            get: function() {
-                return contextDataEntity.getDataXml();
-            }
-        });
-        Object.defineProperty(form, "EntityName", {
-            get: function() {
-                return contextDataEntity.getEntityName();
-            }
-        });
-        Object.defineProperty(form, "EntityReference", {
-            get: function() {
-                return contextDataEntity.getEntityReference();
-            }
-        });
-        Object.defineProperty(form, "EntityId", {
-            get: function() {
-                return contextDataEntity.getId();
-            }
-        });
-        Object.defineProperty(form, "EntityIsDirty", {
-            get: function() {
-                return contextDataEntity.getIsDirty();
-            }
-        });
-        Object.defineProperty(form, "PrimaryAttributeValue", {
-            get: function() {
-                return contextDataEntity.getPrimaryAttributeValue();
-            }
-        });
-        Object.defineProperty(form, "EntityIsValid", {
-            get: function() {
-                return contextDataEntity.isValid();
-            }
-        });
-        Object.defineProperty(form, "Attributes", {
-            get: function() {
-                return contextDataEntity.attributes;
-            }
-        });
-        Object.defineProperty(form, "FormType", {
-            get: function() {
-                return contextUi.getFormType();
-            }
-        });
-        Object.defineProperty(form, "ViewPortHeight", {
-            get: function() {
-                return contextUi.getViewPortHeight();
-            }
-        });
-        Object.defineProperty(form, "ViewPortWidth", {
-            get: function() {
-                return contextUi.getViewPortWidth();
-            }
-        });
-        Object.defineProperty(form, "Controls", {
-            get: function() {
-                return contextUi.controls;
-            }
-        });
-        Object.defineProperty(form, "FormId", {
-            get: function() {
-                return contextUiFormSelector.getCurrentItem().getId();
-            }
-        });
-        Object.defineProperty(form, "FormLabel", {
-            get: function() {
-                return contextUiFormSelector.getCurrentItem().getLabel();
-            }
-        });
-        form.AddOnLoad = function(callback) {
-            contextData.addOnLoad(callback);
-        };
-        form.Refresh = function(save, successCallback, errorCallback) {
-            contextData.refresh(save).then(successCallback, errorCallback);
-        };
-        form.RemoveOnLoad = function(callback) {
-            contextData.removeOnLoad(callback);
-        };
-        form.Save = function(saveOptions, successCallback, errorCallback) {
-            contextData.save(saveOptions).then(successCallback, errorCallback);
-        };
-        form.AddOnSave = function(callback) {
-            contextDataEntity.addOnSave(callback);
-        };
-        form.RemoveOnSave = function(callback) {
-            contextDataEntity.removeOnSave(callback);
-        };
-        form.EntitySave = function(saveOption) {
-            contextDataEntity.save(saveOption);
-        };
-        form.ClearFormNotification = function(uniqueId) {
-            return contextUi.clearFormNotification(uniqueId);
-        };
-        form.Close = function() {
-            contextUi.close();
-        };
-        form.RefreshRibbon = function(refreshAll) {
-            contextUi.refreshRibbon(refreshAll);
-        };
-        form.SetFormNotification = function(message, level, uniqueId) {
-            return contextUi.setFormNotification(message, level, uniqueId);
-        };
-        form.FormNavigate = function(formId) {
-            var formItem = contextUiFormSelector.items.get(formId);
-            formItem.navigate();
-        };
+        Object.defineProperty(form, "IsDirty",                  { get: function() { return contextData.getIsDirty(); } });
+        Object.defineProperty(form, "IsValid",                  { get: function() { return contextData.isValid(); } });
+        Object.defineProperty(form, "DataXml",                  { get: function() { return contextDataEntity.getDataXml(); } });
+        Object.defineProperty(form, "EntityName",               { get: function() { return contextDataEntity.getEntityName(); } });
+        Object.defineProperty(form, "EntityReference",          { get: function() { return contextDataEntity.getEntityReference(); } });
+        Object.defineProperty(form, "EntityId",                 { get: function() { return contextDataEntity.getId(); } });
+        Object.defineProperty(form, "EntityIsDirty",            { get: function() { return contextDataEntity.getIsDirty(); } });
+        Object.defineProperty(form, "PrimaryAttributeValue",    { get: function() { return contextDataEntity.getPrimaryAttributeValue(); } });
+        Object.defineProperty(form, "EntityIsValid",            { get: function() { return contextDataEntity.isValid(); } });
+        Object.defineProperty(form, "Attributes",               { get: function() { return contextDataEntity.attributes; } });
+        Object.defineProperty(form, "FormType",                 { get: function() { return contextUi.getFormType(); } });
+        Object.defineProperty(form, "ViewPortHeight",           { get: function() { return contextUi.getViewPortHeight(); } });
+        Object.defineProperty(form, "ViewPortWidth",            { get: function() { return contextUi.getViewPortWidth(); } });
+        Object.defineProperty(form, "Controls",                 { get: function() { return contextUi.controls; } });
+        Object.defineProperty(form, "FormId",                   { get: function() { return contextUiFormSelector.getCurrentItem().getId(); } });
+        Object.defineProperty(form, "FormLabel",                { get: function() { return contextUiFormSelector.getCurrentItem().getLabel(); } });
+        form.AddOnLoad              = function(callback) { contextData.addOnLoad(callback); };
+        form.Refresh                = function(save, successCallback, errorCallback) { contextData.refresh(save).then(successCallback, errorCallback); };
+        form.RemoveOnLoad           = function(callback) { contextData.removeOnLoad(callback); };
+        form.Save                   = function(saveOptions, successCallback, errorCallback) { contextData.save(saveOptions).then(successCallback, errorCallback); };
+        form.AddOnSave              = function(callback) { contextDataEntity.addOnSave(callback); };
+        form.RemoveOnSave           = function(callback) { contextDataEntity.removeOnSave(callback); };
+        form.EntitySave             = function(saveOption) { contextDataEntity.save(saveOption); };
+        form.ClearFormNotification  = function(uniqueId) { return contextUi.clearFormNotification(uniqueId); };
+        form.Close                  = function() { contextUi.close(); };
+        form.RefreshRibbon          = function(refreshAll) { contextUi.refreshRibbon(refreshAll); };
+        form.SetFormNotification    = function(message, level, uniqueId) {  return contextUi.setFormNotification(message, level, uniqueId); };
+        form.FormNavigate           = function(formId) { contextUiFormSelector.items.get(formId).navigate(); };
         return form;
     }
     function loadProcess(formContext) {
         var process = {};
-        var getProcess = (function() {
-            if (formContext)
-                if (formContext.data)
-                    if (formContext.data.process)
-                        return formContext.data.process;
-        })();
-        var getProcessUi = (function() {
-            if (formContext)
-                if (formContext.ui)
-                    if (formContext.ui.process)
-                        return formContext.ui.process;
-        })();
-        Object.defineProperty(process, "InstanceId", {
-            get: function() {
-                return getProcess.getInstanceId();
-            }
-        });
-        Object.defineProperty(process, "InstanceName", {
-            get: function() {
-                return getProcess.getInstanceName();
-            }
-        });
-        Object.defineProperty(process, "ActivePath", {
-            get: function() {
-                return getProcess.getActivePath();
-            }
-        });
+        const getProcess = formContext.data.process;
+        const getProcessUi = formContext.ui.process;
+        Object.defineProperty(process, "InstanceId",        { get: function() { return getProcess.getInstanceId(); } });
+        Object.defineProperty(process, "InstanceName",      { get: function() { return getProcess.getInstanceName(); } });
+        Object.defineProperty(process, "ActivePath",        { get: function() { return getProcess.getActivePath(); } });
         Object.defineProperty(process, "DisplayState", {
-            get: function() {
-                return getProcessUi.getDisplayState();
-            },
-            set: function(value) {
-                getProcessUi.setDisplayState(value);
-            }
+            get: function() { return getProcessUi.getDisplayState(); },
+            set: function(value) { getProcessUi.setDisplayState(value); }
         });
         Object.defineProperty(process, "Visible", {
-            get: function() {
-                return getProcessUi.getVisible();
-            },
-            set: function(value) {
-                getProcessUi.setVisible(value);
-            }
+            get: function() { return getProcessUi.getVisible(); },
+            set: function(value) { getProcessUi.setVisible(value); }
         });
         Object.defineProperty(process, "Status", {
-            get: function() {
-                return getProcess.getStatus();
-            },
-            set: function(value) {
-                getProcess.setStatus(value, N);
-            }
+            get: function() { return getProcess.getStatus(); },
+            set: function(value) { getProcess.setStatus(value, N); }
         });
         Object.defineProperty(process, "ActiveProcess", {
             get: function() {
-                var data = {
-                    Id: EMPTY_GUID,
-                    Name: EMPTY_STRING,
-                    IsRendered: false,
-                    Stages: N
-                };
-                var activeProcess = getProcess.getActiveProcess();
-                if (activeProcess.getId) {
-                    data.Id = activeProcess.getId();
-                }
-                if (activeProcess.getName) {
-                    data.Name = activeProcess.getName();
-                }
-                if (activeProcess.isRendered) {
-                    data.IsRendered = activeProcess.isRendered();
-                }
-                if (activeProcess.getStages) {
-                    data.Stages = activeProcess.getStages();
-                }
+                var data = { Id: EMPTY_GUID, Name: EMPTY_STRING, IsRendered: false, Stages: N };
+                const activeProcess = getProcess.getActiveProcess();
+                if (activeProcess.getId) data.Id = activeProcess.getId();
+                if (activeProcess.getName) data.Name = activeProcess.getName();
+                if (activeProcess.isRendered) data.IsRendered = activeProcess.isRendered();
+                if (activeProcess.getStages) data.Stages = activeProcess.getStages();
                 return data;
             }
         });
         Object.defineProperty(process, "ActiveStage", {
             get: function() {
-                var data = {
-                    Category: N,
-                    EntityName: EMPTY_STRING,
-                    Id: EMPTY_GUID,
-                    Name: EMPTY_STRING,
-                    Status: EMPTY_STRING,
-                    Steps: N
-                };
-                var activeStage = getProcess.getActiveStage();
-                if (activeStage.getCategory) {
-                    if (activeStage.getCategory().getValue) {
-                        data.Category = activeStage.getCategory().getValue();
-                    }
-                }
-                if (activeStage.getEntityName) {
-                    data.EntityName = activeStage.getEntityName();
-                }
-                if (activeStage.getId) {
-                    data.Id = activeStage.getId();
-                }
-                if (activeStage.getName) {
-                    data.Name = activeStage.getName();
-                }
-                if (activeStage.getStatus) {
-                    data.Status = activeStage.getStatus();
-                }
-                if (activeStage.getSteps) {
-                    data.Steps = activeStage.getSteps();
-                }
+                var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
+                const activeStage = getProcess.getActiveStage();
+                if (activeStage.getCategory) if (activeStage.getCategory().getValue) data.Category = activeStage.getCategory().getValue();
+                if (activeStage.getEntityName) data.EntityName = activeStage.getEntityName();
+                if (activeStage.getId) data.Id = activeStage.getId();
+                if (activeStage.getName) data.Name = activeStage.getName();
+                if (activeStage.getStatus) data.Status = activeStage.getStatus();
+                if (activeStage.getSteps) data.Steps = activeStage.getSteps();
                 return data;
             }
         });
         Object.defineProperty(process, "SelectedStage", {
             get: function() {
-                var data = {
-                    Category: N,
-                    EntityName: EMPTY_STRING,
-                    Id: EMPTY_GUID,
-                    Name: EMPTY_STRING,
-                    Status: EMPTY_STRING,
-                    Steps: N
-                };
-                var selectedStage = getProcess.getSelectedStage();
-                if (selectedStage.getCategory) {
-                    if (selectedStage.getCategory().getValue) {
-                        data.Category = selectedStage.getCategory().getValue();
-                    }
-                }
-                if (selectedStage.getEntityName) {
-                    data.EntityName = selectedStage.getEntityName();
-                }
-                if (selectedStage.getId) {
-                    data.Id = selectedStage.getId();
-                }
-                if (selectedStage.getName) {
-                    data.Name = selectedStage.getName();
-                }
-                if (selectedStage.getStatus) {
-                    data.Status = selectedStage.getStatus();
-                }
-                if (selectedStage.getSteps) {
-                    data.Steps = selectedStage.getSteps();
-                }
+                var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
+                const selectedStage = getProcess.getSelectedStage();
+                if (selectedStage.getCategory) if (selectedStage.getCategory().getValue) data.Category = selectedStage.getCategory().getValue();
+                if (selectedStage.getEntityName) data.EntityName = selectedStage.getEntityName();
+                if (selectedStage.getId) data.Id = selectedStage.getId();
+                if (selectedStage.getName) data.Name = selectedStage.getName();
+                if (selectedStage.getStatus) data.Status = selectedStage.getStatus();
+                if (selectedStage.getSteps) data.Steps = selectedStage.getSteps();
                 return data;
             }
         });
-        process.AddOnProcessStatusChange = function(callback) {
-            getProcess.addOnProcessStatusChange(callback);
-        };
-        process.AddOnStageChange = function(callback) {
-            getProcess.addOnStageChange(callback);
-        };
-        process.AddOnStageSelected = function(callback) {
-            getProcess.addOnStageSelected(callback);
-        };
-        process.EnabledProcesses = function(callback) {
-            getProcess.getEnabledProcesses(callback);
-        };
-        process.MoveNext = function(callback) {
-            getProcess.moveNext(callback);
-        };
-        process.MovePrevious = function(callback) {
-            getProcess.movePrevious(callback);
-        };
-        process.ProcessInstances = function(callback) {
-            getProcess.getProcessInstances(callback);
-        };
-        process.RemoveOnProcessStatusChange = function(callback) {
-            getProcess.removeOnProcessStatusChange(callback);
-        };
-        process.RemoveOnStageChange = function(callback) {
-            getProcess.removeOnStageChange(callback);
-        };
-        process.RemoveOnStageSelected = function(callback) {
-            getProcess.removeOnStageSelected(callback);
-        };
-        process.SetActiveProcess = function(processId, callback) {
-            getProcess.setActiveProcess(processId, callback);
-        };
-        process.SetActiveProcessInstance = function(processInstanceId, callback) {
-            getProcess.setActiveProcessInstance(processInstanceId, callback);
-        };
-        process.SetActiveStage = function(stageId, callback) {
-            getProcess.setActiveStage(stageId, callback);
-        };
+        process.AddOnProcessStatusChange        = function(callback) { getProcess.addOnProcessStatusChange(callback); };
+        process.AddOnStageChange                = function(callback) { getProcess.addOnStageChange(callback); };
+        process.AddOnStageSelected              = function(callback) { getProcess.addOnStageSelected(callback); };
+        process.EnabledProcesses                = function(callback) { getProcess.getEnabledProcesses(callback); };
+        process.MoveNext                        = function(callback) { getProcess.moveNext(callback); };
+        process.MovePrevious                    = function(callback) { getProcess.movePrevious(callback); };
+        process.ProcessInstances                = function(callback) { getProcess.getProcessInstances(callback); };
+        process.RemoveOnProcessStatusChange     = function(callback) { getProcess.removeOnProcessStatusChange(callback); };
+        process.RemoveOnStageChange             = function(callback) { getProcess.removeOnStageChange(callback); };
+        process.RemoveOnStageSelected           = function(callback) { getProcess.removeOnStageSelected(callback); };
+        process.SetActiveProcess                = function(processId, callback) { getProcess.setActiveProcess(processId, callback); };
+        process.SetActiveProcessInstance        = function(processInstanceId, callback) { getProcess.setActiveProcessInstance(processInstanceId, callback); };
+        process.SetActiveStage                  = function(stageId, callback) { getProcess.setActiveStage(stageId, callback); };
         return process;
     }
     function loadField(formContext, body, field, type) {
