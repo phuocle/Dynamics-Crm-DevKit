@@ -534,4 +534,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'JsForm':['User'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}
+//{'JsForm':['User'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':false}

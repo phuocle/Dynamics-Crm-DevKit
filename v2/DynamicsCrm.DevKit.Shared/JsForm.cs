@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Shared
     {
         private List<CrmAttribute> _fields;
         private List<SystemForm> _forms;
-        private string _jsOptionSetFormCode;
+        //private string _jsOptionSetFormCode;
         private int _objectTypeCode = -1;
         private DataCollection<Entity> _processes;
 
@@ -99,28 +99,28 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        private string JsOptionSetFormCode
-        {
-            get
-            {
-                if (_jsOptionSetFormCode != null) return _jsOptionSetFormCode;
-                _jsOptionSetFormCode = string.Empty;
-                _jsOptionSetFormCode += $"\t\tvar optionSet = {{\r\n";
-                foreach (var crmAttribute in Fields)
-                {
-                    if (!crmAttribute.IsValidForRead) continue;
-                    if (crmAttribute.FieldType != AttributeTypeCode.Picklist && crmAttribute.FieldType != AttributeTypeCode.State && crmAttribute.FieldType != AttributeTypeCode.Status) continue;
-                    _jsOptionSetFormCode += $"\t\t\t{crmAttribute.SchemaName} : {{\r\n";
-                    foreach (string nvc in crmAttribute.OptionSetValues)
-                        _jsOptionSetFormCode += $"\t\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
-                    _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-                    _jsOptionSetFormCode += $"\t\t\t}},\r\n";
-                }
-                _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray());
-                _jsOptionSetFormCode += $"\r\n\t\t}};\r\n";
-                return _jsOptionSetFormCode;
-            }
-        }
+        //private string JsOptionSetFormCode
+        //{
+        //    get
+        //    {
+        //        if (_jsOptionSetFormCode != null) return _jsOptionSetFormCode;
+        //        _jsOptionSetFormCode = string.Empty;
+        //        _jsOptionSetFormCode += $"\t\tvar optionSet = {{\r\n";
+        //        foreach (var crmAttribute in Fields)
+        //        {
+        //            if (!crmAttribute.IsValidForRead) continue;
+        //            if (crmAttribute.FieldType != AttributeTypeCode.Picklist && crmAttribute.FieldType != AttributeTypeCode.State && crmAttribute.FieldType != AttributeTypeCode.Status) continue;
+        //            _jsOptionSetFormCode += $"\t\t\t{crmAttribute.SchemaName} : {{\r\n";
+        //            foreach (string nvc in crmAttribute.OptionSetValues)
+        //                _jsOptionSetFormCode += $"\t\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
+        //            _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+        //            _jsOptionSetFormCode += $"\t\t\t}},\r\n";
+        //        }
+        //        _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray());
+        //        _jsOptionSetFormCode += $"\r\n\t\t}};\r\n";
+        //        return _jsOptionSetFormCode;
+        //    }
+        //}
 
         private DataCollection<Entity> Processes
         {

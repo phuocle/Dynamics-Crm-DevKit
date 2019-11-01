@@ -870,4 +870,4 @@ declare namespace OptionSet {
 		}
 	}
 }
-//{'JsForm':['Quick Create','WebApi','WebApi 2'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}
+//{'JsForm':['Quick Create','WebApi','WebApi 2'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':false}

@@ -8,7 +8,9 @@ var formAccount = (function () {
         }
         var account = new LuckyStar.AccountApi();
         account.AccountCategoryCode.Value = OptionSet.Account.AccountCategoryCode.Preferred_Customer;
-        account.
+
+        var accounApi = new LuckyStar.AccountApi();
+        accounApi.IndustryCode.Value = OptionSet.Account.StateCode.Active;
 	}
 	function onSave(executionContext) {
 	}
