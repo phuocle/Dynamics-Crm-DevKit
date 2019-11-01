@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\azure\phuocle\git\D365\D365ICONSCRM\src";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.WebResource\entities";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

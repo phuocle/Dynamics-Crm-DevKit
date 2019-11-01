@@ -7,6 +7,7 @@ var LuckyStar;
         'use strict';
         var EMPTY_STRING = '';
         var EMPTY_GUID = '{00000000-0000-0000-0000-000000000000}';
+        var N = null;
         function loadForm(formContext) {
             var form = {};
             var contextData = (function () {
@@ -557,11 +558,11 @@ var LuckyStar;
 			},
 			DETAILS_TAB: {
 				Section: {
-					PERSONAL INFORMATION: {},
+					PERSONAL_INFORMATION: {},
 					PERSONAL_NOTES_SECTION: {},
 					CONTACT_PREFERENCES: {},
-					billing information: {},
-					shipping information: {}
+					billing_information: {},
+					shipping_information: {}
 				}
 			}
 		};
