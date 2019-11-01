@@ -92,6 +92,7 @@
   <ItemGroup>
     <None Include="requirejsConfig.js" />
     <None Include="WebApiClient.js" />
+    <None Include="devkit.js" />
     <Content Include="icon.png" />
   </ItemGroup>
   <ItemGroup>

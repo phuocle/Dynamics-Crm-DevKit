@@ -1,6 +1,6 @@
 {
   "Framework": "jasmine",
-  "FrameworkVersion": "3.4.0",
+  "FrameworkVersion": "2",
   "TestHarnessReferenceMode": "AMD",
   "TestHarnessLocationMode": "SettingsFileAdjacent",
   "CodeCoverageExecutionMode": "Manual",

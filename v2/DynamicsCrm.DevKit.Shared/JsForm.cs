@@ -463,12 +463,12 @@ namespace DynamicsCrm.DevKit.Shared
             formCode += $"var {ProjectName};\r\n";
             formCode += $"(function ({ProjectName}) {{\r\n";
             formCode += $"\t'use strict';\r\n";
-            var devKit = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.DevKit.js");
-            if (!isDebug)
-            {
-                devKit = devKit.Replace("else { throw new Error(", "//else { throw new Error(");
-            }
-            formCode += devKit + "\r\n";
+            //var devKit = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.DevKit.js");
+            //if (!isDebug)
+            //{
+            //    devKit = devKit.Replace("else { throw new Error(", "//else { throw new Error(");
+            //}
+            //formCode += devKit + "\r\n";
             //FORM
             foreach (var form in processForms)
             {
@@ -539,8 +539,8 @@ namespace DynamicsCrm.DevKit.Shared
                     formCode += $"\t\tform.Navigation = navigation;\r\n";
                 }
                 formCode += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
-                formCode += JsOptionSetFormCode;
-                formCode += $"\t\tform.OptionSet = optionSet;\r\n";
+                //formCode += JsOptionSetFormCode;
+                //formCode += $"\t\tform.OptionSet = optionSet;\r\n";
                 formCode += $"\t\treturn form;\r\n";
                 formCode += $"\t}};\r\n";
             }
@@ -579,8 +579,8 @@ namespace DynamicsCrm.DevKit.Shared
                 formCode += $"\t\tbody.Tab = tab;\r\n";
                 formCode += $"\t\tform.Body = body;\r\n";
                 formCode += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
-                formCode += JsOptionSetFormCode;
-                formCode += $"\t\tform.OptionSet = optionSet;\r\n";
+                //formCode += JsOptionSetFormCode;
+                //formCode += $"\t\tform.OptionSet = optionSet;\r\n";
                 formCode += $"\t\treturn form;\r\n";
                 formCode += $"\t}}\r\n";
             }

@@ -8,6 +8,7 @@ var formAccount = (function () {
         }
         var account = new LuckyStar.AccountApi();
         account.AccountCategoryCode.Value = OptionSet.Account.AccountCategoryCode.Preferred_Customer;
+        account.
 	}
 	function onSave(executionContext) {
 	}
