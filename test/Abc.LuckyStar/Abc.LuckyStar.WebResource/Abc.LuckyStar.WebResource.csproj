@@ -95,6 +95,7 @@
     <Content Include="entities\SystemUser.webapi.js">
       <DependentUpon>SystemUser.js</DependentUpon>
     </Content>
+    <Content Include="lib\devkit.js" />
     <Content Include="lib\WebApiClient.js" />
     <Content Include="entities\DevKit.d.ts" />
     <Content Include="test\Account.test.js" />

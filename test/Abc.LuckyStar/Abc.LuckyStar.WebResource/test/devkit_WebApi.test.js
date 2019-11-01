@@ -1,15 +1,10 @@
-﻿///<reference path='xrm-mock.d.ts' />
-///<reference path='../node_modules/@types/xrm/index.d.ts' />
-///<reference path='../node_modules/@types/sinon/index.d.ts' />
-///<reference path='../node_modules/@types/jasmine/index.d.ts' />
-define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @type {sinon} */_sinon) {
+﻿define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @type {sinon} */_sinon) {
     describe('devkit_WebApi.test.js Test', function () {
 
         beforeEach(function () {
             _xrm_mock.XrmMockGenerator.initialise();
             Xrm.Utility.getGlobalContext = function () { };
         });
-
         it('DevKit.Form.Controls.ControlString', function () {
             //SETUP DATA
             _xrm_mock.XrmMockGenerator.Attribute.createString({
@@ -33,7 +28,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
                 ]);
             var executionContext = _xrm_mock.XrmMockGenerator.formContext;
             //CHECK DATA
-            var form = new WebResource.FormWebApi(executionContext)
+            var form = new LuckyStar.FormWebApi(executionContext)
             //form.Body.devkit_Name.AddNotification
             var addOnChangeData = "";
             form.Body.devkit_Name.AddOnChange(function (executionContent) { addOnChangeData = "DATA-CHANGED"; });
