@@ -90,6 +90,8 @@ namespace DynamicsCrm.DevKit.Shared
                     _d_ts += $"\t\t}}\r\n";
                 }
             }
+            var optionSet = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.OptionSetWebApi_d_ts.js");
+            _d_ts += optionSet;
             _d_ts += $"\t}}\r\n";
             _d_ts += $"}}\r\n";
             return _d_ts;

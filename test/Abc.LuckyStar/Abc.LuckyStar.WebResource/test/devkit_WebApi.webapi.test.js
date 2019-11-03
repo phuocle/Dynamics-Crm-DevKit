@@ -212,14 +212,14 @@
                 expect(webapi.statuscode.FormattedValue).toEqual("Active");
                 expect(webapi.statecode.Value).toEqual(0);
                 expect(webapi.statecode.FormattedValue).toEqual("Active");
-                expect(webapi.devkit_SingleOptionSetCode.Value).toEqual(webapi.OptionSet.devkit_SingleOptionSetCode.Crm_4);
+                expect(webapi.devkit_SingleOptionSetCode.Value).toEqual(OptionSet.devkit_WebApi.devkit_SingleOptionSetCode.Crm_4);
                 expect(webapi.devkit_SingleOptionSetCode.FormattedValue).toEqual("Crm 4");
-                expect(webapi.devkit_SingleOptionSetCodeCalculated.Value).toEqual(webapi.OptionSet.devkit_SingleOptionSetCode.Crm_4);
+                expect(webapi.devkit_SingleOptionSetCodeCalculated.Value).toEqual(OptionSet.devkit_WebApi.devkit_SingleOptionSetCode.Crm_4);
                 expect(webapi.devkit_SingleOptionSetCodeCalculated.FormattedValue).toEqual("Crm 4");
                 expect(webapi.devkit_MultiOptionSetCode.Value.length).toEqual(3);
-                expect(webapi.devkit_MultiOptionSetCode.Value[0]).toEqual(webapi.OptionSet.devkit_MultiOptionSetCode.Crm_4);
-                expect(webapi.devkit_MultiOptionSetCode.Value[1]).toEqual(webapi.OptionSet.devkit_MultiOptionSetCode.Crm_2011);
-                expect(webapi.devkit_MultiOptionSetCode.Value[2]).toEqual(webapi.OptionSet.devkit_MultiOptionSetCode.Crm_2013);
+                expect(webapi.devkit_MultiOptionSetCode.Value[0]).toEqual(OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_4);
+                expect(webapi.devkit_MultiOptionSetCode.Value[1]).toEqual(OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2011);
+                expect(webapi.devkit_MultiOptionSetCode.Value[2]).toEqual(OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2013);
                 expect(webapi.devkit_MultiOptionSetCode.FormattedValue.length).toEqual(3);
                 expect(webapi.devkit_MultiOptionSetCode.FormattedValue[0]).toEqual("Crm 4");
                 expect(webapi.devkit_MultiOptionSetCode.FormattedValue[1]).toEqual("Crm 2011");
@@ -228,12 +228,13 @@
                 expect(webapi.devkit_YesAndNo.FormattedValue).toEqual("Yes");
                 expect(webapi.devkit_YesAndNoCalculated.Value).toBeTruthy();
                 expect(webapi.devkit_YesAndNoCalculated.FormattedValue).toEqual("Yes");
-                expect(webapi.getAliasedValue("a.devkit_singleoptionsetcode")).toEqual(webapi.OptionSet.devkit_SingleOptionSetCode.Crm_4);
+                expect(webapi.getAliasedValue("a.devkit_singleoptionsetcode")).toEqual(OptionSet.devkit_WebApi.devkit_SingleOptionSetCode.Crm_4);
                 var multi = webapi.getAliasedValue("a.devkit_multioptionsetcode", true);
                 expect(multi.length).toEqual(3);
-                expect(multi[0]).toEqual(webapi.OptionSet.devkit_MultiOptionSetCode.Crm_4);
-                expect(multi[1]).toEqual(webapi.OptionSet.devkit_MultiOptionSetCode.Crm_2011);
-                expect(multi[2]).toEqual(webapi.OptionSet.devkit_MultiOptionSetCode.Crm_2013);
+                expect(multi[0]).toEqual(OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_4);
+                expect(multi[1]).toEqual(OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2011);
+                expect(multi[2]).toEqual(OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2013)
+                    OptionSet.devkit_WebApi.devkit_MultiOptionSetCode
                 var multi2 = webapi.getAliasedFormattedValue("a.devkit_multioptionsetcode", true);
                 expect(multi2.length).toEqual(3);
                 expect(multi2[0]).toEqual("Crm 4");
@@ -375,8 +376,8 @@
                 expect(webapi.devkit_DateOnlyDateOnlyCalculated_DateOnly.FormattedValue).toEqual("29.04.2019");
                 expect(webapi.devkit_DateOnlyDateOnlyRollup_DateOnly.Value).toEqual("2019-04-07");
                 expect(webapi.devkit_DateOnlyDateOnlyRollup_DateOnly.FormattedValue).toEqual("07.04.2019");
-                expect(webapi.devkit_DateOnlyDateOnlyRollup_State.Value).toEqual(webapi.OptionSet.RollupState.Calculated);
-                expect(webapi.devkit_DateOnlyDateOnlyRollup_State.FormattedValue).toEqual(webapi.OptionSet.RollupState.Calculated.toString());
+                expect(webapi.devkit_DateOnlyDateOnlyRollup_State.Value).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated);
+                expect(webapi.devkit_DateOnlyDateOnlyRollup_State.FormattedValue).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated.toString());
                 expect(webapi.devkit_DateOnlyDateOnlyRollup_Date_UtcDateAndTime.Value).toEqual("2019-05-01T14:35:54Z");
                 expect(webapi.devkit_DateOnlyDateOnlyRollup_Date_UtcDateAndTime.FormattedValue).toEqual("01.05.2019 09:35 CH");
                 //user local date only
@@ -386,8 +387,8 @@
                 expect(webapi.devkit_UserLocalDateOnlyCalculated_UtcDateOnly.FormattedValue).toEqual("30.04.2019");
                 expect(webapi.devkit_UserLocalDateOnlyRollup_UtcDateOnly.Value).toEqual("2019-04-05T17:00:00Z");
                 expect(webapi.devkit_UserLocalDateOnlyRollup_UtcDateOnly.FormattedValue).toEqual("06.04.2019");
-                expect(webapi.devkit_UserLocalDateOnlyRollup_State.Value).toEqual(webapi.OptionSet.RollupState.Calculated);
-                expect(webapi.devkit_UserLocalDateOnlyRollup_State.FormattedValue).toEqual(webapi.OptionSet.RollupState.Calculated.toString());
+                expect(webapi.devkit_UserLocalDateOnlyRollup_State.Value).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated);
+                expect(webapi.devkit_UserLocalDateOnlyRollup_State.FormattedValue).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated.toString());
                 expect(webapi.devkit_UserLocalDateOnlyRollup_Date_UtcDateAndTime.Value).toEqual("2019-04-30T20:52:27Z");
                 expect(webapi.devkit_UserLocalDateOnlyRollup_Date_UtcDateAndTime.FormattedValue).toEqual("01.05.2019 03:52 SA");
                 //user local date and time
@@ -397,8 +398,8 @@
                 expect(webapi.devkit_UserLocalDateAndTimeCalculated_UtcDateAndTime.FormattedValue).toEqual("27.04.2019 02:30 CH");
                 expect(webapi.devkit_UserLocalDateAndTimeRollup_UtcDateAndTime.Value).toEqual("2019-04-08T01:30:00Z");
                 expect(webapi.devkit_UserLocalDateAndTimeRollup_UtcDateAndTime.FormattedValue).toEqual("08.04.2019 08:30 SA");
-                expect(webapi.devkit_UserLocalDateAndTimeRollup_State.Value).toEqual(webapi.OptionSet.RollupState.Calculated);
-                expect(webapi.devkit_UserLocalDateAndTimeRollup_State.FormattedValue).toEqual(webapi.OptionSet.RollupState.Calculated.toString());
+                expect(webapi.devkit_UserLocalDateAndTimeRollup_State.Value).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated);
+                expect(webapi.devkit_UserLocalDateAndTimeRollup_State.FormattedValue).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated.toString());
                 expect(webapi.devkit_UserLocalDateAndTimeRollup_Date_UtcDateAndTime.Value).toEqual("2019-04-30T21:08:14Z");
                 expect(webapi.devkit_UserLocalDateAndTimeRollup_Date_UtcDateAndTime.FormattedValue).toEqual("01.05.2019 04:08 SA");
                 //time-zone date only
@@ -408,8 +409,8 @@
                 expect(webapi.devkit_TimeZoneDateOnlyCalculated_TimezoneDateOnly.FormattedValue).toEqual("26.04.2019");
                 expect(webapi.devkit_TimeZoneDateOnlyRollup_TimezoneDateOnly.Value).toEqual("2019-04-09T00:00:00Z");
                 expect(webapi.devkit_TimeZoneDateOnlyRollup_TimezoneDateOnly.FormattedValue).toEqual("09.04.2019");
-                expect(webapi.devkit_TimeZoneDateOnlyRollup_State.Value).toEqual(webapi.OptionSet.RollupState.Calculated);
-                expect(webapi.devkit_TimeZoneDateOnlyRollup_State.FormattedValue).toEqual(webapi.OptionSet.RollupState.Calculated.toString());
+                expect(webapi.devkit_TimeZoneDateOnlyRollup_State.Value).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated);
+                expect(webapi.devkit_TimeZoneDateOnlyRollup_State.FormattedValue).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated.toString());
                 expect(webapi.devkit_TimeZoneDateOnlyRollup_Date_UtcDateAndTime.Value).toEqual("2019-05-01T14:35:44Z");
                 expect(webapi.devkit_TimeZoneDateOnlyRollup_Date_UtcDateAndTime.FormattedValue).toEqual("01.05.2019 09:35 CH");
                 //time-zone date and time
@@ -419,8 +420,8 @@
                 expect(webapi.devkit_TimeZoneDateAndTimeCalculated_TimezoneDateAndTime.FormattedValue).toEqual("28.04.2019 03:30 CH");
                 expect(webapi.devkit_TimeZoneDateAndTimeRollup_TimezoneDateAndTime.Value).toEqual("2019-04-10T01:30:00Z");
                 expect(webapi.devkit_TimeZoneDateAndTimeRollup_TimezoneDateAndTime.FormattedValue).toEqual("10.04.2019 01:30 SA");
-                expect(webapi.devkit_TimeZoneDateAndTimeRollup_State.Value).toEqual(webapi.OptionSet.RollupState.Calculated);
-                expect(webapi.devkit_TimeZoneDateAndTimeRollup_State.FormattedValue).toEqual(webapi.OptionSet.RollupState.Calculated.toString());
+                expect(webapi.devkit_TimeZoneDateAndTimeRollup_State.Value).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated);
+                expect(webapi.devkit_TimeZoneDateAndTimeRollup_State.FormattedValue).toEqual(OptionSet.devkit_WebApi.RollupState.Calculated.toString());
                 expect(webapi.devkit_TimeZoneDateAndTimeRollup_Date_UtcDateAndTime.Value).toEqual("2019-05-01T14:35:49Z");
                 expect(webapi.devkit_TimeZoneDateAndTimeRollup_Date_UtcDateAndTime.FormattedValue).toEqual("01.05.2019 09:35 CH");
                 //others
@@ -844,7 +845,7 @@
                 var webapi = new LuckyStar.EmailApi(res.value[0]);
                 var ActivityParties = webapi.ActivityParties;
                 var party0 = new LuckyStar.ActivityPartyApi(ActivityParties[0]);
-                expect(party0.ParticipationTypeMask.Value).toEqual(party0.OptionSet.ParticipationTypeMask.To_Recipient);
+                expect(party0.ParticipationTypeMask.Value).toEqual(OptionSet.ActivityParty.ParticipationTypeMask.To_Recipient);
                 expect(party0.partyid_account.FormattedValue).toEqual("A. Datum Corporation (sample)");
                 expect(party0.AddressUsed.Value).toEqual("someone9@example.com");
                 var party2 = new LuckyStar.ActivityPartyApi(ActivityParties[2]);
@@ -981,8 +982,8 @@
                 //run
                 var api = new LuckyStar.devkit_WebApiApi();
                 api.devkit_Name.Value = "OPTIONSET - INSERT";
-                api.devkit_SingleOptionSetCode.Value = api.OptionSet.devkit_SingleOptionSetCode.Dynamics_365;
-                api.devkit_MultiOptionSetCode.Value = [api.OptionSet.devkit_MultiOptionSetCode.Crm_2015, api.OptionSet.devkit_MultiOptionSetCode.Crm_2016];
+                api.devkit_SingleOptionSetCode.Value = OptionSet.devkit_WebApi.devkit_SingleOptionSetCode.Dynamics_365;
+                api.devkit_MultiOptionSetCode.Value = [OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2015, OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2016];
                 api.devkit_YesAndNo.Value = false;
 
                 var req = new LuckyStar.WebApi.CreateRequest();
@@ -1120,13 +1121,13 @@
                 var toAccountId = getToAccountId();
 
                 var from = new LuckyStar.ActivityPartyApi();
-                from.ParticipationTypeMask.Value = from.OptionSet.ParticipationTypeMask.Sender;
+                from.ParticipationTypeMask.Value = OptionSet.ActivityParty.ParticipationTypeMask.Sender;
                 from.partyid_systemuser.Value = fromUserId;
                 var to1 = new LuckyStar.ActivityPartyApi();
-                to1.ParticipationTypeMask.Value = to1.OptionSet.ParticipationTypeMask.To_Recipient;
+                to1.ParticipationTypeMask.Value = OptionSet.ActivityParty.ParticipationTypeMask.To_Recipient;
                 to1.partyid_contact.Value = toContactId;
                 var to2 = new LuckyStar.ActivityPartyApi();
-                to2.ParticipationTypeMask.Value = to2.OptionSet.ParticipationTypeMask.To_Recipient;
+                to2.ParticipationTypeMask.Value = OptionSet.ActivityParty.ParticipationTypeMask.To_Recipient;
                 to2.partyid_account.Value = toAccountId;
 
                 var email = new LuckyStar.EmailApi();
@@ -1134,7 +1135,7 @@
                 email.Subject.Value = "EMAIL SUBJECT";
                 email.Description.Value = "EMAIL BODY";
                 email.regardingobjectid_account_email.Value = toAccountId;
-                email.PriorityCode.Value = email.OptionSet.PriorityCode.High;
+                email.PriorityCode.Value = OptionSet.Email.PriorityCode.High;
 
                 var req = new LuckyStar.WebApi.CreateRequest();
                 req.entityName = email.EntityName;
@@ -1158,9 +1159,9 @@
                 //result
                 expect(email.Subject.Value).toEqual("EMAIL SUBJECT");
                 expect(email.Description.Value).toEqual("EMAIL BODY");
-                expect(email.StateCode.Value).toEqual(email.OptionSet.StateCode.Open);
-                expect(email.StatusCode.Value).toEqual(email.OptionSet.StatusCode.Draft);
-                expect(email.PriorityCode.Value).toEqual(email.OptionSet.PriorityCode.High);
+                expect(email.StateCode.Value).toEqual(OptionSet.Email.StateCode.Open);
+                expect(email.StatusCode.Value).toEqual(OptionSet.Email.StatusCode.Draft);
+                expect(email.PriorityCode.Value).toEqual(OptionSet.Email.PriorityCode.High);
                 expect(email.ToRecipients.Value).toEqual("someone_a@example.com;someone9@example.com;");
                 expect(email.Sender.Value).toEqual("devkit@crmgridplus.com");
                 expect(res2.Subject).toEqual("EMAIL SUBJECT [DEVKIT]");

@@ -132,7 +132,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "debug": "no"
+      "debug": "yes"
     },
     {
       "profile": "JS-WEBAPI",
@@ -140,7 +140,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsWebApi",
-      "debug": "no"
+      "debug": "yes"
     }
   ],
   "downloadwebresources": [

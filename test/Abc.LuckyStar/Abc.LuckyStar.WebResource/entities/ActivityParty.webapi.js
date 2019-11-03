@@ -1,5 +1,167 @@
 ﻿'use strict';
 /** @namespace LuckyStar */
-var LuckyStar;(function(n){'use strict';n.ActivityPartyApi=function(n){function e(n,t,r,f,e,o,s,h){var l='@Microsoft.Dynamics.CRM.lookuplogicalname',c={},v=function(){return n[t+i]===undefined||n[t+i]===null?u:f!==undefined&&f.length>0?n[t+l]===e?n[t+i]:u:h?n[t+i].toString().split(';').map(function(n){return n.trim()}):n[t+i]},a=function(){return n[t]===undefined||n[t]===null?null:f!==undefined&&f.length>0?n[t+l]===undefined||n[t+l]===e?n[t]:null:h?n[t].toString().split(',').map(function(n){return parseInt(n,10)}):n[t]},y=function(i){h&&(i=i.join(','));f!==undefined&&f.length>0?(i=i.replace('{',u).replace('}',u),s[r+'@odata.bind']='/'+f+'('+i+')'):s[t]=i;n[t]=i};return Object.defineProperty(c,'FormattedValue',{get:v}),o?Object.defineProperty(c,'Value',{get:a}):Object.defineProperty(c,'Value',{get:a,set:y}),c}var u='',i='@OData.Community.Display.V1.FormattedValue',t={ActivityId:{b:'activityid',a:'_activityid_value',c:'activitypointers',d:'activitypointer'},ActivityPartyId:{a:'activitypartyid'},AddressUsed:{a:'addressused'},AddressUsedEmailColumnNumber:{a:'addressusedemailcolumnnumber',r:!0},DoNotEmail:{a:'donotemail',r:!0},DoNotFax:{a:'donotfax',r:!0},DoNotPhone:{a:'donotphone',r:!0},DoNotPostalMail:{a:'donotpostalmail',r:!0},Effort:{a:'effort'},ExchangeEntryId:{a:'exchangeentryid'},InstanceTypeCode:{a:'instancetypecode',r:!0},IsPartyDeleted:{a:'ispartydeleted',r:!0},OwnerId_systemuser:{b:'ownerid',a:'_ownerid_value',c:'systemusers',d:'systemuser'},OwnerId_team:{b:'ownerid',a:'_ownerid_value',c:'teams',d:'team',r:!0},OwningBusinessUnit:{a:'owningbusinessunit',r:!0},OwningUser:{a:'owninguser',r:!0},ParticipationTypeMask:{a:'participationtypemask'},partyid_account:{b:'partyid_account',a:'_partyid_value',c:'accounts',d:'account'},partyid_contact:{b:'partyid_contact',a:'_partyid_value',c:'contacts',d:'contact'},partyid_devkit_webapi:{b:'partyid_devkit_webapi',a:'_partyid_value',c:'devkit_webapis',d:'devkit_webapi'},partyid_knowledgearticle:{b:'partyid_knowledgearticle',a:'_partyid_value',c:'knowledgearticles',d:'knowledgearticle'},partyid_queue:{b:'partyid_queue',a:'_partyid_value',c:'queues',d:'queue'},partyid_systemuser:{b:'partyid_systemuser',a:'_partyid_value',c:'systemusers',d:'systemuser'},ScheduledEnd_UtcDateOnly:{a:'scheduledend',r:!0},ScheduledStart_UtcDateOnly:{a:'scheduledstart',r:!0},VersionNumber:{a:'versionnumber',r:!0}},f,r;n===undefined&&(n={});f={};for(r in t){var o=t[r].a,s=t[r].b,h=t[r].c,c=t[r].d,l=t[r].g,a=t[r].r;t[r]=e(n,o,s,h,c,a,f,l)}return t.Entity=f,t.EntityName='activityparty',t.EntityCollectionName='activityparties',t['@odata.etag']=n['@odata.etag'],t.getAliasedValue=function(t,i){return n[t]===undefined||n[t]===null?null:i?n[t].toString().split(',').map(function(n){return parseInt(n,10)}):n[t]},t.getAliasedFormattedValue=function(t,r){return n[t+i]===undefined||n[t+i]===null?u:r?n[t+i].toString().split(';').map(function(n){return n.trim()}):n[t+i]},t}})(LuckyStar||(LuckyStar={}))
+var LuckyStar;
+(function (LuckyStar) {
+	'use strict';
+	LuckyStar.ActivityPartyApi = function (e) {
+		var EMPTY_STRING = '';
+		var f = '@OData.Community.Display.V1.FormattedValue';
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
+		var activityparty = {
+			ActivityId: { b: 'activityid', a: '_activityid_value', c: 'activitypointers', d: 'activitypointer' },
+			ActivityPartyId: { a: 'activitypartyid' },
+			AddressUsed: { a: 'addressused' },
+			AddressUsedEmailColumnNumber: { a: 'addressusedemailcolumnnumber', r: true },
+			DoNotEmail: { a: 'donotemail', r: true },
+			DoNotFax: { a: 'donotfax', r: true },
+			DoNotPhone: { a: 'donotphone', r: true },
+			DoNotPostalMail: { a: 'donotpostalmail', r: true },
+			Effort: { a: 'effort' },
+			ExchangeEntryId: { a: 'exchangeentryid' },
+			InstanceTypeCode: { a: 'instancetypecode', r: true },
+			IsPartyDeleted: { a: 'ispartydeleted', r: true },
+			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
+			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team', r: true },
+			OwningBusinessUnit: { a: 'owningbusinessunit', r: true },
+			OwningUser: { a: 'owninguser', r: true },
+			ParticipationTypeMask: { a: 'participationtypemask' },
+			partyid_account: { b: 'partyid_account', a: '_partyid_value', c: 'accounts', d: 'account' },
+			partyid_contact: { b: 'partyid_contact', a: '_partyid_value', c: 'contacts', d: 'contact' },
+			partyid_devkit_webapi: { b: 'partyid_devkit_webapi', a: '_partyid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
+			partyid_knowledgearticle: { b: 'partyid_knowledgearticle', a: '_partyid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
+			partyid_queue: { b: 'partyid_queue', a: '_partyid_value', c: 'queues', d: 'queue' },
+			partyid_systemuser: { b: 'partyid_systemuser', a: '_partyid_value', c: 'systemusers', d: 'systemuser' },
+			ScheduledEnd_UtcDateOnly: { a: 'scheduledend', r: true },
+			ScheduledStart_UtcDateOnly: { a: 'scheduledstart', r: true },
+			VersionNumber: { a: 'versionnumber', r: true }
+		};
+		if (e === undefined) e = {};
+		var u = {};
+		for (var field in activityparty) {
+			var a = activityparty[field].a;
+			var b = activityparty[field].b;
+			var c = activityparty[field].c;
+			var d = activityparty[field].d;
+			var g = activityparty[field].g;
+			var r = activityparty[field].r;
+			activityparty[field] = webApiField(e, a, b, c, d, r, u, g);
+		}
+		activityparty.Entity = u;
+		activityparty.EntityName = 'activityparty';
+		activityparty.EntityCollectionName = 'activityparties';
+		activityparty['@odata.etag'] = e['@odata.etag'];
+		activityparty.getAliasedValue = function (alias, isMultiOptionSet) {
+			if (e[alias] === undefined || e[alias] === null) {
+				return null;
+			}
+			if (isMultiOptionSet) {
+				return e[alias].toString().split(',').map(function (item) { return parseInt(item, 10); });
+			}
+			return e[alias];
+		}
+		activityparty.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+			if (e[alias + f] === undefined || e[alias + f] === null) {
+				return EMPTY_STRING;
+			}
+			if (isMultiOptionSet) {
+				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
+			}
+			return e[alias + f];
+		}
+		return activityparty;
+	};
+})(LuckyStar || (LuckyStar = {}));
 /** @namespace OptionSet */
-var OptionSet;(function(n){n.ActivityParty={InstanceTypeCode:{Not_Recurring:0,Recurring_Master:1,Recurring_Instance:2,Recurring_Exception:3,Recurring_Future_Exception:4},ParticipationTypeMask:{Sender:1,To_Recipient:2,CC_Recipient:3,BCC_Recipient:4,Required_attendee:5,Optional_attendee:6,Organizer:7,Regarding:8,Owner:9,Resource:10,Customer:11}}})(OptionSet||(OptionSet={}))
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.ActivityParty = {
+		InstanceTypeCode : {
+			Not_Recurring: 0,
+			Recurring_Master: 1,
+			Recurring_Instance: 2,
+			Recurring_Exception: 3,
+			Recurring_Future_Exception: 4
+		},
+		ParticipationTypeMask : {
+			Sender: 1,
+			To_Recipient: 2,
+			CC_Recipient: 3,
+			BCC_Recipient: 4,
+			Required_attendee: 5,
+			Optional_attendee: 6,
+			Organizer: 7,
+			Regarding: 8,
+			Owner: 9,
+			Resource: 10,
+			Customer: 11
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
+
+	};
+})(OptionSet || (OptionSet = {}));
