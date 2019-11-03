@@ -15,125 +15,124 @@
     }
     function loadForm(formContext) {
         var form = {};
-
-        if (!checkNested(formContext, "data")) return;
-        var contextData = formContext.data;
-        Object.defineProperty(form, "IsDirty", { get: function() { return contextData.getIsDirty(); } });
-        Object.defineProperty(form, "IsValid", { get: function() { return contextData.isValid(); } });
-        form.AddOnLoad      = function(callback) { contextData.addOnLoad(callback); };
-        form.Refresh        = function(save, successCallback, errorCallback) { contextData.refresh(save).then(successCallback, errorCallback); };
-        form.RemoveOnLoad   = function(callback) { contextData.removeOnLoad(callback); };
-        form.Save           = function(saveOptions, successCallback, errorCallback) { contextData.save(saveOptions).then(successCallback, errorCallback); };
-
-        if (!checkNested(formContext, "data", "entity")) return;
-        var contextDataEntity = formContext.data.entity;
-        Object.defineProperty(form, "DataXml",              { get: function() { return contextDataEntity.getDataXml(); } });
-        Object.defineProperty(form, "EntityName",           { get: function() { return contextDataEntity.getEntityName(); } });
-        Object.defineProperty(form, "EntityReference",      { get: function() { return contextDataEntity.getEntityReference(); } });
-        Object.defineProperty(form, "EntityId",             { get: function() { return contextDataEntity.getId(); } });
-        Object.defineProperty(form, "EntityIsDirty",        { get: function() { return contextDataEntity.getIsDirty(); } });
-        Object.defineProperty(form, "PrimaryAttributeValue",{ get: function() { return contextDataEntity.getPrimaryAttributeValue(); } });
-        Object.defineProperty(form, "EntityIsValid",        { get: function() { return contextDataEntity.isValid(); } });
-        Object.defineProperty(form, "Attributes",           { get: function() { return contextDataEntity.attributes; } });
-        form.AddOnSave      = function(callback) { contextDataEntity.addOnSave(callback); };
-        form.RemoveOnSave   = function(callback) { contextDataEntity.removeOnSave(callback); };
-        form.EntitySave     = function(saveOption) { contextDataEntity.save(saveOption); };
-
-        if (!checkNested(formContext, "ui")) return;
-        var contextUi = formContext.ui;
-        Object.defineProperty(form, "FormType",      { get: function() { return contextUi.getFormType(); } });
-        Object.defineProperty(form, "ViewPortHeight",{ get: function() { return contextUi.getViewPortHeight(); } });
-        Object.defineProperty(form, "ViewPortWidth", { get: function() { return contextUi.getViewPortWidth(); } });
-        Object.defineProperty(form, "Controls",      { get: function() { return contextUi.controls; } });
-        form.ClearFormNotification  = function(uniqueId) { return contextUi.clearFormNotification(uniqueId); };
-        form.Close                  = function() { contextUi.close(); };
-        form.RefreshRibbon          = function(refreshAll) { contextUi.refreshRibbon(refreshAll); };
-        form.SetFormNotification    = function(message, level, uniqueId) {  return contextUi.setFormNotification(message, level, uniqueId); };
-
-        if (!checkNested(formContext, "ui", "formSelector")) return;
-        var contextUiFormSelector = formContext.ui.formSelector;
-        Object.defineProperty(form, "FormId",    { get: function() { return contextUiFormSelector.getCurrentItem().getId(); } });
-        Object.defineProperty(form, "FormLabel", { get: function() { return contextUiFormSelector.getCurrentItem().getLabel(); } });
-        form.FormNavigate           = function(formId) { contextUiFormSelector.items.get(formId).navigate(); };
-
+        if (checkNested(formContext, "data")) {
+            var contextData = formContext.data;
+            Object.defineProperty(form, "IsDirty", { get: function () { return contextData.getIsDirty(); } });
+            Object.defineProperty(form, "IsValid", { get: function () { return contextData.isValid(); } });
+            form.AddOnLoad = function (callback) { contextData.addOnLoad(callback); };
+            form.Refresh = function (save, successCallback, errorCallback) { contextData.refresh(save).then(successCallback, errorCallback); };
+            form.RemoveOnLoad = function (callback) { contextData.removeOnLoad(callback); };
+            form.Save = function (saveOptions, successCallback, errorCallback) { contextData.save(saveOptions).then(successCallback, errorCallback); };
+        }
+        if (checkNested(formContext, "data", "entity")) {
+            var contextDataEntity = formContext.data.entity;
+            Object.defineProperty(form, "DataXml", { get: function () { return contextDataEntity.getDataXml(); } });
+            Object.defineProperty(form, "EntityName", { get: function () { return contextDataEntity.getEntityName(); } });
+            Object.defineProperty(form, "EntityReference", { get: function () { return contextDataEntity.getEntityReference(); } });
+            Object.defineProperty(form, "EntityId", { get: function () { return contextDataEntity.getId(); } });
+            Object.defineProperty(form, "EntityIsDirty", { get: function () { return contextDataEntity.getIsDirty(); } });
+            Object.defineProperty(form, "PrimaryAttributeValue", { get: function () { return contextDataEntity.getPrimaryAttributeValue(); } });
+            Object.defineProperty(form, "EntityIsValid", { get: function () { return contextDataEntity.isValid(); } });
+            Object.defineProperty(form, "Attributes", { get: function () { return contextDataEntity.attributes; } });
+            form.AddOnSave = function (callback) { contextDataEntity.addOnSave(callback); };
+            form.RemoveOnSave = function (callback) { contextDataEntity.removeOnSave(callback); };
+            form.EntitySave = function (saveOption) { contextDataEntity.save(saveOption); };
+        }
+        if (checkNested(formContext, "ui")) {
+            var contextUi = formContext.ui;
+            Object.defineProperty(form, "FormType", { get: function () { return contextUi.getFormType(); } });
+            Object.defineProperty(form, "ViewPortHeight", { get: function () { return contextUi.getViewPortHeight(); } });
+            Object.defineProperty(form, "ViewPortWidth", { get: function () { return contextUi.getViewPortWidth(); } });
+            Object.defineProperty(form, "Controls", { get: function () { return contextUi.controls; } });
+            form.ClearFormNotification = function (uniqueId) { return contextUi.clearFormNotification(uniqueId); };
+            form.Close = function () { contextUi.close(); };
+            form.RefreshRibbon = function (refreshAll) { contextUi.refreshRibbon(refreshAll); };
+            form.SetFormNotification = function (message, level, uniqueId) { return contextUi.setFormNotification(message, level, uniqueId); };
+        }
+        if (checkNested(formContext, "ui", "formSelector")) {
+            var contextUiFormSelector = formContext.ui.formSelector;
+            Object.defineProperty(form, "FormId", { get: function () { return contextUiFormSelector.getCurrentItem().getId(); } });
+            Object.defineProperty(form, "FormLabel", { get: function () { return contextUiFormSelector.getCurrentItem().getLabel(); } });
+            form.FormNavigate = function (formId) { contextUiFormSelector.items.get(formId).navigate(); };
+        }
         return form;
     }
     function loadProcess(formContext) {
         var process = {};
-
-        if (!checkNested(formContext, "data", "process")) return;
-        var getProcess = formContext.data.process;        
-        Object.defineProperty(process, "InstanceId",    { get: function() { return getProcess.getInstanceId(); } });
-        Object.defineProperty(process, "InstanceName",  { get: function() { return getProcess.getInstanceName(); } });
-        Object.defineProperty(process, "ActivePath",    { get: function() { return getProcess.getActivePath(); } });        
-        Object.defineProperty(process, "Status", {
-            get: function() { return getProcess.getStatus(); },
-            set: function(value) { getProcess.setStatus(value, N); }
-        });
-        Object.defineProperty(process, "ActiveProcess", {
-            get: function() {
-                var data = { Id: EMPTY_GUID, Name: EMPTY_STRING, IsRendered: false, Stages: N };
-                if (!checkNested(getProcess, "getActiveProcess")) return data;
-                var activeProcess = getProcess.getActiveProcess();
-                if (activeProcess.getId) data.Id = activeProcess.getId();
-                if (activeProcess.getName) data.Name = activeProcess.getName();
-                if (activeProcess.isRendered) data.IsRendered = activeProcess.isRendered();
-                if (activeProcess.getStages) data.Stages = activeProcess.getStages();
-                return data;
-            }
-        });
-        Object.defineProperty(process, "ActiveStage", {
-            get: function() {
-                var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
-                if (!checkNested(getProcess, "getActiveStage")) return data;
-                var activeStage = getProcess.getActiveStage();
-                if (activeStage.getCategory) if (activeStage.getCategory().getValue) data.Category = activeStage.getCategory().getValue();
-                if (activeStage.getEntityName) data.EntityName = activeStage.getEntityName();
-                if (activeStage.getId) data.Id = activeStage.getId();
-                if (activeStage.getName) data.Name = activeStage.getName();
-                if (activeStage.getStatus) data.Status = activeStage.getStatus();
-                if (activeStage.getSteps) data.Steps = activeStage.getSteps();
-                return data;
-            }
-        });
-        Object.defineProperty(process, "SelectedStage", {
-            get: function() {
-                var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
-                if (!checkNested(getProcess, "getSelectedStage")) return data;
-                var selectedStage = getProcess.getSelectedStage();
-                if (selectedStage.getCategory) if (selectedStage.getCategory().getValue) data.Category = selectedStage.getCategory().getValue();
-                if (selectedStage.getEntityName) data.EntityName = selectedStage.getEntityName();
-                if (selectedStage.getId) data.Id = selectedStage.getId();
-                if (selectedStage.getName) data.Name = selectedStage.getName();
-                if (selectedStage.getStatus) data.Status = selectedStage.getStatus();
-                if (selectedStage.getSteps) data.Steps = selectedStage.getSteps();
-                return data;
-            }
-        });
-        process.AddOnProcessStatusChange        = function(callback) { getProcess.addOnProcessStatusChange(callback); };
-        process.AddOnStageChange                = function(callback) { getProcess.addOnStageChange(callback); };
-        process.AddOnStageSelected              = function(callback) { getProcess.addOnStageSelected(callback); };
-        process.EnabledProcesses                = function(callback) { getProcess.getEnabledProcesses(callback); };
-        process.MoveNext                        = function(callback) { getProcess.moveNext(callback); };
-        process.MovePrevious                    = function(callback) { getProcess.movePrevious(callback); };
-        process.ProcessInstances                = function(callback) { getProcess.getProcessInstances(callback); };
-        process.RemoveOnProcessStatusChange     = function(callback) { getProcess.removeOnProcessStatusChange(callback); };
-        process.RemoveOnStageChange             = function(callback) { getProcess.removeOnStageChange(callback); };
-        process.RemoveOnStageSelected           = function(callback) { getProcess.removeOnStageSelected(callback); };
-        process.SetActiveProcess                = function(processId, callback) { getProcess.setActiveProcess(processId, callback); };
-        process.SetActiveProcessInstance        = function(processInstanceId, callback) { getProcess.setActiveProcessInstance(processInstanceId, callback); };
-        process.SetActiveStage                  = function(stageId, callback) { getProcess.setActiveStage(stageId, callback); };
-
-        var getProcessUi = formContext.ui.process;
-        Object.defineProperty(process, "DisplayState", {
-            get: function() { return getProcessUi.getDisplayState(); },
-            set: function(value) { getProcessUi.setDisplayState(value); }
-        });
-        Object.defineProperty(process, "Visible", {
-            get: function() { return getProcessUi.getVisible(); },
-            set: function(value) { getProcessUi.setVisible(value); }
-        });
-
+        if (checkNested(formContext, "data", "process")) {
+            var getProcess = formContext.data.process;
+            Object.defineProperty(process, "InstanceId", { get: function () { return getProcess.getInstanceId(); } });
+            Object.defineProperty(process, "InstanceName", { get: function () { return getProcess.getInstanceName(); } });
+            Object.defineProperty(process, "ActivePath", { get: function () { return getProcess.getActivePath(); } });
+            Object.defineProperty(process, "Status", {
+                get: function () { return getProcess.getStatus(); },
+                set: function (value) { getProcess.setStatus(value, N); }
+            });
+            Object.defineProperty(process, "ActiveProcess", {
+                get: function () {
+                    var data = { Id: EMPTY_GUID, Name: EMPTY_STRING, IsRendered: false, Stages: N };
+                    if (!checkNested(getProcess, "getActiveProcess")) return data;
+                    var activeProcess = getProcess.getActiveProcess();
+                    if (activeProcess.getId) data.Id = activeProcess.getId();
+                    if (activeProcess.getName) data.Name = activeProcess.getName();
+                    if (activeProcess.isRendered) data.IsRendered = activeProcess.isRendered();
+                    if (activeProcess.getStages) data.Stages = activeProcess.getStages();
+                    return data;
+                }
+            });
+            Object.defineProperty(process, "ActiveStage", {
+                get: function () {
+                    var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
+                    if (!checkNested(getProcess, "getActiveStage")) return data;
+                    var activeStage = getProcess.getActiveStage();
+                    if (activeStage.getCategory) if (activeStage.getCategory().getValue) data.Category = activeStage.getCategory().getValue();
+                    if (activeStage.getEntityName) data.EntityName = activeStage.getEntityName();
+                    if (activeStage.getId) data.Id = activeStage.getId();
+                    if (activeStage.getName) data.Name = activeStage.getName();
+                    if (activeStage.getStatus) data.Status = activeStage.getStatus();
+                    if (activeStage.getSteps) data.Steps = activeStage.getSteps();
+                    return data;
+                }
+            });
+            Object.defineProperty(process, "SelectedStage", {
+                get: function () {
+                    var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
+                    if (!checkNested(getProcess, "getSelectedStage")) return data;
+                    var selectedStage = getProcess.getSelectedStage();
+                    if (selectedStage.getCategory) if (selectedStage.getCategory().getValue) data.Category = selectedStage.getCategory().getValue();
+                    if (selectedStage.getEntityName) data.EntityName = selectedStage.getEntityName();
+                    if (selectedStage.getId) data.Id = selectedStage.getId();
+                    if (selectedStage.getName) data.Name = selectedStage.getName();
+                    if (selectedStage.getStatus) data.Status = selectedStage.getStatus();
+                    if (selectedStage.getSteps) data.Steps = selectedStage.getSteps();
+                    return data;
+                }
+            });
+            process.AddOnProcessStatusChange = function (callback) { getProcess.addOnProcessStatusChange(callback); };
+            process.AddOnStageChange = function (callback) { getProcess.addOnStageChange(callback); };
+            process.AddOnStageSelected = function (callback) { getProcess.addOnStageSelected(callback); };
+            process.EnabledProcesses = function (callback) { getProcess.getEnabledProcesses(callback); };
+            process.MoveNext = function (callback) { getProcess.moveNext(callback); };
+            process.MovePrevious = function (callback) { getProcess.movePrevious(callback); };
+            process.ProcessInstances = function (callback) { getProcess.getProcessInstances(callback); };
+            process.RemoveOnProcessStatusChange = function (callback) { getProcess.removeOnProcessStatusChange(callback); };
+            process.RemoveOnStageChange = function (callback) { getProcess.removeOnStageChange(callback); };
+            process.RemoveOnStageSelected = function (callback) { getProcess.removeOnStageSelected(callback); };
+            process.SetActiveProcess = function (processId, callback) { getProcess.setActiveProcess(processId, callback); };
+            process.SetActiveProcessInstance = function (processInstanceId, callback) { getProcess.setActiveProcessInstance(processInstanceId, callback); };
+            process.SetActiveStage = function (stageId, callback) { getProcess.setActiveStage(stageId, callback); };
+        }
+        if (checkNested(formContext, "ui", "process")) {
+            var getProcessUi = formContext.ui.process;
+            Object.defineProperty(process, "DisplayState", {
+                get: function () { return getProcessUi.getDisplayState(); },
+                set: function (value) { getProcessUi.setDisplayState(value); }
+            });
+            Object.defineProperty(process, "Visible", {
+                get: function () { return getProcessUi.getVisible(); },
+                set: function (value) { getProcessUi.setVisible(value); }
+            });
+        }
         return process;
     }
     function loadField(formContext, body, field, type) {
@@ -270,43 +269,46 @@
         return body;
     }
     function loadSection(formContext, tab, sections, section) {
-        if (!checkNested(formContext, "ui", "tabs", "get")) return;
-        var tabObject = formContext.ui.tabs.get(tab);
-        if (!checkNested(tabObject, "sections", "get")) return;
-        var sectionObject = tabObject.sections.get(section);
-        Object.defineProperty(sections[section], "Name",    { get: function() { return sectionObject.getName(); } });
-        Object.defineProperty(sections[section], "Parent",  { get: function() { return sectionObject.getParent(); } });
-        Object.defineProperty(sections[section], "Label", {
-            get: function() { return sectionObject.getLabel(); },
-            set: function(value) { sectionObject.setLabel(value); }
-        });
-        Object.defineProperty(sections[section], "Visible", {
-            get: function() { return sectionObject.getVisible(); },
-            set: function(value) { sectionObject.setVisible(value); }
-        });
+        if (checkNested(formContext, "ui", "tabs", "get")) {
+            var tabObject = formContext.ui.tabs.get(tab);
+            if (checkNested(tabObject, "sections", "get")) {
+                var sectionObject = tabObject.sections.get(section);
+                Object.defineProperty(sections[section], "Name", { get: function () { return sectionObject.getName(); } });
+                Object.defineProperty(sections[section], "Parent", { get: function () { return sectionObject.getParent(); } });
+                Object.defineProperty(sections[section], "Label", {
+                    get: function () { return sectionObject.getLabel(); },
+                    set: function (value) { sectionObject.setLabel(value); }
+                });
+                Object.defineProperty(sections[section], "Visible", {
+                    get: function () { return sectionObject.getVisible(); },
+                    set: function (value) { sectionObject.setVisible(value); }
+                });
+            }
+        }
     }
     function loadTab(formContext, tabs, tab) {
-        if (!checkNested(formContext, "ui", "tabs", "get")) return;
-        var tabObject = formContext.ui.tabs.get(tab);
-        Object.defineProperty(tabs[tab], "Name",            { get: function() { return tabObject.getName(); } });
-        Object.defineProperty(tabs[tab], "Parent",          { get: function() { return tabObject.getParent(); } });
-        Object.defineProperty(tabs[tab], "DisplayState", {
-            get: function() { return tabObject.getDisplayState(); },
-            set: function(value) { tabObject.setDisplayState(value); }
-        });
-        Object.defineProperty(tabs[tab], "Label", {
-            get: function() { return tabObject.getLabel(); },
-            set: function(value) { tabObject.setLabel(value); }
-        });
-        Object.defineProperty(tabs[tab], "Visible", {
-            get: function() { return tabObject.getVisible(); },
-            set: function(value) { tabObject.setVisible(value); }
-        });
-        tabs[tab].AddTabStateChange             = function(callback) { tabObject.addTabStateChange(callback); };
-        tabs[tab].Focus                         = function() { tabObject.setFocus(); };
-        tabs[tab].RemoveTabStateChange          = function(callback) { tabObject.removeTabStateChange(callback); };
-        for (var section in tabs[tab].Section) {
-            loadSection(formContext, tab, tabs[tab].Section, section);
+        if (checkNested(formContext, "ui", "tabs", "get")) {
+            var tabObject = formContext.ui.tabs.get(tab);
+            Object.defineProperty(tabs[tab], "Name", { get: function () { return tabObject.getName(); } });
+            Object.defineProperty(tabs[tab], "Parent", { get: function () { return tabObject.getParent(); } });
+            Object.defineProperty(tabs[tab], "DisplayState", {
+                get: function () { return tabObject.getDisplayState(); },
+                set: function (value) { tabObject.setDisplayState(value); }
+            });
+            Object.defineProperty(tabs[tab], "Label", {
+                get: function () { return tabObject.getLabel(); },
+                set: function (value) { tabObject.setLabel(value); }
+            });
+            Object.defineProperty(tabs[tab], "Visible", {
+                get: function () { return tabObject.getVisible(); },
+                set: function (value) { tabObject.setVisible(value); }
+            });
+            tabs[tab].AddTabStateChange = function (callback) { tabObject.addTabStateChange(callback); };
+            tabs[tab].Focus = function () { tabObject.setFocus(); };
+            tabs[tab].RemoveTabStateChange = function (callback) { tabObject.removeTabStateChange(callback); };
+            for (var section in tabs[tab].Section) {
+                loadSection(formContext, tab, tabs[tab].Section, section);
+            }
         }
     }
     function loadTabs(formContext, tabs) {
@@ -315,18 +317,19 @@
         }
     }
     function loadNavigation(formContext, navigations, navigation) {
-        if (!checkNested(formContext, "ui", "navigation", "items", "get")) return;
-        var navigationItem = formContext.ui.navigation.items.get(navigation);
-        Object.defineProperty(navigations[navigation], "Id",        { get: function() { return navigationItem.getId(); } });
-        Object.defineProperty(navigations[navigation], "Label", {
-            get: function() { return navigationItem.getLabel(); },
-            set: function(value) { navigationItem.setLabel(value); }
-        });
-        Object.defineProperty(navigations[navigation], "Visible", {
-            get: function() { return navigationItem.getVisible(); },
-            set: function(value) { navigationItem.setVisible(value); }
-        });
-        navigations[navigation].Focus = function() { navigationItem.setFocus(); };
+        if (checkNested(formContext, "ui", "navigation", "items", "get")) {
+            var navigationItem = formContext.ui.navigation.items.get(navigation);
+            Object.defineProperty(navigations[navigation], "Id", { get: function () { return navigationItem.getId(); } });
+            Object.defineProperty(navigations[navigation], "Label", {
+                get: function () { return navigationItem.getLabel(); },
+                set: function (value) { navigationItem.setLabel(value); }
+            });
+            Object.defineProperty(navigations[navigation], "Visible", {
+                get: function () { return navigationItem.getVisible(); },
+                set: function (value) { navigationItem.setVisible(value); }
+            });
+            navigations[navigation].Focus = function () { navigationItem.setFocus(); };
+        }
     }
     function loadNavigations(formContext, navigations) {
         for (var navigation in navigations) {
@@ -334,19 +337,20 @@
         }
     }
     function loadQuickForm(formContext, quickForms, quickForm) {
-        if (!checkNested(formContext, "ui", "quickForms", "get")) return;
-        var quickViewControl = formContext.ui.quickForms.get(quickForm);
-        Object.defineProperty(quickForms[quickForm], "ControlType",     { get: function() { return quickViewControl.getControlType(); } });
-        Object.defineProperty(quickForms[quickForm], "Visible",         { get: function() { return quickViewControl.getVisible(); } });
-        Object.defineProperty(quickForms[quickForm], "Name",            { get: function() { return quickViewControl.getName(); } });
-        Object.defineProperty(quickForms[quickForm], "Parent",          { get: function() { return quickViewControl.getParent(); } });
-        Object.defineProperty(quickForms[quickForm], "Label", {
-            get: function() { return quickViewControl.getLabel(); },
-            set: function(value) { quickViewControl.setLabel(value); }
-        });
-        quickForms[quickForm].IsLoaded  = function() { return quickViewControl.isLoaded(); };
-        quickForms[quickForm].Refresh   = function() { quickViewControl.refresh(); };
-        quickForms[quickForm].Focus     = function() { quickViewControl.setFocus(); };
+        if (checkNested(formContext, "ui", "quickForms", "get")) {
+            var quickViewControl = formContext.ui.quickForms.get(quickForm);
+            Object.defineProperty(quickForms[quickForm], "ControlType", { get: function () { return quickViewControl.getControlType(); } });
+            Object.defineProperty(quickForms[quickForm], "Visible", { get: function () { return quickViewControl.getVisible(); } });
+            Object.defineProperty(quickForms[quickForm], "Name", { get: function () { return quickViewControl.getName(); } });
+            Object.defineProperty(quickForms[quickForm], "Parent", { get: function () { return quickViewControl.getParent(); } });
+            Object.defineProperty(quickForms[quickForm], "Label", {
+                get: function () { return quickViewControl.getLabel(); },
+                set: function (value) { quickViewControl.setLabel(value); }
+            });
+            quickForms[quickForm].IsLoaded = function () { return quickViewControl.isLoaded(); };
+            quickForms[quickForm].Refresh = function () { quickViewControl.refresh(); };
+            quickForms[quickForm].Focus = function () { quickViewControl.setFocus(); };
+        }
     }
     function loadQuickForms(formContext, quickForms) {
         for (var quickForm in quickForms) {
