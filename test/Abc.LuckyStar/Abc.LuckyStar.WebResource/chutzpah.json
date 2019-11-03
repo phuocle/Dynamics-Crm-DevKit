@@ -3,8 +3,13 @@
   "FrameworkVersion": "2",
   "TestHarnessReferenceMode": "AMD",
   "TestHarnessLocationMode": "SettingsFileAdjacent",
-  "CodeCoverageExecutionMode": "Never",
+  "CodeCoverageExecutionMode": "Manual",
+  "CodeCoverageIncludes": [ "entities\\*.js" ],
   "References": [
+    {
+      "Path": "lib/devkit.js",
+      "IsTestFrameworkFile": true
+    },
     {
       "Path": "lib/WebApiClient.js",
       "IsTestFrameworkFile": true
