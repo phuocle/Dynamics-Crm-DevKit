@@ -17,6 +17,10 @@
       "IsTestFrameworkFile": true
     },
     {
+      "Path": "lib/devkit.js",
+      "IsTestFrameworkFile": true
+    },
+    {
       "Path": "node_modules/requirejs/require.js",
       "IsTestFrameworkFile": true
     },
@@ -26,7 +30,16 @@
     },
     {
       "Path": "entities",
-      "Includes": [ "*.js" ]
+      "Includes": [ "*.form.js" ]
+    }    ,
+    {
+      "Path": "entities",
+      "Includes": [ "*.webapi.js" ]
+    },
+    {
+      "Path": "entities",
+      "Includes": [ "*.js" ],
+      "Excludes": [ "*.form.js", "*.webapi.js" ]
     }
   ],
   "Tests": [
