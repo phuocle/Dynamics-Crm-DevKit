@@ -1220,11 +1220,12 @@ declare namespace DevKit {
                 readonly Text: string;
                 /**
                  * Adds an option to a control
-                 * @param option The option to add
+                 * @param text The label for the option
+                 * @param value The value for the option
                  * @param index The index position to place the new option in. If not provided, the option will be added to the end
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addoption
                  */
-                AddOption(option: DevKit.Core.TextValueNumber, index: number): void;
+                AddOption(text: string, value: number, index: number): void;
                 /**
                  * Clears all options from a control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearoptions
