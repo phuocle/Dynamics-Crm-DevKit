@@ -58,7 +58,8 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             var comment = new CommentTypeScriptDeclaration()
             {
-                JsForm = ProcessForms.Select(f => FormHelper.GetFormName(f.Name)).ToList<string>(),
+                //JsForm = ProcessForms.Select(f => FormHelper.GetFormName(f.Name)).ToList<string>(),
+                JsForm = ProcessForms.Select(f => f.Name).ToList<string>(),
                 JsWebApi = IsJsWebApi,
                 IsDebugForm = IsDebugForm,
                 IsDebugWebApi = IsDebugWebApi
