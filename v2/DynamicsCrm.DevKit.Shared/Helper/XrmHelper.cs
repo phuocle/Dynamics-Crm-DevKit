@@ -9,6 +9,7 @@ using DynamicsCrm.DevKit.Shared;
 using System;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Crm.Sdk.Messages;
 
 namespace DynamicsCrm.DevKit.Shared.Helper
 {
@@ -84,6 +85,14 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             entities = entities.OrderBy(entity => entity.Name).ToList();
             return entities;
         }
+
+        public static List<int> GetProvisionedLanguages(OrganizationServiceProxy service)
+        {
+            var request = new RetrieveProvisionedLanguagesRequest();
+            var response = (RetrieveProvisionedLanguagesResponse)service.Execute(request);
+            return response.RetrieveProvisionedLanguages.ToList();
+        }
+
 
         public static decimal? GetMetadataMinValue(AttributeMetadata attribute)
         {

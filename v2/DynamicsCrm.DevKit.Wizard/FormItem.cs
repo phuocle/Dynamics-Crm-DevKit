@@ -78,19 +78,17 @@ namespace DynamicsCrm.DevKit.Wizard
                 {
                     link.Text = @"Add New Resource String";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template";
-                    buttonConnection.Enabled = false;
+                    //buttonConnection.Enabled = false;
                     textItemName.Visible = false;
-                    buttonOk.Enabled = true;
+                    //buttonOk.Enabled = true;
                     comboBoxCrmName.Enabled = true;
-
-                    comboBoxEntity.Enabled = true;
+                    //comboBoxEntity.Enabled = true;
                     comboBoxEntity.Visible = true;
-                    comboBoxEntity.DataSource = Utility.GetLanguages();
+                    //comboBoxEntity.DataSource = Utility.GetLanguages();
                     comboBoxEntity.DisplayMember = "Name";
                     comboBoxEntity.ValueMember = "Value";
                     comboBoxEntity.DropDownStyle = ComboBoxStyle.DropDownList;
-                    comboBoxEntity.Text = "English-United States";
-
+                    //comboBoxEntity.Text = "English-United States";
                     comboBoxWebResource.Size = new System.Drawing.Size(comboBoxWebResource.Size.Width / 2 - 50, comboBoxWebResource.Size.Height);
                     comboBoxEntity.Size = new System.Drawing.Size(comboBoxEntity.Size.Width / 2 + 50, comboBoxEntity.Size.Height);
                     comboBoxEntity.Location = new System.Drawing.Point(comboBoxWebResource.Location.X + comboBoxWebResource.Size.Width + 2, comboBoxEntity.Location.Y);
@@ -101,6 +99,7 @@ namespace DynamicsCrm.DevKit.Wizard
                         .Select(x => x.Name.Split(".".ToCharArray())[0])
                         .Distinct()
                         .ToList();
+                    comboBoxWebResource.Enabled = false;
                 }
                 else if (_itemType == ItemType.TestUi)
                 {
@@ -390,6 +389,29 @@ namespace DynamicsCrm.DevKit.Wizard
                     buttonOk.Enabled = comboBoxEntity.Enabled;
                     comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
+                    buttonCancel.Enabled = true;
+                    progressBar.Style = ProgressBarStyle.Blocks;
+                    progressBar.Value = 100;
+                    break;
+                case ItemType.ResourceString:
+                    EnabledAll(false);
+                    List<int> languages = null;
+                    progressBar.Style = ProgressBarStyle.Marquee;
+                    Task task4 = Task.Factory.StartNew(() =>
+                    {
+                        languages = XrmHelper.GetProvisionedLanguages(CrmService);
+                    });
+                    while (!task4.IsCompleted)
+                    {
+                        Application.DoEvents();
+                    }
+                    comboBoxEntity.DataSource = Utility.GetLanguages().Where(x => languages.Contains(int.Parse(x.Value))).ToList();
+                    comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
+                    comboBoxWebResource.Enabled = comboBoxEntity.Enabled;
+                    comboBoxEntity.SelectedIndex = 0;
+                    buttonOk.Enabled = comboBoxEntity.Enabled;
+                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
+                    buttonConnection.Enabled = false;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
                     progressBar.Value = 100;
