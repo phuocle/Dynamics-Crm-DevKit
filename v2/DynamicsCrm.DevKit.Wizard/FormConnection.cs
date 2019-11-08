@@ -8,6 +8,7 @@ using Microsoft.Xrm.Sdk.Client;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
+using System.Drawing;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -16,6 +17,8 @@ namespace DynamicsCrm.DevKit.Wizard
         public FormConnection(DTE dte)
         {
             InitializeComponent();
+
+            Font = SystemFonts.DefaultFont;
 
             Text += Const.Version;
 
