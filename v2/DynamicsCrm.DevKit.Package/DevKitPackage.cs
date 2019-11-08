@@ -7,7 +7,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace DynamicsCrm.DevKit.Package
 {
-    [InstalledProductRegistration("#110", "#112", "2.1.0", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "2.1.1", IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PackageGuidString)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
