@@ -40,8 +40,8 @@
             this.comboBoxMessage = new System.Windows.Forms.ComboBox();
             this.comboBoxEntity = new System.Windows.Forms.ComboBox();
             this.labelEntity = new System.Windows.Forms.Label();
-            this.link = new System.Windows.Forms.LinkLabel();
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.link = new System.Windows.Forms.LinkLabel();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
             this.groupBox.SuspendLayout();
@@ -187,6 +187,15 @@
             this.labelEntity.TabIndex = 0;
             this.labelEntity.Text = "Entity:";
             // 
+            // progressBar
+            // 
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar.Location = new System.Drawing.Point(3, 239);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(0);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(574, 4);
+            this.progressBar.TabIndex = 7;
+            // 
             // link
             // 
             this.link.Location = new System.Drawing.Point(0, 0);
@@ -199,15 +208,6 @@
             this.link.Text = "WIKI: Add new WebResource Project";
             this.link.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.link.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_LinkClicked);
-            // 
-            // progressBar
-            // 
-            this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(3, 239);
-            this.progressBar.Margin = new System.Windows.Forms.Padding(0);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(574, 4);
-            this.progressBar.TabIndex = 7;
             // 
             // buttonCancel
             // 
@@ -233,8 +233,7 @@
             // FormPlugin
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(722, 281);
