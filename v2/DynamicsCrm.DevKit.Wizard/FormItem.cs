@@ -1,5 +1,4 @@
-﻿//522, 178
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using EnvDTE;
@@ -10,6 +9,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
+using System.Drawing;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -198,6 +198,9 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
+            Font = SystemFonts.DefaultFont;
+            progressBar.Visible = false;
+
             Text += Const.Version;
 
             DTE = dte;
@@ -251,6 +254,7 @@ namespace DynamicsCrm.DevKit.Wizard
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
             config.DefaultCrmName = comboBoxCrmName.Text;
             DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
+            progressBar.Visible = true;
             if(ItemType == ItemType.LateBound)
             {
                 EnabledAll(false);
@@ -299,6 +303,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     Application.DoEvents();
                 }
             }
+            progressBar.Visible = false;
             DialogResult = DialogResult.OK;
         }
 
@@ -322,6 +327,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void CheckFormByFormType()
         {
+            progressBar.Visible = true;
             switch (ItemType)
             {
                 case ItemType.LateBound:
@@ -389,6 +395,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Value = 100;
                     break;
             }
+            progressBar.Visible = false;
         }
 
         private void EnabledAll(bool value)
