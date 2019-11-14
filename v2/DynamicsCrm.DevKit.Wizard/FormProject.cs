@@ -8,6 +8,7 @@ using Microsoft.Xrm.Sdk.Client;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
+using System.Drawing;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -31,9 +32,6 @@ namespace DynamicsCrm.DevKit.Wizard
         }
 
         public string WizardNameSpace => labelProjectName.Text;
-
-        //================================================================================================================================================
-
 
         public OrganizationServiceProxy CrmService { get; set; }
         public CrmConnection CrmConnection { get; set; }
@@ -151,6 +149,9 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
+            Font = SystemFonts.DefaultFont;
+            progressBar.Visible = false;
+
             Text += Const.Version;
 
             DTE = dte;
@@ -228,6 +229,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void CheckFormByFormType()
         {
+            progressBar.Visible = true;
             switch (ProjectType)
             {
                 case ProjectType.Shared:
@@ -368,6 +370,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Value = 100;
                     break;
             }
+            progressBar.Visible = false;
         }
 
         private void EnabledAll(bool value)

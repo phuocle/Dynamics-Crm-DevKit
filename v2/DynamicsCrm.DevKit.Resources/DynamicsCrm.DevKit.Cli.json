@@ -61,6 +61,14 @@
           "dependencies": [
             "???_/lib/WebApiClient.js"
           ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "???_/lib/devkit.js"
+          ]
         }
       ]
     }

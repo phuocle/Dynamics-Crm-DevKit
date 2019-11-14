@@ -48,18 +48,17 @@
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(0, 117);
+            this.progressBar.Location = new System.Drawing.Point(3, 123);
             this.progressBar.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(481, 3);
+            this.progressBar.Size = new System.Drawing.Size(574, 4);
             this.progressBar.TabIndex = 1;
             // 
             // buttonConnection
             // 
-            this.buttonConnection.Location = new System.Drawing.Point(400, 0);
-            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonConnection.Location = new System.Drawing.Point(600, 0);
             this.buttonConnection.Name = "buttonConnection";
-            this.buttonConnection.Size = new System.Drawing.Size(73, 29);
+            this.buttonConnection.Size = new System.Drawing.Size(110, 40);
             this.buttonConnection.TabIndex = 0;
             this.buttonConnection.Text = "Co&nnection";
             this.buttonConnection.UseVisualStyleBackColor = true;
@@ -70,8 +69,8 @@
             this.link.Location = new System.Drawing.Point(0, 0);
             this.link.Margin = new System.Windows.Forms.Padding(0);
             this.link.Name = "link";
-            this.link.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.link.Size = new System.Drawing.Size(270, 19);
+            this.link.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+            this.link.Size = new System.Drawing.Size(405, 26);
             this.link.TabIndex = 4;
             this.link.TabStop = true;
             this.link.Text = "WIKI: Add new WebResource Project";
@@ -88,11 +87,10 @@
             this.groupBox.Controls.Add(this.labelItemName);
             this.groupBox.Controls.Add(this.textItemName);
             this.groupBox.Controls.Add(this.labelItem);
-            this.groupBox.Location = new System.Drawing.Point(6, 16);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox.Controls.Add(this.progressBar);
+            this.groupBox.Location = new System.Drawing.Point(9, 22);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox.Size = new System.Drawing.Size(387, 94);
+            this.groupBox.Size = new System.Drawing.Size(580, 130);
             this.groupBox.TabIndex = 5;
             this.groupBox.TabStop = false;
             // 
@@ -107,10 +105,9 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxWebResource.Location = new System.Drawing.Point(87, 12);
-            this.comboBoxWebResource.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBoxWebResource.Location = new System.Drawing.Point(130, 17);
             this.comboBoxWebResource.Name = "comboBoxWebResource";
-            this.comboBoxWebResource.Size = new System.Drawing.Size(286, 21);
+            this.comboBoxWebResource.Size = new System.Drawing.Size(427, 26);
             this.comboBoxWebResource.TabIndex = 6;
             this.comboBoxWebResource.Visible = false;
             this.comboBoxWebResource.SelectedIndexChanged += new System.EventHandler(this.ComboBoxWebResource_SelectedIndexChanged);
@@ -120,10 +117,9 @@
             // 
             this.checkBoxDebug.AutoSize = true;
             this.checkBoxDebug.Enabled = false;
-            this.checkBoxDebug.Location = new System.Drawing.Point(309, 33);
-            this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxDebug.Location = new System.Drawing.Point(464, 46);
             this.checkBoxDebug.Name = "checkBoxDebug";
-            this.checkBoxDebug.Size = new System.Drawing.Size(64, 17);
+            this.checkBoxDebug.Size = new System.Drawing.Size(81, 22);
             this.checkBoxDebug.TabIndex = 5;
             this.checkBoxDebug.Text = "DEBUG";
             this.checkBoxDebug.UseVisualStyleBackColor = true;
@@ -140,10 +136,9 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxEntity.Location = new System.Drawing.Point(87, 12);
-            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBoxEntity.Location = new System.Drawing.Point(130, 17);
             this.comboBoxEntity.Name = "comboBoxEntity";
-            this.comboBoxEntity.Size = new System.Drawing.Size(286, 21);
+            this.comboBoxEntity.Size = new System.Drawing.Size(427, 26);
             this.comboBoxEntity.TabIndex = 4;
             this.comboBoxEntity.Visible = false;
             this.comboBoxEntity.SelectedIndexChanged += new System.EventHandler(this.comboBoxEntity_SelectedIndexChanged);
@@ -161,58 +156,52 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxCrmName.Location = new System.Drawing.Point(87, 62);
-            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBoxCrmName.Location = new System.Drawing.Point(130, 86);
             this.comboBoxCrmName.Name = "comboBoxCrmName";
-            this.comboBoxCrmName.Size = new System.Drawing.Size(286, 21);
+            this.comboBoxCrmName.Size = new System.Drawing.Size(427, 26);
             this.comboBoxCrmName.TabIndex = 2;
             // 
             // labelCrmName
             // 
             this.labelCrmName.AutoSize = true;
-            this.labelCrmName.Location = new System.Drawing.Point(6, 64);
-            this.labelCrmName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelCrmName.Location = new System.Drawing.Point(9, 89);
             this.labelCrmName.Name = "labelCrmName";
-            this.labelCrmName.Size = new System.Drawing.Size(77, 13);
+            this.labelCrmName.Size = new System.Drawing.Size(111, 18);
             this.labelCrmName.TabIndex = 3;
             this.labelCrmName.Text = "Dynamics Crm:";
             // 
             // labelItemName
             // 
             this.labelItemName.AutoSize = true;
-            this.labelItemName.Location = new System.Drawing.Point(87, 33);
-            this.labelItemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelItemName.Location = new System.Drawing.Point(130, 46);
             this.labelItemName.Name = "labelItemName";
-            this.labelItemName.Size = new System.Drawing.Size(0, 13);
+            this.labelItemName.Size = new System.Drawing.Size(0, 18);
             this.labelItemName.TabIndex = 2;
             // 
             // textItemName
             // 
             this.textItemName.Enabled = false;
-            this.textItemName.Location = new System.Drawing.Point(87, 12);
-            this.textItemName.Margin = new System.Windows.Forms.Padding(2);
+            this.textItemName.Location = new System.Drawing.Point(130, 17);
             this.textItemName.Name = "textItemName";
-            this.textItemName.Size = new System.Drawing.Size(286, 20);
+            this.textItemName.Size = new System.Drawing.Size(427, 24);
             this.textItemName.TabIndex = 1;
             this.textItemName.TextChanged += new System.EventHandler(this.textItemName_TextChanged);
             // 
             // labelItem
             // 
             this.labelItem.AutoSize = true;
-            this.labelItem.Location = new System.Drawing.Point(6, 14);
-            this.labelItem.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelItem.Location = new System.Drawing.Point(9, 19);
             this.labelItem.Name = "labelItem";
-            this.labelItem.Size = new System.Drawing.Size(61, 13);
+            this.labelItem.Size = new System.Drawing.Size(84, 18);
             this.labelItem.TabIndex = 0;
             this.labelItem.Text = "Item Name:";
             // 
             // buttonOk
             // 
             this.buttonOk.Enabled = false;
-            this.buttonOk.Location = new System.Drawing.Point(400, 48);
-            this.buttonOk.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonOk.Location = new System.Drawing.Point(600, 66);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(73, 29);
+            this.buttonOk.Size = new System.Drawing.Size(110, 40);
             this.buttonOk.TabIndex = 3;
             this.buttonOk.Text = "&OK";
             this.buttonOk.UseVisualStyleBackColor = true;
@@ -220,10 +209,9 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(400, 81);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonCancel.Location = new System.Drawing.Point(600, 112);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(73, 29);
+            this.buttonCancel.Size = new System.Drawing.Size(110, 40);
             this.buttonCancel.TabIndex = 4;
             this.buttonCancel.Text = "&Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -233,16 +221,17 @@
             // 
             this.AcceptButton = this.buttonOk;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(481, 120);
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(722, 166);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.link);
-            this.Controls.Add(this.progressBar);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormItem";

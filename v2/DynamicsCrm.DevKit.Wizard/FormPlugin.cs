@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,6 +17,11 @@ namespace DynamicsCrm.DevKit.Wizard
         public FormPlugin(ItemType itemType, DTE dte)
         {
             InitializeComponent();
+
+
+            Font = SystemFonts.DefaultFont;
+            progressBar.Visible = false;
+
             Text += Const.Version;
 
             DTE = dte;
@@ -77,6 +83,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void CheckFormByFormType()
         {
+            progressBar.Visible = true;
             switch (ItemType)
             {
                 case ItemType.Plugin:
@@ -143,6 +150,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     }
                     break;
             }
+            progressBar.Visible = false;
 
         }
         private void LoadComboBoxEntity(List<XrmEntity> entities)
@@ -182,6 +190,7 @@ namespace DynamicsCrm.DevKit.Wizard
             if (IsLoadComboBoxEntity) return;
             var entity = comboBoxEntity.SelectedItem as XrmEntity;
             List<string> list = new List<string>();
+            progressBar.Visible = true;
             progressBar.Style = ProgressBarStyle.Marquee;
             if (ItemType == ItemType.Plugin)
             {
@@ -213,6 +222,7 @@ namespace DynamicsCrm.DevKit.Wizard
             progressBar.Style = ProgressBarStyle.Blocks;
             progressBar.Value = 100;
             UpdateItemName();
+            progressBar.Visible = false;
         }
 
         private void UpdateItemName()

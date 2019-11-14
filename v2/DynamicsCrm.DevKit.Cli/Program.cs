@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using CmdLine;
-using DynamicsCrm.DevKit.Cli.Commands;
 using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
@@ -18,7 +17,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\azure\abiz\git\ABIZ_NTGROUP\src\Abiz.NTGroup.SolutionPackager";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.WebResource\entities";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -75,15 +74,6 @@ namespace DynamicsCrm.DevKit.Cli
             if (arguments.Connection != null)
             {
                 CrmCli(arguments);
-            }
-            else
-            {
-                switch (arguments.Type)
-                {
-                    case "nuglify":
-                        TaskNUglify.Run(arguments.Command);
-                        break;
-                }
             }
         }
         private static string HidePassword(string connection)

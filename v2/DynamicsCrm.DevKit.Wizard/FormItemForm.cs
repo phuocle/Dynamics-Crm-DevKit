@@ -10,6 +10,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
+using System.Drawing;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -52,7 +53,11 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
+            Font = SystemFonts.DefaultFont;
+
             Text += Const.Version;
+
+            progressBar.Visible = false;
 
             DTE = dte;
             ItemType = itemType;
@@ -98,6 +103,7 @@ namespace DynamicsCrm.DevKit.Wizard
             if (ItemType == ItemType.JsForm)
             {
                 EnabledAll(false);
+                progressBar.Visible = true;
                 progressBar.Style = ProgressBarStyle.Marquee;
                 var isDebugForm = checkBoxDebug.Checked;
                 var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{Class}.d.ts";
@@ -131,6 +137,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     Application.DoEvents();
                 }
             }
+            progressBar.Visible = false;
             DialogResult = DialogResult.OK;
         }
 
@@ -158,6 +165,7 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 case ItemType.JsForm:
                     List<XrmEntity> entities2 = null;
+                    progressBar.Visible = true;
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task task2 = Task.Factory.StartNew(() =>
                     {
@@ -175,6 +183,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     checkListForm.Enabled = comboBoxEntity.Enabled;
                     progressBar.Style = ProgressBarStyle.Blocks;
                     progressBar.Value = 100;
+                    progressBar.Visible = false;
                     break;
             }
         }
@@ -200,6 +209,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             var entity = comboBoxEntity.SelectedItem as XrmEntity;
             var forms = new List<string>();
+            progressBar.Visible = true;
             progressBar.Style = ProgressBarStyle.Marquee;
             if (ItemType == ItemType.JsForm)
             {
@@ -246,6 +256,7 @@ namespace DynamicsCrm.DevKit.Wizard
             }
             progressBar.Style = ProgressBarStyle.Blocks;
             progressBar.Value = 100;
+            progressBar.Visible = false;
             labelItemName.Text = $"{Utility.SafeName(comboBoxEntity.Text)}.form.js";
         }
 

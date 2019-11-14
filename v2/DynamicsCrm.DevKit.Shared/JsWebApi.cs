@@ -269,9 +269,8 @@ namespace DynamicsCrm.DevKit.Shared
             webApiCode += $"\t\t{@class}.EntityName = \"{@class}\";\r\n";
             webApiCode += $"\t\t{@class}.EntityCollectionName = \"{GetLogicalCollectionName(@class)}\";\r\n";
             webApiCode += $"\t\t{@class}[\"@odata.etag\"] = e[\"@odata.etag\"];\r\n";
-            webApiCode += JsOptionSetFormCode;
-            webApiCode += $"\t\t{@class}.OptionSet = optionSet;\r\n";
-
+            //webApiCode += JsOptionSetFormCode;
+            //webApiCode += $"\t\t{@class}.OptionSet = optionSet;\r\n";
             webApiCode += $"\t\t{@class}.getAliasedValue = function (alias, isMultiOptionSet) {{\r\n";
             webApiCode += $"\t\t\tif (e[alias] === undefined || e[alias] === null) {{\r\n";
             webApiCode += $"\t\t\t\treturn null;\r\n";
@@ -305,6 +304,16 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"'use strict';\r\n";
             code += $"/** @namespace {ProjectName} */\r\n";
             code += webApiCode;
+            code = code + "\r\n";
+            var optionSet = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.OptionSet.js");
+            optionSet = optionSet.Replace("[[EntityOptionSet]]", OptionSet_For_d_ts);
+            var optionSetMin = optionSet;
+            if (!IsDebugWebApi)
+            {
+                optionSetMin = Uglify.Js(optionSet).Code;
+            }
+            code += $"/** @namespace OptionSet */\r\n";
+            code += optionSetMin;
             WebApiCode = code;
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)
@@ -312,23 +321,13 @@ namespace DynamicsCrm.DevKit.Shared
                     processForms.Add(form);
             WebApiCodeTypeScriptDeclaration = GetWebApiCodeTypeScriptDeclaration(processForms, IsDebugForm, true, IsDebugWebApi);
         }
-        private string _jsOptionSetFormCode = null;
-        private string JsOptionSetFormCode
+
+        private string OptionSet_For_d_ts
         {
             get
             {
-                if (_jsOptionSetFormCode != null) return _jsOptionSetFormCode;
-                _jsOptionSetFormCode = string.Empty;
-                _jsOptionSetFormCode += $"\t\tvar optionSet = {{\r\n";
-                _jsOptionSetFormCode += $"\t\t\tRollupState: {{\r\n";
-                _jsOptionSetFormCode += $"\t\t\t\tNotCalculated: 0,\r\n";
-                _jsOptionSetFormCode += $"\t\t\t\tCalculated: 1,\r\n";
-                _jsOptionSetFormCode += $"\t\t\t\tOverflowError: 2,\r\n";
-                _jsOptionSetFormCode += $"\t\t\t\tOtherError: 3,\r\n";
-                _jsOptionSetFormCode += $"\t\t\t\tRetryLimitExceeded: 4,\r\n";
-                _jsOptionSetFormCode += $"\t\t\t\tHierarchicalRecursionLimitReached: 5,\r\n";
-                _jsOptionSetFormCode += $"\t\t\t\tLoopDetected: 6\r\n";
-                _jsOptionSetFormCode += $"\t\t\t}},\r\n";
+                var _d_ts = string.Empty;
+                _d_ts += $"\tOptionSet.{EntityName} = {{\r\n";
                 foreach (var crmAttribute in Fields)
                 {
                     if (!crmAttribute.IsValidForRead) continue;
@@ -336,17 +335,54 @@ namespace DynamicsCrm.DevKit.Shared
                         crmAttribute.FieldType != AttributeTypeCode.State &&
                         crmAttribute.FieldType != AttributeTypeCode.Status &&
                         !crmAttribute.IsMultiSelectPicklist) continue;
-                    _jsOptionSetFormCode += $"\t\t\t{crmAttribute.SchemaName}: {{\r\n";
+                    _d_ts += $"\t\t{crmAttribute.SchemaName} : {{\r\n";
                     foreach (string nvc in crmAttribute.OptionSetValues)
-                        _jsOptionSetFormCode += $"\t\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
-                    _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-                    _jsOptionSetFormCode += $"\t\t\t}},\r\n";
+                        _d_ts += $"\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
+                    _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+                    _d_ts += $"\t\t}},\r\n";
                 }
-                _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray());
-                _jsOptionSetFormCode += $"\r\n\t\t}};\r\n";
-                return _jsOptionSetFormCode;
+                var optionSet = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.OptionSetWebApi.js");
+                _d_ts += optionSet;
+                _d_ts += $"\r\n\t}};";
+                return _d_ts;
             }
         }
+
+        //private string _jsOptionSetFormCode = null;
+        //private string JsOptionSetFormCode
+        //{
+        //    get
+        //    {
+        //        if (_jsOptionSetFormCode != null) return _jsOptionSetFormCode;
+        //        _jsOptionSetFormCode = string.Empty;
+        //        _jsOptionSetFormCode += $"\t\tvar optionSet = {{\r\n";
+        //        _jsOptionSetFormCode += $"\t\t\tRollupState: {{\r\n";
+        //        _jsOptionSetFormCode += $"\t\t\t\tNotCalculated: 0,\r\n";
+        //        _jsOptionSetFormCode += $"\t\t\t\tCalculated: 1,\r\n";
+        //        _jsOptionSetFormCode += $"\t\t\t\tOverflowError: 2,\r\n";
+        //        _jsOptionSetFormCode += $"\t\t\t\tOtherError: 3,\r\n";
+        //        _jsOptionSetFormCode += $"\t\t\t\tRetryLimitExceeded: 4,\r\n";
+        //        _jsOptionSetFormCode += $"\t\t\t\tHierarchicalRecursionLimitReached: 5,\r\n";
+        //        _jsOptionSetFormCode += $"\t\t\t\tLoopDetected: 6\r\n";
+        //        _jsOptionSetFormCode += $"\t\t\t}},\r\n";
+        //        foreach (var crmAttribute in Fields)
+        //        {
+        //            if (!crmAttribute.IsValidForRead) continue;
+        //            if (crmAttribute.FieldType != AttributeTypeCode.Picklist &&
+        //                crmAttribute.FieldType != AttributeTypeCode.State &&
+        //                crmAttribute.FieldType != AttributeTypeCode.Status &&
+        //                !crmAttribute.IsMultiSelectPicklist) continue;
+        //            _jsOptionSetFormCode += $"\t\t\t{crmAttribute.SchemaName}: {{\r\n";
+        //            foreach (string nvc in crmAttribute.OptionSetValues)
+        //                _jsOptionSetFormCode += $"\t\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
+        //            _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+        //            _jsOptionSetFormCode += $"\t\t\t}},\r\n";
+        //        }
+        //        _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray());
+        //        _jsOptionSetFormCode += $"\r\n\t\t}};\r\n";
+        //        return _jsOptionSetFormCode;
+        //    }
+        //}
 
         private int _objectTypeCode = -1;
         private int ObjectTypeCode

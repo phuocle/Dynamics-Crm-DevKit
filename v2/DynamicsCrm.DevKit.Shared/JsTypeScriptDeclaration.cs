@@ -58,7 +58,8 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             var comment = new CommentTypeScriptDeclaration()
             {
-                JsForm = ProcessForms.Select(f => FormHelper.GetFormName(f.Name)).ToList<string>(),
+                //JsForm = ProcessForms.Select(f => FormHelper.GetFormName(f.Name)).ToList<string>(),
+                JsForm = ProcessForms.Select(f => f.Name).ToList<string>(),
                 JsWebApi = IsJsWebApi,
                 IsDebugForm = IsDebugForm,
                 IsDebugWebApi = IsDebugWebApi
@@ -90,6 +91,8 @@ namespace DynamicsCrm.DevKit.Shared
                     _d_ts += $"\t\t}}\r\n";
                 }
             }
+            var optionSet = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.OptionSetWebApi_d_ts.js");
+            _d_ts += optionSet;
             _d_ts += $"\t}}\r\n";
             _d_ts += $"}}\r\n";
             return _d_ts;

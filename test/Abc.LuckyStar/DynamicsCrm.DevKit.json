@@ -1,12 +1,18 @@
 ﻿{
   "DefaultCrmName": "Dynamics 365 - 4.6.2",
-  "DefaultCrmConnection": "DEVKIT",
+  "DefaultCrmConnection": "DEVKIT2",
   "CrmConnections": [
     {
       "Name": "DEVKIT",
       "Url": "https://orgcaffa69c.api.crm5.dynamics.com/XRMServices/2011/Organization.svc",
       "UserName": "dev@pldevkit.onmicrosoft.com",
       "Password": "jx0fE8wm5wnmew2teG9PHg=="
+    },
+    {
+      "Name": "DEVKIT2",
+      "Url": "https://orgcaffa69c.api.crm5.dynamics.com/XRMServices/2011/Organization.svc",
+      "UserName": "dev@pldevkit.onmicrosoft.com",
+      "Password": "lXxH8LKZVyltmKMdhymaWcu5ooBpRRdWeJEScXnSFmM="
     }
   ]
 }

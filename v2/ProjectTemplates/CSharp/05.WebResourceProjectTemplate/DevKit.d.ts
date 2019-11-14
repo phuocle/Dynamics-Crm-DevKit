@@ -1220,11 +1220,12 @@ declare namespace DevKit {
                 readonly Text: string;
                 /**
                  * Adds an option to a control
-                 * @param option The option to add
+                 * @param text The label for the option
+                 * @param value The value for the option
                  * @param index The index position to place the new option in. If not provided, the option will be added to the end
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addoption
                  */
-                AddOption(option: DevKit.Core.TextValueNumber, index: number): void;
+                AddOption(text: string, value: number, index: number): void;
                 /**
                  * Clears all options from a control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearoptions
@@ -2291,23 +2292,6 @@ declare namespace OptionSet {
         Function,
         /** 2 */
         CRUD
-    }
-    /**  */
-    enum RollupState {
-        /** 0 - Attribute value is yet to be calculated */
-        NotCalculated,
-        /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
-        Calculated,
-        /** 2 - Attribute value calculation lead to overflow error */
-        OverflowError,
-        /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
-        OtherError,
-        /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
-        RetryLimitExceeded,
-        /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
-        HierarchicalRecursionLimitReached,
-        /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
-        LoopDetected
     }
     /** Returns information about the kind of device the user is using. */
     enum FormFactor {

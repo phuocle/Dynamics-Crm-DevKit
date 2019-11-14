@@ -1,20 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using DynamicsCrm.DevKit.Shared;
+using CmdLine;
+using DynamicsCrm.DevKit.Tool.Args;
 using NUglify;
 
-namespace DynamicsCrm.DevKit.Cli.Commands
+namespace DynamicsCrm.DevKit.Tool.Commands
 {
-    public class TaskNUglify
+    class TaskNUglify
     {
-        public static void Run(string command)
+        private static List<string> SUPPORTED = new List<string>() { ".html", ".css", ".js" };
+
+
+        internal static void Run()
         {
-            var arguments = Utility.ParseArguments(command);
-            var sourceFile = Utility.GetArgumentValue(arguments, "/source:");
-            var destinationFile = Utility.GetArgumentValue(arguments, "/destination:");
+            var args = CommandLine.Parse<NUglifyArgs>();
+            var sourceFile = args.Source;
+            var destinationFile = args.Destination;
             if (!File.Exists(sourceFile))
                 throw new Exception($"File not found: {sourceFile}");
             var extension = Path.GetExtension(sourceFile);
+            if (!SUPPORTED.Contains(extension))
+                throw new Exception($"Not support extension: {extension}");
             switch (extension)
             {
                 case ".html":
