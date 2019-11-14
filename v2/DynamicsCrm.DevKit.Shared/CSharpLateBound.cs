@@ -15,12 +15,14 @@ namespace DynamicsCrm.DevKit.Shared
         private OrganizationServiceProxy _crmService;
         private List<CrmAttribute> Lists { get; set; }
         private int ObjectTypeCode { get; set; }
+        private string EntityName { get; set; }
         private bool HasImage { get; set; }
 
         internal string Go(OrganizationServiceProxy crmService, CrmVersionName crmVersionName, string entity, string rootNameSpace, string sharedNameSpace)
         {
             _crmService = crmService;
             LoadData(entity);
+            EntityName = entity;
             var logicalName = entity.ToLower();
 
             var code = string.Empty;
@@ -364,7 +366,7 @@ namespace DynamicsCrm.DevKit.Shared
                     code += "\t\t\t\tvar value = Entity.GetAttributeValue<OptionSetValue>(Fields." + crmAttribute.Name +
                             ");\r\n";
                     code += "\t\t\t\tif (value == null) return null;\r\n";
-                    code += "\t\t\t\treturn (" + crmAttribute.Name + ")value.Value;\r\n";
+                    code += "\t\t\t\treturn (" + SafeType(crmAttribute.Name, EntityName + "OptionSets") + ")value.Value;\r\n";
                     code += "\t\t\t}}";
                     return code;
                 case AttributeTypeCode.BigInt:
@@ -432,13 +434,13 @@ namespace DynamicsCrm.DevKit.Shared
                     {
                         code += "get\r\n";
                         code += "\t\t\t{{\r\n";
-                        code += "\t\t\t\tvar data = new List<" + crmAttribute.Name + ">();\r\n";
+                        code += "\t\t\t\tvar data = new List<" + SafeType(crmAttribute.Name, EntityName + "OptionSets") + ">();\r\n";
                         code += "\t\t\t\tvar items = Entity.GetAttributeValue<OptionSetValueCollection>(Fields." + crmAttribute.Name + ");\r\n";
                         code += "\t\t\t\tif (items != null)\r\n";
                         code += "\t\t\t\t{{\r\n";
                         code += "\t\t\t\t\tforeach (OptionSetValue item in items)\r\n";
                         code += "\t\t\t\t\t{{\r\n";
-                        code += "\t\t\t\t\t\tdata.Add((" + crmAttribute.Name + ")item.Value);\r\n";
+                        code += "\t\t\t\t\t\tdata.Add((" + SafeType(crmAttribute.Name, EntityName + "OptionSets") + ")item.Value);\r\n";
                         code += "\t\t\t\t\t}}\r\n";
                         code += "\t\t\t\t}}\r\n";
                         code += "\t\t\t\treturn data;\r\n";
@@ -462,6 +464,12 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
+        private string SafeType(string name, string prefix)
+        {
+            if (name == "Type")
+                return $"{prefix}.{name}";
+            return name;
+        }
 
         private string DeclareType(CrmAttribute crmAttribute)
         {
@@ -472,7 +480,7 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.Picklist:
                 case AttributeTypeCode.State:
                 case AttributeTypeCode.Status:
-                    return crmAttribute.Name + "?";
+                    return SafeType(crmAttribute.Name, EntityName + "OptionSets") + "?";
                 case AttributeTypeCode.BigInt:
                     return "long?";
                 case AttributeTypeCode.Integer:
@@ -506,7 +514,7 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.EntityName:
                 case AttributeTypeCode.String:
                     if (crmAttribute.IsMultiSelectPicklist)
-                        return "List<" + crmAttribute.Name + ">";
+                        return "List<" + SafeType(crmAttribute.Name, crmAttribute.EntityName) + ">";
                     else
                         return "string";
                 case AttributeTypeCode.PartyList:
