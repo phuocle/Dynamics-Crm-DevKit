@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Xml;
 using DynamicsCrm.DevKit.Shared.Models;
@@ -63,7 +65,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"\t\t[DebuggerNonUserCode()]\r\n";
             code += $"\t\tpublic {entity}(Guid {entity}Id)\r\n";
             code += $"\t\t{{\r\n";
-            if(crmVersionName == CrmVersionName._2011 || crmVersionName == CrmVersionName._2013)
+            if (crmVersionName == CrmVersionName._2011 || crmVersionName == CrmVersionName._2013)
             {
                 code += $"\t\t\tEntity = new Entity(EntityLogicalName);\r\n";
                 code += $"\t\t\tEntity.Id = {entity}Id;\r\n";
@@ -150,7 +152,7 @@ namespace DynamicsCrm.DevKit.Shared
 			get { return Entity.GetAttributeValue<string>('entityimage_url'); }
 		}
 ";
-            code = code.Replace("'", ((char) 34).ToString());
+            code = code.Replace("'", ((char)34).ToString());
             return code;
         }
 
@@ -612,7 +614,7 @@ namespace DynamicsCrm.DevKit.Shared
                 EntityFilters = EntityFilters.Attributes,
                 LogicalName = logicalName
             };
-            var response = (RetrieveEntityResponse) _crmService.Execute(request);
+            var response = (RetrieveEntityResponse)_crmService.Execute(request);
             ObjectTypeCode = response.EntityMetadata.ObjectTypeCode.Value;
             HasImage = !string.IsNullOrEmpty(response.EntityMetadata.PrimaryImageAttribute);
             var requestRelationships = new RetrieveEntityRequest
@@ -620,7 +622,7 @@ namespace DynamicsCrm.DevKit.Shared
                 EntityFilters = EntityFilters.Relationships,
                 LogicalName = logicalName
             };
-            var responseRelationships = (RetrieveEntityResponse) _crmService.Execute(requestRelationships);
+            var responseRelationships = (RetrieveEntityResponse)_crmService.Execute(requestRelationships);
 
             var lists = new List<CrmAttribute>();
             foreach (var attribute in response.EntityMetadata.Attributes)
@@ -667,7 +669,7 @@ namespace DynamicsCrm.DevKit.Shared
                     EntityFilters = EntityFilters.Attributes,
                     LogicalName = entity
                 };
-                var response = (RetrieveEntityResponse) _crmService.Execute(request);
+                var response = (RetrieveEntityResponse)_crmService.Execute(request);
                 value += response.EntityMetadata.LogicalCollectionName + ";";
             }
 
@@ -709,21 +711,40 @@ namespace DynamicsCrm.DevKit.Shared
                     crmAttribute.IsMultiSelectPicklist)
                 {
                     var tmp = string.Empty;
-                    foreach (string nvc in crmAttribute.OptionSetValues)
+                    NameValueCollection values = UpdateOptionSetValues(crmAttribute.OptionSetValues);
+                    foreach (string nvc in values)
                     {
                         tmp += "\t\t/// <summary>\r\n";
-                        tmp += "\t\t/// " + XmlEscape(nvc) + " = " + XmlEscape(crmAttribute.OptionSetValues[nvc]) +
+                        tmp += "\t\t/// " + XmlEscape(nvc) + " = " + XmlEscape(values[nvc]) +
                                "\r\n";
                         tmp += "\t\t/// </summary>\r\n";
-                        tmp += string.Format($"\t\t{nvc} = {crmAttribute.OptionSetValues[nvc]},\r\n");
+                        tmp += string.Format($"\t\t{nvc} = {values[nvc]},\r\n");
                     }
-
                     tmp = tmp.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
                     code += @enum.Replace("[[Enum]]", crmAttribute.Name).Replace("[[Declare]]", tmp);
                 }
 
             code = code.TrimEnd("\r\n".ToCharArray()).TrimEnd("\r\n".ToCharArray());
             return code;
+        }
+
+        private NameValueCollection UpdateOptionSetValues(NameValueCollection optionSetValues)
+        {
+            var values = new NameValueCollection();
+            foreach(string key in optionSetValues.Keys)
+            {
+                if (optionSetValues.GetValues(key).Length > 1)
+                {
+                    for(var i = 0; i< optionSetValues.GetValues(key).Length; i++)
+                    {
+                        var value = optionSetValues.GetValues(key)[i];
+                        values.Add(key + "_" + value, value);
+                    }
+                }
+                else
+                    values.Add(key, optionSetValues[key]);
+            }
+            return values;
         }
     }
 }
