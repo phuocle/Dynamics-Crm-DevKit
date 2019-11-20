@@ -292,6 +292,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (fileContent == content)
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + len + "}", "", current) + ": ", CliLog.ColorMagenta, "No Change ", CliLog.ColorGreen, webResourceFile.file.Substring(currentDirectory.Length + 1));
+                AddWebResourceToSolution(new Entity("webresource") {
+                    ["name"] = webResourceFile.uniquename,
+                    ["webresourceid"] = webResourceId
+                });
                 return;
             }
             var webResource = new Entity("webresource")
