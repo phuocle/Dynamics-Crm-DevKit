@@ -1,21 +1,12 @@
-﻿var devKit = (function() {
+﻿var devKit = (function () {
     "use strict";
     var EMPTY_STRING = "";
     var EMPTY_GUID = "{00000000-0000-0000-0000-000000000000}";
     var N = null;
-    function checkNested(obj) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        for (var i = 0; i < args.length; i++) {
-            if (!obj || !obj.hasOwnProperty(args[i])) {
-                return false;
-            }
-            obj = obj[args[i]];
-        }
-        return true;
-    }
     function loadForm(formContext) {
+        if (!formContext) return;
         var form = {};
-        if (checkNested(formContext, "data")) {
+        if (formContext.data) {
             var contextData = formContext.data;
             Object.defineProperty(form, "IsDirty", { get: function () { return contextData.getIsDirty(); } });
             Object.defineProperty(form, "IsValid", { get: function () { return contextData.isValid(); } });
@@ -24,7 +15,7 @@
             form.RemoveOnLoad = function (callback) { contextData.removeOnLoad(callback); };
             form.Save = function (saveOptions, successCallback, errorCallback) { contextData.save(saveOptions).then(successCallback, errorCallback); };
         }
-        if (checkNested(formContext, "data", "entity")) {
+        if (formContext.data && formContext.data.entity) {
             var contextDataEntity = formContext.data.entity;
             Object.defineProperty(form, "DataXml", { get: function () { return contextDataEntity.getDataXml(); } });
             Object.defineProperty(form, "EntityName", { get: function () { return contextDataEntity.getEntityName(); } });
@@ -38,7 +29,7 @@
             form.RemoveOnSave = function (callback) { contextDataEntity.removeOnSave(callback); };
             form.EntitySave = function (saveOption) { contextDataEntity.save(saveOption); };
         }
-        if (checkNested(formContext, "ui")) {
+        if (formContext.ui) {
             var contextUi = formContext.ui;
             Object.defineProperty(form, "FormType", { get: function () { return contextUi.getFormType(); } });
             Object.defineProperty(form, "ViewPortHeight", { get: function () { return contextUi.getViewPortHeight(); } });
@@ -49,7 +40,7 @@
             form.RefreshRibbon = function (refreshAll) { contextUi.refreshRibbon(refreshAll); };
             form.SetFormNotification = function (message, level, uniqueId) { return contextUi.setFormNotification(message, level, uniqueId); };
         }
-        if (checkNested(formContext, "ui", "formSelector")) {
+        if (formContext.ui && formContext.ui.formSelector) {
             var contextUiFormSelector = formContext.ui.formSelector;
             Object.defineProperty(form, "FormId", { get: function () { return contextUiFormSelector.getCurrentItem().getId(); } });
             Object.defineProperty(form, "FormLabel", { get: function () { return contextUiFormSelector.getCurrentItem().getLabel(); } });
@@ -58,8 +49,9 @@
         return form;
     }
     function loadProcess(formContext) {
+        if (!formContext) return;
         var process = {};
-        if (checkNested(formContext, "data", "process")) {
+        if (formContext.data && formContext.data.process) {
             var getProcess = formContext.data.process;
             Object.defineProperty(process, "InstanceId", { get: function () { return getProcess.getInstanceId(); } });
             Object.defineProperty(process, "InstanceName", { get: function () { return getProcess.getInstanceName(); } });
@@ -71,7 +63,7 @@
             Object.defineProperty(process, "ActiveProcess", {
                 get: function () {
                     var data = { Id: EMPTY_GUID, Name: EMPTY_STRING, IsRendered: false, Stages: N };
-                    if (!checkNested(getProcess, "getActiveProcess")) return data;
+                    if (!getProcess.getActiveProcess) return data;
                     var activeProcess = getProcess.getActiveProcess();
                     if (activeProcess.getId) data.Id = activeProcess.getId();
                     if (activeProcess.getName) data.Name = activeProcess.getName();
@@ -83,7 +75,7 @@
             Object.defineProperty(process, "ActiveStage", {
                 get: function () {
                     var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
-                    if (!checkNested(getProcess, "getActiveStage")) return data;
+                    if (!getProcess.getActiveStage) return data;
                     var activeStage = getProcess.getActiveStage();
                     if (activeStage.getCategory) if (activeStage.getCategory().getValue) data.Category = activeStage.getCategory().getValue();
                     if (activeStage.getEntityName) data.EntityName = activeStage.getEntityName();
@@ -97,7 +89,7 @@
             Object.defineProperty(process, "SelectedStage", {
                 get: function () {
                     var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
-                    if (!checkNested(getProcess, "getSelectedStage")) return data;
+                    if (!getProcess.getSelectedStage) return data;
                     var selectedStage = getProcess.getSelectedStage();
                     if (selectedStage.getCategory) if (selectedStage.getCategory().getValue) data.Category = selectedStage.getCategory().getValue();
                     if (selectedStage.getEntityName) data.EntityName = selectedStage.getEntityName();
@@ -122,7 +114,7 @@
             process.SetActiveProcessInstance = function (processInstanceId, callback) { getProcess.setActiveProcessInstance(processInstanceId, callback); };
             process.SetActiveStage = function (stageId, callback) { getProcess.setActiveStage(stageId, callback); };
         }
-        if (checkNested(formContext, "ui", "process")) {
+        if (formContext.ui && formContext.ui.process) {
             var getProcessUi = formContext.ui.process;
             Object.defineProperty(process, "DisplayState", {
                 get: function () { return getProcessUi.getDisplayState(); },
@@ -269,9 +261,11 @@
         return body;
     }
     function loadSection(formContext, tab, sections, section) {
-        if (checkNested(formContext, "ui", "tabs", "get")) {
+        if (!formContext) return;
+        if (formContext.ui && formContext.ui.tabs && formContext.ui.tabs.get) {
             var tabObject = formContext.ui.tabs.get(tab);
-            if (checkNested(tabObject, "sections", "get")) {
+            if (!tabObject) return;
+            if (tabObject.sections && tabObject.sections.get) {
                 var sectionObject = tabObject.sections.get(section);
                 Object.defineProperty(sections[section], "Name", { get: function () { return sectionObject.getName(); } });
                 Object.defineProperty(sections[section], "Parent", { get: function () { return sectionObject.getParent(); } });
@@ -287,7 +281,8 @@
         }
     }
     function loadTab(formContext, tabs, tab) {
-        if (checkNested(formContext, "ui", "tabs", "get")) {
+        if (!formContext) return;
+        if (formContext.ui && formContext.ui.tabs && formContext.ui.tabs.get) {
             var tabObject = formContext.ui.tabs.get(tab);
             Object.defineProperty(tabs[tab], "Name", { get: function () { return tabObject.getName(); } });
             Object.defineProperty(tabs[tab], "Parent", { get: function () { return tabObject.getParent(); } });
@@ -317,7 +312,8 @@
         }
     }
     function loadNavigation(formContext, navigations, navigation) {
-        if (checkNested(formContext, "ui", "navigation", "items", "get")) {
+        if (!formContext) return;
+        if (formContext.ui && formContext.ui.navigation && formContext.ui.navigation.items && formContext.ui.navigation.items.get) {
             var navigationItem = formContext.ui.navigation.items.get(navigation);
             Object.defineProperty(navigations[navigation], "Id", { get: function () { return navigationItem.getId(); } });
             Object.defineProperty(navigations[navigation], "Label", {
@@ -337,7 +333,8 @@
         }
     }
     function loadQuickForm(formContext, quickForms, quickForm) {
-        if (checkNested(formContext, "ui", "quickForms", "get")) {
+        if (!formContext) return;
+        if (formContext.ui && formContext.ui.quickForms && formContext.ui.quickForms.get) {
             var quickViewControl = formContext.ui.quickForms.get(quickForm);
             Object.defineProperty(quickForms[quickForm], "ControlType", { get: function () { return quickViewControl.getControlType(); } });
             Object.defineProperty(quickForms[quickForm], "Visible", { get: function () { return quickViewControl.getVisible(); } });
@@ -359,7 +356,7 @@
     }
     function loadUtility(defaultWebResourceName) {
         var utility = {};
-        if (checkNested(Xrm, "Utility")) {
+        if (Xrm && Xrm.Utility) {
             var getUtility = Xrm.Utility;
             Object.defineProperty(utility, "LearningPathAttributeName", { get: function () { return getUtility.getLearningPathAttributeName(); } });
             utility.CloseProgressIndicator = function () { getUtility.closeProgressIndicator(); };
@@ -372,7 +369,7 @@
             utility.RefreshParentGrid = function (lookupOptions) { getUtility.refreshParentGrid(lookupOptions); };
             utility.ShowProgressIndicator = function (message) { getUtility.showProgressIndicator(message); };
         }
-        if (checkNested(Xrm, "Utility", "getGlobalContext")) {
+        if (Xrm && Xrm.Utility && Xrm.Utility.getGlobalContext) {
             var getGlobalContext = Xrm.Utility.getGlobalContext();
             Object.defineProperty(utility, "ClientUrl", { get: function () { return getGlobalContext.getClientUrl(); } });
             Object.defineProperty(utility, "CurrentAppUrl", { get: function () { return getGlobalContext.getCurrentAppUrl(); } });
@@ -381,7 +378,7 @@
             Object.defineProperty(utility, "Client", {
                 get: function () {
                     var Client = {};
-                    if (checkNested(getGlobalContext, "client")) {
+                    if (getGlobalContext.client) {
                         var client = getGlobalContext.client;
                         Object.defineProperty(Client, "ClientName", { get: function () { return client.getClient(); } });
                         Object.defineProperty(Client, "ClientState", { get: function () { return client.getClientState(); } });
@@ -394,7 +391,7 @@
             Object.defineProperty(utility, "OrganizationSettings", {
                 get: function () {
                     var OrganizationSettings = {};
-                    if (checkNested(getGlobalContext, "organizationSettings")) {
+                    if (getGlobalContext.organizationSettings) {
                         var organizationSettings = getGlobalContext.organizationSettings;
                         Object.defineProperty(OrganizationSettings, "getGlobalContext", { get: function () { return organizationSettings.attributes; } });
                         Object.defineProperty(OrganizationSettings, "BaseCurrencyId", { get: function () { return organizationSettings.baseCurrencyId; } });
@@ -411,7 +408,7 @@
             Object.defineProperty(utility, "UserSettings", {
                 get: function () {
                     var UserSettings = {};
-                    if (checkNested(getGlobalContext, "userSettings")) {
+                    if (getGlobalContext.userSettings) {
                         var userSettings = getGlobalContext.userSettings;
                         Object.defineProperty(UserSettings, "DateFormattingInfo", { get: function () { return userSettings.dateFormattingInfo; } });
                         Object.defineProperty(UserSettings, "DefaultDashboardId", { get: function () { return userSettings.defaultDashboardId; } });
@@ -434,7 +431,7 @@
             utility.CurrentAppProperties = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback); };
             utility.PrependOrgName = function (sPath) { return getGlobalContext.prependOrgName(sPath); };
         }
-        if (checkNested(Xrm, "Navigation")) {
+        if (Xrm && Xrm.Navigation) {
             var getNavigation = Xrm.Navigation;
             utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback); };
             utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback); };
@@ -444,16 +441,16 @@
             utility.OpenUrl = function (url, openUrlOptions) { getNavigation.openUrl(url, openUrlOptions); };
             utility.OpenWebResource = function (webResourceName, windowOptions, data) { getNavigation.openWebResource(webResourceName, windowOptions, data); };
         }
-        if (checkNested(Xrm, "Panel")) {
+        if (Xrm && Xrm.Panel) {
             var getPanel = Xrm.Panel;
             utility.LoadPanel = function (url, title) { getPanel.loadPanel(url, title); };
         }
-        if (checkNested(Xrm, "Encoding")) {
+        if (Xrm && Xrm.Encoding) {
             var getEncoding = Xrm.Encoding;
             utility.XmlAttributeEncode = function (arg) { return getEncoding.xmlAttributeEncode(arg); };
             utility.XmlEncode = function (arg) { return getEncoding.xmlEncode(arg); };
         }
-        if (checkNested(Xrm, "Device")) {
+        if (Xrm && Xrm.Device) {
             var getDevice = Xrm.Device;
             utility.CaptureAudio = function (successCallback, errorCallback) { getDevice.captureAudio().then(successCallback, errorCallback); };
             utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice.captureImage(imageOptions).then(successCallback, errorCallback); };
