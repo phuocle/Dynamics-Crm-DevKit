@@ -443,12 +443,14 @@ namespace DynamicsCrm.DevKit.Shared
             var code = string.Empty;
             code += $"//@ts-check\r\n";
             code += $"///<reference path=\"{EntityName}.d.ts\" />\r\n";
+            code += "\"use strict\";\r\n";
             foreach (var form in processForms)
             {
                 code += $"var form{Utility.SafeName(form.Name)} = (function () {{\r\n";
-                code += $"\tfunction onLoad(executionContext) {{\r\n";
+                code += "\t\"use strict\";\r\n";
+                code += $"\tasync function onLoad(executionContext) {{\r\n";
                 code += $"\t}}\r\n";
-                code += $"\tfunction onSave(executionContext) {{\r\n";
+                code += $"\tasync function onSave(executionContext) {{\r\n";
                 code += $"\t}}\r\n";
                 code += $"\treturn {{\r\n\t\tOnLoad: onLoad,\r\n\t\tOnSave: onSave\r\n\t}};\r\n";
                 code += $"}})();\r\n";
