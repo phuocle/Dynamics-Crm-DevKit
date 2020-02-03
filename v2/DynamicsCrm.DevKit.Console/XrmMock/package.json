@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "xrm-mock": "^3.4.15"
+    "xrm-mock": "^3.4.17"
+  },
+  "dependencies": {
+    "@types/xrm": "^9.0.20"
   }
 }
