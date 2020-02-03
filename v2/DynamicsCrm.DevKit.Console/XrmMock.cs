@@ -8,7 +8,7 @@ namespace DynamicsCrm.DevKit.Console
         internal static void Generator_xrm_mock_d_ts()
         {
             var currentDirectory = Directory.GetCurrentDirectory();
-            var xrm_mock_directory = Path.Combine(currentDirectory, @"..\..\XrmMock\node_modules\xrm-mock");
+            var xrm_mock_directory = Path.Combine(currentDirectory, @"..\..\Packages\node_modules\xrm-mock");
             if (!Directory.Exists(xrm_mock_directory)) return;
             var file = Path.Combine(xrm_mock_directory, @"build\index.d.ts");
             if (!File.Exists(file)) return;

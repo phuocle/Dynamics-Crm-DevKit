@@ -45,12 +45,13 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XrmMock\XrmMock.cs" />
+    <Compile Include="XrmEnum.cs" />
+    <Compile Include="XrmMock.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="XrmMock\package-lock.json" />
-    <None Include="XrmMock\package.json" />
+    <None Include="Packages\package-lock.json" />
+    <None Include="Packages\package.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

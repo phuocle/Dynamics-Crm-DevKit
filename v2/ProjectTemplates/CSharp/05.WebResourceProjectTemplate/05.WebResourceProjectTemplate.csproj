@@ -90,6 +90,7 @@
     </VSTemplate>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="XrmEnum.js" />
     <None Include="requirejsConfig.js" />
     <None Include="WebApiClient.js" />
     <None Include="devkit.js" />
