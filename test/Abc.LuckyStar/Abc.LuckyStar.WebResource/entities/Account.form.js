@@ -87,12 +87,12 @@ var LuckyStar;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var navigation = {
-			navRelationships: {},
 			navAddresses: {},
 			navSubAccts: {},
+			navRelationships: {},
 			navCampaignsInSFA: {},
-			navAsyncOperations: {},
-			navProcessSessions: {}
+			navProcessSessions: {},
+			navAsyncOperations: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;

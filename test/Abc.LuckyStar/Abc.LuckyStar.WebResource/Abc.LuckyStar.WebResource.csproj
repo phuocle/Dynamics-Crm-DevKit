@@ -52,6 +52,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="entities\devkit_CustomActivity.form.js">
+      <DependentUpon>devkit_CustomActivity.js</DependentUpon>
+    </Content>
+    <Content Include="entities\devkit_CustomActivity.js" />
     <Content Include="test\XrmEnum.js" />
     <None Include="deploy.debug.bat" />
     <None Include="package.json" />
@@ -119,6 +123,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\Contact.d.ts">
       <DependentUpon>Contact.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\devkit_CustomActivity.d.ts">
+      <DependentUpon>devkit_CustomActivity.js</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
       <DependentUpon>devkit_WebApi.js</DependentUpon>
