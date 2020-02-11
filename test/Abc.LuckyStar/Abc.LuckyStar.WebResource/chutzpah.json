@@ -4,14 +4,26 @@
   "TestHarnessReferenceMode": "AMD",
   "TestHarnessLocationMode": "SettingsFileAdjacent",
   "CodeCoverageExecutionMode": "Manual",
-  "CodeCoverageIncludes": [ "entities\\*.js" ],
+  "CodeCoverageExcludes": [
+    "*.form.js",
+    "*.webapi.js",
+    "*.test.js",
+    "requirejsConfig.js",
+    "XrmEnum.js",
+    "*\\node_modules\\*"
+  ],
+  "Engine": "JSDom",
   "References": [
+    {
+      "Path": "lib/WebApiClient.js",
+      "IsTestFrameworkFile": true
+    },
     {
       "Path": "lib/devkit.js",
       "IsTestFrameworkFile": true
     },
     {
-      "Path": "lib/WebApiClient.js",
+      "Path": "test/XrmEnum.js",
       "IsTestFrameworkFile": true
     },
     {

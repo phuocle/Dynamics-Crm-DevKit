@@ -34,13 +34,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.DataProvider.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.UiTest", "Abc.LuckyStar.UiTest\Abc.LuckyStar.UiTest.csproj", "{26F40037-23CF-42C1-B038-BE073BC568EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.WebResource", "Abc.LuckyStar.WebResource\Abc.LuckyStar.WebResource.csproj", "{0DD4C078-7695-4083-AE4F-3AC153935D56}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.SolutionPackager", "Abc.LuckyStar.SolutionPackager\Abc.LuckyStar.SolutionPackager.csproj", "{79F69307-96CF-4DEF-9DAB-25BD5BAE9AC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.DataProvider.AzureTable", "Abc.LuckyStar.DataProvider.AzureTable\Abc.LuckyStar.DataProvider.AzureTable.csproj", "{0688F027-19B8-477C-A0E4-CFE250CF52F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.Others.UiTest", "Abc.LuckyStar.Others.UiTest\Abc.LuckyStar.Others.UiTest.csproj", "{A60B4C4B-ECD9-41C2-B168-E6A53B86FC9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.WebResource", "Abc.LuckyStar.WebResource\Abc.LuckyStar.WebResource.csproj", "{612AF577-2F36-42BC-8FFC-5A20D321F070}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -101,10 +101,6 @@ Global
 		{26F40037-23CF-42C1-B038-BE073BC568EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26F40037-23CF-42C1-B038-BE073BC568EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26F40037-23CF-42C1-B038-BE073BC568EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DD4C078-7695-4083-AE4F-3AC153935D56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DD4C078-7695-4083-AE4F-3AC153935D56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DD4C078-7695-4083-AE4F-3AC153935D56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DD4C078-7695-4083-AE4F-3AC153935D56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{79F69307-96CF-4DEF-9DAB-25BD5BAE9AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{79F69307-96CF-4DEF-9DAB-25BD5BAE9AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0688F027-19B8-477C-A0E4-CFE250CF52F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -115,6 +111,10 @@ Global
 		{A60B4C4B-ECD9-41C2-B168-E6A53B86FC9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A60B4C4B-ECD9-41C2-B168-E6A53B86FC9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A60B4C4B-ECD9-41C2-B168-E6A53B86FC9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{612AF577-2F36-42BC-8FFC-5A20D321F070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{612AF577-2F36-42BC-8FFC-5A20D321F070}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{612AF577-2F36-42BC-8FFC-5A20D321F070}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{612AF577-2F36-42BC-8FFC-5A20D321F070}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

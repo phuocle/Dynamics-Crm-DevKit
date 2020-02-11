@@ -1183,6 +1183,17 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/reflow
                  */
                 Reflow(updateUI: boolean, parentStage: string, nextStage: string): void;
+                /**
+                 * Returns the unique identifier of the process instance. Value represents the string representation of a GUID value.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstanceid
+                 */
+                readonly InstanceId: string;
+                /**
+                 * Get/Set the current status of the process instance.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getstatus
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/setstatus
+                 */
+                Status: OptionSet.ProcessStatus;
             }
             interface IControlSelect extends IControlSelectBase {
                 /**
@@ -1209,11 +1220,12 @@ declare namespace DevKit {
                 readonly Text: string;
                 /**
                  * Adds an option to a control
-                 * @param option The option to add
+                 * @param text The label for the option
+                 * @param value The value for the option
                  * @param index The index position to place the new option in. If not provided, the option will be added to the end
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addoption
                  */
-                AddOption(option: DevKit.Core.TextValueNumber, index: number): void;
+                AddOption(text: string, value: number, index: number): void;
                 /**
                  * Clears all options from a control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearoptions
@@ -1316,12 +1328,12 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getvalue
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
                  */
-                Value: string;
+                Value: Date;
                 /**
                  * Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control. The getValue method is different from the attribute getValue method because the control method retrieves the value from the control as the user is typing in the control as opposed to the attribute getValue method that retrieves the value after the user commits (saves) the field
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvalue
                  */
-                Value2: string;
+                Value2: Date;
             }
             interface ControlLookup extends IControl {
                 /**
@@ -1715,7 +1727,7 @@ declare namespace DevKit {
              * @param refreshAll Indicates whether all the ribbon command bars on the current page are refreshed. If you specify false, only the page-level ribbon command bar is refreshed. If you do not specify this parameter, by default false is passed
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/refreshribbon
              */
-            RefreshRibbon(refreshAll: boolean): void;
+            RefreshRibbon(refreshAll?: boolean): void;
             /**
              * Removes a function to be called when form data is loaded
              * @param myFunction The function to be removed for the OnSave event

@@ -52,6 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="test\XrmEnum.js" />
     <None Include="deploy.debug.bat" />
     <None Include="package.json" />
     <None Include="chutzpah.json" />
