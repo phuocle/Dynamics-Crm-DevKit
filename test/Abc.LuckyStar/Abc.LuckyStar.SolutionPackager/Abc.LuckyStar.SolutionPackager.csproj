@@ -43,12 +43,12 @@
     <None Include="DEVKIT\Solutions\Extract_20190731-DEVKIT_1_0_0_0_managed.zip" />
     <None Include="DEVKIT\Solutions\Pack_20190731-DEVKIT_1_0_0_0.zip" />
     <None Include="DEVKIT\Solutions\Pack_20190731-DEVKIT_1_0_0_0_managed.zip" />
-    <None Include="packages.config" />
     <None Include="mapping.xml" />
     <None Include="Extract-Managed.bat" />
     <None Include="Extract-Unmanaged.bat" />
     <None Include="Pack-Managed.bat" />
     <None Include="Pack-Unmanaged.bat" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -164,9 +164,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.1.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <Folder Include="bin\Debug\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\Debug\" />
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.1.1\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
 </Project>
