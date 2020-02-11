@@ -66,6 +66,7 @@
     <Content Include="entities\DevKit.d.ts" />
     <Content Include="test\xrm-mock.d.ts" />
     <Content Include="test\requirejsConfig.js" />
+    <Content Include="test\XrmEnum.js" />
     <None Include="entities\generator.form.bat" />
     <None Include="entities\generator.webapi.bat" />
   </ItemGroup>

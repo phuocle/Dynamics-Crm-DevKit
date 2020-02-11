@@ -9,8 +9,10 @@
     "*.webapi.js",
     "*.test.js",
     "requirejsConfig.js",
+    "XrmEnum.js",
     "*\\node_modules\\*"
   ],
+  "Engine": "JSDom",
   "References": [
     {
       "Path": "lib/WebApiClient.js",
@@ -18,6 +20,10 @@
     },
     {
       "Path": "lib/devkit.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "test/XrmEnum.js",
       "IsTestFrameworkFile": true
     },
     {
