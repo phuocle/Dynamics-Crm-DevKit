@@ -342,13 +342,29 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return forms;
         }
 
-        internal static IOrganizationService GetIOrganizationService(CrmServiceClient crmServiceClient)
+        public static IOrganizationService GetIOrganizationService(CrmServiceClient crmServiceClient)
         {
             if (crmServiceClient.OrganizationServiceProxy != null)
                 return (IOrganizationService)crmServiceClient.OrganizationServiceProxy;
             if (crmServiceClient.OrganizationWebProxyClient != null)
                 return (IOrganizationService)crmServiceClient.OrganizationWebProxyClient;
             throw new Exception("Get IOrganizationService FAILED !!!");
+        }
+
+        public static string BuildConnectionString(string type, string url, string user, string pass)
+        {
+            if (type == "ClientSecret")
+                return $"AuthType=ClientSecret;url={url};ClientId={user};ClientSecret={pass}";
+            else if (type == "AD" || type == "IFD")
+            {
+                var arr = user.Split("\\".ToCharArray());
+                if (arr.Length != 2)
+                    throw new Exception("Please enter User name like: contoso\\jsmith");
+                var domain = arr[0];
+                user = arr[1];
+                return $"AuthType={type};Url={url};Domain={domain};Username={user};Password={pass}";
+            }
+            return $"AuthType=Office365;Url={url};Username={user};Password={pass}";
         }
     }
 }

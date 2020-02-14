@@ -136,6 +136,12 @@
     <Compile Include="FormConnection.Designer.cs">
       <DependentUpon>FormConnection.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormConnection2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormConnection2.Designer.cs">
+      <DependentUpon>FormConnection2.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormItem.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -194,6 +200,9 @@
   <ItemGroup>
     <EmbeddedResource Include="FormConnection.resx">
       <DependentUpon>FormConnection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConnection2.resx">
+      <DependentUpon>FormConnection2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormItem.resx">
       <DependentUpon>FormItem.cs</DependentUpon>
