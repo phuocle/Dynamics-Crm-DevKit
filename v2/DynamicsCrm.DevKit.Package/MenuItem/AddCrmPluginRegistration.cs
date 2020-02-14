@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Wizard;
 using EnvDTE;
 using EnvDTE80;
@@ -101,11 +102,11 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
         private static List<string> CrmPluginRegistrationDataForWorkflow(DTE dte, string fullName)
         {
-            var form = new FormConnection(dte);
+            var form = new FormConnection2(dte);
             var list = new List<string>();
             if (form.ShowDialog() == DialogResult.OK)
             {
-                var crmConnectionString = Utility.CrmConnectionString(form.CrmConnection);
+                var crmConnectionString = XrmHelper.BuildConnectionString(form.CrmConnection);
                 var deployText = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.workflow.deploy.debug.bat");
                 deployText = deployText
                     .Replace("$CrmConnectionString$", crmConnectionString)
@@ -179,7 +180,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             fileCodeModel2.AddImport(shareProjectName);
         }
 
-        private static List<CrmPluginImage> GetPluginImages(OrganizationServiceProxy crmService, string fullName, Guid sdkMessageProcessingStepId)
+        private static List<CrmPluginImage> GetPluginImages(IOrganizationService crmService, string fullName, Guid sdkMessageProcessingStepId)
         {
             var list = new List<CrmPluginImage>();
             var fetchData = new
@@ -246,11 +247,11 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
         private static List<string> CrmPluginRegistrationDataForPlugin(DTE dte, string fullName)
         {
-            var form = new FormConnection(dte);
+            var form = new FormConnection2(dte);
             var list = new List<string>();
             if (form.ShowDialog() == DialogResult.OK)
             {
-                var crmConnectionString = Utility.CrmConnectionString(form.CrmConnection);
+                var crmConnectionString = XrmHelper.BuildConnectionString(form.CrmConnection);
                 var deployText = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.plugin.deploy.debug.bat");
                 deployText = deployText
                     .Replace("$CrmConnectionString$", crmConnectionString)

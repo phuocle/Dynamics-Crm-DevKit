@@ -1,12 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.ServiceModel.Description;
+using System.Net;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
 using EnvDTE;
-using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Package
 {
@@ -82,21 +83,20 @@ namespace DynamicsCrm.DevKit.Package
             dte.StatusBar.Text = text;
         }
 
-        public static OrganizationServiceProxy IsConnection(CrmConnection crmConnection)
+        public static IOrganizationService IsConnection(CrmConnection crmConnection)
         {
             try
             {
-                var uri = new Uri(crmConnection.Url);
-                var clientCredentials = new ClientCredentials();
-                clientCredentials.UserName.UserName = crmConnection.UserName;
-                clientCredentials.UserName.Password = Utility.TryDecryptPassword(crmConnection.Password);
-                var connection = new OrganizationServiceProxy(uri, null, clientCredentials, null);
-                return connection;
+                var connectionString = XrmHelper.BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                var crmServiceClient = new CrmServiceClient(connectionString);
+                return XrmHelper.GetIOrganizationService(crmServiceClient);
             }
             catch
             {
                 return null;
             }
         }
+
     }
 }

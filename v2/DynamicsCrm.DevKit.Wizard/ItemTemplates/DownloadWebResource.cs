@@ -43,10 +43,10 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                     MessageBox.Show("You added this file: download.webresources.bat to your active project", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                var form = new FormConnection(DTE);
+                var form = new FormConnection2(DTE);
                 if (form.ShowDialog() != DialogResult.OK) return;
-                var crmConnectionString = CrmConnectionString(form.CrmConnection);
-
+                //var crmConnectionString = CrmConnectionString(form.CrmConnection);
+                var crmConnectionString = XrmHelper.BuildConnectionString(form.CrmConnection);
                 var file = Utility.GetDevKitCliJsonFile(DTE);
                 if (!File.Exists(file))
                 {
@@ -105,17 +105,6 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             {
                 throw;
             }
-        }
-
-        private string CrmConnectionString(CrmConnection CrmConnection)
-        {
-            var url = CrmConnection.Url.Substring(0, CrmConnection.Url.Length - "/XRMServices/2011/Organization.svc".Length);
-            url = url.Replace(".api.", ".");
-            if (CrmConnection.Url.Contains(".dynamics.com"))
-                return $"AuthType=Office365;Url={url};Username={CrmConnection.UserName};Password={CrmConnection.Password};";
-            var domain = CrmConnection.UserName.Split("\\".ToCharArray())[0];
-            var user = CrmConnection.UserName.Split("\\".ToCharArray())[1];
-            return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={CrmConnection.Password};";
         }
 
         public bool ShouldAddProjectItem(string filePath)

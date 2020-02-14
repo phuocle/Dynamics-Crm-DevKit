@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                     }
                     UtilityPackage.SetGlobal("CrmService", connection, dte);
                 }
-                var crmService = (OrganizationServiceProxy)UtilityPackage.GetGlobal("CrmService", dte);
+                var crmService = (IOrganizationService)UtilityPackage.GetGlobal("CrmService", dte);
                 UtilityPackage.SetDTEStatusBar(dte, " !!! Connected Dynamics CRM !!! ");
                 var webResourceId = IsFoundWebResource(dte, crmService, config.JsonWebResource.prefix);
                 if (webResourceId == Guid.Empty)
@@ -98,7 +98,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             }
         }
 
-        private static Guid IsFoundWebResource(DTE dte, OrganizationServiceProxy crmService, string prefix)
+        private static Guid IsFoundWebResource(DTE dte, IOrganizationService crmService, string prefix)
         {
             var fileName = dte.ActiveDocument.FullName;
             var parts = fileName.Split("\\".ToCharArray());

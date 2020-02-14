@@ -351,6 +351,11 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             throw new Exception("Get IOrganizationService FAILED !!!");
         }
 
+        public static string BuildConnectionString(CrmConnection crmConnection)
+        {
+            return BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
+        }
+
         public static string BuildConnectionString(string type, string url, string user, string pass)
         {
             if (type == "ClientSecret")

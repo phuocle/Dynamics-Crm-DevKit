@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 using System.Drawing;
+using Microsoft.Xrm.Sdk;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -20,7 +21,7 @@ namespace DynamicsCrm.DevKit.Wizard
         public string GeneratedJsFormCode { get; set; }
         public string GeneratedJsFormCodeTypeScriptDeclaration { get; set; }
 
-        public OrganizationServiceProxy CrmService { get; set; }
+        public IOrganizationService CrmService { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string ComboBoxCrmName => comboBoxCrmName.Text;
         public string NameSpace { get; set; }
@@ -148,7 +149,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void buttonConnection_Click(object sender, EventArgs e)
         {
-            var form = new FormConnection(DTE);
+            var form = new FormConnection2(DTE);
             if (form.ShowDialog() == DialogResult.Cancel) return;
 
             CrmConnection = form.CrmConnection;

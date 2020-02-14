@@ -106,7 +106,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 }
                 UtilityPackage.SetGlobal("CrmService", connection, DTE);
             }
-            var crmService = (OrganizationServiceProxy)UtilityPackage.GetGlobal("CrmService", DTE);
+            var crmService = (IOrganizationService)UtilityPackage.GetGlobal("CrmService", DTE);
             UtilityPackage.SetDTEStatusBar(DTE, " !!! Connected Dynamics CRM !!! ");
 
             var fetchData = new

@@ -691,17 +691,6 @@ namespace DynamicsCrm.DevKit.Shared
             return $"{data}{projectType.ToString()}";
         }
 
-        public static string CrmConnectionString(CrmConnection CrmConnection)
-        {
-            var url = CrmConnection.Url.Substring(0, CrmConnection.Url.Length - "/XRMServices/2011/Organization.svc".Length);
-            url = url.Replace(".api.", ".");
-            if (CrmConnection.Url.Contains(".dynamics.com"))
-                return $"AuthType=Office365;Url={url};Username={CrmConnection.UserName};Password={CrmConnection.Password};";
-            var domain = CrmConnection.UserName.Split("\\".ToCharArray())[0];
-            var user = CrmConnection.UserName.Split("\\".ToCharArray())[1];
-            return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={CrmConnection.Password};";
-        }
-
         public static string[] ParseArguments(string commandLine)
         {
             char[] parmChars = commandLine.ToCharArray();

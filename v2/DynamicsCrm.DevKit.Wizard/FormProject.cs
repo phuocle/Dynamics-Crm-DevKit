@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EnvDTE;
-using Microsoft.Xrm.Sdk.Client;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Drawing;
+using Microsoft.Xrm.Sdk;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                return Utility.CrmConnectionString(CrmConnection);
+                return XrmHelper.BuildConnectionString(CrmConnection);
             }
         }
 
@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
         public string WizardNameSpace => labelProjectName.Text;
 
-        public OrganizationServiceProxy CrmService { get; set; }
+        public IOrganizationService CrmService { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string ProjectName => labelProjectName.Text;
         public string ProjectJsName
@@ -216,7 +216,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void buttonConnection_Click(object sender, EventArgs e)
         {
-            var form = new FormConnection(DTE);
+            var form = new FormConnection2(DTE);
             if (form.ShowDialog() == DialogResult.Cancel) return;
 
             CrmConnection = form.CrmConnection;
