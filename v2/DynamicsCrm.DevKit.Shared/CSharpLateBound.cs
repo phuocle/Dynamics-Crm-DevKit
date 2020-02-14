@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Xml;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 
@@ -12,13 +11,13 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public class CSharpLateBound
     {
-        private OrganizationServiceProxy _crmService;
+        private IOrganizationService _crmService;
         private List<CrmAttribute> Lists { get; set; }
         private int ObjectTypeCode { get; set; }
         private string EntityName { get; set; }
         private bool HasImage { get; set; }
 
-        internal string Go(OrganizationServiceProxy crmService, CrmVersionName crmVersionName, string entity, string rootNameSpace, string sharedNameSpace)
+        internal string Go(IOrganizationService crmService, CrmVersionName crmVersionName, string entity, string rootNameSpace, string sharedNameSpace)
         {
             _crmService = crmService;
             LoadData(entity);
@@ -684,8 +683,7 @@ namespace DynamicsCrm.DevKit.Shared
             return value.TrimEnd(";".ToCharArray());
         }
 
-        private string GetNavigationPropertyName(CrmAttribute crmAttribute,
-            RetrieveEntityResponse responseRelationships)
+        private string GetNavigationPropertyName(CrmAttribute crmAttribute, RetrieveEntityResponse responseRelationships)
         {
             if (crmAttribute.FieldType == AttributeTypeCode.Owner) return "ownerid;ownerid";
             var value = string.Empty;

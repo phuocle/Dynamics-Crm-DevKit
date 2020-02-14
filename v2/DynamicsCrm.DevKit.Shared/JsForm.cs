@@ -21,14 +21,14 @@ namespace DynamicsCrm.DevKit.Shared
         private int _objectTypeCode = -1;
         private DataCollection<Entity> _processes;
 
-        public JsForm(OrganizationServiceProxy crmService, string projectName, string entityName)
+        public JsForm(IOrganizationService crmService, string projectName, string entityName)
         {
             CrmService = crmService;
             EntityName = entityName;
             ProjectName = projectName;
         }
 
-        private OrganizationServiceProxy CrmService { get; }
+        private IOrganizationService CrmService { get; }
         private string EntityName { get; }
         private string ProjectName { get; }
 

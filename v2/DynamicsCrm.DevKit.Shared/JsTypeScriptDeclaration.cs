@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public class JsTypeScriptDeclaration
     {
-        public JsTypeScriptDeclaration(OrganizationServiceProxy crmService)
+        public JsTypeScriptDeclaration(IOrganizationService crmService)
         {
 
         }

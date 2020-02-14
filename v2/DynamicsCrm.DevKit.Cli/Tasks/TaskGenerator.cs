@@ -8,6 +8,7 @@ using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -112,7 +113,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var rootNameSpace = json.rootnamespace;
             var sharedNameSpace = GetSharedNameSpace(json.rootnamespace);
             var crmVersionName = (CrmVersionName)int.Parse(json.crmversion);
-            var generated = lateBound.Go(crmServiceClient.OrganizationServiceProxy, crmVersionName, entity, rootNameSpace, sharedNameSpace);
+            var generated = lateBound.Go(XrmHelper.GetIOrganizationService(crmServiceClient), crmVersionName, entity, rootNameSpace, sharedNameSpace);
             var file = $"{currentDirectory}\\{json.rootfolder}\\{entity}.generated.cs";
             var old = string.Empty;
             if (File.Exists(file))
@@ -208,7 +209,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var parts = json.rootnamespace.Split(".".ToCharArray());
             var projectName = parts.Length > 1 ? parts[1] : parts[0];
             if (json.debug.Length > 0) isDebugWebApi = json.debug == "yes" ? true : false;
-            var jsWebApi = new JsWebApi(crmServiceClient.OrganizationServiceProxy, projectName, entity, isDebugWebApi, jsForm, isDebugForm);
+            var jsWebApi = new JsWebApi(XrmHelper.GetIOrganizationService(crmServiceClient), projectName, entity, isDebugWebApi, jsForm, isDebugForm);
             jsWebApi.GeneratorCode();
             var old = string.Empty;
             if (File.Exists(fileTypeScriptDeclaration))
@@ -323,7 +324,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var parts2 = json.rootnamespace.Split(".".ToCharArray());
                 var projectName2 = parts2.Length > 1 ? parts2[1] : parts2[0];
-                var jsForm2 = new JsForm(crmServiceClient.OrganizationServiceProxy, projectName2, entity);
+                var jsForm2 = new JsForm(XrmHelper.GetIOrganizationService(crmServiceClient), projectName2, entity);
                 forms = GetAllForms(entity, jsForm2);
             }
             if (forms.Count == 0) return;
@@ -338,7 +339,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             var parts = json.rootnamespace.Split(".".ToCharArray());
             var projectName = parts.Length > 1 ? parts[1] : parts[0];
-            var jsForm = new JsForm(crmServiceClient.OrganizationServiceProxy, projectName, entity);
+            var jsForm = new JsForm(XrmHelper.GetIOrganizationService(crmServiceClient), projectName, entity);
             if (json.debug.Length > 0) isDebugForm = json.debug == "yes" ? true : false;
             jsForm.GeneratorCode(forms, isDebugForm, webApi, isDebugWebApi);
             if (!File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.js"))

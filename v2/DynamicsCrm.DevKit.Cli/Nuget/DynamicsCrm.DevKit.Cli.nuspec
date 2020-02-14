@@ -24,6 +24,7 @@
     <file src="..\Release\Microsoft.Xrm.Tooling.Connector.dll" target="tools\Microsoft.Xrm.Tooling.Connector.dll" />
     <file src="..\Release\Microsoft.Xrm.Sdk.Deployment.dll" target="tools\Microsoft.Xrm.Sdk.Deployment.dll" />
     <file src="..\Release\DynamicsCrm.DevKit.Resources.dll" target="tools\DynamicsCrm.DevKit.Resources.dll" />
+    <file src="..\Release\System.Net.Http.dll" target="tools\System.Net.Http.dll" />
     <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
     <file src="..\Release\NUglify.dll" target="tools\NUglify.dll" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />

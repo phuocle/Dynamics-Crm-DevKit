@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public class JsWebApi
     {
-        public JsWebApi(OrganizationServiceProxy crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm)
+        public JsWebApi(IOrganizationService crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm)
         {
             CrmService = crmService;
             ProjectName = projectName;
@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Shared
             IsDebugForm = isDebugForm;
             IsDebugWebApi = isDebugWebApi;
         }
-        private OrganizationServiceProxy CrmService { get; }
+        private IOrganizationService CrmService { get; }
         private string EntityName { get; }
         private string ProjectName { get; }
         private List<string> CheckedItems { get; }
