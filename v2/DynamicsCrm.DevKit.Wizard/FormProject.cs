@@ -150,6 +150,8 @@ namespace DynamicsCrm.DevKit.Wizard
             InitializeComponent();
 
             Font = SystemFonts.DefaultFont;
+            this.AutoScaleMode = AutoScaleMode.Font;
+
             progressBar.Visible = false;
 
             Text += Const.Version;

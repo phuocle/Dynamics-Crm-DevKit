@@ -79,7 +79,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 #if DEBUG
                 var cliVersion = Const.Version;
 #else
-                var cliVersion = NugetHelper.GetLatestPackageVersion(Const.PLDynamicsCrmDevKitCli);
+                var cliVersion = NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitCli);
 #endif
                 if (!File.Exists(packagesFile))
                 {

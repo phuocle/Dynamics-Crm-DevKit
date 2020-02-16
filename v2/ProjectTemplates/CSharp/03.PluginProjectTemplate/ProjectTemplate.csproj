@@ -40,6 +40,7 @@
     <Reference Include="Microsoft.Xrm.Sdk">
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.Version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.TargetFramework$\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />

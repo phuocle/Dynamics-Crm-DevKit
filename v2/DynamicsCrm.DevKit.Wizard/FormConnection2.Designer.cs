@@ -33,6 +33,8 @@
             this.btnOk = new System.Windows.Forms.Button();
             this.cboConnection = new System.Windows.Forms.ComboBox();
             this.groupBoxConnection = new System.Windows.Forms.GroupBox();
+            this.cboType = new System.Windows.Forms.ComboBox();
+            this.labelType = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.labelName = new System.Windows.Forms.Label();
             this.btnConnect = new System.Windows.Forms.Button();
@@ -42,17 +44,15 @@
             this.labelUserName = new System.Windows.Forms.Label();
             this.txtUrl = new System.Windows.Forms.TextBox();
             this.labelUrl = new System.Windows.Forms.Label();
-            this.labelType = new System.Windows.Forms.Label();
-            this.cboType = new System.Windows.Forms.ComboBox();
             this.groupBoxConnection.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(691, 2);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCancel.Location = new System.Drawing.Point(402, 9);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(101, 39);
+            this.btnCancel.Size = new System.Drawing.Size(80, 25);
             this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -60,20 +60,19 @@
             // 
             // labelCrmConnection
             // 
-            this.labelCrmConnection.AutoSize = true;
-            this.labelCrmConnection.Location = new System.Drawing.Point(13, 9);
-            this.labelCrmConnection.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelCrmConnection.Location = new System.Drawing.Point(9, 14);
+            this.labelCrmConnection.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCrmConnection.Name = "labelCrmConnection";
-            this.labelCrmConnection.Size = new System.Drawing.Size(152, 24);
+            this.labelCrmConnection.Size = new System.Drawing.Size(95, 20);
             this.labelCrmConnection.TabIndex = 9;
             this.labelCrmConnection.Text = "Crm Connection:";
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(583, 2);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(4);
+            this.btnOk.Location = new System.Drawing.Point(318, 9);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(2);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(100, 39);
+            this.btnOk.Size = new System.Drawing.Size(80, 25);
             this.btnOk.TabIndex = 8;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -84,10 +83,10 @@
             this.cboConnection.DisplayMember = "Name";
             this.cboConnection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboConnection.FormattingEnabled = true;
-            this.cboConnection.Location = new System.Drawing.Point(173, 6);
-            this.cboConnection.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cboConnection.Location = new System.Drawing.Point(108, 11);
+            this.cboConnection.Margin = new System.Windows.Forms.Padding(2);
             this.cboConnection.Name = "cboConnection";
-            this.cboConnection.Size = new System.Drawing.Size(402, 32);
+            this.cboConnection.Size = new System.Drawing.Size(207, 21);
             this.cboConnection.TabIndex = 7;
             // 
             // groupBoxConnection
@@ -103,107 +102,13 @@
             this.groupBoxConnection.Controls.Add(this.labelUserName);
             this.groupBoxConnection.Controls.Add(this.txtUrl);
             this.groupBoxConnection.Controls.Add(this.labelUrl);
-            this.groupBoxConnection.Location = new System.Drawing.Point(17, 45);
-            this.groupBoxConnection.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBoxConnection.Location = new System.Drawing.Point(9, 36);
+            this.groupBoxConnection.Margin = new System.Windows.Forms.Padding(2);
             this.groupBoxConnection.Name = "groupBoxConnection";
-            this.groupBoxConnection.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBoxConnection.Size = new System.Drawing.Size(766, 216);
+            this.groupBoxConnection.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBoxConnection.Size = new System.Drawing.Size(470, 152);
             this.groupBoxConnection.TabIndex = 11;
             this.groupBoxConnection.TabStop = false;
-            // 
-            // txtName
-            // 
-            this.txtName.Location = new System.Drawing.Point(149, 21);
-            this.txtName.Margin = new System.Windows.Forms.Padding(4);
-            this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(413, 29);
-            this.txtName.TabIndex = 8;
-            // 
-            // labelName
-            // 
-            this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(10, 24);
-            this.labelName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(61, 24);
-            this.labelName.TabIndex = 7;
-            this.labelName.Text = "Name";
-            // 
-            // btnConnect
-            // 
-            this.btnConnect.Location = new System.Drawing.Point(570, 135);
-            this.btnConnect.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(181, 66);
-            this.btnConnect.TabIndex = 4;
-            this.btnConnect.Text = "Connect ?";
-            this.btnConnect.UseVisualStyleBackColor = true;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Location = new System.Drawing.Point(149, 172);
-            this.txtPassword.Margin = new System.Windows.Forms.Padding(4);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(413, 29);
-            this.txtPassword.TabIndex = 3;
-            // 
-            // labelPassword
-            // 
-            this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(10, 175);
-            this.labelPassword.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(92, 24);
-            this.labelPassword.TabIndex = 6;
-            this.labelPassword.Text = "Password";
-            // 
-            // txtUserName
-            // 
-            this.txtUserName.Location = new System.Drawing.Point(149, 135);
-            this.txtUserName.Margin = new System.Windows.Forms.Padding(4);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(413, 29);
-            this.txtUserName.TabIndex = 2;
-            // 
-            // labelUserName
-            // 
-            this.labelUserName.AutoSize = true;
-            this.labelUserName.Location = new System.Drawing.Point(8, 138);
-            this.labelUserName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelUserName.Name = "labelUserName";
-            this.labelUserName.Size = new System.Drawing.Size(105, 24);
-            this.labelUserName.TabIndex = 3;
-            this.labelUserName.Text = "User Name";
-            // 
-            // txtUrl
-            // 
-            this.txtUrl.Location = new System.Drawing.Point(149, 98);
-            this.txtUrl.Margin = new System.Windows.Forms.Padding(4);
-            this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(602, 29);
-            this.txtUrl.TabIndex = 1;
-            // 
-            // labelUrl
-            // 
-            this.labelUrl.AutoSize = true;
-            this.labelUrl.Location = new System.Drawing.Point(10, 101);
-            this.labelUrl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelUrl.Name = "labelUrl";
-            this.labelUrl.Size = new System.Drawing.Size(33, 24);
-            this.labelUrl.TabIndex = 0;
-            this.labelUrl.Text = "Url";
-            // 
-            // labelType
-            // 
-            this.labelType.AutoSize = true;
-            this.labelType.Location = new System.Drawing.Point(10, 61);
-            this.labelType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelType.Name = "labelType";
-            this.labelType.Size = new System.Drawing.Size(53, 24);
-            this.labelType.TabIndex = 9;
-            this.labelType.Text = "Type";
             // 
             // cboType
             // 
@@ -215,34 +120,124 @@
             "IFD",
             "Office365",
             "ClientSecret"});
-            this.cboType.Location = new System.Drawing.Point(149, 58);
-            this.cboType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cboType.Location = new System.Drawing.Point(85, 42);
+            this.cboType.Margin = new System.Windows.Forms.Padding(2);
             this.cboType.Name = "cboType";
-            this.cboType.Size = new System.Drawing.Size(413, 32);
+            this.cboType.Size = new System.Drawing.Size(227, 21);
             this.cboType.TabIndex = 10;
             this.cboType.SelectedIndexChanged += new System.EventHandler(this.cboType_SelectedIndexChanged);
             // 
+            // labelType
+            // 
+            this.labelType.Location = new System.Drawing.Point(5, 45);
+            this.labelType.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelType.Name = "labelType";
+            this.labelType.Size = new System.Drawing.Size(76, 17);
+            this.labelType.TabIndex = 9;
+            this.labelType.Text = "Type";
+            // 
+            // txtName
+            // 
+            this.txtName.Location = new System.Drawing.Point(85, 17);
+            this.txtName.Margin = new System.Windows.Forms.Padding(2);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(227, 20);
+            this.txtName.TabIndex = 8;
+            // 
+            // labelName
+            // 
+            this.labelName.Location = new System.Drawing.Point(5, 20);
+            this.labelName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(76, 17);
+            this.labelName.TabIndex = 7;
+            this.labelName.Text = "Name";
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.Location = new System.Drawing.Point(316, 93);
+            this.btnConnect.Margin = new System.Windows.Forms.Padding(2);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(145, 45);
+            this.btnConnect.TabIndex = 4;
+            this.btnConnect.Text = "Connect ?";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Location = new System.Drawing.Point(85, 118);
+            this.txtPassword.Margin = new System.Windows.Forms.Padding(2);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
+            this.txtPassword.Size = new System.Drawing.Size(227, 20);
+            this.txtPassword.TabIndex = 3;
+            // 
+            // labelPassword
+            // 
+            this.labelPassword.Location = new System.Drawing.Point(5, 121);
+            this.labelPassword.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelPassword.Name = "labelPassword";
+            this.labelPassword.Size = new System.Drawing.Size(76, 17);
+            this.labelPassword.TabIndex = 6;
+            this.labelPassword.Text = "Password";
+            // 
+            // txtUserName
+            // 
+            this.txtUserName.Location = new System.Drawing.Point(85, 93);
+            this.txtUserName.Margin = new System.Windows.Forms.Padding(2);
+            this.txtUserName.Name = "txtUserName";
+            this.txtUserName.Size = new System.Drawing.Size(227, 20);
+            this.txtUserName.TabIndex = 2;
+            // 
+            // labelUserName
+            // 
+            this.labelUserName.Location = new System.Drawing.Point(5, 96);
+            this.labelUserName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelUserName.Name = "labelUserName";
+            this.labelUserName.Size = new System.Drawing.Size(76, 17);
+            this.labelUserName.TabIndex = 3;
+            this.labelUserName.Text = "User Name";
+            // 
+            // txtUrl
+            // 
+            this.txtUrl.Location = new System.Drawing.Point(85, 68);
+            this.txtUrl.Margin = new System.Windows.Forms.Padding(2);
+            this.txtUrl.Name = "txtUrl";
+            this.txtUrl.Size = new System.Drawing.Size(376, 20);
+            this.txtUrl.TabIndex = 1;
+            // 
+            // labelUrl
+            // 
+            this.labelUrl.Location = new System.Drawing.Point(5, 71);
+            this.labelUrl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelUrl.Name = "labelUrl";
+            this.labelUrl.Size = new System.Drawing.Size(76, 17);
+            this.labelUrl.TabIndex = 0;
+            this.labelUrl.Text = "Url";
+            // 
             // FormConnection2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(796, 275);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(490, 195);
             this.ControlBox = false;
             this.Controls.Add(this.groupBoxConnection);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.labelCrmConnection);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.cboConnection);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FormConnection2";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DynamicsCrm.DevKit - v.";
             this.groupBoxConnection.ResumeLayout(false);
             this.groupBoxConnection.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

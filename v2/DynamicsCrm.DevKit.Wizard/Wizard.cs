@@ -25,13 +25,10 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$ProjectNetVersion$", Utility.GetProjectNetVersion(form.ComboBoxCrmName));
             replacementsDictionary.Add("$CrmUrl$", form.CrmConnection.Url);
             replacementsDictionary.Add("$CrmUserName$", form.CrmConnection.UserName);
-#if DEBUG
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", "2.0.0");
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", "2.0.0");
-#else
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", NugetHelper.GetLatestPackageVersion(Const.PLDynamicsCrmDevKitCli));
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", NugetHelper.GetLatestPackageVersion(Const.PLDynamicsCrmDevKitAnalyzers));
-#endif
+
+            replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitCli));
+            replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitAnalyzers));
+
             replacementsDictionary.Add("$WebApiClientMin$", Utility.GetWebApiClientMin(form.ProjectJsName));
             replacementsDictionary.Add("$ProjectJsName$", form.ProjectJsName);
 

@@ -81,11 +81,17 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Enum.cs">
       <Link>Links\Enum.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Extensions\Attribute.cs">
+      <Link>Links\Attribute.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\FileSystem.cs">
       <Link>Links\FileSystem.cs</Link>
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Helper\DevKitCrmConfigHelper.cs">
       <Link>Links\DevKitCrmConfigHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Helper\JsonHelper.cs">
+      <Link>Links\JsonHelper.cs</Link>
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Helper\XrmHelper.cs">
       <Link>Links\XrmHelper.cs</Link>
@@ -134,6 +140,9 @@
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\CrmConnection.cs">
       <Link>Links\CrmConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\CrmPluginRegistrationAttribute.cs">
+      <Link>Links\CrmPluginRegistrationAttribute.cs</Link>
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\DataSourceCrm.cs">
       <Link>Links\DataSourceCrm.cs</Link>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DynamicsCrm.DevKit.Shared.Models;
@@ -139,6 +140,14 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                 }
             }
             return attribute;
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> ie, Action<T> action)
+        {
+            foreach (var i in ie)
+            {
+                action(i);
+            }
         }
     }
 }

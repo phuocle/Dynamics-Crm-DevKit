@@ -13,7 +13,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             var fInfo = new FileInfo(solutionFullName ?? throw new InvalidOperationException());
             var devKitCrmConfigFile = $"{fInfo.DirectoryName}\\DynamicsCrm.DevKit.json";
             var json = SimpleJson.SerializeObject(devKitCrmConfig);
-            Utility.ForceWriteAllText(devKitCrmConfigFile, Utility.FormatJson(json));
+            Utility.ForceWriteAllText(devKitCrmConfigFile, JsonHelper.FormatJson(json));
         }
 
         public static void SetDevKitCrmConfig(DTE dte, CrmConnection crmConnection)

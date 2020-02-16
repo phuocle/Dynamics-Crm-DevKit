@@ -23,6 +23,8 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
+            //Font = SystemFonts.DefaultFont;
+
             Text += Const.Version;
             DTE = dte;
             LoadConnections();
@@ -130,9 +132,11 @@ namespace DynamicsCrm.DevKit.Wizard
                 Name = txtName.Text,
                 Url = txtUrl.Text,
                 UserName = txtUserName.Text,
-                Password = EncryptDecrypt.EncryptString(txtPassword.Text),
+                Password = txtPassword.Text,
                 Type = cboType.Text,
             };
+            if (crmConnection.Type != "ClientSecret")
+                crmConnection.Password = EncryptDecrypt.EncryptString(crmConnection.Password);
             if (Config.CrmConnections == null)
                 Config.CrmConnections = new List<CrmConnection>();
             Config.CrmConnections.Add(crmConnection);
@@ -193,20 +197,23 @@ namespace DynamicsCrm.DevKit.Wizard
 
             CrmConnection = (CrmConnection)cboConnection.SelectedValue;
             var password = string.Empty;
-            try
+            if (CrmConnection.Type != "ClientSecret")
             {
-                password = EncryptDecrypt.DecryptString(CrmConnection.Password);
+                try
+                {
+                    password = EncryptDecrypt.DecryptString(CrmConnection.Password);
+                }
+                catch
+                {
+                    password = CrmConnection.Password;
+                }
+                CrmConnection.Password = password;
             }
-            catch
-            {
-                password = CrmConnection.Password;
-            }
-            CrmConnection.Password = password;
             if (CanConnect(CrmConnection))
             {
-                if (CrmConnection.Type != "ClientSecret") {
+                if (CrmConnection.Type != "ClientSecret")
+                {
                     CrmConnection.Password = EncryptDecrypt.EncryptString(password);
-                    DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, CrmConnection);
                 }
                 Config.DefaultCrmConnection = cboConnection.Text;
                 DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
@@ -216,6 +223,7 @@ namespace DynamicsCrm.DevKit.Wizard
             }
             else
             {
+                Cursor = Cursors.Default;
                 MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             EnabledControl(true);

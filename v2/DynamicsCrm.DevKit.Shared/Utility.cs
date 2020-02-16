@@ -7,13 +7,12 @@ using EnvDTE;
 using NUglify;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Text;
-using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public static class Utility
     {
-        private const string IndentString = "  ";
+        //private const string IndentString = "  ";
 
         public static void TryDeleteDirectory(string directory)
         {
@@ -96,30 +95,30 @@ namespace DynamicsCrm.DevKit.Shared
             return code + devKit;
         }
 
-        public static string FormatJson(string json)
-        {
-            var indentation = 0;
-            var quoteCount = 0;
-            var result =
-                from ch in json
-                let quotes = ch == '"' ? quoteCount++ : quoteCount
-                let lineBreak = ch == ',' && quotes % 2 == 0
-                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, indentation))
-                    : null
-                let openChar = ch == '{' || ch == '['
-                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, ++indentation))
-                    : ch.ToString()
-                let closeChar = ch == '}' || ch == ']'
-                    ? Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, --indentation)) + ch
-                    : ch.ToString()
-                select lineBreak ?? (openChar.Length > 1
-                           ? openChar
-                           : closeChar);
+        //public static string FormatJson(string json)
+        //{
+        //    var indentation = 0;
+        //    var quoteCount = 0;
+        //    var result =
+        //        from ch in json
+        //        let quotes = ch == '"' ? quoteCount++ : quoteCount
+        //        let lineBreak = ch == ',' && quotes % 2 == 0
+        //            ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, indentation))
+        //            : null
+        //        let openChar = ch == '{' || ch == '['
+        //            ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, ++indentation))
+        //            : ch.ToString()
+        //        let closeChar = ch == '}' || ch == ']'
+        //            ? Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, --indentation)) + ch
+        //            : ch.ToString()
+        //        select lineBreak ?? (openChar.Length > 1
+        //                   ? openChar
+        //                   : closeChar);
 
-            var @return = string.Concat(result);
-            @return = @return.Replace("\":[", "\": [").Replace("\":\"", "\": \"");
-            return @return;
-        }
+        //    var @return = string.Concat(result);
+        //    @return = @return.Replace("\":[", "\": [").Replace("\":\"", "\": \"");
+        //    return @return;
+        //}
 
         public static bool ExistProject(DTE dte, string projectName)
         {

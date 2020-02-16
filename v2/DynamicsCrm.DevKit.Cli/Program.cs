@@ -5,6 +5,7 @@ using System.Reflection;
 using CmdLine;
 using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
 
@@ -17,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\azure\abiz\tfs\ABIZ_IPAM\src\CDS\NTGroup.Ipam.Shared\Entities";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.ProxyTypes";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -47,7 +48,7 @@ namespace DynamicsCrm.DevKit.Cli
             var jsonFile = Path.Combine(CurrentDirectory, arguments.Json);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.json path: ", CliLog.ColorWhite, jsonFile);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Arguments: ",
-                CliLog.ColorMagenta, "/conn:", CliLog.ColorWhite, HidePassword(arguments.Connection), " ",
+                CliLog.ColorMagenta, "/conn:", CliLog.ColorWhite, XrmHelper.BuildConnectionStringLog(arguments.Connection), " ",
                 CliLog.ColorMagenta, "/json:", CliLog.ColorWhite, arguments.Json, " ",
                 CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, arguments.Type, " ",
                 CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, arguments.Profile

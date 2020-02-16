@@ -7,9 +7,14 @@ using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
+    // @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.ProxyTypes";
+    // /conn:"AuthType=ClientSecret;Url=https://orgcaffa69c.crm5.dynamics.com;ClientId=e31fc7d6-4dce-46e3-8677-04ab0a2968e3;ClientSecret=?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"proxytypes" /profile:"DEBUG" /version:"9.1.0.38"
+    // /conn:"AuthType=Office365;Url=https://orgcaffa69c.crm5.dynamics.com;Username=dev@pldevkit.onmicrosoft.com;Password=b6+abJ1xam0vxgUEg98P7usY3mJ5IMCVuzElnwzAymo=;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"proxytypes" /profile:"DEBUG" /version:"9.1.0.38"
+
     public class TaskProxyType
     {
         private CrmServiceClient crmServiceClient;
@@ -17,9 +22,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private CommandLineArgs arguments;
         private const string LOG = "[PROXYTYPES]";
         private JsonProxyType json;
-        private string Url { get; set; }
-        private string UserName { get; set; }
-        private string Password { get; set; }
 
         public TaskProxyType(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
         {
@@ -43,17 +45,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private void RunProxyType()
         {
-            var command = CreateCommandArgs();
             var path = "\"" + GetParentFolder(currentDirectory) + $@"\packages\Microsoft.CrmSdk.CoreTools.{arguments.Version}\content\bin\coretools\CrmSvcUtil.exe" + "\"";
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Executing CrmSvcUtil");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + path);
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + HidePassword(command));
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + CreateCommandArgsLog());
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "");
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo(path)
                 {
-                    Arguments = $"{command}",
+                    Arguments = CreateCommandArgs(),
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
@@ -70,13 +71,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Executed CrmSvcUtil");
         }
 
-        private string HidePassword(string command)
-        {
-            var arr = command.Split(" ".ToArray());
-            arr[3] = "/password:******";
-            return string.Join(" ", arr);
-        }
-
         private string GetParentFolder(string currentDirectory)
         {
             var directory = new DirectoryInfo(currentDirectory);
@@ -85,40 +79,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private string CreateCommandArgs()
         {
-            ParserConnection();
             var command = new StringBuilder();
+            command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionString(arguments.Connection)}\" ");
             command.Append($"/nologo ");
-            command.Append($"/url:{Url} ");
-            command.Append($"/username:{UserName} ");
-            command.Append($"/password:{Password} ");
             command.Append($"/namespace:{json.@namespace} ");
             command.Append($"/out:{json.output}");
             return command.ToString();
         }
 
-        private string TryDecryptPassword(string password)
+        private string CreateCommandArgsLog()
         {
-            try
-            {
-                password = EncryptDecrypt.DecryptString(password);
-            }
-            catch
-            {
-            }
-            return password;
-        }
-
-        private void ParserConnection()
-        {
-            var arr = arguments.Connection.Split(';');
-            if (arr.Length != 5) throw new Exception("Your password contains ';' charater. DynamicsCrm.DevKit CANNOT parser it.");
-            Url = arr[1].Split('=')[1];
-            UserName = arr[2].Split('=')[1];
-            var password = arguments.Connection.Substring(arguments.Connection.IndexOf("Password=", StringComparison.Ordinal));
-            password = password.Substring("Password=".Length);
-            password = password.Substring(0, password.Length - 1);
-            password = Utility.TryDecryptPassword(password);
-            Password = password;
+            var command = new StringBuilder();
+            command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionStringLog(arguments.Connection)}\" ");
+            command.Append($"/nologo ");
+            command.Append($"/namespace:{json.@namespace} ");
+            command.Append($"/out:{json.output}");
+            return command.ToString();
         }
 
         private bool IsValid()
