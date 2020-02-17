@@ -51,6 +51,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                 //Creating project ...
                 ProjectName = form.ProjectName;
                 Wizard.ProcessProjectReplacementsDictionary(replacementsDictionary, form);
+                Wizard.ProcessProjectConsoleReplacementsDictionary(replacementsDictionary, form);
             }
             catch
             {

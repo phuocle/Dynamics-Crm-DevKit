@@ -359,7 +359,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         public static string BuildConnectionString(string type, string url, string user, string pass)
         {
             if (type == "ClientSecret")
-                return $"AuthType=ClientSecret;url={url};ClientId={user};ClientSecret={pass};";
+                return $"AuthType=ClientSecret;Url={url};ClientId={user};ClientSecret={pass};";
             else if (type == "AD" || type == "IFD")
             {
                 var arr = user.Split("\\".ToCharArray());

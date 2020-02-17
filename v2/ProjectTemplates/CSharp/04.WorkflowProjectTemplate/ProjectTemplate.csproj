@@ -43,6 +43,7 @@
     <Reference Include="Microsoft.Xrm.Sdk.Workflow">
       <HintPath>..\packages\Microsoft.CrmSdk.Workflow.$Microsoft.CrmSdk.Workflow.Version$\lib\net$Microsoft.CrmSdk.Workflow.TargetFramework$\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
