@@ -54,6 +54,19 @@ namespace Microsoft.Xrm.Sdk
             return lists;
         }
 
+        public static void DebugMessage(this ITracingService tracingService, string format, params object[] args)
+        {
+#if DEBUG
+            tracingService.LogMessage(format, args);
+#endif
+        }
+
+        public static void LogMessage(this ITracingService tracingService, string format, params object[] args)
+        {
+            string message = (args == null || args.Length == 0) ? format : string.Format(format, args);
+            tracingService.Trace("{0}: {1}", DateTime.Now.ToString("o"), message);
+        }
+
         private static string CreateXml(string xml, string cookie, int page, int count)
         {
             StringReader stringReader = new StringReader(xml);
