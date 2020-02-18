@@ -17,7 +17,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "DEVKIT",
       "includefiles": [
         "Abc.LuckyStar.Workflow.*.dll"
       ],
@@ -29,8 +29,8 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???",
+      "solution": "DEVKIT",
+      "prefix": "abc_",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -47,27 +47,19 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "abc_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "abc_/entities/[entity].form.js",
+            "abc_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].webapi.js"
+            "abc_/entities/[entity].webapi.js"
           ],
           "dependencies": [
-            "???_/lib/WebApiClient.js"
-          ]
-        },
-        {
-          "webresources": [
-            "???_/entities/[entity].form.js"
-          ],
-          "dependencies": [
-            "???_/lib/devkit.js"
+            "abc_/lib/WebApiClient.js"
           ]
         }
       ]
@@ -77,7 +69,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "DEVKIT",
       "includefiles": [
         "Abc.LuckyStar.DataProvider.*.dll"
       ],
@@ -90,36 +82,36 @@
     {
       "profile": "Extract-Unmanaged",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "DEVKIT",
       "solutiontype": "Unmanaged",
-      "folder": "???",
+      "folder": "DEVKIT",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Extract-Managed",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "DEVKIT",
       "solutiontype": "Managed",
-      "folder": "???",
+      "folder": "DEVKIT",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Pack-Unmanaged",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "DEVKIT",
       "solutiontype": "Unmanaged",
-      "folder": "???",
+      "folder": "DEVKIT",
       "type": "Pack",
       "mapfile": ""
     },
     {
       "profile": "Pack-Managed",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "DEVKIT",
       "solutiontype": "Managed",
-      "folder": "???",
+      "folder": "DEVKIT",
       "type": "Pack",
       "mapfile": ""
     }
@@ -135,19 +127,19 @@
     },
     {
       "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Abc.LuckyStar",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "debug": ""
+      "debug": "yes"
     },
     {
       "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Abc.LuckyStar",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsWebApi",
-      "debug":  ""
+      "debug": "yes"
     }
   ],
   "downloadwebresources": [

@@ -1,22 +1,22 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 
-namespace $NameSpace$
+namespace Abc.LuckyStar.DataProvider
 {
-    public class Retrieve : IPlugin
+    public class RetrieveMultiple : IPlugin
     {
         /*
           InputParameters:
-              Target                  Microsoft.Xrm.Sdk.EntityReference - require
-              ColumnSet               Microsoft.Xrm.Sdk.Query.ColumnSet - require
+              Query                 Microsoft.Xrm.Sdk.Query.QueryBase - require
            OutputParameters:
-              Entity                  Microsoft.Xrm.Sdk.Entity - require
+              EntityCollection      Microsoft.Xrm.Sdk.EntityCollection - require
         */
         private readonly string _unsecureString = null;
         private readonly string _secureString = null;
 
-        public Retrieve(string unsecureString, string secureString)
+        public RetrieveMultiple(string unsecureString, string secureString)
         {
             if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
             if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -31,11 +31,11 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //tracing.DebugMessage("Begin Data Provider: $NameSpace$.Retrieve");
+            //tracing.DebugMessage("Begin Data Provider: Abc.LuckyStar.DataProvider.RetrieveMultiple");
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //tracing.DebugMessage("End Data Provider: $NameSpace$.Retrieve");
+            //tracing.DebugMessage("End Data Provider: Abc.LuckyStar.DataProvider.RetrieveMultiple");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)
@@ -44,13 +44,13 @@ namespace $NameSpace$
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var target = context.InputParameterOrDefault<EntityReference>("Target");
+            var query = context.InputParameterOrDefault<QueryExpression>("Query");
 
-            var entity = new Entity("???", target.Id);
-
+            var entities = new EntityCollection();
+            entities.EntityName = "???";
             //YOUR CODE ...
 
-            context.OutputParameters["BusinessEntity"] = entity;
+            context.OutputParameters["BusinessEntityCollection"] = entities;
         }
     }
 }

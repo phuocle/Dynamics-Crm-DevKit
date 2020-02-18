@@ -31,14 +31,14 @@ $PluginComment$
             if (context.MessageName.ToLower() != "$PluginMessage$".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals $PluginMessage$");
             if (context.Mode != (int)ExecutionModeEnum.$PluginExecution$) throw new InvalidPluginExecutionException("Execution does not equals $PluginExecution$");
 
-            //tracing.DebugMessage("Begin custom action: $NameSpace$.$PluginClass$$PluginOrder2$");
+            //tracing.DebugMessage("Begin Custom Action: $NameSpace$.$PluginClass$$PluginOrder2$");
 
             var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            //tracing.DebugMessage("End custom action: $NameSpace$.$PluginClass$$PluginOrder2$");
+            //tracing.DebugMessage("End Custom Action: $NameSpace$.$PluginClass$$PluginOrder2$");
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

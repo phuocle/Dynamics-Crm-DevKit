@@ -19,12 +19,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.Console", "Ab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.Console.2", "Abc.LuckyStar.Console.2\Abc.LuckyStar.Console.2.csproj", "{1195421A-0973-47B3-AAE4-671D06784C48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.CustomAction.Account", "Abc.LuckyStar.CustomAction.Account\Abc.LuckyStar.CustomAction.Account.csproj", "{8AA5CF99-C009-465D-A9ED-B171269FEE49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.DataProvider", "Abc.LuckyStar.DataProvider\Abc.LuckyStar.DataProvider.csproj", "{46B6AD71-B3C5-4279-A3A3-2216B235CE51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.DataProvider.AzureTable", "Abc.LuckyStar.DataProvider.AzureTable\Abc.LuckyStar.DataProvider.AzureTable.csproj", "{0688F027-19B8-477C-A0E4-CFE250CF52F4}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{0688f027-19b8-477c-a0e4-cfe250cf52f4}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{07fe81eb-5a89-4a3d-aa53-8ff66cbb7f3d}*SharedItemsImports = 13
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{1195421a-0973-47b3-aae4-671d06784c48}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{2a277567-7931-4955-acdf-96de1a036a40}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{2de9fd5f-e0ab-4670-8618-4312aa7951c2}*SharedItemsImports = 4
+		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{46b6ad71-b3c5-4279-a3a3-2216b235ce51}*SharedItemsImports = 4
+		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{8aa5cf99-c009-465d-a9ed-b171269fee49}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +56,18 @@ Global
 		{1195421A-0973-47B3-AAE4-671D06784C48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1195421A-0973-47B3-AAE4-671D06784C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1195421A-0973-47B3-AAE4-671D06784C48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA5CF99-C009-465D-A9ED-B171269FEE49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA5CF99-C009-465D-A9ED-B171269FEE49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA5CF99-C009-465D-A9ED-B171269FEE49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA5CF99-C009-465D-A9ED-B171269FEE49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46B6AD71-B3C5-4279-A3A3-2216B235CE51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46B6AD71-B3C5-4279-A3A3-2216B235CE51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46B6AD71-B3C5-4279-A3A3-2216B235CE51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46B6AD71-B3C5-4279-A3A3-2216B235CE51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0688F027-19B8-477C-A0E4-CFE250CF52F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0688F027-19B8-477C-A0E4-CFE250CF52F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0688F027-19B8-477C-A0E4-CFE250CF52F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0688F027-19B8-477C-A0E4-CFE250CF52F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

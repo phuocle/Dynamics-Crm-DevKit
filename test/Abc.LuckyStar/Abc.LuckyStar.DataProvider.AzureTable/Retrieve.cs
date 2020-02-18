@@ -2,7 +2,7 @@
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
-namespace $NameSpace$
+namespace Abc.LuckyStar.DataProvider.AzureTable
 {
     public class Retrieve : IPlugin
     {
@@ -31,11 +31,11 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //tracing.DebugMessage("Begin Data Provider: $NameSpace$.Retrieve");
+            //tracing.DebugMessage("Begin Data Provider: Abc.LuckyStar.DataProvider.AzureTable.Retrieve");
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //tracing.DebugMessage("End Data Provider: $NameSpace$.Retrieve");
+            //tracing.DebugMessage("End Data Provider: Abc.LuckyStar.DataProvider.AzureTable.Retrieve");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)

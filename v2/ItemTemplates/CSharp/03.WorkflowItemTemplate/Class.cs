@@ -25,11 +25,11 @@ namespace $NameSpace$
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
 
-            //tracing.DebugMessage("Begin workflow: $NameSpace$.$class$");
+            //tracing.DebugMessage("Begin Workflow: $NameSpace$.$class$");
 
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End workflow: $NameSpace$.$class$");
+            //tracing.DebugMessage("End Workflow: $NameSpace$.$class$");
         }
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
