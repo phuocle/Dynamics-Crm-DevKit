@@ -8,6 +8,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
 using DynamicsCrm.DevKit.Shared.Helper;
+using System.Reflection;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -17,6 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
     public class TaskProxyType
     {
+        private const string ENVIRONMENT_ENTITIES = "DynamicsCrm.DevKit.CrmSvcUtilExtensions.Entities";
         private CrmServiceClient crmServiceClient;
         private string currentDirectory;
         private CommandLineArgs arguments;
@@ -38,9 +40,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "PROXY-TYPES");
 
             if (!IsValid()) return;
+
+            CopyFile();
+
             RunProxyType();
 
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "PROXY-TYPES");
+        }
+
+        private void CopyFile()
+        {
+            var fileCrmSvcUtil = GetParentFolder(currentDirectory) + $@"\packages\Microsoft.CrmSdk.CoreTools.{arguments.Version}\content\bin\coretools\CrmSvcUtil.exe";
+            if (!File.Exists(fileCrmSvcUtil)) return;
+            var fileExecuting = Assembly.GetExecutingAssembly().Location;
+            var fiFileExecuting = new FileInfo(fileExecuting);
+            var fileCrmSvcUtilExtension = Path.Combine(fiFileExecuting.DirectoryName, "DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll");
+            if (!File.Exists(fileCrmSvcUtilExtension)) return;
+            var fiCrmSvcUtil = new FileInfo(fileCrmSvcUtil);
+            var fileToCopy = Path.Combine(fiCrmSvcUtil.DirectoryName, "DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll");
+            if (!File.Exists(fileToCopy)) {
+                File.Copy(fileCrmSvcUtilExtension, fileToCopy);
+            }
         }
 
         private void RunProxyType()
@@ -61,6 +81,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CreateNoWindow = true
                 }
             };
+            if (json.entities != null && json.entities.Length > 0)
+            {
+                process.StartInfo.EnvironmentVariables.Add(ENVIRONMENT_ENTITIES, string.Join(",", json.entities));
+            }
             process.Start();
             while (!process.StandardOutput.EndOfStream)
             {
@@ -83,6 +107,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionString(arguments.Connection)}\" ");
             command.Append($"/nologo ");
             command.Append($"/namespace:{json.@namespace} ");
+            if (json.entities != null && json.entities.Length > 0)
+            {
+                command.Append($"/codewriterfilter:DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions ");
+            }
             command.Append($"/out:{json.output}");
             return command.ToString();
         }

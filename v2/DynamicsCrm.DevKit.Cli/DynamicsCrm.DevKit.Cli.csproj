@@ -186,6 +186,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DynamicsCrm.DevKit.CrmSvcUtilExtensions\DynamicsCrm.DevKit.CrmSvcUtilExtensions.csproj">
+      <Project>{af511858-3072-45d7-932d-c0d98470914e}</Project>
+      <Name>DynamicsCrm.DevKit.CrmSvcUtilExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DynamicsCrm.DevKit.Resources\DynamicsCrm.DevKit.Resources.csproj">
       <Project>{c3d692c7-4d23-4f68-af38-ac9b375e4a56}</Project>
       <Name>DynamicsCrm.DevKit.Resources</Name>
