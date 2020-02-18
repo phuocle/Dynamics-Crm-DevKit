@@ -55,9 +55,9 @@
             // buttonConnection
             // 
             this.buttonConnection.Location = new System.Drawing.Point(400, 4);
-            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2);
             this.buttonConnection.Name = "buttonConnection";
-            this.buttonConnection.Size = new System.Drawing.Size(73, 29);
+            this.buttonConnection.Size = new System.Drawing.Size(94, 29);
             this.buttonConnection.TabIndex = 0;
             this.buttonConnection.Text = "Co&nnection";
             this.buttonConnection.UseVisualStyleBackColor = true;
@@ -86,9 +86,9 @@
             this.groupBox.Controls.Add(this.labelItem);
             this.groupBox.Controls.Add(this.progressBar);
             this.groupBox.Location = new System.Drawing.Point(6, 16);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox.Size = new System.Drawing.Size(387, 176);
             this.groupBox.TabIndex = 5;
             this.groupBox.TabStop = false;
@@ -98,7 +98,7 @@
             this.checkListForm.Enabled = false;
             this.checkListForm.FormattingEnabled = true;
             this.checkListForm.Location = new System.Drawing.Point(8, 57);
-            this.checkListForm.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.checkListForm.Margin = new System.Windows.Forms.Padding(2);
             this.checkListForm.Name = "checkListForm";
             this.checkListForm.Size = new System.Drawing.Size(373, 124);
             this.checkListForm.TabIndex = 22;
@@ -109,7 +109,7 @@
             this.checkBoxDebug.AutoSize = true;
             this.checkBoxDebug.Enabled = false;
             this.checkBoxDebug.Location = new System.Drawing.Point(290, 38);
-            this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDebug.Name = "checkBoxDebug";
             this.checkBoxDebug.Size = new System.Drawing.Size(64, 17);
             this.checkBoxDebug.TabIndex = 5;
@@ -129,7 +129,7 @@
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
             this.comboBoxEntity.Location = new System.Drawing.Point(70, 16);
-            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxEntity.Name = "comboBoxEntity";
             this.comboBoxEntity.Size = new System.Drawing.Size(311, 21);
             this.comboBoxEntity.TabIndex = 4;
@@ -148,7 +148,7 @@
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
             this.comboBoxCrmName.Location = new System.Drawing.Point(57, 216);
-            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxCrmName.Name = "comboBoxCrmName";
             this.comboBoxCrmName.Size = new System.Drawing.Size(194, 21);
             this.comboBoxCrmName.TabIndex = 2;
@@ -178,7 +178,7 @@
             this.buttonOk.Location = new System.Drawing.Point(400, 48);
             this.buttonOk.Margin = new System.Windows.Forms.Padding(2, 2, 3, 2);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(73, 29);
+            this.buttonOk.Size = new System.Drawing.Size(94, 29);
             this.buttonOk.TabIndex = 3;
             this.buttonOk.Text = "&OK";
             this.buttonOk.UseVisualStyleBackColor = true;
@@ -187,9 +187,9 @@
             // buttonCancel
             // 
             this.buttonCancel.Location = new System.Drawing.Point(400, 81);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(73, 29);
+            this.buttonCancel.Size = new System.Drawing.Size(94, 29);
             this.buttonCancel.TabIndex = 4;
             this.buttonCancel.Text = "&Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -200,9 +200,7 @@
             this.AcceptButton = this.buttonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(479, 199);
+            this.ClientSize = new System.Drawing.Size(494, 199);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
             this.Controls.Add(this.buttonCancel);
@@ -210,7 +208,7 @@
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.link);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormItemForm";

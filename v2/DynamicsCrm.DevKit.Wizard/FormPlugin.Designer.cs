@@ -49,7 +49,7 @@
             // 
             // buttonConnection
             // 
-            this.buttonConnection.Location = new System.Drawing.Point(400, 0);
+            this.buttonConnection.Location = new System.Drawing.Point(404, 0);
             this.buttonConnection.Margin = new System.Windows.Forms.Padding(2);
             this.buttonConnection.Name = "buttonConnection";
             this.buttonConnection.Size = new System.Drawing.Size(88, 29);
@@ -224,7 +224,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(400, 81);
+            this.buttonCancel.Location = new System.Drawing.Point(404, 81);
             this.buttonCancel.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(88, 29);
@@ -236,7 +236,7 @@
             // buttonOk
             // 
             this.buttonOk.Enabled = false;
-            this.buttonOk.Location = new System.Drawing.Point(400, 48);
+            this.buttonOk.Location = new System.Drawing.Point(404, 48);
             this.buttonOk.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(88, 29);
@@ -250,7 +250,7 @@
             this.AcceptButton = this.buttonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(489, 199);
+            this.ClientSize = new System.Drawing.Size(494, 199);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
             this.Controls.Add(this.groupBox);

@@ -49,7 +49,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(402, 9);
+            this.btnCancel.Location = new System.Drawing.Point(476, 9);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(80, 25);
@@ -69,7 +69,7 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(318, 9);
+            this.btnOk.Location = new System.Drawing.Point(392, 9);
             this.btnOk.Margin = new System.Windows.Forms.Padding(2);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(80, 25);
@@ -83,10 +83,10 @@
             this.cboConnection.DisplayMember = "Name";
             this.cboConnection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboConnection.FormattingEnabled = true;
-            this.cboConnection.Location = new System.Drawing.Point(108, 11);
+            this.cboConnection.Location = new System.Drawing.Point(118, 11);
             this.cboConnection.Margin = new System.Windows.Forms.Padding(2);
             this.cboConnection.Name = "cboConnection";
-            this.cboConnection.Size = new System.Drawing.Size(207, 21);
+            this.cboConnection.Size = new System.Drawing.Size(270, 21);
             this.cboConnection.TabIndex = 7;
             // 
             // groupBoxConnection
@@ -106,7 +106,7 @@
             this.groupBoxConnection.Margin = new System.Windows.Forms.Padding(2);
             this.groupBoxConnection.Name = "groupBoxConnection";
             this.groupBoxConnection.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBoxConnection.Size = new System.Drawing.Size(470, 152);
+            this.groupBoxConnection.Size = new System.Drawing.Size(547, 152);
             this.groupBoxConnection.TabIndex = 11;
             this.groupBoxConnection.TabStop = false;
             // 
@@ -204,7 +204,7 @@
             this.txtUrl.Location = new System.Drawing.Point(85, 68);
             this.txtUrl.Margin = new System.Windows.Forms.Padding(2);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(376, 20);
+            this.txtUrl.Size = new System.Drawing.Size(456, 20);
             this.txtUrl.TabIndex = 1;
             // 
             // labelUrl
@@ -219,7 +219,7 @@
             // FormConnection2
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(490, 195);
+            this.ClientSize = new System.Drawing.Size(561, 195);
             this.ControlBox = false;
             this.Controls.Add(this.groupBoxConnection);
             this.Controls.Add(this.btnCancel);
