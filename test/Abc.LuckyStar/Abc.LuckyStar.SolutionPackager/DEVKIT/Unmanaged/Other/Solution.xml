@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.1.0.13529" SolutionPackageVersion="9.1" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SolutionManifest>
+    <UniqueName>DEVKIT</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="DEVKIT" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions />
+    <Version>1.0.0.0</Version>
+    <Managed>0</Managed>
+    <Publisher>
+      <UniqueName>devkit</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="DEVKIT" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions />
+      <EMailAddress xsi:nil="true"></EMailAddress>
+      <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
+      <CustomizationPrefix>devkit</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>10000</CustomizationOptionValuePrefix>
+      <Addresses>
+        <Address>
+          <AddressNumber>1</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+        <Address>
+          <AddressNumber>2</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City xsi:nil="true"></City>
+          <County xsi:nil="true"></County>
+          <Country xsi:nil="true"></Country>
+          <Fax xsi:nil="true"></Fax>
+          <FreightTermsCode xsi:nil="true"></FreightTermsCode>
+          <ImportSequenceNumber xsi:nil="true"></ImportSequenceNumber>
+          <Latitude xsi:nil="true"></Latitude>
+          <Line1 xsi:nil="true"></Line1>
+          <Line2 xsi:nil="true"></Line2>
+          <Line3 xsi:nil="true"></Line3>
+          <Longitude xsi:nil="true"></Longitude>
+          <Name xsi:nil="true"></Name>
+          <PostalCode xsi:nil="true"></PostalCode>
+          <PostOfficeBox xsi:nil="true"></PostOfficeBox>
+          <PrimaryContactName xsi:nil="true"></PrimaryContactName>
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince xsi:nil="true"></StateOrProvince>
+          <Telephone1 xsi:nil="true"></Telephone1>
+          <Telephone2 xsi:nil="true"></Telephone2>
+          <Telephone3 xsi:nil="true"></Telephone3>
+          <TimeZoneRuleVersionNumber xsi:nil="true"></TimeZoneRuleVersionNumber>
+          <UPSZone xsi:nil="true"></UPSZone>
+          <UTCOffset xsi:nil="true"></UTCOffset>
+          <UTCConversionTimeZoneCode xsi:nil="true"></UTCConversionTimeZoneCode>
+        </Address>
+      </Addresses>
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="1" schemaName="account" behavior="2" />
+      <RootComponent type="1" schemaName="devkit_customactivity" behavior="0" />
+      <RootComponent type="1" schemaName="devkit_processwebapi1" behavior="2" />
+      <RootComponent type="1" schemaName="devkit_webapi" behavior="0" />
+      <RootComponent type="9" schemaName="devkit_crmversioncode" behavior="0" />
+      <RootComponent type="29" id="{54175fcb-ada5-453a-accd-0b577aaba0ea}" behavior="0" />
+      <RootComponent type="29" id="{66ba6024-d9ff-431e-bbbf-d0cccf2a7729}" behavior="0" />
+      <RootComponent type="60" id="{0c459860-8008-4de6-9bc6-855ec6d9538e}" behavior="0" />
+      <RootComponent type="60" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+      <RootComponent type="61" schemaName="abc_/entities/Account.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Account.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Account.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Contact.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Contact.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Contact.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/lib/WebApiClient.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/resources/Resource.1031.resx" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/resources/Resource.1033.resx" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/resources/Resource.1066.resx" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/devkit_WebApi.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/html/HelloWorld.html" behavior="0" />
+      <RootComponent type="91" id="{5e45f081-57b3-e911-a99b-000d3a828cb5}" schemaName="Abc.LuckyStar.CustomAction.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=99a37bee8cc0867b" behavior="0" />
+      <RootComponent type="91" id="{d9439704-62b3-e911-a99b-000d3a828cb5}" schemaName="Abc.LuckyStar.DataProvider, Version=1.0.0.0, Culture=en, PublicKeyToken=78aada29bc82d1b9" behavior="0" />
+      <RootComponent type="91" id="{1f3e294a-6552-ea11-a812-000d3a80c481}" schemaName="Abc.LuckyStar.DataProvider.AzureTable, Version=1.0.0.0, Culture=en, PublicKeyToken=a290da0db6d69c3a" behavior="0" />
+      <RootComponent type="91" id="{19ff59e0-55b3-e911-a99b-000d3a828cb5}" schemaName="Abc.LuckyStar.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=ae8d19edd0684c14" behavior="0" />
+      <RootComponent type="91" id="{9c8220b9-56b3-e911-a99b-000d3a828cb5}" schemaName="Abc.LuckyStar.Workflow.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=4a6ab754597edf30" behavior="0" />
+      <RootComponent type="92" id="{1dff59e0-55b3-e911-a99b-000d3a828cb5}" behavior="0" />
+      <RootComponent type="92" id="{21ff59e0-55b3-e911-a99b-000d3a828cb5}" behavior="0" />
+      <RootComponent type="92" id="{25ff59e0-55b3-e911-a99b-000d3a828cb5}" behavior="0" />
+      <RootComponent type="92" id="{6245f081-57b3-e911-a99b-000d3a828cb5}" behavior="0" />
+    </RootComponents>
+    <MissingDependencies>
+      <MissingDependency>
+        <Required key="0" type="1" schemaName="devkit_processwebapi1" displayName="Process WebApi 1" solution="Active" />
+        <Dependent key="0" type="1" schemaName="devkit_processwebapi1" displayName="Process WebApi 1" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="1" type="26" schemaName="All Contacts" displayName="All Contacts" parentSchemaName="contact" parentDisplayName="Contact" solution="msdynce_AppCommon (9.0.4.0066)" id="{0d5d377b-5e7c-47b5-bab1-a5cb8b4ac105}" />
+        <Dependent key="2" type="60" displayName="Quick View" parentDisplayName="WebApi" id="{75893e08-c50c-4f8e-8814-0f5a605af0bb}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="3" type="60" displayName="Account" parentDisplayName="Account" solution="msdynce_AppCommon (9.0.4.0066)" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+        <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="4" type="60" displayName="account contact card" parentDisplayName="Contact" solution="msdynce_AppCommon (9.0.4.0066)" id="{29de27bc-a257-4f29-99cf-bab4a84e688f}" />
+        <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="5" type="66" schemaName="MscrmControls.CardFeedContainer.CardFeedContainer" displayName="MscrmControls.CardFeedContainer.CardFeedContainer" solution="BaseCustomControlsCore (9.0.2001.4003)" />
+        <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="6" type="66" schemaName="MscrmControls.InputMask.InputMaskControl" displayName="MscrmControls.InputMask.InputMaskControl" solution="CustomControlsCore (9.1.0000.13529)" />
+        <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="7" type="66" schemaName="MscrmControls.WebsitePreview.PreviewControl" displayName="MscrmControls.WebsitePreview.PreviewControl" solution="CustomControlsCore (9.1.0000.13529)" />
+        <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="8" type="66" schemaName="MscrmControls.Multimedia.MultimediaPlayerControl" displayName="MscrmControls.Multimedia.MultimediaPlayerControl" solution="CustomControlsCore (9.1.0000.13529)" />
+        <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="9" type="61" schemaName="devkit_/entities/Account.webapi.js" displayName="devkit_/entities/Account.webapi.js" solution="Active" />
+        <Dependent key="10" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="11" type="61" schemaName="devkit_/entities/Contact.webapi.js" displayName="devkit_/entities/Contact.webapi.js" solution="Active" />
+        <Dependent key="10" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="12" type="61" schemaName="devkit_/entities/SystemUser.webapi.js" displayName="devkit_/entities/SystemUser.webapi.js" solution="Active" />
+        <Dependent key="10" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="13" type="61" schemaName="devkit_/entities/Email.webapi.js" displayName="devkit_/entities/Email.webapi.js" solution="Active" />
+        <Dependent key="10" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="14" type="61" schemaName="devkit_/entities/devkit_WebApi.form.js" displayName="devkit_/entities/devkit_WebApi.form.js" solution="Active" />
+        <Dependent key="10" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="15" type="61" schemaName="devkit_/entities/ActivityParty.webapi.js" displayName="devkit_/entities/ActivityParty.webapi.js" solution="Active" />
+        <Dependent key="10" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="16" type="61" schemaName="devkit_/entities/devkit_WebApi.webapi.js" displayName="devkit_/entities/devkit_WebApi.webapi.js" solution="Active" />
+        <Dependent key="10" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+      </MissingDependency>
+    </MissingDependencies>
+  </SolutionManifest>
+</ImportExportXml>

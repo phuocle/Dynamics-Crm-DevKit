@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{8448b78f-8f42-454e-8e2a-f8196b0419af}</formid>
+    <IntroducedVersion>5.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form showImage="true">
+      <tabs>
+        <tab name="SUMMARY_TAB" id="{3b0b63a9-d379-689a-0ec3-e71eb4c6a841}" IsUserDefined="0" showlabel="true" expanded="true" locklevel="0" ordinalvalue="0">
+          <columns>
+            <column width="33%" id="0">
+              <sections>
+                <section name="ACCOUNT_INFORMATION" showlabel="true" showbar="false" id="{0eb92e6c-bcb8-0d52-a188-d81543ddb7cd}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{e6441984-4343-813a-aa7e-e2747ad35390}" showlabel="true" locklevel="0" ordinalvalue="10003" solutionaction="Modified">
+                        <control id="websiteurl" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" datafieldname="websiteurl" disabled="false" uniqueid="{c134b8cb-24ba-6163-861d-041197210369}" solutionaction="Modified" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{87DE203E-B03C-44CC-8B06-438202B82553}" ordinalvalue="10004">
+                        <control id="parentaccountid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="parentaccountid" uniqueid="{57a3585d-78c9-270e-a27e-28740609b1e7}" solutionaction="Modified" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="25%" id="2">
+              <sections>
+                <section name="SUMMARY_TAB_section_6" showlabel="false" showbar="false" locklevel="0" id="{d4c3ee9c-ba71-5cdb-31be-2aa505750472}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Top" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell id="{8e24c7e3-6a40-5abb-eadb-254eba5478e2}" showlabel="true" colspan="1" auto="false" rowspan="7" ordinalvalue="10002">
+                        <control id="Contacts" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                          <parameters>
+                            <VisualizationId />
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="{64BC19B9-1311-4B93-BE4C-6407B98D2AB3}" id="{2aa02c79-01be-4c69-0a16-13a130baae01}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true" ordinalvalue="2" solutionaction="Added">
+          <labels>
+            <label description="{64BC19B9-1311-4B93-BE4C-6407B98D2AB3}" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="34%" id="0">
+              <sections>
+                <section name="{64BC19B9-1311-4B93-BE4C-6407B98D2AB4}" showlabel="false" showbar="false" locklevel="0" id="{8a6e3c9d-0375-a1e3-7ccc-555c915e5297}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" ordinalvalue="0">
+                  <labels>
+                    <label description="Section" languagecode="1033" />
+                  </labels>
+                  <rows></rows>
+                </section>
+              </sections>
+            </column>
+            <column width="33%" id="1">
+              <sections>
+                <section name="tab_3_section_2" showlabel="false" showbar="false" locklevel="0" id="{4e1e88ab-6ed6-546d-8985-36baa086c5b3}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" ordinalvalue="0">
+                  <labels>
+                    <label description="Section" languagecode="1033" />
+                  </labels>
+                  <rows></rows>
+                </section>
+              </sections>
+            </column>
+            <column width="33%" id="2">
+              <sections>
+                <section name="tab_3_section_3" showlabel="false" showbar="false" locklevel="0" id="{4558729d-112b-85eb-4464-9310b95338ad}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" ordinalvalue="0">
+                  <labels>
+                    <label description="Section" languagecode="1033" />
+                  </labels>
+                  <rows></rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <Navigation>
+        <NavBarAreas solutionaction="Added">
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+      <controlDescriptions>
+        <controlDescription forControl="{c134b8cb-24ba-6163-861d-041197210369}" solutionaction="Added">
+          <customControl id="{71716B6C-711E-476c-8AB8-5D11542BFB47}">
+            <parameters>
+              <datafieldname>websiteurl</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.InputMask.InputMaskControl">
+            <parameters>
+              <value>websiteurl</value>
+              <mask type="SingleLine.Text">accountnumber</mask>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.WebsitePreview.PreviewControl">
+            <parameters>
+              <value>websiteurl</value>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.Multimedia.MultimediaPlayerControl">
+            <parameters>
+              <url>websiteurl</url>
+            </parameters>
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
+    </form>
+    <LocalizedNames>
+      <LocalizedName description="Firma" languagecode="1031" />
+      <LocalizedName description="Account" languagecode="1033" />
+      <LocalizedName description="Khách hàng" languagecode="1066" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Standardmäßiges Kontoformular aktualisiert." languagecode="1031" />
+      <Description description="Updated default Account form." languagecode="1033" />
+      <Description description="Biểu mẫu Khách hàng mặc định đã cập nhật." languagecode="1066" />
+    </Descriptions>
+  </systemform>
+</forms>

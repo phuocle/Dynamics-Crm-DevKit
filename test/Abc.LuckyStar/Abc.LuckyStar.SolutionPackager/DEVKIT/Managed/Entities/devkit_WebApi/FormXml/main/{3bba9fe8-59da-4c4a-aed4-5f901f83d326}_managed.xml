@@ -1,0 +1,997 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{3bba9fe8-59da-4c4a-aed4-5f901f83d326}</formid>
+    <IntroducedVersion>0.0.0.1</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="true" showImage="true" maxWidth="1920">
+      <tabs>
+        <tab name="tab_3" id="{d490476c-5716-8ab8-e871-26ead1d38b36}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="false" labelid="{d61741a0-7409-4d2e-b27a-8039c75a6843}">
+          <labels>
+            <label description="WEBAPI" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="tab_3_section_1" showlabel="true" showbar="true" locklevel="0" id="{b0481caa-2cd3-688e-30da-896414ba445c}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{2f125934-ebf5-4c7f-8ee3-fb98223de2a9}">
+                  <labels>
+                    <label description="NAME &amp; PARENT" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{63f7c6b9-ce23-4846-919d-5c1388b5fefc}" labelid="{3314e42b-636c-4519-8bff-b63de2ba0471}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_name" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3a9601d2-88a7-d3ce-5ebd-e0bd885688c3}" showlabel="true" locklevel="0" labelid="{7fc1fd66-4780-4744-b55b-6164eedf884f}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_alternatekey" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_alternatekey" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="tab_3_section_2" showlabel="true" showbar="true" locklevel="0" id="{d77b8d62-bca3-8eeb-5275-1e52a83dc750}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{45b279d7-ed91-4807-80ce-ea19eb9cab15}">
+                  <labels>
+                    <label description="LINKS" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{776285dc-6ab2-2308-237c-b6391c299a46}" showlabel="true" locklevel="0" labelid="{6599c0af-e583-4db2-ba70-37e2884b2bf2}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_parentwebapiid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_parentwebapiid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0131dbb6-e873-7dcb-a87d-3c88b125937e}" showlabel="true" locklevel="0" labelid="{538fb702-85c2-4233-be9b-7d4582ace779}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_linkwebapiid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_linkwebapiid" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{c1bcb1aa-4310-46c3-8c13-59431dfb4962}" IsUserDefined="1" name="tab_OPTIONSET" locklevel="0" expanded="true" showlabel="true" labelid="{2e608e7d-eb79-43db-8387-18df484d96e9}">
+          <labels>
+            <label description="OPTIONSET" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="true" showbar="true" IsUserDefined="0" id="{a06e0e49-9438-4b27-b812-73c3de05616c}" name="tab_OPTIONSET_section_SINGLE" columns="1" locklevel="0" labelwidth="130" celllabelalignment="Left" celllabelposition="Left" labelid="{710f8d25-bcb9-4d70-97d3-c5927f134422}">
+                  <labels>
+                    <label description="SINGLE" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{eb8ab5ed-a16d-6323-16dd-aba745d3ecd1}" showlabel="true" locklevel="0" labelid="{03aefc2f-6548-4f07-ba50-a30e58e0505e}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_singleoptionsetcode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="devkit_singleoptionsetcode" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_OPTIONSET_section_MULTI_OPTIONSET" showlabel="true" showbar="true" locklevel="0" id="{6ab755c6-2023-1b7d-da83-62055eb39d3b}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{027e18ef-d9c9-4644-9b55-db4b6eeededc}">
+                  <labels>
+                    <label description="MULTI-OPTIONSET" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{0c72c9ab-978d-e14b-7dba-48cea2344b15}" showlabel="true" locklevel="0" labelid="{3bc4a0aa-e2a4-4df8-9b76-6f5ffb16043e}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_multioptionsetcode" classid="{4AA28AB7-9C13-4F57-A73D-AD894D048B5F}" datafieldname="devkit_multioptionsetcode" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_OPTIONSET_section_5" showlabel="true" showbar="true" locklevel="0" id="{b9d1654b-ec29-52e8-53ca-1cdb2decc065}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{16185237-b04b-4e6d-aa0f-546597511860}">
+                  <labels>
+                    <label description="CALCULATED" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{5a3c7606-50e7-a594-bcc9-d9e6dd40ea67}" showlabel="true" locklevel="0" labelid="{106a70fa-2c09-4c59-a8eb-39dfbf1bbfe1}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_singleoptionsetcodecalculated" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="devkit_singleoptionsetcodecalculated" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{05d01ce8-9108-d814-4682-0bed7b9649e6}" showlabel="true" locklevel="0" labelid="{3627681f-5a1e-4e89-8928-78a4d4326701}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_yesandnocalculated" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="devkit_yesandnocalculated" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="tab_OPTIONSEST_section_STATUS" showlabel="true" showbar="true" locklevel="0" id="{00e80a62-ca0b-b185-5865-5a30c8e159a0}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{014b7fb1-1451-4276-8bc8-4ef0a34dff98}">
+                  <labels>
+                    <label description="STATUS" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{a432e8ee-add8-67b5-a407-6970ac8118ad}" showlabel="true" locklevel="0" labelid="{68e412d6-a1b8-4d79-ad64-c030b538b1aa}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="statuscode" classid="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}" datafieldname="statuscode" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_OPTIONSET_section_STATE" showlabel="true" showbar="true" locklevel="0" id="{0b5381a3-6dd4-2bc0-2d21-846c46d4b124}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{da3ad712-8ea2-454d-a2f7-4764ad41d211}">
+                  <labels>
+                    <label description="STATE" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{8e36217d-35cd-3ed3-7146-70a2e6162ec5}" showlabel="true" locklevel="0" labelid="{6d679594-e532-4177-9462-22071267305a}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="statecode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_OPTIONSET_section_6" showlabel="true" showbar="true" locklevel="0" id="{01430326-05bb-8b62-0948-7376a72979c4}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{d8c3baf6-2a24-4182-b486-6daa3b4ce6d2}">
+                  <labels>
+                    <label description="TWO OPTIONS" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{a803991b-8b03-5b82-132a-89c86c1c78d3}" showlabel="true" locklevel="0" labelid="{fcfc2fd3-1558-4e22-99e2-eaa71e6e2ee9}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_yesandno" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="devkit_yesandno" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_4" id="{5003c8a2-1199-a021-c970-cc79e2a4e3b6}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true" labelid="{d0362712-53da-4599-920c-8403141b79b9}">
+          <labels>
+            <label description="DATE TIME" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="tab_4_section_1" showlabel="true" showbar="true" locklevel="0" id="{297d2abc-07b3-55e8-2e2d-112c299a7e58}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{e77f8c8d-7747-4d82-a2dc-fc16bf985ea6}">
+                  <labels>
+                    <label description="USER LOCAL" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{9738379b-3488-3e2d-33c0-114d663b7be9}" showlabel="true" locklevel="0" labelid="{75f59949-c248-40c0-a909-3cf5ac597b0c}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateonly" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateonly" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{92380dd4-6043-8a4a-65d8-5695d19d11c1}" showlabel="true" locklevel="0" labelid="{f494f98d-9b3e-42f5-89c8-9385f0edcddf}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateandtime" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateandtime" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_4_section_3" showlabel="true" showbar="true" locklevel="0" id="{be396793-357a-4435-933d-4cae45a3002c}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{f9d58079-e28e-4321-a177-f14bcf5c5c2c}">
+                  <labels>
+                    <label description="TIME ZONE" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{b63440b5-18cc-54d4-4c7b-e0490b3a5721}" showlabel="true" locklevel="0" labelid="{d1f5df81-cac4-4301-b43a-581bd39dc326}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateonly" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateonly" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{04eeeaeb-d5ba-94d8-5114-77350dc64924}" showlabel="true" locklevel="0" labelid="{d8760404-26c2-4f8f-86e1-80168016319b}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateandtime" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateandtime" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_4_section_5" showlabel="true" showbar="true" locklevel="0" id="{a6104947-ca41-e124-074c-e3ee6bdbe16a}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{71f49d22-8fc9-48d5-9704-f40834f2b9d0}">
+                  <labels>
+                    <label description="ROLLUP USER LOCAL" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{0964b8c3-b262-20bb-d849-677dac8540c1}" showlabel="true" locklevel="0" labelid="{73852186-bc8d-42cc-9373-00f56a0df312}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateonlyrollup" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateonlyrollup" disabled="false" uniqueid="{4c9ce1b5-be28-50d6-d92a-145adab2c31d}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3460dbcb-c839-2d2b-b279-c94d5836a901}" showlabel="true" locklevel="0" labelid="{3189fb55-1500-47e3-9506-9708e89171a2}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateonlyrollup_state" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="devkit_userlocaldateonlyrollup_state" disabled="false" uniqueid="{577664b0-5436-d2e3-5537-b5cdb9bc1631}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1c7d20c3-c17e-bcc3-dcd7-9a93dc423318}" showlabel="true" locklevel="0" labelid="{2ac2abb3-e611-4f95-badd-1331141c44db}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateonlyrollup_date" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateonlyrollup_date" disabled="false" uniqueid="{c2d80a02-38e4-0dde-7b0d-b08b1490b850}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5dc3dd6e-da53-2c2c-c76c-195eb867c55e}" showlabel="true" locklevel="0" labelid="{f9fe6fed-18e4-46b0-96ee-695bdb3ba1e8}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateandtimerollup" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateandtimerollup" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7ae66c78-04a8-8566-da13-974eaae4d2d7}" showlabel="true" locklevel="0" labelid="{f0a1d8b7-fe68-4dca-8b33-cb8edff49156}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateandtimerollup_state" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="devkit_userlocaldateandtimerollup_state" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{4dea89d2-8467-cb2b-6358-a55307749544}" showlabel="true" locklevel="0" labelid="{72680a6c-83d0-4c49-b28b-72f5ee5dc171}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateandtimerollup_date" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateandtimerollup_date" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_4_section_7" showlabel="true" showbar="true" locklevel="0" id="{da49ce39-1aa2-e566-aa95-5626b738bb71}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{22ac621c-d114-4af9-a7de-e73d525ee92a}">
+                  <labels>
+                    <label description="ROLLUP TIME-ZONE" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{61b45954-e04e-ec5c-3852-d811a82511e0}" showlabel="true" locklevel="0" labelid="{92ed0a22-c26a-4358-97b7-24d022147a81}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateonlyrollup" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateonlyrollup" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6da8ee26-0391-5826-80ea-e715d4746de4}" showlabel="true" locklevel="0" labelid="{c7e6ccc5-1e5c-47b8-8a07-be5668432ae8}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateonlyrollup_state" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="devkit_timezonedateonlyrollup_state" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{52db9eb9-3733-6e62-9cbe-d0e23301abd7}" showlabel="true" locklevel="0" labelid="{e74a4f11-f1a0-4f06-96e1-fa662d0f0c6f}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateonlyrollup_date" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateonlyrollup_date" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d5ec7819-06a0-0ee0-846d-a37002400828}" showlabel="true" locklevel="0" labelid="{5326fece-f7a9-447f-a96e-5d92787e6bb3}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateandtimerollup" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateandtimerollup" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{14b08035-31cb-4c51-c0d3-d2ec744569a7}" showlabel="true" locklevel="0" labelid="{a1f10c75-21fe-494e-8a22-9315d25c81f5}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateandtimerollup_state" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="devkit_timezonedateandtimerollup_state" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a9691d0a-2739-78c3-0c50-9092ea825234}" showlabel="true" locklevel="0" labelid="{94f5a090-6f9c-42af-81a5-fb3d8d5a1d80}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateandtimerollup_date" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateandtimerollup_date" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="tab_4_section_2" showlabel="true" showbar="true" locklevel="0" id="{b3387b5b-5cce-4da6-8a8c-860ca720d950}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{b2d671e6-9e3f-4096-a577-5438c4568666}">
+                  <labels>
+                    <label description="DATE ONLY" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{b5407d0a-86db-d824-d922-1513e3529a8c}" showlabel="true" locklevel="0" labelid="{21b7c0b9-7629-41e2-a1d9-5d3320b367f7}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_dateonlydateonly" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_dateonlydateonly" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_4_section_4" showlabel="true" showbar="true" locklevel="0" id="{1c14e387-6295-0c06-944c-284b0a98c642}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{5aedef77-329c-4fc1-8c01-bf4290c42c13}">
+                  <labels>
+                    <label description="CALCULATED" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{5d12e1cb-c9ed-4ec0-5a7e-9b590aa01105}" showlabel="true" locklevel="0" labelid="{0e70f953-92ec-49d1-ad08-dfb88c04cff8}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateonlycalculated" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateonlycalculated" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{18ad00a7-a0c0-47b5-c5ed-937d88ae858d}" showlabel="true" locklevel="0" labelid="{18ae9999-158f-4acb-aa9f-3bd3339e353b}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_userlocaldateandtimecalculated" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateandtimecalculated" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1669a59e-041e-063e-1600-0e3d78127272}" showlabel="true" locklevel="0" labelid="{d4b29abb-571d-46f3-9379-e9e730ccf205}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_dateonlydateonlycalculated" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_dateonlydateonlycalculated" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{01408ba1-0bca-2d57-5c1b-034ba5b2a39d}" showlabel="true" locklevel="0" labelid="{6e5df10d-79b8-498c-b0c9-484d69772495}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateonlycalculated" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateonlycalculated" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{97e58b5a-6dd5-857d-517d-1e3e3d179bc3}" showlabel="true" locklevel="0" labelid="{458e8f01-43fa-49c2-8383-1e214578d543}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_timezonedateandtimecalculated" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateandtimecalculated" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_4_section_6" showlabel="true" showbar="true" locklevel="0" id="{3868b630-cc5b-8d80-6178-d8449aa038ac}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{6673ef06-0550-4bf7-8b17-c09be2e4a9c8}">
+                  <labels>
+                    <label description="ROLLUP DATE ONLY" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{4664305e-793e-57e5-79ca-b59c2eb80944}" showlabel="true" locklevel="0" labelid="{0d216c21-7665-4f3f-b573-d05a4afd6e6d}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_dateonlydateonlyrollup" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_dateonlydateonlyrollup" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{26888309-2934-3888-340c-59270d90399a}" showlabel="true" locklevel="0" labelid="{d99c8a67-390c-4da8-bc0d-1485d73e9767}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_dateonlydateonlyrollup_state" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="devkit_dateonlydateonlyrollup_state" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{4b7a6395-0c5b-1a2a-600b-29818eba2a48}" showlabel="true" locklevel="0" labelid="{46c274da-0d45-4726-a48a-433760ca33e6}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_dateonlydateonlyrollup_date" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_dateonlydateonlyrollup_date" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_6" id="{6eb23d1b-db6c-e703-3783-35c6c37e6141}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true" labelid="{3bd7557f-438c-480b-92b4-c24253328eaf}">
+          <labels>
+            <label description="NUMBER" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="tab_6_section_1" showlabel="true" showbar="true" locklevel="0" id="{61b150b2-3664-cda0-c414-2c4c9a3863e4}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{d8ef0e1f-cd85-4696-bd94-fd7412962603}">
+                  <labels>
+                    <label description="WHOLE NUMBER" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{d538c216-3929-1257-2458-3997a41b0ed4}" showlabel="true" locklevel="0" labelid="{8ffb664a-4d90-4455-aae5-97956bc7894c}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_wholenumbernone" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="devkit_wholenumbernone" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9ec5a463-6be5-68a5-7b72-5c9439910a4e}" showlabel="true" locklevel="0" labelid="{ed8f361d-02dc-4040-a84e-cd98828cfdd6}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_wholenumberduration" classid="{AA987274-CE4E-4271-A803-66164311A958}" datafieldname="devkit_wholenumberduration" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e0e5c64c-41c5-b71e-0194-8e90ea74e9b8}" showlabel="true" locklevel="0" labelid="{1c997c02-08de-49cc-932a-c4c5eaf9a5fa}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_wholenumbertimezone" classid="{7C624A0B-F59E-493d-9583-638D34759266}" datafieldname="devkit_wholenumbertimezone" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c4a61a66-81b4-12aa-18b3-e9a7d8c97586}" showlabel="true" locklevel="0" labelid="{5522488b-3e2b-417a-9928-ee5964a8a784}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_wholenumberlanguage" classid="{671A9387-CA5A-4d1e-8AB7-06E39DDCF6B5}" datafieldname="devkit_wholenumberlanguage" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_6_section_4" showlabel="true" showbar="true" locklevel="0" id="{a4835b1c-dd7b-56b3-0874-b1688450c885}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{413426c0-3921-430d-8ea5-42a392c9d41a}">
+                  <labels>
+                    <label description="CURRENCY" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{051ad612-9aa2-b30c-ed2c-c6ed7c1602ea}" showlabel="true" locklevel="0" labelid="{73dd4681-d86a-47ea-950b-4b13f3b34394}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="transactioncurrencyid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="transactioncurrencyid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{17ae1a40-0ac2-13c0-ee79-34e17931e234}" showlabel="true" locklevel="0" labelid="{50a48bf1-f7bc-4213-82ca-f18b0f734604}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_currency" classid="{533B9E00-756B-4312-95A0-DC888637AC78}" datafieldname="devkit_currency" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7680115a-2109-09a1-c40b-a6779341e789}" showlabel="true" locklevel="0" labelid="{95b74ee3-b3e1-46e9-abbc-d67369c90e19}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="exchangerate" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="exchangerate" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a9609976-0bb5-9a93-dc70-6138a7622d24}" showlabel="true" locklevel="0" labelid="{6f5ec0ce-2068-48a8-a576-b005594ea09f}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_currency_base" classid="{533B9E00-756B-4312-95A0-DC888637AC78}" datafieldname="devkit_currency_base" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="tab_6_section_2" showlabel="true" showbar="true" locklevel="0" id="{84a7ce61-2146-a1d5-b2c1-7639ab78ce38}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{909d6b17-cbeb-4a97-a01b-71eb6374c493}">
+                  <labels>
+                    <label description="FLOATING POINT NUMBER" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{36ea072d-2a99-629d-0e6e-ea24034b7793}" showlabel="true" locklevel="0" labelid="{ebf22850-01b9-47ad-9b68-d45b0693f8e3}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_floatingpointnumber" classid="{0D2C745A-E5A8-4c8f-BA63-C6D3BB604660}" datafieldname="devkit_floatingpointnumber" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_6_section_3" showlabel="true" showbar="true" locklevel="0" id="{28c0121e-0ce1-b714-6bda-30305e513a02}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{c88dcc20-38a6-4817-a97f-c814625eef39}">
+                  <labels>
+                    <label description="DECIMAL NUMBER" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{9c2a6ca8-9574-9279-a9c5-d7781e3a44c8}" showlabel="true" locklevel="0" labelid="{c825724d-fb36-4fde-872c-70e085218e37}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_decimalnumber" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="devkit_decimalnumber" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_5" id="{08c57787-7661-dcb9-126e-42a1e36328d9}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true" labelid="{92dc0818-325d-42dd-8d0c-088b6b55df5f}">
+          <labels>
+            <label description="STRING" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="tab_5_section_1" showlabel="true" showbar="true" locklevel="0" id="{d61db874-7980-e637-d1d2-dd7eed43c319}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{cb1f3516-82d8-46d7-87bc-fbc720405d96}">
+                  <labels>
+                    <label description="LOOKUP" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{62d9788d-1666-4356-8d5f-668e183d4b19}" labelid="{d8c274a5-178d-4f00-beda-53c88e3c37dc}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{65697b21-b179-37e5-b000-2e12ae4786d7}" showlabel="true" locklevel="0" labelid="{a88cc507-25a9-4dcb-8251-a0341659415c}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_customerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_customerid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d61a0c5d-29d0-9c1a-2532-2e4939c85e43}" showlabel="true" locklevel="0" labelid="{62b77dcb-be25-43ea-85d4-e06c3742d341}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_linkwebapiid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_linkwebapiid" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab_5_section_3" showlabel="true" showbar="true" locklevel="0" id="{a6503046-5ea4-da65-1226-1499d1ad6812}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{822f9611-7d26-4b9d-aef8-bad31ede99fd}">
+                  <labels>
+                    <label description="MULTIPLE LINES OF TEXT" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{7c2991b2-c06a-7890-a96c-55642211e947}" showlabel="true" locklevel="0" rowspan="4" labelid="{5d6e873f-2204-40eb-87f7-dffff6345abb}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_multipleliniesoftext" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="devkit_multipleliniesoftext" disabled="false" uniqueid="{d2b90a00-e066-011e-029c-834db93a772c}" />
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="tab_5_section_2" showlabel="true" showbar="true" locklevel="0" id="{3d70c50c-4b64-4c6b-9337-618313396e81}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{a29f6bf0-d71c-4496-98b6-bf65df40a83d}">
+                  <labels>
+                    <label description="SINGLE LINE OF TEXT" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{6b6306c6-ad7d-0892-e25a-a09668cbab30}" showlabel="true" locklevel="0" labelid="{b62db779-c2aa-4e40-96be-15fe03f763e1}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_singlelineoftexttext" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_singlelineoftexttext" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{631851d6-0ba8-d993-d397-2e49a6ec6d6a}" showlabel="true" locklevel="0" labelid="{a32e82a8-ca48-4b02-adc7-8cd171e50c75}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_singlelineoftextemail" classid="{ADA2203E-B4CD-49be-9DDF-234642B43B52}" datafieldname="devkit_singlelineoftextemail" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b53ee6a6-46b9-996c-a9bc-1c0b0a038d14}" showlabel="true" locklevel="0" labelid="{28d123ff-a26e-4c4f-b50b-a9d68a4ed66d}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_singlelineoftexturl" classid="{71716B6C-711E-476c-8AB8-5D11542BFB47}" datafieldname="devkit_singlelineoftexturl" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d066ca1d-1e87-1d47-e460-a520d9bda688}" showlabel="true" locklevel="0" labelid="{89da4b16-dac5-4739-b58d-34455ca3cae8}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_singlelineoftexttickersymbol" classid="{1E1FC551-F7A8-43af-AC34-A8DC35C7B6D4}" datafieldname="devkit_singlelineoftexttickersymbol" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{7ec175d6-8409-e892-b1cc-a05c508972d6}" showlabel="true" locklevel="0" labelid="{d849fe4b-4860-4afb-8a2f-2e86a8e5182c}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_singlelineoftextphone" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_singlelineoftextphone" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a07b773d-987b-1b03-8142-702ec9744a88}" showlabel="true" locklevel="0" rowspan="4" labelid="{9c8f9b03-dac1-4b12-9cec-63dde5132965}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_singlelineoftexttextarea" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="devkit_singlelineoftexttextarea" disabled="false" uniqueid="{6e15e25e-d7ab-ea9e-6c23-d638a3b22bdc}" />
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_ADMINISTRATOR" id="{5da15bd5-c04b-297b-e8ab-520033c05b64}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true" labelid="{d4db407d-d038-4cac-9e53-45a9c2240c9a}">
+          <labels>
+            <label description="ADMINISTRATOR" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="tab_ADMINISTRATOR_section_CREATED" showlabel="true" showbar="true" locklevel="0" id="{a310c541-a922-1602-491c-c007d43ae7da}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{472d355f-5cbf-4d92-8348-fdd85fd1afc4}">
+                  <labels>
+                    <label description="CREATED" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{78429135-3ac8-dd50-3215-03941e681eb3}" showlabel="true" locklevel="0" labelid="{06d8d89e-83c7-4208-98e7-fc0a6dda0950}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="createdby" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="createdby" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d6771384-70a6-2b13-4377-25ce33a01066}" showlabel="true" locklevel="0" labelid="{66e80c11-152b-400b-9d48-4a787f81c7ba}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="createdon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="createdon" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="tab_ADMINISTRATOR_section_MODIFIED" showlabel="true" showbar="true" locklevel="0" id="{cba80a0c-4285-0a44-778d-a691c92ce060}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" labelid="{e0c850fe-3b7c-498c-9f1f-3dccc9779330}">
+                  <labels>
+                    <label description="MODIFIED" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{70d7c2b5-a208-e648-8727-430edad518e6}" showlabel="true" locklevel="0" labelid="{6d977f4a-2675-4d18-a8df-8ff40902beb6}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="modifiedby" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="modifiedby" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{43e58c1a-cc84-66a7-90ca-a24c3b6438a0}" showlabel="true" locklevel="0" labelid="{fc3ed244-e6be-48e3-a338-cd1d8c6a2fc1}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="modifiedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="modifiedon" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{b5e83363-6f56-4a54-bbde-a44df4c17267}" columns="1111" labelwidth="130" celllabelalignment="Left" celllabelposition="Left">
+        <rows>
+          <row>
+            <cell id="{75b09da7-cb1a-2741-765b-962ce3997292}" showlabel="true" locklevel="0" labelid="{77524999-f489-422c-b9cc-43de94275353}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_singleoptionsetcode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="devkit_singleoptionsetcode" disabled="false" />
+            </cell>
+            <cell id="{0345b09a-2a06-3b9d-85a3-8b665c1ee8dc}" showlabel="true" locklevel="0" labelid="{747b8a8b-c813-4243-9f4f-0cfeaa83eabc}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_statuscode" classid="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}" datafieldname="statuscode" disabled="false" />
+            </cell>
+            <cell id="{a2d6b170-5ce3-c250-6783-711879ee7639}" showlabel="true" locklevel="0" labelid="{034a2f73-2cfd-4790-be37-24a202c4df84}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_statecode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="false" />
+            </cell>
+            <cell id="{e188c1ba-84d3-ea69-1c89-42cb3eb3a40d}" showlabel="true" locklevel="0" labelid="{172f7de0-52d4-4457-a8e0-df2288b67e93}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_timezonedateandtime" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateandtime" disabled="false" />
+            </cell>
+          </row>
+          <row>
+            <cell id="{e2231aeb-b5ea-b2c6-486c-05ca3d550474}" showlabel="true" locklevel="0" labelid="{72e072ba-c6de-446f-8010-f75aefad1f52}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_userlocaldateonly" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateonly" disabled="false" />
+            </cell>
+            <cell id="{be228aaa-7b7d-925b-b005-2228cd0bc868}" showlabel="true" locklevel="0" labelid="{d4976e5e-b0f7-4010-9662-ac9f36f1e520}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_userlocaldateandtime" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_userlocaldateandtime" disabled="false" />
+            </cell>
+            <cell id="{1b24391c-5628-e7bd-7671-420dc5941cd0}" showlabel="true" locklevel="0" labelid="{fa224a9e-bb64-43e1-9051-acb3c8adaea7}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_dateonlydateonly" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_dateonlydateonly" disabled="false" />
+            </cell>
+            <cell id="{4024158c-d910-c40b-24b2-7c2eeba048e0}" showlabel="true" locklevel="0" labelid="{639be42a-8006-4183-9ac1-d2b98409c1f5}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_timezonedateonly" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_timezonedateonly" disabled="false" />
+            </cell>
+          </row>
+          <row>
+            <cell id="{997ad47a-1ea9-7319-8836-4a951db43dc6}" showlabel="true" locklevel="0" labelid="{1216c44d-7ef4-47ca-9efd-f88f32322a8a}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_currency" classid="{533B9E00-756B-4312-95A0-DC888637AC78}" datafieldname="devkit_currency" disabled="false" />
+            </cell>
+            <cell id="{c3d5377b-73d4-1ea4-71ab-22e439b24809}" showlabel="true" locklevel="0" labelid="{fa025b79-99de-4327-9ba2-4890f1d22612}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_decimalnumber" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="devkit_decimalnumber" disabled="false" />
+            </cell>
+            <cell id="{4ac04eca-85cd-a1d4-95d1-c1e95d0508c5}" showlabel="true" locklevel="0" labelid="{fa192f76-912e-4e29-9436-d40ffa9aca0f}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_floatingpointnumber" classid="{0D2C745A-E5A8-4c8f-BA63-C6D3BB604660}" datafieldname="devkit_floatingpointnumber" disabled="false" />
+            </cell>
+            <cell id="{15ab15eb-49a4-0739-1e04-3da1d6e87c8c}" showlabel="true" locklevel="0" labelid="{dd9554c3-8ac2-4d18-8996-db4bcca653b7}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_wholenumbernone" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="devkit_wholenumbernone" disabled="false" />
+            </cell>
+          </row>
+          <row>
+            <cell id="{eb3bdbe7-a749-b086-e084-24233d2d4095}" showlabel="true" locklevel="0" labelid="{e74d991a-4b33-49ed-afb4-58fd5cb0c959}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_singlelineoftexttext" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_singlelineoftexttext" disabled="false" />
+            </cell>
+            <cell id="{6763b2e7-c3b8-3b95-e1ce-8eb49aa9a968}" showlabel="true" locklevel="0" labelid="{d3c8aab4-85df-425e-992c-64a421146ed5}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_multipleliniesoftext" classid="{E0DECE4B-6FC8-4a8f-A065-082708572369}" datafieldname="devkit_multipleliniesoftext" disabled="false" />
+            </cell>
+            <cell id="{4ee4276d-9be7-5cb0-c336-85223d643e55}" showlabel="true" locklevel="0" labelid="{6037ea28-0d9d-47e4-b0d2-4ccdbf48896a}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_yesandno" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="devkit_yesandno" disabled="false" />
+            </cell>
+            <cell id="{bcd5ee39-adc5-da62-5232-89a01be3d6a7}" showlabel="true" locklevel="0" labelid="{e4f49abc-8070-4b5b-ad32-a0150056d5a4}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_customerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_customerid" disabled="false" />
+            </cell>
+          </row>
+          <row>
+            <cell id="{6cbc6849-3982-a171-c52c-41253e150cd7}" showlabel="true" locklevel="0" labelid="{04d61d3d-0a3c-4a0a-86c8-225dd444fef9}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" disabled="false" />
+            </cell>
+            <cell id="{0c37418e-872e-71d3-4458-678212dc7cb4}" showlabel="false" labelid="{9af124f4-627c-4053-ba3e-ce1b8d593288}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{19b68704-9c14-913e-e0a0-451c28072d4b}" showlabel="false" labelid="{7501e619-2e75-4852-b1bf-7357e37a83f9}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{5a9207eb-ee7b-665e-5a16-88895337be9b}" showlabel="false" labelid="{69e7b3a5-8c7a-4bdf-93bf-3f987117547f}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+          <row>
+            <cell id="{9bb78189-3042-e778-da98-2b8727e301b5}" showlabel="false" colspan="4" rowspan="6" labelid="{23b6c97c-cfca-47ab-aea1-d772d3981e2a}">
+              <labels>
+                <label description="Google" languagecode="1033" />
+              </labels>
+              <control id="header_IFRAME_google" classid="{FD2A7985-3187-444e-908D-6624B21F69C0}">
+                <parameters>
+                  <Url>http://phuocle.net</Url>
+                  <PassParameters>true</PassParameters>
+                  <Security>false</Security>
+                  <Scrolling>auto</Scrolling>
+                  <Border>true</Border>
+                  <ShowOnMobileClient>false</ShowOnMobileClient>
+                </parameters>
+              </control>
+            </cell>
+          </row>
+          <row />
+          <row />
+          <row />
+          <row />
+          <row />
+          <row>
+            <cell id="{10a9428c-7bae-0a87-e486-c46ec880b5ba}" showlabel="true" colspan="4" rowspan="6" labelid="{fc753e24-c2a7-4a3a-9d65-25ca1b5f0aed}">
+              <labels>
+                <label description="HelloWorld" languagecode="1033" />
+              </labels>
+              <control id="header_WebResource_HelloWorld" classid="{9FDF5F91-88B1-47f4-AD53-C11EFC01A01D}">
+                <parameters>
+                  <Url>devkit_/html/HelloWorld.html</Url>
+                  <PassParameters>false</PassParameters>
+                  <Security>false</Security>
+                  <Scrolling>auto</Scrolling>
+                  <Border>true</Border>
+                  <ShowOnMobileClient>false</ShowOnMobileClient>
+                  <WebResourceId>{572820F2-9A7B-E911-A992-000D3A8020DC}</WebResourceId>
+                </parameters>
+              </control>
+            </cell>
+          </row>
+          <row />
+          <row />
+          <row />
+          <row />
+          <row />
+        </rows>
+      </header>
+      <Navigation>
+        <NavBar>
+          <NavBarByRelationshipItem RelationshipName="devkit_devkit_webapi_devkit_webapi_ParentWebApiId" Sequence="10000" Area="Info" Id="nav_devkit_devkit_webapi_devkit_webapi_ParentWebApiId" Show="false">
+            <Titles>
+              <Title LCID="1033" Text="WebApis" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="devkit_devkit_webapi_devkit_webapi_LinkWebApiId" Sequence="10000" Area="Info" Id="nav_devkit_devkit_webapi_devkit_webapi_LinkWebApiId" Show="false">
+            <Titles>
+              <Title LCID="1033" Text="WebApis" />
+            </Titles>
+          </NavBarByRelationshipItem>
+        </NavBar>
+        <NavBarAreas>
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+      <formLibraries>
+        <Library name="devkit_/entities/devkit_WebApi.js" libraryUniqueId="{90ab97ab-bc05-46a3-24a8-7009ab7648a3}" />
+      </formLibraries>
+      <events>
+        <event name="onsave" application="false" active="false">
+          <Handlers>
+            <Handler functionName="formWebApi.OnSave" libraryName="devkit_/entities/devkit_WebApi.js" handlerUniqueId="{6393978c-6c21-7b9c-e289-246437218484}" enabled="true" parameters="" passExecutionContext="true" />
+          </Handlers>
+        </event>
+      </events>
+      <controlDescriptions />
+      <DisplayConditions Order="1">
+        <Role Id="{627090ff-40a3-4053-8790-584edc5be201}" />
+        <Role Id="{119f245c-3cc8-4b62-b31c-d1a046ced15d}" />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="WebApi 2" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>
