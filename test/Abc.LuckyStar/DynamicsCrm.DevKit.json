@@ -1,6 +1,6 @@
 ﻿{
     "DefaultCrmName": "Dynamics 365 - 4.6.2",
-    "DefaultCrmConnection": "DEVKIT",
+    "DefaultCrmConnection": "DEVKIT-ClientSecret",
     "CrmConnections": [
         {
             "Name": "DEVKIT-ClientSecret",

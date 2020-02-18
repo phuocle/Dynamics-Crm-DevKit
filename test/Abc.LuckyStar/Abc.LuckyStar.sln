@@ -9,18 +9,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.Plugin.Accoun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.ProxyTypes", "Abc.LuckyStar.ProxyTypes\Abc.LuckyStar.ProxyTypes.csproj", "{24F931D0-A884-4354-B3C5-47AC3A575D6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.Console", "Abc.LuckyStar.Console\Abc.LuckyStar.Console.csproj", "{138870DD-458A-4014-8DFE-A3AC5F1067D7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2D474B44-18B9-42E4-8840-6A80885F156E}"
 	ProjectSection(SolutionItems) = preProject
 		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
 		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.Console", "Abc.LuckyStar.Console\Abc.LuckyStar.Console.csproj", "{2A277567-7931-4955-ACDF-96DE1A036A40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.Console.2", "Abc.LuckyStar.Console.2\Abc.LuckyStar.Console.2.csproj", "{1195421A-0973-47B3-AAE4-671D06784C48}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{07fe81eb-5a89-4a3d-aa53-8ff66cbb7f3d}*SharedItemsImports = 13
-		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{138870dd-458a-4014-8dfe-a3ac5f1067d7}*SharedItemsImports = 4
+		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{1195421a-0973-47b3-aae4-671d06784c48}*SharedItemsImports = 4
+		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{2a277567-7931-4955-acdf-96de1a036a40}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{2de9fd5f-e0ab-4670-8618-4312aa7951c2}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,10 +39,14 @@ Global
 		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24F931D0-A884-4354-B3C5-47AC3A575D6A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{138870DD-458A-4014-8DFE-A3AC5F1067D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{138870DD-458A-4014-8DFE-A3AC5F1067D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{138870DD-458A-4014-8DFE-A3AC5F1067D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{138870DD-458A-4014-8DFE-A3AC5F1067D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A277567-7931-4955-ACDF-96DE1A036A40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A277567-7931-4955-ACDF-96DE1A036A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A277567-7931-4955-ACDF-96DE1A036A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A277567-7931-4955-ACDF-96DE1A036A40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1195421A-0973-47B3-AAE4-671D06784C48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1195421A-0973-47B3-AAE4-671D06784C48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1195421A-0973-47B3-AAE4-671D06784C48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1195421A-0973-47B3-AAE4-671D06784C48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

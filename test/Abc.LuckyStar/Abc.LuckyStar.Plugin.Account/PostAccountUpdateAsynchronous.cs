@@ -41,11 +41,11 @@ namespace Abc.LuckyStar.PluginAccount
             if (context.MessageName.ToLower() != "Update".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Update");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //Debugger.Begin(tracing, context);
+            //tracing.DebugMessage("Begin plugin: Abc.LuckyStar.PluginAccount.PostAccountUpdateAsynchronous");
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //Debugger.End(tracing, context);
+            //tracing.DebugMessage("End plugin: Abc.LuckyStar.PluginAccount.PostAccountUpdateAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
