@@ -7,15 +7,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion></ProductVersion>
+    <ProductVersion>
+    </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{$guid1$}</ProjectGuid>
+    <ProjectGuid>{772A4BA8-36A8-408F-8680-33B1AE20E33F}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$NameSpace$</RootNamespace>
-    <AssemblyName>$ProjectName$</AssemblyName>
-    <TargetFrameworkVersion>v$ProjectNetVersion$</TargetFrameworkVersion>
+    <RootNamespace>Abc.LuckyStar.WebResource</RootNamespace>
+    <AssemblyName>Abc.LuckyStar.WebResource</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -25,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,26 +39,19 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\Release\web\$ProjectName$</OutputPath>
+    <OutputPath>..\Release\web\Abc.LuckyStar.WebResource</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
     <NoWarn>CS8032</NoWarn>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-	<ItemGroup>
-    <Folder Include="html\" />
-    <Folder Include="css\" />
-    <Folder Include="js\" />
-		<Folder Include="entities\" />
-		<Folder Include="lib\" />
-    <Folder Include="test\" />
-    <Folder Include="images\"/>$if$($ShortCrmName$==365)
-    <Folder Include="resources\"/>$endif$
-		<Compile Include="Properties\AssemblyInfo.cs" />
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
     <None Include="_package.json" />
@@ -72,7 +67,18 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.Version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.1.1\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\Resource.1031.resx" />
+    <EmbeddedResource Include="resources\Resource.1033.resx" />
+    <EmbeddedResource Include="resources\Resource.1066.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="css\" />
+    <Folder Include="html\" />
+    <Folder Include="images\" />
+    <Folder Include="js\" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
@@ -92,5 +98,5 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''"/>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

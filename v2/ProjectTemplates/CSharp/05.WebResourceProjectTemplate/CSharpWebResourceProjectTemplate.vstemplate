@@ -32,7 +32,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="package.json">package.json</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="_package.json">package.json</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="entities\DevKit.d.ts">DevKit.d.ts</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="lib\WebApiClient.js">WebApiClient.js</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="lib\devkit.js">devkit.js</ProjectItem>
