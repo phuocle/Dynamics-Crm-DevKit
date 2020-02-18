@@ -174,7 +174,8 @@
     {
       "profile": "DEBUG",
       "namespace": "Abc.LuckyStar.ProxyTypes",
-      "output": "GeneratedCode.cs"
+      "output": "GeneratedCode.cs",
+      "entities": "account,contact"
     }
   ],
   "visualstudio": {
