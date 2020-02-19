@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <MaxCpuCount>1</MaxCpuCount>
+    <ResultsDirectory>.\TestResults</ResultsDirectory>
+    <TargetPlatform>x64</TargetPlatform>
+    <TargetFrameworkVersion>Framework45</TargetFrameworkVersion>
+    <TestAdaptersPaths>Release\test</TestAdaptersPaths>
+  </RunConfiguration>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="Code Coverage" uri="datacollector://Microsoft/CodeCoverage/2.0" assemblyQualifiedName="Microsoft.VisualStudio.Coverage.DynamicCoverageDataCollector, Microsoft.VisualStudio.TraceCollector, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+        <Configuration>
+          <CodeCoverage>
+            <ModulePaths>
+              <Exclude>
+                <ModulePath>.*\FakeItEasy.dll$</ModulePath>
+                <ModulePath>.*TestAdapter.*</ModulePath>
+                <ModulePath>.*Chutzpah.*</ModulePath>
+                <ModulePath>.*\Abc.LuckyStar.ProxyTypes.dll$</ModulePath>
+                <ModulePath>.*\Microsoft.Crm.*.dll$</ModulePath>
+                <ModulePath>.*\Abc.LuckyStar.*.Test.dll$</ModulePath>
+                <ModulePath>.*\Abc.LuckyStar.*.UiTest.dll$</ModulePath>
+                <ModulePath>.*\*.exe$</ModulePath>
+              </Exclude>
+            </ModulePaths>
+            <Functions>
+              <Exclude>
+                <Function>^System\.Date\.*</Function>
+                <Function>^System\.DateTimeExtensions\.*</Function>
+                <Function>^Microsoft\.Xrm\.Sdk\.Extension\.*</Function>
+              </Exclude>
+            </Functions>
+            <Attributes>
+              <Exclude>
+                <Attribute>^System.Diagnostics.DebuggerNonUserCodeAttribute$</Attribute>
+              </Exclude>
+            </Attributes>
+            <UseVerifiableInstrumentation>True</UseVerifiableInstrumentation>
+            <AllowLowIntegrityProcesses>True</AllowLowIntegrityProcesses>
+            <CollectFromChildProcesses>True</CollectFromChildProcesses>
+            <CollectAspDotNet>False</CollectAspDotNet>
+          </CodeCoverage>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+  <MSTest>
+    <MapInconclusiveToFailed>True</MapInconclusiveToFailed>
+    <CaptureTraceOutput>false</CaptureTraceOutput>
+    <DeleteDeploymentDirectoryAfterTestRunIsComplete>False</DeleteDeploymentDirectoryAfterTestRunIsComplete>
+    <DeploymentEnabled>False</DeploymentEnabled>
+  </MSTest>
+</RunSettings>
