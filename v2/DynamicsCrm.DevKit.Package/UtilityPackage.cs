@@ -87,7 +87,11 @@ namespace DynamicsCrm.DevKit.Package
         {
             try
             {
-                var connectionString = XrmHelper.BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
+                if (crmConnection.Type != "ClientSecret")
+                {
+                    crmConnection.Password = EncryptDecrypt.DecryptString(crmConnection.Password); ;
+                }
+                var connectionString = XrmHelper.BuildConnectionString(crmConnection);
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 var crmServiceClient = new CrmServiceClient(connectionString);
                 return XrmHelper.GetIOrganizationService(crmServiceClient);

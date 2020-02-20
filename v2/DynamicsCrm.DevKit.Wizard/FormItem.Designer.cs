@@ -71,7 +71,7 @@
             this.link.Margin = new System.Windows.Forms.Padding(0);
             this.link.Name = "link";
             this.link.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.link.Size = new System.Drawing.Size(270, 19);
+            this.link.Size = new System.Drawing.Size(393, 19);
             this.link.TabIndex = 4;
             this.link.TabStop = true;
             this.link.Text = "WIKI: Add new WebResource Project";
@@ -181,7 +181,7 @@
             // labelItemName
             // 
             this.labelItemName.AutoSize = true;
-            this.labelItemName.Location = new System.Drawing.Point(87, 33);
+            this.labelItemName.Location = new System.Drawing.Point(101, 33);
             this.labelItemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItemName.Name = "labelItemName";
             this.labelItemName.Size = new System.Drawing.Size(0, 13);
