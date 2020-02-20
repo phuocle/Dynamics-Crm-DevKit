@@ -90,9 +90,23 @@
       <RootComponent type="61" schemaName="abc_/entities/Account.form.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/entities/Account.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/entities/Account.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/ActivityParty.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/ActivityParty.webapi.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/entities/Contact.form.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/entities/Contact.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/entities/Contact.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/devkit_CustomActivity.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/devkit_CustomActivity.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/devkit_WebApi.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/devkit_WebApi.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/devkit_WebApi.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Email.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Email.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Email.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/SystemUser.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/SystemUser.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/SystemUser.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/lib/devkit.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/lib/WebApiClient.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/resources/Resource.1031.resx" behavior="0" />
       <RootComponent type="61" schemaName="abc_/resources/Resource.1033.resx" behavior="0" />

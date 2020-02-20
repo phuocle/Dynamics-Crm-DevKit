@@ -1440,6 +1440,10 @@
     <value />
     <comment>'Account' : label for section in Entity FormXml ID: '{2787a122-55d5-4c8d-9b21-c8d4ec8cc3fc}'</comment>
   </data>
+  <data name="1:label,Account{29ba2684-5d4e-47bd-8dad-1f06f43df87a}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{29ba2684-5d4e-47bd-8dad-1f06f43df87a}'</comment>
+  </data>
   <data name="1:label,Account{2aa02c79-01be-4c69-0a16-13a130baae01}" xml:space="preserve">
     <value />
     <comment>'Account' : label for tab in Entity FormXml ID: '{2aa02c79-01be-4c69-0a16-13a130baae01}'</comment>
@@ -1564,6 +1568,10 @@
     <value />
     <comment>'Account' : label for section in Entity FormXml ID: '{cc0fe06e-4b5f-4648-A62d-84d1514e1fc5}'</comment>
   </data>
+  <data name="1:label,Account{cec0b747-0abe-409f-b95e-89f681b69dee}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{cec0b747-0abe-409f-b95e-89f681b69dee}'</comment>
+  </data>
   <data name="1:label,Account{cfa09fa5-ccb6-4f97-bd8d-d7e037a7aab1}" xml:space="preserve">
     <value />
     <comment>'Account' : label for cell in Entity FormXml ID: '{cfa09fa5-ccb6-4f97-bd8d-d7e037a7aab1}'</comment>
@@ -1603,6 +1611,10 @@
   <data name="1:label,Account{ed50e866-7968-483d-8388-0e6313d3c784}" xml:space="preserve">
     <value />
     <comment>'Account' : label for cell in Entity FormXml ID: '{ed50e866-7968-483d-8388-0e6313d3c784}'</comment>
+  </data>
+  <data name="1:label,Account{ef7d44bd-ec56-497f-9235-bb7fce81b938}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{ef7d44bd-ec56-497f-9235-bb7fce81b938}'</comment>
   </data>
   <data name="1:label,Account{f587cb66-b142-47c9-bc7a-009875261840}" xml:space="preserve">
     <value />
@@ -3207,6 +3219,10 @@
   <data name="1:Title,AccountnavSubAccts{8448b78f-8f42-454e-8e2a-f8196b0419af}" xml:space="preserve">
     <value>Firmalar</value>
     <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'navSubAccts'</comment>
+  </data>
+  <data name="1:Title,Accountnav_devkit_account_devkit_webapi_Customer{8448b78f-8f42-454e-8e2a-f8196b0419af}" xml:space="preserve">
+    <value />
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'nav_devkit_account_devkit_webapi_Customer'</comment>
   </data>
   <data name="1:Title,AccountProcessCenter{8448b78f-8f42-454e-8e2a-f8196b0419af}" xml:space="preserve">
     <value />

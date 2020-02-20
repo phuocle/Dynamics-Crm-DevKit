@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{46B6AD71-B3C5-4279-A3A3-2216B235CE51}</ProjectGuid>
+    <ProjectGuid>{9B7C2250-CC37-4682-A9B6-C58124EA03F4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Abc.LuckyStar.DataProvider</RootNamespace>

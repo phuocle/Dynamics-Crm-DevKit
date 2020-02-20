@@ -14,13 +14,63 @@
                 <section name="ACCOUNT_INFORMATION" showlabel="true" showbar="false" id="{0eb92e6c-bcb8-0d52-a188-d81543ddb7cd}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="0">
                   <rows>
                     <row>
+                      <cell id="{b0e82a7e-5683-d90c-308a-0d779377ea8a}" showlabel="true" ordinalvalue="10000">
+                        <labels>
+                          <label description="Firmenname" languagecode="1031" solutionaction="Added" />
+                          <label description="Account Name" languagecode="1033" solutionaction="Added" />
+                          <label description="Tên Tài khoản" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8b98a55e-a345-b20e-d46e-801e79d5c1c1}" showlabel="true" ordinalvalue="10002">
+                        <labels>
+                          <label description="Fax" languagecode="1031" solutionaction="Added" />
+                          <label description="Fax" languagecode="1033" solutionaction="Added" />
+                          <label description="Fax" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
                       <cell id="{e6441984-4343-813a-aa7e-e2747ad35390}" showlabel="true" locklevel="0" ordinalvalue="10003" solutionaction="Modified">
+                        <labels>
+                          <label description="Website" languagecode="1031" solutionaction="Added" />
+                          <label description="Website" languagecode="1033" solutionaction="Added" />
+                          <label description="Trang web" languagecode="1066" solutionaction="Added" />
+                        </labels>
                         <control id="websiteurl" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" datafieldname="websiteurl" disabled="false" uniqueid="{c134b8cb-24ba-6163-861d-041197210369}" solutionaction="Modified" />
                       </cell>
                     </row>
                     <row>
                       <cell id="{87DE203E-B03C-44CC-8B06-438202B82553}" ordinalvalue="10004">
+                        <labels>
+                          <label description="Übergeordnete Firma" languagecode="1031" solutionaction="Added" />
+                          <label description="Parent Account" languagecode="1033" solutionaction="Added" />
+                          <label description="Tài khoản Mẹ" languagecode="1066" solutionaction="Added" />
+                        </labels>
                         <control id="parentaccountid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="parentaccountid" uniqueid="{57a3585d-78c9-270e-a27e-28740609b1e7}" solutionaction="Modified" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5f38af3a-3307-47dc-b36d-d9a5de525e6e}" showlabel="true" ordinalvalue="10005">
+                        <labels>
+                          <label description="Börsenkürzel" languagecode="1031" solutionaction="Added" />
+                          <label description="Ticker Symbol" languagecode="1033" solutionaction="Added" />
+                          <label description="Ký hiệu Chứng khoán" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="ADDRESS" showlabel="true" locklevel="0" showbar="false" id="{cc0fe06e-4b5f-4648-A62d-84d1514e1fc5}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell id="{4913500e-605a-809b-e99e-69e2710d09bd}" showlabel="false" locklevel="0" ordinalvalue="10000">
+                        <labels>
+                          <label description="Adresse 1" languagecode="1031" solutionaction="Added" />
+                          <label description="Address 1" languagecode="1033" solutionaction="Added" />
+                          <label description="Địa chỉ 1" languagecode="1066" solutionaction="Added" />
+                        </labels>
                       </cell>
                     </row>
                   </rows>
@@ -32,12 +82,126 @@
                 <section name="SUMMARY_TAB_section_6" showlabel="false" showbar="false" locklevel="0" id="{d4c3ee9c-ba71-5cdb-31be-2aa505750472}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Top" ordinalvalue="1">
                   <rows>
                     <row>
+                      <cell id="{b187688c-8410-5990-16ec-e153968ab583}" showlabel="true" locklevel="0" ordinalvalue="10000">
+                        <labels>
+                          <label description="Primärer Kontakt" languagecode="1031" solutionaction="Added" />
+                          <label description="Primary Contact" languagecode="1033" solutionaction="Added" />
+                          <label description="Người liên hệ Chính" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0F664FFF-E39E-4676-9191-CBA16972B21D}" colspan="1" showlabel="false" ordinalvalue="10001">
+                        <labels>
+                          <label description="Primärer Kontakt" languagecode="1031" solutionaction="Added" />
+                          <label description="Primary Contact" languagecode="1033" solutionaction="Added" />
+                          <label description="Người liên hệ Chính" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
                       <cell id="{8e24c7e3-6a40-5abb-eadb-254eba5478e2}" showlabel="true" colspan="1" auto="false" rowspan="7" ordinalvalue="10002">
                         <control id="Contacts" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
                           <parameters>
                             <VisualizationId />
                           </parameters>
                         </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="DETAILS_TAB" id="{11a42c72-9ded-ea04-253d-2143e731b795}" IsUserDefined="0" showlabel="true" expanded="true" ordinalvalue="1">
+          <columns>
+            <column width="34%" id="0">
+              <sections>
+                <section name="COMPANY_PROFILE" showlabel="true" showbar="false" id="{ca8587c5-18c0-cac1-7c34-6c639eade090}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{59782911-4d1a-38dc-ce49-7dae620dbc51}" showlabel="true" ordinalvalue="10000">
+                        <labels>
+                          <label description="Branche" languagecode="1031" solutionaction="Added" />
+                          <label description="Industry" languagecode="1033" solutionaction="Added" />
+                          <label description="Ngành" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{930beba3-d531-0808-c403-de95e2ac3e62}" showlabel="true" ordinalvalue="10001">
+                        <labels>
+                          <label description="NACE-Code" languagecode="1031" solutionaction="Added" />
+                          <label description="SIC Code" languagecode="1033" solutionaction="Added" />
+                          <label description="Mã SIC" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1c33ad89-92a1-8433-2378-306259eb57c0}" showlabel="true" ordinalvalue="10002">
+                        <labels>
+                          <label description="Besitz" languagecode="1031" solutionaction="Added" />
+                          <label description="Ownership" languagecode="1033" solutionaction="Added" />
+                          <label description="Quyền sở hữu" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="DETAILS_TAB_section_6" showlabel="true" showbar="false" locklevel="0" id="{e201b9ce-c3d5-c922-dba5-528c25066940}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Top" height="auto" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell id="{a4a726a2-8e3e-79d0-02c3-0a04a6b71089}" showlabel="false" locklevel="0" rowspan="3" auto="true" ordinalvalue="10000">
+                        <labels>
+                          <label description="Beschreibung" languagecode="1031" solutionaction="Added" />
+                          <label description="Description" languagecode="1033" solutionaction="Added" />
+                          <label description="Mô tả" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="33%" id="2">
+              <sections>
+                <section name="BILLING" showlabel="true" showbar="false" id="{910de80a-a17e-092a-255d-44d775cb4207}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" locklevel="0" celllabelalignment="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{7cd2b88c-b25c-4729-9c27-f59ebb5a1538}" ordinalvalue="10000">
+                        <labels>
+                          <label description="Währung" languagecode="1031" solutionaction="Added" />
+                          <label description="Currency" languagecode="1033" solutionaction="Added" />
+                          <label description="Loại tiền" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0125719c-a5b0-4230-9817-3fba5d6ebfaf}" ordinalvalue="10001">
+                        <labels>
+                          <label description="Kreditlimit" languagecode="1031" solutionaction="Added" />
+                          <label description="Credit Limit" languagecode="1033" solutionaction="Added" />
+                          <label description="Giới hạn Tín dụng" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{abc2c862-bcd4-4a4b-ac51-c311d4e66d5b}" ordinalvalue="10002">
+                        <labels>
+                          <label description="Kreditsperre" languagecode="1031" solutionaction="Added" />
+                          <label description="Credit Hold" languagecode="1033" solutionaction="Added" />
+                          <label description="Treo Tín dụng" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0bab9157-d14e-441f-969d-80460634c15e}" ordinalvalue="10003">
+                        <labels>
+                          <label description="Zahlungsbedingungen" languagecode="1031" solutionaction="Added" />
+                          <label description="Payment Terms" languagecode="1033" solutionaction="Added" />
+                          <label description="Điều khoản Thanh toán" languagecode="1066" solutionaction="Added" />
+                        </labels>
                       </cell>
                     </row>
                   </rows>
@@ -57,7 +221,15 @@
                   <labels>
                     <label description="Section" languagecode="1033" />
                   </labels>
-                  <rows></rows>
+                  <rows>
+                    <row>
+                      <cell id="{29ba2684-5d4e-47bd-8dad-1f06f43df87a}" ordinalvalue="10000">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
                 </section>
               </sections>
             </column>
@@ -67,7 +239,15 @@
                   <labels>
                     <label description="Section" languagecode="1033" />
                   </labels>
-                  <rows></rows>
+                  <rows>
+                    <row>
+                      <cell id="{cec0b747-0abe-409f-b95e-89f681b69dee}" ordinalvalue="10000">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
                 </section>
               </sections>
             </column>
@@ -77,14 +257,56 @@
                   <labels>
                     <label description="Section" languagecode="1033" />
                   </labels>
-                  <rows></rows>
+                  <rows>
+                    <row>
+                      <cell id="{ef7d44bd-ec56-497f-9235-bb7fce81b938}" ordinalvalue="10000">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
                 </section>
               </sections>
             </column>
           </columns>
         </tab>
       </tabs>
+      <header id="{d5a03552-1183-4347-a237-1f894ba449eb}" columns="111" celllabelposition="Top" labelwidth="115">
+        <rows>
+          <row>
+            <cell id="{d3e19d4e-b2ae-409f-9b4e-5976527c6c83}" ordinalvalue="10000">
+              <labels>
+                <label description="Jahresumsatz" languagecode="1031" solutionaction="Added" />
+                <label description="Annual Revenue" languagecode="1033" solutionaction="Added" />
+                <label description="Doanh thu Hàng năm" languagecode="1066" solutionaction="Added" />
+              </labels>
+            </cell>
+            <cell id="{2adb5a52-604d-5aad-ba6a-2bbab6c33594}" showlabel="true" ordinalvalue="20001">
+              <labels>
+                <label description="Anzahl der Mitarbeiter" languagecode="1031" solutionaction="Added" />
+                <label description="Number of Employees" languagecode="1033" solutionaction="Added" />
+                <label description="Số Nhân viên" languagecode="1066" solutionaction="Added" />
+              </labels>
+            </cell>
+            <cell id="{54b2d0a2-eb77-b3cd-b60a-03ea6944e98e}" showlabel="true" locklevel="1" ordinalvalue="30002">
+              <labels>
+                <label description="Besitzer" languagecode="1031" solutionaction="Added" />
+                <label description="Owner" languagecode="1033" solutionaction="Added" />
+                <label description="Chủ sở hữu" languagecode="1066" solutionaction="Added" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
       <Navigation>
+        <NavBar>
+          <NavBarByRelationshipItem RelationshipName="devkit_account_devkit_webapi_Customer" Sequence="10000" Area="Info" Id="nav_devkit_account_devkit_webapi_Customer" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="WebApis" />
+            </Titles>
+          </NavBarByRelationshipItem>
+        </NavBar>
         <NavBarAreas solutionaction="Added">
           <NavBarArea Id="Info">
             <Titles>

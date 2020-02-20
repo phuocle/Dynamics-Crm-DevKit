@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8AA5CF99-C009-465D-A9ED-B171269FEE49}</ProjectGuid>
+    <ProjectGuid>{090A7E6C-1878-45A0-9AF2-2D9CF7CC57E1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Abc.LuckyStar.CustomAction.Account</RootNamespace>

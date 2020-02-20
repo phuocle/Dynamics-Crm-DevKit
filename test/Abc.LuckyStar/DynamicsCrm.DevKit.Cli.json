@@ -61,6 +61,14 @@
           "dependencies": [
             "abc_/lib/WebApiClient.js"
           ]
+        },
+        {
+          "webresources": [
+            "abc_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "abc_/lib/devkit.js"
+          ]
         }
       ]
     }
@@ -119,11 +127,11 @@
   "generators": [
     {
       "profile": "LATEBOUND",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Abc.LuckyStar.Shared.Entities",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "CSharp",
-      "debug":  ""
+      "debug": ""
     },
     {
       "profile": "JS-FORM",

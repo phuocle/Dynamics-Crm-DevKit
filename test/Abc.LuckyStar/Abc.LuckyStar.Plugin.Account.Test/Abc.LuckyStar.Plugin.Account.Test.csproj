@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{69f01a11-6ccd-4f54-83bb-8859c3ccdfef}</ProjectGuid>
+    <ProjectGuid>{3380E9D4-5C36-4EF8-A054-C49288455E7E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Abc.LuckyStar.PluginAccount.Test</RootNamespace>
@@ -81,6 +81,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PostAccountDeleteAsynchronousTest.cs" />
+    <Compile Include="PostAccountUpdateAsynchronousTest.cs" />
+    <Compile Include="PreAccountCreateSynchronousTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

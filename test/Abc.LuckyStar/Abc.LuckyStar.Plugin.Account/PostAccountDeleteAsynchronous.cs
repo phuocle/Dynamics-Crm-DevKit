@@ -37,11 +37,11 @@ namespace Abc.LuckyStar.PluginAccount
             if (context.MessageName.ToLower() != "Delete".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Delete");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin plugin: Abc.LuckyStar.PluginAccount.PostAccountDeleteAsynchronous");
+            //tracing.DebugMessage("Begin Plugin: Abc.LuckyStar.PluginAccount.PostAccountDeleteAsynchronous");
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End plugin: Abc.LuckyStar.PluginAccount.PostAccountDeleteAsynchronous");
+            //tracing.DebugMessage("End Plugin: Abc.LuckyStar.PluginAccount.PostAccountDeleteAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

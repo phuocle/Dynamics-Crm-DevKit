@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>77cfbc6e-c88e-42b1-bea8-d3a5a0e1c626</ProjectGuid>
+    <ProjectGuid>39ef45ac-262d-4632-93a1-69a96efd80a5</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Abc.LuckyStar.SolutionPackager</RootNamespace>

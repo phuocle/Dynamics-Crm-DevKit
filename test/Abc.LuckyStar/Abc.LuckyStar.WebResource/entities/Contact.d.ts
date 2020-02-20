@@ -120,6 +120,60 @@ declare namespace LuckyStar {
 		/** The Navigation of form Contact */
 		Navigation: LuckyStar.FormContact.Navigation;
 	}
+	namespace FormContact_Quick_Create {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Form.Controls.ControlSection;
+			tab_1_column_2_section_1: DevKit.Form.Controls.ControlSection;
+			tab_1_column_3_section_1: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_tab_1 extends DevKit.Form.Controls.IControlTab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the city for the primary address. */
+			Address1_City: DevKit.Form.Controls.ControlString;
+			/** Type the first line of the primary address. */
+			Address1_Line1: DevKit.Form.Controls.ControlString;
+			/** Type the second line of the primary address. */
+			Address1_Line2: DevKit.Form.Controls.ControlString;
+			/** Type the ZIP Code or postal code for the primary address. */
+			Address1_PostalCode: DevKit.Form.Controls.ControlString;
+			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
+			Description: DevKit.Form.Controls.ControlString;
+			/** Type the primary email address for the contact. */
+			EMailAddress1: DevKit.Form.Controls.ControlString;
+			/** Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			FirstName: DevKit.Form.Controls.ControlString;
+			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			JobTitle: DevKit.Form.Controls.ControlString;
+			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
+			LastName: DevKit.Form.Controls.ControlString;
+			/** Type the mobile phone number for the contact. */
+			MobilePhone: DevKit.Form.Controls.ControlString;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId: DevKit.Form.Controls.ControlLookup;
+			/** Type the main phone number for this contact. */
+			Telephone1: DevKit.Form.Controls.ControlString;
+		}
+	}
+	class FormContact_Quick_Create extends DevKit.Form.IForm {
+		/**
+		* DynamicsCrm.DevKit form Contact_Quick_Create
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Form.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.Form.WebApi;
+		/** The Body section of form Contact_Quick_Create */
+		Body: LuckyStar.FormContact_Quick_Create.Body;
+	}
 	class ContactApi {
 		/**
 		* DynamicsCrm.DevKit ContactApi
@@ -721,4 +775,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Contact'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}
+//{'JsForm':['Contact','Contact Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

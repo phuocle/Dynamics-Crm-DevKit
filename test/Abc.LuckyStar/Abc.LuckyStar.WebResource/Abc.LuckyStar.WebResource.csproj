@@ -10,7 +10,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{772A4BA8-36A8-408F-8680-33B1AE20E33F}</ProjectGuid>
+    <ProjectGuid>{E2C0AF07-2F73-467D-BBA3-8F796AFF696C}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
-    <None Include="_package.json" />
+    <None Include="package.json" />
     <None Include="chutzpah.json" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
@@ -62,6 +62,9 @@
     <Content Include="entities\Account.js" />
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
+    </Content>
+    <Content Include="entities\ActivityParty.form.js">
+      <DependentUpon>ActivityParty.js</DependentUpon>
     </Content>
     <Content Include="entities\ActivityParty.js" />
     <Content Include="entities\ActivityParty.webapi.js">
@@ -78,6 +81,9 @@
       <DependentUpon>devkit_CustomActivity.js</DependentUpon>
     </Content>
     <Content Include="entities\devkit_CustomActivity.js" />
+    <Content Include="entities\devkit_CustomActivity.webapi.js">
+      <DependentUpon>devkit_CustomActivity.js</DependentUpon>
+    </Content>
     <Content Include="entities\devkit_WebApi.form.js">
       <DependentUpon>devkit_WebApi.js</DependentUpon>
     </Content>
@@ -102,6 +108,7 @@
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
+    <Content Include="test\Account.test.js" />
     <Content Include="test\xrm-mock.d.ts" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
@@ -112,17 +119,6 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.1.1\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resources\Resource.1031.resx" />
-    <EmbeddedResource Include="resources\Resource.1033.resx" />
-    <EmbeddedResource Include="resources\Resource.1066.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="css\" />
-    <Folder Include="html\" />
-    <Folder Include="images\" />
-    <Folder Include="js\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts">
@@ -149,6 +145,17 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="css\" />
+    <Folder Include="html\" />
+    <Folder Include="images\" />
+    <Folder Include="js\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\Resource.1031.resx" />
+    <EmbeddedResource Include="resources\Resource.1033.resx" />
+    <EmbeddedResource Include="resources\Resource.1066.resx" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

@@ -1396,21 +1396,109 @@
     <value>UTC Conversion Time Zone Code</value>
     <comment>'devkit_WebApi' : displayname for Attribute 'UTCConversionTimeZoneCode' on Entity</comment>
   </data>
+  <data name="1:label,Account{0125719c-a5b0-4230-9817-3fba5d6ebfaf}" xml:space="preserve">
+    <value>Credit Limit</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{0125719c-a5b0-4230-9817-3fba5d6ebfaf}'</comment>
+  </data>
+  <data name="1:label,Account{0bab9157-d14e-441f-969d-80460634c15e}" xml:space="preserve">
+    <value>Payment Terms</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{0bab9157-d14e-441f-969d-80460634c15e}'</comment>
+  </data>
+  <data name="1:label,Account{0F664FFF-E39E-4676-9191-CBA16972B21D}" xml:space="preserve">
+    <value>Primary Contact</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{0F664FFF-E39E-4676-9191-CBA16972B21D}'</comment>
+  </data>
+  <data name="1:label,Account{1c33ad89-92a1-8433-2378-306259eb57c0}" xml:space="preserve">
+    <value>Ownership</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{1c33ad89-92a1-8433-2378-306259eb57c0}'</comment>
+  </data>
+  <data name="1:label,Account{29ba2684-5d4e-47bd-8dad-1f06f43df87a}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{29ba2684-5d4e-47bd-8dad-1f06f43df87a}'</comment>
+  </data>
   <data name="1:label,Account{2aa02c79-01be-4c69-0a16-13a130baae01}" xml:space="preserve">
     <value>{64BC19B9-1311-4B93-BE4C-6407B98D2AB3}</value>
     <comment>'Account' : label for tab in Entity FormXml ID: '{2aa02c79-01be-4c69-0a16-13a130baae01}'</comment>
+  </data>
+  <data name="1:label,Account{2adb5a52-604d-5aad-ba6a-2bbab6c33594}" xml:space="preserve">
+    <value>Number of Employees</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{2adb5a52-604d-5aad-ba6a-2bbab6c33594}'</comment>
   </data>
   <data name="1:label,Account{4558729d-112b-85eb-4464-9310b95338ad}" xml:space="preserve">
     <value>Section</value>
     <comment>'Account' : label for section in Entity FormXml ID: '{4558729d-112b-85eb-4464-9310b95338ad}'</comment>
   </data>
+  <data name="1:label,Account{4913500e-605a-809b-e99e-69e2710d09bd}" xml:space="preserve">
+    <value>Address 1</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{4913500e-605a-809b-e99e-69e2710d09bd}'</comment>
+  </data>
   <data name="1:label,Account{4e1e88ab-6ed6-546d-8985-36baa086c5b3}" xml:space="preserve">
     <value>Section</value>
     <comment>'Account' : label for section in Entity FormXml ID: '{4e1e88ab-6ed6-546d-8985-36baa086c5b3}'</comment>
   </data>
+  <data name="1:label,Account{54b2d0a2-eb77-b3cd-b60a-03ea6944e98e}" xml:space="preserve">
+    <value>Owner</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{54b2d0a2-eb77-b3cd-b60a-03ea6944e98e}'</comment>
+  </data>
+  <data name="1:label,Account{59782911-4d1a-38dc-ce49-7dae620dbc51}" xml:space="preserve">
+    <value>Industry</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{59782911-4d1a-38dc-ce49-7dae620dbc51}'</comment>
+  </data>
+  <data name="1:label,Account{5f38af3a-3307-47dc-b36d-d9a5de525e6e}" xml:space="preserve">
+    <value>Ticker Symbol</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{5f38af3a-3307-47dc-b36d-d9a5de525e6e}'</comment>
+  </data>
+  <data name="1:label,Account{7cd2b88c-b25c-4729-9c27-f59ebb5a1538}" xml:space="preserve">
+    <value>Currency</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{7cd2b88c-b25c-4729-9c27-f59ebb5a1538}'</comment>
+  </data>
+  <data name="1:label,Account{87DE203E-B03C-44CC-8B06-438202B82553}" xml:space="preserve">
+    <value>Parent Account</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{87DE203E-B03C-44CC-8B06-438202B82553}'</comment>
+  </data>
   <data name="1:label,Account{8a6e3c9d-0375-a1e3-7ccc-555c915e5297}" xml:space="preserve">
     <value>Section</value>
     <comment>'Account' : label for section in Entity FormXml ID: '{8a6e3c9d-0375-a1e3-7ccc-555c915e5297}'</comment>
+  </data>
+  <data name="1:label,Account{8b98a55e-a345-b20e-d46e-801e79d5c1c1}" xml:space="preserve">
+    <value>Fax</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{8b98a55e-a345-b20e-d46e-801e79d5c1c1}'</comment>
+  </data>
+  <data name="1:label,Account{930beba3-d531-0808-c403-de95e2ac3e62}" xml:space="preserve">
+    <value>SIC Code</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{930beba3-d531-0808-c403-de95e2ac3e62}'</comment>
+  </data>
+  <data name="1:label,Account{a4a726a2-8e3e-79d0-02c3-0a04a6b71089}" xml:space="preserve">
+    <value>Description</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{a4a726a2-8e3e-79d0-02c3-0a04a6b71089}'</comment>
+  </data>
+  <data name="1:label,Account{abc2c862-bcd4-4a4b-ac51-c311d4e66d5b}" xml:space="preserve">
+    <value>Credit Hold</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{abc2c862-bcd4-4a4b-ac51-c311d4e66d5b}'</comment>
+  </data>
+  <data name="1:label,Account{b0e82a7e-5683-d90c-308a-0d779377ea8a}" xml:space="preserve">
+    <value>Account Name</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{b0e82a7e-5683-d90c-308a-0d779377ea8a}'</comment>
+  </data>
+  <data name="1:label,Account{b187688c-8410-5990-16ec-e153968ab583}" xml:space="preserve">
+    <value>Primary Contact</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{b187688c-8410-5990-16ec-e153968ab583}'</comment>
+  </data>
+  <data name="1:label,Account{cec0b747-0abe-409f-b95e-89f681b69dee}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{cec0b747-0abe-409f-b95e-89f681b69dee}'</comment>
+  </data>
+  <data name="1:label,Account{d3e19d4e-b2ae-409f-9b4e-5976527c6c83}" xml:space="preserve">
+    <value>Annual Revenue</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{d3e19d4e-b2ae-409f-9b4e-5976527c6c83}'</comment>
+  </data>
+  <data name="1:label,Account{e6441984-4343-813a-aa7e-e2747ad35390}" xml:space="preserve">
+    <value>Website</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{e6441984-4343-813a-aa7e-e2747ad35390}'</comment>
+  </data>
+  <data name="1:label,Account{ef7d44bd-ec56-497f-9235-bb7fce81b938}" xml:space="preserve">
+    <value />
+    <comment>'Account' : label for cell in Entity FormXml ID: '{ef7d44bd-ec56-497f-9235-bb7fce81b938}'</comment>
   </data>
   <data name="1:label,Custom Activity{0b788946-da95-421c-a1fc-fe2b797ffd8e}" xml:space="preserve">
     <value>Notes</value>
@@ -2987,6 +3075,10 @@
   <data name="1:Title,AccountMarketing{8448b78f-8f42-454e-8e2a-f8196b0419af}" xml:space="preserve">
     <value>Marketing</value>
     <comment>'Account' : Title for NavBarArea in Entity FormXml ID: 'Marketing'</comment>
+  </data>
+  <data name="1:Title,Accountnav_devkit_account_devkit_webapi_Customer{8448b78f-8f42-454e-8e2a-f8196b0419af}" xml:space="preserve">
+    <value>WebApis</value>
+    <comment>'Account' : Title for NavBarByRelationshipItem in Entity FormXml ID: 'nav_devkit_account_devkit_webapi_Customer'</comment>
   </data>
   <data name="1:Title,AccountProcessCenter{8448b78f-8f42-454e-8e2a-f8196b0419af}" xml:space="preserve">
     <value>Process Sessions</value>

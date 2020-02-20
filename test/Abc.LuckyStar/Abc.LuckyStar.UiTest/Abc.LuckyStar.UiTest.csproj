@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F995677E-5585-4EE0-9B1F-9EF8E5752A4C}</ProjectGuid>
+    <ProjectGuid>{26FE329A-FC15-4816-ABB6-F8AD7FF0D160}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Abc.LuckyStar.UiTest</RootNamespace>
@@ -40,13 +40,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Dynamics365.UIAutomation.Api">
-      <HintPath>..\packages\Dynamics365.UIAutomation.Api.9.1.0.11711\lib\net46\Microsoft.Dynamics365.UIAutomation.Api.dll</HintPath>
+      <HintPath>..\packages\Dynamics365.UIAutomation.Api.9.1.0.12013\lib\net46\Microsoft.Dynamics365.UIAutomation.Api.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics365.UIAutomation.Api.UCI">
-      <HintPath>..\packages\Dynamics365.UIAutomation.Api.9.1.0.11711\lib\net46\Microsoft.Dynamics365.UIAutomation.Api.UCI.dll</HintPath>
+      <HintPath>..\packages\Dynamics365.UIAutomation.Api.9.1.0.12013\lib\net46\Microsoft.Dynamics365.UIAutomation.Api.UCI.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dynamics365.UIAutomation.Browser">
-      <HintPath>..\packages\Dynamics365.UIAutomation.Api.9.1.0.11711\lib\net46\Microsoft.Dynamics365.UIAutomation.Browser.dll</HintPath>
+      <HintPath>..\packages\Dynamics365.UIAutomation.Api.9.1.0.12013\lib\net46\Microsoft.Dynamics365.UIAutomation.Browser.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.23\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
