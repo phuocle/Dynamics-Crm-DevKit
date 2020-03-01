@@ -25,11 +25,11 @@ namespace Abc.LuckyStar.Workflow.Account
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
 
-            //Debugger.Begin(tracing, executionContext);
+            //tracing.DebugMessage("Begin Workflow: Abc.LuckyStar.Workflow.Account.SendEmail");
 
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
 
-            //Debugger.Begin(tracing, executionContext);
+            //tracing.DebugMessage("End Workflow: Abc.LuckyStar.Workflow.Account.SendEmail");
         }
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

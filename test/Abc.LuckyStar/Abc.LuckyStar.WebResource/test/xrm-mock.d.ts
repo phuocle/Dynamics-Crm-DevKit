@@ -1,4 +1,5 @@
-﻿//xrm-mock: 3.4.15
+﻿//xrm-mock: 3.4.17
+///<reference types='xrm' />
 declare namespace XrmMock {
 	class AddControlNotificationOptionsMock implements Xrm.Controls.AddControlNotificationOptions {
         actions?: Xrm.Controls.ControlNotificationAction[];
@@ -465,24 +466,6 @@ declare namespace XrmMock {
         getCurrentPosition(): Xrm.Async.PromiseLike<Xrm.Device.GetCurrentPositionResponse>;
         pickFile(pickFileOptions: Xrm.Device.PickFileOptions): Xrm.Async.PromiseLike<Xrm.Device.CaptureFileResponse[]>;
     }
-	class MobileMock implements Xrm.Mobile {
-        offline: Xrm.MobileOffline;
-        constructor(offline: Xrm.MobileOffline);
-    }
-	class MobileOfflineMock implements Xrm.MobileOffline {
-        isOfflineEnabled(entityType: string): boolean;
-        createRecord(entityType: string, data: {
-            [attributeName: string]: any;
-        }): Xrm.Async.PromiseLike<Xrm.Async.OfflineOperationSuccessCallbackObject>;
-        retrieveRecord(entityType: string, id: string, options: string): Xrm.Async.PromiseLike<Xrm.Async.OfflineOperationSuccessCallbackObject>;
-        retrieveMultipleRecords(entityType: string, options: string, maxPageSize: number): Xrm.Async.PromiseLike<Array<{
-            [key: string]: any;
-        }>>;
-        updateRecord(entityType: string, id: string, data: {
-            [attributeName: string]: any;
-        }): Xrm.Async.PromiseLike<Xrm.Async.OfflineOperationSuccessCallbackObject>;
-        deleteRecord(entityType: string, id: string): Xrm.Async.PromiseLike<Xrm.Async.OfflineOperationSuccessCallbackObject>;
-    }
 	class DialogSizeOptionsMock implements Xrm.Navigation.DialogSizeOptions {
         height: number;
         width: number;
@@ -646,6 +629,235 @@ declare namespace XrmMock {
         RecurrenceBaseEntityLogicalName?: string;
         PrimaryImageAttribute?: string;
     }
+	class Form {
+        static createBlankForm(): XrmMock.FormItemMock;
+    }
+	class Ui {
+        static createUi(): XrmMock.UiMock;
+        static createLabelElement(label: string): XrmMock.UiLabelElementMock;
+        static createCanGetVisibleElement(isVisible: boolean): XrmMock.UiCanGetVisibleElementMock;
+        static createStandardElement(labelElement: Xrm.Page.UiLabelElement, visibleElement: Xrm.Page.UiCanGetVisibleElement): XrmMock.UiStandardElementMock;
+    }
+	type CreateMethods = "createBoolean" | "createDate" | "createLookup" | "createNumber" | "createOptionSet" | "createString";
+	class Control {
+        createBoolean(components: XrmMock.IBooleanControlComponents): XrmMock.BooleanControlMock;
+        createBoolean(attribute: XrmMock.BooleanAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.BooleanControlMock;
+        createDate(components: XrmMock.IDateControlComponents): XrmMock.DateControlMock;
+        createDate(attribute: XrmMock.DateAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.DateControlMock;
+        createGrid(components: XrmMock.IGridControlComponents): XrmMock.GridControlMock;
+        createGrid(name?: string, visible?: boolean, label?: string): XrmMock.GridControlMock;
+        createLookup(components: XrmMock.ILookupControlComponents): XrmMock.LookupControlMock;
+        createLookup(attribute: XrmMock.LookupAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.LookupControlMock;
+        createNumber(components: XrmMock.INumberControlComponents): XrmMock.NumberControlMock;
+        createNumber(attribute: XrmMock.NumberAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.NumberControlMock;
+        createOptionSet(components: XrmMock.IOptionSetControlComponents): XrmMock.OptionSetControlMock;
+        createOptionSet(attribute: XrmMock.OptionSetAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.OptionSetControlMock;
+        createString(components: XrmMock.IStringControlComponents): XrmMock.StringControlMock;
+        createString(attribute: XrmMock.StringAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.StringControlMock;
+    }
+	type BooleanControlComponent = XrmMock.IAttBooleanControlComponents | XrmMock.IAttBooleanControlComponents[];
+	type DateControlComponent = XrmMock.IAttDateControlComponents | XrmMock.IAttDateControlComponents[];
+	type LookupControlComponent = XrmMock.IAttLookupControlComponents | XrmMock.IAttLookupControlComponents[];
+	type NumberControlComponent = XrmMock.IAttNumberControlComponents | XrmMock.IAttNumberControlComponents[];
+	type OptionSetControlComponent = XrmMock.IAttOptionSetControlComponents | XrmMock.IAttOptionSetControlComponents[];
+	type StringControlComponent = XrmMock.IAttStringControlComponents | XrmMock.IAttStringControlComponents[];
+	class Attribute {
+        createBoolean(attComponents: XrmMock.IBooleanAttributeComponents, controlComponents?: BooleanControlComponent): XrmMock.BooleanAttributeMock;
+        createBoolean(name: string, value?: boolean): XrmMock.BooleanAttributeMock;
+        createDate(attComponents: XrmMock.IDateAttributeComponents, controlComponents?: DateControlComponent): XrmMock.DateAttributeMock;
+        createDate(name: string, value?: Date): XrmMock.DateAttributeMock;
+        createLookup(attComponents: XrmMock.ILookupAttributeComponents, controlComponents?: LookupControlComponent): XrmMock.LookupAttributeMock;
+        createLookup(name: string, lookup: Xrm.LookupValue | Xrm.LookupValue[]): XrmMock.LookupAttributeMock;
+        createNumber(attComponents: XrmMock.INumberAttributeComponents, controlComponents?: NumberControlComponent): XrmMock.NumberAttributeMock;
+        createNumber(name: string, value?: number): XrmMock.NumberAttributeMock;
+        createOptionSet(attComponents: XrmMock.IOptionSetAttributeComponents, controlComponents?: OptionSetControlComponent): XrmMock.OptionSetAttributeMock;
+        createOptionSet(name: string, value?: string | number, options?: Xrm.OptionSetValue[]): XrmMock.OptionSetAttributeMock;
+        createString(attComponents: XrmMock.IStringAttributeComponents, controlComponents?: StringControlComponent): XrmMock.StringAttributeMock;
+        createString(name: string, value?: string): XrmMock.StringAttributeMock;
+    }
+	class Context {
+        static createContext(client?: Xrm.Client): XrmMock.ContextMock;
+    }
+	class Device {
+        static createDevice(): DeviceMock;
+    }
+	class FormItemMock implements Xrm.Controls.FormItem {
+        id: string;
+        label: string;
+        formType: XrmEnum.FormType;
+        currentItem: boolean;
+        constructor(components: IFormItemComponents);
+        getId(): string;
+        getLabel(): string;
+        navigate(): void;
+    }
+	interface IFormItemComponents {
+        id: string;
+        label: string;
+        formType?: XrmEnum.FormType;
+        currentItem?: boolean;
+    }
+	class FormSelectorMock implements Xrm.Controls.FormSelector {
+        items: ItemCollectionMock<FormItemMock>;
+        constructor(items: ItemCollectionMock<FormItemMock>);
+        getCurrentItem(): Xrm.Controls.FormItem;
+    }
+	class UiMock implements Xrm.Ui {
+        process: Xrm.Controls.ProcessControl;
+        controls: Xrm.Collection.ItemCollection<Xrm.Controls.Control>;
+        formSelector: FormSelectorMock;
+        navigation: Xrm.Controls.Navigation;
+        tabs: Xrm.Collection.ItemCollection<Xrm.Controls.Tab>;
+        quickForms: Xrm.Collection.ItemCollection<Xrm.Controls.QuickFormControl>;
+        formNotifications: [{
+            message: string;
+            level: Xrm.Page.ui.FormNotificationLevel;
+            uniqueId: string;
+        }];
+        constructor(components: IUiComponents);
+        setFormNotification(message: string, level: Xrm.Page.ui.FormNotificationLevel, uniqueId: string): boolean;
+        clearFormNotification(uniqueId: string): boolean;
+        close(): void;
+        getFormType(): XrmEnum.FormType;
+        getViewPortHeight(): number;
+        getViewPortWidth(): number;
+        refreshRibbon(): void;
+    }
+	interface IUiComponents {
+        process?: Xrm.Controls.ProcessControl;
+        controls?: Xrm.Collection.ItemCollection<Xrm.Controls.Control>;
+        formSelector?: FormSelectorMock;
+        navigation?: Xrm.Controls.Navigation;
+        tabs?: Xrm.Collection.ItemCollection<Xrm.Controls.Tab>;
+        quickForms?: Xrm.Collection.ItemCollection<Xrm.Controls.QuickFormControl>;
+    }
+	class FormContext {
+        static createFormContext(entity?: XrmMock.IEntityComponents, ui?: XrmMock.IUiComponents, process?: Xrm.ProcessFlow.ProcessManager): XrmMock.FormContextMock;
+    }
+	class EventContext {
+        static Context: Context;
+        static FormContext: FormContext;
+        static createEventContext(entity?: XrmMock.IEntityComponents, context?: Xrm.GlobalContext, formContext?: Xrm.FormContext, ui?: XrmMock.IUiComponents, process?: Xrm.ProcessFlow.ProcessManager): XrmMock.EventContextMock;
+    }
+	class MobileMock implements Xrm.Mobile {
+        offline: Xrm.MobileOffline;
+        constructor(offline: Xrm.MobileOffline);
+    }
+	class MobileOfflineMock implements Xrm.MobileOffline {
+        isOfflineEnabled(entityType: string): boolean;
+        createRecord(entityType: string, data: {
+            [attributeName: string]: any;
+        }): Xrm.Async.PromiseLike<Xrm.Async.OfflineOperationSuccessCallbackObject>;
+        retrieveRecord(entityType: string, id: string, options: string): Xrm.Async.PromiseLike<Xrm.Async.OfflineOperationSuccessCallbackObject>;
+        retrieveMultipleRecords(entityType: string, options: string, maxPageSize: number): Xrm.Async.PromiseLike<Array<{
+            [key: string]: any;
+        }>>;
+        updateRecord(entityType: string, id: string, data: {
+            [attributeName: string]: any;
+        }): Xrm.Async.PromiseLike<Xrm.Async.OfflineOperationSuccessCallbackObject>;
+        deleteRecord(entityType: string, id: string): Xrm.Async.PromiseLike<Xrm.Async.OfflineOperationSuccessCallbackObject>;
+    }
+	class Mobile {
+        static createMobile(): MobileMock;
+    }
+	class Navigation {
+        static createNavigation(client?: Xrm.Client): XrmMock.NavigationStaticMock;
+    }
+	class ControlHelpers {
+        static setControlsParent(controls: Xrm.Collection.ItemCollection<Xrm.Controls.Control | Xrm.Controls.Section>, parent: Xrm.Controls.Section | Xrm.Controls.Tab): void;
+    }
+	class Section {
+        createSection(name?: string, label?: string, isVisible?: boolean, parent?: Xrm.Controls.Tab, controls?: Xrm.Collection.ItemCollection<Xrm.Controls.Control>): XrmMock.SectionMock;
+    }
+	class SectionMock implements Xrm.Controls.Section {
+        controls: Xrm.Collection.ItemCollection<Xrm.Controls.Control>;
+        parent: Xrm.Controls.Tab;
+        constructor(name: string, parent?: Xrm.Controls.Tab, uiStandardElement?: Xrm.Controls.UiStandardElement, controls?: Xrm.Collection.ItemCollection<Xrm.Controls.Control>);
+        getName(): string;
+        getParent(): Xrm.Controls.Tab;
+        setVisible(visible: boolean): void;
+        getVisible(): boolean;
+        getLabel(): string;
+        setLabel(label: string): void;
+    }
+	class TabMock implements Xrm.Controls.Tab {
+        sections: Xrm.Collection.ItemCollection<Xrm.Controls.Section>;
+        tabStateChangeHandlers: Xrm.Events.ContextSensitiveHandler[];
+        constructor(components: ITabComponents);
+        getDisplayState(): Xrm.DisplayState;
+        getName(): string;
+        getParent(): Xrm.Ui;
+        setDisplayState(displayState: Xrm.DisplayState): void;
+        setVisible(visible: boolean): void;
+        getVisible(): boolean;
+        getLabel(): string;
+        setLabel(label: string): void;
+        setFocus(): void;
+        addTabStateChange(handler: (context: Xrm.Events.EventContext) => void): void;
+        removeTabStateChange(handler: (context: Xrm.Events.EventContext) => void): void;
+    }
+	interface ITabComponents {
+        uiStandardElement?: Xrm.Controls.UiStandardElement;
+        uiFocusableElement?: Xrm.Controls.UiFocusable;
+        name?: string;
+        parent?: Xrm.Ui;
+        displayState?: Xrm.DisplayState;
+        sections?: Xrm.Collection.ItemCollection<Xrm.Controls.Section>;
+        tabStateChangeHandlers?: Xrm.Events.ContextSensitiveHandler[];
+    }
+	class Tab {
+        createTab(name?: string, label?: string, isVisible?: boolean, displayState?: Xrm.DisplayState, parent?: Xrm.Ui, sections?: Xrm.Collection.ItemCollection<Xrm.Controls.Section>): XrmMock.TabMock;
+    }
+	class UtilityMock implements Xrm.Utility {
+        alertDialog(message: string, onCloseCallback: () => void): void;
+        confirmDialog(message: string, yesCloseCallback: () => void, noCloseCallback: () => void): void;
+        isActivityType(entityType: string): boolean;
+        openQuickCreate(entityLogicalName: string, createFromEntity?: Xrm.LookupValue, parameters?: Xrm.Utility.OpenParameters): Xrm.Async.PromiseLike<Xrm.Async.OpenQuickCreateSuccessCallbackObject>;
+        openEntityForm(name: string, id?: string, parameters?: Xrm.Utility.FormOpenParameters, windowOptions?: Xrm.Utility.WindowOptions): void;
+        openWebResource(webResourceName: string, webResourceData?: string, width?: number, height?: number): Window;
+        closeProgressIndicator(): void;
+        getAllowedStatusTransitions(entityName: string, stateCode: number): Xrm.Async.PromiseLike<any>;
+        getEntityMetadata(entityName: string, attributes?: string[]): Xrm.Async.PromiseLike<Xrm.Metadata.EntityMetadata>;
+        getGlobalContext(): Xrm.GlobalContext;
+        getResourceString(webResourceName: string, key: string): string;
+        invokeProcessAction(name: string, parameters: Xrm.Collection.Dictionary<any>): Xrm.Async.PromiseLike<any>;
+        lookupObjects(lookupOptions: Xrm.LookupOptions): Xrm.Async.PromiseLike<Xrm.LookupValue[]>;
+        refreshParentGrid(lookupOptions: Xrm.LookupValue): void;
+        showProgressIndicator(message: string): void;
+    }
+	class Utility {
+        static createUtility(): UtilityMock;
+    }
+	class WebApi {
+        static createApi(clientContext: Xrm.ClientContext): XrmMock.WebApiMock;
+    }
+	class XrmMockGenerator {
+        static EventContext: EventContext;
+        static FormContext: FormContext;
+        static Attribute: Attribute;
+        static Context: Context;
+        static Control: Control;
+        static Device: Device;
+        static Mobile: Mobile;
+        static Tab: Tab;
+        static Section: Section;
+        static Form: Form;
+        static Navigation: Navigation;
+        static WebApi: WebApi;
+        static Utility: Utility;
+        static context: XrmMock.ContextMock;
+        static formContext: XrmMock.FormContextMock;
+        static eventContext: XrmMock.EventContextMock;
+        static initialise(components?: IXrmGeneratorComponents): XrmMock.XrmStaticMock;
+        static getEventContext(): XrmMock.EventContextMock;
+        static getFormContext(): XrmMock.FormContextMock;
+    }
+	interface IXrmGeneratorComponents {
+        context?: XrmMock.ContextMock;
+        ui?: XrmMock.IUiComponents;
+        entity?: XrmMock.IEntityComponents;
+        process?: Xrm.ProcessFlow.ProcessManager;
+    }
 	class EntityMock implements Xrm.Entity {
         id: string;
         entityName: string;
@@ -698,23 +910,35 @@ declare namespace XrmMock {
         context?: Xrm.GlobalContext;
     }
 	class ExecuteResponseMock implements Xrm.ExecuteResponse {
-        body: string;
-        headers: any;
+        body: ReadableStream<Uint8Array>;
+        headers: Headers;
         ok: boolean;
+        redirected: boolean;
         status: number;
         statusText: string;
-        type: string;
+        type: ResponseType;
         url: string;
+        trailer: Promise<Headers>;
+        bodyUsed: boolean;
         constructor(components: IExecuteResponseComponents);
+        arrayBuffer(): Promise<ArrayBuffer>;
+        blob(): Promise<Blob>;
+        formData(): Promise<FormData>;
+        json(): Promise<any>;
+        text(): Promise<string>;
+        clone(): Response;
     }
 	interface IExecuteResponseComponents {
-        body?: string;
-        headers?: any;
+        body?: ReadableStream<Uint8Array>;
+        headers?: Headers;
         ok?: boolean;
+        redirected?: boolean;
         status?: number;
         statusText?: string;
-        type?: string;
+        type?: ResponseType;
         url?: string;
+        trailer?: Promise<Headers>;
+        bodyUsed?: boolean;
     }
 	class FileDetailsMock implements Xrm.Navigation.FileDetails {
         fileContent: string;
@@ -732,22 +956,6 @@ declare namespace XrmMock {
         getControl<T extends Xrm.Controls.Control>(controlNameOrIndex: string | number): T;
         getControl<T extends Xrm.Controls.Control>(delegateFunction?: Xrm.Collection.MatchingDelegate<T>): T[];
     }
-	class FormItemMock implements Xrm.Controls.FormItem {
-        id: string;
-        label: string;
-        formType: XrmEnum.FormType;
-        currentItem: boolean;
-        constructor(components: IFormItemComponents);
-        getId(): string;
-        getLabel(): string;
-        navigate(): void;
-    }
-	interface IFormItemComponents {
-        id: string;
-        label: string;
-        formType?: XrmEnum.FormType;
-        currentItem?: boolean;
-    }
 	class FormOpenParametersMock implements Xrm.Utility.OpenParameters {
         [index: string]: string | undefined;
         formid?: string;
@@ -755,22 +963,17 @@ declare namespace XrmMock {
         cmdbar?: Xrm.Url.CmdBarDisplay;
         constructor(formid?: string, navbar?: Xrm.Url.NavBarDisplay, cmdbar?: Xrm.Url.CmdBarDisplay);
     }
-	class FormSelectorMock implements Xrm.Controls.FormSelector {
-        items: ItemCollectionMock<FormItemMock>;
-        constructor(items: ItemCollectionMock<FormItemMock>);
-        getCurrentItem(): Xrm.Controls.FormItem;
-    }
 	class GetCurrentPositionResponseMock implements Xrm.Device.GetCurrentPositionResponse {
         coords: any;
         timestamp: number;
         constructor(coords: any, timestamp: number);
     }
 	class GridControlMock extends ControlMock implements Xrm.Controls.GridControl {
-        onLoadHandlers: Array<() => void>;
+        onLoadHandlers: Xrm.Events.ContextSensitiveHandler[];
         contextType: XrmEnum.GridControlContext;
         entityName: string;
         constructor(components: IGridControlComponents);
-        addOnLoad(handler: () => void): void;
+        addOnLoad(handler: Xrm.Events.ContextSensitiveHandler): void;
         getContextType(): XrmEnum.GridControlContext;
         getEntityName(): string;
         getGrid(): Xrm.Controls.Grid;
@@ -785,7 +988,7 @@ declare namespace XrmMock {
         contextType?: XrmEnum.GridControlContext;
         entityName?: string;
         name?: string;
-        onLoadHandlers?: Array<() => void>;
+        onLoadHandlers?: Xrm.Events.ContextSensitiveHandler[];
     }
 	class GridEntityMock implements Xrm.Controls.Grid.GridEntity {
         constructor(reference: Xrm.LookupValue);
@@ -1159,17 +1362,6 @@ declare namespace XrmMock {
         UseSchedulingEngine?: boolean;
         constructor(UseSchedulingEngine?: boolean);
     }
-	class SectionMock implements Xrm.Controls.Section {
-        controls: Xrm.Collection.ItemCollection<Xrm.Controls.Control>;
-        parent: Xrm.Controls.Tab;
-        constructor(name: string, parent?: Xrm.Controls.Tab, uiStandardElement?: Xrm.Controls.UiStandardElement, controls?: Xrm.Collection.ItemCollection<Xrm.Controls.Control>);
-        getName(): string;
-        getParent(): Xrm.Controls.Tab;
-        setVisible(visible: boolean): void;
-        getVisible(): boolean;
-        getLabel(): string;
-        setLabel(label: string): void;
-    }
 	class StageChangeEventArgumentsMock implements Xrm.Events.StageChangeEventArguments {
         getDirection(): Xrm.ProcessFlow.StageChangeDirection;
         getStage(): Xrm.ProcessFlow.Stage;
@@ -1226,62 +1418,8 @@ declare namespace XrmMock {
         format?: Xrm.Attributes.StringAttributeFormat;
         maxLength?: number;
     }
-	class TabMock implements Xrm.Controls.Tab {
-        sections: Xrm.Collection.ItemCollection<Xrm.Controls.Section>;
-        tabStateChangeHandlers: Xrm.Events.ContextSensitiveHandler[];
-        constructor(components: ITabComponents);
-        getDisplayState(): Xrm.DisplayState;
-        getName(): string;
-        getParent(): Xrm.Ui;
-        setDisplayState(displayState: Xrm.DisplayState): void;
-        setVisible(visible: boolean): void;
-        getVisible(): boolean;
-        getLabel(): string;
-        setLabel(label: string): void;
-        setFocus(): void;
-        addTabStateChange(handler: (context: Xrm.Events.EventContext) => void): void;
-        removeTabStateChange(handler: (context: Xrm.Events.EventContext) => void): void;
-    }
-	interface ITabComponents {
-        uiStandardElement?: Xrm.Controls.UiStandardElement;
-        uiFocusableElement?: Xrm.Controls.UiFocusable;
-        name?: string;
-        parent?: Xrm.Ui;
-        displayState?: Xrm.DisplayState;
-        sections?: Xrm.Collection.ItemCollection<Xrm.Controls.Section>;
-        tabStateChangeHandlers?: Xrm.Events.ContextSensitiveHandler[];
-    }
 	class TimelineWallMock extends ControlMock implements Xrm.Controls.TimelineWall {
         refresh(): void;
-    }
-	class UiMock implements Xrm.Ui {
-        process: Xrm.Controls.ProcessControl;
-        controls: Xrm.Collection.ItemCollection<Xrm.Controls.Control>;
-        formSelector: FormSelectorMock;
-        navigation: Xrm.Controls.Navigation;
-        tabs: Xrm.Collection.ItemCollection<Xrm.Controls.Tab>;
-        quickForms: Xrm.Collection.ItemCollection<Xrm.Controls.QuickFormControl>;
-        formNotifications: [{
-            message: string;
-            level: Xrm.Page.ui.FormNotificationLevel;
-            uniqueId: string;
-        }];
-        constructor(components: IUiComponents);
-        setFormNotification(message: string, level: Xrm.Page.ui.FormNotificationLevel, uniqueId: string): boolean;
-        clearFormNotification(uniqueId: string): boolean;
-        close(): void;
-        getFormType(): XrmEnum.FormType;
-        getViewPortHeight(): number;
-        getViewPortWidth(): number;
-        refreshRibbon(): void;
-    }
-	interface IUiComponents {
-        process?: Xrm.Controls.ProcessControl;
-        controls?: Xrm.Collection.ItemCollection<Xrm.Controls.Control>;
-        formSelector?: FormSelectorMock;
-        navigation?: Xrm.Controls.Navigation;
-        tabs?: Xrm.Collection.ItemCollection<Xrm.Controls.Tab>;
-        quickForms?: Xrm.Collection.ItemCollection<Xrm.Controls.QuickFormControl>;
     }
 	class UserSettingsMock implements Xrm.UserSettings {
         defaultDashboardId: string;
@@ -1309,23 +1447,6 @@ declare namespace XrmMock {
         transactionCurrencyId?: string;
         userId: string;
         userName: string;
-    }
-	class UtilityMock implements Xrm.Utility {
-        alertDialog(message: string, onCloseCallback: () => void): void;
-        confirmDialog(message: string, yesCloseCallback: () => void, noCloseCallback: () => void): void;
-        isActivityType(entityType: string): boolean;
-        openQuickCreate(entityLogicalName: string, createFromEntity?: Xrm.LookupValue, parameters?: Xrm.Utility.OpenParameters): Xrm.Async.PromiseLike<Xrm.Async.OpenQuickCreateSuccessCallbackObject>;
-        openEntityForm(name: string, id?: string, parameters?: Xrm.Utility.FormOpenParameters, windowOptions?: Xrm.Utility.WindowOptions): void;
-        openWebResource(webResourceName: string, webResourceData?: string, width?: number, height?: number): Window;
-        closeProgressIndicator(): void;
-        getAllowedStatusTransitions(entityName: string, stateCode: number): Xrm.Async.PromiseLike<any>;
-        getEntityMetadata(entityName: string, attributes?: string[]): Xrm.Async.PromiseLike<Xrm.Metadata.EntityMetadata>;
-        getGlobalContext(): Xrm.GlobalContext;
-        getResourceString(webResourceName: string, key: string): string;
-        invokeProcessAction(name: string, parameters: Xrm.Collection.Dictionary<any>): Xrm.Async.PromiseLike<any>;
-        lookupObjects(lookupOptions: Xrm.LookupOptions): Xrm.Async.PromiseLike<Xrm.LookupValue[]>;
-        refreshParentGrid(lookupOptions: Xrm.LookupValue): void;
-        showProgressIndicator(message: string): void;
     }
 	class ViewSelectorMock implements Xrm.Controls.ViewSelector {
         constructor(isVisible: boolean);
@@ -1390,119 +1511,6 @@ declare namespace XrmMock {
         Xrm: XrmStaticMock;
         constructor(xrm: XrmStaticMock);
         GetGlobalContext(): Xrm.GlobalContext;
-    }
-	class XrmMockGenerator {
-	    static EventContext: XrmMockGenerator.EventContext;
-	    static FormContext: XrmMockGenerator.FormContext;
-	    static Attribute: XrmMockGenerator.Attribute;
-	    static Context: XrmMockGenerator.Context;
-	    static Control: XrmMockGenerator.Control;
-	    static Device: XrmMockGenerator.Device;
-	    static Mobile: XrmMockGenerator.Mobile;
-	    static Tab: XrmMockGenerator.Tab;
-	    static Section: XrmMockGenerator.Section;
-	    static Form: XrmMockGenerator.Form;
-	    static Navigation: XrmMockGenerator.Navigation;
-	    static WebApi: XrmMockGenerator.WebApi;
-	    static Utility: XrmMockGenerator.Utility;
-	    static context: XrmMock.ContextMock;
-	    static formContext: XrmMock.FormContextMock;
-	    static eventContext: XrmMock.EventContextMock;
-	    static utility: XrmMock.UtilityMock;
-	    static device: XrmMock.DeviceMock;
-	    static mobile: XrmMock.MobileMock;
-	    static initialise(components?: XrmMockGenerator.IXrmGeneratorComponents): XrmMock.XrmStaticMock;
-	    static getEventContext(): XrmMock.EventContextMock;
-	    static getFormContext(): XrmMock.FormContextMock;
-	}
-}
-declare namespace XrmMockGenerator {
-	class Form {
-		createBlankForm(): XrmMock.FormItemMock;
-    }
-	class Ui {
-		createUi(): XrmMock.UiMock;
-		createLabelElement(label: string): XrmMock.UiLabelElementMock;
-		createCanGetVisibleElement(isVisible: boolean): XrmMock.UiCanGetVisibleElementMock;
-		createStandardElement(labelElement: Xrm.Page.UiLabelElement, visibleElement: Xrm.Page.UiCanGetVisibleElement): XrmMock.UiStandardElementMock;
-    }
-	type CreateMethods = "createBoolean" | "createDate" | "createLookup" | "createNumber" | "createOptionSet" | "createString";
-	class Control {
-        createBoolean(components: XrmMock.IBooleanControlComponents): XrmMock.BooleanControlMock;
-        createBoolean(attribute: XrmMock.BooleanAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.BooleanControlMock;
-        createDate(components: XrmMock.IDateControlComponents): XrmMock.DateControlMock;
-        createDate(attribute: XrmMock.DateAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.DateControlMock;
-        createGrid(components: XrmMock.IGridControlComponents): XrmMock.GridControlMock;
-        createGrid(name?: string, visible?: boolean, label?: string): XrmMock.GridControlMock;
-        createLookup(components: XrmMock.ILookupControlComponents): XrmMock.LookupControlMock;
-        createLookup(attribute: XrmMock.LookupAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.LookupControlMock;
-        createNumber(components: XrmMock.INumberControlComponents): XrmMock.NumberControlMock;
-        createNumber(attribute: XrmMock.NumberAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.NumberControlMock;
-        createOptionSet(components: XrmMock.IOptionSetControlComponents): XrmMock.OptionSetControlMock;
-        createOptionSet(attribute: XrmMock.OptionSetAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.OptionSetControlMock;
-        createString(components: XrmMock.IStringControlComponents): XrmMock.StringControlMock;
-        createString(attribute: XrmMock.StringAttributeMock, name?: string, visible?: boolean, disabled?: boolean, label?: string): XrmMock.StringControlMock;
-    }
-	type BooleanControlComponent = XrmMock.IAttBooleanControlComponents | XrmMock.IAttBooleanControlComponents[];
-	type DateControlComponent = XrmMock.IAttDateControlComponents | XrmMock.IAttDateControlComponents[];
-	type LookupControlComponent = XrmMock.IAttLookupControlComponents | XrmMock.IAttLookupControlComponents[];
-	type NumberControlComponent = XrmMock.IAttNumberControlComponents | XrmMock.IAttNumberControlComponents[];
-	type OptionSetControlComponent = XrmMock.IAttOptionSetControlComponents | XrmMock.IAttOptionSetControlComponents[];
-	type StringControlComponent = XrmMock.IAttStringControlComponents | XrmMock.IAttStringControlComponents[];
-	class Attribute {
-        createBoolean(attComponents: XrmMock.IBooleanAttributeComponents, controlComponents?: BooleanControlComponent): XrmMock.BooleanAttributeMock;
-        createBoolean(name: string, value?: boolean): XrmMock.BooleanAttributeMock;
-        createDate(attComponents: XrmMock.IDateAttributeComponents, controlComponents?: DateControlComponent): XrmMock.DateAttributeMock;
-        createDate(name: string, value?: Date): XrmMock.DateAttributeMock;
-        createLookup(attComponents: XrmMock.ILookupAttributeComponents, controlComponents?: LookupControlComponent): XrmMock.LookupAttributeMock;
-        createLookup(name: string, lookup: Xrm.LookupValue | Xrm.LookupValue[]): XrmMock.LookupAttributeMock;
-        createNumber(attComponents: XrmMock.INumberAttributeComponents, controlComponents?: NumberControlComponent): XrmMock.NumberAttributeMock;
-        createNumber(name: string, value?: number): XrmMock.NumberAttributeMock;
-        createOptionSet(attComponents: XrmMock.IOptionSetAttributeComponents, controlComponents?: OptionSetControlComponent): XrmMock.OptionSetAttributeMock;
-        createOptionSet(name: string, value?: string | number, options?: Xrm.OptionSetValue[]): XrmMock.OptionSetAttributeMock;
-        createString(attComponents: XrmMock.IStringAttributeComponents, controlComponents?: StringControlComponent): XrmMock.StringAttributeMock;
-        createString(name: string, value?: string): XrmMock.StringAttributeMock;
-    }
-	class Context {
-		createContext(client?: Xrm.Client): XrmMock.ContextMock;
-    }
-	class Device {
-		createDevice(): XrmMock.DeviceMock;
-    }
-	class FormContext {
-		createFormContext(entity?: XrmMock.IEntityComponents, ui?: XrmMock.IUiComponents, process?: Xrm.ProcessFlow.ProcessManager): XrmMock.FormContextMock;
-    }
-	class EventContext {
-		Context: Context;
-		FormContext: FormContext;
-		createEventContext(entity?: XrmMock.IEntityComponents, context?: Xrm.GlobalContext, formContext?: Xrm.FormContext, ui?: XrmMock.IUiComponents, process?: Xrm.ProcessFlow.ProcessManager): XrmMock.EventContextMock;
-    }
-	class Mobile {
-		createMobile(): XrmMock.MobileMock;
-    }
-	class Navigation {
-		createNavigation(client?: Xrm.Client): XrmMock.NavigationStaticMock;
-    }
-	class ControlHelpers {
-		setControlsParent(controls: Xrm.Collection.ItemCollection<Xrm.Controls.Control | Xrm.Controls.Section>, parent: Xrm.Controls.Section | Xrm.Controls.Tab): void;
-    }
-	class Section {
-        createSection(name?: string, label?: string, isVisible?: boolean, parent?: Xrm.Controls.Tab, controls?: Xrm.Collection.ItemCollection<Xrm.Controls.Control>): XrmMock.SectionMock;
-    }
-	class Tab {
-        createTab(name?: string, label?: string, isVisible?: boolean, displayState?: Xrm.DisplayState, parent?: Xrm.Ui, sections?: Xrm.Collection.ItemCollection<Xrm.Controls.Section>): XrmMock.TabMock;
-    }
-	class Utility {
-		createUtility(): XrmMock.UtilityMock;
-    }
-	class WebApi {
-		createApi(clientContext: Xrm.ClientContext): XrmMock.WebApiMock;
-    }
-	interface IXrmGeneratorComponents {
-        context?: XrmMock.ContextMock;
-        ui?: XrmMock.IUiComponents;
-        entity?: XrmMock.IEntityComponents;
-        process?: Xrm.ProcessFlow.ProcessManager;
     }
 	class ErrorCallbackObjectMock implements Xrm.Async.ErrorCallbackObject {
         errorCode: number;

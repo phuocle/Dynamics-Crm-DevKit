@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using EnvDTE;
@@ -25,13 +26,10 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$ProjectNetVersion$", Utility.GetProjectNetVersion(form.ComboBoxCrmName));
             replacementsDictionary.Add("$CrmUrl$", form.CrmConnection.Url);
             replacementsDictionary.Add("$CrmUserName$", form.CrmConnection.UserName);
-#if DEBUG
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", "2.0.0");
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", "2.0.0");
-#else
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", NugetHelper.GetLatestPackageVersion(Const.PLDynamicsCrmDevKitCli));
-            replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", NugetHelper.GetLatestPackageVersion(Const.PLDynamicsCrmDevKitAnalyzers));
-#endif
+
+            replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitCli));
+            replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitAnalyzers));
+
             replacementsDictionary.Add("$WebApiClientMin$", Utility.GetWebApiClientMin(form.ProjectJsName));
             replacementsDictionary.Add("$ProjectJsName$", form.ProjectJsName);
 
@@ -52,7 +50,7 @@ namespace DynamicsCrm.DevKit.Wizard
             var coreToolsVersion = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkCoreTools);
             replacementsDictionary.Add("$Microsoft.CrmSdk.CoreTools.Version$", coreToolsVersion);
 
-            if (form.ProjectType == ProjectType.Test)
+            if (form.ProjectType == ProjectType.Test || form.ProjectType == ProjectType.Console)
             {
                 var Deployment = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkDeployment, form.ComboBoxCrmName);
                 replacementsDictionary.Add("$Microsoft.CrmSdk.Deployment.Version$", Deployment.Version);
@@ -84,7 +82,32 @@ namespace DynamicsCrm.DevKit.Wizard
                 replacementsDictionary.Add("$Selenium.Support.TargetFramework$", NugetHelper.GetLatestPackageTargetFramework(Const.SeleniumSupport));
                 replacementsDictionary.Add("$Selenium.WebDriver.Version$", NugetHelper.GetLatestPackageVersion(Const.SeleniumWebDriver));
                 replacementsDictionary.Add("$Selenium.WebDriver.TargetFramework$", NugetHelper.GetLatestPackageTargetFramework(Const.SeleniumWebDriver));
+                ProcessProjectConsoleReplacementsDictionary(replacementsDictionary, form);
+                var CoreAssembly = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkXrmToolingCoreAssembly, form.ComboBoxCrmName);
+                replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.CoreAssembly.Version$", CoreAssembly.Version);
+                replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.CoreAssembly.TargetFramework$", CoreAssembly.TargetFramework);
+                var Deployment = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkDeployment, form.ComboBoxCrmName);
+                replacementsDictionary.Add("$Microsoft.CrmSdk.Deployment.Version$", Deployment.Version);
+                replacementsDictionary.Add("$Microsoft.CrmSdk.Deployment.TargetFramework$", Deployment.TargetFramework);
             }
+        }
+
+        public static void ProcessProjectConsoleReplacementsDictionary(Dictionary<string, string> replacementsDictionary, FormProject form)
+        {
+
+            var ClientIdName = form.CrmConnection.Type == "ClientSecret" ? "ClientId" : "Username";
+            var ClientSecretName = form.CrmConnection.Type == "ClientSecret" ? "ClientSecret" : "Password";
+            var AuthTypeValue = form.CrmConnection.Type;
+            var UrlValue = form.CrmConnection.Url;
+            var ClientIdValue = form.CrmConnection.UserName;
+            var ClientSecretValue = form.CrmConnection.Type == "ClientSecret" ? form.CrmConnection.Password : EncryptDecrypt.DecryptString(form.CrmConnection.Password);
+
+            replacementsDictionary.Add("$ClientId$", ClientIdName);
+            replacementsDictionary.Add("$ClientSecret$", ClientSecretName);
+            replacementsDictionary.Add("$AuthTypeValue$", AuthTypeValue);
+            replacementsDictionary.Add("$UrlValue$", UrlValue);
+            replacementsDictionary.Add("$ClientIdValue$", ClientIdValue);
+            replacementsDictionary.Add("$ClientSecretValue$", ClientSecretValue);
         }
 
         public static void ProcessItemReplacementsDictionary(Dictionary<string, string> replacementsDictionary, FormItem form)

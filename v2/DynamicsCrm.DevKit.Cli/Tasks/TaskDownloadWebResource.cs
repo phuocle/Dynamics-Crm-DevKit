@@ -10,6 +10,7 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
 using System.Xml.Linq;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -56,7 +57,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 jsonWebResource.dependencies = GetUpdateDependencies(jsonWebResource.dependencies);
                 var updateJson = SimpleJson.SerializeObject(all);
                 updateJson = updateJson.Replace("[entity]", "__entity__");
-                updateJson = Utility.FormatJson(updateJson);
+                updateJson = JsonHelper.FormatJson(updateJson);
                 updateJson = updateJson.Replace("__entity__", "[entity]");
                 Utility.ForceWriteAllText(jsonFile, updateJson);
             }

@@ -10,12 +10,13 @@ using System;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared.Helper
 {
     public class XrmHelper
     {
-        public static List<string> GetAllCustomActions(OrganizationServiceProxy service)
+        public static List<string> GetAllCustomActions(IOrganizationService service)
         {
             var fetchData = new
             {
@@ -52,7 +53,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 .ToList();
         }
 
-        private static string GetSchemaName(OrganizationServiceProxy service, string logicalName)
+        private static string GetSchemaName(IOrganizationService service, string logicalName)
         {
             if (logicalName == "none") return "None";
             var request = new RetrieveEntityRequest
@@ -64,7 +65,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return response.EntityMetadata.SchemaName;
         }
 
-        public static List<XrmEntity> GetAllEntities(OrganizationServiceProxy service)
+        public static List<XrmEntity> GetAllEntities(IOrganizationService service)
         {
             var request = new RetrieveAllEntitiesRequest
             {
@@ -86,7 +87,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return entities;
         }
 
-        public static List<int> GetProvisionedLanguages(OrganizationServiceProxy service)
+        public static List<int> GetProvisionedLanguages(IOrganizationService service)
         {
             var request = new RetrieveProvisionedLanguagesRequest();
             var response = (RetrieveProvisionedLanguagesResponse)service.Execute(request);
@@ -162,7 +163,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return new NameValueCollection();
         }
 
-        public static List<string> GetSdkMessages(OrganizationServiceProxy service, string logicalName)
+        public static List<string> GetSdkMessages(IOrganizationService service, string logicalName)
         {
             var request = new RetrieveEntityRequest
             {
@@ -195,13 +196,13 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return messages;
         }
 
-        public static string GeneratedLateBoundClass(OrganizationServiceProxy service, string crmName, string entitySchemaName, string nameSpace, string sharedNameSpace)
+        public static string GeneratedLateBoundClass(IOrganizationService service, string crmName, string entitySchemaName, string nameSpace, string sharedNameSpace)
         {
             var lateBound = new CSharpLateBound();
             return lateBound.Go(service, Utility.ConvertCrmNameToCrmVersionName(crmName), entitySchemaName, nameSpace, sharedNameSpace);
         }
 
-        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(OrganizationServiceProxy service, string entityName, string requestName)
+        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(IOrganizationService service, string entityName, string requestName)
         {
             var fetchData = new
             {
@@ -291,7 +292,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         }
 
 
-        public static int GetObjectTypeCode(OrganizationServiceProxy service, string logicalName)
+        public static int GetObjectTypeCode(IOrganizationService service, string logicalName)
         {
             var request = new RetrieveEntityRequest
             {
@@ -304,7 +305,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return -1;
         }
 
-        public static List<string> GetForms(OrganizationServiceProxy service, string logicalName)
+        public static List<string> GetForms(IOrganizationService service, string logicalName)
         {
             var fetchData = new
             {
@@ -339,6 +340,98 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 forms.Add(name);
             }
             return forms;
+        }
+
+        public static IOrganizationService GetIOrganizationService(CrmServiceClient crmServiceClient)
+        {
+            if (crmServiceClient.OrganizationServiceProxy != null)
+                return (IOrganizationService)crmServiceClient.OrganizationServiceProxy;
+            if (crmServiceClient.OrganizationWebProxyClient != null)
+                return (IOrganizationService)crmServiceClient.OrganizationWebProxyClient;
+            throw new Exception("Get IOrganizationService FAILED !!!");
+        }
+
+        public static string BuildConnectionString(CrmConnection crmConnection)
+        {
+            return BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
+        }
+
+        public static string BuildConnectionString(string type, string url, string user, string pass)
+        {
+            if (type == "ClientSecret")
+                return $"AuthType=ClientSecret;Url={url};ClientId={user};ClientSecret={pass};";
+            else if (type == "AD" || type == "IFD")
+            {
+                var arr = user.Split("\\".ToCharArray());
+                if (arr.Length != 2)
+                    throw new Exception("Please enter User name like: contoso\\jsmith");
+                var domain = arr[0];
+                user = arr[1];
+                return $"AuthType={type};Url={url};Domain={domain};Username={user};Password={pass};";
+            }
+            return $"AuthType=Office365;Url={url};Username={user};Password={pass};";
+        }
+
+        public static string BuildConnectionString(string connectionString)
+        {
+            if (connectionString.IndexOf("=ClientSecret;") >= 0) return connectionString;
+            var array = connectionString.Split(";".ToCharArray());
+            if (array.Length == 5)
+            {
+                var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
+                var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
+                var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
+                var password = array.First(x => x.ToLower().StartsWith("password="));
+                if (password.EndsWith("=="))
+                    password = password.Split("=".ToCharArray())[1] + "==";
+                else if (password.EndsWith("="))
+                    password = password.Split("=".ToCharArray())[1] + "=";
+                else
+                    password = password.Split("=".ToCharArray())[1];
+                password = EncryptDecrypt.DecryptString(password);
+                return BuildConnectionString(authType, url, userName, password);
+            }
+            else if (array.Length == 6)
+            {
+                var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
+                var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
+                var domain = array.First(x => x.ToLower().StartsWith("domain=")).Split("=".ToCharArray())[1];
+                var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
+                var password = array.First(x => x.ToLower().StartsWith("password="));
+                if (password.EndsWith("=="))
+                    password = password.Split("=".ToCharArray())[1] + "==";
+                else if (password.EndsWith("="))
+                    password = password.Split("=".ToCharArray())[1] + "=";
+                else
+                    password = password.Split("=".ToCharArray())[1];
+                password = EncryptDecrypt.DecryptString(password);
+                return BuildConnectionString(authType, url, $"{domain}\\{userName}", password);
+            }
+            throw new Exception("Fail when BuildConnectionString");
+        }
+
+        public static string BuildConnectionStringLog(string connectionString)
+        {
+            if (connectionString.IndexOf("=ClientSecret;") >= 0) return connectionString;
+            var array = connectionString.Split(";".ToCharArray());
+            if (array.Length == 5)
+            {
+                var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
+                var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
+                var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
+                var password = "********";
+                return BuildConnectionString(authType, url, userName, password);
+            }
+            else if (array.Length == 6)
+            {
+                var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
+                var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
+                var domain = array.First(x => x.ToLower().StartsWith("domain=")).Split("=".ToCharArray())[1];
+                var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
+                var password = "********";
+                return BuildConnectionString(authType, url, $"{domain}\\{userName}", password);
+            }
+            throw new Exception("Fail when BuildConnectionString");
         }
     }
 }

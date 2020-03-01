@@ -7,13 +7,12 @@ using EnvDTE;
 using NUglify;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Text;
-using DynamicsCrm.DevKit.Shared;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public static class Utility
     {
-        private const string IndentString = "  ";
+        //private const string IndentString = "  ";
 
         public static void TryDeleteDirectory(string directory)
         {
@@ -96,30 +95,30 @@ namespace DynamicsCrm.DevKit.Shared
             return code + devKit;
         }
 
-        public static string FormatJson(string json)
-        {
-            var indentation = 0;
-            var quoteCount = 0;
-            var result =
-                from ch in json
-                let quotes = ch == '"' ? quoteCount++ : quoteCount
-                let lineBreak = ch == ',' && quotes % 2 == 0
-                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, indentation))
-                    : null
-                let openChar = ch == '{' || ch == '['
-                    ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, ++indentation))
-                    : ch.ToString()
-                let closeChar = ch == '}' || ch == ']'
-                    ? Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, --indentation)) + ch
-                    : ch.ToString()
-                select lineBreak ?? (openChar.Length > 1
-                           ? openChar
-                           : closeChar);
+        //public static string FormatJson(string json)
+        //{
+        //    var indentation = 0;
+        //    var quoteCount = 0;
+        //    var result =
+        //        from ch in json
+        //        let quotes = ch == '"' ? quoteCount++ : quoteCount
+        //        let lineBreak = ch == ',' && quotes % 2 == 0
+        //            ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, indentation))
+        //            : null
+        //        let openChar = ch == '{' || ch == '['
+        //            ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, ++indentation))
+        //            : ch.ToString()
+        //        let closeChar = ch == '}' || ch == ']'
+        //            ? Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, --indentation)) + ch
+        //            : ch.ToString()
+        //        select lineBreak ?? (openChar.Length > 1
+        //                   ? openChar
+        //                   : closeChar);
 
-            var @return = string.Concat(result);
-            @return = @return.Replace("\":[", "\": [").Replace("\":\"", "\": \"");
-            return @return;
-        }
+        //    var @return = string.Concat(result);
+        //    @return = @return.Replace("\":[", "\": [").Replace("\":\"", "\": \"");
+        //    return @return;
+        //}
 
         public static bool ExistProject(DTE dte, string projectName)
         {
@@ -689,17 +688,6 @@ namespace DynamicsCrm.DevKit.Shared
             if (data.EndsWith(".Test."))
                 data = data.Replace(".Test.", ".");
             return $"{data}{projectType.ToString()}";
-        }
-
-        public static string CrmConnectionString(CrmConnection CrmConnection)
-        {
-            var url = CrmConnection.Url.Substring(0, CrmConnection.Url.Length - "/XRMServices/2011/Organization.svc".Length);
-            url = url.Replace(".api.", ".");
-            if (CrmConnection.Url.Contains(".dynamics.com"))
-                return $"AuthType=Office365;Url={url};Username={CrmConnection.UserName};Password={CrmConnection.Password};";
-            var domain = CrmConnection.UserName.Split("\\".ToCharArray())[0];
-            var user = CrmConnection.UserName.Split("\\".ToCharArray())[1];
-            return $"AuthType=AD;Url={url};Domain={domain};Username={user};Password={CrmConnection.Password};";
         }
 
         public static string[] ParseArguments(string commandLine)

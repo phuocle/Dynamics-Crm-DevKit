@@ -5,6 +5,7 @@ using System.Reflection;
 using CmdLine;
 using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
 
@@ -17,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.WebResource\entities";
+                return @"C:\src\azure\abiz\tfs\ABIZ_IPAM\src\CDS";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -31,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli
         {
             CliLog.WriteLine(CliLog.ColorGreen, "╔", new string('═', CliLog.StarLength), "╗");
             CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
-            CliLog.WriteLine(CliLog.ColorGreen, "║", CliLog.ColorCyan, $"              DynamicsCrm.DevKit.Cli - {Const.Version}                ", CliLog.ColorGreen, "║");
+            CliLog.WriteLine(CliLog.ColorGreen, "║", CliLog.ColorCyan, $"              DynamicsCrm.DevKit.Cli - {Const.Version}               ", CliLog.ColorGreen, "║");
             CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
             CliLog.WriteLine(CliLog.ColorGreen, "╚", new string('═', CliLog.StarLength), "╝");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Path: ", CliLog.ColorWhite, Assembly.GetExecutingAssembly().Location);
@@ -47,7 +48,7 @@ namespace DynamicsCrm.DevKit.Cli
             var jsonFile = Path.Combine(CurrentDirectory, arguments.Json);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.json path: ", CliLog.ColorWhite, jsonFile);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Arguments: ",
-                CliLog.ColorMagenta, "/conn:", CliLog.ColorWhite, HidePassword(arguments.Connection), " ",
+                CliLog.ColorMagenta, "/conn:", CliLog.ColorWhite, XrmHelper.BuildConnectionStringLog(arguments.Connection), " ",
                 CliLog.ColorMagenta, "/json:", CliLog.ColorWhite, arguments.Json, " ",
                 CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, arguments.Type, " ",
                 CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, arguments.Profile
@@ -78,6 +79,8 @@ namespace DynamicsCrm.DevKit.Cli
         }
         private static string HidePassword(string connection)
         {
+            if (IsUseClientIdAndClientSecrect(connection))
+                return connection;
             var parts = connection.Split(";".ToCharArray());
             parts[parts.Length - 2] = "Password:******";
             return string.Join(";", parts);
@@ -123,12 +126,15 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(CliLog.ColorError, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
                 return false;
             }
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected ", CliLog.ColorMagenta, "Dynamics CRM: ", CliLog.ColorWhite, CrmConnectOrgUriActual);
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected ", CliLog.ColorMagenta, "Dynamics CRM: ", CliLog.ColorWhite, new Uri(CrmConnectOrgUriActual).GetLeftPart(UriPartial.Authority));
             return true;
         }
 
         private static bool IsConnectedDynamics365(string connection)
         {
+            if (IsUseClientIdAndClientSecrect(connection))
+                return IsConnectedDynamics365UseClientIdAndClientSecrect(connection);
+
             var password = connection.Substring(connection.IndexOf("Password=", StringComparison.Ordinal));
             password = password.Substring("Password=".Length);
             password = password.Substring(0, password.Length - 1);
@@ -138,7 +144,6 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connection);
-                CrmServiceClient.OrganizationServiceProxy.Timeout = new TimeSpan(2, 0, 0);
                 CrmConnectOrgUriActual = CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri;
                 return true;
             }
@@ -146,6 +151,27 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 return false;
             }
+        }
+
+        private static bool IsConnectedDynamics365UseClientIdAndClientSecrect(string connection)
+        {
+            try
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                CrmServiceClient = new CrmServiceClient(connection);
+                CrmConnectOrgUriActual = CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool IsUseClientIdAndClientSecrect(string connection)
+        {
+            connection = connection.ToLower().Replace(" ", string.Empty);
+            return connection.IndexOf("clientid=") >= 0 && connection.IndexOf("clientsecret=") >= 0;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace $NameSpace$
 
         /*
         [TestMethod]
-        public void $class$Test_UnsecureString_And_SecureString()
+        public void _00_UnsecureString_And_SecureString()
         {
             var target = new Entity("$logicalname$")
             {
@@ -44,7 +44,7 @@ namespace $NameSpace$
         */
 
         [TestMethod]
-        public void $class$Test_Stage_Does_Not_Equals_$stage_string$()
+        public void _01_Stage_Does_Not_Equals_$stage_string$()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -55,7 +55,7 @@ namespace $NameSpace$
         }
 
         [TestMethod]
-        public void $class$Test_PrimaryEntityName_Does_Not_Equals_$logicalname$()
+        public void _02_PrimaryEntityName_Does_Not_Equals_$logicalname$()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -67,7 +67,7 @@ namespace $NameSpace$
         }
 
         [TestMethod]
-        public void $class$Test_MessageName_Does_Not_Equals_$message$()
+        public void _03_MessageName_Does_Not_Equals_$message$()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -80,7 +80,7 @@ namespace $NameSpace$
         }
 
         [TestMethod]
-        public void $class$Test_Mode_Does_Not_Equals_$execution$()
+        public void _04_Mode_Does_Not_Equals_$execution$()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -95,7 +95,7 @@ namespace $NameSpace$
 
         /*
         [TestMethod]
-        public void $class$Test_CrmPluginRegistration_Check_Image1()
+        public void _05_CrmPluginRegistration_Check()
         {
             var @class = new $class$();
             foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
@@ -111,28 +111,10 @@ namespace $NameSpace$
                     Assert.Fail();
             }
         }
-
-        [TestMethod]
-        public void $class$Test_CrmPluginRegistration_Check_Image2()
-        {
-            var @class = new $class$();
-            foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
-            {
-                if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
-                {
-                    var check = attribute as CrmPluginRegistrationAttribute;
-                    Assert.IsNotNull(check.Image2Attributes);
-                    Assert.IsNotNull(check.Image2Name);
-                    Assert.IsNotNull(check.Image2Type);
-                }
-                else
-                    Assert.Fail();
-            }
-        }
         */
 
         [TestMethod]
-        public void $class$Test_01()
+        public void _06()
         {
             Assert.IsTrue(true);
         }

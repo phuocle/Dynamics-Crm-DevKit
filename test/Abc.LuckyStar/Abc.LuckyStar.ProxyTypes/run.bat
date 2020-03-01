@@ -17,6 +17,6 @@ set "sst1=!str1:%sstr%%sst0%=!"
 if "%sst1%" neq "" for /l %%i in (0,1,8189) do if "!sst1:~%%i,1!" neq "" set /a position+=1
 set /a "index=%position% + 27"
 set version=!MicrosoftCrmSdkCoreTools:~%index%,50!
-set CrmConnection="AuthType=Office365;Url=https://orgcaffa69c.crm5.dynamics.com;Username=dev@pldevkit.onmicrosoft.com;Password=jx0fE8wm5wnmew2teG9PHg==;"
+set CrmConnection="AuthType=ClientSecret;Url=https://orgcaffa69c.crm5.dynamics.com;ClientId=e31fc7d6-4dce-46e3-8677-04ab0a2968e3;ClientSecret=?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h;"
 "%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"proxytypes" /profile:"DEBUG" /version:"%version%"
 exit

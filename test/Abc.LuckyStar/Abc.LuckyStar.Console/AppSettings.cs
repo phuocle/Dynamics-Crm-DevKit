@@ -1,38 +1,35 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Configuration;
 using System.Net;
-using System.ServiceModel.Description;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace Abc.LuckyStar.Console
 {
-    public class AppSettings
+    public static class AppSettings
     {
-        static readonly NameValueCollection nvc;
-        static AppSettings()
+        public static IOrganizationService Service = InitializeIOrganizationService();
+        private static string AuthType { get { return ConfigurationManager.AppSettings["AuthType"]; } }
+        private static string Url { get { return ConfigurationManager.AppSettings["Url"]; } }
+        private static string Username { get { return ConfigurationManager.AppSettings["Username"]; } }
+        private static string Password { get { return ConfigurationManager.AppSettings["Password"]; } }
+        private static string ConnectionString
         {
-            nvc = ConfigurationManager.AppSettings;
-            var uri = new Uri(CrmUrl);
-            var clientCredentials = new ClientCredentials();
-            clientCredentials.UserName.UserName = UserName;
-            clientCredentials.UserName.Password = Password;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            CrmService = new OrganizationServiceProxy(uri, null, clientCredentials, null);
-            CurrentUserId = new EntityReference
+            get
             {
-                LogicalName = "systemuser",
-                Id = ((WhoAmIResponse)CrmService.Execute(new WhoAmIRequest())).UserId
-            };
+                return $"AuthType={AuthType};Url={Url};Username={Username};Password={Password};";
+            }
         }
-
-        public static string UserName { get { return nvc["UserName"]; } }
-        public static string Password { get { return nvc["Password"]; } }
-        public static string CrmUrl { get { return nvc["CrmUrl"]; } }
-
-        public static OrganizationServiceProxy CrmService { get; private set; }
-        public static EntityReference CurrentUserId { get; private set; }
+        static IOrganizationService InitializeIOrganizationService()
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            var crmServiceClient = new CrmServiceClient(ConnectionString);
+            if (crmServiceClient.OrganizationServiceProxy != null)
+                return (IOrganizationService)crmServiceClient.OrganizationServiceProxy;
+            else if (crmServiceClient.OrganizationWebProxyClient != null)
+                return (IOrganizationService)crmServiceClient.OrganizationWebProxyClient;
+            else
+                throw new Exception("Service NULL");
+        }
     }
 }

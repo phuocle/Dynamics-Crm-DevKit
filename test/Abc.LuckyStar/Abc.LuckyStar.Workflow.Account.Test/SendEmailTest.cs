@@ -18,7 +18,7 @@ namespace Abc.LuckyStar.Workflow.Account.Test
         }
 
         [TestMethod]
-        public void SendEmailTest_Execute()
+        public void _01_Execute()
         {
             var inputs = new Dictionary<string, object>() { };
             var outputs = Context.ExecuteCodeActivity<SendEmail>(inputs);
@@ -26,7 +26,7 @@ namespace Abc.LuckyStar.Workflow.Account.Test
         }
 
         [TestMethod]
-        public void SendEmailTest_01()
+        public void _02()
         {
             Assert.IsTrue(true);
         }

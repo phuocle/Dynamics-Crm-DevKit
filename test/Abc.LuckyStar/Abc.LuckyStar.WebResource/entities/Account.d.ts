@@ -110,7 +110,8 @@ declare namespace LuckyStar {
 			navSubAccts: DevKit.Form.Controls.ControlNavigationItem,
 			navCampaignsInSFA: DevKit.Form.Controls.ControlNavigationItem,
 			navAsyncOperations: DevKit.Form.Controls.ControlNavigationItem,
-			navProcessSessions: DevKit.Form.Controls.ControlNavigationItem
+			navProcessSessions: DevKit.Form.Controls.ControlNavigationItem,
+			nav_devkit_account_devkit_webapi_Customer: DevKit.Form.Controls.ControlNavigationItem
 		}
 	}
 	class FormAccount extends DevKit.Form.IForm {
@@ -130,6 +131,56 @@ declare namespace LuckyStar {
 		Header: LuckyStar.FormAccount.Header;
 		/** The Navigation of form Account */
 		Navigation: LuckyStar.FormAccount.Navigation;
+	}
+	namespace FormAccount_Quick_Create {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Form.Controls.ControlSection;
+			tab_1_column_2_section_1: DevKit.Form.Controls.ControlSection;
+			tab_1_column_3_section_1: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_tab_1 extends DevKit.Form.Controls.IControlTab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Type the city for the primary address. */
+			Address1_City: DevKit.Form.Controls.ControlString;
+			/** Type the first line of the primary address. */
+			Address1_Line1: DevKit.Form.Controls.ControlString;
+			/** Type the second line of the primary address. */
+			Address1_Line2: DevKit.Form.Controls.ControlString;
+			/** Type the ZIP Code or postal code for the primary address. */
+			Address1_PostalCode: DevKit.Form.Controls.ControlString;
+			/** Type additional information to describe the account, such as an excerpt from the company's website. */
+			Description: DevKit.Form.Controls.ControlString;
+			/** Type the company or business name. */
+			Name: DevKit.Form.Controls.ControlString;
+			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
+			NumberOfEmployees: DevKit.Form.Controls.ControlInteger;
+			/** Choose the primary contact for the account to provide quick access to contact details. */
+			PrimaryContactId: DevKit.Form.Controls.ControlLookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Form.Controls.ControlMoney;
+			/** Type the main phone number for this account. */
+			Telephone1: DevKit.Form.Controls.ControlString;
+		}
+	}
+	class FormAccount_Quick_Create extends DevKit.Form.IForm {
+		/**
+		* DynamicsCrm.DevKit form Account_Quick_Create
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Form.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.Form.WebApi;
+		/** The Body section of form Account_Quick_Create */
+		Body: LuckyStar.FormAccount_Quick_Create.Body;
 	}
 	class AccountApi {
 		/**
@@ -708,4 +759,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true}
+//{'JsForm':['Account','Account Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

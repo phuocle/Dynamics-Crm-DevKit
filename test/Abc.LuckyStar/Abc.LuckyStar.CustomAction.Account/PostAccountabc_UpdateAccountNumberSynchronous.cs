@@ -37,14 +37,14 @@ namespace Abc.LuckyStar.CustomAction.Account
             if (context.MessageName.ToLower() != "abc_UpdateAccountNumber".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals abc_UpdateAccountNumber");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            //Debugger.Begin(tracing, context);
+            //tracing.DebugMessage("Begin Custom Action: Abc.LuckyStar.CustomAction.Account.PostAccountabc_UpdateAccountNumberSynchronous");
 
             var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            //Debugger.End(tracing, context);
+            //tracing.DebugMessage("End Custom Action: Abc.LuckyStar.CustomAction.Account.PostAccountabc_UpdateAccountNumberSynchronous");
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

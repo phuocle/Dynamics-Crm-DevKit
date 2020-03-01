@@ -35,31 +35,21 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.19\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.23\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.19\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.23\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk.Workflow, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.9.0.2.19\lib\net462\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk.Workflow">
+      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.9.0.2.23\lib\net462\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationFramework" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Activities" />
-    <Reference Include="System.Activities.Presentation" />
     <Reference Include="System.Core" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.DirectoryServices.AccountManagement" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Workflow.Activities" />
-    <Reference Include="System.Workflow.ComponentModel" />
-    <Reference Include="System.Workflow.Runtime" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -70,9 +60,6 @@
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.1.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
   <Import Project="..\Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems" Label="Shared" Condition="Exists('..\Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -81,4 +68,7 @@
     <AssemblyOriginatorKeyFile>Abc.LuckyStar.Workflow.Account.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.1.1\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
 </Project>

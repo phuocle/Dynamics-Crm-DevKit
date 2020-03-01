@@ -1,9 +1,11 @@
 ﻿//@ts-check
 ///<reference path="SystemUser.d.ts" />
+"use strict";
 var formUser = (function () {
-	function onLoad(executionContext) {
+	"use strict";
+	async function onLoad(executionContext) {
 	}
-	function onSave(executionContext) {
+	async function onSave(executionContext) {
 	}
 	return {
 		OnLoad: onLoad,

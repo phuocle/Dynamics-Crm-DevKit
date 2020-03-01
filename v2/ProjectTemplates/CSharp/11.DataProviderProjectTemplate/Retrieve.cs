@@ -31,11 +31,11 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //Debugger.Begin(tracing, context);
+            //tracing.DebugMessage("Begin Data Provider: $NameSpace$.Retrieve");
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //Debugger.End(tracing, context);
+            //tracing.DebugMessage("End Data Provider: $NameSpace$.Retrieve");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)

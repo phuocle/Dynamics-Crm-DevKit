@@ -59,13 +59,14 @@
 		<Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
-    <None Include="package.json" />
+    <None Include="_package.json" />
     <None Include="chutzpah.json" />
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
     <Content Include="test\xrm-mock.d.ts" />
     <Content Include="test\requirejsConfig.js" />
+    <Content Include="test\XrmEnum.js" />
     <None Include="entities\generator.form.bat" />
     <None Include="entities\generator.webapi.bat" />
   </ItemGroup>

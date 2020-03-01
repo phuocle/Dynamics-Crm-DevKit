@@ -21,7 +21,7 @@ namespace $NameSpace$
         }
 
         [TestMethod]
-        public void $class$Test_01()
+        public void _01()
         {
             Assert.IsTrue(true);
         }

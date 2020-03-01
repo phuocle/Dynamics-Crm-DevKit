@@ -18,7 +18,7 @@ namespace $NameSpace$
         }
 
         [TestMethod]
-        public void $class$Test_Execute()
+        public void _01_Execute()
         {
             var inputs = new Dictionary<string, object>() {};
             var outputs = Context.ExecuteCodeActivity<$class$>(inputs);
@@ -26,7 +26,7 @@ namespace $NameSpace$
         }
 
         [TestMethod]
-        public void $class$Test_01()
+        public void _02()
         {
             Assert.IsTrue(true);
         }

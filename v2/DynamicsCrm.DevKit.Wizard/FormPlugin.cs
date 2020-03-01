@@ -8,7 +8,7 @@ using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
-using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Wizard
             ItemType = itemType;
         }
         private bool IsLoadComboBoxEntity { get; set; } = true;
-        public OrganizationServiceProxy CrmService { get; set; }
+        public IOrganizationService CrmService { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public DTE DTE { get; }
         private ItemType _itemType;
@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void buttonConnection_Click(object sender, EventArgs e)
         {
-            var form = new FormConnection(DTE);
+            var form = new FormConnection2(DTE);
             if (form.ShowDialog() == DialogResult.Cancel) return;
 
             CrmConnection = form.CrmConnection;

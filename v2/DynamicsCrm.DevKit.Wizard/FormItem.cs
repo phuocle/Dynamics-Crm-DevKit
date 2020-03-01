@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 using System.Drawing;
+using Microsoft.Xrm.Sdk;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -19,7 +20,7 @@ namespace DynamicsCrm.DevKit.Wizard
         public string GeneratedJsWebApiCode { get; set; }
         public string GeneratedJsWebApiCodeTypeScriptDeclaration { get; set; }
 
-        public OrganizationServiceProxy CrmService { get; set; }
+        public IOrganizationService CrmService { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string ComboBoxCrmName => comboBoxCrmName.Text;
         public string ComboBoxEntityName => comboBoxEntity.Text;
@@ -197,7 +198,8 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
-            Font = SystemFonts.DefaultFont;
+            //Font = SystemFonts.DefaultFont;
+            //this.AutoScaleMode = AutoScaleMode.Font;
             progressBar.Visible = false;
 
             Text += Const.Version;
@@ -313,7 +315,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void buttonConnection_Click(object sender, EventArgs e)
         {
-            var form = new FormConnection(DTE);
+            var form = new FormConnection2(DTE);
             if (form.ShowDialog() == DialogResult.Cancel) return;
 
             CrmConnection = form.CrmConnection;

@@ -77,7 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license\LICENSE.txt" />
-    <Content Include="Nuget\nuget.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

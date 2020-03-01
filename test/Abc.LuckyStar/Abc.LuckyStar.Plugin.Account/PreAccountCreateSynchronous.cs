@@ -41,11 +41,11 @@ namespace Abc.LuckyStar.PluginAccount
             if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            //Debugger.Begin(tracing, context);
+            //tracing.DebugMessage("Begin Plugin: Abc.LuckyStar.PluginAccount.PreAccountCreateSynchronous");
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //Debugger.End(tracing, context);
+            //tracing.DebugMessage("End Plugin: Abc.LuckyStar.PluginAccount.PreAccountCreateSynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

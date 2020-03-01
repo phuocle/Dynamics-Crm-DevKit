@@ -627,40 +627,6 @@ declare namespace LuckyStar {
 		/** The Process of form WebApi_2 */
 		Process: LuckyStar.FormWebApi_2.Process;
 	}
-	namespace Formdevkit_WebApi_Quick_Create {
-		interface tab_tab_1_Sections {
-			tab_1_column_1_section_1: DevKit.Form.Controls.ControlSection;
-			tab_1_column_2_section_1: DevKit.Form.Controls.ControlSection;
-			tab_1_column_3_section_1: DevKit.Form.Controls.ControlSection;
-		}
-		interface tab_tab_1 extends DevKit.Form.Controls.IControlTab {
-			Section: tab_tab_1_Sections;
-		}
-		interface Tabs {
-			tab_1: tab_tab_1;
-		}
-		interface Body {
-			Tab: Tabs;
-			devkit_AlternateKey: DevKit.Form.Controls.ControlString;
-			devkit_DateOnlyDateOnly: DevKit.Form.Controls.ControlDate;
-			/** Unique identifier of the currency associated with the entity. */
-			TransactionCurrencyId: DevKit.Form.Controls.ControlLookup;
-		}
-	}
-	class Formdevkit_WebApi_Quick_Create extends DevKit.Form.IForm {
-		/**
-		* DynamicsCrm.DevKit form devkit_WebApi_Quick_Create
-		* @param executionContext the execution context
-		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
-		*/
-		constructor(executionContext: any, defaultWebResourceName?: string);
-		/** Utility functions/methods/objects for Dynamics 365 form */
-		Utility: DevKit.Form.Utility;
-		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
-		WebApi: DevKit.Form.WebApi;
-		/** The Body section of form devkit_WebApi_Quick_Create */
-		Body: LuckyStar.Formdevkit_WebApi_Quick_Create.Body;
-	}
 	class devkit_WebApiApi {
 		/**
 		* DynamicsCrm.DevKit devkit_WebApiApi
@@ -886,4 +852,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Quick Create','WebApi','WebApi 2'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}
+//{'JsForm':['WebApi','WebApi 2'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

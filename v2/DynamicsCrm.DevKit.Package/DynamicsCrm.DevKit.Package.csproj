@@ -72,17 +72,29 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Const.cs">
       <Link>Links\Const.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\CSharpLateBound.cs">
+      <Link>Links\CSharpLateBound.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
       <Link>Links\EncryptDecrypt.cs</Link>
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Enum.cs">
       <Link>Links\Enum.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Extensions\Attribute.cs">
+      <Link>Links\Attribute.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\FileSystem.cs">
       <Link>Links\FileSystem.cs</Link>
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Helper\DevKitCrmConfigHelper.cs">
       <Link>Links\DevKitCrmConfigHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Helper\JsonHelper.cs">
+      <Link>Links\JsonHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Helper\XrmHelper.cs">
+      <Link>Links\XrmHelper.cs</Link>
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\Cli\Dependency.cs">
       <Link>Links\Dependency.cs</Link>
@@ -123,8 +135,14 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\Cli\JsonWorkflow.cs">
       <Link>Links\JsonWorkflow.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\CrmAttribute.cs">
+      <Link>Links\CrmAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\CrmConnection.cs">
       <Link>Links\CrmConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\CrmPluginRegistrationAttribute.cs">
+      <Link>Links\CrmPluginRegistrationAttribute.cs</Link>
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\DataSourceCrm.cs">
       <Link>Links\DataSourceCrm.cs</Link>
@@ -135,8 +153,14 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\NameValue.cs">
       <Link>Links\NameValue.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\PluginInputOutputParameter.cs">
+      <Link>Links\PluginInputOutputParameter.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\VisualStudioConfig.cs">
       <Link>Links\VisualStudioConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\XrmEntity.cs">
+      <Link>Links\XrmEntity.cs</Link>
     </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\SimpleJson.cs">
       <Link>Links\SimpleJson.cs</Link>
@@ -147,13 +171,13 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Utility.cs">
       <Link>Links\Utility.cs</Link>
     </Compile>
-    <Compile Include="..\DynamicsCrm.DevKit.Wizard\FormConnection.cs">
-      <Link>Links\FormConnection.cs</Link>
+    <Compile Include="..\DynamicsCrm.DevKit.Wizard\FormConnection2.cs">
+      <Link>Links\FormConnection2.cs</Link>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="..\DynamicsCrm.DevKit.Wizard\FormConnection.Designer.cs">
-      <Link>Links\FormConnection.Designer.cs</Link>
-      <DependentUpon>FormConnection.cs</DependentUpon>
+    <Compile Include="..\DynamicsCrm.DevKit.Wizard\FormConnection2.Designer.cs">
+      <Link>Links\FormConnection2.Designer.cs</Link>
+      <DependentUpon>FormConnection2.cs</DependentUpon>
     </Compile>
     <Compile Include="DevKitCommand.cs" />
     <Compile Include="MenuItem\AddCrmPluginRegistration.cs" />
@@ -164,6 +188,7 @@
     <Compile Include="UtilityPackage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -177,9 +202,9 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\DynamicsCrm.DevKit.Wizard\FormConnection.resx">
-      <Link>Links\FormConnection.resx</Link>
-      <DependentUpon>FormConnection.cs</DependentUpon>
+    <EmbeddedResource Include="..\DynamicsCrm.DevKit.Wizard\FormConnection2.resx">
+      <Link>Links\FormConnection2.resx</Link>
+      <DependentUpon>FormConnection2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
@@ -203,9 +228,18 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.12\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.23\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.19.8.16603, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.19.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.19.8.16603, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.19.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.1.0.38\lib\net462\Microsoft.Rest.ClientRuntime.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Imaging, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Imaging.14.3.25407\lib\net45\Microsoft.VisualStudio.Imaging.dll</HintPath>
@@ -252,11 +286,23 @@
     <Reference Include="Microsoft.VisualStudio.Validation, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Validation.14.1.111\lib\net45\Microsoft.VisualStudio.Validation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.XmlTransform, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+    <Reference Include="Microsoft.Web.XmlTransform, Version=3.0.0.34420, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Xdt.3.0.0\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.12\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.23\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk.Deployment, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.Deployment.9.0.2.23\lib\net462\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk.Workflow, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.9.0.2.23\lib\net462\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.1.0.38\lib\net462\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NuGet.Core, Version=2.14.0.832, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
@@ -264,15 +310,32 @@
     <Reference Include="NUglify, Version=1.5.13.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
       <HintPath>..\packages\NUglify.1.5.13\lib\net40\NUglify.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.Activities.Presentation" />
     <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Workflow.Activities" />
+    <Reference Include="System.Workflow.ComponentModel" />
+    <Reference Include="System.Workflow.Runtime" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>

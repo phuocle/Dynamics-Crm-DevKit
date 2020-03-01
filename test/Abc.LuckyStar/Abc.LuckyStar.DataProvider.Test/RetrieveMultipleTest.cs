@@ -21,7 +21,7 @@ namespace Abc.LuckyStar.DataProvider.Test
         }
 
         [TestMethod]
-        public void RetrieveMultipleTest_01()
+        public void _01()
         {
             Assert.IsTrue(true);
         }

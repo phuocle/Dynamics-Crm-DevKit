@@ -32,7 +32,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="package.json">package.json</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="_package.json">package.json</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="entities\DevKit.d.ts">DevKit.d.ts</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="lib\WebApiClient.js">WebApiClient.js</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="lib\devkit.js">devkit.js</ProjectItem>
@@ -40,11 +40,12 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="entities\generator.webapi.bat">generator.webapi.bat</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="test\xrm-mock.d.ts">xrm-mock.d.ts</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="test\requirejsConfig.js">requirejsConfig.js</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="test\XrmEnum.js">XrmEnum.js</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="chutzpah.json">chutzpah.json</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.1.1.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.2.29.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.WebResource</FullClassName>
   </WizardExtension>
 </VSTemplate>

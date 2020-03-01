@@ -29,7 +29,7 @@ namespace Abc.LuckyStar.PluginAccount.Test
 
         /*
         [TestMethod]
-        public void PreAccountCreateSynchronousTest_UnsecureString_And_SecureString()
+        public void _00_UnsecureString_And_SecureString()
         {
             var target = new Entity("account")
             {
@@ -44,7 +44,7 @@ namespace Abc.LuckyStar.PluginAccount.Test
         */
 
         [TestMethod]
-        public void PreAccountCreateSynchronousTest_Stage_Does_Not_Equals_PreOperation()
+        public void _01_Stage_Does_Not_Equals_PreOperation()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -56,7 +56,7 @@ namespace Abc.LuckyStar.PluginAccount.Test
         }
 
         [TestMethod]
-        public void PreAccountCreateSynchronousTest_PrimaryEntityName_Does_Not_Equals_account()
+        public void _02_PrimaryEntityName_Does_Not_Equals_account()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -69,7 +69,7 @@ namespace Abc.LuckyStar.PluginAccount.Test
         }
 
         [TestMethod]
-        public void PreAccountCreateSynchronousTest_MessageName_Does_Not_Equals_Create()
+        public void _03_MessageName_Does_Not_Equals_Create()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -83,7 +83,7 @@ namespace Abc.LuckyStar.PluginAccount.Test
         }
 
         [TestMethod]
-        public void PreAccountCreateSynchronousTest_Mode_Does_Not_Equals_Synchronous()
+        public void _04_Mode_Does_Not_Equals_Synchronous()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -99,7 +99,7 @@ namespace Abc.LuckyStar.PluginAccount.Test
 
         /*
         [TestMethod]
-        public void PreAccountCreateSynchronousTest_CrmPluginRegistration_Check_Image1()
+        public void _05_CrmPluginRegistration_Check()
         {
             var @class = new PreAccountCreateSynchronous();
             foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
@@ -115,28 +115,10 @@ namespace Abc.LuckyStar.PluginAccount.Test
                     Assert.Fail();
             }
         }
-
-        [TestMethod]
-        public void PreAccountCreateSynchronousTest_CrmPluginRegistration_Check_Image2()
-        {
-            var @class = new PreAccountCreateSynchronous();
-            foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
-            {
-                if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
-                {
-                    var check = attribute as CrmPluginRegistrationAttribute;
-                    Assert.IsNotNull(check.Image2Attributes);
-                    Assert.IsNotNull(check.Image2Name);
-                    Assert.IsNotNull(check.Image2Type);
-                }
-                else
-                    Assert.Fail();
-            }
-        }
         */
 
         [TestMethod]
-        public void PreAccountCreateSynchronousTest_01()
+        public void _06()
         {
             Assert.IsTrue(true);
         }

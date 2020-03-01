@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{79F69307-96CF-4DEF-9DAB-25BD5BAE9AC6}</ProjectGuid>
+    <ProjectGuid>39ef45ac-262d-4632-93a1-69a96efd80a5</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Abc.LuckyStar.SolutionPackager</RootNamespace>
@@ -26,8 +26,7 @@
     <OutputPath>..\Release\dll\</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -36,13 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="bin\coretools\CrmSvcUtil.exe.config" />
-    <None Include="bin\coretools\LicenseTerms.docx" />
-    <None Include="bin\coretools\SolutionPackager.exe.config" />
-    <None Include="DEVKIT\Solutions\Extract_20190731-DEVKIT_1_0_0_0.zip" />
-    <None Include="DEVKIT\Solutions\Extract_20190731-DEVKIT_1_0_0_0_managed.zip" />
-    <None Include="DEVKIT\Solutions\Pack_20190731-DEVKIT_1_0_0_0.zip" />
-    <None Include="DEVKIT\Solutions\Pack_20190731-DEVKIT_1_0_0_0_managed.zip" />
     <None Include="packages.config" />
     <None Include="mapping.xml" />
     <None Include="Extract-Managed.bat" />
@@ -52,121 +44,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Content Include="bin\coretools\CrmSvcUtil.exe" />
-    <Content Include="bin\coretools\CrmSvcUtil.xml" />
-    <Content Include="bin\coretools\Microsoft.ApplicationInsights.dll" />
-    <Content Include="bin\coretools\Microsoft.Crm.Sdk.Proxy.dll" />
-    <Content Include="bin\coretools\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
-    <Content Include="bin\coretools\Microsoft.PowerApps.AppInsights.BatchedTelemetry.dll" />
-    <Content Include="bin\coretools\Microsoft.PowerApps.AppInsights.BatchedTelemetryChannel.dll" />
-    <Content Include="bin\coretools\Microsoft.Rest.ClientRuntime.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Sdk.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.Connector.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
-    <Content Include="bin\coretools\Newtonsoft.Json.dll" />
-    <Content Include="bin\coretools\Other Redistributable.txt" />
-    <Content Include="bin\coretools\pacTelemetryUpload.exe" />
-    <Content Include="bin\coretools\SolutionPackager.exe" />
-    <Content Include="bin\coretools\SolutionPackagerLib.dll" />
-    <Content Include="bin\coretools\System.Diagnostics.DiagnosticSource.dll" />
-    <Content Include="bin\coretools\System.ValueTuple.dll" />
-    <Content Include="DEVKIT\log\2019-07-31 03-50.Managed.txt" />
-    <Content Include="DEVKIT\log\2019-07-31 03-50.Unmanaged.txt" />
-    <Content Include="DEVKIT\log\2019-07-31 03-51.Managed.txt" />
-    <Content Include="DEVKIT\log\2019-07-31 03-51.Unmanaged.txt" />
-    <Content Include="DEVKIT\Managed\Other\Customizations.xml" />
-    <Content Include="DEVKIT\Managed\Other\Relationships.xml" />
-    <Content Include="DEVKIT\Managed\Other\Solution.xml" />
-    <Content Include="DEVKIT\Managed\PluginAssemblies\AbcLuckyStarCustomActionAccount-5E45F081-57B3-E911-A99B-000D3A828CB5\AbcLuckyStarCustomActionAccount.dll" />
-    <Content Include="DEVKIT\Managed\PluginAssemblies\AbcLuckyStarCustomActionAccount-5E45F081-57B3-E911-A99B-000D3A828CB5\AbcLuckyStarCustomActionAccount.dll.data.xml" />
-    <Content Include="DEVKIT\Managed\PluginAssemblies\AbcLuckyStarDataProvider-D9439704-62B3-E911-A99B-000D3A828CB5\AbcLuckyStarDataProvider.dll" />
-    <Content Include="DEVKIT\Managed\PluginAssemblies\AbcLuckyStarDataProvider-D9439704-62B3-E911-A99B-000D3A828CB5\AbcLuckyStarDataProvider.dll.data.xml" />
-    <Content Include="DEVKIT\Managed\PluginAssemblies\AbcLuckyStarPluginAccount-19FF59E0-55B3-E911-A99B-000D3A828CB5\AbcLuckyStarPluginAccount.dll" />
-    <Content Include="DEVKIT\Managed\PluginAssemblies\AbcLuckyStarPluginAccount-19FF59E0-55B3-E911-A99B-000D3A828CB5\AbcLuckyStarPluginAccount.dll.data.xml" />
-    <Content Include="DEVKIT\Managed\PluginAssemblies\AbcLuckyStarWorkflowAccount-9C8220B9-56B3-E911-A99B-000D3A828CB5\AbcLuckyStarWorkflowAccount.dll" />
-    <Content Include="DEVKIT\Managed\PluginAssemblies\AbcLuckyStarWorkflowAccount-9C8220B9-56B3-E911-A99B-000D3A828CB5\AbcLuckyStarWorkflowAccount.dll.data.xml" />
-    <Content Include="DEVKIT\Managed\SdkMessageProcessingSteps\{1dff59e0-55b3-e911-a99b-000d3a828cb5}.xml" />
-    <Content Include="DEVKIT\Managed\SdkMessageProcessingSteps\{21ff59e0-55b3-e911-a99b-000d3a828cb5}.xml" />
-    <Content Include="DEVKIT\Managed\SdkMessageProcessingSteps\{25ff59e0-55b3-e911-a99b-000d3a828cb5}.xml" />
-    <Content Include="DEVKIT\Managed\SdkMessageProcessingSteps\{6245f081-57b3-e911-a99b-000d3a828cb5}.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Account.form.js" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Account.form.js.data.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Account.js" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Account.js.data.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Account.webapi.js" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Account.webapi.js.data.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Contact.form.js" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Contact.form.js.data.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Contact.js" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Contact.js.data.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Contact.webapi.js" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\entities\Contact.webapi.js.data.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\lib\WebApiClient.js" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\lib\WebApiClient.js.data.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\resources\Resource.1031.resx.data.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\resources\Resource.1033.resx.data.xml" />
-    <Content Include="DEVKIT\Managed\WebResources\abc_\resources\Resource.1066.resx.data.xml" />
-    <Content Include="DEVKIT\Managed\Workflows\UpdateAccountNumber-54175FCB-ADA5-453A-ACCD-0B577AABA0EA.xaml.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\Other\Customizations.xml" />
-    <Content Include="DEVKIT\Unmanaged\Other\Relationships.xml" />
-    <Content Include="DEVKIT\Unmanaged\Other\Solution.xml" />
-    <Content Include="DEVKIT\Unmanaged\PluginAssemblies\AbcLuckyStarCustomActionAccount-5E45F081-57B3-E911-A99B-000D3A828CB5\AbcLuckyStarCustomActionAccount.dll" />
-    <Content Include="DEVKIT\Unmanaged\PluginAssemblies\AbcLuckyStarCustomActionAccount-5E45F081-57B3-E911-A99B-000D3A828CB5\AbcLuckyStarCustomActionAccount.dll.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\PluginAssemblies\AbcLuckyStarDataProvider-D9439704-62B3-E911-A99B-000D3A828CB5\AbcLuckyStarDataProvider.dll" />
-    <Content Include="DEVKIT\Unmanaged\PluginAssemblies\AbcLuckyStarDataProvider-D9439704-62B3-E911-A99B-000D3A828CB5\AbcLuckyStarDataProvider.dll.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\PluginAssemblies\AbcLuckyStarPluginAccount-19FF59E0-55B3-E911-A99B-000D3A828CB5\AbcLuckyStarPluginAccount.dll" />
-    <Content Include="DEVKIT\Unmanaged\PluginAssemblies\AbcLuckyStarPluginAccount-19FF59E0-55B3-E911-A99B-000D3A828CB5\AbcLuckyStarPluginAccount.dll.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\PluginAssemblies\AbcLuckyStarWorkflowAccount-9C8220B9-56B3-E911-A99B-000D3A828CB5\AbcLuckyStarWorkflowAccount.dll" />
-    <Content Include="DEVKIT\Unmanaged\PluginAssemblies\AbcLuckyStarWorkflowAccount-9C8220B9-56B3-E911-A99B-000D3A828CB5\AbcLuckyStarWorkflowAccount.dll.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\SdkMessageProcessingSteps\{1dff59e0-55b3-e911-a99b-000d3a828cb5}.xml" />
-    <Content Include="DEVKIT\Unmanaged\SdkMessageProcessingSteps\{21ff59e0-55b3-e911-a99b-000d3a828cb5}.xml" />
-    <Content Include="DEVKIT\Unmanaged\SdkMessageProcessingSteps\{25ff59e0-55b3-e911-a99b-000d3a828cb5}.xml" />
-    <Content Include="DEVKIT\Unmanaged\SdkMessageProcessingSteps\{6245f081-57b3-e911-a99b-000d3a828cb5}.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Account.form.js" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Account.form.js.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Account.js" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Account.js.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Account.webapi.js" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Account.webapi.js.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Contact.form.js" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Contact.form.js.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Contact.js" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Contact.js.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Contact.webapi.js" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\entities\Contact.webapi.js.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\lib\WebApiClient.js" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\lib\WebApiClient.js.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\resources\Resource.1031.resx.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\resources\Resource.1033.resx.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\WebResources\abc_\resources\Resource.1066.resx.data.xml" />
-    <Content Include="DEVKIT\Unmanaged\Workflows\UpdateAccountNumber-54175FCB-ADA5-453A-ACCD-0B577AABA0EA.xaml.data.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DEVKIT\Managed\Resources\en-US\resources.en-US.resx" />
-    <EmbeddedResource Include="DEVKIT\Managed\WebResources\abc_\resources\Resource.1031.resx" />
-    <EmbeddedResource Include="DEVKIT\Managed\WebResources\abc_\resources\Resource.1033.resx" />
-    <EmbeddedResource Include="DEVKIT\Managed\WebResources\abc_\resources\Resource.1066.resx" />
-    <EmbeddedResource Include="DEVKIT\Unmanaged\Resources\en-US\resources.en-US.resx" />
-    <EmbeddedResource Include="DEVKIT\Unmanaged\WebResources\abc_\resources\Resource.1031.resx" />
-    <EmbeddedResource Include="DEVKIT\Unmanaged\WebResources\abc_\resources\Resource.1033.resx" />
-    <EmbeddedResource Include="DEVKIT\Unmanaged\WebResources\abc_\resources\Resource.1066.resx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="DEVKIT\Managed\Workflows\UpdateAccountNumber-54175FCB-ADA5-453A-ACCD-0B577AABA0EA.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DEVKIT\Unmanaged\Workflows\UpdateAccountNumber-54175FCB-ADA5-453A-ACCD-0B577AABA0EA.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.1.0\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Debug\" />
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.1.1\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
 </Project>

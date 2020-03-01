@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{35a2df62-d24b-4a6b-b7c7-589366435851}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{f249d78f-2a6a-4684-a1d4-ef8b207eb9c4}" IsUserDefined="1">
+          <labels>
+            <label description="" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{e76781fa-a5f8-4337-9f78-fd104c9044e1}">
+                  <labels>
+                    <label description="ALLGEMEIN" languagecode="1031" />
+                    <label description="GENERAL" languagecode="1033" />
+                    <label description="TỔNG QUÁT" languagecode="1066" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{f862dcfd-0179-41d4-8620-480dd9e169b9}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="subject" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="subject" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{46f4253b-b37e-48da-a7aa-aef6c4e76e05}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="regardingobjectid" classid="{F3015350-44A2-4aa0-97B5-00166532B5E9}" datafieldname="regardingobjectid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{16cc6b7d-0fe2-420a-bdc0-269efaaa1119}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="statecode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="statecode" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{4b954978-cd6f-4c7a-8f58-e000858bc31c}">
+                  <labels>
+                    <label description="ANDERE DETAILS" languagecode="1031" />
+                    <label description="OTHER DETAILS" languagecode="1033" />
+                    <label description="CHI TIẾT KHÁC" languagecode="1066" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{3225936b-5320-4130-b415-b00d7371a8c6}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="prioritycode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="prioritycode" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{cc7e9f76-1b19-4cf0-b1f6-3f0546523065}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="scheduledend" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="scheduledend" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{13ee769f-1cd2-4124-af55-8104a03bfa17}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+  </systemform>
+</forms>
