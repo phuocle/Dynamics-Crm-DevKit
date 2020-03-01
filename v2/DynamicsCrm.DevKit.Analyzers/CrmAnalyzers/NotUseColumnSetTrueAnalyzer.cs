@@ -19,6 +19,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
         }
         public override void Initialize(AnalysisContext context)
         {
+            context.EnableConcurrentExecution();
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             if (context == null) throw new ArgumentNullException(nameof(context));
             base.Initialize(context);
             context.RegisterSyntaxNodeAction(AnalyzerNotUseColumnSetTrue,

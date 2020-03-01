@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.ProxyTypes";
+                return @"C:\src\azure\abiz\tfs\ABIZ_IPAM\src\CDS";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

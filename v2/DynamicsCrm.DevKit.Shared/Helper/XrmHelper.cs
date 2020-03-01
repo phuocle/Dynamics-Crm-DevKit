@@ -382,7 +382,9 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
                 var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
                 var password = array.First(x => x.ToLower().StartsWith("password="));
-                if (password.EndsWith("="))
+                if (password.EndsWith("=="))
+                    password = password.Split("=".ToCharArray())[1] + "==";
+                else if (password.EndsWith("="))
                     password = password.Split("=".ToCharArray())[1] + "=";
                 else
                     password = password.Split("=".ToCharArray())[1];
@@ -396,7 +398,9 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 var domain = array.First(x => x.ToLower().StartsWith("domain=")).Split("=".ToCharArray())[1];
                 var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
                 var password = array.First(x => x.ToLower().StartsWith("password="));
-                if (password.EndsWith("="))
+                if (password.EndsWith("=="))
+                    password = password.Split("=".ToCharArray())[1] + "==";
+                else if (password.EndsWith("="))
                     password = password.Split("=".ToCharArray())[1] + "=";
                 else
                     password = password.Split("=".ToCharArray())[1];
