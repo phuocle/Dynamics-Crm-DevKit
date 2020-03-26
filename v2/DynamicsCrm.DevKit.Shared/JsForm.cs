@@ -262,20 +262,26 @@ namespace DynamicsCrm.DevKit.Shared
             foreach (var item in list)
             {
                 var crmAttribute = Fields.FirstOrDefault(x => x.LogicalName == item);
-                if (crmAttribute == null) continue;
-                var name = crmAttribute.SchemaName;
-                if (name == previousName)
+                if (crmAttribute == null)
                 {
-                    previousCount = previousCount + 1;
-                    name = name + "_" + previousCount.ToString();
+                    code += $"\t\t\t{item}: {{}},\r\n";
                 }
                 else
                 {
-                    previousName = string.Empty;
-                    previousCount = 0;
+                    var name = crmAttribute.SchemaName;
+                    if (name == previousName)
+                    {
+                        previousCount = previousCount + 1;
+                        name = name + "_" + previousCount.ToString();
+                    }
+                    else
+                    {
+                        previousName = string.Empty;
+                        previousCount = 0;
+                    }
+                    code += $"\t\t\t{name}: {{}},\r\n";
+                    previousName = crmAttribute.SchemaName;
                 }
-                code += $"\t\t\t{name}: {{}},\r\n";
-                previousName = crmAttribute.SchemaName;
             }
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return code;
@@ -289,9 +295,9 @@ namespace DynamicsCrm.DevKit.Shared
                     .Descendants("row").Descendants("cell").Descendants("control")
                           select new
                           {
-                              FieldName = (string)x.Attribute("datafieldname")
+                              FieldName = x?.Attribute("datafieldname") ?? x?.Attribute("id")
                           }).Distinct();
-            var list = (from field in fields where field.FieldName != null select field.FieldName).ToList();
+            var list = (from field in fields where field.FieldName != null select (string)field.FieldName).ToList<string>();
             list.Sort();
             return GetJsForListFields(list);
         }

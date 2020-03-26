@@ -133,6 +133,7 @@
             return (type + field).toLowerCase();
         })();
         var control = formContext.getControl(logicalName);
+        if (cotnrol === null) control = formContext.getControl(field);
         var attribute = (function() {
             if (formContext) {
                 if (formContext.getAttribute) {
@@ -226,6 +227,7 @@
             get: function() { return control.getVisible(); },
             set: function(value) { control.setVisible(value); }
         });
+        body[field].ContentWindow           = function(successCallback, errorCallback) { control.getContentWindow().then(successCallback, errorCallback); }
         body[field].Option                  = function(value) { return attribute.getOption(value); };
         body[field].RemoveOnChange          = function(callback) { attribute.removeOnChange(callback); };
         body[field].AddCustomFilter         = function(filter, entityLogicaName) { control.addCustomFilter(filter, entityLogicaName); };

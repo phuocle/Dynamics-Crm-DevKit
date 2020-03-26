@@ -1464,6 +1464,11 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setsrc
                  */
                 Src: string;
+                /**
+                * Returns the content window that represents an IFRAME or web resource.
+                * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+                */
+                ContentWindow(successCallback?: (contentWindow: object) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
             }
             interface ControlIFrame extends IControl {
                 /**
@@ -1482,6 +1487,11 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setsrc
                  */
                 Src: string;
+                /**
+                * Returns the content window that represents an IFRAME or web resource.
+                * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getcontentwindow
+                */
+                ContentWindow(successCallback?: (contentWindow: object) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
             }
             interface ControlTimer extends IControl {
                 /**
