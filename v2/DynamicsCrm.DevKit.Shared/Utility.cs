@@ -340,6 +340,7 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("%", string.Empty);
                 name = name.Replace("^", string.Empty);
                 name = name.Replace("&", string.Empty);
+                name = name.Replace("＆", string.Empty);
                 name = name.Replace("*", string.Empty);
                 name = name.Replace("(", string.Empty);
                 name = name.Replace(")", string.Empty);
@@ -362,6 +363,7 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("=", string.Empty);
                 name = name.Replace("\t", string.Empty);
                 name = name.Replace("___", "_");
+                name = name.Replace("__", "_");
                 var firstchar = name[0];
                 if (firstchar >= '0' && firstchar <= '9') name = "_" + name;
                 return name;

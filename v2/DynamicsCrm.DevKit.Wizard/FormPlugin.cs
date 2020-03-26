@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Wizard
             InitializeComponent();
 
 
-            Font = SystemFonts.DefaultFont;
+            //Font = SystemFonts.DefaultFont;
             progressBar.Visible = false;
 
             Text += Const.Version;

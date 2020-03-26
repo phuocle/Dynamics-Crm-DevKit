@@ -46,18 +46,18 @@
             // progressBar
             // 
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar.Location = new System.Drawing.Point(2, 89);
+            this.progressBar.Location = new System.Drawing.Point(3, 110);
             this.progressBar.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(383, 3);
+            this.progressBar.Size = new System.Drawing.Size(510, 4);
             this.progressBar.TabIndex = 1;
             // 
             // buttonConnection
             // 
-            this.buttonConnection.Location = new System.Drawing.Point(400, 0);
-            this.buttonConnection.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonConnection.Location = new System.Drawing.Point(533, 0);
+            this.buttonConnection.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonConnection.Name = "buttonConnection";
-            this.buttonConnection.Size = new System.Drawing.Size(94, 29);
+            this.buttonConnection.Size = new System.Drawing.Size(125, 36);
             this.buttonConnection.TabIndex = 0;
             this.buttonConnection.Text = "Co&nnection";
             this.buttonConnection.UseVisualStyleBackColor = true;
@@ -68,8 +68,8 @@
             this.link.Location = new System.Drawing.Point(0, 0);
             this.link.Margin = new System.Windows.Forms.Padding(0);
             this.link.Name = "link";
-            this.link.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.link.Size = new System.Drawing.Size(393, 19);
+            this.link.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
+            this.link.Size = new System.Drawing.Size(524, 23);
             this.link.TabIndex = 4;
             this.link.TabStop = true;
             this.link.Text = "WIKI: Add new WebResource Project";
@@ -85,11 +85,11 @@
             this.groupBox.Controls.Add(this.textProjectName);
             this.groupBox.Controls.Add(this.labelProject);
             this.groupBox.Controls.Add(this.progressBar);
-            this.groupBox.Location = new System.Drawing.Point(6, 16);
-            this.groupBox.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox.Location = new System.Drawing.Point(8, 20);
+            this.groupBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox.Size = new System.Drawing.Size(387, 94);
+            this.groupBox.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox.Size = new System.Drawing.Size(516, 116);
             this.groupBox.TabIndex = 5;
             this.groupBox.TabStop = false;
             // 
@@ -104,10 +104,10 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxEntity.Location = new System.Drawing.Point(100, 12);
-            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBoxEntity.Location = new System.Drawing.Point(133, 15);
+            this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxEntity.Name = "comboBoxEntity";
-            this.comboBoxEntity.Size = new System.Drawing.Size(273, 21);
+            this.comboBoxEntity.Size = new System.Drawing.Size(363, 24);
             this.comboBoxEntity.TabIndex = 4;
             this.comboBoxEntity.Visible = false;
             this.comboBoxEntity.SelectedIndexChanged += new System.EventHandler(this.comboBoxEntity_SelectedIndexChanged);
@@ -125,56 +125,53 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxCrmName.Location = new System.Drawing.Point(103, 62);
-            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBoxCrmName.Location = new System.Drawing.Point(137, 76);
+            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxCrmName.Name = "comboBoxCrmName";
-            this.comboBoxCrmName.Size = new System.Drawing.Size(270, 21);
+            this.comboBoxCrmName.Size = new System.Drawing.Size(359, 24);
             this.comboBoxCrmName.TabIndex = 2;
             // 
             // labelDynamicsCrm
             // 
-            this.labelDynamicsCrm.Location = new System.Drawing.Point(6, 65);
-            this.labelDynamicsCrm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelDynamicsCrm.Location = new System.Drawing.Point(8, 80);
             this.labelDynamicsCrm.Name = "labelDynamicsCrm";
-            this.labelDynamicsCrm.Size = new System.Drawing.Size(90, 25);
+            this.labelDynamicsCrm.Size = new System.Drawing.Size(120, 31);
             this.labelDynamicsCrm.TabIndex = 3;
             this.labelDynamicsCrm.Text = "Dynamics Crm:";
             // 
             // labelProjectName
             // 
-            this.labelProjectName.Location = new System.Drawing.Point(100, 32);
-            this.labelProjectName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelProjectName.Location = new System.Drawing.Point(133, 39);
             this.labelProjectName.Name = "labelProjectName";
-            this.labelProjectName.Size = new System.Drawing.Size(273, 28);
+            this.labelProjectName.Size = new System.Drawing.Size(364, 34);
             this.labelProjectName.TabIndex = 2;
             this.labelProjectName.Text = "AAAAA AAAA AAAA AAAA AAA AAA AAAA";
             // 
             // textProjectName
             // 
             this.textProjectName.Enabled = false;
-            this.textProjectName.Location = new System.Drawing.Point(100, 12);
-            this.textProjectName.Margin = new System.Windows.Forms.Padding(2);
+            this.textProjectName.Location = new System.Drawing.Point(133, 15);
+            this.textProjectName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textProjectName.Name = "textProjectName";
-            this.textProjectName.Size = new System.Drawing.Size(273, 20);
+            this.textProjectName.Size = new System.Drawing.Size(363, 22);
             this.textProjectName.TabIndex = 1;
             this.textProjectName.TextChanged += new System.EventHandler(this.textProjectName_TextChanged);
             // 
             // labelProject
             // 
-            this.labelProject.Location = new System.Drawing.Point(6, 15);
-            this.labelProject.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelProject.Location = new System.Drawing.Point(8, 18);
             this.labelProject.Name = "labelProject";
-            this.labelProject.Size = new System.Drawing.Size(90, 31);
+            this.labelProject.Size = new System.Drawing.Size(120, 38);
             this.labelProject.TabIndex = 0;
             this.labelProject.Text = "Project Name:";
             // 
             // buttonOk
             // 
             this.buttonOk.Enabled = false;
-            this.buttonOk.Location = new System.Drawing.Point(400, 48);
-            this.buttonOk.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonOk.Location = new System.Drawing.Point(533, 59);
+            this.buttonOk.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(94, 29);
+            this.buttonOk.Size = new System.Drawing.Size(125, 36);
             this.buttonOk.TabIndex = 3;
             this.buttonOk.Text = "&OK";
             this.buttonOk.UseVisualStyleBackColor = true;
@@ -182,10 +179,10 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(400, 81);
-            this.buttonCancel.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonCancel.Location = new System.Drawing.Point(533, 100);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(94, 29);
+            this.buttonCancel.Size = new System.Drawing.Size(125, 36);
             this.buttonCancel.TabIndex = 4;
             this.buttonCancel.Text = "&Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -194,9 +191,8 @@
             // FormProject
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(494, 120);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(659, 148);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
             this.Controls.Add(this.buttonCancel);
@@ -204,7 +200,7 @@
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.link);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormProject";
