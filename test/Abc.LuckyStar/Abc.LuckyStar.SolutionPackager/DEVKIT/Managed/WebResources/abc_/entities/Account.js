@@ -1,18 +1,11 @@
-//@ts-check
+﻿//@ts-check
 ///<reference path="Account.d.ts" />
+"use strict";
 var formAccount = (function () {
-    function onLoad(executionContext) {
-        var form = new LuckyStar.FormAccount(executionContext);
-        if (form.FormType === OptionSet.FormType.Create) {
-            form.Body.Tab._64BC19B9_1311_4B93_BE4C_6407B98D2AB3.Section._64BC19B9_1311_4B93_BE4C_6407B98D2AB4.Visible = false;
-        }
-        var account = new LuckyStar.AccountApi();
-        account.AccountCategoryCode.Value = OptionSet.Account.AccountCategoryCode.Preferred_Customer;
-
-        var accounApi = new LuckyStar.AccountApi();
-        accounApi.IndustryCode.Value = OptionSet.Account.StateCode.Active;
+	"use strict";
+	async function onLoad(executionContext) {
 	}
-	function onSave(executionContext) {
+	async function onSave(executionContext) {
 	}
 	return {
 		OnLoad: onLoad,
@@ -20,9 +13,10 @@ var formAccount = (function () {
 	};
 })();
 var formAccount_Quick_Create = (function () {
-	function onLoad(executionContext) {
+	"use strict";
+	async function onLoad(executionContext) {
 	}
-	function onSave(executionContext) {
+	async function onSave(executionContext) {
 	}
 	return {
 		OnLoad: onLoad,

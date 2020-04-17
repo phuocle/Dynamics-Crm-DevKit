@@ -105,12 +105,12 @@ declare namespace LuckyStar {
 			WebSiteURL: DevKit.Form.Controls.ControlString;
 		}
 		interface Navigation {
-			navRelationships: DevKit.Form.Controls.ControlNavigationItem,
 			navAddresses: DevKit.Form.Controls.ControlNavigationItem,
 			navSubAccts: DevKit.Form.Controls.ControlNavigationItem,
+			navRelationships: DevKit.Form.Controls.ControlNavigationItem,
 			navCampaignsInSFA: DevKit.Form.Controls.ControlNavigationItem,
-			navAsyncOperations: DevKit.Form.Controls.ControlNavigationItem,
 			navProcessSessions: DevKit.Form.Controls.ControlNavigationItem,
+			navAsyncOperations: DevKit.Form.Controls.ControlNavigationItem,
 			nav_devkit_account_devkit_webapi_Customer: DevKit.Form.Controls.ControlNavigationItem
 		}
 	}

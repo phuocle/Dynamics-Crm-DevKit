@@ -8,7 +8,7 @@
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
-  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/devkit_WebApi.form.js" displayName="abc_/entities/devkit_WebApi.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{8742dece-88a3-475d-bee6-08663b482fde}"/&gt;&lt;Library name="abc_/entities/devkit_WebApi.webapi.js" displayName="abc_/entities/devkit_WebApi.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{07aa0934-84a7-4b45-b410-f039f58347c1}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/devkit_WebApi.form.js" displayName="abc_/entities/devkit_WebApi.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{0339aaae-d5aa-4994-a434-bbded2170abd}"/&gt;&lt;Library name="abc_/entities/devkit_WebApi.webapi.js" displayName="abc_/entities/devkit_WebApi.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{5b9baf73-2aa8-473b-80ef-3c3a4f2885f1}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

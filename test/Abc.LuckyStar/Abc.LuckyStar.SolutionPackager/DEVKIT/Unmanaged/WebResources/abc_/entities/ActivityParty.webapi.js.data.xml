@@ -8,6 +8,7 @@
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/lib/WebApiClient.js" displayName="abc_/lib/WebApiClient.js" languagecode="" description="1.0.0.0" libraryUniqueId="{8582ab54-1e6c-4ea5-9b8c-b81a5b633f77}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

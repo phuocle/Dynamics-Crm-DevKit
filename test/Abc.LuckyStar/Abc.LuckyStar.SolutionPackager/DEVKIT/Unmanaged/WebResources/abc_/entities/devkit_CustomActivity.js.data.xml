@@ -8,7 +8,7 @@
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
-  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/devkit_CustomActivity.form.js" displayName="abc_/entities/devkit_CustomActivity.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{7bc92353-e9c9-489d-8a5c-034dcc5ed3c2}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/devkit_CustomActivity.form.js" displayName="abc_/entities/devkit_CustomActivity.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{e23a6bf4-e141-40ae-8e8d-36009065e71c}"/&gt;&lt;Library name="abc_/entities/devkit_CustomActivity.webapi.js" displayName="abc_/entities/devkit_CustomActivity.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{f1372869-f0fe-4879-9afb-da446ad0a3fb}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

@@ -65,7 +65,7 @@
                 <section name="ADDRESS" showlabel="true" locklevel="0" showbar="false" id="{cc0fe06e-4b5f-4648-A62d-84d1514e1fc5}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="1">
                   <rows>
                     <row>
-                      <cell id="{4913500e-605a-809b-e99e-69e2710d09bd}" showlabel="false" locklevel="0" ordinalvalue="10000">
+                      <cell id="{4913500e-605a-809b-e99e-69e2710d09bd}" showlabel="true" locklevel="0" ordinalvalue="10000">
                         <labels>
                           <label description="Adresse 1" languagecode="1031" solutionaction="Added" />
                           <label description="Address 1" languagecode="1033" solutionaction="Added" />
@@ -221,15 +221,7 @@
                   <labels>
                     <label description="Section" languagecode="1033" />
                   </labels>
-                  <rows>
-                    <row>
-                      <cell id="{29ba2684-5d4e-47bd-8dad-1f06f43df87a}" ordinalvalue="10000">
-                        <labels>
-                          <label description="" languagecode="1033" />
-                        </labels>
-                      </cell>
-                    </row>
-                  </rows>
+                  <rows></rows>
                 </section>
               </sections>
             </column>
@@ -239,15 +231,7 @@
                   <labels>
                     <label description="Section" languagecode="1033" />
                   </labels>
-                  <rows>
-                    <row>
-                      <cell id="{cec0b747-0abe-409f-b95e-89f681b69dee}" ordinalvalue="10000">
-                        <labels>
-                          <label description="" languagecode="1033" />
-                        </labels>
-                      </cell>
-                    </row>
-                  </rows>
+                  <rows></rows>
                 </section>
               </sections>
             </column>
@@ -257,15 +241,7 @@
                   <labels>
                     <label description="Section" languagecode="1033" />
                   </labels>
-                  <rows>
-                    <row>
-                      <cell id="{ef7d44bd-ec56-497f-9235-bb7fce81b938}" ordinalvalue="10000">
-                        <labels>
-                          <label description="" languagecode="1033" />
-                        </labels>
-                      </cell>
-                    </row>
-                  </rows>
+                  <rows></rows>
                 </section>
               </sections>
             </column>

@@ -1,2 +1,3 @@
 ﻿//@ts-check
-///<reference path='ActivityParty.d.ts' />
+///<reference path="ActivityParty.d.ts" />
+"use strict";

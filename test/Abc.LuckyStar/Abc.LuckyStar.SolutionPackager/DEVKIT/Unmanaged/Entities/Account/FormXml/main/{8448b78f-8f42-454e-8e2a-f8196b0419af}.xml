@@ -105,7 +105,7 @@
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{4913500e-605a-809b-e99e-69e2710d09bd}" showlabel="false" locklevel="0">
+                      <cell id="{4913500e-605a-809b-e99e-69e2710d09bd}" showlabel="true" locklevel="0">
                         <labels>
                           <label description="Address 1" languagecode="1033" />
                           <label description="Adresse 1" languagecode="1031" />
@@ -610,15 +610,7 @@
                   <labels>
                     <label description="Section" languagecode="1033" />
                   </labels>
-                  <rows>
-                    <row>
-                      <cell id="{29ba2684-5d4e-47bd-8dad-1f06f43df87a}">
-                        <labels>
-                          <label description="" languagecode="1033" />
-                        </labels>
-                      </cell>
-                    </row>
-                  </rows>
+                  <rows></rows>
                 </section>
               </sections>
             </column>
@@ -628,15 +620,7 @@
                   <labels>
                     <label description="Section" languagecode="1033" />
                   </labels>
-                  <rows>
-                    <row>
-                      <cell id="{cec0b747-0abe-409f-b95e-89f681b69dee}">
-                        <labels>
-                          <label description="" languagecode="1033" />
-                        </labels>
-                      </cell>
-                    </row>
-                  </rows>
+                  <rows></rows>
                 </section>
               </sections>
             </column>
@@ -646,15 +630,7 @@
                   <labels>
                     <label description="Section" languagecode="1033" />
                   </labels>
-                  <rows>
-                    <row>
-                      <cell id="{ef7d44bd-ec56-497f-9235-bb7fce81b938}">
-                        <labels>
-                          <label description="" languagecode="1033" />
-                        </labels>
-                      </cell>
-                    </row>
-                  </rows>
+                  <rows></rows>
                 </section>
               </sections>
             </column>
@@ -707,58 +683,6 @@
       </clientresources>
       <Navigation>
         <NavBar>
-          <NavBarByRelationshipItem RelationshipName="account_customer_relationship_customer" Id="navRelationships" TitleResourceId="Left_Nav_Area_Relationships" Sequence="10" Area="Info" Show="false">
-            <Privileges>
-              <Privilege Entity="" Privilege="ReadActivity" />
-            </Privileges>
-            <Titles>
-              <Title LCID="1033" Text="CustomerRelationship" />
-              <Title LCID="1025" Text="CustomerRelationship" />
-              <Title LCID="1026" Text="CustomerRelationship" />
-              <Title LCID="1027" Text="CustomerRelationship" />
-              <Title LCID="1029" Text="CustomerRelationship" />
-              <Title LCID="1030" Text="CustomerRelationship" />
-              <Title LCID="1031" Text="CustomerRelationship" />
-              <Title LCID="1032" Text="CustomerRelationship" />
-              <Title LCID="3082" Text="CustomerRelationship" />
-              <Title LCID="1061" Text="CustomerRelationship" />
-              <Title LCID="1069" Text="CustomerRelationship" />
-              <Title LCID="1035" Text="CustomerRelationship" />
-              <Title LCID="1036" Text="CustomerRelationship" />
-              <Title LCID="1110" Text="CustomerRelationship" />
-              <Title LCID="1037" Text="CustomerRelationship" />
-              <Title LCID="1081" Text="CustomerRelationship" />
-              <Title LCID="1050" Text="CustomerRelationship" />
-              <Title LCID="1038" Text="CustomerRelationship" />
-              <Title LCID="1057" Text="CustomerRelationship" />
-              <Title LCID="1040" Text="CustomerRelationship" />
-              <Title LCID="1041" Text="CustomerRelationship" />
-              <Title LCID="1087" Text="CustomerRelationship" />
-              <Title LCID="1042" Text="CustomerRelationship" />
-              <Title LCID="1063" Text="CustomerRelationship" />
-              <Title LCID="1062" Text="CustomerRelationship" />
-              <Title LCID="1086" Text="CustomerRelationship" />
-              <Title LCID="1044" Text="CustomerRelationship" />
-              <Title LCID="1043" Text="CustomerRelationship" />
-              <Title LCID="1045" Text="CustomerRelationship" />
-              <Title LCID="1046" Text="CustomerRelationship" />
-              <Title LCID="2070" Text="CustomerRelationship" />
-              <Title LCID="1048" Text="CustomerRelationship" />
-              <Title LCID="1049" Text="CustomerRelationship" />
-              <Title LCID="1051" Text="CustomerRelationship" />
-              <Title LCID="1060" Text="CustomerRelationship" />
-              <Title LCID="10266" Text="CustomerRelationship" />
-              <Title LCID="9242" Text="CustomerRelationship" />
-              <Title LCID="1053" Text="CustomerRelationship" />
-              <Title LCID="1054" Text="CustomerRelationship" />
-              <Title LCID="1055" Text="CustomerRelationship" />
-              <Title LCID="1058" Text="CustomerRelationship" />
-              <Title LCID="1066" Text="CustomerRelationship" />
-              <Title LCID="2052" Text="CustomerRelationship" />
-              <Title LCID="3076" Text="CustomerRelationship" />
-              <Title LCID="1028" Text="CustomerRelationship" />
-            </Titles>
-          </NavBarByRelationshipItem>
           <NavBarByRelationshipItem RelationshipName="Account_CustomerAddress" Id="navAddresses" Sequence="10" Area="Info" Show="false">
             <Privileges>
               <Privilege Entity="" Privilege="ReadActivity" />
@@ -863,6 +787,58 @@
               <Title LCID="1028" Text="客戶" />
             </Titles>
           </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="account_customer_relationship_customer" Id="navRelationships" TitleResourceId="Left_Nav_Area_Relationships" Sequence="10" Area="Info" Show="false">
+            <Privileges>
+              <Privilege Entity="" Privilege="ReadActivity" />
+            </Privileges>
+            <Titles>
+              <Title LCID="1033" Text="CustomerRelationship" />
+              <Title LCID="1025" Text="CustomerRelationship" />
+              <Title LCID="1026" Text="CustomerRelationship" />
+              <Title LCID="1027" Text="CustomerRelationship" />
+              <Title LCID="1029" Text="CustomerRelationship" />
+              <Title LCID="1030" Text="CustomerRelationship" />
+              <Title LCID="1031" Text="CustomerRelationship" />
+              <Title LCID="1032" Text="CustomerRelationship" />
+              <Title LCID="3082" Text="CustomerRelationship" />
+              <Title LCID="1061" Text="CustomerRelationship" />
+              <Title LCID="1069" Text="CustomerRelationship" />
+              <Title LCID="1035" Text="CustomerRelationship" />
+              <Title LCID="1036" Text="CustomerRelationship" />
+              <Title LCID="1110" Text="CustomerRelationship" />
+              <Title LCID="1037" Text="CustomerRelationship" />
+              <Title LCID="1081" Text="CustomerRelationship" />
+              <Title LCID="1050" Text="CustomerRelationship" />
+              <Title LCID="1038" Text="CustomerRelationship" />
+              <Title LCID="1057" Text="CustomerRelationship" />
+              <Title LCID="1040" Text="CustomerRelationship" />
+              <Title LCID="1041" Text="CustomerRelationship" />
+              <Title LCID="1087" Text="CustomerRelationship" />
+              <Title LCID="1042" Text="CustomerRelationship" />
+              <Title LCID="1063" Text="CustomerRelationship" />
+              <Title LCID="1062" Text="CustomerRelationship" />
+              <Title LCID="1086" Text="CustomerRelationship" />
+              <Title LCID="1044" Text="CustomerRelationship" />
+              <Title LCID="1043" Text="CustomerRelationship" />
+              <Title LCID="1045" Text="CustomerRelationship" />
+              <Title LCID="1046" Text="CustomerRelationship" />
+              <Title LCID="2070" Text="CustomerRelationship" />
+              <Title LCID="1048" Text="CustomerRelationship" />
+              <Title LCID="1049" Text="CustomerRelationship" />
+              <Title LCID="1051" Text="CustomerRelationship" />
+              <Title LCID="1060" Text="CustomerRelationship" />
+              <Title LCID="10266" Text="CustomerRelationship" />
+              <Title LCID="9242" Text="CustomerRelationship" />
+              <Title LCID="1053" Text="CustomerRelationship" />
+              <Title LCID="1054" Text="CustomerRelationship" />
+              <Title LCID="1055" Text="CustomerRelationship" />
+              <Title LCID="1058" Text="CustomerRelationship" />
+              <Title LCID="1066" Text="CustomerRelationship" />
+              <Title LCID="2052" Text="CustomerRelationship" />
+              <Title LCID="3076" Text="CustomerRelationship" />
+              <Title LCID="1028" Text="CustomerRelationship" />
+            </Titles>
+          </NavBarByRelationshipItem>
           <NavBarByRelationshipItem RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navCampaignsInSFA" Sequence="20" Area="Marketing" Id="navCampaignsInSFA" Show="false">
             <Titles>
               <Title LCID="1033" Text="Campaigns" />
@@ -912,55 +888,6 @@
               <Title LCID="1028" Text="行銷活動" />
             </Titles>
           </NavBarByRelationshipItem>
-          <NavBarByRelationshipItem RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navAsyncOperations" Sequence="9500" Area="ProcessCenter" Id="navAsyncOperations" Show="false">
-            <Titles>
-              <Title LCID="1033" Text="Workflows" />
-              <Title LCID="1025" Text="عمليات سير العمل" />
-              <Title LCID="1026" Text="Работни потоци" />
-              <Title LCID="1027" Text="Fluxos de treball" />
-              <Title LCID="1029" Text="Pracovní postupy" />
-              <Title LCID="1030" Text="Arbejdsprocesser" />
-              <Title LCID="1031" Text="Workflows" />
-              <Title LCID="1032" Text="Ροές εργασιών" />
-              <Title LCID="3082" Text="Flujos de trabajo" />
-              <Title LCID="1061" Text="Töövood" />
-              <Title LCID="1069" Text="Lan-fluxuak" />
-              <Title LCID="1035" Text="Työnkulut" />
-              <Title LCID="1036" Text="Workflows" />
-              <Title LCID="1110" Text="Fluxos de traballo" />
-              <Title LCID="1037" Text="זרימות עבודה" />
-              <Title LCID="1081" Text="कार्य प्रवाह" />
-              <Title LCID="1050" Text="Tjekovi rada" />
-              <Title LCID="1038" Text="Munkafolyamatok" />
-              <Title LCID="1057" Text="Alur Kerja" />
-              <Title LCID="1040" Text="Flussi di lavoro" />
-              <Title LCID="1041" Text="ワークフロー" />
-              <Title LCID="1087" Text="Жұмыс ағындары" />
-              <Title LCID="1042" Text="워크플로" />
-              <Title LCID="1063" Text="Darbo eigos" />
-              <Title LCID="1062" Text="Darbplūsmas" />
-              <Title LCID="1086" Text="Aliran Kerja" />
-              <Title LCID="1044" Text="Arbeidsflyter" />
-              <Title LCID="1043" Text="Werkstromen" />
-              <Title LCID="1045" Text="Przepływy pracy" />
-              <Title LCID="1046" Text="Fluxos de Trabalho" />
-              <Title LCID="2070" Text="Fluxos de Trabalho" />
-              <Title LCID="1048" Text="Fluxuri de lucru" />
-              <Title LCID="1049" Text="Бизнес-процессы" />
-              <Title LCID="1051" Text="Pracovné postupy" />
-              <Title LCID="1060" Text="Poteki dela" />
-              <Title LCID="10266" Text="Токови посла" />
-              <Title LCID="9242" Text="Tokovi posla" />
-              <Title LCID="1053" Text="Arbetsflöden" />
-              <Title LCID="1054" Text="เวิร์กโฟลว์" />
-              <Title LCID="1055" Text="İş Akışları" />
-              <Title LCID="1058" Text="Робочі цикли" />
-              <Title LCID="1066" Text="Quy trình làm việc" />
-              <Title LCID="2052" Text="工作流" />
-              <Title LCID="3076" Text="工作流程" />
-              <Title LCID="1028" Text="工作流程" />
-            </Titles>
-          </NavBarByRelationshipItem>
           <NavBarByRelationshipItem RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navProcessSessions" Sequence="9700" Area="ProcessCenter" Id="navProcessSessions" Show="false">
             <Titles>
               <Title LCID="1033" Text="Dialog Sessions" />
@@ -1008,6 +935,55 @@
               <Title LCID="2052" Text="对话会话" />
               <Title LCID="3076" Text="對話方塊工作階段" />
               <Title LCID="1028" Text="對話方塊工作階段" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navAsyncOperations" Sequence="9500" Area="ProcessCenter" Id="navAsyncOperations" Show="false">
+            <Titles>
+              <Title LCID="1033" Text="Workflows" />
+              <Title LCID="1025" Text="عمليات سير العمل" />
+              <Title LCID="1026" Text="Работни потоци" />
+              <Title LCID="1027" Text="Fluxos de treball" />
+              <Title LCID="1029" Text="Pracovní postupy" />
+              <Title LCID="1030" Text="Arbejdsprocesser" />
+              <Title LCID="1031" Text="Workflows" />
+              <Title LCID="1032" Text="Ροές εργασιών" />
+              <Title LCID="3082" Text="Flujos de trabajo" />
+              <Title LCID="1061" Text="Töövood" />
+              <Title LCID="1069" Text="Lan-fluxuak" />
+              <Title LCID="1035" Text="Työnkulut" />
+              <Title LCID="1036" Text="Workflows" />
+              <Title LCID="1110" Text="Fluxos de traballo" />
+              <Title LCID="1037" Text="זרימות עבודה" />
+              <Title LCID="1081" Text="कार्य प्रवाह" />
+              <Title LCID="1050" Text="Tjekovi rada" />
+              <Title LCID="1038" Text="Munkafolyamatok" />
+              <Title LCID="1057" Text="Alur Kerja" />
+              <Title LCID="1040" Text="Flussi di lavoro" />
+              <Title LCID="1041" Text="ワークフロー" />
+              <Title LCID="1087" Text="Жұмыс ағындары" />
+              <Title LCID="1042" Text="워크플로" />
+              <Title LCID="1063" Text="Darbo eigos" />
+              <Title LCID="1062" Text="Darbplūsmas" />
+              <Title LCID="1086" Text="Aliran Kerja" />
+              <Title LCID="1044" Text="Arbeidsflyter" />
+              <Title LCID="1043" Text="Werkstromen" />
+              <Title LCID="1045" Text="Przepływy pracy" />
+              <Title LCID="1046" Text="Fluxos de Trabalho" />
+              <Title LCID="2070" Text="Fluxos de Trabalho" />
+              <Title LCID="1048" Text="Fluxuri de lucru" />
+              <Title LCID="1049" Text="Бизнес-процессы" />
+              <Title LCID="1051" Text="Pracovné postupy" />
+              <Title LCID="1060" Text="Poteki dela" />
+              <Title LCID="10266" Text="Токови посла" />
+              <Title LCID="9242" Text="Tokovi posla" />
+              <Title LCID="1053" Text="Arbetsflöden" />
+              <Title LCID="1054" Text="เวิร์กโฟลว์" />
+              <Title LCID="1055" Text="İş Akışları" />
+              <Title LCID="1058" Text="Робочі цикли" />
+              <Title LCID="1066" Text="Quy trình làm việc" />
+              <Title LCID="2052" Text="工作流" />
+              <Title LCID="3076" Text="工作流程" />
+              <Title LCID="1028" Text="工作流程" />
             </Titles>
           </NavBarByRelationshipItem>
           <NavBarByRelationshipItem RelationshipName="devkit_account_devkit_webapi_Customer" Sequence="10000" Area="Info" Id="nav_devkit_account_devkit_webapi_Customer" Show="false">

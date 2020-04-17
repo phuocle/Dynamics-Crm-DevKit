@@ -8,7 +8,7 @@
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
-  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/Email.form.js" displayName="abc_/entities/Email.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{f001cdbe-1aff-4725-8d61-1527dc462adb}"/&gt;&lt;Library name="abc_/entities/Email.webapi.js" displayName="abc_/entities/Email.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{be18eaf2-204e-40c2-b312-4250556617ce}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/Email.form.js" displayName="abc_/entities/Email.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{2c615d55-44a0-4965-a22b-9feffa92f050}"/&gt;&lt;Library name="abc_/entities/Email.webapi.js" displayName="abc_/entities/Email.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{063b5070-813a-4a51-b7ad-f8e194297c37}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

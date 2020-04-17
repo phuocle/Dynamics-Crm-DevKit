@@ -1,9 +1,11 @@
 ﻿//@ts-check
 ///<reference path="devkit_WebApi.d.ts" />
+"use strict";
 var formQuick_Create = (function () {
-	function onLoad(executionContext) {
+	"use strict";
+	async function onLoad(executionContext) {
 	}
-	function onSave(executionContext) {
+	async function onSave(executionContext) {
 	}
 	return {
 		OnLoad: onLoad,
@@ -11,9 +13,10 @@ var formQuick_Create = (function () {
 	};
 })();
 var formWebApi = (function () {
-	function onLoad(executionContext) {
+	"use strict";
+	async function onLoad(executionContext) {
 	}
-	function onSave(executionContext) {
+	async function onSave(executionContext) {
 	}
 	return {
 		OnLoad: onLoad,
@@ -21,9 +24,10 @@ var formWebApi = (function () {
 	};
 })();
 var formWebApi_2 = (function () {
-	function onLoad(executionContext) {
+	"use strict";
+	async function onLoad(executionContext) {
 	}
-	function onSave(executionContext) {
+	async function onSave(executionContext) {
 	}
 	return {
 		OnLoad: onLoad,

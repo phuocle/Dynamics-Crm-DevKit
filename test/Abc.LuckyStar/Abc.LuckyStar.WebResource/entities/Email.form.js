@@ -16,9 +16,12 @@ var LuckyStar;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			ActualDurationMinutes: {},
+			attachmentsGrid: {},
 			bcc: {},
 			cc: {},
 			Description: {},
+			emailengagementactionscontrol: {},
+			emailrecipientactivitycontrol: {},
 			from: {},
 			RegardingObjectId: {},
 			Subject: {},

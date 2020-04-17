@@ -15,9 +15,12 @@ var LuckyStar;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
+			ActionCards: {},
 			Address1_Composite: {},
 			Address1_FreightTermsCode: {},
 			Address1_ShippingMethodCode: {},
+			ChildAccounts: {},
+			Contacts: {},
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
@@ -29,12 +32,15 @@ var LuckyStar;
 			Fax: {},
 			FollowEmail: {},
 			IndustryCode: {},
+			mapcontrol: {},
 			Name: {},
+			notescontrol: {},
 			OwnershipCode: {},
 			ParentAccountId: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
 			PrimaryContactId: {},
+			PrimaryContactId_1: {},
 			SIC: {},
 			Telephone1: {},
 			TickerSymbol: {},
@@ -87,12 +93,12 @@ var LuckyStar;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var navigation = {
-			navRelationships: {},
 			navAddresses: {},
 			navSubAccts: {},
+			navRelationships: {},
 			navCampaignsInSFA: {},
-			navAsyncOperations: {},
 			navProcessSessions: {},
+			navAsyncOperations: {},
 			nav_devkit_account_devkit_webapi_Customer: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);

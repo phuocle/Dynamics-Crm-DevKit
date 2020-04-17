@@ -1,9 +1,22 @@
 ﻿//@ts-check
 ///<reference path="Contact.d.ts" />
+"use strict";
 var formContact = (function () {
-	function onLoad(executionContext) {
+	"use strict";
+	async function onLoad(executionContext) {
 	}
-	function onSave(executionContext) {
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
+var formContact_Quick_Create = (function () {
+	"use strict";
+	async function onLoad(executionContext) {
+	}
+	async function onSave(executionContext) {
 	}
 	return {
 		OnLoad: onLoad,

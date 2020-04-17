@@ -8,6 +8,7 @@
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/ActivityParty.form.js" displayName="abc_/entities/ActivityParty.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{d2c2589d-c433-4ac7-b511-8b8a8531b6a3}"/&gt;&lt;Library name="abc_/entities/ActivityParty.webapi.js" displayName="abc_/entities/ActivityParty.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{af1d6474-3e1c-4ab1-b513-880f3808eb7a}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

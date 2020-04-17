@@ -1412,10 +1412,6 @@
     <value>Quyền sở hữu</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{1c33ad89-92a1-8433-2378-306259eb57c0}'</comment>
   </data>
-  <data name="1:label,Account{29ba2684-5d4e-47bd-8dad-1f06f43df87a}" xml:space="preserve">
-    <value />
-    <comment>'Account' : label for cell in Entity FormXml ID: '{29ba2684-5d4e-47bd-8dad-1f06f43df87a}'</comment>
-  </data>
   <data name="1:label,Account{2aa02c79-01be-4c69-0a16-13a130baae01}" xml:space="preserve">
     <value />
     <comment>'Account' : label for tab in Entity FormXml ID: '{2aa02c79-01be-4c69-0a16-13a130baae01}'</comment>
@@ -1484,10 +1480,6 @@
     <value>Người liên hệ Chính</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{b187688c-8410-5990-16ec-e153968ab583}'</comment>
   </data>
-  <data name="1:label,Account{cec0b747-0abe-409f-b95e-89f681b69dee}" xml:space="preserve">
-    <value />
-    <comment>'Account' : label for cell in Entity FormXml ID: '{cec0b747-0abe-409f-b95e-89f681b69dee}'</comment>
-  </data>
   <data name="1:label,Account{d3e19d4e-b2ae-409f-9b4e-5976527c6c83}" xml:space="preserve">
     <value>Doanh thu Hàng năm</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{d3e19d4e-b2ae-409f-9b4e-5976527c6c83}'</comment>
@@ -1495,10 +1487,6 @@
   <data name="1:label,Account{e6441984-4343-813a-aa7e-e2747ad35390}" xml:space="preserve">
     <value>Trang web</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{e6441984-4343-813a-aa7e-e2747ad35390}'</comment>
-  </data>
-  <data name="1:label,Account{ef7d44bd-ec56-497f-9235-bb7fce81b938}" xml:space="preserve">
-    <value />
-    <comment>'Account' : label for cell in Entity FormXml ID: '{ef7d44bd-ec56-497f-9235-bb7fce81b938}'</comment>
   </data>
   <data name="1:label,Custom Activity{0b788946-da95-421c-a1fc-fe2b797ffd8e}" xml:space="preserve">
     <value>Ghi chú</value>
