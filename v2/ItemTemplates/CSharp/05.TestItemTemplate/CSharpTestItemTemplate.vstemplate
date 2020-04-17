@@ -19,7 +19,7 @@
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">DataProvider.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.2.29.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.4.30.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.Test</FullClassName>
   </WizardExtension>
 </VSTemplate>
