@@ -361,6 +361,8 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("/", string.Empty);
                 name = name.Replace("+", string.Empty);
                 name = name.Replace("=", string.Empty);
+                name = name.Replace("＆", string.Empty);
+                name = name.Replace("％", string.Empty);
                 name = name.Replace("\t", string.Empty);
                 name = name.Replace("___", "_");
                 name = name.Replace("__", "_");
