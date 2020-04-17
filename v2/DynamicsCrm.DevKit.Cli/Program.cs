@@ -18,7 +18,8 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\azure\abiz\tfs\ABIZ_IPAM\src\CDS";
+                // /conn:"AuthType=Office365;Url=https://dev-devkit.crm5.dynamics.com;Username=dev@pldevkit.onmicrosoft.com;Password=b6+abJ1xam0vxgUEg98P7usY3mJ5IMCVuzElnwzAymo=;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"plugins" /profile:"DEBUG"
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.Plugin.Account";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -126,7 +127,7 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(CliLog.ColorError, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
                 return false;
             }
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected ", CliLog.ColorMagenta, "Dynamics CRM: ", CliLog.ColorWhite, new Uri(CrmConnectOrgUriActual).GetLeftPart(UriPartial.Authority));
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected to: ", CliLog.ColorWhite, new Uri(CrmConnectOrgUriActual).GetLeftPart(UriPartial.Authority));
             return true;
         }
 

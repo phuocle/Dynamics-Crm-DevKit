@@ -59,13 +59,18 @@
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="Abc.LuckyStar.Plugin.Account.snk" />
+    <Compile Include="PostAccountAssignAsynchronous.cs" />
     <Compile Include="PostAccountCreateAsynchronous.cs" />
     <Compile Include="PostAccountDeleteAsynchronous.cs" />
+    <Compile Include="PostAccountGrantAccessAsynchronous.cs" />
     <Compile Include="PostAccountMergeAsynchronous.cs" />
     <Compile Include="PostAccountUpdateAsynchronous.cs" />
     <Compile Include="PreAccountCreateSynchronous.cs" />
     <Compile Include="PreAccountDeleteSynchronous.cs" />
+    <Compile Include="PreAccountDeleteSynchronous2.cs" />
+    <Compile Include="PreAccountRetrieveMultipleSynchronous.cs" />
     <Compile Include="PreAccountUpdateSynchronous.cs" />
+    <Compile Include="PreValidationAccountDeleteSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

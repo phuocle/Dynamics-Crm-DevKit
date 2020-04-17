@@ -4,27 +4,22 @@ using Abc.LuckyStar.Shared;
 
 namespace Abc.LuckyStar.PluginAccount
 {
-    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "accountnumber,name",
-    "Abc.LuckyStar.PluginAccount.PostAccountUpdateAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
-    Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "accountnumber")]
-    public class PostAccountUpdateAsynchronous : IPlugin
+    [CrmPluginRegistration("GrantAccess", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
+    "Abc.LuckyStar.PluginAccount.PostAccountGrantAccessAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    public class PostAccountGrantAccessAsynchronous : IPlugin
     {
         /*
           InputParameters:
-              Target                             Microsoft.Xrm.Sdk.Entity - require
-              SuppressDuplicateDetection         System.Boolean
-              CalculateMatchCodeSynchronously    System.Boolean
-              SolutionUniqueName                 System.String
-              MaintainLegacyAppServerBehavior    System.Boolean
-              ConcurrencyBehavior                Microsoft.Xrm.Sdk.ConcurrencyBehavior
-              ReturnRowVersion                   System.Boolean
+              Target             Microsoft.Xrm.Sdk.EntityReference - require
+              PrincipalAccess    Microsoft.Crm.Sdk.Messages.PrincipalAccess - require
            OutputParameters:
         */
 
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-        //public PostAccountUpdateAsynchronous(string unsecureString, string secureString)
+        //public PostAccountGrantAccessAsynchronous(string unsecureString, string secureString)
         //{
         //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
         //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -38,14 +33,14 @@ namespace Abc.LuckyStar.PluginAccount
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
             if (context.PrimaryEntityName.ToLower() != "account".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
-            if (context.MessageName.ToLower() != "Update".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Update");
+            if (context.MessageName.ToLower() != "GrantAccess".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals GrantAccess");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Abc.LuckyStar.PluginAccount.PostAccountUpdateAsynchronous");
+            //tracing.DebugMessage("Begin Plugin: Abc.LuckyStar.PluginAccount.PostAccountGrantAccessAsynchronous");
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Abc.LuckyStar.PluginAccount.PostAccountUpdateAsynchronous");
+            //tracing.DebugMessage("End Plugin: Abc.LuckyStar.PluginAccount.PostAccountGrantAccessAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
