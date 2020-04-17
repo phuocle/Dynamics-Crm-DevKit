@@ -7,7 +7,7 @@
 
 Download Report Authoring Extension
 + https://www.microsoft.com/en-us/download/details.aspx?id=50375 (v.8.2.2.248)
-+ https://www.microsoft.com/en-us/download/details.aspx?id=56973 (v.9.00.0002.0426)
++ https://www.microsoft.com/en-us/download/details.aspx?id=56973 (v.9.00.0002.0426) (Version: 9.0.13.5 Date Published: 1/15/2020)
 
 Microsoft.Crm.Reporting.RdlHelper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
 Microsoft.Crm.Reporting.RdlHelper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
