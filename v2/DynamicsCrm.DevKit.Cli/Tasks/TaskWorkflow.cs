@@ -12,6 +12,7 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Extensions;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
+using System.ServiceModel;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -150,7 +151,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var firstType = GetAttributes(workflowTypes, typeof(CrmPluginRegistrationAttribute).Name).FirstOrDefault();
             if (firstType == null)
             {
-                throw new Exception($"{LOG} Workflow Assembly don't have any type: CrmPluginRegistration Attribute");
+                CliLog.WriteLine();
+                CliLog.WriteLine();
+                CliLog.WriteLine(ConsoleColor.Green, $"{LOG} Plugin Assembly don't have any type: CrmPluginRegistration Attribute");
+                CliLog.WriteLine();
+                CliLog.WriteLine();
+                CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY PLUGIN FAILED !!!");
+                throw new Exception();
             }
             var firstTypeAttribute = firstType.CreateFromData();
             var assemblyProperties = assembly.GetName().FullName
@@ -201,7 +208,20 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Updating", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
                 plugin["pluginassemblyid"] = pluginAssemblyId;
-                crmServiceClient.Update(plugin);
+                try
+                {
+                    crmServiceClient.Update(plugin);
+                }
+                catch (FaultException fe)
+                {
+                    CliLog.WriteLine();
+                    CliLog.WriteLine();
+                    CliLog.WriteLine(ConsoleColor.White, fe.Message);
+                    CliLog.WriteLine();
+                    CliLog.WriteLine();
+                    CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY WORKFLOW FAILED !!!");
+                    throw;
+                }
             }
             return plugin;
         }
@@ -249,8 +269,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ComponentId = Guid.Parse(workflow["pluginassemblyid"].ToString()),
                 SolutionUniqueName = json.solution
             };
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Adding", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{workflow["name"]} ",
-                CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{json.solution}");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, " Adding", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{workflow["name"]} ", CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{json.solution}");
             crmServiceClient.Execute(request);
         }
 
@@ -269,7 +288,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var fetchXml = $@"
 <fetch>
   <entity name='plugintype'>
-    <all-attributes />
+    <attribute name='plugintypeid' />
     <filter type='and'>
       <condition attribute='typename' operator='eq' value='{fetchData.typename}'/>
     </filter>
@@ -286,13 +305,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
                 if (rows.Entities.Count == 0)
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "\tRegistering", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "   Registering", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
                     crmServiceClient.Create(pluginType);
                 }
                 else
                 {
                     pluginType["plugintypeid"] = rows.Entities[0].Id;
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "\tUpdating", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{workflow.FullName}");
                     crmServiceClient.Update(pluginType);
                 }
             }

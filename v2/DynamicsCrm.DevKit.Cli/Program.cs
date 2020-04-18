@@ -18,8 +18,8 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                // /conn:"AuthType=Office365;Url=https://dev-devkit.crm5.dynamics.com;Username=dev@pldevkit.onmicrosoft.com;Password=b6+abJ1xam0vxgUEg98P7usY3mJ5IMCVuzElnwzAymo=;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"plugins" /profile:"DEBUG"
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.Plugin.Account";
+                // /conn:"AuthType=Office365;Url=https://dev-devkit.crm5.dynamics.com;Username=dev@pldevkit.onmicrosoft.com;Password=b6+abJ1xam0vxgUEg98P7usY3mJ5IMCVuzElnwzAymo=;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"workflows" /profile:"DEBUG"
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.Workflow.Account";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
