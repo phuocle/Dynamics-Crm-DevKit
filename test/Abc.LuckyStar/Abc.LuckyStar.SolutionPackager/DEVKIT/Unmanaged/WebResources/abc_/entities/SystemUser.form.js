@@ -25,6 +25,7 @@ var LuckyStar;
 			BusinessUnitId: {},
 			CALType: {},
 			DefaultMailbox: {},
+			DirectReports: {},
 			DomainName: {},
 			FullName: {},
 			HomePhone: {},
@@ -33,12 +34,15 @@ var LuckyStar;
 			MobileAlertEMail: {},
 			MobileOfflineProfileId: {},
 			MobilePhone: {},
+			notescontrol: {},
 			ParentSystemUserId: {},
 			PersonalEMailAddress: {},
 			PositionId: {},
 			PreferredAddressCode: {},
 			PreferredPhoneCode: {},
+			PrivateQueuesSubGrid: {},
 			QueueId: {},
+			TeamsSubGrid: {},
 			Title: {},
 			WindowsLiveID: {}
 		};

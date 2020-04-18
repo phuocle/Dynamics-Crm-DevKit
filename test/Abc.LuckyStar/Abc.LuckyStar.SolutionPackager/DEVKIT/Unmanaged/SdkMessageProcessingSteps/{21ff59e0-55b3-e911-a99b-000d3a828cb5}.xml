@@ -4,7 +4,7 @@
   <PluginTypeId>20ff59e0-55b3-e911-a99b-000d3a828cb5</PluginTypeId>
   <PrimaryEntity>account</PrimaryEntity>
   <AsyncAutoDelete>1</AsyncAutoDelete>
-  <FilteringAttributes>accountnumber</FilteringAttributes>
+  <FilteringAttributes>accountnumber,name</FilteringAttributes>
   <InvocationSource>1</InvocationSource>
   <Mode>1</Mode>
   <Rank>1</Rank>
@@ -15,5 +15,14 @@
   <IsHidden>0</IsHidden>
   <SupportedDeployment>0</SupportedDeployment>
   <IntroducedVersion>1.0</IntroducedVersion>
-  <SdkMessageProcessingStepImages />
+  <SdkMessageProcessingStepImages>
+    <SdkMessageProcessingStepImage Name="PreImage">
+      <SdkMessageProcessingStepImageId>{6acc3f5a-c080-ea11-a811-000d3a80cee2}</SdkMessageProcessingStepImageId>
+      <Attributes>accountnumber</Attributes>
+      <EntityAlias>PreImage</EntityAlias>
+      <ImageType>0</ImageType>
+      <MessagePropertyName>Target</MessagePropertyName>
+      <IsCustomizable>1</IsCustomizable>
+    </SdkMessageProcessingStepImage>
+  </SdkMessageProcessingStepImages>
 </SdkMessageProcessingStep>

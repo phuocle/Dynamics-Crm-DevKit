@@ -15,6 +15,7 @@ var LuckyStar;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
+			ActionCards: {},
 			Address1_Composite: {},
 			Address1_FreightTermsCode: {},
 			Address1_ShippingMethodCode: {},
@@ -35,10 +36,13 @@ var LuckyStar;
 			FullName: {},
 			GenderCode: {},
 			JobTitle: {},
+			mapcontrol: {},
 			MobilePhone: {},
+			notescontrol: {},
 			ParentCustomerId: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
+			PreferredContactMethodCode_1: {},
 			SpousesName: {},
 			Telephone1: {},
 			TransactionCurrencyId: {}

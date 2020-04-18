@@ -108,6 +108,8 @@
       <RootComponent type="61" schemaName="abc_/entities/SystemUser.form.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/entities/SystemUser.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/entities/SystemUser.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Team.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="abc_/entities/Team.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/lib/devkit.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/lib/WebApiClient.js" behavior="0" />
       <RootComponent type="61" schemaName="abc_/resources/Resource.1031.resx" behavior="0" />
@@ -125,14 +127,14 @@
       <RootComponent type="92" id="{1dff59e0-55b3-e911-a99b-000d3a828cb5}" behavior="0" />
       <RootComponent type="92" id="{21ff59e0-55b3-e911-a99b-000d3a828cb5}" behavior="0" />
       <RootComponent type="92" id="{25ff59e0-55b3-e911-a99b-000d3a828cb5}" behavior="0" />
-      <RootComponent type="92" id="{2e7fe3ed-8980-ea11-a811-000d3a80cee2}" behavior="0" />
-      <RootComponent type="92" id="{327fe3ed-8980-ea11-a811-000d3a80cee2}" behavior="0" />
-      <RootComponent type="92" id="{377fe3ed-8980-ea11-a811-000d3a80cee2}" behavior="0" />
-      <RootComponent type="92" id="{42bf47f5-8980-ea11-a811-000d3a80cee2}" behavior="0" />
       <RootComponent type="92" id="{51c50da6-8c80-ea11-a811-000d3a80cee2}" behavior="0" />
+      <RootComponent type="92" id="{618ff4bd-c380-ea11-a811-000d3a80cee2}" behavior="0" />
       <RootComponent type="92" id="{6245f081-57b3-e911-a99b-000d3a828cb5}" behavior="0" />
-      <RootComponent type="92" id="{b16e94e6-8980-ea11-a811-000d3a80cee2}" behavior="0" />
+      <RootComponent type="92" id="{6590234e-bd80-ea11-a811-000d3a80cee2}" behavior="0" />
+      <RootComponent type="92" id="{66670475-bc80-ea11-a811-000d3a80cee2}" behavior="0" />
+      <RootComponent type="92" id="{8c5b30ca-c380-ea11-a811-000d3a80cee2}" behavior="0" />
       <RootComponent type="92" id="{fb6704a0-8c80-ea11-a811-000d3a80cee2}" behavior="0" />
+      <RootComponent type="92" id="{fc401dc4-c380-ea11-a811-000d3a80cee2}" behavior="0" />
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
@@ -152,19 +154,19 @@
         <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="5" type="66" schemaName="MscrmControls.Multimedia.MultimediaPlayerControl" displayName="MscrmControls.Multimedia.MultimediaPlayerControl" solution="CustomControlsCore (9.1.0000.15941)" />
+        <Required key="5" type="66" schemaName="MscrmControls.CardFeedContainer.CardFeedContainer" displayName="MscrmControls.CardFeedContainer.CardFeedContainer" solution="BaseCustomControlsCore (9.0.2003.4014)" />
         <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="6" type="66" schemaName="MscrmControls.CardFeedContainer.CardFeedContainer" displayName="MscrmControls.CardFeedContainer.CardFeedContainer" solution="BaseCustomControlsCore (9.0.2003.4014)" />
+        <Required key="6" type="66" schemaName="MscrmControls.InputMask.InputMaskControl" displayName="MscrmControls.InputMask.InputMaskControl" solution="CustomControlsCore (9.1.0000.15941)" />
         <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="7" type="66" schemaName="MscrmControls.InputMask.InputMaskControl" displayName="MscrmControls.InputMask.InputMaskControl" solution="CustomControlsCore (9.1.0000.15941)" />
+        <Required key="7" type="66" schemaName="MscrmControls.WebsitePreview.PreviewControl" displayName="MscrmControls.WebsitePreview.PreviewControl" solution="CustomControlsCore (9.1.0000.15941)" />
         <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="8" type="66" schemaName="MscrmControls.WebsitePreview.PreviewControl" displayName="MscrmControls.WebsitePreview.PreviewControl" solution="CustomControlsCore (9.1.0000.15941)" />
+        <Required key="8" type="66" schemaName="MscrmControls.Multimedia.MultimediaPlayerControl" displayName="MscrmControls.Multimedia.MultimediaPlayerControl" solution="CustomControlsCore (9.1.0000.15941)" />
         <Dependent key="3" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Abc.LuckyStar.PluginAccount.PostAccountGrantAccessAsynchronous" SdkMessageProcessingStepId="{fc401dc4-c380-ea11-a811-000d3a80cee2}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <PluginTypeName>Abc.LuckyStar.PluginAccount.PostAccountGrantAccessAsynchronous, Abc.LuckyStar.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=ae8d19edd0684c14</PluginTypeName>
+  <PluginTypeId>fb401dc4-c380-ea11-a811-000d3a80cee2</PluginTypeId>
+  <PrimaryEntity>account</PrimaryEntity>
+  <AsyncAutoDelete>1</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>1</Mode>
+  <Rank>1</Rank>
+  <SdkMessageId>{c5bdbb1b-ea3e-db11-86a7-000a3a5473e8}</SdkMessageId>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>

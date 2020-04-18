@@ -30,10 +30,12 @@ var LuckyStar;
 			devkit_DecimalNumber: {},
 			devkit_FloatingPointNumber: {},
 			devkit_LinkWebApiId: {},
+			devkit_LinkWebApiId_1: {},
 			devkit_MultiOptionSetCode: {},
 			devkit_MultipleLiniesofText: {},
 			devkit_Name: {},
 			devkit_ParentWebApiId: {},
+			devkit_ParentWebApiId_1: {},
 			devkit_SingleLineofTextEmail: {},
 			devkit_SingleLineofTextPhone: {},
 			devkit_SingleLineofTextText: {},
@@ -69,13 +71,19 @@ var LuckyStar;
 			devkit_YesAndNo: {},
 			devkit_YesAndNoCalculated: {},
 			ExchangeRate: {},
+			gridSubGridParentWebApi: {},
+			IFRAME_ACIWIDGET: {},
+			IFRAME_GoogleGoogle: {},
 			ModifiedBy: {},
 			ModifiedOn: {},
 			ModifiedOnBehalfBy: {},
+			notescontrol: {},
 			OwnerId: {},
 			statecode: {},
 			statuscode: {},
-			TransactionCurrencyId: {}
+			tCreatedOn: {},
+			TransactionCurrencyId: {},
+			WebResource_WORDHELLO: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
@@ -157,6 +165,8 @@ var LuckyStar;
 		body.Tab = tab;
 		form.Body = body;
 		var header = {
+			: {},
+			: {},
 			CreatedBy: {},
 			CreatedOn: {},
 			CreatedOnBehalfBy: {},
@@ -344,6 +354,7 @@ var LuckyStar;
 			devkit_DecimalNumber: {},
 			devkit_FloatingPointNumber: {},
 			devkit_LinkWebApiId: {},
+			devkit_LinkWebApiId_1: {},
 			devkit_MultiOptionSetCode: {},
 			devkit_MultipleLiniesofText: {},
 			devkit_Name: {},
@@ -445,6 +456,8 @@ var LuckyStar;
 		body.Tab = tab;
 		form.Body = body;
 		var header = {
+			: {},
+			: {},
 			devkit_Currency: {},
 			devkit_CustomerId: {},
 			devkit_DateOnlyDateOnly: {},

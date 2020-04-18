@@ -18,8 +18,8 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                // /conn:"AuthType=Office365;Url=https://dev-devkit.crm5.dynamics.com;Username=dev@pldevkit.onmicrosoft.com;Password=b6+abJ1xam0vxgUEg98P7usY3mJ5IMCVuzElnwzAymo=;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"webresources" /profile:"DEBUG"
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.WebResource";
+                // /conn:"AuthType=Office365;Url=https://dev-devkit.crm5.dynamics.com;Username=dev@pldevkit.onmicrosoft.com;Password=b6+abJ1xam0vxgUEg98P7usY3mJ5IMCVuzElnwzAymo=;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"solutionpackagers" /profile:"Extract-Unmanaged" /version:"9.1.0.39"
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.SolutionPackager";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -34,6 +34,7 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, "╔", new string('═', CliLog.StarLength), "╗");
             CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
             CliLog.WriteLine(CliLog.ColorGreen, "║", CliLog.ColorCyan, $"              DynamicsCrm.DevKit.Cli - {Const.Version}               ", CliLog.ColorGreen, "║");
+            CliLog.WriteLine(CliLog.ColorGreen, "║", CliLog.ColorRed, "       https://github.com/phuocle/Dynamics-Crm-DevKit       ", CliLog.ColorGreen, "║");
             CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
             CliLog.WriteLine(CliLog.ColorGreen, "╚", new string('═', CliLog.StarLength), "╝");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Path: ", CliLog.ColorWhite, Assembly.GetExecutingAssembly().Location);

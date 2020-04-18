@@ -8,7 +8,7 @@
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
-  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/Account.form.js" displayName="abc_/entities/Account.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{e8dffa69-7fa7-4eb0-99d4-2b8638bfe8a9}"/&gt;&lt;Library name="abc_/entities/Account.webapi.js" displayName="abc_/entities/Account.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{02b7d3d3-f12b-4a22-a5ac-cf7b5be38142}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/Account.form.js" displayName="abc_/entities/Account.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{a0df9eb6-add9-4097-9d47-0cd3ef0b054a}"/&gt;&lt;Library name="abc_/entities/Account.webapi.js" displayName="abc_/entities/Account.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{6aa62900-4a9a-46ee-927d-2f8b579c9efe}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

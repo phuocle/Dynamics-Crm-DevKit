@@ -8,20 +8,5 @@
     <PluginType AssemblyQualifiedName="Abc.LuckyStar.CustomAction.Account.PostAccountabc_UpdateAccountNumberSynchronous, Abc.LuckyStar.CustomAction.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=99a37bee8cc0867b" PluginTypeId="6145f081-57b3-e911-a99b-000d3a828cb5" Name="Abc.LuckyStar.CustomAction.Account.PostAccountabc_UpdateAccountNumberSynchronous">
       <FriendlyName>Abc.LuckyStar.CustomAction.Account.PostAccountabc_UpdateAccountNumberSynchronous</FriendlyName>
     </PluginType>
-    <PluginType AssemblyQualifiedName="Abc.LuckyStar.CustomAction.Account.PostAccountCreateAsynchronous, Abc.LuckyStar.CustomAction.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=99a37bee8cc0867b" PluginTypeId="b06e94e6-8980-ea11-a811-000d3a80cee2" Name="Abc.LuckyStar.CustomAction.Account.PostAccountCreateAsynchronous">
-      <FriendlyName>Abc.LuckyStar.CustomAction.Account.PostAccountCreateAsynchronous</FriendlyName>
-    </PluginType>
-    <PluginType AssemblyQualifiedName="Abc.LuckyStar.CustomAction.Account.PostAccountMergeAsynchronous, Abc.LuckyStar.CustomAction.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=99a37bee8cc0867b" PluginTypeId="b46e94e6-8980-ea11-a811-000d3a80cee2" Name="Abc.LuckyStar.CustomAction.Account.PostAccountMergeAsynchronous">
-      <FriendlyName>Abc.LuckyStar.CustomAction.Account.PostAccountMergeAsynchronous</FriendlyName>
-    </PluginType>
-    <PluginType AssemblyQualifiedName="Abc.LuckyStar.CustomAction.Account.PostAccountUpdateAsynchronous, Abc.LuckyStar.CustomAction.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=99a37bee8cc0867b" PluginTypeId="317fe3ed-8980-ea11-a811-000d3a80cee2" Name="Abc.LuckyStar.CustomAction.Account.PostAccountUpdateAsynchronous">
-      <FriendlyName>Abc.LuckyStar.CustomAction.Account.PostAccountUpdateAsynchronous</FriendlyName>
-    </PluginType>
-    <PluginType AssemblyQualifiedName="Abc.LuckyStar.CustomAction.Account.PreAccountDeleteSynchronous, Abc.LuckyStar.CustomAction.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=99a37bee8cc0867b" PluginTypeId="367fe3ed-8980-ea11-a811-000d3a80cee2" Name="Abc.LuckyStar.CustomAction.Account.PreAccountDeleteSynchronous">
-      <FriendlyName>Abc.LuckyStar.CustomAction.Account.PreAccountDeleteSynchronous</FriendlyName>
-    </PluginType>
-    <PluginType AssemblyQualifiedName="Abc.LuckyStar.CustomAction.Account.PreAccountUpdateSynchronous, Abc.LuckyStar.CustomAction.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=99a37bee8cc0867b" PluginTypeId="3a7fe3ed-8980-ea11-a811-000d3a80cee2" Name="Abc.LuckyStar.CustomAction.Account.PreAccountUpdateSynchronous">
-      <FriendlyName>Abc.LuckyStar.CustomAction.Account.PreAccountUpdateSynchronous</FriendlyName>
-    </PluginType>
   </PluginTypes>
 </PluginAssembly>

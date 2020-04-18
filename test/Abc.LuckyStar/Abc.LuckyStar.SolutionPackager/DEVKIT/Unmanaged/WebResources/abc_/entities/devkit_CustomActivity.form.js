@@ -15,6 +15,7 @@ var LuckyStar;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
+			notescontrol: {},
 			OwnerId: {},
 			RegardingObjectId: {},
 			Subject: {}

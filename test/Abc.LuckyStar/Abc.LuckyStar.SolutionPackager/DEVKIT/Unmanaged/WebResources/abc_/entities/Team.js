@@ -1,7 +1,7 @@
 ﻿//@ts-check
-///<reference path="Contact.d.ts" />
+///<reference path="Team.d.ts" />
 "use strict";
-var formContact = (function () {
+var formTeam = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
 	}
@@ -12,10 +12,9 @@ var formContact = (function () {
 		OnSave: onSave
 	};
 })();
-var formContact_Quick_Create = (function () {
+var formTeam_form_–_Business = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
-		///
 	}
 	async function onSave(executionContext) {
 	}
