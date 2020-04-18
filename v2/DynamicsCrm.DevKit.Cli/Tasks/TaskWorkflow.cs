@@ -36,7 +36,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public void Run()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "WORKFLOW");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "WORKFLOWS");
+            CliLog.WriteLine();
 
             if (!IsValid()) return;
             foreach (var file in WorkflowFiles)
@@ -44,7 +45,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 RegisterWorkflow(file);
             }
 
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "WORKFLOW");
+            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "WORKFLOWS");
         }
 
         private bool IsValid()

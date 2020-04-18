@@ -35,10 +35,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "WEBRESOURCES");
+            CliLog.WriteLine();
 
             if (!IsValid()) return;
             var totalWebResourceFiles = WebResourceFiles.Count;
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorMagenta, totalWebResourceFiles, CliLog.ColorGreen, " webresources");
+
+            CliLog.WriteLine(ConsoleColor.Red, "DEPLOYING WEBRESOURCES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, totalWebResourceFiles, CliLog.ColorGreen, " webresources");
             var i = 1;
             foreach (var webResourceFile in WebResourceFiles)
             {
@@ -48,7 +51,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (IsSupportWebResourceDependency)
             {
                 var totalDependencyFiles = Dependencies.Count;
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorMagenta, totalDependencyFiles, CliLog.ColorGreen, " dependencies");
+                CliLog.WriteLine();
+                CliLog.WriteLine(ConsoleColor.Red, "DEPLOYING WEBRESOURCES DEPENDENCIES");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, totalDependencyFiles, CliLog.ColorGreen, " dependencies");
                 var j = 1;
                 foreach (var dependency in Dependencies)
                 {
@@ -59,6 +64,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (WebResourcesToPublish.Count > 0)
                 PublishWebResources();
 
+            CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "WEBRESOURCES");
         }
 
@@ -291,7 +297,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var fileContent = Convert.ToBase64String(File.ReadAllBytes(webResourceFile.file));
             if (fileContent == content)
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + len + "}", "", current) + ": ", CliLog.ColorMagenta, "No Change ", CliLog.ColorGreen, webResourceFile.file.Substring(currentDirectory.Length + 1));
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", current) + ": ", CliLog.ColorGreen, webResourceFile.file.Substring(currentDirectory.Length + 1));
                 AddWebResourceToSolution(new Entity("webresource") {
                     ["name"] = webResourceFile.uniquename,
                     ["webresourceid"] = webResourceId
@@ -368,14 +374,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (webResourceId == Guid.Empty)
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + len + "}", "", current), ": ", CliLog.ColorMagenta, "Creating", CliLog.ColorGreen, " WebResource ", CliLog.ColorCyan, webResourceFile.file, CliLog.ColorGreen, " to ", CliLog.ColorCyan, webResourceFile.uniquename);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", current), ": ", CliLog.ColorMagenta, "Creating", CliLog.ColorGreen, " WebResource ", CliLog.ColorCyan, webResourceFile.file, CliLog.ColorGreen, " to ", CliLog.ColorCyan, webResourceFile.uniquename);
                 webResourceId = crmServiceClient.Create(webResource);
                 webResource["webresourceid"] = webResourceId;
             }
             else
             {
                 webResource["webresourceid"] = webResourceId;
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + len + "}", "", current), ": ", CliLog.ColorMagenta, "Updating", CliLog.ColorBlue, " WebResource ", CliLog.ColorCyan, webResourceFile.file, CliLog.ColorGreen, " to ", CliLog.ColorCyan, webResourceFile.uniquename);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", current), ": ", CliLog.ColorMagenta, "Updating", CliLog.ColorGreen, " WebResource ", CliLog.ColorCyan, webResourceFile.file, CliLog.ColorGreen, " to ", CliLog.ColorCyan, webResourceFile.uniquename);
                 crmServiceClient.Update(webResource);
             }
             WebResourcesToPublish.Add(webResourceId);
@@ -414,8 +420,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ComponentId = Guid.Parse(webResource["webresourceid"].ToString()),
                 SolutionUniqueName = json.solution
             };
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "\tAdding WebResource: ", CliLog.ColorMagenta,
-                $"{webResource["name"]} ", CliLog.ColorGreen, "to solution: ", CliLog.ColorMagenta,
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorMagenta, " Adding ", CliLog.ColorGreen, "WebResource: ", CliLog.ColorMagenta, $"{webResource["name"]} ", CliLog.ColorGreen, "to solution: ", CliLog.ColorMagenta,
                 $"{json.solution}");
             crmServiceClient.Execute(request);
         }
@@ -431,9 +436,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     "<webresource>" + webresources + "</webresource>" +
                     "</webresources></importexportxml>"
             };
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Publishing WebResources");
+            CliLog.WriteLine();
+            CliLog.WriteLine(ConsoleColor.Red, "PUBLISHING WEBRESOURCES");
             crmServiceClient.Execute(publish);
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Published WebResources");
+
+            CliLog.WriteLine();
+            CliLog.WriteLine(ConsoleColor.Red, "PUBLISHED WEBRESOURCES");
         }
 
         private void UpdateDependency(Dependency dependency, int j, int count)
@@ -460,7 +468,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     existingDependencyXml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
                 else
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + len + "}", "", j) + ": ", CliLog.ColorMagenta, "No Change ", CliLog.ColorGreen, webResourceName);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", j) + ": ", CliLog.ColorMagenta, "Not existing", CliLog.ColorGreen, " Webresource ", CliLog.ColorCyan, webResourceName);
                     return;
                 }
                 if (existingDependencyXml != dependencyXml)
@@ -470,16 +478,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         ["dependencyxml"] = dependencyXml
                     };
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + len + "}", "", j), ": ", CliLog.ColorMagenta, "Updated", CliLog.ColorBlue, " Dependency Webresource ", CliLog.ColorCyan, webResourceName);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", j), ": ", CliLog.ColorMagenta, "Updating", CliLog.ColorGreen, " Dependency Webresource ", CliLog.ColorCyan, webResourceName, CliLog.ColorGreen, " to");
                     foreach (var d in dependency.dependencies)
-                        CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "\t" + d);
+                        CliLog.WriteLine(CliLog.ColorCyan, "\t" + d);
                     crmServiceClient.Update(entity);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
                 }
                 else
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + len + "}", "", j) + ": ", CliLog.ColorMagenta, "No Change ", CliLog.ColorGreen, webResourceName);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", j) + ": ", CliLog.ColorGreen, webResourceName);
                 }
             }
         }

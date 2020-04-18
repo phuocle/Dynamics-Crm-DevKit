@@ -59,7 +59,8 @@
             "abc_/entities/[entity].webapi.js"
           ],
           "dependencies": [
-            "abc_/lib/WebApiClient.js"
+            "abc_/lib/WebApiClient.js",
+            "abc_/lib/devkit.js"
           ]
         },
         {

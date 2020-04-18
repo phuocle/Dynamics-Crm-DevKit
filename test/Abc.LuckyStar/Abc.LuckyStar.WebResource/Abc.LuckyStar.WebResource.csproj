@@ -105,6 +105,10 @@
     <Content Include="entities\SystemUser.webapi.js">
       <DependentUpon>SystemUser.js</DependentUpon>
     </Content>
+    <Content Include="entities\Team.form.js">
+      <DependentUpon>Team.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Team.js" />
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
@@ -138,6 +142,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\SystemUser.d.ts">
       <DependentUpon>SystemUser.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Team.d.ts">
+      <DependentUpon>Team.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>

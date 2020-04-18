@@ -36,7 +36,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public void Run()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "PLUGIN");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "PLUGINS");
+            CliLog.WriteLine();
 
             if (!IsValid()) return;
             foreach (var file in PluginFiles)
@@ -44,7 +45,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 RegisterPlugin(file);
             }
 
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "PLUGIN");
+            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "PLUGINS");
         }
 
         private bool IsValid()
