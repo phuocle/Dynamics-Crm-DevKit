@@ -176,7 +176,7 @@
       "profile": "DEBUG",
       "namespace": "Abc.LuckyStar.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "account,contact"
+      "entities": "account,contact,team,systemuser"
     }
   ],
   "visualstudio": {
