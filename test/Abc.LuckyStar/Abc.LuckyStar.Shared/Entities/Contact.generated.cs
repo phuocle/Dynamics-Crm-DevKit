@@ -7,9 +7,6 @@
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
-using System.Collections.Generic;
-using Abc.LuckyStar.Shared;
-using Abc.LuckyStar.Shared.Entities.ContactOptionSets;
 
 namespace Abc.LuckyStar.Shared.Entities.ContactOptionSets
 {
@@ -613,13 +610,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Role</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public AccountRoleCode? AccountRoleCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.AccountRoleCode? AccountRoleCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AccountRoleCode);
 				if (value == null) return null;
-				return (AccountRoleCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.AccountRoleCode)value.Value;
 			}
 			set
 			{
@@ -648,13 +645,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Address 1: Address Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Address1_AddressTypeCode? Address1_AddressTypeCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address1_AddressTypeCode? Address1_AddressTypeCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address1_AddressTypeCode);
 				if (value == null) return null;
-				return (Address1_AddressTypeCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address1_AddressTypeCode)value.Value;
 			}
 			set
 			{
@@ -730,13 +727,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Address 1: Freight Terms</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Address1_FreightTermsCode? Address1_FreightTermsCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address1_FreightTermsCode? Address1_FreightTermsCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address1_FreightTermsCode);
 				if (value == null) return null;
-				return (Address1_FreightTermsCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address1_FreightTermsCode)value.Value;
 			}
 			set
 			{
@@ -861,13 +858,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Address 1: Shipping Method</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Address1_ShippingMethodCode? Address1_ShippingMethodCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address1_ShippingMethodCode? Address1_ShippingMethodCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address1_ShippingMethodCode);
 				if (value == null) return null;
-				return (Address1_ShippingMethodCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address1_ShippingMethodCode)value.Value;
 			}
 			set
 			{
@@ -968,13 +965,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Address 2: Address Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Address2_AddressTypeCode? Address2_AddressTypeCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address2_AddressTypeCode? Address2_AddressTypeCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address2_AddressTypeCode);
 				if (value == null) return null;
-				return (Address2_AddressTypeCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address2_AddressTypeCode)value.Value;
 			}
 			set
 			{
@@ -1050,13 +1047,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Address 2: Freight Terms</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Address2_FreightTermsCode? Address2_FreightTermsCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address2_FreightTermsCode? Address2_FreightTermsCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address2_FreightTermsCode);
 				if (value == null) return null;
-				return (Address2_FreightTermsCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address2_FreightTermsCode)value.Value;
 			}
 			set
 			{
@@ -1181,13 +1178,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Address 2: Shipping Method</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Address2_ShippingMethodCode? Address2_ShippingMethodCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address2_ShippingMethodCode? Address2_ShippingMethodCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address2_ShippingMethodCode);
 				if (value == null) return null;
-				return (Address2_ShippingMethodCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address2_ShippingMethodCode)value.Value;
 			}
 			set
 			{
@@ -1288,13 +1285,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Address 3: Address Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Address3_AddressTypeCode? Address3_AddressTypeCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address3_AddressTypeCode? Address3_AddressTypeCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address3_AddressTypeCode);
 				if (value == null) return null;
-				return (Address3_AddressTypeCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address3_AddressTypeCode)value.Value;
 			}
 			set
 			{
@@ -1370,13 +1367,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Address 3: Freight Terms</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Address3_FreightTermsCode? Address3_FreightTermsCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address3_FreightTermsCode? Address3_FreightTermsCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address3_FreightTermsCode);
 				if (value == null) return null;
-				return (Address3_FreightTermsCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address3_FreightTermsCode)value.Value;
 			}
 			set
 			{
@@ -1501,13 +1498,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Address 3: Shipping Method</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Address3_ShippingMethodCode? Address3_ShippingMethodCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address3_ShippingMethodCode? Address3_ShippingMethodCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Address3_ShippingMethodCode);
 				if (value == null) return null;
-				return (Address3_ShippingMethodCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.Address3_ShippingMethodCode)value.Value;
 			}
 			set
 			{
@@ -1966,13 +1963,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Customer Size</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public CustomerSizeCode? CustomerSizeCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.CustomerSizeCode? CustomerSizeCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.CustomerSizeCode);
 				if (value == null) return null;
-				return (CustomerSizeCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.CustomerSizeCode)value.Value;
 			}
 			set
 			{
@@ -1989,13 +1986,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Relationship Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public CustomerTypeCode? CustomerTypeCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.CustomerTypeCode? CustomerTypeCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.CustomerTypeCode);
 				if (value == null) return null;
-				return (CustomerTypeCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.CustomerTypeCode)value.Value;
 			}
 			set
 			{
@@ -2120,13 +2117,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Education</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public EducationCode? EducationCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.EducationCode? EducationCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.EducationCode);
 				if (value == null) return null;
-				return (EducationCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.EducationCode)value.Value;
 			}
 			set
 			{
@@ -2225,13 +2222,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Marital Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public FamilyStatusCode? FamilyStatusCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.FamilyStatusCode? FamilyStatusCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.FamilyStatusCode);
 				if (value == null) return null;
-				return (FamilyStatusCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.FamilyStatusCode)value.Value;
 			}
 			set
 			{
@@ -2307,13 +2304,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Gender</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public GenderCode? GenderCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.GenderCode? GenderCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.GenderCode);
 				if (value == null) return null;
-				return (GenderCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.GenderCode)value.Value;
 			}
 			set
 			{
@@ -2342,13 +2339,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Has Children</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public HasChildrenCode? HasChildrenCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.HasChildrenCode? HasChildrenCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.HasChildrenCode);
 				if (value == null) return null;
-				return (HasChildrenCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.HasChildrenCode)value.Value;
 			}
 			set
 			{
@@ -2470,13 +2467,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Lead Source</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public LeadSourceCode? LeadSourceCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.LeadSourceCode? LeadSourceCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.LeadSourceCode);
 				if (value == null) return null;
-				return (LeadSourceCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.LeadSourceCode)value.Value;
 			}
 			set
 			{
@@ -2758,13 +2755,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Payment Terms</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public PaymentTermsCode? PaymentTermsCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.PaymentTermsCode? PaymentTermsCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PaymentTermsCode);
 				if (value == null) return null;
-				return (PaymentTermsCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.PaymentTermsCode)value.Value;
 			}
 			set
 			{
@@ -2781,13 +2778,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Preferred Day</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public PreferredAppointmentDayCode? PreferredAppointmentDayCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.PreferredAppointmentDayCode? PreferredAppointmentDayCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PreferredAppointmentDayCode);
 				if (value == null) return null;
-				return (PreferredAppointmentDayCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.PreferredAppointmentDayCode)value.Value;
 			}
 			set
 			{
@@ -2804,13 +2801,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Preferred Time</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public PreferredAppointmentTimeCode? PreferredAppointmentTimeCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.PreferredAppointmentTimeCode? PreferredAppointmentTimeCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PreferredAppointmentTimeCode);
 				if (value == null) return null;
-				return (PreferredAppointmentTimeCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.PreferredAppointmentTimeCode)value.Value;
 			}
 			set
 			{
@@ -2827,13 +2824,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Preferred Method of Contact</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public PreferredContactMethodCode? PreferredContactMethodCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.PreferredContactMethodCode? PreferredContactMethodCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PreferredContactMethodCode);
 				if (value == null) return null;
-				return (PreferredContactMethodCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.PreferredContactMethodCode)value.Value;
 			}
 			set
 			{
@@ -2886,13 +2883,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Shipping Method</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public ShippingMethodCode? ShippingMethodCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.ShippingMethodCode? ShippingMethodCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.ShippingMethodCode);
 				if (value == null) return null;
-				return (ShippingMethodCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.ShippingMethodCode)value.Value;
 			}
 			set
 			{
@@ -2956,13 +2953,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public StateCode? StateCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.StateCode? StateCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.StateCode);
 				if (value == null) return null;
-				return (StateCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.StateCode)value.Value;
 			}
 			set
 			{
@@ -2979,13 +2976,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Status Reason</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public StatusCode? StatusCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.StatusCode? StatusCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.StatusCode);
 				if (value == null) return null;
-				return (StatusCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.StatusCode)value.Value;
 			}
 			set
 			{
@@ -3062,13 +3059,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Territory</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public TerritoryCode? TerritoryCode
+		public Abc.LuckyStar.Shared.Entities.ContactOptionSets.TerritoryCode? TerritoryCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.TerritoryCode);
 				if (value == null) return null;
-				return (TerritoryCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ContactOptionSets.TerritoryCode)value.Value;
 			}
 			set
 			{

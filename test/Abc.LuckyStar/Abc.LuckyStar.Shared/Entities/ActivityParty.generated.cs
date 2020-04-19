@@ -7,9 +7,6 @@
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
-using System.Collections.Generic;
-using Abc.LuckyStar.Shared;
-using Abc.LuckyStar.Shared.Entities.ActivityPartyOptionSets;
 
 namespace Abc.LuckyStar.Shared.Entities.ActivityPartyOptionSets
 {
@@ -291,13 +288,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Appointment Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public InstanceTypeCode? InstanceTypeCode
+		public Abc.LuckyStar.Shared.Entities.ActivityPartyOptionSets.InstanceTypeCode? InstanceTypeCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.InstanceTypeCode);
 				if (value == null) return null;
-				return (InstanceTypeCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ActivityPartyOptionSets.InstanceTypeCode)value.Value;
 			}
 		}
 
@@ -349,13 +346,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Participation Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public ParticipationTypeMask? ParticipationTypeMask
+		public Abc.LuckyStar.Shared.Entities.ActivityPartyOptionSets.ParticipationTypeMask? ParticipationTypeMask
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.ParticipationTypeMask);
 				if (value == null) return null;
-				return (ParticipationTypeMask)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.ActivityPartyOptionSets.ParticipationTypeMask)value.Value;
 			}
 			set
 			{

@@ -131,6 +131,7 @@
       "rootfolder": "???",
       "crmversion": "365",
       "type": "CSharp",
+      "entities": "",
       "debug":  ""
     },
     {
@@ -139,6 +140,7 @@
       "rootfolder": "???",
       "crmversion": "365",
       "type": "JsForm",
+      "entities": "",
       "debug": ""
     },
     {
@@ -147,7 +149,8 @@
       "rootfolder": "???",
       "crmversion": "365",
       "type": "JsWebApi",
-      "debug":  ""
+      "entities": "",
+      "debug": ""
     }
   ],
   "downloadwebresources": [
@@ -162,12 +165,6 @@
       "profile": "DEBUG",
       "folder": "???",
       "solution":  "???"
-    }
-  ],
-  "portals": [
-    {
-      "profile": "DEBUG",
-      "name": "???"
     }
   ],
   "proxytypes": [

@@ -50,7 +50,7 @@ declare namespace LuckyStar {
 		/** The Header section of form Team */
 		Header: LuckyStar.FormTeam.Header;
 	}
-	namespace FormTeam_form_–_Business {
+	namespace FormTeam_form_Business {
 		interface tab_general_Sections {
 			General: DevKit.Form.Controls.ControlSection;
 			Description: DevKit.Form.Controls.ControlSection;
@@ -86,9 +86,9 @@ declare namespace LuckyStar {
 			navProcessSessions: DevKit.Form.Controls.ControlNavigationItem
 		}
 	}
-	class FormTeam_form_–_Business extends DevKit.Form.IForm {
+	class FormTeam_form_Business extends DevKit.Form.IForm {
 		/**
-		* DynamicsCrm.DevKit form Team_form_–_Business
+		* DynamicsCrm.DevKit form Team_form_Business
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -97,10 +97,10 @@ declare namespace LuckyStar {
 		Utility: DevKit.Form.Utility;
 		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
 		WebApi: DevKit.Form.WebApi;
-		/** The Body section of form Team_form_–_Business */
-		Body: LuckyStar.FormTeam_form_–_Business.Body;
-		/** The Navigation of form Team_form_–_Business */
-		Navigation: LuckyStar.FormTeam_form_–_Business.Navigation;
+		/** The Body section of form Team_form_Business */
+		Body: LuckyStar.FormTeam_form_Business.Body;
+		/** The Navigation of form Team_form_Business */
+		Navigation: LuckyStar.FormTeam_form_Business.Navigation;
 	}
 }
 declare namespace OptionSet {

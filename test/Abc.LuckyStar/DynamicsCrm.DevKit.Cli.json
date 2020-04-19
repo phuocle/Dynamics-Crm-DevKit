@@ -132,6 +132,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "CSharp",
+      "entities": "canvasapp",
       "debug": ""
     },
     {
@@ -165,18 +166,12 @@
       "solution":  "???"
     }
   ],
-  "portals": [
-    {
-      "profile": "DEBUG",
-      "name": "???"
-    }
-  ],
   "proxytypes": [
     {
       "profile": "DEBUG",
       "namespace": "Abc.LuckyStar.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities": "account,contact,team,systemuser"
+      "entities": ""
     }
   ],
   "visualstudio": {

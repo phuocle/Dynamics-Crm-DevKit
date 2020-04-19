@@ -54,7 +54,7 @@ var LuckyStar;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		return form;
 	};
-	LuckyStar.FormTeam_form_–_Business = function(executionContext, defaultWebResourceName) {
+	LuckyStar.FormTeam_form_Business = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
 			if (executionContext.getFormContext === undefined) {

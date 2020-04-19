@@ -19,6 +19,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private CommandLineArgs arguments;
         private const string LOG = "[GENERATOR]";
         private JsonGenerator json;
+        List<string> IgnoreEntities = new List<string> { "Entity" };
 
         public TaskGenerator(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
         {
@@ -69,22 +70,38 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private void GeneratorLateBound()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "GENERATOR CSHARP LATE BOUND");
+            CliLog.WriteLine();
 
             var entities = new List<string>();
-            string[] files;
+            string[] files = new string[] { };
             var folder = $"{currentDirectory}\\{json.rootfolder}";
-            //if (json.entities == null || json.entities.Count == 0)
-            //{
+            if (!folder.EndsWith("\\")) folder += "\\";
+            if (json.entities == null || json.entities.Trim().Length == 0)
+            {
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "current folder", CliLog.ColorGreen, " with pattern values: ", CliLog.ColorCyan, "*.generated.cs");
+                CliLog.WriteLine();
                 var pattern = "*.generated.cs";
                 files = Directory.GetFiles(folder, pattern);
-            //}
-            //else
-            //{
-            //    //if (json.entities.Count == 1 && json.entities[0].ToLower() == "all")
-            //    //    files = GetAllEntitiesForWebApi();
-            //    //else
-            //        files = json.entities.Select(e => $"{folder}{e}.generated.js").ToArray();
-            //}
+            }
+            else
+            {
+                if (json.entities.Trim().ToLower() == "*")
+                {
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, "*");
+                    CliLog.WriteLine();
+
+                    var schemas = GetAllEntitySchemas();
+                    files = schemas.Select(e => $"{folder}{e}.generated.cs").ToArray();
+                }
+                else
+                {
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities);
+                    CliLog.WriteLine();
+
+                    files = json.entities.Split(",".ToCharArray()).Select(e => $"{folder}{e}.generated.cs").ToArray();
+                    files = ConvertToSchemaName(files);
+                }
+            }
             foreach (var file in files)
             {
                 var fInfo = new FileInfo(file);
@@ -93,18 +110,72 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (entities.Count == 0)
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "NOT FOUND ", CliLog.ColorMagenta, " ENTIIES !!!");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "NOT FOUND ", CliLog.ColorCyan, "ENTIIES");
+                CliLog.WriteLine();
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR CSHARP LATE BOUND");
                 return;
             }
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorMagenta, entities.Count, CliLog.ColorGreen, " entities");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, entities.Count, CliLog.ColorGreen, " entities");
             var i = 1;
             foreach (var entity in entities)
             {
-                GeneratorLateBound(entity, i, entities.Count);
+                if (IgnoreEntities.Contains(entity)) {
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + entities.Count.ToString().Length + "}", "", i) + ": ", CliLog.ColorRed, "IGNORED ", CliLog.ColorCyan, entity);
+                    i++;
+                    continue;
+                }
+                else
+                    GeneratorLateBound(entity, i, entities.Count);
                 i++;
             }
 
+            CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR CSHARP LATE BOUND");
+        }
+
+        private List<string> GetAllEntitySchemas()
+        {
+            var request = new RetrieveAllEntitiesRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                RetrieveAsIfPublished = true
+            };
+            var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
+            return response.EntityMetadata.OrderBy(x => x.SchemaName).Select(x => x.SchemaName).ToList<string>();
+        }
+
+        private string[] ConvertToSchemaName(string[] files)
+        {
+            var list = new List<string>();
+            foreach(var file in files)
+            {
+                var fileName = Path.GetFileName(file);
+                var logicalName = fileName.Substring(0, fileName.Length - ".generated.cs".Length);
+                var schemaName = GetEntitySchemaName(logicalName);
+                var fileInfo = new FileInfo(file);
+                list.Add(Path.Combine(fileInfo.DirectoryName, $"{schemaName}.generated.cs"));
+
+            }
+            return list.ToArray();
+        }
+
+        private string RemoveForCompare(string value)
+        {
+            return value
+                .Replace(" ", string.Empty)
+                .Replace("\r\n", string.Empty)
+                .Replace("\t", string.Empty);
+        }
+
+        private string GetEntitySchemaName(string entityLogicalName)
+        {
+            var request = new RetrieveEntityRequest
+            {
+                LogicalName = entityLogicalName,
+                EntityFilters = EntityFilters.Entity
+            };
+            var response = (RetrieveEntityResponse)crmServiceClient.Execute(request);
+            return response.EntityMetadata.SchemaName;
         }
 
         private void GeneratorLateBound(string entity, int i, int count)
@@ -117,16 +188,33 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var file = $"{currentDirectory}\\{json.rootfolder}\\{entity}.generated.cs";
             var old = string.Empty;
             if (File.Exists(file))
-                old = File.ReadAllText(file).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-            var @new = generated.Replace(" ", string.Empty).Replace("\r\n", string.Empty).Replace("\t", string.Empty);
-            if (old != @new)
             {
-                File.WriteAllText(file, generated, System.Text.Encoding.UTF8);
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "Processing ", CliLog.ColorGreen, entity, ".generated.cs");
+                old = File.ReadAllText(file);
+            }
+            var @new = generated;
+            if (RemoveForCompare(old) != RemoveForCompare(@new))
+            {
+                if (File.Exists(file))
+                {
+                    File.WriteAllText(file, generated, System.Text.Encoding.UTF8);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "Updated ", CliLog.ColorGreen, entity, ".generated.cs");
+                }
+                else
+                {
+                    var latebound = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.Generator.LateBound.cs");
+                    latebound = latebound.Replace("$NameSpace$", json.rootnamespace).Replace("$class$", entity);
+                    var fileLateBound = $"{currentDirectory}\\{json.rootfolder}\\{entity}.cs";
+
+                    File.WriteAllText(fileLateBound, latebound, System.Text.Encoding.UTF8);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "Created ", CliLog.ColorGreen, entity, ".cs");
+
+                    File.WriteAllText(file, generated, System.Text.Encoding.UTF8);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "Created ", CliLog.ColorGreen, entity, ".generated.cs");
+                }
             }
             else
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "No change ", CliLog.ColorGreen, entity, ".generated.cs");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".generated.cs");
             }
         }
 
@@ -142,6 +230,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private void GeneratorWebApi()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "GENERATOR JS WEBAPI");
+            CliLog.WriteLine();
 
             var entities = new List<string>();
             string[] files;
@@ -177,6 +266,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 i++;
             }
 
+            CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR JS WEBAPI");
         }
 
@@ -257,6 +347,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private void GeneratorJsForm()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "GENERATOR JS FORM");
+            CliLog.WriteLine();
 
             var entities = new List<string>();
             string[] files;
@@ -297,6 +388,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 i++;
             }
 
+            CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR JS FORM");
         }
 

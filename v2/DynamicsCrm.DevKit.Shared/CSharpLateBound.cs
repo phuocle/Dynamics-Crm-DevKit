@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Xml;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.CSharp;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -15,13 +16,26 @@ namespace DynamicsCrm.DevKit.Shared
         private List<CrmAttribute> Lists { get; set; }
         private int ObjectTypeCode { get; set; }
         private string EntityName { get; set; }
+        private string RootNameSpace { get; set; }
         private bool HasImage { get; set; }
+
+        private bool IsValidIdentifier(string identifier)
+        {
+            var cs = new CSharpCodeProvider();
+            return cs.IsValidIdentifier(identifier);
+        }
+
+        private string SafeIdentifier(string identifier){
+            if (IsValidIdentifier(identifier)) return identifier;
+            return "@" + identifier;
+        }
 
         internal string Go(IOrganizationService crmService, CrmVersionName crmVersionName, string entity, string rootNameSpace, string sharedNameSpace)
         {
             _crmService = crmService;
             LoadData(entity);
             EntityName = entity;
+            RootNameSpace = rootNameSpace;
             var logicalName = entity.ToLower();
 
             var code = string.Empty;
@@ -34,9 +48,9 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"using Microsoft.Xrm.Sdk;\r\n";
             code += $"using System;\r\n";
             code += $"using System.Diagnostics;\r\n";
-            code += $"using System.Collections.Generic;\r\n";
-            code += $"using {sharedNameSpace};\r\n";
-            code += $"using {rootNameSpace}.{entity}OptionSets;\r\n";
+            //code += $"using System.Collections.Generic;\r\n";
+            //code += $"using {sharedNameSpace};\r\n";
+            //code += $"using {rootNameSpace}.{entity}OptionSets;\r\n";
             code += $"\r\n";
             code += $"namespace {rootNameSpace}.{entity}OptionSets\r\n";
             code += $"{{\r\n";
@@ -101,7 +115,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"\t\tpublic {entity}(Entity entity, Entity merge)\r\n";
             code += $"\t\t{{\r\n";
             code += $"\t\t\tEntity = entity;\r\n";
-            code += $"\t\t\tforeach (var property in merge.Attributes)\r\n";
+            code += $"\t\t\tforeach (var property in merge?.Attributes)\r\n";
             code += $"\t\t\t{{\r\n";
             code += $"\t\t\t\tvar key = property.Key;\r\n";
             code += $"\t\t\t\tvar value = property.Value;\r\n";
@@ -204,7 +218,8 @@ namespace DynamicsCrm.DevKit.Shared
             var xml = "/// <summary>\r\n";
             if (!string.IsNullOrEmpty(crmAttribute.Description))
             {
-                var description = crmAttribute.Description.Replace("\n", " ");
+                var description = crmAttribute.Description.Replace("\r\n", " ").Replace("\n", " ");
+                description = description.Trim();
                 xml += "\t\t/// <para>" + XmlEscape(description) + "</para>\r\n";
             }
             xml += "\t\t/// <para>" + dataType + "</para>\r\n";
@@ -225,17 +240,14 @@ namespace DynamicsCrm.DevKit.Shared
                     case AttributeTypeCode.Status:
                         if (crmAttribute.IsRequired)
                         {
-                            code = "set\r\n\t{{\r\n\t\tEntity.Attributes[Fields." +
-                                   crmAttribute.Name + "] = new OptionSetValue((int)value);\r\n";
+                            code = "set\r\n\t{{\r\n\t\tEntity.Attributes[Fields." + crmAttribute.Name + "] = new OptionSetValue((int)value);\r\n";
                             code += "}}";
                             return code;
                         }
-
                         code += "set\r\n";
                         code += "\t\t\t{{\r\n";
                         code += "\t\t\t\tif (value.HasValue)\r\n";
-                        code += "\t\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name +
-                                "] = new OptionSetValue((int)value.Value);\r\n";
+                        code += "\t\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name + "] = new OptionSetValue((int)value.Value);\r\n";
                         code += "\t\t\t\telse\r\n";
                         code += "\t\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name + "] = null;\r\n";
                         code += "\t\t\t}}";
@@ -252,8 +264,7 @@ namespace DynamicsCrm.DevKit.Shared
                     case AttributeTypeCode.DateTime:
                         if (crmAttribute.DateTimeBehavior == null)
                         {
-                            return "set {{ Entity.Attributes[Fields." + crmAttribute.Name +
-                                   "] = value; }}";
+                            return "set {{ Entity.Attributes[Fields." + crmAttribute.Name + "] = value; }}";
                         }
                         else if (crmAttribute.DateTimeBehavior == DateTimeBehavior.DateOnly)
                         {
@@ -280,8 +291,7 @@ namespace DynamicsCrm.DevKit.Shared
                         code += "set\r\n";
                         code += "\t\t\t{{\r\n";
                         code += "\t\t\t\tif (value.HasValue)\r\n";
-                        code += "\t\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name +
-                                "] = new Money(value.Value);\r\n";
+                        code += "\t\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name + "] = new Money(value.Value);\r\n";
                         code += "\t\t\t\telse\r\n";
                         code += "\t\t\t\t\tEntity.Attributes[Fields." + crmAttribute.Name + "] = null;\r\n";
                         code += "\t\t\t}}";
@@ -301,14 +311,12 @@ namespace DynamicsCrm.DevKit.Shared
                         }
                         else
                         {
-                            return "set {{ Entity.Attributes[Fields." + crmAttribute.Name +
-                                   "] = value; }}";
+                            return "set {{ Entity.Attributes[Fields." + crmAttribute.Name + "] = value; }}";
                         }
                     case AttributeTypeCode.Lookup:
                     case AttributeTypeCode.Owner:
                     case AttributeTypeCode.Customer:
-                        return "set {{ Entity.Attributes[Fields." + crmAttribute.Name +
-                               "] = value; }}";
+                        return "set {{ Entity.Attributes[Fields." + crmAttribute.Name + "] = value; }}";
                     case AttributeTypeCode.Memo:
                     case AttributeTypeCode.Virtual:
                     case AttributeTypeCode.EntityName:
@@ -362,10 +370,9 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.Status:
                     code += "get\r\n";
                     code += "\t\t\t{{\r\n";
-                    code += "\t\t\t\tvar value = Entity.GetAttributeValue<OptionSetValue>(Fields." + crmAttribute.Name +
-                            ");\r\n";
+                    code += "\t\t\t\tvar value = Entity.GetAttributeValue<OptionSetValue>(Fields." + crmAttribute.Name + ");\r\n";
                     code += "\t\t\t\tif (value == null) return null;\r\n";
-                    code += "\t\t\t\treturn (" + SafeType(crmAttribute.Name, EntityName + "OptionSets") + ")value.Value;\r\n";
+                    code += "\t\t\t\treturn (" + $"{RootNameSpace}.{EntityName}OptionSets." + SafeType(crmAttribute.Name, EntityName + "OptionSets") + ")value.Value;\r\n";
                     code += "\t\t\t}}";
                     return code;
                 case AttributeTypeCode.BigInt:
@@ -405,26 +412,26 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.Money:
                     code += "get\r\n";
                     code += "\t\t\t{{\r\n";
-                    code += "\t\t\t\tvar value = Entity.GetAttributeValue<Money>(Fields." + crmAttribute.Name +
-                            ");\r\n";
+                    code += "\t\t\t\tvar value = Entity.GetAttributeValue<Money>(Fields." + crmAttribute.Name + ");\r\n";
                     code += "\t\t\t\tif (value == null) return null;\r\n";
                     code += "\t\t\t\treturn value.Value;\r\n";
                     code += "\t\t\t}}";
                     return code;
                 case AttributeTypeCode.Double:
-                    return "get {{ return Entity.GetAttributeValue<double?>(Fields." +
-                           crmAttribute.Name + "); }}";
+                    return "get {{ return Entity.GetAttributeValue<double?>(Fields." + crmAttribute.Name + "); }}";
                 case AttributeTypeCode.Uniqueidentifier:
                     if (crmAttribute.IsPrimaryKey)
                         return "get {{ return Id; }}";
                     else
-                        return "get {{ return Entity.GetAttributeValue<Guid?>(Fields." +
-                               crmAttribute.Name + "); }}";
+                    {
+                        if (crmAttribute.LogicalName.ToLower() == (crmAttribute.EntityName + "Id").ToLower())
+                            return "get {{ return Entity.GetAttributeValue<Guid>(Fields." + crmAttribute.Name + "); }}";
+                        return "get {{ return Entity.GetAttributeValue<Guid?>(Fields." + crmAttribute.Name + "); }}";
+                    }
                 case AttributeTypeCode.Lookup:
                 case AttributeTypeCode.Owner:
                 case AttributeTypeCode.Customer:
-                    return "get {{ return Entity.GetAttributeValue<EntityReference>(Fields." +
-                           crmAttribute.Name + "); }}";
+                    return "get {{ return Entity.GetAttributeValue<EntityReference>(Fields." + crmAttribute.Name + "); }}";
                 case AttributeTypeCode.Memo:
                 case AttributeTypeCode.Virtual:
                 case AttributeTypeCode.EntityName:
@@ -433,13 +440,13 @@ namespace DynamicsCrm.DevKit.Shared
                     {
                         code += "get\r\n";
                         code += "\t\t\t{{\r\n";
-                        code += "\t\t\t\tvar data = new List<" + SafeType(crmAttribute.Name, EntityName + "OptionSets") + ">();\r\n";
+                        code += "\t\t\t\tvar data = new System.Collections.Generic.List<" + $"{RootNameSpace}.{EntityName}OptionSets." + crmAttribute.Name + ">();\r\n";
                         code += "\t\t\t\tvar items = Entity.GetAttributeValue<OptionSetValueCollection>(Fields." + crmAttribute.Name + ");\r\n";
                         code += "\t\t\t\tif (items != null)\r\n";
                         code += "\t\t\t\t{{\r\n";
                         code += "\t\t\t\t\tforeach (OptionSetValue item in items)\r\n";
                         code += "\t\t\t\t\t{{\r\n";
-                        code += "\t\t\t\t\t\tdata.Add((" + SafeType(crmAttribute.Name, EntityName + "OptionSets") + ")item.Value);\r\n";
+                        code += "\t\t\t\t\t\tdata.Add((" + $"{RootNameSpace}.{EntityName}OptionSets." + crmAttribute.Name + ")item.Value);\r\n";
                         code += "\t\t\t\t\t}}\r\n";
                         code += "\t\t\t\t}}\r\n";
                         code += "\t\t\t\treturn data;\r\n";
@@ -451,9 +458,8 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.PartyList:
                     code += "get\r\n";
                     code += "\t\t\t{{\r\n";
-                    code += "\t\t\t\tvar data = new List<ActivityParty>();\r\n";
-                    code += "\t\t\t\tforeach (var item in Entity.GetAttributeValue<EntityCollection>(Fields." +
-                            crmAttribute.Name + ").Entities)\r\n";
+                    code += "\t\t\t\tvar data = new System.Collections.Generic.List<ActivityParty>();\r\n";
+                    code += "\t\t\t\tforeach (var item in Entity.GetAttributeValue<EntityCollection>(Fields." + crmAttribute.Name + ").Entities)\r\n";
                     code += "\t\t\t\t\tdata.Add(new ActivityParty(item));\r\n";
                     code += "\t\t\t\treturn data;\r\n";
                     code += "\t\t\t}}";
@@ -465,8 +471,8 @@ namespace DynamicsCrm.DevKit.Shared
 
         private string SafeType(string name, string prefix)
         {
-            if (name == "Type")
-                return $"{prefix}.{name}";
+            //if (name == "Type")
+            //    return $"{prefix}.{name}";
             return name;
         }
 
@@ -479,7 +485,7 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.Picklist:
                 case AttributeTypeCode.State:
                 case AttributeTypeCode.Status:
-                    return SafeType(crmAttribute.Name, EntityName + "OptionSets") + "?";
+                    return $"{RootNameSpace}.{ EntityName}OptionSets." + SafeType(crmAttribute.Name, EntityName + "OptionSets") + "?";
                 case AttributeTypeCode.BigInt:
                     return "long?";
                 case AttributeTypeCode.Integer:
@@ -503,6 +509,8 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.Double:
                     return "double?";
                 case AttributeTypeCode.Uniqueidentifier:
+                    if (crmAttribute.LogicalName.ToLower() == (crmAttribute.EntityName + "Id").ToLower())
+                        return "Guid";
                     return "Guid?";
                 case AttributeTypeCode.Lookup:
                 case AttributeTypeCode.Owner:
@@ -513,11 +521,11 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.EntityName:
                 case AttributeTypeCode.String:
                     if (crmAttribute.IsMultiSelectPicklist)
-                        return "List<" + SafeType(crmAttribute.Name, crmAttribute.EntityName) + ">";
+                        return "System.Collections.Generic.List<" + $"{RootNameSpace}.{EntityName}OptionSets." + crmAttribute.Name + ">";
                     else
                         return "string";
                 case AttributeTypeCode.PartyList:
-                    return "List<ActivityParty>";
+                    return "System.Collections.Generic.List<ActivityParty>";
                 case AttributeTypeCode.ManagedProperty:
                     return "?";
                 default:
@@ -568,13 +576,23 @@ namespace DynamicsCrm.DevKit.Shared
                     code += string.Format(declare, xml, declareType,
                         crmAttribute.DateTimeBehavior != null &&
                         crmAttribute.DateTimeBehavior == DateTimeBehavior.UserLocal
-                            ? crmAttribute.Name + "Utc"
-                            : crmAttribute.Name);
+                            ? SafeDeclareName(crmAttribute.Name) + "Utc"
+                            : SafeDeclareName(crmAttribute.Name));
                 }
             }
 
             code = code.TrimEnd("\r\n".ToCharArray());
             return code;
+        }
+
+        private string SafeDeclareName(string declareName)
+        {
+            declareName = SafeIdentifier(declareName);
+            if (declareName.ToLower() == EntityName.ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "Entity".ToLower()) return declareName + "1";
+            return declareName;
         }
 
         private string GeneratorClassFields()
@@ -724,10 +742,10 @@ namespace DynamicsCrm.DevKit.Shared
                         tmp += "\t\t/// " + XmlEscape(nvc) + " = " + XmlEscape(values[nvc]) +
                                "\r\n";
                         tmp += "\t\t/// </summary>\r\n";
-                        tmp += string.Format($"\t\t{nvc} = {values[nvc]},\r\n");
+                        tmp += string.Format($"\t\t{SafeIdentifier(nvc)} = {values[nvc]},\r\n");
                     }
                     tmp = tmp.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-                    code += @enum.Replace("[[Enum]]", crmAttribute.Name).Replace("[[Declare]]", tmp);
+                    code += @enum.Replace("[[Enum]]", SafeIdentifier(crmAttribute.Name)).Replace("[[Declare]]", tmp);
                 }
 
             code = code.TrimEnd("\r\n".ToCharArray()).TrimEnd("\r\n".ToCharArray());

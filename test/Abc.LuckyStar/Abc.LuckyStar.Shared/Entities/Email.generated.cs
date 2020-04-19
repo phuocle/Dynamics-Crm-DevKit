@@ -7,9 +7,6 @@
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
-using System.Collections.Generic;
-using Abc.LuckyStar.Shared;
-using Abc.LuckyStar.Shared.Entities.EmailOptionSets;
 
 namespace Abc.LuckyStar.Shared.Entities.EmailOptionSets
 {
@@ -449,11 +446,11 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Bcc</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public List<ActivityParty> bcc
+		public System.Collections.Generic.List<ActivityParty> bcc
 		{
 			get
 			{
-				var data = new List<ActivityParty>();
+				var data = new System.Collections.Generic.List<ActivityParty>();
 				foreach (var item in Entity.GetAttributeValue<EntityCollection>(Fields.bcc).Entities)
 					data.Add(new ActivityParty(item));
 				return data;
@@ -485,11 +482,11 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Cc</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public List<ActivityParty> cc
+		public System.Collections.Generic.List<ActivityParty> cc
 		{
 			get
 			{
-				var data = new List<ActivityParty>();
+				var data = new System.Collections.Generic.List<ActivityParty>();
 				foreach (var item in Entity.GetAttributeValue<EntityCollection>(Fields.cc).Entities)
 					data.Add(new ActivityParty(item));
 				return data;
@@ -543,13 +540,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Correlation Method</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public CorrelationMethod? CorrelationMethod
+		public Abc.LuckyStar.Shared.Entities.EmailOptionSets.CorrelationMethod? CorrelationMethod
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.CorrelationMethod);
 				if (value == null) return null;
-				return (CorrelationMethod)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.EmailOptionSets.CorrelationMethod)value.Value;
 			}
 		}
 
@@ -616,13 +613,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Delivery Priority</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public DeliveryPriorityCode? DeliveryPriorityCode
+		public Abc.LuckyStar.Shared.Entities.EmailOptionSets.DeliveryPriorityCode? DeliveryPriorityCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.DeliveryPriorityCode);
 				if (value == null) return null;
-				return (DeliveryPriorityCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.EmailOptionSets.DeliveryPriorityCode)value.Value;
 			}
 			set
 			{
@@ -687,13 +684,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Email Reminder Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public EmailReminderStatus? EmailReminderStatus
+		public Abc.LuckyStar.Shared.Entities.EmailOptionSets.EmailReminderStatus? EmailReminderStatus
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.EmailReminderStatus);
 				if (value == null) return null;
-				return (EmailReminderStatus)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.EmailOptionSets.EmailReminderStatus)value.Value;
 			}
 		}
 
@@ -715,13 +712,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Email Reminder Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public EmailReminderType? EmailReminderType
+		public Abc.LuckyStar.Shared.Entities.EmailOptionSets.EmailReminderType? EmailReminderType
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.EmailReminderType);
 				if (value == null) return null;
-				return (EmailReminderType)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.EmailOptionSets.EmailReminderType)value.Value;
 			}
 			set
 			{
@@ -784,11 +781,11 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public List<ActivityParty> from
+		public System.Collections.Generic.List<ActivityParty> from
 		{
 			get
 			{
-				var data = new List<ActivityParty>();
+				var data = new System.Collections.Generic.List<ActivityParty>();
 				foreach (var item in Entity.GetAttributeValue<EntityCollection>(Fields.from).Entities)
 					data.Add(new ActivityParty(item));
 				return data;
@@ -992,13 +989,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Notifications</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Notifications? Notifications
+		public Abc.LuckyStar.Shared.Entities.EmailOptionSets.Notifications? Notifications
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.Notifications);
 				if (value == null) return null;
-				return (Notifications)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.EmailOptionSets.Notifications)value.Value;
 			}
 			set
 			{
@@ -1118,13 +1115,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Priority</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public PriorityCode? PriorityCode
+		public Abc.LuckyStar.Shared.Entities.EmailOptionSets.PriorityCode? PriorityCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.PriorityCode);
 				if (value == null) return null;
-				return (PriorityCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.EmailOptionSets.PriorityCode)value.Value;
 			}
 			set
 			{
@@ -1327,13 +1324,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Activity Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public StateCode? StateCode
+		public Abc.LuckyStar.Shared.Entities.EmailOptionSets.StateCode? StateCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.StateCode);
 				if (value == null) return null;
-				return (StateCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.EmailOptionSets.StateCode)value.Value;
 			}
 			set
 			{
@@ -1350,13 +1347,13 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Status Reason</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public StatusCode? StatusCode
+		public Abc.LuckyStar.Shared.Entities.EmailOptionSets.StatusCode? StatusCode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.StatusCode);
 				if (value == null) return null;
-				return (StatusCode)value.Value;
+				return (Abc.LuckyStar.Shared.Entities.EmailOptionSets.StatusCode)value.Value;
 			}
 			set
 			{
@@ -1433,11 +1430,11 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public List<ActivityParty> to
+		public System.Collections.Generic.List<ActivityParty> to
 		{
 			get
 			{
-				var data = new List<ActivityParty>();
+				var data = new System.Collections.Generic.List<ActivityParty>();
 				foreach (var item in Entity.GetAttributeValue<EntityCollection>(Fields.to).Entities)
 					data.Add(new ActivityParty(item));
 				return data;
