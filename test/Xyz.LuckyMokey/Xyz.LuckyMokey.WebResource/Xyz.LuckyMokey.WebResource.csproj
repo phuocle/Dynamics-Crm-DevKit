@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
+    <Content Include="entities\generator.form.bat" />
+    <Content Include="entities\generator.webapi.bat" />
     <None Include="packages.config" />
     <None Include="_package.json" />
     <None Include="chutzpah.json" />
@@ -182,7 +184,6 @@
     <Content Include="entities\CustomerRelationship.js" />
     <Content Include="entities\DataPerformance.form.js" />
     <Content Include="entities\DataPerformance.js" />
-    <Content Include="entities\DevKit.d.ts" />
     <Content Include="entities\Discount.form.js" />
     <Content Include="entities\Discount.js" />
     <Content Include="entities\DiscountType.form.js" />
@@ -235,8 +236,6 @@
     <Content Include="entities\FieldSecurityProfile.js" />
     <Content Include="entities\flowsession.form.js" />
     <Content Include="entities\flowsession.js" />
-    <Content Include="entities\generator.form.bat" />
-    <Content Include="entities\generator.webapi.bat" />
     <Content Include="entities\Goal.form.js" />
     <Content Include="entities\Goal.js" />
     <Content Include="entities\GoalRollupQuery.form.js" />
@@ -1278,6 +1277,9 @@
     <Folder Include="resources\" />
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.4.30\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts" />
     <TypeScriptCompile Include="entities\ActivityMimeAttachment.d.ts" />
     <TypeScriptCompile Include="entities\adobe_agreement.d.ts" />
@@ -1341,6 +1343,7 @@
     <TypeScriptCompile Include="entities\CustomerOpportunityRole.d.ts" />
     <TypeScriptCompile Include="entities\CustomerRelationship.d.ts" />
     <TypeScriptCompile Include="entities\DataPerformance.d.ts" />
+    <TypeScriptCompile Include="entities\DevKit.d.ts" />
     <TypeScriptCompile Include="entities\Discount.d.ts" />
     <TypeScriptCompile Include="entities\DiscountType.d.ts" />
     <TypeScriptCompile Include="entities\DisplayString.d.ts" />
@@ -1878,9 +1881,6 @@
     <TypeScriptCompile Include="entities\UserMapping.d.ts" />
     <TypeScriptCompile Include="entities\UserQuery.d.ts" />
     <TypeScriptCompile Include="entities\Workflow.d.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.4.30\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

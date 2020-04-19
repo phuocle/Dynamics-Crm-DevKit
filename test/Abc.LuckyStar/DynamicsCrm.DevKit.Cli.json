@@ -141,7 +141,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "entities": "msdyn_solutionhealthrule",
+      "entities": "devkit_webapi",
       "debug": "yes"
     },
     {

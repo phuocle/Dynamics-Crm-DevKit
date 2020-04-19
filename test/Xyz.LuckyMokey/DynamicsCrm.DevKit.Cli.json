@@ -140,7 +140,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "entities": "msdyn_requirementorganizationunit,msdyn_requirementresourcecategory,msdyn_requirementresourcepreference",
+      "entities": "*",
       "debug": "yes"
     },
     {

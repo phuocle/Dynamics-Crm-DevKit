@@ -263,6 +263,7 @@ namespace DynamicsCrm.DevKit.Shared
             var listExist = new List<string>();
             foreach (var item in list)
             {
+                if (item == null) continue;
                 var crmAttribute = Fields.FirstOrDefault(x => x.LogicalName == item);
                 if (crmAttribute == null)
                 {

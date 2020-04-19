@@ -106,46 +106,6 @@ var LuckyStar;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		return form;
 	};
-	LuckyStar.FormAccount_Quick_Create = function(executionContext, defaultWebResourceName) {
-		var formContext = null;
-		if (executionContext !== undefined)
-		{
-			if (executionContext.getFormContext === undefined) {
-				formContext = executionContext;
-			}
-			else {
-				formContext = executionContext.getFormContext();
-			}
-		}
-		var form = devKit.LoadForm(formContext);
-		var body = {
-			Address1_City: {},
-			Address1_Line1: {},
-			Address1_Line2: {},
-			Address1_PostalCode: {},
-			Description: {},
-			Name: {},
-			NumberOfEmployees: {},
-			PrimaryContactId: {},
-			Revenue: {},
-			Telephone1: {}
-		}
-		devKit.LoadFields(formContext, body);
-		var tab = {
-			tab_1: {
-				Section: {
-					tab_1_column_1_section_1: {},
-					tab_1_column_2_section_1: {},
-					tab_1_column_3_section_1: {}
-				}
-			}
-		}
-		devKit.LoadTabs(formContext, tab);
-		body.Tab = tab;
-		form.Body = body;
-		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		return form;
-	}
 })(LuckyStar || (LuckyStar = {}));
 /** @namespace OptionSet */
 var OptionSet;
