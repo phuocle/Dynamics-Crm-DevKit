@@ -141,7 +141,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "entities": "account,contact,team,systemuser,email,phonecall",
+      "entities": "account,contact,systemuser,team,phonecall,email,activityparty",
       "debug": "yes"
     },
     {
@@ -150,6 +150,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsWebApi",
+      "entities": "account,contact,systemuser,team,phonecall,email,activityparty",
       "debug": "yes"
     }
   ],

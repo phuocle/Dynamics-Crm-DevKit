@@ -454,7 +454,7 @@ namespace DynamicsCrm.DevKit.Shared
                            Name = x?.Attribute("name")?.Value,
                            InnerText = x?.ToString()
                        };
-            int j = 1;
+            //int j = 1;
             var existTabs = new List<string>();
             foreach (var row in rows)
             {
@@ -476,7 +476,7 @@ namespace DynamicsCrm.DevKit.Shared
                             {
                                 name = x2.Attribute("name")?.Value
                             };
-                int i = 1;
+                //int i = 1;
                 var existSections = new List<string>();
                 foreach (var row2 in rows2)
                 {
