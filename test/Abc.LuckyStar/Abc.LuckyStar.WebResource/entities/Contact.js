@@ -1,10 +1,10 @@
 ﻿//@ts-check
-///<reference path="adobe_recipient.d.ts" />
+///<reference path="Contact.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formContact = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
-		
+		var f = new LuckyStar.
 	}
 	async function onSave(executionContext) {
 	}
@@ -13,7 +13,18 @@ var formInformation = (function () {
 		OnSave: onSave
 	};
 })();
-var formQuick_Create = (function () {
+var formContact_Quick_Create = (function () {
+	"use strict";
+	async function onLoad(executionContext) {
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
+var formInformation = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
 	}

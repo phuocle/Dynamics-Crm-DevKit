@@ -1,10 +1,9 @@
 ﻿//@ts-check
-///<reference path="adobe_recipient.d.ts" />
+///<reference path="Team.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formTeam = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
-		
 	}
 	async function onSave(executionContext) {
 	}
@@ -13,7 +12,7 @@ var formInformation = (function () {
 		OnSave: onSave
 	};
 })();
-var formQuick_Create = (function () {
+var formTeam_form_Business = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
 	}

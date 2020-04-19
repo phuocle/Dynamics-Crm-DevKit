@@ -141,7 +141,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "entities": "account",
+      "entities": "account,contact,team,systemuser,email,phonecall",
       "debug": "yes"
     },
     {

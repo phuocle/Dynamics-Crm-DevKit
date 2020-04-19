@@ -1,10 +1,10 @@
 ﻿//@ts-check
-///<reference path="adobe_recipient.d.ts" />
+///<reference path="SystemUser.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formApplication_User = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
-		
+
 	}
 	async function onSave(executionContext) {
 	}
@@ -13,7 +13,18 @@ var formInformation = (function () {
 		OnSave: onSave
 	};
 })();
-var formQuick_Create = (function () {
+var formUser = (function () {
+	"use strict";
+	async function onLoad(executionContext) {
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
+var formUser_form_Business = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
 	}

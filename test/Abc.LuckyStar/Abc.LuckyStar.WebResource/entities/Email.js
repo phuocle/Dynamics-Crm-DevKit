@@ -1,10 +1,10 @@
 ﻿//@ts-check
-///<reference path="adobe_recipient.d.ts" />
+///<reference path="Email.d.ts" />
 "use strict";
-var formInformation = (function () {
+var formEmail = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
-		
+		var f = new LuckyStar.
 	}
 	async function onSave(executionContext) {
 	}
@@ -13,7 +13,18 @@ var formInformation = (function () {
 		OnSave: onSave
 	};
 })();
-var formQuick_Create = (function () {
+var formEmail_for_Interactive_experience = (function () {
+	"use strict";
+	async function onLoad(executionContext) {
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();
+var formWizard = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
 	}

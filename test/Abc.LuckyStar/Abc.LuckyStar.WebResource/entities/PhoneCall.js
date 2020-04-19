@@ -1,11 +1,10 @@
 ﻿//@ts-check
-///<reference path="Account.d.ts" />
+///<reference path="PhoneCall.d.ts" />
 "use strict";
-var formAccount = (function () {
+var formPhone_Call = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
-		var f = new LuckyStar.FormAccount(executionContext);
-
+		var f = new LuckyStar.
 	}
 	async function onSave(executionContext) {
 	}
@@ -14,18 +13,7 @@ var formAccount = (function () {
 		OnSave: onSave
 	};
 })();
-var formAccount_for_Interactive_experience = (function () {
-	"use strict";
-	async function onLoad(executionContext) {
-	}
-	async function onSave(executionContext) {
-	}
-	return {
-		OnLoad: onLoad,
-		OnSave: onSave
-	};
-})();
-var formAccount_Quick_Create = (function () {
+var formPhone_Call_for_Interactive_experience = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
 	}
@@ -36,7 +24,7 @@ var formAccount_Quick_Create = (function () {
 		OnSave: onSave
 	};
 })();
-var formInformation = (function () {
+var formPhone_call_quick_create_form = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
 	}

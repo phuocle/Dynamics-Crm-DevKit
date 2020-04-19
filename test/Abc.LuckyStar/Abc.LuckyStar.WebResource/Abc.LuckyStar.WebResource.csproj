@@ -57,12 +57,32 @@
       <DependentUpon>Account.js</DependentUpon>
     </Content>
     <Content Include="entities\Account.js" />
+    <Content Include="entities\Contact.form.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Contact.js" />
+    <Content Include="entities\Email.form.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Email.js" />
     <Content Include="entities\generator.form.bat" />
     <Content Include="entities\generator.webapi.bat" />
     <None Include="packages.config" />
     <None Include="_package.json" />
     <None Include="chutzpah.json" />
     <Content Include="entities\DevKit.d.ts" />
+    <Content Include="entities\PhoneCall.form.js">
+      <DependentUpon>PhoneCall.js</DependentUpon>
+    </Content>
+    <Content Include="entities\PhoneCall.js" />
+    <Content Include="entities\SystemUser.form.js">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </Content>
+    <Content Include="entities\SystemUser.js" />
+    <Content Include="entities\Team.form.js">
+      <DependentUpon>Team.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Team.js" />
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="test\xrm-mock.d.ts" />
@@ -87,6 +107,21 @@
   <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Contact.d.ts">
+      <DependentUpon>Contact.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Email.d.ts">
+      <DependentUpon>Email.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\PhoneCall.d.ts">
+      <DependentUpon>PhoneCall.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\SystemUser.d.ts">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Team.d.ts">
+      <DependentUpon>Team.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ProjectExtensions>
