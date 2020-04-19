@@ -141,7 +141,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "entities": "account,contact,systemuser,team,phonecall,email,activityparty",
+      "entities": "msdyn_serviceconfiguration,msdyn_odatav4ds,msdyn_aibdatasetrecord",
       "debug": "yes"
     },
     {
@@ -150,7 +150,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsWebApi",
-      "entities": "account,contact,systemuser,team,phonecall,email,activityparty",
+      "entities": "*",
       "debug": "yes"
     }
   ],
