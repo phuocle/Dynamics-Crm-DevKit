@@ -53,12 +53,24 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
-    <Content Include="entities\generator.form.bat" />
-    <Content Include="entities\generator.webapi.bat" />
     <None Include="packages.config" />
     <None Include="_package.json" />
     <None Include="chutzpah.json" />
+    <Content Include="entities\Account.form.js" />
+    <Content Include="entities\Account.js" />
+    <Content Include="entities\Contact.form.js" />
+    <Content Include="entities\Contact.js" />
     <Content Include="entities\DevKit.d.ts" />
+    <Content Include="entities\Email.form.js" />
+    <Content Include="entities\Email.js" />
+    <Content Include="entities\generator.form.bat" />
+    <Content Include="entities\generator.webapi.bat" />
+    <Content Include="entities\PhoneCall.form.js" />
+    <Content Include="entities\PhoneCall.js" />
+    <Content Include="entities\SystemUser.form.js" />
+    <Content Include="entities\SystemUser.js" />
+    <Content Include="entities\Team.form.js" />
+    <Content Include="entities\Team.js" />
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="test\xrm-mock.d.ts" />
@@ -79,6 +91,14 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.4.30\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="entities\Account.d.ts" />
+    <TypeScriptCompile Include="entities\Contact.d.ts" />
+    <TypeScriptCompile Include="entities\Email.d.ts" />
+    <TypeScriptCompile Include="entities\PhoneCall.d.ts" />
+    <TypeScriptCompile Include="entities\SystemUser.d.ts" />
+    <TypeScriptCompile Include="entities\Team.d.ts" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
