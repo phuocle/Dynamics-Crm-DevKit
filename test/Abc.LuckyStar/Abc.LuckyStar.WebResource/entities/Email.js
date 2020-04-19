@@ -4,6 +4,7 @@
 var formEmail = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
+		var f = new LuckyStar.
 	}
 	async function onSave(executionContext) {
 	}
