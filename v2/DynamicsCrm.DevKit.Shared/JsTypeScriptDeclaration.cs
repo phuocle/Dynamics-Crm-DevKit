@@ -58,8 +58,7 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             var comment = new CommentTypeScriptDeclaration()
             {
-                //JsForm = ProcessForms.Select(f => FormHelper.GetFormName(f.Name)).ToList<string>(),
-                JsForm = ProcessForms.Select(f => f.Name).ToList<string>(),
+                JsForm = ProcessForms.Select(f => FormHelper.GetFormName(f.Name)).ToList<string>(),
                 JsWebApi = IsJsWebApi,
                 IsDebugForm = IsDebugForm,
                 IsDebugWebApi = IsDebugWebApi
@@ -456,18 +455,19 @@ namespace DynamicsCrm.DevKit.Shared
                            InnerText = x?.ToString()
                        };
             int j = 1;
+            var existTabs = new List<string>();
             foreach (var row in rows)
             {
                 if (Utility.SafeName(row.Name).Length == 0) continue;
                 var tabName = row.Name;
-                //HOT FIXED for TAB
-                if (EntityName == "EmailServerProfile" && tabName == "tab_3")
-                {
-                    tabName = tabName + j.ToString();
-                    if (tabName == "tab_31") tabName = "tab_3";
-                    j++;
-                }
-
+                ////HOT FIXED for TAB
+                //if (EntityName == "EmailServerProfile" && tabName == "tab_3")
+                //{
+                //    tabName = tabName + j.ToString();
+                //    if (tabName == "tab_31") tabName = "tab_3";
+                //    j++;
+                //}
+                if (existTabs.Contains(Utility.SafeName(tabName))) continue; else existTabs.Add(Utility.SafeName(tabName));
                 part1 += $"\t\tinterface tab_{Utility.SafeName(tabName)}_Sections {{\r\n";
                 var xdoc2 = XDocument.Parse(row.InnerText);
                 var rows2 = from x2 in xdoc2.Descendants("columns").Descendants("column").Descendants("sections")
@@ -477,20 +477,21 @@ namespace DynamicsCrm.DevKit.Shared
                                 name = x2.Attribute("name")?.Value
                             };
                 int i = 1;
+                var existSections = new List<string>();
                 foreach (var row2 in rows2)
                 {
                     if (row2 == null) continue;
                     if (row2.name == null) continue;
                     if (row2.name.StartsWith("ref_pan")) continue;
                     var sectionName = row2.name;
-                    //HOT FIXED!!!!
-                    if (EntityName == "Feedback" && sectionName == "Content")
-                    {
-                        sectionName = sectionName + i.ToString();
-                        if (sectionName == "Content1") sectionName = "Content";
-                        i++;
-                    }
-
+                    ////HOT FIXED!!!!
+                    //if (EntityName == "Feedback" && sectionName == "Content")
+                    //{
+                    //    sectionName = sectionName + i.ToString();
+                    //    if (sectionName == "Content1") sectionName = "Content";
+                    //    i++;
+                    //}
+                    if (existSections.Contains(Utility.SafeName(sectionName))) continue; else existSections.Add(Utility.SafeName(sectionName));
                     part1 += $"\t\t\t{Utility.SafeName(sectionName)}: DevKit.Form.Controls.ControlSection;\r\n";
                 }
                 part1 += $"\t\t}}\r\n";
@@ -537,6 +538,9 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             var previousName = string.Empty;
             var previousCount = 0;
+
+            var listVirtualControls = new List<string>();
+
             foreach (var item in list)
             {
                 item.ClassId = GetARealClassId(formXml, item.ClassId, item.ControlId);
@@ -631,6 +635,10 @@ namespace DynamicsCrm.DevKit.Shared
                 }
                 else if (ControlClassId.VIRTUAL_CONTROLS.Contains(item.ClassId))
                 {
+                    if (listVirtualControls.Contains(item.Id))
+                        continue;
+                    else
+                        listVirtualControls.Add(item.Id);
                     if (item.ClassId == ControlClassId.IFRAME)
                     {
                         _d_ts += $"\t\t\t{item.Id}: DevKit.Form.Controls.ControlIFrame;\r\n";
@@ -679,6 +687,12 @@ namespace DynamicsCrm.DevKit.Shared
                     {
                         _d_ts += $"\t\t\t{item.Id}: DevKit.Form.Controls.ControlPowerBi;\r\n";
                     }
+                    else if (item.ClassId == ControlClassId.UNKNOWN_1 ||
+                             item.ClassId == ControlClassId.UNKNOWN_2 ||
+                             item.ClassId == ControlClassId.UNKNOWN_3 ||
+                             item.ClassId == ControlClassId.UNKNOWN_4 ||
+                             item.ClassId == ControlClassId.UNKNOWN_5)
+                        continue;
                     else
                     {
                         _d_ts += $"\t\t\t{item.Name}: DevKit.Form.Controls.ELSE2???;//{item.Id} - {item.ClassId} -- FOR DEBUG \r\n";

@@ -96,7 +96,7 @@ namespace Abc.LuckyStar.Shared.Entities
 		/// <para>Id</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Guid? Id
+		public Guid? Id1
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.Id); }
 			set { Entity.Attributes[Fields.Id] = value; }

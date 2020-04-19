@@ -4,6 +4,8 @@
 var formAccount = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
+		var form = new LuckyStar.FormAccount()
+		form.
 	}
 	async function onSave(executionContext) {
 	}

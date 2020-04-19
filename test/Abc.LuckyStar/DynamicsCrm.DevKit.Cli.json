@@ -132,7 +132,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "CSharp",
-      "entities": "canvasapp",
+      "entities": "",
       "debug": ""
     },
     {
@@ -141,6 +141,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
+      "entities": "msdyn_solutionhealthrule",
       "debug": "yes"
     },
     {

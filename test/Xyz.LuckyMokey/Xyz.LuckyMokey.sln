@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xyz.LuckyMokey.WebResource", "Xyz.LuckyMokey.WebResource\Xyz.LuckyMokey.WebResource.csproj", "{A3BF1A3D-2C5D-4C33-B35C-E9AC269E13EC}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Xyz.LuckyMokey.Shared\Xyz.LuckyMokey.Shared.projitems*{2628968c-17e6-4c40-bae4-89755a41d4ae}*SharedItemsImports = 4
@@ -27,6 +29,10 @@ Global
 		{2628968C-17E6-4C40-BAE4-89755A41D4AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2628968C-17E6-4C40-BAE4-89755A41D4AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2628968C-17E6-4C40-BAE4-89755A41D4AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3BF1A3D-2C5D-4C33-B35C-E9AC269E13EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3BF1A3D-2C5D-4C33-B35C-E9AC269E13EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3BF1A3D-2C5D-4C33-B35C-E9AC269E13EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3BF1A3D-2C5D-4C33-B35C-E9AC269E13EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,162 @@
+﻿'use strict';
+/** @namespace LuckyMokey */
+var LuckyMokey;
+(function (LuckyMokey) {
+	'use strict';
+	LuckyMokey.Formmsdyusd_windowroute_Information = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			CTISearches: {},
+			msdyusd_Action: {},
+			msdyusd_Application: {},
+			msdyusd_Condition: {},
+			msdyusd_DashboardFrame: {},
+			msdyusd_Destination: {},
+			msdyusd_Direction: {},
+			msdyusd_Entity: {},
+			msdyusd_EntitySearch: {},
+			msdyusd_field: {},
+			msdyusd_From: {},
+			msdyusd_FromSearch: {},
+			msdyusd_HideNavBar: {},
+			msdyusd_HideRibbon: {},
+			msdyusd_InitiatingActivity: {},
+			msdyusd_MultipleMatches: {},
+			msdyusd_MultipleMatchesDecision: {},
+			msdyusd_name: {},
+			msdyusd_NoMatchDecision: {},
+			msdyusd_NoMatchesAction: {},
+			msdyusd_Order: {},
+			msdyusd_RouteType: {},
+			msdyusd_showtab: {},
+			msdyusd_SingleMatchAction: {},
+			msdyusd_SingleMatchDecision: {},
+			msdyusd_SourceFrame: {},
+			msdyusd_url: {},
+			notescontrol: {},
+			OwnerId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			GeneralTab: {
+				Section: {
+					_B27D995D_EA0A_4463_9253_92F19878B844_SECTION_2: {}
+				}
+			},
+			CTITab: {
+				Section: {
+					CTI: {},
+					NoMatchesTab: {},
+					SingleMatchTab: {},
+					MultipleMatchesTab: {}
+				}
+			},
+			ResultTab: {
+				Section: {
+					Result: {},
+					EntitySearch: {},
+					Tab: {},
+					OptionsSection: {}
+				}
+			},
+			tab_5: {
+				Section: {
+					tab_5_section_2: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var footer = {
+			statecode: {}
+		};
+		devKit.LoadFields(formContext, footer, "footer_");
+		form.Footer = footer;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var navigation = {
+			nav_msdyusd_windowroute_agentscriptaction: {},
+			nav_msdyusd_windowroute_ctisearch: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		return form;
+	};
+})(LuckyMokey || (LuckyMokey = {}));
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.msdyusd_windowroute = {
+		msdyusd_Action : {
+			Default: 803750004,
+			Create_Session: 803750000,
+			Show_Outside: 803750001,
+			Route_Window: 803750002,
+			None: 803750003,
+			In_Place: 803750005
+		},
+		msdyusd_Destination : {
+			Tab: 803750000,
+			Entity_Search: 803750001
+		},
+		msdyusd_Direction : {
+			Outbound: 0,
+			Inbound: 1,
+			Both: 2
+		},
+		msdyusd_MultipleMatchesDecision : {
+			Create_Session_then_Do_Action: 803750002,
+			Do_Action: 803750000,
+			Next_Rule: 803750001
+		},
+		msdyusd_NoMatchDecision : {
+			Create_Session_then_Do_Action: 803750002,
+			Do_Action: 803750000,
+			Next_Rule: 803750001
+		},
+		msdyusd_RouteType : {
+			Popup: 803750000,
+			OnLoad: 803750001,
+			In_Place: 803750003,
+			Menu_Chosen: 803750002
+		},
+		msdyusd_SingleMatchDecision : {
+			Create_Session_Load_Match_then_Do_Action: 803750003,
+			Create_Session_then_Do_Action: 803750002,
+			Do_Action: 803750000,
+			Next_Rule: 803750001
+		},
+		statecode : {
+			Active: 0,
+			Inactive: 1
+		},
+		statuscode : {
+			Active: 1,
+			Inactive: 2
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
+
+	};
+})(OptionSet || (OptionSet = {}));

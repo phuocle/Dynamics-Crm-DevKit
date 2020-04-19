@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Xyz.LuckyMokey\Xyz.LuckyMokey.Shared\Entities";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Xyz.LuckyMokey\Xyz.LuckyMokey.WebResource\entities";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

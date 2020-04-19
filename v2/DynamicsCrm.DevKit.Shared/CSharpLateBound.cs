@@ -592,6 +592,7 @@ namespace DynamicsCrm.DevKit.Shared
             if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "1";
             if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "1";
             if (declareName.ToLower() == "Entity".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "Id".ToLower()) return declareName + "1";
             return declareName;
         }
 

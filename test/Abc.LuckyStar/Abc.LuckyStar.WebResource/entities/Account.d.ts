@@ -214,7 +214,7 @@ declare namespace LuckyStar {
 		AccountClassificationCode: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the account. */
 		AccountId: DevKit.WebApi.GuidValue;
-		/** Type an ID number or code for the account to quickly search and identify the account in system views. */
+		/** Type an number or code for the account to quickly search and identify the account in system views. */
 		AccountNumber: DevKit.WebApi.StringValue;
 		/** Select a rating to indicate the value of the customer account. */
 		AccountRatingCode: DevKit.WebApi.OptionSetValue;

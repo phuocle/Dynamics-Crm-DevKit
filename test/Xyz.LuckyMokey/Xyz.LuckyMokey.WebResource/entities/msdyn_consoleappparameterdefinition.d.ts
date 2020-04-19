@@ -1,0 +1,76 @@
+﻿//@ts-check
+///<reference path="DevKit.d.ts" />
+declare namespace LuckyMokey {
+	namespace Formmsdyn_consoleappparameterdefinition_Information {
+		interface Tabs {
+		}
+		interface Body {
+			/** The default value for this parameter. The plugin for UCIApplicationType will cast to appropriate type before use */
+			msdyn_DefaultValue: DevKit.Form.Controls.ControlString;
+			/** Yes - value will be picked from templateParameters argument at runtime
+No - value must be supplied when creating a template that uses this parameter */
+			msdyn_IsRuntime: DevKit.Form.Controls.ControlBoolean;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Form.Controls.ControlString;
+			/** The runtime type of the parameter value */
+			msdyn_RuntimeType: DevKit.Form.Controls.ControlOptionSet;
+		}
+	}
+	class Formmsdyn_consoleappparameterdefinition_Information extends DevKit.Form.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_consoleappparameterdefinition_Information
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Form.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.Form.WebApi;
+		/** The Body section of form msdyn_consoleappparameterdefinition_Information */
+		Body: LuckyMokey.Formmsdyn_consoleappparameterdefinition_Information.Body;
+	}
+}
+declare namespace OptionSet {
+	namespace msdyn_consoleappparameterdefinition {
+		enum msdyn_RuntimeType {
+			/** 110000000 */
+			string,
+			/** 110000001 */
+			number,
+			/** 110000002 */
+			boolean,
+			/** 110000003 */
+			json
+		}
+		enum statecode {
+			/** 0 */
+			Active,
+			/** 1 */
+			Inactive
+		}
+		enum statuscode {
+			/** 1 */
+			Active,
+			/** 2 */
+			Inactive
+		}
+        enum RollupState {
+            /** 0 - Attribute value is yet to be calculated */
+            NotCalculated,
+            /** 1 - Attribute value has been calculated per the last update time in <AttributeSchemaName>_Date attribute */
+            Calculated,
+            /** 2 - Attribute value calculation lead to overflow error */
+            OverflowError,
+            /** 3 - Attribute value calculation failed due to an internal error, next run of calculation job will likely fix it */
+            OtherError,
+            /** 4 - Attribute value calculation failed because the maximum number of retry attempts to calculate the value were exceeded likely due to high number of concurrency and locking conflicts */
+            RetryLimitExceeded,
+            /** 5 - Attribute value calculation failed because maximum hierarchy depth limit for calculation was reached */
+            HierarchicalRecursionLimitReached,
+            /** 6 - Attribute value calculation failed because a recursive loop was detected in the hierarchy of the record */
+            LoopDetected
+        }
+	}
+}
+//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}

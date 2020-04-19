@@ -131,16 +131,17 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "CSharp",
-      "entities": "msdyn_requirementrelationship",
+      "entities": "",
       "debug": ""
     },
     {
       "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Xyz.LuckyMokey",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "debug": ""
+      "entities": "msdyn_requirementorganizationunit,msdyn_requirementresourcecategory,msdyn_requirementresourcepreference",
+      "debug": "yes"
     },
     {
       "profile": "JS-WEBAPI",
