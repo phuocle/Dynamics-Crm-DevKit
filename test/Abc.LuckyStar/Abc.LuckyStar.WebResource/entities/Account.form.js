@@ -106,6 +106,253 @@ var LuckyStar;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		return form;
 	};
+	LuckyStar.FormAccount_for_Interactive_experience = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			Address1_Composite: {},
+			Address1_FreightTermsCode: {},
+			Address1_ShippingMethodCode: {},
+			Contacts: {},
+			CreditLimit: {},
+			CreditOnHold: {},
+			Description: {},
+			DoNotBulkEMail: {},
+			DoNotEMail: {},
+			DoNotFax: {},
+			DoNotPhone: {},
+			DoNotPostalMail: {},
+			Fax: {},
+			FollowEmail: {},
+			IndustryCode: {},
+			Name: {},
+			notescontrol: {},
+			OwnershipCode: {},
+			ParentAccountId: {},
+			PaymentTermsCode: {},
+			PreferredContactMethodCode: {},
+			PrimaryContactId: {},
+			PrimaryContactId_1: {},
+			SIC: {},
+			Telephone1: {},
+			TransactionCurrencyId: {},
+			WebSiteURL: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			SUMMARY_TAB: {
+				Section: {
+					ACCOUNT_INFORMATION: {},
+					Timeline: {}
+				}
+			},
+			DETAILS_TAB: {
+				Section: {
+					COMPANY_PROFILE: {},
+					DETAILS_TAB_section_6: {},
+					CONTACT_PREFERENCES: {},
+					BILLING: {},
+					SHIPPING: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			NumberOfEmployees: {},
+			OwnerId: {},
+			Revenue: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var quickForm = {
+			contactquickform: {}
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var navigation = {
+			navAddresses: {},
+			navSubAccts: {},
+			navRelationships: {},
+			navProcessSessions: {},
+			navAsyncOperations: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		return form;
+	};
+	LuckyStar.FormAccount_Information = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			accountactivitiesgrid: {},
+			AccountCategoryCode: {},
+			accountContactsGrid: {},
+			AccountNumber: {},
+			Address1_AddressTypeCode: {},
+			Address1_City: {},
+			Address1_Country: {},
+			Address1_FreightTermsCode: {},
+			Address1_Line1: {},
+			Address1_Line2: {},
+			Address1_Line3: {},
+			Address1_Name: {},
+			Address1_PostalCode: {},
+			Address1_ShippingMethodCode: {},
+			Address1_StateOrProvince: {},
+			Address1_Telephone1: {},
+			CreditLimit: {},
+			CreditOnHold: {},
+			CustomerTypeCode: {},
+			Description: {},
+			DoNotBulkEMail: {},
+			DoNotEMail: {},
+			DoNotFax: {},
+			DoNotPhone: {},
+			DoNotPostalMail: {},
+			EMailAddress1: {},
+			Fax: {},
+			FollowEmail: {},
+			IndustryCode: {},
+			Name: {},
+			notescontrol: {},
+			NumberOfEmployees: {},
+			OwnerId: {},
+			OwnershipCode: {},
+			ParentAccountId: {},
+			PaymentTermsCode: {},
+			PreferredContactMethodCode: {},
+			PrimaryContactId: {},
+			Revenue: {},
+			SIC: {},
+			Telephone1: {},
+			Telephone2: {},
+			TickerSymbol: {},
+			TransactionCurrencyId: {},
+			WebSiteURL: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			general: {
+				Section: {
+					account_information: {},
+					address: {},
+					shipping_information: {},
+					description: {}
+				}
+			},
+			details: {
+				Section: {
+					professional_information: {},
+					description_2: {},
+					billing_information: {}
+				}
+			},
+			contacts: {
+				Section: {
+					contacts: {}
+				}
+			},
+			notes_and_activities: {
+				Section: {
+					activities: {},
+					notes: {}
+				}
+			},
+			administration: {
+				Section: {
+					internal_information: {},
+					contact_methods: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			CreditLimit: {},
+			OwnerId: {},
+			PreferredContactMethodCode: {},
+			PrimaryContactId: {},
+			Revenue: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var navigation = {
+			navAddresses: {},
+			navSubAct: {},
+			navActivities: {},
+			navActivityHistory: {},
+			navRelationships: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		return form;
+	};
+	LuckyStar.FormAccount_Quick_Create = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined)
+		{
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			Address1_City: {},
+			Address1_Line1: {},
+			Address1_Line2: {},
+			Address1_PostalCode: {},
+			Description: {},
+			Name: {},
+			NumberOfEmployees: {},
+			PrimaryContactId: {},
+			Revenue: {},
+			Telephone1: {}
+		}
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			tab_1: {
+				Section: {
+					tab_1_column_1_section_1: {},
+					tab_1_column_2_section_1: {},
+					tab_1_column_3_section_1: {}
+				}
+			}
+		}
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		return form;
+	}
 })(LuckyStar || (LuckyStar = {}));
 /** @namespace OptionSet */
 var OptionSet;

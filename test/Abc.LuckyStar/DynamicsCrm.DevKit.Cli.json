@@ -141,7 +141,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "entities": "devkit_webapi",
+      "entities": "account",
       "debug": "yes"
     },
     {
