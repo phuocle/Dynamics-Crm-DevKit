@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.WebResource\entities";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Abc.LuckyStar\Abc.LuckyStar.DataProvider";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

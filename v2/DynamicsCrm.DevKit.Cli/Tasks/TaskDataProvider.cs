@@ -12,6 +12,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
+using System.ServiceModel;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -36,6 +37,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "DATA-PROVIDER");
+            CliLog.WriteLine();
 
             if (!IsValid()) return;
             foreach (var file in DataProviderFiles)
@@ -43,6 +45,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 RegisterDataProvider(file);
             }
 
+            CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "DATA-PROVIDER");
         }
 
@@ -133,7 +136,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     ["typename"] = plugin.FullName,
                     ["friendlyname"] = plugin.FullName
                 };
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"\tRegistering Type: ", CliLog.ColorCyan, $"{plugin.FullName}");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, " Registering", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{plugin.FullName}");
                 var pluginTypeId = crmServiceClient.Create(pluginType);
                 pluginType["plugintypeid"] = pluginTypeId;
             }
@@ -181,15 +184,28 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             };
             if (pluginAssemblyId == Guid.Empty)
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Registering Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Registering", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
                 pluginAssemblyId = crmServiceClient.Create(plugin);
                 plugin["pluginassemblyid"] = pluginAssemblyId;
             }
             else
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, "Updating Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Updating", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{assemblyProperties[0]}");
                 plugin["pluginassemblyid"] = pluginAssemblyId;
-                crmServiceClient.Update(plugin);
+                try
+                {
+                    crmServiceClient.Update(plugin);
+                }
+                catch (FaultException fe)
+                {
+                    CliLog.WriteLine();
+                    CliLog.WriteLine();
+                    CliLog.WriteLine(ConsoleColor.White, fe.Message);
+                    CliLog.WriteLine();
+                    CliLog.WriteLine();
+                    CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY DATA-PROVIDER FAILED !!!");
+                    throw;
+                }
             }
             return plugin;
         }
@@ -227,8 +243,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     ComponentId = Guid.Parse(plugin["pluginassemblyid"].ToString()),
                     SolutionUniqueName = json.solution
                 };
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Adding Assembly: ", CliLog.ColorCyan, $"{plugin["name"]} ",
-                    CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{json.solution}");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, " Adding", CliLog.ColorGreen, " Assembly: ", CliLog.ColorCyan, $"{plugin["name"]} ", CliLog.ColorGreen, "to solution: ", CliLog.ColorCyan, $"{json.solution}");
                 crmServiceClient.Execute(request);
             }
         }
