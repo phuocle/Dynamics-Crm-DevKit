@@ -980,22 +980,13 @@
     <Content Include="entities\WorkflowWaitSubscription.webapi.js" />
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
-    <Content Include="test\xrm-mock.d.ts" />
-    <Content Include="test\requirejsConfig.js" />
-    <Content Include="test\XrmEnum.js" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="css\" />
-    <Folder Include="html\" />
-    <Folder Include="images\" />
-    <Folder Include="js\" />
-    <Folder Include="resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.4.30\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
@@ -1380,6 +1371,11 @@
     <TypeScriptCompile Include="entities\WorkflowDependency.d.ts" />
     <TypeScriptCompile Include="entities\WorkflowLog.d.ts" />
     <TypeScriptCompile Include="entities\WorkflowWaitSubscription.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\Resource.1031.resx" />
+    <EmbeddedResource Include="resources\Resource.1033.resx" />
+    <EmbeddedResource Include="resources\Resource.1066.resx" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
