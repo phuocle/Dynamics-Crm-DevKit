@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private CrmServiceClient crmServiceClient;
         private string currentDirectory;
         private CommandLineArgs arguments;
-        private const string LOG = "[SOLUTIONPACKAGER]";
+        private const string LOG = "[SOLUTION-PACKAGER]";
         private JsonSolutionPackager json;
 
         public TaskSolutionPackager(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         internal void Run()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "SOLUTION-PACKAGER");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
             CliLog.WriteLine();
 
             if (!IsValid()) return;
@@ -41,7 +41,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             Packger(solution);
 
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "SOLUTION-PACKAGER");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
         private bool IsValid()
@@ -92,7 +92,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, te.Message);
                     CliLog.WriteLine();
                     CliLog.WriteLine();
-                    CliLog.WriteLine(ConsoleColor.Red, "!!! SOLUTION-PACKAGER FAILED !!!");
+                    CliLog.WriteLine(ConsoleColor.Red, "!!! [SOLUTION-PACKAGER] FAILED !!!");
                     throw;
                 }
             }

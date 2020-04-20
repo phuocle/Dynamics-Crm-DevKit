@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         internal void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
+            CliLog.WriteLine();
 
             if (!IsValid()) return;
 
@@ -41,20 +42,25 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             ReadDownloadedReportFiles(folder);
 
             if (downloadedReportFiles.Count() == 0)
-                throw new Exception("Not found any reports to download");
-
+            {
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Not found any reports to download");
+                CliLog.WriteLine();
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
+                return;
+            }
             var totalDownloadFiles = downloadedReportFiles.Count;
             var len = totalDownloadFiles.ToString().Length;
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, totalDownloadFiles, CliLog.ColorGreen, " reports");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, totalDownloadFiles, CliLog.ColorGreen, " reports");
 
             var i = 1;
             foreach (var downloadFile in downloadedReportFiles)
             {
                 Utility.ForceWriteAllText(downloadFile.FileName, downloadFile.Content);
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Downloaded: ", CliLog.ColorGreen, downloadFile.Name, CliLog.ColorWhite, " to: ", CliLog.ColorGreen, downloadFile.FileName);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, string.Format("{0,0}{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Downloaded ", CliLog.ColorCyan, downloadFile.Name, CliLog.ColorWhite, " to: ", CliLog.ColorGreen, downloadFile.FileName);
                 i++;
             }
 
+            CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
@@ -116,7 +122,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 downloadedReportFiles.Add(new DownloadFile
                 {
                     Content = entity.GetAttributeValue<string>("bodytext"),
-                    FileName = Path.Combine(folder, entity.GetAttributeValue<string>("filename"))
+                    FileName = Path.Combine(folder, entity.GetAttributeValue<string>("filename")),
+                    Name = Path.GetFileName(Path.Combine(folder, entity.GetAttributeValue<string>("filename")))
                 });
             }
         }

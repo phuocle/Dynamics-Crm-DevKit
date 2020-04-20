@@ -34,10 +34,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public void Run()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "WEBRESOURCES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
             CliLog.WriteLine();
 
             if (!IsValid()) return;
+            if (!json.prefix.EndsWith("_")) json.prefix += "_";
+
             var totalWebResourceFiles = WebResourceFiles.Count;
 
             CliLog.WriteLine(ConsoleColor.Red, "DEPLOYING WEBRESOURCES");
@@ -65,7 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 PublishWebResources();
 
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "WEBRESOURCES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
         private bool IsValid()

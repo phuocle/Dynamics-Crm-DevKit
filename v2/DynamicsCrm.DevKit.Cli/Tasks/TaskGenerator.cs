@@ -69,7 +69,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private void GeneratorLateBound()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "GENERATOR CSHARP LATE BOUND");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "[GENERATOR CSHARP LATE BOUND]");
             CliLog.WriteLine();
 
             var entities = new List<string>();
@@ -112,7 +112,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "NOT FOUND ", CliLog.ColorCyan, "ENTIIES");
                 CliLog.WriteLine();
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR CSHARP LATE BOUND");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "[GENERATOR CSHARP LATE BOUND]");
                 return;
             }
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, entities.Count, CliLog.ColorGreen, " entities");
@@ -130,7 +130,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR CSHARP LATE BOUND");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "[GENERATOR CSHARP LATE BOUND]");
         }
 
         private List<string> GetAllEntitySchemas()
@@ -256,47 +256,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private void GeneratorWebApi()
         {
-            //CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "GENERATOR JS WEBAPI");
-            //CliLog.WriteLine();
-
-            //var entities = new List<string>();
-            //string[] files;
-            //var folder = $"{currentDirectory}\\{json.rootfolder}";
-            ////if (json.entities == null || json.entities.Count == 0)
-            ////{
-            //    var pattern = "*.webapi.js";
-            //    files = Directory.GetFiles(folder, pattern);
-            ////}
-            ////else
-            ////{
-            ////    //if (json.entities.Count == 1 && json.entities[0].ToLower() == "all")
-            ////    //    files = GetAllEntitiesForWebApi();
-            ////    //else
-            ////        files = json.entities.Select(e => $"{folder}{e}.webapi.js").ToArray();
-            ////}
-            //foreach (var file in files)
-            //{
-            //    var fInfo = new FileInfo(file);
-            //    var columns = fInfo.Name.Split(".".ToCharArray());
-            //    entities.Add(columns[0]);
-            //}
-            //if (entities.Count == 0)
-            //{
-            //    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "NOT FOUND ", CliLog.ColorMagenta, " ENTIIES !!!");
-            //    return;
-            //}
-            //CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorMagenta, entities.Count, CliLog.ColorGreen, " entities");
-            //var i = 1;
-            //foreach (var entity in entities)
-            //{
-            //    GeneratorJsWebApi(entity, i, entities.Count);
-            //    i++;
-            //}
-
-            //CliLog.WriteLine();
-            //CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR JS WEBAPI");
-
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "GENERATOR JS WEBAPI");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "[GENERATOR JS WEBAPI]");
             CliLog.WriteLine();
 
             var entities = new List<string>();
@@ -339,7 +299,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "NOT FOUND ", CliLog.ColorCyan, "ENTIIES");
                 CliLog.WriteLine();
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR JS WEBAPI");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "[GENERATOR JS WEBAPI]");
                 return;
             }
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, entities.Count, CliLog.ColorGreen, " entities");
@@ -351,7 +311,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR JS WEBAPI");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "[GENERATOR JS WEBAPI]");
 
 
         }
@@ -419,27 +379,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".webapi.js");
         }
 
-        private string[] GetAllEntitiesForWebApi()
-        {
-            var request = new RetrieveAllEntitiesRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                RetrieveAsIfPublished = true
-            };
-            var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
-            var metaDataEntities = response.EntityMetadata.OrderBy(a => a.SchemaName);
-            var entities = new List<string>();
-            foreach (var entity in metaDataEntities)
-            {
-                entities.Add(entity.SchemaName);
-            }
-            entities.Sort();
-            return entities.ToArray();
-        }
+        //private string[] GetAllEntitiesForWebApi()
+        //{
+        //    var request = new RetrieveAllEntitiesRequest
+        //    {
+        //        EntityFilters = EntityFilters.Entity,
+        //        RetrieveAsIfPublished = true
+        //    };
+        //    var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
+        //    var metaDataEntities = response.EntityMetadata.OrderBy(a => a.SchemaName);
+        //    var entities = new List<string>();
+        //    foreach (var entity in metaDataEntities)
+        //    {
+        //        entities.Add(entity.SchemaName);
+        //    }
+        //    entities.Sort();
+        //    return entities.ToArray();
+        //}
 
         private void GeneratorJsForm()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "GENERATOR JS FORM");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "[GENERATOR JS FORM]");
             CliLog.WriteLine();
 
             var entities = new List<string>();
@@ -482,7 +442,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "NOT FOUND ", CliLog.ColorCyan, "ENTIIES");
                 CliLog.WriteLine();
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR JS FORM");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "[GENERATOR JS FORM]");
                 return;
             }
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, entities.Count, CliLog.ColorGreen, " entities");
@@ -494,7 +454,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "GENERATOR JS FORM");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "[GENERATOR JS FORM]");
         }
 
         private void GeneratorJsForm(string entity, int i, int count)

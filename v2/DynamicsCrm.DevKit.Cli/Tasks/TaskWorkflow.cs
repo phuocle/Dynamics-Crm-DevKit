@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public void Run()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "WORKFLOWS");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
             CliLog.WriteLine();
 
             if (!IsValid()) return;
@@ -46,7 +46,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "WORKFLOWS");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
         private bool IsValid()

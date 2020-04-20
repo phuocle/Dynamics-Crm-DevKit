@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
         public void Run()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "PLUGINS");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
             CliLog.WriteLine();
 
             if (!IsValid()) return;
@@ -46,7 +46,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "PLUGINS");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
         private bool IsValid()
@@ -168,7 +168,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine(ConsoleColor.Green, $"{LOG} Plugin Assembly don't have any type: CrmPluginRegistration Attribute");
                 CliLog.WriteLine();
                 CliLog.WriteLine();
-                CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY PLUGIN FAILED !!!");
+                CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY [PLUGIN] FAILED !!!");
                 throw new Exception();
             }
             var firstTypeAttribute = firstType.CreateFromData();
@@ -230,7 +230,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, fe.Message);
                     CliLog.WriteLine();
                     CliLog.WriteLine();
-                    CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY PLUGIN FAILED !!!");
+                    CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY [PLUGIN] FAILED !!!");
                     throw;
                 }
             }
@@ -355,7 +355,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.Red, "!!! Plugin Type: ", ConsoleColor.Green, attribute.Name, ConsoleColor.Red, " is an ", ConsoleColor.Green, "Update", ConsoleColor.Red, " plugin. Please provide ", ConsoleColor.Green, "FilteringAttributes", ConsoleColor.Red, " value !!!");
                         CliLog.WriteLine();
                         CliLog.WriteLine();
-                        CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY PLUGIN FAILED !!!");
+                        CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY [PLUGIN] FAILED !!!");
                         throw new Exception();
                     }
                 }
@@ -450,7 +450,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             CliLog.WriteLine(ConsoleColor.Red, "!!! Plugin Type: ", ConsoleColor.Green, attribute.Name, ConsoleColor.Red, " register ", ConsoleColor.Green, "failed", ConsoleColor.Red, " with message: ", ConsoleColor.White, fe.Message);
                             CliLog.WriteLine();
                             CliLog.WriteLine();
-                            CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY PLUGIN FAILED !!!");
+                            CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY [PLUGIN] FAILED !!!");
                             throw;
                         }
                     }
@@ -547,7 +547,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine(ConsoleColor.Red, "!!! Plugin Type: ", ConsoleColor.Green, pluginType, ConsoleColor.Red, " register ", ConsoleColor.Green, "Image", ConsoleColor.Red, " need provide ", ConsoleColor.Green, "ImageAttributes", ConsoleColor.Red, " value !!!");
                 CliLog.WriteLine();
                 CliLog.WriteLine();
-                CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY PLUGIN FAILED !!!");
+                CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY [PLUGIN] FAILED !!!");
                 throw new Exception();
             }
             var image = new Entity("sdkmessageprocessingstepimage")
@@ -597,7 +597,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         CliLog.WriteLine(ConsoleColor.Red, "!!! Plugin Type: ", ConsoleColor.Green, pluginType, ConsoleColor.Red, " does not support: ", ConsoleColor.Green, imageType.ToString());
                         CliLog.WriteLine();
                         CliLog.WriteLine();
-                        CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY PLUGIN FAILED !!!");
+                        CliLog.WriteLine(ConsoleColor.Red, "!!! DEPLOY [PLUGIN] FAILED !!!");
                         throw;
                     }
                 }

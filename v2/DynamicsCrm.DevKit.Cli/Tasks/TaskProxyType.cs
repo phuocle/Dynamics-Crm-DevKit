@@ -18,7 +18,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private CrmServiceClient crmServiceClient;
         private string currentDirectory;
         private CommandLineArgs arguments;
-        private const string LOG = "[PROXYTYPES]";
+        private const string LOG = "[PROXY-TYPES]";
         private JsonProxyType json;
 
         public TaskProxyType(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
@@ -33,7 +33,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public void Run()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "PROXY-TYPES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
             CliLog.WriteLine();
 
             if (!IsValid()) return;
@@ -43,7 +43,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             RunProxyType();
 
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "PROXY-TYPES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
         private void CopyFile()
