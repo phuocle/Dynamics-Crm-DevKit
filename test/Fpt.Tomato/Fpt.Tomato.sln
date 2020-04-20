@@ -7,6 +7,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Fpt.Tomato.Shared", "Fpt.To
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fpt.Tomato.WebResource", "Fpt.Tomato.WebResource\Fpt.Tomato.WebResource.csproj", "{951A4870-68EE-4AEC-8875-89E4328BA400}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C41D4177-843C-4D7F-9923-0FCFF8F112A0}"
+	ProjectSection(SolutionItems) = preProject
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Fpt.Tomato.Shared\Fpt.Tomato.Shared.projitems*{3c9814c7-4d7b-43a1-8ec7-a8e4bd225d77}*SharedItemsImports = 13

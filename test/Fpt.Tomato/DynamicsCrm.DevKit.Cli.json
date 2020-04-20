@@ -1,31 +1,4 @@
 ﻿{
-  "plugins": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "???",
-      "includefiles": [
-        "Fpt.Tomato.Plugin.*.dll",
-        "Fpt.Tomato.CustomAction.*.dll"
-      ],
-      "excludefiles": [
-        "Fpt.Tomato.*.Test.dll"
-      ]
-    }
-  ],
-  "workflows": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "???",
-      "includefiles": [
-        "Fpt.Tomato.Workflow.*.dll"
-      ],
-      "excludefiles": [
-        "Fpt.Tomato.*.Test.dll"
-      ]
-    }
-  ],
   "webresources": [
     {
       "profile": "DEBUG",
@@ -73,109 +46,22 @@
       ]
     }
   ],
-  "dataproviders": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "???",
-      "includefiles": [
-        "Fpt.Tomato.DataProvider.*.dll"
-      ],
-      "excludefiles": [
-        "Fpt.Tomato.*.Test.dll"
-      ]
-    }
-  ],
-  "solutionpackagers": [
-    {
-      "profile": "Extract-Unmanaged",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Extract-Managed",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Managed",
-      "folder": "???",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Unmanaged",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Managed",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Managed",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    }
-  ],
   "generators": [
     {
-      "profile": "LATEBOUND",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "crmversion": "365",
-      "type": "CSharp",
-      "debug":  ""
-    },
-    {
       "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Fpt.Tomato",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "debug": ""
+      "debug": "yes"
     },
     {
       "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Fpt.Tomato",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsWebApi",
-      "debug":  ""
-    }
-  ],
-  "downloadwebresources": [
-    {
-      "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???"
-    }
-  ],
-  "downloadreports": [
-    {
-      "profile": "DEBUG",
-      "folder": "???",
-      "solution":  "???"
-    }
-  ],
-  "portals": [
-    {
-      "profile": "DEBUG",
-      "name": "???"
-    }
-  ],
-  "proxytypes": [
-    {
-      "profile": "DEBUG",
-      "namespace": "???",
-      "output": "GeneratedCode.cs",
-      "entities":  ""
+      "debug": "yes"
     }
   ],
   "visualstudio": {

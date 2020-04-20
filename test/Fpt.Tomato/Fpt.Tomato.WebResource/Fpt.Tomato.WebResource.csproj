@@ -56,6 +56,13 @@
     <None Include="packages.config" />
     <None Include="_package.json" />
     <None Include="chutzpah.json" />
+    <Content Include="entities\devkit_WebApi.form.js">
+      <DependentUpon>devkit_WebApi.js</DependentUpon>
+    </Content>
+    <Content Include="entities\devkit_WebApi.js" />
+    <Content Include="entities\devkit_WebApi.webapi.js">
+      <DependentUpon>devkit_WebApi.js</DependentUpon>
+    </Content>
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
@@ -75,7 +82,16 @@
     <Folder Include="js\" />
     <Folder Include="resources\" />
   </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
+      <DependentUpon>devkit_WebApi.js</DependentUpon>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
