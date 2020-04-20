@@ -76,13 +76,6 @@
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.4.30\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="css\" />
-    <Folder Include="html\" />
-    <Folder Include="images\" />
-    <Folder Include="js\" />
-    <Folder Include="resources\" />
-  </ItemGroup>
-  <ItemGroup>
     <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
       <DependentUpon>devkit_WebApi.js</DependentUpon>
     </TypeScriptCompile>

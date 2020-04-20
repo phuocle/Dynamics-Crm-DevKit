@@ -165,8 +165,6 @@ var Tomato;
 		body.Tab = tab;
 		form.Body = body;
 		var header = {
-			: {},
-			: {},
 			CreatedBy: {},
 			CreatedOn: {},
 			CreatedOnBehalfBy: {},
@@ -456,8 +454,6 @@ var Tomato;
 		body.Tab = tab;
 		form.Body = body;
 		var header = {
-			: {},
-			: {},
 			devkit_Currency: {},
 			devkit_CustomerId: {},
 			devkit_DateOnlyDateOnly: {},
