@@ -1137,5 +1137,134 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
                 expect(res2.Subject).toEqual("EMAIL SUBJECT [DEVKIT]");
             });
         });
+        describe("Update", () => {
+            it("Update Contact", async () => {
+                //setup contact first
+                //-- setup toContactId
+                var dataToContactId = {
+                    "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#contacts(contactid)/$entity",
+                    "@odata.etag": "W/\"568359\"",
+                    "contactid": "968d37ec-9e66-e911-a993-000d3a804bc9"
+                }
+                var urlToContactId = RegExp.escape(fakeUrl + "/api/data/v9.1/contacts(emailaddress1='someone_a@example.com')?$select=contactid");
+                xhr.respondWith("GET", RegExp(urlToContactId),
+                    [200, { "Content-Type": "application/json" }, JSON.stringify(dataToContactId)]
+                );
+                //setup contact updated
+                var data = {
+                    "@odata.context": fakeUrl + "/api/data/v9.1/$metadata#contacts/$entity",
+                    "@odata.etag": "W/\"669838\"",
+                    "customertypecode": 1,
+                    "address2_addresstypecode": 1,
+                    "birthdate": "1954-05-16",
+                    "merged": false,
+                    "gendercode": 2,
+                    "territorycode": 1,
+                    "emailaddress1": "someone_a@example.com",
+                    "haschildrencode": 1,
+                    "exchangerate": 1,
+                    "preferredappointmenttimecode": 1,
+                    "isbackofficecustomer": false,
+                    "modifiedon": "2019-05-07T14:55:08Z",
+                    "_owninguser_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                    "importsequencenumber": 1,
+                    "address1_composite": "249 Alexander Pl.\r\nRedmond, WA 86372\r\nU.S.",
+                    "lastname": "LAST NAME",
+                    "marketingonly": false,
+                    "donotphone": false,
+                    "preferredcontactmethodcode": 1,
+                    "educationcode": 1,
+                    "_ownerid_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                    "customersizecode": 1,
+                    "firstname": "FIRST NAME",
+                    "anniversary": "1983-04-02",
+                    "jobtitle": "Purchasing Manager",
+                    "donotpostalmail": false,
+                    "yomifullname": "FIRST NAME LAST NAME",
+                    "donotemail": false,
+                    "address2_shippingmethodcode": 1,
+                    "fullname": "FIRST NAME LAST NAME",
+                    "timezoneruleversionnumber": 0,
+                    "address1_addressid": "646b8cd6-1c8b-44e2-a9a1-e5080df6b1ed",
+                    "address2_freighttermscode": 1,
+                    "statuscode": 1,
+                    "createdon": "2019-04-24T14:40:52Z",
+                    "address1_stateorprovince": "WA",
+                    "donotsendmm": false,
+                    "donotfax": false,
+                    "leadsourcecode": 1,
+                    "address1_country": "U.S.",
+                    "versionnumber": 669838,
+                    "address1_line1": "249 Alexander Pl.",
+                    "creditonhold": false,
+                    "telephone1": "123456789",
+                    "_transactioncurrencyid_value": "08a827ca-9063-e911-a836-000d3a80e227",
+                    "address3_addressid": "c60afa4b-b1c9-41d1-890a-ccdfbe0ad137",
+                    "donotbulkemail": false,
+                    "familystatuscode": 2,
+                    "_modifiedby_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                    "followemail": true,
+                    "shippingmethodcode": 1,
+                    "_createdby_value": "739d2b22-5f57-42f9-9a17-ebad89799e7e",
+                    "address1_city": "Redmond",
+                    "donotbulkpostalmail": false,
+                    "_parentcustomerid_value": "828d37ec-9e66-e911-a993-000d3a804bc9",
+                    "spousesname": "Abrus, Luka",
+                    "contactid": "968d37ec-9e66-e911-a993-000d3a804bc9",
+                    "participatesinworkflow": false,
+                    "statecode": 0,
+                    "_owningbusinessunit_value": "3394d17f-8b63-e911-a836-000d3a80e227",
+                    "address2_addressid": "cc36008a-ed0d-46fd-a185-8006d9b44574",
+                    "address1_postalcode": "86372"
+                }
+                var urlUpdate = RegExp.escape(fakeUrl + "/api/data/v9.1/contacts(968d37ec-9e66-e911-a993-000d3a804bc9)");
+                xhr.respondWith("PATCH", RegExp(urlUpdate),
+                    [200, { "Content-Type": "application/json" }, JSON.stringify(data)]
+                );
+                //run
+                var key = new Tomato.WebApi.AlternateKey("emailaddress1", "someone_a@example.com");
+                var req = new Tomato.WebApi.RetrieveRequest();
+                req.alternateKey = [key];
+                req.entityName = "contact";
+                req.queryParams = "?$select=contactid";
+                var res = await WebApiClient.Retrieve(req);
+                var contact = new Tomato.ContactApi(res);
+                var contactId = contact.ContactId.Value;
+
+                //update contact
+                var update = new Tomato.ContactApi();
+                update.FirstName.Value = "FIRST NAME";
+                update.LastName.Value = "LAST NAME";
+                update.Telephone1.Value = "123456789";
+
+                var updateRequest = new Tomato.WebApi.UpdateRequest();
+                updateRequest.entityId = contactId;
+                updateRequest.entity = update.Entity;
+                updateRequest.entityName = update.EntityName;
+
+                var res2 = await WebApiClient.Update(updateRequest);
+                //result
+                var contact = new Tomato.ContactApi(res2);
+                expect(contact.FirstName.Value).toEqual("FIRST NAME");
+                expect(contact.LastName.Value).toEqual("LAST NAME");
+                expect(contact.YomiFullName.Value).toEqual("FIRST NAME LAST NAME");
+            });
+        });
+        describe("Delete", () => {
+            it("Delete Contact", async () => {
+                //setup
+                var urlUpdate = RegExp.escape(fakeUrl + "/api/data/v9.1/contacts(968d37ec-9e66-e911-a993-000d3a804bc9)");
+                xhr.respondWith("DELETE", RegExp(urlUpdate),
+                    [200, { "Content-Type": "application/json" }, JSON.stringify({})]
+                );
+                //run
+                var deleteRequest = new Tomato.WebApi.DeleteRequest();
+                deleteRequest.entityId = "968d37ec-9e66-e911-a993-000d3a804bc9";
+                deleteRequest.entityName = "contact";
+                var res = await WebApiClient.Delete(deleteRequest);
+                //result
+                expect(res).not.toBeUndefined();
+            });
+        });
     });
 });
