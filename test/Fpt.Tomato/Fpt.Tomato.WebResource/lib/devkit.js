@@ -156,15 +156,15 @@ var devKit = (function () {
         Object.defineProperty(body[field], "Format", { get: function () { return attribute.getFormat(); } });//TESTED
         Object.defineProperty(body[field], "InitialValue", { get: function () { return attribute.getInitialValue(); } });//TESTED
         Object.defineProperty(body[field], "IsDirty", { get: function () { return attribute.getIsDirty(); } });//TESTED
-        Object.defineProperty(body[field], "IsPartyList", { get: function () { return attribute.getIsPartyList(); } });
+        Object.defineProperty(body[field], "IsPartyList", { get: function () { return attribute.getIsPartyList(); } });//TESTED
         Object.defineProperty(body[field], "Max", { get: function () { return attribute.getMax(); } });//TESTED
         Object.defineProperty(body[field], "MaxLength", { get: function () { return attribute.getMaxLength(); } });//TESTED
         Object.defineProperty(body[field], "Min", { get: function () { return attribute.getMin(); } });//TESTED
         Object.defineProperty(body[field], "Name", { get: function () { return attribute.getName(); } });//TESTED
-        Object.defineProperty(body[field], "Options", { get: function () { return attribute.getOptions(); } });
+        Object.defineProperty(body[field], "Options", { get: function () { return attribute.getOptions(); } });//TESTED
         Object.defineProperty(body[field], "AttributeParent", { get: function () { return attribute.getParent(); } });
-        Object.defineProperty(body[field], "SelectedOption", { get: function () { return attribute.getSelectedOption(); } });
-        Object.defineProperty(body[field], "Text", { get: function () { return attribute.getText(); } });
+        Object.defineProperty(body[field], "SelectedOption", { get: function () { return attribute.getSelectedOption(); } });//TESTED
+        Object.defineProperty(body[field], "Text", { get: function () { return attribute.getText(); } });//TESTED
         Object.defineProperty(body[field], "UserPrivilege", { get: function () { return attribute.getUserPrivilege(); } });
         Object.defineProperty(body[field], "Valid", { get: function () { return attribute.isValid(); } });
         Object.defineProperty(body[field], "ControlType", { get: function () { return control.getControlType(); } });//TESTED
@@ -196,8 +196,8 @@ var devKit = (function () {
             set: function (value) { control.setData(value); }
         });
         Object.defineProperty(body[field], "DefaultView", {
-            get: function () { return control.getDefaultView(); },
-            set: function (value) { control.setDefaultView(value); }
+            get: function () { return control.getDefaultView(); },//TESTED
+            set: function (value) { control.setDefaultView(value); }//TESTED
         });
         Object.defineProperty(body[field], "Disabled", {
             get: function () { return control.getDisabled(); },//TESTED
@@ -216,8 +216,8 @@ var devKit = (function () {
             set: function (value) { control.setSearchQuery(value); }
         });
         Object.defineProperty(body[field], "ShowTime", {
-            get: function () { return control.getShowTime(); },
-            set: function (value) { control.setShowTime(value); }
+            get: function () { return control.getShowTime(); },//TESTED
+            set: function (value) { control.setShowTime(value); }//TESTED
         });
         Object.defineProperty(body[field], "Src", {
             get: function () { return control.getSrc(); },
@@ -228,7 +228,7 @@ var devKit = (function () {
             set: function (value) { control.setVisible(value); }//TESTED
         });
         body[field].ContentWindow = function (successCallback, errorCallback) { control.getContentWindow().then(successCallback, errorCallback); }
-        body[field].Option = function (value) { return attribute.getOption(value); };
+        body[field].Option = function (value) { return attribute.getOption(value); };//TESTED
         body[field].RemoveOnChange = function (callback) { attribute.removeOnChange(callback); };//TESTED
         body[field].AddCustomFilter = function (filter, entityLogicaName) { control.addCustomFilter(filter, entityLogicaName); };
         body[field].AddCustomView = function (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) { control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault); };
@@ -237,7 +237,7 @@ var devKit = (function () {
         body[field].AddOnSelection = function (callback) { control.addOnSelection(callback); };
         body[field].AddPreSearch = function (callback) { control.addPreSearch(callback); };
         body[field].ClearNotification = function (uniqueId) { return control.clearNotification(uniqueId); };
-        body[field].ClearOptions = function () { return control.clearOptions(); };
+        body[field].ClearOptions = function () { return control.clearOptions(); };//TESTED
         body[field].AddOnChange = function (callback) { attribute.addOnChange(callback); };//TESTED
         body[field].FireOnChange = function () { attribute.fireOnChange(); };//TESTED
         body[field].OpenSearchResult = function (resultNumber, mode) { return control.openSearchResult(resultNumber, mode); };
@@ -245,11 +245,11 @@ var devKit = (function () {
         body[field].RemoveOnPostSearch = function (callback) { control.removeOnPostSearch(callback); };
         body[field].RemoveOnResultOpened = function (callback) { control.removeOnResultOpened(callback); };
         body[field].RemoveOnSelection = function (callback) { control.removeOnSelection(callback); };
-        body[field].RemoveOption = function (value) { control.removeOption(value); };
+        body[field].RemoveOption = function (value) { control.removeOption(value); };//TESTED
         body[field].RemovePreSearch = function (callback) { control.removePreSearch(callback); };
         body[field].Focus = function () { control.setFocus(); };
         body[field].SetNotification = function (message, uniqueId) { return control.setNotification(message, uniqueId); };
-        body[field].AddOption = function (text, value, index) { var option = { text: text, value: value }; control.addOption(option, index); };
+        body[field].AddOption = function (text, value, index) { var option = { text: text, value: value }; control.addOption(option, index); };//TESTED
         body[field].AddNotification = function (title, message, notificationLevel, uniqueId, callback) {
             var actions = { message: message, actions: [callback] };
             var notification = { messages: [title], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };

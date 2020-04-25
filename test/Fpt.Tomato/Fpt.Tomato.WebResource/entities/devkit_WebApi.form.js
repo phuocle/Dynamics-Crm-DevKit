@@ -29,7 +29,7 @@ var Tomato;
 			//devkit_DateOnlyDateOnlyRollup_State: {},
 			//devkit_DecimalNumber: {},
 			devkit_FloatingPointNumber: {},
-			//devkit_LinkWebApiId: {},
+			devkit_LinkWebApiId: {},
 			//devkit_LinkWebApiId_1: {},
 			//devkit_MultiOptionSetCode: {},
 			//devkit_MultipleLiniesofText: {},
@@ -54,7 +54,7 @@ var Tomato;
 			//devkit_TimeZoneDateOnlyRollup: {},
 			//devkit_TimeZoneDateOnlyRollup_Date: {},
 			//devkit_TimeZoneDateOnlyRollup_State: {},
-			//devkit_UserLocalDateAndTime: {},
+			devkit_UserLocalDateAndTime: {},
 			//devkit_UserLocalDateAndTimeCalculated: {},
 			//devkit_UserLocalDateAndTimeRollup: {},
 			//devkit_UserLocalDateAndTimeRollup_Date: {},
@@ -83,7 +83,7 @@ var Tomato;
 			//statuscode: {},
 			//tCreatedOn: {},
 			//TransactionCurrencyId: {},
-			//WebResource_WORDHELLO: {}
+			WebResource_WORDHELLO: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
