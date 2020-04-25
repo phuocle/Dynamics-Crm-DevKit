@@ -2643,12 +2643,19 @@ declare namespace OptionSet {
 }
 /** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client */
 declare namespace WebApiClient {
+    interface PromiseThen<T> {
+        then(callback: (result: T) => void): PromiseCatch<T>;
+    }
+    interface PromiseCatch<T> {
+        catch(callback: (result: any) => void): PromiseFinally<T>;
+    }
+    interface PromiseFinally<T> {
+        finally(callback: (result: any) => void): PromiseDone<T>;
+    }
+    interface PromiseDone<T> {
+        done(callback: (result: any) => void) : void
+    }
     interface RetrieveResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
         "@odata.context": string;
         /** Use the value of the @odata.nextLink property to request the next set of records. Don’t change or append any additional system query options to the value. */
         "@odata.nextLink": string;
@@ -2665,122 +2672,36 @@ declare namespace WebApiClient {
         /** An array object of ODATA value. */
         value: Array<any>;
     }
-    interface CatchRespone {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        catch(callback: (result: any) => void): FinallyRespone;
-    }
-    interface FinallyRespone {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        finally(callback: (result: any) => void): DoneRespone;
-    }
-    interface DoneRespone {
-        /**
-         * Use with asynchronous request
-         * @param callback the callback for asynchronous request
-         */
-        done(callback: (result: any) => void);
-    }
-    interface UpdateResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
-    interface CreateResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
-    interface DeleteResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
-    interface AssociateResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback The callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
-    interface DisassociateResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback The callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
     /**
-     * Retrieves records from CRM (async = true).
+     * Retrieves records from CRM.
      * @param request the Tomato.WebApi.RetrieveRequest object.
      */
-    function Retrieve(request: Tomato.WebApi.RetrieveRequest): RetrieveResponse;
+    function Retrieve(request: Tomato.WebApi.RetrieveRequest): PromiseThen<RetrieveResponse>;
     /**
-     * Retrieves records from CRM (async = false).
-     * @param request the Tomato.WebApi.RetrieveRequest object.
-     */
-    function Retrieve(request: Tomato.WebApi.RetrieveRequest): void;
-    /**
-     * Creates a given record in CRM (async = true).
+     * Creates a given record in CRM.
      * @param request The Tomato.WebApi.CreateRequest object.
      */
-    function Create(request: Tomato.WebApi.CreateRequest): CreateResponse;
+    function Create(request: Tomato.WebApi.CreateRequest): Promise<string> | Promise<object> | string | object;
     /**
-     * Creates a given record in CRM (async = false).
-     * @param request The Tomato.WebApi.CreateRequest object.
-     */
-    function Create(request: Tomato.WebApi.CreateRequest): void;
-    /**
-     * Updates a given record in CRM (async = true).
+     * Updates a given record in CRM.
      * @param request the Tomato.WebApi.UpdateRequest object.
      */
-    function Update(request: Tomato.WebApi.UpdateRequest): UpdateResponse;
+    function Update(request: Tomato.WebApi.UpdateRequest): Promise<string> | Promise<object> | string | object;
     /**
-     * Updates a given record in CRM (async = false).
-     * @param request the Tomato.WebApi.UpdateRequest object.
-     */
-    function Update(request: Tomato.WebApi.UpdateRequest): void;
-    /**
-     * Deletes a given record in CRM (async = true).
+     * Deletes a given record in CRM.
      * @param request the Tomato.WebApi.DeleteRequest object.
      */
-    function Delete(request: Tomato.WebApi.DeleteRequest): DeleteResponse;
+    function Delete(request: Tomato.WebApi.DeleteRequest): Promise<string> | string;
     /**
-     * Deletes a given record in CRM (async = false).
-     * @param request the Tomato.WebApi.DeleteRequest object.
-     */
-    function Delete(request: Tomato.WebApi.DeleteRequest): void;
-    /**
-     * Associates given records in CRM (async = true).
+     * Associates given records in CRM.
      * @param request the Tomato.WebApi.AssociateRequest object.
      */
-    function Associate(request: Tomato.WebApi.AssociateRequest): AssociateResponse;
+    function Associate(request: Tomato.WebApi.AssociateRequest): Promise<string> | string;
     /**
-     * Associates given records in CRM (async = false).
-     * @param request the Tomato.WebApi.AssociateRequest object.
-     */
-    function Associate(request: Tomato.WebApi.AssociateRequest): void;
-    /**
-     * Disassociates given records in CRM (async = true).
+     * Disassociates given records in CRM.
      * @param request the Tomato.WebApi.DisassociateRequest object.
      */
-    function Disassociate(request: Tomato.WebApi.DisassociateRequest): DisassociateResponse;
-    /**
-     * Disassociates given records in CRM (async = false).
-     * @param request the Tomato.WebApi.DisassociateRequest object.
-     */
-    function Disassociate(request: Tomato.WebApi.DisassociateRequest): void;
+    function Disassociate(request: Tomato.WebApi.DisassociateRequest): Promise<string> | string;
     /**
      * Executes the given request in CRM
      * @param request Request to send, must be in prototype chain of WebApiClient.Requests.Request

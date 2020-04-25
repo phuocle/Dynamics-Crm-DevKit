@@ -54,8 +54,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
-    <None Include="_package.json" />
+    <None Include="package.json" />
     <None Include="chutzpah.json" />
+    <Content Include="entities\Account.form.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Account.js" />
+    <Content Include="entities\Account.webapi.js">
+      <DependentUpon>Account.js</DependentUpon>
+    </Content>
+    <Content Include="entities\ActivityParty.js" />
+    <Content Include="entities\ActivityParty.webapi.js">
+      <DependentUpon>ActivityParty.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Contact.form.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Contact.js" />
+    <Content Include="entities\Contact.webapi.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
     <Content Include="entities\devkit_WebApi.form.js">
       <DependentUpon>devkit_WebApi.js</DependentUpon>
     </Content>
@@ -63,21 +81,58 @@
     <Content Include="entities\devkit_WebApi.webapi.js">
       <DependentUpon>devkit_WebApi.js</DependentUpon>
     </Content>
+    <Content Include="entities\Email.form.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Email.js" />
+    <Content Include="entities\Email.webapi.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
+    <Content Include="entities\SystemUser.form.js">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </Content>
+    <Content Include="entities\SystemUser.js" />
+    <Content Include="entities\SystemUser.webapi.js">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </Content>
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
+    <Content Include="test\devkit_WebApi.webapi.test.js" />
     <Content Include="test\xrm-mock.d.ts" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
     <None Include="entities\generator.form.bat" />
     <None Include="entities\generator.webapi.bat" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.4.30\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="entities\Account.d.ts">
+      <DependentUpon>Account.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\ActivityParty.d.ts">
+      <DependentUpon>ActivityParty.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Contact.d.ts">
+      <DependentUpon>Contact.js</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
       <DependentUpon>devkit_WebApi.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Email.d.ts">
+      <DependentUpon>Email.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\SystemUser.d.ts">
+      <DependentUpon>SystemUser.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
