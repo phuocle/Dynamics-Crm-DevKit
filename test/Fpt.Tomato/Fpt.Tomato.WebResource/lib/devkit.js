@@ -439,13 +439,14 @@ var devKit = (function () {
         }
         if (Xrm && Xrm.Navigation) {
             var getNavigation = Xrm.Navigation;
-            utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback); };
-            utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback); };
-            utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) { getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback); };
-            utility.OpenFile = function (file, openFileOptions) { getNavigation.openFile(file, openFileOptions); };
-            utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) { getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback); };
-            utility.OpenUrl = function (url, openUrlOptions) { getNavigation.openUrl(url, openUrlOptions); };
-            utility.OpenWebResource = function (webResourceName, windowOptions, data) { getNavigation.openWebResource(webResourceName, windowOptions, data); };
+            utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback); };//TESTED
+            utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback); };//TESTED
+            utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) { getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback); };//TESTED
+            utility.OpenFile = function (file, openFileOptions) { getNavigation.openFile(file, openFileOptions); };//TESTED
+            utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) { getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback); };//TESTED
+            utility.OpenUrl = function (url, openUrlOptions) { getNavigation.openUrl(url, openUrlOptions); };//TESTED
+            utility.OpenWebResource = function (webResourceName, windowOptions, data) { getNavigation.openWebResource(webResourceName, windowOptions, data); };//TESTED
+            utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback); };
         }
         if (Xrm && Xrm.Panel) {
             var getPanel = Xrm.Panel;
@@ -455,6 +456,9 @@ var devKit = (function () {
             var getEncoding = Xrm.Encoding;
             utility.XmlAttributeEncode = function (arg) { return getEncoding.xmlAttributeEncode(arg); };//TESTED
             utility.XmlEncode = function (arg) { return getEncoding.xmlEncode(arg); };//TESTED
+            utility.HtmlAttributeEncode = function (arg) { return getEncoding.htmlAttributeEncode(arg); };
+            utility.HtmlDecode = function (arg) { return getEncoding.htmlDecode(arg); };
+            utility.HtmlEncode = function (arg) { return getEncoding.htmlEncode(arg); };
         }
         if (Xrm && Xrm.Device) {
             var getDevice = Xrm.Device;

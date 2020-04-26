@@ -12,6 +12,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             XrmMockGenerator.Panel = new _xrm_mock.PanelMock();
             XrmMockGenerator.Encoding = new _xrm_mock.EncodingMock();
             XrmMockGenerator.Device = new _xrm_mock.DeviceMock();
+            XrmMockGenerator.Navigation = new _xrm_mock.NavigationStaticMock();
         });
         it('DevKit.Form.Controls.ControlString', () => {
             _xrm_mock.XrmMockGenerator.Attribute.createString({
@@ -399,6 +400,16 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(() => { form.Utility.BarcodeValue(null, null) }).toThrow(new Error("Not implemented."));
             expect(() => { form.Utility.CurrentPosition(null, null) }).toThrow(new Error("Not implemented."));
             expect(() => { form.Utility.PickFile(null, null, null) }).toThrow(new Error("Not implemented."));
+
+            expect(() => { form.Utility.OpenAlertDialog(null, null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
+            expect(() => { form.Utility.OpenConfirmDialog(null, null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
+            expect(() => { form.Utility.OpenErrorDialog(null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
+            expect(() => { form.Utility.OpenFile(null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
+            expect(() => { form.Utility.OpenForm(null, null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
+            expect(() => { form.Utility.OpenUrl(null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
+            expect(() => { form.Utility.OpenWebResource(null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
+
+            //MISSED: form.Utility.NavigateTo
 
         });
         it('Field Removed', () => {

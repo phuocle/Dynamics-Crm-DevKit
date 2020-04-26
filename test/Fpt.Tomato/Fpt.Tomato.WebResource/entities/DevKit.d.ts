@@ -647,6 +647,78 @@ declare namespace DevKit {
              */
             Stages: Array<ProcessStage>;
         }
+        interface PageInputEntityList {
+            /** Specify "entitylist" */
+            pageType: "entitylist";
+            /** The logical name of the entity to load in the list control. */
+            entityName: string;
+            /** The ID of the view to load. If you don't specify it, navigates to the default main view for the entity. */
+            viewId?: string;
+            /**  Type of view to load. Specify "savedquery" or "userquery". */
+            viewType?: "savedquery" | "userquery";
+        }
+        interface PageInputHtmlWebResource {
+            /** Specify "webresource" */
+            pageType: "webresource";
+            /** The name of the web resource to load. */
+            webresourceName: string;
+            /** The data to pass to the web resource. */
+            data?: string;
+        }
+        interface PageInputEntityRecordRelationship {
+            /** Name of the attribute used for relationship. */
+            attributeName: string,
+            /** Name of the relationship. */
+            name: string,
+            /** Name of the navigation property for this relationship. */
+            navigationPropertyName: string,
+            /** Relationship type. Specify one of the following values: 0:OneToMany | 1:ManyToMany */
+            relationshipType: number,
+            /** Role type in relationship. Specify one of the following values: 1:Referencing | 2:AssociationEntity */
+            roleType: number
+        }
+        interface PageInputEntityRecord {
+            /** Specify "entityrecord" */
+            pageType: "entityrecord",
+            /** Logical name of the entity to display the form for. */
+            entityName: string,
+            /** ID of the entity record to display the form for. If you don't specify this value, the form will be opened in create mode. */
+            entityId?: string,
+            /** Designates a record that will provide default values based on mapped attribute values. */
+            createFromEntity?: DevKit.Core.EntityReference,
+            /** A dictionary object that passes extra parameters to the form. */
+            data?: any,
+            /** ID of the form instance to be displayed. */
+            formId: string,
+            /** Indicates whether the form is navigated to from a different entity using cross-entity business process flow. */
+            isCrossEntityNavigate?: boolean,
+            /** Indicates whether there are any offline sync errors. */
+            isOfflineSyncError?: boolean,
+            /** ID of the business process to be displayed on the form. */
+            processId?: string,
+            /** ID of the business process instance to be displayed on the form. */
+            processInstanceId?: string,
+            /** Define a relationship object to display the related records on the form. */
+            relationship?: DevKit.Core.PageInputEntityRecordRelationship,
+            /** ID of the selected stage in business process instance. */
+            selectedStageId?: string
+        }
+        interface NavigationOptions {
+            /** Specify 1 to open the page inline; 2 to open the page in a dialog. Entity lists can only be opened inline; web resources can be opened either inline or in a dialog. */
+            target: 1 | 2;
+            /** The width of dialog. To specify the width in pixels, just type a numeric value. To specify the width in percentage, specify an object of type */
+            width?: number | SizeValue;
+            /** The height of dialog. To specify the width in pixels, just type a numeric value. To specify the height in percentage, specify an object of type */
+            height?: number | SizeValue;
+            /** Specify 1 to open the dialog in center; 2 to open the dialog on the side. Default is 1 (center). */
+            position?: 1 | 2;
+        }
+        interface SizeValue {
+            /** The numerical value */
+            value: number;
+            /** The unit of measurement. Specify "%" or "px". Default value is "px" */
+            unit: "%" | "px";
+        }
     }
     namespace WebApi {
         interface OptionSetValue {
@@ -1981,6 +2053,15 @@ declare namespace DevKit {
              */
             OrganizationSettings: DevKit.Form.OrganizationSettings;
             /**
+             * Navigates to the specified page.
+             * @param pageInput Input about the page to navigate to. The object definition changes depending on the type of page to navigate to: entity list or HTML web resource.
+             * @param navigationOptions Options for navigating to a page: whether to open inline or in a dialog. If you don't specify this parameter, page is opened inline by default.
+             * @param successCallback A function to execute on successful navigation to the page when navigating inline and on closing the dialog when navigating to a dialog.
+             * @param errorCallback A function to execute when the operation fails.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+             */
+            NavigateTo(pageInput: DevKit.Core.PageInputEntityList | DevKit.Core.PageInputHtmlWebResource | DevKit.Core.PageInputEntityRecord, navigationOptions?: DevKit.Core.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
+            /**
              * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients).
              * @param filePickOption An object pick file option
              * @param successCallback A function to call when selected files are returned. An array of objects with each object having the following attributes is passed to the function.
@@ -2040,6 +2121,24 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-encoding/xmlattributeencode
              */
             XmlEncode(arg: string): string;
+            /**
+             * Encodes the specified string so that it can be used in an HTML attribute.
+             * @param arg String to be encoded.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmlattributeencode
+             */
+            HtmlAttributeEncode(arg: string): string;
+            /**
+             * Converts a string that has been HTML-encoded into a decoded string.
+             * @param arg HTML-encoded string to be decoded.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmldecode
+             */
+            HtmlDecode(arg: string): string;
+            /**
+             * Converts a string to an HTML-encoded string.
+             * @param arg String to be encoded.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmlencode
+             */
+            HtmlEncode(arg: string): string;
         }
         interface WebApi {
             /**
