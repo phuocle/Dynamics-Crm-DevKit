@@ -401,52 +401,52 @@ var Tomato;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			tab_3: {
-				Section: {
-					tab_3_section_1: {},
-					tab_3_section_2: {}
-				}
-			},
-			tab_OPTIONSET: {
-				Section: {
-					tab_OPTIONSET_section_SINGLE: {},
-					tab_OPTIONSET_section_MULTI_OPTIONSET: {},
-					tab_OPTIONSET_section_5: {},
-					tab_OPTIONSEST_section_STATUS: {},
-					tab_OPTIONSET_section_STATE: {},
-					tab_OPTIONSET_section_6: {}
-				}
-			},
-			tab_4: {
-				Section: {
-					tab_4_section_1: {},
-					tab_4_section_3: {},
-					tab_4_section_5: {},
-					tab_4_section_7: {},
-					tab_4_section_2: {},
-					tab_4_section_4: {},
-					tab_4_section_6: {}
-				}
-			},
-			tab_6: {
-				Section: {
-					tab_6_section_1: {},
-					tab_6_section_4: {},
-					tab_6_section_2: {},
-					tab_6_section_3: {}
-				}
-			},
-			tab_5: {
-				Section: {
-					tab_5_section_1: {},
-					tab_5_section_3: {},
-					tab_5_section_2: {}
-				}
-			},
+			//tab_3: {
+			//	Section: {
+			//		tab_3_section_1: {},
+			//		tab_3_section_2: {}
+			//	}
+			//},
+			//tab_OPTIONSET: {
+			//	Section: {
+			//		tab_OPTIONSET_section_SINGLE: {},
+			//		tab_OPTIONSET_section_MULTI_OPTIONSET: {},
+			//		tab_OPTIONSET_section_5: {},
+			//		tab_OPTIONSEST_section_STATUS: {},
+			//		tab_OPTIONSET_section_STATE: {},
+			//		tab_OPTIONSET_section_6: {}
+			//	}
+			//},
+			//tab_4: {
+			//	Section: {
+			//		tab_4_section_1: {},
+			//		tab_4_section_3: {},
+			//		tab_4_section_5: {},
+			//		tab_4_section_7: {},
+			//		tab_4_section_2: {},
+			//		tab_4_section_4: {},
+			//		tab_4_section_6: {}
+			//	}
+			//},
+			//tab_6: {
+			//	Section: {
+			//		tab_6_section_1: {},
+			//		tab_6_section_4: {},
+			//		tab_6_section_2: {},
+			//		tab_6_section_3: {}
+			//	}
+			//},
+			//tab_5: {
+			//	Section: {
+			//		tab_5_section_1: {},
+			//		tab_5_section_3: {},
+			//		tab_5_section_2: {}
+			//	}
+			//},
 			tab_ADMINISTRATOR: {
 				Section: {
 					tab_ADMINISTRATOR_section_CREATED: {},
-					tab_ADMINISTRATOR_section_MODIFIED: {}
+					//tab_ADMINISTRATOR_section_MODIFIED: {}
 				}
 			}
 		};

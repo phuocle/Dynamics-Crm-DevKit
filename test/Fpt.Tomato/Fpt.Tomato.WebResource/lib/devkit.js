@@ -204,8 +204,8 @@ var devKit = (function () {
             set: function (value) { control.setDisabled(value); }//TESTED
         });
         Object.defineProperty(body[field], "EntityTypes", {
-            get: function () { return control.getEntityTypes(); },
-            set: function (value) { control.setEntityTypes(value); }
+            get: function () { return control.getEntityTypes(); },//TESTED
+            set: function (value) { control.setEntityTypes(value); }//TESTED
         });
         Object.defineProperty(body[field], "Label", {
             get: function () { return control.getLabel(); },//TESTED
@@ -230,13 +230,13 @@ var devKit = (function () {
         body[field].ContentWindow = function (successCallback, errorCallback) { control.getContentWindow().then(successCallback, errorCallback); }
         body[field].Option = function (value) { return attribute.getOption(value); };//TESTED
         body[field].RemoveOnChange = function (callback) { attribute.removeOnChange(callback); };//TESTED
-        body[field].AddCustomFilter = function (filter, entityLogicaName) { control.addCustomFilter(filter, entityLogicaName); };
-        body[field].AddCustomView = function (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) { control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault); };
+        body[field].AddCustomFilter = function (filter, entityLogicaName) { control.addCustomFilter(filter, entityLogicaName); };//TESTED
+        body[field].AddCustomView = function (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) { control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault); };//TESTED
         body[field].AddOnPostSearch = function (callback) { control.addOnPostSearch(callback); };
         body[field].AddOnResultOpened = function (callback) { control.addOnResultOpened(callback); };
         body[field].AddOnSelection = function (callback) { control.addOnSelection(callback); };
-        body[field].AddPreSearch = function (callback) { control.addPreSearch(callback); };
-        body[field].ClearNotification = function (uniqueId) { return control.clearNotification(uniqueId); };
+        body[field].AddPreSearch = function (callback) { control.addPreSearch(callback); };//TESTED
+        body[field].ClearNotification = function (uniqueId) { return control.clearNotification(uniqueId); };//TESTED
         body[field].ClearOptions = function () { return control.clearOptions(); };//TESTED
         body[field].AddOnChange = function (callback) { attribute.addOnChange(callback); };//TESTED
         body[field].FireOnChange = function () { attribute.fireOnChange(); };//TESTED
@@ -248,7 +248,7 @@ var devKit = (function () {
         body[field].RemoveOption = function (value) { control.removeOption(value); };//TESTED
         body[field].RemovePreSearch = function (callback) { control.removePreSearch(callback); };
         body[field].Focus = function () { control.setFocus(); };
-        body[field].SetNotification = function (message, uniqueId) { return control.setNotification(message, uniqueId); };
+        body[field].SetNotification = function (message, uniqueId) { return control.setNotification(message, uniqueId); };//TESTED
         body[field].AddOption = function (text, value, index) { var option = { text: text, value: value }; control.addOption(option, index); };//TESTED
         body[field].AddNotification = function (title, message, notificationLevel, uniqueId, callback) {
             var actions = { message: message, actions: [callback] };
@@ -269,15 +269,15 @@ var devKit = (function () {
             if (!tabObject) return;
             if (tabObject.sections && tabObject.sections.get) {
                 var sectionObject = tabObject.sections.get(section);
-                Object.defineProperty(sections[section], "Name", { get: function () { return sectionObject.getName(); } });
-                Object.defineProperty(sections[section], "Parent", { get: function () { return sectionObject.getParent(); } });
+                Object.defineProperty(sections[section], "Name", { get: function () { return sectionObject.getName(); } });//TESTED
+                Object.defineProperty(sections[section], "Parent", { get: function () { return sectionObject.getParent(); } });//TESTED
                 Object.defineProperty(sections[section], "Label", {
-                    get: function () { return sectionObject.getLabel(); },
-                    set: function (value) { sectionObject.setLabel(value); }
+                    get: function () { return sectionObject.getLabel(); },//TESTED
+                    set: function (value) { sectionObject.setLabel(value); }//TESTED
                 });
                 Object.defineProperty(sections[section], "Visible", {
-                    get: function () { return sectionObject.getVisible(); },
-                    set: function (value) { sectionObject.setVisible(value); }
+                    get: function () { return sectionObject.getVisible(); },//TESTED
+                    set: function (value) { sectionObject.setVisible(value); }//TESTED
                 });
             }
         }
@@ -285,24 +285,24 @@ var devKit = (function () {
     function loadTab(formContext, tabs, tab) {
         if (!formContext) return;
         if (formContext.ui && formContext.ui.tabs && formContext.ui.tabs.get) {
-            var tabObject = formContext.ui.tabs.get(tab);
-            Object.defineProperty(tabs[tab], "Name", { get: function () { return tabObject.getName(); } });
-            Object.defineProperty(tabs[tab], "Parent", { get: function () { return tabObject.getParent(); } });
+            var tabObject = formContext.ui.tabs.get(tab);            
+            Object.defineProperty(tabs[tab], "Name", { get: function () { return tabObject.getName(); } });//TESTED
+            Object.defineProperty(tabs[tab], "Parent", { get: function () { return tabObject.getParent(); } });//TESTED
             Object.defineProperty(tabs[tab], "DisplayState", {
-                get: function () { return tabObject.getDisplayState(); },
-                set: function (value) { tabObject.setDisplayState(value); }
+                get: function () { return tabObject.getDisplayState(); },//TESTED
+                set: function (value) { tabObject.setDisplayState(value); }//TESTED
             });
             Object.defineProperty(tabs[tab], "Label", {
-                get: function () { return tabObject.getLabel(); },
-                set: function (value) { tabObject.setLabel(value); }
+                get: function () { return tabObject.getLabel(); },//TESTED
+                set: function (value) { tabObject.setLabel(value); }//TESTED
             });
             Object.defineProperty(tabs[tab], "Visible", {
-                get: function () { return tabObject.getVisible(); },
-                set: function (value) { tabObject.setVisible(value); }
+                get: function () { return tabObject.getVisible(); },//TESTED
+                set: function (value) { tabObject.setVisible(value); }//TESTED
             });
-            tabs[tab].AddTabStateChange = function (callback) { tabObject.addTabStateChange(callback); };
-            tabs[tab].Focus = function () { tabObject.setFocus(); };
-            tabs[tab].RemoveTabStateChange = function (callback) { tabObject.removeTabStateChange(callback); };
+            tabs[tab].AddTabStateChange = function (callback) { tabObject.addTabStateChange(callback); };//TESTED
+            tabs[tab].Focus = function () { tabObject.setFocus(); };//TESTED
+            tabs[tab].RemoveTabStateChange = function (callback) { tabObject.removeTabStateChange(callback); };//TESTED
             for (var section in tabs[tab].Section) {
                 loadSection(formContext, tab, tabs[tab].Section, section);
             }

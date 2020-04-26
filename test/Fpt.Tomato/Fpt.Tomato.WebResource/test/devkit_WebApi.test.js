@@ -11,7 +11,6 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             _xrm_mock.XrmMockGenerator.initialise();
         });
 
-
         it('DevKit.Form.Controls.ControlString', () => {
             _xrm_mock.XrmMockGenerator.Attribute.createString({
                     attributeType: "string",
@@ -164,7 +163,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(form.Body.devkit_UserLocalDateAndTime.ShowTime).toBeFalsy();
         });
         it('DevKit.Form.Controls.ControlLookup', () => {
-            _xrm_mock.XrmMockGenerator.Control.createLookup(new _xrm_mock.LookupControlMock({
+            var lookup = _xrm_mock.XrmMockGenerator.Control.createLookup(new _xrm_mock.LookupControlMock({
                 name: "devkit_linkwebapiid",
                 attribute: new _xrm_mock.LookupAttributeMock({
                     name: "devkit_linkwebapiid",
@@ -172,12 +171,12 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
                     value: [new _xrm_mock.LookupValueMock("id", "devkit_webapi", "name")]
                 }),
                 views: [{
-                    entityName: "devkit_webapi",
-                    fetchXml: "<fetchxml/>",
-                    layoutXml: "<layoutxml/>",
-                    viewDisplayName: "Lookup WebApi",
-                    viewId: "DefaultViewId",
-                    isDefault: true
+                        entityName: "devkit_webapi",
+                        fetchXml: "<fetchxml/>",
+                        layoutXml: "<layoutxml/>",
+                        viewDisplayName: "Lookup WebApi",
+                        viewId: "DefaultViewId",
+                        isDefault: true
                     }, {
                         entityName: "devkit_webapi",
                         fetchXml: "<fetchxml2/>",
@@ -198,6 +197,70 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(form.Body.devkit_LinkWebApiId.Value[0].id).toBe("id");
             expect(form.Body.devkit_LinkWebApiId.Value[0].name).toBe("name");
             expect(form.Body.devkit_LinkWebApiId.Value[0].entityType).toBe("devkit_webapi");
+
+            expect(() => { form.Body.devkit_LinkWebApiId.SetNotification("Notification Message", "NotificationId") }).toThrow(new Error("set notification not implemented"));
+            expect(() => { form.Body.devkit_LinkWebApiId.ClearNotification("NotificationId") }).toThrow(new Error("clear notification not implemented"));
+            expect(() => { form.Body.devkit_LinkWebApiId.EntityTypes }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_LinkWebApiId.EntityTypes = ["account"] }).toThrow(new Error("Method not implemented."));
+
+            expect(lookup.filters.length).toBe(0);
+            var devkit_LinkWebApiIdAddPreSearch = () => {
+                var filter = `
+<filter type="and">
+    <condition attribute="devkit_name" operator="eq" value="ABCD" />
+</filter>
+`;
+                var form = new Tomato.FormWebApi(executionContext);
+                form.Body.devkit_LinkWebApiId.AddCustomFilter(filter, "devkit_webapi");
+            }
+            form.Body.devkit_LinkWebApiId.AddPreSearch(devkit_LinkWebApiIdAddPreSearch);
+            devkit_LinkWebApiIdAddPreSearch();
+            expect(lookup.filters.length).toBe(1);
+
+            expect(lookup.views.length).toBe(2);
+            form.Body.devkit_LinkWebApiId.AddCustomView("viewid", "enttiyName", "viewDisplayName", "fetchXml", "layoutXml", false);
+            expect(lookup.views.length).toBe(3);
+        });
+        it('TAB & SECTION', () => {
+            var ui = new _xrm_mock.UiMock({
+                formSelector: new _xrm_mock.FormSelectorMock(
+                    new _xrm_mock.ItemCollectionMock([
+                        new _xrm_mock.FormItemMock({
+                            label: "DEVKIT WEBAPI FORM",
+                            id: "devkit_webapi_form_id",
+                            formType: 1,
+                            currentItem: true
+                        })
+                    ])
+                ),
+            });
+            var tab = _xrm_mock.XrmMockGenerator.Tab.createTab("ADMINISTRATOR", "TAB LABEL", true, "expanded", ui, null);
+            _xrm_mock.XrmMockGenerator.Section.createSection("ADMINISTRATOR_section_1", "SECTION LABEL", true, tab, null);
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormWebApi(executionContext);
+            expect(form.Body.Tab.ADMINISTRATOR.DisplayState).toBe(OptionSet.TabDisplayState.Expanded);
+            form.Body.Tab.ADMINISTRATOR.DisplayState = OptionSet.TabDisplayState.Collapsed;
+            expect(form.Body.Tab.ADMINISTRATOR.DisplayState).toBe(OptionSet.TabDisplayState.Collapsed);
+            expect(form.Body.Tab.ADMINISTRATOR.Label).toBe("TAB LABEL");
+            expect(form.Body.Tab.ADMINISTRATOR.Name).toBe("ADMINISTRATOR");
+            expect(form.Body.Tab.ADMINISTRATOR.Parent).toBeDefined();
+            expect(form.Body.Tab.ADMINISTRATOR.Visible).toBeTruthy();
+            form.Body.Tab.ADMINISTRATOR.Visible = false;
+            expect(form.Body.Tab.ADMINISTRATOR.Visible).toBeFalsy();
+            expect(form.Body.Tab.ADMINISTRATOR.Section.ADMINISTRATOR_section_1.Label).toBe("SECTION LABEL");
+            expect(form.Body.Tab.ADMINISTRATOR.Section.ADMINISTRATOR_section_1.Name).toBe("ADMINISTRATOR_section_1");
+            expect(form.Body.Tab.ADMINISTRATOR.Section.ADMINISTRATOR_section_1.Parent).toBeDefined();
+            expect(form.Body.Tab.ADMINISTRATOR.Section.ADMINISTRATOR_section_1.Visible).toBeTruthy();
+            form.Body.Tab.ADMINISTRATOR.Section.ADMINISTRATOR_section_1.Visible = false;
+            expect(form.Body.Tab.ADMINISTRATOR.Section.ADMINISTRATOR_section_1.Visible).toBeFalsy();
+
+            expect(tab.tabStateChangeHandlers.length).toBe(0);
+            form.Body.Tab.ADMINISTRATOR.AddTabStateChange(() => { });
+            expect(tab.tabStateChangeHandlers.length).toBe(1);
+            form.Body.Tab.ADMINISTRATOR.RemoveTabStateChange(() => { });
+            expect(tab.tabStateChangeHandlers.length).toBe(0);
+            form.Body.Tab.ADMINISTRATOR.Focus();
+
         });
     });
 });
