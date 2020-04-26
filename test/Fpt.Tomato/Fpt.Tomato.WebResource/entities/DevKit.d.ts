@@ -1897,7 +1897,7 @@ declare namespace DevKit {
              * Returns a boolean value indicating if the Customer Engagement instance is hosted on-premises or online
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/isonpremises
              */
-            IsOnPremise: boolean;
+            IsOnPremises: boolean;
             /**
              * Returns the name of the DOM attribute expected by the Learning Path (guided help) Content Designer for identifying UI controls in the Dynamics 365 for Customer Engagement apps form. An attribute by this name must be added to the UI element that needs to be exposed to Learning Path (guided help)
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getlearningpathattributename
@@ -2169,7 +2169,7 @@ declare namespace DevKit {
             *  Returns information whether the server is online or offline
             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#isoffline
             */
-            IsOffline(): boolean;
+            IsOffline: boolean;
         }
         interface OrganizationSettings {
             /**
@@ -2191,7 +2191,7 @@ declare namespace DevKit {
             * Indicates whether the auto-save option is enabled for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#isautosaveenabled
             */
-            IsAutoSaveEnabled(): boolean;
+            IsAutoSaveEnabled: boolean;
             /**
             * Returns the preferred language ID for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#languageid
@@ -2228,17 +2228,17 @@ declare namespace DevKit {
             * Indicates whether guided help is enabled for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
             */
-            IsGuidedHelpEnabled(): boolean;
+            IsGuidedHelpEnabled: boolean;
             /**
             * Indicates whether high contrast is enabled for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#ishighcontrastenabled
             */
-            IsHighContrastEnabled(): boolean;
+            IsHighContrastEnabled: boolean;
             /**
             * Indicates whether the language for the current user is a right-to-left (RTL) language
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isrtl
             */
-            IsRTL(): boolean;
+            IsRTL: boolean;
             /**
             * Returns the language ID for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#languageid
@@ -2273,7 +2273,7 @@ declare namespace DevKit {
             * Returns the difference in minutes between the local time and Coordinated Universal Time (UTC)
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#gettimezoneoffsetminutes-method
             */
-            TimeZoneOffsetMinutes(): number;
+            TimeZoneOffsetMinutes: number;
         }
     }
 }

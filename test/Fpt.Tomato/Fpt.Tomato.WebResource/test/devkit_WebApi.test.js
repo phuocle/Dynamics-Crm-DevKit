@@ -8,9 +8,11 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
     describe('devkit_WebApi.test.js Test', function () {
 
         beforeEach(function () {
-            _xrm_mock.XrmMockGenerator.initialise();
+            var XrmMockGenerator = _xrm_mock.XrmMockGenerator.initialise();
+            XrmMockGenerator.Panel = new _xrm_mock.PanelMock();
+            XrmMockGenerator.Encoding = new _xrm_mock.EncodingMock();
+            XrmMockGenerator.Device = new _xrm_mock.DeviceMock();
         });
-
         it('DevKit.Form.Controls.ControlString', () => {
             _xrm_mock.XrmMockGenerator.Attribute.createString({
                     attributeType: "string",
@@ -103,7 +105,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             //form.Body.devkit_FloatingPointNumber.Precision = 1;
             //expect(form.Body.devkit_FloatingPointNumber.Precision).toBe(1);
         });
-        it ('DevKit.Form.Controls.ControlOptionSet', () => {
+        it('DevKit.Form.Controls.ControlOptionSet', () => {
             _xrm_mock.XrmMockGenerator.Attribute.createOptionSet({
                     name: "devkit_singleoptionsetcode",
                     initialValue: 100000001,
@@ -261,6 +263,148 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(tab.tabStateChangeHandlers.length).toBe(0);
             form.Body.Tab.ADMINISTRATOR.Focus();
 
+        });
+        it('HEADER & FOOTER', () => {
+            _xrm_mock.XrmMockGenerator.Attribute.createString(
+                {
+                    attributeType: "string",
+                    format: "text",
+                    isDirty: true,
+                    name: "header_devkit_name",
+                    requiredLevel: "required",
+                    value: "CONTROL-STRING-HEADER",
+                    maxLength: 100,
+                    submitMode: "always"
+                },
+                {
+                    controlType: "standard",
+                    disabled: true,
+                    label: "CONTROL-STRING-LABEL",
+                    name: "header_devkit_name",
+                    visible: true
+                }
+            );
+            _xrm_mock.XrmMockGenerator.Attribute.createString(
+                {
+                    attributeType: "string",
+                    format: "text",
+                    isDirty: true,
+                    name: "footer_devkit_name",
+                    requiredLevel: "required",
+                    value: "CONTROL-STRING-FOOTER",
+                    maxLength: 100,
+                    submitMode: "always"
+                },
+                {
+                    controlType: "standard",
+                    disabled: true,
+                    label: "CONTROL-STRING-LABEL",
+                    name: "footer_devkit_name",
+                    visible: true
+                }
+            );
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormWebApi(executionContext);
+            expect(form.Header.devkit_Name.Value).toBe("CONTROL-STRING-HEADER");
+            expect(form.Footer.devkit_Name.Value).toBe("CONTROL-STRING-FOOTER");
+        });
+        it('Utility', () => {
+            var context = _xrm_mock.XrmMockGenerator.context = new _xrm_mock.ContextMock({
+                clientContext: new _xrm_mock.ClientContextMock("Web", "Online"),
+                clientUrl: "https://clienturl.fake",
+                userId: "{00000000-0000-0000-0000-000000000000}",
+                userName: "DEVKIT",
+                userLcid: 1033,
+                userRoles: ["{00000001-0000-0000-0000-000000000000}", "{00000002-0000-0000-0000-000000000000}"],
+                version: "10.0.0.0",
+                userSettings: new _xrm_mock.UserSettingsMock({
+                    isGuidedHelpEnabled: true,
+                    userId: "DEVKIT-USERID",
+                    userName: "DEVKIT-USERNAME",
+                    isHighContrastEnabled: false,
+                    isRTL: false,
+                    defaultDashboardId: "DEFAULT-DASHBOARD-ID",
+                    languageId: 1066,
+                    transactionCurrencyId: "VND",
+                    securityRolePrivileges: ["GUID1", "GUID2"],
+                    securityRoles: ["NAME1", "NAME2", "NAME3"]
+                }),
+                orgUniqueName: "OrgUniqueName",
+                currentTheme: "Office12Blue",
+                isAutoSaveEnabled: true,
+                orgLcid: 1033,
+                timeZoneOffset: 7
+            });
+            context.organizationSettings = new _xrm_mock.OrganizationSettingsMock({
+                baseCurrencyId: "USD",
+                defaultCountryCode: "VN",
+                languageId: 1033,
+                organizationId: "OrgGuid",
+                uniqueName: "OrgUniqueName",
+                isAutoSaveEnabled: true,
+                useSkypeProtocol: true
+            });
+
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormWebApi(executionContext);
+            //TODO: form.Utility.LearningPathAttributeName
+            expect(() => { form.Utility.ShowProgressIndicator("Waiting"); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.CloseProgressIndicator(); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.EntityMetadata("devkit_webapi", null, null, null); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.ResourceString("resourcename", "key"); }).toThrow(new Error("Method not implemented."));
+            //TODO: form.Utility.Resource
+            expect(() => { form.Utility.InvokeProcessAction("name", null, null, null); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.LookupObjects(null, null, null); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.RefreshParentGrid(null); }).toThrow(new Error("Method not implemented."));
+            expect(form.Utility.ClientUrl).toBe("https://clienturl.fake");
+            expect(() => { form.Utility.CurrentAppUrl; }).toThrow(new Error("Method not implemented."));
+            expect(form.Utility.Version).toBe("10.0.0.0");
+            //MISSED - XRM-MOCK - Type mistake expect(() => { form.Utility.IsOnPremises; }).toThrow(new Error("Method not implemented."));
+            expect(form.Utility.Client.ClientName).toBe(OptionSet.ClientName.Web);
+            expect(form.Utility.Client.ClientState).toBe(OptionSet.ClientState.Online);
+            expect(() => { form.Utility.Client.FormFactor }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.Client.IsOffline }).toThrow(new Error("Method not implemented."));
+
+            expect(form.Utility.OrganizationSettings.BaseCurrencyId).toBe("USD");
+            expect(form.Utility.OrganizationSettings.DefaultCountryCode).toBe("VN");
+            expect(form.Utility.OrganizationSettings.IsAutoSaveEnabled).toBeTruthy();
+            expect(form.Utility.OrganizationSettings.LanguageId).toBe(1033);
+            expect(form.Utility.OrganizationSettings.OrganizationId).toBe("OrgGuid");
+            expect(form.Utility.OrganizationSettings.UniqueName).toBe("OrgUniqueName");
+            expect(form.Utility.OrganizationSettings.UseSkypeProtocol).toBeTruthy();
+
+            //MISSED: form.Utility.UserSettings.DateFormattingInfo
+            expect(form.Utility.UserSettings.DefaultDashboardId).toBe("DEFAULT-DASHBOARD-ID");
+            expect(form.Utility.UserSettings.IsGuidedHelpEnabled).toBeTruthy();
+            expect(form.Utility.UserSettings.IsHighContrastEnabled).toBeFalsy();
+            expect(form.Utility.UserSettings.IsRTL).toBeFalsy();
+            expect(form.Utility.UserSettings.LanguageId).toBe(1066);
+            expect(form.Utility.UserSettings.SecurityRolePrivileges.length).toBe(2);
+            expect(form.Utility.UserSettings.SecurityRoles.length).toBe(3);
+            expect(() => { form.Utility.UserSettings.TimeZoneOffsetMinutes }).toThrow(new Error("Not implemented"));
+
+            expect(() => { form.Utility.AdvancedConfigSetting(OptionSet.AdvancedConfigSetting.MaxChildIncidentNumber); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.CurrentAppName(null, null); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.CurrentAppProperties(null, null) }).toThrow(new Error("Method not implemented."));
+            expect(form.Utility.PrependOrgName("abc-")).toBe("abc-OrgUniqueName");
+
+            expect(() => { form.Utility.LoadPanel("url", "title"); }).toThrow(new Error("Not implemented."));
+
+            expect(() => { form.Utility.XmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
+            expect(() => { form.Utility.XmlEncode("code"); }).toThrow(new Error("Not implemented"));
+
+            expect(() => { form.Utility.CaptureAudio(null, null) }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Utility.CaptureImage(null, null, null) }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Utility.CaptureVideo(null, null) }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Utility.BarcodeValue(null, null) }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Utility.CurrentPosition(null, null) }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Utility.PickFile(null, null, null) }).toThrow(new Error("Not implemented."));
+
+        });
+        it('Field Removed', () => {
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormWebApi(executionContext);
+            expect(() => { form.Body.devkit_SingleLineofTextUrl.Value }).toThrow(new Error("field: devkit_singlelineoftexturl removed on form"));
         });
     });
 });

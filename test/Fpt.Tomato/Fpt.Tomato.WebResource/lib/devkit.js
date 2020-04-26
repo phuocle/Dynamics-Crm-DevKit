@@ -127,7 +127,7 @@ var devKit = (function () {
         }
         return process;
     }
-    function loadField(formContext, body, field, type) {   
+    function loadField(formContext, body, field, type) {           
         var logicalName = (function () {
             if (type === undefined) return field.toLowerCase();
             return (type + field).toLowerCase();
@@ -151,7 +151,7 @@ var devKit = (function () {
                     }
                 }
             }
-        })();
+        })();        
         Object.defineProperty(body[field], "AttributeType", { get: function () { return attribute.getAttributeType(); } });//TESTED
         Object.defineProperty(body[field], "Format", { get: function () { return attribute.getFormat(); } });//TESTED
         Object.defineProperty(body[field], "InitialValue", { get: function () { return attribute.getInitialValue(); } });//TESTED
@@ -188,7 +188,10 @@ var devKit = (function () {
             set: function (value) { attribute.setSubmitMode(value); }//TESTED
         });
         Object.defineProperty(body[field], "Value", {
-            get: function () { return attribute.getValue(); },//TESTED
+            get: function () {//TESTED
+                if (attribute !== undefined) return attribute.getValue();
+                throw new Error(`field: ${logicalName} removed on form`);
+            },           
             set: function (value) { attribute.setValue(value); }//TESTED
         });
         Object.defineProperty(body[field], "Data", {
@@ -362,31 +365,31 @@ var devKit = (function () {
         if (Xrm && Xrm.Utility) {
             var getUtility = Xrm.Utility;
             Object.defineProperty(utility, "LearningPathAttributeName", { get: function () { return getUtility.getLearningPathAttributeName(); } });
-            utility.CloseProgressIndicator = function () { getUtility.closeProgressIndicator(); };
+            utility.CloseProgressIndicator = function () { getUtility.closeProgressIndicator(); };//TESTED
             utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback); };
-            utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback); };
-            utility.ResourceString = function (webResourceName, key) { return getUtility.getResourceString(webResourceName, key); };
+            utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback); };//TESTED
+            utility.ResourceString = function (webResourceName, key) { return getUtility.getResourceString(webResourceName, key); };//TESTED
             utility.Resource = function (key) { if (defaultWebResourceName !== undefined) return getUtility.getResourceString(defaultWebResourceName, key); return EMPTY_STRING; };
-            utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback); };
-            utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback); };
-            utility.RefreshParentGrid = function (lookupOptions) { getUtility.refreshParentGrid(lookupOptions); };
-            utility.ShowProgressIndicator = function (message) { getUtility.showProgressIndicator(message); };
+            utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback); };//TESTED
+            utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback); };//TESTED
+            utility.RefreshParentGrid = function (lookupOptions) { getUtility.refreshParentGrid(lookupOptions); };//TESTED
+            utility.ShowProgressIndicator = function (message) { getUtility.showProgressIndicator(message); };//TESTED
         }
         if (Xrm && Xrm.Utility && Xrm.Utility.getGlobalContext) {
             var getGlobalContext = Xrm.Utility.getGlobalContext();
-            Object.defineProperty(utility, "ClientUrl", { get: function () { return getGlobalContext.getClientUrl(); } });
+            Object.defineProperty(utility, "ClientUrl", { get: function () { return getGlobalContext.getClientUrl(); } });//TESTED
             Object.defineProperty(utility, "CurrentAppUrl", { get: function () { return getGlobalContext.getCurrentAppUrl(); } });
-            Object.defineProperty(utility, "Version", { get: function () { return getGlobalContext.getVersion(); } });
+            Object.defineProperty(utility, "Version", { get: function () { return getGlobalContext.getVersion(); } });//TESTED
             Object.defineProperty(utility, "IsOnPremises", { get: function () { return getGlobalContext.isOnPremises(); } });
             Object.defineProperty(utility, "Client", {
                 get: function () {
                     var Client = {};
                     if (getGlobalContext.client) {
                         var client = getGlobalContext.client;
-                        Object.defineProperty(Client, "ClientName", { get: function () { return client.getClient(); } });
-                        Object.defineProperty(Client, "ClientState", { get: function () { return client.getClientState(); } });
-                        Object.defineProperty(Client, "FormFactor", { get: function () { return client.getFormFactor(); } });
-                        Client.IsOffline = function () { return client.isOffline(); };
+                        Object.defineProperty(Client, "ClientName", { get: function () { return client.getClient(); } });//TESTED
+                        Object.defineProperty(Client, "ClientState", { get: function () { return client.getClientState(); } });//TESTED
+                        Object.defineProperty(Client, "FormFactor", { get: function () { return client.getFormFactor(); } });//TESTED
+                        Object.defineProperty(Client, "IsOffline", { get: function () { return client.isOffline(); } });//TESTED                        
                     }
                     return Client;
                 }
@@ -396,14 +399,14 @@ var devKit = (function () {
                     var OrganizationSettings = {};
                     if (getGlobalContext.organizationSettings) {
                         var organizationSettings = getGlobalContext.organizationSettings;
-                        Object.defineProperty(OrganizationSettings, "getGlobalContext", { get: function () { return organizationSettings.attributes; } });
-                        Object.defineProperty(OrganizationSettings, "BaseCurrencyId", { get: function () { return organizationSettings.baseCurrencyId; } });
-                        Object.defineProperty(OrganizationSettings, "DefaultCountryCode", { get: function () { return organizationSettings.defaultCountryCode; } });
-                        Object.defineProperty(OrganizationSettings, "LanguageId", { get: function () { return organizationSettings.languageId; } });
-                        Object.defineProperty(OrganizationSettings, "OrganizationId", { get: function () { return organizationSettings.organizationId; } });
-                        Object.defineProperty(OrganizationSettings, "UniqueName", { get: function () { return organizationSettings.uniqueName; } });
-                        Object.defineProperty(OrganizationSettings, "UseSkypeProtocol", { get: function () { return organizationSettings.useSkypeProtocol; } });
-                        OrganizationSettings.IsAutoSaveEnabled = function () { return organizationSettings.isAutoSaveEnabled; };
+                        Object.defineProperty(OrganizationSettings, "Attributes", { get: function () { return organizationSettings.attributes; } });
+                        Object.defineProperty(OrganizationSettings, "BaseCurrencyId", { get: function () { return organizationSettings.baseCurrencyId; } });//TESTED
+                        Object.defineProperty(OrganizationSettings, "DefaultCountryCode", { get: function () { return organizationSettings.defaultCountryCode; } });//TESTED
+                        Object.defineProperty(OrganizationSettings, "LanguageId", { get: function () { return organizationSettings.languageId; } });//TESTED
+                        Object.defineProperty(OrganizationSettings, "OrganizationId", { get: function () { return organizationSettings.organizationId; } });//TESTED
+                        Object.defineProperty(OrganizationSettings, "UniqueName", { get: function () { return organizationSettings.uniqueName; } });//TESTED
+                        Object.defineProperty(OrganizationSettings, "UseSkypeProtocol", { get: function () { return organizationSettings.useSkypeProtocol; } });//TESTED
+                        Object.defineProperty(OrganizationSettings, "IsAutoSaveEnabled", { get: function () { return organizationSettings.isAutoSaveEnabled; } });//TESTED                        
                     }
                     return OrganizationSettings;
                 }
@@ -414,25 +417,25 @@ var devKit = (function () {
                     if (getGlobalContext.userSettings) {
                         var userSettings = getGlobalContext.userSettings;
                         Object.defineProperty(UserSettings, "DateFormattingInfo", { get: function () { return userSettings.dateFormattingInfo; } });
-                        Object.defineProperty(UserSettings, "DefaultDashboardId", { get: function () { return userSettings.defaultDashboardId; } });
-                        Object.defineProperty(UserSettings, "LanguageId", { get: function () { return userSettings.languageId; } });
-                        Object.defineProperty(UserSettings, "SecurityRolePrivileges", { get: function () { return userSettings.securityRolePrivileges; } });
-                        Object.defineProperty(UserSettings, "SecurityRoles", { get: function () { return userSettings.securityRoles; } });
-                        Object.defineProperty(UserSettings, "TransactionCurrencyId", { get: function () { return userSettings.transactionCurrencyId; } });
-                        Object.defineProperty(UserSettings, "UserId", { get: function () { return userSettings.userId; } });
-                        Object.defineProperty(UserSettings, "UserName", { get: function () { return userSettings.userName; } });
-                        UserSettings.IsGuidedHelpEnabled = function () { return userSettings.isGuidedHelpEnabled; };
-                        UserSettings.IsHighContrastEnabled = function () { return userSettings.isHighContrastEnabled; };
-                        UserSettings.IsRTL = function () { return userSettings.isRTL; };
-                        UserSettings.TimeZoneOffsetMinutes = function () { return userSettings.getTimeZoneOffsetMinutes(); };
+                        Object.defineProperty(UserSettings, "DefaultDashboardId", { get: function () { return userSettings.defaultDashboardId; } });//TESTED
+                        Object.defineProperty(UserSettings, "LanguageId", { get: function () { return userSettings.languageId; } });//TESTED
+                        Object.defineProperty(UserSettings, "SecurityRolePrivileges", { get: function () { return userSettings.securityRolePrivileges; } });//TESTED
+                        Object.defineProperty(UserSettings, "SecurityRoles", { get: function () { return userSettings.securityRoles; } });//TESTED
+                        Object.defineProperty(UserSettings, "TransactionCurrencyId", { get: function () { return userSettings.transactionCurrencyId; } });//TESTED
+                        Object.defineProperty(UserSettings, "UserId", { get: function () { return userSettings.userId; } });//TESTED
+                        Object.defineProperty(UserSettings, "UserName", { get: function () { return userSettings.userName; } });//TESTED
+                        Object.defineProperty(UserSettings, "IsGuidedHelpEnabled", { get: function () { return userSettings.isGuidedHelpEnabled; } });//TESTED
+                        Object.defineProperty(UserSettings, "IsHighContrastEnabled", { get: function () { return userSettings.isHighContrastEnabled; } });//TESTED
+                        Object.defineProperty(UserSettings, "IsRTL", { get: function () { return userSettings.isRTL; } });//TESTED
+                        Object.defineProperty(UserSettings, "TimeZoneOffsetMinutes", { get: function () { return userSettings.getTimeZoneOffsetMinutes(); } });//TESTED
                     }
                     return UserSettings;
                 }
             });
-            utility.AdvancedConfigSetting = function (setting) { return getGlobalContext.getAdvancedConfigSetting(setting); };
-            utility.CurrentAppName = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppName().then(successCallback, errorCallback); };
-            utility.CurrentAppProperties = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback); };
-            utility.PrependOrgName = function (sPath) { return getGlobalContext.prependOrgName(sPath); };
+            utility.AdvancedConfigSetting = function (setting) { return getGlobalContext.getAdvancedConfigSetting(setting); };//TESTED
+            utility.CurrentAppName = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppName().then(successCallback, errorCallback); };//TESTED
+            utility.CurrentAppProperties = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback); };//TESTED
+            utility.PrependOrgName = function (sPath) { return getGlobalContext.prependOrgName(sPath); };//TESTED
         }
         if (Xrm && Xrm.Navigation) {
             var getNavigation = Xrm.Navigation;
@@ -446,21 +449,21 @@ var devKit = (function () {
         }
         if (Xrm && Xrm.Panel) {
             var getPanel = Xrm.Panel;
-            utility.LoadPanel = function (url, title) { getPanel.loadPanel(url, title); };
+            utility.LoadPanel = function (url, title) { getPanel.loadPanel(url, title); };//TESTED
         }
         if (Xrm && Xrm.Encoding) {
             var getEncoding = Xrm.Encoding;
-            utility.XmlAttributeEncode = function (arg) { return getEncoding.xmlAttributeEncode(arg); };
-            utility.XmlEncode = function (arg) { return getEncoding.xmlEncode(arg); };
+            utility.XmlAttributeEncode = function (arg) { return getEncoding.xmlAttributeEncode(arg); };//TESTED
+            utility.XmlEncode = function (arg) { return getEncoding.xmlEncode(arg); };//TESTED
         }
         if (Xrm && Xrm.Device) {
             var getDevice = Xrm.Device;
-            utility.CaptureAudio = function (successCallback, errorCallback) { getDevice.captureAudio().then(successCallback, errorCallback); };
-            utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice.captureImage(imageOptions).then(successCallback, errorCallback); };
-            utility.CaptureVideo = function (successCallback, errorCallback) { getDevice.captureVideo().then(successCallback, errorCallback); };
-            utility.BarcodeValue = function (successCallback, errorCallback) { getDevice.getBarcodeValue().then(successCallback, errorCallback); };
-            utility.CurrentPosition = function (successCallback, errorCallback) { getDevice.getCurrentPosition().then(successCallback, errorCallback); };
-            utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback); };
+            utility.CaptureAudio = function (successCallback, errorCallback) { getDevice.captureAudio().then(successCallback, errorCallback); };//TESTED
+            utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice.captureImage(imageOptions).then(successCallback, errorCallback); };//TESTED
+            utility.CaptureVideo = function (successCallback, errorCallback) { getDevice.captureVideo().then(successCallback, errorCallback); };//TESTED
+            utility.BarcodeValue = function (successCallback, errorCallback) { getDevice.getBarcodeValue().then(successCallback, errorCallback); };//TESTED
+            utility.CurrentPosition = function (successCallback, errorCallback) { getDevice.getCurrentPosition().then(successCallback, errorCallback); };//TESTED
+            utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback); };//TESTED
         }
         return utility;
     }

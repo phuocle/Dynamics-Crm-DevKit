@@ -41,7 +41,7 @@ var Tomato;
 			//devkit_SingleLineofTextText: {},
 			//devkit_SingleLineofTextTextArea: {},
 			//devkit_SingleLineofTextTickerSymbol: {},
-			//devkit_SingleLineofTextUrl: {},
+			devkit_SingleLineofTextUrl: {},
 			devkit_SingleOptionSetCode: {},
 			//devkit_SingleOptionSetCodeCalculated: {},
 			//devkit_TimeZoneDateAndTime: {},
