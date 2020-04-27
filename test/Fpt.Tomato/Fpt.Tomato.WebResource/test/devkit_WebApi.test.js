@@ -353,6 +353,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(() => { form.Utility.CloseProgressIndicator(); }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.EntityMetadata("devkit_webapi", null, null, null); }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.ResourceString("resourcename", "key"); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.AllowedStatusTransitions(null, null, null, null); }).toThrow(new Error("Method not implemented."));
             //TODO: form.Utility.Resource
             expect(() => { form.Utility.InvokeProcessAction("name", null, null, null); }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.LookupObjects(null, null, null); }).toThrow(new Error("Method not implemented."));

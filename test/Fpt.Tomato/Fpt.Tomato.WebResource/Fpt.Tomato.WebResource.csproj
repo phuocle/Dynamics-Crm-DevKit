@@ -151,7 +151,7 @@
     <Content Include="test\docs\controls\_addCustomFilter.md" />
     <Content Include="test\docs\controls\_addCustomView.md" />
     <Content Include="test\docs\controls\addNotification.md" />
-    <Content Include="test\docs\controls\addOnLookupTagClick.md" />
+    <Content Include="test\docs\controls\__addOnLookupTagClick.md" />
     <Content Include="test\docs\controls\addOnPostSearch.md" />
     <Content Include="test\docs\controls\addOnResultOpened.md" />
     <Content Include="test\docs\controls\addOnSelection.md" />
@@ -183,7 +183,7 @@
     <Content Include="test\docs\controls\_getVisible.md" />
     <Content Include="test\docs\controls\openSearchResult.md" />
     <Content Include="test\docs\controls\refresh.md" />
-    <Content Include="test\docs\controls\removeOnLookupTagClick.md" />
+    <Content Include="test\docs\controls\__removeOnLookupTagClick.md" />
     <Content Include="test\docs\controls\removeOnPostSearch.md" />
     <Content Include="test\docs\controls\removeOnResultOpened.md" />
     <Content Include="test\docs\controls\removeOnSelection.md" />
@@ -531,8 +531,8 @@
     <Content Include="test\docs\save-event-arguments\isDefaultPrevented.md" />
     <Content Include="test\docs\save-event-arguments\preventDefault.md" />
     <Content Include="test\docs\xrm-app.md" />
-    <Content Include="test\docs\Xrm-App\addGlobalNotification.md" />
-    <Content Include="test\docs\Xrm-App\clearGlobalNotification.md" />
+    <Content Include="test\docs\Xrm-App\__addGlobalNotification.md" />
+    <Content Include="test\docs\Xrm-App\__clearGlobalNotification.md" />
     <Content Include="test\docs\Xrm-App\includes\addGlobalNotification-description.md" />
     <Content Include="test\docs\Xrm-App\includes\clearGlobalNotification-description.md" />
     <Content Include="test\docs\xrm-device.md" />
@@ -549,9 +549,9 @@
     <Content Include="test\docs\Xrm-Device\includes\pickFile-description.md" />
     <Content Include="test\docs\Xrm-Device\_pickFile.md" />
     <Content Include="test\docs\xrm-encoding.md" />
-    <Content Include="test\docs\Xrm-Encoding\htmlAttributeEncode.md" />
-    <Content Include="test\docs\Xrm-Encoding\htmlDecode.md" />
-    <Content Include="test\docs\Xrm-Encoding\htmlEncode.md" />
+    <Content Include="test\docs\Xrm-Encoding\__htmlAttributeEncode.md" />
+    <Content Include="test\docs\Xrm-Encoding\__htmlDecode.md" />
+    <Content Include="test\docs\Xrm-Encoding\__htmlEncode.md" />
     <Content Include="test\docs\Xrm-Encoding\includes\htmlAttributeEncode-description.md" />
     <Content Include="test\docs\Xrm-Encoding\includes\htmlDecode-description.md" />
     <Content Include="test\docs\Xrm-Encoding\includes\htmlEncode-description.md" />
@@ -569,7 +569,7 @@
     <Content Include="test\docs\Xrm-Navigation\includes\openTaskFlow-description.md" />
     <Content Include="test\docs\Xrm-Navigation\includes\openUrl-description.md" />
     <Content Include="test\docs\Xrm-Navigation\includes\openWebResource-description.md" />
-    <Content Include="test\docs\Xrm-Navigation\navigateTo.md" />
+    <Content Include="test\docs\Xrm-Navigation\__navigateTo.md" />
     <Content Include="test\docs\Xrm-Navigation\_openAlertDialog.md" />
     <Content Include="test\docs\Xrm-Navigation\_openConfirmDialog.md" />
     <Content Include="test\docs\Xrm-Navigation\_openErrorDialog.md" />
@@ -582,7 +582,7 @@
     <Content Include="test\docs\Xrm-Panel\_loadPanel.md" />
     <Content Include="test\docs\xrm-utility.md" />
     <Content Include="test\docs\Xrm-Utility\_closeProgressIndicator.md" />
-    <Content Include="test\docs\Xrm-Utility\getAllowedStatusTransitions.md" />
+    <Content Include="test\docs\Xrm-Utility\_getAllowedStatusTransitions.md" />
     <Content Include="test\docs\Xrm-Utility\_getEntityMetadata.md" />
     <Content Include="test\docs\Xrm-Utility\getGlobalContext.md" />
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\_client.md" />
@@ -597,7 +597,7 @@
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\_organizationSettings.md" />
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\_prependOrgName.md" />
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\_userSettings.md" />
-    <Content Include="test\docs\Xrm-Utility\getLearningPathAttributeName.md" />
+    <Content Include="test\docs\Xrm-Utility\__getLearningPathAttributeName.md" />
     <Content Include="test\docs\Xrm-Utility\getPageContext.md" />
     <Content Include="test\docs\Xrm-Utility\_getResourceString.md" />
     <Content Include="test\docs\Xrm-Utility\includes\closeProgressIndicator-description.md" />

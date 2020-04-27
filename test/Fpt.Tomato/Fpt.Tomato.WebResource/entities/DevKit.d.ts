@@ -719,6 +719,23 @@ declare namespace DevKit {
             /** The unit of measurement. Specify "%" or "px". Default value is "px" */
             unit: "%" | "px";
         }
+        interface GlobalNotification {
+            action?: GlobalNotificationAction,
+            /** Defines the level of notification. Valid values are: 1: Success | 2: Error | 3: Warning | 4: Information */
+            level: 1 | 2 | 3 | 4,
+            /** The message to display in the notification. */
+            message: string,
+            /** ndicates whether or not the user can close or dismiss the notification. If you don't specify this parameter, users can't close or dismiss the notification by default. */
+            showCloseButton: boolean,
+            /** Defines the type of notification. Currently, only a value of 2 is supported, which displays a message bar at the top of the app. */
+            type: 2
+        }
+        interface GlobalNotificationAction {
+            /** The label for the action in the message. */
+            actionLabel?: string,
+            /** Function reference. The function to execute when the action label is clicked. */
+            eventHandler?: string
+        }
     }
     namespace WebApi {
         interface OptionSetValue {
@@ -1461,6 +1478,18 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removepresearch
                  */
                 RemovePreSearch(callback: (executionContext: any) => void): void;
+                /**
+                 * Adds an event handler to the OnLookupTagClick event.
+                 * @param callback The function to add to the OnLookupTagClick event. The execution context is automatically passed as the first parameter to this function along with eventArgs that contain the tag value. More information: OnLookupTagClick event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonlookuptagclick
+                */
+                AddOnLookupTagClick(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes an event handler from the OnLookupTagClick event.
+                 * @param callback The function to be removed from the OnLookupTagClick event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonlookuptagclick
+                 */
+                RemoveOnLookupTagClick(callback: (executionContext: any) => void): void;
             }
             interface ControlKnowledge extends IControl {
                 /**
@@ -2139,6 +2168,22 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmlencode
              */
             HtmlEncode(arg: string): string;
+            /**
+             * Displays an error, information, warning, or success notification for an app, and lets you specify actions to execute based on the notification.
+             * @param notification The notification to add.
+             * @param successCallback A function to call when notification is displayed. A GUID value is passed to uniquely identify the notification. You can use the GUID value to close or dismiss the notification using the clearGlobalNotification method.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+             */
+            AddGlobalNotification(notification: DevKit.Core.GlobalNotification, successCallback?: (result: string) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
+            /**
+             * Clears a notification in the app.
+             * @param uniqueId The ID to use to clear a specific notification that was set using addGlobalNotification.
+             * @param successCallback A function to call when the notification is cleared.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-app/clearglobalnotification
+             */
+            ClearGlobalNotification(uniqueId: string, successCallback?: (result: string) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
         }
         interface WebApi {
             /**

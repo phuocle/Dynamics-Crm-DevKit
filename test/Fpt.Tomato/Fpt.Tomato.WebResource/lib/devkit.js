@@ -258,6 +258,8 @@ var devKit = (function () {
             var notification = { messages: [title], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
             return control.addNotification(notification);
         };
+        body[field].AddOnLookupTagClick = function (callback) { control.addOnLookupTagClick(callback); };
+        body[field].RemoveOnLookupTagClick = function (callback) { control.removeOnLookupTagClick(callback); };
     }
     function loadFields(formContext, body, type) {
         for (var field in body) {
@@ -364,12 +366,12 @@ var devKit = (function () {
         var utility = {};
         if (Xrm && Xrm.Utility) {
             var getUtility = Xrm.Utility;
-            Object.defineProperty(utility, "LearningPathAttributeName", { get: function () { return getUtility.getLearningPathAttributeName(); } });
+            Object.defineProperty(utility, "LearningPathAttributeName", { get: function () { return getUtility.getLearningPathAttributeName(); } });//XRM-MOCK
             utility.CloseProgressIndicator = function () { getUtility.closeProgressIndicator(); };//TESTED
-            utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback); };
+            utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback); };//TESTED
             utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback); };//TESTED
             utility.ResourceString = function (webResourceName, key) { return getUtility.getResourceString(webResourceName, key); };//TESTED
-            utility.Resource = function (key) { if (defaultWebResourceName !== undefined) return getUtility.getResourceString(defaultWebResourceName, key); return EMPTY_STRING; };
+            utility.Resource = function (key) { if (defaultWebResourceName !== undefined) return getUtility.getResourceString(defaultWebResourceName, key); return EMPTY_STRING; };//TESTED
             utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback); };//TESTED
             utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback); };//TESTED
             utility.RefreshParentGrid = function (lookupOptions) { getUtility.refreshParentGrid(lookupOptions); };//TESTED
@@ -378,9 +380,9 @@ var devKit = (function () {
         if (Xrm && Xrm.Utility && Xrm.Utility.getGlobalContext) {
             var getGlobalContext = Xrm.Utility.getGlobalContext();
             Object.defineProperty(utility, "ClientUrl", { get: function () { return getGlobalContext.getClientUrl(); } });//TESTED
-            Object.defineProperty(utility, "CurrentAppUrl", { get: function () { return getGlobalContext.getCurrentAppUrl(); } });
+            Object.defineProperty(utility, "CurrentAppUrl", { get: function () { return getGlobalContext.getCurrentAppUrl(); } });//TESTED
             Object.defineProperty(utility, "Version", { get: function () { return getGlobalContext.getVersion(); } });//TESTED
-            Object.defineProperty(utility, "IsOnPremises", { get: function () { return getGlobalContext.isOnPremises(); } });
+            Object.defineProperty(utility, "IsOnPremises", { get: function () { return getGlobalContext.isOnPremises(); } });//XRM-MOCK
             Object.defineProperty(utility, "Client", {
                 get: function () {
                     var Client = {};
@@ -399,7 +401,7 @@ var devKit = (function () {
                     var OrganizationSettings = {};
                     if (getGlobalContext.organizationSettings) {
                         var organizationSettings = getGlobalContext.organizationSettings;
-                        Object.defineProperty(OrganizationSettings, "Attributes", { get: function () { return organizationSettings.attributes; } });
+                        Object.defineProperty(OrganizationSettings, "Attributes", { get: function () { return organizationSettings.attributes; } });//NOT-TEST
                         Object.defineProperty(OrganizationSettings, "BaseCurrencyId", { get: function () { return organizationSettings.baseCurrencyId; } });//TESTED
                         Object.defineProperty(OrganizationSettings, "DefaultCountryCode", { get: function () { return organizationSettings.defaultCountryCode; } });//TESTED
                         Object.defineProperty(OrganizationSettings, "LanguageId", { get: function () { return organizationSettings.languageId; } });//TESTED
@@ -416,7 +418,7 @@ var devKit = (function () {
                     var UserSettings = {};
                     if (getGlobalContext.userSettings) {
                         var userSettings = getGlobalContext.userSettings;
-                        Object.defineProperty(UserSettings, "DateFormattingInfo", { get: function () { return userSettings.dateFormattingInfo; } });
+                        Object.defineProperty(UserSettings, "DateFormattingInfo", { get: function () { return userSettings.dateFormattingInfo; } });//XRM-MOCK BUG
                         Object.defineProperty(UserSettings, "DefaultDashboardId", { get: function () { return userSettings.defaultDashboardId; } });//TESTED
                         Object.defineProperty(UserSettings, "LanguageId", { get: function () { return userSettings.languageId; } });//TESTED
                         Object.defineProperty(UserSettings, "SecurityRolePrivileges", { get: function () { return userSettings.securityRolePrivileges; } });//TESTED
@@ -446,7 +448,7 @@ var devKit = (function () {
             utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) { getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback); };//TESTED
             utility.OpenUrl = function (url, openUrlOptions) { getNavigation.openUrl(url, openUrlOptions); };//TESTED
             utility.OpenWebResource = function (webResourceName, windowOptions, data) { getNavigation.openWebResource(webResourceName, windowOptions, data); };//TESTED
-            utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback); };
+            utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback); };//XRM-MOCK
         }
         if (Xrm && Xrm.Panel) {
             var getPanel = Xrm.Panel;
@@ -456,9 +458,9 @@ var devKit = (function () {
             var getEncoding = Xrm.Encoding;
             utility.XmlAttributeEncode = function (arg) { return getEncoding.xmlAttributeEncode(arg); };//TESTED
             utility.XmlEncode = function (arg) { return getEncoding.xmlEncode(arg); };//TESTED
-            utility.HtmlAttributeEncode = function (arg) { return getEncoding.htmlAttributeEncode(arg); };
-            utility.HtmlDecode = function (arg) { return getEncoding.htmlDecode(arg); };
-            utility.HtmlEncode = function (arg) { return getEncoding.htmlEncode(arg); };
+            utility.HtmlAttributeEncode = function (arg) { return getEncoding.htmlAttributeEncode(arg); };//XRM-MOCK
+            utility.HtmlDecode = function (arg) { return getEncoding.htmlDecode(arg); };//XRM-MOCK
+            utility.HtmlEncode = function (arg) { return getEncoding.htmlEncode(arg); };//XRM-MOCK
         }
         if (Xrm && Xrm.Device) {
             var getDevice = Xrm.Device;
@@ -468,6 +470,11 @@ var devKit = (function () {
             utility.BarcodeValue = function (successCallback, errorCallback) { getDevice.getBarcodeValue().then(successCallback, errorCallback); };//TESTED
             utility.CurrentPosition = function (successCallback, errorCallback) { getDevice.getCurrentPosition().then(successCallback, errorCallback); };//TESTED
             utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback); };//TESTED
+        }
+        if (Xrm && Xrm.App) {
+            var getApp = Xrm.App;
+            utility.AddGlobalNotification = function (notification, successCallback, errorCallback) { getApp.addGlobalNotification(notification).then(successCallback, errorCallback); }
+            utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp.clearGlobalNotification(uniqueId).then(successCallback, errorCallback); }
         }
         return utility;
     }
