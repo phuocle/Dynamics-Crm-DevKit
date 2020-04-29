@@ -444,10 +444,9 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             var data = new _xrm_mock.DataMock(entity);
             var ui = new _xrm_mock.UiMock({});
             _xrm_mock.XrmMockGenerator.formContext = new _xrm_mock.FormContextMock(data, ui);
-
             var executionContext = _xrm_mock.XrmMockGenerator.formContext;
-
             var form = new Tomato.FormWebApi(executionContext);
+            //===========================================================================================================================
             expect(data.loadEventHandlers.length).toBe(0);
             var fun1 = function (executionContext) { };
             var fun2 = function (executionContext) { };
@@ -460,6 +459,58 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             form.RemoveOnLoad(fun2);
             expect(data.loadEventHandlers.length).toBe(1);
             expect(() => { form.Save(null); }).toThrow(new Error("save not implemented"));
+            //===========================================================================================================================
         })
+        it('formContext.data.entity', () => {
+            var attributes = new _xrm_mock.ItemCollectionMock([
+                new _xrm_mock.AttributeMock({
+                    name: "devkit_name",
+                    isDirty: true
+                })
+            ]);
+            var entity = new _xrm_mock.EntityMock({
+                entityName: "devkit_entityname",
+                attributes: attributes,
+                id: "{00000000-0000-0000-0000-000000000000}",
+                primaryValue: "LE VAN PHUOC"
+            });
+            var data = new _xrm_mock.DataMock(entity);
+            var ui = new _xrm_mock.UiMock({});
+            _xrm_mock.XrmMockGenerator.formContext = new _xrm_mock.FormContextMock(data, ui);
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormWebApi(executionContext);
+            //===========================================================================================================================
+            expect(form.Attributes.getLength()).toBe(1);
+            form.Attributes.forEach((item, i) => {
+                item.setValue("AAA");
+            });
+            expect(executionContext.getAttribute("devkit_name").getValue()).toBe("AAA");
+            var item2 = form.Attributes.get("devkit_name");
+            item2.setValue("BBB");
+            expect(executionContext.getAttribute("devkit_name").getValue()).toBe("BBB");
+            var item3 = form.Attributes.get(0);
+            item3.setValue("CCC");
+            expect(executionContext.getAttribute("devkit_name").getValue()).toBe("CCC");
+            expect(entity.saveEventHandlers.length).toBe(0);
+            var fun1 = function (executionContext) { };
+            var fun2 = function (executionContext) { };
+            form.AddOnSave(fun1);
+            form.AddOnSave(fun2);
+            expect(entity.saveEventHandlers.length).toBe(2);
+            expect(() => { form.DataXml; }).toThrow(new Error("getDataXml not implemented"));
+            expect(form.EntityName).toBe("devkit_entityname");
+            expect(form.EntityReference).toBeDefined();
+            expect(form.EntityReference.entityType).toBe("devkit_entityname");
+            expect(form.EntityReference.id).toBe("{00000000-0000-0000-0000-000000000000}");
+            expect(form.EntityReference.name).toBe("LE VAN PHUOC");
+            expect(form.EntityId).toBe("{00000000-0000-0000-0000-000000000000}");
+            expect(form.EntityIsDirty).toBeTruthy();
+            expect(form.PrimaryAttributeValue).toBe("LE VAN PHUOC");
+            expect(() => { form.EntityIsValid; }).toThrow(new Error("isValid not implemented."));
+            form.RemoveOnSave(fun2);
+            expect(entity.saveEventHandlers.length).toBe(1);
+            expect(form.EntitySave(OptionSet.SaveOption.SaveAndClose)).toBeUndefined();
+            //===========================================================================================================================
+        });
     });
 });
