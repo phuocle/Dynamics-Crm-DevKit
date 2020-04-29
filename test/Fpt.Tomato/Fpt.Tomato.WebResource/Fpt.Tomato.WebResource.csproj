@@ -332,7 +332,7 @@
     <Content Include="test\docs\formContext-data-process\step\includes\setProgress-description.md" />
     <Content Include="test\docs\formContext-data-process\step\isRequired.md" />
     <Content Include="test\docs\formContext-data-process\step\setProgress.md" />
-    <Content Include="test\docs\formContext-data.md" />
+    <Content Include="test\docs\_formContext-data.md" />
     <Content Include="test\docs\formContext-data\addOnLoad.md" />
     <Content Include="test\docs\formContext-data\getIsDirty.md" />
     <Content Include="test\docs\formContext-data\includes\addOnLoad-description.md" />
@@ -342,9 +342,9 @@
     <Content Include="test\docs\formContext-data\includes\removeOnLoad-description.md" />
     <Content Include="test\docs\formContext-data\includes\save-description.md" />
     <Content Include="test\docs\formContext-data\isValid.md" />
-    <Content Include="test\docs\formContext-data\refresh.md" />
+    <Content Include="test\docs\formContext-data\_refresh.md" />
     <Content Include="test\docs\formContext-data\removeOnLoad.md" />
-    <Content Include="test\docs\formContext-data\save.md" />
+    <Content Include="test\docs\formContext-data\_save.md" />
     <Content Include="test\docs\formContext-ui-formSelector.md" />
     <Content Include="test\docs\formContext-ui-formSelector\getId.md" />
     <Content Include="test\docs\formContext-ui-formSelector\getLabel.md" />

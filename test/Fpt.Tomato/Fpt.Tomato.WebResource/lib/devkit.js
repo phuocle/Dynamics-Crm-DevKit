@@ -8,15 +8,17 @@ var devKit = (function () {
         var form = {};
         if (formContext.data) {
             var contextData = formContext.data;
-            Object.defineProperty(form, "IsDirty", { get: function () { return contextData.getIsDirty(); } });
-            Object.defineProperty(form, "IsValid", { get: function () { return contextData.isValid(); } });
-            form.AddOnLoad = function (callback) { contextData.addOnLoad(callback); };
+            form.AddOnLoad = function (callback) { contextData.addOnLoad(callback); };            
+            Object.defineProperty(form, "DataIsDirty", { get: function () { return contextData.getIsDirty(); } });
+            Object.defineProperty(form, "DataIsValid", { get: function () { return contextData.isValid(); } });            
             form.Refresh = function (save, successCallback, errorCallback) { contextData.refresh(save).then(successCallback, errorCallback); };
             form.RemoveOnLoad = function (callback) { contextData.removeOnLoad(callback); };
             form.Save = function (saveOptions, successCallback, errorCallback) { contextData.save(saveOptions).then(successCallback, errorCallback); };
         }
         if (formContext.data && formContext.data.entity) {
             var contextDataEntity = formContext.data.entity;
+            Object.defineProperty(form, "Attributes", { get: function () { return contextDataEntity.attributes; } });
+            form.AddOnSave = function (callback) { contextDataEntity.addOnSave(callback); };
             Object.defineProperty(form, "DataXml", { get: function () { return contextDataEntity.getDataXml(); } });
             Object.defineProperty(form, "EntityName", { get: function () { return contextDataEntity.getEntityName(); } });
             Object.defineProperty(form, "EntityReference", { get: function () { return contextDataEntity.getEntityReference(); } });
@@ -24,8 +26,6 @@ var devKit = (function () {
             Object.defineProperty(form, "EntityIsDirty", { get: function () { return contextDataEntity.getIsDirty(); } });
             Object.defineProperty(form, "PrimaryAttributeValue", { get: function () { return contextDataEntity.getPrimaryAttributeValue(); } });
             Object.defineProperty(form, "EntityIsValid", { get: function () { return contextDataEntity.isValid(); } });
-            Object.defineProperty(form, "Attributes", { get: function () { return contextDataEntity.attributes; } });
-            form.AddOnSave = function (callback) { contextDataEntity.addOnSave(callback); };
             form.RemoveOnSave = function (callback) { contextDataEntity.removeOnSave(callback); };
             form.EntitySave = function (saveOption) { contextDataEntity.save(saveOption); };
         }

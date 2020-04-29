@@ -5,8 +5,8 @@
 ///<reference path='../node_modules/@types/jasmine/index.d.ts' />
 // @ts-ignore
 define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @type {sinon} */_sinon) {
+    /*
     describe('devkit_WebApi.test.js Test', function () {
-
         beforeEach(function () {
             var XrmMockGenerator = _xrm_mock.XrmMockGenerator.initialise();
             XrmMockGenerator.Panel = new _xrm_mock.PanelMock();
@@ -418,5 +418,48 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             var form = new Tomato.FormWebApi(executionContext);
             expect(() => { form.Body.devkit_SingleLineofTextUrl.Value }).toThrow(new Error("field: devkit_singlelineoftexturl removed on form"));
         });
+    });
+    */
+
+    //copy "C:\src\github\phuocle\xrm-mock\build\index.js" "C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Fpt.Tomato\Fpt.Tomato.WebResource\node_modules\xrm-mock\build\index.js"
+
+    describe('loadForm(formContext)', () => {
+        beforeEach(function () {
+            var XrmMockGenerator = _xrm_mock.XrmMockGenerator.initialise();
+            XrmMockGenerator.Panel = new _xrm_mock.PanelMock();
+            XrmMockGenerator.Encoding = new _xrm_mock.EncodingMock();
+            XrmMockGenerator.Device = new _xrm_mock.DeviceMock();
+            XrmMockGenerator.Navigation = new _xrm_mock.NavigationStaticMock();
+        });
+        it('formContext.data', () => {
+            var attributes = new _xrm_mock.ItemCollectionMock([
+                new _xrm_mock.AttributeMock({
+                    name: "devkiit_name",
+                    isDirty: true
+                })
+            ]);
+            var entity = new _xrm_mock.EntityMock({
+                attributes: attributes
+            });
+            var data = new _xrm_mock.DataMock(entity);
+            var ui = new _xrm_mock.UiMock({});
+            _xrm_mock.XrmMockGenerator.formContext = new _xrm_mock.FormContextMock(data, ui);
+
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+
+            var form = new Tomato.FormWebApi(executionContext);
+            expect(data.loadEventHandlers.length).toBe(0);
+            var fun1 = function (executionContext) { };
+            var fun2 = function (executionContext) { };
+            form.AddOnLoad(fun1);
+            form.AddOnLoad(fun2);
+            expect(data.loadEventHandlers.length).toBe(2);
+            expect(() => { form.DataIsDirty }).toThrow(new Error("getIsDirty not implemented"));
+            expect(() => { form.DataIsValid }).toThrow(new Error("isValid not implemented"));
+            expect(() => { form.Refresh(null); }).toThrow(new Error("refresh not implemented"));
+            form.RemoveOnLoad(fun2);
+            expect(data.loadEventHandlers.length).toBe(1);
+            expect(() => { form.Save(null); }).toThrow(new Error("save not implemented"));
+        })
     });
 });
