@@ -558,5 +558,36 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(form.ClearFormNotification("KEY")).toBeTruthy();
             //===========================================================================================================================
         });
+        it('formContext.ui.formSelector', () => {
+            var attributes = new _xrm_mock.ItemCollectionMock([
+                new _xrm_mock.AttributeMock({
+                    name: "devkiit_name",
+                    isDirty: true
+                })
+            ]);
+            var entity = new _xrm_mock.EntityMock({
+                attributes: attributes
+            });
+            var data = new _xrm_mock.DataMock(entity);
+            var formSelector = new _xrm_mock.FormSelectorMock(
+                new _xrm_mock.ItemCollectionMock([
+                    new _xrm_mock.FormItemMock({
+                        label: "DEVKIT WEBAPI FORM",
+                        id: "devkit_webapi_form_id",
+                        formType: 2,
+                        currentItem: true
+                    })
+                ])
+            );
+            var ui = new _xrm_mock.UiMock({ formSelector: formSelector });
+            _xrm_mock.XrmMockGenerator.formContext = new _xrm_mock.FormContextMock(data, ui);
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormWebApi(executionContext);
+            //===========================================================================================================================
+            expect(form.FormId).toBe("devkit_webapi_form_id");
+            expect(form.FormLabel).toBe("DEVKIT WEBAPI FORM");
+            expect(() => { form.FormNavigate("devkit_webapi_form_id") }).toThrow(new Error("Form navigation not implemented."));
+            //Visible set and get
+        });
     });
 });
