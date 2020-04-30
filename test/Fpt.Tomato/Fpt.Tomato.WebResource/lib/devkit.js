@@ -8,11 +8,11 @@ var devKit = (function () {
         var form = {};
         if (formContext.data) {
             var contextData = formContext.data;
-            form.AddOnLoad = function (callback) { contextData.addOnLoad(callback); };            
+            form.DataAddOnLoad = function (callback) { contextData.addOnLoad(callback); };            
             Object.defineProperty(form, "DataIsDirty", { get: function () { return contextData.getIsDirty(); } });
             Object.defineProperty(form, "DataIsValid", { get: function () { return contextData.isValid(); } });            
             form.Refresh = function (save, successCallback, errorCallback) { contextData.refresh(save).then(successCallback, errorCallback); };
-            form.RemoveOnLoad = function (callback) { contextData.removeOnLoad(callback); };
+            form.DataRemoveOnLoad = function (callback) { contextData.removeOnLoad(callback); };
             form.Save = function (saveOptions, successCallback, errorCallback) { contextData.save(saveOptions).then(successCallback, errorCallback); };
         }
         if (formContext.data && formContext.data.entity) {
@@ -31,13 +31,16 @@ var devKit = (function () {
         }
         if (formContext.ui) {
             var contextUi = formContext.ui;
+            Object.defineProperty(form, "Controls", { get: function () { return contextUi.controls; } });
+            form.UiAddOnLoad = function (callback) { contextUi.addOnLoad(callback); };
+            form.ClearFormNotification = function (uniqueId) { return contextUi.clearFormNotification(uniqueId); };
+            form.Close = function () { contextUi.close(); };
             Object.defineProperty(form, "FormType", { get: function () { return contextUi.getFormType(); } });
             Object.defineProperty(form, "ViewPortHeight", { get: function () { return contextUi.getViewPortHeight(); } });
             Object.defineProperty(form, "ViewPortWidth", { get: function () { return contextUi.getViewPortWidth(); } });
-            Object.defineProperty(form, "Controls", { get: function () { return contextUi.controls; } });
-            form.ClearFormNotification = function (uniqueId) { return contextUi.clearFormNotification(uniqueId); };
-            form.Close = function () { contextUi.close(); };
             form.RefreshRibbon = function (refreshAll) { contextUi.refreshRibbon(refreshAll); };
+            form.UiRemoveOnLoad = function (callback) { contextUi.removeOnLoad(callback); };
+            form.SetFormEntityName = function (arg) { contextUi.setFormEntityName(arg); };
             form.SetFormNotification = function (message, level, uniqueId) { return contextUi.setFormNotification(message, level, uniqueId); };
         }
         if (formContext.ui && formContext.ui.formSelector) {

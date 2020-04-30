@@ -450,13 +450,13 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(data.loadEventHandlers.length).toBe(0);
             var fun1 = function (executionContext) { };
             var fun2 = function (executionContext) { };
-            form.AddOnLoad(fun1);
-            form.AddOnLoad(fun2);
+            form.DataAddOnLoad(fun1);
+            form.DataAddOnLoad(fun2);
             expect(data.loadEventHandlers.length).toBe(2);
             expect(() => { form.DataIsDirty }).toThrow(new Error("getIsDirty not implemented"));
             expect(() => { form.DataIsValid }).toThrow(new Error("isValid not implemented"));
             expect(() => { form.Refresh(null); }).toThrow(new Error("refresh not implemented"));
-            form.RemoveOnLoad(fun2);
+            form.DataRemoveOnLoad(fun2);
             expect(data.loadEventHandlers.length).toBe(1);
             expect(() => { form.Save(null); }).toThrow(new Error("save not implemented"));
             //===========================================================================================================================
@@ -492,6 +492,8 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             item3.setValue("CCC");
             expect(executionContext.getAttribute("devkit_name").getValue()).toBe("CCC");
             expect(entity.saveEventHandlers.length).toBe(0);
+            var item4 = form.Attributes.get((i) => { return i.getValue() === "CCC"; });
+            expect(item4).toBeDefined();
             var fun1 = function (executionContext) { };
             var fun2 = function (executionContext) { };
             form.AddOnSave(fun1);
@@ -510,6 +512,50 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             form.RemoveOnSave(fun2);
             expect(entity.saveEventHandlers.length).toBe(1);
             expect(form.EntitySave(OptionSet.SaveOption.SaveAndClose)).toBeUndefined();
+            //===========================================================================================================================
+        });
+        it('formContext.ui', () => {
+            var attributes = new _xrm_mock.ItemCollectionMock([
+                new _xrm_mock.AttributeMock({
+                    name: "devkiit_name",
+                    isDirty: true
+                })
+            ]);
+            var entity = new _xrm_mock.EntityMock({
+                attributes: attributes
+            });
+            var data = new _xrm_mock.DataMock(entity);
+            var formSelector = new _xrm_mock.FormSelectorMock(
+                new _xrm_mock.ItemCollectionMock([
+                    new _xrm_mock.FormItemMock({
+                        label: "DEVKIT WEBAPI FORM",
+                        id: "devkit_webapi_form_id",
+                        formType: 2,
+                        currentItem: true
+                    })
+                ])
+            );
+            var ui = new _xrm_mock.UiMock({ formSelector: formSelector });
+            _xrm_mock.XrmMockGenerator.formContext = new _xrm_mock.FormContextMock(data, ui);
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormWebApi(executionContext);
+            //===========================================================================================================================
+            expect(form.Controls.getLength()).toBe(0);
+            //expect(form.UiAddOnLoad(null)).toBeDefined();
+            expect(form.ClearFormNotification("AAA")).toBeFalsy();
+            expect(() => { form.Close(); }).toThrow(new Error("close not implemented"));
+            expect(form.FormType).toBe(OptionSet.FormType.Update);
+            expect(() => { form.ViewPortHeight }).toThrow(new Error("getViewPortHeight not implemented"));
+            expect(() => { form.ViewPortWidth }).toThrow(new Error("getViewPortWidth not implemented"));
+            expect(() => { form.RefreshRibbon() }).toThrow(new Error("refreshRibbon not implemented"));
+            //form.UiRemoveOnLoad
+            //setFormEntityName
+            expect(form.SetFormNotification("AAA", OptionSet.FormNotificationLevel.Error, "KEY")).toBeTruthy();
+            expect(ui.formNotifications.length).toBe(1);
+            expect(ui.formNotifications[0].level).toBe("ERROR");
+            expect(ui.formNotifications[0].message).toBe("AAA");
+            expect(ui.formNotifications[0].uniqueId).toBe("KEY");
+            expect(form.ClearFormNotification("KEY")).toBeTruthy();
             //===========================================================================================================================
         });
     });

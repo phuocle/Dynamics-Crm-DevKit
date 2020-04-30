@@ -1737,7 +1737,13 @@ declare namespace DevKit {
             * @param successCallback The function to be executed when the form data loads. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/addonload
             */
-            AddOnLoad(successCallback: (executionContext: any) => void): void;
+            DataAddOnLoad(successCallback: (executionContext: any) => void): void;
+            /**
+            * Adds a function to be called on the form OnLoad event.
+            * @param successCallback The function to be executed on the form OnLoad event. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui/addonload
+            */
+            UiAddOnLoad(successCallback: (executionContext: any) => void): void;
             /**
              *  The Attributes collections of form Account
              *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes
@@ -1856,7 +1862,13 @@ declare namespace DevKit {
              * @param myFunction The function to be removed when the form data loads.
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/removeonload
              */
-            RemoveOnLoad(myFunction: () => void): void;
+            DataRemoveOnLoad(myFunction: () => void): void;
+            /**
+             * Removes a function from the form OnLoad event.
+             * @param myFunction The function to be removed from the form OnLoad event.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeonload
+             */
+            UiRemoveOnLoad(myFunction: () => void): void;
             /**
              * Saves the record asynchronously with the option to set callback functions to be executed after the save operation is completed. You can also set an object to control how appointment, recurring appointment, or service activity records are processed
              * @param saveOption An object for specifying options for saving the record
