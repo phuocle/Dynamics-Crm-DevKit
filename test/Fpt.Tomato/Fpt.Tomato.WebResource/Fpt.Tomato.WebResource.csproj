@@ -163,14 +163,14 @@
     <Content Include="test\docs\controls\getContentWindow.md" />
     <Content Include="test\docs\controls\getControl.md" />
     <Content Include="test\docs\controls\_getControlType.md" />
-    <Content Include="test\docs\controls\getData.md" />
+    <Content Include="test\docs\controls\remove_getData.md" />
     <Content Include="test\docs\controls\_getDefaultView.md" />
     <Content Include="test\docs\controls\_getDisabled.md" />
     <Content Include="test\docs\controls\_getEntityTypes.md" />
     <Content Include="test\docs\controls\getInitialUrl.md" />
     <Content Include="test\docs\controls\_getLabel.md" />
     <Content Include="test\docs\controls\getName.md" />
-    <Content Include="test\docs\controls\getObject.md" />
+    <Content Include="test\docs\controls\remove_getObject.md" />
     <Content Include="test\docs\controls\getOptions.md" />
     <Content Include="test\docs\controls\getParent.md" />
     <Content Include="test\docs\controls\getSearchQuery.md" />
@@ -189,7 +189,7 @@
     <Content Include="test\docs\controls\removeOnSelection.md" />
     <Content Include="test\docs\controls\_removeOption.md" />
     <Content Include="test\docs\controls\removePreSearch.md" />
-    <Content Include="test\docs\controls\setData.md" />
+    <Content Include="test\docs\controls\remove_setData.md" />
     <Content Include="test\docs\controls\_setDefaultView.md" />
     <Content Include="test\docs\controls\_setDisabled.md" />
     <Content Include="test\docs\controls\_setEntityTypes.md" />
@@ -248,7 +248,7 @@
     <Content Include="test\docs\formContext-data-entity\includes\save-description.md" />
     <Content Include="test\docs\formContext-data-entity\_isValid.md" />
     <Content Include="test\docs\formContext-data-entity\_removeOnSave.md" />
-    <Content Include="test\docs\formContext-data-entity\_save.md" />
+    <Content Include="test\docs\formContext-data-entity\remove_save.md" />
     <Content Include="test\docs\formContext-data-process.md" />
     <Content Include="test\docs\formContext-data-process\activepath\getActivePath.md" />
     <Content Include="test\docs\formContext-data-process\activepath\includes\getActivePath-description.md" />

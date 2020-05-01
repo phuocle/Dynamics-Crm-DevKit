@@ -458,7 +458,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(() => { form.Refresh(null); }).toThrow(new Error("refresh not implemented"));
             form.DataRemoveOnLoad(fun2);
             expect(data.loadEventHandlers.length).toBe(1);
-            expect(() => { form.Save(null); }).toThrow(new Error("save not implemented"));
+            expect(() => { form.Save(null, null, null); }).toThrow(new Error("save not implemented"));
             //===========================================================================================================================
         })
         it('formContext.data.entity', () => {
@@ -511,7 +511,6 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(() => { form.EntityIsValid; }).toThrow(new Error("isValid not implemented."));
             form.RemoveOnSave(fun2);
             expect(entity.saveEventHandlers.length).toBe(1);
-            expect(form.EntitySave(OptionSet.SaveOption.SaveAndClose)).toBeUndefined();
             //===========================================================================================================================
         });
         it('formContext.ui', () => {
@@ -586,8 +585,9 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             //===========================================================================================================================
             expect(form.FormId).toBe("devkit_webapi_form_id");
             expect(form.FormLabel).toBe("DEVKIT WEBAPI FORM");
-            expect(() => { form.FormNavigate("devkit_webapi_form_id") }).toThrow(new Error("Form navigation not implemented."));
-            //Visible set and get
+            expect(() => { form.FormNavigate(0) }).toThrow(new Error("Form navigation not implemented."));
+            expect(() => { form.FormIsVisible(0) }).toThrow(new Error("getVisible not implemented."));
+            expect(() => { form.FormSetVisible(0, null) }).toThrow(new Error("setVisibles not implemented."));
         });
     });
 });

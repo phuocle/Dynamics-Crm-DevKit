@@ -1796,12 +1796,6 @@ declare namespace DevKit {
              */
             readonly EntityReference: DevKit.Core.EntityReference;
             /**
-             * Saves the record synchronously with the options to close the form or open a new form after the save is completed
-             * @param saveOption Specify options for saving the record
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/save
-             */
-            EntitySave(saveOption: OptionSet.SaveOption): void;
-            /**
              * Returns the ID of the form
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-formselector/getid
              */
@@ -1817,6 +1811,18 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-formselector/navigate
              */
             FormNavigate(formId: string): void;
+            /**
+             * Returns a value that indicates whether the form is currently visible.
+             * @param formId The form Id that you want to check visible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getvisible
+             */
+            FormIsVisible(formId: string): boolean;
+            /**
+             * Sets a value that indicates whether the form is visible.
+             * @param formId The form Id that you want to set visible
+             * @param value Specify true to show the form; false to hide the form.
+             */
+            FormSetVisible(formId: string, value: boolean): void;
             /**
              * Gets the form type for the record
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/getformtype

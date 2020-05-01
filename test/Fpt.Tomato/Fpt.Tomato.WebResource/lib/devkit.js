@@ -27,7 +27,6 @@ var devKit = (function () {
             Object.defineProperty(form, "PrimaryAttributeValue", { get: function () { return contextDataEntity.getPrimaryAttributeValue(); } });
             Object.defineProperty(form, "EntityIsValid", { get: function () { return contextDataEntity.isValid(); } });
             form.RemoveOnSave = function (callback) { contextDataEntity.removeOnSave(callback); };
-            form.EntitySave = function (saveOption) { contextDataEntity.save(saveOption); };
         }
         if (formContext.ui) {
             var contextUi = formContext.ui;
@@ -48,6 +47,8 @@ var devKit = (function () {
             Object.defineProperty(form, "FormId", { get: function () { return contextUiFormSelector.getCurrentItem().getId(); } });
             Object.defineProperty(form, "FormLabel", { get: function () { return contextUiFormSelector.getCurrentItem().getLabel(); } });
             form.FormNavigate = function (formId) { contextUiFormSelector.items.get(formId).navigate(); };
+            form.FormIsVisible = function (formId) { return contextUiFormSelector.items.get(formId).getVisible(); }
+            form.FormSetVisible = function (formId, value) { contextUiFormSelector.items.get(formId).setVisible(value); }
         }
         return form;
     }
