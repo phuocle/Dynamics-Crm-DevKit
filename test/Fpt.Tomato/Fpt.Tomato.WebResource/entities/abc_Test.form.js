@@ -17,7 +17,11 @@ var Tomato;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			abc_All: {},
-			abc_All_1: {}
+			abc_All_1: {},
+			abc_Boolean: {},
+			abc_Lookup: {},
+			abc_OptionSetCode: {},
+			abc_FloatingPointNumber: {}
 		};
 		devKit.LoadFields(formContext, body);
 

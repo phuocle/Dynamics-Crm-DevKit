@@ -190,6 +190,10 @@ declare namespace Tomato {
 			Tab: Tabs;
 			abc_All: DevKit.Form.Controls.ControlString;
 			abc_All_1: DevKit.Form.Controls.ControlString;
+			abc_Boolean: DevKit.Form.Controls.ControlBoolean;
+			abc_Lookup: DevKit.Form.Controls.ControlLookup;
+			abc_OptionSetCode: DevKit.Form.Controls.ControlOptionSet;
+			abc_FloatingPointNumber: DevKit.Form.Controls.ControlDouble
 		}
 		interface Footer {
 			/** Unique identifier of the user who created the record. */

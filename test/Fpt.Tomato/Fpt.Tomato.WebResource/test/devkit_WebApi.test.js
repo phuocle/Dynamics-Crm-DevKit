@@ -590,7 +590,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(() => { form.FormSetVisible(0, null) }).toThrow(new Error("setVisible not implemented."));
         });
     });
-    describe('Properties & Methods for all atributes/controls', () => {
+    describe('Atributes', () => {
         beforeEach(function () {
             var XrmMockGenerator = _xrm_mock.XrmMockGenerator.initialise();
             XrmMockGenerator.Panel = new _xrm_mock.PanelMock();
@@ -598,7 +598,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             XrmMockGenerator.Device = new _xrm_mock.DeviceMock();
             XrmMockGenerator.Navigation = new _xrm_mock.NavigationStaticMock();
         });
-        it('Properties & Methods for attributes', () => {
+        it('All attribute types', () => {
             _xrm_mock.XrmMockGenerator.Attribute.createString({
                 attributeType: "string",
                 format: "text",
@@ -649,7 +649,107 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(form.Body.abc_All.Value).toBe("ABC ALL VALUE NEW");
             expect(() => { form.Body.abc_All.SetIsValid(null, null); }).toThrow(new Error("setIsValid not implemented"));
         });
-        it('Properties & Methods for controls standard', () => {
+        it('Boolean attribute type', () => {
+            _xrm_mock.XrmMockGenerator.Attribute.createBoolean({
+                name: "abc_boolean",
+                initialValue: true
+            });
+
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+            expect(form.Body.abc_Boolean.InitialValue).toBeTruthy();
+        });
+        it('Lookup attribute type', () => {
+            var lookup = _xrm_mock.XrmMockGenerator.Control.createLookup(new _xrm_mock.LookupControlMock({
+                name: "abc_lookup",
+                attribute: new _xrm_mock.LookupAttributeMock({
+                    name: "abc_lookup",
+                    isPartyList: true
+                })
+            }));
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(form.Body.abc_Lookup.IsPartyList).toBeTruthy();
+        });
+        it('MultiSelectOptionSet and OptionSet attribute types', () => {
+            _xrm_mock.XrmMockGenerator.Attribute.createOptionSet({
+                name: "abc_optionsetcode",
+                initialValue: 100000001,
+                options: [
+                    { text: "Value 1", value: 100000000 },
+                    { text: "Value 2", value: 100000001 },
+                    { text: "Value 3", value: 100000002 },
+                    { text: "Value 4", value: 100000003 },
+                    { text: "Value 5", value: 100000004 },
+                    { text: "Value 6", value: 100000005 }
+                ],
+                value: 100000001
+            },
+                {
+                    name: "abc_optionsetcode",
+                    options: [
+                        { text: "Value 1", value: 100000000 },
+                        { text: "Value 2", value: 100000001 },
+                        { text: "Value 3", value: 100000002 },
+                        { text: "Value 4", value: 100000003 },
+                        { text: "Value 5", value: 100000004 },
+                        { text: "Value 6", value: 100000005 }
+                    ]
+                }
+            );
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(form.Body.abc_OptionSetCode.InitialValue).toBe(OptionSet.abc_Test.abc_OptionSetCode.Value_2);
+            var option = form.Body.abc_OptionSetCode.Option("Value 6");
+            expect(option.text).toBe("Value 6");
+            expect(option.value).toBe(100000005);
+            expect(form.Body.abc_OptionSetCode.Options.length).toBe(6);
+            expect(form.Body.abc_OptionSetCode.Options[0].text).toBe("Value 1");
+            expect(form.Body.abc_OptionSetCode.Options[0].value).toBe(100000000);
+            var selectedOption = form.Body.abc_OptionSetCode.SelectedOption;
+            expect(selectedOption.text).toBe("Value 2");
+            expect(selectedOption.value).toBe(100000001);
+            expect(form.Body.abc_OptionSetCode.Text).toBe("Value 2");
+        });
+        it('Number attribute type (decimal, double, integer, money)', () => {
+            _xrm_mock.XrmMockGenerator.Attribute.createNumber({
+                name: "abc_floatingpointnumber",
+                max: 123.78,
+                min: 12.84,
+                precision: 2,
+            });
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(form.Body.abc_FloatingPointNumber.Max).toBe(123.78);
+            expect(form.Body.abc_FloatingPointNumber.Min).toBe(12.84);
+            expect(form.Body.abc_FloatingPointNumber.Precision).toBe(2);
+            form.Body.abc_FloatingPointNumber.Precision = 1;
+            expect(form.Body.abc_FloatingPointNumber.Precision).toBe(1);
+        });
+        it('String attribute type', () => {
+            _xrm_mock.XrmMockGenerator.Attribute.createString({
+                attributeType: "string",
+                name: "abc_all",
+                maxLength: 100
+            });
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(form.Body.abc_All.MaxLength).toBe(100);
+        });
+    });
+    describe('Controls', () => {
+        beforeEach(function () {
+            var XrmMockGenerator = _xrm_mock.XrmMockGenerator.initialise();
+            XrmMockGenerator.Panel = new _xrm_mock.PanelMock();
+            XrmMockGenerator.Encoding = new _xrm_mock.EncodingMock();
+            XrmMockGenerator.Device = new _xrm_mock.DeviceMock();
+            XrmMockGenerator.Navigation = new _xrm_mock.NavigationStaticMock();
+        });
+        it('standard control type', () => {
             _xrm_mock.XrmMockGenerator.Attribute.createString({
                 attributeType: "string",
                 format: "text",
@@ -699,6 +799,160 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(() => { form.Body.abc_All.SetNotification("ABC", "ABC") }).toThrow(new Error("set notification not implemented"));
             form.Body.abc_All.Visible = false;
             expect(form.Body.abc_All.Visible).toBeFalsy();
+        });
+        it('iframe control type', () => {
+            expect(true).toBeTruthy();
+        });
+        it('kbsearch (Knowledge base search) control type', () => {
+            expect(true).toBeTruthy();
+        });
+        it('lookup control type', () => {
+            var lookup = _xrm_mock.XrmMockGenerator.Control.createLookup(new _xrm_mock.LookupControlMock({
+                name: "abc_lookup",
+                attribute: new _xrm_mock.LookupAttributeMock({
+                    name: "abc_lookup",
+                    isPartyList: true,
+                    value: [new _xrm_mock.LookupValueMock("id", "abc_test2", "name")]
+                }),
+                views: [
+                    {
+                        entityName: "abc_test2",
+                        fetchXml: "<fetchxml/>",
+                        layoutXml: "<layoutxml/>",
+                        viewDisplayName: "Lookup Test2",
+                        viewId: "DefaultViewId",
+                        isDefault: true
+                    },
+                    {
+                        entityName: "abc_test2",
+                        fetchXml: "<fetchxml2/>",
+                        layoutXml: "<layoutxml2/>",
+                        viewDisplayName: "Lookup Test2 2",
+                        viewId: "DefaultViewId2",
+                        isDefault: false
+                    }
+                ],
+                disabled: false,
+                label: "LOOKUP LABEL",
+                visible: true
+            }));
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(lookup.filters.length).toBe(0);
+            var abc_LookupAddPreSearch = () => {
+                var filter = `
+<filter type="and">
+    <condition attribute="abc_name" operator="eq" value="ABC" />
+</filter>
+`;
+                var form = new Tomato.FormTest(executionContext);
+                form.Body.abc_Lookup.AddCustomFilter(filter, "abc_test");
+            }
+            form.Body.abc_Lookup.AddPreSearch(abc_LookupAddPreSearch);
+            abc_LookupAddPreSearch();
+            expect(lookup.filters.length).toBe(1);
+            expect(lookup.views.length).toBe(2);
+            form.Body.abc_Lookup.AddCustomView("viewid", "enttiyName", "viewDisplayName", "fetchXml", "layoutXml", false);
+            expect(lookup.views.length).toBe(3);
+            expect(() => { form.Body.abc_Lookup.AddNotification(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.abc_Lookup.AddOnLookupTagClick(null); }).toThrow(new Error("addOnLookupTagClick not implemented"))
+            expect(() => { form.Body.abc_Lookup.ClearNotification("uniqueId") }).toThrow(new Error("clear notification not implemented"));
+            expect(form.Body.abc_Lookup.Attribute).toBeDefined();
+            expect(form.Body.abc_Lookup.ControlType).toBe(OptionSet.FieldControlType.Lookup);
+            expect(form.Body.abc_Lookup.DefaultView).toBe("DefaultViewId");
+            expect(form.Body.abc_Lookup.Disabled).toBeFalsy();
+            expect(() => { form.Body.abc_Lookup.EntityTypes }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.abc_Lookup.Label).toBe("LOOKUP LABEL");
+            expect(form.Body.abc_Lookup.ControlName).toBe("abc_lookup");
+            expect(form.Body.abc_Lookup.ControlParent).toBeUndefined();
+            expect(form.Body.abc_Lookup.Visible).toBeTruthy();
+            expect(() => { form.Body.abc_Lookup.RemoveOnLookupTagClick(null); }).toThrow(new Error("removeOnLookupTagClick not implemented"))
+            expect(() => { form.Body.abc_Lookup.RemovePreSearch(abc_LookupAddPreSearch) }).toThrow(new Error("remove presearch not implemented"));
+            form.Body.abc_Lookup.DefaultView = "DefaultViewId2";
+            expect(form.Body.abc_Lookup.DefaultView).toBe("DefaultViewId2");
+            form.Body.abc_Lookup.Disabled = true;
+            expect(form.Body.abc_Lookup.Disabled).toBeTruthy();
+            expect(() => { form.Body.abc_Lookup.EntityTypes = ["account"] }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.abc_Lookup.Focus()).toBeUndefined();
+            form.Body.abc_Lookup.Label = "LOOKUP LABEL NEW";
+            expect(form.Body.abc_Lookup.Label).toBe("LOOKUP LABEL NEW");
+            expect(() => { form.Body.abc_Lookup.SetNotification("ABC", "ABC") }).toThrow(new Error("set notification not implemented"));
+            form.Body.abc_Lookup.Visible = false;
+            expect(form.Body.abc_Lookup.Visible).toBeFalsy();
+        });
+        it('multiselectoptionset and optionset control types', () => {
+            var optionSet = _xrm_mock.XrmMockGenerator.Control.createOptionSet({
+                name: "abc_optionsetcode",
+                disabled: true,
+                label: "OPTIONSET LABEL",
+                visible: true,
+                attribute: new _xrm_mock.OptionSetAttributeMock({
+                    name: "abc_optionsetcode",
+                    options: [
+                        { text: "Value 1", value: 100000000 },
+                        { text: "Value 2", value: 100000001 },
+                        { text: "Value 3", value: 100000002 },
+                        { text: "Value 4", value: 100000003 },
+                        { text: "Value 5", value: 100000004 },
+                        { text: "Value 6", value: 100000005 }
+                    ]
+                }),
+                options: [
+                        { text: "Value 1", value: 100000000 },
+                        { text: "Value 2", value: 100000001 },
+                        { text: "Value 3", value: 100000002 },
+                        { text: "Value 4", value: 100000003 },
+                        { text: "Value 5", value: 100000004 },
+                        { text: "Value 6", value: 100000005 }
+                ]
+            });
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(() => { form.Body.abc_OptionSetCode.AddNotification(null) }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.abc_OptionSetCode.Options.length).toBe(6);
+            expect(form.Body.abc_OptionSetCode.AddOption("Value 7", 100000006, 6)).toBeUndefined();
+            expect(form.Body.abc_OptionSetCode.ControlOptions.length).toBe(7);
+            expect(() => { form.Body.abc_OptionSetCode.ClearNotification("uniqueId") }).toThrow(new Error("clear notification not implemented"));
+            expect(form.Body.abc_OptionSetCode.ClearOptions()).toBeUndefined();
+            expect(form.Body.abc_OptionSetCode.ControlOptions.length).toBe(0);
+            expect(form.Body.abc_OptionSetCode.Attribute).toBeDefined();
+            expect(form.Body.abc_OptionSetCode.ControlType).toBe(OptionSet.FieldControlType.OptionSet);
+            expect(form.Body.abc_OptionSetCode.Disabled).toBeTruthy();
+            expect(form.Body.abc_OptionSetCode.Label).toBe("OPTIONSET LABEL");
+            expect(form.Body.abc_OptionSetCode.ControlName).toBe("abc_optionsetcode");
+            expect(form.Body.abc_OptionSetCode.ControlParent).toBeUndefined();
+            expect(form.Body.abc_OptionSetCode.Visible).toBeTruthy();
+            form.Body.abc_OptionSetCode.AddOption("A", 1, 0);
+            form.Body.abc_OptionSetCode.AddOption("B", 2, 0);
+            form.Body.abc_OptionSetCode.AddOption("C", 3, 0);
+            expect(form.Body.abc_OptionSetCode.ControlOptions.length).toBe(3);
+            expect(form.Body.abc_OptionSetCode.RemoveOption(1));
+            expect(form.Body.abc_OptionSetCode.ControlOptions.length).toBe(2);
+            form.Body.abc_OptionSetCode.Disabled = false;
+            expect(form.Body.abc_OptionSetCode.Disabled).toBeFalsy();
+            expect(form.Body.abc_OptionSetCode.Focus()).toBeUndefined();
+            form.Body.abc_OptionSetCode.Label = "OPTIONSET LABEL NEW";
+            expect(form.Body.abc_OptionSetCode.Label).toBe("OPTIONSET LABEL NEW");
+            expect(() => { form.Body.abc_OptionSetCode.SetNotification("ABC", "ABC") }).toThrow(new Error("set notification not implemented"));
+            form.Body.abc_OptionSetCode.Visible = false;
+            expect(form.Body.abc_OptionSetCode.Visible).toBeFalsy();
+        });
+        it('quickform control type', () => {
+            expect(true).toBeTruthy();
+        });
+        it('subgrid control type', () => {
+            expect(true).toBeTruthy();
+        });
+        it('timelinewall control type', () => {
+            expect(true).toBeTruthy();
+        });
+        it('timer control type', () => {
+            expect(true).toBeTruthy();
+        });
+        it('webresource control type', () => {
+            expect(true).toBeTruthy();
         });
     });
 });

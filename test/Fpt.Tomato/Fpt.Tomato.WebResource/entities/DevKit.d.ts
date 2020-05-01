@@ -1313,6 +1313,11 @@ declare namespace DevKit {
                  */
                 readonly Options: Array<DevKit.Core.TextValueNumber>;
                 /**
+                 * Returns an array of option objects representing valid options available for a control, including a blank option and excluding any options that have been removed from the control using removeOption.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getoptions
+                */
+                readonly ControlOptions: Array<DevKit.Core.TextValueNumber>;
+                /**
                  * Returns a string value of the text for the currently selected option for an optionset or multiselectoptionset attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/gettext
                  */
@@ -1324,7 +1329,7 @@ declare namespace DevKit {
                  * @param index The index position to place the new option in. If not provided, the option will be added to the end
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addoption
                  */
-                AddOption(text: string, value: number, index: number): void;
+                AddOption(text: string, value: number, index?: number): void;
                 /**
                  * Clears all options from a control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearoptions

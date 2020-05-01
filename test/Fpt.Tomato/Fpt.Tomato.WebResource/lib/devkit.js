@@ -166,6 +166,7 @@ var devKit = (function () {
         Object.defineProperty(body[field], "Min", { get: function () { return attribute.getMin(); } });//TESTED
         Object.defineProperty(body[field], "AttributeName", { get: function () { return attribute.getName(); } });//TESTED
         Object.defineProperty(body[field], "Options", { get: function () { return attribute.getOptions(); } });//TESTED
+        Object.defineProperty(body[field], "ControlOptions", { get: function () { return control.getOptions(); } });//TESTED
         Object.defineProperty(body[field], "AttributeParent", { get: function () { return attribute.getParent(); } });
         Object.defineProperty(body[field], "SelectedOption", { get: function () { return attribute.getSelectedOption(); } });//TESTED
         Object.defineProperty(body[field], "Text", { get: function () { return attribute.getText(); } });//TESTED
@@ -245,7 +246,7 @@ var devKit = (function () {
         body[field].AddOnSelection = function (callback) { control.addOnSelection(callback); };
         body[field].AddPreSearch = function (callback) { control.addPreSearch(callback); };//TESTED
         body[field].ClearNotification = function (uniqueId) { return control.clearNotification(uniqueId); };//TESTED
-        body[field].ClearOptions = function () { return control.clearOptions(); };//TESTED
+        body[field].ClearOptions = function () { control.clearOptions(); };//TESTED
         body[field].AddOnChange = function (callback) { attribute.addOnChange(callback); };//TESTED
         body[field].FireOnChange = function () { attribute.fireOnChange(); };//TESTED
         body[field].OpenSearchResult = function (resultNumber, mode) { return control.openSearchResult(resultNumber, mode); };
