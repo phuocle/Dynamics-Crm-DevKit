@@ -527,7 +527,7 @@ declare namespace DevKit {
         }
         interface FieldNotification {
             /** A collection of objects */
-            actions: Array<FieldNotificationAction>;
+            actions?: Array<FieldNotificationAction>;
             /** The message to display in the notification. In the current release, only the first message specified in this array will be displayed. The string that you specify here appears as bold text in the notification, and is typically used for title or subject of the notification. You should limit your message to 50 characters for optimal user experience */
             messages: Array<string>;
             /** Defines the type of notification */
@@ -537,9 +537,9 @@ declare namespace DevKit {
         }
         interface FieldNotificationAction {
             /** The body message of the notification to be displayed to the user. Limit your message to 100 characters for optimal user experience */
-            message: string;
+            message?: string;
             /** Array of functions. The corresponding actions for the message */
-            actions: Array<any>;
+            actions?: Array<any>;
         }
         interface ProcessStage {
             /**
@@ -975,6 +975,11 @@ declare namespace DevKit {
         namespace Controls {
             interface IControl {
                 /**
+                 * Returns the attribute that the control is bound to. Controls that aren’t bound to an attribute (subgrid, web resource, and IFRAME) don’t have this method. An error will be thrown if you attempt to use this method on one of these controls.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getattribute
+                 * */
+                readonly Attribute: any
+                /**
                  * Returns a string value that represents the type of control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getcontroltype
                  */
@@ -1012,16 +1017,14 @@ declare namespace DevKit {
                 readonly IsDirty: boolean;
                 /**
                  * Returns a string representing the logical name of the attribute
-                 * Returns the name assigned to the control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getname
                  */
-                readonly Name: string;
+                readonly AttributeName: string;
                 /**
-                 * Returns a string representing the logical name of the attribute
-                 * Returns the name assigned to the control
+                 * Returns the name assigned to the control.
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getname
                  */
-                readonly Name2: string;
+                readonly ControlName: string;
                 /**
                  * Returns the formContext.data.entity object that is the parent to all attributes
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getparent
@@ -1043,7 +1046,7 @@ declare namespace DevKit {
                  * Returns a boolean value to indicate whether the value of an attribute is valid
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/isvalid
                  */
-                readonly Valid: boolean;
+                readonly IsValid: boolean;
                 /**
                  * Removes a function from the OnChange event hander for an attribute
                  * @param callback Specifies the function to be removed from the OnChange event
@@ -1097,6 +1100,13 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getuserprivilege
                  */
                 readonly UserPrivilege: DevKit.Core.FieldUserPrivilege;
+                /**
+                 * Sets a value for an attribute to determine whether it is valid or invalid with a message.
+                 * @param valid Specify false to set the attribute value to invalid and true to set the value to valid
+                 * @param message The message to display
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/setisvalid
+                 */
+                SetIsValid(valid: boolean, message: string): void
             }
             interface IControlSelectBase extends IControl {
                 /**

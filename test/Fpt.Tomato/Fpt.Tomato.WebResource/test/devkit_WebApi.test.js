@@ -587,7 +587,118 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(form.FormLabel).toBe("DEVKIT WEBAPI FORM");
             expect(() => { form.FormNavigate(0) }).toThrow(new Error("Form navigation not implemented."));
             expect(() => { form.FormIsVisible(0) }).toThrow(new Error("getVisible not implemented."));
-            expect(() => { form.FormSetVisible(0, null) }).toThrow(new Error("setVisibles not implemented."));
+            expect(() => { form.FormSetVisible(0, null) }).toThrow(new Error("setVisible not implemented."));
+        });
+    });
+    describe('Properties & Methods for all atributes/controls', () => {
+        beforeEach(function () {
+            var XrmMockGenerator = _xrm_mock.XrmMockGenerator.initialise();
+            XrmMockGenerator.Panel = new _xrm_mock.PanelMock();
+            XrmMockGenerator.Encoding = new _xrm_mock.EncodingMock();
+            XrmMockGenerator.Device = new _xrm_mock.DeviceMock();
+            XrmMockGenerator.Navigation = new _xrm_mock.NavigationStaticMock();
+        });
+        it('Properties & Methods for attributes', () => {
+            _xrm_mock.XrmMockGenerator.Attribute.createString({
+                attributeType: "string",
+                format: "text",
+                isDirty: true,
+                name: "abc_all",
+                requiredLevel: "required",
+                value: "ABC ALL VALUE",
+                maxLength: 100,
+                submitMode: "always"
+            },
+                {
+                    controlType: "standard",
+                    disabled: true,
+                    label: "ABC ALL LABEL",
+                    name: "abc_all",
+                    visible: true
+                }
+            );
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            var addOnChangeData = "";
+            var abc_AllAddOnChange = function (executionContent) { addOnChangeData = "ON-CHANGED"; }
+            form.Body.abc_All.AddOnChange(abc_AllAddOnChange);
+            form.Body.abc_All.FireOnChange();
+            expect(addOnChangeData).toBe("ON-CHANGED");
+            expect(form.Body.abc_All.AttributeType).toBe(OptionSet.FieldAttributeType.String);
+            expect(form.Body.abc_All.Format).toBe(OptionSet.FieldFormat.Text);
+            expect(form.Body.abc_All.IsDirty).toBeTruthy();
+            expect(form.Body.abc_All.AttributeName).toBe("abc_all");
+            expect(() => { form.Body.abc_All.AttributeParent }).toThrow(new Error("getParent not implemented"));
+            expect(form.Body.abc_All.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Required);
+            expect(form.Body.abc_All.SubmitMode).toBe(OptionSet.FieldSubmitMode.Always);
+            expect(() => { form.Body.abc_All.UserPrivilege }).toThrow(new Error("getUserPrivilege not implemented"));
+            expect(form.Body.abc_All.Value).toBe("ABC ALL VALUE");
+            expect(() => { form.Body.abc_All.IsValid }).toThrow(new Error("isValid not implemented"));
+            addOnChangeData = "REMOVE";
+            form.Body.abc_All.RemoveOnChange(abc_AllAddOnChange);
+            form.Body.abc_All.FireOnChange();
+            expect(addOnChangeData).toBe("REMOVE");
+            form.Body.abc_All.RequiredLevel = OptionSet.FieldRequiredLevel.Recommended;
+            expect(form.Body.abc_All.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Recommended);
+            form.Body.abc_All.SubmitMode = OptionSet.FieldSubmitMode.Never;
+            expect(form.Body.abc_All.SubmitMode).toBe(OptionSet.FieldSubmitMode.Never);
+            form.Body.abc_All.Value = null;
+            expect(form.Body.abc_All.Value).toBeNull();
+            form.Body.abc_All.Value = "ABC ALL VALUE NEW";
+            expect(form.Body.abc_All.Value).toBe("ABC ALL VALUE NEW");
+            expect(() => { form.Body.abc_All.SetIsValid(null, null); }).toThrow(new Error("setIsValid not implemented"));
+        });
+        it('Properties & Methods for controls standard', () => {
+            _xrm_mock.XrmMockGenerator.Attribute.createString({
+                attributeType: "string",
+                format: "text",
+                isDirty: true,
+                name: "abc_all",
+                requiredLevel: "required",
+                value: "ABC ALL VALUE",
+                maxLength: 100,
+                submitMode: "always"
+            },
+                [
+                    {
+                        controlType: "standard",
+                        disabled: true,
+                        label: "ABC ALL LABEL",
+                        name: "abc_all",
+                        visible: true
+                    },
+                    {
+                        controlType: "standard",
+                        disabled: true,
+                        label: "ABC ALL LABEL_TAB_2",
+                        name: "abc_all_1",
+                        visible: false
+                    }
+                ]
+            );
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(() => { form.Body.abc_All.AddNotification(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.abc_All.ClearNotification("uniqueId") }).toThrow(new Error("clear notification not implemented"));
+            expect(form.Body.abc_All.Attribute).toBeDefined();
+            expect(form.Body.abc_All.ControlType).toBe(OptionSet.FieldControlType.Standard);
+            expect(form.Body.abc_All.Disabled).toBeTruthy();
+            expect(form.Body.abc_All.Label).toBe("ABC ALL LABEL");
+            expect(form.Body.abc_All.ControlName).toBe("abc_all");
+            expect(form.Body.abc_All_1.ControlName).toBe("abc_all_1");
+            expect(form.Body.abc_All_1.Value).toBe("ABC ALL VALUE");
+            expect(form.Body.abc_All.ControlParent).toBeUndefined();
+            expect(form.Body.abc_All_1.Visible).toBeFalsy(0);
+            form.Body.abc_All.Disabled = false;
+            expect(form.Body.abc_All.Disabled).toBeFalsy();
+            expect(form.Body.abc_All.Focus()).toBeUndefined();
+            form.Body.abc_All.Label = "ABC ALL LABEL NEW";
+            expect(form.Body.abc_All.Label).toBe("ABC ALL LABEL NEW");
+            expect(() => { form.Body.abc_All.SetNotification("ABC", "ABC") }).toThrow(new Error("set notification not implemented"));
+            form.Body.abc_All.Visible = false;
+            expect(form.Body.abc_All.Visible).toBeFalsy();
         });
     });
 });

@@ -164,21 +164,22 @@ var devKit = (function () {
         Object.defineProperty(body[field], "Max", { get: function () { return attribute.getMax(); } });//TESTED
         Object.defineProperty(body[field], "MaxLength", { get: function () { return attribute.getMaxLength(); } });//TESTED
         Object.defineProperty(body[field], "Min", { get: function () { return attribute.getMin(); } });//TESTED
-        Object.defineProperty(body[field], "Name", { get: function () { return attribute.getName(); } });//TESTED
+        Object.defineProperty(body[field], "AttributeName", { get: function () { return attribute.getName(); } });//TESTED
         Object.defineProperty(body[field], "Options", { get: function () { return attribute.getOptions(); } });//TESTED
         Object.defineProperty(body[field], "AttributeParent", { get: function () { return attribute.getParent(); } });
         Object.defineProperty(body[field], "SelectedOption", { get: function () { return attribute.getSelectedOption(); } });//TESTED
         Object.defineProperty(body[field], "Text", { get: function () { return attribute.getText(); } });//TESTED
         Object.defineProperty(body[field], "UserPrivilege", { get: function () { return attribute.getUserPrivilege(); } });
-        Object.defineProperty(body[field], "Valid", { get: function () { return attribute.isValid(); } });
+        Object.defineProperty(body[field], "IsValid", { get: function () { return attribute.isValid(); } });
         Object.defineProperty(body[field], "ControlType", { get: function () { return control.getControlType(); } });//TESTED
         Object.defineProperty(body[field], "InitialUrl", { get: function () { return control.getInitialUrl(); } });
-        Object.defineProperty(body[field], "Name2", { get: function () { return control.getName(); } });
+        Object.defineProperty(body[field], "ControlName", { get: function () { return control.getName(); } });
         Object.defineProperty(body[field], "Object", { get: function () { return control.getObject(); } });
         Object.defineProperty(body[field], "ControlParent", { get: function () { return control.getParent(); } });
         Object.defineProperty(body[field], "State", { get: function () { return control.getState(); } });
         Object.defineProperty(body[field], "TotalResultCount", { get: function () { return control.getTotalResultCount(); } });
         Object.defineProperty(body[field], "Value2", { get: function () { return control.getValue(); } });
+        Object.defineProperty(body[field], "Attribute", { get: function () { return control.getAttribute(); } });
         Object.defineProperty(body[field], "Precision", {
             get: function () { return attribute.getPrecision(); },//TESTED
             set: function (value) { attribute.setPrecision(value); }
@@ -264,6 +265,7 @@ var devKit = (function () {
         };
         body[field].AddOnLookupTagClick = function (callback) { control.addOnLookupTagClick(callback); };
         body[field].RemoveOnLookupTagClick = function (callback) { control.removeOnLookupTagClick(callback); };
+        body[field].SetIsValid = function (valid, message) { attribute.setIsValid(valid, message); };
     }
     function loadFields(formContext, body, type) {
         for (var field in body) {

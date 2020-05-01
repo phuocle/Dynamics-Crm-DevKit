@@ -56,6 +56,8 @@
     <None Include="packages.config" />
     <None Include="package.json" />
     <None Include="chutzpah.json" />
+    <Content Include="entities\abc_Test.form.js" />
+    <Content Include="entities\abc_Test.js" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
@@ -647,6 +649,7 @@
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.4.30\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="entities\abc_Test.d.ts" />
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
     </TypeScriptCompile>
