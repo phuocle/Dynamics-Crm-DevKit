@@ -193,7 +193,8 @@ declare namespace Tomato {
 			abc_Boolean: DevKit.Form.Controls.ControlBoolean;
 			abc_Lookup: DevKit.Form.Controls.ControlLookup;
 			abc_OptionSetCode: DevKit.Form.Controls.ControlOptionSet;
-			abc_FloatingPointNumber: DevKit.Form.Controls.ControlDouble
+			abc_FloatingPointNumber: DevKit.Form.Controls.ControlDouble;
+			abc_IFramed: DevKit.Form.Controls.ControlIFrame;
 		}
 		interface Footer {
 			/** Unique identifier of the user who created the record. */

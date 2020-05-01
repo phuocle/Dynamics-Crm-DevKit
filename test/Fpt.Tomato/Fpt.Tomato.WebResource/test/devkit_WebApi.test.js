@@ -801,7 +801,46 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(form.Body.abc_All.Visible).toBeFalsy();
         });
         it('iframe control type', () => {
-            expect(true).toBeTruthy();
+            var attributes = new _xrm_mock.ItemCollectionMock([
+                new _xrm_mock.AttributeMock({
+                    name: "abc_iframed"
+                })
+            ]);
+            var entity = new _xrm_mock.EntityMock({
+                attributes: attributes
+            });
+            var data = new _xrm_mock.DataMock(entity);
+            var frame = new _xrm_mock.IframeControlMock({
+                name: "abc_iframed",
+                controlType: "iframe",
+                label: "IFRAME LABEL",
+                visible: true
+            });
+            var ui = new _xrm_mock.UiMock({
+                controls: new _xrm_mock.ItemCollectionMock([
+                    frame
+                ])
+            });
+            _xrm_mock.XrmMockGenerator.formContext = new _xrm_mock.FormContextMock(data, ui);
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(() => { form.Body.abc_IFramed.ContentWindow(null, null) }).toThrow(new Error("getContentWindow not implemented."));
+            expect(form.Body.abc_IFramed.ControlType).toBe(OptionSet.FieldControlType.Iframe);
+            expect(() => { form.Body.abc_IFramed.Disabled }).toThrow(new Error("getDisabled not implemented."));
+            expect(() => { form.Body.abc_IFramed.InitialUrl }).toThrow(new Error("getInitialUrl not implemented."));
+            expect(form.Body.abc_IFramed.Label).toBe("IFRAME LABEL");
+            expect(form.Body.abc_IFramed.ControlName).toBe("abc_iframed");
+            expect(() => { form.Body.abc_IFramed.Object }).toThrow(new Error("getObject not implemented."));
+            expect(form.Body.abc_IFramed.ControlParent).toBeUndefined();
+            expect(() => { form.Body.abc_IFramed.Src }).toThrow(new Error("getSrc not implemented."));
+            expect(form.Body.abc_IFramed.Visible).toBeTruthy();
+            expect(() => { form.Body.abc_IFramed.Disabled = true }).toThrow(new Error("setDisabled not implemented."));
+            expect(() => { form.Body.abc_IFramed.Focus() }).toThrow(new Error("setFocus not implemented."));
+            form.Body.abc_IFramed.Label = "IFRAME LABEL NEW";
+            expect(form.Body.abc_IFramed.Label).toBe("IFRAME LABEL NEW");
+            expect(() => { form.Body.abc_IFramed.Src = "ABC" }).toThrow(new Error("setSrc not implemented."));
+            expect(() => { form.Body.abc_IFramed.Visible = true }).toThrow(new Error("setVisible not implemented."));
         });
         it('kbsearch (Knowledge base search) control type', () => {
             expect(true).toBeTruthy();

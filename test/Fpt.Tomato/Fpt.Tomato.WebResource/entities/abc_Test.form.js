@@ -21,7 +21,8 @@ var Tomato;
 			abc_Boolean: {},
 			abc_Lookup: {},
 			abc_OptionSetCode: {},
-			abc_FloatingPointNumber: {}
+			abc_FloatingPointNumber: {},
+			abc_IFramed: { }
 		};
 		devKit.LoadFields(formContext, body);
 
