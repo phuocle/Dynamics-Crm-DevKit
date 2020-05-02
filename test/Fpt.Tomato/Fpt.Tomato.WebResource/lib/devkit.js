@@ -346,18 +346,29 @@ var devKit = (function () {
             loadNavigation(formContext, navigations, navigation);
         }
     }
-    function loadQuickForm(formContext, quickForms, quickForm) {        
+    function loadQuickForm(formContext, quickForms, quickForm) {  
         if (!formContext) return;
         if (formContext.ui && formContext.ui.quickForms && formContext.ui.quickForms.get) {
             var quickViewControl = formContext.ui.quickForms.get(quickForm);
             if (!quickViewControl) return;
+            quickForms[quickForm].Controls = function (arg) {
+                if (arg === undefined) return quickViewControl.getControl();
+                return quickViewControl.getControl(arg);
+            };
             Object.defineProperty(quickForms[quickForm], "ControlType", { get: function () { return quickViewControl.getControlType(); } });
-            Object.defineProperty(quickForms[quickForm], "Visible", { get: function () { return quickViewControl.getVisible(); } });
-            Object.defineProperty(quickForms[quickForm], "Name", { get: function () { return quickViewControl.getName(); } });
-            Object.defineProperty(quickForms[quickForm], "Parent", { get: function () { return quickViewControl.getParent(); } });
+            Object.defineProperty(quickForms[quickForm], "Disabled", {
+                get: function () { return quickViewControl.getDisabled(); },
+                set: function (value) { quickViewControl.setDisabled(value); }
+            });
             Object.defineProperty(quickForms[quickForm], "Label", {
                 get: function () { return quickViewControl.getLabel(); },
                 set: function (value) { quickViewControl.setLabel(value); }
+            });
+            Object.defineProperty(quickForms[quickForm], "ControlName", { get: function () { return quickViewControl.getName(); } });
+            Object.defineProperty(quickForms[quickForm], "ControlParent", { get: function () { return quickViewControl.getParent(); } });
+            Object.defineProperty(quickForms[quickForm], "Visible", {
+                get: function () { return quickViewControl.getVisible(); },
+                set: function (value) { quickViewControl.setVisible(value); }
             });
             quickForms[quickForm].IsLoaded = function () { return quickViewControl.isLoaded(); };
             quickForms[quickForm].Refresh = function () { quickViewControl.refresh(); };

@@ -45,7 +45,9 @@ var Tomato;
 		process.Process_Test = _Process_Test;
 		form.Process = process;
 
-		var quickForm = {};
+		var quickForm = {
+			QuickForm: {}
+		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 

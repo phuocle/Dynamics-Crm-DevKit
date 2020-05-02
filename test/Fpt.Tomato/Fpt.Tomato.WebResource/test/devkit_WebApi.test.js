@@ -979,7 +979,42 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(form.Body.abc_OptionSetCode.Visible).toBeFalsy();
         });
         it('quickform control type', () => {
-            expect(true).toBeTruthy();
+            var attributes = new _xrm_mock.ItemCollectionMock([
+                new _xrm_mock.AttributeMock({
+                    name: "quickform"
+                })
+            ]);
+            var entity = new _xrm_mock.EntityMock({
+                attributes: attributes
+            });
+            var data = new _xrm_mock.DataMock(entity);
+            var quickform = new _xrm_mock.QuickFormControlMock({
+                name: "QuickForm",
+                controlType: "quickform",
+                label: "QUICK FORM LABEL",
+                visible: true
+            });
+            var ui = new _xrm_mock.UiMock({
+                quickForms: new _xrm_mock.ItemCollectionMock([quickform])
+            });
+            _xrm_mock.XrmMockGenerator.formContext = new _xrm_mock.FormContextMock(data, ui);
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(() => { form.QuickForm.QuickForm.Controls() }).toThrow(new Error("Method not implemented."));
+            expect(form.QuickForm.QuickForm.ControlType).toBe(OptionSet.FieldControlType.QuickForm);
+            expect(() => { form.QuickForm.QuickForm.Disabled }).toThrow(new Error("Method not implemented."));
+            expect(form.QuickForm.QuickForm.Label).toBe("QUICK FORM LABEL");
+            expect(form.QuickForm.QuickForm.ControlName).toBe("QuickForm");
+            expect(form.QuickForm.QuickForm.ControlParent).toBeUndefined();
+            expect(form.QuickForm.QuickForm.Visible).toBeTruthy();
+            expect(() => { form.QuickForm.QuickForm.IsLoaded() }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.QuickForm.QuickForm.Refresh() }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.QuickForm.QuickForm.Disabled = true }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.QuickForm.QuickForm.Focus() }).toThrow(new Error("Method not implemented."));
+            form.QuickForm.QuickForm.Label = "QUICK FORM LABEL NEW";
+            expect(form.QuickForm.QuickForm.Label).toBe("QUICK FORM LABEL NEW");
+            expect(() => { form.QuickForm.QuickForm.Visible = false }).toThrow(new Error("Method not implemented."));
         });
         it('subgrid control type', () => {
             expect(true).toBeTruthy();

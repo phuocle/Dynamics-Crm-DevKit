@@ -1731,7 +1731,59 @@ declare namespace DevKit {
 
             }
             interface ControlQuickView {
-
+                /**
+                 * Gets the controls on a form or control on form by passing an argument
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
+                 */
+                Controls(arg?: string | number): Array<any> | any;
+                /**
+                 * Returns a string value that categorizes quick view controls.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrolhttps://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontroltype
+                 */
+                readonly ControlType: OptionSet.FieldControlType;
+                /**
+                 * Gets a boolean value indicating whether the control is disabled. Or sets the state of the control to either enabled or disabled.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getdisabled
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setdisabled
+                 */
+                Disabled: boolean;
+                /**
+                 * Returns the label for the quick view control. Or sets the label for the quick view control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getlabel
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setlabel
+                 */
+                Label: string;
+                /**
+                 * Returns the name assigned to the quick view control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getname
+                 */
+                readonly ControlName: string;
+                /**
+                 * Returns a reference to the section object that contains the control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getparent
+                 */
+                readonly ControlParent: any;
+                /**
+                 * Returns a value that indicates whether the quick view control is currently visible. Or displays or hides a control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getvisible
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setvisible
+                 */
+                Visible: boolean;
+                /**
+                 * Returns whether the data binding for the constituent controls in a quick view control is complete.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
+                 */
+                IsLoaded(): boolean;
+                /**
+                 * Refreshes the data displayed in a quick view control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/refresh
+                 */
+                Refresh(): void;
+                /**
+                 * Sets focus on the control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setfocus
+                 */
+                Focus(): void;
             }
             interface ControlAciWidget {
 

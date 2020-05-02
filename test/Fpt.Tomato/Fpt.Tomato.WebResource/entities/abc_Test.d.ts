@@ -305,6 +305,9 @@ declare namespace Tomato {
 		interface Process extends DevKit.Form.Controls.IControlProcess {
 			Process_WebApi_1: ProcessProcess_WebApi_1;
 		}
+		interface QuickForm {
+			QuickForm: DevKit.Form.Controls.ControlQuickView;
+        }
 	}
 	class FormTest extends DevKit.Form.IForm {
 		/**
@@ -327,6 +330,8 @@ declare namespace Tomato {
 		Navigation: Tomato.FormTest.Navigation;
 		/** The Process of form WebApi */
 		Process: Tomato.FormTest.Process;
+		/** The QuickForm of Test */
+		QuickForm: Tomato.FormTest.QuickForm;
 	}
 }
 declare namespace OptionSet {
