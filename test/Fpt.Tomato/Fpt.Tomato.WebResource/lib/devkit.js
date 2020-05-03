@@ -346,34 +346,80 @@ var devKit = (function () {
             loadNavigation(formContext, navigations, navigation);
         }
     }
-    function loadQuickForm(formContext, quickForms, quickForm) {  
-        if (!formContext) return;
-        if (formContext.ui && formContext.ui.quickForms && formContext.ui.quickForms.get) {
-            var quickViewControl = formContext.ui.quickForms.get(quickForm);
-            if (!quickViewControl) return;
-            quickForms[quickForm].Controls = function (arg) {
-                if (arg === undefined) return quickViewControl.getControl();
-                return quickViewControl.getControl(arg);
-            };
-            Object.defineProperty(quickForms[quickForm], "ControlType", { get: function () { return quickViewControl.getControlType(); } });
-            Object.defineProperty(quickForms[quickForm], "Disabled", {
-                get: function () { return quickViewControl.getDisabled(); },
-                set: function (value) { quickViewControl.setDisabled(value); }
-            });
-            Object.defineProperty(quickForms[quickForm], "Label", {
-                get: function () { return quickViewControl.getLabel(); },
-                set: function (value) { quickViewControl.setLabel(value); }
-            });
-            Object.defineProperty(quickForms[quickForm], "ControlName", { get: function () { return quickViewControl.getName(); } });
-            Object.defineProperty(quickForms[quickForm], "ControlParent", { get: function () { return quickViewControl.getParent(); } });
-            Object.defineProperty(quickForms[quickForm], "Visible", {
-                get: function () { return quickViewControl.getVisible(); },
-                set: function (value) { quickViewControl.setVisible(value); }
-            });
-            quickForms[quickForm].IsLoaded = function () { return quickViewControl.isLoaded(); };
-            quickForms[quickForm].Refresh = function () { quickViewControl.refresh(); };
-            quickForms[quickForm].Focus = function () { quickViewControl.setFocus(); };
+    function controlRemoved(formContext, type, control) {
+        console.log(`${type}: ${control} removed on form`);
+    }
+    function loadQuickForm(formContext, quickForms, quickForm) {
+        if (!formContext || !formContext.ui || !formContext.ui.quickForms || !formContext.ui.quickForms.get) return;
+        var quickViewControl = formContext.ui.quickForms.get(quickForm);
+        if (!quickViewControl) {
+            controlRemoved(formContext, "QuickView", quickForm);
         }
+        quickForms[quickForm].Controls = function (arg) {
+            if (!quickViewControl) return [];
+            if (arg === undefined) return quickViewControl.getControl();
+            return quickViewControl.getControl(arg);
+        };
+        Object.defineProperty(quickForms[quickForm], "ControlType", {
+            get: function () {
+                if (!quickViewControl) return EMPTY_STRING;
+                return quickViewControl.getControlType();
+            }
+        });
+        Object.defineProperty(quickForms[quickForm], "Disabled", {
+            get: function () {
+                if (!quickViewControl) return true;
+                return quickViewControl.getDisabled();
+            },
+            set: function (value) {
+                if (!quickViewControl) return;
+                quickViewControl.setDisabled(value);
+            }
+        });
+        Object.defineProperty(quickForms[quickForm], "Label", {
+            get: function () {
+                if (!quickViewControl) return EMPTY_STRING;
+                return quickViewControl.getLabel();
+            },
+            set: function (value) {
+                if (!quickViewControl) return;
+                quickViewControl.setLabel(value);
+            }
+        });
+        Object.defineProperty(quickForms[quickForm], "ControlName", {
+            get: function () {
+                if (!quickViewControl) return EMPTY_STRING;
+                return quickViewControl.getName();
+            }
+        });
+        Object.defineProperty(quickForms[quickForm], "ControlParent", {
+            get: function () {
+                if (!quickViewControl) return {};
+                return quickViewControl.getParent();
+            }
+        });
+        Object.defineProperty(quickForms[quickForm], "Visible", {
+            get: function () {
+                if (!quickViewControl) return false;
+                return quickViewControl.getVisible();
+            },
+            set: function (value) {
+                if (!quickViewControl) return;
+                quickViewControl.setVisible(value);
+            }
+        });
+        quickForms[quickForm].IsLoaded = function () {
+            if (!quickViewControl) return false;
+            return quickViewControl.isLoaded();
+        };
+        quickForms[quickForm].Refresh = function () {
+            if (!quickViewControl) return;
+            quickViewControl.refresh();
+        };
+        quickForms[quickForm].Focus = function () {
+            if (!quickViewControl) return;
+            quickViewControl.setFocus();
+        };
     }
     function loadQuickForms(formContext, quickForms) {
         for (var quickForm in quickForms) {

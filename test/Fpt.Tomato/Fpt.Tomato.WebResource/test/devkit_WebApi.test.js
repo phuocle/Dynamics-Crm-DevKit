@@ -422,7 +422,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
     */
 
     //copy "C:\src\github\phuocle\xrm-mock\build\index.js" "C:\src\github\phuocle\Dynamics-Crm-DevKit\test\Fpt.Tomato\Fpt.Tomato.WebResource\node_modules\xrm-mock\build\index.js"
-
+    /*
     describe('loadForm(formContext)', () => {
         beforeEach(function () {
             var XrmMockGenerator = _xrm_mock.XrmMockGenerator.initialise();
@@ -590,6 +590,8 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(() => { form.FormSetVisible(0, null) }).toThrow(new Error("setVisible not implemented."));
         });
     });
+    */
+    /*
     describe('Atributes', () => {
         beforeEach(function () {
             var XrmMockGenerator = _xrm_mock.XrmMockGenerator.initialise();
@@ -741,6 +743,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(form.Body.abc_All.MaxLength).toBe(100);
         });
     });
+    */
     describe('Controls', () => {
         beforeEach(function () {
             var XrmMockGenerator = _xrm_mock.XrmMockGenerator.initialise();
@@ -749,6 +752,7 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             XrmMockGenerator.Device = new _xrm_mock.DeviceMock();
             XrmMockGenerator.Navigation = new _xrm_mock.NavigationStaticMock();
         });
+        /*
         it('standard control type', () => {
             _xrm_mock.XrmMockGenerator.Attribute.createString({
                 attributeType: "string",
@@ -978,6 +982,8 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             form.Body.abc_OptionSetCode.Visible = false;
             expect(form.Body.abc_OptionSetCode.Visible).toBeFalsy();
         });
+        */
+        /*
         it('quickform control type', () => {
             var attributes = new _xrm_mock.ItemCollectionMock([
                 new _xrm_mock.AttributeMock({
@@ -1000,7 +1006,6 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             _xrm_mock.XrmMockGenerator.formContext = new _xrm_mock.FormContextMock(data, ui);
             var executionContext = _xrm_mock.XrmMockGenerator.formContext;
             var form = new Tomato.FormTest(executionContext);
-
             expect(() => { form.QuickForm.QuickForm.Controls() }).toThrow(new Error("Method not implemented."));
             expect(form.QuickForm.QuickForm.ControlType).toBe(OptionSet.FieldControlType.QuickForm);
             expect(() => { form.QuickForm.QuickForm.Disabled }).toThrow(new Error("Method not implemented."));
@@ -1016,6 +1021,47 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
             expect(form.QuickForm.QuickForm.Label).toBe("QUICK FORM LABEL NEW");
             expect(() => { form.QuickForm.QuickForm.Visible = false }).toThrow(new Error("Method not implemented."));
         });
+        */
+        it('REMOVED quickform control type', () => {
+            var attributes = new _xrm_mock.ItemCollectionMock([
+                new _xrm_mock.AttributeMock({
+                    name: "quickform1"
+                })
+            ]);
+            var entity = new _xrm_mock.EntityMock({
+                attributes: attributes
+            });
+            var data = new _xrm_mock.DataMock(entity);
+            var quickform = new _xrm_mock.QuickFormControlMock({
+                name: "QuickForm1",
+                controlType: "quickform",
+                label: "QUICK FORM LABEL",
+                visible: true
+            });
+            var ui = new _xrm_mock.UiMock({
+                quickForms: new _xrm_mock.ItemCollectionMock([quickform])
+            });
+            _xrm_mock.XrmMockGenerator.formContext = new _xrm_mock.FormContextMock(data, ui);
+            var executionContext = _xrm_mock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+            expect(form.QuickForm.QuickForm.Controls().length).toBe(0);
+            expect(form.QuickForm.QuickForm.ControlType.toString()).toBe("");
+            expect(form.QuickForm.QuickForm.Disabled).toBeTruthy();
+            expect(form.QuickForm.QuickForm.Label).toBe("");
+            expect(form.QuickForm.QuickForm.ControlName).toBe("");
+            expect(form.QuickForm.QuickForm.ControlParent.length).toBe({}.length);
+            expect(form.QuickForm.QuickForm.Visible).toBeFalsy();
+            expect(form.QuickForm.QuickForm.IsLoaded()).toBeFalsy();
+            expect(form.QuickForm.QuickForm.Refresh()).toBeUndefined();
+            form.QuickForm.QuickForm.Disabled = true;
+            expect(form.QuickForm.QuickForm.Disabled).toBeTruthy();
+            expect(form.QuickForm.QuickForm.Focus()).toBeUndefined();
+            form.QuickForm.QuickForm.Label = "QUICK FORM LABEL NEW";
+            expect(form.QuickForm.QuickForm.Label).toBe("");
+            form.QuickForm.QuickForm.Visible = false;
+            expect(form.QuickForm.QuickForm.Visible).toBeFalsy();
+        });
+        /*
         it('subgrid control type', () => {
             expect(true).toBeTruthy();
         });
@@ -1028,5 +1074,6 @@ define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @ty
         it('webresource control type', () => {
             expect(true).toBeTruthy();
         });
+        */
     });
 });
