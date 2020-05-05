@@ -56,7 +56,9 @@
     <None Include="packages.config" />
     <None Include="package.json" />
     <None Include="chutzpah.json" />
-    <Content Include="entities\abc_Test.form.js" />
+    <Content Include="entities\abc_Test.form.js">
+      <DependentUpon>abc_Test.js</DependentUpon>
+    </Content>
     <Content Include="entities\abc_Test.js" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
@@ -100,6 +102,8 @@
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
+    <Content Include="test\abc_Test.Atributes.test.js" />
+    <Content Include="test\abc_Test.Utility.test.js" />
     <Content Include="test\devkit_WebApi.test.js" />
     <Content Include="test\devkit_WebApi.webapi.test.js" />
     <Content Include="test\docs\Xrm-App\media\add-global-error.png" />
@@ -649,7 +653,9 @@
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.4.30\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="entities\abc_Test.d.ts" />
+    <TypeScriptCompile Include="entities\abc_Test.d.ts">
+      <DependentUpon>abc_Test.js</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
     </TypeScriptCompile>

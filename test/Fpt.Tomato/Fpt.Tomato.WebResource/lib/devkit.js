@@ -346,15 +346,15 @@ var devKit = (function () {
             loadNavigation(formContext, navigations, navigation);
         }
     }
-    function controlRemoved(formContext, type, control) {
-        console.log(`${type}: ${control} removed on form`);
-    }
+    //function controlRemoved(formContext, type, control) {
+    //    console.log(`${type}: ${control} removed on form`);
+    //}
     function loadQuickForm(formContext, quickForms, quickForm) {
         if (!formContext || !formContext.ui || !formContext.ui.quickForms || !formContext.ui.quickForms.get) return;
         var quickViewControl = formContext.ui.quickForms.get(quickForm);
-        if (!quickViewControl) {
-            controlRemoved(formContext, "QuickView", quickForm);
-        }
+        //if (!quickViewControl) {
+        //    controlRemoved(formContext, "QuickView", quickForm);
+        //}
         quickForms[quickForm].Controls = function (arg) {
             if (!quickViewControl) return [];
             if (arg === undefined) return quickViewControl.getControl();
@@ -550,7 +550,7 @@ var devKit = (function () {
         LoadNavigations: loadNavigations,
         LoadQuickForms: loadQuickForms,
         LoadUtility: loadUtility
-    };
+    }
 })();
 var OptionSet;
 (function (OptionSet) {

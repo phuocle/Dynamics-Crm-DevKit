@@ -4,6 +4,7 @@
 var formAccount = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
+		var r = new Tomato
 	}
 	async function onSave(executionContext) {
 	}
