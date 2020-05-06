@@ -2121,6 +2121,11 @@ declare namespace DevKit {
              */
             LearningPathAttributeName: string;
             /**
+             * The method returns an object with the input property. The input property is an object with the following attributes depending on whether you are currently on the entity form or entity list
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getpagecontext
+             * */
+            PageContext: any;
+            /**
              * Displays the web page represented by a URL in the static area in the side pane, which appears on all pages in the Dynamics 365 for Customer Engagement apps web client.
              * @param url URL of the page to be loaded in the side pane static area.
              * @param title Title of the side pane static area.

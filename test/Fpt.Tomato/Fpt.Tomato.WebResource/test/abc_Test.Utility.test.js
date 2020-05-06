@@ -106,6 +106,7 @@ define(['xrm-mock'], () => {
             expect(() => { form.Utility.InvokeProcessAction("name", null, null, null) }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.LookupObjects(null, null, null); }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.RefreshParentGrid(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.PageContext }).toThrow(new Error("Method not implemented."));
 
             //getGlobalContext.client;
             expect(form.Utility.Client.ClientName).toBe(OptionSet.ClientName.Web);
