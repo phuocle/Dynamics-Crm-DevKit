@@ -1,5 +1,4 @@
 ﻿//@ts-check
-
 define(['xrm-mock'], () => {
     var xrmMock = require('xrm-mock');
 
@@ -112,7 +111,6 @@ define(['xrm-mock'], () => {
             );
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new Tomato.FormTest(executionContext);
-
             expect(form.Body.abc_OptionSetCode.InitialValue).toBe(OptionSet.abc_Test.abc_OptionSetCode.Value_2);
             var option = form.Body.abc_OptionSetCode.Option("Value 6");
             expect(option.text).toBe("Value 6");

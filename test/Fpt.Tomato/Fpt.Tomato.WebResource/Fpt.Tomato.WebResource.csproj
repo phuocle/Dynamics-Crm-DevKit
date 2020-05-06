@@ -60,56 +60,14 @@
       <DependentUpon>abc_Test.js</DependentUpon>
     </Content>
     <Content Include="entities\abc_Test.js" />
-    <Content Include="entities\Account.form.js">
-      <DependentUpon>Account.js</DependentUpon>
-    </Content>
-    <Content Include="entities\Account.js" />
-    <Content Include="entities\Account.webapi.js">
-      <DependentUpon>Account.js</DependentUpon>
-    </Content>
-    <Content Include="entities\ActivityParty.js" />
-    <Content Include="entities\ActivityParty.webapi.js">
-      <DependentUpon>ActivityParty.js</DependentUpon>
-    </Content>
-    <Content Include="entities\Contact.form.js">
-      <DependentUpon>Contact.js</DependentUpon>
-    </Content>
-    <Content Include="entities\Contact.js" />
-    <Content Include="entities\Contact.webapi.js">
-      <DependentUpon>Contact.js</DependentUpon>
-    </Content>
-    <Content Include="entities\devkit_WebApi.form.js">
-      <DependentUpon>devkit_WebApi.js</DependentUpon>
-    </Content>
-    <Content Include="entities\devkit_WebApi.js" />
-    <Content Include="entities\devkit_WebApi.webapi.js">
-      <DependentUpon>devkit_WebApi.js</DependentUpon>
-    </Content>
-    <Content Include="entities\Email.form.js">
-      <DependentUpon>Email.js</DependentUpon>
-    </Content>
-    <Content Include="entities\Email.js" />
-    <Content Include="entities\Email.webapi.js">
-      <DependentUpon>Email.js</DependentUpon>
-    </Content>
-    <Content Include="entities\SystemUser.form.js">
-      <DependentUpon>SystemUser.js</DependentUpon>
-    </Content>
-    <Content Include="entities\SystemUser.js" />
-    <Content Include="entities\SystemUser.webapi.js">
-      <DependentUpon>SystemUser.js</DependentUpon>
-    </Content>
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
     <Content Include="test\abc_Test.Atributes.test.js" />
     <Content Include="test\abc_Test.Utility.test.js" />
-    <Content Include="test\devkit_WebApi.test.js" />
-    <Content Include="test\devkit_WebApi.webapi.test.js" />
     <Content Include="test\docs\Xrm-App\media\add-global-error.png" />
     <Content Include="test\docs\Xrm-App\media\add-global-information.png" />
     <Content Include="test\docs\Xrm-App\media\add-global-warning.png" />
-    <Content Include="test\xrm-mock.d.ts" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
     <None Include="entities\generator.form.bat" />
@@ -537,8 +495,8 @@
     <Content Include="test\docs\save-event-arguments\isDefaultPrevented.md" />
     <Content Include="test\docs\save-event-arguments\preventDefault.md" />
     <Content Include="test\docs\xrm-app.md" />
-    <Content Include="test\docs\Xrm-App\__addGlobalNotification.md" />
-    <Content Include="test\docs\Xrm-App\__clearGlobalNotification.md" />
+    <Content Include="test\docs\Xrm-App\_addGlobalNotification.md" />
+    <Content Include="test\docs\Xrm-App\_clearGlobalNotification.md" />
     <Content Include="test\docs\Xrm-App\includes\addGlobalNotification-description.md" />
     <Content Include="test\docs\Xrm-App\includes\clearGlobalNotification-description.md" />
     <Content Include="test\docs\xrm-device.md" />
@@ -575,7 +533,7 @@
     <Content Include="test\docs\Xrm-Navigation\includes\openTaskFlow-description.md" />
     <Content Include="test\docs\Xrm-Navigation\includes\openUrl-description.md" />
     <Content Include="test\docs\Xrm-Navigation\includes\openWebResource-description.md" />
-    <Content Include="test\docs\Xrm-Navigation\__navigateTo.md" />
+    <Content Include="test\docs\Xrm-Navigation\_navigateTo.md" />
     <Content Include="test\docs\Xrm-Navigation\_openAlertDialog.md" />
     <Content Include="test\docs\Xrm-Navigation\_openConfirmDialog.md" />
     <Content Include="test\docs\Xrm-Navigation\_openErrorDialog.md" />
@@ -599,11 +557,11 @@
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\_getCurrentAppUrl.md" />
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\_getVersion.md" />
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\getWebResourceUrl.md" />
-    <Content Include="test\docs\Xrm-Utility\getGlobalContext\isOnPremises.md" />
+    <Content Include="test\docs\Xrm-Utility\getGlobalContext\_isOnPremises.md" />
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\_organizationSettings.md" />
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\_prependOrgName.md" />
     <Content Include="test\docs\Xrm-Utility\getGlobalContext\_userSettings.md" />
-    <Content Include="test\docs\Xrm-Utility\__getLearningPathAttributeName.md" />
+    <Content Include="test\docs\Xrm-Utility\_getLearningPathAttributeName.md" />
     <Content Include="test\docs\Xrm-Utility\getPageContext.md" />
     <Content Include="test\docs\Xrm-Utility\_getResourceString.md" />
     <Content Include="test\docs\Xrm-Utility\includes\closeProgressIndicator-description.md" />
@@ -656,31 +614,11 @@
     <TypeScriptCompile Include="entities\abc_Test.d.ts">
       <DependentUpon>abc_Test.js</DependentUpon>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\Account.d.ts">
-      <DependentUpon>Account.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\ActivityParty.d.ts">
-      <DependentUpon>ActivityParty.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\Contact.d.ts">
-      <DependentUpon>Contact.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
-      <DependentUpon>devkit_WebApi.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\Email.d.ts">
-      <DependentUpon>Email.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\SystemUser.d.ts">
-      <DependentUpon>SystemUser.js</DependentUpon>
-    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="test2\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <ProjectExtensions>

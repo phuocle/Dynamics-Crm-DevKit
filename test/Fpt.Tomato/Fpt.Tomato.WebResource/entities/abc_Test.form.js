@@ -13,7 +13,6 @@ var Tomato;
 				formContext = executionContext.getFormContext();
 			}
 		}
-
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			abc_All: {},

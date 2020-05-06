@@ -156,23 +156,23 @@ var devKit = (function () {
                 }
             }
         })();        
-        Object.defineProperty(body[field], "AttributeType", { get: function () { return attribute.getAttributeType(); } });//TESTED
-        Object.defineProperty(body[field], "Format", { get: function () { return attribute.getFormat(); } });//TESTED
-        Object.defineProperty(body[field], "InitialValue", { get: function () { return attribute.getInitialValue(); } });//TESTED
-        Object.defineProperty(body[field], "IsDirty", { get: function () { return attribute.getIsDirty(); } });//TESTED
-        Object.defineProperty(body[field], "IsPartyList", { get: function () { return attribute.getIsPartyList(); } });//TESTED
-        Object.defineProperty(body[field], "Max", { get: function () { return attribute.getMax(); } });//TESTED
-        Object.defineProperty(body[field], "MaxLength", { get: function () { return attribute.getMaxLength(); } });//TESTED
-        Object.defineProperty(body[field], "Min", { get: function () { return attribute.getMin(); } });//TESTED
-        Object.defineProperty(body[field], "AttributeName", { get: function () { return attribute.getName(); } });//TESTED
-        Object.defineProperty(body[field], "Options", { get: function () { return attribute.getOptions(); } });//TESTED
-        Object.defineProperty(body[field], "ControlOptions", { get: function () { return control.getOptions(); } });//TESTED
+        Object.defineProperty(body[field], "AttributeType", { get: function () { return attribute.getAttributeType(); } });
+        Object.defineProperty(body[field], "Format", { get: function () { return attribute.getFormat(); } });
+        Object.defineProperty(body[field], "InitialValue", { get: function () { return attribute.getInitialValue(); } });
+        Object.defineProperty(body[field], "IsDirty", { get: function () { return attribute.getIsDirty(); } });
+        Object.defineProperty(body[field], "IsPartyList", { get: function () { return attribute.getIsPartyList(); } });
+        Object.defineProperty(body[field], "Max", { get: function () { return attribute.getMax(); } });
+        Object.defineProperty(body[field], "MaxLength", { get: function () { return attribute.getMaxLength(); } });
+        Object.defineProperty(body[field], "Min", { get: function () { return attribute.getMin(); } });
+        Object.defineProperty(body[field], "AttributeName", { get: function () { return attribute.getName(); } });
+        Object.defineProperty(body[field], "Options", { get: function () { return attribute.getOptions(); } });
+        Object.defineProperty(body[field], "ControlOptions", { get: function () { return control.getOptions(); } });
         Object.defineProperty(body[field], "AttributeParent", { get: function () { return attribute.getParent(); } });
-        Object.defineProperty(body[field], "SelectedOption", { get: function () { return attribute.getSelectedOption(); } });//TESTED
-        Object.defineProperty(body[field], "Text", { get: function () { return attribute.getText(); } });//TESTED
+        Object.defineProperty(body[field], "SelectedOption", { get: function () { return attribute.getSelectedOption(); } });
+        Object.defineProperty(body[field], "Text", { get: function () { return attribute.getText(); } });
         Object.defineProperty(body[field], "UserPrivilege", { get: function () { return attribute.getUserPrivilege(); } });
         Object.defineProperty(body[field], "IsValid", { get: function () { return attribute.isValid(); } });
-        Object.defineProperty(body[field], "ControlType", { get: function () { return control.getControlType(); } });//TESTED
+        Object.defineProperty(body[field], "ControlType", { get: function () { return control.getControlType(); } });
         Object.defineProperty(body[field], "InitialUrl", { get: function () { return control.getInitialUrl(); } });
         Object.defineProperty(body[field], "ControlName", { get: function () { return control.getName(); } });
         Object.defineProperty(body[field], "Object", { get: function () { return control.getObject(); } });
@@ -182,83 +182,83 @@ var devKit = (function () {
         Object.defineProperty(body[field], "Value2", { get: function () { return control.getValue(); } });
         Object.defineProperty(body[field], "Attribute", { get: function () { return control.getAttribute(); } });
         Object.defineProperty(body[field], "Precision", {
-            get: function () { return attribute.getPrecision(); },//TESTED
+            get: function () { return attribute.getPrecision(); },
             set: function (value) { attribute.setPrecision(value); }
         });
         Object.defineProperty(body[field], "RequiredLevel", {
-            get: function () { return attribute.getRequiredLevel(); },//TESTED
-            set: function (value) { attribute.setRequiredLevel(value); }//TESTED
+            get: function () { return attribute.getRequiredLevel(); },
+            set: function (value) { attribute.setRequiredLevel(value); }
         });
         Object.defineProperty(body[field], "SubmitMode", {
-            get: function () { return attribute.getSubmitMode(); },//TESTED
-            set: function (value) { attribute.setSubmitMode(value); }//TESTED
+            get: function () { return attribute.getSubmitMode(); },
+            set: function (value) { attribute.setSubmitMode(value); }
         });
         Object.defineProperty(body[field], "Value", {
-            get: function () {//TESTED
+            get: function () {
                 if (attribute !== undefined) return attribute.getValue();
                 throw new Error(`field: ${logicalName} removed on form`);
             },           
-            set: function (value) { attribute.setValue(value); }//TESTED
+            set: function (value) { attribute.setValue(value); }
         });
         Object.defineProperty(body[field], "Data", {
             get: function () { return control.getData(); },
             set: function (value) { control.setData(value); }
         });
         Object.defineProperty(body[field], "DefaultView", {
-            get: function () { return control.getDefaultView(); },//TESTED
-            set: function (value) { control.setDefaultView(value); }//TESTED
+            get: function () { return control.getDefaultView(); },
+            set: function (value) { control.setDefaultView(value); }
         });
         Object.defineProperty(body[field], "Disabled", {
-            get: function () { return control.getDisabled(); },//TESTED
-            set: function (value) { control.setDisabled(value); }//TESTED
+            get: function () { return control.getDisabled(); },
+            set: function (value) { control.setDisabled(value); }
         });
         Object.defineProperty(body[field], "EntityTypes", {
-            get: function () { return control.getEntityTypes(); },//TESTED
-            set: function (value) { control.setEntityTypes(value); }//TESTED
+            get: function () { return control.getEntityTypes(); },
+            set: function (value) { control.setEntityTypes(value); }
         });
         Object.defineProperty(body[field], "Label", {
-            get: function () { return control.getLabel(); },//TESTED
-            set: function (value) { control.setLabel(value); }//TESTED
+            get: function () { return control.getLabel(); },
+            set: function (value) { control.setLabel(value); }
         });
         Object.defineProperty(body[field], "SearchQuery", {
             get: function () { return control.getSearchQuery(); },
             set: function (value) { control.setSearchQuery(value); }
         });
         Object.defineProperty(body[field], "ShowTime", {
-            get: function () { return control.getShowTime(); },//TESTED
-            set: function (value) { control.setShowTime(value); }//TESTED
+            get: function () { return control.getShowTime(); },
+            set: function (value) { control.setShowTime(value); }
         });
         Object.defineProperty(body[field], "Src", {
             get: function () { return control.getSrc(); },
             set: function (value) { control.setSrc(value); }
         });
         Object.defineProperty(body[field], "Visible", {
-            get: function () { return control.getVisible(); },//TESTED
-            set: function (value) { control.setVisible(value); }//TESTED
+            get: function () { return control.getVisible(); },
+            set: function (value) { control.setVisible(value); }
         });
         body[field].ContentWindow = function (successCallback, errorCallback) { control.getContentWindow().then(successCallback, errorCallback); }
-        body[field].Option = function (value) { return attribute.getOption(value); };//TESTED
-        body[field].RemoveOnChange = function (callback) { attribute.removeOnChange(callback); };//TESTED
-        body[field].AddCustomFilter = function (filter, entityLogicaName) { control.addCustomFilter(filter, entityLogicaName); };//TESTED
-        body[field].AddCustomView = function (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) { control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault); };//TESTED
+        body[field].Option = function (value) { return attribute.getOption(value); };
+        body[field].RemoveOnChange = function (callback) { attribute.removeOnChange(callback); };
+        body[field].AddCustomFilter = function (filter, entityLogicaName) { control.addCustomFilter(filter, entityLogicaName); };
+        body[field].AddCustomView = function (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) { control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault); };
         body[field].AddOnPostSearch = function (callback) { control.addOnPostSearch(callback); };
         body[field].AddOnResultOpened = function (callback) { control.addOnResultOpened(callback); };
         body[field].AddOnSelection = function (callback) { control.addOnSelection(callback); };
-        body[field].AddPreSearch = function (callback) { control.addPreSearch(callback); };//TESTED
-        body[field].ClearNotification = function (uniqueId) { return control.clearNotification(uniqueId); };//TESTED
-        body[field].ClearOptions = function () { control.clearOptions(); };//TESTED
-        body[field].AddOnChange = function (callback) { attribute.addOnChange(callback); };//TESTED
-        body[field].FireOnChange = function () { attribute.fireOnChange(); };//TESTED
+        body[field].AddPreSearch = function (callback) { control.addPreSearch(callback); };
+        body[field].ClearNotification = function (uniqueId) { return control.clearNotification(uniqueId); };
+        body[field].ClearOptions = function () { control.clearOptions(); };
+        body[field].AddOnChange = function (callback) { attribute.addOnChange(callback); };
+        body[field].FireOnChange = function () { attribute.fireOnChange(); };
         body[field].OpenSearchResult = function (resultNumber, mode) { return control.openSearchResult(resultNumber, mode); };
         body[field].Refresh = function () { control.refresh(); };
         body[field].RemoveOnPostSearch = function (callback) { control.removeOnPostSearch(callback); };
         body[field].RemoveOnResultOpened = function (callback) { control.removeOnResultOpened(callback); };
         body[field].RemoveOnSelection = function (callback) { control.removeOnSelection(callback); };
-        body[field].RemoveOption = function (value) { control.removeOption(value); };//TESTED
+        body[field].RemoveOption = function (value) { control.removeOption(value); };
         body[field].RemovePreSearch = function (callback) { control.removePreSearch(callback); };
         body[field].Focus = function () { control.setFocus(); };
-        body[field].SetNotification = function (message, uniqueId) { return control.setNotification(message, uniqueId); };//TESTED
-        body[field].AddOption = function (text, value, index) { var option = { text: text, value: value }; control.addOption(option, index); };//TESTED
+        body[field].SetNotification = function (message, uniqueId) { return control.setNotification(message, uniqueId); };
+        body[field].AddOption = function (text, value, index) { var option = { text: text, value: value }; control.addOption(option, index); };
         body[field].AddNotification = function (title, message, notificationLevel, uniqueId, callback) {
             var actions = { message: message, actions: [callback] };
             var notification = { messages: [title], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
@@ -281,15 +281,15 @@ var devKit = (function () {
             if (!tabObject) return;
             if (tabObject.sections && tabObject.sections.get) {
                 var sectionObject = tabObject.sections.get(section);
-                Object.defineProperty(sections[section], "Name", { get: function () { return sectionObject.getName(); } });//TESTED
-                Object.defineProperty(sections[section], "Parent", { get: function () { return sectionObject.getParent(); } });//TESTED
+                Object.defineProperty(sections[section], "Name", { get: function () { return sectionObject.getName(); } });
+                Object.defineProperty(sections[section], "Parent", { get: function () { return sectionObject.getParent(); } });
                 Object.defineProperty(sections[section], "Label", {
-                    get: function () { return sectionObject.getLabel(); },//TESTED
-                    set: function (value) { sectionObject.setLabel(value); }//TESTED
+                    get: function () { return sectionObject.getLabel(); },
+                    set: function (value) { sectionObject.setLabel(value); }
                 });
                 Object.defineProperty(sections[section], "Visible", {
-                    get: function () { return sectionObject.getVisible(); },//TESTED
-                    set: function (value) { sectionObject.setVisible(value); }//TESTED
+                    get: function () { return sectionObject.getVisible(); },
+                    set: function (value) { sectionObject.setVisible(value); }
                 });
             }
         }
@@ -298,23 +298,23 @@ var devKit = (function () {
         if (!formContext) return;
         if (formContext.ui && formContext.ui.tabs && formContext.ui.tabs.get) {
             var tabObject = formContext.ui.tabs.get(tab);            
-            Object.defineProperty(tabs[tab], "Name", { get: function () { return tabObject.getName(); } });//TESTED
-            Object.defineProperty(tabs[tab], "Parent", { get: function () { return tabObject.getParent(); } });//TESTED
+            Object.defineProperty(tabs[tab], "Name", { get: function () { return tabObject.getName(); } });
+            Object.defineProperty(tabs[tab], "Parent", { get: function () { return tabObject.getParent(); } });
             Object.defineProperty(tabs[tab], "DisplayState", {
-                get: function () { return tabObject.getDisplayState(); },//TESTED
-                set: function (value) { tabObject.setDisplayState(value); }//TESTED
+                get: function () { return tabObject.getDisplayState(); },
+                set: function (value) { tabObject.setDisplayState(value); }
             });
             Object.defineProperty(tabs[tab], "Label", {
-                get: function () { return tabObject.getLabel(); },//TESTED
-                set: function (value) { tabObject.setLabel(value); }//TESTED
+                get: function () { return tabObject.getLabel(); },
+                set: function (value) { tabObject.setLabel(value); }
             });
             Object.defineProperty(tabs[tab], "Visible", {
-                get: function () { return tabObject.getVisible(); },//TESTED
-                set: function (value) { tabObject.setVisible(value); }//TESTED
+                get: function () { return tabObject.getVisible(); },
+                set: function (value) { tabObject.setVisible(value); }
             });
-            tabs[tab].AddTabStateChange = function (callback) { tabObject.addTabStateChange(callback); };//TESTED
-            tabs[tab].Focus = function () { tabObject.setFocus(); };//TESTED
-            tabs[tab].RemoveTabStateChange = function (callback) { tabObject.removeTabStateChange(callback); };//TESTED
+            tabs[tab].AddTabStateChange = function (callback) { tabObject.addTabStateChange(callback); };
+            tabs[tab].Focus = function () { tabObject.setFocus(); };
+            tabs[tab].RemoveTabStateChange = function (callback) { tabObject.removeTabStateChange(callback); };
             for (var section in tabs[tab].Section) {
                 loadSection(formContext, tab, tabs[tab].Section, section);
             }
@@ -346,15 +346,9 @@ var devKit = (function () {
             loadNavigation(formContext, navigations, navigation);
         }
     }
-    //function controlRemoved(formContext, type, control) {
-    //    console.log(`${type}: ${control} removed on form`);
-    //}
     function loadQuickForm(formContext, quickForms, quickForm) {
         if (!formContext || !formContext.ui || !formContext.ui.quickForms || !formContext.ui.quickForms.get) return;
         var quickViewControl = formContext.ui.quickForms.get(quickForm);
-        //if (!quickViewControl) {
-        //    controlRemoved(formContext, "QuickView", quickForm);
-        //}
         quickForms[quickForm].Controls = function (arg) {
             if (!quickViewControl) return [];
             if (arg === undefined) return quickViewControl.getControl();
@@ -430,32 +424,29 @@ var devKit = (function () {
         var utility = {};
         if (Xrm && Xrm.Utility) {
             var getUtility = Xrm.Utility;
-            Object.defineProperty(utility, "LearningPathAttributeName", { get: function () { return getUtility.getLearningPathAttributeName(); } });//XRM-MOCK
-            utility.CloseProgressIndicator = function () { getUtility.closeProgressIndicator(); };//TESTED
-            utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback); };//TESTED
-            utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback); };//TESTED
-            utility.ResourceString = function (webResourceName, key) { return getUtility.getResourceString(webResourceName, key); };//TESTED
-            utility.Resource = function (key) { if (defaultWebResourceName !== undefined) return getUtility.getResourceString(defaultWebResourceName, key); return EMPTY_STRING; };//TESTED
-            utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback); };//TESTED
-            utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback); };//TESTED
-            utility.RefreshParentGrid = function (lookupOptions) { getUtility.refreshParentGrid(lookupOptions); };//TESTED
-            utility.ShowProgressIndicator = function (message) { getUtility.showProgressIndicator(message); };//TESTED
+            Object.defineProperty(utility, "LearningPathAttributeName", { get: function () { return getUtility.getLearningPathAttributeName(); } });
+            utility.CloseProgressIndicator = function () { getUtility.closeProgressIndicator(); };
+            utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback); };
+            utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback); };
+            utility.ResourceString = function (webResourceName, key) { return getUtility.getResourceString(webResourceName, key); };
+            utility.Resource = function (key) { if (defaultWebResourceName !== undefined) return getUtility.getResourceString(defaultWebResourceName, key); return EMPTY_STRING; };
+            utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback); };
+            utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback); };
+            utility.RefreshParentGrid = function (lookupOptions) { getUtility.refreshParentGrid(lookupOptions); };
+            utility.ShowProgressIndicator = function (message) { getUtility.showProgressIndicator(message); };
         }
         if (Xrm && Xrm.Utility && Xrm.Utility.getGlobalContext) {
             var getGlobalContext = Xrm.Utility.getGlobalContext();
-            Object.defineProperty(utility, "ClientUrl", { get: function () { return getGlobalContext.getClientUrl(); } });//TESTED
-            Object.defineProperty(utility, "CurrentAppUrl", { get: function () { return getGlobalContext.getCurrentAppUrl(); } });//TESTED
-            Object.defineProperty(utility, "Version", { get: function () { return getGlobalContext.getVersion(); } });//TESTED
-            Object.defineProperty(utility, "IsOnPremises", { get: function () { return getGlobalContext.isOnPremises(); } });//XRM-MOCK
+            
             Object.defineProperty(utility, "Client", {
                 get: function () {
                     var Client = {};
                     if (getGlobalContext.client) {
                         var client = getGlobalContext.client;
-                        Object.defineProperty(Client, "ClientName", { get: function () { return client.getClient(); } });//TESTED
-                        Object.defineProperty(Client, "ClientState", { get: function () { return client.getClientState(); } });//TESTED
-                        Object.defineProperty(Client, "FormFactor", { get: function () { return client.getFormFactor(); } });//TESTED
-                        Object.defineProperty(Client, "IsOffline", { get: function () { return client.isOffline(); } });//TESTED                        
+                        Object.defineProperty(Client, "ClientName", { get: function () { return client.getClient(); } });
+                        Object.defineProperty(Client, "ClientState", { get: function () { return client.getClientState(); } });
+                        Object.defineProperty(Client, "FormFactor", { get: function () { return client.getFormFactor(); } });
+                        Object.defineProperty(Client, "IsOffline", { get: function () { return client.isOffline(); } });                        
                     }
                     return Client;
                 }
@@ -466,13 +457,13 @@ var devKit = (function () {
                     if (getGlobalContext.organizationSettings) {
                         var organizationSettings = getGlobalContext.organizationSettings;
                         Object.defineProperty(OrganizationSettings, "Attributes", { get: function () { return organizationSettings.attributes; } });//NOT-TEST
-                        Object.defineProperty(OrganizationSettings, "BaseCurrencyId", { get: function () { return organizationSettings.baseCurrencyId; } });//TESTED
-                        Object.defineProperty(OrganizationSettings, "DefaultCountryCode", { get: function () { return organizationSettings.defaultCountryCode; } });//TESTED
-                        Object.defineProperty(OrganizationSettings, "LanguageId", { get: function () { return organizationSettings.languageId; } });//TESTED
-                        Object.defineProperty(OrganizationSettings, "OrganizationId", { get: function () { return organizationSettings.organizationId; } });//TESTED
-                        Object.defineProperty(OrganizationSettings, "UniqueName", { get: function () { return organizationSettings.uniqueName; } });//TESTED
-                        Object.defineProperty(OrganizationSettings, "UseSkypeProtocol", { get: function () { return organizationSettings.useSkypeProtocol; } });//TESTED
-                        Object.defineProperty(OrganizationSettings, "IsAutoSaveEnabled", { get: function () { return organizationSettings.isAutoSaveEnabled; } });//TESTED                        
+                        Object.defineProperty(OrganizationSettings, "BaseCurrencyId", { get: function () { return organizationSettings.baseCurrencyId; } });
+                        Object.defineProperty(OrganizationSettings, "DefaultCountryCode", { get: function () { return organizationSettings.defaultCountryCode; } });
+                        Object.defineProperty(OrganizationSettings, "LanguageId", { get: function () { return organizationSettings.languageId; } });
+                        Object.defineProperty(OrganizationSettings, "OrganizationId", { get: function () { return organizationSettings.organizationId; } });
+                        Object.defineProperty(OrganizationSettings, "UniqueName", { get: function () { return organizationSettings.uniqueName; } });
+                        Object.defineProperty(OrganizationSettings, "UseSkypeProtocol", { get: function () { return organizationSettings.useSkypeProtocol; } });
+                        Object.defineProperty(OrganizationSettings, "IsAutoSaveEnabled", { get: function () { return organizationSettings.isAutoSaveEnabled; } });                        
                     }
                     return OrganizationSettings;
                 }
@@ -482,58 +473,63 @@ var devKit = (function () {
                     var UserSettings = {};
                     if (getGlobalContext.userSettings) {
                         var userSettings = getGlobalContext.userSettings;
-                        Object.defineProperty(UserSettings, "DateFormattingInfo", { get: function () { return userSettings.dateFormattingInfo; } });//XRM-MOCK BUG
-                        Object.defineProperty(UserSettings, "DefaultDashboardId", { get: function () { return userSettings.defaultDashboardId; } });//TESTED
-                        Object.defineProperty(UserSettings, "LanguageId", { get: function () { return userSettings.languageId; } });//TESTED
-                        Object.defineProperty(UserSettings, "SecurityRolePrivileges", { get: function () { return userSettings.securityRolePrivileges; } });//TESTED
-                        Object.defineProperty(UserSettings, "SecurityRoles", { get: function () { return userSettings.securityRoles; } });//TESTED
-                        Object.defineProperty(UserSettings, "TransactionCurrencyId", { get: function () { return userSettings.transactionCurrencyId; } });//TESTED
-                        Object.defineProperty(UserSettings, "UserId", { get: function () { return userSettings.userId; } });//TESTED
-                        Object.defineProperty(UserSettings, "UserName", { get: function () { return userSettings.userName; } });//TESTED
-                        Object.defineProperty(UserSettings, "IsGuidedHelpEnabled", { get: function () { return userSettings.isGuidedHelpEnabled; } });//TESTED
-                        Object.defineProperty(UserSettings, "IsHighContrastEnabled", { get: function () { return userSettings.isHighContrastEnabled; } });//TESTED
-                        Object.defineProperty(UserSettings, "IsRTL", { get: function () { return userSettings.isRTL; } });//TESTED
-                        Object.defineProperty(UserSettings, "TimeZoneOffsetMinutes", { get: function () { return userSettings.getTimeZoneOffsetMinutes(); } });//TESTED
+                        Object.defineProperty(UserSettings, "DateFormattingInfo", { get: function () { return userSettings.dateFormattingInfo; } });
+                        Object.defineProperty(UserSettings, "DefaultDashboardId", { get: function () { return userSettings.defaultDashboardId; } });
+                        Object.defineProperty(UserSettings, "IsGuidedHelpEnabled", { get: function () { return userSettings.isGuidedHelpEnabled; } });
+                        Object.defineProperty(UserSettings, "IsHighContrastEnabled", { get: function () { return userSettings.isHighContrastEnabled; } });
+                        Object.defineProperty(UserSettings, "IsRTL", { get: function () { return userSettings.isRTL; } });
+                        Object.defineProperty(UserSettings, "LanguageId", { get: function () { return userSettings.languageId; } });
+                        Object.defineProperty(UserSettings, "Roles", { get: function () { debugger; return userSettings.roles; } });
+                        Object.defineProperty(UserSettings, "SecurityRolePrivileges", { get: function () { return userSettings.securityRolePrivileges; } });                        
+                        Object.defineProperty(UserSettings, "TransactionCurrency", { get: function () { return userSettings.transactionCurrency; } });                        
+                        Object.defineProperty(UserSettings, "UserId", { get: function () { return userSettings.userId; } });
+                        Object.defineProperty(UserSettings, "UserName", { get: function () { return userSettings.userName; } });
+                        Object.defineProperty(UserSettings, "TimeZoneOffsetMinutes", { get: function () { return userSettings.getTimeZoneOffsetMinutes(); } });
                     }
                     return UserSettings;
                 }
             });
-            utility.AdvancedConfigSetting = function (setting) { return getGlobalContext.getAdvancedConfigSetting(setting); };//TESTED
-            utility.CurrentAppName = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppName().then(successCallback, errorCallback); };//TESTED
-            utility.CurrentAppProperties = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback); };//TESTED
-            utility.PrependOrgName = function (sPath) { return getGlobalContext.prependOrgName(sPath); };//TESTED
+            utility.AdvancedConfigSetting = function (setting) { return getGlobalContext.getAdvancedConfigSetting(setting); };
+            Object.defineProperty(utility, "ClientUrl", { get: function () { return getGlobalContext.getClientUrl(); } });            
+            utility.CurrentAppName = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppName().then(successCallback, errorCallback); };
+            utility.CurrentAppProperties = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback); };
+            Object.defineProperty(utility, "CurrentAppUrl", { get: function () { return getGlobalContext.getCurrentAppUrl(); } });
+            Object.defineProperty(utility, "Version", { get: function () { return getGlobalContext.getVersion(); } });
+            utility.WebResourceUrl = function (webResourceName) { return getGlobalContext.getWebResourceUrl(webResourceName); };
+            Object.defineProperty(utility, "IsOnPremises", { get: function () { return getGlobalContext.isOnPremises(); } });
+            utility.PrependOrgName = function (sPath) { return getGlobalContext.prependOrgName(sPath); };
         }
         if (Xrm && Xrm.Navigation) {
             var getNavigation = Xrm.Navigation;
-            utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback); };//TESTED
-            utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback); };//TESTED
-            utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) { getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback); };//TESTED
-            utility.OpenFile = function (file, openFileOptions) { getNavigation.openFile(file, openFileOptions); };//TESTED
-            utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) { getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback); };//TESTED
-            utility.OpenUrl = function (url, openUrlOptions) { getNavigation.openUrl(url, openUrlOptions); };//TESTED
-            utility.OpenWebResource = function (webResourceName, windowOptions, data) { getNavigation.openWebResource(webResourceName, windowOptions, data); };//TESTED
+            utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback); };
+            utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback); };
+            utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) { getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback); };
+            utility.OpenFile = function (file, openFileOptions) { getNavigation.openFile(file, openFileOptions); };
+            utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) { getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback); };
+            utility.OpenUrl = function (url, openUrlOptions) { getNavigation.openUrl(url, openUrlOptions); };
+            utility.OpenWebResource = function (webResourceName, windowOptions, data) { getNavigation.openWebResource(webResourceName, windowOptions, data); };
             utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback); };//XRM-MOCK
         }
         if (Xrm && Xrm.Panel) {
             var getPanel = Xrm.Panel;
-            utility.LoadPanel = function (url, title) { getPanel.loadPanel(url, title); };//TESTED
+            utility.LoadPanel = function (url, title) { getPanel.loadPanel(url, title); };
         }
         if (Xrm && Xrm.Encoding) {
             var getEncoding = Xrm.Encoding;
-            utility.XmlAttributeEncode = function (arg) { return getEncoding.xmlAttributeEncode(arg); };//TESTED
-            utility.XmlEncode = function (arg) { return getEncoding.xmlEncode(arg); };//TESTED
+            utility.XmlAttributeEncode = function (arg) { return getEncoding.xmlAttributeEncode(arg); };
+            utility.XmlEncode = function (arg) { return getEncoding.xmlEncode(arg); };
             utility.HtmlAttributeEncode = function (arg) { return getEncoding.htmlAttributeEncode(arg); };//XRM-MOCK
             utility.HtmlDecode = function (arg) { return getEncoding.htmlDecode(arg); };//XRM-MOCK
             utility.HtmlEncode = function (arg) { return getEncoding.htmlEncode(arg); };//XRM-MOCK
         }
         if (Xrm && Xrm.Device) {
             var getDevice = Xrm.Device;
-            utility.CaptureAudio = function (successCallback, errorCallback) { getDevice.captureAudio().then(successCallback, errorCallback); };//TESTED
-            utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice.captureImage(imageOptions).then(successCallback, errorCallback); };//TESTED
-            utility.CaptureVideo = function (successCallback, errorCallback) { getDevice.captureVideo().then(successCallback, errorCallback); };//TESTED
-            utility.BarcodeValue = function (successCallback, errorCallback) { getDevice.getBarcodeValue().then(successCallback, errorCallback); };//TESTED
-            utility.CurrentPosition = function (successCallback, errorCallback) { getDevice.getCurrentPosition().then(successCallback, errorCallback); };//TESTED
-            utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback); };//TESTED
+            utility.CaptureAudio = function (successCallback, errorCallback) { getDevice.captureAudio().then(successCallback, errorCallback); };
+            utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice.captureImage(imageOptions).then(successCallback, errorCallback); };
+            utility.CaptureVideo = function (successCallback, errorCallback) { getDevice.captureVideo().then(successCallback, errorCallback); };
+            utility.BarcodeValue = function (successCallback, errorCallback) { getDevice.getBarcodeValue().then(successCallback, errorCallback); };
+            utility.CurrentPosition = function (successCallback, errorCallback) { getDevice.getCurrentPosition().then(successCallback, errorCallback); };
+            utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback); };
         }
         if (Xrm && Xrm.App) {
             var getApp = Xrm.App;

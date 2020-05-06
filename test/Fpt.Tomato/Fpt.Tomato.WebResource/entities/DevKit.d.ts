@@ -417,30 +417,43 @@ declare namespace DevKit {
             /** The entity type to which to apply this filter. */
             entityLogicalName: string
         }
+        interface DateFormattingInfoCalendar {
+            MinSupportedDateTime: Date;
+            MaxSupportedDateTime: Date;
+            AlgorithmType: number;
+            CalendarType: number;
+            Eras: Array<number>;
+            TwoDigitYearMax: number;
+            IsReadOnly: boolean;
+        }
         interface DateFormattingInfo {
-            AMDesignator: string,
-            AbbreviatedDayNames: Array<string>,
-            AbbreviatedMonthGenitiveNames: Array<string>,
-            AbbreviatedMonthNames: Array<string>,
-            CalendarWeekRule: number,
-            Calendar: any,
-            DateSeparator: string,
-            DayNames: Array<string>,
-            FirstDayOfWeek: number,
-            FullDateTimePattern: string,
-            LongDatePattern: string,
-            LongTimePattern: string,
-            MonthDayPattern: string,
-            MonthGenitiveNames: Array<string>,
-            MonthNames: Array<string>,
-            PMDesignator: string,
-            ShortDatePattern: string,
-            ShortTimePattern: string,
-            ShortestDayNames: Array<string>,
-            UniversalSortableDateTimePattern: string,
-            SortableDateTimePattern: string,
-            TimeSeparator: string,
-            YearMonthPattern: string
+            AMDesignator: string;
+            AbbreviatedDayNames: Array<string>;
+            AbbreviatedMonthGenitiveNames: Array<string>;
+            AbbreviatedMonthNames: Array<string>;
+            Calendar: DateFormattingInfoCalendar;
+            CalendarWeekRule: number;
+            DateSeparator: string;
+            DayNames: Array<string>;
+            FirstDayOfWeek: number;
+            FullDateTimePattern: string;
+            IsReadOnly: boolean;
+            LongDatePattern: string;
+            LongTimePattern: string;
+            MonthDayPattern: string;
+            MonthGenitiveNames: Array<string>;
+            MonthNames: Array<string>;
+            NativeCalendarName: string;
+            PMDesignator: string;
+            RFC1123Pattern: string;
+            ShortDatePattern: string;
+            ShortTimePattern: string;
+            ShortestDayNames: Array<string>;
+            SortableDateTimePattern: string;
+            TimeSeparator: string;
+            UniversalSortableDateTimePattern: string;
+            YearMonthPattern: string;
+            eras: Array<string>;
         }
         interface FormOption {
             /** Indicates whether to display the command bar. If you do not specify this parameter, the command bar is displayed by default. */
@@ -2037,6 +2050,12 @@ declare namespace DevKit {
              */
             CurrentAppName(successCallback: (result: string) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
+             * Returns the relative URL with the caching token for the specified web resource.
+             * @param webResourceName Name of the web resource.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getwebresourceurl
+             */
+            WebResourceUrl(webResourceName: string): string;
+            /**
              * Returns the properties of the current business app in Customer Engagement
              * @param successCallback A function to call when the business app property information is returned
              * @param errorCallback A function to call when the operation fails
@@ -2486,20 +2505,20 @@ declare namespace DevKit {
             */
             LanguageId: number;
             /**
+             * Returns a collection of lookup objects containing the GUID and display name of each of the security role or teams that the user is associated with.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#roles
+            */
+            Roles: DevKit.Form.Collections;
+            /**
             * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
             */
             SecurityRolePrivileges: Array<string>;
             /**
-            * Returns an array of strings that represent the GUID values of each of the security role that the user is associated with or any teams that the user is associated with
-            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
+            * Returns a lookup object containing the ID, display name, and entity type of the transaction currency for the current user.
+            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
             */
-            SecurityRoles: Array<string>;
-            /**
-            * Returns the transaction currency ID for the current user
-            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
-            */
-            TransactionCurrencyId: string;
+            TransactionCurrency: DevKit.Core.EntityReference;
             /**
             * Returns the GUID of the SystemUser.Id value for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
