@@ -197,6 +197,7 @@ declare namespace Tomato {
 			abc_IFramed: DevKit.Form.Controls.ControlIFrame;
 			abc_KbSearch: DevKit.Form.Controls.ControlKnowledge;
 			abc_TimelineWall: DevKit.Form.Controls.ControlTimelineWall;
+			abc_Timer: DevKit.Form.Controls.ControlTimer;
 		}
 		interface Footer {
 			/** Unique identifier of the user who created the record. */

@@ -403,7 +403,41 @@ define(['xrm-mock'], () => {
             expect(() => { form.Body.abc_TimelineWall.Visible = true }).toThrow(new Error("Method not implemented."));
         });
         it('timer control type', () => {
-            expect(true).toBeTruthy();
+            var attributes = new xrmMock.ItemCollectionMock([
+                new xrmMock.AttributeMock({
+                    name: "abc_timer"
+                })
+            ]);
+            var entity = new xrmMock.EntityMock({
+                attributes: attributes
+            });
+            var data = new xrmMock.DataMock(entity);
+            var timer = new xrmMock.TimerControlMock({
+                name: "abc_timer",
+                controlType: "timercontrol",
+                label: "TIMMER LABEL",
+                visible: true
+            });
+            var ui = new xrmMock.UiMock({
+                controls: new xrmMock.ItemCollectionMock([timer])
+            });
+            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+            expect(form.Body.abc_Timer.ControlType).toBe(OptionSet.FieldControlType.TimerControl);
+            expect(() => { form.Body.abc_Timer.Disabled }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.abc_Timer.Label).toBe("TIMMER LABEL");
+            expect(form.Body.abc_Timer.AttributeName).toBe("abc_timer");
+            expect(form.Body.abc_Timer.ControlName).toBe("abc_timer");
+            expect(form.Body.abc_Timer.ControlParent).toBeUndefined();
+            expect(() => { form.Body.abc_Timer.State }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.abc_Timer.Visible).toBeTruthy();
+            expect(() => { form.Body.abc_Timer.Refresh() }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Body.abc_Timer.Disabled = true }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.abc_Timer.Focus() }).toThrow(new Error("Method not implemented."));
+            form.Body.abc_Timer.Label = "TIMMER LABEL NEW";
+            expect(form.Body.abc_Timer.Label).toBe("TIMMER LABEL NEW");
+            expect(() => { form.Body.abc_Timer.Visible = false }).toThrow(new Error("Method not implemented."));
         });
         it('webresource control type', () => {
             expect(true).toBeTruthy();

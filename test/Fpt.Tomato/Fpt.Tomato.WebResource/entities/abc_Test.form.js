@@ -23,7 +23,8 @@ var Tomato;
 			abc_FloatingPointNumber: {},
 			abc_IFramed: {},
 			abc_KbSearch: {},
-			abc_TimelineWall: {}
+			abc_TimelineWall: {},
+			abc_Timer: {}
 		};
 		devKit.LoadFields(formContext, body);
 

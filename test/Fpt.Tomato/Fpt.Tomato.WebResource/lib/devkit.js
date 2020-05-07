@@ -642,7 +642,7 @@ var OptionSet;
         OptionSet: 'optionset',
         QuickForm: 'quickform',
         SubGrid: 'subgrid',
-        TimerControl: 'TimerControl',
+        TimerControl: 'timercontrol',
         TimelineWall: 'timelinewall',
         WebResource: 'webresource'
     };
