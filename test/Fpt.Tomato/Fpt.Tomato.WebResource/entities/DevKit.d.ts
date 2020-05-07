@@ -1367,11 +1367,11 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
                  */
                 Value: string;
-                /**
-                 * Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control. The getValue method is different from the attribute getValue method because the control method retrieves the value from the control as the user is typing in the control as opposed to the attribute getValue method that retrieves the value after the user commits (saves) the field
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvalue
-                 */
-                Value2: string;
+                ///**
+                // * Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control. The getValue method is different from the attribute getValue method because the control method retrieves the value from the control as the user is typing in the control as opposed to the attribute getValue method that retrieves the value after the user commits (saves) the field
+                // * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvalue
+                // */
+                //Value2: string;
             }
             interface IControlNumber extends IControl {
                 /**
@@ -1549,6 +1549,11 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/gettotalresultcount
                  */
                 readonly TotalResultCount: number;
+                /**
+                 * Use this method to get the currently selected result of the search control. The currently selected result also represents the result that is currently open.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getselectedresults
+                 */
+                SelectedResults: any
                 /**
                  * Opens a search result in the search control by specifying the result number
                  * @param resultNumber Numerical value specifying the result number to be opened. Result number starts from 1

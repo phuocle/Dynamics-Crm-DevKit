@@ -179,7 +179,7 @@ var devKit = (function () {
         Object.defineProperty(body[field], "ControlParent", { get: function () { return control.getParent(); } });
         Object.defineProperty(body[field], "State", { get: function () { return control.getState(); } });
         Object.defineProperty(body[field], "TotalResultCount", { get: function () { return control.getTotalResultCount(); } });
-        Object.defineProperty(body[field], "Value2", { get: function () { return control.getValue(); } });
+        Object.defineProperty(body[field], "SelectedResults", { get: function () { return control.getSelectedResults(); } });
         Object.defineProperty(body[field], "Attribute", { get: function () { return control.getAttribute(); } });
         Object.defineProperty(body[field], "Precision", {
             get: function () { return attribute.getPrecision(); },
