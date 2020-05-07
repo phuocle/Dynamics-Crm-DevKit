@@ -62,6 +62,104 @@ declare namespace LuckyMokey {
 		/** The Header section of form SLA */
 		Header: LuckyMokey.FormSLA.Header;
 	}
+	class SLAApi {
+		/**
+		* DynamicsCrm.DevKit SLAApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Select whether this SLA will allow pausing and resuming during the time calculation. */
+		AllowPauseResume: DevKit.WebApi.BooleanValue;
+		/** Select the field that specifies the date and time from which the SLA items will be calculated for the case record. For example, if you select the Case Created On field, SLA calculation will begin from the time the case is created.  */
+		ApplicableFrom: DevKit.WebApi.StringValue;
+		/** Select the field that specifies the date and time from which the SLA items will be calculated. For example, if you select the Case Created On field, SLA calculation will begin from the time the case is created. */
+		ApplicableFromPickList: DevKit.WebApi.OptionSetValue;
+		/** Choose the business hours for calculating SLA item timelines. */
+		BusinessHoursId: DevKit.WebApi.LookupValue;
+		/** Type additional information to describe the SLA */
+		ChangedAttributeList: DevKit.WebApi.StringValue;
+		/** For internal use only. */
+		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		/** Shows who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Type additional information to describe the SLA */
+		Description: DevKit.WebApi.StringValue;
+		/** Exchange rate between the currency associated with the SLA record and the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Tells whether this SLA is the default one. */
+		IsDefault: DevKit.WebApi.BooleanValue;
+		/** For internal use only. */
+		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		/** Shows who last updated the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Type a descriptive name of the service level agreement (SLA). */
+		Name: DevKit.WebApi.StringValue;
+		/** Choose the entity type that the SLA is defined. */
+		ObjectTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		/** For internal use only. */
+		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValue;
+		/** Shows the primary entity that the SLA has been created for. */
+		PrimaryEntityOTC: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the SLA. */
+		SLAId: DevKit.WebApi.GuidValue;
+		/** For internal use only. */
+		SLAIdUnique: DevKit.WebApi.GuidValueReadonly;
+		/** Select the type of service level agreement (SLA). */
+		SLAType: DevKit.WebApi.OptionSetValue;
+		slaversion: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier of the associated solution. */
+		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		/** Shows whether the Service Level Agreement (SLA) is active or inactive. */
+		StateCode: DevKit.WebApi.OptionSetValue;
+		/** Select the status of the service level agreement (SLA). */
+		StatusCode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		/** Unique identifier of the currency associated with the SLA record. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValueReadonly;
+		/** Version number of the SLA. */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		/** Workflow associated with the SLA. */
+		WorkflowId: DevKit.WebApi.LookupValue;
+	}
 }
 declare namespace OptionSet {
 	namespace SLA {
@@ -1805,4 +1903,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['SLA'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['SLA'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

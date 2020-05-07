@@ -22,6 +22,74 @@ declare namespace LuckyMokey {
 		/** The Body section of form msdyn_suggestedcontact_Information */
 		Body: LuckyMokey.Formmsdyn_suggestedcontact_Information.Body;
 	}
+	namespace Formmsdyn_suggestedcontact_Information {
+		interface Tabs {
+		}
+		interface Body {
+			msdyn_fullname: DevKit.Form.Controls.ControlString;
+		}
+	}
+	class Formmsdyn_suggestedcontact_Information extends DevKit.Form.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_suggestedcontact_Information
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Form.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.Form.WebApi;
+		/** The Body section of form msdyn_suggestedcontact_Information */
+		Body: LuckyMokey.Formmsdyn_suggestedcontact_Information.Body;
+	}
+	class msdyn_suggestedcontactApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_suggestedcontactApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		msdyn_accountname: DevKit.WebApi.StringValue;
+		msdyn_addresscity: DevKit.WebApi.StringValue;
+		msdyn_addressline1: DevKit.WebApi.StringValue;
+		msdyn_addressline2: DevKit.WebApi.StringValue;
+		msdyn_addresspostalcode: DevKit.WebApi.StringValue;
+		msdyn_companyname: DevKit.WebApi.StringValue;
+		/** Date and time when the record was created. */
+		msdyn_createdon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_description: DevKit.WebApi.StringValue;
+		msdyn_email: DevKit.WebApi.StringValue;
+		/** first name */
+		msdyn_firstname: DevKit.WebApi.StringValue;
+		msdyn_fullname: DevKit.WebApi.StringValue;
+		msdyn_jobtitle: DevKit.WebApi.StringValue;
+		msdyn_lastname: DevKit.WebApi.StringValue;
+		msdyn_mobilephone: DevKit.WebApi.StringValue;
+		msdyn_preferredcontactmethodcode: DevKit.WebApi.StringValue;
+		/** Unique identifier for entity instances */
+		msdyn_suggestedcontactId: DevKit.WebApi.GuidValue;
+		msdyn_telephone: DevKit.WebApi.StringValue;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_suggestedcontact {
@@ -43,4 +111,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

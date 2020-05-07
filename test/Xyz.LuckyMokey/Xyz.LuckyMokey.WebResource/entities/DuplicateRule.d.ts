@@ -72,6 +72,85 @@ declare namespace LuckyMokey {
 		/** The Body section of form DuplicateRule_Information */
 		Body: LuckyMokey.FormDuplicateRule_Information.Body;
 	}
+	class DuplicateRuleApi {
+		/**
+		* DynamicsCrm.DevKit DuplicateRuleApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Database table that stores match codes for the record type being evaluated for potential duplicates. */
+		BaseEntityMatchCodeTable: DevKit.WebApi.StringValueReadonly;
+		/** Record type of the record being evaluated for potential duplicates. */
+		BaseEntityName: DevKit.WebApi.StringValue;
+		/** Record type of the record being evaluated for potential duplicates. */
+		BaseEntityTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		/** Unique identifier of the user who created the duplicate detection rule. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the duplicate detection rule was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the duplicaterule. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Description of the duplicate detection rule. */
+		Description: DevKit.WebApi.StringValue;
+		/** Unique identifier of the duplicate detection rule. */
+		DuplicateRuleId: DevKit.WebApi.GuidValue;
+		/** Determines whether to flag inactive records as duplicates */
+		ExcludeInactiveRecords: DevKit.WebApi.BooleanValue;
+		/** Indicates if the operator is case-sensitive. */
+		IsCaseSensitive: DevKit.WebApi.BooleanValue;
+		/** Database table that stores match codes for potential duplicate records. */
+		MatchingEntityMatchCodeTable: DevKit.WebApi.StringValueReadonly;
+		/** Record type of the records being evaluated as potential duplicates. */
+		MatchingEntityName: DevKit.WebApi.StringValue;
+		/** Record type of the records being evaluated as potential duplicates. */
+		MatchingEntityTypeCode: DevKit.WebApi.OptionSetValueReadonly;
+		/** Unique identifier of the user who last modified the duplicate detection rule. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the duplicate detection rule was last modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who last modified the duplicaterule. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Name of the duplicate detection rule. */
+		Name: DevKit.WebApi.StringValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the business unit that owns duplicate detection rule. */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the team who owns the duplicate detection rule. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the user who owns the duplicate detection rule. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the duplicate detection rule. */
+		StateCode: DevKit.WebApi.OptionSetValueReadonly;
+		/** Reason for the status of the duplicate detection rule. */
+		StatusCode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+	}
 }
 declare namespace OptionSet {
 	namespace DuplicateRule {
@@ -3471,4 +3550,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

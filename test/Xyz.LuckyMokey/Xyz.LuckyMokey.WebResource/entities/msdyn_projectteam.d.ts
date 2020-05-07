@@ -80,6 +80,129 @@ declare namespace LuckyMokey {
 		/** The Navigation of form msdyn_projectteam_Information */
 		Navigation: LuckyMokey.Formmsdyn_projectteam_Information.Navigation;
 	}
+	class msdyn_projectteamApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_projectteamApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the allocation method used to book resources on the project (full capacity, percentage, and so on). */
+		msdyn_allocationmethod: DevKit.WebApi.OptionSetValue;
+		/** Shows the number of applicants for this project team. */
+		msdyn_Applicantcount: DevKit.WebApi.IntegerValueReadonly;
+		/** Last Updated time of rollup field Applicant count. */
+		msdyn_Applicantcount_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** State of rollup field Applicant count. */
+		msdyn_Applicantcount_State: DevKit.WebApi.IntegerValueReadonly;
+		/** Shows if there are applicants available for this project team. */
+		msdyn_Applicantsavailable: DevKit.WebApi.BooleanValueReadonly;
+		/** Type the total assigned hours for project team member. */
+		msdyn_AssignedHours: DevKit.WebApi.DecimalValue;
+		/** Select whether the team member is billable */
+		msdyn_BillingType: DevKit.WebApi.OptionSetValue;
+		/** Shows the resource. */
+		msdyn_bookableresourceid: DevKit.WebApi.LookupValue;
+		/** Shows the calendar used for staffing this project team. */
+		msdyn_calendarId: DevKit.WebApi.StringValue;
+		/** Type the system description. */
+		msdyn_Description: DevKit.WebApi.StringValue;
+		/** Enter the resource team membership start date. */
+		msdyn_From_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Hard Booked Hours */
+		msdyn_hardbookedhours: DevKit.WebApi.DecimalValue;
+		/** Duplicate for resource requirement */
+		msdyn_hours: DevKit.WebApi.DecimalValue;
+		/** Shows the number of hours required of this team member on the project. */
+		msdyn_HoursRequested: DevKit.WebApi.DoubleValue;
+		/** Shows the membership status of this project team member. */
+		msdyn_MembershipStatus: DevKit.WebApi.OptionSetValue;
+		/** The id of the project team member in MS Project Client. */
+		msdyn_msprojectclientid: DevKit.WebApi.StringValue;
+		/** Type the name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Shows the number of resources requested. */
+		msdyn_Number: DevKit.WebApi.IntegerValue;
+		/** The organizational unit of the resource performing the work. */
+		msdyn_organizationalunit: DevKit.WebApi.LookupValue;
+		/** Duplicate for resource requirement */
+		msdyn_percentage: DevKit.WebApi.DecimalValue;
+		/** Select the project that this team members are part of. */
+		msdyn_project: DevKit.WebApi.LookupValue;
+		/** Select whether the team member can approve time and expenses. */
+		msdyn_ProjectApprover: DevKit.WebApi.BooleanValue;
+		/** Unique identifier for entity instances */
+		msdyn_projectteamId: DevKit.WebApi.GuidValue;
+		/** Required hours of team member from team member requirement */
+		msdyn_requiredhours: DevKit.WebApi.DecimalValue;
+		/** Select the role this team member is playing in this team. */
+		msdyn_resourcecategory: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Resource Requirement associated with Project Team Member. */
+		msdyn_resourcerequirementid: DevKit.WebApi.LookupValue;
+		/** Enter a description of the role for this team member. */
+		msdyn_RoleDescription: DevKit.WebApi.StringValue;
+		/** Soft Booked Hours */
+		msdyn_softbookedhours: DevKit.WebApi.DecimalValue;
+		/** Enter the end date of the resource membership in a team. */
+		msdyn_To_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Template to use for generic resource's schedule. Will be ignored if its a user or facility resource */
+		msdyn_worktemplate: DevKit.WebApi.LookupValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the status of the project team. */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Project Team */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_projectteam {
@@ -143,4 +266,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

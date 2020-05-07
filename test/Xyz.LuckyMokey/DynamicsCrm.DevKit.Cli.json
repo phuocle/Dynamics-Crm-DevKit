@@ -145,11 +145,12 @@
     },
     {
       "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Xyz.LuckyMokey",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsWebApi",
-      "debug":  ""
+      "entities": "*",
+      "debug": "yes"
     }
   ],
   "downloadwebresources": [

@@ -65,6 +65,102 @@ declare namespace LuckyMokey {
 		/** The Navigation of form SharePointSite_Information */
 		Navigation: LuckyMokey.FormSharePointSite_Information.Navigation;
 	}
+	class SharePointSiteApi {
+		/**
+		* DynamicsCrm.DevKit SharePointSiteApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Absolute URL of the SharePoint site. */
+		AbsoluteURL: DevKit.WebApi.StringValue;
+		/** Unique identifier of the user who created the SharePoint site record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the SharePoint site record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the SharePoint site record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Description of the SharePoint site record. */
+		Description: DevKit.WebApi.StringValue;
+		/** Exchange rate between the currency associated with the SharePoint site record and the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Indicates whether the SharePoint site is the default site or not. */
+		IsDefault: DevKit.WebApi.BooleanValue;
+		/** Indicates if SharePoint Grid is present or not. */
+		IsGridPresent: DevKit.WebApi.BooleanValue;
+		/** Allows embedding of Power BI Reports available in this SharePoint site. */
+		IsPowerBISite: DevKit.WebApi.BooleanValue;
+		/** Date and time when the SharePoint site URL was last validated. */
+		LastValidated_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Unique identifier of the user who last modified the SharePoint site record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the SharePoint site record was last modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the SharePoint site record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Name of the SharePoint site record. */
+		Name: DevKit.WebApi.StringValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the document location record. */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the team that owns the SharePoint site record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the user who owns the SharePoint site record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the parent SharePoint site. */
+		ParentSite: DevKit.WebApi.LookupValue;
+		/** Relative URL of the SharePoint site. */
+		RelativeUrl: DevKit.WebApi.StringValue;
+		/** Shows the service type of location of the SharePoint site. */
+		ServiceType: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier of the SharePoint site in Dynamics 365 */
+		SharePointSiteId: DevKit.WebApi.GuidValue;
+		/** For internal use only. */
+		SiteCollectionId: DevKit.WebApi.GuidValueReadonly;
+		/** Status of the SharePoint site record. */
+		StateCode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the SharePoint site record. */
+		StatusCode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the currency associated with the SharePoint site record. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValueReadonly;
+		/** Choose the user who owns the SharePoint site. */
+		UserId: DevKit.WebApi.GuidValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Validation status of the SharePoint site URL. */
+		ValidationStatus: DevKit.WebApi.OptionSetValue;
+		/** Reason for validation status of the URL */
+		ValidationStatusErrorCode: DevKit.WebApi.OptionSetValue;
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace SharePointSite {
@@ -136,4 +232,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

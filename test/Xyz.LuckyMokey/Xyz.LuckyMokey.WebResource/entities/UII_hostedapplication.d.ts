@@ -194,6 +194,180 @@ declare namespace LuckyMokey {
 		/** The Navigation of form UII_hostedapplication_Information */
 		Navigation: LuckyMokey.FormUII_hostedapplication_Information.Navigation;
 	}
+	class UII_hostedapplicationApi {
+		/**
+		* DynamicsCrm.DevKit UII_hostedapplicationApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		msdyusd_allowmultiplepages: DevKit.WebApi.BooleanValue;
+		msdyusd_AutoLaunch: DevKit.WebApi.BooleanValue;
+		msdyusd_CRMWindowHostType: DevKit.WebApi.OptionSetValue;
+		msdyusd_DashboardName: DevKit.WebApi.StringValue;
+		msdyusd_DisplayName: DevKit.WebApi.StringValue;
+		msdyusd_HostingType: DevKit.WebApi.OptionSetValue;
+		/** Number of browser instances available within this control before the user is prompted that they hit the limit. (2-20 are valid) */
+		msdyusd_MaximumBrowsers: DevKit.WebApi.IntegerValue;
+		msdyusd_PanelType: DevKit.WebApi.OptionSetValue;
+		msdyusd_SavedURL: DevKit.WebApi.StringValue;
+		msdyusd_ScanforDataParameters: DevKit.WebApi.BooleanValue;
+		msdyusd_SpecifyURL: DevKit.WebApi.BooleanValue;
+		msdyusd_XAML: DevKit.WebApi.StringValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the UII Hosted Application */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the UII Hosted Application */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Determines the Adapter Mode */
+		UII_AdapterMode: DevKit.WebApi.OptionSetValue;
+		/** Determines the Adapter Type information */
+		UII_AdapterType: DevKit.WebApi.StringValue;
+		/** URI of Adapter . */
+		UII_AdapterURI: DevKit.WebApi.StringValue;
+		/** Determines the Hosting Mode for the Hosted Application */
+		UII_ApplicationHostingMode: DevKit.WebApi.OptionSetValue;
+		/** Holds Assembly Type information. */
+		UII_AssemblyType: DevKit.WebApi.StringValue;
+		/** Holds Assembly URI */
+		UII_AssemblyURI: DevKit.WebApi.StringValue;
+		/** Stores the Automation Bindings information */
+		UII_AutomationXml: DevKit.WebApi.StringValue;
+		/** Determines with Display Group Panel the application needs to be displayed. */
+		UII_DisplayGroup: DevKit.WebApi.StringValue;
+		/** Stores the Extension Xml file which capture any additional info with the Hosted Application Entity doent allow to enter. */
+		UII_ExtensionsXml: DevKit.WebApi.StringValue;
+		/** Holds the Arguments for External App Settings */
+		UII_ExternalAppArguments: DevKit.WebApi.StringValue;
+		/** Holds the External Application URI . */
+		UII_ExternalAppURI: DevKit.WebApi.StringValue;
+		/** Working Directory of External Application */
+		UII_ExternalAppWorkingDirectory: DevKit.WebApi.StringValue;
+		/** FindWindow class to find the Top Level Window */
+		UII_FindWindowClass: DevKit.WebApi.StringValue;
+		/** Unique identifier for entity instances */
+		UII_hostedapplicationId: DevKit.WebApi.GuidValue;
+		/** Determines the Type of Hosted Application */
+		UII_HostedApplicationType: DevKit.WebApi.OptionSetValue;
+		/** Holds the ICA File Path for the Citrix Application */
+		UII_ICAFileName: DevKit.WebApi.StringValue;
+		/** Determines if the Hosted Application is a Dynamic Application */
+		UII_isAppDynamic: DevKit.WebApi.BooleanValue;
+		/** Determines if Attach Input Thread for the Application Process. */
+		UII_isAttachInputThread: DevKit.WebApi.BooleanValue;
+		/** Enable/Disable Auto Sign On feature for the Hosted Application */
+		UII_isAutoSignOn: DevKit.WebApi.BooleanValue;
+		/** Determines the dependency with Workflow */
+		UII_isDependentonWorkflow: DevKit.WebApi.BooleanValue;
+		/** Determines if the application is  Global Application */
+		UII_isGlobalApplication: DevKit.WebApi.BooleanValue;
+		/** Top Level Window is limit to current Process. */
+		UII_isLimittoProcess: DevKit.WebApi.BooleanValue;
+		/** Determines if Message Pump is set for the Hosted Application */
+		UII_isNoMessagePump: DevKit.WebApi.BooleanValue;
+		/** Restore is Minimized */
+		UII_isRestoreifMinimized: DevKit.WebApi.BooleanValue;
+		/** For Dynamic Positioned App, this setting determines the Frame and caption retainment */
+		UII_isRetainFrameandCaption: DevKit.WebApi.BooleanValue;
+		/** To Retain on Taskbar */
+		UII_isRetainonTaskbar: DevKit.WebApi.BooleanValue;
+		/** For Dynamic Positioned Application , determines if System Menu needs to be retained. */
+		UII_isRetainSystemMenu: DevKit.WebApi.BooleanValue;
+		/** Determines if the Hosted Application need to be displayed in the Toolbar drop down list. */
+		UII_isShowinToolbarDropdown: DevKit.WebApi.BooleanValue;
+		/** Determines if Hosted Application can SHow Menu . */
+		UII_isShowMenu: DevKit.WebApi.BooleanValue;
+		/** Determines if new browser process for every instance. */
+		UII_isUsenewbrowserprocess: DevKit.WebApi.BooleanValue;
+		/** Determines if the webapplication toolbar is enabled. */
+		UII_isWebAppUseToolbar: DevKit.WebApi.BooleanValue;
+		/** Determines the Main Window Acquisition time for the Hosted Application */
+		UII_MainWindowAcquisitionTimeout: DevKit.WebApi.IntegerValue;
+		/** This application life cycle will be managed through automations. */
+		uii_managedApplication: DevKit.WebApi.BooleanValue;
+		/** Check this option to manage the hosting of application using automations. */
+		uii_ManageHosting: DevKit.WebApi.BooleanValue;
+		/** Check this option to handle the pop ups using automations. */
+		uii_ManagePopups: DevKit.WebApi.BooleanValue;
+		/** X co-ordinate of Minimum Size */
+		UII_MinimumSizeX: DevKit.WebApi.IntegerValue;
+		/** Y co-ordinate of Minimum Size */
+		UII_MinimumSizeY: DevKit.WebApi.IntegerValue;
+		/** Hosted Application Name. */
+		UII_name: DevKit.WebApi.StringValue;
+		/** X co-ordinate of Optimal Size */
+		UII_OptimalSizeX: DevKit.WebApi.IntegerValue;
+		/** Y co-ordinate of Optimal Size */
+		UII_OptimalSizeY: DevKit.WebApi.IntegerValue;
+		/** Process Acquisition FileName for Remote Application */
+		UII_ProcessAcquisitionFilename: DevKit.WebApi.StringValue;
+		/** Remote Server Side Process Acquisition Attempts */
+		UII_remote_ProcessAcquisitionAttempts: DevKit.WebApi.IntegerValue;
+		/** Remote Server Side Process Acquisition Delay */
+		UII_remote_ProcessAcquisitionDelay: DevKit.WebApi.IntegerValue;
+		/** For Dynamic Positioned Application , Determines the existance of Sizing controls */
+		UII_RemoveSizingControls: DevKit.WebApi.BooleanValue;
+		/** Holds Sorting Order Value for the Hosted Application. */
+		UII_SortOrder: DevKit.WebApi.IntegerValue;
+		/** Caption to identify the Top Level Window */
+		UII_TopLevelWindowCaption: DevKit.WebApi.StringValue;
+		/** Determines the mode to find the Top Level Window */
+		UII_TopLevelWindowMode: DevKit.WebApi.OptionSetValue;
+		/** Determines if the user can close the Hosted Application */
+		UII_UserCanClose: DevKit.WebApi.BooleanValue;
+		/** Holds the Web Application URL */
+		UII_WebAppURL: DevKit.WebApi.StringValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace UII_hostedapplication {
@@ -327,4 +501,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

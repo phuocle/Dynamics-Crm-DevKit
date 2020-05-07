@@ -50,6 +50,99 @@ declare namespace LuckyMokey {
 		/** The Header section of form msdyn_analysisresult_Information */
 		Header: LuckyMokey.Formmsdyn_analysisresult_Information.Header;
 	}
+	class msdyn_analysisresultApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_analysisresultApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** The associated Analysis Component that contains the issue described by the Analysis Result. */
+		msdyn_AnalysisComponentId: DevKit.WebApi.LookupValue;
+		msdyn_AnalysisComponentType: DevKit.WebApi.OptionSetValue;
+		/** The parent Analysis Job that produced the Analysis Result */
+		msdyn_AnalysisJobId: DevKit.WebApi.LookupValue;
+		/** Unique identifier for entity instances */
+		msdyn_analysisresultId: DevKit.WebApi.GuidValue;
+		msdyn_Category: DevKit.WebApi.OptionSetValue;
+		msdyn_ComponentType: DevKit.WebApi.OptionSetValue;
+		msdyn_EntityName: DevKit.WebApi.StringValue;
+		msdyn_FileUri: DevKit.WebApi.StringValue;
+		msdyn_HasResolution: DevKit.WebApi.BooleanValue;
+		msdyn_helplink: DevKit.WebApi.StringValue;
+		msdyn_Level: DevKit.WebApi.OptionSetValue;
+		msdyn_Line: DevKit.WebApi.IntegerValue;
+		msdyn_Member: DevKit.WebApi.StringValue;
+		msdyn_Message: DevKit.WebApi.StringValue;
+		msdyn_MessageArguments: DevKit.WebApi.StringValue;
+		msdyn_MessageId: DevKit.WebApi.StringValue;
+		msdyn_Module: DevKit.WebApi.StringValue;
+		/** The name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** The return status of a rule run: pass, fail, or configuration error */
+		msdyn_ReturnStatus: DevKit.WebApi.OptionSetValue;
+		msdyn_RuleId: DevKit.WebApi.StringValue;
+		msdyn_RuleReferenceUri: DevKit.WebApi.StringValue;
+		msdyn_Severity: DevKit.WebApi.OptionSetValue;
+		msdyn_Snippet: DevKit.WebApi.StringValue;
+		msdyn_SolutionHealthMessage: DevKit.WebApi.StringValue;
+		msdyn_Type: DevKit.WebApi.StringValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Analysis Result */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Analysis Result */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_analysisresult {
@@ -145,4 +238,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

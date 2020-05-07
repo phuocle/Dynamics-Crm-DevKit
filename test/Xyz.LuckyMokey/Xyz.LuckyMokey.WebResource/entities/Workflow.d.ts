@@ -36,6 +36,162 @@ declare namespace LuckyMokey {
 		/** The Body section of form Workflow_Information */
 		Body: LuckyMokey.FormWorkflow_Information.Body;
 	}
+	class WorkflowApi {
+		/**
+		* DynamicsCrm.DevKit WorkflowApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the latest activation record for the process. */
+		ActiveWorkflowId: DevKit.WebApi.LookupValueReadonly;
+		/** Indicates whether the asynchronous system job is automatically deleted on completion. */
+		AsyncAutoDelete: DevKit.WebApi.BooleanValue;
+		/** Business Process Type. */
+		BusinessProcessType: DevKit.WebApi.OptionSetValue;
+		/** Category of the process. */
+		Category: DevKit.WebApi.OptionSetValue;
+		/** Business logic converted into client data */
+		ClientData: DevKit.WebApi.StringValue;
+		/** For internal use only. */
+		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		/** Unique identifier of the user who created the process. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the process was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the process. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Stage of the process when triggered on Create. */
+		CreateStage: DevKit.WebApi.OptionSetValue;
+		/** Stage of the process when triggered on Delete. */
+		DeleteStage: DevKit.WebApi.OptionSetValue;
+		/** Description of the process. */
+		Description: DevKit.WebApi.StringValue;
+		/** Shows the default image for the record. */
+		EntityImage: DevKit.WebApi.StringValue;
+		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
+		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		/** For internal use only. */
+		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		/** Unique identifier of the associated form. */
+		FormId: DevKit.WebApi.GuidValue;
+		/** Input parameters to the process. */
+		InputParameters: DevKit.WebApi.StringValue;
+		/** Version in which the form is introduced. */
+		IntroducedVersion: DevKit.WebApi.StringValue;
+		/** Indicates whether the process was created using the Microsoft Dynamics 365 Web application. */
+		IsCrmUIWorkflow: DevKit.WebApi.BooleanValueReadonly;
+		/** Information that specifies whether this component can be customized. */
+		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		/** Indicates whether the solution component is part of a managed solution. */
+		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		/** Whether or not the steps in the process are executed in a single transaction. */
+		IsTransacted: DevKit.WebApi.BooleanValue;
+		/** Language of the process. */
+		LanguageCode: DevKit.WebApi.IntegerValue;
+		/** Shows the mode of the process. */
+		Mode: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier of the user who last modified the process. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the process was last modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who last modified the process. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Name of the process. */
+		Name: DevKit.WebApi.StringValue;
+		/** Indicates whether the process is able to run as an on-demand process. */
+		OnDemand: DevKit.WebApi.BooleanValue;
+		/** For internal use only. */
+		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the business unit that owns the process. */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the team who owns the process. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the user who owns the process. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the definition for process activation. */
+		ParentWorkflowId: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the plug-in type. */
+		PluginTypeId: DevKit.WebApi.LookupValueReadonly;
+		/** Type the business process flow order. */
+		ProcessOrder: DevKit.WebApi.IntegerValue;
+		/** Contains the role assignment for the process. */
+		ProcessRoleAssignment: DevKit.WebApi.StringValue;
+		/** Unique identifier of the associated form for process trigger. */
+		ProcessTriggerFormId: DevKit.WebApi.GuidValue;
+		/** Scope of the process trigger. */
+		ProcessTriggerScope: DevKit.WebApi.OptionSetValue;
+		/** Indicates the rank for order of execution for the synchronous workflow. */
+		Rank: DevKit.WebApi.IntegerValue;
+		/** Specifies the system user account under which a workflow executes. */
+		RunAs: DevKit.WebApi.OptionSetValue;
+		/** Scope of the process. */
+		Scope: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier of the SDK Message associated with this workflow. */
+		SdkMessageId: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the associated solution. */
+		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		/** Contains the id of the stage where the entity is located. */
+		stageid: DevKit.WebApi.GuidValue;
+		/** Status of the process. */
+		StateCode: DevKit.WebApi.OptionSetValue;
+		/** Additional information about status of the process. */
+		StatusCode: DevKit.WebApi.OptionSetValue;
+		/** Indicates whether the process can be included in other processes as a child process. */
+		Subprocess: DevKit.WebApi.BooleanValue;
+		/** For internal use only. */
+		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		/** Select whether synchronous workflow failures will be saved to log files. */
+		SyncWorkflowLogOnFailure: DevKit.WebApi.BooleanValue;
+		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+		traversedpath: DevKit.WebApi.StringValue;
+		/** Indicates whether the process will be triggered when the primary entity is created. */
+		TriggerOnCreate: DevKit.WebApi.BooleanValue;
+		/** Indicates whether the process will be triggered on deletion of the primary entity. */
+		TriggerOnDelete: DevKit.WebApi.BooleanValue;
+		/** Attributes that trigger the process when updated. */
+		TriggerOnUpdateAttributeList: DevKit.WebApi.StringValue;
+		/** Type of the process. */
+		Type: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		UIData: DevKit.WebApi.StringValueReadonly;
+		/** Type of the UI Flow process. */
+		UIFlowType: DevKit.WebApi.OptionSetValue;
+		/** Unique name of the process */
+		UniqueName: DevKit.WebApi.StringValue;
+		/** Select the stage a process will be triggered on update. */
+		UpdateStage: DevKit.WebApi.OptionSetValue;
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		/** Unique identifier of the process. */
+		WorkflowId: DevKit.WebApi.GuidValue;
+		/** For internal use only. */
+		WorkflowIdUnique: DevKit.WebApi.GuidValueReadonly;
+		/** XAML that defines the process. */
+		Xaml: DevKit.WebApi.StringValue;
+	}
 }
 declare namespace OptionSet {
 	namespace Workflow {
@@ -163,4 +319,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

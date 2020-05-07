@@ -70,6 +70,123 @@ declare namespace LuckyMokey {
 		/** The Navigation of form RTV */
 		Navigation: LuckyMokey.FormRTV.Navigation;
 	}
+	class msdyn_rtvApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_rtvApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Shows the sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who last updated the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		msdyn_Address1: DevKit.WebApi.StringValue;
+		msdyn_Address2: DevKit.WebApi.StringValue;
+		msdyn_Address3: DevKit.WebApi.StringValue;
+		/** The user who approved or rejected this return */
+		msdyn_ApprovedDeclinedBy: DevKit.WebApi.LookupValue;
+		/** Internal field used to generate the next name upon entity creation. It is optionally copied to the msdyn_name field. */
+		msdyn_AutoNumbering: DevKit.WebApi.StringValue;
+		/** Unique identifier for Resource Booking associated with RTV. */
+		msdyn_Booking: DevKit.WebApi.LookupValue;
+		msdyn_City: DevKit.WebApi.StringValue;
+		msdyn_Country: DevKit.WebApi.StringValue;
+		msdyn_Latitude: DevKit.WebApi.DoubleValue;
+		msdyn_Longitude: DevKit.WebApi.DoubleValue;
+		/** Shows the unique number for identifying this RTV record. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Purchase Order from where items are originating */
+		msdyn_OriginalPurchaseOrder: DevKit.WebApi.LookupValue;
+		/** Originating RMA if items were returned from customer */
+		msdyn_OriginatingRMA: DevKit.WebApi.LookupValue;
+		msdyn_PostalCode: DevKit.WebApi.StringValue;
+		msdyn_ReferenceNo: DevKit.WebApi.StringValue;
+		/** Enter the date when return was requested. */
+		msdyn_RequestDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the date items were returned to vendor. */
+		msdyn_ReturnDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** User processing this return */
+		msdyn_ReturnedBy: DevKit.WebApi.LookupValue;
+		/** Shows the entity instances. */
+		msdyn_rtvId: DevKit.WebApi.GuidValue;
+		/** Method of Shipment to Vendor */
+		msdyn_ShipVia: DevKit.WebApi.LookupValue;
+		msdyn_StateOrProvince: DevKit.WebApi.StringValue;
+		/** RTV Substatus */
+		msdyn_SubStatus: DevKit.WebApi.LookupValue;
+		/** Enter the current status of the RTV. */
+		msdyn_SystemStatus: DevKit.WebApi.OptionSetValue;
+		/** Tax code vendor charges you */
+		msdyn_TaxCode: DevKit.WebApi.LookupValue;
+		/** Shows the total Amount to be credited on this RTV. */
+		msdyn_TotalAmount: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the total amount in the base currency. */
+		msdyn_totalamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Vendor where items will be returned */
+		msdyn_Vendor: DevKit.WebApi.LookupValue;
+		/** Contact person at Vendor */
+		msdyn_VendorContact: DevKit.WebApi.LookupValue;
+		/** RMA from Vendor */
+		msdyn_VendorRMA: DevKit.WebApi.StringValue;
+		/** Unique identifier for Work Order associated with RTV. */
+		msdyn_WorkOrder: DevKit.WebApi.LookupValue;
+		/** Shows the date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the RTV */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the RTV */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the currency associated with the entity. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		/** Shows the time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_rtv {
@@ -115,4 +232,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['RTV'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['RTV'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

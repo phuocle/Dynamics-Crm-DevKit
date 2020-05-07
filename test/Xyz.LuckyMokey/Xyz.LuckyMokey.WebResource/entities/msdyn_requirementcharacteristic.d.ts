@@ -42,7 +42,7 @@ declare namespace LuckyMokey {
 		/** The Body section of form msdyn_requirementcharacteristic_Information */
 		Body: LuckyMokey.Formmsdyn_requirementcharacteristic_Information.Body;
 	}
-	namespace FormQuick_Create_from_Requirement {
+	namespace Formmsdyn_requirementcharacteristic_Quick_Create_from_Requirement {
 		interface tab_tab_1_Sections {
 			tab_1_column_1_section_1: DevKit.Form.Controls.ControlSection;
 			tab_1_column_2_section_1: DevKit.Form.Controls.ControlSection;
@@ -68,9 +68,9 @@ declare namespace LuckyMokey {
 			msdyn_WorkOrderIncident: DevKit.Form.Controls.ControlLookup;
 		}
 	}
-	class FormQuick_Create_from_Requirement extends DevKit.Form.IForm {
+	class Formmsdyn_requirementcharacteristic_Quick_Create_from_Requirement extends DevKit.Form.IForm {
 		/**
-		* DynamicsCrm.DevKit form Quick_Create_from_Requirement
+		* DynamicsCrm.DevKit form msdyn_requirementcharacteristic_Quick_Create_from_Requirement
 		* @param executionContext the execution context
 		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
 		*/
@@ -79,8 +79,87 @@ declare namespace LuckyMokey {
 		Utility: DevKit.Form.Utility;
 		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
 		WebApi: DevKit.Form.WebApi;
-		/** The Body section of form Quick_Create_from_Requirement */
-		Body: LuckyMokey.FormQuick_Create_from_Requirement.Body;
+		/** The Body section of form msdyn_requirementcharacteristic_Quick_Create_from_Requirement */
+		Body: LuckyMokey.Formmsdyn_requirementcharacteristic_Quick_Create_from_Requirement.Body;
+	}
+	class msdyn_requirementcharacteristicApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_requirementcharacteristicApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Characteristic */
+		msdyn_Characteristic: DevKit.WebApi.LookupValue;
+		/** The name of a custom entity */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Rating Value */
+		msdyn_RatingValue: DevKit.WebApi.LookupValue;
+		/** A unique identifier for an entity instance */
+		msdyn_requirementcharacteristicId: DevKit.WebApi.GuidValue;
+		/** Internal use. Tracks the related Requirement when it is equally or less restrictive than other Requirement Characteristics with the same Requirement/Characteristic combination. */
+		msdyn_RequirementSystemUse: DevKit.WebApi.LookupValue;
+		/** Resource Requirement */
+		msdyn_ResourceRequirement: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Work Order associated with Requirement Characteristic. */
+		msdyn_WorkOrder: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Work Order associated with Requirement Characteristic. */
+		msdyn_WorkOrderIncident: DevKit.WebApi.LookupValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Requirement Characteristic */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Requirement Characteristic */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
 	}
 }
 declare namespace OptionSet {
@@ -115,4 +194,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information','Quick Create from Requirement'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information','Quick Create from Requirement'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

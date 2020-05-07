@@ -190,6 +190,108 @@ declare namespace LuckyMokey {
 		/** The Navigation of form Customer_Asset_Mobile */
 		Navigation: LuckyMokey.FormCustomer_Asset_Mobile.Navigation;
 	}
+	class msdyn_customerassetApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_customerassetApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who last updated the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Parent Customer of this Asset */
+		msdyn_Account: DevKit.WebApi.LookupValue;
+		/** If active parent alerts exist for the device */
+		msdyn_alert: DevKit.WebApi.BooleanValueReadonly;
+		/** Count of parent alerts for this device */
+		msdyn_alertcount: DevKit.WebApi.IntegerValueReadonly;
+		/** Last Updated time of rollup field Alert Count. */
+		msdyn_alertcount_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** State of rollup field Alert Count. */
+		msdyn_alertcount_State: DevKit.WebApi.IntegerValueReadonly;
+		/** The category of the customer asset */
+		msdyn_CustomerAssetCategory: DevKit.WebApi.LookupValue;
+		/** Shows the entity instances. */
+		msdyn_customerassetId: DevKit.WebApi.GuidValue;
+		/** Device ID used to register with the IoT provider. This will not be used if there are two or more connected devices for this asset. */
+		msdyn_DeviceId: DevKit.WebApi.StringValue;
+		msdyn_LastAlertTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Last Updated time of rollup field Last active alert time. */
+		msdyn_LastAlertTime_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** State of rollup field Last active alert time. */
+		msdyn_LastAlertTime_State: DevKit.WebApi.IntegerValueReadonly;
+		/** The last command sent to any of the connected devices for this asset. */
+		msdyn_LastCommandSent: DevKit.WebApi.LookupValue;
+		/** The timestamp of the last command sent for any of the connected devices for this asset. */
+		msdyn_LastCommandSentTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_Latitude: DevKit.WebApi.DoubleValue;
+		msdyn_Longitude: DevKit.WebApi.DoubleValue;
+		/** Top level Asset, (if this asset is a sub asset) */
+		msdyn_MasterAsset: DevKit.WebApi.LookupValue;
+		/** Enter the name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Parent Asset */
+		msdyn_ParentAsset: DevKit.WebApi.LookupValue;
+		/** Reference to Product associated with this Asset */
+		msdyn_Product: DevKit.WebApi.LookupValue;
+		/** A status field that denotes whether all the devices connected to this asset are registered with the IoT provider. */
+		msdyn_RegistrationStatus: DevKit.WebApi.OptionSetValue;
+		/** Indicates a link to the Work Order Product from where this Asset was auto created by the system. */
+		msdyn_WorkOrderProduct: DevKit.WebApi.LookupValue;
+		/** Shows the date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Customer Asset */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Customer Asset */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Shows the time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_customerasset {
@@ -235,4 +337,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Customer Asset','Customer Asset - Mobile'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Customer Asset','Customer Asset - Mobile'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

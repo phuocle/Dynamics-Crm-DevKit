@@ -203,6 +203,182 @@ declare namespace LuckyMokey {
 		/** The Navigation of form adobe_agreement_Agreement */
 		Navigation: LuckyMokey.Formadobe_agreement_Agreement.Navigation;
 	}
+	class adobe_agreementApi {
+		/**
+		* DynamicsCrm.DevKit adobe_agreementApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		adobe_add_recipient_from_parent_entity: DevKit.WebApi.BooleanValue;
+		/** Redirect your signers or approvers to a landing page of your choice */
+		adobe_addpostsignredirecturl: DevKit.WebApi.BooleanValue;
+		adobe_adobe_agreementsystemuserlookup: DevKit.WebApi.LookupValue;
+		adobe_agreementAccountlookup: DevKit.WebApi.LookupValue;
+		adobe_agreementcontactlookup: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Contract associated with Agreement. */
+		adobe_agreementcontractlookup: DevKit.WebApi.LookupValue;
+		adobe_agreementexpires: DevKit.WebApi.BooleanValue;
+		/** Unique identifier for Agreement Mapping Template associated with Agreement. */
+		adobe_AgreementFormId: DevKit.WebApi.LookupValue;
+		/** Unique identifier for entity instances */
+		adobe_agreementId: DevKit.WebApi.GuidValue;
+		adobe_agreementInvoicelookup: DevKit.WebApi.LookupValue;
+		adobe_agreementleadlookup: DevKit.WebApi.LookupValue;
+		adobe_agreementmessage: DevKit.WebApi.StringValue;
+		adobe_agreementopportunitylookup: DevKit.WebApi.LookupValue;
+		adobe_agreementQuotelookup: DevKit.WebApi.LookupValue;
+		adobe_agreementsalesorderlookup: DevKit.WebApi.LookupValue;
+		adobe_audittrailcontent: DevKit.WebApi.StringValue;
+		adobe_authoringurl: DevKit.WebApi.StringValue;
+		adobe_automaticreminder: DevKit.WebApi.OptionSetValue;
+		adobe_combineddocumenturl: DevKit.WebApi.StringValue;
+		adobe_creationdata: DevKit.WebApi.StringValue;
+		adobe_creationtype: DevKit.WebApi.StringValue;
+		adobe_crmversion: DevKit.WebApi.StringValue;
+		adobe_currentsignerurl: DevKit.WebApi.StringValue;
+		adobe_datesent_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		adobe_datesigned_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		adobe_dateupdated_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		adobe_daysuntilexpires: DevKit.WebApi.IntegerValue;
+		adobe_documentimagesurls: DevKit.WebApi.StringValue;
+		adobe_emailid: DevKit.WebApi.StringValue;
+		adobe_esagreementid: DevKit.WebApi.StringValue;
+		adobe_esagreementstatus: DevKit.WebApi.StringValue;
+		adobe_exceptionmessage: DevKit.WebApi.StringValue;
+		/** Select this option when signers are present and will sign in person. */
+		adobe_hostsigning: DevKit.WebApi.BooleanValue;
+		adobe_identityverification: DevKit.WebApi.OptionSetValue;
+		adobe_isattachmentadded: DevKit.WebApi.BooleanValue;
+		adobe_isaudittrailattached: DevKit.WebApi.BooleanValue;
+		adobe_isPostAddedToParentEntity: DevKit.WebApi.BooleanValue;
+		adobe_isQuickCreate: DevKit.WebApi.BooleanValue;
+		adobe_isrecipientadded: DevKit.WebApi.BooleanValue;
+		adobe_issignedpdfattached: DevKit.WebApi.BooleanValue;
+		adobe_legacyid: DevKit.WebApi.StringValue;
+		adobe_librarydocuments: DevKit.WebApi.StringValue;
+		adobe_librarydocumentslong: DevKit.WebApi.StringValue;
+		adobe_migrationguid: DevKit.WebApi.StringValue;
+		adobe_missingtemplatedocument: DevKit.WebApi.BooleanValue;
+		adobe_missingtemplaterecipient: DevKit.WebApi.BooleanValue;
+		/** The name of the custom entity. */
+		adobe_name: DevKit.WebApi.StringValue;
+		adobe_oquickcreateentityptionset: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier for Account associated with Agreement. */
+		adobe_parentaccountId: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Contact associated with Agreement. */
+		adobe_parentcontactid: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Contract associated with Agreement. */
+		adobe_parentcontractid: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Invoice associated with Agreement. */
+		adobe_ParentInvoiceId: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Lead associated with Agreement. */
+		adobe_parentleadid: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Opportunity associated with Agreement. */
+		adobe_parentopportunityid: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Order associated with Agreement. */
+		adobe_ParentOrderId: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Quote associated with Agreement. */
+		adobe_parentquoteid: DevKit.WebApi.LookupValue;
+		/** Unique identifier for User associated with Agreement. */
+		adobe_parentuserid: DevKit.WebApi.LookupValue;
+		adobe_plugintrigger: DevKit.WebApi.StringValue;
+		adobe_plugintriggerasync: DevKit.WebApi.StringValue;
+		adobe_postsigningredirecturl: DevKit.WebApi.StringValue;
+		/** It is recommended you allow the user to see the completion screen and download any documents before re-directing to your landing page.  Adobe recommends between 10-30 seconds. */
+		adobe_postsignredirectdelay: DevKit.WebApi.IntegerValue;
+		adobe_postsignredirecturl: DevKit.WebApi.StringValue;
+		adobe_quickcreatelookuptemplatelist: DevKit.WebApi.LookupValue;
+		adobe_ReaderRoleOnly: DevKit.WebApi.BooleanValue;
+		adobe_recipientdata: DevKit.WebApi.StringValue;
+		adobe_reviewsigningorder: DevKit.WebApi.BooleanValue;
+		adobe_securesignedpdf: DevKit.WebApi.BooleanValue;
+		adobe_selecteddatamap: DevKit.WebApi.StringValue;
+		adobe_selectedlanguage: DevKit.WebApi.StringValue;
+		adobe_selectedlibraryid: DevKit.WebApi.StringValue;
+		/** User Id of the sender of agreement */
+		adobe_senderId: DevKit.WebApi.LookupValue;
+		/** Add yourself to the signing order */
+		adobe_sendersigning: DevKit.WebApi.BooleanValue;
+		adobe_sendersigningoptions: DevKit.WebApi.OptionSetValue;
+		adobe_sendersigningorder: DevKit.WebApi.BooleanValue;
+		adobe_sendersignsonly: DevKit.WebApi.BooleanValue;
+		adobe_sendfromlibrary: DevKit.WebApi.BooleanValue;
+		adobe_sendfromlibrarycheckboxvalue: DevKit.WebApi.BooleanValue;
+		adobe_signaturetype: DevKit.WebApi.BooleanValue;
+		adobe_signedpdfpassword: DevKit.WebApi.StringValue;
+		adobe_signingorder: DevKit.WebApi.BooleanValue;
+		adobe_signingpassword: DevKit.WebApi.StringValue;
+		adobe_subject: DevKit.WebApi.StringValue;
+		adobe_templateid: DevKit.WebApi.StringValue;
+		adobe_triggeragreementupdate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Preview documents before sending */
+		adobe_useauthoring: DevKit.WebApi.BooleanValue;
+		adobe_useragent: DevKit.WebApi.StringValue;
+		adobe_usermessagequickcreateform: DevKit.WebApi.StringValue;
+		adobe_waitingforsendersignature: DevKit.WebApi.BooleanValue;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Contains the id of the process associated with the entity. */
+		processid: DevKit.WebApi.GuidValue;
+		/** Contains the id of the stage where the entity is located. */
+		stageid: DevKit.WebApi.GuidValue;
+		/** Status of the Agreement */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Agreement */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+		traversedpath: DevKit.WebApi.StringValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace adobe_agreement {
@@ -284,4 +460,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Agreement'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Agreement'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

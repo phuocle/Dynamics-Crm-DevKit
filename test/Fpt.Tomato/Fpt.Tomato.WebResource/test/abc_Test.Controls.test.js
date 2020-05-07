@@ -306,6 +306,7 @@ define(['xrm-mock'], () => {
             xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new Tomato.FormTest(executionContext);
+
             expect(() => { form.QuickForm.QuickForm.Controls() }).toThrow(new Error("Method not implemented."));
             expect(form.QuickForm.QuickForm.ControlType).toBe(OptionSet.FieldControlType.QuickForm);
             expect(() => { form.QuickForm.QuickForm.Disabled }).toThrow(new Error("Method not implemented."));
@@ -364,7 +365,42 @@ define(['xrm-mock'], () => {
             expect(true).toBeTruthy();
         });
         it('timelinewall control type', () => {
-            expect(true).toBeTruthy();
+            var attributes = new xrmMock.ItemCollectionMock([
+                new xrmMock.AttributeMock({
+                    name: "abc_timelinewall"
+                })
+            ]);
+            var entity = new xrmMock.EntityMock({
+                attributes: attributes
+            });
+            var data = new xrmMock.DataMock(entity);
+            var timelineWall = new xrmMock.TimelineWallMock({
+                name: "abc_timelinewall",
+                controlType: "timelinewall",
+                label: "TIMELINE WALL LABEL",
+                visible: true
+            });
+            var ui = new xrmMock.UiMock({
+                controls: new xrmMock.ItemCollectionMock([timelineWall])
+            });
+            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            expect(form.Body.abc_TimelineWall.ControlType).toBe(OptionSet.FieldControlType.TimelineWall);
+            expect(() => { form.Body.abc_TimelineWall.Disabled }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.abc_TimelineWall.Label).toBe("TIMELINE WALL LABEL");
+            expect(form.Body.abc_TimelineWall.AttributeName).toBe("abc_timelinewall");
+            expect(form.Body.abc_TimelineWall.ControlName).toBe("abc_timelinewall");
+            expect(form.Body.abc_TimelineWall.ControlParent).toBeUndefined();
+            expect(form.Body.abc_TimelineWall.Visible).toBeTruthy();
+            expect(() => { form.Body.abc_TimelineWall.Refresh() }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Body.abc_TimelineWall.Disabled = true}).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.abc_TimelineWall.Disabled = true }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.abc_TimelineWall.Focus() }).toThrow(new Error("Method not implemented."));
+            form.Body.abc_TimelineWall.Label = "TIMELINE WALL LABEL NEW";
+            expect(form.Body.abc_TimelineWall.Label).toBe("TIMELINE WALL LABEL NEW");
+            expect(() => { form.Body.abc_TimelineWall.Visible = true }).toThrow(new Error("Method not implemented."));
         });
         it('timer control type', () => {
             expect(true).toBeTruthy();

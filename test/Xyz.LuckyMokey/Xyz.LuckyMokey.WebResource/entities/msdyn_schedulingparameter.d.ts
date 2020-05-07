@@ -58,6 +58,98 @@ declare namespace LuckyMokey {
 		/** The Body section of form msdyn_schedulingparameter_Information */
 		Body: LuckyMokey.Formmsdyn_schedulingparameter_Information.Body;
 	}
+	class msdyn_schedulingparameterApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_schedulingparameterApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** For internal use */
+		msdyn_AdvancedSettings: DevKit.WebApi.StringValue;
+		/** When changing bookings on hourly Schedule Board, automatically update travel time and distance for affected bookings. */
+		msdyn_AutoUpdateBookingTravel: DevKit.WebApi.OptionSetValue;
+		/** Configuration that defines operations, which will be executed in background periodically (internal use only) */
+		msdyn_BackgroundJobsConfiguration: DevKit.WebApi.StringValue;
+		/** Determines if the mapping provider will be used for map location and distance calculations. */
+		msdyn_ConnectToMaps: DevKit.WebApi.BooleanValue;
+		/** Shows the logical name of the latitude field to be used by geolocations. */
+		msdyn_CustomGeoLatitudeField: DevKit.WebApi.StringValue;
+		/** Shows the logical name of custom entity to be used for geolocations. */
+		msdyn_CustomGeoLocationEntity: DevKit.WebApi.StringValue;
+		/** Shows the logical name of the longitude field to be used for geolocations. */
+		msdyn_CustomGeoLongitudeField: DevKit.WebApi.StringValue;
+		/** Shows the logical name of the resource field to be used for geolocations. */
+		msdyn_CustomGeoResourceField: DevKit.WebApi.StringValue;
+		/** Shows the logical name of the timestamp field to be used for geolocations. */
+		msdyn_CustomGeoTimestampField: DevKit.WebApi.StringValue;
+		msdyn_DefaultRadiusUnit: DevKit.WebApi.OptionSetValue;
+		msdyn_DefaultRadiusValue: DevKit.WebApi.IntegerValue;
+		/** Disable Sanitizing HTML Templates on the Schedule Board */
+		msdyn_DisableSanitizingHTMLTemplates: DevKit.WebApi.BooleanValue;
+		/** Determines if a custom entity will be used as a source of geo locations for resources to be displayed in the map view. */
+		msdyn_EnableCustomGeoLocation: DevKit.WebApi.BooleanValue;
+		/** Determines if scheduling optimization is enabled. */
+		msdyn_enableOptimizer: DevKit.WebApi.BooleanValue;
+		msdyn_GeoLocationExpiresAfterXMinutes: DevKit.WebApi.IntegerValue;
+		msdyn_GeoLocationRefreshIntervalSeconds: DevKit.WebApi.IntegerValue;
+		/** Api key for map */
+		msdyn_MapApiKey: DevKit.WebApi.StringValue;
+		/** The name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Determines if the schedule assistant should automatically filter results based on the requirement territory. */
+		msdyn_SAAutoFilterServiceTerritory: DevKit.WebApi.BooleanValue;
+		msdyn_ScheduleBoardRefreshIntervalSeconds: DevKit.WebApi.IntegerValue;
+		/** A unique identifier for an entity instance. */
+		msdyn_schedulingparameterId: DevKit.WebApi.GuidValue;
+		/** Unique identifier for the organization */
+		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Status of the Scheduling Parameter */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Scheduling Parameter */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_schedulingparameter {
@@ -103,4 +195,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

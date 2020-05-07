@@ -163,6 +163,101 @@ declare namespace LuckyMokey {
 		/** The Body section of form IoT_Device_MFD */
 		Body: LuckyMokey.FormIoT_Device_MFD.Body;
 	}
+	class msdyn_iotdeviceApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_iotdeviceApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Parent customer of this device */
+		msdyn_Account: DevKit.WebApi.LookupValue;
+		/** The device category that this IoT device belongs to. */
+		msdyn_Category: DevKit.WebApi.LookupValue;
+		/** The connection status of the device (Disconnected or Connected) */
+		msdyn_ConnectionState: DevKit.WebApi.BooleanValue;
+		/** Device ID used to register with the IoT provider. */
+		msdyn_DeviceId: DevKit.WebApi.StringValue;
+		/** Reported Properties data for Device */
+		msdyn_DeviceReportedProperties: DevKit.WebApi.StringValue;
+		/** The editable properties for a device. */
+		msdyn_DeviceSettings: DevKit.WebApi.StringValue;
+		/** Unique identifier for entity instances */
+		msdyn_iotdeviceId: DevKit.WebApi.GuidValue;
+		/** The IoT Provider Instance to which this device belongs. */
+		msdyn_IoTProviderInstance: DevKit.WebApi.LookupValue;
+		/** Select “Yes” if this device is simulated for testing and development purposes. Select “No” if this is a real device.​ */
+		msdyn_IsSimulated: DevKit.WebApi.OptionSetValue;
+		/** The last activity time of the device */
+		msdyn_LastActivityTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_LastCommandSent: DevKit.WebApi.LookupValue;
+		msdyn_LastCommandSentTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** The name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** A message field that explains the IoT Registration Status. */
+		msdyn_RegistrationMessage: DevKit.WebApi.StringValue;
+		/** A status field that denotes whether the device is registered with the IoT provider. */
+		msdyn_RegistrationStatus: DevKit.WebApi.OptionSetValue;
+		/** Identifying Tags for the Device */
+		msdyn_Tags: DevKit.WebApi.StringValue;
+		/** The device's time zone. */
+		msdyn_Timezone: DevKit.WebApi.IntegerValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the IoT Device */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the IoT Device */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_iotdevice {
@@ -214,4 +309,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information','IoT Device MFD'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information','IoT Device MFD'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

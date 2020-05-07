@@ -35,6 +35,101 @@ declare namespace LuckyMokey {
 		/** The Body section of form ImportMap_Information */
 		Body: LuckyMokey.FormImportMap_Information.Body;
 	}
+	class ImportMapApi {
+		/**
+		* DynamicsCrm.DevKit ImportMapApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** For internal use only. */
+		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		/** Shows who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Type additional information to describe the data map, such as the intended use or data source. */
+		Description: DevKit.WebApi.StringValue;
+		/** Choose whether a data file can contain data for one or more record types. */
+		EntitiesPerFile: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier of the data map. */
+		ImportMapId: DevKit.WebApi.GuidValue;
+		/** Unique identifier of the ImortMap. */
+		ImportMapIdUnique: DevKit.WebApi.GuidValueReadonly;
+		/** Select the type of data map to distinguish out-of-the-box data maps from custom maps. */
+		ImportMapType: DevKit.WebApi.OptionSetValue;
+		/** Version in which the component is introduced. */
+		IntroducedVersion: DevKit.WebApi.StringValue;
+		/** Information that specifies whether this component is managed. */
+		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		/** Information about whether the data map is valid for use with data import. */
+		IsValidForImport: DevKit.WebApi.BooleanValueReadonly;
+		/** Information about whether this data map was created by the Data Migration Manager. */
+		IsWizardCreated: DevKit.WebApi.BooleanValue;
+		/** Customizations XML */
+		MapCustomizations: DevKit.WebApi.StringValue;
+		/** Shows who last updated the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who last updated the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Type a descriptive name for the data map. */
+		Name: DevKit.WebApi.StringValue;
+		/** For internal use only. */
+		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Business unit that owns the data map. */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the team who owns the data map. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the user who owns the data map. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the associated solution. */
+		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		/** Type the name of the migration source that this data map is used for. */
+		Source: DevKit.WebApi.StringValue;
+		/** Select the migration source type that this data map is used for. */
+		SourceType: DevKit.WebApi.OptionSetValue;
+		/** Source user value for source Microsoft Dynamics 365 user link. */
+		SourceUserIdentifierForSourceCRMUserLink: DevKit.WebApi.StringValue;
+		/** Column in the source file that uniquely identifies a user. */
+		SourceUserIdentifierForSourceDataSourceUserLink: DevKit.WebApi.StringValue;
+		/** Shows whether the data map is active or inactive. Inactive data maps are read-only and can't be edited. */
+		StateCode: DevKit.WebApi.OptionSetValue;
+		/** Select the data map's status. */
+		StatusCode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		/** Select the name of the Microsoft Dynamics 365 record type that this data map is defined for. */
+		TargetEntity: DevKit.WebApi.OptionSetValueReadonly;
+		/** Microsoft Dynamics 365 user. */
+		TargetUserIdentifierForSourceCRMUserLink: DevKit.WebApi.StringValue;
+	}
 }
 declare namespace OptionSet {
 	namespace ImportMap {
@@ -1786,4 +1881,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

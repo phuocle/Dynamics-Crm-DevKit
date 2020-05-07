@@ -54,6 +54,117 @@ declare namespace LuckyMokey {
 		/** The Header section of form msdyn_contractlinescheduleofvalue_Project_Information */
 		Header: LuckyMokey.Formmsdyn_contractlinescheduleofvalue_Project_Information.Header;
 	}
+	class msdyn_contractlinescheduleofvalueApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_contractlinescheduleofvalueApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Enter the value of the milestone. */
+		msdyn_amount: DevKit.WebApi.MoneyValue;
+		msdyn_amount_after_tax: DevKit.WebApi.MoneyValueReadonly;
+		/** Value of the amount_after_tax in base currency. */
+		msdyn_amount_after_tax_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Value of the Amount in base currency. */
+		msdyn_amount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Select the project contract associated with this milestone. */
+		msdyn_contract: DevKit.WebApi.LookupValue;
+		/** (Deprecated) Shows the project contract line that has this milestone */
+		msdyn_ContractLine: DevKit.WebApi.StringValue;
+		/** Enter a description of the project contract line that has this milestone. */
+		msdyn_ContractLineDescription: DevKit.WebApi.StringValue;
+		/** Unique identifier for Project Contract Line associated with Project Contract Line Invoice Schedule. */
+		msdyn_ContractLineId: DevKit.WebApi.LookupValue;
+		/** Unique identifier for entity instances */
+		msdyn_contractlinescheduleofvalueId: DevKit.WebApi.GuidValue;
+		/** Type a description of the milestone. */
+		msdyn_description: DevKit.WebApi.StringValue;
+		/** Description of the project contract line milestone */
+		msdyn_externaldescription: DevKit.WebApi.StringValue;
+		/** Enter the date of which this milestone should be achieved */
+		msdyn_Invoicedate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Select the status of invoicing of this milestone */
+		msdyn_Invoicestatus: DevKit.WebApi.OptionSetValue;
+		/** Type the name of the milestone. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Enter the price of the transaction. */
+		msdyn_price: DevKit.WebApi.MoneyValue;
+		/** Value of the Price in base currency. */
+		msdyn_price_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Select the project that is tracking the work required to achieve this milestone. */
+		msdyn_project: DevKit.WebApi.LookupValue;
+		/** Select the project work breakdown structure (WBS) task that is tracking the work for this milestone. */
+		msdyn_projecttask: DevKit.WebApi.LookupValue;
+		/** Date of project contract line milestone */
+		msdyn_startdatetime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_tax: DevKit.WebApi.MoneyValue;
+		/** Value of the tax in base currency. */
+		msdyn_tax_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Transaction classification of the project contract line milestone */
+		msdyn_TransactionClassification: DevKit.WebApi.OptionSetValue;
+		/** Transaction type of the project contract line milestone */
+		msdyn_TransactionTypeCode: DevKit.WebApi.OptionSetValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the project contract line milestone. */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the project contract line milestone. */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Shows the currency associated with the entity. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_contractlinescheduleofvalue {
@@ -129,4 +240,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Project Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Project Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

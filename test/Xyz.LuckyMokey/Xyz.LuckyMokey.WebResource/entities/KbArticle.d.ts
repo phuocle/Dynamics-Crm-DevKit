@@ -63,6 +63,91 @@ declare namespace LuckyMokey {
 		/** The Footer section of form KbArticle_Information */
 		Footer: LuckyMokey.FormKbArticle_Information.Footer;
 	}
+	class KbArticleApi {
+		/**
+		* DynamicsCrm.DevKit KbArticleApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Shows the article content and formatting, stored as XML. */
+		ArticleXml: DevKit.WebApi.StringValue;
+		/** Comments regarding the knowledge base article. */
+		Comments: DevKit.WebApi.StringValue;
+		/** Description of the content of the knowledge base article. */
+		Content: DevKit.WebApi.StringValueReadonly;
+		/** Unique identifier of the user who created the knowledge base article. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the knowledge base article was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the article. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Type additional information that describes the knowledge base article. */
+		Description: DevKit.WebApi.StringValue;
+		/** The default image for the entity. */
+		EntityImage: DevKit.WebApi.StringValue;
+		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
+		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		/** For internal use only. */
+		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Unique identifier of the data import or data migration that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Shows the ID of the article. */
+		KbArticleId: DevKit.WebApi.GuidValue;
+		/** Choose the template that you want to use as a base for creating the new article. */
+		KbArticleTemplateId: DevKit.WebApi.LookupValue;
+		/** Title of the associated knowledge base article template. */
+		KbArticleTemplateIdTitle: DevKit.WebApi.StringValueReadonly;
+		/** Keywords to be used for searches in knowledge base articles. */
+		KeyWords: DevKit.WebApi.StringValue;
+		/** Select which language the article must be available in. This list is based on the list of language packs that are installed in your Microsoft Dynamics 365 environment. */
+		LanguageCode: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who last modified the knowledge base article. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the knowledge base article was last modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who last modified the kbarticle. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Knowledge base article number. */
+		Number: DevKit.WebApi.StringValueReadonly;
+		/** Unique identifier of the organization associated with the article. */
+		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Shows whether the knowledge base article is in draft, unapproved, or published status. Published articles are read-only and can't be edited unless they are unpublished. */
+		StateCode: DevKit.WebApi.OptionSetValue;
+		/** Select the article's status. */
+		StatusCode: DevKit.WebApi.OptionSetValue;
+		/** Choose the subject of the article to assist with article searches. You can configure subjects under Business Management in the Settings area. */
+		SubjectId: DevKit.WebApi.LookupValue;
+		/** Type a subject or descriptive name for the article to assist with article searches. */
+		Title: DevKit.WebApi.StringValue;
+		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		/** Title of the knowledge base article. */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace KbArticle {
@@ -100,4 +185,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

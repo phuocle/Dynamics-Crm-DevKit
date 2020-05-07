@@ -412,6 +412,276 @@ declare namespace LuckyMokey {
 		/** The Process of form Project_Invoice */
 		Process: LuckyMokey.FormProject_Invoice.Process;
 	}
+	namespace FormInvoice {
+		interface tab_newInvoice_Sections {
+			quickInvoice_summary: DevKit.Form.Controls.ControlSection;
+			quickInvoice_salesinformation: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_newInvoice extends DevKit.Form.Controls.IControlTab {
+			Section: tab_newInvoice_Sections;
+		}
+		interface Tabs {
+			newInvoice: tab_newInvoice;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities. */
+			CustomerId: DevKit.Form.Controls.ControlLookup;
+			/** Type additional information to describe the invoice, such as shipping details or product substitutions. */
+			Description: DevKit.Form.Controls.ControlString;
+			/** Type a descriptive name for the invoice. */
+			Name: DevKit.Form.Controls.ControlString;
+			/** Choose the opportunity that the invoice is related to for reporting and analytics. */
+			OpportunityId: DevKit.Form.Controls.ControlLookup;
+			/** Owner Id */
+			OwnerId: DevKit.Form.Controls.ControlLookup;
+			/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
+			PriceLevelId: DevKit.Form.Controls.ControlLookup;
+			/** Choose the order related to the invoice to make sure the order is fulfilled and invoiced correctly. */
+			SalesOrderId: DevKit.Form.Controls.ControlLookup;
+			/** Select the invoice's status. */
+			StatusCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Form.Controls.ControlLookup;
+		}
+	}
+	class FormInvoice extends DevKit.Form.IForm {
+		/**
+		* DynamicsCrm.DevKit form Invoice
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Form.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.Form.WebApi;
+		/** The Body section of form Invoice */
+		Body: LuckyMokey.FormInvoice.Body;
+	}
+	class InvoiceApi {
+		/**
+		* DynamicsCrm.DevKit InvoiceApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the account with which the invoice is associated. */
+		AccountId: DevKit.WebApi.LookupValueReadonly;
+		/** Type the city for the customer's billing address. */
+		BillTo_City: DevKit.WebApi.StringValue;
+		/** Shows the complete Bill To address. */
+		BillTo_Composite: DevKit.WebApi.StringValueReadonly;
+		/** Type the country or region for the customer's billing address. */
+		BillTo_Country: DevKit.WebApi.StringValue;
+		/** Type the fax number for the customer's billing address. */
+		BillTo_Fax: DevKit.WebApi.StringValue;
+		/** Type the first line of the customer's billing address. */
+		BillTo_Line1: DevKit.WebApi.StringValue;
+		/** Type the second line of the customer's billing address. */
+		BillTo_Line2: DevKit.WebApi.StringValue;
+		/** Type the third line of the billing address. */
+		BillTo_Line3: DevKit.WebApi.StringValue;
+		/** Type a name for the customer's billing address, such as "Headquarters" or "Field office", to identify the address. */
+		BillTo_Name: DevKit.WebApi.StringValue;
+		/** Type the ZIP Code or postal code for the billing address. */
+		BillTo_PostalCode: DevKit.WebApi.StringValue;
+		/** Type the state or province for the billing address. */
+		BillTo_StateOrProvince: DevKit.WebApi.StringValue;
+		/** Type the phone number for the customer's billing address. */
+		BillTo_Telephone: DevKit.WebApi.StringValue;
+		/** Unique identifier of the contact associated with the invoice. */
+		ContactId: DevKit.WebApi.LookupValueReadonly;
+		/** Shows who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		customerid_account: DevKit.WebApi.LookupValue;
+		customerid_contact: DevKit.WebApi.LookupValue;
+		/** Enter the date when the products included in the invoice were delivered. */
+		DateDelivered_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Type additional information to describe the invoice, such as shipping details or product substitutions. */
+		Description: DevKit.WebApi.StringValue;
+		/** Type the discount amount for the invoice if the customer is eligible for special savings. */
+		DiscountAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Invoice Discount Amount in base currency. */
+		DiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Type the discount rate that should be applied to the Detail Amount field, for use in calculating the Pre-Freight Amount and Total Amount values for the invoice. */
+		DiscountPercentage: DevKit.WebApi.DecimalValue;
+		/** Enter the date by which the invoice should be paid by the customer. */
+		DueDate_DateOnly: DevKit.WebApi.DateOnlyValue;
+		/** The primary email address for the entity. */
+		EmailAddress: DevKit.WebApi.StringValue;
+		/** The default image for the entity. */
+		EntityImage: DevKit.WebApi.StringValue;
+		EntityImage_Timestamp: DevKit.WebApi.BigIntValueReadonly;
+		EntityImage_URL: DevKit.WebApi.StringValueReadonly;
+		EntityImageId: DevKit.WebApi.GuidValueReadonly;
+		/** Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Type the cost of freight or shipping for the products included in the invoice for use in calculating the total amount due. */
+		FreightAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Freight Amount in base currency. */
+		FreightAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the invoice. */
+		InvoiceId: DevKit.WebApi.GuidValue;
+		/** Shows the identifying number or code of the invoice. */
+		InvoiceNumber: DevKit.WebApi.StringValue;
+		/** Select whether prices specified on the invoice are locked from any further updates. */
+		IsPriceLocked: DevKit.WebApi.BooleanValue;
+		/** Enter the date and time when the invoice was last submitted to an accounting or ERP system for processing. */
+		LastBackofficeSubmit_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Contains the date time stamp of the last on hold time. */
+		LastOnHoldTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Shows who last updated the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who last updated the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Enter the amount due on this invoice. */
+		msdyn_AmountDue: DevKit.WebApi.MoneyValue;
+		/** Value of the Amount Due in base currency. */
+		msdyn_amountdue_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Type the primary contact name at the customer's billing address. */
+		msdyn_billtocontactname: DevKit.WebApi.StringValue;
+		/** Indicates if this invoice contains corrections to previous invoices. */
+		msdyn_HasCorrections: DevKit.WebApi.BooleanValue;
+		/** Document date of the Invoice for use in calculation of payment due date */
+		msdyn_InvoiceDate_TimezoneDateOnly: DevKit.WebApi.TimezoneDateOnlyValue;
+		/** Whether the Invoice is for an Item-based or a service maintainence-based sale */
+		msdyn_OrderType: DevKit.WebApi.OptionSetValue;
+		/** Project specific status */
+		msdyn_projectinvoicestatus: DevKit.WebApi.OptionSetValue;
+		/** Type a descriptive name for the invoice. */
+		Name: DevKit.WebApi.StringValue;
+		/** Shows the duration in minutes for which the invoice was on hold. */
+		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		/** Choose the opportunity that the invoice is related to for reporting and analytics. */
+		OpportunityId: DevKit.WebApi.LookupValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Select the payment terms to indicate when the customer needs to pay the total amount. */
+		PaymentTermsCode: DevKit.WebApi.OptionSetValue;
+		/** Choose the price list associated with this record to make sure the products associated with the campaign are offered at the correct prices. */
+		PriceLevelId: DevKit.WebApi.LookupValue;
+		/** Type of pricing error for the invoice. */
+		PricingErrorCode: DevKit.WebApi.OptionSetValue;
+		/** Select the priority so that preferred customers or critical issues are handled quickly. */
+		PriorityCode: DevKit.WebApi.OptionSetValue;
+		/** Contains the id of the process associated with the entity. */
+		ProcessId: DevKit.WebApi.GuidValue;
+		/** Choose the order related to the invoice to make sure the order is fulfilled and invoiced correctly. */
+		SalesOrderId: DevKit.WebApi.LookupValue;
+		/** Select a shipping method for deliveries sent to this address. */
+		ShippingMethodCode: DevKit.WebApi.OptionSetValue;
+		/** Type the city for the customer's shipping address. */
+		ShipTo_City: DevKit.WebApi.StringValue;
+		/** Shows the complete Ship To address. */
+		ShipTo_Composite: DevKit.WebApi.StringValueReadonly;
+		/** Type the country or region for the customer's shipping address. */
+		ShipTo_Country: DevKit.WebApi.StringValue;
+		/** Type the fax number for the customer's shipping address. */
+		ShipTo_Fax: DevKit.WebApi.StringValue;
+		/** Select the freight terms to make sure shipping orders are processed correctly. */
+		ShipTo_FreightTermsCode: DevKit.WebApi.OptionSetValue;
+		/** Type the first line of the customer's shipping address. */
+		ShipTo_Line1: DevKit.WebApi.StringValue;
+		/** Type the second line of the customer's shipping address. */
+		ShipTo_Line2: DevKit.WebApi.StringValue;
+		/** Type the third line of the shipping address. */
+		ShipTo_Line3: DevKit.WebApi.StringValue;
+		/** Type a name for the customer's shipping address, such as "Headquarters" or "Field office",  to identify the address. */
+		ShipTo_Name: DevKit.WebApi.StringValue;
+		/** Type the ZIP Code or postal code for the shipping address. */
+		ShipTo_PostalCode: DevKit.WebApi.StringValue;
+		/** Type the state or province for the shipping address. */
+		ShipTo_StateOrProvince: DevKit.WebApi.StringValue;
+		/** Type the phone number for the customer's shipping address. */
+		ShipTo_Telephone: DevKit.WebApi.StringValue;
+		/** Skip Price Calculation (For Internal Use) */
+		SkipPriceCalculation: DevKit.WebApi.OptionSetValue;
+		/** Choose the service level agreement (SLA) that you want to apply to the invoice record. */
+		SLAId: DevKit.WebApi.LookupValue;
+		/** Last SLA that was applied to this invoice. This field is for internal use only. */
+		SLAInvokedId: DevKit.WebApi.LookupValueReadonly;
+		SLAName: DevKit.WebApi.StringValueReadonly;
+		/** Contains the id of the stage where the entity is located. */
+		StageId: DevKit.WebApi.GuidValue;
+		/** Shows whether the invoice is active, paid, or canceled. Paid and canceled invoices are read-only and can't be edited unless they are reactivated. */
+		StateCode: DevKit.WebApi.OptionSetValue;
+		/** Select the invoice's status. */
+		StatusCode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Shows the total amount due, calculated as the sum of the products, discount, freight, and taxes for the invoice. */
+		TotalAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Total Amount in base currency. */
+		TotalAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the total product amount due, minus any discounts. This value is added to freight and tax amounts in the calculation for the total amount due for the invoice. */
+		TotalAmountLessFreight: DevKit.WebApi.MoneyValue;
+		/** Value of the Total Pre-Freight Amount in base currency. */
+		TotalAmountLessFreight_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the total discount amount, based on the discount price and rate entered on the invoice. */
+		TotalDiscountAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Total Discount Amount in base currency. */
+		TotalDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the sum of all existing and write-in products included on the invoice, based on the specified price list and quantities. */
+		TotalLineItemAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Total Detail Amount in base currency. */
+		TotalLineItemAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the Manual Discount amounts specified on all products included in the invoice. This value is reflected in the Detail Amount field on the invoice and is added to any discount amount or rate specified on the invoice. */
+		TotalLineItemDiscountAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Total Line Item Discount Amount in base currency. */
+		TotalLineItemDiscountAmount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the total of the Tax amounts specified on all products included in the invoice, included in the Total Amount due calculation for the invoice. */
+		TotalTax: DevKit.WebApi.MoneyValue;
+		/** Value of the Total Tax in base currency. */
+		TotalTax_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+		TraversedPath: DevKit.WebApi.StringValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+		/** Select whether the products included in the invoice should be shipped to the specified address or held until the customer calls with further pick up or delivery instructions. */
+		WillCall: DevKit.WebApi.BooleanValue;
+	}
 }
 declare namespace OptionSet {
 	namespace Invoice {
@@ -603,4 +873,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information','Invoice','Project Invoice'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information','Invoice','Invoice','Project Invoice'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

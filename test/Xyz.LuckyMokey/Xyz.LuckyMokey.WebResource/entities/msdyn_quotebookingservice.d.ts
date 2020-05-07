@@ -55,6 +55,201 @@ declare namespace LuckyMokey {
 		/** The Body section of form msdyn_quotebookingservice_Information */
 		Body: LuckyMokey.Formmsdyn_quotebookingservice_Information.Body;
 	}
+	namespace Formmsdyn_quotebookingservice_Information {
+		interface Tabs {
+		}
+		interface Body {
+			notescontrol: DevKit.Form.Controls.ControlNote;
+			/** The name of the custom entity. */
+			msdyn_name: DevKit.Form.Controls.ControlString;
+			/** Owner Id */
+			OwnerId: DevKit.Form.Controls.ControlLookup;
+		}
+	}
+	class Formmsdyn_quotebookingservice_Information extends DevKit.Form.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_quotebookingservice_Information
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Form.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.Form.WebApi;
+		/** The Body section of form msdyn_quotebookingservice_Information */
+		Body: LuckyMokey.Formmsdyn_quotebookingservice_Information.Body;
+	}
+	namespace Formmsdyn_quotebookingservice_Information {
+		interface tab_tab_1_Sections {
+			tab_1_column_1_section_1: DevKit.Form.Controls.ControlSection;
+			tab_1_column_2_section_1: DevKit.Form.Controls.ControlSection;
+			tab_1_column_3_section_1: DevKit.Form.Controls.ControlSection;
+		}
+		interface tab_tab_1 extends DevKit.Form.Controls.IControlTab {
+			Section: tab_tab_1_Sections;
+		}
+		interface Tabs {
+			tab_1: tab_tab_1;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Shows the actual duration of service. */
+			msdyn_duration: DevKit.Form.Controls.ControlInteger;
+			/** Shows the total cost amount of the service. It is calculated as (Unit Cost) * Duration */
+			msdyn_EstimatedCostAmount: DevKit.Form.Controls.ControlMoney;
+			/** Shows the total sales amount of the service. */
+			msdyn_EstimatedSalesAmount: DevKit.Form.Controls.ControlMoney;
+			/** Enter the amount charged as a minimum charge. */
+			msdyn_minimumchargeamount: DevKit.Form.Controls.ControlMoney;
+			/** Enter the duration of up to how long the minimum charge applies. */
+			msdyn_minimumchargeduration: DevKit.Form.Controls.ControlInteger;
+			/** Unique identifier for Quote Booking Setup associated with Quote Booking Service. */
+			msdyn_quotebookingsetup: DevKit.Form.Controls.ControlLookup;
+			/** Unique identifier for Product/Service associated with Quote Booking Service. */
+			msdyn_Service: DevKit.Form.Controls.ControlLookup;
+			/** The unit that determines the pricing for this service when Price List is set */
+			msdyn_unit: DevKit.Form.Controls.ControlLookup;
+			/** Enter the amount you wish to charge the customer per unit. This field is optional. */
+			msdyn_unitamount: DevKit.Form.Controls.ControlMoney;
+			/** Shows the estimated cost amount per unit. */
+			msdyn_unitcostamount: DevKit.Form.Controls.ControlMoney;
+		}
+	}
+	class Formmsdyn_quotebookingservice_Information extends DevKit.Form.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_quotebookingservice_Information
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Form.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.Form.WebApi;
+		/** The Body section of form msdyn_quotebookingservice_Information */
+		Body: LuckyMokey.Formmsdyn_quotebookingservice_Information.Body;
+	}
+	class msdyn_quotebookingserviceApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_quotebookingserviceApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** The currency that will be used to charge this service */
+		msdyn_currency: DevKit.WebApi.MoneyValue;
+		/** Value of the Currency in base currency. */
+		msdyn_currency_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Customer Asset related to this Service */
+		msdyn_customerasset: DevKit.WebApi.LookupValue;
+		/** Shows the actual duration of service. */
+		msdyn_duration: DevKit.WebApi.IntegerValue;
+		/** Enter the duration you want to bill the customer for. By default, this will default to the same value as the "Duration" field. */
+		msdyn_durationtobill: DevKit.WebApi.IntegerValue;
+		/** Shows the total cost amount of the service. It is calculated as (Unit Cost) * Duration */
+		msdyn_EstimatedCostAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Estimate Cost Amount in base currency. */
+		msdyn_estimatedcostamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the total sales amount of the service. */
+		msdyn_EstimatedSalesAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Estimate Sales Amount in base currency. */
+		msdyn_estimatedsalesamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** For internal use only. */
+		msdyn_Internalflags: DevKit.WebApi.StringValue;
+		msdyn_iscopied: DevKit.WebApi.BooleanValue;
+		/** Shows the order of this service within the agreement services. */
+		msdyn_lineorder: DevKit.WebApi.IntegerValue;
+		/** Enter the amount charged as a minimum charge. */
+		msdyn_minimumchargeamount: DevKit.WebApi.MoneyValue;
+		/** Value of the Minimum Charge Amount in base currency. */
+		msdyn_minimumchargeamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Enter the duration of up to how long the minimum charge applies. */
+		msdyn_minimumchargeduration: DevKit.WebApi.IntegerValue;
+		/** The name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Optionally set Price List that will determine the pricing for this service on the Work Order */
+		msdyn_pricelist: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Quote associated with Quote Booking Service. */
+		msdyn_quote: DevKit.WebApi.LookupValue;
+		/** The Quote Booking Incident related to this service */
+		msdyn_quotebookingincident: DevKit.WebApi.LookupValue;
+		/** Unique identifier for entity instances */
+		msdyn_quotebookingserviceId: DevKit.WebApi.GuidValue;
+		/** Unique identifier for Quote Booking Setup associated with Quote Booking Service. */
+		msdyn_quotebookingsetup: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Product/Service associated with Quote Booking Service. */
+		msdyn_Service: DevKit.WebApi.LookupValue;
+		/** The unit that determines the pricing for this service when Price List is set */
+		msdyn_unit: DevKit.WebApi.LookupValue;
+		/** Enter the amount you wish to charge the customer per unit. This field is optional. */
+		msdyn_unitamount: DevKit.WebApi.MoneyValue;
+		/** Value of the Unit Amount in base currency. */
+		msdyn_unitamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the estimated cost amount per unit. */
+		msdyn_unitcostamount: DevKit.WebApi.MoneyValue;
+		/** Value of the Unit Cost in base currency. */
+		msdyn_unitcostamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Quote Booking Service */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Quote Booking Service */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the currency associated with the entity. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_quotebookingservice {
@@ -88,4 +283,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information','Information','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

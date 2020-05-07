@@ -92,6 +92,144 @@ declare namespace LuckyMokey {
 		/** The Body section of form msdyn_opportunitylinetransaction_Information */
 		Body: LuckyMokey.Formmsdyn_opportunitylinetransaction_Information.Body;
 	}
+	class msdyn_opportunitylinetransactionApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_opportunitylinetransactionApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Select the name of the customer to which this opportunity belongs. */
+		msdyn_AccountCustomer: DevKit.WebApi.LookupValue;
+		msdyn_AccountingDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_AccountVendor: DevKit.WebApi.LookupValue;
+		/** Enter the amount on the estimate line. */
+		msdyn_Amount: DevKit.WebApi.MoneyValue;
+		/** Value of the Amount in base currency. */
+		msdyn_amount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Select the calculation method used to determine the amount on the estimate line.  */
+		msdyn_AmountMethod: DevKit.WebApi.OptionSetValue;
+		msdyn_BasisAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Basis Amount in base currency. */
+		msdyn_basisamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		msdyn_BasisPrice: DevKit.WebApi.MoneyValue;
+		/** Value of the Basis Price in base currency. */
+		msdyn_basisprice_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Enter the quantity used as basis for calculating quantity on this estimate line. */
+		msdyn_BasisQuantity: DevKit.WebApi.DecimalValue;
+		/** Select whether this estimate line would be charged to the customer or not. Only chargeable transactions will add to the invoice total when an invoices are created */
+		msdyn_BillingType: DevKit.WebApi.OptionSetValue;
+		/** Shows the resource. */
+		msdyn_bookableresource: DevKit.WebApi.LookupValue;
+		/** Select the customer contact of this opportunity. */
+		msdyn_ContactCustomer: DevKit.WebApi.LookupValue;
+		msdyn_ContactVendor: DevKit.WebApi.LookupValue;
+		/** Select whether the customer identified on the opportunity was an account or a contact */
+		msdyn_CustomerType: DevKit.WebApi.OptionSetValue;
+		/** Type a description of the opportunity line estimate. */
+		msdyn_description: DevKit.WebApi.StringValue;
+		/** Enter the document date. The document date is only relevant for actuals and invoiced transactions; does not apply to opportunity line estimates. */
+		msdyn_DocumentDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the end time of the opportunity line estimate. */
+		msdyn_EndDateTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_ExchangeRateDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Shows the opportunity line that this estimate line belongs to. */
+		msdyn_OpportunityLine: DevKit.WebApi.StringValue;
+		/** Shows the entity instances. */
+		msdyn_opportunitylinetransactionId: DevKit.WebApi.GuidValue;
+		/** Relevant when amount calculation method on the opportunity line transactions is "Multiply basis amount by percent" */
+		msdyn_Percent: DevKit.WebApi.DecimalValue;
+		/** Enter the price on the estimate line. */
+		msdyn_Price: DevKit.WebApi.MoneyValue;
+		/** Value of the Price in base currency. */
+		msdyn_price_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Select the price list used on the opportunity line estimate. */
+		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		/** Select the product on the estimate line. */
+		msdyn_Product: DevKit.WebApi.LookupValue;
+		/** Select the name of the Project that this estimate line is for. */
+		msdyn_Project: DevKit.WebApi.LookupValue;
+		/** Enter the quantity of the opportunity estimate line. */
+		msdyn_Quantity: DevKit.WebApi.DecimalValue;
+		/** Select the role that is estimated to perform the work. */
+		msdyn_ResourceCategory: DevKit.WebApi.LookupValue;
+		/** Select the organizational unit of the resource who is estimated to perform the work. */
+		msdyn_ResourceOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		/** Enter the start date of the opportunity line estimate. */
+		msdyn_StartDateTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Select the name of the project task for which this estimate line was created. */
+		msdyn_Task: DevKit.WebApi.LookupValue;
+		/** Select the category of the transaction. */
+		msdyn_TransactionCategory: DevKit.WebApi.LookupValue;
+		/** Transaction classification of the Opportunity line transaction */
+		msdyn_TransactionClassification: DevKit.WebApi.OptionSetValue;
+		/** Transaction type for the opportunity line. */
+		msdyn_TransactionTypeCode: DevKit.WebApi.OptionSetValue;
+		/** Select the unit of the estimate quantity. */
+		msdyn_Unit: DevKit.WebApi.LookupValue;
+		/** Select the unit group of the opportunity line estimate. */
+		msdyn_UnitSchedule: DevKit.WebApi.LookupValue;
+		msdyn_VendorType: DevKit.WebApi.OptionSetValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Opportunity Line Detail */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Opportunity Line Detail */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Shows the currency associated with the entity. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_opportunitylinetransaction {
@@ -191,4 +329,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

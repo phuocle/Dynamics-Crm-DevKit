@@ -225,6 +225,122 @@ declare namespace LuckyMokey {
 		/** The Navigation of form Agreement_Booking_Setup_Mobile */
 		Navigation: LuckyMokey.FormAgreement_Booking_Setup_Mobile.Navigation;
 	}
+	class msdyn_agreementbookingsetupApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_agreementbookingsetupApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who last updated the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Agreement this Booking Setup relates to */
+		msdyn_Agreement: DevKit.WebApi.LookupValue;
+		/** Shows the entity instances. */
+		msdyn_agreementbookingsetupId: DevKit.WebApi.GuidValue;
+		/** Enable if the system should automatically generate Order Bookings for the Booking Dates of this Booking Setup */
+		msdyn_AutoGenerateBooking: DevKit.WebApi.BooleanValue;
+		/** Enable if the system should automatically generate Work Orders for the Booking Dates of this Booking Setup */
+		msdyn_AutoGenerateWO: DevKit.WebApi.BooleanValue;
+		/** Type a description of this booking setup. */
+		msdyn_Description: DevKit.WebApi.StringValue;
+		/** Shows the duration of the booking. */
+		msdyn_EstimatedDuration: DevKit.WebApi.IntegerValue;
+		/** Specify how many days in advance of the Booking Date the system should automatically generate a Work Order */
+		msdyn_GenerateWODaysInAdvance: DevKit.WebApi.IntegerValue;
+		/** For internal use only. */
+		msdyn_InternalFlags: DevKit.WebApi.StringValue;
+		/** Only used when Work Location is a Facility. Latitude is used when trying to locate nearby facilities. */
+		msdyn_Latitude: DevKit.WebApi.DoubleValue;
+		/** Only used when Work Location is a Facility. Longitude is used when trying to locate nearby facilities. */
+		msdyn_Longitude: DevKit.WebApi.DoubleValue;
+		/** Enter the name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Shows the flexibility of days after the booking date. */
+		msdyn_PostBookingFlexibility: DevKit.WebApi.IntegerValue;
+		/** Intended for internal use. Manipulating values in this field is not supported and can lead to unexpected system behavior. */
+		msdyn_PostponeGenerationUntil_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		/** Shows the flexibility of days prior to the booking date. */
+		msdyn_PreBookingFlexibility: DevKit.WebApi.IntegerValue;
+		/** Preferred Resource to booked */
+		msdyn_PreferredResource: DevKit.WebApi.LookupValue;
+		/** Shows the preferred time to booking. */
+		msdyn_PreferredStartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Booking Priority */
+		msdyn_Priority: DevKit.WebApi.LookupValue;
+		/** Stores the booking recurrence settings. */
+		msdyn_RecurrenceSettings: DevKit.WebApi.StringValue;
+		/** For internal use only. */
+		msdyn_Revision: DevKit.WebApi.IntegerValue;
+		/** Shows the time window up until when this can be booked. */
+		msdyn_TimeWindowEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Shows the time window from when this can be booked. */
+		msdyn_TimeWindowStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_WorkLocation: DevKit.WebApi.OptionSetValue;
+		/** Shows the work order summary to be set on the work orders generated. */
+		msdyn_WorkOrderSummary: DevKit.WebApi.StringValue;
+		/** Work Order Type to be used on generated Work Orders */
+		msdyn_WorkOrderType: DevKit.WebApi.LookupValue;
+		/** Shows the date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Contains the ID of the process associated with the entity. */
+		processid: DevKit.WebApi.GuidValue;
+		/** Contains the ID of the stage where the entity is located. */
+		stageid: DevKit.WebApi.GuidValue;
+		/** Status of the Agreement Booking Setup */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Agreement Booking Setup */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Shows a comma-separated list of string values that represent the unique identifiers of stages in a business process flow instance in the order that they occur. */
+		traversedpath: DevKit.WebApi.StringValue;
+		/** Shows the time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_agreementbookingsetup {
@@ -266,4 +382,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Agreement Booking Setup','Agreement Booking Setup - Mobile'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Agreement Booking Setup','Agreement Booking Setup - Mobile'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

@@ -25,6 +25,108 @@ declare namespace LuckyMokey {
 		/** The Body section of form msdyn_SessionData_Information */
 		Body: LuckyMokey.Formmsdyn_SessionData_Information.Body;
 	}
+	class msdyn_SessionDataApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_SessionDataApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Conversation Identifier */
+		msdyn_ConversationId: DevKit.WebApi.StringValue;
+		/** Custom Attribute 1 */
+		msdyn_CustomAttribute1: DevKit.WebApi.StringValue;
+		/** Custom Attribute 2 */
+		msdyn_CustomAttribute2: DevKit.WebApi.StringValue;
+		/** Custom Attribute 3 */
+		msdyn_CustomAttribute3: DevKit.WebApi.StringValue;
+		/** Custom Attribute 4 */
+		msdyn_CustomAttribute4: DevKit.WebApi.StringValue;
+		/** Custom Attribute 5 */
+		msdyn_CustomAttribute5: DevKit.WebApi.StringValue;
+		/** External System Correlation Id */
+		msdyn_ExternalCorrelationId: DevKit.WebApi.StringValue;
+		/** Required name field */
+		msdyn_Name: DevKit.WebApi.StringValue;
+		msdyn_ProviderSessionId: DevKit.WebApi.StringValue;
+		/** Identifier of the queue to which this session belongs to */
+		msdyn_QueueId: DevKit.WebApi.StringValue;
+		/** Name of the queue to which this session belongs to */
+		msdyn_QueueName: DevKit.WebApi.StringValue;
+		/** Additional data related to the session */
+		msdyn_SessionAdditionalData: DevKit.WebApi.StringValue;
+		/** Timestamp at which the agent was assigned to the session */
+		msdyn_SessionAgentAssignedTimestamp_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Channel for the session */
+		msdyn_SessionChannel: DevKit.WebApi.StringValue;
+		/** Timestamp at which the session was created */
+		msdyn_SessionCreatedTimestamp_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Reason for the session creation */
+		msdyn_SessionCreationReason: DevKit.WebApi.StringValue;
+		/** Unique identifier for entity instances */
+		msdyn_SessionDataId: DevKit.WebApi.GuidValue;
+		/** Timestamp at which the queue was assigned to the session */
+		msdyn_SessionQueueAssignedTimestamp_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Identifier of the client session */
+		msdyn_UCISessionId: DevKit.WebApi.StringValue;
+		/** Name of the client session */
+		msdyn_UCISessionName: DevKit.WebApi.StringValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the SessionData */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the SessionData */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_SessionData {
@@ -58,4 +160,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}

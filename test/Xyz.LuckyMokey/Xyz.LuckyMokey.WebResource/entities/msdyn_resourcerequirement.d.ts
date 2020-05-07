@@ -189,6 +189,162 @@ declare namespace LuckyMokey {
 		/** The Body section of form Infomation */
 		Body: LuckyMokey.FormInfomation.Body;
 	}
+	class msdyn_resourcerequirementApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_resourcerequirementApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Select the allocation method to be used for creating requirement distribution over a time period. */
+		msdyn_allocationmethod: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier for Appointment associated with Resource Requirement. */
+		msdyn_AppointmentRequirementId: DevKit.WebApi.LookupValue;
+		/** A unique identifier for the booking setup metadata that is associated with a resource requirement. */
+		msdyn_BookingSetupMetadataId: DevKit.WebApi.LookupValue;
+		/** The calendar that will be used for a resource requirement */
+		msdyn_CalendarId: DevKit.WebApi.StringValue;
+		/** Type the city where the resource is required. */
+		msdyn_city: DevKit.WebApi.StringValue;
+		/** Enter the cost price of the resource required. */
+		msdyn_costprice: DevKit.WebApi.MoneyValue;
+		/** Value of the Cost Price in base currency. */
+		msdyn_costprice_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Type the country/region where the resource is required. */
+		msdyn_country: DevKit.WebApi.StringValue;
+		/** Duration of total minutes required */
+		msdyn_duration: DevKit.WebApi.IntegerValue;
+		/** Effort that's required from resource capacity */
+		msdyn_effort: DevKit.WebApi.DecimalValue;
+		msdyn_fromdate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** The fulfilled duration, in minutes. */
+		msdyn_FulfilledDuration: DevKit.WebApi.IntegerValue;
+		/** Enter the hours fulfilled against requirement when the requirement status is fulfilled. */
+		msdyn_fulfilledhours: DevKit.WebApi.DecimalValue;
+		/** Enter the number of hours for which a requirement is required. */
+		msdyn_hours: DevKit.WebApi.DecimalValue;
+		/** For internal use only. */
+		msdyn_InternalFlags: DevKit.WebApi.StringValue;
+		msdyn_IsPrimary: DevKit.WebApi.BooleanValue;
+		/** Is template requirement */
+		msdyn_istemplate: DevKit.WebApi.BooleanValue;
+		/** The latitude to use for the location of a requirement. */
+		msdyn_Latitude: DevKit.WebApi.DoubleValue;
+		/** The longitude to use for the location of a requirement. */
+		msdyn_Longitude: DevKit.WebApi.DoubleValue;
+		/** The name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Enter the percentage of the calendar capacity required. */
+		msdyn_percentage: DevKit.WebApi.DecimalValue;
+		msdyn_PoolType: DevKit.WebApi.MultiOptionSetValue;
+		/** Priority of the requirement. To be taken into consideration while scheduling resources */
+		msdyn_Priority: DevKit.WebApi.LookupValue;
+		/** Select the project for which the resource is required. */
+		msdyn_projectid: DevKit.WebApi.LookupValue;
+		msdyn_ProposedDuration: DevKit.WebApi.IntegerValue;
+		/** Enter the number of resources required. */
+		msdyn_quantity: DevKit.WebApi.DecimalValue;
+		msdyn_RemainingDuration: DevKit.WebApi.IntegerValue;
+		/** The status of the resource request associated with this requirement. */
+		msdyn_requeststatus: DevKit.WebApi.StringValue;
+		/** The requirement group control view id of the resource requirement entity. This field will has value only when the entity is inside the requirement group control. */
+		msdyn_requirementgroupcontrolviewid: DevKit.WebApi.StringValue;
+		/** Requirement Group */
+		msdyn_requirementgroupid: DevKit.WebApi.LookupValue;
+		/** Requirement Relationship */
+		msdyn_requirementrelationshipid: DevKit.WebApi.LookupValue;
+		/** Unique identifier for entity instances */
+		msdyn_resourcerequirementId: DevKit.WebApi.GuidValue;
+		msdyn_resourcetype: DevKit.WebApi.MultiOptionSetValue;
+		/** Select the required role. */
+		msdyn_roleid: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Service Appointment associated with Resource Requirement. */
+		msdyn_serviceappointment: DevKit.WebApi.LookupValue;
+		/** Sort option string field of resource requirement */
+		msdyn_sortoptions: DevKit.WebApi.StringValue;
+		/** Type the state/province where the resource is required. */
+		msdyn_stateorprovince: DevKit.WebApi.StringValue;
+		/** Requirement Status */
+		msdyn_Status: DevKit.WebApi.LookupValue;
+		/** template requirement id if requirement is created from template */
+		msdyn_templaterequirementid: DevKit.WebApi.StringValue;
+		msdyn_Territory: DevKit.WebApi.LookupValue;
+		/** Enter the starting range of the time promised to the account that incidents will be resolved. */
+		msdyn_TimeFromPromised_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_TimeGroup: DevKit.WebApi.LookupValue;
+		/** Enter the ending range of the time promised to the account that incidents will be resolved. */
+		msdyn_TimeToPromised_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_TimeWindowEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_TimeWindowStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** End date of requirement period */
+		msdyn_todate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Select the type of resource requirement. */
+		msdyn_type: DevKit.WebApi.OptionSetValue;
+		/** The working hours for a requirement. */
+		msdyn_workhourtemplate: DevKit.WebApi.LookupValue;
+		msdyn_WorkLocation: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier for Work Order associated with Resource Requirement. */
+		msdyn_WorkOrder: DevKit.WebApi.LookupValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Resource Requirement */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Resource Requirement */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the currency associated with the entity. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_resourcerequirement {
@@ -278,4 +434,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Infomation','Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false}
+//{'JsForm':['Infomation','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true}
