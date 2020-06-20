@@ -1,3 +1,5 @@
+# This tool don't have good document. I planned update it.
+
 # DynamicsCrm.DevKit contains:
 * [23 projects/items template.](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-and-Items-Template)
 * [Integrated with Visual Studio](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Integrated-with-Visual-Studio) for deploy WebResources, Reports.
