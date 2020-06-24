@@ -749,6 +749,24 @@ declare namespace DevKit {
             /** Function reference. The function to execute when the action label is clicked. */
             eventHandler?: string
         }
+        interface GridRelationship {
+            /** Name of the attribute. */
+            attributeName: string,
+            /** Name of the relationship. */
+            name: string,
+            /** Name of the navigation property for this relationship. */
+            navigationPropertyName: string,
+            /** Returns one of the following values to indicate the relationship type. 0: OneToMany | 1: ManyToMany */
+            relationshipType: 0 | 1,
+            /** Returns one of the following values to indicate the role type of relationship. 1: Referencing | 2: AssociationEntity */
+            roleType: 1 | 2
+        }
+        interface ViewSelector {
+            /** Reference to the current view. */
+            CurrentView: DevKit.Core.EntityReference;
+            /** Returns a boolean value to indicate whether the view selector is visible */
+            readonly Visible: boolean;
+        }
     }
     namespace WebApi {
         interface OptionSetValue {
@@ -1728,7 +1746,43 @@ declare namespace DevKit {
                 Value: Array<number>;
             }
             interface ControlGrid {
-
+                /**
+                 * Adds event handlers to the Subgrid OnLoad event event. [Read-only and editable grids]
+                 * @param callback The function to be executed when the subgrid loads. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See execution context for more information.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/addonload
+                 */
+                AddOnLoad(callback: (executionContext: any) => void): void;
+                /**
+                 * Gets the logical name of the entity data displayed in the grid. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getentityname
+                 * */
+                readonly EntityName: string;
+                /**
+                 * Gets the FetchXML query that represents the current data, including filtered and sorted data, in the grid control. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getfetchxml
+                 */
+                readonly FetchXml: string
+                /**
+                 * Gets the grid type (grid or subgrid). [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getgridtype
+                 * */
+                readonly GridType: OptionSet.GridType;
+                /**
+                 * Gets information about the relationship used to filter the subgrid. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
+                 * */
+                readonly Relationship: DevKit.Core.GridRelationship;
+                /**
+                 * Gets the URL of the current grid control. [Read-only and editable grids]
+                 * @param client Indicates the client type. You can specify one of the following values: 0: Browser | 1: MobileApplication
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/geturl
+                 */
+                Url(client: 0 | 1): string;
+                /**
+                 * Provides methods to get or set information about the view selector of the subgrid control. If the subgrid control is not configured to display the view selector, calling the ViewSelector methods will throw an error. [Read-only grid]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/viewselector
+                 */
+                ViewSelector: DevKit.Core.ViewSelector;
             }
             interface ControlNote {
 
@@ -2909,6 +2963,13 @@ declare namespace OptionSet {
         Video,
         /** "image" */
         Image
+    }
+    /**  */
+    enum GridType {
+        /** 1 */
+        HomePageGrid,
+        /** 2 */
+        Subgrid
     }
 }
 /** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client */

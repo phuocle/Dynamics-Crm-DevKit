@@ -133,7 +133,7 @@
             return (type + field).toLowerCase();
         })();
         var control = formContext.getControl(logicalName);
-        if (cotnrol === null) control = formContext.getControl(field);
+        if (control === null) control = formContext.getControl(field);
         var attribute = (function() {
             if (formContext) {
                 if (formContext.getAttribute) {

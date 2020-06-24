@@ -310,6 +310,9 @@ declare namespace Tomato {
 		}
 		interface QuickForm {
 			QuickForm: DevKit.Form.Controls.ControlQuickView;
+		}
+		interface Grid {
+			Contacts: DevKit.Form.Controls.ControlGrid;
         }
 	}
 	class FormTest extends DevKit.Form.IForm {
@@ -335,6 +338,8 @@ declare namespace Tomato {
 		Process: Tomato.FormTest.Process;
 		/** The QuickForm of Test */
 		QuickForm: Tomato.FormTest.QuickForm;
+		/** The Grids of Text*/
+		Grid: Tomato.FormTest.Grid;
 	}
 }
 declare namespace OptionSet {

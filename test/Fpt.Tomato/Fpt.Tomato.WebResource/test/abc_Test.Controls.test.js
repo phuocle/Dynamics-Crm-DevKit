@@ -1,7 +1,6 @@
 ﻿//@ts-check
 define(['xrm-mock'], () => {
     var xrmMock = require('xrm-mock');
-
     describe('Controls', () => {
         beforeEach(function () {
             var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
@@ -362,7 +361,61 @@ define(['xrm-mock'], () => {
         //    expect(form.QuickForm.QuickForm.Visible).toBeFalsy();
         //});
         it('subgrid control type', () => {
-            expect(true).toBeTruthy();
+            var attributes = new xrmMock.ItemCollectionMock([
+                new xrmMock.AttributeMock({
+                    name: "Contacts"
+                })
+            ]);
+            var entity = new xrmMock.EntityMock({
+                attributes: attributes
+            });
+            var data = new xrmMock.DataMock(entity);
+
+            var grid = new xrmMock.GridControlMock({
+                name: "Contacts",
+                controlType: "subgrid",
+                label: "CONTACTS",
+                visible: true,
+                entityName: "contact",
+                contextType: XrmEnum.GridControlContext.FormContextRelated
+            });
+
+            var viewSelector = new xrmMock.ViewSelectorMock(true);
+            viewSelector.setCurrentView(new xrmMock.LookupValueMock("GUID-CONTACTS-I-FOLLOW", "1039", "Contacts I Follow"));
+            grid.viewSelector = viewSelector;
+
+            var relationship = new xrmMock.RelationshipMock({
+                name: "name"
+            });
+            grid.relationship = relationship;
+            var ui = new xrmMock.UiMock({
+                controls: new xrmMock.ItemCollectionMock([grid])
+            });
+            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+            var ContactsAddOnLoad = function (executionContext) { }
+            expect(grid.onLoadHandlers.length).toBe(0);
+            form.Grid.Contacts.AddOnLoad(ContactsAddOnLoad);
+            expect(grid.onLoadHandlers.length).toBe(1);
+            expect(form.Grid.Contacts.EntityName).toBe("contact");
+            expect(() => { form.Grid.Contacts.FetchXml }).toThrow(new Error("getFetchXml not implemented."));
+            expect(() => { form.Grid.Contacts.GridType }).toThrow(new Error("getGridType not implemented."));
+            expect(form.Grid.Contacts.Relationship).toBeDefined();
+            expect(() => { form.Grid.Contacts.Url(0); }).toThrow(new Error("getUrl not implemented."));
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.entityType).toBe("1039");
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-CONTACTS-I-FOLLOW");
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("Contacts I Follow");
+            var newCurrentView = {
+                entityType: "1039",
+                id: "GUID-NEW",
+                name: "NAME-NEW"
+            };
+            form.Grid.Contacts.ViewSelector.CurrentView = newCurrentView;
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.entityType).toBe("1039");
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-NEW");
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("NAME-NEW");
+            expect(form.Grid.Contacts.ViewSelector.Visible).toBeTruthy();
         });
         it('timelinewall control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([
@@ -442,6 +495,5 @@ define(['xrm-mock'], () => {
         it('webresource control type', () => {
             expect(true).toBeTruthy();
         });
-
     });
 });

@@ -13,7 +13,7 @@ var Tomato;
 				formContext = executionContext.getFormContext();
 			}
 		}
-		var form = devKit.LoadForm(formContext);
+        var form = devKit.LoadForm(formContext);
 		var body = {
 			abc_All: {},
 			abc_All_1: {},
@@ -52,6 +52,12 @@ var Tomato;
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
+
+		var grid = {
+			Contacts: {}
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
 
 		var navigation = {}
 		devKit.LoadNavigations(formContext, navigation);

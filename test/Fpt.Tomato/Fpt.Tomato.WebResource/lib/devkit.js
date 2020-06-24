@@ -196,7 +196,7 @@ var devKit = (function () {
         Object.defineProperty(body[field], "Value", {
             get: function () {
                 if (attribute !== undefined) return attribute.getValue();
-                throw new Error(`field: ${logicalName} removed on form`);
+                //throw new Error(`field: ${logicalName} removed on form`);
             },           
             set: function (value) { attribute.setValue(value); }
         });
@@ -420,6 +420,34 @@ var devKit = (function () {
             loadQuickForm(formContext, quickForms, quickForm);
         }
     }
+    function loadGrid(formContext, grids, grid) {
+        if (!formContext || !formContext.getControl) return;
+        var gridControl = formContext.getControl(grid);
+        grids[grid].AddOnLoad = function (callback) { gridControl.addOnLoad(callback); };
+        Object.defineProperty(grids[grid], "EntityName", { get: function () { return gridControl.getEntityName(); } });
+        Object.defineProperty(grids[grid], "FetchXml", { get: function () { return gridControl.getFetchXml(); } });
+        Object.defineProperty(grids[grid], "GridType", { get: function () { return gridControl.getGridType(); } });
+        Object.defineProperty(grids[grid], "Relationship", { get: function () { return gridControl.getRelationship(); } });
+        grids[grid].Url = function (client) { gridControl.getUrl(client); };
+        Object.defineProperty(grids[grid], "ViewSelector", {
+            get: function () {
+                var viewSelector = {};
+                Object.defineProperty(viewSelector, "CurrentView", {
+                    get: function () { return gridControl.getViewSelector().getCurrentView(); },
+                    set: function (value) { gridControl.getViewSelector().setCurrentView(value); }
+                });
+                Object.defineProperty(viewSelector, "Visible", {
+                    get: function () { return gridControl.getViewSelector().isVisible(); },
+                });
+                return viewSelector;
+            }
+        });
+    }
+    function loadGrids(formContext, grids) {
+        for (var grid in grids) {
+            loadGrid(formContext, grids, grid);
+        }
+    }
     function loadUtility(defaultWebResourceName) {
         var utility = {};
         if (Xrm && Xrm.Utility) {
@@ -437,8 +465,7 @@ var devKit = (function () {
             Object.defineProperty(utility, "PageContext", { get: function () { return getUtility.getPageContext(); } });
         }
         if (Xrm && Xrm.Utility && Xrm.Utility.getGlobalContext) {
-            var getGlobalContext = Xrm.Utility.getGlobalContext();
-            
+            var getGlobalContext = Xrm.Utility.getGlobalContext();            
             Object.defineProperty(utility, "Client", {
                 get: function () {
                     var Client = {};
@@ -546,7 +573,8 @@ var devKit = (function () {
         LoadTabs: loadTabs,
         LoadNavigations: loadNavigations,
         LoadQuickForms: loadQuickForms,
-        LoadUtility: loadUtility
+        LoadGrids: loadGrids,
+        LoadUtility: loadUtility        
     }
 })();
 var OptionSet;
@@ -692,4 +720,8 @@ var OptionSet;
         Open: 1,
         Save: 2
     };
+    OptionSet.GridType = {
+        HomePageGrid: 1,
+        Subgrid: 2
+    }
 })(OptionSet || (OptionSet = {}));
