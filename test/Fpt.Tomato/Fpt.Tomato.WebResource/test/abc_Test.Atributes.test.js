@@ -1,7 +1,6 @@
 ﻿//@ts-check
 define(['xrm-mock'], () => {
     var xrmMock = require('xrm-mock');
-
     describe('Atributes', () => {
         beforeEach(function () {
             var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();

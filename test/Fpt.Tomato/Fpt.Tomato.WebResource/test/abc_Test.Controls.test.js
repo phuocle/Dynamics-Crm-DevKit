@@ -85,7 +85,7 @@ define(['xrm-mock'], () => {
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new Tomato.FormTest(executionContext);
 
-            expect(() => { form.Body.abc_IFramed.ContentWindow(null, null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.abc_IFramed.ContentWindow(null, null) }).toThrow(new Error("getContentWindow not implemented."));
             expect(form.Body.abc_IFramed.ControlType).toBe(OptionSet.FieldControlType.Iframe);
             expect(() => { form.Body.abc_IFramed.Disabled }).toThrow(new Error("getDisabled not implemented."));
             expect(() => { form.Body.abc_IFramed.InitialUrl }).toThrow(new Error("getInitialUrl not implemented."));
@@ -385,7 +385,11 @@ define(['xrm-mock'], () => {
             grid.viewSelector = viewSelector;
 
             var relationship = new xrmMock.RelationshipMock({
-                name: "name"
+                name: "name",
+                attributeName: "attributeName",
+                navigationPropertyName: "navigationPropertyName",
+                relationshipType: XrmEnum.RelationshipType.OneToMany,
+                roleType: XrmEnum.RoleType.AssociationEntity
             });
             grid.relationship = relationship;
             var ui = new xrmMock.UiMock({
@@ -402,6 +406,11 @@ define(['xrm-mock'], () => {
             expect(() => { form.Grid.Contacts.FetchXml }).toThrow(new Error("getFetchXml not implemented."));
             expect(() => { form.Grid.Contacts.GridType }).toThrow(new Error("getGridType not implemented."));
             expect(form.Grid.Contacts.Relationship).toBeDefined();
+            expect(form.Grid.Contacts.Relationship.attributeName).toBe("attributeName");
+            expect(form.Grid.Contacts.Relationship.name).toBe("name");
+            expect(form.Grid.Contacts.Relationship.navigationPropertyName).toBe("navigationPropertyName");
+            expect(form.Grid.Contacts.Relationship.relationshipType).toBe(XrmEnum.RelationshipType.OneToMany);
+            expect(form.Grid.Contacts.Relationship.roleType).toBe(XrmEnum.RoleType.AssociationEntity);
             expect(() => { form.Grid.Contacts.Url(0); }).toThrow(new Error("getUrl not implemented."));
             expect(form.Grid.Contacts.ViewSelector.CurrentView.entityType).toBe("1039");
             expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-CONTACTS-I-FOLLOW");
