@@ -392,6 +392,12 @@ define(['xrm-mock'], () => {
                 roleType: XrmEnum.RoleType.AssociationEntity
             });
             grid.relationship = relationship;
+
+            var row1 = new xrmMock.GridRowMock(new xrmMock.DataMock(null), new xrmMock.GridRowDataMock(null));
+            var row2 = new xrmMock.GridRowMock(new xrmMock.DataMock(null), new xrmMock.GridRowDataMock(null));
+            var rows = new xrmMock.ItemCollectionMock([ row1, row2]);
+            grid.grid = new xrmMock.GridMock(rows);
+
             var ui = new xrmMock.UiMock({
                 controls: new xrmMock.ItemCollectionMock([grid])
             });
@@ -425,6 +431,22 @@ define(['xrm-mock'], () => {
             expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-NEW");
             expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("NAME-NEW");
             expect(form.Grid.Contacts.ViewSelector.Visible).toBeTruthy();
+            expect(() => { form.Grid.Contacts.Refresh(); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Grid.Contacts.RefreshRibbon(); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Grid.Contacts.OpenRelatedGrid(); }).toThrow(new Error("openRelatedGrid not implemented."));
+            form.Grid.Contacts.RemoveOnLoad(ContactsAddOnLoad);
+            expect(grid.onLoadHandlers.length).toBe(0);
+            expect(form.Grid.Contacts.Rows.getLength()).toBe(2);
+            var row_0 = form.Grid.Contacts.Rows.get(0);
+            expect(row_0).toBeDefined();
+            form.Grid.Contacts.Rows.forEach((row, index) => {
+                var d = row.data.entity;
+                debugger;
+
+            });
+            //form.Grid.Contacts.SelectedRows.
+            //form.Grid.Contacts.TotalRecordCount
+
         });
         it('timelinewall control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([

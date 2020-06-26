@@ -1783,6 +1783,51 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/viewselector
                  */
                 ViewSelector: DevKit.Core.ViewSelector;
+                /**
+                 * Refreshes the grid. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/refresh
+                 */
+                Refresh(): void;
+                /**
+                 * Refreshes the ribbon rules for the grid control. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/refreshribbon
+                 */
+                RefreshRibbon(): void;
+                /**
+                 * Displays the associated grid for the grid. This method does nothing if the grid is not filtered based on a relationship. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/openrelatedgrid
+                 */
+                OpenRelatedGrid(): void;
+                /**
+                 * Removes event handlers from the Subgrid OnLoad event event. [Read-only grids]
+                 * @param myFunction The function to be removed from the OnLoad event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/removeonload
+                 */
+                RemoveOnLoad(myFunction: () => void): void;
+                /**
+                 * Returns a collection of every GridRow in the Grid. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
+                 */
+                readonly Rows: DevKit.Form.Controls.GridRows;
+            }
+            interface GridRow {
+                readonly data: any;
+            }
+            interface GridRows {
+                /**
+                 * @param successCallback Delegate function with parameters for item and index.
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/foreach
+                 */
+                forEach(successCallback: (row: DevKit.Form.Controls.GridRow, index: number) => void): void;
+                /**
+                 * @param index The object where the index matches the number.
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
+                 */
+                get(index: number): DevKit.Form.Controls.GridRow;
+                /**
+                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/getlength
+                 */
+                getLength(): number;
             }
             interface ControlNote {
 

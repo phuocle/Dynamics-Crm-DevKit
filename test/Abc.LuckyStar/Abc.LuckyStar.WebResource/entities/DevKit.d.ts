@@ -1,5 +1,5 @@
-﻿/** DynamicsCrm.DevKit for namespace LuckyStar */
-declare namespace LuckyStar {
+﻿/** DynamicsCrm.DevKit for namespace Tomato */
+declare namespace Tomato {
     namespace WebApi {
         class AlternateKey {
             /**
@@ -417,30 +417,43 @@ declare namespace DevKit {
             /** The entity type to which to apply this filter. */
             entityLogicalName: string
         }
+        interface DateFormattingInfoCalendar {
+            MinSupportedDateTime: Date;
+            MaxSupportedDateTime: Date;
+            AlgorithmType: number;
+            CalendarType: number;
+            Eras: Array<number>;
+            TwoDigitYearMax: number;
+            IsReadOnly: boolean;
+        }
         interface DateFormattingInfo {
-            AMDesignator: string,
-            AbbreviatedDayNames: Array<string>,
-            AbbreviatedMonthGenitiveNames: Array<string>,
-            AbbreviatedMonthNames: Array<string>,
-            CalendarWeekRule: number,
-            Calendar: any,
-            DateSeparator: string,
-            DayNames: Array<string>,
-            FirstDayOfWeek: number,
-            FullDateTimePattern: string,
-            LongDatePattern: string,
-            LongTimePattern: string,
-            MonthDayPattern: string,
-            MonthGenitiveNames: Array<string>,
-            MonthNames: Array<string>,
-            PMDesignator: string,
-            ShortDatePattern: string,
-            ShortTimePattern: string,
-            ShortestDayNames: Array<string>,
-            UniversalSortableDateTimePattern: string,
-            SortableDateTimePattern: string,
-            TimeSeparator: string,
-            YearMonthPattern: string
+            AMDesignator: string;
+            AbbreviatedDayNames: Array<string>;
+            AbbreviatedMonthGenitiveNames: Array<string>;
+            AbbreviatedMonthNames: Array<string>;
+            Calendar: DateFormattingInfoCalendar;
+            CalendarWeekRule: number;
+            DateSeparator: string;
+            DayNames: Array<string>;
+            FirstDayOfWeek: number;
+            FullDateTimePattern: string;
+            IsReadOnly: boolean;
+            LongDatePattern: string;
+            LongTimePattern: string;
+            MonthDayPattern: string;
+            MonthGenitiveNames: Array<string>;
+            MonthNames: Array<string>;
+            NativeCalendarName: string;
+            PMDesignator: string;
+            RFC1123Pattern: string;
+            ShortDatePattern: string;
+            ShortTimePattern: string;
+            ShortestDayNames: Array<string>;
+            SortableDateTimePattern: string;
+            TimeSeparator: string;
+            UniversalSortableDateTimePattern: string;
+            YearMonthPattern: string;
+            eras: Array<string>;
         }
         interface FormOption {
             /** Indicates whether to display the command bar. If you do not specify this parameter, the command bar is displayed by default. */
@@ -527,7 +540,7 @@ declare namespace DevKit {
         }
         interface FieldNotification {
             /** A collection of objects */
-            actions: Array<FieldNotificationAction>;
+            actions?: Array<FieldNotificationAction>;
             /** The message to display in the notification. In the current release, only the first message specified in this array will be displayed. The string that you specify here appears as bold text in the notification, and is typically used for title or subject of the notification. You should limit your message to 50 characters for optimal user experience */
             messages: Array<string>;
             /** Defines the type of notification */
@@ -537,9 +550,9 @@ declare namespace DevKit {
         }
         interface FieldNotificationAction {
             /** The body message of the notification to be displayed to the user. Limit your message to 100 characters for optimal user experience */
-            message: string;
+            message?: string;
             /** Array of functions. The corresponding actions for the message */
-            actions: Array<any>;
+            actions?: Array<any>;
         }
         interface ProcessStage {
             /**
@@ -646,6 +659,113 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/getstages
              */
             Stages: Array<ProcessStage>;
+        }
+        interface PageInputEntityList {
+            /** Specify "entitylist" */
+            pageType: "entitylist";
+            /** The logical name of the entity to load in the list control. */
+            entityName: string;
+            /** The ID of the view to load. If you don't specify it, navigates to the default main view for the entity. */
+            viewId?: string;
+            /**  Type of view to load. Specify "savedquery" or "userquery". */
+            viewType?: "savedquery" | "userquery";
+        }
+        interface PageInputHtmlWebResource {
+            /** Specify "webresource" */
+            pageType: "webresource";
+            /** The name of the web resource to load. */
+            webresourceName: string;
+            /** The data to pass to the web resource. */
+            data?: string;
+        }
+        interface PageInputEntityRecordRelationship {
+            /** Name of the attribute used for relationship. */
+            attributeName: string,
+            /** Name of the relationship. */
+            name: string,
+            /** Name of the navigation property for this relationship. */
+            navigationPropertyName: string,
+            /** Relationship type. Specify one of the following values: 0:OneToMany | 1:ManyToMany */
+            relationshipType: number,
+            /** Role type in relationship. Specify one of the following values: 1:Referencing | 2:AssociationEntity */
+            roleType: number
+        }
+        interface PageInputEntityRecord {
+            /** Specify "entityrecord" */
+            pageType: "entityrecord",
+            /** Logical name of the entity to display the form for. */
+            entityName: string,
+            /** ID of the entity record to display the form for. If you don't specify this value, the form will be opened in create mode. */
+            entityId?: string,
+            /** Designates a record that will provide default values based on mapped attribute values. */
+            createFromEntity?: DevKit.Core.EntityReference,
+            /** A dictionary object that passes extra parameters to the form. */
+            data?: any,
+            /** ID of the form instance to be displayed. */
+            formId: string,
+            /** Indicates whether the form is navigated to from a different entity using cross-entity business process flow. */
+            isCrossEntityNavigate?: boolean,
+            /** Indicates whether there are any offline sync errors. */
+            isOfflineSyncError?: boolean,
+            /** ID of the business process to be displayed on the form. */
+            processId?: string,
+            /** ID of the business process instance to be displayed on the form. */
+            processInstanceId?: string,
+            /** Define a relationship object to display the related records on the form. */
+            relationship?: DevKit.Core.PageInputEntityRecordRelationship,
+            /** ID of the selected stage in business process instance. */
+            selectedStageId?: string
+        }
+        interface NavigationOptions {
+            /** Specify 1 to open the page inline; 2 to open the page in a dialog. Entity lists can only be opened inline; web resources can be opened either inline or in a dialog. */
+            target: 1 | 2;
+            /** The width of dialog. To specify the width in pixels, just type a numeric value. To specify the width in percentage, specify an object of type */
+            width?: number | SizeValue;
+            /** The height of dialog. To specify the width in pixels, just type a numeric value. To specify the height in percentage, specify an object of type */
+            height?: number | SizeValue;
+            /** Specify 1 to open the dialog in center; 2 to open the dialog on the side. Default is 1 (center). */
+            position?: 1 | 2;
+        }
+        interface SizeValue {
+            /** The numerical value */
+            value: number;
+            /** The unit of measurement. Specify "%" or "px". Default value is "px" */
+            unit: "%" | "px";
+        }
+        interface GlobalNotification {
+            action?: GlobalNotificationAction,
+            /** Defines the level of notification. Valid values are: 1: Success | 2: Error | 3: Warning | 4: Information */
+            level: 1 | 2 | 3 | 4,
+            /** The message to display in the notification. */
+            message: string,
+            /** ndicates whether or not the user can close or dismiss the notification. If you don't specify this parameter, users can't close or dismiss the notification by default. */
+            showCloseButton: boolean,
+            /** Defines the type of notification. Currently, only a value of 2 is supported, which displays a message bar at the top of the app. */
+            type: 2
+        }
+        interface GlobalNotificationAction {
+            /** The label for the action in the message. */
+            actionLabel?: string,
+            /** Function reference. The function to execute when the action label is clicked. */
+            eventHandler?: string
+        }
+        interface GridRelationship {
+            /** Name of the attribute. */
+            attributeName: string,
+            /** Name of the relationship. */
+            name: string,
+            /** Name of the navigation property for this relationship. */
+            navigationPropertyName: string,
+            /** Returns one of the following values to indicate the relationship type. 0: OneToMany | 1: ManyToMany */
+            relationshipType: 0 | 1,
+            /** Returns one of the following values to indicate the role type of relationship. 1: Referencing | 2: AssociationEntity */
+            roleType: 1 | 2
+        }
+        interface ViewSelector {
+            /** Reference to the current view. */
+            CurrentView: DevKit.Core.EntityReference;
+            /** Returns a boolean value to indicate whether the view selector is visible */
+            readonly Visible: boolean;
         }
     }
     namespace WebApi {
@@ -886,6 +1006,11 @@ declare namespace DevKit {
         namespace Controls {
             interface IControl {
                 /**
+                 * Returns the attribute that the control is bound to. Controls that aren’t bound to an attribute (subgrid, web resource, and IFRAME) don’t have this method. An error will be thrown if you attempt to use this method on one of these controls.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getattribute
+                 * */
+                readonly Attribute: any
+                /**
                  * Returns a string value that represents the type of control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getcontroltype
                  */
@@ -923,16 +1048,14 @@ declare namespace DevKit {
                 readonly IsDirty: boolean;
                 /**
                  * Returns a string representing the logical name of the attribute
-                 * Returns the name assigned to the control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getname
                  */
-                readonly Name: string;
+                readonly AttributeName: string;
                 /**
-                 * Returns a string representing the logical name of the attribute
-                 * Returns the name assigned to the control
+                 * Returns the name assigned to the control.
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getname
                  */
-                readonly Name2: string;
+                readonly ControlName: string;
                 /**
                  * Returns the formContext.data.entity object that is the parent to all attributes
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getparent
@@ -954,7 +1077,7 @@ declare namespace DevKit {
                  * Returns a boolean value to indicate whether the value of an attribute is valid
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/isvalid
                  */
-                readonly Valid: boolean;
+                readonly IsValid: boolean;
                 /**
                  * Removes a function from the OnChange event hander for an attribute
                  * @param callback Specifies the function to be removed from the OnChange event
@@ -972,14 +1095,14 @@ declare namespace DevKit {
                  * @param uniqueId The ID to use to clear a specific message that was set using setNotification or addNotification. If the uniqueId parameter isn’t specified, the currently displayed notification will be cleared
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearnotification
                  */
-                ClearNotification(uniqueId: string): void;
+                ClearNotification(uniqueId: string): boolean;
                 /**
                  * Displays an error message for the control to indicate that data isn’t valid. When this method is used,  a red "X" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message
                  * @param message The message to display
                  * @param uniqueId The ID to use to clear this message when using the clearNotification method
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setnotification
                  */
-                SetNotification(message: string, uniqueId?: string): void;
+                SetNotification(message: string, uniqueId?: string): boolean;
                 /**
                  * Returns whether the control is disabled
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getdisabled
@@ -1008,6 +1131,13 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/getuserprivilege
                  */
                 readonly UserPrivilege: DevKit.Core.FieldUserPrivilege;
+                /**
+                 * Sets a value for an attribute to determine whether it is valid or invalid with a message.
+                 * @param valid Specify false to set the attribute value to invalid and true to set the value to valid
+                 * @param message The message to display
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/setisvalid
+                 */
+                SetIsValid(valid: boolean, message: string): void
             }
             interface IControlSelectBase extends IControl {
                 /**
@@ -1214,6 +1344,11 @@ declare namespace DevKit {
                  */
                 readonly Options: Array<DevKit.Core.TextValueNumber>;
                 /**
+                 * Returns an array of option objects representing valid options available for a control, including a blank option and excluding any options that have been removed from the control using removeOption.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getoptions
+                */
+                readonly ControlOptions: Array<DevKit.Core.TextValueNumber>;
+                /**
                  * Returns a string value of the text for the currently selected option for an optionset or multiselectoptionset attribute
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/gettext
                  */
@@ -1225,7 +1360,7 @@ declare namespace DevKit {
                  * @param index The index position to place the new option in. If not provided, the option will be added to the end
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/addoption
                  */
-                AddOption(text: string, value: number, index: number): void;
+                AddOption(text: string, value: number, index?: number): void;
                 /**
                  * Clears all options from a control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearoptions
@@ -1250,11 +1385,11 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes/setvalue
                  */
                 Value: string;
-                /**
-                 * Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control. The getValue method is different from the attribute getValue method because the control method retrieves the value from the control as the user is typing in the control as opposed to the attribute getValue method that retrieves the value after the user commits (saves) the field
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvalue
-                 */
-                Value2: string;
+                ///**
+                // * Gets the latest value in a control as the user types characters in a specific text or number field. This method helps you to build interactive experiences by validating data and alerting users as they type characters in a control. The getValue method is different from the attribute getValue method because the control method retrieves the value from the control as the user is typing in the control as opposed to the attribute getValue method that retrieves the value after the user commits (saves) the field
+                // * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getvalue
+                // */
+                //Value2: string;
             }
             interface IControlNumber extends IControl {
                 /**
@@ -1389,6 +1524,18 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/removepresearch
                  */
                 RemovePreSearch(callback: (executionContext: any) => void): void;
+                /**
+                 * Adds an event handler to the OnLookupTagClick event.
+                 * @param callback The function to add to the OnLookupTagClick event. The execution context is automatically passed as the first parameter to this function along with eventArgs that contain the tag value. More information: OnLookupTagClick event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonlookuptagclick
+                */
+                AddOnLookupTagClick(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes an event handler from the OnLookupTagClick event.
+                 * @param callback The function to be removed from the OnLookupTagClick event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonlookuptagclick
+                 */
+                RemoveOnLookupTagClick(callback: (executionContext: any) => void): void;
             }
             interface ControlKnowledge extends IControl {
                 /**
@@ -1420,6 +1567,11 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/gettotalresultcount
                  */
                 readonly TotalResultCount: number;
+                /**
+                 * Use this method to get the currently selected result of the search control. The currently selected result also represents the result that is currently open.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getselectedresults
+                 */
+                SelectedResults: any
                 /**
                  * Opens a search result in the search control by specifying the result number
                  * @param resultNumber Numerical value specifying the result number to be opened. Result number starts from 1
@@ -1594,8 +1746,99 @@ declare namespace DevKit {
                 Value: Array<number>;
             }
             interface ControlGrid {
-
+                /**
+                 * Adds event handlers to the Subgrid OnLoad event event. [Read-only and editable grids]
+                 * @param callback The function to be executed when the subgrid loads. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See execution context for more information.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/addonload
+                 */
+                AddOnLoad(callback: (executionContext: any) => void): void;
+                /**
+                 * Gets the logical name of the entity data displayed in the grid. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getentityname
+                 * */
+                readonly EntityName: string;
+                /**
+                 * Gets the FetchXML query that represents the current data, including filtered and sorted data, in the grid control. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getfetchxml
+                 */
+                readonly FetchXml: string
+                /**
+                 * Gets the grid type (grid or subgrid). [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getgridtype
+                 * */
+                readonly GridType: OptionSet.GridType;
+                /**
+                 * Gets information about the relationship used to filter the subgrid. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getrelationship
+                 * */
+                readonly Relationship: DevKit.Core.GridRelationship;
+                /**
+                 * Gets the URL of the current grid control. [Read-only and editable grids]
+                 * @param client Indicates the client type. You can specify one of the following values: 0: Browser | 1: MobileApplication
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/geturl
+                 */
+                Url(client: 0 | 1): string;
+                /**
+                 * Provides methods to get or set information about the view selector of the subgrid control. If the subgrid control is not configured to display the view selector, calling the ViewSelector methods will throw an error. [Read-only grid]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/viewselector
+                 */
+                ViewSelector: DevKit.Core.ViewSelector;
+                /**
+                 * Refreshes the grid. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/refresh
+                 */
+                Refresh(): void;
+                /**
+                 * Refreshes the ribbon rules for the grid control. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/refreshribbon
+                 */
+                RefreshRibbon(): void;
+                /**
+                 * Displays the associated grid for the grid. This method does nothing if the grid is not filtered based on a relationship. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/openrelatedgrid
+                 */
+                OpenRelatedGrid(): void;
+                /**
+                 * Removes event handlers from the Subgrid OnLoad event event. [Read-only grids]
+                 * @param myFunction The function to be removed from the OnLoad event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/removeonload
+                 */
+                RemoveOnLoad(myFunction: () => void): void;
+                /**
+                 * Returns a collection of every GridRow in the Grid. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
+                 */
+                readonly Rows: DevKit.Form.Controls.GridRows;
+                readonly SelectedRows: DevKit.Form.Controls.GridRows;
+                readonly OnRecordSelect: DevKit.Form.Controls.GridRow;
             }
+            interface GridRow {
+                readonly EntityName: string;
+                readonly EntityReference: DevKit.Core.EntityReference;
+                readonly EntityId: string;
+                readonly PrimaryAttributeValue: string;
+                readonly Columns: DevKit.Form.Controls.GridColumns
+            }
+            interface GridRows {
+                forEach(successCallback: (row: DevKit.Form.Controls.GridRow, index: number) => void): void;
+                get(index: number): DevKit.Form.Controls.GridRow;
+                getLength(): number;
+            }
+            interface GridColumns {
+                forEach(successCallback: (column: DevKit.Form.Controls.GridColumn, index: number) => void): void;
+                get(index: string): DevKit.Form.Controls.GridColumn;
+                getLength(): number;
+            }
+            interface GridColumn {
+                readonly Name: string;
+                RequiredLevel: OptionSet.FieldRequiredLevel;
+                Value: string;
+                Disabled: boolean;
+                SetNotification(message: string, uniqueId?: string): boolean;
+                ClearNotification(uniqueId: string): boolean;
+            }
+
+
             interface ControlNote {
 
             }
@@ -1615,7 +1858,59 @@ declare namespace DevKit {
 
             }
             interface ControlQuickView {
-
+                /**
+                 * Gets the controls on a form or control on form by passing an argument
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
+                 */
+                Controls(arg?: string | number): Array<any> | any;
+                /**
+                 * Returns a string value that categorizes quick view controls.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrolhttps://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontroltype
+                 */
+                readonly ControlType: OptionSet.FieldControlType;
+                /**
+                 * Gets a boolean value indicating whether the control is disabled. Or sets the state of the control to either enabled or disabled.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getdisabled
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setdisabled
+                 */
+                Disabled: boolean;
+                /**
+                 * Returns the label for the quick view control. Or sets the label for the quick view control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getlabel
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setlabel
+                 */
+                Label: string;
+                /**
+                 * Returns the name assigned to the quick view control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getname
+                 */
+                readonly ControlName: string;
+                /**
+                 * Returns a reference to the section object that contains the control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getparent
+                 */
+                readonly ControlParent: any;
+                /**
+                 * Returns a value that indicates whether the quick view control is currently visible. Or displays or hides a control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getvisible
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setvisible
+                 */
+                Visible: boolean;
+                /**
+                 * Returns whether the data binding for the constituent controls in a quick view control is complete.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
+                 */
+                IsLoaded(): boolean;
+                /**
+                 * Refreshes the data displayed in a quick view control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/refresh
+                 */
+                Refresh(): void;
+                /**
+                 * Sets focus on the control.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setfocus
+                 */
+                Focus(): void;
             }
             interface ControlAciWidget {
 
@@ -1631,6 +1926,18 @@ declare namespace DevKit {
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/addonsave
             */
             AddOnSave(successCallback: (executionContext: any) => void): void;
+            /**
+            * Adds a function to be called when form data is loaded.
+            * @param successCallback The function to be executed when the form data loads. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/addonload
+            */
+            DataAddOnLoad(successCallback: (executionContext: any) => void): void;
+            /**
+            * Adds a function to be called on the form OnLoad event.
+            * @param successCallback The function to be executed on the form OnLoad event. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui/addonload
+            */
+            UiAddOnLoad(successCallback: (executionContext: any) => void): void;
             /**
              *  The Attributes collections of form Account
              *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/attributes
@@ -1683,12 +1990,6 @@ declare namespace DevKit {
              */
             readonly EntityReference: DevKit.Core.EntityReference;
             /**
-             * Saves the record synchronously with the options to close the form or open a new form after the save is completed
-             * @param saveOption Specify options for saving the record
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/save
-             */
-            EntitySave(saveOption: OptionSet.SaveOption): void;
-            /**
              * Returns the ID of the form
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-formselector/getid
              */
@@ -1705,6 +2006,18 @@ declare namespace DevKit {
              */
             FormNavigate(formId: string): void;
             /**
+             * Returns a value that indicates whether the form is currently visible.
+             * @param formId The form Id that you want to check visible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/getvisible
+             */
+            FormIsVisible(formId: string): boolean;
+            /**
+             * Sets a value that indicates whether the form is visible.
+             * @param formId The form Id that you want to set visible
+             * @param value Specify true to show the form; false to hide the form.
+             */
+            FormSetVisible(formId: string, value: boolean): void;
+            /**
              * Gets the form type for the record
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/getformtype
              */
@@ -1713,12 +2026,12 @@ declare namespace DevKit {
              * Gets a boolean value indicating whether the form data has been modified
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data/getisdirty
              */
-            readonly IsDirty: boolean;
+            readonly DataIsDirty: boolean;
             /**
              * Gets a boolean value indicating whether all of the form data is valid. This includes the main entity and any unbound attributes
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data/isvalid
              */
-            readonly IsValid: boolean;
+            readonly DataIsValid: boolean;
             /**
              * Gets a string for the value of the primary attribute of the entity
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/getprimaryattributevalue
@@ -1739,11 +2052,23 @@ declare namespace DevKit {
              */
             RefreshRibbon(refreshAll?: boolean): void;
             /**
-             * Removes a function to be called when form data is loaded
+             * Removes a function to be called when the record is saved.
              * @param myFunction The function to be removed for the OnSave event
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/removeonsave
              */
             RemoveOnSave(myFunction: () => void): void;
+            /**
+             * Removes a function to be called when form data is loaded.
+             * @param myFunction The function to be removed when the form data loads.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data/removeonload
+             */
+            DataRemoveOnLoad(myFunction: () => void): void;
+            /**
+             * Removes a function from the form OnLoad event.
+             * @param myFunction The function to be removed from the form OnLoad event.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui/removeonload
+             */
+            UiRemoveOnLoad(myFunction: () => void): void;
             /**
              * Saves the record asynchronously with the option to set callback functions to be executed after the save operation is completed. You can also set an object to control how appointment, recurring appointment, or service activity records are processed
              * @param saveOption An object for specifying options for saving the record
@@ -1839,6 +2164,12 @@ declare namespace DevKit {
              */
             CurrentAppName(successCallback: (result: string) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
             /**
+             * Returns the relative URL with the caching token for the specified web resource.
+             * @param webResourceName Name of the web resource.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/getwebresourceurl
+             */
+            WebResourceUrl(webResourceName: string): string;
+            /**
              * Returns the properties of the current business app in Customer Engagement
              * @param successCallback A function to call when the business app property information is returned
              * @param errorCallback A function to call when the operation fails
@@ -1897,12 +2228,17 @@ declare namespace DevKit {
              * Returns a boolean value indicating if the Customer Engagement instance is hosted on-premises or online
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/isonpremises
              */
-            IsOnPremise: boolean;
+            IsOnPremises: boolean;
             /**
              * Returns the name of the DOM attribute expected by the Learning Path (guided help) Content Designer for identifying UI controls in the Dynamics 365 for Customer Engagement apps form. An attribute by this name must be added to the UI element that needs to be exposed to Learning Path (guided help)
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getlearningpathattributename
              */
             LearningPathAttributeName: string;
+            /**
+             * The method returns an object with the input property. The input property is an object with the following attributes depending on whether you are currently on the entity form or entity list
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getpagecontext
+             * */
+            PageContext: any;
             /**
              * Displays the web page represented by a URL in the static area in the side pane, which appears on all pages in the Dynamics 365 for Customer Engagement apps web client.
              * @param url URL of the page to be loaded in the side pane static area.
@@ -1981,6 +2317,15 @@ declare namespace DevKit {
              */
             OrganizationSettings: DevKit.Form.OrganizationSettings;
             /**
+             * Navigates to the specified page.
+             * @param pageInput Input about the page to navigate to. The object definition changes depending on the type of page to navigate to: entity list or HTML web resource.
+             * @param navigationOptions Options for navigating to a page: whether to open inline or in a dialog. If you don't specify this parameter, page is opened inline by default.
+             * @param successCallback A function to execute on successful navigation to the page when navigating inline and on closing the dialog when navigating to a dialog.
+             * @param errorCallback A function to execute when the operation fails.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
+             */
+            NavigateTo(pageInput: DevKit.Core.PageInputEntityList | DevKit.Core.PageInputHtmlWebResource | DevKit.Core.PageInputEntityRecord, navigationOptions?: DevKit.Core.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
+            /**
              * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients).
              * @param filePickOption An object pick file option
              * @param successCallback A function to call when selected files are returned. An array of objects with each object having the following attributes is passed to the function.
@@ -2040,6 +2385,40 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-encoding/xmlattributeencode
              */
             XmlEncode(arg: string): string;
+            /**
+             * Encodes the specified string so that it can be used in an HTML attribute.
+             * @param arg String to be encoded.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmlattributeencode
+             */
+            HtmlAttributeEncode(arg: string): string;
+            /**
+             * Converts a string that has been HTML-encoded into a decoded string.
+             * @param arg HTML-encoded string to be decoded.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmldecode
+             */
+            HtmlDecode(arg: string): string;
+            /**
+             * Converts a string to an HTML-encoded string.
+             * @param arg String to be encoded.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-encoding/htmlencode
+             */
+            HtmlEncode(arg: string): string;
+            /**
+             * Displays an error, information, warning, or success notification for an app, and lets you specify actions to execute based on the notification.
+             * @param notification The notification to add.
+             * @param successCallback A function to call when notification is displayed. A GUID value is passed to uniquely identify the notification. You can use the GUID value to close or dismiss the notification using the clearGlobalNotification method.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-app/addglobalnotification
+             */
+            AddGlobalNotification(notification: DevKit.Core.GlobalNotification, successCallback?: (result: string) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
+            /**
+             * Clears a notification in the app.
+             * @param uniqueId The ID to use to clear a specific notification that was set using addGlobalNotification.
+             * @param successCallback A function to call when the notification is cleared.
+             * @param errorCallback A function to call when the operation fails.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-app/clearglobalnotification
+             */
+            ClearGlobalNotification(uniqueId: string, successCallback?: (result: string) => void, errorCallback?: (error: DevKit.Core.Error) => void): void;
         }
         interface WebApi {
             /**
@@ -2169,7 +2548,7 @@ declare namespace DevKit {
             *  Returns information whether the server is online or offline
             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/client#isoffline
             */
-            IsOffline(): boolean;
+            IsOffline: boolean;
         }
         interface OrganizationSettings {
             /**
@@ -2191,7 +2570,7 @@ declare namespace DevKit {
             * Indicates whether the auto-save option is enabled for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#isautosaveenabled
             */
-            IsAutoSaveEnabled(): boolean;
+            IsAutoSaveEnabled: boolean;
             /**
             * Returns the preferred language ID for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#languageid
@@ -2228,37 +2607,37 @@ declare namespace DevKit {
             * Indicates whether guided help is enabled for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isguidedhelpenabled
             */
-            IsGuidedHelpEnabled(): boolean;
+            IsGuidedHelpEnabled: boolean;
             /**
             * Indicates whether high contrast is enabled for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#ishighcontrastenabled
             */
-            IsHighContrastEnabled(): boolean;
+            IsHighContrastEnabled: boolean;
             /**
             * Indicates whether the language for the current user is a right-to-left (RTL) language
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#isrtl
             */
-            IsRTL(): boolean;
+            IsRTL: boolean;
             /**
             * Returns the language ID for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#languageid
             */
             LanguageId: number;
             /**
+             * Returns a collection of lookup objects containing the GUID and display name of each of the security role or teams that the user is associated with.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#roles
+            */
+            Roles: DevKit.Form.Collections;
+            /**
             * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
             */
             SecurityRolePrivileges: Array<string>;
             /**
-            * Returns an array of strings that represent the GUID values of each of the security role that the user is associated with or any teams that the user is associated with
-            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
+            * Returns a lookup object containing the ID, display name, and entity type of the transaction currency for the current user.
+            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
             */
-            SecurityRoles: Array<string>;
-            /**
-            * Returns the transaction currency ID for the current user
-            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
-            */
-            TransactionCurrencyId: string;
+            TransactionCurrency: DevKit.Core.EntityReference;
             /**
             * Returns the GUID of the SystemUser.Id value for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
@@ -2273,7 +2652,7 @@ declare namespace DevKit {
             * Returns the difference in minutes between the local time and Coordinated Universal Time (UTC)
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#gettimezoneoffsetminutes-method
             */
-            TimeZoneOffsetMinutes(): number;
+            TimeZoneOffsetMinutes: number;
         }
     }
 }
@@ -2640,15 +3019,29 @@ declare namespace OptionSet {
         /** "image" */
         Image
     }
+    /**  */
+    enum GridType {
+        /** 1 */
+        HomePageGrid,
+        /** 2 */
+        Subgrid
+    }
 }
 /** A promise-based JavaScript library for the Microsoft Dynamics CRM WebApi. Github: https://github.com/DigitalFlow/Xrm-WebApi-Client */
 declare namespace WebApiClient {
+    interface PromiseThen<T> {
+        then(callback: (result: T) => void): PromiseCatch<T>;
+    }
+    interface PromiseCatch<T> {
+        catch(callback: (result: any) => void): PromiseFinally<T>;
+    }
+    interface PromiseFinally<T> {
+        finally(callback: (result: any) => void): PromiseDone<T>;
+    }
+    interface PromiseDone<T> {
+        done(callback: (result: any) => void) : void
+    }
     interface RetrieveResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
         "@odata.context": string;
         /** Use the value of the @odata.nextLink property to request the next set of records. Don’t change or append any additional system query options to the value. */
         "@odata.nextLink": string;
@@ -2665,122 +3058,36 @@ declare namespace WebApiClient {
         /** An array object of ODATA value. */
         value: Array<any>;
     }
-    interface CatchRespone {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        catch(callback: (result: any) => void): FinallyRespone;
-    }
-    interface FinallyRespone {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        finally(callback: (result: any) => void): DoneRespone;
-    }
-    interface DoneRespone {
-        /**
-         * Use with asynchronous request
-         * @param callback the callback for asynchronous request
-         */
-        done(callback: (result: any) => void);
-    }
-    interface UpdateResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
-    interface CreateResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
-    interface DeleteResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback the callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
-    interface AssociateResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback The callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
-    interface DisassociateResponse {
-        /**
-         * Use with asynchronous request.
-         * @param callback The callback for asynchronous request.
-         */
-        then(callback: (result: any) => void): CatchRespone;
-    }
     /**
-     * Retrieves records from CRM (async = true).
-     * @param request the LuckyStar.WebApi.RetrieveRequest object.
+     * Retrieves records from CRM.
+     * @param request the Tomato.WebApi.RetrieveRequest object.
      */
-    function Retrieve(request: LuckyStar.WebApi.RetrieveRequest): RetrieveResponse;
+    function Retrieve(request: Tomato.WebApi.RetrieveRequest): PromiseThen<RetrieveResponse>;
     /**
-     * Retrieves records from CRM (async = false).
-     * @param request the LuckyStar.WebApi.RetrieveRequest object.
+     * Creates a given record in CRM.
+     * @param request The Tomato.WebApi.CreateRequest object.
      */
-    function Retrieve(request: LuckyStar.WebApi.RetrieveRequest): void;
+    function Create(request: Tomato.WebApi.CreateRequest): Promise<string> | Promise<object> | string | object;
     /**
-     * Creates a given record in CRM (async = true).
-     * @param request The LuckyStar.WebApi.CreateRequest object.
+     * Updates a given record in CRM.
+     * @param request the Tomato.WebApi.UpdateRequest object.
      */
-    function Create(request: LuckyStar.WebApi.CreateRequest): CreateResponse;
+    function Update(request: Tomato.WebApi.UpdateRequest): Promise<string> | Promise<object> | string | object;
     /**
-     * Creates a given record in CRM (async = false).
-     * @param request The LuckyStar.WebApi.CreateRequest object.
+     * Deletes a given record in CRM.
+     * @param request the Tomato.WebApi.DeleteRequest object.
      */
-    function Create(request: LuckyStar.WebApi.CreateRequest): void;
+    function Delete(request: Tomato.WebApi.DeleteRequest): Promise<string> | string;
     /**
-     * Updates a given record in CRM (async = true).
-     * @param request the LuckyStar.WebApi.UpdateRequest object.
+     * Associates given records in CRM.
+     * @param request the Tomato.WebApi.AssociateRequest object.
      */
-    function Update(request: LuckyStar.WebApi.UpdateRequest): UpdateResponse;
+    function Associate(request: Tomato.WebApi.AssociateRequest): Promise<string> | string;
     /**
-     * Updates a given record in CRM (async = false).
-     * @param request the LuckyStar.WebApi.UpdateRequest object.
+     * Disassociates given records in CRM.
+     * @param request the Tomato.WebApi.DisassociateRequest object.
      */
-    function Update(request: LuckyStar.WebApi.UpdateRequest): void;
-    /**
-     * Deletes a given record in CRM (async = true).
-     * @param request the LuckyStar.WebApi.DeleteRequest object.
-     */
-    function Delete(request: LuckyStar.WebApi.DeleteRequest): DeleteResponse;
-    /**
-     * Deletes a given record in CRM (async = false).
-     * @param request the LuckyStar.WebApi.DeleteRequest object.
-     */
-    function Delete(request: LuckyStar.WebApi.DeleteRequest): void;
-    /**
-     * Associates given records in CRM (async = true).
-     * @param request the LuckyStar.WebApi.AssociateRequest object.
-     */
-    function Associate(request: LuckyStar.WebApi.AssociateRequest): AssociateResponse;
-    /**
-     * Associates given records in CRM (async = false).
-     * @param request the LuckyStar.WebApi.AssociateRequest object.
-     */
-    function Associate(request: LuckyStar.WebApi.AssociateRequest): void;
-    /**
-     * Disassociates given records in CRM (async = true).
-     * @param request the LuckyStar.WebApi.DisassociateRequest object.
-     */
-    function Disassociate(request: LuckyStar.WebApi.DisassociateRequest): DisassociateResponse;
-    /**
-     * Disassociates given records in CRM (async = false).
-     * @param request the LuckyStar.WebApi.DisassociateRequest object.
-     */
-    function Disassociate(request: LuckyStar.WebApi.DisassociateRequest): void;
+    function Disassociate(request: Tomato.WebApi.DisassociateRequest): Promise<string> | string;
     /**
      * Executes the given request in CRM
      * @param request Request to send, must be in prototype chain of WebApiClient.Requests.Request

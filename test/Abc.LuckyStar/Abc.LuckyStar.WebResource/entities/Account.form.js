@@ -104,6 +104,13 @@ var LuckyStar;
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+
+		var grid = {
+			Contacts: {}
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+
 		return form;
 	};
 	LuckyStar.FormAccount_for_Interactive_experience = function(executionContext, defaultWebResourceName) {

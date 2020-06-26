@@ -424,6 +424,7 @@ var devKit = (function () {
         if (!formContext || !formContext.getControl) return;
         var gridControl = formContext.getControl(grid);
         grids[grid].AddOnLoad = function (callback) { gridControl.addOnLoad(callback); };
+        grids[grid].RemoveOnLoad = function (callback) { gridControl.removeOnLoad(callback); };
         Object.defineProperty(grids[grid], "EntityName", { get: function () { return gridControl.getEntityName(); } });
         Object.defineProperty(grids[grid], "FetchXml", { get: function () { return gridControl.getFetchXml(); } });
         Object.defineProperty(grids[grid], "GridType", { get: function () { return gridControl.getGridType(); } });
@@ -440,6 +441,14 @@ var devKit = (function () {
                     get: function () { return gridControl.getViewSelector().isVisible(); },
                 });
                 return viewSelector;
+            }
+        });
+        grids[grid].Refresh = function () { gridControl.refresh(); };
+        grids[grid].RefreshRibbon = function () { gridControl.refreshRibbon(); };
+        grids[grid].OpenRelatedGrid = function () { gridControl.openRelatedGrid(); };
+        Object.defineProperty(grids[grid], "Rows", {
+            get: function () {
+                return gridControl.getGrid().getRows();
             }
         });
     }

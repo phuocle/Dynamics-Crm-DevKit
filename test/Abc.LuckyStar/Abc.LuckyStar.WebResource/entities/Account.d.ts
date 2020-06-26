@@ -113,6 +113,9 @@ declare namespace LuckyStar {
 			navAsyncOperations: DevKit.Form.Controls.ControlNavigationItem,
 			nav_devkit_account_devkit_webapi_Customer: DevKit.Form.Controls.ControlNavigationItem
 		}
+		interface Grid {
+			Contacts: DevKit.Form.Controls.ControlGrid;
+		}
 	}
 	class FormAccount extends DevKit.Form.IForm {
 		/**
@@ -131,6 +134,7 @@ declare namespace LuckyStar {
 		Header: LuckyStar.FormAccount.Header;
 		/** The Navigation of form Account */
 		Navigation: LuckyStar.FormAccount.Navigation;
+		Grid: LuckyStar.FormAccount.Grid;
 	}
 	namespace FormAccount_for_Interactive_experience {
 		interface Header {
