@@ -1095,14 +1095,14 @@ declare namespace DevKit {
                  * @param uniqueId The ID to use to clear a specific message that was set using setNotification or addNotification. If the uniqueId parameter isn’t specified, the currently displayed notification will be cleared
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/clearnotification
                  */
-                ClearNotification(uniqueId: string): void;
+                ClearNotification(uniqueId: string): boolean;
                 /**
                  * Displays an error message for the control to indicate that data isn’t valid. When this method is used,  a red "X" icon appears next to the control. On Dynamics 365 for Customer Engagement apps mobile clients, tapping on the icon will display the message
                  * @param message The message to display
                  * @param uniqueId The ID to use to clear this message when using the clearNotification method
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/setnotification
                  */
-                SetNotification(message: string, uniqueId?: string): void;
+                SetNotification(message: string, uniqueId?: string): boolean;
                 /**
                  * Returns whether the control is disabled
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls/getdisabled
@@ -1809,26 +1809,36 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
                  */
                 readonly Rows: DevKit.Form.Controls.GridRows;
+                readonly SelectedRows: DevKit.Form.Controls.GridRows;
+                readonly OnRecordSelect: DevKit.Form.Controls.GridRow;
             }
             interface GridRow {
-                readonly data: any;
+                readonly EntityName: string;
+                readonly EntityReference: DevKit.Core.EntityReference;
+                readonly EntityId: string;
+                readonly PrimaryAttributeValue: string;
+                readonly Columns: DevKit.Form.Controls.GridColumns
             }
             interface GridRows {
-                /**
-                 * @param successCallback Delegate function with parameters for item and index.
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/foreach
-                 */
                 forEach(successCallback: (row: DevKit.Form.Controls.GridRow, index: number) => void): void;
-                /**
-                 * @param index The object where the index matches the number.
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
-                 */
                 get(index: number): DevKit.Form.Controls.GridRow;
-                /**
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/getlength
-                 */
                 getLength(): number;
             }
+            interface GridColumns {
+                forEach(successCallback: (column: DevKit.Form.Controls.GridColumn, index: number) => void): void;
+                get(index: string): DevKit.Form.Controls.GridColumn;
+                getLength(): number;
+            }
+            interface GridColumn {
+                readonly Name: string;
+                RequiredLevel: OptionSet.FieldRequiredLevel;
+                Value: string;
+                Disabled: boolean;
+                SetNotification(message: string, uniqueId?: string): boolean;
+                ClearNotification(uniqueId: string): boolean;
+            }
+
+
             interface ControlNote {
 
             }

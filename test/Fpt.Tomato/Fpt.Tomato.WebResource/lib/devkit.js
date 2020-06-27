@@ -1,8 +1,27 @@
+//@ts-check
 var devKit = (function () {
+    //@ts-check
     "use strict";
     var EMPTY_STRING = "";
     var EMPTY_GUID = "{00000000-0000-0000-0000-000000000000}";
+    var EMPTY_REFERENCE = { entityType: EMPTY_STRING, id: EMPTY_GUID, name: EMPTY_STRING };
+    var EMPTY_NUMBER = 0;
     var N = null;
+    function has(obj, key) {
+        if (isNullOrUndefined(obj)) return false;
+        return key.split(".").every(function (x) {
+            if (typeof obj != "object" || obj === null || !x in obj) {
+                return false;
+            }
+            obj = obj[x];
+            return true;
+        });
+    }
+    function isNullOrUndefined(obj) {
+        if (obj === null) return true;
+        if (obj === undefined) return true;
+        return false;
+    }
     function loadForm(formContext) {
         if (!formContext) return;
         var form = {};
@@ -420,39 +439,255 @@ var devKit = (function () {
             loadQuickForm(formContext, quickForms, quickForm);
         }
     }
-    function loadGrid(formContext, grids, grid) {
-        if (!formContext || !formContext.getControl) return;
+    function loadGrid(formContext, grids, grid) {        
+        if (!has(formContext, 'getControl')) return;
         var gridControl = formContext.getControl(grid);
-        grids[grid].AddOnLoad = function (callback) { gridControl.addOnLoad(callback); };
-        grids[grid].RemoveOnLoad = function (callback) { gridControl.removeOnLoad(callback); };
-        Object.defineProperty(grids[grid], "EntityName", { get: function () { return gridControl.getEntityName(); } });
-        Object.defineProperty(grids[grid], "FetchXml", { get: function () { return gridControl.getFetchXml(); } });
-        Object.defineProperty(grids[grid], "GridType", { get: function () { return gridControl.getGridType(); } });
-        Object.defineProperty(grids[grid], "Relationship", { get: function () { return gridControl.getRelationship(); } });
-        grids[grid].Url = function (client) { gridControl.getUrl(client); };
+        grids[grid].AddOnLoad = function (callback) {
+            if (!has(gridControl, 'addOnLoad')) return;
+            gridControl.addOnLoad(callback);
+        };
+        grids[grid].RemoveOnLoad = function (callback) {
+            if (!has(gridControl, 'removeOnLoad')) return;
+            gridControl.removeOnLoad(callback);
+        };
+        Object.defineProperty(grids[grid], "EntityName", {
+            get: function () {
+                if (!has(gridControl, 'getEntityName')) return EMPTY_STRING;
+                return gridControl.getEntityName();
+            }
+        });
+        Object.defineProperty(grids[grid], "FetchXml", {
+            get: function () {
+                if (!has(gridControl, 'getFetchXml')) return EMPTY_STRING;
+                return gridControl.getFetchXml();
+            }
+        });
+        Object.defineProperty(grids[grid], "GridType", {
+            get: function () {
+                if (!has(gridControl, 'getGridType')) return 2;
+                return gridControl.getGridType();
+            }
+        });
+        Object.defineProperty(grids[grid], "Relationship", {
+            get: function () {
+                if (!has(gridControl, 'getRelationship')) return {};
+                return gridControl.getRelationship();
+            }
+        });
+        grids[grid].Url = function (client) {
+            if (!has(gridControl, 'getUrl')) return EMPTY_STRING;
+            return gridControl.getUrl(client);
+        };
         Object.defineProperty(grids[grid], "ViewSelector", {
             get: function () {
-                var viewSelector = {};
+                if (!has(gridControl, 'getViewSelector')) return {};
+                var viewSelectorControl = gridControl.getViewSelector();
+                var viewSelector = {};                
                 Object.defineProperty(viewSelector, "CurrentView", {
-                    get: function () { return gridControl.getViewSelector().getCurrentView(); },
-                    set: function (value) { gridControl.getViewSelector().setCurrentView(value); }
+                    get: function () {
+                        if (!has(viewSelectorControl, 'getCurrentView')) return EMPTY_REFERENCE;
+                        return gridControl.getViewSelector().getCurrentView();
+                    },
+                    set: function (value) {
+                        if (!has(viewSelectorControl, 'getCurrentView')) return;
+                        gridControl.getViewSelector().setCurrentView(value);
+                    }
                 });
                 Object.defineProperty(viewSelector, "Visible", {
-                    get: function () { return gridControl.getViewSelector().isVisible(); },
+                    get: function () {
+                        if (!has(viewSelectorControl, 'isVisible')) return false;
+                        return gridControl.getViewSelector().isVisible();
+                    },
                 });
                 return viewSelector;
             }
         });
-        grids[grid].Refresh = function () { gridControl.refresh(); };
-        grids[grid].RefreshRibbon = function () { gridControl.refreshRibbon(); };
-        grids[grid].OpenRelatedGrid = function () { gridControl.openRelatedGrid(); };
+        grids[grid].Refresh = function () {
+            if (!has(gridControl, 'refresh')) return;
+            gridControl.refresh();
+        };
+        grids[grid].RefreshRibbon = function () {
+            if (!has(gridControl, 'refreshRibbon')) return;
+            gridControl.refreshRibbon();
+        };
+        grids[grid].OpenRelatedGrid = function () {
+            if (!has(gridControl, 'openRelatedGrid')) return;
+            gridControl.openRelatedGrid();
+        };
         Object.defineProperty(grids[grid], "Rows", {
             get: function () {
-                return gridControl.getGrid().getRows();
+                var obj = {};
+                obj.getLength = function () {     
+                    if (!gridControl) return 0;
+                    return gridControl.getGrid().getRows().getLength();                    
+                }
+                obj.get = function (index) {
+                    if (!gridControl) return {};
+                    var row = gridControl.getGrid().getRows().get(index);
+                    return loadGridRow(row);
+                }
+                obj.forEach = function (callback) {
+                    if (!gridControl) return;
+                    var rows = gridControl.getGrid().getRows();
+                    for (var index = 0; index < rows.getLength(); index++) {
+                        var row = rows.get(index);
+                        callback(loadGridRow(row), index);
+                    }
+                }
+                return obj;
             }
         });
+        Object.defineProperty(grids[grid], "SelectedRows", {
+            get: function () {
+                var obj = {};
+                obj.getLength = function () {
+                    if (!gridControl) return 0;
+                    return gridControl.getGrid().getSelectedRows().getLength();
+                }
+                obj.get = function (index) {
+                    if (!gridControl) return {};
+                    var row = gridControl.getGrid().getSelectedRows().get(index);
+                    return loadGridRow(row);
+                }
+                obj.forEach = function (callback) {
+                    if (!gridControl) return;
+                    var selectedRows = gridControl.getGrid().getSelectedRows();
+                    for (var index = 0; index < selectedRows.getLength(); index++) {
+                        var row = selectedRows.get(index);
+                        callback(loadGridRow(row), index);
+                    }
+                }
+                return obj;
+            }
+        });
+        Object.defineProperty(grids[grid], "OnRecordSelect", {
+            get: function () {
+                return loadGridRow(formContext);
+            }
+        });
+    }    
+    function loadGridRow(row) {
+        var obj = {};
+        Object.defineProperty(obj, "EntityName", {
+            get: function () {
+                if (!has(row, 'data.entity.getEntityName')) return EMPTY_STRING;
+                return row.data.entity.getEntityName();                
+            }
+        });
+        Object.defineProperty(obj, "EntityReference", {
+            get: function () {
+                if (!has(row, 'data.entity.getEntityReference')) return EMPTY_REFERENCE;
+                return row.data.entity.getEntityReference();                
+            }
+        });
+        Object.defineProperty(obj, "EntityId", {
+            get: function () {
+                if (!has(row, 'data.entity.getId')) return EMPTY_GUID;
+                return row.data.entity.getId();                
+            }
+        });
+        Object.defineProperty(obj, "PrimaryAttributeValue", {
+            get: function () {
+                if (!has(row, 'data.entity.getPrimaryAttributeValue')) return EMPTY_STRING;
+                return row.data.entity.getPrimaryAttributeValue();
+            }
+        });
+        Object.defineProperty(obj, "Columns", {
+            get: function () {
+                var col = {};
+                col.getLength = function () {
+                    if (!has(row, 'data.entity.attributes.getLength')) return 0;
+                    return row.data.entity.attributes.getLength();                    
+                }
+                col.get = function (value) {
+                    if (!has(row, 'data.entity.attributes')) return {};
+                    var columns = row.data.entity.attributes;
+                    for (var index = 0; index < columns.getLength(); index++) {
+                        var column = columns.get(index);
+                        if (column.getName() === value) {
+                            return loadGridColumn(column);
+                        }
+                    }
+                    return {};
+                }
+                col.forEach = function (callback) {
+                    if (!has(row, 'data.entity.attributes')) return;
+                    var columns = row.data.entity.attributes;
+                    for (var index = 0; index < columns.getLength(); index++) {
+                        var column = columns.get(index);
+                        callback(loadGridColumn(column), index);
+                    }
+                }
+                return col;
+            }
+        });
+        return obj;
     }
-    function loadGrids(formContext, grids) {
+    function loadGridColumn(col) {
+        var obj = {};
+        Object.defineProperty(obj, "Name", {
+            get: function () {
+                if (!has(col, 'getName')) return EMPTY_STRING;
+                return col.getName();
+            }
+        });
+        Object.defineProperty(obj, "RequiredLevel", {
+            get: function () {
+                if (!has(col, 'getRequiredLevel')) return "none";
+                return col.getRequiredLevel();
+            },
+            set: function (value) {
+                if (!has(col, 'setRequiredLevel')) return;
+                col.setRequiredLevel(value);
+            }
+        });
+        Object.defineProperty(obj, "Value", {
+            get: function () {
+                if (!has(col, 'getValue')) return EMPTY_STRING;
+                return col.getValue();
+            },
+            set: function (value) {
+                if (!has(col, 'setValue')) return;
+                col.setValue(value);
+            }
+        });
+        obj.SetNotification = function (message, uniqueId) {
+            if (!has(col, 'controls.get')) return false;
+            var control = col.controls.get(0);
+            if (!control) return false;
+            return control.setNotification(message, uniqueId);
+        };
+        obj.ClearNotification = function (uniqueId) {
+            if (!has(col, 'controls.get')) return false;
+            var control = col.controls.get(0);
+            if (!control) return false;
+            return control.clearNotification(uniqueId);
+        };
+        Object.defineProperty(obj, "Disabled", {
+            get: function () {
+                if (!has(col, 'controls.get')) return false;
+                var control = col.controls.get(0);                    
+                if (!control) return false;
+                return control.getDisabled();                
+            },
+            set: function (value) {
+                if (!has(col, 'controls.get')) return false;
+                var control = col.controls.get(0);
+                if (!control) return false;
+                control.setDisabled(value);
+            }
+        });
+        Object.defineProperty(obj, "Label", {
+            get: function () {
+                if (!has(col, 'controls.get')) return EMPTY_STRING;
+                var control = col.controls.get(0);
+                if (!control) return EMPTY_STRING;
+                return control.getLabel();
+            }
+        });
+        return obj;
+    }
+    function loadGrids(formContext, grids) {        
         for (var grid in grids) {
             loadGrid(formContext, grids, grid);
         }

@@ -12,10 +12,14 @@ var formAccount = (function () {
 		var form = new LuckyStar.FormAccount(executionContext);
 		var rowlength = form.Grid.Contacts.Rows.getLength();
 		var row0 = form.Grid.Contacts.Rows.get(0);
+		debugger;
+		var entityName = row0.EntityName;
 		form.Grid.Contacts.Rows.forEach(function (row, index) {
 			console.log(`Row${index}`);
+			debugger;
+			var name = row.EntityName;
 			var colLength = row.Columns.getLength();
-			var col0 = row.Columns.get(0);
+			var col0 = row.Columns.get("fullname");
 			row.Columns.forEach(function (column, index) {
 				if (column.Name === "firstname") {
 					console.log(`Col${index}`);
@@ -25,7 +29,6 @@ var formAccount = (function () {
 			debugger;
 		});
 
-		form.Grid.Contacts.ro
 
 
 		////form.Body.CreditLimit.SetNotification("aaa");
@@ -98,7 +101,6 @@ var formAccount = (function () {
 		debugger;
 		var col = row.Columns.get("firstname");
 		col.Disabled = true;
-
     }
 	return {
 		OnLoad: onLoad,
