@@ -1809,13 +1809,42 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
                  */
                 readonly Rows: DevKit.Form.Controls.GridRows;
+                /**
+                 * Returns a collection of every selected GridRow in the Grid. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/getselectedrows
+                 */
                 readonly SelectedRows: DevKit.Form.Controls.GridRows;
+                /**
+                 * Get a single row (record) is selected in the editable grid. [Editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
+                 */
                 readonly OnRecordSelect: DevKit.Form.Controls.GridRow;
+                /**
+                 * Returns the total number of records that match the filter criteria of the view, not limited by the number visible in a single page. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/gettotalrecordcount
+                 */
+                readonly TotalRecordCount: number;
             }
             interface GridRow {
+                /**
+                 * Returns the logical name for the record in the row. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getentityname
+                 */
                 readonly EntityName: string;
+                /**
+                 * Returns a Lookup value that references the record in the row. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getentityreference
+                 */
                 readonly EntityReference: DevKit.Core.EntityReference;
+                /**
+                 * Returns the Id for the record in the row. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getid
+                 */
                 readonly EntityId: string;
+                /**
+                 * Returns the primary attribute value for the record in the row. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getprimaryattributevalue
+                 */
                 readonly PrimaryAttributeValue: string;
                 readonly Columns: DevKit.Form.Controls.GridColumns
             }
@@ -1830,15 +1859,42 @@ declare namespace DevKit {
                 getLength(): number;
             }
             interface GridColumn {
+                /**
+                 * Returns the logical name of the attribute of a selected grid row. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridattribute
+                 */
                 readonly Name: string;
+                /**
+                 * Get/Set a string value indicating whether a value for the attribute is required or recommended. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridattribute
+                 */
                 RequiredLevel: OptionSet.FieldRequiredLevel;
+                /**
+                 * Get/Set the data value for an attribute. [Read-only and editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridattribute
+                 */
                 Value: string;
+                /**
+                 * Get/Set the cell is disabled. [Editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcell
+                 */
                 Disabled: boolean;
+                /**
+                 * Displays an error message for a cell to indicate that data isn’t valid.. [Editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcell
+                 */
                 SetNotification(message: string, uniqueId?: string): boolean;
+                /**
+                 * Clears notification for a cell. [Editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcell
+                 */
                 ClearNotification(uniqueId: string): boolean;
+                /**
+                 * Returns the label of the column that contains the cell. [Editable grids]
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcell
+                 */
+                readonly Label: string;
             }
-
-
             interface ControlNote {
 
             }

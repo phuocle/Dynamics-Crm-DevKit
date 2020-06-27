@@ -393,7 +393,17 @@ define(['xrm-mock'], () => {
             });
             grid.relationship = relationship;
 
-            var row1 = new xrmMock.GridRowMock(new xrmMock.DataMock(null), new xrmMock.GridRowDataMock(null));
+            var row1Entity = new xrmMock.EntityMock({
+                id: "ROW1-GUID",
+                primaryValue: "ROW1-VALUE",
+                entityName: "contact",
+                attributes: new xrmMock.ItemCollectionMock([
+                    new xrmMock.StringAttributeMock({ name: "abc_col1", value: "ROW1-COL1", requiredLevel: "recommended", controls: new xrmMock.ItemCollectionMock([new xrmMock.StringControlMock({ attribute: null, name: 'abc_col1', disabled: true })])}),
+                    new xrmMock.StringAttributeMock({ name: "abc_col2", value: "ROW1-COL2" }),
+                    new xrmMock.StringAttributeMock({ name: "abc_col3", value: "ROW1-COL3" }),
+                ])
+            });
+            var row1 = new xrmMock.GridRowMock(new xrmMock.DataMock(row1Entity), new xrmMock.GridRowDataMock(null));
             var row2 = new xrmMock.GridRowMock(new xrmMock.DataMock(null), new xrmMock.GridRowDataMock(null));
             var rows = new xrmMock.ItemCollectionMock([ row1, row2]);
             grid.grid = new xrmMock.GridMock(rows);
@@ -437,16 +447,44 @@ define(['xrm-mock'], () => {
             form.Grid.Contacts.RemoveOnLoad(ContactsAddOnLoad);
             expect(grid.onLoadHandlers.length).toBe(0);
             expect(form.Grid.Contacts.Rows.getLength()).toBe(2);
-            var row_0 = form.Grid.Contacts.Rows.get(0);
-            expect(row_0).toBeDefined();
-            form.Grid.Contacts.Rows.forEach((row, index) => {
-                var d = row.data.entity;
-                debugger;
-
+            var row0 = form.Grid.Contacts.Rows.get(0);
+            expect(row0.EntityId).toBe("ROW1-GUID")
+            expect(row0.EntityName).toBe("contact");
+            expect(row0.PrimaryAttributeValue).toBe("ROW1-VALUE");
+            expect(row0.EntityReference.id).toBe("ROW1-GUID");
+            expect(row0.EntityReference.entityType).toBe("contact");
+            expect(row0.EntityReference.name).toBe("ROW1-VALUE");
+            expect(row0.Columns).toBeDefined();
+            expect(row0.Columns.getLength()).toBe(3);
+            var row0col0 = row0.Columns.get("abc_col1");
+            expect(row0col0).toBeDefined();
+            expect(row0col0.Value).toBe("ROW1-COL1");
+            row0col0.Value = "ROW1-COL1-NEW";
+            expect(row0col0.Value).toBe("ROW1-COL1-NEW");
+            expect(row0col0.Name).toBe("abc_col1");
+            expect(row0col0.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Recommended);
+            row0col0.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
+            expect(row0col0.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Required);
+            expect(row0col0.Disabled).toBeTruthy();
+            row0col0.Disabled = false;
+            expect(row0col0.Disabled).toBeFalsy();
+            expect(() => { row0col0.SetNotification(null, null) }).toThrow(new Error("set notification not implemented"));
+            expect(() => { row0col0.ClearNotification(null) }).toThrow(new Error("clear notification not implemented"));
+            form.Grid.Contacts.Rows.forEach(function (row, index) {
+                expect(row).toBeDefined();
+                row.Columns.forEach(function (column, index) {
+                    expect(column).toBeDefined();
+                });
             });
-            //form.Grid.Contacts.SelectedRows.
-            //form.Grid.Contacts.TotalRecordCount
-
+            var rowNotExist = form.Grid.Contacts.Rows.get(4);
+            expect(rowNotExist).toBeDefined();
+            expect(rowNotExist.EntityId).toBe("{00000000-0000-0000-0000-000000000000}");
+            var columnNotExist = row0.Columns.get("col_not_exisit");
+            expect(columnNotExist).toBeDefined();
+            expect(columnNotExist.Name).toBe("");
+            expect(columnNotExist.Value).toBe("");
+            expect(() => { form.Grid.Contacts.TotalRecordCount }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Grid.Contacts.SelectedRows.getLength() }).toThrow(new Error("Not implemented."));
         });
         it('timelinewall control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([

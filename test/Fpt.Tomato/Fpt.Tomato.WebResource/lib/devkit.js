@@ -9,6 +9,7 @@ var devKit = (function () {
     var N = null;
     function has(obj, key) {
         if (isNullOrUndefined(obj)) return false;
+        if (Object.keys(obj).length === 0 && obj.constructor === Object) return false;
         return key.split(".").every(function (x) {
             if (typeof obj != "object" || obj === null || !x in obj) {
                 return false;
@@ -439,9 +440,11 @@ var devKit = (function () {
             loadQuickForm(formContext, quickForms, quickForm);
         }
     }
-    function loadGrid(formContext, grids, grid) {        
-        if (!has(formContext, 'getControl')) return;
-        var gridControl = formContext.getControl(grid);
+    function loadGrid(formContext, grids, grid) {
+        var gridControl = null;
+        if (has(formContext, 'getControl')) {
+            gridControl = formContext.getControl(grid);
+        }        
         grids[grid].AddOnLoad = function (callback) {
             if (!has(gridControl, 'addOnLoad')) return;
             gridControl.addOnLoad(callback);
@@ -522,7 +525,7 @@ var devKit = (function () {
                     return gridControl.getGrid().getRows().getLength();                    
                 }
                 obj.get = function (index) {
-                    if (!gridControl) return {};
+                    if (!gridControl) return loadGridRow({});
                     var row = gridControl.getGrid().getRows().get(index);
                     return loadGridRow(row);
                 }
@@ -565,6 +568,13 @@ var devKit = (function () {
                 return loadGridRow(formContext);
             }
         });
+        Object.defineProperty(grids[grid], "TotalRecordCount", {
+            get: function () {
+                if (!has(gridControl, 'getGrid ')) return 0;
+                if (!has(gridControl.getGrid(), 'getTotalRecordCount')) return 0;
+                return gridControl.getGrid().getTotalRecordCount();
+            }
+        });
     }    
     function loadGridRow(row) {
         var obj = {};
@@ -599,16 +609,10 @@ var devKit = (function () {
                     if (!has(row, 'data.entity.attributes.getLength')) return 0;
                     return row.data.entity.attributes.getLength();                    
                 }
-                col.get = function (value) {
-                    if (!has(row, 'data.entity.attributes')) return {};
-                    var columns = row.data.entity.attributes;
-                    for (var index = 0; index < columns.getLength(); index++) {
-                        var column = columns.get(index);
-                        if (column.getName() === value) {
-                            return loadGridColumn(column);
-                        }
-                    }
-                    return {};
+                col.get = function (index) {
+                    if (!has(row, 'data.entity.attributes')) return loadGridColumn({});
+                    var column = row.data.entity.attributes.get(index);
+                    return loadGridColumn(column);
                 }
                 col.forEach = function (callback) {
                     if (!has(row, 'data.entity.attributes')) return;
