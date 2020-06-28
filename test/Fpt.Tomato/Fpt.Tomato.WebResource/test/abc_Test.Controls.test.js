@@ -405,8 +405,9 @@ define(['xrm-mock'], () => {
             });
             var row1 = new xrmMock.GridRowMock(new xrmMock.DataMock(row1Entity), new xrmMock.GridRowDataMock(null));
             var row2 = new xrmMock.GridRowMock(new xrmMock.DataMock(null), new xrmMock.GridRowDataMock(null));
-            var rows = new xrmMock.ItemCollectionMock([ row1, row2]);
-            grid.grid = new xrmMock.GridMock(rows);
+            var rows = new xrmMock.ItemCollectionMock([row1, row2]);
+            var selectedRows = new xrmMock.ItemCollectionMock([row1]);
+            grid.grid = new xrmMock.GridMock(rows, selectedRows);
 
             var ui = new xrmMock.UiMock({
                 controls: new xrmMock.ItemCollectionMock([grid])
@@ -483,8 +484,12 @@ define(['xrm-mock'], () => {
             expect(columnNotExist).toBeDefined();
             expect(columnNotExist.Name).toBe("");
             expect(columnNotExist.Value).toBe("");
-            expect(() => { form.Grid.Contacts.TotalRecordCount }).toThrow(new Error("Not implemented."));
-            expect(() => { form.Grid.Contacts.SelectedRows.getLength() }).toThrow(new Error("Not implemented."));
+            expect(form.Grid.Contacts.TotalRecordCount).toBe(2);
+            expect(form.Grid.Contacts.SelectedRows.getLength()).toBe(1);
+            expect(form.Grid.Contacts.SelectedRows.get(0)).toBeDefined();
+            form.Grid.Contacts.SelectedRows.forEach(function (row, index) {
+                expect(row).toBeDefined();
+            });
         });
         it('timelinewall control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([

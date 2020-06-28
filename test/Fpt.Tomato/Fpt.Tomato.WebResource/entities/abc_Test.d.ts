@@ -89,102 +89,23 @@ declare namespace Tomato {
 			/** Unique identifier of the currency associated with the entity. */
 			TransactionCurrencyId: DevKit.Form.Controls.ControlLookup;
 		}
-		interface tab_WEBAPI_Sections {
-			WEBAPI_section_1: DevKit.Form.Controls.ControlSection;
-			WEBAPI_section_2: DevKit.Form.Controls.ControlSection;
+		interface tab_Tab2_Sections {
+			Tab2Section1: DevKit.Form.Controls.ControlSection;
+			Tab2Section2: DevKit.Form.Controls.ControlSection;
 		}
-		interface tab_NOTE_Sections {
-			NOTE_section_1: DevKit.Form.Controls.ControlSection;
+		interface tab_Tab1_Sections {
+			Tab1Section1: DevKit.Form.Controls.ControlSection;
+			Tab1Section2: DevKit.Form.Controls.ControlSection;
 		}
-		interface tab_TIMER_Sections {
-			TIMER_section_1: DevKit.Form.Controls.ControlSection;
+		interface tab_Tab1 extends DevKit.Form.Controls.IControlTab {
+			Section: tab_Tab1_Sections;
 		}
-		interface tab_OTHERS_Sections {
-			OTHERS_section_1: DevKit.Form.Controls.ControlSection;
-		}
-		interface tab_QUICKVIEW_Sections {
-			QUICKVIEW_section_1: DevKit.Form.Controls.ControlSection;
-		}
-		interface tab_SUBGRID_Sections {
-			SUBGRID_section_1: DevKit.Form.Controls.ControlSection;
-		}
-		interface tab_OPTIONSET_Sections {
-			OPTIONSET_section_1: DevKit.Form.Controls.ControlSection;
-			OPTIONSET_section_3: DevKit.Form.Controls.ControlSection;
-			OPTIONSET_section_5: DevKit.Form.Controls.ControlSection;
-			OPTIONSET_section_2: DevKit.Form.Controls.ControlSection;
-			OPTIONSET_section_4: DevKit.Form.Controls.ControlSection;
-			OPTIONSET_section_6: DevKit.Form.Controls.ControlSection;
-		}
-		interface tab_DATETIME_Sections {
-			DATETIME_section_1: DevKit.Form.Controls.ControlSection;
-			DATETIME_section_3: DevKit.Form.Controls.ControlSection;
-			DATETIME_section_5: DevKit.Form.Controls.ControlSection;
-			DATETIME_section_7: DevKit.Form.Controls.ControlSection;
-			DATETIME_section_2: DevKit.Form.Controls.ControlSection;
-			DATETIME_section_4: DevKit.Form.Controls.ControlSection;
-			DATETIME_section_6: DevKit.Form.Controls.ControlSection;
-		}
-		interface tab_NUMBER_Sections {
-			NUMBER_section_1: DevKit.Form.Controls.ControlSection;
-			NUMBER_section_4: DevKit.Form.Controls.ControlSection;
-			NUMBER_section_2: DevKit.Form.Controls.ControlSection;
-			NUMBER_section_3: DevKit.Form.Controls.ControlSection;
-		}
-		interface tab_STRING_Sections {
-			STRING_section_1: DevKit.Form.Controls.ControlSection;
-			STRING_section_3: DevKit.Form.Controls.ControlSection;
-			STRING_section_2: DevKit.Form.Controls.ControlSection;
-		}
-		interface tab_ADMINISTRATOR_Sections {
-			ADMINISTRATOR_section_1: DevKit.Form.Controls.ControlSection;
-			ADMINISTRATOR_section_2: DevKit.Form.Controls.ControlSection;
-		}
-		interface tab_WEBAPI extends DevKit.Form.Controls.IControlTab {
-			Section: tab_WEBAPI_Sections;
-		}
-		interface tab_NOTE extends DevKit.Form.Controls.IControlTab {
-			Section: tab_NOTE_Sections;
-		}
-		interface tab_TIMER extends DevKit.Form.Controls.IControlTab {
-			Section: tab_TIMER_Sections;
-		}
-		interface tab_OTHERS extends DevKit.Form.Controls.IControlTab {
-			Section: tab_OTHERS_Sections;
-		}
-		interface tab_QUICKVIEW extends DevKit.Form.Controls.IControlTab {
-			Section: tab_QUICKVIEW_Sections;
-		}
-		interface tab_SUBGRID extends DevKit.Form.Controls.IControlTab {
-			Section: tab_SUBGRID_Sections;
-		}
-		interface tab_OPTIONSET extends DevKit.Form.Controls.IControlTab {
-			Section: tab_OPTIONSET_Sections;
-		}
-		interface tab_DATETIME extends DevKit.Form.Controls.IControlTab {
-			Section: tab_DATETIME_Sections;
-		}
-		interface tab_NUMBER extends DevKit.Form.Controls.IControlTab {
-			Section: tab_NUMBER_Sections;
-		}
-		interface tab_STRING extends DevKit.Form.Controls.IControlTab {
-			Section: tab_STRING_Sections;
-		}
-		interface tab_ADMINISTRATOR extends DevKit.Form.Controls.IControlTab {
-			Section: tab_ADMINISTRATOR_Sections;
+		interface tab_Tab2 extends DevKit.Form.Controls.IControlTab {
+			Section: tab_Tab2_Sections;
 		}
 		interface Tabs {
-			WEBAPI: tab_WEBAPI;
-			NOTE: tab_NOTE;
-			TIMER: tab_TIMER;
-			OTHERS: tab_OTHERS;
-			QUICKVIEW: tab_QUICKVIEW;
-			SUBGRID: tab_SUBGRID;
-			OPTIONSET: tab_OPTIONSET;
-			DATETIME: tab_DATETIME;
-			NUMBER: tab_NUMBER;
-			STRING: tab_STRING;
-			ADMINISTRATOR: tab_ADMINISTRATOR;
+			Tab1: tab_Tab1;
+			Tab2: tab_Tab2;
 		}
 		interface Body {
 			Tab: Tabs;
@@ -285,10 +206,7 @@ declare namespace Tomato {
 			TransactionCurrencyId: DevKit.Form.Controls.ControlLookup;
 		}
 		interface Navigation {
-			nav_devkit_devkit_webapi_devkit_webapi_ParentWebApiId: DevKit.Form.Controls.ControlNavigationItem,
-			nav_devkit_devkit_webapi_devkit_webapi_LinkWebApiId: DevKit.Form.Controls.ControlNavigationItem,
-			nav_bpf_devkit_webapi_devkit_processwebapi1: DevKit.Form.Controls.ControlNavigationItem,
-			nav_devkit_devkit_webapi_contact: DevKit.Form.Controls.ControlNavigationItem
+			nav01: DevKit.Form.Controls.ControlNavigationItem,
 		}
 		interface ProcessProcess_WebApi_1 {
 			devkit_CustomerId: DevKit.Form.Controls.ControlLookup;

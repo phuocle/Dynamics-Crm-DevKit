@@ -214,10 +214,7 @@ var devKit = (function () {
             set: function (value) { attribute.setSubmitMode(value); }
         });
         Object.defineProperty(body[field], "Value", {
-            get: function () {
-                if (attribute !== undefined) return attribute.getValue();
-                //throw new Error(`field: ${logicalName} removed on form`);
-            },           
+            get: function () { return attribute.getValue(); },           
             set: function (value) { attribute.setValue(value); }
         });
         Object.defineProperty(body[field], "Data", {
@@ -315,30 +312,68 @@ var devKit = (function () {
         }
     }
     function loadTab(formContext, tabs, tab) {
-        if (!formContext) return;
-        if (formContext.ui && formContext.ui.tabs && formContext.ui.tabs.get) {
-            var tabObject = formContext.ui.tabs.get(tab);            
-            Object.defineProperty(tabs[tab], "Name", { get: function () { return tabObject.getName(); } });
-            Object.defineProperty(tabs[tab], "Parent", { get: function () { return tabObject.getParent(); } });
-            Object.defineProperty(tabs[tab], "DisplayState", {
-                get: function () { return tabObject.getDisplayState(); },
-                set: function (value) { tabObject.setDisplayState(value); }
-            });
-            Object.defineProperty(tabs[tab], "Label", {
-                get: function () { return tabObject.getLabel(); },
-                set: function (value) { tabObject.setLabel(value); }
-            });
-            Object.defineProperty(tabs[tab], "Visible", {
-                get: function () { return tabObject.getVisible(); },
-                set: function (value) { tabObject.setVisible(value); }
-            });
-            tabs[tab].AddTabStateChange = function (callback) { tabObject.addTabStateChange(callback); };
-            tabs[tab].Focus = function () { tabObject.setFocus(); };
-            tabs[tab].RemoveTabStateChange = function (callback) { tabObject.removeTabStateChange(callback); };
-            for (var section in tabs[tab].Section) {
-                loadSection(formContext, tab, tabs[tab].Section, section);
+        var tabObject = null;        
+        if (has(formContext, 'ui.tabs.get')) tabObject = formContext.ui.tabs.get(tab);                    
+        Object.defineProperty(tabs[tab], "Name", {
+            get: function () {
+                if (!tabObject) return EMPTY_STRING;
+                return tabObject.getName();
             }
-        }
+        });
+        Object.defineProperty(tabs[tab], "Parent", {
+            get: function () {
+                if (!tabObject) return null;
+                return tabObject.getParent();
+            }
+        });
+        Object.defineProperty(tabs[tab], "DisplayState", {
+            get: function () {
+                if (!tabObject) return "expanded";
+                return tabObject.getDisplayState();
+            },
+            set: function (value) {
+                if (tabObject)
+                    tabObject.setDisplayState(value);
+            }
+        });
+        Object.defineProperty(tabs[tab], "Label", {
+            get: function () {
+                if (!tabObject) return EMPTY_STRING;
+                return tabObject.getLabel();
+            },
+            set: function (value) {
+                if (tabObject)
+                    tabObject.setLabel(value);
+            }
+        });
+        Object.defineProperty(tabs[tab], "Visible", {
+            get: function () {
+                if (!tabObject) return false;
+                return tabObject.getVisible();
+            },
+            set: function (value) {
+                if (tabObject)
+                    tabObject.setVisible(value);
+            }
+        });
+        tabs[tab].AddTabStateChange = function (callback) {
+            if (tabObject) {
+                tabObject.addTabStateChange(callback);
+            }
+        };
+        tabs[tab].Focus = function () {
+            if (tabObject) {
+                tabObject.setFocus();
+            }
+        };
+        tabs[tab].RemoveTabStateChange = function (callback) {
+            if (tabObject) {
+                tabObject.removeTabStateChange(callback);
+            }
+        };
+        for (var section in tabs[tab].Section) {
+            loadSection(formContext, tab, tabs[tab].Section, section);
+        }        
     }
     function loadTabs(formContext, tabs) {
         for (var tab in tabs) {
@@ -346,20 +381,48 @@ var devKit = (function () {
         }
     }
     function loadNavigation(formContext, navigations, navigation) {
-        if (!formContext) return;
-        if (formContext.ui && formContext.ui.navigation && formContext.ui.navigation.items && formContext.ui.navigation.items.get) {
-            var navigationItem = formContext.ui.navigation.items.get(navigation);
-            Object.defineProperty(navigations[navigation], "Id", { get: function () { return navigationItem.getId(); } });
-            Object.defineProperty(navigations[navigation], "Label", {
-                get: function () { return navigationItem.getLabel(); },
-                set: function (value) { navigationItem.setLabel(value); }
-            });
-            Object.defineProperty(navigations[navigation], "Visible", {
-                get: function () { return navigationItem.getVisible(); },
-                set: function (value) { navigationItem.setVisible(value); }
-            });
-            navigations[navigation].Focus = function () { navigationItem.setFocus(); };
+        var navigationItem = null;
+        if (has(formContext, 'ui.navigation.items.get')) {
+            for (var i = 0; i < formContext.ui.navigation.items.getLength(); i++) {
+                if (navigation === formContext.ui.navigation.items.get(i).getId()) {
+                    navigationItem = formContext.ui.navigation.items.get(i);
+                }
+            }
         }
+        Object.defineProperty(navigations[navigation], "Id", {
+            get: function () {
+                if (!navigationItem) { return EMPTY_STRING; }
+                return navigationItem.getId();
+            }
+        });
+        Object.defineProperty(navigations[navigation], "Label", {
+            get: function () {
+                if (!navigationItem) { return EMPTY_STRING; }
+                return navigationItem.getLabel();
+            },
+            set: function (value) {
+                if (navigationItem) {
+                    navigationItem.setLabel(value);
+                }
+            }
+        });
+        Object.defineProperty(navigations[navigation], "Visible", {
+            get: function () {
+                if (!navigationItem) { return false; }
+                return navigationItem.getVisible();
+            },
+            set: function (value) {
+                if (navigationItem) {
+                    navigationItem.setVisible(value);
+                }
+            }
+        });
+        navigations[navigation].Focus = function () {
+            debugger;
+            if (navigationItem) {
+                navigationItem.setFocus();
+            }
+        };
     }
     function loadNavigations(formContext, navigations) {
         for (var navigation in navigations) {
@@ -520,21 +583,23 @@ var devKit = (function () {
         Object.defineProperty(grids[grid], "Rows", {
             get: function () {
                 var obj = {};
-                obj.getLength = function () {     
-                    if (!gridControl) return 0;
-                    return gridControl.getGrid().getRows().getLength();                    
+                obj.getLength = function () {
+                    if (gridControl && gridControl.getGrid && gridControl.getGrid().getRows && gridControl.getGrid().getRows().getLength)
+                        return gridControl.getGrid().getRows().getLength();
+                    return 0;
                 }
                 obj.get = function (index) {
-                    if (!gridControl) return loadGridRow({});
-                    var row = gridControl.getGrid().getRows().get(index);
-                    return loadGridRow(row);
+                    if (gridControl && gridControl.getGrid && gridControl.getGrid().getRows && gridControl.getGrid().getRows().get)
+                        return loadGridRow(gridControl.getGrid().getRows().get(index));
+                    return loadGridRow({});
                 }
                 obj.forEach = function (callback) {
-                    if (!gridControl) return;
-                    var rows = gridControl.getGrid().getRows();
-                    for (var index = 0; index < rows.getLength(); index++) {
-                        var row = rows.get(index);
-                        callback(loadGridRow(row), index);
+                    if (gridControl && gridControl.getGrid && gridControl.getGrid().getRows && gridControl.getGrid().getRows().getLength) {
+                        var rows = gridControl.getGrid().getRows();
+                        for (var index = 0; index < rows.getLength(); index++) {
+                            var row = rows.get(index);
+                            callback(loadGridRow(row), index);
+                        }
                     }
                 }
                 return obj;
@@ -543,22 +608,24 @@ var devKit = (function () {
         Object.defineProperty(grids[grid], "SelectedRows", {
             get: function () {
                 var obj = {};
-                obj.getLength = function () {
-                    if (!gridControl) return 0;
-                    return gridControl.getGrid().getSelectedRows().getLength();
+                obj.getLength = function () {                    
+                    if (gridControl && gridControl.getGrid && gridControl.getGrid().getSelectedRows && gridControl.getGrid().getSelectedRows().getLength)
+                        return gridControl.getGrid().getSelectedRows().getLength();
+                    return 0;
                 }
-                obj.get = function (index) {
-                    if (!gridControl) return {};
-                    var row = gridControl.getGrid().getSelectedRows().get(index);
-                    return loadGridRow(row);
+                obj.get = function (index) {                    
+                    if (gridControl && gridControl.getGrid && gridControl.getGrid().getSelectedRows && gridControl.getGrid().getSelectedRows().get)
+                        return  loadGridRow(gridControl.getGrid().getSelectedRows().get(index));
+                    return loadGridRow({});
                 }
                 obj.forEach = function (callback) {
-                    if (!gridControl) return;
-                    var selectedRows = gridControl.getGrid().getSelectedRows();
-                    for (var index = 0; index < selectedRows.getLength(); index++) {
-                        var row = selectedRows.get(index);
-                        callback(loadGridRow(row), index);
-                    }
+                    if (gridControl && gridControl.getGrid && gridControl.getGrid().getSelectedRows && gridControl.getGrid().getSelectedRows().getLength) {
+                        var rows = gridControl.getGrid().getSelectedRows();
+                        for (var index = 0; index < rows.getLength(); index++) {
+                            var row = rows.get(index);
+                            callback(loadGridRow(row), index);
+                        }
+                    }                    
                 }
                 return obj;
             }

@@ -27,8 +27,20 @@ var Tomato;
 			abc_Timer: {}
 		};
 		devKit.LoadFields(formContext, body);
-
-		var tab = {}
+		var tab = {
+			Tab1: {
+				Section: {
+					Tab1Section1: {},
+					Tab1Section2: {}
+				}
+			},
+			Tab3: {
+				Section: {
+					Tab3Section1: {},
+					Tab3Section2: {}
+				}
+			},
+		}
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
@@ -59,7 +71,9 @@ var Tomato;
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 
-		var navigation = {}
+		var navigation = {
+			nav01: {}
+		}
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
 
