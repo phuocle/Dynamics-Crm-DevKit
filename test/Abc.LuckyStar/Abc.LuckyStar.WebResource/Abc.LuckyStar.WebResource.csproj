@@ -67,7 +67,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
-    <None Include="package.json" />
     <None Include="chutzpah.json" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
