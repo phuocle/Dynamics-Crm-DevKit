@@ -73,105 +73,387 @@ var devKit = (function () {
         return form;
     }
     function loadProcess(formContext) {
+        var loadStep = function (step) {
+            var obj = {};
+            Object.defineProperty(obj, "Attribute", {
+                get: function () {
+                    if (step && step.getAttribute) {
+                        return step.getAttribute();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, "Name", {
+                get: function () {
+                    if (step && step.getName) {
+                        return step.getName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, "Required", {
+                get: function () {
+                    if (step && step.isRequired) {
+                        return step.isRequired();
+                    }
+                    return false;
+                }
+            });
+            Object.defineProperty(obj, "Progress", {
+                get: function () {
+                    if (step && step.getProgress) {
+                        return step.getProgress();
+                    }
+                    return false;
+                }
+            });
+            obj.SetProgress = function (stepProgress, message) {
+                if (step && step.setProgress) {
+                    step.setProgress(stepProgress, message);
+                }
+            }
+            return obj;
+        }
+        var loadStage = function (stage) {
+            var obj = {};
+            Object.defineProperty(obj, "Category", {
+                get: function () {
+                    if (stage && stage.getCategory && stage.getCategory().getValue) {
+                        return stage.getCategory().getValue();
+                    }
+                    return 0;
+                }
+            });
+            Object.defineProperty(obj, "EntityName", {
+                get: function () {
+                    if (stage && stage.getEntityName) {
+                        return stage.getEntityName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, "Id", {
+                get: function () {
+                    if (stage && stage.getId) {
+                        return stage.getId();
+                    }
+                    return EMPTY_GUID;
+                }
+            });
+            Object.defineProperty(obj, "Name", {
+                get: function () {
+                    if (stage && stage.getName) {
+                        return stage.getName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, "Status", {
+                get: function () {
+                    if (stage && stage.getStatus) {
+                        return stage.getStatus();
+                    }
+                    return "active";
+                }
+            });
+            obj.AllowCreateNew = function (callback) {
+                if (stage && stage.getNavigationBehavior) {
+                    stage.getNavigationBehavior().allowCreateNew = callback;
+                }
+            }
+            Object.defineProperty(obj, "Steps", {
+                get: function () {
+                    var obj = {};
+                    obj.getLength = function () {
+                        if (!stage) return 0;
+                        return stage.getSteps().getLength();
+                    }
+                    obj.get = function (index) {
+                        if (!stage) return loadStep({});
+                        var step = stage.getSteps().get(index);
+                        return loadStep(step);
+                    }
+                    obj.forEach = function (callback) {
+                        if (!stage) return;
+                        var steps = stage.getSteps();
+                        for (var index = 0; index < steps.getLength(); index++) {
+                            var step = steps.get(index);
+                            callback(loadStep(step), index);
+                        }
+                    }
+                    return obj;
+                }
+            });
+            return obj;
+        }
+        var loadProcess = function (process) {
+            var obj = {};
+            Object.defineProperty(obj, "Id", {
+                get: function () {
+                    if (!process) { return EMPTY_STRING; }
+                    return process.getId();
+                }
+            });
+            Object.defineProperty(obj, "Name", {
+                get: function () {
+                    if (!process) { return EMPTY_STRING; }
+                    return process.getName();
+                }
+            });
+            Object.defineProperty(obj, "IsRendered", {
+                get: function () {
+                    if (!process) { return false; }
+                    return process.isRendered();
+                }
+            });
+            Object.defineProperty(obj, "Stages", {
+                get: function () {
+                    var obj = {};
+                    obj.getLength = function () {
+                        if (!process) return 0;
+                        return process.getStages().getLength();
+                    }
+                    obj.get = function (index) {
+                        if (!process) return loadStage({});
+                        var stage = process.getStages().get(index);
+                        return loadStage(stage);
+                    }
+                    obj.forEach = function (callback) {
+                        if (!process) return;
+                        var stages = process.getStages();
+                        for (var index = 0; index < stages.getLength(); index++) {
+                            var stage = stages.get(index);
+                            callback(loadStage(stage), index);
+                        }
+                    }
+                    return obj;
+                }
+            });
+            return obj;
+        }
         var process = {};
         var getProcess = null;
-        if (has(formContext, 'data.process')) getProcess = formContext.data.process;
-        Object.defineProperty(process, "InstanceId", {
-            get: function () {
-                if (!getProcess) return EMPTY_STRING;
-                return getProcess.getInstanceId();
+        if (formContext && formContext.data && formContext.data.process) {
+            getProcess = formContext.data.process;
+        }
+        var getProcessUi = null;
+        if (formContext && formContext.ui && formContext.ui.process) {
+            getProcessUi = formContext.ui.process;
+        }
+
+        process.AddOnPreProcessStatusChange = function (callback) {
+            if (getProcess) {
+                getProcess.addOnPreProcessStatusChange(callback);
             }
-        });
-        //Object.defineProperty(process, "InstanceName", { get: function () { return getProcess.getInstanceName(); } });
-        //Object.defineProperty(process, "ActivePath", { get: function () { return getProcess.getActivePath(); } });
-        //Object.defineProperty(process, "Status", {
-        //    get: function () { return getProcess.getStatus(); },
-        //    set: function (value) { getProcess.setStatus(value, N); }
-        //});
+        };
+        process.RemoveOnPreProcessStatusChange = function (callback) {
+            if (getProcess) {
+                getProcess.removeOnPreProcessStatusChange(callback);
+            }
+        };
+        process.AddOnProcessStatusChange = function (callback) {
+            if (getProcess) {
+                getProcess.addOnProcessStatusChange(callback);
+            }
+        };
+        process.RemoveOnProcessStatusChange = function (callback) {
+            if (getProcess) {
+                getProcess.removeOnProcessStatusChange(callback);
+            }
+        };
+        process.AddOnStageChange = function (callback) {
+            if (getProcess) {
+                getProcess.addOnStageChange(callback);
+            }
+        };
+        process.RemoveOnStageChange = function (callback) {
+            if (getProcess) {
+                getProcess.removeOnStageChange(callback);
+            }
+        };
+        process.AddOnStageSelected = function (callback) {
+            if (getProcess) {
+                getProcess.addOnStageSelected(callback);
+            }
+        };
+        process.RemoveOnStageSelected = function (callback) {
+            if (getProcess) {
+                getProcess.removeOnStageSelected (callback);
+            }
+        };
+        process.EnabledProcesses = function (callback) {
+            if (getProcess) {
+                getProcess.getEnabledProcesses(function (enabledProcesses) {
+                    var processes = [];
+                    for (var processId in enabledProcesses) {
+                        processes.push({ ProcessId: processId, ProcessName: enabledProcesses[processId] });
+                    }
+                    callback(processes);
+                });
+            }
+        };
+        process.MoveNext = function (callback) {
+            if (getProcess && getProcess.moveNext) {
+                getProcess.moveNext(callback);
+            }
+        };
+        process.MovePrevious = function (callback) {
+            if (getProcess && getProcess.movePrevious) {
+                getProcess.movePrevious(callback);
+            }
+        };
+        process.ProcessInstances = function (callback) {
+            if (getProcess) {
+                getProcess.getProcessInstances(function (processInstances) {
+                    var processes = [];
+                    for (var processId in processInstances) {
+                        var process = processInstances[processId];
+                        processes.push({
+                            ProcessId: process.ProcessDefinitionID,
+                            ProcessName: process.ProcessDefinitionName,
+                            CreatedOn: process.CreatedOn,
+                            CreatedOnDate: process.CreatedOnDate,
+                            InstanceId: process.ProcessInstanceID,
+                            InstanceName: process.ProcessInstanceName,
+                            Status: process.StatusCodeName
+                        });
+;                    }
+                    callback(processes);
+                });
+            }
+        };
+        process.SetActiveStage = function (stageId, callback) {
+            if (getProcess && getProcess.setActiveStage) {
+                getProcess.setActiveStage(stageId, callback);
+            }
+        };
+        process.SetActiveProcessInstance = function (processInstanceId, callback) {
+            if (getProcess && getProcess.setActiveProcessInstance) {
+                getProcess.setActiveProcessInstance(processInstanceId, callback);
+            }
+        };
+        process.SetActiveProcess = function (processId, callback) {
+            if (getProcess && getProcess.setActiveProcess) {
+                getProcess.setActiveProcess(processId, callback);
+            }
+        };
+        process.Reflow = function (updateUI, parentStage, nextStage) {
+            if (getProcess && getProcess.reflow) {
+                getProcess.reflow(updateUI, parentStage, nextStage);
+            }
+        }
         Object.defineProperty(process, "ActiveProcess", {
             get: function () {
-                var activeProcess = {};
                 var getActiveProcess = null;
                 if (has(getProcess, 'getActiveProcess')) getActiveProcess = getProcess.getActiveProcess();
-                Object.defineProperty(activeProcess, "Id", {
-                    get: function () {
-                        if (!getActiveProcess) { return EMPTY_STRING; }
-                        return getActiveProcess.getId();
-                    }
-                });
-                Object.defineProperty(activeProcess, "Name", {
-                    get: function () {
-                        if (!getActiveProcess) { return EMPTY_STRING; }
-                        return getActiveProcess.getName();
-                    }
-                });
-                Object.defineProperty(activeProcess, "IsRendered", {
-                    get: function () {
-                        if (!getActiveProcess) { return false; }
-                        return getActiveProcess.isRendered();
-                    }
-                });
-                Object.defineProperty(activeProcess, "Stages", {
-                    get: function () {
-                        if (!getActiveProcess) { return []; }
-                        return getActiveProcess.getStages();
-                    }
-                });
-                return activeProcess;
+                return loadProcess(getActiveProcess);                
             }
         });
-        //Object.defineProperty(process, "ActiveStage", {
-        //    get: function () {
-        //        var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
-        //        if (!getProcess.getActiveStage) return data;
-        //        var activeStage = getProcess.getActiveStage();
-        //        if (activeStage.getCategory) if (activeStage.getCategory().getValue) data.Category = activeStage.getCategory().getValue();
-        //        if (activeStage.getEntityName) data.EntityName = activeStage.getEntityName();
-        //        if (activeStage.getId) data.Id = activeStage.getId();
-        //        if (activeStage.getName) data.Name = activeStage.getName();
-        //        if (activeStage.getStatus) data.Status = activeStage.getStatus();
-        //        if (activeStage.getSteps) data.Steps = activeStage.getSteps();
-        //        return data;
-        //    }
-        //});
-        //Object.defineProperty(process, "SelectedStage", {
-        //    get: function () {
-        //        var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
-        //        if (!getProcess.getSelectedStage) return data;
-        //        var selectedStage = getProcess.getSelectedStage();
-        //        if (selectedStage.getCategory) if (selectedStage.getCategory().getValue) data.Category = selectedStage.getCategory().getValue();
-        //        if (selectedStage.getEntityName) data.EntityName = selectedStage.getEntityName();
-        //        if (selectedStage.getId) data.Id = selectedStage.getId();
-        //        if (selectedStage.getName) data.Name = selectedStage.getName();
-        //        if (selectedStage.getStatus) data.Status = selectedStage.getStatus();
-        //        if (selectedStage.getSteps) data.Steps = selectedStage.getSteps();
-        //        return data;
-        //    }
-        //});
-        //process.AddOnProcessStatusChange = function (callback) { getProcess.addOnProcessStatusChange(callback); };
-        //process.AddOnStageChange = function (callback) { getProcess.addOnStageChange(callback); };
-        //process.AddOnStageSelected = function (callback) { getProcess.addOnStageSelected(callback); };
-        //process.EnabledProcesses = function (callback) { getProcess.getEnabledProcesses(callback); };
-        //process.MoveNext = function (callback) { getProcess.moveNext(callback); };
-        //process.MovePrevious = function (callback) { getProcess.movePrevious(callback); };
-        //process.ProcessInstances = function (callback) { getProcess.getProcessInstances(callback); };
-        //process.RemoveOnProcessStatusChange = function (callback) { getProcess.removeOnProcessStatusChange(callback); };
-        //process.RemoveOnStageChange = function (callback) { getProcess.removeOnStageChange(callback); };
-        //process.RemoveOnStageSelected = function (callback) { getProcess.removeOnStageSelected(callback); };
-        //process.SetActiveProcess = function (processId, callback) { getProcess.setActiveProcess(processId, callback); };
-        //process.SetActiveProcessInstance = function (processInstanceId, callback) { getProcess.setActiveProcessInstance(processInstanceId, callback); };
-        //process.SetActiveStage = function (stageId, callback) { getProcess.setActiveStage(stageId, callback); };
-        //if (formContext.ui && formContext.ui.process) {
-        //    var getProcessUi = formContext.ui.process;
-        //    Object.defineProperty(process, "DisplayState", {
-        //        get: function () { return getProcessUi.getDisplayState(); },
-        //        set: function (value) { getProcessUi.setDisplayState(value); }
-        //    });
-        //    Object.defineProperty(process, "Visible", {
-        //        get: function () { return getProcessUi.getVisible(); },
-        //        set: function (value) { getProcessUi.setVisible(value); }
-        //    });
-        //}
+        Object.defineProperty(process, "SelectedStage", {
+            get: function () {
+                var selectedStage = null;
+                if (getProcess && getProcess.getSelectedStage) {
+                    selectedStage = getProcess.getSelectedStage();
+                }
+                return loadStage(selectedStage);
+            }
+        });
+        Object.defineProperty(process, "ActiveStage", {
+            get: function () {
+                var activeStage = null;
+                if (getProcess && getProcess.getActiveStage) {
+                    activeStage = getProcess.getActiveStage();
+                }
+                return loadStage(activeStage);
+            }
+        });       
+        Object.defineProperty(process, "InstanceId", {
+            get: function () {
+                if (getProcess && getProcess.getInstanceId) {
+                    return getProcess.getInstanceId();
+                }
+                return EMPTY_GUID;
+            }
+        });
+        Object.defineProperty(process, "InstanceName", {
+            get: function () {
+                if (getProcess && getProcess.getInstanceName) {
+                    return getProcess.getInstanceName();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(process, "Status", {
+            get: function () {
+                if (getProcess && getProcess.getStatus) {
+                    return getProcess.getStatus();
+                }
+                return "active";
+            },
+            set: function (value) {
+                if (getProcess && getProcess.setStatus) {
+                    getProcess.setStatus(value);
+                }
+            }
+        });
+        Object.defineProperty(process, "DisplayState", {
+            get: function () {
+                if (getProcessUi && getProcessUi.getDisplayState) {
+                    return getProcessUi.getDisplayState();
+                }
+                return "expanded";
+            },
+            set: function (value) {
+                if (getProcessUi && getProcessUi.setDisplayState) {
+                    getProcessUi.setDisplayState(value);
+                }
+            }
+        });
+        Object.defineProperty(process, "Visible", {
+            get: function () {
+                if (getProcessUi && getProcessUi.getVisible) {
+                    return getProcessUi.getVisible();
+                }
+                return true;
+            },
+            set: function (value) {
+                if (getProcessUi && getProcessUi.setVisible) {
+                    getProcessUi.setVisible(value);
+                }
+            }
+        });
+        Object.defineProperty(process, "ActivePath", {
+            get: function () {
+                var obj = {};
+                var getActivePath = null;
+                if (getProcess && getProcess.getActivePath) {
+                    getActivePath = getProcess.getActivePath();
+                }
+                obj.getLength = function () {
+                    if (getActivePath && getActivePath.getLength) {
+                        return getActivePath.getLength();
+                    }
+                    return 0;
+                }
+                obj.get = function (index) {
+                    if (getActivePath && getActivePath.get) {
+                        var stage = getActivePath.get(index);
+                        return loadStage(stage);
+                    }
+                    return loadStage({});
+                }
+                obj.forEach = function (callback) {
+                    if (getActivePath && getActivePath.forEach) {
+                        var stages = getActivePath;
+                        for (var index = 0; index < stages.getLength(); index++) {
+                            var stage = stages.get(index);
+                            callback(loadStage(stage), index);
+                        }
+                    }
+                }
+                return obj;
+            }
+        });       
         return process;
     }
     function loadField(formContext, body, field, type) {           

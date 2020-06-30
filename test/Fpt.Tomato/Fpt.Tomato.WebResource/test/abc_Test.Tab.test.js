@@ -43,7 +43,15 @@ define(['xrm-mock'], () => {
             form.Body.Tab.Tab1.Section.Tab1Section1.Visible = false;
             expect(form.Body.Tab.Tab1.Section.Tab1Section1.Visible).toBeFalsy();
         });
-
+        it('Tab/Section removed', () => {
+            var tab2Section1 = xrmMock.XrmMockGenerator.Section.createSection("Tab2Section1", "LABEL-TAB1-SECTION1", true, null, null);
+            var tab2Section2 = xrmMock.XrmMockGenerator.Section.createSection("Tab2Section2", "LABEL-TAB1-SECTION2", false, null, null);
+            var tab2 = xrmMock.XrmMockGenerator.Tab.createTab("Tab3", "LABEL-TAB2", true, "expanded", null, new xrmMock.ItemCollectionMock([tab2Section1, tab2Section2]));
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+            expect(form.Body.Tab.Tab2.Label).toBe("");
+            expect(form.Body.Tab.Tab2.Section.Tab2Section1.Label).toBe("");
+        });
         it('Navigation', () => {
             var standard = new xrmMock.UiStandardElementMock(new xrmMock.UiLabelElementMock("NAV-LABBEL"), new xrmMock.UiCanGetVisibleElementMock(true));
             var focus = new xrmMock.UiFocusableMock(true);
@@ -73,6 +81,28 @@ define(['xrm-mock'], () => {
             form.Navigation.nav01.Visible = false;
             expect(form.Navigation.nav01.Visible).toBeFalsy();
             expect(form.Navigation.nav01.Focus()).toBeUndefined();
+        });
+        it('Process', () => {
+            var stage1 = new xrmMock.StageMock("stage1", "Start", "active", null, [new xrmMock.StepMock("Stage1Step1", "abc_all", true), new xrmMock.StepMock("Stage1Step2", "abc_all2", true) ]);
+            var stage2 = new xrmMock.StageMock("stage2", "Finish", "inactive", null, [new xrmMock.StepMock("Stage2Step1", "abc_all", true)]);
+            var process1 = new xrmMock.ProcessMock({ id: "Process_1", name: "PROCESS 1", rendered: true, stages: new xrmMock.ItemCollectionMock([stage1, stage2]) });
+            var process = new xrmMock.ProcessManagerMock([process1]);
+            xrmMock.XrmMockGenerator.initialise({ process: process });
+
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new Tomato.FormTest(executionContext);
+
+            //expect(form.Process.InstanceId).toBe("Process_1");
+            //expect(form.Process.)
+
+            ////ActiveProcess
+            //expect(form.Process.ActiveProcess.Name).toBe("PROCESS 1");
+            //expect(form.Process.ActiveProcess.Id).toBe("Process_1");
+            //expect(form.Process.ActiveProcess.IsRendered).toBeTruthy();
+            //expect(form.Process.ActiveProcess.Stages.getLength()).toBe(2);
+
+            form.Process.ActiveProcess.
+
         });
     });
 });

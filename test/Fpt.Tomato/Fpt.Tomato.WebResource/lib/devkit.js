@@ -28,9 +28,9 @@ var devKit = (function () {
         var form = {};
         if (formContext.data) {
             var contextData = formContext.data;
-            form.DataAddOnLoad = function (callback) { contextData.addOnLoad(callback); };            
+            form.DataAddOnLoad = function (callback) { contextData.addOnLoad(callback); };
             Object.defineProperty(form, "DataIsDirty", { get: function () { return contextData.getIsDirty(); } });
-            Object.defineProperty(form, "DataIsValid", { get: function () { return contextData.isValid(); } });            
+            Object.defineProperty(form, "DataIsValid", { get: function () { return contextData.isValid(); } });
             form.Refresh = function (save, successCallback, errorCallback) { contextData.refresh(save).then(successCallback, errorCallback); };
             form.DataRemoveOnLoad = function (callback) { contextData.removeOnLoad(callback); };
             form.Save = function (saveOptions, successCallback, errorCallback) { contextData.save(saveOptions).then(successCallback, errorCallback); };
@@ -73,85 +73,108 @@ var devKit = (function () {
         return form;
     }
     function loadProcess(formContext) {
-        if (!formContext) return;
         var process = {};
-        if (formContext.data && formContext.data.process) {
-            var getProcess = formContext.data.process;
-            Object.defineProperty(process, "InstanceId", { get: function () { return getProcess.getInstanceId(); } });
-            Object.defineProperty(process, "InstanceName", { get: function () { return getProcess.getInstanceName(); } });
-            Object.defineProperty(process, "ActivePath", { get: function () { return getProcess.getActivePath(); } });
-            Object.defineProperty(process, "Status", {
-                get: function () { return getProcess.getStatus(); },
-                set: function (value) { getProcess.setStatus(value, N); }
-            });
-            Object.defineProperty(process, "ActiveProcess", {
-                get: function () {
-                    var data = { Id: EMPTY_GUID, Name: EMPTY_STRING, IsRendered: false, Stages: N };
-                    if (!getProcess.getActiveProcess) return data;
-                    var activeProcess = getProcess.getActiveProcess();
-                    if (activeProcess.getId) data.Id = activeProcess.getId();
-                    if (activeProcess.getName) data.Name = activeProcess.getName();
-                    if (activeProcess.isRendered) data.IsRendered = activeProcess.isRendered();
-                    if (activeProcess.getStages) data.Stages = activeProcess.getStages();
-                    return data;
-                }
-            });
-            Object.defineProperty(process, "ActiveStage", {
-                get: function () {
-                    var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
-                    if (!getProcess.getActiveStage) return data;
-                    var activeStage = getProcess.getActiveStage();
-                    if (activeStage.getCategory) if (activeStage.getCategory().getValue) data.Category = activeStage.getCategory().getValue();
-                    if (activeStage.getEntityName) data.EntityName = activeStage.getEntityName();
-                    if (activeStage.getId) data.Id = activeStage.getId();
-                    if (activeStage.getName) data.Name = activeStage.getName();
-                    if (activeStage.getStatus) data.Status = activeStage.getStatus();
-                    if (activeStage.getSteps) data.Steps = activeStage.getSteps();
-                    return data;
-                }
-            });
-            Object.defineProperty(process, "SelectedStage", {
-                get: function () {
-                    var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
-                    if (!getProcess.getSelectedStage) return data;
-                    var selectedStage = getProcess.getSelectedStage();
-                    if (selectedStage.getCategory) if (selectedStage.getCategory().getValue) data.Category = selectedStage.getCategory().getValue();
-                    if (selectedStage.getEntityName) data.EntityName = selectedStage.getEntityName();
-                    if (selectedStage.getId) data.Id = selectedStage.getId();
-                    if (selectedStage.getName) data.Name = selectedStage.getName();
-                    if (selectedStage.getStatus) data.Status = selectedStage.getStatus();
-                    if (selectedStage.getSteps) data.Steps = selectedStage.getSteps();
-                    return data;
-                }
-            });
-            process.AddOnProcessStatusChange = function (callback) { getProcess.addOnProcessStatusChange(callback); };
-            process.AddOnStageChange = function (callback) { getProcess.addOnStageChange(callback); };
-            process.AddOnStageSelected = function (callback) { getProcess.addOnStageSelected(callback); };
-            process.EnabledProcesses = function (callback) { getProcess.getEnabledProcesses(callback); };
-            process.MoveNext = function (callback) { getProcess.moveNext(callback); };
-            process.MovePrevious = function (callback) { getProcess.movePrevious(callback); };
-            process.ProcessInstances = function (callback) { getProcess.getProcessInstances(callback); };
-            process.RemoveOnProcessStatusChange = function (callback) { getProcess.removeOnProcessStatusChange(callback); };
-            process.RemoveOnStageChange = function (callback) { getProcess.removeOnStageChange(callback); };
-            process.RemoveOnStageSelected = function (callback) { getProcess.removeOnStageSelected(callback); };
-            process.SetActiveProcess = function (processId, callback) { getProcess.setActiveProcess(processId, callback); };
-            process.SetActiveProcessInstance = function (processInstanceId, callback) { getProcess.setActiveProcessInstance(processInstanceId, callback); };
-            process.SetActiveStage = function (stageId, callback) { getProcess.setActiveStage(stageId, callback); };
-        }
-        if (formContext.ui && formContext.ui.process) {
-            var getProcessUi = formContext.ui.process;
-            Object.defineProperty(process, "DisplayState", {
-                get: function () { return getProcessUi.getDisplayState(); },
-                set: function (value) { getProcessUi.setDisplayState(value); }
-            });
-            Object.defineProperty(process, "Visible", {
-                get: function () { return getProcessUi.getVisible(); },
-                set: function (value) { getProcessUi.setVisible(value); }
-            });
-        }
+        var getProcess = null;
+        if (has(formContext, 'data.process')) getProcess = formContext.data.process;
+        Object.defineProperty(process, "InstanceId", {
+            get: function () {
+                if (!getProcess) return EMPTY_STRING;
+                return getProcess.getInstanceId();
+            }
+        });
+        //Object.defineProperty(process, "InstanceName", { get: function () { return getProcess.getInstanceName(); } });
+        //Object.defineProperty(process, "ActivePath", { get: function () { return getProcess.getActivePath(); } });
+        //Object.defineProperty(process, "Status", {
+        //    get: function () { return getProcess.getStatus(); },
+        //    set: function (value) { getProcess.setStatus(value, N); }
+        //});
+        Object.defineProperty(process, "ActiveProcess", {
+            get: function () {
+                var activeProcess = {};
+                var getActiveProcess = null;
+                if (has(getProcess, 'getActiveProcess')) getActiveProcess = getProcess.getActiveProcess();
+                Object.defineProperty(activeProcess, "Id", {
+                    get: function () {
+                        if (!getActiveProcess) { return EMPTY_STRING; }
+                        return getActiveProcess.getId();
+                    }
+                });
+                Object.defineProperty(activeProcess, "Name", {
+                    get: function () {
+                        if (!getActiveProcess) { return EMPTY_STRING; }
+                        return getActiveProcess.getName();
+                    }
+                });
+                Object.defineProperty(activeProcess, "IsRendered", {
+                    get: function () {
+                        if (!getActiveProcess) { return false; }
+                        return getActiveProcess.isRendered();
+                    }
+                });
+                Object.defineProperty(activeProcess, "Stages", {
+                    get: function () {
+                        if (!getActiveProcess) { return []; }
+                        return getActiveProcess.getStages();
+                    }
+                });
+                return activeProcess;
+            }
+        });
+        //Object.defineProperty(process, "ActiveStage", {
+        //    get: function () {
+        //        var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
+        //        if (!getProcess.getActiveStage) return data;
+        //        var activeStage = getProcess.getActiveStage();
+        //        if (activeStage.getCategory) if (activeStage.getCategory().getValue) data.Category = activeStage.getCategory().getValue();
+        //        if (activeStage.getEntityName) data.EntityName = activeStage.getEntityName();
+        //        if (activeStage.getId) data.Id = activeStage.getId();
+        //        if (activeStage.getName) data.Name = activeStage.getName();
+        //        if (activeStage.getStatus) data.Status = activeStage.getStatus();
+        //        if (activeStage.getSteps) data.Steps = activeStage.getSteps();
+        //        return data;
+        //    }
+        //});
+        //Object.defineProperty(process, "SelectedStage", {
+        //    get: function () {
+        //        var data = { Category: N, EntityName: EMPTY_STRING, Id: EMPTY_GUID, Name: EMPTY_STRING, Status: EMPTY_STRING, Steps: N };
+        //        if (!getProcess.getSelectedStage) return data;
+        //        var selectedStage = getProcess.getSelectedStage();
+        //        if (selectedStage.getCategory) if (selectedStage.getCategory().getValue) data.Category = selectedStage.getCategory().getValue();
+        //        if (selectedStage.getEntityName) data.EntityName = selectedStage.getEntityName();
+        //        if (selectedStage.getId) data.Id = selectedStage.getId();
+        //        if (selectedStage.getName) data.Name = selectedStage.getName();
+        //        if (selectedStage.getStatus) data.Status = selectedStage.getStatus();
+        //        if (selectedStage.getSteps) data.Steps = selectedStage.getSteps();
+        //        return data;
+        //    }
+        //});
+        //process.AddOnProcessStatusChange = function (callback) { getProcess.addOnProcessStatusChange(callback); };
+        //process.AddOnStageChange = function (callback) { getProcess.addOnStageChange(callback); };
+        //process.AddOnStageSelected = function (callback) { getProcess.addOnStageSelected(callback); };
+        //process.EnabledProcesses = function (callback) { getProcess.getEnabledProcesses(callback); };
+        //process.MoveNext = function (callback) { getProcess.moveNext(callback); };
+        //process.MovePrevious = function (callback) { getProcess.movePrevious(callback); };
+        //process.ProcessInstances = function (callback) { getProcess.getProcessInstances(callback); };
+        //process.RemoveOnProcessStatusChange = function (callback) { getProcess.removeOnProcessStatusChange(callback); };
+        //process.RemoveOnStageChange = function (callback) { getProcess.removeOnStageChange(callback); };
+        //process.RemoveOnStageSelected = function (callback) { getProcess.removeOnStageSelected(callback); };
+        //process.SetActiveProcess = function (processId, callback) { getProcess.setActiveProcess(processId, callback); };
+        //process.SetActiveProcessInstance = function (processInstanceId, callback) { getProcess.setActiveProcessInstance(processInstanceId, callback); };
+        //process.SetActiveStage = function (stageId, callback) { getProcess.setActiveStage(stageId, callback); };
+        //if (formContext.ui && formContext.ui.process) {
+        //    var getProcessUi = formContext.ui.process;
+        //    Object.defineProperty(process, "DisplayState", {
+        //        get: function () { return getProcessUi.getDisplayState(); },
+        //        set: function (value) { getProcessUi.setDisplayState(value); }
+        //    });
+        //    Object.defineProperty(process, "Visible", {
+        //        get: function () { return getProcessUi.getVisible(); },
+        //        set: function (value) { getProcessUi.setVisible(value); }
+        //    });
+        //}
         return process;
     }
-    function loadField(formContext, body, field, type) {           
+    function loadField(formContext, body, field, type) {
         var logicalName = (function () {
             if (type === undefined) return field.toLowerCase();
             return (type + field).toLowerCase();
@@ -175,7 +198,7 @@ var devKit = (function () {
                     }
                 }
             }
-        })();        
+        })();
         Object.defineProperty(body[field], "AttributeType", { get: function () { return attribute.getAttributeType(); } });
         Object.defineProperty(body[field], "Format", { get: function () { return attribute.getFormat(); } });
         Object.defineProperty(body[field], "InitialValue", { get: function () { return attribute.getInitialValue(); } });
@@ -214,7 +237,7 @@ var devKit = (function () {
             set: function (value) { attribute.setSubmitMode(value); }
         });
         Object.defineProperty(body[field], "Value", {
-            get: function () { return attribute.getValue(); },           
+            get: function () { return attribute.getValue(); },
             set: function (value) { attribute.setValue(value); }
         });
         Object.defineProperty(body[field], "Data", {
@@ -292,28 +315,50 @@ var devKit = (function () {
         return body;
     }
     function loadSection(formContext, tab, sections, section) {
-        if (!formContext) return;
         if (formContext.ui && formContext.ui.tabs && formContext.ui.tabs.get) {
-            var tabObject = formContext.ui.tabs.get(tab);
-            if (!tabObject) return;
-            if (tabObject.sections && tabObject.sections.get) {
-                var sectionObject = tabObject.sections.get(section);
-                Object.defineProperty(sections[section], "Name", { get: function () { return sectionObject.getName(); } });
-                Object.defineProperty(sections[section], "Parent", { get: function () { return sectionObject.getParent(); } });
-                Object.defineProperty(sections[section], "Label", {
-                    get: function () { return sectionObject.getLabel(); },
-                    set: function (value) { sectionObject.setLabel(value); }
-                });
-                Object.defineProperty(sections[section], "Visible", {
-                    get: function () { return sectionObject.getVisible(); },
-                    set: function (value) { sectionObject.setVisible(value); }
-                });
-            }
+            var tabObject = null;
+            if (has(formContext, 'ui.tabs.get')) tabObject = formContext.ui.tabs.get(tab);
+            var sectionObject = null;
+            if (has(tabObject, 'sections.get')) sectionObject = tabObject.sections.get(section);
+            Object.defineProperty(sections[section], "Name", {
+                get: function () {
+                    if (!sectionObject) { return EMPTY_STRING; }
+                    return sectionObject.getName();
+                }
+            });
+            Object.defineProperty(sections[section], "Parent", {
+                get: function () {
+                    if (!sectionObject) { return null;}
+                    return sectionObject.getParent();
+                }
+            });
+            Object.defineProperty(sections[section], "Label", {
+                get: function () {
+                    if (!sectionObject) { return EMPTY_STRING };
+                    return sectionObject.getLabel();
+                },
+                set: function (value) {
+                    if (sectionObject) {
+                        sectionObject.setLabel(value);
+                    }
+                }
+            });
+            Object.defineProperty(sections[section], "Visible", {
+                get: function () {
+                    if (!sectionObject) { return false; }
+                    return sectionObject.getVisible();
+                },
+                set: function (value) {
+                    if (sectionObject) {
+                        sectionObject.setVisible(value);
+                    }
+                }
+            });
         }
     }
     function loadTab(formContext, tabs, tab) {
-        var tabObject = null;        
-        if (has(formContext, 'ui.tabs.get')) tabObject = formContext.ui.tabs.get(tab);                    
+        var tabObject = null;
+        if (has(formContext, 'ui.tabs.get')) tabObject = formContext.ui.tabs.get(tab);
         Object.defineProperty(tabs[tab], "Name", {
             get: function () {
                 if (!tabObject) return EMPTY_STRING;
@@ -373,7 +418,7 @@ var devKit = (function () {
         };
         for (var section in tabs[tab].Section) {
             loadSection(formContext, tab, tabs[tab].Section, section);
-        }        
+        }
     }
     function loadTabs(formContext, tabs) {
         for (var tab in tabs) {
@@ -418,7 +463,6 @@ var devKit = (function () {
             }
         });
         navigations[navigation].Focus = function () {
-            debugger;
             if (navigationItem) {
                 navigationItem.setFocus();
             }
@@ -507,7 +551,7 @@ var devKit = (function () {
         var gridControl = null;
         if (has(formContext, 'getControl')) {
             gridControl = formContext.getControl(grid);
-        }        
+        }
         grids[grid].AddOnLoad = function (callback) {
             if (!has(gridControl, 'addOnLoad')) return;
             gridControl.addOnLoad(callback);
@@ -548,7 +592,7 @@ var devKit = (function () {
             get: function () {
                 if (!has(gridControl, 'getViewSelector')) return {};
                 var viewSelectorControl = gridControl.getViewSelector();
-                var viewSelector = {};                
+                var viewSelector = {};
                 Object.defineProperty(viewSelector, "CurrentView", {
                     get: function () {
                         if (!has(viewSelectorControl, 'getCurrentView')) return EMPTY_REFERENCE;
@@ -608,12 +652,12 @@ var devKit = (function () {
         Object.defineProperty(grids[grid], "SelectedRows", {
             get: function () {
                 var obj = {};
-                obj.getLength = function () {                    
+                obj.getLength = function () {
                     if (gridControl && gridControl.getGrid && gridControl.getGrid().getSelectedRows && gridControl.getGrid().getSelectedRows().getLength)
                         return gridControl.getGrid().getSelectedRows().getLength();
                     return 0;
                 }
-                obj.get = function (index) {                    
+                obj.get = function (index) {
                     if (gridControl && gridControl.getGrid && gridControl.getGrid().getSelectedRows && gridControl.getGrid().getSelectedRows().get)
                         return  loadGridRow(gridControl.getGrid().getSelectedRows().get(index));
                     return loadGridRow({});
@@ -625,7 +669,7 @@ var devKit = (function () {
                             var row = rows.get(index);
                             callback(loadGridRow(row), index);
                         }
-                    }                    
+                    }
                 }
                 return obj;
             }
@@ -642,25 +686,25 @@ var devKit = (function () {
                 return gridControl.getGrid().getTotalRecordCount();
             }
         });
-    }    
+    }
     function loadGridRow(row) {
         var obj = {};
         Object.defineProperty(obj, "EntityName", {
             get: function () {
                 if (!has(row, 'data.entity.getEntityName')) return EMPTY_STRING;
-                return row.data.entity.getEntityName();                
+                return row.data.entity.getEntityName();
             }
         });
         Object.defineProperty(obj, "EntityReference", {
             get: function () {
                 if (!has(row, 'data.entity.getEntityReference')) return EMPTY_REFERENCE;
-                return row.data.entity.getEntityReference();                
+                return row.data.entity.getEntityReference();
             }
         });
         Object.defineProperty(obj, "EntityId", {
             get: function () {
                 if (!has(row, 'data.entity.getId')) return EMPTY_GUID;
-                return row.data.entity.getId();                
+                return row.data.entity.getId();
             }
         });
         Object.defineProperty(obj, "PrimaryAttributeValue", {
@@ -674,7 +718,7 @@ var devKit = (function () {
                 var col = {};
                 col.getLength = function () {
                     if (!has(row, 'data.entity.attributes.getLength')) return 0;
-                    return row.data.entity.attributes.getLength();                    
+                    return row.data.entity.attributes.getLength();
                 }
                 col.get = function (index) {
                     if (!has(row, 'data.entity.attributes')) return loadGridColumn({});
@@ -737,9 +781,9 @@ var devKit = (function () {
         Object.defineProperty(obj, "Disabled", {
             get: function () {
                 if (!has(col, 'controls.get')) return false;
-                var control = col.controls.get(0);                    
+                var control = col.controls.get(0);
                 if (!control) return false;
-                return control.getDisabled();                
+                return control.getDisabled();
             },
             set: function (value) {
                 if (!has(col, 'controls.get')) return false;
@@ -758,7 +802,7 @@ var devKit = (function () {
         });
         return obj;
     }
-    function loadGrids(formContext, grids) {        
+    function loadGrids(formContext, grids) {
         for (var grid in grids) {
             loadGrid(formContext, grids, grid);
         }
@@ -780,7 +824,7 @@ var devKit = (function () {
             Object.defineProperty(utility, "PageContext", { get: function () { return getUtility.getPageContext(); } });
         }
         if (Xrm && Xrm.Utility && Xrm.Utility.getGlobalContext) {
-            var getGlobalContext = Xrm.Utility.getGlobalContext();            
+            var getGlobalContext = Xrm.Utility.getGlobalContext();
             Object.defineProperty(utility, "Client", {
                 get: function () {
                     var Client = {};
@@ -789,7 +833,7 @@ var devKit = (function () {
                         Object.defineProperty(Client, "ClientName", { get: function () { return client.getClient(); } });
                         Object.defineProperty(Client, "ClientState", { get: function () { return client.getClientState(); } });
                         Object.defineProperty(Client, "FormFactor", { get: function () { return client.getFormFactor(); } });
-                        Object.defineProperty(Client, "IsOffline", { get: function () { return client.isOffline(); } });                        
+                        Object.defineProperty(Client, "IsOffline", { get: function () { return client.isOffline(); } });
                     }
                     return Client;
                 }
@@ -806,7 +850,7 @@ var devKit = (function () {
                         Object.defineProperty(OrganizationSettings, "OrganizationId", { get: function () { return organizationSettings.organizationId; } });
                         Object.defineProperty(OrganizationSettings, "UniqueName", { get: function () { return organizationSettings.uniqueName; } });
                         Object.defineProperty(OrganizationSettings, "UseSkypeProtocol", { get: function () { return organizationSettings.useSkypeProtocol; } });
-                        Object.defineProperty(OrganizationSettings, "IsAutoSaveEnabled", { get: function () { return organizationSettings.isAutoSaveEnabled; } });                        
+                        Object.defineProperty(OrganizationSettings, "IsAutoSaveEnabled", { get: function () { return organizationSettings.isAutoSaveEnabled; } });
                     }
                     return OrganizationSettings;
                 }
@@ -823,8 +867,8 @@ var devKit = (function () {
                         Object.defineProperty(UserSettings, "IsRTL", { get: function () { return userSettings.isRTL; } });
                         Object.defineProperty(UserSettings, "LanguageId", { get: function () { return userSettings.languageId; } });
                         Object.defineProperty(UserSettings, "Roles", { get: function () { debugger; return userSettings.roles; } });
-                        Object.defineProperty(UserSettings, "SecurityRolePrivileges", { get: function () { return userSettings.securityRolePrivileges; } });                        
-                        Object.defineProperty(UserSettings, "TransactionCurrency", { get: function () { return userSettings.transactionCurrency; } });                        
+                        Object.defineProperty(UserSettings, "SecurityRolePrivileges", { get: function () { return userSettings.securityRolePrivileges; } });
+                        Object.defineProperty(UserSettings, "TransactionCurrency", { get: function () { return userSettings.transactionCurrency; } });
                         Object.defineProperty(UserSettings, "UserId", { get: function () { return userSettings.userId; } });
                         Object.defineProperty(UserSettings, "UserName", { get: function () { return userSettings.userName; } });
                         Object.defineProperty(UserSettings, "TimeZoneOffsetMinutes", { get: function () { return userSettings.getTimeZoneOffsetMinutes(); } });
@@ -833,7 +877,7 @@ var devKit = (function () {
                 }
             });
             utility.AdvancedConfigSetting = function (setting) { return getGlobalContext.getAdvancedConfigSetting(setting); };
-            Object.defineProperty(utility, "ClientUrl", { get: function () { return getGlobalContext.getClientUrl(); } });            
+            Object.defineProperty(utility, "ClientUrl", { get: function () { return getGlobalContext.getClientUrl(); } });
             utility.CurrentAppName = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppName().then(successCallback, errorCallback); };
             utility.CurrentAppProperties = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback); };
             Object.defineProperty(utility, "CurrentAppUrl", { get: function () { return getGlobalContext.getCurrentAppUrl(); } });
@@ -889,7 +933,7 @@ var devKit = (function () {
         LoadNavigations: loadNavigations,
         LoadQuickForms: loadQuickForms,
         LoadGrids: loadGrids,
-        LoadUtility: loadUtility        
+        LoadUtility: loadUtility
     }
 })();
 var OptionSet;

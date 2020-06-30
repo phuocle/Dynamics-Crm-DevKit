@@ -34,10 +34,10 @@ var Tomato;
 					Tab1Section2: {}
 				}
 			},
-			Tab3: {
+			Tab2: {
 				Section: {
-					Tab3Section1: {},
-					Tab3Section2: {}
+					Tab2Section1: {},
+					Tab2Section2: {}
 				}
 			},
 		}
@@ -54,9 +54,11 @@ var Tomato;
 		form.Footer = footer;
 
 		var process = devKit.LoadProcess(formContext);
-		var _Process_Test = {};
-		devKit.LoadFields(formContext, _Process_Test, "header_process_");
-		process.Process_Test = _Process_Test;
+		var _Process_1 = {
+			abc_All: {}
+		};
+		devKit.LoadFields(formContext, _Process_1, "header_process_");
+		process.Process_1 = _Process_1;
 		form.Process = process;
 
 		var quickForm = {

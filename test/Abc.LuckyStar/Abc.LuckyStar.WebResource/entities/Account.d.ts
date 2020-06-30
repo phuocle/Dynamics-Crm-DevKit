@@ -111,6 +111,28 @@ declare namespace LuckyStar {
 			navProcessSessions: DevKit.Form.Controls.ControlNavigationItem,
 			nav_devkit_account_devkit_webapi_Customer: DevKit.Form.Controls.ControlNavigationItem
 		}
+		interface ProcessBPF_Account_3 {
+			/** Type an number or code for the account to quickly search and identify the account in system views. */
+			AccountNumber: DevKit.Form.Controls.ControlString;
+			/** Type the company or business name. */
+			Name: DevKit.Form.Controls.ControlString;
+		}
+		interface ProcessBPF_Account_1 {
+			/** Select a category to indicate whether the customer account is standard or preferred. */
+			AccountCategoryCode: DevKit.Form.Controls.ControlOptionSet;
+			/** Type an number or code for the account to quickly search and identify the account in system views. */
+			AccountNumber: DevKit.Form.Controls.ControlString;
+			/** Type the company or business name. */
+			Name: DevKit.Form.Controls.ControlString;
+			/** Type the main phone number for this account. */
+			Telephone1: DevKit.Form.Controls.ControlString;
+			/** Type a second phone number for this account. */
+			Telephone2: DevKit.Form.Controls.ControlString;
+		}
+		interface Process extends DevKit.Form.Controls.IControlProcess {
+			BPF_Account_3: ProcessBPF_Account_3;
+			BPF_Account_1: ProcessBPF_Account_1;
+		}
 	}
 	class FormAccount extends DevKit.Form.IForm {
 		/**
@@ -129,6 +151,8 @@ declare namespace LuckyStar {
 		Header: LuckyStar.FormAccount.Header;
 		/** The Navigation of form Account */
 		Navigation: LuckyStar.FormAccount.Navigation;
+		/** The Process of form Account */
+		Process: LuckyStar.FormAccount.Process;
 	}
 }
 declare namespace OptionSet {

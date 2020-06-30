@@ -207,24 +207,13 @@ declare namespace Tomato {
 		}
 		interface Navigation {
 			nav01: DevKit.Form.Controls.ControlNavigationItem,
+			nav02: DevKit.Form.Controls.ControlNavigationItem,
 		}
-		interface ProcessProcess_WebApi_1 {
-			devkit_CustomerId: DevKit.Form.Controls.ControlLookup;
-			devkit_DecimalNumber: DevKit.Form.Controls.ControlDecimal;
-			devkit_FloatingPointNumber: DevKit.Form.Controls.ControlDouble;
-			devkit_MultipleLiniesofText: DevKit.Form.Controls.ControlString;
-			devkit_SingleLineofTextText: DevKit.Form.Controls.ControlString;
-			devkit_SingleLineofTextText_1: DevKit.Form.Controls.ControlString;
-			devkit_SingleOptionSetCode: DevKit.Form.Controls.ControlOptionSet;
-			devkit_UserLocalDateOnly: DevKit.Form.Controls.ControlDate;
-			devkit_WholeNumberNone: DevKit.Form.Controls.ControlInteger;
-			devkit_YesAndNo: DevKit.Form.Controls.ControlBoolean;
-			devkit_YesAndNoCalculated: DevKit.Form.Controls.ControlBoolean;
-			/** Owner Id */
-			OwnerId: DevKit.Form.Controls.ControlLookup;
+		interface ProcessProcess_1 {
+			abc_All: DevKit.Form.Controls.ControlString;
 		}
 		interface Process extends DevKit.Form.Controls.IControlProcess {
-			Process_WebApi_1: ProcessProcess_WebApi_1;
+			Process_1: ProcessProcess_1;
 		}
 		interface QuickForm {
 			QuickForm: DevKit.Form.Controls.ControlQuickView;

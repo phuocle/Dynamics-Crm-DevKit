@@ -653,12 +653,12 @@ declare namespace DevKit {
              * Returns a boolean value indicating whether the process is rendered
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/isrendered
              */
-            Rendered: boolean;
+            IsRendered: boolean;
             /**
              * Returns a collection of stages in the process
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/getstages
              */
-            Stages: Array<ProcessStage>;
+            Stages: DevKit.Form.Collections<ProcessStage>;
         }
         interface PageInputEntityList {
             /** Specify "entitylist" */
@@ -1251,7 +1251,7 @@ declare namespace DevKit {
                  * Returns a Process object representing the active process
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
                  */
-                ActiveProcess: DevKit.Core.ProcessStep;
+                ActiveProcess: DevKit.Core.ProcessProcess;
                 /**
                  * Sets a Process as the active process. If there is an active instance of the process, the entity record is loaded with the process instance ID. If there is no active instance of the process, a new process instance is created and the entity record is loaded with the process instance ID. If there are multiple instances of the current process, the record is loaded with the first instance of the active process as per the defaulting logic, that is the most recently used process instance per user
                  * @param processId The Id of the process to set as the active process
@@ -2548,36 +2548,36 @@ declare namespace DevKit {
              */
             ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest | DevKit.WebApi.ChangeSetRequest>, successCallback: (result: Array<DevKit.WebApi.ExecuteResponse>) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
         }
-        interface Collections {
+        interface Collections<T> {
             /**
              * Applies the action contained in a delegate function.
              * @param successCallback Delegate function with parameters for item and index.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/foreach
              */
-            forEach(successCallback: (item: any, index: number) => void): void;
+            forEach(successCallback: (item: T, index: number) => void): void;
             /**
              *  Get one or more objects from the collection depending on the arguments passed.
              *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
              */
-            get(): Array<any>;
+            get(): T;
             /**
              * Get one or more objects from the collection depending on the arguments passed.
              * @param item The object where the name matches the argument. The objects returned in the formContext.data.process namespace don’t contain names. So, using the string parameter for this method returns no objects.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
              */
-            get(item: string): any;
+            get(item: string): T;
             /**
              * Get one or more objects from the collection depending on the arguments passed.
              * @param index The object where the index matches the number.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
              */
-            get(index: number): any;
+            get(index: number): T;
             /**
              * Get one or more objects from the collection depending on the arguments passed.
              * @param successCallback Any objects that cause the delegate function to return true.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
              */
-            get(successCallback: (item: any, index: number) => void): Array<any>;
+            get(successCallback: (item: T, index: number) => void): T;
             /**
              * Gets the count of items in the collection.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/getlength

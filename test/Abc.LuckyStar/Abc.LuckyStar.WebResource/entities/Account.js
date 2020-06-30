@@ -7,30 +7,25 @@ var formAccount = (function () {
 
 
 	}
-	async function onSave(executionContext) {
-		executionContext.getEventArgs().preventDefault();
-		var form = new LuckyStar.FormAccount(executionContext);
-		var rowlength = form.Grid.Contacts.Rows.getLength();
-		var row0 = form.Grid.Contacts.Rows.get(0);
-		debugger;
-		var entityName = row0.EntityName;
-		form.Grid.Contacts.Rows.forEach(function (row, index) {
-			console.log(`Row${index}`);
-			debugger;
-			var name = row.EntityName;
-			var colLength = row.Columns.getLength();
-			var col0 = row.Columns.get("fullname");
-			row.Columns.forEach(function (column, index) {
-				if (column.Name === "firstname") {
-					console.log(`Col${index}`);
-					column.Disabled = true;
-				}
-			});
-			debugger;
-		});
-
-
-
+	function testGrid(executionContext) {
+		//var rowlength = form.Grid.Contacts.Rows.getLength();
+		//var row0 = form.Grid.Contacts.Rows.get(0);
+		//debugger;
+		//var entityName = row0.EntityName;
+		//form.Grid.Contacts.Rows.forEach(function (row, index) {
+		//	console.log(`Row${index}`);
+		//	debugger;
+		//	var name = row.EntityName;
+		//	var colLength = row.Columns.getLength();
+		//	var col0 = row.Columns.get("fullname");
+		//	row.Columns.forEach(function (column, index) {
+		//		if (column.Name === "firstname") {
+		//			console.log(`Col${index}`);
+		//			column.Disabled = true;
+		//		}
+		//	});
+		//	debugger;
+		//});
 		////form.Body.CreditLimit.SetNotification("aaa");
 		//var row0 = c.Rows.get(0);
 		////var data = row0.data;
@@ -94,13 +89,41 @@ var formAccount = (function () {
 		//column.Label
 		//column.Disabled
 		//debugger;
+    }
+
+	async function onSave(executionContext) {
+		executionContext.getEventArgs().preventDefault();
+		var form = new LuckyStar.FormAccount(executionContext);
+		var p = form.Process;
+		p.EnabledProcesses(function (processes) {
+			//{"bc14a370-45e2-4d7e-badf-6b42d8234763":"BPF Account 1","60418618-39c6-420e-89e1-2bcd8212d002":"BPF Account 3"}
+			//debugger;
+		});
+		p.ProcessInstances(function (processes) {
+			//debugger;
+		});
+		var a = p.ActiveProcess;
+		p.ActiveProcess.Stages.forEach(function (stage, index) {
+			//debugger;
+			stage.Steps.forEach(function (step, index) {
+				//debugger;
+			});
+		});
+		var s = p.SelectedStage;
+		var b = p.ActiveStage;
+		p.ActivePath.forEach(function (stage, index) {
+			debugger;
+		});
+		debugger;
+
+
 	}
 	function recordSelect(executionContext) {
-		var form = new LuckyStar.FormAccount(executionContext);
-		var row = form.Grid.Contacts.OnRecordSelect;
-		debugger;
-		var col = row.Columns.get("firstname");
-		col.Disabled = true;
+		//var form = new LuckyStar.FormAccount(executionContext);
+		//var row = form.Grid.Contacts.OnRecordSelect;
+		//debugger;
+		//var col = row.Columns.get("firstname");
+		//col.Disabled = true;
     }
 	return {
 		OnLoad: onLoad,

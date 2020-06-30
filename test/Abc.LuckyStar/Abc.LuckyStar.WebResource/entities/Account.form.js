@@ -85,6 +85,23 @@ var LuckyStar;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _BPF_Account_3 = {
+			AccountNumber: {},
+			Name: {}
+		}
+		devKit.LoadFields(formContext, _BPF_Account_3, "header_process_");
+		process.BPF_Account_3 = _BPF_Account_3;
+		var _BPF_Account_1 = {
+			AccountCategoryCode: {},
+			AccountNumber: {},
+			Name: {},
+			Telephone1: {},
+			Telephone2: {}
+		}
+		devKit.LoadFields(formContext, _BPF_Account_1, "header_process_");
+		process.BPF_Account_1 = _BPF_Account_1;
+		form.Process = process;
 		var quickForm = {
 			contactquickform: {}
 		};
