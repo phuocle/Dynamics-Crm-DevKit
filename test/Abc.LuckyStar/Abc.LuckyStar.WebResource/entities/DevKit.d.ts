@@ -1326,12 +1326,12 @@ declare namespace DevKit {
                 Visible: boolean;
                 /**
                  * Reflows the UI of the business process control
-                 * @param updateUI Specify true to update the UI of the process control; false otherwise
+                 * @param updateUi Specify true to update the UI of the process control; false otherwise
                  * @param parentStage Specify the ID of the parent stage in the GUID format
                  * @param nextStage Specify the ID of the next stage in the GUID format
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/reflow
                  */
-                Reflow(updateUI: boolean, parentStage: string, nextStage: string): void;
+                Reflow(updateUi: boolean, parentStage: string, nextStage: string): void;
                 /**
                  * Get/Set the current status of the process instance.
                  * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getstatus

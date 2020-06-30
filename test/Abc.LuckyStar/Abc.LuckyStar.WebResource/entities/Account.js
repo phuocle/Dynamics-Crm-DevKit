@@ -106,7 +106,9 @@ var formAccount = (function () {
 		p.ActiveProcess.Stages.forEach(function (stage, index) {
 			//debugger;
 			stage.Steps.forEach(function (step, index) {
-				//debugger;
+				debugger;
+				var a = step.Attribute;
+				debugger;
 			});
 		});
 		var s = p.SelectedStage;
