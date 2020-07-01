@@ -1,7 +1,8 @@
 //@ts-check
-var devKit = (function () {
+var devKit = (function () {    
     //@ts-check
     "use strict";
+    var Xrm = Xrm || {};
     var EMPTY_STRING = "";
     var EMPTY_GUID = "{00000000-0000-0000-0000-000000000000}";
     var EMPTY_REFERENCE = { entityType: EMPTY_STRING, id: EMPTY_GUID, name: EMPTY_STRING };
@@ -619,7 +620,6 @@ var devKit = (function () {
             if (has(tabObject, 'sections.get')) {
                 sectionObject = tabObject.sections.get(section);
             }
-
             Object.defineProperty(sections[section], "Name", {
                 get: function () {
                     if (has(sectionObject, 'getName')) {
@@ -668,7 +668,6 @@ var devKit = (function () {
             if (has(formContext, 'ui.tabs.get')) {
                 tabObject = formContext.ui.tabs.get(tab);
             }
-
             tabs[tab].AddTabStateChange = function (callback) {
                 if (has(tabObject, 'addTabStateChange')) {
                     tabObject.addTabStateChange(callback);
@@ -684,7 +683,6 @@ var devKit = (function () {
                     tabObject.removeTabStateChange(callback);
                 }
             };
-
             Object.defineProperty(tabs[tab], "Name", {
                 get: function () {
                     if (has(tabObject, 'getName')) {
@@ -739,8 +737,7 @@ var devKit = (function () {
                         tabObject.setVisible(value);
                     }
                 }
-            });
-            
+            });            
             for (var section in tabs[tab].Section) {
                 loadSection(formContext, tab, tabs[tab].Section, section);
             }
@@ -759,13 +756,11 @@ var devKit = (function () {
                     }
                 }
             }
-
             navigations[navigation].Focus = function () {
                 if (has(navigationItem, 'setFocus')) {
                     navigationItem.setFocus();
                 }
             };
-
             Object.defineProperty(navigations[navigation], "Id", {
                 get: function () {
                     if (has(navigationItem, 'getId')) {
@@ -799,8 +794,7 @@ var devKit = (function () {
                         navigationItem.setVisible(value);
                     }
                 }
-            });
-            
+            });            
         }
         for (var navigation in navigations) {
             loadNavigation(formContext, navigations, navigation);
@@ -808,73 +802,100 @@ var devKit = (function () {
     }
     function loadQuickForms(formContext, quickForms) {
         var loadQuickForm = function(formContext, quickForms, quickForm) {
-            if (!formContext || !formContext.ui || !formContext.ui.quickForms || !formContext.ui.quickForms.get) return;
-            var quickViewControl = formContext.ui.quickForms.get(quickForm);
-            quickForms[quickForm].Controls = function (arg) {
-                if (!quickViewControl) return [];
-                if (arg === undefined) return quickViewControl.getControl();
-                return quickViewControl.getControl(arg);
+            var quickViewControl = null;
+            if (has(formContext, 'ui.quickForms.get')) {
+                quickViewControl = formContext.ui.quickForms.get(quickForm);
+            }
+            quickForms[quickForm].Controls = function (arg) {                
+                if (has(quickViewControl, 'getControl')) {
+                    if (arg === undefined) {
+                        return quickViewControl.getControl();
+                    }
+                    else {
+                        return quickViewControl.getControl(arg);
+                    }
+                }
+                return [];
+            };
+            quickForms[quickForm].IsLoaded = function () {
+                if (has(quickViewControl, 'isLoaded')) {
+                    return quickViewControl.isLoaded();
+                }
+                return EMPTY_BOOL;
+            };
+            quickForms[quickForm].Refresh = function () {
+                if (has(quickViewControl, 'refresh')) {
+                    quickViewControl.refresh();
+                }
+            };
+            quickForms[quickForm].Focus = function () {
+                if (has(quickViewControl, 'setFocus')) {
+                    quickViewControl.setFocus();
+                }
             };
             Object.defineProperty(quickForms[quickForm], "ControlType", {
                 get: function () {
-                    if (!quickViewControl) return EMPTY_STRING;
-                    return quickViewControl.getControlType();
+                    if (has(quickViewControl, 'getControlType')) {
+                        return quickViewControl.getControlType();
+                    }
+                    return EMPTY_STRING;
                 }
             });
             Object.defineProperty(quickForms[quickForm], "Disabled", {
                 get: function () {
-                    if (!quickViewControl) return true;
-                    return quickViewControl.getDisabled();
+                    if (has(quickViewControl, 'getDisabled')) {
+                        return quickViewControl.getDisabled();
+                    }
+                    return EMPTY_BOOL;
                 },
                 set: function (value) {
-                    if (!quickViewControl) return;
-                    quickViewControl.setDisabled(value);
+                    if (has(quickViewControl, 'setDisabled')) {
+                        quickViewControl.setDisabled(value);
+                    }
                 }
             });
             Object.defineProperty(quickForms[quickForm], "Label", {
                 get: function () {
-                    if (!quickViewControl) return EMPTY_STRING;
-                    return quickViewControl.getLabel();
+                    if (has(quickViewControl, 'getLabel')) {
+                        return quickViewControl.getLabel();
+                    }
+                    return EMPTY_STRING;
                 },
                 set: function (value) {
-                    if (!quickViewControl) return;
-                    quickViewControl.setLabel(value);
+                    if (has(quickViewControl, 'setLabel')) {
+                        quickViewControl.setLabel(value);
+                    }
                 }
             });
             Object.defineProperty(quickForms[quickForm], "ControlName", {
                 get: function () {
-                    if (!quickViewControl) return EMPTY_STRING;
-                    return quickViewControl.getName();
+                    if (has(quickViewControl, 'getName')) {
+                        return quickViewControl.getName();
+                    }
+                    return EMPTY_STRING;
                 }
             });
             Object.defineProperty(quickForms[quickForm], "ControlParent", {
                 get: function () {
-                    if (!quickViewControl) return {};
-                    return quickViewControl.getParent();
+                    if (has(quickViewControl, 'getParent')) {
+                        return quickViewControl.getParent();
+                    }
+                    return null;
                 }
             });
             Object.defineProperty(quickForms[quickForm], "Visible", {
                 get: function () {
-                    if (!quickViewControl) return false;
-                    return quickViewControl.getVisible();
+                    if (has(quickViewControl, 'getVisible')) {
+                        return quickViewControl.getVisible();
+                    }
+                    return EMPTY_BOOL;
                 },
                 set: function (value) {
-                    if (!quickViewControl) return;
-                    quickViewControl.setVisible(value);
+                    if (has(quickViewControl, 'setVisible')) {
+                        quickViewControl.setVisible(value);
+                    }
                 }
-            });
-            quickForms[quickForm].IsLoaded = function () {
-                if (!quickViewControl) return false;
-                return quickViewControl.isLoaded();
-            };
-            quickForms[quickForm].Refresh = function () {
-                if (!quickViewControl) return;
-                quickViewControl.refresh();
-            };
-            quickForms[quickForm].Focus = function () {
-                if (!quickViewControl) return;
-                quickViewControl.setFocus();
-            };
+            });            
         }
         for (var quickForm in quickForms) {
             loadQuickForm(formContext, quickForms, quickForm);
@@ -1216,120 +1237,528 @@ var devKit = (function () {
     }
     function loadUtility(defaultWebResourceName) {
         var utility = {};
-        if (Xrm && Xrm.Utility) {
-            var getUtility = Xrm.Utility;
-            Object.defineProperty(utility, "LearningPathAttributeName", { get: function () { return getUtility.getLearningPathAttributeName(); } });
-            utility.CloseProgressIndicator = function () { getUtility.closeProgressIndicator(); };
-            utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) { getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback); };
-            utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) { getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback); };
-            utility.ResourceString = function (webResourceName, key) { return getUtility.getResourceString(webResourceName, key); };
-            utility.Resource = function (key) { if (defaultWebResourceName !== undefined) return getUtility.getResourceString(defaultWebResourceName, key); return EMPTY_STRING; };
-            utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) { getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback); };
-            utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) { getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback); };
-            utility.RefreshParentGrid = function (lookupOptions) { getUtility.refreshParentGrid(lookupOptions); };
-            utility.ShowProgressIndicator = function (message) { getUtility.showProgressIndicator(message); };
-            Object.defineProperty(utility, "PageContext", { get: function () { return getUtility.getPageContext(); } });
+
+        var getUtility = null;
+        if (has(Xrm, 'Utility')) {
+            getUtility = Xrm.Utility;
         }
-        if (Xrm && Xrm.Utility && Xrm.Utility.getGlobalContext) {
-            var getGlobalContext = Xrm.Utility.getGlobalContext();
-            Object.defineProperty(utility, "Client", {
-                get: function () {
-                    var Client = {};
-                    if (getGlobalContext.client) {
-                        var client = getGlobalContext.client;
-                        Object.defineProperty(Client, "ClientName", { get: function () { return client.getClient(); } });
-                        Object.defineProperty(Client, "ClientState", { get: function () { return client.getClientState(); } });
-                        Object.defineProperty(Client, "FormFactor", { get: function () { return client.getFormFactor(); } });
-                        Object.defineProperty(Client, "IsOffline", { get: function () { return client.isOffline(); } });
-                    }
-                    return Client;
+        utility.CloseProgressIndicator = function () {
+            if (has(getUtility, 'closeProgressIndicator')) {
+                getUtility.closeProgressIndicator();
+            }
+        };
+        utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) {
+            if (has(getUtility, 'getAllowedStatusTransitions')) {
+                getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback);
+            }
+        };
+        utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) {
+            if (has(getUtility, 'getEntityMetadata')) {
+                getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback);
+            }
+        };
+        utility.ResourceString = function (webResourceName, key) {
+            if (has(getUtility, 'getResourceString')) {
+                return getUtility.getResourceString(webResourceName, key);
+            }
+        };
+        utility.Resource = function (key) {
+            if (!isNullOrUndefined(defaultWebResourceName)) {
+                if (has(getUtility, 'getResourceString')) {
+                    return getUtility.getResourceString(defaultWebResourceName, key);
                 }
-            });
-            Object.defineProperty(utility, "OrganizationSettings", {
-                get: function () {
-                    var OrganizationSettings = {};
-                    if (getGlobalContext.organizationSettings) {
-                        var organizationSettings = getGlobalContext.organizationSettings;
-                        Object.defineProperty(OrganizationSettings, "Attributes", { get: function () { return organizationSettings.attributes; } });//NOT-TEST
-                        Object.defineProperty(OrganizationSettings, "BaseCurrencyId", { get: function () { return organizationSettings.baseCurrencyId; } });
-                        Object.defineProperty(OrganizationSettings, "DefaultCountryCode", { get: function () { return organizationSettings.defaultCountryCode; } });
-                        Object.defineProperty(OrganizationSettings, "LanguageId", { get: function () { return organizationSettings.languageId; } });
-                        Object.defineProperty(OrganizationSettings, "OrganizationId", { get: function () { return organizationSettings.organizationId; } });
-                        Object.defineProperty(OrganizationSettings, "UniqueName", { get: function () { return organizationSettings.uniqueName; } });
-                        Object.defineProperty(OrganizationSettings, "UseSkypeProtocol", { get: function () { return organizationSettings.useSkypeProtocol; } });
-                        Object.defineProperty(OrganizationSettings, "IsAutoSaveEnabled", { get: function () { return organizationSettings.isAutoSaveEnabled; } });
-                    }
-                    return OrganizationSettings;
+            }
+            return EMPTY_STRING;
+        };
+        utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) {
+            if (has(getUtility, 'invokeProcessAction')) {
+                getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback);
+            }
+        };
+        utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) {
+            if (has(getUtility, 'lookupObjects')) {
+                getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback);
+            }
+        };
+        utility.RefreshParentGrid = function (lookupOptions) {
+            if (has(getUtility, 'refreshParentGrid')) {
+                getUtility.refreshParentGrid(lookupOptions);
+            }
+        };
+        utility.ShowProgressIndicator = function (message) {
+            if (has(getUtility, 'showProgressIndicator')) {
+                getUtility.showProgressIndicator(message);
+            }
+        };
+        Object.defineProperty(utility, "LearningPathAttributeName", {
+            get: function () {
+                if (has(getUtility, 'getLearningPathAttributeName')) {
+                    return getUtility.getLearningPathAttributeName();
                 }
-            });
-            Object.defineProperty(utility, "UserSettings", {
-                get: function () {
-                    var UserSettings = {};
-                    if (getGlobalContext.userSettings) {
-                        var userSettings = getGlobalContext.userSettings;
-                        Object.defineProperty(UserSettings, "DateFormattingInfo", { get: function () { return userSettings.dateFormattingInfo; } });
-                        Object.defineProperty(UserSettings, "DefaultDashboardId", { get: function () { return userSettings.defaultDashboardId; } });
-                        Object.defineProperty(UserSettings, "IsGuidedHelpEnabled", { get: function () { return userSettings.isGuidedHelpEnabled; } });
-                        Object.defineProperty(UserSettings, "IsHighContrastEnabled", { get: function () { return userSettings.isHighContrastEnabled; } });
-                        Object.defineProperty(UserSettings, "IsRTL", { get: function () { return userSettings.isRTL; } });
-                        Object.defineProperty(UserSettings, "LanguageId", { get: function () { return userSettings.languageId; } });
-                        Object.defineProperty(UserSettings, "Roles", { get: function () { debugger; return userSettings.roles; } });
-                        Object.defineProperty(UserSettings, "SecurityRolePrivileges", { get: function () { return userSettings.securityRolePrivileges; } });
-                        Object.defineProperty(UserSettings, "TransactionCurrency", { get: function () { return userSettings.transactionCurrency; } });
-                        Object.defineProperty(UserSettings, "UserId", { get: function () { return userSettings.userId; } });
-                        Object.defineProperty(UserSettings, "UserName", { get: function () { return userSettings.userName; } });
-                        Object.defineProperty(UserSettings, "TimeZoneOffsetMinutes", { get: function () { return userSettings.getTimeZoneOffsetMinutes(); } });
-                    }
-                    return UserSettings;
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(utility, "PageContext", {
+            get: function () {
+                if (has(getUtility, 'getPageContext')) {
+                    return getUtility.getPageContext();
                 }
-            });
-            utility.AdvancedConfigSetting = function (setting) { return getGlobalContext.getAdvancedConfigSetting(setting); };
-            Object.defineProperty(utility, "ClientUrl", { get: function () { return getGlobalContext.getClientUrl(); } });
-            utility.CurrentAppName = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppName().then(successCallback, errorCallback); };
-            utility.CurrentAppProperties = function (successCallback, errorCallback) { getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback); };
-            Object.defineProperty(utility, "CurrentAppUrl", { get: function () { return getGlobalContext.getCurrentAppUrl(); } });
-            Object.defineProperty(utility, "Version", { get: function () { return getGlobalContext.getVersion(); } });
-            utility.WebResourceUrl = function (webResourceName) { return getGlobalContext.getWebResourceUrl(webResourceName); };
-            Object.defineProperty(utility, "IsOnPremises", { get: function () { return getGlobalContext.isOnPremises(); } });
-            utility.PrependOrgName = function (sPath) { return getGlobalContext.prependOrgName(sPath); };
+                return null;
+            }
+        });
+
+        var getGlobalContext = null;
+        if (has(Xrm, 'Utility.getGlobalContext')) {
+            getGlobalContext = Xrm.Utility.getGlobalContext();
+        }   
+        utility.AdvancedConfigSetting = function (setting) {
+            if (has(getGlobalContext, 'getAdvancedConfigSetting')) {
+                return getGlobalContext.getAdvancedConfigSetting(setting);
+            }
+            return EMPTY_NUMBER;
+        };
+        utility.CurrentAppName = function (successCallback, errorCallback) {
+            if (has(getGlobalContext, 'getCurrentAppName')) {
+                getGlobalContext.getCurrentAppName().then(successCallback, errorCallback);
+            }            
+        };
+        utility.CurrentAppProperties = function (successCallback, errorCallback) {
+            if (has(getGlobalContext, 'getCurrentAppProperties')) {
+                getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback);
+            }
+        };
+        utility.WebResourceUrl = function (webResourceName) {
+            if (has(getGlobalContext, 'getWebResourceUrl')) {
+                return getGlobalContext.getWebResourceUrl(webResourceName);
+            }
+            return EMPTY_STRING;
+        };
+        utility.PrependOrgName = function (sPath) {
+            if (has(getGlobalContext, 'prependOrgName')) {
+                return getGlobalContext.prependOrgName(sPath);
+            }
+            return EMPTY_STRING;
+        };
+        Object.defineProperty(utility, "Client", {
+            get: function () {
+                var obj = {};
+                var client = null;
+                if (has(getGlobalContext, 'client')) {
+                    client = getGlobalContext.client;
+                }                
+                Object.defineProperty(obj, "ClientName", {
+                    get: function () {
+                        if (has(client, 'getClient')) {
+                            return client.getClient();
+                        }
+                        return "Web";
+                    }
+                });
+                Object.defineProperty(obj, "ClientState", {
+                    get: function () {
+                        if (has(client, 'getClientState')) {
+                            return client.getClientState();
+                        }
+                        return "Online";
+                    }
+                });
+                Object.defineProperty(obj, "FormFactor", {
+                    get: function () {
+                        if (has(client, 'getFormFactor')) {
+                            return client.getFormFactor();
+                        }
+                        return EMPTY_NUMBER;
+                    }
+                });
+                Object.defineProperty(obj, "IsOffline", {
+                    get: function () {
+                        if (has(client, 'isOffline')) {
+                            return client.isOffline();
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });                
+                return obj;
+            }
+        });
+        Object.defineProperty(utility, "OrganizationSettings", {
+            get: function () {
+                var obj = {};
+                var organizationSettings = null;
+                if (has(getGlobalContext, 'organizationSettings')) {
+                    organizationSettings = getGlobalContext.organizationSettings;
+                }                
+                Object.defineProperty(obj, "Attributes", {
+                    get: function () {
+                        if (has(organizationSettings, 'attributes')) {
+                            return organizationSettings.attributes;
+                        }
+                        return {};
+                    }
+                });
+                Object.defineProperty(obj, "BaseCurrencyId", {
+                    get: function () {
+                        if (has(organizationSettings, 'baseCurrencyId')) {
+                            return organizationSettings.baseCurrencyId;
+                        }
+                        return EMPTY_GUID;
+                    }
+                });
+                Object.defineProperty(obj, "BaseCurrency", {
+                    get: function () {
+                        if (has(organizationSettings, 'baseCurrency')) {
+                            return organizationSettings.baseCurrency;
+                        }
+                        return EMPTY_REFERENCE;
+                    }
+                });
+
+                Object.defineProperty(obj, "DefaultCountryCode", {
+                    get: function () {
+                        if (has(organizationSettings, 'defaultCountryCode')) {
+                            return organizationSettings.defaultCountryCode;
+                        }
+                        return null;
+                    }
+                });
+                Object.defineProperty(obj, "IsAutoSaveEnabled", {
+                    get: function () {
+                        if (has(organizationSettings, 'isAutoSaveEnabled')) {
+                            return organizationSettings.isAutoSaveEnabled;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, "LanguageId", {
+                    get: function () {
+                        if (has(organizationSettings, 'languageId')) {
+                            return organizationSettings.languageId;
+                        }
+                        return 1033;
+                    }
+                });
+                Object.defineProperty(obj, "OrganizationId", {
+                    get: function () {
+                        if (has(organizationSettings, 'organizationId')) {
+                            return organizationSettings.organizationId;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, "UniqueName", {
+                    get: function () {
+                        if (has(organizationSettings, 'uniqueName')) {
+                            return organizationSettings.uniqueName;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, "UseSkypeProtocol", {
+                    get: function () {
+                        if (has(organizationSettings, 'useSkypeProtocol')) {
+                            return organizationSettings.useSkypeProtocol;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });                
+                return obj;
+            }
+        });
+        Object.defineProperty(utility, "UserSettings", {
+            get: function () {
+                var obj = {};
+                var userSettings = null;
+                if (has(getGlobalContext, 'userSettings')) {
+                    userSettings = getGlobalContext.userSettings;
+                }
+                Object.defineProperty(obj, "DateFormattingInfo", {
+                    get: function () {
+                        if (has(userSettings, 'dateFormattingInfo')) {
+                            return userSettings.dateFormattingInfo;
+                        }
+                        return {};
+                    }
+                });
+                Object.defineProperty(obj, "DefaultDashboardId", {
+                    get: function () {
+                        if (has(userSettings, 'defaultDashboardId')) {
+                            return userSettings.defaultDashboardId;
+                        }
+                        return EMPTY_GUID;
+                    }
+                });
+                Object.defineProperty(obj, "IsGuidedHelpEnabled", {
+                    get: function () {
+                        if (has(userSettings, 'isGuidedHelpEnabled')) {
+                            return userSettings.isGuidedHelpEnabled;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, "IsHighContrastEnabled", {
+                    get: function () {
+                        if (has(userSettings, 'isHighContrastEnabled')) {
+                            return userSettings.isHighContrastEnabled;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, "IsRTL", {
+                    get: function () {
+                        if (has(userSettings, 'isRTL')) {
+                            return userSettings.isRTL;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, "LanguageId", {
+                    get: function () {
+                        if (has(userSettings, 'languageId')) {
+                            return userSettings.languageId;
+                        }
+                        return 1033;
+                    }
+                });
+                Object.defineProperty(obj, "Roles", {
+                    get: function () {
+                        if (has(userSettings, 'roles')) {
+                            return userSettings.roles;
+                        }
+                        return [];
+                    }
+                });
+                Object.defineProperty(obj, "SecurityRolePrivileges", {
+                    get: function () {
+                        if (has(userSettings, 'securityRolePrivileges')) {
+                            return userSettings.securityRolePrivileges;
+                        }
+                        return [];
+                    }
+                });
+                Object.defineProperty(obj, "SecurityRoles", {
+                    get: function () {
+                        if (has(userSettings, 'securityRoles')) {
+                            return userSettings.securityRoles;
+                        }
+                        return [];
+                    }
+                });
+                Object.defineProperty(obj, "TransactionCurrency", {
+                    get: function () {
+                        if (has(userSettings, 'transactionCurrency')) {
+                            return userSettings.transactionCurrency;
+                        }
+                        return EMPTY_REFERENCE;
+                    }
+                });
+                Object.defineProperty(obj, "TransactionCurrencyId", {
+                    get: function () {
+                        if (has(userSettings, 'transactionCurrencyId')) {
+                            return userSettings.transactionCurrencyId;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, "UserId", {
+                    get: function () {
+                        if (has(userSettings, 'userId')) {
+                            return userSettings.userId;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, "UserName", {
+                    get: function () {
+                        if (has(userSettings, 'userName')) {
+                            return userSettings.userName;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, "TimeZoneOffsetMinutes", {
+                    get: function () {
+                        if (has(userSettings, 'getTimeZoneOffsetMinutes')) {
+                            return userSettings.getTimeZoneOffsetMinutes();
+                        }
+                        return EMPTY_NUMBER;
+                    }
+                });
+                return obj;
+            }
+        });        
+        Object.defineProperty(utility, "ClientUrl", {
+            get: function () {
+                if (has(getGlobalContext, 'getClientUrl')) {
+                    return getGlobalContext.getClientUrl();
+                }
+                return EMPTY_STRING;
+            }
+        });        
+        Object.defineProperty(utility, "CurrentAppUrl", {
+            get: function () {
+                if (has(getGlobalContext, 'getCurrentAppUrl')) {
+                    return getGlobalContext.getCurrentAppUrl();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(utility, "Version", {
+            get: function () {
+                if (has(getGlobalContext, 'getVersion')) {
+                    return getGlobalContext.getVersion();
+                }
+                return EMPTY_STRING;
+            }
+        });        
+        Object.defineProperty(utility, "IsOnPremises", {
+            get: function () {
+                if (has(getGlobalContext, 'isOnPremises')) {
+                    return getGlobalContext.isOnPremises();
+                }
+                return EMPTY_BOOL;
+            }
+        });        
+
+        var getNavigation = null;
+        if (has(Xrm, 'Navigation')) {
+            getNavigation = Xrm.Navigation;
         }
-        if (Xrm && Xrm.Navigation) {
-            var getNavigation = Xrm.Navigation;
-            utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) { getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback); };
-            utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) { getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback); };
-            utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) { getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback); };
-            utility.OpenFile = function (file, openFileOptions) { getNavigation.openFile(file, openFileOptions); };
-            utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) { getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback); };
-            utility.OpenUrl = function (url, openUrlOptions) { getNavigation.openUrl(url, openUrlOptions); };
-            utility.OpenWebResource = function (webResourceName, windowOptions, data) { getNavigation.openWebResource(webResourceName, windowOptions, data); };
-            utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) { getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback); };
+        utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) {
+            if (has(getNavigation, 'openAlertDialog')) {
+                getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback);
+            }
+        };
+        utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) {
+            if (has(getNavigation, 'openConfirmDialog')) {
+                getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback);
+            }
+        };
+        utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) {
+            if (has(getNavigation, 'openErrorDialog')) {
+                getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback);
+            }
+        };
+        utility.OpenFile = function (file, openFileOptions) {
+            if (has(getNavigation, 'openFile')) {
+                getNavigation.openFile(file, openFileOptions);
+            }
+        };
+        utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) {
+            if (has(getNavigation, 'openForm')) {
+                getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback);
+            }
+        };
+        utility.OpenUrl = function (url, openUrlOptions) {
+            if (has(getNavigation, 'openUrl')) {
+                getNavigation.openUrl(url, openUrlOptions);
+            }
+        };
+        utility.OpenWebResource = function (webResourceName, windowOptions, data) {
+            if (has(getNavigation, 'openWebResource')) {
+                getNavigation.openWebResource(webResourceName, windowOptions, data);
+            }
+        };
+        utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) {
+            if (has(getNavigation, 'navigateTo')) {
+                getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback);
+            }
+        };
+
+        var getPanel = null;
+        if (has(Xrm, 'Panel')) {
+            getPanel = Xrm.Panel;
         }
-        if (Xrm && Xrm.Panel) {
-            var getPanel = Xrm.Panel;
-            utility.LoadPanel = function (url, title) { getPanel.loadPanel(url, title); };
+        utility.LoadPanel = function (url, title) {
+            if (has(getPanel, 'loadPanel')) {
+                getPanel.loadPanel(url, title);
+            }
+        };
+
+        var getEncoding = null;
+        if (has(Xrm, 'Encoding')) {
+            getEncoding = Xrm.Encoding;
         }
-        if (Xrm && Xrm.Encoding) {
-            var getEncoding = Xrm.Encoding;
-            utility.XmlAttributeEncode = function (arg) { return getEncoding.xmlAttributeEncode(arg); };
-            utility.XmlEncode = function (arg) { return getEncoding.xmlEncode(arg); };
-            utility.HtmlAttributeEncode = function (arg) { return getEncoding.htmlAttributeEncode(arg); };
-            utility.HtmlDecode = function (arg) { return getEncoding.htmlDecode(arg); };
-            utility.HtmlEncode = function (arg) { return getEncoding.htmlEncode(arg); };
+        utility.XmlAttributeEncode = function (arg) {
+            if (has(getEncoding, 'xmlAttributeEncode')) {
+                return getEncoding.xmlAttributeEncode(arg);
+            }
+            return arg;
+        };
+        utility.XmlEncode = function (arg) {
+            if (has(getEncoding, 'xmlEncode')) {
+                return getEncoding.xmlEncode(arg);
+            }
+            return arg;
+        };
+        utility.HtmlAttributeEncode = function (arg) {
+            if (has(getEncoding, 'htmlAttributeEncode')) {
+                return getEncoding.htmlAttributeEncode(arg);
+            }
+            return arg;
+        };
+        utility.HtmlDecode = function (arg) {
+            if (has(getEncoding, 'htmlDecode')) {
+                return getEncoding.htmlDecode(arg);
+            }
+            return arg;
+        };
+        utility.HtmlEncode = function (arg) {
+            if (has(getEncoding, 'htmlEncode')) {
+                return getEncoding.htmlEncode(arg);
+            }
+            return arg;
+        };
+
+        var getDevice = null;
+        if (has(Xrm, 'Device')) {
+            getDevice = Xrm.Device;
         }
-        if (Xrm && Xrm.Device) {
-            var getDevice = Xrm.Device;
-            utility.CaptureAudio = function (successCallback, errorCallback) { getDevice.captureAudio().then(successCallback, errorCallback); };
-            utility.CaptureImage = function (imageOptions, successCallback, errorCallback) { getDevice.captureImage(imageOptions).then(successCallback, errorCallback); };
-            utility.CaptureVideo = function (successCallback, errorCallback) { getDevice.captureVideo().then(successCallback, errorCallback); };
-            utility.BarcodeValue = function (successCallback, errorCallback) { getDevice.getBarcodeValue().then(successCallback, errorCallback); };
-            utility.CurrentPosition = function (successCallback, errorCallback) { getDevice.getCurrentPosition().then(successCallback, errorCallback); };
-            utility.PickFile = function (pickFileOptions, successCallback, errorCallback) { getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback); };
+        utility.CaptureAudio = function (successCallback, errorCallback) {
+            if (has(getDevice, 'captureAudio')) {
+                getDevice.captureAudio().then(successCallback, errorCallback);
+            }
+        };
+        utility.CaptureImage = function (imageOptions, successCallback, errorCallback) {
+            if (has(getDevice, 'captureImage')) {
+                getDevice.captureImage(imageOptions).then(successCallback, errorCallback);
+            }
+        };
+        utility.CaptureVideo = function (successCallback, errorCallback) {
+            if (has(getDevice, 'captureVideo')) {
+                getDevice.captureVideo().then(successCallback, errorCallback);
+            }
+        };
+        utility.BarcodeValue = function (successCallback, errorCallback) {
+            if (has(getDevice, 'getBarcodeValue')) {
+                getDevice.getBarcodeValue().then(successCallback, errorCallback);
+            }
+        };
+        utility.CurrentPosition = function (successCallback, errorCallback) {
+            if (has(getDevice, 'getCurrentPosition')) {
+                getDevice.getCurrentPosition().then(successCallback, errorCallback);
+            }
+        };
+        utility.PickFile = function (pickFileOptions, successCallback, errorCallback) {
+            if (has(getDevice, 'pickFile')) {
+                getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback);
+            }
+        };
+
+        var getApp = null;
+        if (has(Xrm, 'App')) {
+            getApp = Xrm.App;
         }
-        if (Xrm && Xrm.App) {
-            var getApp = Xrm.App;
-            utility.AddGlobalNotification = function (notification, successCallback, errorCallback) { getApp.addGlobalNotification(notification).then(successCallback, errorCallback); }
-            utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) { getApp.clearGlobalNotification(uniqueId).then(successCallback, errorCallback); }
+        utility.AddGlobalNotification = function (notification, successCallback, errorCallback) {
+            if (has(getApp, 'addGlobalNotification')) {
+                getApp.addGlobalNotification(notification).then(successCallback, errorCallback);
+            }
         }
+        utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) {
+            if (has(getApp, 'clearGlobalNotification')) {
+                getApp.clearGlobalNotification(uniqueId).then(successCallback, errorCallback);
+            }
+        }
+
         return utility;
     }
     return {

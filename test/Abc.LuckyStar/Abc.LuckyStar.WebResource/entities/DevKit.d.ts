@@ -2533,10 +2533,15 @@ declare namespace DevKit {
             */
             Attributes: Array<DevKit.Core.KeyValueObject>;
             /**
-            * Returns the ID of the base currency for the current organization
-            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
+            * [Deprecated] Returns the ID of the base currency for the current organization
+            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid            *
             */
             BaseCurrencyId: string;
+            /**
+            * Returns a lookup object containing the ID, name, and entity type of the base currency for the current organization. This method is supported only on the Unified Interface.
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrency
+            */
+            BaseCurrency: DevKit.Core.EntityReference;
             /**
             * Returns the default country/region code for phone numbers for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#defaultcountrycode
@@ -2603,17 +2608,27 @@ declare namespace DevKit {
              * Returns a collection of lookup objects containing the GUID and display name of each of the security role or teams that the user is associated with.
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#roles
             */
-            Roles: DevKit.Form.Collections;
+            Roles: DevKit.Core.Collections<DevKit.Core.EntityReference>;
             /**
             * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
             */
             SecurityRolePrivileges: Array<string>;
             /**
+            * [Deprecated] Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
+            */
+            SecurityRoles: Array<string>;
+            /**
             * Returns a lookup object containing the ID, display name, and entity type of the transaction currency for the current user.
-            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
             */
             TransactionCurrency: DevKit.Core.EntityReference;
+            /**
+            * [Deprecated] Returns the transaction currency ID for the current user.
+            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
+            */
+            TransactionCurrencyId: string;
             /**
             * Returns the GUID of the SystemUser.Id value for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid

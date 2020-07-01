@@ -118,6 +118,7 @@ var formAccount = (function () {
 		});
 		debugger;
 
+		form.Utility.OrganizationSettings.BaseCurrencyId
 
 	}
 	function recordSelect(executionContext) {
