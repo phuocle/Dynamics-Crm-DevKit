@@ -581,16 +581,15 @@ declare namespace DevKit {
              */
             Status: "active" | "inactive";
             /**
-             * Returns a navigation behavior object for a stage that can be used to define whether the Create button is available for users to create other entity record in a cross-entity business process flow navigation scenario. This method is available only for Unified Interface
-             * @param callback The function to execute
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getnavigationbehavior
+             * Returns the status of the stage
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/stage/getnavigationbehavior
              */
-            NavigationBehavior(callback: () => void): void;
+            AllowCreateNew(callback: () => boolean): void;
             /**
-             * Returns a collection of steps in the stage
+             * Returns a navigation behavior object for a stage that can be used to define whether the Create button is available for users to create other entity record in a cross-entity business process flow navigation scenario.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getsteps
              */
-            Steps: Array<ProcessStep>;
+            Steps: DevKit.Core.Collections<ProcessStep>;
         }
         interface ProcessStep {
             /**
@@ -621,22 +620,16 @@ declare namespace DevKit {
              */
             SetProgress(stepProgress: OptionSet.ProcessProgress, message?: string): void;
         }
-        interface ProcessInstance {
-            /**
-             * Returns the unique identifier of the process instance
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/instance/getinstanceid
-             */
-            InstanceId: string;
-            /**
-             * Returns the name of the process instance
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/instance/getinstancename
-             */
-            InstanceName: string;
-            /**
-             * Returns the current status of the process instance
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/instance/getstatus
-             */
-            Status: OptionSet.ProcessStatus;
+        interface ProcessInstance extends ProcessEnabled {
+            readonly CreatedOn: string;
+            readonly CreatedOnDate: Date;
+            readonly InstanceId: string;
+            readonly InstanceName: string;
+            readonly Status: OptionSet.ProcessStatus;
+        }
+        interface ProcessEnabled {
+            readonly ProcessId: string;
+            readonly ProcessName: string;
         }
         interface ProcessProcess {
             /**
@@ -653,12 +646,12 @@ declare namespace DevKit {
              * Returns a boolean value indicating whether the process is rendered
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/isrendered
              */
-            IsRendered: boolean;
+            Rendered: boolean;
             /**
              * Returns a collection of stages in the process
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/getstages
              */
-            Stages: DevKit.Form.Collections<ProcessStage>;
+            Stages: DevKit.Core.Collections<ProcessStage>;
         }
         interface PageInputEntityList {
             /** Specify "entitylist" */
@@ -766,6 +759,14 @@ declare namespace DevKit {
             CurrentView: DevKit.Core.EntityReference;
             /** Returns a boolean value to indicate whether the view selector is visible */
             readonly Visible: boolean;
+        }
+        interface Collections<T> {
+            forEach(successCallback: (item: T, index: number) => void): void;
+            get(): Array<T>;
+            get(item: string): T;
+            get(index: number): T;
+            get(successCallback: (item: T, index: number) => void): Array<T>;
+            getLength(): number;
         }
     }
     namespace WebApi {
@@ -1195,6 +1196,99 @@ declare namespace DevKit {
             }
             interface IControlProcess {
                 /**
+                 * Adds a function as an event handler for the OnPreProcessStatusChange event so that it will be called before the business process flow status changes.
+                 * @param callback The function to be executed when the business process flow status changes. The function will be added to the start of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonpreprocessstatuschange
+                 */
+                AddOnPreProcessStatusChange(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes an event handler from the OnPreProcessStatusChange event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonpreprocessstatuschange
+                 */
+                RemoveOnPreProcessStatusChange(callback: () => void): void;
+                /**
+                 * Adds a function as an event handler for the OnProcessStatusChange event so that it will be called when the business process flow status changes.
+                 * @param callback The function to be executed when the business process flow status changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonprocessstatuschange
+                 */
+                AddOnProcessStatusChange(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes an event handler from the OnProcessStatusChange event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
+                 */
+                RemoveOnProcessStatusChange(callback: () => void): void;
+                /**
+                 * Adds a function as an event handler for the OnStageChange event so that it will be called when the business process flow stage changes.
+                 * @param callback TThe function to be executed when the business process flow stage changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonstagechange
+                 */
+                AddOnStageChange(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes an event handler from the OnStageChange event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
+                 */
+                RemoveOnStageChange(callback: () => void): void;
+                /**
+                 * Adds a function as an event handler for the OnStageSelected event so that it will be called when a business process flow stage is selected.
+                 * @param callback The function to be executed when the business process flow stage is selected. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonstageselected
+                 */
+                AddOnStageSelected(callback: (executionContext: any) => void): void;
+                /**
+                 * Removes an event handler from the OnStageSelected event.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
+                 */
+                RemoveOnStageSelected(callback: () => void): void;
+                /**
+                 * Asynchronously retrieves the business process flows enabled for an entity that the current user can switch to.
+                 * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user’s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getenabledprocesses
+                 */
+                EnabledProcesses(callback: (processes: Array<DevKit.Core.ProcessEnabled>) => void): void;
+                /**
+                 * Returns all the process instances for the entity record that the calling user has access to.
+                 * @param callback The callback function is passed an object with the following attributes and their corresponding values as the key:value pair. All returned values are of string type except for CreatedOnDate
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getprocessinstances
+                 */
+                ProcessInstances(callback: (processes: Array<DevKit.Core.ProcessInstance>) => void): void;
+                /**
+                 * Returns a Process object representing the active process.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
+                 */
+                ActiveProcess: DevKit.Core.ProcessProcess;
+                /**
+                 * Gets the currently selected stage
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/getselectedstage
+                 */
+                SelectedStage: DevKit.Core.ProcessStage;
+                /**
+                 * Returns representing the active stage
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/getactivestage
+                 */
+                ActiveStage: DevKit.Core.ProcessStage;
+                /**
+                 * Sets a completed stage as the active stage
+                 * @param stageId The ID of the completed stage for the entity to make the active stage
+                 * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/setactivestage
+                 */
+                SetActiveStage(stageId: string, callback: (result: "success" | "invalid" | "unreachable" | "dirtyForm") => void): void;
+                /**
+                 * Returns the unique identifier of the process instance. Value represents the string representation of a GUID value.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstanceid
+                 */
+                readonly InstanceId: string;
+                /**
+                 * Returns the name of the process instance.
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstancename
+                 */
+                readonly InstanceName: string;
+                /**
+                 * Gets a collection of stages currently in the active path with methods to interact with the stages displayed in the business process flow control. The active path represents stages currently rendered in the process control based on the branching rules and current data in the record
+                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activepath/getactivepath
+                 */
+                ActivePath: DevKit.Core.Collections<DevKit.Core.ProcessStage>;
+                /**
                  * Progresses to the next stage. You can also move to a next stage in a different entity
                  * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/navigation/movenext
@@ -1207,40 +1301,6 @@ declare namespace DevKit {
                  */
                 MovePrevious(callback: (result: "success" | "crossEntity" | "beginning" | "invalid" | "dirtyForm") => void): void;
                 /**
-                 * Gets a collection of stages currently in the active path with methods to interact with the stages displayed in the business process flow control. The active path represents stages currently rendered in the process control based on the branching rules and current data in the record
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activepath/getactivepath
-                 */
-                ActivePath: DevKit.Form.Collections;
-                /**
-                 * Asynchronously retrieves the business process flows enabled for an entity that the current user can switch to
-                 * @param callback The callback function must accept a parameter that contains an object with dictionary properties where the name of the property is the Id of the business process flow and the value of the property is the name of the business process flow. The enabled processes are filtered according to the user’s privileges. The list of enabled processes is the same ones a user can see in the UI if they want to change the process manually
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getenabledprocesses
-                 */
-                EnabledProcesses(callback: (result: Array<any>) => void): void;
-                /**
-                 * Returns representing the active stage
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activestage/getactivestage
-                 */
-                ActiveStage: DevKit.Core.ProcessStage;
-                /**
-                 * Gets the currently selected stage
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getselectedstage
-                 */
-                SelectedStage: DevKit.Core.ProcessStage;
-                /**
-                 * Sets a completed stage as the active stage
-                 * @param stageId The ID of the completed stage for the entity to make the active stage
-                 * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activestage/setactivestage
-                 */
-                SetActiveStage(stageId: string, callback: (result: "success" | "invalid" | "unreachable" | "dirtyForm") => void): void;
-                /**
-                 * Returns all the process instances for the entity record that the calling user has access to.
-                 * @param callback The callback function is passed an object with the following attributes and their corresponding values as the key:value pair. All returned values are of string type except for CreatedOnDate
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/getprocessinstances
-                 */
-                ProcessInstances(callback: (result: Array<DevKit.Core.ProcessInstance>) => void): void;
-                /**
                  * Sets a process instance as the active instance
                  * @param processInstanceId The Id of the process instance to set as the active instance
                  * @param callback A function to call when the operation is complete
@@ -1248,53 +1308,12 @@ declare namespace DevKit {
                  */
                 SetActiveProcessInstance(processInstanceId: string, callback: (result: "success" | "invalid") => void): void;
                 /**
-                 * Returns a Process object representing the active process
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activeprocess/getactiveprocess
-                 */
-                ActiveProcess: DevKit.Core.ProcessProcess;
-                /**
                  * Sets a Process as the active process. If there is an active instance of the process, the entity record is loaded with the process instance ID. If there is no active instance of the process, a new process instance is created and the entity record is loaded with the process instance ID. If there are multiple instances of the current process, the record is loaded with the first instance of the active process as per the defaulting logic, that is the most recently used process instance per user
                  * @param processId The Id of the process to set as the active process
                  * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate whether the operation succeeded
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/activeprocess/setactiveprocess
                  */
                 SetActiveProcess(processId: string, callback: (result: "success" | "invalid") => void): void;
-                /**
-                 * Adds a function as an event handler for the OnProcessStatusChange event so that it will be called when the business process flow status changes
-                 * @param callback The function to be executed when the business process flow status changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonprocessstatuschange
-                 */
-                AddOnProcessStatusChange(callback: (executionContext: any) => void): void;
-                /**
-                 * Removes an event handler from the OnProcessStatusChange event
-                 * @param callback The function to be removed from the OnProcessStatusChange event
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonprocessstatuschange
-                 */
-                RemoveOnProcessStatusChange(callback: (executionContext: any) => void): void;
-                /**
-                 * Adds a function as an event handler for the OnStageChange event so that it will be called when the business process flow stage changes
-                 * @param callback The function to be executed when the business process flow stage changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonstagechange
-                 */
-                AddOnStageChange(callback: (executionContext: any) => void): void;
-                /**
-                 * Removes an event handler from the OnStageChange event
-                 * @param callback The function to be removed from the OnStageChange event
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonstagechange
-                 */
-                RemoveOnStageChange(callback: (executionContext: any) => void): void;
-                /**
-                 * Adds a function as an event handler for the OnStageSelected event so that it will be called when a business process flow stage is selected
-                 * @param callback The function to be executed when the business process flow stage is selected. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/addonstageselected
-                 */
-                AddOnStageSelected(callback: (executionContext: any) => void): void;
-                /**
-                 * Removes an event handler from the OnStageSelected event
-                 * @param callback The function to be removed from the OnStageSelected event
-                 * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/eventhandlers/removeonstageselected
-                 */
-                RemoveOnStageSelected(callback: (executionContext: any) => void): void;
                 /**
                  * Retrieves the display state for the business process control
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/getdisplaystate
@@ -1307,17 +1326,12 @@ declare namespace DevKit {
                 Visible: boolean;
                 /**
                  * Reflows the UI of the business process control
-                 * @param updateUI Specify true to update the UI of the process control; false otherwise
+                 * @param updateUi Specify true to update the UI of the process control; false otherwise
                  * @param parentStage Specify the ID of the parent stage in the GUID format
                  * @param nextStage Specify the ID of the next stage in the GUID format
                  * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui-process/reflow
                  */
-                Reflow(updateUI: boolean, parentStage: string, nextStage: string): void;
-                /**
-                 * Returns the unique identifier of the process instance. Value represents the string representation of a GUID value.
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getinstanceid
-                 */
-                readonly InstanceId: string;
+                Reflow(updateUi: boolean, parentStage: string, nextStage: string): void;
                 /**
                  * Get/Set the current status of the process instance.
                  * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/instance/getstatus
@@ -1809,42 +1823,13 @@ declare namespace DevKit {
                  * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
                  */
                 readonly Rows: DevKit.Form.Controls.GridRows;
-                /**
-                 * Returns a collection of every selected GridRow in the Grid. [Read-only and editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/getselectedrows
-                 */
                 readonly SelectedRows: DevKit.Form.Controls.GridRows;
-                /**
-                 * Get a single row (record) is selected in the editable grid. [Editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/getrows
-                 */
                 readonly OnRecordSelect: DevKit.Form.Controls.GridRow;
-                /**
-                 * Returns the total number of records that match the filter criteria of the view, not limited by the number visible in a single page. [Read-only and editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/gettotalrecordcount
-                 */
-                readonly TotalRecordCount: number;
             }
             interface GridRow {
-                /**
-                 * Returns the logical name for the record in the row. [Read-only and editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcontrol/getentityname
-                 */
                 readonly EntityName: string;
-                /**
-                 * Returns a Lookup value that references the record in the row. [Read-only and editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getentityreference
-                 */
                 readonly EntityReference: DevKit.Core.EntityReference;
-                /**
-                 * Returns the Id for the record in the row. [Read-only and editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getid
-                 */
                 readonly EntityId: string;
-                /**
-                 * Returns the primary attribute value for the record in the row. [Read-only and editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridentity/getprimaryattributevalue
-                 */
                 readonly PrimaryAttributeValue: string;
                 readonly Columns: DevKit.Form.Controls.GridColumns
             }
@@ -1859,41 +1844,12 @@ declare namespace DevKit {
                 getLength(): number;
             }
             interface GridColumn {
-                /**
-                 * Returns the logical name of the attribute of a selected grid row. [Read-only and editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridattribute
-                 */
                 readonly Name: string;
-                /**
-                 * Get/Set a string value indicating whether a value for the attribute is required or recommended. [Read-only and editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridattribute
-                 */
                 RequiredLevel: OptionSet.FieldRequiredLevel;
-                /**
-                 * Get/Set the data value for an attribute. [Read-only and editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridattribute
-                 */
                 Value: string;
-                /**
-                 * Get/Set the cell is disabled. [Editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcell
-                 */
                 Disabled: boolean;
-                /**
-                 * Displays an error message for a cell to indicate that data isn’t valid.. [Editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcell
-                 */
                 SetNotification(message: string, uniqueId?: string): boolean;
-                /**
-                 * Clears notification for a cell. [Editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcell
-                 */
                 ClearNotification(uniqueId: string): boolean;
-                /**
-                 * Returns the label of the column that contains the cell. [Editable grids]
-                 * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/gridcell
-                 */
-                readonly Label: string;
             }
             interface ControlNote {
 
@@ -2548,42 +2504,6 @@ declare namespace DevKit {
              */
             ExecuteMultiple(requests: Array<DevKit.WebApi.ExecuteRequest | DevKit.WebApi.ChangeSetRequest>, successCallback: (result: Array<DevKit.WebApi.ExecuteResponse>) => void, errorCallback: (error: DevKit.Core.Error) => void): void;
         }
-        interface Collections<T> {
-            /**
-             * Applies the action contained in a delegate function.
-             * @param successCallback Delegate function with parameters for item and index.
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/foreach
-             */
-            forEach(successCallback: (item: T, index: number) => void): void;
-            /**
-             *  Get one or more objects from the collection depending on the arguments passed.
-             *  @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
-             */
-            get(): T;
-            /**
-             * Get one or more objects from the collection depending on the arguments passed.
-             * @param item The object where the name matches the argument. The objects returned in the formContext.data.process namespace don’t contain names. So, using the string parameter for this method returns no objects.
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
-             */
-            get(item: string): T;
-            /**
-             * Get one or more objects from the collection depending on the arguments passed.
-             * @param index The object where the index matches the number.
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
-             */
-            get(index: number): T;
-            /**
-             * Get one or more objects from the collection depending on the arguments passed.
-             * @param successCallback Any objects that cause the delegate function to return true.
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/get
-             */
-            get(successCallback: (item: T, index: number) => void): T;
-            /**
-             * Gets the count of items in the collection.
-             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/collections/getlength
-             */
-            getLength(): number;
-        }
         interface Client {
             /**
             *  Returns a value to indicate which client the script is executing in.
@@ -2613,10 +2533,15 @@ declare namespace DevKit {
             */
             Attributes: Array<DevKit.Core.KeyValueObject>;
             /**
-            * Returns the ID of the base currency for the current organization
-            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid
+            * [Deprecated] Returns the ID of the base currency for the current organization
+            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid            *
             */
             BaseCurrencyId: string;
+            /**
+            * Returns a lookup object containing the ID, name, and entity type of the base currency for the current organization. This method is supported only on the Unified Interface.
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrency
+            */
+            BaseCurrency: DevKit.Core.EntityReference;
             /**
             * Returns the default country/region code for phone numbers for the current organization
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#defaultcountrycode
@@ -2683,17 +2608,27 @@ declare namespace DevKit {
              * Returns a collection of lookup objects containing the GUID and display name of each of the security role or teams that the user is associated with.
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#roles
             */
-            Roles: DevKit.Form.Collections;
+            Roles: DevKit.Core.Collections<DevKit.Core.EntityReference>;
             /**
             * Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroleprivileges
             */
             SecurityRolePrivileges: Array<string>;
             /**
+            * [Deprecated] Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
+            */
+            SecurityRoles: Array<string>;
+            /**
             * Returns a lookup object containing the ID, display name, and entity type of the transaction currency for the current user.
-            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
+            * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrencyid
             */
             TransactionCurrency: DevKit.Core.EntityReference;
+            /**
+            * [Deprecated] Returns the transaction currency ID for the current user.
+            * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
+            */
+            TransactionCurrencyId: string;
             /**
             * Returns the GUID of the SystemUser.Id value for the current user
             * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/xrm-utility/getglobalcontext/usersettings#userid
