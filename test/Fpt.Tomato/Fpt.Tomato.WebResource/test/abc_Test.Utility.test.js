@@ -35,7 +35,7 @@ define(['xrm-mock'], () => {
                 languageId: 1066,
                 securityRolePrivileges: ["GUID1", "GUID2"],
                 securityRoles: ["NAME1", "NAME2", "NAME3"],
-                transactionCurrencyId: "VND",
+                transactionCurrencyId: "VND-GUID",
                 //dateFormattingInfo: {
                 //    AMDesignator: "AM",
                 //    Calendar: {
@@ -74,11 +74,12 @@ define(['xrm-mock'], () => {
                 //    eras: [ 1, "A.D.", null, 0 ]
                 //},
                 roles: new xrmMock.ItemCollectionMock([new xrmMock.LookupValueMock("GUID1", "role", "ROLE-1"), new xrmMock.LookupValueMock("GUID2", "role", "ROLE-2")]),
-                transactionCurrency: new xrmMock.LookupValueMock("GUID-Currency", "transactioncurrency", "VND" )
+                transactionCurrency: new xrmMock.LookupValueMock("VND-GUID", "transactioncurrency", "VND" )
             });
 
             context.organizationSettings = new xrmMock.OrganizationSettingsMock({
-                baseCurrencyId: "USD",
+                baseCurrencyId: "USD-GUID",
+                baseCurrency: new xrmMock.LookupValueMock("USD-GUID", "transactioncurrencty", "USD"),
                 defaultCountryCode: "VN",
                 languageId: 1033,
                 organizationId: "OrgGuid",
@@ -115,7 +116,10 @@ define(['xrm-mock'], () => {
 
             //getGlobalContext.organizationSettings;
             expect(form.Utility.OrganizationSettings.Attributes).toBeDefined();
-            expect(form.Utility.OrganizationSettings.BaseCurrencyId).toBe("USD");
+            expect(form.Utility.OrganizationSettings.BaseCurrencyId).toBe("USD-GUID");
+            expect(form.Utility.OrganizationSettings.BaseCurrency.id).toBe("USD-GUID");
+            expect(form.Utility.OrganizationSettings.BaseCurrency.name).toBe("USD");
+            expect(form.Utility.OrganizationSettings.BaseCurrency.entityType).toBe("transactioncurrencty");
             expect(form.Utility.OrganizationSettings.DefaultCountryCode).toBe("VN");
             expect(form.Utility.OrganizationSettings.IsAutoSaveEnabled).toBeTruthy();
             expect(form.Utility.OrganizationSettings.LanguageId).toBe(1033);
@@ -169,9 +173,11 @@ define(['xrm-mock'], () => {
             expect(form.Utility.UserSettings.Roles.get(0).name).toBe("ROLE-1");
             expect(form.Utility.UserSettings.Roles.get(0).entityType).toBe("role");
             expect(form.Utility.UserSettings.SecurityRolePrivileges.length).toBe(2);
-            expect(form.Utility.UserSettings.TransactionCurrency.id).toBe("GUID-Currency");
+            expect(form.Utility.UserSettings.SecurityRoles.length).toBe(3);
+            expect(form.Utility.UserSettings.TransactionCurrency.id).toBe("VND-GUID");
             expect(form.Utility.UserSettings.TransactionCurrency.entityType).toBe("transactioncurrency");
             expect(form.Utility.UserSettings.TransactionCurrency.name).toBe("VND");
+            expect(form.Utility.UserSettings.TransactionCurrencyId).toBe("VND-GUID");
             expect(form.Utility.UserSettings.UserId).toBe("DEVKIT-USERID");
             expect(form.Utility.UserSettings.UserName).toBe("DEVKIT-USERNAME")
             expect(() => { form.Utility.UserSettings.TimeZoneOffsetMinutes }).toThrow(new Error("Not implemented"));

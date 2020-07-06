@@ -589,7 +589,7 @@ declare namespace DevKit {
              * Returns a navigation behavior object for a stage that can be used to define whether the Create button is available for users to create other entity record in a cross-entity business process flow navigation scenario.
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/stage/getsteps
              */
-            Steps: DevKit.Core.Collections<ProcessStep>;
+            Steps: Array<ProcessStep>;
         }
         interface ProcessStep {
             /**
@@ -646,7 +646,7 @@ declare namespace DevKit {
              * Returns a boolean value indicating whether the process is rendered
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/isrendered
              */
-            Rendered: boolean;
+            IsRendered: boolean;
             /**
              * Returns a collection of stages in the process
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-process/process/getstages
@@ -1970,7 +1970,7 @@ declare namespace DevKit {
              * A control represents an HTML element present on the form. Some controls are bound to a specific attribute, whereas others may represent unbound controls such as an IFRAME, Web resource, or a sub grid that has been added to the form
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/controls
              */
-            readonly Controls: DevKit.Form.Collections;
+            readonly Controls: DevKit.Core.Collections<any>;
             /**
              * Returns a string representing the XML that will be sent to the server when the record is saved. Only data in fields that have changed are set to the server
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-data-entity/getdataxml
@@ -2107,6 +2107,12 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/clientapi/reference/formcontext-ui/getviewportwidth
              * */
             readonly ViewPortWidth: number;
+            /**
+             * Sets the name of the entity to be displayed on the form.
+             * @param arg Name of the entity to be displayed on the form.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformentityname
+             * */
+            SetFormEntityName(arg: string): void;
         }
         interface Utility {
             /**

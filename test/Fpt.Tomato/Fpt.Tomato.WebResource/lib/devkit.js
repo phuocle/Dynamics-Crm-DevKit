@@ -305,7 +305,7 @@ var devKit = (function () {
             var obj = {};
             Object.defineProperty(obj, "Category", {
                 get: function () {
-                    if (stage && stage.getCategory && stage.getCategory().getValue) {
+                    if (has(stage, 'getCategory')) {
                         return stage.getCategory().getValue();
                     }
                     return EMPTY_NUMBER;
@@ -321,7 +321,7 @@ var devKit = (function () {
             });
             Object.defineProperty(obj, "Id", {
                 get: function () {
-                    if (stage && stage.getId) {
+                    if (has(stage, 'getId')) {
                         return stage.getId();
                     }
                     return EMPTY_GUID;
@@ -338,7 +338,7 @@ var devKit = (function () {
             Object.defineProperty(obj, "Status", {
                 get: function () {
                     if (has(stage, 'getStatus')) {
-                        return stage.getStatus();
+                        return stage.getStatus();                        
                     }
                     return "active";
                 }
@@ -350,27 +350,12 @@ var devKit = (function () {
             }
             Object.defineProperty(obj, "Steps", {
                 get: function () {
-                    var obj = {};
-                    obj.getLength = function () {
-                        if (has(stage, 'getSteps')) {
-                            return stage.getSteps().getLength();
-                        }
-                        return EMPTY_NUMBER;
-                    }
-                    obj.get = function (index) {
-                        if (has(stage, 'getSteps')) {
-                            var step = stage.getSteps().get(index);
-                            return loadStep(step);
-                        }
-                        return loadStep({});
-                    }
-                    obj.forEach = function (callback) {
-                        if (has(stage, 'getSteps')) {
-                            var steps = stage.getSteps();
-                            for (var index = 0; index < steps.getLength(); index++) {
-                                var step = steps.get(index);
-                                callback(loadStep(step), index);
-                            }
+                    var obj = [];
+                    if (has(stage, 'getSteps')) {
+                        var steps = stage.getSteps();
+                        for (var index = 0; index < steps.length; index++) {
+                            var step = steps[index];
+                            obj.push(loadStep(step));
                         }
                     }
                     return obj;
@@ -540,8 +525,8 @@ var devKit = (function () {
             }
         };
         process.Reflow = function (updateUi, parentStage, nextStage) {
-            if (has(getProcess, 'reflow')) {
-                getProcess.reflow(updateUi, parentStage, nextStage);
+            if (has(getProcessUi, 'reflow')) {               
+                getProcessUi.reflow(updateUi, parentStage, nextStage);
             }
         }
         Object.defineProperty(process, "ActiveProcess", {
