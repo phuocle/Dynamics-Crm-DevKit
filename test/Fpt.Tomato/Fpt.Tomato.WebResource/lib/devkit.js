@@ -226,24 +226,36 @@ var devKit = (function () {
         }        
         form.FormNavigate = function (formId) {
             if (has(contextUiFormSelector, 'items')) {
-                contextUiFormSelector.items.get(formId).navigate();
+                var form = contextUiFormSelector.items.get(formId);
+                if (has(form, 'navigate')) {
+                    form.navigate();
+                }
             }
         };
         form.FormIsVisible = function (formId) {
             if (has(contextUiFormSelector, 'items')) {
-                return contextUiFormSelector.items.get(formId).getVisible();
+                var form = contextUiFormSelector.items.get(formId);
+                if (has(form, 'getVisible')) {
+                    return form.getVisible();
+                }
             }
             return EMPTY_BOOL;
         }
         form.FormSetVisible = function (formId, value) {
             if (has(contextUiFormSelector, 'items')) {
-                contextUiFormSelector.items.get(formId).setVisible(value);
+                var form = contextUiFormSelector.items.get(formId);
+                if (has(form, 'setVisible')) {
+                    form.setVisible(value);
+                }
             }
         }
         Object.defineProperty(form, "FormId", {
             get: function () {
                 if (has(contextUiFormSelector, 'getCurrentItem')) {
-                    return contextUiFormSelector.getCurrentItem().getId();
+                    var form = contextUiFormSelector.getCurrentItem();
+                    if (has(form, 'getId')) {                        
+                        return form.getId();                        
+                    }
                 }
                 return EMPTY_GUID;
             }
@@ -251,12 +263,14 @@ var devKit = (function () {
         Object.defineProperty(form, "FormLabel", {
             get: function () {
                 if (has(contextUiFormSelector, 'getCurrentItem')) {
-                    return contextUiFormSelector.getCurrentItem().getLabel();
+                    var form = contextUiFormSelector.getCurrentItem();
+                    if (has(form, 'getLabel')) {
+                        return form.getLabel();
+                    }
                 }
                 return EMPTY_STRING;
             }
         });
-
         return form;
     }
     function loadProcess(formContext) {
@@ -2257,31 +2271,31 @@ var devKit = (function () {
             if (has(getEncoding, 'xmlAttributeEncode')) {
                 return getEncoding.xmlAttributeEncode(arg);
             }
-            return arg;
+            //return arg;
         };
         utility.XmlEncode = function (arg) {
             if (has(getEncoding, 'xmlEncode')) {
                 return getEncoding.xmlEncode(arg);
             }
-            return arg;
+            //return arg;
         };
         utility.HtmlAttributeEncode = function (arg) {
             if (has(getEncoding, 'htmlAttributeEncode')) {
                 return getEncoding.htmlAttributeEncode(arg);
             }
-            return arg;
+            //return arg;
         };
         utility.HtmlDecode = function (arg) {
             if (has(getEncoding, 'htmlDecode')) {
                 return getEncoding.htmlDecode(arg);
             }
-            return arg;
+            //return arg;
         };
         utility.HtmlEncode = function (arg) {
             if (has(getEncoding, 'htmlEncode')) {
                 return getEncoding.htmlEncode(arg);
             }
-            return arg;
+            //return arg;
         };
 
         var getDevice = null;
@@ -2336,6 +2350,72 @@ var devKit = (function () {
 
         return utility;
     }
+    function loadExecutionContext(executionContext) {
+        var obj = {};
+        obj.GetSharedVariable = function (key) {
+            if (has(executionContext, 'getSharedVariable')) {
+                return executionContext.getSharedVariable(key);
+            }
+            return null;
+        }
+        obj.SetSharedVariable = function (key, value) {
+            if (has(executionContext, 'setSharedVariable')) {
+                return executionContext.setSharedVariable(key, value);
+            }
+        }
+        obj.IsDefaultPrevented = function () {
+            if (has(executionContext, 'getEventArgs')) {
+                return executionContext.getEventArgs().isDefaultPrevented();
+            }
+            return EMPTY_BOOL;
+        }
+        obj.SetPreventDefault = function () {
+            if (has(executionContext, 'getEventArgs')) {
+                executionContext.getEventArgs().preventDefault();
+            }
+        }
+        Object.defineProperty(obj, "Depth", {
+            get: function () {
+                if (has(executionContext, 'getDepth')) {
+                    return executionContext.getDepth();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        Object.defineProperty(obj, "EventArgs", {
+            get: function () {
+                if (has(executionContext, 'getEventArgs')) {
+                    return executionContext.getEventArgs();
+                }
+                //return {};
+            }
+        });
+        Object.defineProperty(obj, "EventSource", {
+            get: function () {
+                if (has(executionContext, 'getEventSource')) {
+                    return executionContext.getEventSource();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(obj, "FormContext", {
+            get: function () {
+                if (has(executionContext, 'getFormContext')) {
+                    return executionContext.getFormContext();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(obj, "SaveMode", {
+            get: function () {
+                if (has(executionContext, 'getEventArgs')) {
+                    return executionContext.getEventArgs().getSaveMode();
+                }
+                return 1;
+            }
+        });
+        return obj;
+    }
     return {
         LoadForm: loadForm,
         LoadProcess: loadProcess,
@@ -2344,9 +2424,11 @@ var devKit = (function () {
         LoadNavigations: loadNavigations,
         LoadQuickForms: loadQuickForms,
         LoadGrids: loadGrids,
-        LoadUtility: loadUtility
+        LoadUtility: loadUtility,
+        LoadExecutionContext: loadExecutionContext
     }
 })();
+/** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
     OptionSet.FormType = {

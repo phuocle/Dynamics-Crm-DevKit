@@ -81,6 +81,13 @@ define(['xrm-mock'], () => {
             expect(form.FormType).toBe(OptionSet.FormType.Update);
             expect(() => { form.ViewPortHeight }).toThrow(new Error("getViewPortHeight not implemented"));
             expect(() => { form.ViewPortWidth }).toThrow(new Error("getViewPortWidth not implemented"));
+            expect(() => { form.UiAddOnLoad(null) }).toThrow(new Error("addOnLoad not implemented"));
+            expect(() => { form.UiRemoveOnLoad(null) }).toThrow(new Error("removeOnLoad not implemented"));
+            expect(form.FormNavigate("form1")).toBeUndefined();
+            expect(form.FormSetVisible("form1", true)).toBeUndefined();
+            expect(form.FormIsVisible("form1")).toBeFalsy();
+            expect(form.FormId).toBe("form1");
+            expect(form.FormLabel).toBe("FORM1");
         });
     });
 });

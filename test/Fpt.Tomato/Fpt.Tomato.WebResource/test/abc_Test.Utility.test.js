@@ -90,9 +90,11 @@ define(['xrm-mock'], () => {
                     "abc": "1"
                 }
             });
-            xrmMock.XrmMockGenerator.context = context;
-            var executionContext = xrmMock.XrmMockGenerator.formContext;
 
+            xrmMock.XrmMockGenerator.context = context;
+            xrmMock.XrmMockGenerator.eventContext = new xrmMock.EventContextMock({ formContext: xrmMock.XrmMockGenerator.formContext, context: xrmMock.XrmMockGenerator.context });
+
+            var executionContext = xrmMock.XrmMockGenerator.eventContext;
             var form = new Tomato.FormTest(executionContext, "web-resource-language");
 
             //var getUtility = Xrm.Utility;
@@ -223,6 +225,17 @@ define(['xrm-mock'], () => {
             //var getApp = Xrm.App;
             expect(() => { form.Utility.AddGlobalNotification(null, null, null) }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.ClearGlobalNotification(null, null, null) }).toThrow(new Error("Method not implemented."));
+
+            //Execution Context
+            expect(() => { form.ExecutionContext.Depth }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("not implemented"));
+            expect(form.ExecutionContext.FormContext).toBeDefined();
+            expect(() => { form.ExecutionContext.GetSharedVariable("A") }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.SetSharedVariable("A", "B") }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.SetPreventDefault()}).toThrow(new Error("not implemented"));
         });
     });
 });

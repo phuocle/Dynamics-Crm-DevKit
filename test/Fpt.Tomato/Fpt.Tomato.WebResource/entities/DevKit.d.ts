@@ -768,6 +768,56 @@ declare namespace DevKit {
             get(successCallback: (item: T, index: number) => void): Array<T>;
             getLength(): number;
         }
+        interface ExecutionContext {
+            /**
+             * Returns a value that indicates the order in which this handler is executed.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/getdepth
+             */
+            readonly Depth: number;
+            /**
+             * Returns an object with methods to manage the events.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventargs
+             */
+            readonly EventArgs: any;
+            /**
+             * Returns a reference to the object that the event occurred on.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/geteventsource
+             */
+            readonly EventSource: any;
+            /**
+             * Returns a reference to the form or an item on the form depending on where the method was called.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/getformcontext
+             */
+            readonly FormContext: any;
+            /**
+             * Retrieves a variable set using the SetSharedVariable method.
+             * @param key The name of the variable.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/getsharedvariable
+             */
+            GetSharedVariable(key: string): any;
+            /**
+             * Sets the value of a variable to be used by a handler after the current handler completes.
+             * @param key The name of the variable.
+             * @param value The values to set.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/setsharedvariable
+             */
+            SetSharedVariable(key: string, value: any): void;
+            /**
+             * Returns a value indicating how the save event was initiated by the user.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
+             */
+            readonly SaveMode: OptionSet.SaveMode;
+            /**
+             * Returns a value indicating whether the save event has been canceled because the preventDefault method was used in this event hander or a previous event handler.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/isdefaultprevented
+             */
+            IsDefaultPrevented(): boolean;
+            /**
+             * Cancels the save operation, but all remaining handlers for the event will still be executed.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefault
+             */
+            SetPreventDefault(): void;
+        }
     }
     namespace WebApi {
         interface OptionSetValue {
@@ -2113,6 +2163,11 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui/setformentityname
              * */
             SetFormEntityName(arg: string): void;
+             /**
+             * The execution context defines the event context in which your code executes.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/execution-context
+             * */
+            readonly ExecutionContext: DevKit.Core.ExecutionContext;
         }
         interface Utility {
             /**

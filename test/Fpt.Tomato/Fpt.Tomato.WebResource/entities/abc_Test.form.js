@@ -80,6 +80,9 @@ var Tomato;
 		form.Navigation = navigation;
 
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+
 		return form;
 	};
 })(Tomato || (Tomato = {}));
