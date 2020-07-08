@@ -1,4 +1,5 @@
 ﻿//@ts-check
+///<reference path='../entities/abc_Test.js' />
 define(['xrm-mock'], () => {
     var xrmMock = require('xrm-mock');
     describe('Atributes', () => {
@@ -81,6 +82,9 @@ define(['xrm-mock'], () => {
             var form = new Tomato.FormTest(executionContext);
 
             expect(form.Body.abc_Lookup.IsPartyList).toBeTruthy();
+
+            form.WebApi.
+
         });
         it('MultiSelectOptionSet and OptionSet attribute types', () => {
             xrmMock.XrmMockGenerator.Attribute.createOptionSet({
@@ -148,6 +152,10 @@ define(['xrm-mock'], () => {
             var form = new Tomato.FormTest(executionContext);
 
             expect(form.Body.abc_All.MaxLength).toBe(100);
+
+            var a = await form.WebApi.CreateRecord("a", null);
+
+            form.WebApi.RetrieveRecord(null, null,)
         });
     });
 });

@@ -2387,7 +2387,7 @@ var devKit = (function () {
                 if (has(executionContext, 'getEventArgs')) {
                     return executionContext.getEventArgs();
                 }
-                //return {};
+                return {};
             }
         });
         Object.defineProperty(obj, "EventSource", {

@@ -1,6 +1,6 @@
 ﻿/** DynamicsCrm.DevKit for d.ts */
 declare namespace DevKit {
-    type Guid = {};
+    type Guid = string;
     namespace Controls {
         interface IControl {
             /**
@@ -144,7 +144,7 @@ declare namespace DevKit {
              */
             readonly InitialValue: number;
         }
-        interface Process {
+        interface IControlProcess {
             /**
              * Adds a function as an event handler for the OnPreProcessStatusChange event so that it will be called before the business process flow status changes
              * @param callback The function to be executed when the business process flow status changes. The function will be added to the start of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
@@ -825,11 +825,6 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/events/grid-onrecordselect
              */
             readonly OnRecordSelect: DevKit.Controls.GridRow;
-            /**
-             * [Editable grids] Returns the total number of records that match the filter criteria of the view, not limited by the number visible in a single page
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/gettotalrecordcount
-             */
-            readonly TotalRecordCount: number;
         }
         interface GridRow {
             /**
@@ -1200,147 +1195,6 @@ declare namespace DevKit {
         interface ChangeSetRequest {
 
         }
-        /**
-         * Object passed to ErrorCallbackDelegate.
-         */
-        interface ErrorCallbackObject {
-            /**
-             * The error code.
-             */
-            errorCode: number;
-
-            /**
-             * An error message describing the issue.
-             */
-            message: string;
-        }
-
-        /**
-         * Object passed to QuickCreateSuccessCallbackDelegate.
-         */
-        interface OpenQuickCreateSuccessCallbackObject {
-            /**
-             * A lookup value which identifies the record which has been created.
-             */
-            savedEntityReference: LookupValue;
-        }
-
-        /**
-         * Object passed to OfflineOperationSuccessCallbackDelegate;
-         */
-        interface OfflineOperationSuccessCallbackObject {
-            /**
-             * GUID of the record;
-             */
-            id: string;
-
-            /**
-             * Logical name of the entity.
-             */
-            logicalName: string;
-        }
-
-        /**
-         * Object passed to OfflineErrorCallbackDelegate.
-         */
-        interface OfflineErrorCallbackObject extends ErrorCallbackObject {
-            /**
-             * An internal error message that might contain additional details about the issue.
-             */
-            debugMessage: string;
-        }
-
-        /**
-         * Interface for asynchronous promises. Based on JQuery Promise
-         */
-        interface PromiseLike<T> {
-            /**
-             * Attaches callbacks for the resolution and/or rejection of the Promise.
-             * @param onFulfilled The callback to execute when the Promise is resolved.
-             * @param onRejected The callback to execute when the Promise is rejected.
-             * @returns A Promise for the completion of which ever callback is executed.
-             */
-            then<U>(onFulfilled?: (value: T) => U | PromiseLike<U>, onRejected?: (error: any) => U | PromiseLike<U>):
-                PromiseLike<U>;
-            then<U>(onFulfilled?: (value: T) => U | PromiseLike<U>, onRejected?: (error: any) => void): PromiseLike<U>;
-
-            /**
-             * UNDOCUMENTED (Web Client only) Add handlers to be called when the Deferred object is rejected.
-             */
-            fail<U>(onRejected?: (reason: ErrorResponse) => U | PromiseLike<U>): PromiseLike<U>;
-
-            /**
-             * UNDOCUMENTED (Web Client only): Add handlers to be called when the Deferred object is either resolved or rejected.
-             */
-            always<U>(alwaysCallback: (() => U | PromiseLike<U>)): PromiseLike<U>;
-
-            /**
-             * UNDOCUMENTED (Unified Client only): Add handlers to be called when the Deferred object is rejected.
-             */
-            catch<U>(onRejected?: (reason: ErrorResponse) => U | PromiseLike<U>): PromiseLike<U>;
-
-            /**
-             * UNDOCUMENTED (Unified Client only): Add handlers to be called when the Deferred object is either resolved or rejected.
-             */
-            finally<U>(finallyCallback: (() => U | PromiseLike<U>)): PromiseLike<U>;
-        }
-        interface CreateResponse {
-            entityType: string;
-            id: string;
-        }
-        /** Interface for the Promise error response arguments */
-        interface ErrorResponse {
-            errorCode: number;
-            message: string;
-        }
-    }
-    abstract class WebApi {
-        /**
-         * Creates an entity record
-         * @param entityLogicalName Logical name of the entity you want to create. For example: "account".
-         * @param entity A JSON object defining the attributes and values for the new entity record.
-         * @returns On success, returns a promise object containing the attributes specified earlier in the description of the successCallback parameter.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createrecord
-         */
-        CreateRecord(entityLogicalName: string, entity: any): WebApi.PromiseLike<WebApi.CreateResponse>;
-        /**
-         * Updates an entity record.
-         * @param entityLogicalName The entity logical name of the record you want to update. For example: "account".
-         * @param id GUID of the entity record you want to update.
-         * @param entity A JSON object containing key: value pairs, where key is the property of the entity and value is the value of the property you want update.
-         * @returns On success, returns a promise object containing the attributes specified earlier in the description of the successCallback parameter.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/updaterecord
-         */
-        UpdateRecord(entityLogicalName: string, id: string, entity: any): WebApi.PromiseLike<any>;
-        /**
-         * Deletes an entity record.
-         * @param entityLogicalName The entity logical name of the record you want to delete. For example: "account".
-         * @param id GUID of the entity record you want to delete.
-         * @returns On success, returns a promise object containing the attributes specified earlier in the description of the successCallback parameter.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/deleterecord
-         */
-        DeleteRecord(entityLogicalName: string, id: string): WebApi.PromiseLike<string>;
-        /**
-         * Retrieves an entity record.
-         * @param entityLogicalName The entity logical name of the record you want to retrieve. For example: "account".
-         * @param id GUID of the entity record you want to retrieve.
-         * @param options (Optional) OData system query options, $select and $expand, to retrieve your data.
-         * - Use the $select system query option to limit the properties returned by including a comma-separated
-         *   list of property names. This is an important performance best practice. If properties aren’t
-         *   specified using $select, all properties will be returned.
-         * - Use the $expand system query option to control what data from related entities is returned. If you
-         *   just include the name of the navigation property, you’ll receive all the properties for related
-         *   records. You can limit the properties returned for related records using the $select system query
-         *   option in parentheses after the navigation property name. Use this for both single-valued and
-         *   collection-valued navigation properties.
-         * - You can also specify multiple query options by using & to separate the query options.
-         * @example <caption>options example:</caption>
-         * options: $select=name&$expand=primarycontactid($select=contactid,fullname)
-         * @returns On success, returns a promise containing a JSON object with the retrieved attributes and their values.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
-         */
-        RetrieveRecord(entityLogicalName: string, id: string, options?: string): WebApi.PromiseLike<any>;
-
     }
     interface IEntityBaseAttribute {
         /** Type of an attribute */
@@ -1697,6 +1551,12 @@ declare namespace DevKit {
         readonly relationshipType: 0 | 1,
         /** Returns one of the following values to indicate the role type of relationship. 1: Referencing | 2: AssociationEntity */
         readonly roleType: 1 | 2
+    }
+    interface ViewSelector {
+        /** Reference to the current view. */
+        readonly CurrentView: DevKit.EntityReference;
+        /** Returns a boolean value to indicate whether the view selector is visible */
+        readonly Visible: boolean;
     }
     interface Collections<T> {
         forEach(successCallback: (item: T, index: number) => void): void;
@@ -2110,7 +1970,7 @@ declare namespace DevKit {
         readonly Attributes: Array<DevKit.KeyValueObject>;
         /**
         * [Deprecated] Returns the ID of the base currency for the current organization
-        * @deprecated use {@link BaseCurrency }
+        * @deprecated please use BaseCurrency
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#basecurrencyid            *
         */
         readonly BaseCurrencyId: DevKit.Guid;
@@ -2193,7 +2053,7 @@ declare namespace DevKit {
         readonly SecurityRolePrivileges: Array<DevKit.Guid>;
         /**
         * [Deprecated] Returns an array of strings that represent the GUID values of each of the security role privilege that the user is associated with or any teams that the user is associated with
-        * @deprecated use {@link SecurityRolePrivileges}
+        * @deprecated Please use SecurityRolePrivileges
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#securityroles
         */
         readonly SecurityRoles: Array<DevKit.Guid>;
@@ -2204,7 +2064,7 @@ declare namespace DevKit {
         readonly TransactionCurrency: DevKit.EntityReference;
         /**
         * [Deprecated] Returns the transaction currency ID for the current user.
-        * @deprecated use {@link TransactionCurrency}
+        * @deprecated Please use TransactionCurrency
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/usersettings#transactioncurrency
         */
         readonly TransactionCurrencyId: DevKit.Guid;
@@ -2659,12 +2519,6 @@ declare namespace DevKit {
         actionLabel?: string,
         /** Function reference. The function to execute when the action label is clicked. */
         eventHandler?: string
-    }
-    interface ViewSelector {
-        /** Reference to the current view. */
-        CurrentView: DevKit.EntityReference;
-        /** Returns a boolean value to indicate whether the view selector is visible */
-        readonly Visible: boolean;
     }
 }
 /** DynamicsCrm.DevKit for namespace OptionSet */
