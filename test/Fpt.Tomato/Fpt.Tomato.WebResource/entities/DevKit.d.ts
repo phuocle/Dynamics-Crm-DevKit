@@ -888,6 +888,11 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/setdisabled
              */
             Disabled: boolean;
+            /**
+             * [Editable grids] Returns the label of the column that contains the cell
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/getlabel
+             */
+            Label: string;
         }
         interface Note {
 

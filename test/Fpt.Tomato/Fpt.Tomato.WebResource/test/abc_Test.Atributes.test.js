@@ -80,11 +80,7 @@ define(['xrm-mock'], () => {
             }));
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new Tomato.FormTest(executionContext);
-
             expect(form.Body.abc_Lookup.IsPartyList).toBeTruthy();
-
-            form.WebApi.
-
         });
         it('MultiSelectOptionSet and OptionSet attribute types', () => {
             xrmMock.XrmMockGenerator.Attribute.createOptionSet({
@@ -152,10 +148,6 @@ define(['xrm-mock'], () => {
             var form = new Tomato.FormTest(executionContext);
 
             expect(form.Body.abc_All.MaxLength).toBe(100);
-
-            var a = await form.WebApi.CreateRecord("a", null);
-
-            form.WebApi.RetrieveRecord(null, null,)
         });
     });
 });

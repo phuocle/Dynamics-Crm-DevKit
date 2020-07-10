@@ -70,6 +70,7 @@
     <Content Include="test\abc_Test.Process.test.js" />
     <Content Include="test\abc_Test.Tab.test.js" />
     <Content Include="test\abc_Test.Utility.test.js" />
+    <Content Include="test\abc_Test.WebApi._test_.js" />
     <Content Include="test\docs\_Xrm-App\media\add-global-error.png" />
     <Content Include="test\docs\_Xrm-App\media\add-global-information.png" />
     <Content Include="test\docs\_Xrm-App\media\add-global-warning.png" />
