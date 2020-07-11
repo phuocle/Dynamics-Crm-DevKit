@@ -2,8 +2,8 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???",
+      "solution": "DEVKIT",
+      "prefix": "devkit_",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -20,27 +20,28 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "abc_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "abc_/entities/[entity].form.js",
+            "abc_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].webapi.js"
+            "abc_/entities/[entity].webapi.js"
           ],
           "dependencies": [
-            "???_/lib/WebApiClient.js"
+            "abc_/lib/WebApiClient.js",
+            "abc_/lib/devkit.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].form.js"
+            "abc_/entities/[entity].form.js"
           ],
           "dependencies": [
-            "???_/lib/devkit.js"
+            "abc_/lib/devkit.js"
           ]
         }
       ]
@@ -65,7 +66,7 @@
     }
   ],
   "visualstudio": {
-    "connection": "???",
-    "webresourceprofile": "???"
+    "connection": "DEVKIT-ClientSecret",
+    "webresourceprofile": "DEBUG"
   }
 }

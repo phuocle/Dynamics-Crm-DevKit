@@ -46,7 +46,8 @@
   ],
   "CodeCoverageExecutionMode": "Manual",
   "CodeCoverageIncludes": [
-    "lib\\devkit.js"
+    "lib\\devkit.js",
+    "entities\\devkit_WebApi.webapi.js"
   ],
   "CodeCoverageExcludes": [
   ],

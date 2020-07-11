@@ -60,6 +60,26 @@
       <DependentUpon>abc_Test.js</DependentUpon>
     </Content>
     <Content Include="entities\abc_Test.js" />
+    <Content Include="entities\ActivityParty.js" />
+    <Content Include="entities\ActivityParty.webapi.js">
+      <DependentUpon>ActivityParty.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Contact.js" />
+    <Content Include="entities\Contact.webapi.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
+    <Content Include="entities\devkit_WebApi.js" />
+    <Content Include="entities\devkit_WebApi.webapi.js">
+      <DependentUpon>devkit_WebApi.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Email.js" />
+    <Content Include="entities\Email.webapi.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
+    <Content Include="entities\SystemUser.js" />
+    <Content Include="entities\SystemUser.webapi.js">
+      <DependentUpon>SystemUser.js</DependentUpon>
+    </Content>
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
@@ -70,7 +90,7 @@
     <Content Include="test\abc_Test.Process.test.js" />
     <Content Include="test\abc_Test.Tab.test.js" />
     <Content Include="test\abc_Test.Utility.test.js" />
-    <Content Include="test\abc_Test.WebApi._test_.js" />
+    <Content Include="test\abc_Test.WebApi.test.js" />
     <Content Include="test\docs\_Xrm-App\media\add-global-error.png" />
     <Content Include="test\docs\_Xrm-App\media\add-global-information.png" />
     <Content Include="test\docs\_Xrm-App\media\add-global-warning.png" />
@@ -619,6 +639,21 @@
   <ItemGroup>
     <TypeScriptCompile Include="entities\abc_Test.d.ts">
       <DependentUpon>abc_Test.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\ActivityParty.d.ts">
+      <DependentUpon>ActivityParty.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Contact.d.ts">
+      <DependentUpon>Contact.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
+      <DependentUpon>devkit_WebApi.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Email.d.ts">
+      <DependentUpon>Email.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\SystemUser.d.ts">
+      <DependentUpon>SystemUser.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
