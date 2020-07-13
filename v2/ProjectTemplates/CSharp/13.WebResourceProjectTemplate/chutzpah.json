@@ -1,0 +1,57 @@
+{
+  "Framework": "jasmine",
+  "FrameworkVersion": "2",
+  "TestHarnessReferenceMode": "AMD",
+  "TestHarnessLocationMode": "SettingsFileAdjacent",
+  "CodeCoverageExecutionMode": "Manual",
+  "CodeCoverageExcludes": [
+    "*.form.js",
+    "*.webapi.js",
+    "*.test.js",
+    "requirejsConfig.js",
+    "XrmEnum.js",
+    "*\\node_modules\\*"
+  ],
+  "Engine": "JSDom",
+  "References": [
+    {
+      "Path": "lib/WebApiClient.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "lib/devkit.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "test/XrmEnum.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "node_modules/requirejs/require.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "test/requirejsConfig.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "entities",
+      "Includes": [ "*.form.js" ]
+    }    ,
+    {
+      "Path": "entities",
+      "Includes": [ "*.webapi.js" ]
+    },
+    {
+      "Path": "entities",
+      "Includes": [ "*.js" ],
+      "Excludes": [ "*.form.js", "*.webapi.js" ]
+    }
+  ],
+  "Tests": [
+    {
+      "Path": "test",
+      "Includes": [ "*.test.js" ]
+    }
+  ]
+}

@@ -648,22 +648,17 @@ define(['xrm-mock', 'sinon'], () => {
     });
     describe("Delete", () => {
         it("Delete Contact", async () => {
-            ////setup
-            //var urlUpdate = RegExp.escape(fakeUrl + "/api/data/v9.1/contacts(968d37ec-9e66-e911-a993-000d3a804bc9)");
-            //xhr.respondWith("DELETE", RegExp(urlUpdate),
-            //    [200, { "Content-Type": "application/json" }, JSON.stringify({})]
-            //);
-            ////run
-            //var deleteRequest = new Tomato.WebApi.DeleteRequest();
-            //deleteRequest.entityId = "968d37ec-9e66-e911-a993-000d3a804bc9";
-            //deleteRequest.entityName = "contact";
-            //var res = await WebApiClient.Delete(deleteRequest);
-            ////result
-            //expect(res).not.toBeUndefined();
-
-            var a = await Xrm.WebApi.online.deleteRecord("a", "a");
-
-
+            var obj =
+            {
+                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f",
+                entityType: "devkit_webapi"
+            };
+            sinon.stub(Xrm.WebApi, 'deleteRecord')
+                .withArgs("devkit_webapi", "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f")
+                .returns( obj );
+            var res = await Xrm.WebApi.deleteRecord("devkit_webapi", "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
+            expect(res.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
+            expect(res.entityType).toBe("devkit_webapi");
         });
     });
 });
