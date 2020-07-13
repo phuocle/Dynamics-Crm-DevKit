@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "fpt.tomato.webresource.2",
+  "version": "1.0.0",
+  "description": "fpt.tomato.webresource.2",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jasmine": "^3.5.10",
+    "@types/requirejs": "^2.1.31",
+    "@types/sinon": "^9.0.0",
+    "@types/xrm": "^9.0.25",
+    "jasmine": "^3.5.0",
+    "requirejs": "^2.3.6",
+    "sinon": "^9.0.2",
+    "xrm-mock": "^3.4.18"
+  }
+}

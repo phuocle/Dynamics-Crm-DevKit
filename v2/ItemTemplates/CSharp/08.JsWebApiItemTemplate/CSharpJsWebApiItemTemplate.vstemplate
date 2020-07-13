@@ -16,7 +16,7 @@
     <ProjectItem ReplaceParameters="false" TargetFileName="Javascript.js">Javascript.js</ProjectItem>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.4.30.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.7.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.JsWebApi</FullClassName>
   </WizardExtension>
 </VSTemplate>

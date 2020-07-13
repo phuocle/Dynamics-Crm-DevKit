@@ -61,10 +61,8 @@
     <None Include="packages.config" />
     <None Include="_package.json" />
     <None Include="chutzpah.json" />
-    <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
-    <Content Include="test\xrm-mock.d.ts" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
     <None Include="entities\generator.form.bat" />
@@ -74,23 +72,5 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.Version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-        <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>23645</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:23645/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''"/>
 </Project>

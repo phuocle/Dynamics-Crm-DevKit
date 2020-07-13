@@ -9,14 +9,13 @@ namespace DynamicsCrm.DevKit.Shared
         public static readonly List<DataSourceCrm> DataSourceCrm = new List<DataSourceCrm>
         {
             new DataSourceCrm{ Version = "4.6.2", Name = $"{Const.Dynamics365} - 4.6.2"},
-            //new DataSourceCrm{ Version = "4.5.2", Name = $"{Const.Dynamics365} - 4.5.2"},
             new DataSourceCrm{ Version = "4.5.2", Name = $"{Const.DynamicsCrm2016} - 4.5.2"},
             new DataSourceCrm{ Version = "4.5.2", Name = $"{Const.DynamicsCrm2015} - 4.5.2"},
             new DataSourceCrm{ Version = "4.5.2", Name = $"{Const.DynamicsCrm2013} - 4.5.2"},
             new DataSourceCrm{ Version = "4.0", Name = $"{Const.DynamicsCrm2011} - 4.0"}
         };
         public const string PLDynamicsCrmDevKitResourcesDll = "DynamicsCrm.DevKit.Resources.dll";
-        public const string Version = "2.4.30";
+        public const string Version = "2.7.31";
 
         public const string Chutzpah = "Chutzpah";
         public const string MicrosoftCrmSdkCoreAssemblies = "Microsoft.CrmSdk.CoreAssemblies";
