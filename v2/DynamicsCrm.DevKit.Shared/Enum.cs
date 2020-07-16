@@ -27,7 +27,8 @@ public enum ItemType
     Report,
     JsForm,
     JsTest,
-    ResourceString
+    ResourceString,
+    JsForm2,
 }
 
 public enum ParameterType

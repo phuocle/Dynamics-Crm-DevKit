@@ -28,7 +28,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helper\FormHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\JsonHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsForm2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsWebApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\Dependency.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\DownloadFile.cs" />

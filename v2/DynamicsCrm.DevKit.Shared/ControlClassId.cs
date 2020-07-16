@@ -50,6 +50,9 @@
         public const string PARTY_LISTS = "CBFB742C-14E7-4A17-96BB-1A13F7F64AA2";
         public const string REGRADING = "F3015350-44A2-4AA0-97B5-00166532B5E9";
         public const string POWERBI = "8C54228C-1B25-4909-A12A-F2B968BB0D62";
+        public const string FILE = "0A7FF475-B016-4687-9CE5-042BFDBD6519";
+        public const string IMAGE = "7E548B0D-209C-477B-9DCD-F0F44472381D";
+        public const string SUB_GRID_PANEL = "02D4264B-47E2-4B4C-AA95-F439F3F4D458";
 
         public const string UNKNOWN_1 = "50608ED7-B3A2-421D-9A99-AC58946E4597";
         public const string UNKNOWN_2 = "B5236566-B3BB-4A1A-8578-B48F67F51800";
@@ -103,6 +106,7 @@
             QUICK_VIEW_FORM,
             ACI_WIDGET,
             SUB_GRID,
+            SUB_GRID_PANEL,
             TIMER,
             BING_MAP,
             NOTE,
@@ -117,6 +121,8 @@
             UNKNOWN_3,
             UNKNOWN_4,
             UNKNOWN_5,
+            FILE,
+            IMAGE
         };
     }
 }

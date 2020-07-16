@@ -34,11 +34,11 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}</ProjectGuid>
+    <ProjectGuid>{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSharpWebResource2ProjectTemplate</RootNamespace>
-    <AssemblyName>CSharpWebResource2ProjectTemplate</AssemblyName>
+    <RootNamespace>CSharpJsForm2ItemTemplate</RootNamespace>
+    <AssemblyName>CSharpJsForm2ItemTemplate</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
@@ -71,32 +71,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="chutzpah.json" />
-    <None Include="deploy.debug.bat" />
-    <None Include="generator.form.bat" />
-    <None Include="generator.webapi.bat" />
-    <None Include="package.json" />
-    <None Include="_packages.config" />
-    <None Include="ProjectTemplate.csproj" />
+    <Content Include="icon.png" />
+    <Content Include="Javascript.js" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="CSharpWebResource2ProjectTemplate.vstemplate">
+    <VSTemplate Include="CSharpJsForm2ItemTemplate.vstemplate">
       <OutputSubPath>DynamicsCrm.DevKit</OutputSubPath>
       <SubType>Designer</SubType>
     </VSTemplate>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="XrmEnum.js" />
-    <None Include="requirejsConfig.js" />
-    <None Include="devkit.js" />
-    <Content Include="icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DevKit.d.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

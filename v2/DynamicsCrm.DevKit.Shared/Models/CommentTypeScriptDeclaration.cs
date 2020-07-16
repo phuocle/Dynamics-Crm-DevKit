@@ -8,5 +8,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public bool JsWebApi { get; set; }
         public bool IsDebugForm { get; set; }
         public bool IsDebugWebApi { get; set; }
+        public string Version { get; set; }
     }
 }

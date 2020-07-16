@@ -20,6 +20,7 @@ namespace DynamicsCrm.DevKit.Wizard
         public string GeneratedJsForm { get; set; }
         public string GeneratedJsFormCode { get; set; }
         public string GeneratedJsFormCodeTypeScriptDeclaration { get; set; }
+        public string GeneratedJsFormCodeTypeScriptDeclaration2 { get; set; }
 
         public IOrganizationService CrmService { get; set; }
         public CrmConnection CrmConnection { get; set; }
@@ -45,6 +46,11 @@ namespace DynamicsCrm.DevKit.Wizard
                 if(_itemType == ItemType.JsForm)
                 {
                     link.Text = @"Add New Js Form Class";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template";
+                }
+                else if (_itemType == ItemType.JsForm2)
+                {
+                    link.Text = @"Add New Js Form Class (NEW)";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template";
                 }
             }
@@ -138,6 +144,43 @@ namespace DynamicsCrm.DevKit.Wizard
                     Application.DoEvents();
                 }
             }
+            else if (ItemType == ItemType.JsForm2)
+            {
+                EnabledAll(false);
+                progressBar.Visible = true;
+                progressBar.Style = ProgressBarStyle.Marquee;
+                var isDebugForm = checkBoxDebug.Checked;
+                var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{Class}.d.ts";
+                var isDebugWebApi = false;
+                var jsWebApi = false;
+                if (File.Exists(file))
+                {
+                    try
+                    {
+                        var lines = File.ReadAllLines(file);
+                        var json = lines[lines.Length - 1];
+                        var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                        isDebugWebApi = comment.IsDebugWebApi;
+                        jsWebApi = comment.JsWebApi;
+                    }
+                    catch { }
+                }
+                var jsGlobalNameSpace = Utility.GetJsGlobalNameSpace(DTE);
+                var forms = checkListForm.CheckedItems.OfType<string>().ToList();
+                var @class = Class;
+                Task task2 = Task.Factory.StartNew(() =>
+                {
+                    var jsForm2 = new JsForm2(CrmService, jsGlobalNameSpace, @class);
+                    jsForm2.GeneratorCode(forms, isDebugForm, jsWebApi, isDebugWebApi);
+                    GeneratedJsForm = jsForm2.Form;
+                    GeneratedJsFormCode = jsForm2.FormCode;
+                    GeneratedJsFormCodeTypeScriptDeclaration2 = jsForm2.FormCodeTypeScriptDeclaration2;
+                });
+                while (!task2.IsCompleted)
+                {
+                    Application.DoEvents();
+                }
+            }
             progressBar.Visible = false;
             DialogResult = DialogResult.OK;
         }
@@ -165,6 +208,7 @@ namespace DynamicsCrm.DevKit.Wizard
             switch (ItemType)
             {
                 case ItemType.JsForm:
+                case ItemType.JsForm2:
                     List<XrmEntity> entities2 = null;
                     progressBar.Visible = true;
                     progressBar.Style = ProgressBarStyle.Marquee;
@@ -212,7 +256,7 @@ namespace DynamicsCrm.DevKit.Wizard
             var forms = new List<string>();
             progressBar.Visible = true;
             progressBar.Style = ProgressBarStyle.Marquee;
-            if (ItemType == ItemType.JsForm)
+            if (ItemType == ItemType.JsForm || ItemType == ItemType.JsForm2)
             {
                 Task task1 = Task.Factory.StartNew(() =>
                 {

@@ -56,6 +56,10 @@
     <None Include="packages.config" />
     <None Include="_package.json" />
     <None Include="chutzpah.json" />
+    <Content Include="entities\devkit_Location.form.js">
+      <DependentUpon>devkit_Location.js</DependentUpon>
+    </Content>
+    <Content Include="entities\devkit_Location.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="entities\DevKit.d.ts" />
     <Content Include="test\requirejsConfig.js" />
@@ -64,6 +68,7 @@
     <None Include="entities\generator.webapi.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <ItemGroup>
     <Folder Include="css\" />
     <Folder Include="html\" />
@@ -73,6 +78,14 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.7.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="entities\devkit_Location.d.ts">
+      <DependentUpon>devkit_Location.js</DependentUpon>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>
