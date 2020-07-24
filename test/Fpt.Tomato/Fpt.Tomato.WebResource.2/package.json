@@ -19,5 +19,9 @@
     "requirejs": "^2.3.6",
     "sinon": "^9.0.2",
     "xrm-mock": "^3.4.18"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.158",
+    "lodash": "^4.17.19"
   }
 }

@@ -981,6 +981,8 @@ declare namespace DevKit {
         }
         interface QuickView {
             readonly Value: any;
+            Visible: boolean;
+            Label: string;
         }
     }
     namespace WebApi {

@@ -65,9 +65,9 @@ declare namespace Tomato {
 			statuscode: DevKit.Controls.OptionSet;
 		}
 		interface Navigation {
+			navAudit: DevKit.Controls.NavigationItem,
 			nav_devkit_devkit_location_account_LocationId: DevKit.Controls.NavigationItem,
-			nav_bpf_devkit_location_devkit_bpf_location_1: DevKit.Controls.NavigationItem,
-			nav_bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69: DevKit.Controls.NavigationItem
+			nav_devkit_devkit_location_contact_LocationId: DevKit.Controls.NavigationItem
 		}
 		interface quickForm_qwAccount_Body {
 			AccountCategoryCode: DevKit.Controls.QuickView;

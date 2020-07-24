@@ -360,10 +360,15 @@ namespace DynamicsCrm.DevKit.Shared
                                .Descendants("Navigation")
                                .Descendants("NavBar")
                                .Descendants("NavBarByRelationshipItem")
+                               where (string)x?.Attribute("Show") == null ||
+                                     (string)x?.Attribute("Show") == "true"
                                select (string)x?.Attribute("Id")).ToList();
             if (navigations.Count == 0) return string.Empty;
             foreach (var navigation in navigations)
+            {
+
                 _d_ts += $"\t\t\t{navigation}: DevKit.Controls.NavigationItem,\r\n";
+            }
             _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return _d_ts;
         }

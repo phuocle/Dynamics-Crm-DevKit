@@ -45,6 +45,38 @@
           ]
         }
       ]
+    },
+    {
+      "profile": "DEBUG2",
+      "solution": "DEVKIT",
+      "prefix": "devkit_",
+      "rootfolder": "",
+      "includefiles": [
+        "entities\\*.js",
+        "lib\\**.js"
+      ],
+      "excludefiles": [
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "devkit_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "devkit_/entities/[entity].form.js"
+          ]
+        },
+        {
+          "webresources": [
+            "devkit_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "devkit_/lib/devkit.js",
+            "devkit_/lib/lodash.min.js"
+          ]
+        }
+      ]
     }
   ],
   "generators": [

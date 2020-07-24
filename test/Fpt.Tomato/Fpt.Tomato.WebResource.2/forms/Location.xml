@@ -37,6 +37,20 @@
                   </cell>
                 </row>
                 <row>
+                  <cell id="{3a17d484-5b79-b147-9b87-79d53201b198}" showlabel="false" colspan="1" auto="false">
+                    <labels>
+                      <label description="Quick View Account" languagecode="1033" />
+                    </labels>
+                    <control id="qwAccount" classid="{5C5600E0-1D6E-4205-A272-BE80DA87FD42}" datafieldname="devkit_accountid" disabled="false">
+                      <parameters>
+                        <QuickForms>&lt;QuickFormIds&gt;&lt;QuickFormId entityname="account"&gt;7dcbaf74-2f8b-4cc5-82a7-d69bc7d2ba49&lt;/QuickFormId&gt;&lt;/QuickFormIds&gt;</QuickForms>
+                        <ControlMode>Edit</ControlMode>
+                        <DisplayAsCustomer360Tile>false</DisplayAsCustomer360Tile>
+                      </parameters>
+                    </control>
+                  </cell>
+                </row>
+                <row>
                   <cell id="{02220c00-28c4-51bb-6681-26a752a32be6}" showlabel="true" locklevel="0">
                     <labels>
                       <label description="Contact" languagecode="1033" />
@@ -362,9 +376,9 @@
       <columns>
         <column width="100%">
           <sections>
-            <section name="tab_3_section_1" showlabel="false" showbar="false" locklevel="0" id="{27110ddc-3540-1192-ce34-2bee47051007}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115">
+            <section name="tab3sec1" showlabel="true" showbar="true" locklevel="0" id="{27110ddc-3540-1192-ce34-2bee47051007}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left">
               <labels>
-                <label description="Section" languagecode="1033" />
+                <label description="sec1" languagecode="1033" />
               </labels>
               <rows>
                 <row>
@@ -591,6 +605,16 @@
       </customControl>
     </controlDescription>
   </controlDescriptions>
+  <formLibraries>
+    <Library name="devkit_/entities/devkit_Location.js" libraryUniqueId="{30244e53-41ec-e042-7ee1-57b3c809b899}" />
+  </formLibraries>
+  <events>
+    <event name="onload" application="false" active="false">
+      <Handlers>
+        <Handler functionName="formLocation.OnLoad" libraryName="devkit_/entities/devkit_Location.js" handlerUniqueId="{de07334c-4abc-cd51-269e-3b24454e2ca0}" enabled="true" parameters="" passExecutionContext="true" />
+      </Handlers>
+    </event>
+  </events>
   <DisplayConditions Order="0" FallbackForm="true">
     <Everyone />
   </DisplayConditions>
