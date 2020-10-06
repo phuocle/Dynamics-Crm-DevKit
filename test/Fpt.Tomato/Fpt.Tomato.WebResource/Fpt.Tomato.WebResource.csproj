@@ -514,12 +514,12 @@
     <Content Include="test\docs\_grids\_viewselector\_isVisible.md" />
     <Content Include="test\docs\_grids\_viewselector\_setCurrentView.md" />
     <Content Include="test\docs\save-event-arguments.md" />
-    <Content Include="test\docs\save-event-arguments\getSaveMode.md" />
+    <Content Include="test\docs\save-event-arguments\_getSaveMode.md" />
     <Content Include="test\docs\save-event-arguments\includes\getSaveMode-description.md" />
     <Content Include="test\docs\save-event-arguments\includes\isDefaultPrevented-description.md" />
     <Content Include="test\docs\save-event-arguments\includes\preventDefault-description.md" />
-    <Content Include="test\docs\save-event-arguments\isDefaultPrevented.md" />
-    <Content Include="test\docs\save-event-arguments\preventDefault.md" />
+    <Content Include="test\docs\save-event-arguments\_isDefaultPrevented.md" />
+    <Content Include="test\docs\save-event-arguments\_preventDefault.md" />
     <Content Include="test\docs\xrm-app.md" />
     <Content Include="test\docs\_Xrm-App\_addGlobalNotification.md" />
     <Content Include="test\docs\_Xrm-App\_clearGlobalNotification.md" />

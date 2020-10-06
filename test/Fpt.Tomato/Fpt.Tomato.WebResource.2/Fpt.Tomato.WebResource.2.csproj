@@ -54,7 +54,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="packages.config" />
-    <None Include="_package.json" />
     <None Include="chutzpah.json" />
     <Content Include="entities\devkit_Location.form.js">
       <DependentUpon>devkit_Location.js</DependentUpon>

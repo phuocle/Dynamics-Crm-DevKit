@@ -58,7 +58,7 @@ var formLocation = (function () {
 
 	function CheckQuickForm() {
 		IsTrue(form.QuickForm.quickViewContact.Visible, true, "form.QuickForm.quickViewContact.Visible");
-		IsTrue(form.QuickForm.quickViewContact.Body.FirstName.Value, "Jim",  " Jim - form.QuickForm.quickViewContact.Body.FirstName.Value");
+		IsTrue(form.QuickForm.quickViewContact.Body.FirstName.Value, "Jim",  "------ BUG ------ Jim - form.QuickForm.quickViewContact.Body.FirstName.Value");
 		IsTrue(form.QuickForm.quickViewContact.Body.FirstName.Visible, true, "true - form.QuickForm.quickViewContact.Body.FirstName.Visible");
 		form.QuickForm.quickViewContact.Body.EMailAddress1.Visible = false;
 		form.QuickForm.quickViewContact.Body.LastName.Label = "NEW LAST NAME";
