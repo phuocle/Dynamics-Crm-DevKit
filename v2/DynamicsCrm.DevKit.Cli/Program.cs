@@ -32,7 +32,7 @@ namespace DynamicsCrm.DevKit.Cli
         {
             CliLog.WriteLine(CliLog.ColorGreen, "╔", new string('═', CliLog.StarLength), "╗");
             CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
-            CliLog.WriteLine(CliLog.ColorGreen, "║", CliLog.ColorCyan, $"              DynamicsCrm.DevKit.Cli - {Const.Version}               ", CliLog.ColorGreen, "║");
+            CliLog.WriteLine(CliLog.ColorGreen, "║", CliLog.ColorCyan, $"              DynamicsCrm.DevKit.Cli - {Const.Version}              ", CliLog.ColorGreen, "║");
             CliLog.WriteLine(CliLog.ColorGreen, "║", CliLog.ColorRed, "       https://github.com/phuocle/Dynamics-Crm-DevKit       ", CliLog.ColorGreen, "║");
             CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
             CliLog.WriteLine(CliLog.ColorGreen, "╚", new string('═', CliLog.StarLength), "╝");

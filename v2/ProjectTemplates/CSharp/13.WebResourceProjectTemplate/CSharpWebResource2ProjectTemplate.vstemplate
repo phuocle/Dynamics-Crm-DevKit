@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <SortOrder>1120</SortOrder>
-    <Name>13. C# WebResource Project (NEW)</Name>
-    <Description>C# WebResource Project Template (NEW)</Description>
+    <Name>WebResource Project (NEW)</Name>
+    <Description>WebResource Project Template (NEW)</Description>
     <DefaultName>WebResourceProject</DefaultName>
-    <TemplateID>AAAAAAAA-AAAA-AAAA-AAAA-000000000013</TemplateID>
+    <TemplateID>DynamicsCrm.DevKit.CSharpWebResourceProjectNEW</TemplateID>
     <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
-    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>

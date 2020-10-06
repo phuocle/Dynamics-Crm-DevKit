@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <SortOrder>1080</SortOrder>
-    <Name>08. C# Ui Test Project</Name>
-    <Description>C# Ui Test Project Template</Description>
+    <Name>Ui Test Project</Name>
+    <Description>Ui Test Project Template</Description>
     <DefaultName>UiTestProject</DefaultName>
-    <TemplateID>AAAAAAAA-AAAA-AAAA-AAAA-000000000008</TemplateID>
-    <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
-    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <TemplateID>DynamicsCrm.DevKit</TemplateID>
+    <TemplateGroupID>DynamicsCrm.DevKit.CSharpUiTestProject</TemplateGroupID>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>

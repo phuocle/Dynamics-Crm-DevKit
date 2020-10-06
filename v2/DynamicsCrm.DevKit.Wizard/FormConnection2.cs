@@ -23,9 +23,6 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
-            //Font = SystemFonts.DefaultFont;
-
-            Text += Const.Version;
             DTE = dte;
             LoadConnections();
         }

@@ -86,7 +86,7 @@
             this.cboConnection.Location = new System.Drawing.Point(118, 11);
             this.cboConnection.Margin = new System.Windows.Forms.Padding(2);
             this.cboConnection.Name = "cboConnection";
-            this.cboConnection.Size = new System.Drawing.Size(270, 21);
+            this.cboConnection.Size = new System.Drawing.Size(270, 24);
             this.cboConnection.TabIndex = 7;
             // 
             // groupBoxConnection
@@ -123,7 +123,7 @@
             this.cboType.Location = new System.Drawing.Point(85, 42);
             this.cboType.Margin = new System.Windows.Forms.Padding(2);
             this.cboType.Name = "cboType";
-            this.cboType.Size = new System.Drawing.Size(227, 21);
+            this.cboType.Size = new System.Drawing.Size(227, 24);
             this.cboType.TabIndex = 10;
             this.cboType.SelectedIndexChanged += new System.EventHandler(this.cboType_SelectedIndexChanged);
             // 
@@ -141,7 +141,7 @@
             this.txtName.Location = new System.Drawing.Point(85, 17);
             this.txtName.Margin = new System.Windows.Forms.Padding(2);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(227, 20);
+            this.txtName.Size = new System.Drawing.Size(227, 22);
             this.txtName.TabIndex = 8;
             // 
             // labelName
@@ -170,7 +170,7 @@
             this.txtPassword.Margin = new System.Windows.Forms.Padding(2);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(227, 20);
+            this.txtPassword.Size = new System.Drawing.Size(227, 22);
             this.txtPassword.TabIndex = 3;
             // 
             // labelPassword
@@ -187,7 +187,7 @@
             this.txtUserName.Location = new System.Drawing.Point(85, 93);
             this.txtUserName.Margin = new System.Windows.Forms.Padding(2);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(227, 20);
+            this.txtUserName.Size = new System.Drawing.Size(227, 22);
             this.txtUserName.TabIndex = 2;
             // 
             // labelUserName
@@ -204,7 +204,7 @@
             this.txtUrl.Location = new System.Drawing.Point(85, 68);
             this.txtUrl.Margin = new System.Windows.Forms.Padding(2);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(456, 20);
+            this.txtUrl.Size = new System.Drawing.Size(456, 22);
             this.txtUrl.TabIndex = 1;
             // 
             // labelUrl
@@ -218,7 +218,8 @@
             // 
             // FormConnection2
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(561, 195);
             this.ControlBox = false;
             this.Controls.Add(this.groupBoxConnection);
@@ -234,7 +235,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DynamicsCrm.DevKit - v.";
+            this.Text = "DynamicsCrm.DevKit";
             this.groupBoxConnection.ResumeLayout(false);
             this.groupBoxConnection.PerformLayout();
             this.ResumeLayout(false);

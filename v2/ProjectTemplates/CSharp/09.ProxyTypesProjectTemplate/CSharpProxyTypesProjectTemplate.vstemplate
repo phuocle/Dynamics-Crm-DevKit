@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <SortOrder>1090</SortOrder>
-    <Name>09. C# ProxyTypes Project</Name>
-    <Description>C# ProxyTypes Project Template</Description>
+    <Name>ProxyTypes Project</Name>
+    <Description>ProxyTypes Project Template</Description>
     <DefaultName>ProxyTypesProject</DefaultName>
-    <TemplateID>AAAAAAAA-AAAA-AAAA-AAAA-000000000009</TemplateID>
+    <TemplateID>DynamicsCrm.DevKit.CSharpProxyTypesProject</TemplateID>
     <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
-    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
