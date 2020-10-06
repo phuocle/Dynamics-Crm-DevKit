@@ -169,10 +169,16 @@
   ],
   "proxytypes": [
     {
-      "profile": "DEBUG",
-      "namespace": "???",
+      "profile": "ALL",
+      "namespace": "Abc.LuckyStar.ProxyTypes",
       "output": "GeneratedCode.cs",
-      "entities":  ""
+      "entities": ""
+    },
+    {
+      "profile": "ENTITIES",
+      "namespace": "Abc.LuckyStar.ProxyTypes2",
+      "output": "GeneratedCode2.cs",
+      "entities": "account,contact"
     }
   ],
   "visualstudio": {
