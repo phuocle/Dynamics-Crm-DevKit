@@ -36,8 +36,8 @@ namespace Abc.LuckyStar.PluginAccount
             if (context.MessageName.ToLower() != "Assign".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Assign");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage($"Begin Plugin: Abc.LuckyStar.PluginAccount.PostAccountAssignAsynchronous with context: {SimpleJson.SerializeObject(context)}");
-            tracing.DebugContext(context);
+            //tracing.DebugMessage("Begin Plugin: Abc.LuckyStar.PluginAccount.PostAccountAssignAsynchronous");
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 

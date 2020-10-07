@@ -6,8 +6,7 @@ namespace Abc.LuckyStar.PluginAccount
 {
     [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "accountnumber,name",
     "Abc.LuckyStar.PluginAccount.PostAccountUpdateAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
-    Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "accountnumber,name",
-    Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "accountnumber,name,websiteurl,telephone1")]
+    Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "accountnumber")]
     public class PostAccountUpdateAsynchronous : IPlugin
     {
         /*
@@ -43,7 +42,8 @@ namespace Abc.LuckyStar.PluginAccount
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
             //tracing.DebugMessage("Begin Plugin: Abc.LuckyStar.PluginAccount.PostAccountUpdateAsynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
+
             ExecutePlugin(context, serviceFactory, service, tracing);
 
             //tracing.DebugMessage("End Plugin: Abc.LuckyStar.PluginAccount.PostAccountUpdateAsynchronous");

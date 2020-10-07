@@ -42,6 +42,7 @@ namespace Abc.LuckyStar.PluginAccount
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
             //tracing.DebugMessage("Begin Plugin: Abc.LuckyStar.PluginAccount.PreAccountCreateSynchronous");
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 

@@ -37,6 +37,7 @@ namespace Abc.LuckyStar.PluginAccount
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
             //tracing.DebugMessage("Begin Plugin: Abc.LuckyStar.PluginAccount.PostAccountGrantAccessAsynchronous");
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
