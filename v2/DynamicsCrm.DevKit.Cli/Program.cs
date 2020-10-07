@@ -30,12 +30,13 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static void CrmCli(CommandLineArgs arguments)
         {
-            CliLog.WriteLine(CliLog.ColorGreen, "╔", new string('═', CliLog.StarLength), "╗");
-            CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
-            CliLog.WriteLine(CliLog.ColorGreen, "║", CliLog.ColorCyan, $"              DynamicsCrm.DevKit.Cli - {Const.Version}              ", CliLog.ColorGreen, "║");
-            CliLog.WriteLine(CliLog.ColorGreen, "║", CliLog.ColorRed, "       https://github.com/phuocle/Dynamics-Crm-DevKit       ", CliLog.ColorGreen, "║");
-            CliLog.WriteLine(CliLog.ColorGreen, "║", new string(' ', CliLog.StarLength), "║");
-            CliLog.WriteLine(CliLog.ColorGreen, "╚", new string('═', CliLog.StarLength), "╝");
+            CliLog.WriteLine(CliLog.ColorGreen, " ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
+            CliLog.WriteLine(CliLog.ColorGreen, "|  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
+            CliLog.WriteLine(CliLog.ColorGreen, "| | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
+            CliLog.WriteLine(CliLog.ColorGreen, "| |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
+            CliLog.WriteLine(CliLog.ColorGreen, "|____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
+            CliLog.WriteLine(CliLog.ColorGreen, "       |___/                                          ", CliLog.ColorWhite, "https://github.com/phuocle/Dynamics-Crm-DevKit", CliLog.ColorBlue, $" {Const.Version}");
+            CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Path: ", CliLog.ColorWhite, Assembly.GetExecutingAssembly().Location);
 #if DEBUG
             CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
