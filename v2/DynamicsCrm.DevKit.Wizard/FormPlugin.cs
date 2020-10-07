@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
@@ -18,11 +16,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
-
-            //Font = SystemFonts.DefaultFont;
             progressBar.Visible = false;
-
-            Text += Const.Version;
 
             DTE = dte;
             ItemType = itemType;

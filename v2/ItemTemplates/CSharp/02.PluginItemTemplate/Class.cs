@@ -32,6 +32,7 @@ $PluginComment$
             if (context.Mode != (int)ExecutionModeEnum.$PluginExecution$) throw new InvalidPluginExecutionException("Execution does not equals $PluginExecution$");
 
             //tracing.DebugMessage("Begin Plugin: $NameSpacePlugin$.$PluginClass$$PluginOrder2$");
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 

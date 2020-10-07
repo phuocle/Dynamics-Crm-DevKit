@@ -84,7 +84,7 @@
             this.labelClass.AutoSize = true;
             this.labelClass.Location = new System.Drawing.Point(8, 63);
             this.labelClass.Name = "labelClass";
-            this.labelClass.Size = new System.Drawing.Size(46, 17);
+            this.labelClass.Size = new System.Drawing.Size(45, 16);
             this.labelClass.TabIndex = 12;
             this.labelClass.Text = "Class:";
             // 
@@ -93,7 +93,7 @@
             this.labelExecution.AutoSize = true;
             this.labelExecution.Location = new System.Drawing.Point(8, 181);
             this.labelExecution.Name = "labelExecution";
-            this.labelExecution.Size = new System.Drawing.Size(73, 17);
+            this.labelExecution.Size = new System.Drawing.Size(69, 16);
             this.labelExecution.TabIndex = 10;
             this.labelExecution.Text = "Execution:";
             // 
@@ -102,7 +102,7 @@
             this.labelStage.AutoSize = true;
             this.labelStage.Location = new System.Drawing.Point(8, 140);
             this.labelStage.Name = "labelStage";
-            this.labelStage.Size = new System.Drawing.Size(49, 17);
+            this.labelStage.Size = new System.Drawing.Size(47, 16);
             this.labelStage.TabIndex = 9;
             this.labelStage.Text = "Stage:";
             // 
@@ -120,7 +120,7 @@
             this.labelMessage.AutoSize = true;
             this.labelMessage.Location = new System.Drawing.Point(8, 101);
             this.labelMessage.Name = "labelMessage";
-            this.labelMessage.Size = new System.Drawing.Size(69, 17);
+            this.labelMessage.Size = new System.Drawing.Size(68, 16);
             this.labelMessage.TabIndex = 8;
             this.labelMessage.Text = "Message:";
             // 
@@ -191,7 +191,7 @@
             this.labelEntity.AutoSize = true;
             this.labelEntity.Location = new System.Drawing.Point(8, 22);
             this.labelEntity.Name = "labelEntity";
-            this.labelEntity.Size = new System.Drawing.Size(47, 17);
+            this.labelEntity.Size = new System.Drawing.Size(43, 16);
             this.labelEntity.TabIndex = 0;
             this.labelEntity.Text = "Entity:";
             // 
@@ -243,7 +243,8 @@
             // FormPlugin
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(659, 245);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
@@ -259,7 +260,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DynamicsCrm.DevKit - v.";
+            this.Text = "DynamicsCrm.DevKit";
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);
