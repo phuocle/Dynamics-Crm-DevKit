@@ -3,7 +3,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "DEVKIT",
       "includefiles": [
         "Abc.LuckyStar.Plugin.*.dll",
         "Abc.LuckyStar.CustomAction.*.dll"
