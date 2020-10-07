@@ -60,10 +60,6 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
-            Font = SystemFonts.DefaultFont;
-
-            Text += Const.Version;
-
             progressBar.Visible = false;
 
             DTE = dte;

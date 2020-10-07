@@ -111,7 +111,7 @@
             this.checkBoxDebug.Location = new System.Drawing.Point(387, 47);
             this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxDebug.Name = "checkBoxDebug";
-            this.checkBoxDebug.Size = new System.Drawing.Size(79, 21);
+            this.checkBoxDebug.Size = new System.Drawing.Size(75, 20);
             this.checkBoxDebug.TabIndex = 5;
             this.checkBoxDebug.Text = "DEBUG";
             this.checkBoxDebug.UseVisualStyleBackColor = true;
@@ -158,7 +158,7 @@
             this.labelItemName.AutoSize = true;
             this.labelItemName.Location = new System.Drawing.Point(93, 48);
             this.labelItemName.Name = "labelItemName";
-            this.labelItemName.Size = new System.Drawing.Size(0, 17);
+            this.labelItemName.Size = new System.Drawing.Size(0, 16);
             this.labelItemName.TabIndex = 2;
             // 
             // labelItem
@@ -166,7 +166,7 @@
             this.labelItem.AutoSize = true;
             this.labelItem.Location = new System.Drawing.Point(8, 22);
             this.labelItem.Name = "labelItem";
-            this.labelItem.Size = new System.Drawing.Size(79, 17);
+            this.labelItem.Size = new System.Drawing.Size(76, 16);
             this.labelItem.TabIndex = 0;
             this.labelItem.Text = "Item Name:";
             // 
@@ -196,7 +196,8 @@
             // FormItemForm
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(659, 245);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
@@ -212,7 +213,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DynamicsCrm.DevKit - v.";
+            this.Text = "DynamicsCrm.DevKit";
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);
