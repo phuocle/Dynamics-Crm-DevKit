@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{c108b896-6b52-ea11-a812-000d3a80c481}</WebResourceId>
+  <Name>abc_/entities/devkit_CustomActivity.js</Name>
+  <DisplayName>abc_/entities/devkit_CustomActivity.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/devkit_CustomActivity.form.js" displayName="abc_/entities/devkit_CustomActivity.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{de53945f-3cdf-446a-aa2e-1f1544d5c9d7}"/&gt;&lt;Library name="abc_/entities/devkit_CustomActivity.webapi.js" displayName="abc_/entities/devkit_CustomActivity.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{4776133f-34da-495d-920a-78cd44cb2d2b}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/abc_entitiesdevkit_CustomActivityjsC108B896-6B52-EA11-A812-000D3A80C481</FileName>
+</WebResource>

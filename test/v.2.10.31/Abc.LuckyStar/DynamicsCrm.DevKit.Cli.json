@@ -90,36 +90,36 @@
     {
       "profile": "Extract-Unmanaged",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "DEVKIT",
       "solutiontype": "Unmanaged",
-      "folder": "???",
+      "folder": "DEVKIT",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Extract-Managed",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "DEVKIT",
       "solutiontype": "Managed",
-      "folder": "???",
+      "folder": "DEVKIT",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Pack-Unmanaged",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "DEVKIT",
       "solutiontype": "Unmanaged",
-      "folder": "???",
+      "folder": "DEVKIT",
       "type": "Pack",
       "mapfile": ""
     },
     {
       "profile": "Pack-Managed",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "DEVKIT",
       "solutiontype": "Managed",
-      "folder": "???",
+      "folder": "DEVKIT",
       "type": "Pack",
       "mapfile": ""
     }

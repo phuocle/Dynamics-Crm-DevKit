@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{343b41bf-9f66-e911-a991-000d3a802ab7}</WebResourceId>
+  <Name>devkit_/entities/devkit_WebApi.js</Name>
+  <DisplayName>devkit_/entities/devkit_WebApi.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="devkit_/entities/devkit_WebApi.form.js" displayName="devkit_/entities/devkit_WebApi.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{0ac22a53-43d0-4325-90c9-d9b85c918bca}"/&gt;&lt;Library name="devkit_/entities/devkit_WebApi.webapi.js" displayName="devkit_/entities/devkit_WebApi.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{defa591b-9679-4481-809a-206141f83611}"/&gt;&lt;Library name="devkit_/entities/Contact.webapi.js" displayName="devkit_/entities/Contact.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{aeb1dbac-a265-4fe5-8610-1bcfcd614dcf}"/&gt;&lt;Library name="devkit_/entities/ActivityParty.webapi.js" displayName="devkit_/entities/ActivityParty.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{2e4689c0-8fef-4483-b078-4b9b47370f6f}"/&gt;&lt;Library name="devkit_/entities/Account.webapi.js" displayName="devkit_/entities/Account.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{ba08ce3e-6853-4017-9b6e-d9941a885079}"/&gt;&lt;Library name="devkit_/entities/Email.webapi.js" displayName="devkit_/entities/Email.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{0faca18b-618c-43a2-856b-950a88be3b6a}"/&gt;&lt;Library name="devkit_/entities/SystemUser.webapi.js" displayName="devkit_/entities/SystemUser.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{1c26f64f-d016-4449-b6cb-8bb4ded3935f}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/devkit_entitiesdevkit_WebApijs343B41BF-9F66-E911-A991-000D3A802AB7</FileName>
+</WebResource>

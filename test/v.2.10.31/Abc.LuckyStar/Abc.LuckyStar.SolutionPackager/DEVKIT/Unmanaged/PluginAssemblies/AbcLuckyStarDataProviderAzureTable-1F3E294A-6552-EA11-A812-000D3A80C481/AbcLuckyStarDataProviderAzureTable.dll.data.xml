@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Abc.LuckyStar.DataProvider.AzureTable, Version=1.0.0.0, Culture=en, PublicKeyToken=a290da0db6d69c3a" PluginAssemblyId="1f3e294a-6552-ea11-a812-000d3a80c481" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/AbcLuckyStarDataProviderAzureTable-1F3E294A-6552-EA11-A812-000D3A80C481/AbcLuckyStarDataProviderAzureTable.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Abc.LuckyStar.DataProvider.AzureTable.Retrieve, Abc.LuckyStar.DataProvider.AzureTable, Version=1.0.0.0, Culture=en, PublicKeyToken=a290da0db6d69c3a" PluginTypeId="223e294a-6552-ea11-a812-000d3a80c481" Name="Abc.LuckyStar.DataProvider.AzureTable.Retrieve">
+      <FriendlyName>Abc.LuckyStar.DataProvider.AzureTable.Retrieve</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Abc.LuckyStar.DataProvider.AzureTable.RetrieveMultiple, Abc.LuckyStar.DataProvider.AzureTable, Version=1.0.0.0, Culture=en, PublicKeyToken=a290da0db6d69c3a" PluginTypeId="233e294a-6552-ea11-a812-000d3a80c481" Name="Abc.LuckyStar.DataProvider.AzureTable.RetrieveMultiple">
+      <FriendlyName>Abc.LuckyStar.DataProvider.AzureTable.RetrieveMultiple</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{69270904-60b3-e911-a99b-000d3a828cb5}</WebResourceId>
+  <Name>abc_/entities/Contact.js</Name>
+  <DisplayName>abc_/entities/Contact.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="abc_/entities/Contact.form.js" displayName="abc_/entities/Contact.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{b2759280-b34c-40f9-8ad3-1a4621ae7e42}"/&gt;&lt;Library name="abc_/entities/Contact.webapi.js" displayName="abc_/entities/Contact.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{9206b7dd-f8e2-4c7e-a4fd-22aa70b271ba}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/abc_entitiesContactjs69270904-60B3-E911-A99B-000D3A828CB5</FileName>
+</WebResource>
