@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.Xrm.Sdk;
 using Abc.LuckyStar.Shared;
+using Abc.LuckyStar.Shared.Entities;
 
 namespace Abc.LuckyStar.PluginAccount
 {
     [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
     "Abc.LuckyStar.PluginAccount.PostAccountCreateAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
-    Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "accountnumber")]
+    Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "accountnumber,fax")]
     public class PostAccountCreateAsynchronous : IPlugin
     {
         /*
@@ -42,20 +43,27 @@ namespace Abc.LuckyStar.PluginAccount
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
             //tracing.DebugMessage("Begin Plugin: Abc.LuckyStar.PluginAccount.PostAccountCreateAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
+            tracing.DebugContext(context);
             //tracing.DebugMessage("End Plugin: Abc.LuckyStar.PluginAccount.PostAccountCreateAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            //var target = (???)context.InputParameters["Target"];
+            var target = (Entity)context.InputParameters["Target"];
             //var preEntity = (Entity)context.PreEntityImages["PreImage"];
             //var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
-
+            var account = new Account(target);
+            if (account.Telephone1 == null) return;
+            var update = new Account(account.Id)
+            {
+                Fax = account.Telephone1
+            };
+            service.Update(account.GetUpdateEntity());
         }
     }
 }

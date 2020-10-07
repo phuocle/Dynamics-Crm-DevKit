@@ -127,8 +127,8 @@
   "generators": [
     {
       "profile": "LATEBOUND",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Abc.LuckyStar.Shared.Entities",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "CSharp",
       "entities": "",
@@ -136,21 +136,21 @@
     },
     {
       "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Abc.LuckyStar",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "entities": "",
-      "debug": ""
+      "entities": "msdyn_serviceconfiguration,msdyn_odatav4ds,msdyn_aibdatasetrecord",
+      "debug": "yes"
     },
     {
       "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Abc.LuckyStar",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "JsWebApi",
-      "entities": "",
-      "debug": ""
+      "entities": "*",
+      "debug": "yes"
     }
   ],
   "downloadwebresources": [
