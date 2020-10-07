@@ -13,14 +13,14 @@ namespace $NameSpace$
            OutputParameters:
               Entity                  Microsoft.Xrm.Sdk.Entity - require
         */
-        private readonly string _unsecureString = null;
-        private readonly string _secureString = null;
+        //private readonly string _unsecureString = null;
+        //private readonly string _secureString = null;
 
-        public Retrieve(string unsecureString, string secureString)
-        {
-            if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-            if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
-        }
+        //public Retrieve(string unsecureString, string secureString)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
+        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //}
 
         public void Execute(IServiceProvider serviceProvider)
         {
@@ -32,6 +32,7 @@ namespace $NameSpace$
             var dataSource = retriever.RetrieveEntityDataSource();
 
             //tracing.DebugMessage("Begin Data Provider: $NameSpace$.Retrieve");
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
