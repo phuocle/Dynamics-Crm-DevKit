@@ -9,15 +9,18 @@
     <Import_RootNamespace>Abc.LuckyStar.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Entities\" />
     <Folder Include="$(MSBuildThisFileDirectory)Lib\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
+  <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
+    <DependentUpon>Account.cs</DependentUpon>
+  </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\EntityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
-     <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
+    <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
   </ItemGroup>
 </Project>
