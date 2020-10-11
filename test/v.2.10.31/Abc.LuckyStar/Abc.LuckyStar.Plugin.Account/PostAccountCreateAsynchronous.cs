@@ -7,7 +7,7 @@ namespace Abc.LuckyStar.PluginAccount
 {
     [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
     "Abc.LuckyStar.PluginAccount.PostAccountCreateAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
-    Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "accountnumber,fax")]
+    Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "name,telephone1,fax")]
     public class PostAccountCreateAsynchronous : IPlugin
     {
         /*
@@ -47,7 +47,6 @@ namespace Abc.LuckyStar.PluginAccount
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            tracing.DebugContext(context);
             //tracing.DebugMessage("End Plugin: Abc.LuckyStar.PluginAccount.PostAccountCreateAsynchronous");
         }
 
