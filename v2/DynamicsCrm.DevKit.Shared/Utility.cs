@@ -12,8 +12,6 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class Utility
     {
-        //private const string IndentString = "  ";
-
         public static void TryDeleteDirectory(string directory)
         {
             if (Directory.Exists(directory))
@@ -94,31 +92,6 @@ namespace DynamicsCrm.DevKit.Shared
             devKit = Uglify.Js(devKit).Code;
             return code + devKit;
         }
-
-        //public static string FormatJson(string json)
-        //{
-        //    var indentation = 0;
-        //    var quoteCount = 0;
-        //    var result =
-        //        from ch in json
-        //        let quotes = ch == '"' ? quoteCount++ : quoteCount
-        //        let lineBreak = ch == ',' && quotes % 2 == 0
-        //            ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, indentation))
-        //            : null
-        //        let openChar = ch == '{' || ch == '['
-        //            ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, ++indentation))
-        //            : ch.ToString()
-        //        let closeChar = ch == '}' || ch == ']'
-        //            ? Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, --indentation)) + ch
-        //            : ch.ToString()
-        //        select lineBreak ?? (openChar.Length > 1
-        //                   ? openChar
-        //                   : closeChar);
-
-        //    var @return = string.Concat(result);
-        //    @return = @return.Replace("\":[", "\": [").Replace("\":\"", "\": \"");
-        //    return @return;
-        //}
 
         public static bool ExistProject(DTE dte, string projectName)
         {
@@ -403,19 +376,6 @@ namespace DynamicsCrm.DevKit.Shared
             return CrmVersionName._365;
         }
 
-        //public static void UpdateSolutionFile(string solutionFile, string projectName, string netVersion, string port)
-        //{
-        //    var data = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.WebSite.txt");
-        //    var solution = File.ReadAllText(solutionFile);
-        //    data = data
-        //        .Replace("$ProjectName$", projectName)
-        //        .Replace("$Guid$", $"{{{Guid.NewGuid().ToString().ToUpper()}}}")
-        //        .Replace("$NetVersion$", netVersion)
-        //        .Replace("$Port$", port);
-        //    solution += data;
-        //    Utility.ForceWriteAllText(solutionFile, solution);
-        //}
-
         public static string TrimGuid(string guid)
         {
             if (guid == null) return null;
@@ -443,9 +403,9 @@ namespace DynamicsCrm.DevKit.Shared
             var Projects = (object[])dte.ActiveSolutionProjects;
             var project = (Project)Projects[0];
             Project projectWithoutTest = null;
-            foreach (Project p in dte.Solution.Projects)
+            foreach (Project p in GetProjects(dte.Solution))
             {
-                if ($"{p.Name}.Test" == project.Name)
+                if ($"{p.Name}.Test" == "Abc.LuckyStar.DataProvider.Test"/*project.Name*/)
                 {
                     projectWithoutTest = p;
                     break;
