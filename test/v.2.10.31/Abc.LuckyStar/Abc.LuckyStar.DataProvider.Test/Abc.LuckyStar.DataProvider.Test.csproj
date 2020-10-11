@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C0AB0CFB-87C7-4F24-AF91-9A987171908A}</ProjectGuid>
+    <ProjectGuid>{362AF379-6AEE-48D3-8F56-44FE95576C31}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Abc.LuckyStar.PluginAccount.Test</RootNamespace>
-    <AssemblyName>Abc.LuckyStar.Plugin.Account.Test</AssemblyName>
+    <RootNamespace>Abc.LuckyStar.DataProvider.Test</RootNamespace>
+    <AssemblyName>Abc.LuckyStar.DataProvider.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -91,8 +91,8 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Abc.LuckyStar.Plugin.Account\Abc.LuckyStar.Plugin.Account.csproj">
-      <Name>Abc.LuckyStar.Plugin.Account</Name>
+    <ProjectReference Include="..\Abc.LuckyStar.DataProvider\Abc.LuckyStar.DataProvider.csproj">
+      <Name>Abc.LuckyStar.DataProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\Abc.LuckyStar.ProxyTypes\Abc.LuckyStar.ProxyTypes.csproj">
       <Name>Abc.LuckyStar.ProxyTypes</Name>
