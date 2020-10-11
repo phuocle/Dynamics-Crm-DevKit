@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>Solution Packager Project</Name>
+    <Name>01. Solution Packager Project</Name>
     <Description>Solution Packager Project Template</Description>
     <DefaultName>SolutionPackagerProject</DefaultName>
     <TemplateID>DynamicsCrm.DevKit.CSharpSolutionPackagerProject</TemplateID>

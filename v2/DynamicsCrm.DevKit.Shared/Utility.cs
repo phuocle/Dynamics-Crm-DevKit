@@ -301,7 +301,7 @@ namespace DynamicsCrm.DevKit.Shared
             return string.Join(".", items);
         }
 
-        private static bool IsAddedTestProject(Projects projects, string projectName)
+        private static bool IsAddedTestProject(List<Project> projects, string projectName)
         {
             foreach (Project project in projects)
                 if (project.Name == projectName)
@@ -311,8 +311,9 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static List<string> GetAllProjectForTesting(DTE dte)
         {
-            var projects = new List<string>();
-            foreach (Project project in GetProjects(dte.Solution))
+            var lists = new List<string>();
+            var projects = GetProjects(dte.Solution);
+            foreach (Project project in projects)
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name.Contains($".{ProjectType.Plugin.ToString()}.") ||
@@ -324,11 +325,11 @@ namespace DynamicsCrm.DevKit.Shared
                     project.Name.EndsWith($".{ProjectType.DataProvider.ToString()}"))
                 {
                     if (project.Name.EndsWith(".Test")) continue;
-                    if (IsAddedTestProject(dte.Solution.Projects, $"{project.Name}.Test")) continue;
-                    projects.Add(project.Name);
+                    if (IsAddedTestProject(projects, $"{project.Name}.Test")) continue;
+                    lists.Add(project.Name);
                 }
             }
-            return projects;
+            return lists;
         }
 
         public static string SafeName(string name)

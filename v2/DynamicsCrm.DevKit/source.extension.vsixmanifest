@@ -3,10 +3,10 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PL.DynamicsCrm.DevKit.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="2.10.31" Language="en-US"
+        <Identity Id="PL.DynamicsCrm.DevKit.NEW.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="2.10.31" Language="en-US"
                   Publisher="PhuocLe" />
-        <DisplayName>DynamicsCrm.DevKit</DisplayName>
-        <Description xml:space="preserve">A collection of projects / items template for develop Dynamics 365 CRM/CDS (Oct-31-2020)</Description>
+        <DisplayName>DynamicsCrm.DevKit (NEW)</DisplayName>
+        <Description xml:space="preserve">A collection of projects / items template for develop Dynamics 365 CRM/CDS (Oct-31-2020) (NEW)</Description>
         <MoreInfo>https://github.com/phuocle/Dynamics-Crm-DevKit</MoreInfo>
         <License>License.txt</License>
         <Icon>icon.png</Icon>
@@ -30,7 +30,6 @@
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="05.WebResourceProjectTemplate" d:TargetPath="|05.WebResourceProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="06.TestProjectTemplate" d:TargetPath="|06.TestProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="07.ReportProjectTemplate" d:TargetPath="|07.ReportProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="08.TestUiProjectTemplate" d:TargetPath="|08.TestUiProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="09.ProxyTypesProjectTemplate" d:TargetPath="|09.ProxyTypesProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="10.SharedProjectTemplate" d:TargetPath="|10.SharedProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="11.DataProviderProjectTemplate" d:TargetPath="|11.DataProviderProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
@@ -50,6 +49,7 @@
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="12.JsDevkitItemTemplate" d:TargetPath="|12.JsDevkitItemTemplate;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="13.WebResourceProjectTemplate" d:TargetPath="|13.WebResourceProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="13.JsFormItemTemplate" d:TargetPath="|13.JsFormItemTemplate;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="08.TestUiProjectTemplate" d:TargetPath="|08.TestUiProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
 
     </Assets>
     <Prerequisites>
