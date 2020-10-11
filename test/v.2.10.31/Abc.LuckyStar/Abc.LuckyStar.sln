@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.DataProvider.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.Workflow.Account.Test", "Abc.LuckyStar.Workflow.Account.Test\Abc.LuckyStar.Workflow.Account.Test.csproj", "{A368FC84-EB2E-4643-89C7-2CDA1191604A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.UiTest", "Abc.LuckyStar.UiTest\Abc.LuckyStar.UiTest.csproj", "{078E81E6-2132-4EE4-976D-87832AFCF9A8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{2f8ae098-4907-417a-8cae-ad609e6cdbde}*SharedItemsImports = 4
@@ -112,6 +114,10 @@ Global
 		{A368FC84-EB2E-4643-89C7-2CDA1191604A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A368FC84-EB2E-4643-89C7-2CDA1191604A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A368FC84-EB2E-4643-89C7-2CDA1191604A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{078E81E6-2132-4EE4-976D-87832AFCF9A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{078E81E6-2132-4EE4-976D-87832AFCF9A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{078E81E6-2132-4EE4-976D-87832AFCF9A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{078E81E6-2132-4EE4-976D-87832AFCF9A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,6 +136,7 @@ Global
 		{E11A5D58-5BFA-4C0F-829C-C8246567468B} = {B744B97B-593D-4176-B210-D487E4B4F6B1}
 		{362AF379-6AEE-48D3-8F56-44FE95576C31} = {B744B97B-593D-4176-B210-D487E4B4F6B1}
 		{A368FC84-EB2E-4643-89C7-2CDA1191604A} = {B744B97B-593D-4176-B210-D487E4B4F6B1}
+		{078E81E6-2132-4EE4-976D-87832AFCF9A8} = {B744B97B-593D-4176-B210-D487E4B4F6B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05755AEA-DE87-4722-B840-88ED13E2530B}
