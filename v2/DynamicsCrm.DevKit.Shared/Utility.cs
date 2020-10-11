@@ -122,7 +122,8 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static bool ExistProject(DTE dte, string projectName)
         {
-            foreach (Project project in dte.Solution.Projects)
+            var projects = GetProjects(dte.Solution);
+            foreach (Project project in projects)
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name == projectName) return true;
@@ -130,9 +131,22 @@ namespace DynamicsCrm.DevKit.Shared
             return false;
         }
 
+        private static List<Project> GetProjects(Solution sln)
+        {
+            List<Project> list = new List<Project>();
+            if (sln == null) return list;
+            list.AddRange(sln.Projects.Cast<Project>());
+
+            for (int i = 0; i < list.Count; i++)
+                list.AddRange(list[i].ProjectItems.Cast<ProjectItem>().Select(x => x.SubProject).OfType<Project>());
+
+            return list;
+        }
+
         public static Project GetProject(DTE dte, string projectName)
         {
-            foreach (Project project in dte.Solution.Projects)
+            var projects = GetProjects(dte.Solution);
+            foreach (Project project in projects)
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name == projectName) return project;
@@ -298,7 +312,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static List<string> GetAllProjectForTesting(DTE dte)
         {
             var projects = new List<string>();
-            foreach (Project project in dte.Solution.Projects)
+            foreach (Project project in GetProjects(dte.Solution))
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name.Contains($".{ProjectType.Plugin.ToString()}.") ||

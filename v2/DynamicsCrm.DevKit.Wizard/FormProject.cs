@@ -411,13 +411,13 @@ namespace DynamicsCrm.DevKit.Wizard
                 temp = temp.Replace("..", ".");
                 labelProjectName.Text = temp;
             }
-            else if (ProjectType == ProjectType.Report)
-            {
-                var temp = $@"{text}.Report";
-                if (temp.StartsWith("."))
-                    temp = temp.Substring(1);
-                labelProjectName.Text = temp;
-            }
+            //else if (ProjectType == ProjectType.Report)
+            //{
+            //        var temp = $@"{text}.Report";
+            //    if (temp.StartsWith("."))
+            //        temp = temp.Substring(1);
+            //    labelProjectName.Text = temp;
+            //}
             else
             {
                 var temp = $@"{labelProjectName.Tag}.{text}";
