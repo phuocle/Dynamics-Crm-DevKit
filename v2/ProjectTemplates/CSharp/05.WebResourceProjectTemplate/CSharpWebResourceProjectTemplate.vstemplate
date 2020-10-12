@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>05. WebResource Project</Name>
+    <Name>05. WebResource Project (OLD)</Name>
     <Description>WebResource Project Template</Description>
     <DefaultName>WebResourceProject</DefaultName>
     <TemplateID>DynamicsCrm.DevKit</TemplateID>
@@ -31,7 +31,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="_package.json">package.json</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="entities\DevKit.d.ts">DevKit.d.ts</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="entities\DevKit.d.ts">devkit.d.ts</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="lib\WebApiClient.js">WebApiClient.js</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="lib\devkit.js">devkit.js</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="entities\generator.form.bat">generator.form.bat</ProjectItem>

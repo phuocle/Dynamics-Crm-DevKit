@@ -10,10 +10,25 @@ namespace DynamicsCrm.DevKit.Console
         {
             //XrmMock.Generator_xrm_mock_d_ts();
             //XrmEnum.Generator();
-            DevKitJsMin();
+            DevKitJsMinOld();
+            DevKitJsMinNew();
         }
 
-        private static void DevKitJsMin()
+        private static void DevKitJsMinNew()
+        {
+            var file = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\v2\DynamicsCrm.DevKit.Resources\devkit.365.new.js";
+            var devkitCode = File.ReadAllText(file);
+            var devkitCodeMin = Uglify.Js(devkitCode).Code;
+            var output = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\v2\ProjectTemplates\CSharp\13.WebResourceProjectTemplate\devkit.js";
+            File.WriteAllText(output, devkitCodeMin);
+
+
+            var file_d_ts = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\v2\DynamicsCrm.DevKit.Resources\devkit.365.new.d.ts";
+            var output_d_ts = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\v2\ProjectTemplates\CSharp\13.WebResourceProjectTemplate\devkit.d.ts";
+            File.Copy(file_d_ts, output_d_ts, true);
+        }
+
+        private static void DevKitJsMinOld()
         {
             var file = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\v2\DynamicsCrm.DevKit.Resources\devkit.365.js";
             var devkitCode = File.ReadAllText(file);
@@ -21,5 +36,6 @@ namespace DynamicsCrm.DevKit.Console
             var output = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\v2\ProjectTemplates\CSharp\05.WebResourceProjectTemplate\devkit.js";
             File.WriteAllText(output, devkitCodeMin);
         }
+
     }
 }
