@@ -41,6 +41,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{676679
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{4AA43DC0-2CFE-423D-93C7-605CF434B237}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebResources", "WebResources", "{6D1476C5-5C9C-4245-AED0-B2FF2FE75D30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.WebResource", "Abc.LuckyStar.WebResource\Abc.LuckyStar.WebResource.csproj", "{83A6476D-8569-4DC6-977B-00E04EA1A291}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{2f8ae098-4907-417a-8cae-ad609e6cdbde}*SharedItemsImports = 4
@@ -88,6 +92,10 @@ Global
 		{EE028A13-7D55-4143-86BB-7AB283731A01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE028A13-7D55-4143-86BB-7AB283731A01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE028A13-7D55-4143-86BB-7AB283731A01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83A6476D-8569-4DC6-977B-00E04EA1A291}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83A6476D-8569-4DC6-977B-00E04EA1A291}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83A6476D-8569-4DC6-977B-00E04EA1A291}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83A6476D-8569-4DC6-977B-00E04EA1A291}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,6 +110,7 @@ Global
 		{87320201-CFFE-45D1-ABF5-F47C031A068A} = {A0CFCC93-946E-4A67-9F7D-31147930FAA9}
 		{DE6C254E-648C-4CEF-99A4-01FB2D8732D7} = {4AA43DC0-2CFE-423D-93C7-605CF434B237}
 		{EE028A13-7D55-4143-86BB-7AB283731A01} = {67667965-891F-4F5F-A8B9-FF608FAE3A19}
+		{83A6476D-8569-4DC6-977B-00E04EA1A291} = {6D1476C5-5C9C-4245-AED0-B2FF2FE75D30}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05755AEA-DE87-4722-B840-88ED13E2530B}
