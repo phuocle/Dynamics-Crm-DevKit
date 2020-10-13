@@ -144,7 +144,7 @@ declare namespace DevKit {
              */
             readonly InitialValue: number;
         }
-        interface Process {
+        interface IProcess {
             /**
              * Adds a function as an event handler for the OnPreProcessStatusChange event so that it will be called before the business process flow status changes
              * @param callback The function to be executed when the business process flow status changes. The function will be added to the start of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
@@ -295,6 +295,54 @@ declare namespace DevKit {
              */
             Status: OptionSet.ProcessStatus;
         }
+        interface ITab {
+            /**
+             * Adds a function to be called when the TabStateChange event occurs
+             * @param callback The function to be executed on the TabStateChange event. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/addtabstatechange
+             */
+            AddTabStateChange(callback: (executionContext: any) => void): void;
+            /**
+             * Sets the focus on the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setfocus
+             * */
+            Focus(): void;
+            /**
+             * Removes a function to be called when the TabStateChange event occurs
+             * @param callback The function to be removed from the TabStateChange event
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/removetabstatechange
+             */
+            RemoveTabStateChange(callback: (executionContext: any) => void): void;
+            /**
+             * Get the name of the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getname
+             */
+            readonly Name: string;
+            /**
+             * Get the formContext.ui object containing the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getparent
+             */
+            readonly Parent: any;
+            /**
+             * Get/Set display state of the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getdisplaystate
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setdisplaystate
+             */
+            DisplayState: OptionSet.TabDisplayState;
+            /**
+             * Get/Set the label for the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getlabel
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setlabel
+             */
+            Label: string;
+            /**
+             * Get/Set a value that indicates whether the tab is currently visible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setvisible
+             */
+            Visible: boolean;
+
+        }
         interface IControlSelect extends IControlSelectBase {
             /**
              * Returns an option object with the value matching the argument (label or enumeration value) passed to the method
@@ -379,6 +427,62 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
              */
             Value: number;
+        }
+        interface IQuickView {
+            /**
+             * Gets the controls on a form or control on form by passing an argument
+             * @param arg You can access a single control in the constituent controls collection by passing an argument as either the name or the index value of the constituent control in a quick view control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
+             */
+            Controls(arg?: string | number): Array<any> | any;
+            /**
+             * Returns whether the data binding for the constituent controls in a quick view control is complete
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
+             */
+            IsLoaded(): boolean;
+            /**
+             * Refreshes the data displayed in a quick view control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/refresh
+             */
+            Refresh(): void;
+            /**
+             * Sets focus on the control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setfocus
+             */
+            Focus(): void;
+            /**
+             * Returns a string value that categorizes quick view controls
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrolhttps://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontroltype
+             */
+            readonly ControlType: OptionSet.FieldControlType;
+            /**
+             * [ReadOnly] Returns the name assigned to the quick view control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getname
+             */
+            readonly ControlName: string;
+            /**
+             * Returns a reference to the section object that contains the control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getparent
+             */
+            readonly ControlParent: any;
+            /**
+             * Get/Set a boolean value indicating whether the control is disabled. Or sets the state of the control to either enabled or disabled
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getdisabled
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setdisabled
+             */
+            Disabled: boolean;
+            /**
+             * Get/Set the label for the quick view control. Or sets the label for the quick view control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getlabel
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setlabel
+             */
+            Label: string;
+            /**
+             * Get/Set a value that indicates whether the quick view control is currently visible. Or displays or hides a control.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setvisible
+             */
+            Visible: boolean;
         }
         interface Integer extends IControlNumber {
 
@@ -679,54 +783,7 @@ declare namespace DevKit {
              */
             Visible: boolean;
         }
-        interface Tab {
-            /**
-             * Adds a function to be called when the TabStateChange event occurs
-             * @param callback The function to be executed on the TabStateChange event. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/addtabstatechange
-             */
-            AddTabStateChange(callback: (executionContext: any) => void): void;
-            /**
-             * Sets the focus on the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setfocus
-             * */
-            Focus(): void;
-            /**
-             * Removes a function to be called when the TabStateChange event occurs
-             * @param callback The function to be removed from the TabStateChange event
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/removetabstatechange
-             */
-            RemoveTabStateChange(callback: (executionContext: any) => void): void;
-            /**
-             * Get the name of the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getname
-             */
-            readonly Name: string;
-            /**
-             * Get the formContext.ui object containing the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getparent
-             */
-            readonly Parent: any;
-            /**
-             * Get/Set display state of the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getdisplaystate
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setdisplaystate
-             */
-            DisplayState: OptionSet.TabDisplayState;
-            /**
-             * Get/Set the label for the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getlabel
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setlabel
-             */
-            Label: string;
-            /**
-             * Get/Set a value that indicates whether the tab is currently visible
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getvisible
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setvisible
-             */
-            Visible: boolean;
 
-        }
         interface Section {
             /**
              * Get the name of the section
@@ -909,67 +966,23 @@ declare namespace DevKit {
         interface ActionCards {
 
         }
-        interface QuickView {
-            /**
-             * Gets the controls on a form or control on form by passing an argument
-             * @param arg You can access a single control in the constituent controls collection by passing an argument as either the name or the index value of the constituent control in a quick view control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
-             */
-            Controls(arg?: string | number): Array<any> | any;
-            /**
-             * Returns whether the data binding for the constituent controls in a quick view control is complete
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
-             */
-            IsLoaded(): boolean;
-            /**
-             * Refreshes the data displayed in a quick view control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/refresh
-             */
-            Refresh(): void;
-            /**
-             * Sets focus on the control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setfocus
-             */
-            Focus(): void;
-            /**
-             * Returns a string value that categorizes quick view controls
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrolhttps://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontroltype
-             */
-            readonly ControlType: OptionSet.FieldControlType;
-            /**
-             * Returns the name assigned to the quick view control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getname
-             */
-            readonly ControlName: string;
-            /**
-             * Returns a reference to the section object that contains the control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getparent
-             */
-            readonly ControlParent: any;
-            /**
-             * Get/Set a boolean value indicating whether the control is disabled. Or sets the state of the control to either enabled or disabled
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getdisabled
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setdisabled
-             */
-            Disabled: boolean;
-            /**
-             * Get/Set the label for the quick view control. Or sets the label for the quick view control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getlabel
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setlabel
-             */
-            Label: string;
-            /**
-             * Get/Set a value that indicates whether the quick view control is currently visible. Or displays or hides a control.
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getvisible
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setvisible
-             */
-            Visible: boolean;
-        }
+
         interface AciWidget {
 
         }
         interface PowerBi {
 
+        }
+        interface File {
+
+        }
+        interface Image {
+
+        }
+        interface QuickView {
+            readonly Value: any;
+            Visible: boolean;
+            Label: string;
         }
     }
     namespace WebApi {
