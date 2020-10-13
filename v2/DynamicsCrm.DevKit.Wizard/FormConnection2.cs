@@ -23,6 +23,9 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
+            this.AutoScaleMode = AutoScaleMode.None;
+            this.Font = DefaultFont;
+
             DTE = dte;
             LoadConnections();
         }
