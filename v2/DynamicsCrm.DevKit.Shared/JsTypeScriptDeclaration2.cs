@@ -934,7 +934,7 @@ namespace DynamicsCrm.DevKit.Shared
                 var form_d_ts_Header = GetForm_d_ts_Header(form.FormXml);
                 if (form_d_ts_Header.Length > 0)
                 {
-                    _d_ts += $"\t\tinterface Header {{\r\n";
+                    _d_ts += $"\t\tinterface Header extends DevKit.Controls.IHeader {{\r\n";
                     _d_ts += form_d_ts_Header;
                     _d_ts += $"\t\t}}\r\n";
                 }
@@ -946,7 +946,7 @@ namespace DynamicsCrm.DevKit.Shared
                 var form_d_ts_Footer = GetForm_d_ts_Footer(form.FormXml);
                 if (form_d_ts_Footer.Length > 0)
                 {
-                    _d_ts += $"\t\tinterface Footer {{\r\n";
+                    _d_ts += $"\t\tinterface Footer extends DevKit.Controls.IFooter {{\r\n";
                     _d_ts += form_d_ts_Footer;
                     _d_ts += $"\t\t}}\r\n";
                 }
