@@ -78,6 +78,8 @@ declare namespace LuckyStar {
 			IndustryCode: DevKit.Controls.OptionSet;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
 			/** Select the account's ownership structure, such as public or private. */
 			OwnershipCode: DevKit.Controls.OptionSet;
 			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
@@ -99,11 +101,14 @@ declare namespace LuckyStar {
 			/** Type the account's website URL to get quick details about the company profile. */
 			WebSiteURL: DevKit.Controls.String;
 		}
+		interface Navigation {
+			nav_devkit_account_devkit_webapi_Customer: DevKit.Controls.NavigationItem
+		}
 		interface quickForm_contactquickform_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
 			Telephone1: DevKit.Controls.QuickView;
 		}
-		interface quickForm_contactquickform extends DevKit.Controls.QuickView {
+		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
 			Body: quickForm_contactquickform_Body;
 		}
 		interface QuickForm {
@@ -151,6 +156,8 @@ declare namespace LuckyStar {
 		Body: LuckyStar.FormAccount.Body;
 		/** The Header section of form Account */
 		Header: LuckyStar.FormAccount.Header;
+		/** The Navigation of form Account */
+		Navigation: LuckyStar.FormAccount.Navigation;
 		/** The QuickForm of form Account */
 		QuickForm: LuckyStar.FormAccount.QuickForm;
 		/** The Process of form Account */

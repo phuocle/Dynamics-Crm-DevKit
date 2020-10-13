@@ -158,6 +158,18 @@ declare namespace DevKit {
              */
             RemoveOnPreProcessStatusChange(callback: () => void): void;
             /**
+             * Adds a function as an event handler for the OnPreStageChange event so that it will be called before the business process flow stage changes
+             * @param callback The function that runs before the business process flow stage changes. The function will be added to the start of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonprestagechange
+             */
+            AddOnPreStageChange(callback: (executionContext: any) => void): void;
+            /**
+             * Removes an event handler from the OnPreStageChange event
+             * @param callback The function to be removed from the OnPreStageChange event
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprestagechange
+             */
+            RemoveOnPreStageChange(callback: () => void): void;
+            /**
              * Adds a function as an event handler for the OnProcessStatusChange event so that it will be called when the business process flow status changes
              * @param callback The function to be executed when the business process flow status changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonprocessstatuschange

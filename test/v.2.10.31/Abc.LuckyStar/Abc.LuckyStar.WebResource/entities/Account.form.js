@@ -34,6 +34,7 @@ var LuckyStar;
 			IndustryCode: {},
 			mapcontrol: {},
 			Name: {},
+			Name_1: {},
 			notescontrol: {},
 			OwnershipCode: {},
 			ParentAccountId: {},
@@ -111,10 +112,20 @@ var LuckyStar;
 			navRelationships: {},
 			navAddresses: {},
 			navSubAccts: {},
+			navActivities: {},
 			navCampaignsInSFA: {},
+			navSocialprofiles: {},
+			navContacts: {},
+			navSPDocuments: {},
+			navConnections: {},
+			navDocument: {},
 			navAsyncOperations: {},
+			nav_devkit_account_devkit_webapi_Customer: {},
 			navProcessSessions: {},
-			nav_devkit_account_devkit_webapi_Customer: {}
+			nav_bpf_account_devkit_bpfaccount1: {},
+			nav_bpf_account_devkit_bpfaccount3: {},
+			nav_devkit_account_devkit_location_Account: {},
+			nav_devkit_account_devkit_location_Customer: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;

@@ -69,6 +69,7 @@
     <None Include="packages.config" />
     <None Include="chutzpah.json" />
     <Content Include="entities\devkit.d.ts" />
+    <Content Include="test\devkit.test.js" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
     <None Include="entities\generator.form.bat" />
