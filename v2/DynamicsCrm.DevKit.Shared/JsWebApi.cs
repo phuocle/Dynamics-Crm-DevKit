@@ -8,6 +8,7 @@ using NUglify;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Specialized;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -336,8 +337,9 @@ namespace DynamicsCrm.DevKit.Shared
                         crmAttribute.FieldType != AttributeTypeCode.Status &&
                         !crmAttribute.IsMultiSelectPicklist) continue;
                     _d_ts += $"\t\t{crmAttribute.SchemaName} : {{\r\n";
-                    foreach (string nvc in crmAttribute.OptionSetValues)
-                        _d_ts += $"\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
+                    NameValueCollection values = UpdateOptionSetValues(crmAttribute.OptionSetValues);
+                    foreach (string nvc in values)
+                        _d_ts += $"\t\t\t{nvc}: {values[nvc]},\r\n";
                     _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
                     _d_ts += $"\t\t}},\r\n";
                 }
@@ -347,7 +349,24 @@ namespace DynamicsCrm.DevKit.Shared
                 return _d_ts;
             }
         }
-
+        private NameValueCollection UpdateOptionSetValues(NameValueCollection optionSetValues)
+        {
+            var values = new NameValueCollection();
+            foreach (string key in optionSetValues.Keys)
+            {
+                if (optionSetValues.GetValues(key).Length > 1)
+                {
+                    for (var i = 0; i < optionSetValues.GetValues(key).Length; i++)
+                    {
+                        var value = optionSetValues.GetValues(key)[i];
+                        values.Add(key + "_" + value, value);
+                    }
+                }
+                else
+                    values.Add(key, optionSetValues[key]);
+            }
+            return values;
+        }
         //private string _jsOptionSetFormCode = null;
         //private string JsOptionSetFormCode
         //{

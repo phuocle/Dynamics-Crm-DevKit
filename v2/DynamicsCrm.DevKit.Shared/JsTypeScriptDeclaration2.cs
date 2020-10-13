@@ -10,6 +10,7 @@ using System;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata.Query;
+using System.Collections.Specialized;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -88,9 +89,10 @@ namespace DynamicsCrm.DevKit.Shared
                     crmAttribute.IsMultiSelectPicklist)
                 {
                     _d_ts += $"\t\tenum {crmAttribute.SchemaName} {{\r\n";
-                    foreach (string nvc in crmAttribute.OptionSetValues)
+                    NameValueCollection values = UpdateOptionSetValues(crmAttribute.OptionSetValues);
+                    foreach (string nvc in values)
                     {
-                        _d_ts += $"\t\t\t/** {crmAttribute.OptionSetValues[nvc]} */\r\n";
+                        _d_ts += $"\t\t\t/** {values[nvc]} */\r\n";
                         _d_ts += $"\t\t\t{nvc},\r\n";
                     }
                     _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
@@ -102,6 +104,24 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"\t}}\r\n";
             _d_ts += $"}}\r\n";
             return _d_ts;
+        }
+        private NameValueCollection UpdateOptionSetValues(NameValueCollection optionSetValues)
+        {
+            var values = new NameValueCollection();
+            foreach (string key in optionSetValues.Keys)
+            {
+                if (optionSetValues.GetValues(key).Length > 1)
+                {
+                    for (var i = 0; i < optionSetValues.GetValues(key).Length; i++)
+                    {
+                        var value = optionSetValues.GetValues(key)[i];
+                        values.Add(key + "_" + value, value);
+                    }
+                }
+                else
+                    values.Add(key, optionSetValues[key]);
+            }
+            return values;
         }
         private string GetWebApi_d_ts()
         {

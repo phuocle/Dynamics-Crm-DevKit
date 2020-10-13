@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>12. JavaScript devkit.js</Name>
+    <Name>12. JavaScript devkit.js (NEW)</Name>
     <Description>JavaScript Devkit Template</Description>
     <Icon>icon.png</Icon>
     <TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000012</TemplateID>
@@ -13,7 +13,7 @@
     <DefaultName>Devkit.js</DefaultName>
   </TemplateData>
   <TemplateContent>
-    <ProjectItem ReplaceParameters="false" TargetFileName="Devkit.js">Devkit.js</ProjectItem>
+    <ProjectItem ReplaceParameters="false" TargetFileName="devkit.js">devkit.js</ProjectItem>
   </TemplateContent>
   <WizardExtension>
     <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.10.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>

@@ -28,7 +28,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         public void RunFinished()
         {
             var devkitFileName = Path.Combine(CurrentFolder, "devkit.js");
-            var devkitCode = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.devkit.365.js");
+            var devkitCode = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.devkit.365.new.js");
             var devkitCodeMin = Uglify.Js(devkitCode).Code;
             if (File.Exists(devkitFileName))
                 Utility.ForceWriteAllText(devkitFileName, devkitCodeMin);

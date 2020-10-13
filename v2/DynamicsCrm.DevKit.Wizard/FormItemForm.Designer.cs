@@ -106,12 +106,11 @@
             // 
             // checkBoxDebug
             // 
-            this.checkBoxDebug.AutoSize = true;
             this.checkBoxDebug.Enabled = false;
             this.checkBoxDebug.Location = new System.Drawing.Point(387, 47);
             this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxDebug.Name = "checkBoxDebug";
-            this.checkBoxDebug.Size = new System.Drawing.Size(75, 20);
+            this.checkBoxDebug.Size = new System.Drawing.Size(120, 20);
             this.checkBoxDebug.TabIndex = 5;
             this.checkBoxDebug.Text = "DEBUG";
             this.checkBoxDebug.UseVisualStyleBackColor = true;
