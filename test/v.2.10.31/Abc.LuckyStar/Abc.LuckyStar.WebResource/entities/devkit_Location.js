@@ -4,6 +4,11 @@
 var formLocation = (function () {
 	"use strict";
 	async function onLoad(executionContext) {
+		var form = new LuckyStar.FormLocation(executionContext);
+		form.Header.BodyVisible = true;
+		form.Header.CommandBarVisible = true;
+		form.Header.TabNavigatorVisible = true;
+		form.Footer.BodyVisible = true;
 	}
 	async function onSave(executionContext) {
 	}

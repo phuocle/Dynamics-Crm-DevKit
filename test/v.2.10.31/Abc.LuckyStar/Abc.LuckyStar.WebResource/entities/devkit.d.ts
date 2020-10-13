@@ -490,11 +490,39 @@ declare namespace DevKit {
              */
             Label: string;
             /**
-             * Get/Set a value that indicates whether the quick view control is currently visible. Or displays or hides a control.
+             * Get/Set a value that indicates whether the quick view control is currently visible. Or displays or hides a control
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getvisible
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setvisible
              */
             Visible: boolean;
+        }
+        interface IFooter {
+            /**
+             * Get/Set the visibility of footer section
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/getvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/setvisible
+             */
+            BodyVisible: boolean;
+        }
+        interface IHeader {
+            /**
+             * Get/Set the visibility of header section
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getbodyvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setbodyvisible
+             */
+            BodyVisible: boolean;
+            /**
+             * Get/Set the command bar visibility
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getcommandbarvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setcommandbarvisible
+             */
+            CommandBarVisible: boolean;
+            /**
+             * Get/Set the tab navigator visibility
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/gettabnavigatorvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/settabnavigatorvisible
+             */
+            TabNavigatorVisible: boolean;
         }
         interface Integer extends IControlNumber {
 

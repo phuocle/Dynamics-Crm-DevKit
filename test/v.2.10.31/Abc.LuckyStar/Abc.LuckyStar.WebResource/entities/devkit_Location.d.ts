@@ -2,7 +2,7 @@
 ///<reference path="DevKit.d.ts" />
 declare namespace LuckyStar {
 	namespace FormLocation {
-		interface Header {
+		interface Header extends DevKit.Controls.IHeader {
 			devkit_AccountId: DevKit.Controls.Lookup;
 			devkit_ContactId: DevKit.Controls.Lookup;
 		}
@@ -54,7 +54,7 @@ declare namespace LuckyStar {
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}
-		interface Footer {
+		interface Footer extends DevKit.Controls.IFooter {
 			/** Date and time when the record was created. */
 			CreatedOn: DevKit.Controls.DateTime;
 			/** Date and time when the record was modified. */
