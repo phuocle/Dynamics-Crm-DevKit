@@ -3,6 +3,7 @@
   "FrameworkVersion": "2",
   "TestHarnessReferenceMode": "AMD",
   "TestHarnessLocationMode": "SettingsFileAdjacent",
+  "Engine": "Chrome",
   "CodeCoverageExecutionMode": "Manual",
   "CodeCoverageExcludes": [
     "*.form.js",
@@ -12,14 +13,13 @@
     "XrmEnum.js",
     "*\\node_modules\\*"
   ],
-  "Engine": "Chrome",
   "References": [
     {
-      "Path": "lib/WebApiClient.js",
+      "Path": "node_modules/requirejs/require.js",
       "IsTestFrameworkFile": true
     },
     {
-      "Path": "lib/devkit.js",
+      "Path": "test/requirejsConfig.js",
       "IsTestFrameworkFile": true
     },
     {
@@ -27,11 +27,7 @@
       "IsTestFrameworkFile": true
     },
     {
-      "Path": "node_modules/requirejs/require.js",
-      "IsTestFrameworkFile": true
-    },
-    {
-      "Path": "test/requirejsConfig.js",
+      "Path": "lib/devkit.js",
       "IsTestFrameworkFile": true
     },
     {

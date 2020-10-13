@@ -1,13 +1,12 @@
 ﻿//@ts-check
-///<reference path='xrm-mock.d.ts' />
-///<reference path='../node_modules/@types/xrm/index.d.ts' />
-///<reference path='../node_modules/@types/sinon/index.d.ts' />
-///<reference path='../node_modules/@types/jasmine/index.d.ts' />
-// @ts-ignore
-define(['xrm-mock', 'sinon'], function (/** @type {XrmMock} */_xrm_mock, /** @type {sinon} */_sinon) {
+define(['xrm-mock', 'sinon'], function () {
+    var xrmMock = require('xrm-mock');
+    var sinon = require('sinon');
     describe('$class$.test.js Test', function () {
+        beforeEach(function () {
+            xrmMock.XrmMockGenerator.initialise();
+        });
         it('Test-01', function () {
-            _xrm_mock.XrmMockGenerator.initialise();
             expect(true).toBe(true);
         });
     });

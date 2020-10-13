@@ -90,5 +90,8 @@
   <ItemGroup>
     <EmbeddedResource Include="devkit.365.new.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="devkit.365.new.d.ts" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

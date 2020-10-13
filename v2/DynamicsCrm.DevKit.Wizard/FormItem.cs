@@ -198,6 +198,9 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
+            this.AutoScaleMode = AutoScaleMode.None;
+            this.Font = DefaultFont;
+
             progressBar.Visible = false;
 
             DTE = dte;

@@ -448,6 +448,16 @@ var devKit = (function () {
                 getProcess.removeOnPreProcessStatusChange(callback);
             }
         };
+        process.AddOnPreStageChange = function (callback) {
+            if (has(getProcess, 'addOnPreStageChange')) {
+                getProcess.addOnPreStageChange(callback);
+            }
+        };
+        process.RemoveOnPreStageChange = function (callback) {
+            if (has(getProcess, 'removeOnPreStageChange')) {
+                getProcess.removeOnPreStageChange(callback);
+            }
+        };
         process.AddOnProcessStatusChange = function (callback) {
             if (has(getProcess, 'addOnProcessStatusChange')) {
                 getProcess.addOnProcessStatusChange(callback);

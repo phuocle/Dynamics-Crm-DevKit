@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 var _d_ts = string.Empty;
                 _d_ts += $"//@ts-check\r\n";
-                _d_ts += $"///<reference path=\"DevKit.d.ts\" />\r\n";
+                _d_ts += $"///<reference path=\"devkit.d.ts\" />\r\n";
                 _d_ts += $"declare namespace {ProjectName} {{\r\n";
                 if (ProcessForms.Count > 0)
                     _d_ts += GetForm_d_ts();
