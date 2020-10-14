@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="deploy.debug.bat" />
+    <Content Include="css\app.css" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
@@ -84,6 +85,12 @@
     <Content Include="entities\SystemUser.webapi.js">
       <DependentUpon>SystemUser.js</DependentUpon>
     </Content>
+    <Content Include="html\HelloWorld.html" />
+    <Content Include="images\user.jpg" />
+    <Content Include="images\svg\user.svg" />
+    <Content Include="js\ultils.js" />
+    <Content Include="lib\lodash.min.js" />
+    <Content Include="lib\moment.min.js" />
     <Content Include="lib\devkit.js" />
     <Content Include="package.json" />
     <None Include="packages.config" />
@@ -97,12 +104,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
-  <ItemGroup>
-    <Folder Include="css\" />
-    <Folder Include="html\" />
-    <Folder Include="images\" />
-    <Folder Include="js\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.10.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>

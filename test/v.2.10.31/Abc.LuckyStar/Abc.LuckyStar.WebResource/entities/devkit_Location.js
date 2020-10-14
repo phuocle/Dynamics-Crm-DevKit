@@ -3,14 +3,16 @@
 "use strict";
 var formLocation = (function () {
 	"use strict";
+	/** @type { LuckyStar.FormLocation} */
+	let form = null;
 	async function onLoad(executionContext) {
-		var form = new LuckyStar.FormLocation(executionContext);
-		form.Header.BodyVisible = true;
-		form.Header.CommandBarVisible = true;
-		form.Header.TabNavigatorVisible = true;
-		form.Footer.BodyVisible = true;
+		form = new LuckyStar.FormLocation(executionContext);
+
+
+
 	}
 	async function onSave(executionContext) {
+
 	}
 	return {
 		OnLoad: onLoad,

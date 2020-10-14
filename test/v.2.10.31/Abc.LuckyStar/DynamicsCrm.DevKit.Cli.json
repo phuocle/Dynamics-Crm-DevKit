@@ -30,44 +30,48 @@
     {
       "profile": "DEBUG",
       "solution": "DEVKIT",
-      "prefix": "abc_",
+      "prefix": "devkit_",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
         "entities\\*.js",
         "html\\**.html",
-        "images\\**.png",
+        "images\\**.*",
         "js\\**.js",
         "lib\\**.js",
         "resources\\*.resx"
       ],
       "excludefiles": [
-        "test\\**.js"
+        "test\\**.js",
+        "**\\*.test.js"
       ],
       "dependencies": [
         {
           "webresources": [
-            "abc_/entities/[entity].js"
+            "devkit_/entities/[entity].js"
           ],
           "dependencies": [
-            "abc_/entities/[entity].form.js",
-            "abc_/entities/[entity].webapi.js"
+            "devkit_/entities/[entity].form.js",
+            "devkit_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "abc_/entities/[entity].webapi.js"
+            "devkit_/entities/[entity].form.js",
+            "devkit_/entities/[entity].webapi.js"
           ],
           "dependencies": [
-            "???_/lib/WebApiClient.js"
+            "devkit_/js/ultils.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].form.js"
+            "devkit_/js/ultils.js"
           ],
           "dependencies": [
-            "???_/lib/devkit.js"
+            "devkit_/lib/devkit.js",
+            "devkit_/lib/lodash.min.js",
+            "devkit_/lib/moment.min.js"
           ]
         }
       ]
