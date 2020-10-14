@@ -74,6 +74,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                         {
                             text += $"  <Compile Include=\"$(MSBuildThisFileDirectory){check}\">\r\n";
                             text += $"    <DependentUpon>{@class}</DependentUpon>\r\n";
+                            text += $"    <SubType>Code</SubType>\r\n";
                             text += $"  </Compile>\r\n";
                         }
                         else

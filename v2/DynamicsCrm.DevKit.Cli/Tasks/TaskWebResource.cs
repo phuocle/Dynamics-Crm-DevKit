@@ -184,11 +184,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private List<Dependency> TransformPattern(IEnumerable<Dependency> dependencies, IEnumerable<WebResourceFile> webResourceFiles)
         {
             var list = new List<Dependency>();
-            var entities = webResourceFiles
+            var forms = webResourceFiles
                 .Where(w => w.file.EndsWith(".form.js"))
                 .Select(s => Path.GetFileName(s.file))
                 .Select(s => s.Substring(0, s.Length - ".form.js".Length))
                 .ToList();
+            var webApis = webResourceFiles
+                .Where(w => w.file.EndsWith(".webapi.js"))
+                .Select(s => Path.GetFileName(s.file))
+                .Select(s => s.Substring(0, s.Length - ".webapi.js".Length))
+                .ToList();
+
+            var entities = forms.Concat(webApis).Distinct().ToList();
+
             foreach (var dependency in dependencies)
             {
                 if (!dependency.webresources.Any(w => w.Contains("[entity]")) &&
