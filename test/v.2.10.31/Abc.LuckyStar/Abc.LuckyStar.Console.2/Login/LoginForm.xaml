@@ -1,14 +1,14 @@
-﻿<Window x:Class="PowerApps.Samples.LoginUX.ExampleLoginForm"
+﻿<Window x:Class="Abc.LuckyStar.Console._2.LoginForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:CrmLoginCtrl="clr-namespace:Microsoft.Xrm.Tooling.CrmConnectControl;assembly=Microsoft.Xrm.Tooling.CrmConnectControl" 
-        Title="Sample Application Login Window" Width="465" MinHeight="475"
-        ResizeMode="NoResize" 
+        xmlns:CrmLoginCtrl="clr-namespace:Microsoft.Xrm.Tooling.CrmConnectControl;assembly=Microsoft.Xrm.Tooling.CrmConnectControl"
+        Title="Login Window" Width="465" MinHeight="475"
+        ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        WindowStartupLocation="CenterScreen" 
+        WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        AllowsTransparency="True" 
-        BorderThickness="1" 
+        AllowsTransparency="True"
+        BorderThickness="1"
         BorderBrush="#173561"
         Loaded="Window_Loaded">
     <Window.Resources>
@@ -20,7 +20,7 @@
     </Window.Resources>
     <Grid>
         <StackPanel>
-            <TextBlock Text="Example Login Control for Samples" Margin="5,0,0,0" FontSize="18" FontWeight="Bold"  />
+            <TextBlock Text="DynamicsCrm.DevKit Login ... " Margin="5,0,0,0" FontSize="18" FontWeight="Bold"  />
             <CrmLoginCtrl:CrmServerLoginControl Name="CrmLoginCtrl" Grid.Row="1" ShowTitle="False"  Margin="10,0,10,0" VerticalAlignment="Bottom"  />
         </StackPanel>
     </Grid>

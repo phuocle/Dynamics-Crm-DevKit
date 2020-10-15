@@ -114,8 +114,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
-    <Compile Include="LoginUX\ExampleLoginForm.xaml.cs">
-      <DependentUpon>ExampleLoginForm.xaml</DependentUpon>
+    <Compile Include="Login\LoginForm.xaml.cs">
+      <DependentUpon>LoginForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -128,9 +128,9 @@
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.10.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="LoginUX\ExampleLoginForm.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Login\LoginForm.xaml">
       <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
   </ItemGroup>
   <Import Project="..\Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems" Label="Shared" Condition="Exists('..\Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems')" />
