@@ -25,6 +25,7 @@ namespace DynamicsCrm.DevKit.Shared
         public const string MicrosoftCrmSdkDeployment = "Microsoft.CrmSdk.Deployment";
         public const string MicrosoftCrmSdkWorkflow = "Microsoft.CrmSdk.Workflow";
         public const string MicrosoftCrmSdkXrmToolingCoreAssembly = "Microsoft.CrmSdk.XrmTooling.CoreAssembly";
+        public const string MicrosoftCrmSdkXrmToolingWpfControls = "Microsoft.CrmSdk.XrmTooling.WpfControls";
         public const string DynamicsCrmDevKitAnalyzers = "DynamicsCrm.DevKit.Analyzers";
         public const string Dynamics365UIAutomationApi = "Dynamics365.UIAutomation.Api";
         public const string SeleniumChromeWebDriver = "Selenium.Chrome.WebDriver";

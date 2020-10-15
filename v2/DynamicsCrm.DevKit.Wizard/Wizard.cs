@@ -60,6 +60,10 @@ namespace DynamicsCrm.DevKit.Wizard
                     var CoreAssembly = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkXrmToolingCoreAssembly, form.ComboBoxCrmName);
                     replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.CoreAssembly.Version$", CoreAssembly.Version);
                     replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.CoreAssembly.TargetFramework$", CoreAssembly.TargetFramework);
+
+                    var WpfControls = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkXrmToolingWpfControls, form.ComboBoxCrmName);
+                    replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.WpfControls.Version$", WpfControls.Version);
+                    replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.WpfControls.TargetFramework$", WpfControls.TargetFramework);
                 }
                 var shortPackage = "." + form.WizardShortCrmName;
                 if (shortPackage == ".365") shortPackage = ".9";

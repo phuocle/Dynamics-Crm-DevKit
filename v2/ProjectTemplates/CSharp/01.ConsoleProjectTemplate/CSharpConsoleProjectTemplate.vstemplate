@@ -24,6 +24,8 @@
       <ProjectItem ReplaceParameters="true">Program.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Login\LoginForm.xaml">LoginForm.xaml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Login\LoginForm.xaml.cs">LoginForm.xaml.cs</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>

@@ -73,6 +73,8 @@
   <ItemGroup>
     <None Include="AppSettings.cs" />
     <None Include="Program.cs" />
+    <None Include="LoginForm.xaml.cs" />
+    <None Include="LoginForm.xaml" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

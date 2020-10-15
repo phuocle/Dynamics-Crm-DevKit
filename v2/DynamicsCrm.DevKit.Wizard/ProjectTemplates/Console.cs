@@ -12,6 +12,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
         private DTE DTE { get; set; }
         private Project Project { get; set; }
         private string ProjectName { get; set; }
+        private string Check { get; set; }
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -50,6 +51,8 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
                 //Creating project ...
                 ProjectName = form.ProjectName;
+                Check = "0";
+                replacementsDictionary.Add("$Check$", Check);
                 Wizard.ProcessProjectReplacementsDictionary(replacementsDictionary, form);
                 Wizard.ProcessProjectConsoleReplacementsDictionary(replacementsDictionary, form);
             }
@@ -65,6 +68,14 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 
         public bool ShouldAddProjectItem(string filePath)
         {
+            if (Check == "0")
+            {
+                if (filePath == "LoginForm.xaml" || filePath == "LoginForm.xaml.cs") return false;
+                return true;
+            }
+            else if (Check == "1") {
+                return true;
+            }
             return true;
         }
     }
