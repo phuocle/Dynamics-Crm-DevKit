@@ -2,12 +2,11 @@
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 
-namespace Abc.LuckyStar.Console._2
+namespace Abc.LuckyStar.Console._3
 {
     public static class AppSettings
     {
         public static IOrganizationService Service = InitializeIOrganizationService();
-
         private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
         {
             if (sender is LoginForm)

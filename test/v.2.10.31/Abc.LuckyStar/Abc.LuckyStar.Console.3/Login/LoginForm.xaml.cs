@@ -4,7 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace Abc.LuckyStar.Console._2
+namespace Abc.LuckyStar.Console._3
 {
     public partial class LoginForm : Window
     {
@@ -16,7 +16,6 @@ namespace Abc.LuckyStar.Console._2
         public CrmConnectionManager CrmConnectionMgr { get { return mgr; } }
 
         public event EventHandler ConnectionToCrmCompleted;
-
 
         public LoginForm()
         {
@@ -53,11 +52,11 @@ namespace Abc.LuckyStar.Console._2
         private void mgr_ServerConnectionStatusUpdate(object sender, ServerConnectStatusEventArgs e)
         {
             Dispatcher.Invoke(DispatcherPriority.Normal,
-                               new System.Action(() =>
-                               {
-                                   this.Title = string.IsNullOrWhiteSpace(e.StatusMessage) ? e.ErrorMessage : e.StatusMessage;
-                               }
-                            ));
+                new System.Action(() =>
+                {
+                    this.Title = string.IsNullOrWhiteSpace(e.StatusMessage) ? e.ErrorMessage : e.StatusMessage;
+                }
+            ));
         }
 
         private void mgr_ConnectionCheckComplete(object sender, ServerConnectStatusEventArgs e)
@@ -73,13 +72,13 @@ namespace Abc.LuckyStar.Console._2
                 resetUiFlag = true;
                 CrmLoginCtrl.GoBackToLogin();
                 Dispatcher.Invoke(DispatcherPriority.Normal,
-                       new System.Action(() =>
-                       {
-                           this.Title = "Failed to Login with cached credentials.";
-                           MessageBox.Show(this.Title, "Notification from ConnectionManager", MessageBoxButton.OK, MessageBoxImage.Error);
-                           CrmLoginCtrl.IsEnabled = true;
-                       }
-                        ));
+                    new System.Action(() =>
+                    {
+                        this.Title = "Failed to Login with cached credentials.";
+                        MessageBox.Show(this.Title, "Notification from ConnectionManager", MessageBoxButton.OK, MessageBoxImage.Error);
+                        CrmLoginCtrl.IsEnabled = true;
+                    }
+                ));
                 resetUiFlag = false;
             }
             else
@@ -94,20 +93,18 @@ namespace Abc.LuckyStar.Console._2
         {
             bIsConnectedComplete = false;
             Dispatcher.Invoke(DispatcherPriority.Normal,
-                               new System.Action(() =>
-                               {
-                                   this.Title = "Starting Login Process. ";
-                                   CrmLoginCtrl.IsEnabled = true;
-                               }
-                                   ));
+                new System.Action(() =>
+                {
+                    this.Title = "Starting Login Process. ";
+                    CrmLoginCtrl.IsEnabled = true;
+                }
+            ));
         }
 
         private void CrmLoginCtrl_ConnectionStatusEvent(object sender, ConnectStatusEventArgs e)
         {
-
             if (e.ConnectSucceeded && !bIsConnectedComplete)
                 ProcessSuccess();
-
         }
 
         private void CrmLoginCtrl_ConnectErrorEvent(object sender, ConnectErrorEventArgs e)
@@ -132,11 +129,9 @@ namespace Abc.LuckyStar.Console._2
                    this.Title = "Notification from Parent";
                    CrmLoginCtrl.IsEnabled = true;
                }
-                ));
-
+            ));
             if (ConnectionToCrmCompleted != null)
                 ConnectionToCrmCompleted(this, null);
-
             resetUiFlag = false;
         }
     }
