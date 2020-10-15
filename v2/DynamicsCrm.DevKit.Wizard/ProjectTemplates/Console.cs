@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
                 //Creating project ...
                 ProjectName = form.ProjectName;
-                Check = "0";
+                Check = form.Check;
                 replacementsDictionary.Add("$Check$", Check);
                 Wizard.ProcessProjectReplacementsDictionary(replacementsDictionary, form);
                 Wizard.ProcessProjectConsoleReplacementsDictionary(replacementsDictionary, form);

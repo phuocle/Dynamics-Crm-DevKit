@@ -353,6 +353,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
 
         public static string BuildConnectionString(CrmConnection crmConnection)
         {
+            if (crmConnection == null) return string.Empty;
             return BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
         }
 

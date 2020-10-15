@@ -36,6 +36,7 @@ namespace DynamicsCrm.DevKit.Shared
         //Decrypt
         public static string DecryptString(string cipherText)
         {
+            if (cipherText == null) return string.Empty;
             string passPhrase = "PL.DynamicsCrm.DevKit";
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
             byte[] cipherTextBytes = Convert.FromBase64String(cipherText);

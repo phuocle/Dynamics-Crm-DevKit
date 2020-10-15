@@ -60,6 +60,7 @@ namespace DynamicsCrm.DevKit.Wizard
             }
         }
         public string ComboBoxCrmName => comboBoxCrmName.Text;
+        public string Check { get; set; } = "0";
 
         public DTE DTE { get; }
         private ProjectType _projectType;
@@ -221,6 +222,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
             CrmConnection = form.CrmConnection;
             CrmService = form.CrmService;
+            Check = form.Check;
 
             buttonOk.Enabled = true;
             comboBoxCrmName.Enabled = true;
