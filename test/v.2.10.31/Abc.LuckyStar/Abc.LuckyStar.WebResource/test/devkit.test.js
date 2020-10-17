@@ -30,7 +30,7 @@ define(['xrm-mock', 'sinon'], function () {
                 }
             );
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new LuckyStar.FormAccount(executionContext);                   
+            var form = new LuckyStar.FormAccount(executionContext);
 
             var onChangeData = "";
             var nameAddOnChange = function (executionContent) { onChangeData = "ON-CHANGED"; }
@@ -59,7 +59,7 @@ define(['xrm-mock', 'sinon'], function () {
             expect(form.Body.Name.Value).toBeNull();
             form.Body.Name.Value = "NAME VALUE NEW";
             expect(form.Body.Name.Value).toBe("NAME VALUE NEW");
-            expect(() => { form.Body.Name.SetIsValid(null, null); }).toThrow(new Error("setIsValid not implemented"));             
+            expect(() => { form.Body.Name.SetIsValid(null, null); }).toThrow(new Error("setIsValid not implemented"));
         });
         it('Boolean attribute type', () => {
             xrmMock.XrmMockGenerator.Attribute.createBoolean({
@@ -689,7 +689,7 @@ define(['xrm-mock', 'sinon'], function () {
             XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
             XrmMockGenerator.Device = new xrmMock.DeviceMock();
             XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-            //XrmMockGenerator.App = new xrmMock.AppMock();
+            XrmMockGenerator.App = new xrmMock.AppMock();
         });
         it('Form', () => {
             var attributes = new xrmMock.ItemCollectionMock([
@@ -758,13 +758,13 @@ define(['xrm-mock', 'sinon'], function () {
             expect(form.ClearFormNotification("B")).toBeTruthy();
             expect(() => { form.Close() }).toThrow(new Error("close not implemented"));
             expect(() => { form.RefreshRibbon() }).toThrow(new Error("refreshRibbon not implemented"));
-            //expect(() => { form.SetFormEntityName(null); }).toThrow(new Error("setFormEntityName not implemented"));
+            expect(() => { form.SetFormEntityName(null); }).toThrow(new Error("setFormEntityName not implemented"));
             expect(form.Controls).toBeDefined();
             expect(form.FormType).toBe(OptionSet.FormType.Update);
             expect(() => { form.ViewPortHeight }).toThrow(new Error("getViewPortHeight not implemented"));
             expect(() => { form.ViewPortWidth }).toThrow(new Error("getViewPortWidth not implemented"));
-            //expect(() => { form.UiAddOnLoad(null) }).toThrow(new Error("addOnLoad not implemented"));
-            //expect(() => { form.UiRemoveOnLoad(null) }).toThrow(new Error("removeOnLoad not implemented"));
+            expect(() => { form.UiAddOnLoad(null) }).toThrow(new Error("addOnLoad not implemented"));
+            expect(() => { form.UiRemoveOnLoad(null) }).toThrow(new Error("removeOnLoad not implemented"));
             expect(form.FormNavigate("form1")).toBeUndefined();
             expect(form.FormSetVisible("form1", true)).toBeUndefined();
             expect(form.FormIsVisible("form1")).toBeFalsy();
@@ -779,7 +779,7 @@ define(['xrm-mock', 'sinon'], function () {
             XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
             XrmMockGenerator.Device = new xrmMock.DeviceMock();
             XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-            //XrmMockGenerator.App = new xrmMock.AppMock();
+            XrmMockGenerator.App = new xrmMock.AppMock();
         });
         it('Navigation', () => {
             var standard = new xrmMock.UiStandardElementMock(new xrmMock.UiLabelElementMock("NAV-LABBEL"), new xrmMock.UiCanGetVisibleElementMock(true));
@@ -820,7 +820,7 @@ define(['xrm-mock', 'sinon'], function () {
             XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
             XrmMockGenerator.Device = new xrmMock.DeviceMock();
             XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-            //XrmMockGenerator.App = new xrmMock.AppMock();
+            XrmMockGenerator.App = new xrmMock.AppMock();
         });
         it('Process', () => {
             var stage1 = new xrmMock.StageMock("stage1", "Start", XrmEnum.StageStatus.Active, XrmEnum.StageCategory.Identify, [new xrmMock.StepMock("Stage1Step1", "abc_all", true), new xrmMock.StepMock("Stage1Step2", "abc_all2", true)]);
@@ -835,10 +835,10 @@ define(['xrm-mock', 'sinon'], function () {
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new LuckyStar.FormLocation(executionContext);
 
-            //expect(() => { form.Process.AddOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
-            //expect(() => { form.Process.RemoveOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
-            //expect(() => { form.Process.AddOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
-            //expect(() => { form.Process.RemoveOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Process.AddOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Process.RemoveOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Process.AddOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Process.RemoveOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Process.AddOnProcessStatusChange(null) }).toThrow(new Error("add on process status change not implemented."));
             expect(() => { form.Process.RemoveOnProcessStatusChange(null) }).toThrow(new Error("remove on process status change not implemented."));
             expect(() => { form.Process.AddOnStageChange(null) }).toThrow(new Error("add on stage change not implemented"));
@@ -863,8 +863,8 @@ define(['xrm-mock', 'sinon'], function () {
             form.Process.ActiveProcess.Stages.forEach(function (stage, index) {
                 expect(stage).toBeDefined();
             });
-            //expect(() => { s1.AllowCreateNew(function () { return true; }) }).toThrow(new Error("getNavigationBehavior not implemented"));
-            //expect(s1.Category).toBe(OptionSet.ProcessCategory.Identify);
+            expect(() => { s1.AllowCreateNew(function () { return true; }) }).toThrow(new Error("getNavigationBehavior not implemented"));
+            expect(s1.Category).toBe(OptionSet.ProcessCategory.Identify);
             expect(() => { s1.EntityName }).toThrow(new Error("get entity name not implemented"));
             expect(s1.Id).toBe("stage1");
             expect(s1.Name).toBe("Start");
@@ -874,8 +874,8 @@ define(['xrm-mock', 'sinon'], function () {
             expect(ss1.Attribute).toBe("abc_all");
             expect(ss1.Name).toBe("Stage1Step1");
             expect(ss1.Required).toBeTruthy();
-            //expect(() => { ss1.Progress }).toThrow(new Error("getProgress not implemented"));
-            //expect(() => { ss1.SetProgress(null, null) }).toThrow(new Error("setProgress not implemented"));
+            expect(() => { ss1.Progress }).toThrow(new Error("getProgress not implemented"));
+            expect(() => { ss1.SetProgress(null, null) }).toThrow(new Error("setProgress not implemented"));
             expect(() => { form.Process.ProcessInstances(function (processes) { ; }) }).toThrow(new Error("get process instances not implemented."));
             expect(() => { form.Process.SelectedStage }).toThrow(new Error("get selected not implemented"));
             var activeStage = form.Process.ActiveStage;
@@ -898,7 +898,7 @@ define(['xrm-mock', 'sinon'], function () {
             XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
             XrmMockGenerator.Device = new xrmMock.DeviceMock();
             XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-            //XrmMockGenerator.App = new xrmMock.AppMock();
+            XrmMockGenerator.App = new xrmMock.AppMock();
         });
         it('Utility', () => {
             var context = new xrmMock.ContextMock({
@@ -925,7 +925,7 @@ define(['xrm-mock', 'sinon'], function () {
                 languageId: 1066,
                 securityRolePrivileges: ["GUID1", "GUID2"],
                 securityRoles: ["NAME1", "NAME2", "NAME3"],
-                //transactionCurrencyId: "VND-GUID",
+                transactionCurrencyId: "VND-GUID",
                 //dateFormattingInfo: {
                 //    AMDesignator: "AM",
                 //    Calendar: {
@@ -987,7 +987,7 @@ define(['xrm-mock', 'sinon'], function () {
             var form = new LuckyStar.FormAccount(executionContext, "web-resource-language");
 
             //var getUtility = Xrm.Utility;
-            //expect(() => { form.Utility.LearningPathAttributeName }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.LearningPathAttributeName }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.ShowProgressIndicator("Waiting") }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.CloseProgressIndicator() }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.EntityMetadata("devkit_webapi", null, null, null) }).toThrow(new Error("Method not implemented."));
@@ -997,7 +997,7 @@ define(['xrm-mock', 'sinon'], function () {
             expect(() => { form.Utility.InvokeProcessAction("name", null, null, null) }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.LookupObjects(null, null, null); }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.RefreshParentGrid(null) }).toThrow(new Error("Method not implemented."));
-            //expect(() => { form.Utility.PageContext }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.PageContext }).toThrow(new Error("Method not implemented."));
 
             //getGlobalContext.client;
             expect(form.Utility.Client.ClientName).toBe(OptionSet.ClientName.Web);
@@ -1006,11 +1006,11 @@ define(['xrm-mock', 'sinon'], function () {
             expect(() => { form.Utility.Client.IsOffline }).toThrow(new Error("Method not implemented."));
 
             //getGlobalContext.organizationSettings;
-            //expect(form.Utility.OrganizationSettings.Attributes).toBeDefined();
-            //expect(form.Utility.OrganizationSettings.BaseCurrencyId).toBe("USD-GUID");
-            //expect(form.Utility.OrganizationSettings.BaseCurrency.id).toBe("USD-GUID");
-            //expect(form.Utility.OrganizationSettings.BaseCurrency.name).toBe("USD");
-            //expect(form.Utility.OrganizationSettings.BaseCurrency.entityType).toBe("transactioncurrencty");
+            expect(form.Utility.OrganizationSettings.Attributes).toBeDefined();
+            expect(form.Utility.OrganizationSettings.BaseCurrencyId).toBe("USD-GUID");
+            expect(form.Utility.OrganizationSettings.BaseCurrency.id).toBe("USD-GUID");
+            expect(form.Utility.OrganizationSettings.BaseCurrency.name).toBe("USD");
+            expect(form.Utility.OrganizationSettings.BaseCurrency.entityType).toBe("transactioncurrencty");
             expect(form.Utility.OrganizationSettings.DefaultCountryCode).toBe("VN");
             expect(form.Utility.OrganizationSettings.IsAutoSaveEnabled).toBeTruthy();
             expect(form.Utility.OrganizationSettings.LanguageId).toBe(1033);
@@ -1059,16 +1059,16 @@ define(['xrm-mock', 'sinon'], function () {
             expect(form.Utility.UserSettings.IsHighContrastEnabled).toBeFalsy();
             expect(form.Utility.UserSettings.IsRTL).toBeFalsy();
             expect(form.Utility.UserSettings.LanguageId).toBe(1066);
-            //expect(form.Utility.UserSettings.Roles.getLength()).toBe(2);
-            //expect(form.Utility.UserSettings.Roles.get(0).id).toBe("GUID1");
-            //expect(form.Utility.UserSettings.Roles.get(0).name).toBe("ROLE-1");
-            //expect(form.Utility.UserSettings.Roles.get(0).entityType).toBe("role");
+            expect(form.Utility.UserSettings.Roles.getLength()).toBe(2);
+            expect(form.Utility.UserSettings.Roles.get(0).id).toBe("GUID1");
+            expect(form.Utility.UserSettings.Roles.get(0).name).toBe("ROLE-1");
+            expect(form.Utility.UserSettings.Roles.get(0).entityType).toBe("role");
             expect(form.Utility.UserSettings.SecurityRolePrivileges.length).toBe(2);
             expect(form.Utility.UserSettings.SecurityRoles.length).toBe(3);
-            //expect(form.Utility.UserSettings.TransactionCurrency.id).toBe("VND-GUID");
-            //expect(form.Utility.UserSettings.TransactionCurrency.entityType).toBe("transactioncurrency");
-            //expect(form.Utility.UserSettings.TransactionCurrency.name).toBe("VND");
-            //expect(form.Utility.UserSettings.TransactionCurrencyId).toBe("VND-GUID");
+            expect(form.Utility.UserSettings.TransactionCurrency.id).toBe("VND-GUID");
+            expect(form.Utility.UserSettings.TransactionCurrency.entityType).toBe("transactioncurrency");
+            expect(form.Utility.UserSettings.TransactionCurrency.name).toBe("VND");
+            expect(form.Utility.UserSettings.TransactionCurrencyId).toBe("VND-GUID");
             expect(form.Utility.UserSettings.UserId).toBe("DEVKIT-USERID");
             expect(form.Utility.UserSettings.UserName).toBe("DEVKIT-USERNAME")
             expect(() => { form.Utility.UserSettings.TimeZoneOffsetMinutes }).toThrow(new Error("Not implemented"));
@@ -1079,8 +1079,8 @@ define(['xrm-mock', 'sinon'], function () {
             expect(() => { form.Utility.CurrentAppProperties(null, null) }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Utility.CurrentAppUrl; }).toThrow(new Error("Method not implemented."));
             expect(form.Utility.Version).toBe("10.0.0.0");
-            //expect(() => { form.Utility.WebResourceUrl(null) }).toThrow(new Error("Method not implemented."));
-            //expect(() => { form.Utility.IsOnPremises; }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.WebResourceUrl(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.IsOnPremises; }).toThrow(new Error("Method not implemented."));
             expect(form.Utility.PrependOrgName("abc-")).toBe("abc-OrgUniqueName");
 
             //var getPanel = Xrm.Panel;
@@ -1089,9 +1089,9 @@ define(['xrm-mock', 'sinon'], function () {
             //var getEncoding = Xrm.Encoding;
             expect(() => { form.Utility.XmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
             expect(() => { form.Utility.XmlEncode("code"); }).toThrow(new Error("Not implemented"));
-            //expect(() => { form.Utility.HtmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
-            //expect(() => { form.Utility.HtmlDecode("code"); }).toThrow(new Error("Not implemented"));
-            //expect(() => { form.Utility.HtmlEncode("code"); }).toThrow(new Error("Not implemented"));
+            expect(() => { form.Utility.HtmlAttributeEncode("code"); }).toThrow(new Error("Not implemented"));
+            expect(() => { form.Utility.HtmlDecode("code"); }).toThrow(new Error("Not implemented"));
+            expect(() => { form.Utility.HtmlEncode("code"); }).toThrow(new Error("Not implemented"));
 
             //var getDevice = Xrm.Device;
             expect(() => { form.Utility.CaptureAudio(null, null) }).toThrow(new Error("Not implemented."));
@@ -1109,22 +1109,22 @@ define(['xrm-mock', 'sinon'], function () {
             expect(() => { form.Utility.OpenForm(null, null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
             expect(() => { form.Utility.OpenUrl(null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
             expect(() => { form.Utility.OpenWebResource(null, null, null); }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
-            //expect(() => { form.Utility.NavigateTo(null, null, null, null) }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
+            expect(() => { form.Utility.NavigateTo(null, null, null, null) }).toThrow(new Error("Navigation methods not implemented. Consider stubbing calls using a tool such as Sinon.JS"));
 
             //var getApp = Xrm.App;
-            //expect(() => { form.Utility.AddGlobalNotification(null, null, null) }).toThrow(new Error("Method not implemented."));
-            //expect(() => { form.Utility.ClearGlobalNotification(null, null, null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.AddGlobalNotification(null, null, null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Utility.ClearGlobalNotification(null, null, null) }).toThrow(new Error("Method not implemented."));
 
             //Execution Context
-            //expect(() => { form.ExecutionContext.Depth }).toThrow(new Error("not implemented"));
-            //expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("not implemented"));
-            //expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("not implemented"));
-            //expect(form.ExecutionContext.FormContext).toBeDefined();
-            //expect(() => { form.ExecutionContext.GetSharedVariable("A") }).toThrow(new Error("not implemented"));
-            //expect(() => { form.ExecutionContext.SetSharedVariable("A", "B") }).toThrow(new Error("not implemented"));
-            //expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("not implemented"));
-            //expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("not implemented"));
-            //expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.Depth }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("not implemented"));
+            expect(form.ExecutionContext.FormContext).toBeDefined();
+            expect(() => { form.ExecutionContext.GetSharedVariable("A") }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.SetSharedVariable("A", "B") }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("not implemented"));
         });
     });
     describe('Tabs', () => {
@@ -1156,7 +1156,7 @@ define(['xrm-mock', 'sinon'], function () {
             form.Body.Tab.SUMMARY_TAB.Label = "LABEL-TAB1-NEW";
             expect(form.Body.Tab.SUMMARY_TAB.Label).toBe("LABEL-TAB1-NEW");
             expect(form.Body.Tab.SUMMARY_TAB.Name).toBe("SUMMARY_TAB");
-            //expect(form.Body.Tab.Tab1.Parent).toBeUndefined();
+            expect(form.Body.Tab.SUMMARY_TAB.Parent).toBeDefined();
             form.Body.Tab.SUMMARY_TAB.RemoveTabStateChange(addTabStateChange);
             expect(tab1.tabStateChangeHandlers.length).toBe(0);
             expect(form.Body.Tab.SUMMARY_TAB.Visible).toBeTruthy();
@@ -1166,7 +1166,7 @@ define(['xrm-mock', 'sinon'], function () {
             form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label = "LABEL-TAB1-SECTION1-NEW";
             expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Label).toBe("LABEL-TAB1-SECTION1-NEW");
             expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Name).toBe("ACCOUNT_INFORMATION");
-            //expect(form.Body.Tab.Tab1.Section.Tab1Section1.Parent).toBeUndefined();
+            expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Parent).toBeDefined();
             expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeTruthy();
             form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible = false;
             expect(form.Body.Tab.SUMMARY_TAB.Section.ACCOUNT_INFORMATION.Visible).toBeFalsy();
