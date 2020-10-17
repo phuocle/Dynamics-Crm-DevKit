@@ -222,7 +222,7 @@ var devKit = (function () {
         }
         form.FormNavigate = function (formId) {
             if (has(contextUiFormSelector, 'items')) {
-                var form = contextUiFormSelector.items.get(formId);
+                var form = contextUiFormSelector.items.get(formId) || contextUiFormSelector.items.get(formId.toLowerCase());
                 if (has(form, 'navigate')) {
                     form.navigate();
                 }
@@ -230,7 +230,7 @@ var devKit = (function () {
         };
         form.FormIsVisible = function (formId) {
             if (has(contextUiFormSelector, 'items')) {
-                var form = contextUiFormSelector.items.get(formId);
+                var form = contextUiFormSelector.items.get(formId) || contextUiFormSelector.items.get(formId.toLowerCase());
                 if (has(form, 'getVisible')) {
                     return form.getVisible();
                 }
@@ -239,7 +239,7 @@ var devKit = (function () {
         }
         form.FormSetVisible = function (formId, value) {
             if (has(contextUiFormSelector, 'items')) {
-                var form = contextUiFormSelector.items.get(formId);
+                var form = contextUiFormSelector.items.get(formId) || contextUiFormSelector.items.get(formId.toLowerCase());
                 if (has(form, 'setVisible')) {
                     form.setVisible(value);
                 }
@@ -446,6 +446,16 @@ var devKit = (function () {
         process.RemoveOnPreProcessStatusChange = function (callback) {
             if (has(getProcess, 'removeOnPreProcessStatusChange')) {
                 getProcess.removeOnPreProcessStatusChange(callback);
+            }
+        };
+        process.AddOnPreStageChange = function (callback) {
+            if (has(getProcess, 'addOnPreStageChange')) {
+                getProcess.addOnPreStageChange(callback);
+            }
+        };
+        process.RemoveOnPreStageChange = function (callback) {
+            if (has(getProcess, 'removeOnPreStageChange')) {
+                getProcess.removeOnPreStageChange(callback);
             }
         };
         process.AddOnProcessStatusChange = function (callback) {
@@ -1196,6 +1206,62 @@ var devKit = (function () {
                 }
             })();
             loadField(body[field], attribute, control);
+        }
+        if (type === "footer_") {
+            Object.defineProperty(body, 'BodyVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.footerSection.getVisible')) {
+                        return formContext.ui.footerSection.getVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.footerSection.setVisible')) {
+                        formContext.ui.footerSection.setVisible(value);
+                    }
+                }
+            });
+        }
+        else if (type === "header_") {
+            Object.defineProperty(body, 'BodyVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.headerSection.getBodyVisible')) {
+                        return formContext.ui.headerSection.getBodyVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.headerSection.setBodyVisible')) {
+                        formContext.ui.headerSection.setBodyVisible(value);
+                    }
+                }
+            });
+            Object.defineProperty(body, 'CommandBarVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.headerSection.getCommandBarVisible')) {
+                        return formContext.ui.headerSection.getCommandBarVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.headerSection.setCommandBarVisible')) {
+                        formContext.ui.headerSection.setCommandBarVisible(value);
+                    }
+                }
+            });
+            Object.defineProperty(body, 'TabNavigatorVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.headerSection.getTabNavigatorVisible')) {
+                        return formContext.ui.headerSection.getTabNavigatorVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.headerSection.setTabNavigatorVisible')) {
+                        formContext.ui.headerSection.setTabNavigatorVisible(value);
+                    }
+                }
+            });
         }
         return body;
     }

@@ -3,6 +3,7 @@
   "FrameworkVersion": "2",
   "TestHarnessReferenceMode": "AMD",
   "TestHarnessLocationMode": "SettingsFileAdjacent",
+  "Engine": "Chrome",
   "CodeCoverageExecutionMode": "Manual",
   "CodeCoverageExcludes": [
     "*.form.js",
@@ -11,8 +12,7 @@
     "requirejsConfig.js",
     "XrmEnum.js",
     "*\\node_modules\\*"
-  ],
-  "Engine": "Chrome",
+  ],  
   "References": [
     {
       "Path": "lib/WebApiClient.js",
