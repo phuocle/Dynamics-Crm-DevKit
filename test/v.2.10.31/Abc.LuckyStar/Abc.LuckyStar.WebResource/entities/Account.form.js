@@ -130,6 +130,7 @@ var LuckyStar;
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		return form;
 	};
 	LuckyStar.FormAccount_Quick_Create = function(executionContext, defaultWebResourceName) {

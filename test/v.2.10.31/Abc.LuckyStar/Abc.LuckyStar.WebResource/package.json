@@ -14,7 +14,7 @@
     "@types/jasmine": "^3.5.14",
     "@types/requirejs": "^2.1.32",
     "@types/sinon": "^9.0.8",
-    "@types/xrm": "^9.0.29",
+    "@types/xrm": "^9.0.30",
     "jasmine": "^3.6.2",
     "requirejs": "^2.3.6",
     "sinon": "^9.2.0",

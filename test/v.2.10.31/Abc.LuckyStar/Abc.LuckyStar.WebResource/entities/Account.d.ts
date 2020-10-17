@@ -2,7 +2,7 @@
 ///<reference path="devkit.d.ts" />
 declare namespace LuckyStar {
 	namespace FormAccount {
-		interface Header {
+		interface Header extends DevKit.Controls.IHeader {
 			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
 			NumberOfEmployees: DevKit.Controls.Integer;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
