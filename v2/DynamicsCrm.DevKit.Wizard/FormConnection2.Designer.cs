@@ -53,10 +53,10 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(492, 268);
+            this.btnCancel.Location = new System.Drawing.Point(369, 218);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(80, 25);
+            this.btnCancel.Size = new System.Drawing.Size(60, 20);
             this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -65,19 +65,19 @@
             // labelCrmConnection
             // 
             this.labelCrmConnection.AutoSize = true;
-            this.labelCrmConnection.Location = new System.Drawing.Point(10, 23);
+            this.labelCrmConnection.Location = new System.Drawing.Point(8, 21);
             this.labelCrmConnection.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCrmConnection.Name = "labelCrmConnection";
-            this.labelCrmConnection.Size = new System.Drawing.Size(128, 16);
+            this.labelCrmConnection.Size = new System.Drawing.Size(103, 13);
             this.labelCrmConnection.TabIndex = 9;
             this.labelCrmConnection.Text = "Saved Connections:";
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(406, 268);
+            this.btnOk.Location = new System.Drawing.Point(304, 218);
             this.btnOk.Margin = new System.Windows.Forms.Padding(2);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(80, 25);
+            this.btnOk.Size = new System.Drawing.Size(60, 20);
             this.btnOk.TabIndex = 8;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -88,10 +88,10 @@
             this.cboConnection.DisplayMember = "Name";
             this.cboConnection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboConnection.FormattingEnabled = true;
-            this.cboConnection.Location = new System.Drawing.Point(142, 20);
+            this.cboConnection.Location = new System.Drawing.Point(115, 18);
             this.cboConnection.Margin = new System.Windows.Forms.Padding(2);
             this.cboConnection.Name = "cboConnection";
-            this.cboConnection.Size = new System.Drawing.Size(418, 24);
+            this.cboConnection.Size = new System.Drawing.Size(305, 21);
             this.cboConnection.TabIndex = 7;
             // 
             // groupBoxConnection
@@ -107,11 +107,11 @@
             this.groupBoxConnection.Controls.Add(this.labelUserName);
             this.groupBoxConnection.Controls.Add(this.txtUrl);
             this.groupBoxConnection.Controls.Add(this.labelUrl);
-            this.groupBoxConnection.Location = new System.Drawing.Point(13, 48);
+            this.groupBoxConnection.Location = new System.Drawing.Point(10, 39);
             this.groupBoxConnection.Margin = new System.Windows.Forms.Padding(2);
             this.groupBoxConnection.Name = "groupBoxConnection";
             this.groupBoxConnection.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBoxConnection.Size = new System.Drawing.Size(547, 152);
+            this.groupBoxConnection.Size = new System.Drawing.Size(410, 124);
             this.groupBoxConnection.TabIndex = 11;
             this.groupBoxConnection.TabStop = false;
             // 
@@ -126,46 +126,46 @@
             "IFD",
             "Office365",
             "ClientSecret"});
-            this.cboType.Location = new System.Drawing.Point(99, 42);
+            this.cboType.Location = new System.Drawing.Point(74, 34);
             this.cboType.Margin = new System.Windows.Forms.Padding(2);
             this.cboType.Name = "cboType";
-            this.cboType.Size = new System.Drawing.Size(213, 24);
+            this.cboType.Size = new System.Drawing.Size(161, 21);
             this.cboType.TabIndex = 10;
             // 
             // labelType
             // 
             this.labelType.AutoSize = true;
-            this.labelType.Location = new System.Drawing.Point(5, 45);
+            this.labelType.Location = new System.Drawing.Point(4, 37);
             this.labelType.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelType.Name = "labelType";
-            this.labelType.Size = new System.Drawing.Size(40, 16);
+            this.labelType.Size = new System.Drawing.Size(31, 13);
             this.labelType.TabIndex = 9;
             this.labelType.Text = "Type";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(99, 17);
+            this.txtName.Location = new System.Drawing.Point(74, 14);
             this.txtName.Margin = new System.Windows.Forms.Padding(2);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(213, 22);
+            this.txtName.Size = new System.Drawing.Size(161, 20);
             this.txtName.TabIndex = 8;
             // 
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(5, 20);
+            this.labelName.Location = new System.Drawing.Point(4, 16);
             this.labelName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(45, 16);
+            this.labelName.Size = new System.Drawing.Size(35, 13);
             this.labelName.TabIndex = 7;
             this.labelName.Text = "Name";
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(396, 93);
+            this.btnConnect.Location = new System.Drawing.Point(297, 76);
             this.btnConnect.Margin = new System.Windows.Forms.Padding(2);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(145, 48);
+            this.btnConnect.Size = new System.Drawing.Size(109, 39);
             this.btnConnect.TabIndex = 4;
             this.btnConnect.Text = "Connect ?";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -173,56 +173,56 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(99, 118);
+            this.txtPassword.Location = new System.Drawing.Point(74, 96);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(2);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(293, 22);
+            this.txtPassword.Size = new System.Drawing.Size(221, 20);
             this.txtPassword.TabIndex = 3;
             // 
             // labelPassword
             // 
             this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(5, 121);
+            this.labelPassword.Location = new System.Drawing.Point(4, 98);
             this.labelPassword.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(90, 16);
+            this.labelPassword.Size = new System.Drawing.Size(73, 13);
             this.labelPassword.TabIndex = 6;
             this.labelPassword.Text = "Client Secrect";
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(99, 93);
+            this.txtUserName.Location = new System.Drawing.Point(74, 76);
             this.txtUserName.Margin = new System.Windows.Forms.Padding(2);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(293, 22);
+            this.txtUserName.Size = new System.Drawing.Size(221, 20);
             this.txtUserName.TabIndex = 2;
             // 
             // labelUserName
             // 
             this.labelUserName.AutoSize = true;
-            this.labelUserName.Location = new System.Drawing.Point(5, 96);
+            this.labelUserName.Location = new System.Drawing.Point(4, 78);
             this.labelUserName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelUserName.Name = "labelUserName";
-            this.labelUserName.Size = new System.Drawing.Size(55, 16);
+            this.labelUserName.Size = new System.Drawing.Size(45, 13);
             this.labelUserName.TabIndex = 3;
             this.labelUserName.Text = "Client Id";
             // 
             // txtUrl
             // 
-            this.txtUrl.Location = new System.Drawing.Point(99, 68);
+            this.txtUrl.Location = new System.Drawing.Point(74, 55);
             this.txtUrl.Margin = new System.Windows.Forms.Padding(2);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(442, 22);
+            this.txtUrl.Size = new System.Drawing.Size(332, 20);
             this.txtUrl.TabIndex = 1;
             // 
             // labelUrl
             // 
             this.labelUrl.AutoSize = true;
-            this.labelUrl.Location = new System.Drawing.Point(5, 71);
+            this.labelUrl.Location = new System.Drawing.Point(4, 58);
             this.labelUrl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelUrl.Name = "labelUrl";
-            this.labelUrl.Size = new System.Drawing.Size(25, 16);
+            this.labelUrl.Size = new System.Drawing.Size(20, 13);
             this.labelUrl.TabIndex = 0;
             this.labelUrl.Text = "Url";
             // 
@@ -232,9 +232,11 @@
             this.groupBox1.Controls.Add(this.groupBoxConnection);
             this.groupBox1.Controls.Add(this.labelCrmConnection);
             this.groupBox1.Controls.Add(this.cboConnection);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(9, 10);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(571, 214);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(428, 174);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             // 
@@ -243,9 +245,10 @@
             this.chkCheck0.AutoSize = true;
             this.chkCheck0.Checked = true;
             this.chkCheck0.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCheck0.Location = new System.Drawing.Point(13, 0);
+            this.chkCheck0.Location = new System.Drawing.Point(10, 0);
+            this.chkCheck0.Margin = new System.Windows.Forms.Padding(2);
             this.chkCheck0.Name = "chkCheck0";
-            this.chkCheck0.Size = new System.Drawing.Size(160, 20);
+            this.chkCheck0.Size = new System.Drawing.Size(135, 17);
             this.chkCheck0.TabIndex = 13;
             this.chkCheck0.Text = "ClientId / ClientSecrect";
             this.chkCheck0.UseVisualStyleBackColor = true;
@@ -254,9 +257,10 @@
             // chkCheck1
             // 
             this.chkCheck1.AutoSize = true;
-            this.chkCheck1.Location = new System.Drawing.Point(25, 242);
+            this.chkCheck1.Location = new System.Drawing.Point(19, 197);
+            this.chkCheck1.Margin = new System.Windows.Forms.Padding(2);
             this.chkCheck1.Name = "chkCheck1";
-            this.chkCheck1.Size = new System.Drawing.Size(167, 20);
+            this.chkCheck1.Size = new System.Drawing.Size(139, 17);
             this.chkCheck1.TabIndex = 13;
             this.chkCheck1.Text = "OOB SDK Control Login";
             this.chkCheck1.UseVisualStyleBackColor = true;
@@ -264,9 +268,9 @@
             // 
             // FormConnection2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(594, 310);
+            this.ClientSize = new System.Drawing.Size(444, 246);
             this.ControlBox = false;
             this.Controls.Add(this.chkCheck1);
             this.Controls.Add(this.groupBox1);

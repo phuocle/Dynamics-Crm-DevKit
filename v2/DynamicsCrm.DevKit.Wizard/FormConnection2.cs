@@ -31,8 +31,8 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
-            this.AutoScaleMode = AutoScaleMode.None;
-            this.Font = DefaultFont;
+            //this.AutoScaleMode = AutoScaleMode.None;
+            //this.Font = DefaultFont;
             cboType.SelectedIndex = 3;
 
             DTE = dte;
