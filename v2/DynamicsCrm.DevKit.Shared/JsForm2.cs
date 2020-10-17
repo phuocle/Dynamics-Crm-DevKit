@@ -465,6 +465,7 @@ namespace DynamicsCrm.DevKit.Shared
                     formCode += $"\t\tform.Navigation = navigation;\r\n";
                 }
                 formCode += $"\t\tform.Utility = devKit.LoadUtility(defaultWebResourceName);\r\n";
+                formCode += $"\t\tform.ExecutionContext = devKit.LoadExecutionContext(executionContext);\r\n";
                 //formCode += JsOptionSetFormCode;
                 //formCode += $"\t\tform.OptionSet = optionSet;\r\n";
                 formCode += $"\t\treturn form;\r\n";
