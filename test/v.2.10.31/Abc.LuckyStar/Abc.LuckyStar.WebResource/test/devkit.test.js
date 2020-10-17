@@ -30,7 +30,7 @@ define(['xrm-mock', 'sinon'], function () {
                 }
             );
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new LuckyStar.FormAccount(executionContext);
+            var form = new LuckyStar.FormAccount(executionContext);                   
 
             var onChangeData = "";
             var nameAddOnChange = function (executionContent) { onChangeData = "ON-CHANGED"; }
@@ -59,7 +59,7 @@ define(['xrm-mock', 'sinon'], function () {
             expect(form.Body.Name.Value).toBeNull();
             form.Body.Name.Value = "NAME VALUE NEW";
             expect(form.Body.Name.Value).toBe("NAME VALUE NEW");
-            expect(() => { form.Body.Name.SetIsValid(null, null); }).toThrow(new Error("setIsValid not implemented"));
+            expect(() => { form.Body.Name.SetIsValid(null, null); }).toThrow(new Error("setIsValid not implemented"));             
         });
         it('Boolean attribute type', () => {
             xrmMock.XrmMockGenerator.Attribute.createBoolean({
