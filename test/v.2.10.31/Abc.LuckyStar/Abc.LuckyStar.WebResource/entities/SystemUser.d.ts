@@ -1,6 +1,131 @@
 ﻿//@ts-check
-///<reference path="DevKit.d.ts" />
+///<reference path="devkit.d.ts" />
 declare namespace LuckyStar {
+	namespace FormUser {
+		interface tab_SUMMARY_TAB_Sections {
+			onpremise_account_information: DevKit.Controls.Section;
+			online_account_information: DevKit.Controls.Section;
+			user_information: DevKit.Controls.Section;
+			SOCIAL_PANE_TAB: DevKit.Controls.Section;
+			teams_information: DevKit.Controls.Section;
+			organization_information: DevKit.Controls.Section;
+			queue_selection: DevKit.Controls.Section;
+			queue_information: DevKit.Controls.Section;
+		}
+		interface tab_DETAILS_TAB_Sections {
+			user_information_2: DevKit.Controls.Section;
+			mailing_address: DevKit.Controls.Section;
+			DirectReports: DevKit.Controls.Section;
+		}
+		interface tab_ADMINISTRATION_TAB_Sections {
+			administration: DevKit.Controls.Section;
+			e_mail_configuration: DevKit.Controls.Section;
+		}
+		interface tab_MobileOfflineProfile_TAB_Sections {
+			mobileofflineaccessinfo: DevKit.Controls.Section;
+		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface tab_ADMINISTRATION_TAB extends DevKit.Controls.ITab {
+			Section: tab_ADMINISTRATION_TAB_Sections;
+		}
+		interface tab_MobileOfflineProfile_TAB extends DevKit.Controls.ITab {
+			Section: tab_MobileOfflineProfile_TAB_Sections;
+		}
+		interface Tabs {
+			SUMMARY_TAB: tab_SUMMARY_TAB;
+			DETAILS_TAB: tab_DETAILS_TAB;
+			ADMINISTRATION_TAB: tab_ADMINISTRATION_TAB;
+			MobileOfflineProfile_TAB: tab_MobileOfflineProfile_TAB;
+		}
+		interface Body {
+			Tab: Tabs;
+			notescontrol: DevKit.Controls.Note;
+			/** Type of user. */
+			AccessMode: DevKit.Controls.OptionSet;
+			/** Shows the complete primary address. */
+			Address1_Composite: DevKit.Controls.String;
+			/** Fax number for address 1. */
+			Address1_Fax: DevKit.Controls.String;
+			/** First telephone number associated with address 1. */
+			Address1_Telephone1: DevKit.Controls.String;
+			/** Second telephone number associated with address 1. */
+			Address1_Telephone2: DevKit.Controls.String;
+			/** Third telephone number associated with address 1. */
+			Address1_Telephone3: DevKit.Controls.String;
+			/** Shows the complete secondary address. */
+			Address2_Composite: DevKit.Controls.String;
+			/** Unique identifier of the business unit with which the user is associated. */
+			BusinessUnitId: DevKit.Controls.Lookup;
+			/** License type of user. */
+			CALType: DevKit.Controls.OptionSet;
+			/** Select the mailbox associated with this user. */
+			DefaultMailbox: DevKit.Controls.Lookup;
+			/** Active Directory domain of which the user is a member. */
+			DomainName: DevKit.Controls.String;
+			/** Full name of the user. */
+			FullName: DevKit.Controls.String;
+			/** Home phone number for the user. */
+			HomePhone: DevKit.Controls.String;
+			/** Internal email address for the user. */
+			InternalEMailAddress: DevKit.Controls.String;
+			/** User invitation status. */
+			InviteStatusCode: DevKit.Controls.OptionSet;
+			/** Mobile alert email address for the user. */
+			MobileAlertEMail: DevKit.Controls.String;
+			/** Items contained with a particular SystemUser. */
+			MobileOfflineProfileId: DevKit.Controls.Lookup;
+			/** Mobile phone number for the user. */
+			MobilePhone: DevKit.Controls.String;
+			/** Unique identifier of the manager of the user. */
+			ParentSystemUserId: DevKit.Controls.Lookup;
+			/** Personal email address of the user. */
+			PersonalEMailAddress: DevKit.Controls.String;
+			/** User's position in hierarchical security model. */
+			PositionId: DevKit.Controls.Lookup;
+			/** Preferred address for the user. */
+			PreferredAddressCode: DevKit.Controls.OptionSet;
+			/** Preferred phone number for the user. */
+			PreferredPhoneCode: DevKit.Controls.OptionSet;
+			/** Unique identifier of the default queue for the user. */
+			QueueId: DevKit.Controls.Lookup;
+			/** Title of the user. */
+			Title: DevKit.Controls.String;
+			/** Windows Live ID */
+			WindowsLiveID: DevKit.Controls.String;
+		}
+		interface Footer extends DevKit.Controls.IFooter {
+			/** Information about whether the user is enabled. */
+			IsDisabled: DevKit.Controls.Boolean;
+		}
+		interface Grid {
+			TeamsSubGrid: DevKit.Controls.Grid;
+			PrivateQueuesSubGrid: DevKit.Controls.Grid;
+			DirectReports: DevKit.Controls.Grid;
+		}
+	}
+	class FormUser extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form User
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.WebApi;
+		/** The Body section of form User */
+		Body: LuckyStar.FormUser.Body;
+		/** The Footer section of form User */
+		Footer: LuckyStar.FormUser.Footer;
+		/** The Grid of form User */
+		Grid: LuckyStar.FormUser.Grid;
+	}
 	class SystemUserApi {
 		/**
 		* DynamicsCrm.DevKit SystemUserApi
@@ -429,4 +554,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':null}
+//{'JsForm':['User'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.10.31','JsFormVersion':'v2'}

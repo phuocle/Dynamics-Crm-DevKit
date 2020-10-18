@@ -1,6 +1,435 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace LuckyStar {
+	namespace FormWebApi {
+		interface Header extends DevKit.Controls.IHeader {
+			header_IFRAME_google: DevKit.Controls.IFrame;
+			header_WebResource_HelloWorld: DevKit.Controls.WebResource;
+			/** Unique identifier of the user who created the record. */
+			CreatedBy: DevKit.Controls.Lookup;
+			/** Date and time when the record was created. */
+			CreatedOn: DevKit.Controls.DateTime;
+			/** Unique identifier of the delegate user who created the record. */
+			CreatedOnBehalfBy: DevKit.Controls.Lookup;
+			devkit_AlternateKey: DevKit.Controls.String;
+			devkit_Currency: DevKit.Controls.Money;
+			/** Value of the Currency in base currency. */
+			devkit_currency_Base: DevKit.Controls.Money;
+			devkit_CustomerId: DevKit.Controls.Lookup;
+			devkit_DateOnlyDateOnly: DevKit.Controls.Date;
+			devkit_DateOnlyDateOnlyCalculated: DevKit.Controls.Date;
+			devkit_DateOnlyDateOnlyRollup: DevKit.Controls.Date;
+			/** Last Updated time of rollup field Date Only Date Only Rollup. */
+			devkit_DateOnlyDateOnlyRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field Date Only Date Only Rollup. */
+			devkit_DateOnlyDateOnlyRollup_State: DevKit.Controls.Integer;
+			devkit_DecimalNumber: DevKit.Controls.Decimal;
+			devkit_FloatingPointNumber: DevKit.Controls.Double;
+			devkit_LinkWebApiId: DevKit.Controls.Lookup;
+			devkit_MultipleLiniesofText: DevKit.Controls.String;
+			/** The name of the custom entity. */
+			devkit_Name: DevKit.Controls.String;
+			devkit_ParentWebApiId: DevKit.Controls.Lookup;
+			devkit_SingleLineofTextEmail: DevKit.Controls.String;
+			devkit_SingleLineofTextPhone: DevKit.Controls.String;
+			devkit_SingleLineofTextText: DevKit.Controls.String;
+			devkit_SingleLineofTextTextArea: DevKit.Controls.String;
+			devkit_SingleLineofTextTickerSymbol: DevKit.Controls.String;
+			devkit_SingleLineofTextUrl: DevKit.Controls.String;
+			devkit_SingleOptionSetCode: DevKit.Controls.OptionSet;
+			devkit_SingleOptionSetCodeCalculated: DevKit.Controls.OptionSet;
+			devkit_TimeZoneDateAndTime: DevKit.Controls.DateTime;
+			devkit_TimeZoneDateAndTimeCalculated: DevKit.Controls.DateTime;
+			devkit_TimeZoneDateAndTimeRollup: DevKit.Controls.DateTime;
+			/** Last Updated time of rollup field TimeZone Date And Time Rollup. */
+			devkit_TimeZoneDateAndTimeRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field TimeZone Date And Time Rollup. */
+			devkit_TimeZoneDateAndTimeRollup_State: DevKit.Controls.Integer;
+			devkit_TimeZoneDateOnly: DevKit.Controls.Date;
+			devkit_TimeZoneDateOnlyCalculated: DevKit.Controls.Date;
+			devkit_TimeZoneDateOnlyRollup: DevKit.Controls.Date;
+			/** Last Updated time of rollup field TimeZone Date Only Rollup. */
+			devkit_TimeZoneDateOnlyRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field TimeZone Date Only Rollup. */
+			devkit_TimeZoneDateOnlyRollup_State: DevKit.Controls.Integer;
+			devkit_UserLocalDateAndTime: DevKit.Controls.DateTime;
+			devkit_UserLocalDateAndTimeCalculated: DevKit.Controls.DateTime;
+			devkit_UserLocalDateAndTimeRollup: DevKit.Controls.DateTime;
+			/** Last Updated time of rollup field User Local Date And Time Rollup. */
+			devkit_UserLocalDateAndTimeRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field User Local Date And Time Rollup. */
+			devkit_UserLocalDateAndTimeRollup_State: DevKit.Controls.Integer;
+			devkit_UserLocalDateOnly: DevKit.Controls.Date;
+			devkit_UserLocalDateOnlyCalculated: DevKit.Controls.Date;
+			devkit_UserLocalDateOnlyRollup: DevKit.Controls.Date;
+			/** Last Updated time of rollup field User Local Date Only Rollup. */
+			devkit_UserLocalDateOnlyRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field User Local Date Only Rollup. */
+			devkit_UserLocalDateOnlyRollup_State: DevKit.Controls.Integer;
+			devkit_WholeNumberDuration: DevKit.Controls.Integer;
+			devkit_WholeNumberLanguage: DevKit.Controls.Integer;
+			devkit_WholeNumberNone: DevKit.Controls.Integer;
+			devkit_WholeNumberTimeZone: DevKit.Controls.Integer;
+			devkit_YesAndNo: DevKit.Controls.Boolean;
+			devkit_YesAndNoCalculated: DevKit.Controls.Boolean;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			ExchangeRate: DevKit.Controls.Decimal;
+			/** Unique identifier of the user who modified the record. */
+			ModifiedBy: DevKit.Controls.Lookup;
+			/** Date and time when the record was modified. */
+			ModifiedOn: DevKit.Controls.DateTime;
+			/** Unique identifier of the delegate user who modified the record. */
+			ModifiedOnBehalfBy: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Status of the WebApi */
+			statecode: DevKit.Controls.OptionSet;
+			/** Reason for the status of the WebApi */
+			statuscode: DevKit.Controls.OptionSet;
+			/** Unique identifier of the currency associated with the entity. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface tab_WEBAPI_Sections {
+			WEBAPI_section_1: DevKit.Controls.Section;
+			WEBAPI_section_2: DevKit.Controls.Section;
+		}
+		interface tab_NOTE_Sections {
+			NOTE_section_1: DevKit.Controls.Section;
+		}
+		interface tab_TIMER_Sections {
+			TIMER_section_1: DevKit.Controls.Section;
+		}
+		interface tab_OTHERS_Sections {
+			OTHERS_section_1: DevKit.Controls.Section;
+		}
+		interface tab_QUICKVIEW_Sections {
+			QUICKVIEW_section_1: DevKit.Controls.Section;
+		}
+		interface tab_SUBGRID_Sections {
+			SUBGRID_section_1: DevKit.Controls.Section;
+		}
+		interface tab_OPTIONSET_Sections {
+			OPTIONSET_section_1: DevKit.Controls.Section;
+			OPTIONSET_section_3: DevKit.Controls.Section;
+			OPTIONSET_section_5: DevKit.Controls.Section;
+			OPTIONSET_section_2: DevKit.Controls.Section;
+			OPTIONSET_section_4: DevKit.Controls.Section;
+			OPTIONSET_section_6: DevKit.Controls.Section;
+		}
+		interface tab_DATETIME_Sections {
+			DATETIME_section_1: DevKit.Controls.Section;
+			DATETIME_section_3: DevKit.Controls.Section;
+			DATETIME_section_5: DevKit.Controls.Section;
+			DATETIME_section_7: DevKit.Controls.Section;
+			DATETIME_section_2: DevKit.Controls.Section;
+			DATETIME_section_4: DevKit.Controls.Section;
+			DATETIME_section_6: DevKit.Controls.Section;
+		}
+		interface tab_NUMBER_Sections {
+			NUMBER_section_1: DevKit.Controls.Section;
+			NUMBER_section_4: DevKit.Controls.Section;
+			NUMBER_section_2: DevKit.Controls.Section;
+			NUMBER_section_3: DevKit.Controls.Section;
+		}
+		interface tab_STRING_Sections {
+			STRING_section_1: DevKit.Controls.Section;
+			STRING_section_3: DevKit.Controls.Section;
+			STRING_section_2: DevKit.Controls.Section;
+		}
+		interface tab_ADMINISTRATOR_Sections {
+			ADMINISTRATOR_section_1: DevKit.Controls.Section;
+			ADMINISTRATOR_section_2: DevKit.Controls.Section;
+		}
+		interface tab_WEBAPI extends DevKit.Controls.ITab {
+			Section: tab_WEBAPI_Sections;
+		}
+		interface tab_NOTE extends DevKit.Controls.ITab {
+			Section: tab_NOTE_Sections;
+		}
+		interface tab_TIMER extends DevKit.Controls.ITab {
+			Section: tab_TIMER_Sections;
+		}
+		interface tab_OTHERS extends DevKit.Controls.ITab {
+			Section: tab_OTHERS_Sections;
+		}
+		interface tab_QUICKVIEW extends DevKit.Controls.ITab {
+			Section: tab_QUICKVIEW_Sections;
+		}
+		interface tab_SUBGRID extends DevKit.Controls.ITab {
+			Section: tab_SUBGRID_Sections;
+		}
+		interface tab_OPTIONSET extends DevKit.Controls.ITab {
+			Section: tab_OPTIONSET_Sections;
+		}
+		interface tab_DATETIME extends DevKit.Controls.ITab {
+			Section: tab_DATETIME_Sections;
+		}
+		interface tab_NUMBER extends DevKit.Controls.ITab {
+			Section: tab_NUMBER_Sections;
+		}
+		interface tab_STRING extends DevKit.Controls.ITab {
+			Section: tab_STRING_Sections;
+		}
+		interface tab_ADMINISTRATOR extends DevKit.Controls.ITab {
+			Section: tab_ADMINISTRATOR_Sections;
+		}
+		interface Tabs {
+			WEBAPI: tab_WEBAPI;
+			NOTE: tab_NOTE;
+			TIMER: tab_TIMER;
+			OTHERS: tab_OTHERS;
+			QUICKVIEW: tab_QUICKVIEW;
+			SUBGRID: tab_SUBGRID;
+			OPTIONSET: tab_OPTIONSET;
+			DATETIME: tab_DATETIME;
+			NUMBER: tab_NUMBER;
+			STRING: tab_STRING;
+			ADMINISTRATOR: tab_ADMINISTRATOR;
+		}
+		interface Body {
+			Tab: Tabs;
+			notescontrol: DevKit.Controls.Note;
+			tCreatedOn: DevKit.Controls.Timer;
+			WebResource_WORDHELLO: DevKit.Controls.WebResource;
+			IFRAME_GoogleGoogle: DevKit.Controls.IFrame;
+			IFRAME_ACIWIDGET: DevKit.Controls.AciWidget;
+			/** Unique identifier of the user who created the record. */
+			CreatedBy: DevKit.Controls.Lookup;
+			/** Date and time when the record was created. */
+			CreatedOn: DevKit.Controls.DateTime;
+			/** Unique identifier of the delegate user who created the record. */
+			CreatedOnBehalfBy: DevKit.Controls.Lookup;
+			devkit_AlternateKey: DevKit.Controls.String;
+			devkit_Currency: DevKit.Controls.Money;
+			/** Value of the Currency in base currency. */
+			devkit_currency_Base: DevKit.Controls.Money;
+			devkit_CustomerId: DevKit.Controls.Lookup;
+			devkit_DateOnlyDateOnly: DevKit.Controls.Date;
+			devkit_DateOnlyDateOnlyCalculated: DevKit.Controls.Date;
+			devkit_DateOnlyDateOnlyRollup: DevKit.Controls.Date;
+			/** Last Updated time of rollup field Date Only Date Only Rollup. */
+			devkit_DateOnlyDateOnlyRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field Date Only Date Only Rollup. */
+			devkit_DateOnlyDateOnlyRollup_State: DevKit.Controls.Integer;
+			devkit_DecimalNumber: DevKit.Controls.Decimal;
+			devkit_FloatingPointNumber: DevKit.Controls.Double;
+			devkit_LinkWebApiId: DevKit.Controls.Lookup;
+			devkit_LinkWebApiId_1: DevKit.Controls.Lookup;
+			devkit_MultiOptionSetCode: DevKit.Controls.MultiOptionSet;
+			devkit_MultipleLiniesofText: DevKit.Controls.String;
+			/** The name of the custom entity. */
+			devkit_Name: DevKit.Controls.String;
+			devkit_ParentWebApiId: DevKit.Controls.Lookup;
+			devkit_SingleLineofTextEmail: DevKit.Controls.String;
+			devkit_SingleLineofTextPhone: DevKit.Controls.String;
+			devkit_SingleLineofTextText: DevKit.Controls.String;
+			devkit_SingleLineofTextTextArea: DevKit.Controls.String;
+			devkit_SingleLineofTextTickerSymbol: DevKit.Controls.String;
+			devkit_SingleLineofTextUrl: DevKit.Controls.String;
+			devkit_SingleOptionSetCode: DevKit.Controls.OptionSet;
+			devkit_SingleOptionSetCodeCalculated: DevKit.Controls.OptionSet;
+			devkit_TimeZoneDateAndTime: DevKit.Controls.DateTime;
+			devkit_TimeZoneDateAndTimeCalculated: DevKit.Controls.DateTime;
+			devkit_TimeZoneDateAndTimeRollup: DevKit.Controls.DateTime;
+			/** Last Updated time of rollup field TimeZone Date And Time Rollup. */
+			devkit_TimeZoneDateAndTimeRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field TimeZone Date And Time Rollup. */
+			devkit_TimeZoneDateAndTimeRollup_State: DevKit.Controls.Integer;
+			devkit_TimeZoneDateOnly: DevKit.Controls.Date;
+			devkit_TimeZoneDateOnlyCalculated: DevKit.Controls.Date;
+			devkit_TimeZoneDateOnlyRollup: DevKit.Controls.Date;
+			/** Last Updated time of rollup field TimeZone Date Only Rollup. */
+			devkit_TimeZoneDateOnlyRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field TimeZone Date Only Rollup. */
+			devkit_TimeZoneDateOnlyRollup_State: DevKit.Controls.Integer;
+			devkit_UserLocalDateAndTime: DevKit.Controls.DateTime;
+			devkit_UserLocalDateAndTimeCalculated: DevKit.Controls.DateTime;
+			devkit_UserLocalDateAndTimeRollup: DevKit.Controls.DateTime;
+			/** Last Updated time of rollup field User Local Date And Time Rollup. */
+			devkit_UserLocalDateAndTimeRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field User Local Date And Time Rollup. */
+			devkit_UserLocalDateAndTimeRollup_State: DevKit.Controls.Integer;
+			devkit_UserLocalDateOnly: DevKit.Controls.Date;
+			devkit_UserLocalDateOnlyCalculated: DevKit.Controls.Date;
+			devkit_UserLocalDateOnlyRollup: DevKit.Controls.Date;
+			/** Last Updated time of rollup field User Local Date Only Rollup. */
+			devkit_UserLocalDateOnlyRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field User Local Date Only Rollup. */
+			devkit_UserLocalDateOnlyRollup_State: DevKit.Controls.Integer;
+			devkit_WholeNumberDuration: DevKit.Controls.Integer;
+			devkit_WholeNumberLanguage: DevKit.Controls.Integer;
+			devkit_WholeNumberNone: DevKit.Controls.Integer;
+			devkit_WholeNumberTimeZone: DevKit.Controls.Integer;
+			devkit_YesAndNo: DevKit.Controls.Boolean;
+			devkit_YesAndNoCalculated: DevKit.Controls.Boolean;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			ExchangeRate: DevKit.Controls.Decimal;
+			/** Unique identifier of the user who modified the record. */
+			ModifiedBy: DevKit.Controls.Lookup;
+			/** Date and time when the record was modified. */
+			ModifiedOn: DevKit.Controls.DateTime;
+			/** Unique identifier of the delegate user who modified the record. */
+			ModifiedOnBehalfBy: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Status of the WebApi */
+			statecode: DevKit.Controls.OptionSet;
+			/** Reason for the status of the WebApi */
+			statuscode: DevKit.Controls.OptionSet;
+			/** Unique identifier of the currency associated with the entity. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Footer extends DevKit.Controls.IFooter {
+			/** Unique identifier of the user who created the record. */
+			CreatedBy: DevKit.Controls.Lookup;
+			/** Date and time when the record was created. */
+			CreatedOn: DevKit.Controls.DateTime;
+			/** Unique identifier of the delegate user who created the record. */
+			CreatedOnBehalfBy: DevKit.Controls.Lookup;
+			devkit_AlternateKey: DevKit.Controls.String;
+			devkit_Currency: DevKit.Controls.Money;
+			/** Value of the Currency in base currency. */
+			devkit_currency_Base: DevKit.Controls.Money;
+			devkit_CustomerId: DevKit.Controls.Lookup;
+			devkit_DateOnlyDateOnly: DevKit.Controls.Date;
+			devkit_DateOnlyDateOnlyCalculated: DevKit.Controls.Date;
+			devkit_DateOnlyDateOnlyRollup: DevKit.Controls.Date;
+			/** Last Updated time of rollup field Date Only Date Only Rollup. */
+			devkit_DateOnlyDateOnlyRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field Date Only Date Only Rollup. */
+			devkit_DateOnlyDateOnlyRollup_State: DevKit.Controls.Integer;
+			devkit_DecimalNumber: DevKit.Controls.Decimal;
+			devkit_FloatingPointNumber: DevKit.Controls.Double;
+			devkit_LinkWebApiId: DevKit.Controls.Lookup;
+			devkit_MultipleLiniesofText: DevKit.Controls.String;
+			/** The name of the custom entity. */
+			devkit_Name: DevKit.Controls.String;
+			devkit_ParentWebApiId: DevKit.Controls.Lookup;
+			devkit_SingleLineofTextEmail: DevKit.Controls.String;
+			devkit_SingleLineofTextPhone: DevKit.Controls.String;
+			devkit_SingleLineofTextText: DevKit.Controls.String;
+			devkit_SingleLineofTextTextArea: DevKit.Controls.String;
+			devkit_SingleLineofTextTickerSymbol: DevKit.Controls.String;
+			devkit_SingleLineofTextUrl: DevKit.Controls.String;
+			devkit_SingleOptionSetCode: DevKit.Controls.OptionSet;
+			devkit_SingleOptionSetCodeCalculated: DevKit.Controls.OptionSet;
+			devkit_TimeZoneDateAndTime: DevKit.Controls.DateTime;
+			devkit_TimeZoneDateAndTimeCalculated: DevKit.Controls.DateTime;
+			devkit_TimeZoneDateAndTimeRollup: DevKit.Controls.DateTime;
+			/** Last Updated time of rollup field TimeZone Date And Time Rollup. */
+			devkit_TimeZoneDateAndTimeRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field TimeZone Date And Time Rollup. */
+			devkit_TimeZoneDateAndTimeRollup_State: DevKit.Controls.Integer;
+			devkit_TimeZoneDateOnly: DevKit.Controls.Date;
+			devkit_TimeZoneDateOnlyCalculated: DevKit.Controls.Date;
+			devkit_TimeZoneDateOnlyRollup: DevKit.Controls.Date;
+			/** Last Updated time of rollup field TimeZone Date Only Rollup. */
+			devkit_TimeZoneDateOnlyRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field TimeZone Date Only Rollup. */
+			devkit_TimeZoneDateOnlyRollup_State: DevKit.Controls.Integer;
+			devkit_UserLocalDateAndTime: DevKit.Controls.DateTime;
+			devkit_UserLocalDateAndTimeCalculated: DevKit.Controls.DateTime;
+			devkit_UserLocalDateAndTimeRollup: DevKit.Controls.DateTime;
+			/** Last Updated time of rollup field User Local Date And Time Rollup. */
+			devkit_UserLocalDateAndTimeRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field User Local Date And Time Rollup. */
+			devkit_UserLocalDateAndTimeRollup_State: DevKit.Controls.Integer;
+			devkit_UserLocalDateOnly: DevKit.Controls.Date;
+			devkit_UserLocalDateOnlyCalculated: DevKit.Controls.Date;
+			devkit_UserLocalDateOnlyRollup: DevKit.Controls.Date;
+			/** Last Updated time of rollup field User Local Date Only Rollup. */
+			devkit_UserLocalDateOnlyRollup_Date: DevKit.Controls.DateTime;
+			/** State of rollup field User Local Date Only Rollup. */
+			devkit_UserLocalDateOnlyRollup_State: DevKit.Controls.Integer;
+			devkit_WholeNumberDuration: DevKit.Controls.Integer;
+			devkit_WholeNumberLanguage: DevKit.Controls.Integer;
+			devkit_WholeNumberNone: DevKit.Controls.Integer;
+			devkit_WholeNumberTimeZone: DevKit.Controls.Integer;
+			devkit_YesAndNo: DevKit.Controls.Boolean;
+			devkit_YesAndNoCalculated: DevKit.Controls.Boolean;
+			/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+			ExchangeRate: DevKit.Controls.Decimal;
+			/** Unique identifier of the user who modified the record. */
+			ModifiedBy: DevKit.Controls.Lookup;
+			/** Date and time when the record was modified. */
+			ModifiedOn: DevKit.Controls.DateTime;
+			/** Unique identifier of the delegate user who modified the record. */
+			ModifiedOnBehalfBy: DevKit.Controls.Lookup;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Status of the WebApi */
+			statecode: DevKit.Controls.OptionSet;
+			/** Reason for the status of the WebApi */
+			statuscode: DevKit.Controls.OptionSet;
+			/** Unique identifier of the currency associated with the entity. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Navigation {
+			nav_devkit_devkit_webapi_devkit_webapi_ParentWebApiId: DevKit.Controls.NavigationItem,
+			nav_devkit_devkit_webapi_devkit_webapi_LinkWebApiId: DevKit.Controls.NavigationItem,
+			nav_bpf_devkit_webapi_devkit_processwebapi1: DevKit.Controls.NavigationItem,
+			nav_devkit_devkit_webapi_contact: DevKit.Controls.NavigationItem
+		}
+		interface quickForm_quickViewWebApi_Body {
+			devkit_Name: DevKit.Controls.QuickView;
+			devkit_SingleLineofTextText: DevKit.Controls.QuickView;
+			devkit_YesAndNo: DevKit.Controls.QuickView;
+			OwnerId: DevKit.Controls.QuickView;
+		}
+		interface quickForm_quickViewWebApi extends DevKit.Controls.IQuickView {
+			Body: quickForm_quickViewWebApi_Body;
+		}
+		interface QuickForm {
+			quickViewWebApi: quickForm_quickViewWebApi;
+		}
+		interface ProcessProcess_WebApi_1 {
+			devkit_CustomerId: DevKit.Controls.Lookup;
+			devkit_DecimalNumber: DevKit.Controls.Decimal;
+			devkit_FloatingPointNumber: DevKit.Controls.Double;
+			devkit_MultipleLiniesofText: DevKit.Controls.String;
+			devkit_SingleLineofTextText: DevKit.Controls.String;
+			devkit_SingleLineofTextText_1: DevKit.Controls.String;
+			devkit_SingleOptionSetCode: DevKit.Controls.OptionSet;
+			devkit_UserLocalDateOnly: DevKit.Controls.Date;
+			devkit_WholeNumberNone: DevKit.Controls.Integer;
+			devkit_YesAndNo: DevKit.Controls.Boolean;
+			devkit_YesAndNoCalculated: DevKit.Controls.Boolean;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			Process_WebApi_1: ProcessProcess_WebApi_1;
+		}
+		interface Grid {
+			gridSubGridParentWebApi: DevKit.Controls.Grid;
+		}
+	}
+	class FormWebApi extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form WebApi
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.WebApi;
+		/** The Body section of form WebApi */
+		Body: LuckyStar.FormWebApi.Body;
+		/** The Footer section of form WebApi */
+		Footer: LuckyStar.FormWebApi.Footer;
+		/** The Header section of form WebApi */
+		Header: LuckyStar.FormWebApi.Header;
+		/** The Navigation of form WebApi */
+		Navigation: LuckyStar.FormWebApi.Navigation;
+		/** The QuickForm of form WebApi */
+		QuickForm: LuckyStar.FormWebApi.QuickForm;
+		/** The Process of form WebApi */
+		Process: LuckyStar.FormWebApi.Process;
+		/** The Grid of form WebApi */
+		Grid: LuckyStar.FormWebApi.Grid;
+	}
 	class devkit_WebApiApi {
 		/**
 		* DynamicsCrm.DevKit devkit_WebApiApi
@@ -226,4 +655,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':'2.10.31','JsFormVersion':null}
+//{'JsForm':['WebApi'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.10.31','JsFormVersion':'v2'}

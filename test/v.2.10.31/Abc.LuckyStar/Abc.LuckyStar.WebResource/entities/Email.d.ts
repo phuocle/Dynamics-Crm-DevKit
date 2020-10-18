@@ -1,6 +1,83 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace LuckyStar {
+	namespace FormEmail {
+		interface Header extends DevKit.Controls.IHeader {
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Select the priority so that preferred customers or critical issues are handled quickly. */
+			PriorityCode: DevKit.Controls.OptionSet;
+			/** Enter the expected due date and time for the activity to be completed to provide details about when the email will be sent. */
+			ScheduledEnd: DevKit.Controls.DateTime;
+			/** Select the email's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_Email_Sections {
+			recipient_information: DevKit.Controls.Section;
+			email_description: DevKit.Controls.Section;
+			Regarding_information: DevKit.Controls.Section;
+			attachments: DevKit.Controls.Section;
+			emailengagementactions: DevKit.Controls.Section;
+			Emailrecipient_section_6: DevKit.Controls.Section;
+			tab_4_section_2: DevKit.Controls.Section;
+		}
+		interface tab_Email extends DevKit.Controls.ITab {
+			Section: tab_Email_Sections;
+		}
+		interface Tabs {
+			Email: tab_Email;
+		}
+		interface Body {
+			Tab: Tabs;
+			emailengagementactionscontrol: DevKit.Controls.EmailEngagement;
+			emailrecipientactivitycontrol: DevKit.Controls.EmailRecipient;
+			/** Type the number of minutes spent creating and sending the email. The duration is used in reporting. */
+			ActualDurationMinutes: DevKit.Controls.Integer;
+			/** Enter the recipients that are included on the email distribution, but are not displayed to other recipients. */
+			bcc: DevKit.Controls.Lookup;
+			/** Enter the recipients that should be copied on the email. */
+			cc: DevKit.Controls.Lookup;
+			/** Type the greeting and message text of the email. */
+			Description: DevKit.Controls.String;
+			/** Enter the sender of the email. */
+			from: DevKit.Controls.Lookup;
+			/** Choose the record that the email relates to. */
+			RegardingObjectId: DevKit.Controls.Lookup;
+			/** Type a short description about the objective or primary topic of the email. */
+			Subject: DevKit.Controls.String;
+			/** Enter the account, contact, lead, queue, or user recipients for the email. */
+			to: DevKit.Controls.Lookup;
+		}
+		interface Footer extends DevKit.Controls.IFooter {
+			/** For internal use only. Shows whether this email is followed. This is evaluated state which overrides user selection of follow email. */
+			IsEmailFollowed: DevKit.Controls.Boolean;
+			/** For internal use only. Shows whether this email Reminder is Set. */
+			IsEmailReminderSet: DevKit.Controls.Boolean;
+		}
+		interface Grid {
+			attachmentsGrid: DevKit.Controls.Grid;
+		}
+	}
+	class FormEmail extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form Email
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
+		WebApi: DevKit.WebApi;
+		/** The Body section of form Email */
+		Body: LuckyStar.FormEmail.Body;
+		/** The Footer section of form Email */
+		Footer: LuckyStar.FormEmail.Footer;
+		/** The Header section of form Email */
+		Header: LuckyStar.FormEmail.Header;
+		/** The Grid of form Email */
+		Grid: LuckyStar.FormEmail.Grid;
+	}
 	class EmailApi {
 		/**
 		* DynamicsCrm.DevKit EmailApi
@@ -334,4 +411,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':false,'Version':'2.10.31','JsFormVersion':null}
+//{'JsForm':['Email'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.10.31','JsFormVersion':'v2'}
