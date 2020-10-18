@@ -76,6 +76,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="lib\Microsoft.VisualStudio.Coverage.Analysis.dll" />
+    <Content Include="lib\Microsoft.VisualStudio.Coverage.Interop.dll" />
     <Content Include="license\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
