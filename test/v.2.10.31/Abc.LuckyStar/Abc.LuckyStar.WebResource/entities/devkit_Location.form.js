@@ -97,6 +97,14 @@ var LuckyStar;
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
+		var grid = {
+			chartAccount: {},
+			panelContact: {},
+			panelAccount: {},
+			gridAccount: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
 		var navigation = {
 			navAudit: {},
 			nav_devkit_devkit_location_account_LocationId: {},
@@ -107,6 +115,7 @@ var LuckyStar;
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		return form;
 	};
 	LuckyStar.FormQuick_Create_Location = function(executionContext, defaultWebResourceName) {

@@ -1601,7 +1601,7 @@ declare namespace DevKit {
         readonly IsReadOnly: boolean;
     }
     interface DateFormattingInfo {
-        readonly AMDesignator: string;
+        readonly AmDesignator: string;
         readonly AbbreviatedDayNames: Array<string>;
         readonly AbbreviatedMonthGenitiveNames: Array<string>;
         readonly AbbreviatedMonthNames: Array<string>;
@@ -1611,15 +1611,12 @@ declare namespace DevKit {
         readonly DayNames: Array<string>;
         readonly FirstDayOfWeek: number;
         readonly FullDateTimePattern: string;
-        readonly IsReadOnly: boolean;
         readonly LongDatePattern: string;
         readonly LongTimePattern: string;
         readonly MonthDayPattern: string;
         readonly MonthGenitiveNames: Array<string>;
         readonly MonthNames: Array<string>;
-        readonly NativeCalendarName: string;
-        readonly PMDesignator: string;
-        readonly RFC1123Pattern: string;
+        readonly PmDesignator: string;
         readonly ShortDatePattern: string;
         readonly ShortTimePattern: string;
         readonly ShortestDayNames: Array<string>;
@@ -1627,7 +1624,6 @@ declare namespace DevKit {
         readonly TimeSeparator: string;
         readonly UniversalSortableDateTimePattern: string;
         readonly YearMonthPattern: string;
-        readonly eras: Array<string>;
     }
     interface AppProperty {
         readonly appId: string;

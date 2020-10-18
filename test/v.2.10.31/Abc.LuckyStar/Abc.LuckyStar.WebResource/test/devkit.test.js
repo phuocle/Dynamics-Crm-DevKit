@@ -467,24 +467,24 @@ define(['xrm-mock', 'sinon'], function () {
             expect(form.QuickForm.quickViewContact.Label).toBe("QUICK FORM LABEL NEW");
             expect(() => { form.QuickForm.quickViewContact.Visible = false }).toThrow(new Error("Method not implemented."));
         });
-        /*
         it('subgrid control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([
                 new xrmMock.AttributeMock({
-                    name: "Contacts"
+                    name: "name"
                 })
             ]);
             var entity = new xrmMock.EntityMock({
+                entityName: "account",
                 attributes: attributes
             });
             var data = new xrmMock.DataMock(entity);
 
             var grid = new xrmMock.GridControlMock({
-                name: "Contacts",
+                name: "gridAccount",
                 controlType: "subgrid",
-                label: "CONTACTS",
+                label: "ACCOUNTS",
                 visible: true,
-                entityName: "contact",
+                entityName: "account",
                 contextType: XrmEnum.GridControlContext.FormContextRelated
             });
 
@@ -493,9 +493,9 @@ define(['xrm-mock', 'sinon'], function () {
             grid.viewSelector = viewSelector;
 
             var relationship = new xrmMock.RelationshipMock({
-                name: "name",
-                attributeName: "attributeName",
-                navigationPropertyName: "navigationPropertyName",
+                name: "name_relationship",
+                attributeName: "attribute_name_relationship",
+                navigationPropertyName: "navigation_property_name_relationship",
                 relationshipType: XrmEnum.RelationshipType.OneToMany,
                 roleType: XrmEnum.RoleType.AssociationEntity
             });
@@ -504,7 +504,7 @@ define(['xrm-mock', 'sinon'], function () {
             var row1Entity = new xrmMock.EntityMock({
                 id: "ROW1-GUID",
                 primaryValue: "ROW1-VALUE",
-                entityName: "contact",
+                entityName: "account",
                 attributes: new xrmMock.ItemCollectionMock([
                     new xrmMock.StringAttributeMock({ name: "abc_col1", value: "ROW1-COL1", requiredLevel: "recommended", controls: new xrmMock.ItemCollectionMock([new xrmMock.StringControlMock({ attribute: null, name: 'abc_col1', disabled: true })]) }),
                     new xrmMock.StringAttributeMock({ name: "abc_col2", value: "ROW1-COL2" }),
@@ -523,46 +523,47 @@ define(['xrm-mock', 'sinon'], function () {
             xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
             var executionContext = xrmMock.XrmMockGenerator.formContext;
 
-            var form = new Tomato.FormTest(executionContext);
-            var ContactsAddOnLoad = function (executionContext) { }
+            var form = new LuckyStar.FormLocation(executionContext);
+            var accountAddOnLoad = function (executionContext) { }
             expect(grid.onLoadHandlers.length).toBe(0);
-            form.Grid.Contacts.AddOnLoad(ContactsAddOnLoad);
+            form.Grid.gridAccount.AddOnLoad(accountAddOnLoad);
+
             expect(grid.onLoadHandlers.length).toBe(1);
-            expect(form.Grid.Contacts.EntityName).toBe("contact");
-            expect(() => { form.Grid.Contacts.FetchXml }).toThrow(new Error("getFetchXml not implemented."));
-            expect(() => { form.Grid.Contacts.GridType }).toThrow(new Error("getGridType not implemented."));
-            expect(form.Grid.Contacts.Relationship).toBeDefined();
-            expect(form.Grid.Contacts.Relationship.attributeName).toBe("attributeName");
-            expect(form.Grid.Contacts.Relationship.name).toBe("name");
-            expect(form.Grid.Contacts.Relationship.navigationPropertyName).toBe("navigationPropertyName");
-            expect(form.Grid.Contacts.Relationship.relationshipType).toBe(XrmEnum.RelationshipType.OneToMany);
-            expect(form.Grid.Contacts.Relationship.roleType).toBe(XrmEnum.RoleType.AssociationEntity);
-            expect(() => { form.Grid.Contacts.Url(0); }).toThrow(new Error("getUrl not implemented."));
-            expect(form.Grid.Contacts.ViewSelector.CurrentView.entityType).toBe("1039");
-            expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-CONTACTS-I-FOLLOW");
-            expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("Contacts I Follow");
+            expect(form.Grid.gridAccount.EntityName).toBe("account");
+            expect(() => { form.Grid.gridAccount.FetchXml }).toThrow(new Error("getFetchXml not implemented."));
+            expect(() => { form.Grid.gridAccount.GridType }).toThrow(new Error("getGridType not implemented."));
+            expect(form.Grid.gridAccount.Relationship).toBeDefined();
+            expect(form.Grid.gridAccount.Relationship.attributeName).toBe("attribute_name_relationship");
+            expect(form.Grid.gridAccount.Relationship.name).toBe("name_relationship");
+            expect(form.Grid.gridAccount.Relationship.navigationPropertyName).toBe("navigation_property_name_relationship");
+            expect(form.Grid.gridAccount.Relationship.relationshipType).toBe(XrmEnum.RelationshipType.OneToMany);
+            expect(form.Grid.gridAccount.Relationship.roleType).toBe(XrmEnum.RoleType.AssociationEntity);
+            expect(() => { form.Grid.gridAccount.Url(0); }).toThrow(new Error("getUrl not implemented."));
+            expect(form.Grid.gridAccount.ViewSelector.CurrentView.entityType).toBe("1039");
+            expect(form.Grid.gridAccount.ViewSelector.CurrentView.id).toBe("GUID-CONTACTS-I-FOLLOW");
+            expect(form.Grid.gridAccount.ViewSelector.CurrentView.name).toBe("Contacts I Follow");
             var newCurrentView = {
                 entityType: "1039",
                 id: "GUID-NEW",
                 name: "NAME-NEW"
             };
-            form.Grid.Contacts.ViewSelector.CurrentView = newCurrentView;
-            expect(form.Grid.Contacts.ViewSelector.CurrentView.entityType).toBe("1039");
-            expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-NEW");
-            expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("NAME-NEW");
-            expect(form.Grid.Contacts.ViewSelector.Visible).toBeTruthy();
-            expect(() => { form.Grid.Contacts.Refresh(); }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Grid.Contacts.RefreshRibbon(); }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Grid.Contacts.OpenRelatedGrid(); }).toThrow(new Error("openRelatedGrid not implemented."));
-            form.Grid.Contacts.RemoveOnLoad(ContactsAddOnLoad);
+            form.Grid.gridAccount.ViewSelector.CurrentView = newCurrentView;
+            expect(form.Grid.gridAccount.ViewSelector.CurrentView.entityType).toBe("1039");
+            expect(form.Grid.gridAccount.ViewSelector.CurrentView.id).toBe("GUID-NEW");
+            expect(form.Grid.gridAccount.ViewSelector.CurrentView.name).toBe("NAME-NEW");
+            expect(form.Grid.gridAccount.ViewSelector.Visible).toBeTruthy();
+            expect(() => { form.Grid.gridAccount.Refresh(); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Grid.gridAccount.RefreshRibbon(); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Grid.gridAccount.OpenRelatedGrid(); }).toThrow(new Error("openRelatedGrid not implemented."));
+            form.Grid.gridAccount.RemoveOnLoad(accountAddOnLoad);
             expect(grid.onLoadHandlers.length).toBe(0);
-            expect(form.Grid.Contacts.Rows.getLength()).toBe(2);
-            var row0 = form.Grid.Contacts.Rows.get(0);
+            expect(form.Grid.gridAccount.Rows.getLength()).toBe(2);
+            var row0 = form.Grid.gridAccount.Rows.get(0);
             expect(row0.EntityId).toBe("ROW1-GUID")
-            expect(row0.EntityName).toBe("contact");
+            expect(row0.EntityName).toBe("account");
             expect(row0.PrimaryAttributeValue).toBe("ROW1-VALUE");
             expect(row0.EntityReference.id).toBe("ROW1-GUID");
-            expect(row0.EntityReference.entityType).toBe("contact");
+            expect(row0.EntityReference.entityType).toBe("account");
             expect(row0.EntityReference.name).toBe("ROW1-VALUE");
             expect(row0.Columns).toBeDefined();
             expect(row0.Columns.getLength()).toBe(3);
@@ -581,26 +582,27 @@ define(['xrm-mock', 'sinon'], function () {
             expect(row0col0.Label).toBe("abc_col1");
             expect(() => { row0col0.SetNotification(null, null) }).toThrow(new Error("set notification not implemented"));
             expect(() => { row0col0.ClearNotification(null) }).toThrow(new Error("clear notification not implemented"));
-            form.Grid.Contacts.Rows.forEach(function (row, index) {
+            form.Grid.gridAccount.Rows.forEach(function (row, index) {
                 expect(row).toBeDefined();
                 row.Columns.forEach(function (column, index) {
                     expect(column).toBeDefined();
                 });
             });
-            var rowNotExist = form.Grid.Contacts.Rows.get(4);
+            var rowNotExist = form.Grid.gridAccount.Rows.get(4);
             expect(rowNotExist).toBeDefined();
-            //expect(rowNotExist.EntityId).toBe("{00000000-0000-0000-0000-000000000000}");
+            expect(rowNotExist.EntityId).toBe("{00000000-0000-0000-0000-000000000000}");
             var columnNotExist = row0.Columns.get("col_not_exisit");
             expect(columnNotExist).toBeDefined();
-            //expect(columnNotExist.Name).toBe("");
-            //expect(columnNotExist.Value).toBe("");
-            expect(form.Grid.Contacts.TotalRecordCount).toBe(2);
-            expect(form.Grid.Contacts.SelectedRows.getLength()).toBe(1);
-            expect(form.Grid.Contacts.SelectedRows.get(0)).toBeDefined();
-            form.Grid.Contacts.SelectedRows.forEach(function (row, index) {
+            expect(columnNotExist.Name).toBe("");
+            expect(columnNotExist.Value).toBe("");
+            expect(form.Grid.gridAccount.TotalRecordCount).toBe(2);
+            expect(form.Grid.gridAccount.SelectedRows.getLength()).toBe(1);
+            expect(form.Grid.gridAccount.SelectedRows.get(0)).toBeDefined();
+            form.Grid.gridAccount.SelectedRows.forEach(function (row, index) {
                 expect(row).toBeDefined();
             });
         });
+        /*
         it('timelinewall control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([
                 new xrmMock.AttributeMock({
@@ -914,57 +916,57 @@ define(['xrm-mock', 'sinon'], function () {
                 isAutoSaveEnabled: true,
                 orgLcid: 1033,
                 timeZoneOffset: 7,
-            });
-            context.userSettings = new xrmMock.UserSettingsMock({
-                isGuidedHelpEnabled: true,
-                isHighContrastEnabled: false,
-                isRTL: false,
-                userId: "DEVKIT-USERID",
-                userName: "DEVKIT-USERNAME",
-                defaultDashboardId: "DEFAULT-DASHBOARD-ID",
-                languageId: 1066,
-                securityRolePrivileges: ["GUID1", "GUID2"],
-                securityRoles: ["NAME1", "NAME2", "NAME3"],
-                transactionCurrencyId: "VND-GUID",
-                //dateFormattingInfo: {
-                //    AMDesignator: "AM",
-                //    Calendar: {
-                //        MinSupportedDateTime: "0001-01-01T00:00:00",
-                //        MaxSupportedDateTime: "9999-12-31T23:59:59.9999999",
-                //        AlgorithmType: 1,
-                //        CalendarType: 1,
-                //        Eras: [ 1 ],
-                //        TwoDigitYearMax: 2029,
-                //        IsReadOnly: false
-                //    },
-                //    DateSeparator: "/",
-                //    FirstDayOfWeek: 0,
-                //    CalendarWeekRule: 0,
-                //    FullDateTimePattern: "dddd, MMMM d, yyyy h:mm:ss tt",
-                //    LongDatePattern: "dddd, MMMM d, yyyy",
-                //    LongTimePattern: "h:mm:ss tt",
-                //    MonthDayPattern: "MMMM dd",
-                //    PMDesignator: "PM",
-                //    RFC1123Pattern: "ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",
-                //    ShortDatePattern: "M/d/yyyy",
-                //    ShortTimePattern: "h:mm tt",
-                //    SortableDateTimePattern: "yyyy'-'MM'-'dd'T'HH':'mm':'ss",
-                //    TimeSeparator: ":",
-                //    UniversalSortableDateTimePattern: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
-                //    YearMonthPattern: "MMMM yyyy",
-                //    AbbreviatedDayNames: [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ],
-                //    ShortestDayNames: [ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
-                //    DayNames: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
-                //    AbbreviatedMonthNames: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "" ],
-                //    MonthNames: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "" ],
-                //    IsReadOnly: false,
-                //    NativeCalendarName: "Gregorian Calendar",
-                //    AbbreviatedMonthGenitiveNames: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "" ],
-                //    MonthGenitiveNames: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "" ],
-                //    eras: [ 1, "A.D.", null, 0 ]
-                //},
-                roles: new xrmMock.ItemCollectionMock([new xrmMock.LookupValueMock("GUID1", "role", "ROLE-1"), new xrmMock.LookupValueMock("GUID2", "role", "ROLE-2")]),
-                transactionCurrency: new xrmMock.LookupValueMock("VND-GUID", "transactioncurrency", "VND")
+                userSettings: new xrmMock.UserSettingsMock({
+                    isGuidedHelpEnabled: true,
+                    isHighContrastEnabled: false,
+                    isRTL: false,
+                    userId: "DEVKIT-USERID",
+                    userName: "DEVKIT-USERNAME",
+                    defaultDashboardId: "DEFAULT-DASHBOARD-ID",
+                    languageId: 1066,
+                    securityRolePrivileges: ["GUID1", "GUID2"],
+                    securityRoles: ["NAME1", "NAME2", "NAME3"],
+                    transactionCurrencyId: "VND-GUID",
+                    roles: new xrmMock.ItemCollectionMock([new xrmMock.LookupValueMock("GUID1", "role", "ROLE-1"), new xrmMock.LookupValueMock("GUID2", "role", "ROLE-2")]),
+                    transactionCurrency: new xrmMock.LookupValueMock("VND-GUID", "transactioncurrency", "VND"),
+                    dateFormattingInfo: new xrmMock.DateFormattingInfoMock({
+                        AmDesignator: "AM",
+                        Calendar: {
+                            MinSupportedDateTime: new Date("0001-01-01T00:00:00"),
+                            MaxSupportedDateTime: new Date("9999-12-31T23:59:59.9999999"),
+                            AlgorithmType: 1,
+                            CalendarType: 1,
+                            Eras: [1],
+                            TwoDigitYearMax: 2029,
+                            IsReadOnly: false
+                        },
+                        DateSeparator: "/",
+                        FirstDayOfWeek: 0,
+                        CalendarWeekRule: 0,
+                        FullDateTimePattern: "dddd, MMMM d, yyyy h:mm:ss tt",
+                        LongDatePattern: "dddd, MMMM d, yyyy",
+                        LongTimePattern: "h:mm:ss tt",
+                        MonthDayPattern: "MMMM dd",
+                        PmDesignator: "PM",
+                        //RFC1123Pattern: "ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",
+                        ShortDatePattern: "M/d/yyyy",
+                        ShortTimePattern: "h:mm tt",
+                        SortableDateTimePattern: "yyyy'-'MM'-'dd'T'HH':'mm':'ss",
+                        TimeSeparator: ":",
+                        UniversalSortableDateTimePattern: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
+                        YearMonthPattern: "MMMM yyyy",
+                        AbbreviatedDayNames: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                        ShortestDayNames: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+                        DayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                        AbbreviatedMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", ""],
+                        MonthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ""],
+                        //IsReadOnly: false,
+                        //NativeCalendarName: "Gregorian Calendar",
+                        AbbreviatedMonthGenitiveNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", ""],
+                        MonthGenitiveNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ""],
+                        //eras: [1, "A.D.", null, 0]
+                    })
+                })
             });
             context.organizationSettings = new xrmMock.OrganizationSettingsMock({
                 baseCurrencyId: "USD-GUID",
@@ -1019,41 +1021,37 @@ define(['xrm-mock', 'sinon'], function () {
             expect(form.Utility.OrganizationSettings.UseSkypeProtocol).toBeTruthy();
 
             //getGlobalContext.userSettings
-            //expect(form.Utility.UserSettings.DateFormattingInfo.AMDesignator).toBe("AM");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar).toBeDefined();
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.MinSupportedDateTime.toString()).toBe("0001-01-01T00:00:00");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.MaxSupportedDateTime.toString()).toBe("9999-12-31T23:59:59.9999999");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.AlgorithmType).toBe(1);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.CalendarType).toBe(1);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.Eras.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.TwoDigitYearMax).toBe(2029);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.IsReadOnly).toBeFalsy();
-            //expect(form.Utility.UserSettings.DateFormattingInfo.DateSeparator).toBe("/");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek).toBe(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.CalendarWeekRule).toBe(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern).toBe("dddd, MMMM d, yyyy h:mm:ss tt");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.LongDatePattern).toBe("dddd, MMMM d, yyyy");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.LongTimePattern).toBe("h:mm:ss tt");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.MonthDayPattern).toBe("MMMM dd");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.PMDesignator).toBe("PM");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.RFC1123Pattern).toBe("ddd, dd MMM yyyy HH':'mm':'ss 'GMT'");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern).toBe("M/d/yyyy");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern).toBe("h:mm tt");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.SortableDateTimePattern).toBe("yyyy'-'MM'-'dd'T'HH':'mm':'ss");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.TimeSeparator).toBe(":");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.UniversalSortableDateTimePattern).toBe("yyyy'-'MM'-'dd HH':'mm':'ss'Z'");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.YearMonthPattern).toBe("MMMM yyyy");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedDayNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.ShortestDayNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.DayNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedMonthNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.MonthNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedMonthGenitiveNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.MonthGenitiveNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.DayNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.eras.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.IsReadOnly).toBeFalsy();
-            //expect(form.Utility.UserSettings.DateFormattingInfo.NativeCalendarName).toBe("Gregorian Calendar");
+            expect(form.Utility.UserSettings.DateFormattingInfo.AmDesignator).toBe("AM");
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar).toBeDefined();
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.MinSupportedDateTime.toDateString()).toBe(new Date("0001-01-01T00:00:00").toDateString());
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.MaxSupportedDateTime.toDateString()).toBe(new Date("9999-12-31T23:59:59.9999999").toDateString());
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.AlgorithmType).toBe(1);
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.CalendarType).toBe(1);
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.Eras.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.TwoDigitYearMax).toBe(2029);
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.IsReadOnly).toBeFalsy();
+            expect(form.Utility.UserSettings.DateFormattingInfo.DateSeparator).toBe("/");
+            expect(form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek).toBe(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.CalendarWeekRule).toBe(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern).toBe("dddd, MMMM d, yyyy h:mm:ss tt");
+            expect(form.Utility.UserSettings.DateFormattingInfo.LongDatePattern).toBe("dddd, MMMM d, yyyy");
+            expect(form.Utility.UserSettings.DateFormattingInfo.LongTimePattern).toBe("h:mm:ss tt");
+            expect(form.Utility.UserSettings.DateFormattingInfo.MonthDayPattern).toBe("MMMM dd");
+            expect(form.Utility.UserSettings.DateFormattingInfo.PmDesignator).toBe("PM");
+            expect(form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern).toBe("M/d/yyyy");
+            expect(form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern).toBe("h:mm tt");
+            expect(form.Utility.UserSettings.DateFormattingInfo.SortableDateTimePattern).toBe("yyyy'-'MM'-'dd'T'HH':'mm':'ss");
+            expect(form.Utility.UserSettings.DateFormattingInfo.TimeSeparator).toBe(":");
+            expect(form.Utility.UserSettings.DateFormattingInfo.UniversalSortableDateTimePattern).toBe("yyyy'-'MM'-'dd HH':'mm':'ss'Z'");
+            expect(form.Utility.UserSettings.DateFormattingInfo.YearMonthPattern).toBe("MMMM yyyy");
+            expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedDayNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.ShortestDayNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.DayNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedMonthNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.MonthNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedMonthGenitiveNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.MonthGenitiveNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.DayNames.length).toBeGreaterThan(0);
             expect(form.Utility.UserSettings.DefaultDashboardId).toBe("DEFAULT-DASHBOARD-ID");
             expect(form.Utility.UserSettings.IsGuidedHelpEnabled).toBeTruthy();
             expect(form.Utility.UserSettings.IsHighContrastEnabled).toBeFalsy();
@@ -1134,7 +1132,7 @@ define(['xrm-mock', 'sinon'], function () {
             XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
             XrmMockGenerator.Device = new xrmMock.DeviceMock();
             XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
-            //XrmMockGenerator.App = new xrmMock.AppMock();
+            XrmMockGenerator.App = new xrmMock.AppMock();
         });
         it('Tab', () => {
             var tab1Section1 = xrmMock.XrmMockGenerator.Section.createSection("ACCOUNT_INFORMATION", "LABEL-TAB1-SECTION1", true, null, null);

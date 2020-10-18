@@ -13,6 +13,9 @@
     "XrmEnum.js",
     "*\\node_modules\\*"
   ],
+  "CodeCoverageIncludes": [
+    "lib\\devkit.js"
+  ],
   "References": [
     {
       "Path": "test/XrmEnum.js",
@@ -27,8 +30,7 @@
       "IsTestFrameworkFile": true
     },
     {
-      "Path": "lib/devkit.js",
-      "IsTestFrameworkFile": true
+      "Path": "lib/devkit.js"
     },
     {
       "Path": "entities",
