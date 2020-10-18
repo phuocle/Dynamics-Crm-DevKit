@@ -82,7 +82,7 @@
     <Content Include="entities\Contact.webapi.js">
       <DependentUpon>Contact.js</DependentUpon>
     </Content>
-    <Content Include="entities\devkit_Dummy.form.js">
+    <Content Include="entities\devkit_Dummy.formdummy.js">
       <DependentUpon>devkit_Dummy.js</DependentUpon>
     </Content>
     <Content Include="entities\devkit_Dummy.js" />
