@@ -2348,7 +2348,7 @@ var devKit = (function () {
         if (has(Xrm, 'Encoding')) {
             getEncoding = Xrm.Encoding;
         }
-        utility.XmlAttributeEncode = function (arg) {
+        utility.XmlAttributeEncode = function (arg) {            
             if (has(getEncoding, 'xmlAttributeEncode')) {
                 return getEncoding.xmlAttributeEncode(arg);
             }
