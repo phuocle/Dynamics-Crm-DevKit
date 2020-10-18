@@ -19,7 +19,6 @@ namespace DynamicsCrm.DevKit.Wizard
         public string GeneratedLateBoundClass { get; set; }
         public string GeneratedJsWebApiCode { get; set; }
         public string GeneratedJsWebApiCodeTypeScriptDeclaration { get; set; }
-
         public IOrganizationService CrmService { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string ComboBoxCrmName => comboBoxCrmName.Text;
@@ -279,6 +278,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
                 var isDebugForm = false;
                 var jsForm = new List<string>();
+                var jsFormVersion = string.Empty;
                 if (File.Exists(file))
                 {
                     var lines = File.ReadAllLines(file);
@@ -286,11 +286,12 @@ namespace DynamicsCrm.DevKit.Wizard
                     var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
                     isDebugForm = comment.IsDebugForm;
                     jsForm = comment.JsForm;
+                    jsFormVersion = comment.JsFormVersion;
                 }
                 var jsGlobalNameSpace = Utility.GetJsGlobalNameSpace(DTE);
                 Task task2 = Task.Factory.StartNew(() =>
                 {
-                    var jsWebApi = new JsWebApi(CrmService, jsGlobalNameSpace, entityName, isDebug, jsForm, isDebugForm);
+                    var jsWebApi = new JsWebApi(CrmService, jsGlobalNameSpace, entityName, isDebug, jsForm, isDebugForm, jsFormVersion);
                     jsWebApi.GeneratorCode();
                     GeneratedJsWebApiCode = jsWebApi.WebApiCode;
                     GeneratedJsWebApiCodeTypeScriptDeclaration = jsWebApi.WebApiCodeTypeScriptDeclaration;
@@ -456,6 +457,7 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 case ItemType.JsWebApi:
                     labelItemName.Text = $"{Utility.SafeName(text)}.webapi.js";
+                    LoadDebugCheckBox();
                     break;
                 case ItemType.JsTest:
                     labelItemName.Text = $"{Utility.SafeName(text)}.test.js";
@@ -471,6 +473,27 @@ namespace DynamicsCrm.DevKit.Wizard
                 case ItemType.Test:
                     labelItemName.Text = $"{Utility.SafeName(text)}Test.cs";
                     break;
+            }
+        }
+
+        private void LoadDebugCheckBox()
+        {
+            var entity = comboBoxEntity.SelectedItem as XrmEntity;
+            var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entity.Name}.intellisense.js";
+            var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entity.Name}.d.ts";
+            var file = File.Exists(file2) ? file2 : file1;
+            if (File.Exists(file))
+            {
+                try
+                {
+                    var lines = File.ReadAllLines(file);
+                    var json = lines[lines.Length - 1];
+                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    checkBoxDebug.Checked = comment.IsDebugWebApi;
+                }
+                catch
+                {
+                }
             }
         }
 

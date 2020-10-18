@@ -14,7 +14,7 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public class JsWebApi
     {
-        public JsWebApi(IOrganizationService crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm)
+        public JsWebApi(IOrganizationService crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm, string jsFormVersion)
         {
             CrmService = crmService;
             ProjectName = projectName;
@@ -22,6 +22,7 @@ namespace DynamicsCrm.DevKit.Shared
             CheckedItems = checkedItems;
             IsDebugForm = isDebugForm;
             IsDebugWebApi = isDebugWebApi;
+            JsFormVersion = jsFormVersion;
         }
         private IOrganizationService CrmService { get; }
         private string EntityName { get; }
@@ -29,6 +30,7 @@ namespace DynamicsCrm.DevKit.Shared
         private List<string> CheckedItems { get; }
         private bool IsDebugWebApi { get; }
         private bool IsDebugForm { get; }
+        private string JsFormVersion { get; }
         private List<CrmAttribute> _fields;
         private List<CrmAttribute> Fields
         {
@@ -318,9 +320,19 @@ namespace DynamicsCrm.DevKit.Shared
             WebApiCode = code;
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)
+            {
                 if (CheckedItems.Contains($"{form.Name}"))
+                {
                     processForms.Add(form);
-            WebApiCodeTypeScriptDeclaration = GetWebApiCodeTypeScriptDeclaration(processForms, IsDebugForm, true, IsDebugWebApi);
+                    CheckedItems.Remove(form.Name);
+                }
+            }
+            foreach (var form in Forms)
+            {
+                if (CheckedItems.Any(x => form.Name.EndsWith(x)))
+                    processForms.Add(form);
+            }
+            WebApiCodeTypeScriptDeclaration = GetWebApiCodeTypeScriptDeclaration(processForms, IsDebugForm, true, IsDebugWebApi, JsFormVersion);
         }
 
         private string OptionSet_For_d_ts
@@ -525,20 +537,38 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        private string GetWebApiCodeTypeScriptDeclaration(List<SystemForm> processForms, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
+        private string GetWebApiCodeTypeScriptDeclaration(List<SystemForm> processForms, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi, string jsFormVersion)
         {
-            var jsIntellisense = new JsTypeScriptDeclaration(CrmService)
+            if (jsFormVersion == null || jsFormVersion == string.Empty)
             {
-                ProcessForms = processForms,
-                IsDebugForm = isDebugForm,
-                IsDebugWebApi = isDebugWebApi,
-                IsJsWebApi = isJsWebApi,
-                ProjectName = ProjectName,
-                EntityName = EntityName,
-                Fields = Fields,
-                Processes = Processes
-            };
-            return jsIntellisense.Intellisense;
+                var jsIntellisense = new JsTypeScriptDeclaration(CrmService)
+                {
+                    ProcessForms = processForms,
+                    IsDebugForm = isDebugForm,
+                    IsDebugWebApi = isDebugWebApi,
+                    IsJsWebApi = isJsWebApi,
+                    ProjectName = ProjectName,
+                    EntityName = EntityName,
+                    Fields = Fields,
+                    Processes = Processes
+                };
+                return jsIntellisense.Intellisense;
+            }
+            else
+            {
+                var jsIntellisense = new JsTypeScriptDeclaration2(CrmService)
+                {
+                    ProcessForms = processForms,
+                    IsDebugForm = isDebugForm,
+                    IsDebugWebApi = isDebugWebApi,
+                    IsJsWebApi = isJsWebApi,
+                    ProjectName = ProjectName,
+                    EntityName = EntityName,
+                    Fields = Fields,
+                    Processes = Processes
+                };
+                return jsIntellisense.Intellisense;
+            }
         }
     }
 }

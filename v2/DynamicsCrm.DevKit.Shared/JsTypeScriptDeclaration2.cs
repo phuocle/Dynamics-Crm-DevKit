@@ -65,7 +65,8 @@ namespace DynamicsCrm.DevKit.Shared
                 JsForm = ProcessForms.Select(f => FormHelper.GetFormName(f.Name)).ToList<string>(),
                 JsWebApi = IsJsWebApi,
                 IsDebugForm = IsDebugForm,
-                IsDebugWebApi = IsDebugWebApi
+                IsDebugWebApi = IsDebugWebApi,
+                JsFormVersion = "v2"
             };
             if (comment.Version == null)
             {
@@ -605,7 +606,7 @@ namespace DynamicsCrm.DevKit.Shared
             fields = fields.OrderBy(x => x.Name).ToList();
             foreach(var field in fields)
             {
-                if (field.ClassId == ControlClassId.SUB_GRID || field.ClassId == ControlClassId.SUB_GRID_PANEL) continue;
+                if (field.ClassId == ControlClassId.SUB_GRID || field.ClassId == ControlClassId.SUB_GRID_PANEL || field.ClassId == ControlClassId.TIMER) continue;
                 var request = new RetrieveAttributeRequest
                 {
                     EntityLogicalName = quickViewEntityLogicalName,

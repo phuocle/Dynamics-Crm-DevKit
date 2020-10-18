@@ -39,7 +39,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 var _d_ts = string.Empty;
                 _d_ts += $"//@ts-check\r\n";
-                _d_ts += $"///<reference path=\"DevKit.d.ts\" />\r\n";
+                _d_ts += $"///<reference path=\"devkit.d.ts\" />\r\n";
                 _d_ts += $"declare namespace {ProjectName} {{\r\n";
                 if (ProcessForms.Count > 0)
                     _d_ts += GetForm_d_ts();
@@ -61,7 +61,8 @@ namespace DynamicsCrm.DevKit.Shared
                 JsForm = ProcessForms.Select(f => FormHelper.GetFormName(f.Name)).ToList<string>(),
                 JsWebApi = IsJsWebApi,
                 IsDebugForm = IsDebugForm,
-                IsDebugWebApi = IsDebugWebApi
+                IsDebugWebApi = IsDebugWebApi,
+                Version = Const.Version
             };
             _d_ts += $"//{SimpleJson.SerializeObject(comment)}";
             _d_ts = _d_ts.Replace("\"", "'");
