@@ -208,6 +208,21 @@ define(['xrm-mock', 'sinon'], function () {
             form.Body.Name.Visible = false;
             expect(form.Body.Name.Visible).toBeFalsy();
         });
+        it('standard control type for DateTime', () => {
+            xrmMock.XrmMockGenerator.Control.createDate(new xrmMock.DateControlMock({
+                name: "createdon",
+                showTime: true,
+                attribute: new xrmMock.DateAttributeMock({
+                    name: "createdon"
+                })
+            }));
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new LuckyStar.FormLocation(executionContext);
+
+            expect(form.Body.CreatedOn.ShowTime).toBeTruthy();
+            form.Body.CreatedOn.ShowTime = false;
+            expect(form.Body.CreatedOn.ShowTime).toBeFalsy();
+        });
         it('iframe control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([
                 new xrmMock.AttributeMock({
@@ -250,11 +265,10 @@ define(['xrm-mock', 'sinon'], function () {
             expect(() => { form.Body.IFRAME_google.Src = "ABC" }).toThrow(new Error("setSrc not implemented."));
             expect(() => { form.Body.IFRAME_google.Visible = true }).toThrow(new Error("setVisible not implemented."));
         });
-        /*
         it('kbsearch (Knowledge base search) control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([
                 new xrmMock.AttributeMock({
-                    name: "abc_kbsearch"
+                    name: "devkit_KbSearch"
                 })
             ]);
             var entity = new xrmMock.EntityMock({
@@ -262,7 +276,7 @@ define(['xrm-mock', 'sinon'], function () {
             });
             var data = new xrmMock.DataMock(entity);
             var kbsearch = new xrmMock.KbSearchControlMock({
-                name: "abc_kbsearch",
+                name: "devkit_KbSearch",
                 controlType: "kbsearch",
                 label: "KbSearch LABEL",
                 visible: true
@@ -274,32 +288,31 @@ define(['xrm-mock', 'sinon'], function () {
             });
             xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new Tomato.FormTest(executionContext);
+            var form = new LuckyStar.FormDummy(executionContext);
 
-            expect(() => { form.Body.abc_KbSearch.AddOnPostSearch(null) }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_KbSearch.AddOnResultOpened(null) }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_KbSearch.AddOnSelection(null) }).toThrow(new Error("Method not implemented."));
-            expect(form.Body.abc_KbSearch.ControlType).toBe(OptionSet.FieldControlType.KbSearch);
-            expect(() => { form.Body.abc_KbSearch.Disabled }).toThrow(new Error("Method not implemented."));
-            expect(form.Body.abc_KbSearch.Label).toBe("KbSearch LABEL");
-            expect(form.Body.abc_KbSearch.AttributeName).toBe("abc_kbsearch");
-            expect(form.Body.abc_KbSearch.ControlName).toBe("abc_kbsearch");
-            expect(form.Body.abc_KbSearch.ControlParent).toBeUndefined();
-            expect(() => { form.Body.abc_KbSearch.SearchQuery }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_KbSearch.SelectedResults }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_KbSearch.TotalResultCount }).toThrow(new Error("Method not implemented."));
-            expect(form.Body.abc_KbSearch.Visible).toBeTruthy();
-            expect(() => { form.Body.abc_KbSearch.OpenSearchResult(null, null) }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_KbSearch.RemoveOnPostSearch(null) }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_KbSearch.RemoveOnResultOpened(null) }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_KbSearch.RemoveOnSelection(null) }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_KbSearch.Focus() }).toThrow(new Error("Method not implemented."));
-            form.Body.abc_KbSearch.Label = "KbSearch LABEL NEW";
-            expect(form.Body.abc_KbSearch.Label).toBe("KbSearch LABEL NEW");
-            expect(() => { form.Body.abc_KbSearch.SearchQuery = "SEARCH QUERY" }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_KbSearch.Visible = true }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.AddOnPostSearch(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.AddOnResultOpened(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.AddOnSelection(null) }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.devkit_KbSearch.ControlType).toBe(OptionSet.FieldControlType.KbSearch);
+            expect(() => { form.Body.devkit_KbSearch.Disabled }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.devkit_KbSearch.Label).toBe("KbSearch LABEL");
+            expect(form.Body.devkit_KbSearch.ControlName).toBe("devkit_KbSearch");
+            expect(form.Body.devkit_KbSearch.ControlParent).toBeUndefined();
+            expect(() => { form.Body.devkit_KbSearch.SearchQuery }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.SelectedResults }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.TotalResultCount }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.devkit_KbSearch.Visible).toBeTruthy();
+            expect(() => { form.Body.devkit_KbSearch.OpenSearchResult(null, null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.RemoveOnPostSearch(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.RemoveOnResultOpened(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.RemoveOnSelection(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.Focus() }).toThrow(new Error("Method not implemented."));
+            form.Body.devkit_KbSearch.Label = "KbSearch LABEL NEW";
+            expect(form.Body.devkit_KbSearch.Label).toBe("KbSearch LABEL NEW");
+            expect(() => { form.Body.devkit_KbSearch.SearchQuery = "SEARCH QUERY" }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.devkit_KbSearch.Visible = true }).toThrow(new Error("Method not implemented."));
         });
-        */
+
         it('lookup control type', () => {
             var lookup = xrmMock.XrmMockGenerator.Control.createLookup(new xrmMock.LookupControlMock({
                 name: "parentaccountid",
@@ -478,7 +491,6 @@ define(['xrm-mock', 'sinon'], function () {
                 attributes: attributes
             });
             var data = new xrmMock.DataMock(entity);
-
             var grid = new xrmMock.GridControlMock({
                 name: "gridAccount",
                 controlType: "subgrid",
@@ -487,11 +499,9 @@ define(['xrm-mock', 'sinon'], function () {
                 entityName: "account",
                 contextType: XrmEnum.GridControlContext.FormContextRelated
             });
-
             var viewSelector = new xrmMock.ViewSelectorMock(true);
             viewSelector.setCurrentView(new xrmMock.LookupValueMock("GUID-CONTACTS-I-FOLLOW", "1039", "Contacts I Follow"));
             grid.viewSelector = viewSelector;
-
             var relationship = new xrmMock.RelationshipMock({
                 name: "name_relationship",
                 attributeName: "attribute_name_relationship",
@@ -500,7 +510,6 @@ define(['xrm-mock', 'sinon'], function () {
                 roleType: XrmEnum.RoleType.AssociationEntity
             });
             grid.relationship = relationship;
-
             var row1Entity = new xrmMock.EntityMock({
                 id: "ROW1-GUID",
                 primaryValue: "ROW1-VALUE",
@@ -516,7 +525,6 @@ define(['xrm-mock', 'sinon'], function () {
             var rows = new xrmMock.ItemCollectionMock([row1, row2]);
             var selectedRows = new xrmMock.ItemCollectionMock([row1]);
             grid.grid = new xrmMock.GridMock(rows, selectedRows);
-
             var ui = new xrmMock.UiMock({
                 controls: new xrmMock.ItemCollectionMock([grid])
             });
@@ -527,7 +535,6 @@ define(['xrm-mock', 'sinon'], function () {
             var accountAddOnLoad = function (executionContext) { }
             expect(grid.onLoadHandlers.length).toBe(0);
             form.Grid.gridAccount.AddOnLoad(accountAddOnLoad);
-
             expect(grid.onLoadHandlers.length).toBe(1);
             expect(form.Grid.gridAccount.EntityName).toBe("account");
             expect(() => { form.Grid.gridAccount.FetchXml }).toThrow(new Error("getFetchXml not implemented."));
@@ -602,11 +609,11 @@ define(['xrm-mock', 'sinon'], function () {
                 expect(row).toBeDefined();
             });
         });
-        /*
+
         it('timelinewall control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([
                 new xrmMock.AttributeMock({
-                    name: "abc_timelinewall"
+                    name: "notescontrol"
                 })
             ]);
             var entity = new xrmMock.EntityMock({
@@ -614,7 +621,7 @@ define(['xrm-mock', 'sinon'], function () {
             });
             var data = new xrmMock.DataMock(entity);
             var timelineWall = new xrmMock.TimelineWallMock({
-                name: "abc_timelinewall",
+                name: "notescontrol",
                 controlType: "timelinewall",
                 label: "TIMELINE WALL LABEL",
                 visible: true
@@ -626,26 +633,25 @@ define(['xrm-mock', 'sinon'], function () {
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new LuckyStar.FormLocation(executionContext);
 
-            expect(form.Body.abc_TimelineWall.ControlType).toBe(OptionSet.FieldControlType.TimelineWall);
-            expect(() => { form.Body.abc_TimelineWall.Disabled }).toThrow(new Error("Method not implemented."));
-            expect(form.Body.abc_TimelineWall.Label).toBe("TIMELINE WALL LABEL");
-            expect(form.Body.abc_TimelineWall.AttributeName).toBe("abc_timelinewall");
-            expect(form.Body.abc_TimelineWall.ControlName).toBe("abc_timelinewall");
-            expect(form.Body.abc_TimelineWall.ControlParent).toBeUndefined();
-            expect(form.Body.abc_TimelineWall.Visible).toBeTruthy();
-            expect(() => { form.Body.abc_TimelineWall.Refresh() }).toThrow(new Error("Not implemented."));
-            expect(() => { form.Body.abc_TimelineWall.Disabled = true }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_TimelineWall.Disabled = true }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_TimelineWall.Focus() }).toThrow(new Error("Method not implemented."));
-            form.Body.abc_TimelineWall.Label = "TIMELINE WALL LABEL NEW";
-            expect(form.Body.abc_TimelineWall.Label).toBe("TIMELINE WALL LABEL NEW");
-            expect(() => { form.Body.abc_TimelineWall.Visible = true }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.notescontrol.ControlType).toBe(OptionSet.FieldControlType.TimelineWall);
+            expect(() => { form.Body.notescontrol.Disabled }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.notescontrol.Label).toBe("TIMELINE WALL LABEL");
+            expect(form.Body.notescontrol.ControlName).toBe("notescontrol");
+            expect(form.Body.notescontrol.ControlParent).toBeUndefined();
+            expect(form.Body.notescontrol.Visible).toBeTruthy();
+            expect(() => { form.Body.notescontrol.Refresh() }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Body.notescontrol.Disabled = true }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.notescontrol.Disabled = true }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.notescontrol.Focus() }).toThrow(new Error("Method not implemented."));
+            form.Body.notescontrol.Label = "TIMELINE WALL LABEL NEW";
+            expect(form.Body.notescontrol.Label).toBe("TIMELINE WALL LABEL NEW");
+            expect(() => { form.Body.notescontrol.Visible = true }).toThrow(new Error("Method not implemented."));
         });
-        /*
+
         it('timer control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([
                 new xrmMock.AttributeMock({
-                    name: "abc_timer"
+                    name: "timerControl"
                 })
             ]);
             var entity = new xrmMock.EntityMock({
@@ -653,7 +659,7 @@ define(['xrm-mock', 'sinon'], function () {
             });
             var data = new xrmMock.DataMock(entity);
             var timer = new xrmMock.TimerControlMock({
-                name: "abc_timer",
+                name: "timerControl",
                 controlType: "timercontrol",
                 label: "TIMMER LABEL",
                 visible: true
@@ -663,26 +669,22 @@ define(['xrm-mock', 'sinon'], function () {
             });
             xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new Tomato.FormTest(executionContext);
-            expect(form.Body.abc_Timer.ControlType).toBe(OptionSet.FieldControlType.TimerControl);
-            expect(() => { form.Body.abc_Timer.Disabled }).toThrow(new Error("Method not implemented."));
-            expect(form.Body.abc_Timer.Label).toBe("TIMMER LABEL");
-            expect(form.Body.abc_Timer.AttributeName).toBe("abc_timer");
-            expect(form.Body.abc_Timer.ControlName).toBe("abc_timer");
-            expect(form.Body.abc_Timer.ControlParent).toBeUndefined();
-            expect(() => { form.Body.abc_Timer.State }).toThrow(new Error("Method not implemented."));
-            expect(form.Body.abc_Timer.Visible).toBeTruthy();
-            expect(() => { form.Body.abc_Timer.Refresh() }).toThrow(new Error("Not implemented."));
-            expect(() => { form.Body.abc_Timer.Disabled = true }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.abc_Timer.Focus() }).toThrow(new Error("Method not implemented."));
-            form.Body.abc_Timer.Label = "TIMMER LABEL NEW";
-            expect(form.Body.abc_Timer.Label).toBe("TIMMER LABEL NEW");
-            expect(() => { form.Body.abc_Timer.Visible = false }).toThrow(new Error("Method not implemented."));
+            var form = new LuckyStar.FormLocation(executionContext);
+
+            expect(form.Body.timerControl.ControlType).toBe(OptionSet.FieldControlType.TimerControl);
+            expect(() => { form.Body.timerControl.Disabled }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.timerControl.Label).toBe("TIMMER LABEL");
+            expect(form.Body.timerControl.ControlName).toBe("timerControl");
+            expect(form.Body.timerControl.ControlParent).toBeUndefined();
+            expect(() => { form.Body.timerControl.State }).toThrow(new Error("Method not implemented."));
+            expect(form.Body.timerControl.Visible).toBeTruthy();
+            expect(() => { form.Body.timerControl.Refresh() }).toThrow(new Error("Not implemented."));
+            expect(() => { form.Body.timerControl.Disabled = true }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.timerControl.Focus() }).toThrow(new Error("Method not implemented."));
+            form.Body.timerControl.Label = "TIMMER LABEL NEW";
+            expect(form.Body.timerControl.Label).toBe("TIMMER LABEL NEW");
+            expect(() => { form.Body.timerControl.Visible = false }).toThrow(new Error("Method not implemented."));
         });
-        it('webresource control type', () => {
-            expect(true).toBeTruthy();
-        });
-        */
     });
     describe('Forms', () => {
         beforeEach(function () {
@@ -725,7 +727,6 @@ define(['xrm-mock', 'sinon'], function () {
                 ])
             });
             xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
-
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new LuckyStar.FormAccount(executionContext);
 
@@ -948,7 +949,6 @@ define(['xrm-mock', 'sinon'], function () {
                         LongTimePattern: "h:mm:ss tt",
                         MonthDayPattern: "MMMM dd",
                         PmDesignator: "PM",
-                        //RFC1123Pattern: "ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",
                         ShortDatePattern: "M/d/yyyy",
                         ShortTimePattern: "h:mm tt",
                         SortableDateTimePattern: "yyyy'-'MM'-'dd'T'HH':'mm':'ss",
@@ -960,11 +960,8 @@ define(['xrm-mock', 'sinon'], function () {
                         DayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
                         AbbreviatedMonthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", ""],
                         MonthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ""],
-                        //IsReadOnly: false,
-                        //NativeCalendarName: "Gregorian Calendar",
                         AbbreviatedMonthGenitiveNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", ""],
                         MonthGenitiveNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ""],
-                        //eras: [1, "A.D.", null, 0]
                     })
                 })
             });
@@ -981,10 +978,8 @@ define(['xrm-mock', 'sinon'], function () {
                     "abc": "1"
                 }
             });
-
             xrmMock.XrmMockGenerator.context = context;
             xrmMock.XrmMockGenerator.eventContext = new xrmMock.EventContextMock({ formContext: xrmMock.XrmMockGenerator.formContext, context: xrmMock.XrmMockGenerator.context });
-
             var executionContext = xrmMock.XrmMockGenerator.eventContext;
             var form = new LuckyStar.FormAccount(executionContext, "web-resource-language");
 
@@ -1069,8 +1064,8 @@ define(['xrm-mock', 'sinon'], function () {
             expect(form.Utility.UserSettings.TransactionCurrencyId).toBe("VND-GUID");
             expect(form.Utility.UserSettings.UserId).toBe("DEVKIT-USERID");
             expect(form.Utility.UserSettings.UserName).toBe("DEVKIT-USERNAME")
-            expect(() => { form.Utility.UserSettings.TimeZoneOffsetMinutes }).toThrow(new Error("Not implemented"));
 
+            expect(() => { form.Utility.UserSettings.TimeZoneOffsetMinutes }).toThrow(new Error("Not implemented"));
             expect(() => { form.Utility.AdvancedConfigSetting(OptionSet.AdvancedConfigSetting.MaxChildIncidentNumber); }).toThrow(new Error("Method not implemented."));
             expect(form.Utility.ClientUrl).toBe("https://clienturl.fake");
             expect(() => { form.Utility.CurrentAppName(null, null); }).toThrow(new Error("Method not implemented."));
@@ -1146,7 +1141,6 @@ define(['xrm-mock', 'sinon'], function () {
             form.Body.Tab.SUMMARY_TAB.AddTabStateChange(addTabStateChange);
             expect(tab1.tabStateChangeHandlers.length).toBe(1);
             expect(form.Body.Tab.SUMMARY_TAB.DisplayState).toBe(OptionSet.TabDisplayState.Expanded);
-
             form.Body.Tab.SUMMARY_TAB.DisplayState = OptionSet.TabDisplayState.Collapsed;
             expect(form.Body.Tab.SUMMARY_TAB.DisplayState).toBe(OptionSet.TabDisplayState.Collapsed);
             expect(form.Body.Tab.SUMMARY_TAB.Focus()).toBeUndefined();
