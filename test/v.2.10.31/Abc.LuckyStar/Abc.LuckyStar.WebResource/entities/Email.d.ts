@@ -1,5 +1,5 @@
 ﻿//@ts-check
-///<reference path="DevKit.d.ts" />
+///<reference path="devkit.d.ts" />
 declare namespace LuckyStar {
 	class EmailApi {
 		/**
@@ -334,4 +334,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':true,'Version':null}
+//{'JsForm':[],'JsWebApi':true,'IsDebugForm':false,'IsDebugWebApi':false,'Version':'2.10.31','JsFormVersion':null}
