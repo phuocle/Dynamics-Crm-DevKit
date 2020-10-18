@@ -108,6 +108,12 @@ var LuckyStar;
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
+		var grid = {
+			ChildAccounts: {},
+			Contacts: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
 		var navigation = {
 			navRelationships: {},
 			navAddresses: {},

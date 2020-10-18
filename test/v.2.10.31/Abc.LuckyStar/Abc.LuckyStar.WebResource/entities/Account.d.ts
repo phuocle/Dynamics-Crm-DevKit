@@ -797,4 +797,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Account','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.10.31'}
+//{'JsForm':['Account','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.10.31','JsFormVersion':'v2'}
