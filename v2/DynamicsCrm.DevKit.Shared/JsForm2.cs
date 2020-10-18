@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -455,6 +456,15 @@ namespace DynamicsCrm.DevKit.Shared
                     formCode += $"\t\tdevKit.LoadQuickForms(formContext, quickForm);\r\n";
                     formCode += $"\t\tform.QuickForm = quickForm;\r\n";
                 }
+                var codeGrid = GetJsGridCode(form.FormXml);
+                if (codeGrid.Length > 0)
+                {
+                    formCode += $"\t\tvar grid = {{\r\n";
+                    formCode += codeGrid;
+                    formCode += $"\t\t}};\r\n";
+                    formCode += $"\t\tdevKit.LoadGrids(formContext, grid);\r\n";
+                    formCode += $"\t\tform.Grid = grid;\r\n";
+                }
                 var codeNavigation = GetJsNavigationCode(form.FormXml);
                 if (codeNavigation.Length > 0)
                 {
@@ -537,6 +547,74 @@ namespace DynamicsCrm.DevKit.Shared
             code += optionSetMin;
             return code;
         }
+
+        private class IdName
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+            public string ClassId { get; set; }
+            public string ControlId { get; set; }
+        }
+
+        private string GetARealClassId(string formXml, string classId, string controlId)
+        {
+            if (controlId == null || controlId.Length == 0) return classId;
+            var xdoc = XDocument.Parse(formXml);
+            var rows = from x in xdoc
+                       .Descendants("controlDescriptions")
+                       .Elements("controlDescription")
+                       where x?.Attribute("forControl")?.Value == controlId
+                       select x;
+            if (rows == null) return classId;
+            var rows2 = (from x in rows.Elements("customControl")
+                         where x?.Attribute("id")?.Value != null
+                         select new
+                         {
+                             id = x?.Attribute("id")?.Value?.ToString()
+                         }).ToList();
+            if (rows2.Count() == 0) return classId;
+            foreach (var row in rows2)
+            {
+                if (Guid.TryParse(row.id, out var guid))
+                {
+                    return guid.ToString().ToUpper();
+                }
+            }
+            return classId;
+        }
+
+        private string GetJsGridCode(string formXml)
+        {
+            var code = string.Empty;
+            var xdoc = XDocument.Parse(formXml);
+            var fields = (from x in xdoc
+                          .Descendants("tabs")
+                          .Descendants("tab")
+                          .Descendants("columns")
+                          .Descendants("column")
+                          .Descendants("sections")
+                          .Descendants("section")
+                          .Descendants("rows")
+                          .Descendants("row")
+                          .Descendants("cell")
+                          .Descendants("control")
+                          select new IdName
+                          {
+                              Name = x?.Attribute("datafieldname")?.Value,
+                              Id = x?.Attribute("id").Value,
+                              ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                              ControlId = x?.Attribute("uniqueid")?.Value
+                          }).Distinct().ToList();
+            var temp = string.Empty;
+            foreach (var field in fields)
+            {
+                var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
+                if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
+                code += $"\t\t\t{field.Id}: {{}},\r\n";
+            }
+            return code;
+        }
+
         private string OptionSet_For_d_ts
         {
             get
