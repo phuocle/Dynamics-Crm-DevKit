@@ -26,7 +26,6 @@ namespace DynamicsCrm.DevKit.Cli
         }
 
         private static CrmServiceClient CrmServiceClient { get; set; }
-        private static string CrmConnectOrgUriActual { get; set; }
 
         private static void CrmCli(CommandLineArgs arguments)
         {
@@ -49,12 +48,25 @@ namespace DynamicsCrm.DevKit.Cli
 #endif
             var jsonFile = Path.Combine(CurrentDirectory, arguments.Json);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.json path: ", CliLog.ColorWhite, jsonFile);
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Arguments: ",
-                CliLog.ColorMagenta, "/conn:", CliLog.ColorWhite, XrmHelper.BuildConnectionStringLog(arguments.Connection), " ",
-                CliLog.ColorMagenta, "/json:", CliLog.ColorWhite, arguments.Json, " ",
-                CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, arguments.Type, " ",
-                CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, arguments.Profile
+            if (arguments.SdkLogin.Length > 0 && arguments.SdkLogin.ToLower() == "yes")
+            {
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "Arguments: ",
+                CliLog.ColorMagenta, "/sdklogin:", CliLog.ColorCyan, "yes", " ",
+                CliLog.ColorMagenta, "/json:", CliLog.ColorCyan, arguments.Json, " ",
+                CliLog.ColorMagenta, "/type:", CliLog.ColorCyan, arguments.Type, " ",
+                CliLog.ColorMagenta, "/profile:", CliLog.ColorCyan, arguments.Profile
                 );
+            }
+            else
+            {
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "Arguments: ",
+                CliLog.ColorMagenta, "/conn:", CliLog.ColorCyan, XrmHelper.BuildConnectionStringLog(arguments.Connection), " ",
+                CliLog.ColorMagenta, "/json:", CliLog.ColorCyan, arguments.Json, " ",
+                CliLog.ColorMagenta, "/type:", CliLog.ColorCyan, arguments.Type, " ",
+                CliLog.ColorMagenta, "/profile:", CliLog.ColorCyan, arguments.Profile
+                );
+            }
+
             Run(arguments);
 #if DEBUG
             CliLog.WriteLine(CliLog.ColorRed, "!!! FINISHED !!!");
@@ -70,23 +82,20 @@ namespace DynamicsCrm.DevKit.Cli
 #endif
         }
 
-
+        [STAThread]
         public static void Main(string[] args)
         {
             var arguments = CommandLine.Parse<CommandLineArgs>();
-            if (arguments.Connection != null)
-            {
-                CrmCli(arguments);
-            }
+            CrmCli(arguments);
         }
-        private static string HidePassword(string connection)
-        {
-            if (IsUseClientIdAndClientSecrect(connection))
-                return connection;
-            var parts = connection.Split(";".ToCharArray());
-            parts[parts.Length - 2] = "Password:******";
-            return string.Join(";", parts);
-        }
+        //private static string HidePassword(string connection)
+        //{
+        //    if (IsUseClientIdAndClientSecrect(connection))
+        //        return connection;
+        //    var parts = connection.Split(";".ToCharArray());
+        //    parts[parts.Length - 2] = "Password:******";
+        //    return string.Join(";", parts);
+        //}
 
         private static void Run(CommandLineArgs arguments)
         {
@@ -97,10 +106,17 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static bool IsValid(CommandLineArgs arguments)
         {
-            if (arguments.Connection.Length == 0)
+            if (arguments.SdkLogin.Length > 0 && arguments.SdkLogin.ToLower() == "yes")
             {
-                CliLog.WriteLine(CliLog.ColorError, $"/conn: missing");
-                return false;
+                ;
+            }
+            else
+            {
+                if (arguments.Connection.Length == 0)
+                {
+                    CliLog.WriteLine(CliLog.ColorError, $"/conn: missing");
+                    return false;
+                }
             }
             if (arguments.Json.Length == 0)
             {
@@ -123,13 +139,45 @@ namespace DynamicsCrm.DevKit.Cli
                 CliLog.WriteLine(CliLog.ColorError, $"/profile: missing");
                 return false;
             }
-            if (!IsConnectedDynamics365(arguments.Connection))
+            if (arguments.SdkLogin.Length > 0 && arguments.SdkLogin.ToLower() == "yes")
             {
-                CliLog.WriteLine(CliLog.ColorError, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
-                return false;
+                if (!IsConnectedDynamics365BySdkLogin())
+                {
+                    CliLog.WriteLine(CliLog.ColorError, $"SdkLogin failed !!!");
+                    return false;
+                }
             }
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected to: ", CliLog.ColorWhite, new Uri(CrmConnectOrgUriActual).GetLeftPart(UriPartial.Authority));
+            else
+            {
+                if (!IsConnectedDynamics365(arguments.Connection))
+                {
+                    CliLog.WriteLine(CliLog.ColorError, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
+                    return false;
+                }
+            }
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected to: ", CliLog.ColorWhite, new Uri(CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority));
             return true;
+        }
+
+        private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        {
+            if (sender is LoginForm)
+            {
+                ((LoginForm)sender).Close();
+            }
+        }
+
+        private static bool IsConnectedDynamics365BySdkLogin()
+        {
+            var loginForm = new LoginForm();
+            loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+            loginForm.ShowDialog();
+            if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+            {
+                CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
+                return true;
+            }
+            return false;
         }
 
         private static bool IsConnectedDynamics365(string connection)
@@ -146,7 +194,6 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connection);
-                CrmConnectOrgUriActual = CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri;
                 return true;
             }
             catch
@@ -161,7 +208,6 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connection);
-                CrmConnectOrgUriActual = CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri;
                 return true;
             }
             catch
