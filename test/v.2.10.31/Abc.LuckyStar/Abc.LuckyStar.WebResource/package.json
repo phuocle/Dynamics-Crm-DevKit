@@ -18,6 +18,6 @@
     "jasmine": "^3.6.2",
     "requirejs": "^2.3.6",
     "sinon": "^9.2.0",
-    "xrm-mock": "^3.4.20"
+    "xrm-mock": "^3.4.21"
   }
 }
