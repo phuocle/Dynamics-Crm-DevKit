@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using DynamicsCrm.DevKit.Shared;
-using System;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
@@ -50,6 +49,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
                 //Creating project ...
                 ProjectName = form.ProjectName;
+                replacementsDictionary.Add("$Check$", form.Check);
                 Wizard.ProcessProjectReplacementsDictionary(replacementsDictionary, form);
             }
             catch
