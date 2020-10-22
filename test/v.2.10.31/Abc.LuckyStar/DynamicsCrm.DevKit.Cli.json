@@ -145,7 +145,7 @@
       "crmversion": "365",
       "type": "JsForm",
       "entities": "",
-      "debug": "yes"
+      "debug": ""
     },
     {
       "profile": "JS-WEBAPI",
@@ -154,7 +154,7 @@
       "crmversion": "365",
       "type": "JsWebApi",
       "entities": "",
-      "debug": "yes"
+      "debug": ""
     }
   ],
   "downloadwebresources": [

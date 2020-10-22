@@ -321,7 +321,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var jsForm = new List<string>();
             var isDebugForm = false;
             var isDebugWebApi = false;
-
+            var jsFormVersion = string.Empty;
             if (!File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.js"))
             {
                 var text = string.Empty;
@@ -341,12 +341,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     isDebugWebApi = comment.IsDebugWebApi;
                     jsForm = comment.JsForm;
                     isDebugForm = comment.IsDebugForm;
+                    jsFormVersion = comment.JsFormVersion;
                 }
             }
             var parts = json.rootnamespace.Split(".".ToCharArray());
             var projectName = parts.Length > 1 ? parts[1] : parts[0];
-            if (json.debug.Length > 0) isDebugWebApi = json.debug == "yes" ? true : false;
-            var jsWebApi = new JsWebApi(XrmHelper.GetIOrganizationService(crmServiceClient), projectName, entity, isDebugWebApi, jsForm, isDebugForm);
+            if (json.debug.Length > 0)
+            {
+                isDebugWebApi = json.debug == "yes" ? true : false;
+            }
+            var jsWebApi = new JsWebApi(XrmHelper.GetIOrganizationService(crmServiceClient), projectName, entity, isDebugWebApi, jsForm, isDebugForm, jsFormVersion);
             jsWebApi.GeneratorCode();
             var old = string.Empty;
             if (File.Exists(fileTypeScriptDeclaration))
@@ -378,24 +382,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             else
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".webapi.js");
         }
-
-        //private string[] GetAllEntitiesForWebApi()
-        //{
-        //    var request = new RetrieveAllEntitiesRequest
-        //    {
-        //        EntityFilters = EntityFilters.Entity,
-        //        RetrieveAsIfPublished = true
-        //    };
-        //    var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
-        //    var metaDataEntities = response.EntityMetadata.OrderBy(a => a.SchemaName);
-        //    var entities = new List<string>();
-        //    foreach (var entity in metaDataEntities)
-        //    {
-        //        entities.Add(entity.SchemaName);
-        //    }
-        //    entities.Sort();
-        //    return entities.ToArray();
-        //}
 
         private void GeneratorJsForm()
         {
@@ -449,14 +435,119 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var i = 1;
             foreach (var entity in entities)
             {
-                GeneratorJsForm(entity, i, entities.Count);
+                var jsFormVersion = string.Empty;
+                var fileTypeScriptDeclaration = $"{currentDirectory}\\{json.rootfolder}\\{entity}.d.ts";
+                if (File.Exists(fileTypeScriptDeclaration))
+                {
+
+                    var lines = File.ReadAllLines(fileTypeScriptDeclaration);
+                    if (lines.Count() != 0)
+                    {
+                        var json = lines[lines.Length - 1];
+                        var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                        jsFormVersion = comment.JsFormVersion;
+                    }
+                }
+                if (jsFormVersion == "v2")
+                {
+                    GeneratorJsForm2(entity, i, entities.Count);
+                }
+                else
+                {
+                    GeneratorJsForm(entity, i, entities.Count);
+                }
                 i++;
             }
 
             CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "[GENERATOR JS FORM]");
         }
-
+        private void GeneratorJsForm2(string entity, int i, int count)
+        {
+            var forms = new List<string>();
+            var isDebugForm = true;
+            var webApi = false;
+            var isDebugWebApi = false;
+            var fileTypeScriptDeclaration = $"{currentDirectory}\\{json.rootfolder}\\{entity}.d.ts";
+            if (File.Exists(fileTypeScriptDeclaration))
+            {
+                var lines = File.ReadAllLines(fileTypeScriptDeclaration);
+                if (lines.Count() != 0)
+                {
+                    var json = lines[lines.Length - 1];
+                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    forms = comment.JsForm;
+                    isDebugForm = comment.IsDebugForm;
+                    webApi = comment.JsWebApi;
+                    isDebugWebApi = comment.IsDebugWebApi;
+                }
+            }
+            if (forms.Count == 0)
+            {
+                var parts2 = json.rootnamespace.Split(".".ToCharArray());
+                var projectName2 = parts2.Length > 1 ? parts2[1] : parts2[0];
+                var jsForm2 = new JsForm(XrmHelper.GetIOrganizationService(crmServiceClient), projectName2, entity);
+                forms = GetAllForms(entity, jsForm2);
+            }
+            if (forms.Count == 0)
+            {
+                if (File.Exists(fileTypeScriptDeclaration))
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".d.ts");
+                if (File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.form.js"))
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".form.js");
+                return;
+            }
+            if (File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.js"))
+            {
+                var text = File.ReadAllText($"{currentDirectory}\\{json.rootfolder}\\{entity}.js");
+                text = text.Replace("\r\n", string.Empty);
+                if (text.Length == 0 || text == $"//@ts-check///<reference path=\"{entity}.d.ts\" />")
+                {
+                    Utility.TryDeleteFile($"{currentDirectory}\\{json.rootfolder}\\{entity}.js");
+                }
+            }
+            var parts = json.rootnamespace.Split(".".ToCharArray());
+            var projectName = parts.Length > 1 ? parts[1] : parts[0];
+            var jsForm = new JsForm2(XrmHelper.GetIOrganizationService(crmServiceClient), projectName, entity);
+            if (json.debug.Length > 0) isDebugForm = json.debug == "yes" ? true : false;
+            jsForm.GeneratorCode(forms, isDebugForm, webApi, isDebugWebApi);
+            if (!File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.js"))
+            {
+                var text = jsForm.Form;
+                text = text.Replace($"[[{entity}]]", $"{entity}.d.ts");
+                Utility.ForceWriteAllText($"{currentDirectory}\\{json.rootfolder}\\{entity}.js", text);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "Created ", CliLog.ColorGreen, entity, ".js");
+            }
+            var old = string.Empty;
+            if (File.Exists(fileTypeScriptDeclaration))
+                old = File.ReadAllText(fileTypeScriptDeclaration);
+            var @new = jsForm.FormCodeTypeScriptDeclaration2;
+            if (RemoveForCompare(old) != RemoveForCompare(@new))
+            {
+                if (File.Exists(fileTypeScriptDeclaration))
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "Updated ", CliLog.ColorGreen, entity, ".d.ts");
+                else
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "Created ", CliLog.ColorGreen, entity, ".d.ts");
+                Utility.ForceWriteAllText(fileTypeScriptDeclaration, jsForm.FormCodeTypeScriptDeclaration2);
+            }
+            else
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".d.ts");
+            var fileForm = $"{currentDirectory}\\{json.rootfolder}\\{entity}.form.js";
+            old = string.Empty;
+            if (File.Exists(fileForm))
+                old = File.ReadAllText(fileForm);
+            @new = jsForm.FormCode;
+            if (RemoveForCompare(old) != RemoveForCompare(@new))
+            {
+                if (File.Exists(fileForm))
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "Updated ", CliLog.ColorGreen, entity, ".form.js");
+                else
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorMagenta, "Created ", CliLog.ColorGreen, entity, ".form.js");
+                Utility.ForceWriteAllText(fileForm, jsForm.FormCode);
+            }
+            else
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".form.js");
+        }
         private void GeneratorJsForm(string entity, int i, int count)
         {
             var forms = new List<string>();
@@ -543,7 +634,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             else
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".form.js");
         }
-
         private List<string> GetAllForms(string entity, JsForm jsForm)
         {
             var forms = jsForm.GetForms().ToList();
@@ -552,24 +642,24 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return forms;
         }
 
-        private string[] GetAllEntities()
-        {
-            var request = new RetrieveAllEntitiesRequest
-            {
-                EntityFilters = EntityFilters.Entity,
-                RetrieveAsIfPublished = true
-            };
-            var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
-            var metaDataEntities = response.EntityMetadata.OrderBy(a => a.SchemaName);
-            var entities = new List<string>();
-            foreach (var entity in metaDataEntities)
-            {
-                if (entity.IsBPFEntity.HasValue && entity.IsBPFEntity.Value) continue;
-                if (entity.IsIntersect.HasValue && entity.IsIntersect.Value) continue;
-                entities.Add(entity.SchemaName);
-            }
-            entities.Sort();
-            return entities.ToArray();
-        }
+        //private string[] GetAllEntities()
+        //{
+        //    var request = new RetrieveAllEntitiesRequest
+        //    {
+        //        EntityFilters = EntityFilters.Entity,
+        //        RetrieveAsIfPublished = true
+        //    };
+        //    var response = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
+        //    var metaDataEntities = response.EntityMetadata.OrderBy(a => a.SchemaName);
+        //    var entities = new List<string>();
+        //    foreach (var entity in metaDataEntities)
+        //    {
+        //        if (entity.IsBPFEntity.HasValue && entity.IsBPFEntity.Value) continue;
+        //        if (entity.IsIntersect.HasValue && entity.IsIntersect.Value) continue;
+        //        entities.Add(entity.SchemaName);
+        //    }
+        //    entities.Sort();
+        //    return entities.ToArray();
+        //}
     }
 }

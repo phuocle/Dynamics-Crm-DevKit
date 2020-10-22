@@ -1,5 +1,5 @@
 ﻿//@ts-check
-///<reference path="DevKit.d.ts" />
+///<reference path="devkit.d.ts" />
 declare namespace LuckyStar {
 	class ActivityPartyApi {
 		/**

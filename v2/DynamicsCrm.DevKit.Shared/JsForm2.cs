@@ -742,9 +742,18 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)
+            {
                 if (checkedItems.Contains($"{form.Name}"))
-                    if (!processForms.Any(a => a.Name == form.Name))
-                        processForms.Add(form);
+                {
+                    processForms.Add(form);
+                    checkedItems.Remove(form.Name);
+                }
+            }
+            foreach (var form in Forms)
+            {
+                if (checkedItems.Any(x => form.Name.EndsWith(x)))
+                    processForms.Add(form);
+            }
             Form = GetForm(processForms);
             FormCode = GetFormCode(processForms, isDebugForm);
             FormCodeTypeScriptDeclaration2 = GetTypeScriptDeclaration2(processForms, isDebugForm, isJsWebApi, isDebugWebApi);

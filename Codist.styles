@@ -25,11 +25,12 @@
     },
     {
       "Key": "Number",
-      "Bold": true
+      "Bold": false,
+      "ForegroundColor": "#80FFFF"
     },
     {
       "Key": "String",
-      "ForegroundColor": "#FF8000"
+      "ForegroundColor": "#FFFF80"
     },
     {
       "Key": "string - verbatim",
@@ -43,8 +44,8 @@
     },
     {
       "Key": "Comment",
-      "Italic": true,
-      "ForegroundColor": "#5F0080FF"
+      "Italic": false,
+      "ForegroundColor": "#3F0080FF"
     },
     {
       "Key": "unnecessary code",
@@ -156,8 +157,8 @@
     },
     {
       "Key": "C#: Loop keyword",
-      "Bold": true,
-      "ForegroundColor": "#40CFFF"
+      "Bold": false,
+      "ForegroundColor": "#FF80FF"
     },
     {
       "Key": "C#: Type cast keyword",
@@ -171,11 +172,11 @@
     },
     {
       "Key": "C#: Declaration",
-      "FontSize": 8.0
+      "FontSize": 10.0
     },
     {
       "Key": "C#: Member declaration",
-      "FontSize": 5.0
+      "FontSize": 10.0
     },
     {
       "Key": "C#: Declaration brace",
@@ -237,7 +238,7 @@
     },
     {
       "Key": "C#: Const field",
-      "ForegroundColor": "#C94EC9"
+      "ForegroundColor": "#FF80C0"
     },
     {
       "Key": "C#: Read-only field",
@@ -255,7 +256,7 @@
     },
     {
       "Key": "C#: Method",
-      "ForegroundColor": "#E46B6B"
+      "ForegroundColor": "#00FF80"
     },
     {
       "Key": "C#: Extension method",
@@ -268,8 +269,8 @@
     },
     {
       "Key": "C#: Parameter",
-      "Italic": true,
-      "ForegroundColor": "#FF44A2"
+      "Bold": false,
+      "ForegroundColor": "#FF0080"
     },
     {
       "Key": "C#: XML Doc",
@@ -325,12 +326,8 @@
       "BackgroundColor": "#FFFFFF"
     },
     {
-      "Key": "viasfora.rainbow.1",
-      "ForegroundColor": "#00FF40"
-    },
-    {
       "Key": "parameter name",
-      "Bold": true,
+      "Bold": false,
       "ForegroundColor": "#008040"
     }
   ]
