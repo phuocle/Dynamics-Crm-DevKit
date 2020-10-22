@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml version="9.1.0.23465" SolutionPackageVersion="9.1" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ImportExportXml version="9.1.0.23744" SolutionPackageVersion="9.1" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SolutionManifest>
     <UniqueName>DEVKIT</UniqueName>
     <LocalizedNames>
@@ -102,42 +102,34 @@
       <RootComponent type="60" id="{7dcbaf74-2f8b-4cc5-82a7-d69bc7d2ba49}" behavior="0" />
       <RootComponent type="60" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       <RootComponent type="60" id="{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}" behavior="0" />
+      <RootComponent type="60" id="{e27aa124-7445-471f-9906-f5fc6463a478}" behavior="0" />
       <RootComponent type="60" id="{f25c29fd-12d7-4894-addb-d358000a305a}" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Account.form.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Account.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Account.webapi.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/ActivityParty.form.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/ActivityParty.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/ActivityParty.webapi.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Contact.form.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Contact.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Contact.webapi.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/devkit_CustomActivity.form.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/devkit_CustomActivity.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/devkit_CustomActivity.webapi.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/devkit_WebApi.form.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/devkit_WebApi.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/devkit_WebApi.webapi.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Email.form.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Email.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Email.webapi.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/SystemUser.form.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/SystemUser.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/SystemUser.webapi.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Team.form.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/entities/Team.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/lib/devkit.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/lib/WebApiClient.js" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/resources/Resource.1031.resx" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/resources/Resource.1033.resx" behavior="0" />
-      <RootComponent type="61" schemaName="abc_/resources/Resource.1066.resx" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/css/app.css" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/Account.form.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/Account.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/Account.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/ActivityParty.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/ActivityParty.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/Contact.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/Contact.webapi.js" behavior="0" />
       <RootComponent type="61" schemaName="devkit_/entities/devkit_Location.form.js" behavior="0" />
       <RootComponent type="61" schemaName="devkit_/entities/devkit_Location.js" behavior="0" />
       <RootComponent type="61" schemaName="devkit_/entities/devkit_WebApi.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/devkit_WebApi.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/Email.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/Email.webapi.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/SystemUser.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/entities/SystemUser.webapi.js" behavior="0" />
       <RootComponent type="61" schemaName="devkit_/html/HelloWorld.html" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/images/svg/user.svg" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/images/user.jpg" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/js/ultils.js" behavior="0" />
       <RootComponent type="61" schemaName="devkit_/lib/devkit.js" behavior="0" />
-      <RootComponent type="61" schemaName="devkit_/lib/expect.min.js" behavior="0" />
       <RootComponent type="61" schemaName="devkit_/lib/lodash.min.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/lib/moment.min.js" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/resources/Resource.1031.resx" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/resources/Resource.1033.resx" behavior="0" />
+      <RootComponent type="61" schemaName="devkit_/resources/Resource.1066.resx" behavior="0" />
       <RootComponent type="62" schemaName="devkit_DEVKIT" behavior="0" />
       <RootComponent type="80" schemaName="devkit_DEVKIT" behavior="0" />
       <RootComponent type="91" id="{5e45f081-57b3-e911-a99b-000d3a828cb5}" schemaName="Abc.LuckyStar.CustomAction.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=99a37bee8cc0867b" behavior="0" />
@@ -161,84 +153,76 @@
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
-        <Required key="0" type="26" schemaName="All Accounts" displayName="All Accounts" parentSchemaName="account" parentDisplayName="Account" solution="msdynce_AppCommon (9.0.4.0066)" id="{65ffaf9a-e8c5-432d-860b-32f841b00d87}" />
-        <Dependent key="1" type="60" displayName="Location" parentDisplayName="Location" id="{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}" />
+        <Required key="0" type="26" schemaName="All Contacts" displayName="All Contacts" parentSchemaName="contact" parentDisplayName="Contact" solution="msdynce_AppCommon (9.0.4.0066)" id="{0d5d377b-5e7c-47b5-bab1-a5cb8b4ac105}" />
+        <Dependent key="1" type="60" displayName="Quick View" parentDisplayName="WebApi" id="{75893e08-c50c-4f8e-8814-0f5a605af0bb}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="2" type="60" displayName="Contact Quick Form" parentDisplayName="Contact" solution="msdynce_AppCommon (9.0.4.0066)" id="{bdb0ae1c-32fa-4374-b637-8dafe107bc44}" />
-        <Dependent key="1" type="60" displayName="Location" parentDisplayName="Location" id="{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}" />
+        <Required key="2" type="26" schemaName="All Accounts" displayName="All Accounts" parentSchemaName="account" parentDisplayName="Account" solution="msdynce_AppCommon (9.0.4.0066)" id="{65ffaf9a-e8c5-432d-860b-32f841b00d87}" />
+        <Dependent key="3" type="60" displayName="Location 2" parentDisplayName="Location" id="{e27aa124-7445-471f-9906-f5fc6463a478}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="3" type="66" schemaName="MscrmControls.Grid.GridControl" displayName="MscrmControls.Grid.GridControl" solution="BaseCustomControlsCore (9.0.2009.2011)" />
-        <Dependent key="1" type="60" displayName="Location" parentDisplayName="Location" id="{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}" />
+        <Required key="4" type="60" displayName="Contact Quick Form" parentDisplayName="Contact" solution="msdynce_AppCommon (9.0.4.0066)" id="{bdb0ae1c-32fa-4374-b637-8dafe107bc44}" />
+        <Dependent key="3" type="60" displayName="Location 2" parentDisplayName="Location" id="{e27aa124-7445-471f-9906-f5fc6463a478}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="4" type="66" schemaName="MscrmControls.WebsitePreview.PreviewControl" displayName="MscrmControls.WebsitePreview.PreviewControl" solution="CustomControlsCore (9.1.0000.23465)" />
-        <Dependent key="1" type="60" displayName="Location" parentDisplayName="Location" id="{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}" />
+        <Required key="5" type="66" schemaName="MscrmControls.Grid.GridControl" displayName="MscrmControls.Grid.GridControl" solution="BaseCustomControlsCore (9.0.2009.3007)" />
+        <Dependent key="3" type="60" displayName="Location 2" parentDisplayName="Location" id="{e27aa124-7445-471f-9906-f5fc6463a478}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="5" type="26" schemaName="All Contacts" displayName="All Contacts" parentSchemaName="contact" parentDisplayName="Contact" solution="msdynce_AppCommon (9.0.4.0066)" id="{0d5d377b-5e7c-47b5-bab1-a5cb8b4ac105}" />
-        <Dependent key="6" type="60" displayName="Quick View" parentDisplayName="WebApi" id="{75893e08-c50c-4f8e-8814-0f5a605af0bb}" />
+        <Required key="6" type="66" schemaName="MscrmControls.WebsitePreview.PreviewControl" displayName="MscrmControls.WebsitePreview.PreviewControl" solution="CustomControlsCore (9.1.0000.23744)" />
+        <Dependent key="3" type="60" displayName="Location 2" parentDisplayName="Location" id="{e27aa124-7445-471f-9906-f5fc6463a478}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="7" type="60" displayName="Account" parentDisplayName="Account" solution="msdynce_AppCommon (9.0.4.0066)" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
-        <Dependent key="7" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+        <Required key="2" type="26" schemaName="All Accounts" displayName="All Accounts" parentSchemaName="account" parentDisplayName="Account" solution="msdynce_AppCommon (9.0.4.0066)" id="{65ffaf9a-e8c5-432d-860b-32f841b00d87}" />
+        <Dependent key="7" type="60" displayName="Location" parentDisplayName="Location" id="{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="8" type="60" displayName="account contact card" parentDisplayName="Contact" solution="msdynce_AppCommon (9.0.4.0066)" id="{29de27bc-a257-4f29-99cf-bab4a84e688f}" />
-        <Dependent key="7" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+        <Required key="4" type="60" displayName="Contact Quick Form" parentDisplayName="Contact" solution="msdynce_AppCommon (9.0.4.0066)" id="{bdb0ae1c-32fa-4374-b637-8dafe107bc44}" />
+        <Dependent key="7" type="60" displayName="Location" parentDisplayName="Location" id="{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="9" type="66" schemaName="MscrmControls.Multimedia.MultimediaPlayerControl" displayName="MscrmControls.Multimedia.MultimediaPlayerControl" solution="CustomControlsCore (9.1.0000.23465)" />
-        <Dependent key="7" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+        <Required key="5" type="66" schemaName="MscrmControls.Grid.GridControl" displayName="MscrmControls.Grid.GridControl" solution="BaseCustomControlsCore (9.0.2009.3007)" />
+        <Dependent key="7" type="60" displayName="Location" parentDisplayName="Location" id="{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="3" type="66" schemaName="MscrmControls.Grid.GridControl" displayName="MscrmControls.Grid.GridControl" solution="BaseCustomControlsCore (9.0.2009.2011)" />
-        <Dependent key="7" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+        <Required key="6" type="66" schemaName="MscrmControls.WebsitePreview.PreviewControl" displayName="MscrmControls.WebsitePreview.PreviewControl" solution="CustomControlsCore (9.1.0000.23744)" />
+        <Dependent key="7" type="60" displayName="Location" parentDisplayName="Location" id="{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="10" type="66" schemaName="MscrmControls.InputMask.InputMaskControl" displayName="MscrmControls.InputMask.InputMaskControl" solution="CustomControlsCore (9.1.0000.23465)" />
-        <Dependent key="7" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+        <Required key="8" type="60" displayName="Account" parentDisplayName="Account" solution="msdynce_AppCommon (9.0.4.0066)" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+        <Dependent key="8" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="11" type="66" schemaName="MscrmControls.CardFeedContainer.CardFeedContainer" displayName="MscrmControls.CardFeedContainer.CardFeedContainer" solution="BaseCustomControlsCore (9.0.2009.2011)" />
-        <Dependent key="7" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+        <Required key="9" type="60" displayName="account contact card" parentDisplayName="Contact" solution="msdynce_AppCommon (9.0.4.0066)" id="{29de27bc-a257-4f29-99cf-bab4a84e688f}" />
+        <Dependent key="8" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="4" type="66" schemaName="MscrmControls.WebsitePreview.PreviewControl" displayName="MscrmControls.WebsitePreview.PreviewControl" solution="CustomControlsCore (9.1.0000.23465)" />
-        <Dependent key="7" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
+        <Required key="10" type="66" schemaName="MscrmControls.InputMask.InputMaskControl" displayName="MscrmControls.InputMask.InputMaskControl" solution="CustomControlsCore (9.1.0000.23744)" />
+        <Dependent key="8" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="12" type="61" schemaName="devkit_/entities/devkit_WebApi.webapi.js" displayName="devkit_/entities/devkit_WebApi.webapi.js" solution="Active" />
-        <Dependent key="13" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+        <Required key="11" type="66" schemaName="MscrmControls.Multimedia.MultimediaPlayerControl" displayName="MscrmControls.Multimedia.MultimediaPlayerControl" solution="CustomControlsCore (9.1.0000.23744)" />
+        <Dependent key="8" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="14" type="61" schemaName="devkit_/entities/SystemUser.webapi.js" displayName="devkit_/entities/SystemUser.webapi.js" solution="Active" />
-        <Dependent key="13" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+        <Required key="5" type="66" schemaName="MscrmControls.Grid.GridControl" displayName="MscrmControls.Grid.GridControl" solution="BaseCustomControlsCore (9.0.2009.3007)" />
+        <Dependent key="8" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="15" type="61" schemaName="devkit_/entities/Account.webapi.js" displayName="devkit_/entities/Account.webapi.js" solution="Active" />
-        <Dependent key="13" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+        <Required key="12" type="66" schemaName="MscrmControls.CardFeedContainer.CardFeedContainer" displayName="MscrmControls.CardFeedContainer.CardFeedContainer" solution="BaseCustomControlsCore (9.0.2009.3007)" />
+        <Dependent key="8" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="16" type="61" schemaName="devkit_/entities/devkit_WebApi.form.js" displayName="devkit_/entities/devkit_WebApi.form.js" solution="Active" />
-        <Dependent key="13" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+        <Required key="6" type="66" schemaName="MscrmControls.WebsitePreview.PreviewControl" displayName="MscrmControls.WebsitePreview.PreviewControl" solution="CustomControlsCore (9.1.0000.23744)" />
+        <Dependent key="8" type="60" displayName="Account" parentDisplayName="Account" id="{8448b78f-8f42-454e-8e2a-f8196b0419af}" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="17" type="61" schemaName="devkit_/entities/Email.webapi.js" displayName="devkit_/entities/Email.webapi.js" solution="Active" />
-        <Dependent key="13" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
+        <Required key="13" type="61" schemaName="devkit_/entities/devkit_WebApi.form.js" displayName="devkit_/entities/devkit_WebApi.form.js" solution="Active" />
+        <Dependent key="14" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
       </MissingDependency>
       <MissingDependency>
-        <Required key="18" type="61" schemaName="devkit_/entities/ActivityParty.webapi.js" displayName="devkit_/entities/ActivityParty.webapi.js" solution="Active" />
-        <Dependent key="13" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required key="19" type="61" schemaName="devkit_/entities/Contact.webapi.js" displayName="devkit_/entities/Contact.webapi.js" solution="Active" />
-        <Dependent key="13" type="61" schemaName="devkit_/entities/devkit_WebApi.js" displayName="devkit_/entities/devkit_WebApi.js" />
-      </MissingDependency>
-      <MissingDependency>
-        <Required key="20" type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)" />
-        <Dependent key="21" type="80" schemaName="devkit_DEVKIT" displayName="DEVKIT" />
+        <Required key="15" type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)" />
+        <Dependent key="16" type="80" schemaName="devkit_DEVKIT" displayName="DEVKIT" />
       </MissingDependency>
     </MissingDependencies>
   </SolutionManifest>

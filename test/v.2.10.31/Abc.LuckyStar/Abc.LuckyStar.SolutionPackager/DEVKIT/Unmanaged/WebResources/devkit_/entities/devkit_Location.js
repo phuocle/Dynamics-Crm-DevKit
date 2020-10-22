@@ -3,109 +3,172 @@
 "use strict";
 var formLocation = (function () {
 	"use strict";
-	/** @type {Tomato.FormLocation } */
-	var form = null;
+	/** @type { LuckyStar.FormLocation} */
+	let form = null;
 	async function onLoad(executionContext) {
-		form = new Tomato.FormLocation(executionContext);
-
-		setTimeout(function () {
+		form = new LuckyStar.FormLocation(executionContext);
+		setTimeout(() => {
 			console.clear();
 
 			CheckLoadForm();
-			CheckFormBody();
-			CheckFormTab();
-			CheckFormHeader();
-			CheckFormFooter();
-			CheckFormProcess();
-			CheckFormProcess1();
-			CheckQuickForm();
-			CheckFormNavigation();
-			CheckUtility()
-			CheckSubgrid();
-			CheckExecutionContext();
 
 		}, 5000);
 	}
+	async function onSave(executionContext) {
+
+	}
 
 	function CheckLoadForm() {
-		IsTrue(form.EntityName, "devkit_location", "devKit.LoadForm - form.EntityName");
-    }
+		var dataAddOnLoadValue = 0;
+		var dataAddOnLoad = (executionContext) => {
+			dataAddOnLoadValue++;
+			IsTrue(dataAddOnLoadValue, 1, "01 - devkit.LoadForm - form.DataAddOnLoad");
 
-	function CheckFormBody() {
-		IsTrue(form.Body.devkit_Name.Value, "Location 1", "devKit.LoadFields(formContext, body) - form.Body.devkit_Name.Value");
-	}
+			form.DataRemoveOnLoad(dataAddOnLoad);
+			IsTrue(dataAddOnLoadValue, 1, "03 - devkit.LoadForm - form.DataRemoveOnLoad");
+		}
+		form.DataAddOnLoad(dataAddOnLoad);
 
-	function CheckFormTab() {
-		IsTrue(form.Body.Tab.tab3.Label, "tab3", "devKit.LoadTabs(formContext, tab); - form.Body.Tab.tab3.Label");
-		IsTrue(form.Body.Tab.tab3.Section.tab3sec1.Label, "sec1", "SECTION - form.Body.Tab.tab3.Section.tab3sec1.Label");
-	}
+		var refreshValue = 0;
+		form.Refresh(true, () => {
+			refreshValue++;
+			IsTrue(refreshValue, 1, "02 - devKit.LoadForm - form.Refresh");
+		}, (error) => { logError("02 - devKit.LoadForm - form.Refresh", error) });
 
-	function CheckFormHeader() {
-		IsTrue(form.Header.devkit_AccountId.Value[0].name, "A. Datum Corporation (sample)", "devKit.LoadFields(formContext, header, \"header_\"); - form.Header.devkit_AccountId.Value[0].name");
-	}
+		var saveValue = 0;
+		form.Save({ saveMode: OptionSet.SaveMode.Save, useSchedulingEngine: false }, (executionContext) => {
+			saveValue++;
+			IsTrue(saveValue, 1, "04 - devkit.LoadForm - form.Save");
+		}, (error) => { logError("04 - devkit.LoadForm - form.Save", error) });
 
-	function CheckFormFooter() {
-		IsTrue(form.Footer.statuscode.Value, OptionSet.devkit_Location.statuscode.Active, "devKit.LoadFields(formContext, footer, \"footer_\"); - form.Footer.statuscode.Value");
-	}
+		IsTrue(form.DataIsDirty, false, "05 - devkit.LoadForm - form.DataIsDirty");
 
-	function CheckFormProcess() {
-		IsTrue(form.Process.ActiveStage.Name, "Stage 2", "devKit.LoadProcess(formContext)");
-    }
+		IsTrue(form.DataIsValid, true, "06 - devkit.LoadForm - form.DataIsValid");
 
-	function CheckFormProcess1() {
-		IsTrue(form.Process.BPF_Location_2.devkit_ContactId.Value[0].name, "Jim Glynn (sample)", "process.BPF_Location_2 - form.Process.BPF_Location_2.devkit_ContactId.Value[0].name");
-    }
+		var addOnSaveValue = 0;
+		var addOnSave = (executionContext) => {
+			addOnSaveValue++;
+			IsTrue(addOnSaveValue, 1, "07 - devkit.LoadForm - form.AddOnSave");
 
-	function CheckQuickForm() {
-		IsTrue(form.QuickForm.quickViewContact.Visible, true, "form.QuickForm.quickViewContact.Visible");
-		IsTrue(form.QuickForm.quickViewContact.Body.FirstName.Value, "Jim",  "------ BUG ------ Jim - form.QuickForm.quickViewContact.Body.FirstName.Value");
-		IsTrue(form.QuickForm.quickViewContact.Body.FirstName.Visible, true, "true - form.QuickForm.quickViewContact.Body.FirstName.Visible");
-		form.QuickForm.quickViewContact.Body.EMailAddress1.Visible = false;
-		form.QuickForm.quickViewContact.Body.LastName.Label = "NEW LAST NAME";
-    }
+			form.RemoveOnSave(addOnSave);
+			IsTrue(addOnSaveValue, 1, "08 - devkit.LoadForm - form.RemoveOnSave");
+		}
+		form.AddOnSave(addOnSave)
 
-	function CheckFormNavigation() {
-		form.Navigation.nav_devkit_devkit_location_account_LocationId.Label = "AAA";
-		form.Navigation.navAudit.Label = "BBB";
-		form.Navigation.nav_devkit_devkit_location_contact_LocationId.Label = "CCC";
-	}
-	function CheckUtility() {
-		IsTrue(form.Utility.UserSettings.Roles.getLength(), 2, "form.Utility.UserSettings.Roles.getLength() = 2");
-	}
-	function CheckSubgrid() {
-		IsTrue(form.Grid.panelContact.TotalRecordCount, 2, "form.Grid.panelContact.TotalRecordCount = 2");
-		IsTrue(form.Grid.panelContact.Rows.getLength(), 2, "form.Grid.panelContact.Rows.getLength() = 2");
-	}
-	function CheckExecutionContext() {
-		form.ExecutionContext.SetSharedVariable("A", "BA");
-		IsTrue(form.ExecutionContext.GetSharedVariable("A"), "BA", "form.ExecutionContext.GetSharedVariable");
+		IsTrue(form.Attributes.getLength(), form.Attributes.getLength(), "09 - devkit.LoadForm - from.Attributes");
+
+		IsGreater(form.DataXml.length, 0, "10 - devkit.LoadForm - form.DataXml");
+
+		IsTrue(form.EntityName, "devkit_location", "11 - devkit.LoadForm - form.EntityName");
+
+		IsTrue(form.EntityReference.entityType, "devkit_location", "12 - devkit.LoadForm - form.EntityReference.entityType");
+		IsNotNullOrUndefined(form.EntityReference.id, "13 - devkit.LoadForm - form.EntityReference.id");
+		IsGreater(form.EntityReference.name.length, 0, "14 - devkit.LoadForm - form.EntityReference.name");
+
+		IsNotNullOrUndefined(form.EntityId, "15 - devkit.LoadForm - form.EntityId");
+
+		IsTrue(form.EntityIsDirty, false, "16 - devkit.LoadForm - form.EntityIsDirty");
+
+		IsGreater(form.PrimaryAttributeValue.length, 0, "17 - devkit.LoadForm - form.PrimaryAttributeValue");
+
+		IsTrue(form.EntityIsValid, true, "18 - devkit.LoadForm - form.EntityIsValid");
+
+		var uiAddOnLoadValue = 0;
+		var uiAddOnLoad = (executionContext) => {
+			uiAddOnLoadValue++;
+			IsTrue(uiAddOnLoadValue, 1, "19 - devkit.LoadForm - form.UiAddOnLoad"); //TODO: NOT RUN
+
+			form.UiRemoveOnLoad(uiAddOnLoad);
+			IsTrue(uiAddOnLoadValue, 1, "20 - devkit.LoadForm - form.UiRemoveOnLoad"); //TODO: NOT RUN
+		}
+		form.UiAddOnLoad(uiAddOnLoad)
+
+		form.SetFormNotification("form.SetFormNotification", OptionSet.FormNotificationLevel.Error, "SetFormNotification");
+		IsTrue(true, true, "21 - devkit.LoadForm - form.SetFormNotification");
+		setTimeout(() => {
+			form.ClearFormNotification("SetFormNotification");
+			IsTrue(true, true, "22 - devkit.LoadForm - form.ClearFormNotification");
+		}, 5000);
+
+		//form.Close();
+		IsTrue(true, true, "22 - devkit.LoadForm - form.Close");//OK
+
+		form.RefreshRibbon(true);
+		IsTrue(true, true, "23 - devkit.LoadForm - form.RefreshRibbon");
+
+		form.SetFormEntityName("AAAAAAAAAAAA");
+		IsTrue(true, true, "24 - devkit.LoadForm - form.SetFormEntityName");
+
+		IsGreater(form.Controls.getLength(), 0, "25 - devkit.LoadForm - form.Controls");
+
+		IsTrue(form.FormType, OptionSet.FormType.Update, "26 - devkit.LoadForm - form.FormType");
+
+		IsGreater(form.ViewPortWidth, 0, "27 - devkit.LoadForm - form.ViewPortWidth");
+
+		IsGreater(form.ViewPortHeight, 0, "28 - devkit.LoadForm - form.ViewPortHeight");
+
+		//form.FormNavigate("E27AA124-7445-471F-9906-F5FC6463A478")
+		IsTrue(true, true, "29 - devkit.LoadForm - form.FormNavigate"); //OK
+
+		form.FormSetVisible("E27AA124-7445-471F-9906-F5FC6463A478", false);
+		IsTrue(true, true, "30 - devkit.LoadForm - form.FormSetVisible");
+
+		IsTrue(form.FormIsVisible("E27AA124-7445-471F-9906-F5FC6463A478"), false, "31 - devkit.LoadForm - form.FormIsVisible");
+
+		IsNotNullOrUndefined(form.FormId, "32 - devkit.LoadForm - form.FormId");
+
+		IsTrue(form.FormLabel, "Location", "33 - devkit.LoadForm - form.FormLabel");
 	}
 
 	function IsTrue(value1, value2, message) {
 		if (_.isEqual(value1, value2)) {
-			console.log("PASSED: " + message);
+			console.log(message);
 		}
 		else {
-			console.log("FAILED: " + message);
-        }
+			console.log("====================================================================== FAILED: " + message + " " + JSON.stringify({value1, value2}));
+		}
+	}
+
+	function IsNotNullOrUndefined(value, message) {
+		if (value !== null && value !== undefined) {
+			console.log(message);
+		}
+		else {
+			console.log("====================================================================== FAILED: " + message + " " + JSON.stringify({ value }));
+		}
     }
 
-	async function onSave(executionContext) {
-		IsTrue(form.Grid.panelAccount.TotalRecordCount, 1, "form.Grid.gridAccount.TotalRecordCount = 1");
-	}
-		return {
+	function IsGreater(value1, value2, message) {
+		if (Number(value1) > Number(value2)) {
+			console.log(message);
+		}
+		else {
+			console.log("====================================================================== FAILED: " + message + " " + JSON.stringify({ value1, value2 }));
+		}
+    }
+
+	function NotTest(message) {
+		console.log("====================================================================== NOT TEST: " + message);
+    }
+	function logError(message, error) {
+		console.log("=== ERROR ===");
+		console.log(message);
+		console.log(JSON.stringify(error))
+		console.log("=============");
+    }
+	return {
 		OnLoad: onLoad,
 		OnSave: onSave
 	};
 })();
-//var formQuick_Create_Location = (function () {
-//	"use strict";
-//	async function onLoad(executionContext) {
-//	}
-//	async function onSave(executionContext) {
-//	}
-//	return {
-//		OnLoad: onLoad,
-//		OnSave: onSave
-//	};
-//})();
+var formQuick_Create_Location = (function () {
+	"use strict";
+	async function onLoad(executionContext) {
+	}
+	async function onSave(executionContext) {
+	}
+	return {
+		OnLoad: onLoad,
+		OnSave: onSave
+	};
+})();

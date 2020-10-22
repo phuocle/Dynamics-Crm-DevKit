@@ -8,7 +8,7 @@
   <IntroducedVersion>1.0</IntroducedVersion>
   <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
   <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
-  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="devkit_/lib/devkit.js" displayName="devkit_/lib/devkit.js" languagecode="" description="1.0.0.0" libraryUniqueId="{e7971b0b-affa-4fa0-90ea-c7eab2f8350f}"/&gt;&lt;Library name="devkit_/lib/lodash.min.js" displayName="devkit_/lib/lodash.min.js" languagecode="" description="1.0.0.0" libraryUniqueId="{8b0041f1-de9e-41cf-81a2-4843499276c7}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="devkit_/js/ultils.js" displayName="devkit_/js/ultils.js" languagecode="" description="1.0.0.0" libraryUniqueId="{7f721113-2315-42c6-a602-346da1d02128}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
   <IsCustomizable>1</IsCustomizable>
   <CanBeDeleted>1</CanBeDeleted>
   <IsHidden>0</IsHidden>

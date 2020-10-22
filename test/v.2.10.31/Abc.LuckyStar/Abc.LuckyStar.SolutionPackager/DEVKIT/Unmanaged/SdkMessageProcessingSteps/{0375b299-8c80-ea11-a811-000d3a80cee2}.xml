@@ -18,7 +18,7 @@
   <SdkMessageProcessingStepImages>
     <SdkMessageProcessingStepImage Name="PostImage">
       <SdkMessageProcessingStepImageId>{9f4e59d6-c180-ea11-a811-000d3a80cee2}</SdkMessageProcessingStepImageId>
-      <Attributes>accountnumber</Attributes>
+      <Attributes>name,telephone1,fax</Attributes>
       <EntityAlias>PostImage</EntityAlias>
       <ImageType>1</ImageType>
       <MessagePropertyName>Id</MessagePropertyName>

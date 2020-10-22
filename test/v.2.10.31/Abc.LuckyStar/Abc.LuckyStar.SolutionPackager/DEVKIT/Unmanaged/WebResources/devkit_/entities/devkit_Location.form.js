@@ -1,9 +1,9 @@
-'use strict';
-/** @namespace Tomato */
-var Tomato;
-(function (Tomato) {
+﻿'use strict';
+/** @namespace LuckyStar */
+var LuckyStar;
+(function (LuckyStar) {
 	'use strict';
-	Tomato.FormLocation = function(executionContext, defaultWebResourceName) {
+	LuckyStar.FormLocation = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
 			if (executionContext.getFormContext === undefined) {
@@ -92,40 +92,24 @@ var Tomato;
 		process.BPF_Location_1 = _BPF_Location_1;
 		form.Process = process;
 		var quickForm = {
-			qwAccount: {
-				AccountCategoryCode: {},
-				AccountNumber: {}
-			},
-			quickViewContact: {
-				EMailAddress1: {},
-				FirstName: {},
-				LastName: {},
-				MobilePhone: {},
-				ParentCustomerId: {}
-			}
+			qwAccount: {},
+			quickViewContact: {}
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
-		var grid = {
-			chartAccount: {},
-			panelContact: {},
-			panelAccount: {},
-			gridAccount: {}
-		};
-		devKit.LoadGrids(formContext, grid);
-		form.Grid = grid;
 		form.QuickForm = quickForm;
 		var navigation = {
 			navAudit: {},
 			nav_devkit_devkit_location_account_LocationId: {},
 			nav_devkit_devkit_location_contact_LocationId: {},
+			nav_bpf_devkit_location_devkit_bpf_location_1: {},
+			nav_bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
 		return form;
 	};
-	Tomato.FormQuick_Create_Location = function(executionContext, defaultWebResourceName) {
+	LuckyStar.FormQuick_Create_Location = function(executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined)
 		{
@@ -161,7 +145,7 @@ var Tomato;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		return form;
 	}
-})(Tomato || (Tomato = {}));
+})(LuckyStar || (LuckyStar = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {

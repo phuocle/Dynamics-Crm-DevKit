@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{6971a1b1-fd0d-eb11-a813-000d3a80cee2}</WebResourceId>
+  <Name>devkit_/entities/Account.js</Name>
+  <DisplayName>devkit_/entities/Account.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="devkit_/entities/Account.form.js" displayName="devkit_/entities/Account.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{4c9993ec-25f2-441b-afa2-d9c9877db86c}"/&gt;&lt;Library name="devkit_/entities/Account.webapi.js" displayName="devkit_/entities/Account.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{ab32445c-ec78-4128-b892-74f53b576f00}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/devkit_entitiesAccountjs6971A1B1-FD0D-EB11-A813-000D3A80CEE2</FileName>
+</WebResource>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>0</isdefault>
+    <savedqueryid>{0989d944-3976-4fe4-a5d9-3d6392c81492}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="devkit_name" select="1" icon="1" preview="1">
+        <row name="result" id="devkit_webapiid">
+          <cell name="devkit_name" width="125" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_userlocaldateonly" width="150" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_userlocaldateandtime" width="150" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_dateonlydateonly" width="150" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_timezonedateonly" width="150" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_timezonedateandtime" width="150" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_userlocaldateonlycalculated" width="200" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_userlocaldateandtimecalculated" width="200" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_dateonlydateonlycalculated" width="200" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_timezonedateonlycalculated" width="200" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_timezonedateandtimecalculated" width="200" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_userlocaldateonlyrollup" width="200" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_userlocaldateandtimerollup" width="200" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+        <entity name="devkit_webapi">
+          <attribute name="devkit_name" />
+          <attribute name="devkit_userlocaldateonly" />
+          <attribute name="devkit_userlocaldateandtime" />
+          <attribute name="devkit_dateonlydateonly" />
+          <attribute name="devkit_timezonedateandtime" />
+          <attribute name="devkit_timezonedateonly" />
+          <attribute name="devkit_userlocaldateonlycalculated" />
+          <attribute name="devkit_userlocaldateandtimecalculated" />
+          <attribute name="devkit_timezonedateonlycalculated" />
+          <attribute name="devkit_timezonedateandtimecalculated" />
+          <attribute name="devkit_dateonlydateonlycalculated" />
+          <attribute name="devkit_userlocaldateonlyrollup" />
+          <attribute name="devkit_userlocaldateandtimerollup" />
+          <order attribute="devkit_name" descending="false" />
+          <filter type="and">
+            <condition attribute="devkit_name" operator="like" value="DATETIME%" />
+          </filter>
+          <attribute name="devkit_webapiid" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>0.0.0.1</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="DATETIME" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

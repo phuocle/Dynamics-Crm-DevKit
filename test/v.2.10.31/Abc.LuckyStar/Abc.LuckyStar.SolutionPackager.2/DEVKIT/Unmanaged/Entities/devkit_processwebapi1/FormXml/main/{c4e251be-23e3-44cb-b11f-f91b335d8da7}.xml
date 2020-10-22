@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{c4e251be-23e3-44cb-b11f-f91b335d8da7}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{7c4ef8c5-5c17-4e8f-9082-88d34edf2a3c}" name="StageStep3" locklevel="0" expanded="true">
+          <labels>
+            <label description="" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{9164b203-0389-4f9f-b95b-30f20bbd2ddc}" name="StageStep3_section1">
+                  <labels>
+                    <label description="" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{ef82582f-7a4d-4099-ba1d-bc7f24b49c6c}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_customerid" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="devkit_customerid" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{88c917a4-aac7-4edf-b4ee-9482850cf373}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_wholenumbernone" classid="{c6d124ca-7eda-4a60-aea9-7fb8d318b68f}" datafieldname="devkit_wholenumbernone" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{c9215d65-4928-48b3-9a5c-1b4a6010513f}" name="StageStep9" locklevel="0" expanded="true">
+          <labels>
+            <label description="" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{60abaa48-7679-417e-a32e-178d50e90173}" name="StageStep9_section1">
+                  <labels>
+                    <label description="" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{b2e01b17-7fbc-4a8f-915d-bc34fe0c2782}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_yesandno" classid="{67fac785-cd58-4f9f-abb3-4b7ddc6ed5ed}" datafieldname="devkit_yesandno" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{114bff6d-c825-4680-82aa-1cbdd45f9541}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_decimalnumber" classid="{c3efe0c3-0ec6-42be-8349-cbd9079dfd8e}" datafieldname="devkit_decimalnumber" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{60dfcc45-3db5-4af9-8342-fdce3ec3de88}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_singlelineoftexttext" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="devkit_singlelineoftexttext" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{2a749026-7ec8-40c3-8a07-d24e775962fc}" name="StageStep17" locklevel="0" expanded="true">
+          <labels>
+            <label description="" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{6cbbfee1-5194-4d3c-bb24-9aee70fdbb3c}" name="StageStep17_section1">
+                  <labels>
+                    <label description="" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{d03950ab-6f04-4b93-8df3-9f141eb5d421}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_singlelineoftexttext" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="devkit_singlelineoftexttext" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{71c9b39e-6034-49c9-97d3-708c19764f8e}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_singleoptionsetcode" classid="{3ef39988-22bb-4f0b-bbbe-64b5a3748aee}" datafieldname="devkit_singleoptionsetcode" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{409c6471-f777-4d05-8205-09b7eade4327}" name="StageStep23" locklevel="0" expanded="true">
+          <labels>
+            <label description="" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{8635af3b-c20a-43c9-b8e1-f4f248dff575}" name="StageStep23_section1">
+                  <labels>
+                    <label description="" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{f1e512ad-984f-41d3-ad55-064b5934b932}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_floatingpointnumber" classid="{0d2c745a-e5a8-4c8f-ba63-c6d3bb604660}" datafieldname="devkit_floatingpointnumber" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5f94e8b1-ce5a-4fce-9261-b7909fe153d5}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_userlocaldateonly" classid="{5b773807-9fb2-42db-97c3-7a91eff8adff}" datafieldname="devkit_userlocaldateonly" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{344328a5-7668-4a34-a3f7-e836933e1845}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_yesandnocalculated" classid="{67fac785-cd58-4f9f-abb3-4b7ddc6ed5ed}" datafieldname="devkit_yesandnocalculated" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{68b4d136-14c2-45ce-9ddf-c1d759b34a1b}" name="StageStep36" locklevel="0" expanded="true">
+          <labels>
+            <label description="" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{3ae88de1-15bf-41ea-9439-07e02a3e1d17}" name="StageStep36_section1">
+                  <labels>
+                    <label description="" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{522636d9-9452-404a-9290-4f06e7510007}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:ownerid" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="ownerid" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3947d849-deac-4dfc-8135-233536b6d399}" showlabel="true" visible="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_webapi_devkit_processwebapi1:devkit_multipleliniesoftext" classid="{e0dece4b-6fc8-4a8f-a065-082708572369}" datafieldname="devkit_multipleliniesoftext" relationship="bpf_devkit_webapi_devkit_processwebapi1" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>
