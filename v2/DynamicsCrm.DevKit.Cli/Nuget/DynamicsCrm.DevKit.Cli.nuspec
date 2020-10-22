@@ -1,38 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-  <metadata>
-    <id>DynamicsCrm.DevKit.Cli</id>
-    <version>2.10.31</version>
-    <title>DynamicsCrm.DevKit.Cli - CLI for DynamicsCrm.DevKit tool</title>
-    <authors>PhuocLe</authors>
-    <license type="file">license\LICENSE.txt</license>
-    <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/phuocle/Dynamics-Crm-DevKit/master/icon.png</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>CLI for DynamicsCrm.DevKit tool</description>
-    <language>en-US</language>
-    <tags>Dynamics, Dynamics365, CRM, CLI, DevKit, Analyzers</tags>
-  </metadata>
-  <files>
-    <file src="..\Release\DynamicsCrm.DevKit.Cli.exe" target="tools\DynamicsCrm.DevKit.Cli.exe" />
-    <file src="..\Release\DynamicsCrm.DevKit.Cli.exe.config" target="tools\DynamicsCrm.DevKit.Cli.exe.config" />
-    <file src="..\Release\DynamicsCrm.DevKit.Cli.json" target="tools\DynamicsCrm.DevKit.Cli.json" />
-    <file src="..\Release\Microsoft.Crm.Sdk.Proxy.dll" target="tools\Microsoft.Crm.Sdk.Proxy.dll" />
-    <file src="..\Release\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" target="tools\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
-    <file src="..\Release\Microsoft.Xrm.Sdk.dll" target="tools\Microsoft.Xrm.Sdk.dll" />
-    <file src="..\Release\Microsoft.Xrm.Sdk.Workflow.dll" target="tools\Microsoft.Xrm.Sdk.Workflow.dll" />
-    <file src="..\Release\Microsoft.Xrm.Tooling.Connector.dll" target="tools\Microsoft.Xrm.Tooling.Connector.dll" />
-    <file src="..\Release\Microsoft.Xrm.Sdk.Deployment.dll" target="tools\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <file src="..\Release\DynamicsCrm.DevKit.Resources.dll" target="tools\DynamicsCrm.DevKit.Resources.dll" />
-    <file src="..\Release\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" target="tools\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" />
-    <file src="..\Release\System.Net.Http.dll" target="tools\System.Net.Http.dll" />
-    <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
-    <file src="..\Release\NUglify.dll" target="tools\NUglify.dll" />
-    <file src="..\Release\Microsoft.Rest.ClientRuntime.dll" target="tools\Microsoft.Rest.ClientRuntime.dll" />
-    <file src="..\Release\Microsoft.Xrm.Tooling.CrmConnectControl.dll" target="tools\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
-    <file src="..\Release\Microsoft.Xrm.Tooling.Ui.Styles.dll" target="tools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
-    <file src="..\Release\Microsoft.Xrm.Tooling.WebResourceUtility.dll" target="tools\Microsoft.Xrm.Tooling.WebResourceUtility.dll" />
-    <file src="..\Release\NuGet.Core.dll" target="tools\NuGet.Core.dll" />
-    <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
-  </files>
+    <metadata>
+        <id>DynamicsCrm.DevKit.Cli</id>
+        <version>2.10.31</version>
+        <title>DynamicsCrm.DevKit.Cli - CLI for DynamicsCrm.DevKit tool</title>
+        <authors>PhuocLe</authors>
+        <license type="file">license\LICENSE.txt</license>
+        <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/phuocle/Dynamics-Crm-DevKit/master/icon.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>CLI for DynamicsCrm.DevKit tool</description>
+        <language>en-US</language>
+        <tags>Dynamics, Dynamics365, CRM, CLI, DevKit, Analyzers</tags>
+    </metadata>
+    <files>
+        <file src="..\Release\DynamicsCrm.DevKit.Cli.exe" target="tools\DynamicsCrm.DevKit.Cli.exe" />
+        <file src="..\Release\DynamicsCrm.DevKit.Cli.exe.config" target="tools\DynamicsCrm.DevKit.Cli.exe.config" />
+        <file src="..\Release\DynamicsCrm.DevKit.Cli.json" target="tools\DynamicsCrm.DevKit.Cli.json" />
+        <file src="..\Release\Microsoft.Crm.Sdk.Proxy.dll" target="tools\Microsoft.Crm.Sdk.Proxy.dll" />
+        <file src="..\Release\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" target="tools\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
+        <file src="..\Release\Microsoft.Xrm.Sdk.dll" target="tools\Microsoft.Xrm.Sdk.dll" />
+        <file src="..\Release\Microsoft.Xrm.Sdk.Workflow.dll" target="tools\Microsoft.Xrm.Sdk.Workflow.dll" />
+        <file src="..\Release\Microsoft.Xrm.Tooling.Connector.dll" target="tools\Microsoft.Xrm.Tooling.Connector.dll" />
+        <file src="..\Release\Microsoft.Xrm.Sdk.Deployment.dll" target="tools\Microsoft.Xrm.Sdk.Deployment.dll" />
+        <file src="..\Release\DynamicsCrm.DevKit.Resources.dll" target="tools\DynamicsCrm.DevKit.Resources.dll" />
+        <file src="..\Release\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" target="tools\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" />
+        <file src="..\Release\System.Net.Http.dll" target="tools\System.Net.Http.dll" />
+        <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
+        <file src="..\Release\NUglify.dll" target="tools\NUglify.dll" />
+        <file src="..\Release\Microsoft.Rest.ClientRuntime.dll" target="tools\Microsoft.Rest.ClientRuntime.dll" />
+        <file src="..\Release\Microsoft.Xrm.Tooling.CrmConnectControl.dll" target="tools\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
+        <file src="..\Release\Microsoft.Xrm.Tooling.Ui.Styles.dll" target="tools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
+        <file src="..\Release\Microsoft.Xrm.Tooling.WebResourceUtility.dll" target="tools\Microsoft.Xrm.Tooling.WebResourceUtility.dll" />
+        <file src="..\Release\NuGet.Core.dll" target="tools\NuGet.Core.dll" />
+        <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
+        <file src="..\Release\Newtonsoft.Json.dll" target="tools\Newtonsoft.Json.dll" />
+        <file src="..\Release\NuGet.Core.dll" target="tools\NuGet.Core.dll" />
+        <file src="..\Release\System.Security.Cryptography.Algorithms.dll" target="tools\System.Security.Cryptography.Algorithms.dll" />
+        <file src="..\Release\System.Security.Cryptography.Encoding.dll" target="tools\System.Security.Cryptography.Encoding.dll" />
+        <file src="..\Release\System.Security.Cryptography.Primitives.dll" target="tools\System.Security.Cryptography.Primitives.dll" />
+        <file src="..\Release\System.Security.Cryptography.X509Certificates.dll" target="tools\System.Security.Cryptography.X509Certificates.dll" />
+        <file src="..\Release\Microsoft.Web.XmlTransform.dll" target="tools\Microsoft.Web.XmlTransform.dll" />
+    </files>
 </package>

@@ -14,7 +14,6 @@ namespace $NameSpace$
         private bool resetUiFlag = false;
 
         public CrmConnectionManager CrmConnectionMgr { get { return mgr; } }
-
         public event EventHandler ConnectionToCrmCompleted;
 
         public LoginForm()
@@ -86,7 +85,6 @@ namespace $NameSpace$
                 if (e.Connected && !bIsConnectedComplete)
                     ProcessSuccess();
             }
-
         }
 
         private void CrmLoginCtrl_ConnectionCheckBegining(object sender, EventArgs e)

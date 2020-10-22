@@ -14,9 +14,7 @@ namespace DynamicsCrm.DevKit.Cli
         private bool resetUiFlag = false;
 
         public CrmConnectionManager CrmConnectionMgr { get { return mgr; } }
-
         public event EventHandler ConnectionToCrmCompleted;
-
 
         public LoginForm()
         {
@@ -53,11 +51,11 @@ namespace DynamicsCrm.DevKit.Cli
         private void mgr_ServerConnectionStatusUpdate(object sender, ServerConnectStatusEventArgs e)
         {
             Dispatcher.Invoke(DispatcherPriority.Normal,
-                               new System.Action(() =>
-                               {
-                                   this.Title = string.IsNullOrWhiteSpace(e.StatusMessage) ? e.ErrorMessage : e.StatusMessage;
-                               }
-                            ));
+                new System.Action(() =>
+                {
+                    this.Title = string.IsNullOrWhiteSpace(e.StatusMessage) ? e.ErrorMessage : e.StatusMessage;
+                }
+            ));
         }
 
         private void mgr_ConnectionCheckComplete(object sender, ServerConnectStatusEventArgs e)
@@ -87,27 +85,24 @@ namespace DynamicsCrm.DevKit.Cli
                 if (e.Connected && !bIsConnectedComplete)
                     ProcessSuccess();
             }
-
         }
 
         private void CrmLoginCtrl_ConnectionCheckBegining(object sender, EventArgs e)
         {
             bIsConnectedComplete = false;
             Dispatcher.Invoke(DispatcherPriority.Normal,
-                               new System.Action(() =>
-                               {
-                                   this.Title = "Starting Login Process. ";
-                                   CrmLoginCtrl.IsEnabled = true;
-                               }
-                                   ));
+                new System.Action(() =>
+                {
+                    this.Title = "Starting Login Process. ";
+                    CrmLoginCtrl.IsEnabled = true;
+                }
+            ));
         }
 
         private void CrmLoginCtrl_ConnectionStatusEvent(object sender, ConnectStatusEventArgs e)
         {
-
             if (e.ConnectSucceeded && !bIsConnectedComplete)
                 ProcessSuccess();
-
         }
 
         private void CrmLoginCtrl_ConnectErrorEvent(object sender, ConnectErrorEventArgs e)
@@ -133,10 +128,8 @@ namespace DynamicsCrm.DevKit.Cli
                    CrmLoginCtrl.IsEnabled = true;
                }
                 ));
-
             if (ConnectionToCrmCompleted != null)
                 ConnectionToCrmCompleted(this, null);
-
             resetUiFlag = false;
         }
     }
