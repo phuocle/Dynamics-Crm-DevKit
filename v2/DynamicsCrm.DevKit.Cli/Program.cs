@@ -29,6 +29,11 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static void CrmCli(CommandLineArgs arguments)
         {
+#if DEBUG
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
+            CliLog.WriteLine(CliLog.ColorRed, " DEBUG MODE");
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
+#endif
             CliLog.WriteLine(CliLog.ColorGreen, " ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
             CliLog.WriteLine(CliLog.ColorGreen, "|  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
             CliLog.WriteLine(CliLog.ColorGreen, "| | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
@@ -36,34 +41,31 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, "|____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
             CliLog.WriteLine(CliLog.ColorGreen, "       |___/                                          ", CliLog.ColorWhite, "https://github.com/phuocle/Dynamics-Crm-DevKit", CliLog.ColorBlue, $" {Const.Version}");
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Path: ", CliLog.ColorWhite, Assembly.GetExecutingAssembly().Location);
-#if DEBUG
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
-            CliLog.WriteLine(CliLog.ColorRed, " DEBUG MODE");
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
-#endif
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Current Directory path: ", CliLog.ColorWhite, CurrentDirectory);
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.exe path: ", CliLog.ColorWhite, Assembly.GetExecutingAssembly().Location);
 #if !DEBUG
             try
             {
 #endif
             var jsonFile = Path.Combine(CurrentDirectory, arguments.Json);
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.json path: ", CliLog.ColorWhite, jsonFile);
+            var jsonFileInfo = new FileInfo(jsonFile);
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.json path: ", CliLog.ColorWhite, jsonFileInfo.FullName);
             if (arguments.SdkLogin.Length > 0 && arguments.SdkLogin.ToLower() == "yes")
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "Arguments: ",
-                CliLog.ColorMagenta, "/sdklogin:", CliLog.ColorCyan, "yes", " ",
-                CliLog.ColorMagenta, "/json:", CliLog.ColorCyan, arguments.Json, " ",
-                CliLog.ColorMagenta, "/type:", CliLog.ColorCyan, arguments.Type, " ",
-                CliLog.ColorMagenta, "/profile:", CliLog.ColorCyan, arguments.Profile
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Arguments: ",
+                CliLog.ColorMagenta, "/sdklogin:", CliLog.ColorWhite, "yes", " ",
+                CliLog.ColorMagenta, "/json:", CliLog.ColorWhite, arguments.Json, " ",
+                CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, arguments.Type, " ",
+                CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, arguments.Profile
                 );
             }
             else
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "Arguments: ",
-                CliLog.ColorMagenta, "/conn:", CliLog.ColorCyan, XrmHelper.BuildConnectionStringLog(arguments.Connection), " ",
-                CliLog.ColorMagenta, "/json:", CliLog.ColorCyan, arguments.Json, " ",
-                CliLog.ColorMagenta, "/type:", CliLog.ColorCyan, arguments.Type, " ",
-                CliLog.ColorMagenta, "/profile:", CliLog.ColorCyan, arguments.Profile
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Arguments: ",
+                CliLog.ColorMagenta, "/conn:", CliLog.ColorWhite, XrmHelper.BuildConnectionStringLog(arguments.Connection), " ",
+                CliLog.ColorMagenta, "/json:", CliLog.ColorWhite, arguments.Json, " ",
+                CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, arguments.Type, " ",
+                CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, arguments.Profile
                 );
             }
 
@@ -88,14 +90,6 @@ namespace DynamicsCrm.DevKit.Cli
             var arguments = CommandLine.Parse<CommandLineArgs>();
             CrmCli(arguments);
         }
-        //private static string HidePassword(string connection)
-        //{
-        //    if (IsUseClientIdAndClientSecrect(connection))
-        //        return connection;
-        //    var parts = connection.Split(";".ToCharArray());
-        //    parts[parts.Length - 2] = "Password:******";
-        //    return string.Join(";", parts);
-        //}
 
         private static void Run(CommandLineArgs arguments)
         {
@@ -155,7 +149,8 @@ namespace DynamicsCrm.DevKit.Cli
                     return false;
                 }
             }
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected to: ", CliLog.ColorWhite, new Uri(CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority));
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected: ", CliLog.ColorWhite, new Uri(CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority));
+            CliLog.WriteLine();
             return true;
         }
 

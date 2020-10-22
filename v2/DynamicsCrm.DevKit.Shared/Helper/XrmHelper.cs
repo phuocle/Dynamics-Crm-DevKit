@@ -413,7 +413,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
 
         public static string BuildConnectionStringLog(string connectionString)
         {
-            if (connectionString.IndexOf("=ClientSecret;") >= 0) return connectionString;
+            if (connectionString.ToLower().IndexOf("=ClientSecret;".ToLower()) >= 0) return connectionString;
             var array = connectionString.Split(";".ToCharArray());
             if (array.Length == 5)
             {
