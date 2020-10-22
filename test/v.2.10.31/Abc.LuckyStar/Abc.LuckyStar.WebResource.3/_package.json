@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "$LogicalProjectName$",
+  "name": "abc.luckystar.webresource.3",
   "version": "1.0.0",
-  "description": "$LogicalProjectName$",
+  "description": "abc.luckystar.webresource.3",
   "main": "index.js",
   "directories": {
     "test": "test"
