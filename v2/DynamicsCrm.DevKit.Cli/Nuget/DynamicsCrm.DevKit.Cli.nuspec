@@ -28,6 +28,11 @@
     <file src="..\Release\System.Net.Http.dll" target="tools\System.Net.Http.dll" />
     <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
     <file src="..\Release\NUglify.dll" target="tools\NUglify.dll" />
+    <file src="..\Release\Microsoft.Rest.ClientRuntime.dll" target="tools\Microsoft.Rest.ClientRuntime.dll" />
+    <file src="..\Release\Microsoft.Xrm.Tooling.CrmConnectControl.dll" target="tools\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
+    <file src="..\Release\Microsoft.Xrm.Tooling.Ui.Styles.dll" target="tools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
+    <file src="..\Release\Microsoft.Xrm.Tooling.WebResourceUtility.dll" target="tools\Microsoft.Xrm.Tooling.WebResourceUtility.dll" />
+    <file src="..\Release\NuGet.Core.dll" target="tools\NuGet.Core.dll" />
     <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
   </files>
 </package>
