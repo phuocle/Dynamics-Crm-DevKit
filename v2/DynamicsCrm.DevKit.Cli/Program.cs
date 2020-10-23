@@ -4,6 +4,7 @@ using System.Net;
 using System.Reflection;
 using CmdLine;
 using DynamicsCrm.DevKit.Cli.Tasks;
+using DynamicsCrm.DevKit.SdkLogin;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
@@ -156,15 +157,15 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
         {
-            if (sender is LoginForm)
+            if (sender is FormLogin login)
             {
-                ((LoginForm)sender).Close();
+                login.Close();
             }
         }
 
         private static bool IsConnectedDynamics365BySdkLogin()
         {
-            var loginForm = new LoginForm();
+            var loginForm = new FormLogin();
             loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
             loginForm.ShowDialog();
             if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)

@@ -84,7 +84,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.WebResourceProjectTempla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.JsFormItemTemplate", "ItemTemplates\CSharp\13.JsFormItemTemplate\13.JsFormItemTemplate.csproj", "{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Lib", "DynamicsCrm.DevKit.Lib\DynamicsCrm.DevKit.Lib.csproj", "{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.SdkLogin", "DynamicsCrm.DevKit.SdkLogin\DynamicsCrm.DevKit.SdkLogin.csproj", "{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

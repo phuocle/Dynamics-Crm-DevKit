@@ -1,14 +1,12 @@
-﻿using Microsoft.Xrm.Tooling.Connector;
-using Microsoft.Xrm.Tooling.CrmConnectControl;
+﻿using Microsoft.Xrm.Tooling.CrmConnectControl;
 using System;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace DynamicsCrm.DevKit.Cli
+namespace DynamicsCrm.DevKit.SdkLogin
 {
-    public partial class LoginForm : Window
+    public partial class FormLogin
     {
-        private CrmServiceClient CrmSvc = null;
         private bool bIsConnectedComplete = false;
         private CrmConnectionManager mgr = null;
         private bool resetUiFlag = false;
@@ -16,7 +14,7 @@ namespace DynamicsCrm.DevKit.Cli
         public CrmConnectionManager CrmConnectionMgr { get { return mgr; } }
         public event EventHandler ConnectionToCrmCompleted;
 
-        public LoginForm()
+        public FormLogin()
         {
             InitializeComponent();
         }
@@ -24,11 +22,13 @@ namespace DynamicsCrm.DevKit.Cli
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             bIsConnectedComplete = false;
-            mgr = new CrmConnectionManager();
-            mgr.ParentControl = CrmLoginCtrl;
-            mgr.UseUserLocalDirectoryForConfigStore = true;
-            mgr.ClientId = "51f81489-12ee-4a9e-aaae-a2591f45987d";
-            mgr.RedirectUri = new Uri("app://58145B91-0C36-4500-8554-080854F2AC97");
+            mgr = new CrmConnectionManager
+            {
+                ParentControl = CrmLoginCtrl,
+                UseUserLocalDirectoryForConfigStore = true,
+                ClientId = "51f81489-12ee-4a9e-aaae-a2591f45987d",
+                RedirectUri = new Uri("app://58145B91-0C36-4500-8554-080854F2AC97")
+            };
             CrmLoginCtrl.SetGlobalStoreAccess(mgr);
             CrmLoginCtrl.SetControlMode(ServerLoginConfigCtrlMode.FullLoginPanel);
             CrmLoginCtrl.ConnectionCheckBegining += new EventHandler(CrmLoginCtrl_ConnectionCheckBegining);
@@ -119,7 +119,6 @@ namespace DynamicsCrm.DevKit.Cli
         {
             resetUiFlag = true;
             bIsConnectedComplete = true;
-            CrmSvc = mgr.CrmSvc;
             CrmLoginCtrl.GoBackToLogin();
             Dispatcher.Invoke(DispatcherPriority.Normal,
                new System.Action(() =>
@@ -128,8 +127,7 @@ namespace DynamicsCrm.DevKit.Cli
                    CrmLoginCtrl.IsEnabled = true;
                }
                 ));
-            if (ConnectionToCrmCompleted != null)
-                ConnectionToCrmCompleted(this, null);
+            ConnectionToCrmCompleted?.Invoke(this, null);
             resetUiFlag = false;
         }
     }

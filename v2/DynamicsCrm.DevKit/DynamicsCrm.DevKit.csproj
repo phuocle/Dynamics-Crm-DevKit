@@ -64,7 +64,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -81,6 +80,12 @@
     <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DynamicsCrm.DevKit.SdkLogin\DynamicsCrm.DevKit.SdkLogin.csproj">
+      <Project>{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}</Project>
+      <Name>DynamicsCrm.DevKit.SdkLogin</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\DynamicsCrm.DevKit.Package\DynamicsCrm.DevKit.Package.csproj">
       <Project>{6302EA70-637D-4FDC-B169-1493427DD8D2}</Project>
       <Name>DynamicsCrm.DevKit.Package</Name>
