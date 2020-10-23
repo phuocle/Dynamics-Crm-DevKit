@@ -17,14 +17,15 @@
         <file src="..\Release\DynamicsCrm.DevKit.Cli.exe" target="tools\DynamicsCrm.DevKit.Cli.exe" />
         <file src="..\Release\DynamicsCrm.DevKit.Cli.exe.config" target="tools\DynamicsCrm.DevKit.Cli.exe.config" />
         <file src="..\Release\DynamicsCrm.DevKit.Cli.json" target="tools\DynamicsCrm.DevKit.Cli.json" />
+        <file src="..\Release\DynamicsCrm.DevKit.SdkLogin.dll" target="tools\DynamicsCrm.DevKit.SdkLogin.dll" />
+        <file src="..\Release\DynamicsCrm.DevKit.Resources.dll" target="tools\DynamicsCrm.DevKit.Resources.dll" />
+        <file src="..\Release\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" target="tools\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" />
         <file src="..\Release\Microsoft.Crm.Sdk.Proxy.dll" target="tools\Microsoft.Crm.Sdk.Proxy.dll" />
         <file src="..\Release\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" target="tools\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
         <file src="..\Release\Microsoft.Xrm.Sdk.dll" target="tools\Microsoft.Xrm.Sdk.dll" />
         <file src="..\Release\Microsoft.Xrm.Sdk.Workflow.dll" target="tools\Microsoft.Xrm.Sdk.Workflow.dll" />
         <file src="..\Release\Microsoft.Xrm.Tooling.Connector.dll" target="tools\Microsoft.Xrm.Tooling.Connector.dll" />
         <file src="..\Release\Microsoft.Xrm.Sdk.Deployment.dll" target="tools\Microsoft.Xrm.Sdk.Deployment.dll" />
-        <file src="..\Release\DynamicsCrm.DevKit.Resources.dll" target="tools\DynamicsCrm.DevKit.Resources.dll" />
-        <file src="..\Release\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" target="tools\DynamicsCrm.DevKit.CrmSvcUtilExtensions.dll" />
         <file src="..\Release\System.Net.Http.dll" target="tools\System.Net.Http.dll" />
         <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
         <file src="..\Release\NUglify.dll" target="tools\NUglify.dll" />
