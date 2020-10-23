@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TemplateWizard;
 using DynamicsCrm.DevKit.Shared;
 using System;
 using DynamicsCrm.DevKit.SdkLogin;
+//using DynamicsCrm.DevKit.SdkLogin;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
@@ -45,7 +46,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                 form.Close();
             }
         }
-        [STAThread]
+
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
 

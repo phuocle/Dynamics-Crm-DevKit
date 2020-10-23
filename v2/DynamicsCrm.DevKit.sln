@@ -84,7 +84,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.WebResourceProjectTempla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.JsFormItemTemplate", "ItemTemplates\CSharp\13.JsFormItemTemplate\13.JsFormItemTemplate.csproj", "{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.SdkLogin", "DynamicsCrm.DevKit.SdkLogin\DynamicsCrm.DevKit.SdkLogin.csproj", "{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.SdkLogin.9.0.0.7", "DynamicsCrm.DevKit.SdkLogin.9.0.0.7\DynamicsCrm.DevKit.SdkLogin.9.0.0.7.csproj", "{4FBFE8FA-4863-4F5F-BFDB-DD98BBAC3CEA}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -220,10 +220,10 @@ Global
 		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FBFE8FA-4863-4F5F-BFDB-DD98BBAC3CEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FBFE8FA-4863-4F5F-BFDB-DD98BBAC3CEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FBFE8FA-4863-4F5F-BFDB-DD98BBAC3CEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FBFE8FA-4863-4F5F-BFDB-DD98BBAC3CEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

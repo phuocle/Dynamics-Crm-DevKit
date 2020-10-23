@@ -83,8 +83,8 @@
       <HintPath>..\packages\NuGet.Core.2.14.0\lib\net40-Client\NuGet.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NUglify, Version=1.9.6.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUglify.1.9.6\lib\net40\NUglify.dll</HintPath>
+    <Reference Include="NUglify, Version=1.9.9.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUglify.1.9.9\lib\net40\NUglify.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -213,13 +213,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DynamicsCrm.DevKit.SdkLogin\DynamicsCrm.DevKit.SdkLogin.csproj">
-      <Project>{0bd4ada6-cf1e-4123-b30e-c9d33298bccd}</Project>
-      <Name>DynamicsCrm.DevKit.SdkLogin</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DynamicsCrm.DevKit.Resources\DynamicsCrm.DevKit.Resources.csproj">
       <Project>{c3d692c7-4d23-4f68-af38-ac9b375e4a56}</Project>
       <Name>DynamicsCrm.DevKit.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DynamicsCrm.DevKit.SdkLogin.9.0.0.7\DynamicsCrm.DevKit.SdkLogin.9.0.0.7.csproj">
+      <Project>{4fbfe8fa-4863-4f5f-bfdb-dd98bbac3cea}</Project>
+      <Name>DynamicsCrm.DevKit.SdkLogin.9.0.0.7</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
