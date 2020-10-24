@@ -9,6 +9,8 @@ using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Drawing;
 using Microsoft.Xrm.Sdk;
+using DynamicsCrm.DevKit.SdkLogin;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -216,14 +218,44 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             var form = new FormConnection2(DTE);
             if (form.ShowDialog() == DialogResult.Cancel) return;
-
-            CrmConnection = form.CrmConnection;
-            CrmService = form.CrmService;
+            if (form.Check == "1")
+            {
+                if (ProjectType == ProjectType.DataProvider)
+                {
+                    var loginForm = new FormLogin9007();
+                    loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                    loginForm.ShowDialog();
+                    if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+                    {
+                        if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
+                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
+                        else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
+                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
+                        else
+                            throw new WizardCancelledException();
+                        CrmConnection = new CrmConnection {Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
+                    }
+                    else
+                        throw new WizardCancelledException();
+                }
+            }
+            else
+            {
+                CrmConnection = form.CrmConnection;
+                CrmService = form.CrmService;
+            }
             Check = form.Check;
-
             buttonOk.Enabled = true;
             comboBoxCrmName.Enabled = true;
             CheckFormByFormType();
+        }
+
+        private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        {
+            if (sender is FormLogin9007 login)
+            {
+                login.Close();
+            }
         }
 
         private void CheckFormByFormType()

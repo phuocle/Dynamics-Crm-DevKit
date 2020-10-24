@@ -4,9 +4,6 @@ using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using DynamicsCrm.DevKit.Shared;
-using System;
-using DynamicsCrm.DevKit.SdkLogin;
-//using DynamicsCrm.DevKit.SdkLogin;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
@@ -39,44 +36,32 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             Utility.TfsUndoAdd(DTE, oldProjectFolder, newProjectFolder);
         }
 
-        private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
-        {
-            if (sender is FormLogin form)
-            {
-                form.Close();
-            }
-        }
-
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
-
-            var loginForm = new FormLogin();
-            loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
-            loginForm.ShowDialog();
-
-            //var destinationDirectory = replacementsDictionary["$destinationdirectory$"];
-            //try
-            //{
-            //    DTE = (DTE)automationObject;
-            //    if (!Utility.SharedProjectExist(DTE))
-            //    {
-            //        MessageBox.Show(@"Please add DynamicsCrm.DevKit Shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        throw new WizardCancelledException();
-            //    }
-            //    var form = new FormProject(ProjectType.DataProvider, DTE);
-            //    if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
-            //    //Creating project ...
-            //    ProjectName = form.ProjectName;
-            //    Wizard.ProcessProjectReplacementsDictionary(replacementsDictionary, form);
-            //}
-            //catch
-            //{
-            //    if (Directory.Exists(destinationDirectory))
-            //    {
-            //        Utility.TryDeleteDirectory(destinationDirectory);
-            //    }
-            //    throw;
-            //}
+            var destinationDirectory = replacementsDictionary["$destinationdirectory$"];
+            try
+            {
+                DTE = (DTE)automationObject;
+                if (!Utility.SharedProjectExist(DTE))
+                {
+                    MessageBox.Show(@"Please add DynamicsCrm.DevKit Shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    throw new WizardCancelledException();
+                }
+                var form = new FormProject(ProjectType.DataProvider, DTE);
+                if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
+                //Creating project ...
+                ProjectName = form.ProjectName;
+                replacementsDictionary.Add("$Check$", form.Check);
+                Wizard.ProcessProjectReplacementsDictionary(replacementsDictionary, form);
+            }
+            catch
+            {
+                if (Directory.Exists(destinationDirectory))
+                {
+                    Utility.TryDeleteDirectory(destinationDirectory);
+                }
+                throw;
+            }
         }
 
         public bool ShouldAddProjectItem(string filePath)
