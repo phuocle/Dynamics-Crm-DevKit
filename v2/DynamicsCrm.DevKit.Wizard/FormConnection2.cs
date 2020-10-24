@@ -155,7 +155,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 CrmService.Execute(new WhoAmIRequest());
                 return true;
             }
-            catch
+            catch(Exception e)
             {
                 return false;
             }

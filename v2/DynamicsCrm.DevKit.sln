@@ -76,8 +76,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.JsFormItemTemplate", "It
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Package", "DynamicsCrm.DevKit.Package\DynamicsCrm.DevKit.Package.csproj", "{6302EA70-637D-4FDC-B169-1493427DD8D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Console", "DynamicsCrm.DevKit.Console\DynamicsCrm.DevKit.Console.csproj", "{26067BC0-588B-4079-BBF6-6E0964BFDEBD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12.JsDevkitItemTemplate", "ItemTemplates\CSharp\12.JsDevkitItemTemplate\12.JsDevkitItemTemplate.csproj", "{CCBD1381-E6A6-4A57-9853-E93A27A33F12}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.WebResourceProjectTemplate", "ProjectTemplates\CSharp\13.WebResourceProjectTemplate\13.WebResourceProjectTemplate.csproj", "{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}"
@@ -204,10 +202,6 @@ Global
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12}.Release|Any CPU.ActiveCfg = Release|Any CPU

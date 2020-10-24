@@ -65,14 +65,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.SolutionPacka
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.SolutionPackager.2", "Abc.LuckyStar.SolutionPackager.2\Abc.LuckyStar.SolutionPackager.2.csproj", "{E01C41C6-E3F5-4D85-9EDD-2DF5AC5FCB1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.DataProvider.2", "Abc.LuckyStar.DataProvider.2\Abc.LuckyStar.DataProvider.2.csproj", "{99893140-D2E4-487F-9C71-5CE59CEF6A8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar.DataProvider.3", "Abc.LuckyStar.DataProvider.3\Abc.LuckyStar.DataProvider.3.csproj", "{0D8A1EB0-CBDB-46DF-80F1-F24CC1E6E62A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{0d8a1eb0-cbdb-46df-80f1-f24cc1e6e62a}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{1becbe7e-2d53-4f74-91f7-81acd18c8b4c}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{2f8ae098-4907-417a-8cae-ad609e6cdbde}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{3b74694f-5b90-4cd6-8fbd-7c1c1a592863}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{51e00a93-71c0-441e-9ff2-04693cd40cfa}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{7e9d0556-8f58-4b44-b65c-3986b680ece4}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{87320201-cffe-45d1-abf5-f47c031a068a}*SharedItemsImports = 4
+		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{99893140-d2e4-487f-9c71-5ce59cef6a8e}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{bc2559b6-63d4-43f9-953f-c6a19c2e8ecc}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{de6c254e-648c-4cef-99a4-01fb2d8732d7}*SharedItemsImports = 4
 		Abc.LuckyStar.Shared\Abc.LuckyStar.Shared.projitems*{e4d52657-e3d5-4794-9b2e-d2b2627744d5}*SharedItemsImports = 13
@@ -158,6 +164,14 @@ Global
 		{E01C41C6-E3F5-4D85-9EDD-2DF5AC5FCB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E01C41C6-E3F5-4D85-9EDD-2DF5AC5FCB1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E01C41C6-E3F5-4D85-9EDD-2DF5AC5FCB1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99893140-D2E4-487F-9C71-5CE59CEF6A8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99893140-D2E4-487F-9C71-5CE59CEF6A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99893140-D2E4-487F-9C71-5CE59CEF6A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99893140-D2E4-487F-9C71-5CE59CEF6A8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D8A1EB0-CBDB-46DF-80F1-F24CC1E6E62A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D8A1EB0-CBDB-46DF-80F1-F24CC1E6E62A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D8A1EB0-CBDB-46DF-80F1-F24CC1E6E62A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D8A1EB0-CBDB-46DF-80F1-F24CC1E6E62A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,6 +197,8 @@ Global
 		{2F8AE098-4907-417A-8CAE-AD609E6CDBDE} = {472B3B0A-53A3-48FD-BF9A-6CF0D5079794}
 		{EE028A13-7D55-4143-86BB-7AB283731A01} = {67667965-891F-4F5F-A8B9-FF608FAE3A19}
 		{E01C41C6-E3F5-4D85-9EDD-2DF5AC5FCB1F} = {67667965-891F-4F5F-A8B9-FF608FAE3A19}
+		{99893140-D2E4-487F-9C71-5CE59CEF6A8E} = {A0CFCC93-946E-4A67-9F7D-31147930FAA9}
+		{0D8A1EB0-CBDB-46DF-80F1-F24CC1E6E62A} = {A0CFCC93-946E-4A67-9F7D-31147930FAA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05755AEA-DE87-4722-B840-88ED13E2530B}

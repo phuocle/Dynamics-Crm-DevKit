@@ -102,7 +102,7 @@ namespace DynamicsCrm.DevKit.SdkLogin
             // Check to see if its possible to do an Auto Login
             if (!mgr.RequireUserLogin())
             {
-                if (MessageBox.Show("Credentials already saved in configuration\nChoose Yes to Auto Login or No to Reset Credentials", "Auto Login", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MessageBox.Show("Credentials already saved in configuration\nChoose Yes to Auto Login or No to Reset Credentials", "DynamicsCrm.DevKit - Auto Login", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     // If RequireUserLogin is false, it means that there has been a successful login here before and the credentials are cached.
                     CrmLoginCtrl.IsEnabled = false;
