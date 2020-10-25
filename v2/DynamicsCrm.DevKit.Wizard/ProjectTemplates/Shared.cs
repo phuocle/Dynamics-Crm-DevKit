@@ -45,7 +45,8 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
                 //Creating project ...
                 ProjectName = form.ProjectName;
-                if(Utility.ExistProject(DTE, ProjectName))
+                replacementsDictionary.Add("$Check$", form.Check);
+                if (Utility.ExistProject(DTE, ProjectName))
                 {
                     MessageBox.Show($@"{ProjectName} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     throw new WizardCancelledException();

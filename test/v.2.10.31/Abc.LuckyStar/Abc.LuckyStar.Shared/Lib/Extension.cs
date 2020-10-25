@@ -62,13 +62,13 @@ namespace Microsoft.Xrm.Sdk
                 x.EntityState,
                 x.ExtensionData,
                 x.FormattedValues,
-                x.HasLazyFileAttribute,
+                //x.HasLazyFileAttribute,
                 x.Id,
                 x.KeyAttributes,
-                x.LazyFileAttributeKey,
-                x.LazyFileAttributeValue,
-                x.LazyFileSizeAttributeKey,
-                x.LazyFileSizeAttributeValue,
+                //x.LazyFileAttributeKey,
+                //x.LazyFileAttributeValue,
+                //x.LazyFileSizeAttributeKey,
+                //x.LazyFileSizeAttributeValue,
                 x.LogicalName,
                 x.RowVersion,
                 ToEntityReference = x.ToEntityReference()
@@ -132,8 +132,8 @@ namespace Microsoft.Xrm.Sdk
                 OutputParameters = outputParameters,
                 PostEntityImages = postEntityImages,
                 PreEntityImages = preEntityImages,
-                IsAutoTransact = context.IsAutoTransact(),
-                IsWithinMainTransaction = context.IsWithinMainTransaction()                
+                //IsAutoTransact = context.IsAutoTransact(),
+                //IsWithinMainTransaction = context.IsWithinMainTransaction()                
             };
             tracingService.LogMessage(SimpleJson.SerializeObject(obj));
 #endif

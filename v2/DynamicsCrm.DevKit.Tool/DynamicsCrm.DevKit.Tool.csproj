@@ -42,8 +42,9 @@
     <Reference Include="CmdLine, Version=1.0.7.509, Culture=neutral, PublicKeyToken=e6ac9ead3d3b48e4, processorArchitecture=MSIL">
       <HintPath>..\packages\CmdLine.1.0.7.509\lib\net40-Client\CmdLine.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Coverage.Analysis">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\PrivateAssemblies\Microsoft.VisualStudio.Coverage.Analysis.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.Coverage.Analysis, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Microsoft.VisualStudio.Coverage.Analysis.dll</HintPath>
     </Reference>
     <Reference Include="NUglify, Version=1.9.9.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
       <HintPath>..\packages\NUglify.1.9.9\lib\net40\NUglify.dll</HintPath>
@@ -76,7 +77,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lib\Microsoft.VisualStudio.Coverage.Analysis.dll" />
+    <Content Include="lib\Microsoft.VisualStudio.Coverage.Analysis.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib\Microsoft.VisualStudio.Coverage.Interop.dll" />
     <Content Include="license\LICENSE.txt" />
   </ItemGroup>

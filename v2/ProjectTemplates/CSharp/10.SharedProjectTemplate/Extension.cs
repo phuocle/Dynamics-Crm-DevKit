@@ -139,17 +139,16 @@ namespace Microsoft.Xrm.Sdk
 #endif
         }
 
-        public static void DebugMessage(this ITracingService tracingService, string format, params object[] args)
+        public static void DebugMessage(this ITracingService tracingService, string message)
         {
 #if DEBUG
-            tracingService.LogMessage(format, args);
+            tracingService.LogMessage(message);
 #endif
         }
 
-        public static void LogMessage(this ITracingService tracingService, string format, params object[] args)
+        public static void LogMessage(this ITracingService tracingService, string message)
         {
-            string message = (args == null || args.Length == 0) ? format : string.Format(format, args);
-            tracingService.Trace("{0}: {1}", DateTime.Now.ToString("o"), message);
+            tracingService.Trace(message);
         }
 
         private static string CreateXml(string xml, string cookie, int page, int count)

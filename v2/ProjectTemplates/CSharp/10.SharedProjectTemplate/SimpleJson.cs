@@ -1901,7 +1901,8 @@ namespace $NameSpace$
             public static GetDelegate GetGetMethodByReflection(PropertyInfo propertyInfo)
             {
                 MethodInfo methodInfo = GetGetterMethodInfo(propertyInfo);
-                return delegate (object source) {
+                return delegate (object source) 
+                {
                     if (methodInfo.Name == "get_Item")
                         return null;
                     return methodInfo.Invoke(source, EmptyObjects);

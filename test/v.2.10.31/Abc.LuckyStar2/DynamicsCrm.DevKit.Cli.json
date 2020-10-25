@@ -1,15 +1,15 @@
-{
+﻿{
   "plugins": [
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
       "solution": "???",
       "includefiles": [
-        "???.Plugin.*.dll",
-        "???.CustomAction.*.dll"
+        "Abc.LuckyStar2.Plugin.*.dll",
+        "Abc.LuckyStar2.CustomAction.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "Abc.LuckyStar2.*.Test.dll"
       ]
     }
   ],
@@ -19,10 +19,10 @@
       "folder": "bin\\Debug",
       "solution": "???",
       "includefiles": [
-        "???.Workflow.*.dll"
+        "Abc.LuckyStar2.Workflow.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "Abc.LuckyStar2.*.Test.dll"
       ]
     }
   ],
@@ -71,10 +71,10 @@
       "folder": "bin\\Debug",
       "solution": "???",
       "includefiles": [
-        "???.DataProvider.*.dll"
+        "Abc.LuckyStar2.DataProvider.*.dll"
       ],
       "excludefiles": [
-        "???.*.Test.dll"
+        "Abc.LuckyStar2.*.Test.dll"
       ]
     }
   ],

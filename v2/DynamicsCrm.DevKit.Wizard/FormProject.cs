@@ -220,7 +220,8 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.ShowDialog() == DialogResult.Cancel) return;
             if (form.Check == "1")
             {
-                if (ProjectType == ProjectType.DataProvider)
+                if (ProjectType == ProjectType.Shared ||
+                    ProjectType == ProjectType.DataProvider)
                 {
                     var loginForm = new FormLogin9007();
                     loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
