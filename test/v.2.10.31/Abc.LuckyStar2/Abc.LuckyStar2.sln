@@ -3,12 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Abc.LuckyStar2.Shared", "Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.shproj", "{37490541-817C-45B6-A846-D66235180B8A}"
-EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{37490541-817c-45b6-a846-d66235180b8a}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
