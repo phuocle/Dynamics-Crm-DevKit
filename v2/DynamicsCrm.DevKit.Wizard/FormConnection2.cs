@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
@@ -178,6 +179,13 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             if (Check == "1")
             {
+                var executingAssembly = Assembly.GetExecutingAssembly();
+                var fInfo = new System.IO.FileInfo(executingAssembly.Location);
+                var checkFile = $"{fInfo.Directory.FullName}\\Microsoft.Xrm.Tooling.Ui.Styles.dll";
+                if (System.IO.File.Exists(checkFile))
+                {
+                    Assembly.LoadFrom(checkFile);
+                }
                 DialogResult = DialogResult.OK;
                 Close();
             }
