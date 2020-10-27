@@ -12,7 +12,8 @@
     Report,
     DataProvider,
     SolutionPackager,
-    Portal
+    Portal,
+    Default
 }
 
 public enum ItemType
@@ -29,6 +30,7 @@ public enum ItemType
     JsTest,
     ResourceString,
     JsForm2,
+    Default
 }
 
 public enum ParameterType

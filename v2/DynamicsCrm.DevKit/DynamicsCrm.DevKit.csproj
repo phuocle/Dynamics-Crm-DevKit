@@ -97,9 +97,9 @@
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
-    <ProjectReference Include="..\DynamicsCrm.DevKit.SdkLogin.9.0.0.7\DynamicsCrm.DevKit.SdkLogin.9.0.0.7.csproj">
-      <Project>{4FBFE8FA-4863-4F5F-BFDB-DD98BBAC3CEA}</Project>
-      <Name>DynamicsCrm.DevKit.SdkLogin.9.0.0.7</Name>
+    <ProjectReference Include="..\DynamicsCrm.DevKit.SdkLogin\DynamicsCrm.DevKit.SdkLogin.csproj">
+      <Project>{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}</Project>
+      <Name>DynamicsCrm.DevKit.SdkLogin</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>

@@ -19,6 +19,8 @@ namespace DynamicsCrm.DevKit.Wizard
         private DevKitCrmConfig Config = null;
         public IOrganizationService CrmService { get; private set; } = null;
         public CrmConnection CrmConnection { get; private set; }
+        private ProjectType ProjectType { get; set; }
+        private ItemType ItemType { get; set; }
         public string Check
         {
             get
@@ -28,9 +30,12 @@ namespace DynamicsCrm.DevKit.Wizard
             }
         }
 
-        public FormConnection2(DTE dte)
+        public FormConnection2(DTE dte, ProjectType projectType = ProjectType.Default, ItemType itemType = ItemType.Default)
         {
             InitializeComponent();
+
+            ProjectType = projectType;
+            ItemType = itemType;
 
             cboType.SelectedIndex = 3;
 
@@ -208,22 +213,31 @@ namespace DynamicsCrm.DevKit.Wizard
                     }
                     CrmConnection.Password = password;
                 }
-                if (CanConnect(CrmConnection))
+                if (ProjectType == ProjectType.Shared)
                 {
-                    if (CrmConnection.Type != "ClientSecret")
-                    {
-                        CrmConnection.Password = EncryptDecrypt.EncryptString(password);
-                    }
-                    Config.DefaultCrmConnection = cboConnection.Text;
-                    DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
                     DialogResult = DialogResult.OK;
                     Cursor = Cursors.Default;
                     Close();
                 }
                 else
                 {
-                    Cursor = Cursors.Default;
-                    MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (CanConnect(CrmConnection))
+                    {
+                        if (CrmConnection.Type != "ClientSecret")
+                        {
+                            CrmConnection.Password = EncryptDecrypt.EncryptString(password);
+                        }
+                        Config.DefaultCrmConnection = cboConnection.Text;
+                        DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
+                        DialogResult = DialogResult.OK;
+                        Cursor = Cursors.Default;
+                        Close();
+                    }
+                    else
+                    {
+                        Cursor = Cursors.Default;
+                        MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 EnabledControl(true);
             }

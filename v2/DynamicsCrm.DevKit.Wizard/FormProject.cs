@@ -216,14 +216,13 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void buttonConnection_Click(object sender, EventArgs e)
         {
-            var form = new FormConnection2(DTE);
+            var form = new FormConnection2(DTE, ProjectType);
             if (form.ShowDialog() == DialogResult.Cancel) return;
             if (form.Check == "1")
             {
-                if (ProjectType == ProjectType.Shared ||
-                    ProjectType == ProjectType.DataProvider)
+                if (ProjectType == ProjectType.DataProvider)
                 {
-                    var loginForm = new FormLogin9007();
+                    var loginForm = new FormLogin();
                     loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
                     loginForm.ShowDialog();
                     if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
@@ -253,7 +252,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
         {
-            if (sender is FormLogin9007 login)
+            if (sender is FormLogin login)
             {
                 login.Close();
             }
