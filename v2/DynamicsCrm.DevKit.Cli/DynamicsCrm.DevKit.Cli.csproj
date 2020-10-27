@@ -70,9 +70,7 @@
     <Compile Include="Tasks\TaskDownloadWebResource.cs" />
     <Compile Include="Tasks\TaskGenerator.cs" />
     <None Include="packages.config" />
-    <None Include="Tasks\TaskInitialize.cs" />
     <Compile Include="Tasks\TaskPlugin.cs" />
-    <None Include="Tasks\TaskPortal.cs" />
     <Compile Include="Tasks\TaskProxyType.cs" />
     <Compile Include="Tasks\TaskSolutionPackager.cs" />
     <Compile Include="Tasks\TaskWebResource.cs" />

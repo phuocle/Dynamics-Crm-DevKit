@@ -108,28 +108,42 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string CreateCommandArgs()
         {
             var command = new StringBuilder();
-            command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionString(arguments.Connection)}\" ");
+            if (arguments.SdkLogin.Length > 0 && arguments.SdkLogin.ToLower() == "yes")
+            {
+                command.Append("/interactivelogin ");
+            }
+            else
+            {
+                command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionString(arguments.Connection)}\" ");
+            }
             command.Append($"/nologo ");
-            command.Append($"/namespace:{json.@namespace} ");
+            command.Append($"/namespace:\"{json.@namespace}\" ");
             if (json.entities != null && json.entities.Length > 0)
             {
-                command.Append($"/codewriterfilter:DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions ");
+                command.Append($"/codewriterfilter:\"DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions\" ");
             }
-            command.Append($"/out:{json.output}");
+            command.Append($"/out:\"{json.output}\"");
             return command.ToString();
         }
 
         private string CreateCommandArgsLog()
         {
             var command = new StringBuilder();
-            command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionStringLog(arguments.Connection)}\" ");
+            if (arguments.SdkLogin.Length > 0 && arguments.SdkLogin.ToLower() == "yes")
+            {
+                command.Append("/interactivelogin ");
+            }
+            else
+            {
+                command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionStringLog(arguments.Connection)}\" ");
+            }
             if (json.entities != null && json.entities.Length > 0)
             {
-                command.Append($"/codewriterfilter:DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions ");
+                command.Append($"/codewriterfilter:\"DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions\" ");
             }
             command.Append($"/nologo ");
-            command.Append($"/namespace:{json.@namespace} ");
-            command.Append($"/out:{json.output}");
+            command.Append($"/namespace:\"{json.@namespace}\" ");
+            command.Append($"/out:\"{json.output}\"");
             return command.ToString();
         }
 

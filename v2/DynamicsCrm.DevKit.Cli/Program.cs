@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.10.31\Abc.LuckyStar\Abc.LuckyStar.WebResource\entities";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.10.31\Abc.LuckyStar2\Abc.LuckyStar2.ProxyTypes";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -136,10 +136,13 @@ namespace DynamicsCrm.DevKit.Cli
             }
             if (arguments.SdkLogin.Length > 0 && arguments.SdkLogin.ToLower() == "yes")
             {
-                if (!IsConnectedDynamics365BySdkLogin())
+                if (arguments.Type.ToLower() != "proxytypes")
                 {
-                    CliLog.WriteLine(CliLog.ColorError, $"SdkLogin failed !!!");
-                    return false;
+                    if (!IsConnectedDynamics365BySdkLogin())
+                    {
+                        CliLog.WriteLine(CliLog.ColorError, $"SdkLogin failed !!!");
+                        return false;
+                    }
                 }
             }
             else
@@ -150,7 +153,10 @@ namespace DynamicsCrm.DevKit.Cli
                     return false;
                 }
             }
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected: ", CliLog.ColorWhite, new Uri(CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority));
+            if (CrmServiceClient != null)
+            {
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected: ", CliLog.ColorWhite, new Uri(CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority));
+            }
             CliLog.WriteLine();
             return true;
         }
