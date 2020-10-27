@@ -213,7 +213,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     }
                     CrmConnection.Password = password;
                 }
-                if (ProjectType == ProjectType.Shared)
+                if (1 == 0)
                 {
                     DialogResult = DialogResult.OK;
                     Cursor = Cursors.Default;
