@@ -35,6 +35,14 @@ namespace DynamicsCrm.DevKit.Wizard
             InitializeComponent();
 
             ProjectType = projectType;
+
+            if (ProjectType == ProjectType.UiTest ||
+                ProjectType == ProjectType.Test)
+            {
+                chkCheck0.Enabled = false;
+                chkCheck1.Enabled = false;
+            }
+
             ItemType = itemType;
 
             cboType.SelectedIndex = 3;

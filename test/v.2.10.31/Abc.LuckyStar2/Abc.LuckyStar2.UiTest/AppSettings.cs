@@ -4,20 +4,20 @@ using System.Net;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 
-namespace $NameSpace$
+namespace Abc.LuckyStar2.UiTest
 {
     public static class AppSettings
     {
         public static IOrganizationService Service = InitializeIOrganizationService();
         private static string AuthType { get { return ConfigurationManager.AppSettings["AuthType"]; } }
         private static string Url { get { return ConfigurationManager.AppSettings["Url"]; } }
-        private static string $ClientId$ { get { return ConfigurationManager.AppSettings["$ClientId$"]; } }
-        private static string $ClientSecret$ { get { return ConfigurationManager.AppSettings["$ClientSecret$"]; } }
+        private static string ClientId { get { return ConfigurationManager.AppSettings["ClientId"]; } }
+        private static string ClientSecret { get { return ConfigurationManager.AppSettings["ClientSecret"]; } }
         private static string ConnectionString
         {
             get
             {
-                return $"AuthType={AuthType};Url={Url};$ClientId$={$ClientId$};$ClientSecret$={$ClientSecret$};";
+                return $"AuthType={AuthType};Url={Url};ClientId={ClientId};ClientSecret={ClientSecret};";
             }
         }
 
