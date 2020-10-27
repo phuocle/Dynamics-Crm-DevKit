@@ -17,5 +17,5 @@ set "sst1=!str1:%sstr%%sst0%=!"
 if "%sst1%" neq "" for /l %%i in (0,1,8189) do if "!sst1:~%%i,1!" neq "" set /a position+=1
 set /a "index=%position% + 27"
 set version=!MicrosoftCrmSdkCoreTools:~%index%,50!
-"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /sdklogin:"yes" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"proxytypes" /profile:"DEBUG" /version:"%version%"
+"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /sdklogin:"yes" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"proxytypes" /profile:"ALL" /version:"%version%"
 exit

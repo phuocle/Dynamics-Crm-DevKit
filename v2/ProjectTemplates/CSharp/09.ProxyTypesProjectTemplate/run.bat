@@ -18,5 +18,5 @@ if "%sst1%" neq "" for /l %%i in (0,1,8189) do if "!sst1:~%%i,1!" neq "" set /a 
 set /a "index=%position% + 27"
 set version=!MicrosoftCrmSdkCoreTools:~%index%,50!
 $if$($Check$==0)set CrmConnection="$CrmConnectionString$"
-"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"proxytypes" /profile:"DEBUG" /version:"%version%"$endif$$if$($Check$==1)"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /sdklogin:"yes" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"proxytypes" /profile:"DEBUG" /version:"%version%"$endif$
+"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"proxytypes" /profile:"ALL" /version:"%version%"$endif$$if$($Check$==1)"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /sdklogin:"yes" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"proxytypes" /profile:"ALL" /version:"%version%"$endif$
 exit

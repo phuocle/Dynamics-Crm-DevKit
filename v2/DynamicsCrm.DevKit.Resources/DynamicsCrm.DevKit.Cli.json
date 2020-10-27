@@ -161,7 +161,7 @@
   ],
   "proxytypes": [
     {
-      "profile": "DEBUG",
+      "profile": "ALL",
       "namespace": "???",
       "output": "GeneratedCode.cs",
       "entities":  ""

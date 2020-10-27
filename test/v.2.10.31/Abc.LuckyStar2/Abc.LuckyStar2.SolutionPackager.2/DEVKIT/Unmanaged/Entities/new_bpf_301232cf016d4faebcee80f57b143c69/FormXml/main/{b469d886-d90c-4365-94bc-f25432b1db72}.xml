@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{b469d886-d90c-4365-94bc-f25432b1db72}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{096b75e3-c69e-4858-bdce-ff46ee210150}" name="StageStep4" locklevel="0" expanded="true" visible="false" labelid="{1fb8092a-353e-4ba2-a306-7e3774e19c0f}">
+          <labels>
+            <label description="Stage 1" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{17208243-9981-49b8-8658-4181e75ccbde}" name="StageStep4_section1" labelid="{5092b9f9-4ee0-41bb-a00d-b102de0d7bc1}">
+                  <labels>
+                    <label description="Stage 1" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{cec1523e-d1b2-4c1b-8a89-fced647c4ac4}" showlabel="true" visible="true" labelid="{412283be-8333-4b5f-aae3-5240ad6289f6}">
+                        <labels>
+                          <label description="Account" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69:devkit_accountid" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="devkit_accountid" relationship="bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69" isrequired="true" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{30bda325-9d8f-405f-965d-28c1890e2411}" showlabel="true" visible="true" labelid="{2d15b00e-9b2d-46c7-af0d-e4496b8c4c4f}">
+                        <labels>
+                          <label description="Contact" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69:devkit_contactid" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="devkit_contactid" relationship="bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{292a3b1e-2995-4080-90c2-98d21d541cbc}" name="StageStep10" locklevel="0" expanded="true" visible="false" labelid="{8243b67a-d46c-4e52-8915-3f830be7a4ae}">
+          <labels>
+            <label description="Stage 2" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{c6ca471b-1894-5d92-9a23-edc5c40883ae}" name="StageStep10_section1" labelid="{b8236df8-40ff-4abb-b246-7cf21cc7a913}">
+                  <labels>
+                    <label description="Stage 2" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{84c8d54d-c44b-4e01-8bc4-fc8ec7f26d2a}" showlabel="true" visible="true" labelid="{497ac8ab-609b-4cd5-92ce-a5679ca24907}">
+                        <labels>
+                          <label description="Customer" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69:devkit_customerid" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="devkit_customerid" relationship="bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69" isrequired="true" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{886c6d2f-82ab-45d7-84fd-10b619ddec80}" name="StageStep14" locklevel="0" expanded="true" visible="false" labelid="{1a0e1d8f-63dd-4ec5-a596-d4ee4a82d2eb}">
+          <labels>
+            <label description="Stage 3" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{ec9a8f03-3c1c-0210-4da4-32b29bf25d62}" name="StageStep14_section1" labelid="{1199422e-a437-4864-8d92-f8cf15e9ba51}">
+                  <labels>
+                    <label description="Stage 3" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{05898e77-19f4-44f2-bda8-ee6efdac1c96}" showlabel="true" visible="true" labelid="{76a1939d-ba6c-462c-a102-f35c9c66b4a4}">
+                        <labels>
+                          <label description="Address 1: City" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_contact_new_bpf_301232cf016d4faebcee80f57b143c69:address1_city" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="address1_city" relationship="bpf_contact_new_bpf_301232cf016d4faebcee80f57b143c69" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{fafe9526-67a8-4309-81c6-555f0cfc1488}" showlabel="true" visible="true" labelid="{4d81439f-6a82-4aec-a07e-ee27474f1010}">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_contact_new_bpf_301232cf016d4faebcee80f57b143c69:ownerid" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="ownerid" relationship="bpf_contact_new_bpf_301232cf016d4faebcee80f57b143c69" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>
