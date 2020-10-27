@@ -41,14 +41,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar2.UiTest", "Ab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar2.2.UiTest", "Abc.LuckyStar2.2.UiTest\Abc.LuckyStar2.2.UiTest.csproj", "{D865C22A-7332-4F05-ABFB-1DEFABC74988}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar2.Plugin", "Abc.LuckyStar2.Plugin\Abc.LuckyStar2.Plugin.csproj", "{492FF4E5-A647-4ED3-8C53-217DBC22C0DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar2.Plugin.2", "Abc.LuckyStar2.Plugin.2\Abc.LuckyStar2.Plugin.2.csproj", "{964EA7C9-C987-4A73-A450-6C8527388B11}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{0cf6db22-f5d6-4f54-b8d4-a50d27771c6d}*SharedItemsImports = 4
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{1c2369a0-c642-4a2b-b980-c7b53f3df877}*SharedItemsImports = 4
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{32031a6b-3924-4e84-9587-1826e5153ecf}*SharedItemsImports = 4
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{42e07893-1f1e-46fa-a7f8-219a3ab64adf}*SharedItemsImports = 4
+		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{492ff4e5-a647-4ed3-8c53-217dbc22c0dc}*SharedItemsImports = 4
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{76555243-3ead-434a-9aa2-8d6347c6a412}*SharedItemsImports = 4
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{946a4b92-50a3-4d11-939d-a1622d40b65f}*SharedItemsImports = 4
+		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{964ea7c9-c987-4a73-a450-6c8527388b11}*SharedItemsImports = 4
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{a99ae673-ff05-4838-b2b9-e2c4392f6f1f}*SharedItemsImports = 4
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{c10fd336-3ded-40bb-b87f-ebe0396fda62}*SharedItemsImports = 4
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{d03defe6-a5e0-4b7c-a33e-ad6c879411fb}*SharedItemsImports = 13
@@ -118,6 +124,14 @@ Global
 		{D865C22A-7332-4F05-ABFB-1DEFABC74988}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D865C22A-7332-4F05-ABFB-1DEFABC74988}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D865C22A-7332-4F05-ABFB-1DEFABC74988}.Release|Any CPU.Build.0 = Release|Any CPU
+		{492FF4E5-A647-4ED3-8C53-217DBC22C0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{492FF4E5-A647-4ED3-8C53-217DBC22C0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{492FF4E5-A647-4ED3-8C53-217DBC22C0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{492FF4E5-A647-4ED3-8C53-217DBC22C0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{964EA7C9-C987-4A73-A450-6C8527388B11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{964EA7C9-C987-4A73-A450-6C8527388B11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{964EA7C9-C987-4A73-A450-6C8527388B11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{964EA7C9-C987-4A73-A450-6C8527388B11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
