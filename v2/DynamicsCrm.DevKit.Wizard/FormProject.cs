@@ -221,7 +221,8 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.Check == "1")
             {
                 if (ProjectType == ProjectType.DataProvider ||
-                    ProjectType == ProjectType.CustomAction)
+                    ProjectType == ProjectType.CustomAction ||
+                    ProjectType == ProjectType.Workflow)
                 {
                     var loginForm = new FormLogin();
                     loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
