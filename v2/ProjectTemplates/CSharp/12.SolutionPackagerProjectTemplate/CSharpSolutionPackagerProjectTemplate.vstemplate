@@ -16,6 +16,8 @@
     <EnableEditOfLocationField>false</EnableEditOfLocationField>
     <CreateInPlace>true</CreateInPlace>
     <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+    <LanguageTag>CSharp</LanguageTag>
+    <PlatformTag>Windows</PlatformTag>
   </TemplateData>
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">

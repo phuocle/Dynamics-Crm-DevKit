@@ -228,13 +228,6 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\05.WebResourceProjectTemplate\05.WebResourceProjectTemplate.csproj">
-      <Project>{AE2C2285-298E-47CD-80EB-11F44B9F3D42}</Project>
-      <Name>05.WebResourceProjectTemplate</Name>
-      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
     <ProjectReference Include="..\ProjectTemplates\CSharp\06.TestProjectTemplate\06.TestProjectTemplate.csproj">
       <Project>{547D1385-E9AA-47E5-A94B-D0B50719BBAB}</Project>
       <Name>06.TestProjectTemplate</Name>
