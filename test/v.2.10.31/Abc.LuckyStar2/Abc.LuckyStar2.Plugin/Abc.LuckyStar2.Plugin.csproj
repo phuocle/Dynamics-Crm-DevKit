@@ -53,6 +53,8 @@
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="Abc.LuckyStar2.Plugin.snk" />
+    <Compile Include="PostAccountCreateAsynchronous.cs" />
+    <Compile Include="PostAccountCreateAsynchronous2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -53,6 +53,8 @@
     <None Include="packages.config" />
     <None Include="Abc.LuckyStar2.CustomAction.snk" />
     <None Include="deploy.debug.bat" />
+    <Compile Include="PostAccountabc_UpdateAccountNumberSynchronous.cs" />
+    <Compile Include="PostNoneIsPaiEnabledSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

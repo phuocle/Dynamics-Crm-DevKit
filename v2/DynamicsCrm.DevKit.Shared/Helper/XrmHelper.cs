@@ -39,13 +39,14 @@ namespace DynamicsCrm.DevKit.Shared.Helper
   </entity>
 </fetch>";
             var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            var list = (from entity in rows.Entities
-                        select new XrmEntity
-                        {
-                            LogicalName = entity["name"].ToString(),
-                            Name = GetSchemaName(service, entity["primaryobjecttypecode"].ToString())
-                        }).ToList();
-
+            var list = new List<XrmEntity>();
+            foreach(var entity in rows.Entities)
+            {
+                list.Add(new XrmEntity {
+                    LogicalName = entity.GetAttributeValue<string>("name"),
+                    Name = GetSchemaName(service, entity.GetAttributeValue<string>("primaryobjecttypecode"))
+                });
+            }
             var json = SimpleJson.SerializeObject(list);
             return list
                 .Where(x => x.Name.ToLower() == "none")
@@ -55,7 +56,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
 
         private static string GetSchemaName(IOrganizationService service, string logicalName)
         {
-            if (logicalName == "none") return "None";
+            if (logicalName == null || logicalName == "none") return "None";
             var request = new RetrieveEntityRequest
             {
                 EntityFilters = EntityFilters.Entity,
