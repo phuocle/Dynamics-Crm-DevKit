@@ -290,6 +290,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name.Contains($".{ProjectType.Plugin.ToString()}.") ||
+                    project.Name.Contains($".{ProjectType.Plugin.ToString()}") ||
                     project.Name.Contains($".{ProjectType.Workflow.ToString()}.") ||
                     project.Name.EndsWith($".{ProjectType.Workflow.ToString()}") ||
                     project.Name.Contains($".{ProjectType.CustomAction.ToString()}.") ||

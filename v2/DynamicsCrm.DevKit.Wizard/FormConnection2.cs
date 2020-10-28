@@ -221,7 +221,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     }
                     CrmConnection.Password = password;
                 }
-                if (1 == 0)
+                if (ProjectType == ProjectType.Test)
                 {
                     DialogResult = DialogResult.OK;
                     Cursor = Cursors.Default;

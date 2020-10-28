@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar2.Plugin", "Ab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar2.Plugin.2", "Abc.LuckyStar2.Plugin.2\Abc.LuckyStar2.Plugin.2.csproj", "{964EA7C9-C987-4A73-A450-6C8527388B11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abc.LuckyStar2.Plugin.Test", "Abc.LuckyStar2.Plugin.Test\Abc.LuckyStar2.Plugin.Test.csproj", "{5EE27A22-03E1-4B24-A81C-85CD998A75BF}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems*{0cf6db22-f5d6-4f54-b8d4-a50d27771c6d}*SharedItemsImports = 4
@@ -132,6 +134,10 @@ Global
 		{964EA7C9-C987-4A73-A450-6C8527388B11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{964EA7C9-C987-4A73-A450-6C8527388B11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{964EA7C9-C987-4A73-A450-6C8527388B11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EE27A22-03E1-4B24-A81C-85CD998A75BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EE27A22-03E1-4B24-A81C-85CD998A75BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EE27A22-03E1-4B24-A81C-85CD998A75BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EE27A22-03E1-4B24-A81C-85CD998A75BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
