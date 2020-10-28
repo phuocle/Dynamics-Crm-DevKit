@@ -406,7 +406,7 @@ namespace DynamicsCrm.DevKit.Shared
             Project projectWithoutTest = null;
             foreach (Project p in GetProjects(dte.Solution))
             {
-                if ($"{p.Name}.Test" == "Abc.LuckyStar.DataProvider.Test"/*project.Name*/)
+                if ($"{p.Name}.Test" == project.Name)
                 {
                     projectWithoutTest = p;
                     break;
