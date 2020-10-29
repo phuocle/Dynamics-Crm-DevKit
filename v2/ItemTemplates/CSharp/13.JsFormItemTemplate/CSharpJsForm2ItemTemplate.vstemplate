@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>13. JavaScript Form (NEW)</Name>
+    <Name>07. JavaScript Form</Name>
     <Description>JavaScript Form Template</Description>
     <Icon>icon.png</Icon>
-    <TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000013</TemplateID>
+    <TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000007</TemplateID>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>Visual C#</ProjectSubType>
     <AppliesTo>CSharp</AppliesTo>

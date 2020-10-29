@@ -12,6 +12,8 @@ using System.IO;
 using System.Linq;
 using System.Drawing;
 using Microsoft.Xrm.Sdk;
+using DynamicsCrm.DevKit.SdkLogin;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -186,13 +188,42 @@ namespace DynamicsCrm.DevKit.Wizard
             DialogResult = DialogResult.Cancel;
         }
 
+        private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        {
+            if (sender is FormLogin login)
+            {
+                login.Close();
+            }
+        }
+
         private void buttonConnection_Click(object sender, EventArgs e)
         {
             var form = new FormConnection2(DTE);
             if (form.ShowDialog() == DialogResult.Cancel) return;
 
-            CrmConnection = form.CrmConnection;
-            CrmService = form.CrmService;
+            if (form.Check == "1")
+            {
+                var loginForm = new FormLogin();
+                loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                loginForm.ShowDialog();
+                if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+                {
+                    if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
+                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
+                    else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
+                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
+                    else
+                        throw new WizardCancelledException();
+                    CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
+                }
+                else
+                    throw new WizardCancelledException();
+            }
+            else
+            {
+                CrmConnection = form.CrmConnection;
+                CrmService = form.CrmService;
+            }
 
             buttonOk.Enabled = true;
             comboBoxCrmName.Enabled = true;

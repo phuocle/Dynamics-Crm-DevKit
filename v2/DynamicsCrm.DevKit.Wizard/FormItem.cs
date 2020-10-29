@@ -326,7 +326,10 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.ShowDialog() == DialogResult.Cancel) return;
             if (form.Check == "1")
             {
-                if (ItemType == ItemType.LateBound)
+                if (ItemType == ItemType.LateBound ||
+                    ItemType == ItemType.JsWebApi ||
+                    ItemType == ItemType.JsTest ||
+                    ItemType == ItemType.ResourceString)
                 {
                     var loginForm = new FormLogin();
                     loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
