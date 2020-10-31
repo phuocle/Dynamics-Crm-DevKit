@@ -121,10 +121,10 @@
             // 
             this.checkBoxDebug.AutoSize = true;
             this.checkBoxDebug.Enabled = false;
-            this.checkBoxDebug.Location = new System.Drawing.Point(309, 33);
+            this.checkBoxDebug.Location = new System.Drawing.Point(309, 35);
             this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDebug.Name = "checkBoxDebug";
-            this.checkBoxDebug.Size = new System.Drawing.Size(64, 17);
+            this.checkBoxDebug.Size = new System.Drawing.Size(75, 20);
             this.checkBoxDebug.TabIndex = 5;
             this.checkBoxDebug.Text = "DEBUG";
             this.checkBoxDebug.UseVisualStyleBackColor = true;
@@ -174,9 +174,9 @@
             this.labelCrmName.Location = new System.Drawing.Point(6, 64);
             this.labelCrmName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCrmName.Name = "labelCrmName";
-            this.labelCrmName.Size = new System.Drawing.Size(77, 13);
+            this.labelCrmName.Size = new System.Drawing.Size(35, 16);
             this.labelCrmName.TabIndex = 3;
-            this.labelCrmName.Text = "Dynamics Crm:";
+            this.labelCrmName.Text = "Crm:";
             // 
             // labelItemName
             // 
@@ -184,7 +184,7 @@
             this.labelItemName.Location = new System.Drawing.Point(101, 33);
             this.labelItemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItemName.Name = "labelItemName";
-            this.labelItemName.Size = new System.Drawing.Size(0, 13);
+            this.labelItemName.Size = new System.Drawing.Size(0, 16);
             this.labelItemName.TabIndex = 2;
             // 
             // textItemName
@@ -193,7 +193,7 @@
             this.textItemName.Location = new System.Drawing.Point(101, 12);
             this.textItemName.Margin = new System.Windows.Forms.Padding(2);
             this.textItemName.Name = "textItemName";
-            this.textItemName.Size = new System.Drawing.Size(272, 20);
+            this.textItemName.Size = new System.Drawing.Size(272, 22);
             this.textItemName.TabIndex = 1;
             this.textItemName.TextChanged += new System.EventHandler(this.textItemName_TextChanged);
             // 
@@ -203,7 +203,7 @@
             this.labelItem.Location = new System.Drawing.Point(6, 14);
             this.labelItem.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItem.Name = "labelItem";
-            this.labelItem.Size = new System.Drawing.Size(61, 13);
+            this.labelItem.Size = new System.Drawing.Size(76, 16);
             this.labelItem.TabIndex = 0;
             this.labelItem.Text = "Item Name:";
             // 
@@ -241,7 +241,7 @@
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.link);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

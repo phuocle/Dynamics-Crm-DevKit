@@ -68,7 +68,7 @@
             this.labelCrmConnection.Location = new System.Drawing.Point(8, 21);
             this.labelCrmConnection.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCrmConnection.Name = "labelCrmConnection";
-            this.labelCrmConnection.Size = new System.Drawing.Size(103, 13);
+            this.labelCrmConnection.Size = new System.Drawing.Size(128, 16);
             this.labelCrmConnection.TabIndex = 9;
             this.labelCrmConnection.Text = "Saved Connections:";
             // 
@@ -88,10 +88,10 @@
             this.cboConnection.DisplayMember = "Name";
             this.cboConnection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboConnection.FormattingEnabled = true;
-            this.cboConnection.Location = new System.Drawing.Point(115, 18);
+            this.cboConnection.Location = new System.Drawing.Point(164, 18);
             this.cboConnection.Margin = new System.Windows.Forms.Padding(2);
             this.cboConnection.Name = "cboConnection";
-            this.cboConnection.Size = new System.Drawing.Size(305, 21);
+            this.cboConnection.Size = new System.Drawing.Size(256, 21);
             this.cboConnection.TabIndex = 7;
             // 
             // groupBoxConnection
@@ -126,10 +126,10 @@
             "IFD",
             "Office365",
             "ClientSecret"});
-            this.cboType.Location = new System.Drawing.Point(88, 42);
+            this.cboType.Location = new System.Drawing.Point(98, 42);
             this.cboType.Margin = new System.Windows.Forms.Padding(2);
             this.cboType.Name = "cboType";
-            this.cboType.Size = new System.Drawing.Size(147, 21);
+            this.cboType.Size = new System.Drawing.Size(197, 21);
             this.cboType.TabIndex = 10;
             // 
             // labelType
@@ -138,16 +138,16 @@
             this.labelType.Location = new System.Drawing.Point(4, 45);
             this.labelType.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelType.Name = "labelType";
-            this.labelType.Size = new System.Drawing.Size(31, 13);
+            this.labelType.Size = new System.Drawing.Size(40, 16);
             this.labelType.TabIndex = 9;
             this.labelType.Text = "Type";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(88, 14);
+            this.txtName.Location = new System.Drawing.Point(98, 14);
             this.txtName.Margin = new System.Windows.Forms.Padding(2);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(147, 20);
+            this.txtName.Size = new System.Drawing.Size(197, 22);
             this.txtName.TabIndex = 8;
             // 
             // labelName
@@ -156,7 +156,7 @@
             this.labelName.Location = new System.Drawing.Point(4, 17);
             this.labelName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(35, 13);
+            this.labelName.Size = new System.Drawing.Size(45, 16);
             this.labelName.TabIndex = 7;
             this.labelName.Text = "Name";
             // 
@@ -173,11 +173,11 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(86, 127);
+            this.txtPassword.Location = new System.Drawing.Point(98, 127);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(2);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(209, 20);
+            this.txtPassword.Size = new System.Drawing.Size(197, 22);
             this.txtPassword.TabIndex = 3;
             // 
             // labelPassword
@@ -186,16 +186,16 @@
             this.labelPassword.Location = new System.Drawing.Point(4, 130);
             this.labelPassword.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(73, 13);
+            this.labelPassword.Size = new System.Drawing.Size(90, 16);
             this.labelPassword.TabIndex = 6;
             this.labelPassword.Text = "Client Secrect";
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(88, 99);
+            this.txtUserName.Location = new System.Drawing.Point(98, 99);
             this.txtUserName.Margin = new System.Windows.Forms.Padding(2);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(207, 20);
+            this.txtUserName.Size = new System.Drawing.Size(197, 22);
             this.txtUserName.TabIndex = 2;
             // 
             // labelUserName
@@ -204,16 +204,16 @@
             this.labelUserName.Location = new System.Drawing.Point(4, 102);
             this.labelUserName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelUserName.Name = "labelUserName";
-            this.labelUserName.Size = new System.Drawing.Size(45, 13);
+            this.labelUserName.Size = new System.Drawing.Size(55, 16);
             this.labelUserName.TabIndex = 3;
             this.labelUserName.Text = "Client Id";
             // 
             // txtUrl
             // 
-            this.txtUrl.Location = new System.Drawing.Point(88, 71);
+            this.txtUrl.Location = new System.Drawing.Point(98, 71);
             this.txtUrl.Margin = new System.Windows.Forms.Padding(2);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(318, 20);
+            this.txtUrl.Size = new System.Drawing.Size(308, 22);
             this.txtUrl.TabIndex = 1;
             // 
             // labelUrl
@@ -222,7 +222,7 @@
             this.labelUrl.Location = new System.Drawing.Point(4, 74);
             this.labelUrl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelUrl.Name = "labelUrl";
-            this.labelUrl.Size = new System.Drawing.Size(20, 13);
+            this.labelUrl.Size = new System.Drawing.Size(25, 16);
             this.labelUrl.TabIndex = 0;
             this.labelUrl.Text = "Url";
             // 
@@ -245,10 +245,10 @@
             this.chkCheck0.AutoSize = true;
             this.chkCheck0.Checked = true;
             this.chkCheck0.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCheck0.Location = new System.Drawing.Point(10, 0);
+            this.chkCheck0.Location = new System.Drawing.Point(0, 0);
             this.chkCheck0.Margin = new System.Windows.Forms.Padding(2);
             this.chkCheck0.Name = "chkCheck0";
-            this.chkCheck0.Size = new System.Drawing.Size(135, 17);
+            this.chkCheck0.Size = new System.Drawing.Size(160, 20);
             this.chkCheck0.TabIndex = 13;
             this.chkCheck0.Text = "ClientId / ClientSecrect";
             this.chkCheck0.UseVisualStyleBackColor = true;
@@ -257,10 +257,10 @@
             // chkCheck1
             // 
             this.chkCheck1.AutoSize = true;
-            this.chkCheck1.Location = new System.Drawing.Point(19, 229);
+            this.chkCheck1.Location = new System.Drawing.Point(9, 230);
             this.chkCheck1.Margin = new System.Windows.Forms.Padding(2);
             this.chkCheck1.Name = "chkCheck1";
-            this.chkCheck1.Size = new System.Drawing.Size(139, 17);
+            this.chkCheck1.Size = new System.Drawing.Size(167, 20);
             this.chkCheck1.TabIndex = 13;
             this.chkCheck1.Text = "OOB SDK Control Login";
             this.chkCheck1.UseVisualStyleBackColor = true;
@@ -275,7 +275,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
