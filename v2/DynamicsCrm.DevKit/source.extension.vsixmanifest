@@ -6,12 +6,12 @@
         <Identity Id="PL.DynamicsCrm.DevKit.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="2.10.31" Language="en-US"
                   Publisher="PhuocLe" />
         <DisplayName>DynamicsCrm.DevKit</DisplayName>
-        <Description xml:space="preserve">A collection of projects / items template for develop Dynamics 365 CRM/CDS (Oct-31-2020)</Description>
+        <Description xml:space="preserve">A collection of projects/items template for develop Dynamics 365 CRM/CDS (Oct-31-2020)</Description>
         <MoreInfo>https://github.com/phuocle/Dynamics-Crm-DevKit</MoreInfo>
         <License>License.txt</License>
         <Icon>icon.png</Icon>
         <PreviewImage>icon.png</PreviewImage>
-        <Tags>Dynamics; Dynamics 365; Dynamics CRM; Tool; JavaScript</Tags>
+        <Tags>Dynamics; Dynamics 365; Dynamics CRM; Tool; JavaScript; CDS</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[15.0,17.0]" />
