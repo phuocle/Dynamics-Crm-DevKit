@@ -250,6 +250,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetProjectNetVersion(string comboboxCrmName)
         {
+            if (comboboxCrmName.Length == 0) return comboboxCrmName;
             return comboboxCrmName.Split("-".ToCharArray())[1].Trim();
         }
 

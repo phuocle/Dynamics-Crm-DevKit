@@ -269,6 +269,7 @@ namespace DynamicsCrm.DevKit.Wizard
         private void chkCheck1_CheckedChanged(object sender, EventArgs e)
         {
             chkCheck0.Checked = !chkCheck1.Checked;
+            btnOk.Enabled = true;
         }
     }
 }

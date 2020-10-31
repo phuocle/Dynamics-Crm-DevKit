@@ -29,6 +29,7 @@ namespace DynamicsCrm.DevKit.Wizard
             get
             {
                 var crmName = Utility.GetCrmName(comboBoxCrmName.Text);
+                if (crmName.Length == 0) return crmName;
                 return crmName.Substring(crmName.LastIndexOf(" ")).Trim();
             }
         }
