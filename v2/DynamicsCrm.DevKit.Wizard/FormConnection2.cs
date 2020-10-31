@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
@@ -18,39 +19,44 @@ namespace DynamicsCrm.DevKit.Wizard
         private DevKitCrmConfig Config = null;
         public IOrganizationService CrmService { get; private set; } = null;
         public CrmConnection CrmConnection { get; private set; }
-
-        public FormConnection2(DTE dte)
+        private ProjectType ProjectType { get; set; }
+        private ItemType ItemType { get; set; }
+        public string Check
         {
-            InitializeComponent();
-
-            //Font = SystemFonts.DefaultFont;
-
-            Text += Const.Version;
-            DTE = dte;
-            LoadConnections();
+            get
+            {
+                if (chkCheck0.Checked) return "0";
+                return "1";
+            }
         }
 
-        private void cboType_SelectedIndexChanged(object sender, EventArgs e)
+        public FormConnection2(DTE dte, ProjectType projectType = ProjectType.Default, ItemType itemType = ItemType.Default)
         {
-            switch (cboType.SelectedIndex)
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var fInfo = new System.IO.FileInfo(executingAssembly.Location);
+            var checkFile = $"{fInfo.Directory.FullName}\\Microsoft.Xrm.Tooling.Ui.Styles.dll";
+            if (System.IO.File.Exists(checkFile))
             {
-                case 0: //On-premises
-                case 1: //IFD
-                    labelUserName.Text = "User Name";
-                    labelPassword.Text = "Password";
-                    txtPassword.PasswordChar = '*';
-                    break;
-                case 2: //Office365
-                    labelUserName.Text = "Email";
-                    labelPassword.Text = "Password";
-                    txtPassword.PasswordChar = '*';
-                    break;
-                case 3: //Client Secrect
-                    labelUserName.Text = "Client Id";
-                    labelPassword.Text = "Client Secrect";
-                    txtPassword.PasswordChar = '\0';
-                    break;
+                Assembly.LoadFrom(checkFile);
             }
+
+            InitializeComponent();
+
+            ProjectType = projectType;
+
+            if (ProjectType == ProjectType.UiTest ||
+                ProjectType == ProjectType.Test)
+            {
+                chkCheck0.Enabled = false;
+                chkCheck1.Enabled = false;
+            }
+
+            ItemType = itemType;
+
+            cboType.SelectedIndex = 3;
+
+            DTE = dte;
+            LoadConnections();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -192,41 +198,78 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
-            EnabledControl(false);
-
-            CrmConnection = (CrmConnection)cboConnection.SelectedValue;
-            var password = string.Empty;
-            if (CrmConnection.Type != "ClientSecret")
+            if (Check == "1")
             {
-                try
+                var executingAssembly = Assembly.GetExecutingAssembly();
+                var fInfo = new System.IO.FileInfo(executingAssembly.Location);
+                var checkFile = $"{fInfo.Directory.FullName}\\Microsoft.Xrm.Tooling.Ui.Styles.dll";
+                if (System.IO.File.Exists(checkFile))
                 {
-                    password = EncryptDecrypt.DecryptString(CrmConnection.Password);
+                    Assembly.LoadFrom(checkFile);
                 }
-                catch
-                {
-                    password = CrmConnection.Password;
-                }
-                CrmConnection.Password = password;
-            }
-            if (CanConnect(CrmConnection))
-            {
-                if (CrmConnection.Type != "ClientSecret")
-                {
-                    CrmConnection.Password = EncryptDecrypt.EncryptString(password);
-                }
-                Config.DefaultCrmConnection = cboConnection.Text;
-                DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
                 DialogResult = DialogResult.OK;
-                Cursor = Cursors.Default;
                 Close();
             }
             else
             {
-                Cursor = Cursors.Default;
-                MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Cursor = Cursors.WaitCursor;
+                EnabledControl(false);
+
+                CrmConnection = (CrmConnection)cboConnection.SelectedValue;
+                var password = string.Empty;
+                if (CrmConnection.Type != "ClientSecret")
+                {
+                    try
+                    {
+                        password = EncryptDecrypt.DecryptString(CrmConnection.Password);
+                    }
+                    catch
+                    {
+                        password = CrmConnection.Password;
+                    }
+                    CrmConnection.Password = password;
+                }
+                if (ProjectType == ProjectType.Test)
+                {
+                    DialogResult = DialogResult.OK;
+                    Cursor = Cursors.Default;
+                    Close();
+                }
+                else
+                {
+                    if (CanConnect(CrmConnection))
+                    {
+                        if (CrmConnection.Type != "ClientSecret")
+                        {
+                            CrmConnection.Password = EncryptDecrypt.EncryptString(password);
+                        }
+                        Config.DefaultCrmConnection = cboConnection.Text;
+                        DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
+                        DialogResult = DialogResult.OK;
+                        Cursor = Cursors.Default;
+                        Close();
+                    }
+                    else
+                    {
+                        Cursor = Cursors.Default;
+                        MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                EnabledControl(true);
             }
-            EnabledControl(true);
+        }
+
+        private void chkCheck0_CheckedChanged(object sender, EventArgs e)
+        {
+            chkCheck1.Checked = !chkCheck0.Checked;
+            cboConnection.Enabled = chkCheck0.Checked;
+            groupBoxConnection.Enabled = chkCheck0.Checked;
+        }
+
+        private void chkCheck1_CheckedChanged(object sender, EventArgs e)
+        {
+            chkCheck0.Checked = !chkCheck1.Checked;
+            btnOk.Enabled = true;
         }
     }
 }

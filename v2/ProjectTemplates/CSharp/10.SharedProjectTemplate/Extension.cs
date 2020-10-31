@@ -53,18 +53,102 @@ namespace Microsoft.Xrm.Sdk
             }
             return lists;
         }
-
-        public static void DebugMessage(this ITracingService tracingService, string format, params object[] args)
-        {
 #if DEBUG
-            tracingService.LogMessage(format, args);
+        private static object EntityToObject(Entity x)
+        {
+            return new
+            {
+                x.Attributes,
+                x.EntityState,
+                x.ExtensionData,
+                x.FormattedValues,
+                x.HasLazyFileAttribute,
+                x.Id,
+                x.KeyAttributes,
+                x.LazyFileAttributeKey,
+                x.LazyFileAttributeValue,
+                x.LazyFileSizeAttributeKey,
+                x.LazyFileSizeAttributeValue,
+                x.LogicalName,
+                x.RowVersion,
+                ToEntityReference = x.ToEntityReference()
+            };
+        }
+
+        public static void DebugContext(this ITracingService tracingService, IPluginExecutionContext context)
+        {
+
+            var preEntityImages = context.PreEntityImages == null ? null : context.PreEntityImages.Values.Select(x => EntityToObject(x));
+            var postEntityImages = context.PostEntityImages == null ? null : context.PostEntityImages.Values.Select(x => EntityToObject(x));
+            var inputParameters = new Dictionary<string, object>();
+            foreach(var key in context.InputParameters.Keys)
+            {
+                if (context.InputParameters[key] is Entity x)
+                {
+                    inputParameters.Add(key, EntityToObject(x));
+                }
+                else
+                {
+                    inputParameters.Add(key, context.InputParameters[key]);
+                }
+            }
+            var outputParameters = new Dictionary<string, object>();
+            foreach (var key in context.OutputParameters.Keys)
+            {
+                if (context.OutputParameters[key] is Entity x)
+                {
+                    outputParameters.Add(key, EntityToObject(x));
+                }
+                else
+                {
+                    outputParameters.Add(key, context.OutputParameters[key]);
+                }
+            }
+            var obj = new
+            {
+                context.BusinessUnitId,
+                context.CorrelationId,
+                context.Depth,
+                context.InitiatingUserId,
+                context.IsExecutingOffline,
+                context.IsInTransaction,
+                context.IsOfflinePlayback,
+                context.IsolationMode,
+                context.MessageName,
+                context.Mode,
+                context.OperationCreatedOn,
+                context.OperationId,
+                context.OrganizationId,
+                context.OrganizationName,
+                context.OwningExtension,
+                context.PrimaryEntityId,
+                context.PrimaryEntityName,
+                context.RequestId,
+                context.SecondaryEntityName,
+                context.SharedVariables,
+                context.Stage,
+                context.UserId,
+                InputParameters = inputParameters,
+                OutputParameters = outputParameters,
+                PostEntityImages = postEntityImages,
+                PreEntityImages = preEntityImages,
+                IsAutoTransact = context.IsAutoTransact(),
+                IsWithinMainTransaction = context.IsWithinMainTransaction()
+            };
+            tracingService.LogMessage(SimpleJson.SerializeObject(obj));
 #endif
         }
 
-        public static void LogMessage(this ITracingService tracingService, string format, params object[] args)
+        public static void DebugMessage(this ITracingService tracingService, string message)
         {
-            string message = (args == null || args.Length == 0) ? format : string.Format(format, args);
-            tracingService.Trace("{0}: {1}", DateTime.Now.ToString("o"), message);
+#if DEBUG
+            tracingService.LogMessage(message);
+#endif
+        }
+
+        public static void LogMessage(this ITracingService tracingService, string message)
+        {
+            tracingService.Trace(message);
         }
 
         private static string CreateXml(string xml, string cookie, int page, int count)

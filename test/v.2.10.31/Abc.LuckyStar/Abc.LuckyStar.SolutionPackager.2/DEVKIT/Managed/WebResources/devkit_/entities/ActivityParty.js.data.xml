@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{7db799b7-fd0d-eb11-a813-000d3a80cee2}</WebResourceId>
+  <Name>devkit_/entities/ActivityParty.js</Name>
+  <DisplayName>devkit_/entities/ActivityParty.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="devkit_/entities/ActivityParty.webapi.js" displayName="devkit_/entities/ActivityParty.webapi.js" languagecode="" description="1.0.0.0" libraryUniqueId="{ee24c9d5-956f-4b03-acd2-bef2819df3e0}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/devkit_entitiesActivityPartyjs7DB799B7-FD0D-EB11-A813-000D3A80CEE2</FileName>
+</WebResource>

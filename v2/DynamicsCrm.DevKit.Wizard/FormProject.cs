@@ -9,6 +9,8 @@ using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Drawing;
 using Microsoft.Xrm.Sdk;
+using DynamicsCrm.DevKit.SdkLogin;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -27,6 +29,7 @@ namespace DynamicsCrm.DevKit.Wizard
             get
             {
                 var crmName = Utility.GetCrmName(comboBoxCrmName.Text);
+                if (crmName.Length == 0) return crmName;
                 return crmName.Substring(crmName.LastIndexOf(" ")).Trim();
             }
         }
@@ -60,6 +63,7 @@ namespace DynamicsCrm.DevKit.Wizard
             }
         }
         public string ComboBoxCrmName => comboBoxCrmName.Text;
+        public string Check { get; set; } = "0";
 
         public DTE DTE { get; }
         private ProjectType _projectType;
@@ -149,12 +153,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
-            Font = SystemFonts.DefaultFont;
-            this.AutoScaleMode = AutoScaleMode.Font;
-
             progressBar.Visible = false;
-
-            Text += Const.Version;
 
             DTE = dte;
             ProjectType = projectType;
@@ -218,15 +217,50 @@ namespace DynamicsCrm.DevKit.Wizard
 
         private void buttonConnection_Click(object sender, EventArgs e)
         {
-            var form = new FormConnection2(DTE);
+            var form = new FormConnection2(DTE, ProjectType);
             if (form.ShowDialog() == DialogResult.Cancel) return;
-
-            CrmConnection = form.CrmConnection;
-            CrmService = form.CrmService;
-
+            if (form.Check == "1")
+            {
+                if (ProjectType == ProjectType.DataProvider ||
+                    ProjectType == ProjectType.CustomAction ||
+                    ProjectType == ProjectType.Workflow ||
+                    ProjectType == ProjectType.Report ||
+                    ProjectType == ProjectType.Plugin)
+                {
+                    var loginForm = new FormLogin();
+                    loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                    loginForm.ShowDialog();
+                    if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+                    {
+                        if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
+                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
+                        else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
+                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
+                        else
+                            throw new WizardCancelledException();
+                        CrmConnection = new CrmConnection {Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
+                    }
+                    else
+                        throw new WizardCancelledException();
+                }
+            }
+            else
+            {
+                CrmConnection = form.CrmConnection;
+                CrmService = form.CrmService;
+            }
+            Check = form.Check;
             buttonOk.Enabled = true;
             comboBoxCrmName.Enabled = true;
             CheckFormByFormType();
+        }
+
+        private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        {
+            if (sender is FormLogin login)
+            {
+                login.Close();
+            }
         }
 
         private void CheckFormByFormType()
@@ -416,13 +450,13 @@ namespace DynamicsCrm.DevKit.Wizard
                 temp = temp.Replace("..", ".");
                 labelProjectName.Text = temp;
             }
-            else if (ProjectType == ProjectType.Report)
-            {
-                var temp = $@"{text}.Report";
-                if (temp.StartsWith("."))
-                    temp = temp.Substring(1);
-                labelProjectName.Text = temp;
-            }
+            //else if (ProjectType == ProjectType.Report)
+            //{
+            //        var temp = $@"{text}.Report";
+            //    if (temp.StartsWith("."))
+            //        temp = temp.Substring(1);
+            //    labelProjectName.Text = temp;
+            //}
             else
             {
                 var temp = $@"{labelProjectName.Tag}.{text}";

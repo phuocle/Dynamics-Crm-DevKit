@@ -7,13 +7,12 @@ using EnvDTE;
 using NUglify;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Text;
+using Microsoft.CSharp;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public static class Utility
     {
-        //private const string IndentString = "  ";
-
         public static void TryDeleteDirectory(string directory)
         {
             if (Directory.Exists(directory))
@@ -95,34 +94,10 @@ namespace DynamicsCrm.DevKit.Shared
             return code + devKit;
         }
 
-        //public static string FormatJson(string json)
-        //{
-        //    var indentation = 0;
-        //    var quoteCount = 0;
-        //    var result =
-        //        from ch in json
-        //        let quotes = ch == '"' ? quoteCount++ : quoteCount
-        //        let lineBreak = ch == ',' && quotes % 2 == 0
-        //            ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, indentation))
-        //            : null
-        //        let openChar = ch == '{' || ch == '['
-        //            ? ch + Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, ++indentation))
-        //            : ch.ToString()
-        //        let closeChar = ch == '}' || ch == ']'
-        //            ? Environment.NewLine + string.Concat(Enumerable.Repeat(IndentString, --indentation)) + ch
-        //            : ch.ToString()
-        //        select lineBreak ?? (openChar.Length > 1
-        //                   ? openChar
-        //                   : closeChar);
-
-        //    var @return = string.Concat(result);
-        //    @return = @return.Replace("\":[", "\": [").Replace("\":\"", "\": \"");
-        //    return @return;
-        //}
-
         public static bool ExistProject(DTE dte, string projectName)
         {
-            foreach (Project project in dte.Solution.Projects)
+            var projects = GetProjects(dte.Solution);
+            foreach (Project project in projects)
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name == projectName) return true;
@@ -130,9 +105,22 @@ namespace DynamicsCrm.DevKit.Shared
             return false;
         }
 
+        private static List<Project> GetProjects(Solution sln)
+        {
+            List<Project> list = new List<Project>();
+            if (sln == null) return list;
+            list.AddRange(sln.Projects.Cast<Project>());
+
+            for (int i = 0; i < list.Count; i++)
+                list.AddRange(list[i].ProjectItems.Cast<ProjectItem>().Select(x => x.SubProject).OfType<Project>());
+
+            return list;
+        }
+
         public static Project GetProject(DTE dte, string projectName)
         {
-            foreach (Project project in dte.Solution.Projects)
+            var projects = GetProjects(dte.Solution);
+            foreach (Project project in projects)
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name == projectName) return project;
@@ -262,6 +250,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetProjectNetVersion(string comboboxCrmName)
         {
+            if (comboboxCrmName.Length == 0) return comboboxCrmName;
             return comboboxCrmName.Split("-".ToCharArray())[1].Trim();
         }
 
@@ -287,7 +276,7 @@ namespace DynamicsCrm.DevKit.Shared
             return string.Join(".", items);
         }
 
-        private static bool IsAddedTestProject(Projects projects, string projectName)
+        private static bool IsAddedTestProject(List<Project> projects, string projectName)
         {
             foreach (Project project in projects)
                 if (project.Name == projectName)
@@ -297,11 +286,13 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static List<string> GetAllProjectForTesting(DTE dte)
         {
-            var projects = new List<string>();
-            foreach (Project project in dte.Solution.Projects)
+            var lists = new List<string>();
+            var projects = GetProjects(dte.Solution);
+            foreach (Project project in projects)
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
                 if (project.Name.Contains($".{ProjectType.Plugin.ToString()}.") ||
+                    project.Name.Contains($".{ProjectType.Plugin.ToString()}") ||
                     project.Name.Contains($".{ProjectType.Workflow.ToString()}.") ||
                     project.Name.EndsWith($".{ProjectType.Workflow.ToString()}") ||
                     project.Name.Contains($".{ProjectType.CustomAction.ToString()}.") ||
@@ -310,11 +301,11 @@ namespace DynamicsCrm.DevKit.Shared
                     project.Name.EndsWith($".{ProjectType.DataProvider.ToString()}"))
                 {
                     if (project.Name.EndsWith(".Test")) continue;
-                    if (IsAddedTestProject(dte.Solution.Projects, $"{project.Name}.Test")) continue;
-                    projects.Add(project.Name);
+                    if (IsAddedTestProject(projects, $"{project.Name}.Test")) continue;
+                    lists.Add(project.Name);
                 }
             }
-            return projects;
+            return lists;
         }
 
         public static string SafeName(string name)
@@ -340,6 +331,8 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("%", string.Empty);
                 name = name.Replace("^", string.Empty);
                 name = name.Replace("&", string.Empty);
+                name = name.Replace("＆", string.Empty);
+                name = name.Replace("|", string.Empty);
                 name = name.Replace("*", string.Empty);
                 name = name.Replace("(", string.Empty);
                 name = name.Replace(")", string.Empty);
@@ -360,10 +353,16 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("/", string.Empty);
                 name = name.Replace("+", string.Empty);
                 name = name.Replace("=", string.Empty);
+                name = name.Replace("–", string.Empty);
+                name = name.Replace("＆", string.Empty);
+                name = name.Replace("％", string.Empty);
                 name = name.Replace("\t", string.Empty);
                 name = name.Replace("___", "_");
+                name = name.Replace("__", "_");
                 var firstchar = name[0];
                 if (firstchar >= '0' && firstchar <= '9') name = "_" + name;
+                var cs = new CSharpCodeProvider();
+                name = cs.CreateValidIdentifier(name);
                 return name;
             }
             catch
@@ -381,19 +380,6 @@ namespace DynamicsCrm.DevKit.Shared
             if (name.StartsWith(Const.Dynamics365)) return CrmVersionName._365;
             return CrmVersionName._365;
         }
-
-        //public static void UpdateSolutionFile(string solutionFile, string projectName, string netVersion, string port)
-        //{
-        //    var data = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.WebSite.txt");
-        //    var solution = File.ReadAllText(solutionFile);
-        //    data = data
-        //        .Replace("$ProjectName$", projectName)
-        //        .Replace("$Guid$", $"{{{Guid.NewGuid().ToString().ToUpper()}}}")
-        //        .Replace("$NetVersion$", netVersion)
-        //        .Replace("$Port$", port);
-        //    solution += data;
-        //    Utility.ForceWriteAllText(solutionFile, solution);
-        //}
 
         public static string TrimGuid(string guid)
         {
@@ -422,7 +408,7 @@ namespace DynamicsCrm.DevKit.Shared
             var Projects = (object[])dte.ActiveSolutionProjects;
             var project = (Project)Projects[0];
             Project projectWithoutTest = null;
-            foreach (Project p in dte.Solution.Projects)
+            foreach (Project p in GetProjects(dte.Solution))
             {
                 if ($"{p.Name}.Test" == project.Name)
                 {

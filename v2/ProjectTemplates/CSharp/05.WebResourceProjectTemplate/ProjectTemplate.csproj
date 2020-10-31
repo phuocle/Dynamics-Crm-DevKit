@@ -63,7 +63,7 @@
     <None Include="chutzpah.json" />
     <Content Include="lib\WebApiClient.js" />
     <Content Include="lib\devkit.js" />
-    <Content Include="entities\DevKit.d.ts" />
+    <Content Include="entities\devkit.d.ts" />
     <Content Include="test\xrm-mock.d.ts" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />

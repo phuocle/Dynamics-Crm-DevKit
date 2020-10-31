@@ -26,6 +26,7 @@ namespace $NameSpace$
             var tracing = executionContext.GetExtension<ITracingService>();
 
             //tracing.DebugMessage("Begin Workflow: $NameSpace$.$class$");
+            //tracing.DebugContext(workflowContext);
 
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
 

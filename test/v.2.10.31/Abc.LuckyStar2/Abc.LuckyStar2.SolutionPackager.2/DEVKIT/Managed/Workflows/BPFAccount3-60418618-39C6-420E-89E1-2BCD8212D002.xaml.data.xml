@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{60418618-39c6-420e-89e1-2bcd8212d002}" Name="BPF Account 3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <XamlFileName>/Workflows/BPFAccount3-60418618-39C6-420E-89E1-2BCD8212D002.xaml</XamlFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>4</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>1</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <processorder>100</processorder>
+  <RunAs>1</RunAs>
+  <UniqueName>devkit_bpfaccount3</UniqueName>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ProcessTriggerScope>1</ProcessTriggerScope>
+  <PrimaryEntity>Account</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="BPF Account 3" />
+  </LocalizedNames>
+  <labels>
+    <steplabels id="{5ad552ea-f128-42a7-88bf-703bd03f9c6c}">
+      <label languagecode="1033" description="Stage A" />
+    </steplabels>
+    <steplabels id="{f15720c4-7673-4df2-9122-5d71ad0424d9}">
+      <label languagecode="1033" description="Account Name" />
+    </steplabels>
+    <steplabels id="{3a9505f9-1774-43fd-83aa-06e17b6a794f}">
+      <label languagecode="1033" description="Stage B" />
+    </steplabels>
+    <steplabels id="{f5ef9e35-7596-427b-9d52-67ce5e7bcb60}">
+      <label languagecode="1033" description="Account Number" />
+    </steplabels>
+  </labels>
+</Workflow>

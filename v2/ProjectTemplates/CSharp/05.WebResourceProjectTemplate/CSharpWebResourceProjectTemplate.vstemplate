@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <SortOrder>1050</SortOrder>
-    <Name>05. C# WebResource Project</Name>
-    <Description>C# WebResource Project Template</Description>
+    <Name>05. WebResource Project (OLD)</Name>
+    <Description>WebResource Project Template</Description>
     <DefaultName>WebResourceProject</DefaultName>
-    <TemplateID>AAAAAAAA-AAAA-AAAA-AAAA-000000000005</TemplateID>
-    <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
-    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <TemplateID>DynamicsCrm.DevKit</TemplateID>
+    <TemplateGroupID>DynamicsCrm.DevKit.CSharpWebResourceProject</TemplateGroupID>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
@@ -33,7 +31,7 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="_package.json">package.json</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="entities\DevKit.d.ts">DevKit.d.ts</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="entities\DevKit.d.ts">devkit.d.ts</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="lib\WebApiClient.js">WebApiClient.js</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="lib\devkit.js">devkit.js</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="entities\generator.form.bat">generator.form.bat</ProjectItem>
@@ -45,7 +43,7 @@
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.2.29.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.10.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.WebResource</FullClassName>
   </WizardExtension>
 </VSTemplate>

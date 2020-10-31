@@ -1,13 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Net;
 using DynamicsCrm.DevKit.Shared;
-using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
 using EnvDTE;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Package
 {
@@ -43,18 +39,6 @@ namespace DynamicsCrm.DevKit.Package
                 SetDTEStatusBar(dte, " !!! Failed when reading DynamicsCrm.DevKit.Cli.json config !!! ", true);
                 return null;
             }
-            if (vs.connection.Length == 0 || vs.connection == "???")
-            {
-                SetDTEStatusBar(dte, " !!! Failed when reading DynamicsCrm.DevKit.Cli.json connection config !!! ", true);
-                return null;
-            }
-            var crmConnection = SimpleJson.DeserializeObject<DevKitCrmConfig>(File.ReadAllText(configFile))
-                                          .CrmConnections.FirstOrDefault(x => x.Name == vs.connection);
-            if (crmConnection == null)
-            {
-                SetDTEStatusBar(dte, " !!! Failed when reading DynamicsCrm.DevKit.json connection config !!! ", true);
-                return null;
-            }
             if (vs.webresourceprofile.Length == 0 || vs.webresourceprofile == "???")
             {
                 SetDTEStatusBar(dte, " !!! Failed when reading DynamicsCrm.DevKit.Cli.json webresourceprofile config !!! ", true);
@@ -69,7 +53,6 @@ namespace DynamicsCrm.DevKit.Package
             }
             return new VisualStudioConfig
             {
-                CrmConnection = crmConnection,
                 JsonWebResource = jsonWebResource
             };
         }
@@ -82,25 +65,5 @@ namespace DynamicsCrm.DevKit.Package
             }
             dte.StatusBar.Text = text;
         }
-
-        public static IOrganizationService IsConnection(CrmConnection crmConnection)
-        {
-            try
-            {
-                if (crmConnection.Type != "ClientSecret")
-                {
-                    crmConnection.Password = EncryptDecrypt.DecryptString(crmConnection.Password); ;
-                }
-                var connectionString = XrmHelper.BuildConnectionString(crmConnection);
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                var crmServiceClient = new CrmServiceClient(connectionString);
-                return XrmHelper.GetIOrganizationService(crmServiceClient);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
     }
 }

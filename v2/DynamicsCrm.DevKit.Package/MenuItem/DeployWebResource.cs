@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
+using DynamicsCrm.DevKit.SdkLogin;
+using DynamicsCrm.DevKit.Wizard;
 using EnvDTE;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 
@@ -34,6 +36,14 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             menuCommand.Visible = true;
         }
 
+        private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        {
+            if (sender is FormLogin login)
+            {
+                login.Close();
+            }
+        }
+
         internal static void Click(DTE dte)
         {
             try
@@ -45,13 +55,43 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 var check = UtilityPackage.GetGlobal("CrmService", dte);
                 if (check == null)
                 {
-                    var connection = UtilityPackage.IsConnection(config.CrmConnection);
-                    if (connection == null)
+                    var form = new FormConnection2(dte);
+                    if (form.ShowDialog() == DialogResult.Cancel) return;
+                    if (form.Check == "1")
                     {
-                        UtilityPackage.SetDTEStatusBar(dte, " !!! Connection Dynamics CRM  failed !!! ", true);
-                        return;
+                        var loginForm = new FormLogin();
+                        loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                        loginForm.ShowDialog();
+                        if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+                        {
+                            if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
+                            {
+                                var CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
+                                UtilityPackage.SetGlobal("CrmService", CrmService, dte);
+                            }
+                            else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
+                            {
+                                var CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
+                                UtilityPackage.SetGlobal("CrmService", CrmService, dte);
+                            }
+                            else
+                            {
+                                UtilityPackage.SetDTEStatusBar(dte, " !!! Connection Dynamics CRM  failed !!! ", true);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            UtilityPackage.SetDTEStatusBar(dte, " !!! Connection Dynamics CRM  failed !!! ", true);
+                            return;
+                        }
                     }
-                    UtilityPackage.SetGlobal("CrmService", connection, dte);
+                    else
+                    {
+                        var CrmConnection = form.CrmConnection;
+                        var CrmService = form.CrmService;
+                        UtilityPackage.SetGlobal("CrmService", CrmService, dte);
+                    }
                 }
                 var crmService = (IOrganizationService)UtilityPackage.GetGlobal("CrmService", dte);
                 UtilityPackage.SetDTEStatusBar(dte, " !!! Connected Dynamics CRM !!! ");

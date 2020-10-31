@@ -97,7 +97,7 @@
     <Content Include="icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DevKit.d.ts" />
+    <None Include="devkit.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="xrm-mock.d.ts" />

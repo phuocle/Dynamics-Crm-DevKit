@@ -24,8 +24,8 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$LogicalProjectName$", form.ProjectName.ToLower());
 
             replacementsDictionary.Add("$ProjectNetVersion$", Utility.GetProjectNetVersion(form.ComboBoxCrmName));
-            replacementsDictionary.Add("$CrmUrl$", form.CrmConnection.Url);
-            replacementsDictionary.Add("$CrmUserName$", form.CrmConnection.UserName);
+            replacementsDictionary.Add("$CrmUrl$", form?.CrmConnection?.Url ?? string.Empty);
+            replacementsDictionary.Add("$CrmUserName$", form?.CrmConnection?.UserName ?? string.Empty);
 
             replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitCli));
             replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitAnalyzers));
@@ -60,6 +60,10 @@ namespace DynamicsCrm.DevKit.Wizard
                     var CoreAssembly = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkXrmToolingCoreAssembly, form.ComboBoxCrmName);
                     replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.CoreAssembly.Version$", CoreAssembly.Version);
                     replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.CoreAssembly.TargetFramework$", CoreAssembly.TargetFramework);
+
+                    var WpfControls = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkXrmToolingWpfControls, form.ComboBoxCrmName);
+                    replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.WpfControls.Version$", WpfControls.Version);
+                    replacementsDictionary.Add("$Microsoft.CrmSdk.XrmTooling.WpfControls.TargetFramework$", WpfControls.TargetFramework);
                 }
                 var shortPackage = "." + form.WizardShortCrmName;
                 if (shortPackage == ".365") shortPackage = ".9";
@@ -94,20 +98,18 @@ namespace DynamicsCrm.DevKit.Wizard
 
         public static void ProcessProjectConsoleReplacementsDictionary(Dictionary<string, string> replacementsDictionary, FormProject form)
         {
-
-            var ClientIdName = form.CrmConnection.Type == "ClientSecret" ? "ClientId" : "Username";
-            var ClientSecretName = form.CrmConnection.Type == "ClientSecret" ? "ClientSecret" : "Password";
-            var AuthTypeValue = form.CrmConnection.Type;
-            var UrlValue = form.CrmConnection.Url;
-            var ClientIdValue = form.CrmConnection.UserName;
-            var ClientSecretValue = form.CrmConnection.Type == "ClientSecret" ? form.CrmConnection.Password : EncryptDecrypt.DecryptString(form.CrmConnection.Password);
-
-            replacementsDictionary.Add("$ClientId$", ClientIdName);
-            replacementsDictionary.Add("$ClientSecret$", ClientSecretName);
-            replacementsDictionary.Add("$AuthTypeValue$", AuthTypeValue);
-            replacementsDictionary.Add("$UrlValue$", UrlValue);
-            replacementsDictionary.Add("$ClientIdValue$", ClientIdValue);
-            replacementsDictionary.Add("$ClientSecretValue$", ClientSecretValue);
+            var ClientIdName = form?.CrmConnection?.Type == "ClientSecret" ? "ClientId" : "Username";
+            var ClientSecretName = form?.CrmConnection?.Type == "ClientSecret" ? "ClientSecret" : "Password";
+            var AuthTypeValue = form?.CrmConnection?.Type;
+            var UrlValue = form?.CrmConnection?.Url;
+            var ClientIdValue = form?.CrmConnection?.UserName;
+            var ClientSecretValue = form?.CrmConnection?.Type == "ClientSecret" ? form?.CrmConnection?.Password : EncryptDecrypt.DecryptString(form?.CrmConnection?.Password);
+            replacementsDictionary.Add("$ClientId$", ClientIdName ?? string.Empty);
+            replacementsDictionary.Add("$ClientSecret$", ClientSecretName ?? string.Empty);
+            replacementsDictionary.Add("$AuthTypeValue$", AuthTypeValue ?? string.Empty);
+            replacementsDictionary.Add("$UrlValue$", UrlValue ?? string.Empty);
+            replacementsDictionary.Add("$ClientIdValue$", ClientIdValue ?? string.Empty);
+            replacementsDictionary.Add("$ClientSecretValue$", ClientSecretValue ?? string.Empty);
         }
 
         public static void ProcessItemReplacementsDictionary(Dictionary<string, string> replacementsDictionary, FormItem form)

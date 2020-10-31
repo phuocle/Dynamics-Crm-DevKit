@@ -1,0 +1,191 @@
+﻿{
+  "plugins": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "DEVKIT",
+      "includefiles": [
+        "Abc.LuckyStar.Plugin.*.dll",
+        "Abc.LuckyStar.CustomAction.*.dll"
+      ],
+      "excludefiles": [
+        "Abc.LuckyStar.*.Test.dll"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "DEVKIT",
+      "includefiles": [
+        "Abc.LuckyStar.Workflow.*.dll"
+      ],
+      "excludefiles": [
+        "Abc.LuckyStar.*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "DEVKIT",
+      "prefix": "devkit_",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.*",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "test\\**.js",
+        "**\\*.test.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "devkit_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "devkit_/entities/[entity].form.js",
+            "devkit_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "devkit_/entities/[entity].form.js",
+            "devkit_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "devkit_/js/ultils.js"
+          ]
+        },
+        {
+          "webresources": [
+            "devkit_/js/ultils.js"
+          ],
+          "dependencies": [
+            "devkit_/lib/devkit.js",
+            "devkit_/lib/lodash.min.js",
+            "devkit_/lib/moment.min.js"
+          ]
+        }
+      ]
+    }
+  ],
+  "dataproviders": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "DEVKIT",
+      "includefiles": [
+        "Abc.LuckyStar.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "Abc.LuckyStar.*.Test.dll"
+      ]
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Unmanaged",
+      "rootfolder": "",
+      "solution": "DEVKIT",
+      "solutiontype": "Unmanaged",
+      "folder": "DEVKIT",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Extract-Managed",
+      "rootfolder": "",
+      "solution": "DEVKIT",
+      "solutiontype": "Managed",
+      "folder": "DEVKIT",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Unmanaged",
+      "rootfolder": "",
+      "solution": "DEVKIT",
+      "solutiontype": "Unmanaged",
+      "folder": "DEVKIT",
+      "type": "Pack",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Managed",
+      "rootfolder": "",
+      "solution": "DEVKIT",
+      "solutiontype": "Managed",
+      "folder": "DEVKIT",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "rootnamespace": "Abc.LuckyStar.Shared.Entities",
+      "rootfolder": "",
+      "crmversion": "365",
+      "type": "CSharp",
+      "entities": "",
+      "debug":  ""
+    },
+    {
+      "profile": "JS-FORM",
+      "rootnamespace": "Abc.LuckyStar",
+      "rootfolder": "",
+      "crmversion": "365",
+      "type": "JsForm",
+      "entities": "",
+      "debug": ""
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "Abc.LuckyStar",
+      "rootfolder": "",
+      "crmversion": "365",
+      "type": "JsWebApi",
+      "entities": "",
+      "debug": ""
+    }
+  ],
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???"
+    }
+  ],
+  "downloadreports": [
+    {
+      "profile": "DEBUG",
+      "folder": "???",
+      "solution":  "???"
+    }
+  ],
+  "proxytypes": [
+    {
+      "profile": "ALL",
+      "namespace": "Abc.LuckyStar.ProxyTypes",
+      "output": "GeneratedCode.cs",
+      "entities": ""
+    },
+    {
+      "profile": "ENTITIES",
+      "namespace": "Abc.LuckyStar.ProxyTypes2",
+      "output": "GeneratedCode2.cs",
+      "entities": "account,contact"
+    }
+  ],
+  "visualstudio": {    
+    "webresourceprofile": "DEBUG"
+  }
+}

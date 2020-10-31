@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DynamicsCrm.DevKit.Shared.Models.Cli
+﻿namespace DynamicsCrm.DevKit.Shared.Models.Cli
 {
     public class JsonGenerator
     {
@@ -10,5 +8,6 @@ namespace DynamicsCrm.DevKit.Shared.Models.Cli
         public string type { get; set; }
         public string crmversion { get; set; }
         public string debug { get; set; }
+        public string entities { get; set; }
     }
 }

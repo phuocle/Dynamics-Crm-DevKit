@@ -12,6 +12,8 @@ using System.IO;
 using System.Linq;
 using System.Drawing;
 using Microsoft.Xrm.Sdk;
+using DynamicsCrm.DevKit.SdkLogin;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -20,6 +22,7 @@ namespace DynamicsCrm.DevKit.Wizard
         public string GeneratedJsForm { get; set; }
         public string GeneratedJsFormCode { get; set; }
         public string GeneratedJsFormCodeTypeScriptDeclaration { get; set; }
+        public string GeneratedJsFormCodeTypeScriptDeclaration2 { get; set; }
 
         public IOrganizationService CrmService { get; set; }
         public CrmConnection CrmConnection { get; set; }
@@ -47,16 +50,17 @@ namespace DynamicsCrm.DevKit.Wizard
                     link.Text = @"Add New Js Form Class";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template";
                 }
+                else if (_itemType == ItemType.JsForm2)
+                {
+                    link.Text = @"Add New Js Form Class (NEW)";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template";
+                }
             }
         }
 
         public FormItemForm(ItemType itemType, DTE dte, string nameSpace, string sharedNameSpace)
         {
             InitializeComponent();
-
-            Font = SystemFonts.DefaultFont;
-
-            Text += Const.Version;
 
             progressBar.Visible = false;
 
@@ -138,6 +142,43 @@ namespace DynamicsCrm.DevKit.Wizard
                     Application.DoEvents();
                 }
             }
+            else if (ItemType == ItemType.JsForm2)
+            {
+                EnabledAll(false);
+                progressBar.Visible = true;
+                progressBar.Style = ProgressBarStyle.Marquee;
+                var isDebugForm = checkBoxDebug.Checked;
+                var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{Class}.d.ts";
+                var isDebugWebApi = false;
+                var jsWebApi = false;
+                if (File.Exists(file))
+                {
+                    try
+                    {
+                        var lines = File.ReadAllLines(file);
+                        var json = lines[lines.Length - 1];
+                        var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                        isDebugWebApi = comment.IsDebugWebApi;
+                        jsWebApi = comment.JsWebApi;
+                    }
+                    catch { }
+                }
+                var jsGlobalNameSpace = Utility.GetJsGlobalNameSpace(DTE);
+                var forms = checkListForm.CheckedItems.OfType<string>().ToList();
+                var @class = Class;
+                Task task2 = Task.Factory.StartNew(() =>
+                {
+                    var jsForm2 = new JsForm2(CrmService, jsGlobalNameSpace, @class);
+                    jsForm2.GeneratorCode(forms, isDebugForm, jsWebApi, isDebugWebApi);
+                    GeneratedJsForm = jsForm2.Form;
+                    GeneratedJsFormCode = jsForm2.FormCode;
+                    GeneratedJsFormCodeTypeScriptDeclaration2 = jsForm2.FormCodeTypeScriptDeclaration2;
+                });
+                while (!task2.IsCompleted)
+                {
+                    Application.DoEvents();
+                }
+            }
             progressBar.Visible = false;
             DialogResult = DialogResult.OK;
         }
@@ -147,13 +188,42 @@ namespace DynamicsCrm.DevKit.Wizard
             DialogResult = DialogResult.Cancel;
         }
 
+        private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        {
+            if (sender is FormLogin login)
+            {
+                login.Close();
+            }
+        }
+
         private void buttonConnection_Click(object sender, EventArgs e)
         {
             var form = new FormConnection2(DTE);
             if (form.ShowDialog() == DialogResult.Cancel) return;
 
-            CrmConnection = form.CrmConnection;
-            CrmService = form.CrmService;
+            if (form.Check == "1")
+            {
+                var loginForm = new FormLogin();
+                loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                loginForm.ShowDialog();
+                if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+                {
+                    if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
+                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
+                    else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
+                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
+                    else
+                        throw new WizardCancelledException();
+                    CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
+                }
+                else
+                    throw new WizardCancelledException();
+            }
+            else
+            {
+                CrmConnection = form.CrmConnection;
+                CrmService = form.CrmService;
+            }
 
             buttonOk.Enabled = true;
             comboBoxCrmName.Enabled = true;
@@ -165,6 +235,7 @@ namespace DynamicsCrm.DevKit.Wizard
             switch (ItemType)
             {
                 case ItemType.JsForm:
+                case ItemType.JsForm2:
                     List<XrmEntity> entities2 = null;
                     progressBar.Visible = true;
                     progressBar.Style = ProgressBarStyle.Marquee;
@@ -212,7 +283,7 @@ namespace DynamicsCrm.DevKit.Wizard
             var forms = new List<string>();
             progressBar.Visible = true;
             progressBar.Style = ProgressBarStyle.Marquee;
-            if (ItemType == ItemType.JsForm)
+            if (ItemType == ItemType.JsForm || ItemType == ItemType.JsForm2)
             {
                 Task task1 = Task.Factory.StartNew(() =>
                 {
@@ -243,7 +314,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     {
                         foreach (var form in comment.JsForm)
                         {
-                            if (form == checkListForm.Items[i].ToString())
+                            if (form == checkListForm.Items[i].ToString() || checkListForm.Items[i].ToString().ToLower().EndsWith(form.ToLower()))
                             {
                                 checkListForm.SetItemChecked(i, true);
                             }

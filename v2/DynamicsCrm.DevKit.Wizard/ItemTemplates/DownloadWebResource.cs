@@ -46,7 +46,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var form = new FormConnection2(DTE);
                 if (form.ShowDialog() != DialogResult.OK) return;
                 //var crmConnectionString = CrmConnectionString(form.CrmConnection);
-                var crmConnectionString = XrmHelper.BuildConnectionString(form.CrmConnection);
+
                 var file = Utility.GetDevKitCliJsonFile(DTE);
                 if (!File.Exists(file))
                 {
@@ -63,7 +63,16 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 }
 
                 var downloadContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.webresource.download.webresources.bat");
-                downloadContent = downloadContent.Replace("$CrmConnectionString$", crmConnectionString);
+                if (form.Check == "1")
+                {
+                    downloadContent = downloadContent.Replace("set CrmConnection=\"$CrmConnectionString$\"\r\n", string.Empty);
+                    downloadContent = downloadContent.Replace("/conn:%CrmConnection%", "/sdklogin:\"yes\"");
+                }
+                else
+                {
+                    var crmConnectionString = XrmHelper.BuildConnectionString(form.CrmConnection);
+                    downloadContent = downloadContent.Replace("$CrmConnectionString$", crmConnectionString);
+                }
                 Utility.ForceWriteAllTextWithoutUTF8(downloadFile, downloadContent);
                 project.ProjectItems.AddFromFile(downloadFile);
 
@@ -71,7 +80,17 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 if (!File.Exists(deployFile))
                 {
                     var deployContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.webresource.deploy.debug.bat");
-                    deployContent = deployContent.Replace("$CrmConnectionString$", crmConnectionString);
+                    if (form.Check == "1")
+                    {
+                        deployContent = deployContent.Replace("set CrmConnection=\"$CrmConnectionString$\"\r\n", string.Empty);
+                        deployContent = deployContent.Replace("/conn:%CrmConnection%", "/sdklogin:\"yes\"");
+                    }
+                    else
+                    {
+                        var crmConnectionString = XrmHelper.BuildConnectionString(form.CrmConnection);
+                        deployContent = deployContent.Replace("$CrmConnectionString$", crmConnectionString);
+                    }
+
                     Utility.ForceWriteAllTextWithoutUTF8(deployFile, deployContent);
                     project.ProjectItems.AddFromFile(deployFile);
                 }

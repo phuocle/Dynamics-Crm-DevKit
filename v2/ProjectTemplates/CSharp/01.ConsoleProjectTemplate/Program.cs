@@ -1,9 +1,11 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;$if$($Check$== 1)
+using System;$endif$
 
 namespace $NameSpace$
 {
     public class Program
     {
+        $if$($Check$==1)[STAThread]$endif$
         static void Main()
         {
             var UserId = ((WhoAmIResponse)AppSettings.Service.Execute(new WhoAmIRequest())).UserId;

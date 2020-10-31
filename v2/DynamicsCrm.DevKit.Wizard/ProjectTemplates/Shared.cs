@@ -38,14 +38,15 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             var destinationDirectory = replacementsDictionary["$destinationdirectory$"];
-            try
-            {
+            //try
+            //{
                 DTE = (DTE)automationObject;
                 var form = new FormProject(ProjectType.Shared, DTE);
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
                 //Creating project ...
                 ProjectName = form.ProjectName;
-                if(Utility.ExistProject(DTE, ProjectName))
+                replacementsDictionary.Add("$Check$", form.Check);
+                if (Utility.ExistProject(DTE, ProjectName))
                 {
                     MessageBox.Show($@"{ProjectName} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     throw new WizardCancelledException();
@@ -65,15 +66,15 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                         ;
                     Utility.ForceWriteAllText(file, json);
                 }
-            }
-            catch
-            {
-                if (Directory.Exists(destinationDirectory))
-                {
-                    Utility.TryDeleteDirectory(destinationDirectory);
-                }
-                throw;
-            }
+            //}
+            //catch
+            //{
+            //    if (Directory.Exists(destinationDirectory))
+            //    {
+            //        Utility.TryDeleteDirectory(destinationDirectory);
+            //    }
+            //    throw;
+            //}
         }
 
         public bool ShouldAddProjectItem(string filePath)

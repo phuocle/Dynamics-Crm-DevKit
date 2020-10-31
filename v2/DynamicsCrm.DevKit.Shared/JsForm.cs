@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -259,23 +260,32 @@ namespace DynamicsCrm.DevKit.Shared
             var code = string.Empty;
             var previousName = string.Empty;
             var previousCount = 0;
+            var listExist = new List<string>();
             foreach (var item in list)
             {
+                if (item == null) continue;
                 var crmAttribute = Fields.FirstOrDefault(x => x.LogicalName == item);
-                if (crmAttribute == null) continue;
-                var name = crmAttribute.SchemaName;
-                if (name == previousName)
+                if (crmAttribute == null)
                 {
-                    previousCount = previousCount + 1;
-                    name = name + "_" + previousCount.ToString();
+                    if (listExist.Contains(item)) continue; else listExist.Add(item);
+                    code += $"\t\t\t{item}: {{}},\r\n";
                 }
                 else
                 {
-                    previousName = string.Empty;
-                    previousCount = 0;
+                    var name = crmAttribute.SchemaName;
+                    if (name == previousName)
+                    {
+                        previousCount = previousCount + 1;
+                        name = name + "_" + previousCount.ToString();
+                    }
+                    else
+                    {
+                        previousName = string.Empty;
+                        previousCount = 0;
+                    }
+                    code += $"\t\t\t{name}: {{}},\r\n";
+                    previousName = crmAttribute.SchemaName;
                 }
-                code += $"\t\t\t{name}: {{}},\r\n";
-                previousName = crmAttribute.SchemaName;
             }
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return code;
@@ -289,9 +299,9 @@ namespace DynamicsCrm.DevKit.Shared
                     .Descendants("row").Descendants("cell").Descendants("control")
                           select new
                           {
-                              FieldName = (string)x.Attribute("datafieldname")
+                              FieldName = x?.Attribute("datafieldname") ?? x?.Attribute("id")
                           }).Distinct();
-            var list = (from field in fields where field.FieldName != null select field.FieldName).ToList();
+            var list = (from field in fields where field.FieldName != null select (string)field.FieldName).ToList<string>();
             list.Sort();
             return GetJsForListFields(list);
         }
@@ -306,8 +316,11 @@ namespace DynamicsCrm.DevKit.Shared
                     Name = x?.Attribute("name")?.Value,
                     InnerText = x?.ToString()
                 };
+            var existTabs = new List<string>();
             foreach (var tab in tabs)
             {
+                if (Utility.SafeName(tab.Name).Length == 0) continue;
+                if (existTabs.Contains(Utility.SafeName(tab.Name))) continue; else existTabs.Add(Utility.SafeName(tab.Name));
                 code += $"\t\t\t{Utility.SafeName(tab.Name)}: {{\r\n";
                 code += $"\t\t\t\tSection: {{\r\n";
                 var xdoc2 = XDocument.Parse(tab.InnerText);
@@ -320,11 +333,14 @@ namespace DynamicsCrm.DevKit.Shared
                     {
                         Name = x2?.Attribute("name")?.Value
                     };
+                var existSections = new List<string>();
                 foreach (var section in sections)
                 {
                     if (section == null) continue;
                     if (section.Name == null) continue;
                     if (section.Name.StartsWith("ref_pan")) continue;
+                    if (Utility.SafeName(section.Name).Length == 0) continue;
+                    if (existSections.Contains(Utility.SafeName(section.Name))) continue; else existSections.Add(Utility.SafeName(section.Name));
                     code += $"\t\t\t\t\t{Utility.SafeName(section.Name)}: {{}},\r\n";
                 }
                 code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
@@ -627,8 +643,9 @@ namespace DynamicsCrm.DevKit.Shared
                         crmAttribute.FieldType != AttributeTypeCode.Status &&
                         !crmAttribute.IsMultiSelectPicklist) continue;
                     _d_ts += $"\t\t{crmAttribute.SchemaName} : {{\r\n";
-                    foreach (string nvc in crmAttribute.OptionSetValues)
-                        _d_ts += $"\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
+                    NameValueCollection values = UpdateOptionSetValues(crmAttribute.OptionSetValues);
+                    foreach (string nvc in values)
+                        _d_ts += $"\t\t\t{nvc}: {values[nvc]},\r\n";
                     _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
                     _d_ts += $"\t\t}},\r\n";
                 }
@@ -637,6 +654,25 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += $"\r\n\t}};";
                 return _d_ts;
             }
+        }
+
+        private NameValueCollection UpdateOptionSetValues(NameValueCollection optionSetValues)
+        {
+            var values = new NameValueCollection();
+            foreach (string key in optionSetValues.Keys)
+            {
+                if (optionSetValues.GetValues(key).Length > 1)
+                {
+                    for (var i = 0; i < optionSetValues.GetValues(key).Length; i++)
+                    {
+                        var value = optionSetValues.GetValues(key)[i];
+                        values.Add(key + "_" + value, value);
+                    }
+                }
+                else
+                    values.Add(key, optionSetValues[key]);
+            }
+            return values;
         }
 
         private string GetLogicalCollectionName(CrmAttribute crmAttribute)
@@ -729,8 +765,9 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)
-                if (checkedItems.Contains($"{form.Name}") && !processForms.Any(a => a.Name == form.Name))
-                    processForms.Add(form);
+                if (checkedItems.Contains($"{form.Name}"))
+                    if (!processForms.Any(a => a.Name == form.Name))
+                        processForms.Add(form);
             Form = GetForm(processForms);
             FormCode = GetFormCode(processForms, isDebugForm);
             FormCodeTypeScriptDeclaration = GetTypeScriptDeclaration(processForms, isDebugForm, isJsWebApi, isDebugWebApi);

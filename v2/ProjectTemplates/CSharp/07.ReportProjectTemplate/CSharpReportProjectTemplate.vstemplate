@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <SortOrder>1070</SortOrder>
-    <Name>07. C# Report Project</Name>
-    <Description>C# Report Project Template</Description>
+    <Name>10. Report Project</Name>
+    <Description>Report Project Template</Description>
     <DefaultName>ReportProject</DefaultName>
-    <TemplateID>AAAAAAAA-AAAA-AAAA-AAAA-000000000007</TemplateID>
+    <TemplateID>DynamicsCrm.DevKit.CSharpReportProject</TemplateID>
     <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
-    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
@@ -18,6 +16,8 @@
     <EnableEditOfLocationField>false</EnableEditOfLocationField>
     <CreateInPlace>true</CreateInPlace>
     <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
+    <LanguageTag>CSharp</LanguageTag>
+    <PlatformTag>Windows</PlatformTag>
   </TemplateData>
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
@@ -27,7 +27,7 @@
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.2.29.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.10.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Report</FullClassName>
   </WizardExtension>
 </VSTemplate>

@@ -85,7 +85,7 @@
             this.labelClass.Location = new System.Drawing.Point(6, 51);
             this.labelClass.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelClass.Name = "labelClass";
-            this.labelClass.Size = new System.Drawing.Size(35, 13);
+            this.labelClass.Size = new System.Drawing.Size(45, 16);
             this.labelClass.TabIndex = 12;
             this.labelClass.Text = "Class:";
             // 
@@ -95,7 +95,7 @@
             this.labelExecution.Location = new System.Drawing.Point(6, 147);
             this.labelExecution.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelExecution.Name = "labelExecution";
-            this.labelExecution.Size = new System.Drawing.Size(57, 13);
+            this.labelExecution.Size = new System.Drawing.Size(69, 16);
             this.labelExecution.TabIndex = 10;
             this.labelExecution.Text = "Execution:";
             // 
@@ -105,17 +105,17 @@
             this.labelStage.Location = new System.Drawing.Point(6, 114);
             this.labelStage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelStage.Name = "labelStage";
-            this.labelStage.Size = new System.Drawing.Size(38, 13);
+            this.labelStage.Size = new System.Drawing.Size(47, 16);
             this.labelStage.TabIndex = 9;
             this.labelStage.Text = "Stage:";
             // 
             // textPluginClass
             // 
             this.textPluginClass.Enabled = false;
-            this.textPluginClass.Location = new System.Drawing.Point(70, 49);
+            this.textPluginClass.Location = new System.Drawing.Point(79, 49);
             this.textPluginClass.Margin = new System.Windows.Forms.Padding(2);
             this.textPluginClass.Name = "textPluginClass";
-            this.textPluginClass.Size = new System.Drawing.Size(299, 20);
+            this.textPluginClass.Size = new System.Drawing.Size(290, 22);
             this.textPluginClass.TabIndex = 2;
             // 
             // labelMessage
@@ -124,7 +124,7 @@
             this.labelMessage.Location = new System.Drawing.Point(6, 82);
             this.labelMessage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelMessage.Name = "labelMessage";
-            this.labelMessage.Size = new System.Drawing.Size(53, 13);
+            this.labelMessage.Size = new System.Drawing.Size(68, 16);
             this.labelMessage.TabIndex = 8;
             this.labelMessage.Text = "Message:";
             // 
@@ -136,10 +136,10 @@
             this.comboBoxExecution.Items.AddRange(new object[] {
             "Synchronous",
             "Asynchronous"});
-            this.comboBoxExecution.Location = new System.Drawing.Point(70, 145);
+            this.comboBoxExecution.Location = new System.Drawing.Point(79, 145);
             this.comboBoxExecution.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxExecution.Name = "comboBoxExecution";
-            this.comboBoxExecution.Size = new System.Drawing.Size(299, 21);
+            this.comboBoxExecution.Size = new System.Drawing.Size(290, 21);
             this.comboBoxExecution.TabIndex = 5;
             this.comboBoxExecution.SelectedIndexChanged += new System.EventHandler(this.comboBoxExecution_SelectedIndexChanged);
             // 
@@ -152,10 +152,10 @@
             "PreValidation",
             "PreOperation",
             "PostOperation"});
-            this.comboBoxStage.Location = new System.Drawing.Point(70, 112);
+            this.comboBoxStage.Location = new System.Drawing.Point(79, 112);
             this.comboBoxStage.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxStage.Name = "comboBoxStage";
-            this.comboBoxStage.Size = new System.Drawing.Size(299, 21);
+            this.comboBoxStage.Size = new System.Drawing.Size(290, 21);
             this.comboBoxStage.TabIndex = 4;
             this.comboBoxStage.SelectedIndexChanged += new System.EventHandler(this.comboBoxStage_SelectedIndexChanged);
             // 
@@ -164,10 +164,10 @@
             this.comboBoxMessage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMessage.Enabled = false;
             this.comboBoxMessage.FormattingEnabled = true;
-            this.comboBoxMessage.Location = new System.Drawing.Point(70, 80);
+            this.comboBoxMessage.Location = new System.Drawing.Point(79, 80);
             this.comboBoxMessage.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxMessage.Name = "comboBoxMessage";
-            this.comboBoxMessage.Size = new System.Drawing.Size(299, 21);
+            this.comboBoxMessage.Size = new System.Drawing.Size(290, 21);
             this.comboBoxMessage.TabIndex = 3;
             this.comboBoxMessage.SelectedIndexChanged += new System.EventHandler(this.comboBoxMessage_SelectedIndexChanged);
             // 
@@ -183,10 +183,10 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxEntity.Location = new System.Drawing.Point(70, 16);
+            this.comboBoxEntity.Location = new System.Drawing.Point(79, 16);
             this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxEntity.Name = "comboBoxEntity";
-            this.comboBoxEntity.Size = new System.Drawing.Size(299, 21);
+            this.comboBoxEntity.Size = new System.Drawing.Size(290, 21);
             this.comboBoxEntity.TabIndex = 1;
             this.comboBoxEntity.SelectedIndexChanged += new System.EventHandler(this.comboBoxEntity_SelectedIndexChanged);
             // 
@@ -196,7 +196,7 @@
             this.labelEntity.Location = new System.Drawing.Point(6, 18);
             this.labelEntity.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelEntity.Name = "labelEntity";
-            this.labelEntity.Size = new System.Drawing.Size(36, 13);
+            this.labelEntity.Size = new System.Drawing.Size(43, 16);
             this.labelEntity.TabIndex = 0;
             this.labelEntity.Text = "Entity:";
             // 
@@ -248,8 +248,7 @@
             // FormPlugin
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(494, 199);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
@@ -257,7 +256,7 @@
             this.Controls.Add(this.link);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -265,7 +264,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DynamicsCrm.DevKit - v.";
+            this.Text = "DynamicsCrm.DevKit";
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{6171a1b1-fd0d-eb11-a813-000d3a80cee2}</WebResourceId>
+  <Name>devkit_/css/app.css</Name>
+  <DisplayName>devkit_/css/app.css</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>2</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/devkit_cssappcss6171A1B1-FD0D-EB11-A813-000D3A80CEE2</FileName>
+</WebResource>

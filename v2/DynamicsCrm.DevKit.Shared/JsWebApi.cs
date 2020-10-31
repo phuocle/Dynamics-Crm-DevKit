@@ -8,12 +8,14 @@ using NUglify;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Specialized;
+using System;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class JsWebApi
     {
-        public JsWebApi(IOrganizationService crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm)
+        public JsWebApi(IOrganizationService crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm, string jsFormVersion)
         {
             CrmService = crmService;
             ProjectName = projectName;
@@ -21,6 +23,7 @@ namespace DynamicsCrm.DevKit.Shared
             CheckedItems = checkedItems;
             IsDebugForm = isDebugForm;
             IsDebugWebApi = isDebugWebApi;
+            JsFormVersion = jsFormVersion;
         }
         private IOrganizationService CrmService { get; }
         private string EntityName { get; }
@@ -28,6 +31,7 @@ namespace DynamicsCrm.DevKit.Shared
         private List<string> CheckedItems { get; }
         private bool IsDebugWebApi { get; }
         private bool IsDebugForm { get; }
+        private string JsFormVersion { get; }
         private List<CrmAttribute> _fields;
         private List<CrmAttribute> Fields
         {
@@ -317,9 +321,19 @@ namespace DynamicsCrm.DevKit.Shared
             WebApiCode = code;
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)
+            {
                 if (CheckedItems.Contains($"{form.Name}"))
+                {
                     processForms.Add(form);
-            WebApiCodeTypeScriptDeclaration = GetWebApiCodeTypeScriptDeclaration(processForms, IsDebugForm, true, IsDebugWebApi);
+                    CheckedItems.Remove(form.Name);
+                }
+            }
+            foreach (var form in Forms)
+            {
+                if (CheckedItems.Any(x => form.Name.EndsWith(x)))
+                    processForms.Add(form);
+            }
+            WebApiCodeTypeScriptDeclaration = GetWebApiCodeTypeScriptDeclaration(processForms, IsDebugForm, true, IsDebugWebApi, JsFormVersion);
         }
 
         private string OptionSet_For_d_ts
@@ -336,8 +350,9 @@ namespace DynamicsCrm.DevKit.Shared
                         crmAttribute.FieldType != AttributeTypeCode.Status &&
                         !crmAttribute.IsMultiSelectPicklist) continue;
                     _d_ts += $"\t\t{crmAttribute.SchemaName} : {{\r\n";
-                    foreach (string nvc in crmAttribute.OptionSetValues)
-                        _d_ts += $"\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
+                    NameValueCollection values = UpdateOptionSetValues(crmAttribute.OptionSetValues);
+                    foreach (string nvc in values)
+                        _d_ts += $"\t\t\t{nvc}: {values[nvc]},\r\n";
                     _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
                     _d_ts += $"\t\t}},\r\n";
                 }
@@ -347,42 +362,29 @@ namespace DynamicsCrm.DevKit.Shared
                 return _d_ts;
             }
         }
-
-        //private string _jsOptionSetFormCode = null;
-        //private string JsOptionSetFormCode
-        //{
-        //    get
-        //    {
-        //        if (_jsOptionSetFormCode != null) return _jsOptionSetFormCode;
-        //        _jsOptionSetFormCode = string.Empty;
-        //        _jsOptionSetFormCode += $"\t\tvar optionSet = {{\r\n";
-        //        _jsOptionSetFormCode += $"\t\t\tRollupState: {{\r\n";
-        //        _jsOptionSetFormCode += $"\t\t\t\tNotCalculated: 0,\r\n";
-        //        _jsOptionSetFormCode += $"\t\t\t\tCalculated: 1,\r\n";
-        //        _jsOptionSetFormCode += $"\t\t\t\tOverflowError: 2,\r\n";
-        //        _jsOptionSetFormCode += $"\t\t\t\tOtherError: 3,\r\n";
-        //        _jsOptionSetFormCode += $"\t\t\t\tRetryLimitExceeded: 4,\r\n";
-        //        _jsOptionSetFormCode += $"\t\t\t\tHierarchicalRecursionLimitReached: 5,\r\n";
-        //        _jsOptionSetFormCode += $"\t\t\t\tLoopDetected: 6\r\n";
-        //        _jsOptionSetFormCode += $"\t\t\t}},\r\n";
-        //        foreach (var crmAttribute in Fields)
-        //        {
-        //            if (!crmAttribute.IsValidForRead) continue;
-        //            if (crmAttribute.FieldType != AttributeTypeCode.Picklist &&
-        //                crmAttribute.FieldType != AttributeTypeCode.State &&
-        //                crmAttribute.FieldType != AttributeTypeCode.Status &&
-        //                !crmAttribute.IsMultiSelectPicklist) continue;
-        //            _jsOptionSetFormCode += $"\t\t\t{crmAttribute.SchemaName}: {{\r\n";
-        //            foreach (string nvc in crmAttribute.OptionSetValues)
-        //                _jsOptionSetFormCode += $"\t\t\t\t{nvc}: {crmAttribute.OptionSetValues[nvc]},\r\n";
-        //            _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
-        //            _jsOptionSetFormCode += $"\t\t\t}},\r\n";
-        //        }
-        //        _jsOptionSetFormCode = _jsOptionSetFormCode.TrimEnd(",\r\n".ToCharArray());
-        //        _jsOptionSetFormCode += $"\r\n\t\t}};\r\n";
-        //        return _jsOptionSetFormCode;
-        //    }
-        //}
+        private NameValueCollection UpdateOptionSetValues(NameValueCollection optionSetValues)
+        {
+            var values = new NameValueCollection();
+            foreach (string key in optionSetValues.Keys)
+            {
+                if (optionSetValues.GetValues(key).Length > 1)
+                {
+                    for (var i = 0; i < optionSetValues.GetValues(key).Length; i++)
+                    {
+                        var value = optionSetValues.GetValues(key)[i];
+                        values.Add(key + "_" + value, value);
+                    }
+                }
+                else
+                    values.Add(key, optionSetValues[key]);
+            }
+            var newValues = new NameValueCollection();
+            var sortedKeys = values.AllKeys;
+            Array.Sort(sortedKeys);
+            foreach (var key in sortedKeys)
+                newValues.Add(key, values[key]);
+            return newValues;
+        }
 
         private int _objectTypeCode = -1;
         private int ObjectTypeCode
@@ -506,20 +508,38 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        private string GetWebApiCodeTypeScriptDeclaration(List<SystemForm> processForms, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
+        private string GetWebApiCodeTypeScriptDeclaration(List<SystemForm> processForms, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi, string jsFormVersion)
         {
-            var jsIntellisense = new JsTypeScriptDeclaration(CrmService)
+            if (jsFormVersion == null || jsFormVersion == string.Empty)
             {
-                ProcessForms = processForms,
-                IsDebugForm = isDebugForm,
-                IsDebugWebApi = isDebugWebApi,
-                IsJsWebApi = isJsWebApi,
-                ProjectName = ProjectName,
-                EntityName = EntityName,
-                Fields = Fields,
-                Processes = Processes
-            };
-            return jsIntellisense.Intellisense;
+                var jsIntellisense = new JsTypeScriptDeclaration(CrmService)
+                {
+                    ProcessForms = processForms,
+                    IsDebugForm = isDebugForm,
+                    IsDebugWebApi = isDebugWebApi,
+                    IsJsWebApi = isJsWebApi,
+                    ProjectName = ProjectName,
+                    EntityName = EntityName,
+                    Fields = Fields,
+                    Processes = Processes
+                };
+                return jsIntellisense.Intellisense;
+            }
+            else
+            {
+                var jsIntellisense = new JsTypeScriptDeclaration2(CrmService)
+                {
+                    ProcessForms = processForms,
+                    IsDebugForm = isDebugForm,
+                    IsDebugWebApi = isDebugWebApi,
+                    IsJsWebApi = isJsWebApi,
+                    ProjectName = ProjectName,
+                    EntityName = EntityName,
+                    Fields = Fields,
+                    Processes = Processes
+                };
+                return jsIntellisense.Intellisense;
+            }
         }
     }
 }

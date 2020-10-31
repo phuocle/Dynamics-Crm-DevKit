@@ -1,0 +1,140 @@
+﻿'use strict';
+/** @namespace LuckyMokey */
+var LuckyMokey;
+(function (LuckyMokey) {
+	'use strict';
+	LuckyMokey.Formmsdyn_expense_Information = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			msdyn_Amount: {},
+			msdyn_ExpenseCategory: {},
+			msdyn_ExpenseStatus: {},
+			msdyn_externaldescription: {},
+			msdyn_name: {},
+			msdyn_Price: {},
+			msdyn_Project: {},
+			msdyn_Quantity: {},
+			msdyn_Salestaxamount: {},
+			msdyn_totalamount: {},
+			msdyn_TransactionDate: {},
+			msdyn_Unit: {},
+			msdyn_UnitGroup: {},
+			notescontrol: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var navigation = {
+			nav_msdyn_msdyn_expense_msdyn_expensereceipt_ExpenseId: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		return form;
+	};
+	LuckyMokey.FormCreate_Expense = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined)
+		{
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			msdyn_Amount: {},
+			msdyn_ExpenseCategory: {},
+			msdyn_externaldescription: {},
+			msdyn_name: {},
+			msdyn_Price: {},
+			msdyn_Project: {},
+			msdyn_Quantity: {},
+			msdyn_Salestaxamount: {},
+			msdyn_TransactionDate: {},
+			msdyn_Unit: {},
+			msdyn_UnitGroup: {},
+			TransactionCurrencyId: {}
+		}
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			tab_1: {
+				Section: {
+					tab_1_column_1_section_1: {}
+				}
+			}
+		}
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		return form;
+	}
+})(LuckyMokey || (LuckyMokey = {}));
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.msdyn_expense = {
+		msdyn_ExpenseStatus : {
+			Draft: 192350000,
+			Submitted: 192350001,
+			Approved: 192350002,
+			Rejected: 192350003,
+			Posted: 192350004,
+			Paid: 192350005,
+			Recall_Requested: 192350006
+		},
+		msdyn_targetExpenseStatus : {
+			Draft: 192350000,
+			Submitted: 192350001,
+			Approved: 192350002,
+			Rejected: 192350003,
+			Posted: 192350004,
+			Paid: 192350005,
+			Recall_Requested: 192350006
+		},
+		statecode : {
+			Active: 0,
+			Inactive: 1
+		},
+		statuscode : {
+			Draft: 867380000,
+			Rejected: 867380001,
+			Submitted: 867380002,
+			Approved: 867380003,
+			Posted: 867380004,
+			Paid: 867380005
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
+
+	};
+})(OptionSet || (OptionSet = {}));

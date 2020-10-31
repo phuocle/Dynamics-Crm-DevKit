@@ -28,7 +28,11 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
         public void RunFinished()
         {
             var devkitFileName = Path.Combine(CurrentFolder, "devkit.js");
-            var devkitCode = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.devkit.365.js");
+            var devkitDtsFileName = Path.Combine(CurrentFolder, "devkit.d.ts");
+
+            var devkitCode = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.devkit.365.new.js");
+            var devkitDts = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.devkit.365.new.d.ts");
+
             var devkitCodeMin = Uglify.Js(devkitCode).Code;
             if (File.Exists(devkitFileName))
                 Utility.ForceWriteAllText(devkitFileName, devkitCodeMin);
@@ -36,6 +40,14 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             {
                 Utility.ForceWriteAllText(devkitFileName, devkitCodeMin);
                 SelectedProjectItem.ProjectItems.AddFromFile(devkitFileName);
+            }
+
+            if (File.Exists(devkitDtsFileName))
+                Utility.ForceWriteAllText(devkitDtsFileName, devkitDts);
+            else
+            {
+                Utility.ForceWriteAllText(devkitDtsFileName, devkitDts);
+                SelectedProjectItem.ProjectItems.AddFromFile(devkitDtsFileName);
             }
         }
 
@@ -60,7 +72,9 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 projectItems = selectItem.Project.ProjectItems;
             else if (selectItem.ProjectItem != null)
                 projectItems = selectItem.ProjectItem.ProjectItems;
-            return projectItems.Parent as ProjectItem;
+            var check = projectItems.Parent as ProjectItem;
+            if (check == null) return projectItems.Item(1);
+            return check;
         }
     }
 }

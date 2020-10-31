@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Entity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name LocalizedName="Account" OriginalName="">Account</Name>
+  <EntityInfo>
+    <entity Name="Account">
+      <attributes>
+        <attribute PhysicalName="AccountCategoryCode">
+          <Type>picklist</Type>
+          <Name>accountcategorycode</Name>
+          <LogicalName>accountcategorycode</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>auto</ImeMode>
+          <ValidForUpdateApi>1</ValidForUpdateApi>
+          <ValidForReadApi>1</ValidForReadApi>
+          <ValidForCreateApi>1</ValidForCreateApi>
+          <IsCustomField>0</IsCustomField>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <IsSecured>0</IsSecured>
+          <IntroducedVersion>5.0.0.0</IntroducedVersion>
+          <SourceType>0</SourceType>
+          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
+          <IsSortableEnabled>0</IsSortableEnabled>
+          <IsDataSourceSecret>0</IsDataSourceSecret>
+          <AutoNumberFormat></AutoNumberFormat>
+          <IsSearchable>0</IsSearchable>
+          <IsFilterable>0</IsFilterable>
+          <IsRetrievable>0</IsRetrievable>
+          <IsLocalizable>0</IsLocalizable>
+          <AppDefaultValue>-1</AppDefaultValue>
+          <optionset Name="account_accountcategorycode">
+            <OptionSetType>picklist</OptionSetType>
+            <IntroducedVersion>5.0.0.0</IntroducedVersion>
+            <displaynames>
+              <displayname description="Category" languagecode="1033" />
+              <displayname description="Kategorie" languagecode="1031" />
+              <displayname description="Thể loại" languagecode="1066" />
+            </displaynames>
+            <Descriptions>
+              <Description description="Drop-down list for selecting the category of the account." languagecode="1033" />
+              <Description description="Dropdownliste für die Auswahl der Firmenkategorie." languagecode="1031" />
+              <Description description="Danh sách thả xuống để chọn loại khách hàng." languagecode="1066" />
+            </Descriptions>
+            <options>
+              <option value="1" ExternalValue="" Color="">
+                <labels>
+                  <label description="Bevorzugter Kunde" languagecode="1031" />
+                  <label description="Khách hàng Ưu tiên" languagecode="1066" />
+                  <label description="Preferred Customer" languagecode="1033" />
+                </labels>
+                <Descriptions>
+                  <Description description="Preferred Customer" languagecode="1033" />
+                </Descriptions>
+              </option>
+              <option value="2" ExternalValue="" Color="">
+                <labels>
+                  <label description="Standard" languagecode="1031" />
+                  <label description="Chuẩn" languagecode="1066" />
+                  <label description="Standard" languagecode="1033" />
+                </labels>
+                <Descriptions>
+                  <Description description="Standard 2" languagecode="1033" />
+                </Descriptions>
+              </option>
+              <option value="3" ExternalValue="" Color="#0000ff">
+                <labels>
+                  <label description="Standard" languagecode="1033" />
+                </labels>
+                <Descriptions>
+                  <Description description="Standard 3" languagecode="1033" />
+                </Descriptions>
+              </option>
+              <option value="100000001" ExternalValue="" Color="#0000ff">
+                <labels>
+                  <label description="Other" languagecode="1033" />
+                </labels>
+                <Descriptions>
+                  <Description description="Other" languagecode="1033" />
+                </Descriptions>
+              </option>
+            </options>
+          </optionset>
+          <displaynames>
+            <displayname description="Kategorie" languagecode="1031" />
+            <displayname description="Thể loại" languagecode="1066" />
+            <displayname description="Category" languagecode="1033" />
+          </displaynames>
+          <Descriptions>
+            <Description description="Wählen Sie eine Kategorie aus, um anzugeben, ob es sich um ein standardmäßiges oder um ein bevorzugtes Kundenkonto handelt." languagecode="1031" />
+            <Description description="Chọn một thể loại để cho biết tài khoản khách hàng là tiêu chuẩn hay là ưu tiên." languagecode="1066" />
+            <Description description="Select a category to indicate whether the customer account is standard or preferred." languagecode="1033" />
+          </Descriptions>
+        </attribute>
+        <attribute PhysicalName="AccountNumber">
+          <Type>nvarchar</Type>
+          <Name>accountnumber</Name>
+          <LogicalName>accountnumber</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>auto</ImeMode>
+          <ValidForUpdateApi>1</ValidForUpdateApi>
+          <ValidForReadApi>1</ValidForReadApi>
+          <ValidForCreateApi>1</ValidForCreateApi>
+          <IsCustomField>0</IsCustomField>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <IsSecured>0</IsSecured>
+          <IntroducedVersion>5.0.0.0</IntroducedVersion>
+          <SourceType>0</SourceType>
+          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
+          <IsSortableEnabled>0</IsSortableEnabled>
+          <IsDataSourceSecret>0</IsDataSourceSecret>
+          <AutoNumberFormat></AutoNumberFormat>
+          <IsSearchable>1</IsSearchable>
+          <IsFilterable>0</IsFilterable>
+          <IsRetrievable>1</IsRetrievable>
+          <IsLocalizable>0</IsLocalizable>
+          <Format>text</Format>
+          <MaxLength>20</MaxLength>
+          <Length>40</Length>
+          <displaynames>
+            <displayname description="Firmennummer" languagecode="1031" />
+            <displayname description="Số Tài khoản" languagecode="1066" />
+            <displayname description="Account Number" languagecode="1033" />
+          </displaynames>
+          <Descriptions>
+            <Description description="Geben Sie eine ID-Nummer oder einen ID-Code für die Firma ein, um es in Systemansichten schnell suchen und erkennen zu können." languagecode="1031" />
+            <Description description="Nhập số ID hoặc mã cho tài khoản để nhanh chóng tìm kiếm và xác định tài khoản trong dạng xem hệ thống." languagecode="1066" />
+            <Description description="Type an number or code for the account to quickly search and identify the account in system views." languagecode="1033" />
+          </Descriptions>
+        </attribute>
+        <attribute PhysicalName="devkit_LocationId">
+          <Type>lookup</Type>
+          <Name>devkit_locationid</Name>
+          <LogicalName>devkit_locationid</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <ImeMode>auto</ImeMode>
+          <ValidForUpdateApi>1</ValidForUpdateApi>
+          <ValidForReadApi>1</ValidForReadApi>
+          <ValidForCreateApi>1</ValidForCreateApi>
+          <IsCustomField>1</IsCustomField>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <IsSecured>0</IsSecured>
+          <IntroducedVersion>1.0.0.0</IntroducedVersion>
+          <IsCustomizable>1</IsCustomizable>
+          <IsRenameable>1</IsRenameable>
+          <CanModifySearchSettings>1</CanModifySearchSettings>
+          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
+          <SourceType>0</SourceType>
+          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
+          <IsSortableEnabled>0</IsSortableEnabled>
+          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
+          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+          <IsDataSourceSecret>0</IsDataSourceSecret>
+          <AutoNumberFormat></AutoNumberFormat>
+          <IsSearchable>0</IsSearchable>
+          <IsFilterable>0</IsFilterable>
+          <IsRetrievable>0</IsRetrievable>
+          <IsLocalizable>0</IsLocalizable>
+          <LookupStyle>single</LookupStyle>
+          <LookupTypes />
+          <displaynames>
+            <displayname description="Location" languagecode="1033" />
+          </displaynames>
+          <Descriptions>
+            <Description description="" languagecode="1033" />
+          </Descriptions>
+        </attribute>
+      </attributes>
+    </entity>
+  </EntityInfo>
+  <FormXml />
+  <RibbonDiffXml />
+</Entity>

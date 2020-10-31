@@ -20,6 +20,7 @@ namespace $NameSpace$
                 return $"AuthType={AuthType};Url={Url};$ClientId$={$ClientId$};$ClientSecret$={$ClientSecret$};";
             }
         }
+
         static IOrganizationService InitializeIOrganizationService()
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;

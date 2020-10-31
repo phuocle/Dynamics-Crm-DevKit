@@ -4,13 +4,10 @@ using System.IO;
 using System.Linq;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
-using System.Xml.Linq;
-using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -36,145 +33,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         internal void Run()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "DOWNLOAD-WEBRESOURCES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "[DOWNLOAD-WEBRESOURCES]");
+            CliLog.WriteLine();
 
             if (!IsValid()) return;
 
-            var list = DownloadWebResources();
-            var jsonFile = Path.Combine(currentDirectory, arguments.Json);
+            if (!json.prefix.EndsWith("_")) json.prefix += "_";
 
-            var all = SimpleJson.DeserializeObject<Json>(File.ReadAllText(jsonFile));
-            var jsonWebResource = all.webresources.FirstOrDefault(x => x.profile == arguments.Profile);
-            if (jsonWebResource != null)
-            {
-                foreach (var item in list)
-                {
-                    if (!jsonWebResource.includefiles.Contains(item))
-                    {
-                        jsonWebResource.includefiles.Add(item);
-                    }
-                }
-                jsonWebResource.dependencies = GetUpdateDependencies(jsonWebResource.dependencies);
-                var updateJson = SimpleJson.SerializeObject(all);
-                updateJson = updateJson.Replace("[entity]", "__entity__");
-                updateJson = JsonHelper.FormatJson(updateJson);
-                updateJson = updateJson.Replace("__entity__", "[entity]");
-                Utility.ForceWriteAllText(jsonFile, updateJson);
-            }
-            AddProjectItemGroup(list);
+            DownloadWebResources();
 
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "DOWNLOAD-WEBRESOURCES");
-        }
-
-        private void AddProjectItemGroup(List<string> list)
-        {
-            var projects = Directory.GetFiles(currentDirectory, "*.csproj");
-            foreach (var project in projects)
-            {
-                var content = File.ReadAllText(project);
-                if (content.IndexOf("download.webresources.bat") > 0)
-                {
-                    var xdoc = XDocument.Parse(content);
-                    var items = (from x in xdoc.Descendants()
-                                 where x?.Attribute("Include")?.Value != null
-                                 select x?.Attribute("Include")?.Value
-                                ).ToList();
-                    var lines = from item in list
-                                where !items.Contains(item)
-                                select item;
-                    if (lines.Count() == 0) break;
-                    var itemGroup = "\t<ItemGroup>\r\n";
-                    foreach (var item in lines)
-                    {
-                        if (item.EndsWith(".resx"))
-                            itemGroup += $"\t\t<None Include=\"{item}\" />\r\n";
-                        else
-                            itemGroup += $"\t\t<Content Include=\"{item}\" />\r\n";
-                    }
-                    itemGroup += "\t</ItemGroup>\r\n";
-                    content = content.Replace("</Project>", itemGroup + "</Project>");
-                    File.WriteAllText(project, content);
-                    break;
-                }
-            }
-        }
-
-        private List<Dependency> GetUpdateDependencies(List<Dependency> dependencies)
-        {
-            if (!IsSupportWebResourceDependency)
-            {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "Your organization don't suport WebResource dependency");
-                return dependencies;
-            }
-            var i = 1;
-            var total = downloadedFiles.Count;
-            var len = total.ToString().Length;
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, total, CliLog.ColorGreen, " webresources");
-            foreach (var downloadedFile in downloadedFiles)
-            {
-                var fetchData = new
-                {
-                    webresourceid = downloadedFile.ObjectId
-                };
-                var fetchXml = $@"
-<fetch>
-  <entity name='webresource'>
-    <attribute name='name' />
-    <attribute name='dependencyxml' />
-    <filter type='and'>
-      <condition attribute='webresourceid' operator='eq' value='{fetchData.webresourceid}'/>
-    </filter>
-  </entity>
-</fetch>";
-                var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-                if (rows.Entities.Count != 1) continue;
-                var name = rows.Entities[0].GetAttributeValue<string>("name");
-                var dependencyxml = rows.Entities[0].GetAttributeValue<string>("dependencyxml");
-                if (dependencyxml == null)
-                {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Dependency: ", CliLog.ColorGreen, name, CliLog.ColorWhite, " not found");
-                    i++;
-                    continue;
-                }
-                var xdoc = XDocument.Parse(dependencyxml);
-                var webResources = (from x in xdoc.Descendants("Dependencies").Descendants("Dependency").Elements("Library")
-                                    select new
-                                    {
-                                        name = x?.Attribute("name")?.Value
-                                    }).ToList();
-                if (webResources.Count == 0)
-                {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Dependency: ", CliLog.ColorGreen, name, CliLog.ColorWhite, " not found");
-                    i++;
-                    continue;
-                }
-                var existing = dependencies.FirstOrDefault(d => d.webresources.Contains(name));
-                List<string> dependenciesLog;
-                if (existing == null)
-                {
-                    dependenciesLog = webResources.Select(w => w.name).ToList();
-                    dependencies.Add(new Dependency
-                    {
-                        webresources = new List<string> { name },
-                        dependencies = dependenciesLog
-                    });
-                }
-                else
-                {
-                    var update = existing.dependencies;
-                    update.AddRange(webResources.Select(w => w.name).ToList());
-                    update = update.Distinct().ToList();
-                    existing.dependencies = update;
-                    dependenciesLog = update;
-                }
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Dependency: ", CliLog.ColorGreen, name, CliLog.ColorWhite, " dependencies");
-                foreach (var dependency in dependenciesLog)
-                {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "\t", CliLog.ColorGreen, dependency);
-                }
-                i++;
-            }
-            return dependencies;
+            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "[DOWNLOAD-WEBRESOURCES]");
         }
 
         private bool IsValid()
@@ -188,9 +57,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return true;
         }
 
-        private List<string> DownloadWebResources()
+        private void DownloadWebResources()
         {
-            var list = new List<string>();
             var fetchData = new
             {
                 ismanaged = "0",
@@ -246,13 +114,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             var totalDownloadWebResources = downloadFiles.Count;
             var len = totalDownloadWebResources.ToString().Length;
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorCyan, totalDownloadWebResources, CliLog.ColorGreen, " webresources");
-            //DELETE first
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, totalDownloadWebResources, CliLog.ColorGreen, " webresources");
+
             foreach (var downloadFile in downloadFiles)
             {
                 Utility.TryDeleteFile(downloadFile.FileName);
             }
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "   !!!   Deleted ", CliLog.ColorWhite, totalDownloadWebResources, CliLog.ColorRed, " existing files   !!!   ");
 
             var i = 1;
             foreach (var downloadFile in downloadFiles)
@@ -261,12 +128,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (isOk)
                 {
                     var shortFileName = downloadFile.FileName.Substring(currentDirectory.Length + 1);
-                    list.Add(shortFileName);
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, string.Format("{0,0}|{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Downloaded: ", CliLog.ColorGreen, downloadFile.Name, CliLog.ColorWhite, " to: ", CliLog.ColorGreen, shortFileName);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, string.Format("{0,0}{1," + len + "}", "", i) + ": ", CliLog.ColorWhite, "Downloaded ", CliLog.ColorGreen, downloadFile.Name, CliLog.ColorWhite, " to: ", CliLog.ColorGreen, shortFileName);
                 }
                 i++;
             }
-            return list;
         }
 
         private bool DownloadWebResourceFile(DownloadFile downloadFile, int i, int totalDownloadWebResources)
@@ -287,7 +152,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 return true;
             }
         }
-
 
         private List<DownloadFile> DownloadFiles(DataCollection<Entity> entities)
         {
@@ -337,20 +201,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 case WebResourceWebResourceType.SvgFormat: return ".svg";
             }
             return ".html";
-        }
-
-        private bool? _isSupportWebResourceDependency = (bool?)null;
-        private bool IsSupportWebResourceDependency
-        {
-            get
-            {
-                if (_isSupportWebResourceDependency != null) return _isSupportWebResourceDependency.Value;
-                var request = new RetrieveVersionRequest();
-                var response = (RetrieveVersionResponse)crmServiceClient.Execute(request);
-                var version = new Version(response.Version);
-                _isSupportWebResourceDependency = version >= new Version("9.0");
-                return _isSupportWebResourceDependency.Value;
-            }
         }
     }
 }

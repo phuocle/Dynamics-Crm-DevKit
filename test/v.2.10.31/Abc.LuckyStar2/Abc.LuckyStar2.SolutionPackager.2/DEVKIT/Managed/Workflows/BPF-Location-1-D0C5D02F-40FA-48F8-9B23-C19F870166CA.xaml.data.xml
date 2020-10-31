@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{d0c5d02f-40fa-48f8-9b23-c19f870166ca}" Name="BPF-Location-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <XamlFileName>/Workflows/BPF-Location-1-D0C5D02F-40FA-48F8-9B23-C19F870166CA.xaml</XamlFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>4</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>1</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <processorder>100</processorder>
+  <RunAs>1</RunAs>
+  <UniqueName>devkit_bpf_location_1</UniqueName>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ProcessTriggerScope>1</ProcessTriggerScope>
+  <PrimaryEntity>devkit_Location</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="BPF-Location-1" />
+  </LocalizedNames>
+  <labels>
+    <steplabels id="{c124b9c1-f7ae-4ace-95c3-5196630408e8}">
+      <label languagecode="1033" description="Stage 1" />
+    </steplabels>
+    <steplabels id="{b7039685-656e-4be2-91a4-d5e1f6ac3d31}">
+      <label languagecode="1033" description="Account" />
+    </steplabels>
+    <steplabels id="{bf9508ed-d119-4ae0-83fb-a6fbb77e3dcd}">
+      <label languagecode="1033" description="Contact" />
+    </steplabels>
+    <steplabels id="{d3412a3e-2a2d-414a-bd9a-1a765992f509}">
+      <label languagecode="1033" description="Stage 2" />
+    </steplabels>
+    <steplabels id="{49d5876d-699b-4939-9c10-39fc0d6f68fd}">
+      <label languagecode="1033" description="Customer" />
+    </steplabels>
+  </labels>
+</Workflow>

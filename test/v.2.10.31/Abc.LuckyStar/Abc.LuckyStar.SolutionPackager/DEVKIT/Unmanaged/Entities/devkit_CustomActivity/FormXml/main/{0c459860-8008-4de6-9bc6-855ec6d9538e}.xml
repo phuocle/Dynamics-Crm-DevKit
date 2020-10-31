@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{0c459860-8008-4de6-9bc6-855ec6d9538e}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="true" showImage="false" maxWidth="1920">
+      <tabs>
+        <tab verticallayout="true" id="{8bd55f69-1237-4eb2-97b4-dd8ef5d0e712}" IsUserDefined="1" name="tabGeneral" locklevel="0" expanded="true" showlabel="true">
+          <labels>
+            <label description="Allgemein" languagecode="1031" />
+            <label description="General" languagecode="1033" />
+            <label description="Tổng quát" languagecode="1066" />
+          </labels>
+          <columns>
+            <column width="33%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{1d11d2bd-be56-4f6b-b010-422856caa375}">
+                  <labels>
+                    <label description="Allgemein" languagecode="1031" />
+                    <label description="General" languagecode="1033" />
+                    <label description="Tổng quát" languagecode="1066" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{84c294c7-161b-40ee-b742-00daa2a11bee}">
+                        <labels>
+                          <label description="Subject" languagecode="1033" />
+                          <label description="Betreff" languagecode="1031" />
+                          <label description="Chủ đề" languagecode="1066" />
+                        </labels>
+                        <control id="subject" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="subject" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{653b2a17-a9fa-4ba3-a694-00be0930327d}">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                          <label description="Besitzer" languagecode="1031" />
+                          <label description="Chủ sở hữu" languagecode="1066" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a7a04a00-894c-4c62-b91b-891a18c1ebea}">
+                        <labels>
+                          <label description="Regarding" languagecode="1033" />
+                          <label description="Bezug" languagecode="1031" />
+                          <label description="Bản lưu ý" languagecode="1066" />
+                        </labels>
+                        <control id="regardingobjectid" classid="{F3015350-44A2-4aa0-97B5-00166532B5E9}" datafieldname="regardingobjectid" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="66%">
+              <sections>
+                <section showlabel="false" showbar="false" id="{0b788946-da95-421c-a1fc-fe2b797ffd8e}" IsUserDefined="0" height="auto">
+                  <labels>
+                    <label description="Notizen" languagecode="1031" />
+                    <label description="Notes" languagecode="1033" />
+                    <label description="Ghi chú" languagecode="1066" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell showlabel="false" rowspan="15" auto="false" id="{540a7d5c-f2e1-4f45-84ca-6f9e8dbec6c6}">
+                        <labels>
+                          <label description="Notiztext" languagecode="1031" />
+                          <label description="Note Text" languagecode="1033" />
+                          <label description="Văn bản ghi chú" languagecode="1066" />
+                        </labels>
+                        <control id="notescontrol" classid="{06375649-c143-495e-a496-c962e5b4488e}">
+                          <parameters>
+                            <DefaultTabId>NotesTab</DefaultTabId>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row height="auto" />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{36df4cf7-8116-4692-852f-67efe04ec2a3}" celllabelposition="Top" columns="1111" labelwidth="115">
+        <rows>
+          <row>
+            <cell id="{528df707-f2ab-431c-bafc-df1c689f9591}">
+              <labels>
+                <label description="Priority" languagecode="1033" />
+                <label description="Priorität" languagecode="1031" />
+                <label description="Ưu tiên" languagecode="1066" />
+              </labels>
+              <control id="header_prioritycode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="prioritycode" disabled="false" />
+            </cell>
+            <cell id="{4ae98544-5685-4545-822b-0d7102cc9b8e}">
+              <labels>
+                <label description="Due Date" languagecode="1033" />
+                <label description="Fälligkeitsdatum" languagecode="1031" />
+                <label description="Ngày Hết hạn" languagecode="1066" />
+              </labels>
+              <control id="header_scheduledend" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="scheduledend" disabled="false" />
+            </cell>
+            <cell id="{3d3faeb6-7283-4cd5-9480-b7bc44b1d06a}">
+              <labels>
+                <label description="Activity Status" languagecode="1033" />
+                <label description="Aktivitätsstatus" languagecode="1031" />
+                <label description="Trạng thái Hoạt động" languagecode="1066" />
+              </labels>
+              <control id="header_statecode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="false" />
+            </cell>
+            <cell id="{e6f4c93e-ecff-4e1c-8223-c1462446cdb3}">
+              <labels>
+                <label description="Owner" languagecode="1033" />
+                <label description="Besitzer" languagecode="1031" />
+                <label description="Chủ sở hữu" languagecode="1066" />
+              </labels>
+              <control id="header_ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" disabled="false" />
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <Navigation>
+        <NavBar></NavBar>
+        <NavBarAreas>
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Custom Activity" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

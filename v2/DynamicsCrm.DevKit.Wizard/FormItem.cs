@@ -11,6 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Drawing;
 using Microsoft.Xrm.Sdk;
+using DynamicsCrm.DevKit.SdkLogin;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -19,7 +21,6 @@ namespace DynamicsCrm.DevKit.Wizard
         public string GeneratedLateBoundClass { get; set; }
         public string GeneratedJsWebApiCode { get; set; }
         public string GeneratedJsWebApiCodeTypeScriptDeclaration { get; set; }
-
         public IOrganizationService CrmService { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string ComboBoxCrmName => comboBoxCrmName.Text;
@@ -198,11 +199,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
-            //Font = SystemFonts.DefaultFont;
-            //this.AutoScaleMode = AutoScaleMode.Font;
             progressBar.Visible = false;
-
-            Text += Const.Version;
 
             DTE = dte;
             ItemType = itemType;
@@ -283,6 +280,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 var file = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entityName}.d.ts";
                 var isDebugForm = false;
                 var jsForm = new List<string>();
+                var jsFormVersion = string.Empty;
                 if (File.Exists(file))
                 {
                     var lines = File.ReadAllLines(file);
@@ -290,11 +288,12 @@ namespace DynamicsCrm.DevKit.Wizard
                     var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
                     isDebugForm = comment.IsDebugForm;
                     jsForm = comment.JsForm;
+                    jsFormVersion = comment.JsFormVersion;
                 }
                 var jsGlobalNameSpace = Utility.GetJsGlobalNameSpace(DTE);
                 Task task2 = Task.Factory.StartNew(() =>
                 {
-                    var jsWebApi = new JsWebApi(CrmService, jsGlobalNameSpace, entityName, isDebug, jsForm, isDebugForm);
+                    var jsWebApi = new JsWebApi(CrmService, jsGlobalNameSpace, entityName, isDebug, jsForm, isDebugForm, jsFormVersion);
                     jsWebApi.GeneratorCode();
                     GeneratedJsWebApiCode = jsWebApi.WebApiCode;
                     GeneratedJsWebApiCodeTypeScriptDeclaration = jsWebApi.WebApiCodeTypeScriptDeclaration;
@@ -313,13 +312,47 @@ namespace DynamicsCrm.DevKit.Wizard
             DialogResult = DialogResult.Cancel;
         }
 
+        private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        {
+            if (sender is FormLogin login)
+            {
+                login.Close();
+            }
+        }
+
         private void buttonConnection_Click(object sender, EventArgs e)
         {
             var form = new FormConnection2(DTE);
             if (form.ShowDialog() == DialogResult.Cancel) return;
-
-            CrmConnection = form.CrmConnection;
-            CrmService = form.CrmService;
+            if (form.Check == "1")
+            {
+                if (ItemType == ItemType.LateBound ||
+                    ItemType == ItemType.JsWebApi ||
+                    ItemType == ItemType.JsTest ||
+                    ItemType == ItemType.ResourceString)
+                {
+                    var loginForm = new FormLogin();
+                    loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                    loginForm.ShowDialog();
+                    if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+                    {
+                        if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
+                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
+                        else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
+                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
+                        else
+                            throw new WizardCancelledException();
+                        CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
+                    }
+                    else
+                        throw new WizardCancelledException();
+                }
+            }
+            else
+            {
+                CrmConnection = form.CrmConnection;
+                CrmService = form.CrmService;
+            }
 
             buttonOk.Enabled = true;
             comboBoxCrmName.Enabled = true;
@@ -460,6 +493,7 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 case ItemType.JsWebApi:
                     labelItemName.Text = $"{Utility.SafeName(text)}.webapi.js";
+                    LoadDebugCheckBox();
                     break;
                 case ItemType.JsTest:
                     labelItemName.Text = $"{Utility.SafeName(text)}.test.js";
@@ -475,6 +509,27 @@ namespace DynamicsCrm.DevKit.Wizard
                 case ItemType.Test:
                     labelItemName.Text = $"{Utility.SafeName(text)}Test.cs";
                     break;
+            }
+        }
+
+        private void LoadDebugCheckBox()
+        {
+            var entity = comboBoxEntity.SelectedItem as XrmEntity;
+            var file1 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entity.Name}.intellisense.js";
+            var file2 = $"{DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]}{entity.Name}.d.ts";
+            var file = File.Exists(file2) ? file2 : file1;
+            if (File.Exists(file))
+            {
+                try
+                {
+                    var lines = File.ReadAllLines(file);
+                    var json = lines[lines.Length - 1];
+                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    checkBoxDebug.Checked = comment.IsDebugWebApi;
+                }
+                catch
+                {
+                }
             }
         }
 

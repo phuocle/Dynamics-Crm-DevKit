@@ -100,18 +100,17 @@
             this.checkListForm.Location = new System.Drawing.Point(8, 57);
             this.checkListForm.Margin = new System.Windows.Forms.Padding(2);
             this.checkListForm.Name = "checkListForm";
-            this.checkListForm.Size = new System.Drawing.Size(373, 124);
+            this.checkListForm.Size = new System.Drawing.Size(373, 106);
             this.checkListForm.TabIndex = 22;
             this.checkListForm.SelectedIndexChanged += new System.EventHandler(this.CheckListForm_SelectedIndexChanged);
             // 
             // checkBoxDebug
             // 
-            this.checkBoxDebug.AutoSize = true;
             this.checkBoxDebug.Enabled = false;
             this.checkBoxDebug.Location = new System.Drawing.Point(290, 38);
             this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDebug.Name = "checkBoxDebug";
-            this.checkBoxDebug.Size = new System.Drawing.Size(64, 17);
+            this.checkBoxDebug.Size = new System.Drawing.Size(90, 16);
             this.checkBoxDebug.TabIndex = 5;
             this.checkBoxDebug.Text = "DEBUG";
             this.checkBoxDebug.UseVisualStyleBackColor = true;
@@ -128,10 +127,10 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxEntity.Location = new System.Drawing.Point(70, 16);
+            this.comboBoxEntity.Location = new System.Drawing.Point(86, 16);
             this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxEntity.Name = "comboBoxEntity";
-            this.comboBoxEntity.Size = new System.Drawing.Size(311, 21);
+            this.comboBoxEntity.Size = new System.Drawing.Size(295, 21);
             this.comboBoxEntity.TabIndex = 4;
             this.comboBoxEntity.SelectedIndexChanged += new System.EventHandler(this.comboBoxEntity_SelectedIndexChanged);
             // 
@@ -159,7 +158,7 @@
             this.labelItemName.Location = new System.Drawing.Point(70, 39);
             this.labelItemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItemName.Name = "labelItemName";
-            this.labelItemName.Size = new System.Drawing.Size(0, 13);
+            this.labelItemName.Size = new System.Drawing.Size(0, 16);
             this.labelItemName.TabIndex = 2;
             // 
             // labelItem
@@ -168,7 +167,7 @@
             this.labelItem.Location = new System.Drawing.Point(6, 18);
             this.labelItem.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItem.Name = "labelItem";
-            this.labelItem.Size = new System.Drawing.Size(61, 13);
+            this.labelItem.Size = new System.Drawing.Size(76, 16);
             this.labelItem.TabIndex = 0;
             this.labelItem.Text = "Item Name:";
             // 
@@ -198,8 +197,7 @@
             // FormItemForm
             // 
             this.AcceptButton = this.buttonOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(494, 199);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
@@ -207,7 +205,7 @@
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.link);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -215,7 +213,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DynamicsCrm.DevKit - v.";
+            this.Text = "DynamicsCrm.DevKit";
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);

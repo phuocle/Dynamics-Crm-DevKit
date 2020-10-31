@@ -56,14 +56,6 @@
         },
         {
           "webresources": [
-            "???_/entities/[entity].webapi.js"
-          ],
-          "dependencies": [
-            "???_/lib/WebApiClient.js"
-          ]
-        },
-        {
-          "webresources": [
             "???_/entities/[entity].form.js"
           ],
           "dependencies": [
@@ -131,6 +123,7 @@
       "rootfolder": "???",
       "crmversion": "365",
       "type": "CSharp",
+      "entities": "",
       "debug":  ""
     },
     {
@@ -139,6 +132,7 @@
       "rootfolder": "???",
       "crmversion": "365",
       "type": "JsForm",
+      "entities": "",
       "debug": ""
     },
     {
@@ -147,7 +141,8 @@
       "rootfolder": "???",
       "crmversion": "365",
       "type": "JsWebApi",
-      "debug":  ""
+      "entities": "",
+      "debug": ""
     }
   ],
   "downloadwebresources": [
@@ -164,22 +159,15 @@
       "solution":  "???"
     }
   ],
-  "portals": [
-    {
-      "profile": "DEBUG",
-      "name": "???"
-    }
-  ],
   "proxytypes": [
     {
-      "profile": "DEBUG",
+      "profile": "ALL",
       "namespace": "???",
       "output": "GeneratedCode.cs",
       "entities":  ""
     }
   ],
   "visualstudio": {
-    "connection": "???",
     "webresourceprofile": "???"
   }
 }

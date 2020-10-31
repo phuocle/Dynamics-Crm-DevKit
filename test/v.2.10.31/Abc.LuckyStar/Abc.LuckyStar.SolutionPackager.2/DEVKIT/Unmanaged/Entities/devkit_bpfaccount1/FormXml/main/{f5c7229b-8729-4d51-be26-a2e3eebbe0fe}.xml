@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{f5c7229b-8729-4d51-be26-a2e3eebbe0fe}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{b23a9798-032c-407a-b378-ff2b7cba5219}" name="StageStep3" locklevel="0" expanded="true" visible="false" labelid="{f291d739-f010-4753-8565-d5e312aab55f}">
+          <labels>
+            <label description="Stage 1" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{b23a9798-032c-407a-b378-ff2b7cba5219}" name="StageStep3_section1" labelid="{4c946ec1-1a53-4140-a54b-c6c519c6eef5}">
+                  <labels>
+                    <label description="Stage 1" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{5259207e-0ebf-4c6b-af99-dbcc80bff7e4}" showlabel="true" visible="true" labelid="{b39c215b-f2d3-4607-8cf8-dd95e287eec5}">
+                        <labels>
+                          <label description="Account Name" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_account_devkit_bpfaccount1:name" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="name" relationship="bpf_account_devkit_bpfaccount1" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{888dfdbd-b9da-4271-9a3e-2583a0604325}" showlabel="true" visible="true" labelid="{446b0081-11a6-488a-a5cc-d0e9e41b2409}">
+                        <labels>
+                          <label description="Account Number" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_account_devkit_bpfaccount1:accountnumber" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="accountnumber" relationship="bpf_account_devkit_bpfaccount1" isrequired="true" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{ed620c53-7a3c-46dd-aaed-31432fceb2d1}" name="StageStep9" locklevel="0" expanded="true" visible="false" labelid="{95364bab-bccc-4cbf-b3be-8d3b86c465be}">
+          <labels>
+            <label description="Stage 2" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{ed620c53-7a3c-46dd-aaed-31432fceb2d1}" name="StageStep9_section1" labelid="{28c7c191-4ff4-4918-8909-def192f84f08}">
+                  <labels>
+                    <label description="Stage 2" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{a933e221-9e47-44f0-b720-c2b1f28aea0b}" showlabel="true" visible="true" labelid="{146afc70-3e29-48b4-b608-7d5867752fec}">
+                        <labels>
+                          <label description="Main Phone" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_account_devkit_bpfaccount1:telephone1" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="telephone1" relationship="bpf_account_devkit_bpfaccount1" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab verticallayout="true" id="{09d3a83c-2b42-4e95-adff-6bbc27093a62}" name="StageStep13" locklevel="0" expanded="true" visible="false" labelid="{3e3f303b-8482-45f6-9e7e-28b2cbe5f072}">
+          <labels>
+            <label description="Stage 3" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showbar="false" columns="1" id="{09d3a83c-2b42-4e95-adff-6bbc27093a62}" name="StageStep13_section1" labelid="{80aa8742-024b-405c-a272-15c90397783a}">
+                  <labels>
+                    <label description="Stage 3" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{0dadf6b8-833b-48f0-99da-5286be0cc9d8}" showlabel="true" visible="true" labelid="{c69ae8f1-2721-43e3-b623-e60bd558f6e0}">
+                        <labels>
+                          <label description="Other Phone" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_account_devkit_bpfaccount1:telephone2" classid="{4273edbd-ac1d-40d3-9fb2-095c621b552d}" datafieldname="telephone2" relationship="bpf_account_devkit_bpfaccount1" isrequired="false" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{723fbe9f-a809-46a5-8c3d-72f2c582e50d}" showlabel="true" visible="true" labelid="{0363b8f1-f026-4880-b774-9de040061bdb}">
+                        <labels>
+                          <label description="Category" languagecode="1033" />
+                        </labels>
+                        <control id="bpf_account_devkit_bpfaccount1:accountcategorycode" classid="{3ef39988-22bb-4f0b-bbbe-64b5a3748aee}" datafieldname="accountcategorycode" relationship="bpf_account_devkit_bpfaccount1" isrequired="true" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

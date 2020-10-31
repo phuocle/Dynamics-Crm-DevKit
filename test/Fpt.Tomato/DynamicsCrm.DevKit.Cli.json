@@ -1,0 +1,104 @@
+﻿{
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "DEVKIT",
+      "prefix": "devkit_",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "abc_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "abc_/entities/[entity].form.js",
+            "abc_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "abc_/entities/[entity].webapi.js"
+          ],
+          "dependencies": [
+            "abc_/lib/WebApiClient.js",
+            "abc_/lib/devkit.js"
+          ]
+        },
+        {
+          "webresources": [
+            "abc_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "abc_/lib/devkit.js"
+          ]
+        }
+      ]
+    },
+    {
+      "profile": "DEBUG2",
+      "solution": "DEVKIT",
+      "prefix": "devkit_",
+      "rootfolder": "",
+      "includefiles": [
+        "entities\\*.js",
+        "lib\\**.js"
+      ],
+      "excludefiles": [
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "devkit_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "devkit_/entities/[entity].form.js"
+          ]
+        },
+        {
+          "webresources": [
+            "devkit_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "devkit_/lib/devkit.js",
+            "devkit_/lib/lodash.min.js"
+          ]
+        }
+      ]
+    }
+  ],
+  "generators": [
+    {
+      "profile": "JS-FORM",
+      "rootnamespace": "Fpt.Tomato",
+      "rootfolder": "",
+      "crmversion": "365",
+      "type": "JsForm",
+      "debug": "yes"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "Fpt.Tomato",
+      "rootfolder": "",
+      "crmversion": "365",
+      "type": "JsWebApi",
+      "debug": "yes"
+    }
+  ],
+  "visualstudio": {
+    "connection": "DEVKIT-ClientSecret",
+    "webresourceprofile": "DEBUG"
+  }
+}

@@ -76,9 +76,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.JsFormItemTemplate", "It
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Package", "DynamicsCrm.DevKit.Package\DynamicsCrm.DevKit.Package.csproj", "{6302EA70-637D-4FDC-B169-1493427DD8D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Console", "DynamicsCrm.DevKit.Console\DynamicsCrm.DevKit.Console.csproj", "{26067BC0-588B-4079-BBF6-6E0964BFDEBD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12.JsDevkitItemTemplate", "ItemTemplates\CSharp\12.JsDevkitItemTemplate\12.JsDevkitItemTemplate.csproj", "{CCBD1381-E6A6-4A57-9853-E93A27A33F12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.WebResourceProjectTemplate", "ProjectTemplates\CSharp\13.WebResourceProjectTemplate\13.WebResourceProjectTemplate.csproj", "{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.JsFormItemTemplate", "ItemTemplates\CSharp\13.JsFormItemTemplate\13.JsFormItemTemplate.csproj", "{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.SdkLogin", "DynamicsCrm.DevKit.SdkLogin\DynamicsCrm.DevKit.SdkLogin.csproj", "{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -198,14 +202,22 @@ Global
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -237,6 +249,8 @@ Global
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{F3432EFE-5FE3-46F4-9335-703E658C022E} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
+		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
+		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}

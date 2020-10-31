@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private CrmServiceClient crmServiceClient;
         private string currentDirectory;
         private CommandLineArgs arguments;
-        private const string LOG = "[SOLUTIONPACKAGER]";
+        private const string LOG = "[SOLUTION-PACKAGER]";
         private JsonSolutionPackager json;
 
         public TaskSolutionPackager(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
@@ -32,14 +32,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         internal void Run()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "SOLUTION-PACKAGER");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
+            CliLog.WriteLine();
 
             if (!IsValid()) return;
 
             var solution = GetSolutionFromCrm();
             Packger(solution);
 
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "SOLUTION-PACKAGER");
+            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
         private bool IsValid()
@@ -63,22 +65,43 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private string GetSolutionFromCrm()
         {
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"Exporting {json.solutiontype} solution: ", CliLog.ColorCyan, json.solution, CliLog.ColorGreen, " to:");
-            var fileName = Utility.FormatSolutionVersionString(json.solution, System.Version.Parse(CrmVersion), json.solutiontype);
-            var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", fileName);
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + solutionFile);
-            var request = new ExportSolutionRequest
+            if (json.type.ToLower().Trim() == "Extract".ToLower())
             {
-                Managed = json.solutiontype == "Managed",
-                SolutionName = json.solution
-            };
-            var response = (ExportSolutionResponse)crmServiceClient.Execute(request);
-            var tempFile = Utility.WriteTempFile(fileName, response.ExportSolutionFile);
-            var dir = Path.GetDirectoryName(solutionFile);
-            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-            File.Copy(tempFile, solutionFile, true);
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"Exported {json.solutiontype} solution: ", CliLog.ColorCyan);
-            return solutionFile;
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Exporting ", CliLog.ColorCyan, json.solutiontype, CliLog.ColorGreen, " solution: ", CliLog.ColorCyan, json.solution, CliLog.ColorGreen, " to:");
+                var fileName = Utility.FormatSolutionVersionString(json.solution, System.Version.Parse(CrmVersion), json.solutiontype);
+                var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", fileName);
+                CliLog.WriteLine(CliLog.ColorCyan, " " + solutionFile);
+                var request = new ExportSolutionRequest
+                {
+                    Managed = json.solutiontype == "Managed",
+                    SolutionName = json.solution
+                };
+                try
+                {
+                    var response = (ExportSolutionResponse)crmServiceClient.Execute(request);
+                    var tempFile = Utility.WriteTempFile(fileName, response.ExportSolutionFile);
+                    var dir = Path.GetDirectoryName(solutionFile);
+                    if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                    File.Copy(tempFile, solutionFile, true);
+                    return solutionFile;
+                }
+                catch (TimeoutException te)
+                {
+                    CliLog.WriteLine();
+                    CliLog.WriteLine();
+                    CliLog.WriteLine(ConsoleColor.White, te.Message);
+                    CliLog.WriteLine();
+                    CliLog.WriteLine();
+                    CliLog.WriteLine(ConsoleColor.Red, "!!! [SOLUTION-PACKAGER] FAILED !!!");
+                    throw;
+                }
+            }
+            else
+            {
+                var fileName = Utility.FormatSolutionVersionString(json.solution, System.Version.Parse(CrmVersion), json.solutiontype);
+                var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", fileName);
+                return solutionFile;
+            }
         }
 
         private string CrmVersion
@@ -109,10 +132,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var command = CreateCommandArgs(solutionFile);
             var path = "\"" + GetParentFolder(currentDirectory) + $@"\packages\Microsoft.CrmSdk.CoreTools.{arguments.Version}\content\bin\coretools\SolutionPackager.exe" + "\"";
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Executing Solution Packager");
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + path);
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + command);
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Executing ", CliLog.ColorCyan, "Solution Packager");
+            CliLog.WriteLine(CliLog.ColorCyan, " " + path + " " + command);
+            CliLog.WriteLine();
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo(path)
@@ -131,7 +153,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, line);
             }
             process.WaitForExit();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Executed Solution Packager");
         }
 
         private string GetParentFolder(string currentDirectory)

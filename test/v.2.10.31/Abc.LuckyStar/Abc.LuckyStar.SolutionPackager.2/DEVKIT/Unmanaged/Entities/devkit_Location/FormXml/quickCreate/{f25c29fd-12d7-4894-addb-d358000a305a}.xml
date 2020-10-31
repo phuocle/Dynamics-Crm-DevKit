@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{f25c29fd-12d7-4894-addb-d358000a305a}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form maxWidth="1920">
+      <tabs>
+        <tab id="{4798af24-0a7d-4b98-9fe4-ca5dd561cab1}" name="tab_1" showlabel="false">
+          <labels>
+            <label description="Tab" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="33%">
+              <sections>
+                <section id="{2135e0e2-c2a8-4590-8849-c82020340dbb}" name="tab1sec1" columns="1" showlabel="true" showbar="true" IsUserDefined="0" locklevel="0" labelwidth="130" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="sec1" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{81177042-8b31-8513-b75a-c555ae637151}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Account" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_accountid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_accountid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{ed021891-ac84-40d0-3c6c-419bcd8add97}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Status Reason" languagecode="1033" />
+                          <label description="Statusgrund" languagecode="1031" />
+                          <label description="Lý do dẫn đến Trạng thái" languagecode="1066" />
+                        </labels>
+                        <control id="statuscode" classid="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}" datafieldname="statuscode" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="33%">
+              <sections>
+                <section id="{b04b4ec5-9ee1-4dc2-ba93-ab008e778d77}" name="tab1sec2" columns="1" showlabel="true" showbar="true" IsUserDefined="0" locklevel="0" labelwidth="130" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="sec2" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{b328a3dd-0086-2198-9504-ee2d79285d5a}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Contact" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_contactid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_contactid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{00c35a86-41a4-d039-01ce-9865920a02cc}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                          <label description="Besitzer" languagecode="1031" />
+                          <label description="Chủ sở hữu" languagecode="1066" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="33%">
+              <sections>
+                <section id="{719c32d3-7eaa-4e73-bbe5-49438d5949b1}" name="tab1sec3" columns="1" showlabel="true" showbar="true" IsUserDefined="0" locklevel="0" labelwidth="130" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="sec3" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{4e53a157-2460-9c1b-48e7-a3083ed1b941}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Customer" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_customerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_customerid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{381e1cac-528e-48a1-45be-560c6d5802b3}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_name" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <DisplayConditions Order="1">
+        <Role Id="{627090ff-40a3-4053-8790-584edc5be201}" />
+        <Role Id="{119f245c-3cc8-4b62-b31c-d1a046ced15d}" />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Quick Create Location" languagecode="1033" />
+    </LocalizedNames>
+  </systemform>
+</forms>

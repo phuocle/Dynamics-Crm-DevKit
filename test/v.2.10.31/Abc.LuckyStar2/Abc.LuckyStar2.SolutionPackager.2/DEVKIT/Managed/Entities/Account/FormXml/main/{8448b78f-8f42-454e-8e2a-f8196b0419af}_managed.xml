@@ -1,0 +1,500 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{8448b78f-8f42-454e-8e2a-f8196b0419af}</formid>
+    <IntroducedVersion>5.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form showImage="true" shownavigationbar="true" maxWidth="1920" solutionaction="Modified">
+      <tabs>
+        <tab name="SUMMARY_TAB" id="{3b0b63a9-d379-689a-0ec3-e71eb4c6a841}" IsUserDefined="0" showlabel="true" expanded="true" locklevel="0" ordinalvalue="0">
+          <columns>
+            <column width="33%" id="0">
+              <sections>
+                <section name="ACCOUNT_INFORMATION" showlabel="true" showbar="false" id="{0eb92e6c-bcb8-0d52-a188-d81543ddb7cd}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{b0e82a7e-5683-d90c-308a-0d779377ea8a}" showlabel="true" ordinalvalue="10000">
+                        <labels>
+                          <label description="Firmenname" languagecode="1031" solutionaction="Added" />
+                          <label description="Account Name" languagecode="1033" solutionaction="Added" />
+                          <label description="Tên Tài khoản" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3441a91e-47c5-672c-7a20-902d6baa9036}" showlabel="true" ordinalvalue="10002" solutionaction="Modified" />
+                    </row>
+                    <row>
+                      <cell id="{8b98a55e-a345-b20e-d46e-801e79d5c1c1}" showlabel="true" ordinalvalue="10003" solutionaction="Modified">
+                        <labels>
+                          <label description="Fax" languagecode="1031" solutionaction="Added" />
+                          <label description="Fax" languagecode="1033" solutionaction="Added" />
+                          <label description="Fax" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e6441984-4343-813a-aa7e-e2747ad35390}" showlabel="true" locklevel="0" ordinalvalue="10004" solutionaction="Modified">
+                        <labels>
+                          <label description="Website" languagecode="1031" solutionaction="Added" />
+                          <label description="Website" languagecode="1033" solutionaction="Added" />
+                          <label description="Trang web" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                        <control id="websiteurl" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" datafieldname="websiteurl" disabled="false" uniqueid="{c134b8cb-24ba-6163-861d-041197210369}" solutionaction="Modified" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{87DE203E-B03C-44CC-8B06-438202B82553}" ordinalvalue="10005" solutionaction="Modified">
+                        <labels>
+                          <label description="Übergeordnete Firma" languagecode="1031" solutionaction="Added" />
+                          <label description="Parent Account" languagecode="1033" solutionaction="Added" />
+                          <label description="Tài khoản Mẹ" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                        <control id="parentaccountid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="parentaccountid" uniqueid="{57a3585d-78c9-270e-a27e-28740609b1e7}" solutionaction="Modified" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5f38af3a-3307-47dc-b36d-d9a5de525e6e}" showlabel="true" ordinalvalue="10006" solutionaction="Modified">
+                        <labels>
+                          <label description="Börsenkürzel" languagecode="1031" solutionaction="Added" />
+                          <label description="Ticker Symbol" languagecode="1033" solutionaction="Added" />
+                          <label description="Ký hiệu Chứng khoán" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{15782c90-0e03-98d8-e349-150ee865d134}" showlabel="true" locklevel="0" ordinalvalue="10001" solutionaction="Added">
+                        <labels>
+                          <label description="Firmenname" languagecode="1031" />
+                          <label description="Account Name 2" languagecode="1033" />
+                          <label description="Tên Tài khoản" languagecode="1066" />
+                        </labels>
+                        <control id="name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="name" disabled="false" uniqueid="{5538268a-1888-3298-c6ea-80790234e465}" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="ADDRESS" showlabel="true" locklevel="0" showbar="false" id="{cc0fe06e-4b5f-4648-A62d-84d1514e1fc5}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell id="{4913500e-605a-809b-e99e-69e2710d09bd}" showlabel="true" locklevel="0" ordinalvalue="10000">
+                        <labels>
+                          <label description="Adresse 1" languagecode="1031" solutionaction="Added" />
+                          <label description="Address 1" languagecode="1033" solutionaction="Added" />
+                          <label description="Địa chỉ 1" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="42%" id="1">
+              <sections>
+                <section name="SOCIAL_PANE_TAB" showlabel="false" showbar="false" id="{7a073b7c-5422-2418-3d26-b2a7eb290832}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Top" locklevel="0" celllabelalignment="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{7e87ab43-7321-21c7-5704-24c5c38000c6}" showlabel="false" rowspan="23" auto="false" colspan="1" ordinalvalue="10000">
+                        <control id="notescontrol" classid="{06375649-c143-495e-a496-c962e5b4488e}" disabled="false" uniqueid="{0972ac52-8338-5071-2a5c-180b6c6e857b}" solutionaction="Modified" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="25%" id="2">
+              <sections>
+                <section name="SUMMARY_TAB_section_6" showlabel="false" showbar="false" locklevel="0" id="{d4c3ee9c-ba71-5cdb-31be-2aa505750472}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Top" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell id="{b187688c-8410-5990-16ec-e153968ab583}" showlabel="true" locklevel="0" ordinalvalue="10000">
+                        <labels>
+                          <label description="Primärer Kontakt" languagecode="1031" solutionaction="Added" />
+                          <label description="Primary Contact" languagecode="1033" solutionaction="Added" />
+                          <label description="Người liên hệ Chính" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0F664FFF-E39E-4676-9191-CBA16972B21D}" colspan="1" showlabel="false" ordinalvalue="10001">
+                        <labels>
+                          <label description="Primärer Kontakt" languagecode="1031" solutionaction="Added" />
+                          <label description="Primary Contact" languagecode="1033" solutionaction="Added" />
+                          <label description="Người liên hệ Chính" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8e24c7e3-6a40-5abb-eadb-254eba5478e2}" showlabel="true" colspan="1" auto="false" rowspan="7" ordinalvalue="10002" solutionaction="Removed" />
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="DETAILS_TAB" id="{11a42c72-9ded-ea04-253d-2143e731b795}" IsUserDefined="0" showlabel="true" expanded="true" ordinalvalue="1">
+          <columns>
+            <column width="34%" id="0">
+              <sections>
+                <section name="COMPANY_PROFILE" showlabel="true" showbar="false" id="{ca8587c5-18c0-cac1-7c34-6c639eade090}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{59782911-4d1a-38dc-ce49-7dae620dbc51}" showlabel="true" ordinalvalue="10000">
+                        <labels>
+                          <label description="Branche" languagecode="1031" solutionaction="Added" />
+                          <label description="Industry" languagecode="1033" solutionaction="Added" />
+                          <label description="Ngành" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{930beba3-d531-0808-c403-de95e2ac3e62}" showlabel="true" ordinalvalue="10001">
+                        <labels>
+                          <label description="NACE-Code" languagecode="1031" solutionaction="Added" />
+                          <label description="SIC Code" languagecode="1033" solutionaction="Added" />
+                          <label description="Mã SIC" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1c33ad89-92a1-8433-2378-306259eb57c0}" showlabel="true" ordinalvalue="10002">
+                        <labels>
+                          <label description="Besitz" languagecode="1031" solutionaction="Added" />
+                          <label description="Ownership" languagecode="1033" solutionaction="Added" />
+                          <label description="Quyền sở hữu" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="DETAILS_TAB_section_6" showlabel="true" showbar="false" locklevel="0" id="{e201b9ce-c3d5-c922-dba5-528c25066940}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Top" height="auto" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell id="{a4a726a2-8e3e-79d0-02c3-0a04a6b71089}" showlabel="false" locklevel="0" rowspan="3" auto="true" ordinalvalue="10000">
+                        <labels>
+                          <label description="Beschreibung" languagecode="1031" solutionaction="Added" />
+                          <label description="Description" languagecode="1033" solutionaction="Added" />
+                          <label description="Mô tả" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="33%" id="2">
+              <sections>
+                <section name="BILLING" showlabel="true" showbar="false" id="{910de80a-a17e-092a-255d-44d775cb4207}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" locklevel="0" celllabelalignment="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{7cd2b88c-b25c-4729-9c27-f59ebb5a1538}" ordinalvalue="10000">
+                        <labels>
+                          <label description="Währung" languagecode="1031" solutionaction="Added" />
+                          <label description="Currency" languagecode="1033" solutionaction="Added" />
+                          <label description="Loại tiền" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0125719c-a5b0-4230-9817-3fba5d6ebfaf}" ordinalvalue="10001">
+                        <labels>
+                          <label description="Kreditlimit" languagecode="1031" solutionaction="Added" />
+                          <label description="Credit Limit" languagecode="1033" solutionaction="Added" />
+                          <label description="Giới hạn Tín dụng" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{abc2c862-bcd4-4a4b-ac51-c311d4e66d5b}" ordinalvalue="10002">
+                        <labels>
+                          <label description="Kreditsperre" languagecode="1031" solutionaction="Added" />
+                          <label description="Credit Hold" languagecode="1033" solutionaction="Added" />
+                          <label description="Treo Tín dụng" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0bab9157-d14e-441f-969d-80460634c15e}" ordinalvalue="10003">
+                        <labels>
+                          <label description="Zahlungsbedingungen" languagecode="1031" solutionaction="Added" />
+                          <label description="Payment Terms" languagecode="1033" solutionaction="Added" />
+                          <label description="Điều khoản Thanh toán" languagecode="1066" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="{64BC19B9-1311-4B93-BE4C-6407B98D2AB3}" id="{2aa02c79-01be-4c69-0a16-13a130baae01}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true" ordinalvalue="2" solutionaction="Added">
+          <labels>
+            <label description="{64BC19B9-1311-4B93-BE4C-6407B98D2AB3}" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%" id="0">
+              <sections>
+                <section name="{64BC19B9-1311-4B93-BE4C-6407B98D2AB4}" showlabel="false" showbar="false" locklevel="0" id="{8a6e3c9d-0375-a1e3-7ccc-555c915e5297}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left" ordinalvalue="0">
+                  <labels>
+                    <label description="Section" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{8e24c7e3-6a40-5abb-eadb-254eba5478e2}" showlabel="true" colspan="1" auto="false" rowspan="9" ordinalvalue="10000">
+                        <labels>
+                          <label description="KONTAKTE" languagecode="1031" />
+                          <label description="CONTACTS" languagecode="1033" />
+                          <label description="NGƯỜI LIÊN HỆ" languagecode="1066" />
+                        </labels>
+                        <control id="Contacts" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" uniqueid="{2a5a64a5-cecb-2972-13ea-7c41e7d5ad87}" indicationOfSubgrid="true">
+                          <parameters>
+                            <ViewId>{73BC2D9B-4E0E-424C-8839-ED59D6817E3A}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>contact_customer_accounts</RelationshipName>
+                            <TargetEntityType>contact</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <ViewIds>{00000000-0000-0000-00AA-000010001003}</ViewIds>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Grid</ChartGridMode>
+                            <VisualizationId>{E365462F-1DB9-46A8-928D-BEAB1A7A2375}</VisualizationId>
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>false</EnableChartPicker>
+                            <RecordsPerPage>6</RecordsPerPage>
+                            <HeaderColorCode>#F3F3F3</HeaderColorCode>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{d5a03552-1183-4347-a237-1f894ba449eb}" columns="111" celllabelposition="Top" labelwidth="115">
+        <rows>
+          <row>
+            <cell id="{d3e19d4e-b2ae-409f-9b4e-5976527c6c83}" ordinalvalue="10000">
+              <labels>
+                <label description="Jahresumsatz" languagecode="1031" solutionaction="Added" />
+                <label description="Annual Revenue" languagecode="1033" solutionaction="Added" />
+                <label description="Doanh thu Hàng năm" languagecode="1066" solutionaction="Added" />
+              </labels>
+            </cell>
+            <cell id="{2adb5a52-604d-5aad-ba6a-2bbab6c33594}" showlabel="true" ordinalvalue="20001">
+              <labels>
+                <label description="Anzahl der Mitarbeiter" languagecode="1031" solutionaction="Added" />
+                <label description="Number of Employees" languagecode="1033" solutionaction="Added" />
+                <label description="Số Nhân viên" languagecode="1066" solutionaction="Added" />
+              </labels>
+            </cell>
+            <cell id="{54b2d0a2-eb77-b3cd-b60a-03ea6944e98e}" showlabel="true" locklevel="1" ordinalvalue="30002">
+              <labels>
+                <label description="Besitzer" languagecode="1031" solutionaction="Added" />
+                <label description="Owner" languagecode="1033" solutionaction="Added" />
+                <label description="Chủ sở hữu" languagecode="1066" solutionaction="Added" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <Navigation>
+        <NavBar>
+          <NavBarByRelationshipItem RelationshipName="Account_CustomerAddress" Id="navAddresses" Sequence="11" Area="Info" Show="false" solutionaction="Modified" />
+          <NavBarByRelationshipItem RelationshipName="account_parent_account" Id="navSubAccts" TitleResourceId="Label_SubAccounts" Sequence="12" Area="Info" Show="false" solutionaction="Modified" />
+          <NavBarByRelationshipItem RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navCampaignsInSFA" Sequence="21" Area="Marketing" Id="navCampaignsInSFA" Show="false" solutionaction="Modified" />
+          <NavBarByRelationshipItem RelationshipName="Account_ActivityPointers" Sequence="20" Area="Info" Id="navActivities" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="Activities" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="Socialprofile_customer_accounts" Sequence="50" Area="Info" Id="navSocialprofiles" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="Social Profiles" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="contact_customer_accounts" Sequence="51" Area="Info" Id="navContacts" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="Contacts" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="Account_SharepointDocument" Sequence="60" Area="Info" Id="navSPDocuments" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="Documents" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navConnections" Sequence="8500" Area="Info" Id="navConnections" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="Connections" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navDocument" Sequence="9000" Area="Info" Id="navDocument" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="Documents" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="devkit_account_devkit_webapi_Customer" Id="nav_devkit_account_devkit_webapi_Customer" Show="true" Sequence="9601" Area="Info" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="WebApis" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="bpf_account_devkit_bpfaccount1" Sequence="10000" Area="Info" Id="nav_bpf_account_devkit_bpfaccount1" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="BPF Account 1" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="bpf_account_devkit_bpfaccount3" Sequence="10001" Area="Info" Id="nav_bpf_account_devkit_bpfaccount3" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="BPF Account 3" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="devkit_account_devkit_location_Account" Sequence="10002" Area="Info" Id="nav_devkit_account_devkit_location_Account" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="Locations" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="devkit_account_devkit_location_Customer" Sequence="10003" Area="Info" Id="nav_devkit_account_devkit_location_Customer" Show="false" solutionaction="Added">
+            <Titles>
+              <Title LCID="1033" Text="Locations" />
+            </Titles>
+          </NavBarByRelationshipItem>
+        </NavBar>
+        <NavBarAreas solutionaction="Added">
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+      <controlDescriptions>
+        <controlDescription forControl="{c134b8cb-24ba-6163-861d-041197210369}" solutionaction="Added">
+          <customControl id="{71716B6C-711E-476c-8AB8-5D11542BFB47}">
+            <parameters>
+              <datafieldname>websiteurl</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.InputMask.InputMaskControl">
+            <parameters>
+              <value>websiteurl</value>
+              <mask type="SingleLine.Text">accountnumber</mask>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.WebsitePreview.PreviewControl">
+            <parameters>
+              <value>websiteurl</value>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.Multimedia.MultimediaPlayerControl">
+            <parameters>
+              <url>websiteurl</url>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{2a5a64a5-cecb-2972-13ea-7c41e7d5ad87}" solutionaction="Added">
+          <customControl id="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" formFactor="0">
+            <parameters>
+              <ViewId>{73BC2D9B-4E0E-424C-8839-ED59D6817E3A}</ViewId>
+              <IsUserView>false</IsUserView>
+              <RelationshipName>contact_customer_accounts</RelationshipName>
+              <TargetEntityType>contact</TargetEntityType>
+              <AutoExpand>Fixed</AutoExpand>
+              <EnableQuickFind>false</EnableQuickFind>
+              <EnableViewPicker>false</EnableViewPicker>
+              <ViewIds>{00000000-0000-0000-00AA-000010001003}</ViewIds>
+              <EnableJumpBar>false</EnableJumpBar>
+              <ChartGridMode>Grid</ChartGridMode>
+              <VisualizationId>{E365462F-1DB9-46A8-928D-BEAB1A7A2375}</VisualizationId>
+              <IsUserChart>false</IsUserChart>
+              <EnableChartPicker>false</EnableChartPicker>
+              <RecordsPerPage>6</RecordsPerPage>
+              <HeaderColorCode>#F3F3F3</HeaderColorCode>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.Grid.GridControl">
+            <parameters>
+              <data-set name="Grid">
+                <ViewId>{73BC2D9B-4E0E-424C-8839-ED59D6817E3A}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>contact_customer_accounts</RelationshipName>
+                <TargetEntityType>contact</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{00000000-0000-0000-00AA-000010001003}</FilteredViewIds>
+              </data-set>
+              <EnableGroupBy static="true" type="Enum">yes</EnableGroupBy>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <ReflowBehavior static="true" type="Enum">GridOnly</ReflowBehavior>
+              <ListLayoutDirection static="true" type="Enum">Vertical</ListLayoutDirection>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <HideNestedGridColumnHeader static="true" type="Enum">no</HideNestedGridColumnHeader>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.Grid.GridControl">
+            <parameters>
+              <data-set name="Grid">
+                <ViewId>{73BC2D9B-4E0E-424C-8839-ED59D6817E3A}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>contact_customer_accounts</RelationshipName>
+                <TargetEntityType>contact</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{00000000-0000-0000-00AA-000010001003}</FilteredViewIds>
+              </data-set>
+              <EnableGroupBy static="true" type="Enum">yes</EnableGroupBy>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <ReflowBehavior static="true" type="Enum">GridOnly</ReflowBehavior>
+              <ListLayoutDirection static="true" type="Enum">Vertical</ListLayoutDirection>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <HideNestedGridColumnHeader static="true" type="Enum">no</HideNestedGridColumnHeader>
+            </parameters>
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
+    </form>
+    <LocalizedNames>
+      <LocalizedName description="Firma" languagecode="1031" />
+      <LocalizedName description="Account" languagecode="1033" />
+      <LocalizedName description="Khách hàng" languagecode="1066" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Standardmäßiges Kontoformular aktualisiert." languagecode="1031" />
+      <Description description="Updated default Account form." languagecode="1033" />
+      <Description description="Biểu mẫu Khách hàng mặc định đã cập nhật." languagecode="1066" />
+    </Descriptions>
+  </systemform>
+</forms>

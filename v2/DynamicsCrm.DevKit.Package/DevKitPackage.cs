@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 
 namespace DynamicsCrm.DevKit.Package
 {
-    [InstalledProductRegistration("#110", "#112", "2.1.1", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", Const.Version, IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PackageGuidString)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]

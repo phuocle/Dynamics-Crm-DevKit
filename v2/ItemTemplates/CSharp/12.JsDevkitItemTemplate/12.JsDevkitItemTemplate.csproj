@@ -81,7 +81,7 @@
     </VSTemplate>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Devkit.js" />
+    <Content Include="devkit.js" />
     <Content Include="icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

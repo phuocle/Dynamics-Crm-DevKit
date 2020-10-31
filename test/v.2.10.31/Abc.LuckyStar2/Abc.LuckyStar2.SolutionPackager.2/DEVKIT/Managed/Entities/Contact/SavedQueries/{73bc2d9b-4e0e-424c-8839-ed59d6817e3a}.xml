@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>0</isdefault>
+    <savedqueryid>{73bc2d9b-4e0e-424c-8839-ed59d6817e3a}</savedqueryid>
+    <queryapi></queryapi>
+    <layoutxml>
+      <grid name="resultset" jump="fullname" select="1" icon="1" preview="1">
+        <row name="result" id="contactid">
+          <cell name="fullname" width="150" />
+          <cell name="emailaddress1" width="150" />
+          <cell name="firstname" width="100" />
+          <cell name="lastname" width="100" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" output-format="xml-platform" mapping="logical">
+        <entity name="contact">
+          <attribute name="fullname" />
+          <attribute name="emailaddress1" />
+          <order attribute="fullname" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+          <attribute name="lastname" />
+          <attribute name="firstname" />
+          <attribute name="contactid" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>5.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Ansicht Unterraster für aktive Kontakte" languagecode="1031" />
+      <LocalizedName description="Active Contacts Subgrid View" languagecode="1033" />
+      <LocalizedName description="Dạng xem lưới con người liên hệ hiện hoạt" languagecode="1066" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Zeigt den Namen und die E-Mail-Adresse von aktiven Kontakten an." languagecode="1031" />
+      <Description description="Displays the Name and Email of active contacts." languagecode="1033" />
+      <Description description="Bạn hãy hiển thị Tên và Email của người liên hệ hiện hoạt." languagecode="1066" />
+    </Descriptions>
+  </savedquery>
+</savedqueries>

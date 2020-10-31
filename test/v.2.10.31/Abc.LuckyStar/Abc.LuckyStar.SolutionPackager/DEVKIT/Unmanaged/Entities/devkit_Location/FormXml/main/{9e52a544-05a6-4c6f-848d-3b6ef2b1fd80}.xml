@@ -1,0 +1,680 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{9e52a544-05a6-4c6f-848d-3b6ef2b1fd80}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form shownavigationbar="true" showImage="false" maxWidth="1920" headerdensity="HighWithControls">
+      <tabs>
+        <tab verticallayout="true" id="{197b6839-f6e1-405a-b8a6-abe2dc83a7c2}" IsUserDefined="1" name="tab1" locklevel="0" expanded="true" showlabel="true">
+          <labels>
+            <label description="Allgemein" languagecode="1031" />
+            <label description="tab1" languagecode="1033" />
+            <label description="Tổng quát" languagecode="1066" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{45d8f6b8-41d0-41d7-88ae-db05766bb2a7}" name="tab1sec1" columns="1" locklevel="0" labelwidth="130" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Allgemein" languagecode="1031" />
+                    <label description="sec1" languagecode="1033" />
+                    <label description="Tổng quát" languagecode="1066" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{49e573c2-e3e4-4df4-ac0d-2cee3a38e645}">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_name" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c4729b26-0cc5-4faf-9fc6-a8c8447c5f8d}">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                          <label description="Besitzer" languagecode="1031" />
+                          <label description="Chủ sở hữu" languagecode="1066" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{a845e74a-27b9-c999-e221-4d87ad5a2182}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Account" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_accountid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_accountid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3a17d484-5b79-b147-9b87-79d53201b198}" showlabel="false" colspan="1" auto="false">
+                        <labels>
+                          <label description="Quick View Account" languagecode="1033" />
+                        </labels>
+                        <control id="qwAccount" classid="{5C5600E0-1D6E-4205-A272-BE80DA87FD42}" datafieldname="devkit_accountid" disabled="false">
+                          <parameters>
+                            <QuickForms>&lt;QuickFormIds&gt;&lt;QuickFormId entityname="account"&gt;7dcbaf74-2f8b-4cc5-82a7-d69bc7d2ba49&lt;/QuickFormId&gt;&lt;/QuickFormIds&gt;</QuickForms>
+                            <ControlMode>Edit</ControlMode>
+                            <DisplayAsCustomer360Tile>false</DisplayAsCustomer360Tile>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{02220c00-28c4-51bb-6681-26a752a32be6}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Contact" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_contactid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_contactid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{39029848-a62a-06a8-5004-838a39399d17}" showlabel="false" colspan="1" auto="false">
+                        <labels>
+                          <label description="Quick View Contact" languagecode="1033" />
+                        </labels>
+                        <control id="quickViewContact" classid="{5C5600E0-1D6E-4205-A272-BE80DA87FD42}" datafieldname="devkit_contactid" disabled="false">
+                          <parameters>
+                            <QuickForms>&lt;QuickFormIds&gt;&lt;QuickFormId entityname="contact"&gt;bdb0ae1c-32fa-4374-b637-8dafe107bc44&lt;/QuickFormId&gt;&lt;/QuickFormIds&gt;</QuickForms>
+                            <ControlMode>Edit</ControlMode>
+                            <DisplayAsCustomer360Tile>false</DisplayAsCustomer360Tile>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{286c50e1-8e28-4464-9154-1a64edeb71a0}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Modified On" languagecode="1033" />
+                          <label description="Geändert am" languagecode="1031" />
+                          <label description="Sửa đổi Vào" languagecode="1066" />
+                        </labels>
+                        <control id="modifiedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="modifiedon" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{4a1ab073-2ec1-b0d7-4a8d-b7883c14a127}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Created On" languagecode="1033" />
+                          <label description="Erstellt am" languagecode="1031" />
+                          <label description="Ngày tạo" languagecode="1066" />
+                        </labels>
+                        <control id="createdon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="createdon" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="tab1sec2" showlabel="false" showbar="false" locklevel="0" id="{688b96a6-5e2e-1107-a215-0d20b4de8e17}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="sec2" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{69d2a89e-40d0-7a3e-777d-b486a7e997c6}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Modified By" languagecode="1033" />
+                          <label description="Geändert von" languagecode="1031" />
+                          <label description="Người Sửa đổi" languagecode="1066" />
+                        </labels>
+                        <control id="modifiedby" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="modifiedby" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{24d1d0eb-a7e7-9064-453b-db2d265aac0b}" showlabel="false" colspan="1" auto="false" rowspan="6">
+                        <labels>
+                          <label description="HelloWorld" languagecode="1033" />
+                        </labels>
+                        <control id="WebResource_HelloWorld" classid="{9FDF5F91-88B1-47f4-AD53-C11EFC01A01D}">
+                          <parameters>
+                            <Url>devkit_/html/HelloWorld.html</Url>
+                            <PassParameters>false</PassParameters>
+                            <Security>false</Security>
+                            <Scrolling>auto</Scrolling>
+                            <Border>true</Border>
+                            <ShowOnMobileClient>false</ShowOnMobileClient>
+                            <WebResourceId>{572820F2-9A7B-E911-A992-000D3A8020DC}</WebResourceId>
+                          </parameters>
+                        </control>
+                        <events>
+                          <event name="onload" application="false">
+                            <dependencies />
+                          </event>
+                        </events>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row>
+                      <cell id="{e096ed9d-a6ce-4b7d-c9ab-91a406e7b649}" showlabel="true" colspan="1" auto="false" rowspan="4">
+                        <labels>
+                          <label description="Accounts (Location)" languagecode="1033" />
+                          <label description="Firmen" languagecode="1031" />
+                          <label description="Tài khoản" languagecode="1066" />
+                        </labels>
+                        <control id="chartAccount" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" indicationOfSubgrid="true" uniqueid="{d5837733-527b-40e0-e2a3-8c6254165621}">
+                          <parameters>
+                            <ViewId>{65FFAF9A-E8C5-432D-860B-32F841B00D87}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>devkit_devkit_location_account_LocationId</RelationshipName>
+                            <TargetEntityType>account</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <ViewIds>{65FFAF9A-E8C5-432D-860B-32F841B00D87}</ViewIds>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>Chart</ChartGridMode>
+                            <VisualizationId>{A3A9EE47-5093-DE11-97D4-00155DA3B01E}</VisualizationId>
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>false</EnableChartPicker>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <HeaderColorCode>#F3F3F3</HeaderColorCode>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="ref_pan_tab1_section_3" showlabel="false" showbar="false" locklevel="0" id="{92b993d8-cbe3-66c2-c601-dceac731ac57}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" rowheight="25" autoexpand="false" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="Section" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{7aa6a8a3-5ed3-0aeb-a1ae-47e189358818}" showlabel="false" colspan="1" auto="false" rowspan="6">
+                        <labels>
+                          <label description="Contacts (Location)" languagecode="1033" />
+                          <label description="Kontakte" languagecode="1031" />
+                          <label description="Người liên hệ" languagecode="1066" />
+                        </labels>
+                        <control id="panelContact" classid="{02D4264B-47E2-4B4C-AA95-F439F3F4D458}" uniqueid="{92214389-e2d3-9328-3ab8-5e50b6bec9ee}">
+                          <parameters>
+                            <ViewId>{00000000-0000-0000-00AA-000010001003}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>devkit_devkit_location_contact_LocationId</RelationshipName>
+                            <TargetEntityType>contact</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <ViewIds>{00000000-0000-0000-00AA-000010001003}</ViewIds>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>All</ChartGridMode>
+                            <VisualizationId>{E365462F-1DB9-46A8-928D-BEAB1A7A2375}</VisualizationId>
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <HeaderColorCode>#F3F3F3</HeaderColorCode>
+                            <ReferencePanelSubgridIconUrl>msdyncrm_/AssistEditControl/KBEditor/libs/ckeditor/plugins/link/images/anchor.png</ReferencePanelSubgridIconUrl>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row>
+                      <cell id="{88251474-3c68-1a20-db8b-b9043036eb43}" showlabel="false" colspan="1" auto="false" rowspan="6">
+                        <labels>
+                          <label description="Accounts (Location)" languagecode="1033" />
+                          <label description="Kontakte" languagecode="1031" />
+                          <label description="Người liên hệ" languagecode="1066" />
+                        </labels>
+                        <control id="panelAccount" classid="{02D4264B-47E2-4B4C-AA95-F439F3F4D458}">
+                          <parameters>
+                            <ViewId>{00000000-0000-0000-00AA-000010001001}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>devkit_devkit_location_account_LocationId</RelationshipName>
+                            <TargetEntityType>account</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <ViewIds>{00000000-0000-0000-00AA-000010001001}</ViewIds>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>All</ChartGridMode>
+                            <VisualizationId>{74A622C0-5193-DE11-97D4-00155DA3B01E}</VisualizationId>
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <HeaderColorCode>#F3F3F3</HeaderColorCode>
+                            <ReferencePanelSubgridIconUrl>msdyncrm_/AssistEditControl/KBEditor/libs/ckeditor/plugins/link/images/hidpi/anchor.png</ReferencePanelSubgridIconUrl>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab2" id="{abd94d08-ada2-0633-4716-3387099e1125}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true">
+          <labels>
+            <label description="tab2" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="tab2sec1" showlabel="false" showbar="false" locklevel="0" id="{1a93b885-aa20-731a-01d9-80cc9b7bc42c}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="sec1" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{21b6d005-395c-7857-5b93-c6ac8c7d55b0}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Customer" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_customerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_customerid" disabled="false" uniqueid="{4995d437-8208-9925-2b82-237a529e99cb}">
+                          <parameters>
+                            <AutoResolve>true</AutoResolve>
+                            <DisableMru>false</DisableMru>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{78c7070d-9e74-097c-b505-486e69e4cd13}" showlabel="false" colspan="1" auto="false" rowspan="6">
+                        <labels>
+                          <label description="Accounts (Location)" languagecode="1033" />
+                          <label description="Kontakte" languagecode="1031" />
+                          <label description="Người liên hệ" languagecode="1066" />
+                        </labels>
+                        <control id="gridAccount" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" indicationOfSubgrid="true" uniqueid="{50c43334-1d33-db17-1e70-79ace34be92b}">
+                          <parameters>
+                            <ViewId>{00000000-0000-0000-00AA-000010001001}</ViewId>
+                            <IsUserView>false</IsUserView>
+                            <RelationshipName>devkit_devkit_location_account_LocationId</RelationshipName>
+                            <TargetEntityType>account</TargetEntityType>
+                            <AutoExpand>Fixed</AutoExpand>
+                            <EnableQuickFind>false</EnableQuickFind>
+                            <EnableViewPicker>false</EnableViewPicker>
+                            <ViewIds>{00000000-0000-0000-00AA-000010001001}</ViewIds>
+                            <EnableJumpBar>false</EnableJumpBar>
+                            <ChartGridMode>All</ChartGridMode>
+                            <VisualizationId>{74A622C0-5193-DE11-97D4-00155DA3B01E}</VisualizationId>
+                            <IsUserChart>false</IsUserChart>
+                            <EnableChartPicker>true</EnableChartPicker>
+                            <RecordsPerPage>4</RecordsPerPage>
+                            <HeaderColorCode>#F3F3F3</HeaderColorCode>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row>
+                      <cell id="{d2e270de-de16-4036-5741-ed14b1e8314e}" showlabel="false" colspan="1" auto="false" rowspan="6">
+                        <labels>
+                          <label description="google" languagecode="1033" />
+                        </labels>
+                        <control id="IFRAME_google" classid="{FD2A7985-3187-444e-908D-6624B21F69C0}">
+                          <parameters>
+                            <Url>https://www.phuocle.net</Url>
+                            <PassParameters>true</PassParameters>
+                            <Security>false</Security>
+                            <Scrolling>auto</Scrolling>
+                            <Border>true</Border>
+                            <ShowOnMobileClient>false</ShowOnMobileClient>
+                          </parameters>
+                        </control>
+                        <events>
+                          <event name="onload" application="false">
+                            <dependencies />
+                          </event>
+                        </events>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row>
+                      <cell showlabel="true" locklevel="0" id="{b614671d-4e43-4dbb-91f6-f5f916029a8d}">
+                        <labels>
+                          <label description="devkit_image_url" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_image_url" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" datafieldname="devkit_image_url" disabled="false" uniqueid="{8c3edf2e-a675-4f48-b8e0-d0a8b49ae284}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{409204c6-1537-e4d4-b1dc-6ab457043010}" showlabel="true" colspan="1" auto="false" rowspan="2">
+                        <labels>
+                          <label description="TIMER" languagecode="1033" />
+                        </labels>
+                        <control id="timerControl" classid="{9C5CA0A1-AB4D-4781-BE7E-8DFBE867B87E}">
+                          <parameters>
+                            <SuccessConditionName>statecode</SuccessConditionName>
+                            <SuccessConditionValue>0</SuccessConditionValue>
+                            <FailureTimeField>createdon</FailureTimeField>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row>
+                      <cell id="{0055966a-a04b-468c-9805-b047630713cd}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Image" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_image" classid="{7E548B0D-209C-477B-9DCD-F0F44472381D}" datafieldname="devkit_image" disabled="false" uniqueid="{933d605e-86b2-2372-4a37-1e262b0dc417}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c064f2c2-8e9f-46f3-b6e4-051a9616cc60}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="File" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_file" classid="{0A7FF475-B016-4687-9CE5-042BFDBD6519}" datafieldname="devkit_file" disabled="false" uniqueid="{d3cca331-0d91-22aa-dbd8-4d63e840a23a}" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab3" id="{7d9259ba-75a9-3668-edab-abc4995ddb32}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true">
+          <labels>
+            <label description="tab3" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="tab3sec1" showlabel="true" showbar="true" locklevel="0" id="{27110ddc-3540-1192-ce34-2bee47051007}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Left">
+                  <labels>
+                    <label description="sec1" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{a2ad59bb-d1a8-60d2-6595-50b921c80683}" showlabel="true" rowspan="15" auto="false" colspan="1" locklevel="0">
+                        <labels>
+                          <label description="Note Text" languagecode="1033" />
+                        </labels>
+                        <control id="notescontrol" classid="{06375649-c143-495e-a496-c962e5b4488e}" uniqueid="{97a897cd-112a-1729-c101-2d77d1877dc7}" disabled="false">
+                          <parameters>
+                            <UClientUniqueName>Timeline</UClientUniqueName>
+                            <UClientModules>Notes</UClientModules>
+                            <UClientDefaultModuleForCreateExperience>Notes</UClientDefaultModuleForCreateExperience>
+                            <UClientShowFilterPane>true</UClientShowFilterPane>
+                            <UClientExpandFilterPane>false</UClientExpandFilterPane>
+                            <UClientOrderBy>descending</UClientOrderBy>
+                            <UClientRecordPerPage>10</UClientRecordPerPage>
+                            <DefaultTabId>ActivitiesTab</DefaultTabId>
+                            <EmailConversationView>true</EmailConversationView>
+                            <ShowArticleTab>false</ShowArticleTab>
+                            <SelectDefaultLanguage>00000000-0000-0000-0000-000000000000</SelectDefaultLanguage>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{d38de5b3-4cec-442b-a2e7-ff073d233ff3}" columns="11" labelwidth="130" celllabelalignment="Left" celllabelposition="Left">
+        <rows>
+          <row>
+            <cell id="{cc67a400-da77-e436-6c87-6a5628d51308}" showlabel="true" locklevel="0">
+              <labels>
+                <label description="Account" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_accountid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_accountid" disabled="false" />
+            </cell>
+            <cell id="{01e28ebc-9c09-7908-098a-e5947d2581d2}" showlabel="true" locklevel="0">
+              <labels>
+                <label description="Contact" languagecode="1033" />
+              </labels>
+              <control id="header_devkit_contactid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_contactid" disabled="false" />
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{7543b7ea-41fd-423e-98a6-480a6a883c9f}" columns="1111" labelwidth="130" celllabelalignment="Left" celllabelposition="Left">
+        <rows>
+          <row>
+            <cell id="{98e57d74-ae2a-59ed-8c11-7eb18b9330ae}" showlabel="true" locklevel="0">
+              <labels>
+                <label description="Created On" languagecode="1033" />
+                <label description="Erstellt am" languagecode="1031" />
+                <label description="Ngày tạo" languagecode="1066" />
+              </labels>
+              <control id="footer_createdon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="createdon" disabled="true" />
+            </cell>
+            <cell id="{8052a807-c5bc-e85a-6d74-d842636cb012}" showlabel="true" locklevel="0">
+              <labels>
+                <label description="Modified On" languagecode="1033" />
+                <label description="Geändert am" languagecode="1031" />
+                <label description="Sửa đổi Vào" languagecode="1066" />
+              </labels>
+              <control id="footer_modifiedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="modifiedon" disabled="true" />
+            </cell>
+            <cell id="{d5bd1242-3ed5-15be-6182-7490576c2681}" showlabel="true" locklevel="0">
+              <labels>
+                <label description="Status" languagecode="1033" />
+                <label description="Trạng thái" languagecode="1066" />
+              </labels>
+              <control id="footer_statecode" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="true" />
+            </cell>
+            <cell id="{05a3a601-92b2-2cd8-3e3b-3e955a880de1}" showlabel="true" locklevel="0">
+              <labels>
+                <label description="Status Reason" languagecode="1033" />
+                <label description="Statusgrund" languagecode="1031" />
+                <label description="Lý do dẫn đến Trạng thái" languagecode="1066" />
+              </labels>
+              <control id="footer_statuscode" classid="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}" datafieldname="statuscode" disabled="true" />
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <Navigation>
+        <NavBar>
+          <NavBarByRelationshipItem RelationshipName="hardcoded_{B7196B13-6B9D-42CD-BD58-B19A3953126F}navAudit" Sequence="9601" Area="Info" Id="navAudit">
+            <Titles>
+              <Title LCID="1033" Text="Audit History" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="devkit_devkit_location_account_LocationId" Sequence="10000" Area="Info" Id="nav_devkit_devkit_location_account_LocationId">
+            <Titles>
+              <Title LCID="1033" Text="NAV-Accounts" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="devkit_devkit_location_contact_LocationId" Sequence="10001" Area="Info" Id="nav_devkit_devkit_location_contact_LocationId">
+            <Titles>
+              <Title LCID="1033" Text="Contacts" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="bpf_devkit_location_devkit_bpf_location_1" Id="nav_bpf_devkit_location_devkit_bpf_location_1" Show="false" Sequence="10002" Area="Info">
+            <Titles>
+              <Title LCID="1033" Text="BPF-Location-1" />
+            </Titles>
+          </NavBarByRelationshipItem>
+          <NavBarByRelationshipItem RelationshipName="bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69" Id="nav_bpf_devkit_location_new_bpf_301232cf016d4faebcee80f57b143c69" Show="false" Sequence="10003" Area="Info">
+            <Titles>
+              <Title LCID="1033" Text="BPF-Location-2" />
+            </Titles>
+          </NavBarByRelationshipItem>
+        </NavBar>
+        <NavBarAreas>
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+      <controlDescriptions>
+        <controlDescription forControl="{8c3edf2e-a675-4f48-b8e0-d0a8b49ae284}">
+          <customControl id="{71716B6C-711E-476C-8AB8-5D11542BFB47}">
+            <parameters>
+              <datafieldname>devkit_image_url</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.WebsitePreview.PreviewControl">
+            <parameters>
+              <value>devkit_image_url</value>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.WebsitePreview.PreviewControl">
+            <parameters>
+              <value>devkit_image_url</value>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.WebsitePreview.PreviewControl">
+            <parameters>
+              <value>devkit_image_url</value>
+            </parameters>
+          </customControl>
+        </controlDescription>
+        <controlDescription forControl="{50c43334-1d33-db17-1e70-79ace34be92b}">
+          <customControl id="{E7A81278-8635-4d9e-8D4D-59480B391C5B}" formFactor="0">
+            <parameters>
+              <ViewId>{00000000-0000-0000-00AA-000010001001}</ViewId>
+              <IsUserView>false</IsUserView>
+              <RelationshipName>devkit_devkit_location_account_LocationId</RelationshipName>
+              <TargetEntityType>account</TargetEntityType>
+              <AutoExpand>Fixed</AutoExpand>
+              <EnableQuickFind>false</EnableQuickFind>
+              <EnableViewPicker>false</EnableViewPicker>
+              <ViewIds>{00000000-0000-0000-00AA-000010001001}</ViewIds>
+              <EnableJumpBar>false</EnableJumpBar>
+              <ChartGridMode>All</ChartGridMode>
+              <VisualizationId>{74A622C0-5193-DE11-97D4-00155DA3B01E}</VisualizationId>
+              <IsUserChart>false</IsUserChart>
+              <EnableChartPicker>true</EnableChartPicker>
+              <RecordsPerPage>4</RecordsPerPage>
+              <HeaderColorCode>#F3F3F3</HeaderColorCode>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.Grid.GridControl">
+            <parameters>
+              <data-set name="Grid">
+                <ViewId>{00000000-0000-0000-00AA-000010001001}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>devkit_devkit_location_account_LocationId</RelationshipName>
+                <TargetEntityType>account</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{00000000-0000-0000-00AA-000010001001}</FilteredViewIds>
+              </data-set>
+              <EnableGroupBy static="true" type="Enum">yes</EnableGroupBy>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <ReflowBehavior static="true" type="Enum">GridOnly</ReflowBehavior>
+              <ListLayoutDirection static="true" type="Enum">Vertical</ListLayoutDirection>
+              <EnableSubGridAutoCollapse static="true" type="Enum">false</EnableSubGridAutoCollapse>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <HideNestedGridColumnHeader static="true" type="Enum">no</HideNestedGridColumnHeader>
+              <EnableJumpBar static="true" type="Enum">yes</EnableJumpBar>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.Grid.GridControl">
+            <parameters>
+              <data-set name="Grid">
+                <ViewId>{00000000-0000-0000-00AA-000010001001}</ViewId>
+                <columnsDefaultView />
+                <IsUserView>false</IsUserView>
+                <RelationshipName>devkit_devkit_location_account_LocationId</RelationshipName>
+                <TargetEntityType>account</TargetEntityType>
+                <EnableViewPicker>false</EnableViewPicker>
+                <FilteredViewIds>{00000000-0000-0000-00AA-000010001001}</FilteredViewIds>
+              </data-set>
+              <EnableGroupBy static="true" type="Enum">yes</EnableGroupBy>
+              <EnableEditing static="true" type="Enum">yes</EnableEditing>
+              <ReflowBehavior static="true" type="Enum">GridOnly</ReflowBehavior>
+              <ListLayoutDirection static="true" type="Enum">Vertical</ListLayoutDirection>
+              <EnableSubGridAutoCollapse static="true" type="Enum">false</EnableSubGridAutoCollapse>
+              <EnableFiltering static="true" type="Enum">yes</EnableFiltering>
+              <HideNestedGridColumnHeader static="true" type="Enum">no</HideNestedGridColumnHeader>
+              <EnableJumpBar static="true" type="Enum">yes</EnableJumpBar>
+            </parameters>
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
+      <formLibraries>
+        <Library name="devkit_/entities/devkit_Location.js" libraryUniqueId="{30244e53-41ec-e042-7ee1-57b3c809b899}" />
+      </formLibraries>
+      <events>
+        <event name="onload" application="false" active="false">
+          <Handlers>
+            <Handler functionName="formLocation.OnLoad" libraryName="devkit_/entities/devkit_Location.js" handlerUniqueId="{de07334c-4abc-cd51-269e-3b24454e2ca0}" enabled="true" parameters="" passExecutionContext="true" />
+          </Handlers>
+        </event>
+        <event name="onsave" application="false" active="false">
+          <Handlers>
+            <Handler functionName="formLocation.OnSave" libraryName="devkit_/entities/devkit_Location.js" handlerUniqueId="{e3546884-5b76-0ea3-c63e-d2e8516d0c20}" enabled="true" parameters="" passExecutionContext="true" />
+          </Handlers>
+        </event>
+      </events>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Location" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

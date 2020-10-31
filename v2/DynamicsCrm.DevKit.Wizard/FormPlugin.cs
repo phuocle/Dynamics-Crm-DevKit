@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.SdkLogin;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk;
 
 namespace DynamicsCrm.DevKit.Wizard
@@ -18,11 +18,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
-
-            Font = SystemFonts.DefaultFont;
             progressBar.Visible = false;
-
-            Text += Const.Version;
 
             DTE = dte;
             ItemType = itemType;
@@ -69,14 +65,45 @@ namespace DynamicsCrm.DevKit.Wizard
             DialogResult = DialogResult.Cancel;
         }
 
+        private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        {
+            if (sender is FormLogin login)
+            {
+                login.Close();
+            }
+        }
+
         private void buttonConnection_Click(object sender, EventArgs e)
         {
             var form = new FormConnection2(DTE);
             if (form.ShowDialog() == DialogResult.Cancel) return;
-
-            CrmConnection = form.CrmConnection;
-            CrmService = form.CrmService;
-
+            if (form.Check == "1")
+            {
+                if (ItemType == ItemType.Plugin ||
+                    ItemType == ItemType.CustomAction)
+                {
+                    var loginForm = new FormLogin();
+                    loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                    loginForm.ShowDialog();
+                    if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+                    {
+                        if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
+                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
+                        else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
+                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
+                        else
+                            throw new WizardCancelledException();
+                        CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
+                    }
+                    else
+                        throw new WizardCancelledException();
+                }
+            }
+            else
+            {
+                CrmConnection = form.CrmConnection;
+                CrmService = form.CrmService;
+            }
             buttonOk.Enabled = true;
             CheckFormByFormType();
         }

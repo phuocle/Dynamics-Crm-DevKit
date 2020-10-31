@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <WebResourceId>{37b17f88-31ca-ea11-a812-000d3a80cee2}</WebResourceId>
+  <Name>devkit_/entities/devkit_Location.js</Name>
+  <DisplayName>devkit_/entities/devkit_Location.js</DisplayName>
+  <Description>1.0.0.0</Description>
+  <WebResourceType>3</WebResourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsEnabledForMobileClient>0</IsEnabledForMobileClient>
+  <IsAvailableForMobileOffline>0</IsAvailableForMobileOffline>
+  <DependencyXml>&lt;Dependencies&gt;&lt;Dependency componentType="WebResource"&gt;&lt;Library name="devkit_/entities/devkit_Location.form.js" displayName="devkit_/entities/devkit_Location.form.js" languagecode="" description="1.0.0.0" libraryUniqueId="{4a2aeca2-288c-4573-a21c-d1b42a293b74}"/&gt;&lt;/Dependency&gt;&lt;/Dependencies&gt;</DependencyXml>
+  <IsCustomizable>1</IsCustomizable>
+  <CanBeDeleted>1</CanBeDeleted>
+  <IsHidden>0</IsHidden>
+  <FileName>/WebResources/devkit_entitiesdevkit_Locationjs37B17F88-31CA-EA11-A812-000D3A80CEE2</FileName>
+</WebResource>
