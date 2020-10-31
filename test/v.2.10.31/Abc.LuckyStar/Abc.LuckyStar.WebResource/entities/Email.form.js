@@ -83,25 +83,25 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.Email = {
 		CorrelationMethod : {
+			ConversationIndex: 5,
+			CustomCorrelation: 7,
+			InReplyTo: 3,
 			None: 0,
 			Skipped: 1,
-			XHeader: 2,
-			InReplyTo: 3,
-			TrackingToken: 4,
-			ConversationIndex: 5,
 			SmartMatching: 6,
-			CustomCorrelation: 7
+			TrackingToken: 4,
+			XHeader: 2
 		},
 		DeliveryPriorityCode : {
+			High: 2,
 			Low: 0,
-			Normal: 1,
-			High: 2
+			Normal: 1
 		},
 		EmailReminderStatus : {
 			NotSet: 0,
-			ReminderSet: 1,
 			ReminderExpired: 2,
-			ReminderInvalid: 3
+			ReminderInvalid: 3,
+			ReminderSet: 1
 		},
 		EmailReminderType : {
 			If_I_do_not_receive_a_reply_by: 0,
@@ -114,24 +114,24 @@ var OptionSet;
 			Truncated_body: 2
 		},
 		PriorityCode : {
+			High: 2,
 			Low: 0,
-			Normal: 1,
-			High: 2
+			Normal: 1
 		},
 		StateCode : {
-			Open: 0,
+			Canceled: 2,
 			Completed: 1,
-			Canceled: 2
+			Open: 0
 		},
 		StatusCode : {
-			Draft: 1,
-			Completed: 2,
-			Sent: 3,
-			Received: 4,
 			Canceled: 5,
+			Completed: 2,
+			Draft: 1,
+			Failed: 8,
 			Pending_Send: 6,
+			Received: 4,
 			Sending: 7,
-			Failed: 8
+			Sent: 3
 		},
         RollupState : {
             NotCalculated: 0,

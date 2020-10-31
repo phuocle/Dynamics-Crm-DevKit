@@ -101,8 +101,6 @@ declare namespace LuckyStar {
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
-		WebApi: DevKit.WebApi;
 		/** The Body section of form Contact */
 		Body: LuckyStar.FormContact.Body;
 		/** The Header section of form Contact */
@@ -537,12 +535,12 @@ declare namespace OptionSet {
 		enum Address1_AddressTypeCode {
 			/** 1 */
 			Bill_To,
-			/** 2 */
-			Ship_To,
+			/** 4 */
+			Other,
 			/** 3 */
 			Primary,
-			/** 4 */
-			Other
+			/** 2 */
+			Ship_To
 		}
 		enum Address1_FreightTermsCode {
 			/** 1 */
@@ -557,12 +555,12 @@ declare namespace OptionSet {
 			DHL,
 			/** 3 */
 			FedEx,
-			/** 4 */
-			UPS,
-			/** 5 */
-			Postal_Mail,
 			/** 6 */
 			Full_Load,
+			/** 5 */
+			Postal_Mail,
+			/** 4 */
+			UPS,
 			/** 7 */
 			Will_Call
 		}
@@ -603,20 +601,20 @@ declare namespace OptionSet {
 			Default_Value
 		}
 		enum FamilyStatusCode {
-			/** 1 */
-			Single,
-			/** 2 */
-			Married,
 			/** 3 */
 			Divorced,
+			/** 2 */
+			Married,
+			/** 1 */
+			Single,
 			/** 4 */
 			Widowed
 		}
 		enum GenderCode {
-			/** 1 */
-			Male,
 			/** 2 */
-			Female
+			Female,
+			/** 1 */
+			Male
 		}
 		enum HasChildrenCode {
 			/** 1 */
@@ -627,50 +625,50 @@ declare namespace OptionSet {
 			Default_Value
 		}
 		enum PaymentTermsCode {
-			/** 1 */
-			Net_30,
 			/** 2 */
 			_2_10_Net_30,
+			/** 1 */
+			Net_30,
 			/** 3 */
 			Net_45,
 			/** 4 */
 			Net_60
 		}
 		enum PreferredAppointmentDayCode {
-			/** 0 */
-			Sunday,
+			/** 5 */
+			Friday,
 			/** 1 */
 			Monday,
+			/** 6 */
+			Saturday,
+			/** 0 */
+			Sunday,
+			/** 4 */
+			Thursday,
 			/** 2 */
 			Tuesday,
 			/** 3 */
-			Wednesday,
-			/** 4 */
-			Thursday,
-			/** 5 */
-			Friday,
-			/** 6 */
-			Saturday
+			Wednesday
 		}
 		enum PreferredAppointmentTimeCode {
-			/** 1 */
-			Morning,
 			/** 2 */
 			Afternoon,
 			/** 3 */
-			Evening
+			Evening,
+			/** 1 */
+			Morning
 		}
 		enum PreferredContactMethodCode {
 			/** 1 */
 			Any,
 			/** 2 */
 			Email,
-			/** 3 */
-			Phone,
 			/** 4 */
 			Fax,
 			/** 5 */
-			Mail
+			Mail,
+			/** 3 */
+			Phone
 		}
 		enum ShippingMethodCode {
 			/** 1 */

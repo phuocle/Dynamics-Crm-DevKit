@@ -117,8 +117,6 @@ declare namespace LuckyStar {
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
-		WebApi: DevKit.WebApi;
 		/** The Body section of form User */
 		Body: LuckyStar.FormUser.Body;
 		/** The Footer section of form User */
@@ -415,18 +413,18 @@ declare namespace LuckyStar {
 declare namespace OptionSet {
 	namespace SystemUser {
 		enum AccessMode {
-			/** 0 */
-			Read_Write,
 			/** 1 */
 			Administrative,
-			/** 2 */
-			Read,
-			/** 3 */
-			Support_User,
+			/** 5 */
+			Delegated_Admin,
 			/** 4 */
 			Non_interactive,
-			/** 5 */
-			Delegated_Admin
+			/** 2 */
+			Read,
+			/** 0 */
+			Read_Write,
+			/** 3 */
+			Support_User
 		}
 		enum Address1_AddressTypeCode {
 			/** 1 */
@@ -445,74 +443,74 @@ declare namespace OptionSet {
 			Default_Value
 		}
 		enum CALType {
-			/** 0 */
-			Professional,
 			/** 1 */
 			Administrative,
 			/** 2 */
 			Basic,
-			/** 3 */
-			Device_Professional,
 			/** 4 */
 			Device_Basic,
-			/** 5 */
-			Essential,
-			/** 6 */
-			Device_Essential,
-			/** 7 */
-			Enterprise,
 			/** 8 */
 			Device_Enterprise,
+			/** 6 */
+			Device_Essential,
+			/** 3 */
+			Device_Professional,
+			/** 7 */
+			Enterprise,
+			/** 5 */
+			Essential,
+			/** 11 */
+			Field_Service,
+			/** 0 */
+			Professional,
+			/** 12 */
+			Project_Service,
 			/** 9 */
 			Sales,
 			/** 10 */
-			Service,
-			/** 11 */
-			Field_Service,
-			/** 12 */
-			Project_Service
+			Service
 		}
 		enum EmailRouterAccessApproval {
-			/** 0 */
-			Empty,
 			/** 1 */
 			Approved,
+			/** 0 */
+			Empty,
 			/** 2 */
 			Pending_Approval,
 			/** 3 */
 			Rejected
 		}
 		enum IncomingEmailDeliveryMethod {
-			/** 0 */
-			None,
+			/** 3 */
+			Forward_Mailbox,
 			/** 1 */
 			Microsoft_Dynamics_365_for_Outlook,
+			/** 0 */
+			None,
 			/** 2 */
-			Server_Side_Synchronization_or_Email_Router,
-			/** 3 */
-			Forward_Mailbox
+			Server_Side_Synchronization_or_Email_Router
 		}
 		enum InviteStatusCode {
-			/** 0 */
-			Invitation_Not_Sent,
-			/** 1 */
-			Invited,
-			/** 2 */
-			Invitation_Near_Expired,
-			/** 3 */
-			Invitation_Expired,
 			/** 4 */
 			Invitation_Accepted,
+			/** 3 */
+			Invitation_Expired,
+			/** 2 */
+			Invitation_Near_Expired,
+			/** 0 */
+			Invitation_Not_Sent,
 			/** 5 */
 			Invitation_Rejected,
 			/** 6 */
-			Invitation_Revoked
+			Invitation_Revoked,
+			/** 1 */
+			Invited
 		}
 		enum OutgoingEmailDeliveryMethod {
-			/** 0 */
-			None,
 			/** 1 */
 			Microsoft_Dynamics_365_for_Outlook,
+			/** 0 */
+			None,
 			/** 2 */
 			Server_Side_Synchronization_or_Email_Router
 		}
@@ -527,14 +525,14 @@ declare namespace OptionSet {
 			Default_Value
 		}
 		enum PreferredPhoneCode {
-			/** 1 */
-			Main_Phone,
-			/** 2 */
-			Other_Phone,
 			/** 3 */
 			Home_Phone,
+			/** 1 */
+			Main_Phone,
 			/** 4 */
-			Mobile_Phone
+			Mobile_Phone,
+			/** 2 */
+			Other_Phone
 		}
         enum RollupState {
             /** 0 - Attribute value is yet to be calculated */

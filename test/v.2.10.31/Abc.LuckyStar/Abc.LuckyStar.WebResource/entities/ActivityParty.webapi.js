@@ -135,23 +135,23 @@ var OptionSet;
 	OptionSet.ActivityParty = {
 		InstanceTypeCode : {
 			Not_Recurring: 0,
-			Recurring_Master: 1,
-			Recurring_Instance: 2,
 			Recurring_Exception: 3,
-			Recurring_Future_Exception: 4
+			Recurring_Future_Exception: 4,
+			Recurring_Instance: 2,
+			Recurring_Master: 1
 		},
 		ParticipationTypeMask : {
-			Sender: 1,
-			To_Recipient: 2,
-			CC_Recipient: 3,
 			BCC_Recipient: 4,
-			Required_attendee: 5,
+			CC_Recipient: 3,
+			Customer: 11,
 			Optional_attendee: 6,
 			Organizer: 7,
-			Regarding: 8,
 			Owner: 9,
+			Regarding: 8,
+			Required_attendee: 5,
 			Resource: 10,
-			Customer: 11
+			Sender: 1,
+			To_Recipient: 2
 		},
         RollupState : {
             NotCalculated: 0,

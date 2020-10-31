@@ -338,27 +338,27 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.devkit_WebApi = {
 		devkit_MultiOptionSetCode : {
-			Crm_4: 100000000,
 			Crm_2011: 100000001,
 			Crm_2013: 100000002,
 			Crm_2015: 100000003,
 			Crm_2016: 100000004,
+			Crm_4: 100000000,
 			Dynamics_365: 100000005
 		},
 		devkit_SingleOptionSetCode : {
-			Crm_4: 100000000,
 			Crm_2011: 100000001,
 			Crm_2013: 100000002,
 			Crm_2015: 100000003,
 			Crm_2016: 100000004,
+			Crm_4: 100000000,
 			Dynamics_365: 100000005
 		},
 		devkit_SingleOptionSetCodeCalculated : {
-			Crm_4: 100000000,
 			Crm_2011: 100000001,
 			Crm_2013: 100000002,
 			Crm_2015: 100000003,
 			Crm_2016: 100000004,
+			Crm_4: 100000000,
 			Dynamics_365: 100000005
 		},
 		statecode : {

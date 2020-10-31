@@ -67,8 +67,6 @@ declare namespace LuckyStar {
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
-		WebApi: DevKit.WebApi;
 		/** The Body section of form Email */
 		Body: LuckyStar.FormEmail.Body;
 		/** The Footer section of form Email */
@@ -308,40 +306,40 @@ declare namespace LuckyStar {
 declare namespace OptionSet {
 	namespace Email {
 		enum CorrelationMethod {
+			/** 5 */
+			ConversationIndex,
+			/** 7 */
+			CustomCorrelation,
+			/** 3 */
+			InReplyTo,
 			/** 0 */
 			None,
 			/** 1 */
 			Skipped,
-			/** 2 */
-			XHeader,
-			/** 3 */
-			InReplyTo,
-			/** 4 */
-			TrackingToken,
-			/** 5 */
-			ConversationIndex,
 			/** 6 */
 			SmartMatching,
-			/** 7 */
-			CustomCorrelation
+			/** 4 */
+			TrackingToken,
+			/** 2 */
+			XHeader
 		}
 		enum DeliveryPriorityCode {
+			/** 2 */
+			High,
 			/** 0 */
 			Low,
 			/** 1 */
-			Normal,
-			/** 2 */
-			High
+			Normal
 		}
 		enum EmailReminderStatus {
 			/** 0 */
 			NotSet,
-			/** 1 */
-			ReminderSet,
 			/** 2 */
 			ReminderExpired,
 			/** 3 */
-			ReminderInvalid
+			ReminderInvalid,
+			/** 1 */
+			ReminderSet
 		}
 		enum EmailReminderType {
 			/** 0 */
@@ -360,38 +358,38 @@ declare namespace OptionSet {
 			Truncated_body
 		}
 		enum PriorityCode {
+			/** 2 */
+			High,
 			/** 0 */
 			Low,
 			/** 1 */
-			Normal,
-			/** 2 */
-			High
+			Normal
 		}
 		enum StateCode {
-			/** 0 */
-			Open,
+			/** 2 */
+			Canceled,
 			/** 1 */
 			Completed,
-			/** 2 */
-			Canceled
+			/** 0 */
+			Open
 		}
 		enum StatusCode {
-			/** 1 */
-			Draft,
-			/** 2 */
-			Completed,
-			/** 3 */
-			Sent,
-			/** 4 */
-			Received,
 			/** 5 */
 			Canceled,
+			/** 2 */
+			Completed,
+			/** 1 */
+			Draft,
+			/** 8 */
+			Failed,
 			/** 6 */
 			Pending_Send,
+			/** 4 */
+			Received,
 			/** 7 */
 			Sending,
-			/** 8 */
-			Failed
+			/** 3 */
+			Sent
 		}
         enum RollupState {
             /** 0 - Attribute value is yet to be calculated */

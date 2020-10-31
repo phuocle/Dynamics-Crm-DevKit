@@ -150,8 +150,6 @@ declare namespace LuckyStar {
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
-		WebApi: DevKit.WebApi;
 		/** The Body section of form Account */
 		Body: LuckyStar.FormAccount.Body;
 		/** The Header section of form Account */

@@ -108,9 +108,9 @@ var OptionSet;
 		},
 		Address1_AddressTypeCode : {
 			Bill_To: 1,
-			Ship_To: 2,
+			Other: 4,
 			Primary: 3,
-			Other: 4
+			Ship_To: 2
 		},
 		Address1_FreightTermsCode : {
 			FOB: 1,
@@ -120,9 +120,9 @@ var OptionSet;
 			Airborne: 1,
 			DHL: 2,
 			FedEx: 3,
-			UPS: 4,
-			Postal_Mail: 5,
 			Full_Load: 6,
+			Postal_Mail: 5,
+			UPS: 4,
 			Will_Call: 7
 		},
 		Address2_AddressTypeCode : {
@@ -153,14 +153,14 @@ var OptionSet;
 			Default_Value: 1
 		},
 		FamilyStatusCode : {
-			Single: 1,
-			Married: 2,
 			Divorced: 3,
+			Married: 2,
+			Single: 1,
 			Widowed: 4
 		},
 		GenderCode : {
-			Male: 1,
-			Female: 2
+			Female: 2,
+			Male: 1
 		},
 		HasChildrenCode : {
 			Default_Value: 1
@@ -169,31 +169,31 @@ var OptionSet;
 			Default_Value: 1
 		},
 		PaymentTermsCode : {
-			Net_30: 1,
 			_2_10_Net_30: 2,
+			Net_30: 1,
 			Net_45: 3,
 			Net_60: 4
 		},
 		PreferredAppointmentDayCode : {
-			Sunday: 0,
-			Monday: 1,
-			Tuesday: 2,
-			Wednesday: 3,
-			Thursday: 4,
 			Friday: 5,
-			Saturday: 6
+			Monday: 1,
+			Saturday: 6,
+			Sunday: 0,
+			Thursday: 4,
+			Tuesday: 2,
+			Wednesday: 3
 		},
 		PreferredAppointmentTimeCode : {
-			Morning: 1,
 			Afternoon: 2,
-			Evening: 3
+			Evening: 3,
+			Morning: 1
 		},
 		PreferredContactMethodCode : {
 			Any: 1,
 			Email: 2,
-			Phone: 3,
 			Fax: 4,
-			Mail: 5
+			Mail: 5,
+			Phone: 3
 		},
 		ShippingMethodCode : {
 			Default_Value: 1

@@ -114,12 +114,12 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.SystemUser = {
 		AccessMode : {
-			Read_Write: 0,
 			Administrative: 1,
-			Read: 2,
-			Support_User: 3,
+			Delegated_Admin: 5,
 			Non_interactive: 4,
-			Delegated_Admin: 5
+			Read: 2,
+			Read_Write: 0,
+			Support_User: 3
 		},
 		Address1_AddressTypeCode : {
 			Default_Value: 1
@@ -134,44 +134,44 @@ var OptionSet;
 			Default_Value: 1
 		},
 		CALType : {
-			Professional: 0,
 			Administrative: 1,
 			Basic: 2,
-			Device_Professional: 3,
 			Device_Basic: 4,
-			Essential: 5,
-			Device_Essential: 6,
-			Enterprise: 7,
 			Device_Enterprise: 8,
-			Sales: 9,
-			Service: 10,
+			Device_Essential: 6,
+			Device_Professional: 3,
+			Enterprise: 7,
+			Essential: 5,
 			Field_Service: 11,
-			Project_Service: 12
+			Professional: 0,
+			Project_Service: 12,
+			Sales: 9,
+			Service: 10
 		},
 		EmailRouterAccessApproval : {
-			Empty: 0,
 			Approved: 1,
+			Empty: 0,
 			Pending_Approval: 2,
 			Rejected: 3
 		},
 		IncomingEmailDeliveryMethod : {
-			None: 0,
+			Forward_Mailbox: 3,
 			Microsoft_Dynamics_365_for_Outlook: 1,
-			Server_Side_Synchronization_or_Email_Router: 2,
-			Forward_Mailbox: 3
+			None: 0,
+			Server_Side_Synchronization_or_Email_Router: 2
 		},
 		InviteStatusCode : {
-			Invitation_Not_Sent: 0,
-			Invited: 1,
-			Invitation_Near_Expired: 2,
-			Invitation_Expired: 3,
 			Invitation_Accepted: 4,
+			Invitation_Expired: 3,
+			Invitation_Near_Expired: 2,
+			Invitation_Not_Sent: 0,
 			Invitation_Rejected: 5,
-			Invitation_Revoked: 6
+			Invitation_Revoked: 6,
+			Invited: 1
 		},
 		OutgoingEmailDeliveryMethod : {
-			None: 0,
 			Microsoft_Dynamics_365_for_Outlook: 1,
+			None: 0,
 			Server_Side_Synchronization_or_Email_Router: 2
 		},
 		PreferredAddressCode : {
@@ -182,10 +182,10 @@ var OptionSet;
 			Default_Value: 1
 		},
 		PreferredPhoneCode : {
-			Main_Phone: 1,
-			Other_Phone: 2,
 			Home_Phone: 3,
-			Mobile_Phone: 4
+			Main_Phone: 1,
+			Mobile_Phone: 4,
+			Other_Phone: 2
 		},
         RollupState : {
             NotCalculated: 0,

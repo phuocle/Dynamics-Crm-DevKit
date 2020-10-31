@@ -413,8 +413,6 @@ declare namespace LuckyStar {
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
-		WebApi: DevKit.WebApi;
 		/** The Body section of form WebApi */
 		Body: LuckyStar.FormWebApi.Body;
 		/** The Footer section of form WebApi */
@@ -576,8 +574,6 @@ declare namespace LuckyStar {
 declare namespace OptionSet {
 	namespace devkit_WebApi {
 		enum devkit_MultiOptionSetCode {
-			/** 100000000 */
-			Crm_4,
 			/** 100000001 */
 			Crm_2011,
 			/** 100000002 */
@@ -586,12 +582,12 @@ declare namespace OptionSet {
 			Crm_2015,
 			/** 100000004 */
 			Crm_2016,
+			/** 100000000 */
+			Crm_4,
 			/** 100000005 */
 			Dynamics_365
 		}
 		enum devkit_SingleOptionSetCode {
-			/** 100000000 */
-			Crm_4,
 			/** 100000001 */
 			Crm_2011,
 			/** 100000002 */
@@ -600,12 +596,12 @@ declare namespace OptionSet {
 			Crm_2015,
 			/** 100000004 */
 			Crm_2016,
+			/** 100000000 */
+			Crm_4,
 			/** 100000005 */
 			Dynamics_365
 		}
 		enum devkit_SingleOptionSetCodeCalculated {
-			/** 100000000 */
-			Crm_4,
 			/** 100000001 */
 			Crm_2011,
 			/** 100000002 */
@@ -614,6 +610,8 @@ declare namespace OptionSet {
 			Crm_2015,
 			/** 100000004 */
 			Crm_2016,
+			/** 100000000 */
+			Crm_4,
 			/** 100000005 */
 			Dynamics_365
 		}
