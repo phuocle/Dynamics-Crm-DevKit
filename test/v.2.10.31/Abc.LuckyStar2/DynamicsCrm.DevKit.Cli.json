@@ -124,7 +124,25 @@
       "crmversion": "365",
       "type": "CSharp",
       "entities": "",
-      "debug":  ""
+      "debug": ""
+    },
+    {
+      "profile": "LATEBOUND1",
+      "rootnamespace": "Abc.LuckyStar2.Shared.Entities",
+      "rootfolder": "",
+      "crmversion": "365",
+      "type": "CSharp",
+      "entities": "account,contact,team,systemuser",
+      "debug": ""
+    },
+    {
+      "profile": "LATEBOUND2",
+      "rootnamespace": "Abc.LuckyStar2.Shared.Entities",
+      "rootfolder": "",
+      "crmversion": "365",
+      "type": "CSharp",
+      "entities": "*",
+      "debug": ""
     },
     {
       "profile": "JS-FORM",
