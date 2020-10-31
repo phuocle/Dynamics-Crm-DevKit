@@ -99,23 +99,67 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
         private static List<string> CrmPluginRegistrationDataForWorkflow(DTE dte, string fullName)
         {
-            var form = new FormConnection2(dte);
+            IOrganizationService CrmService = null;
+            Shared.Models.CrmConnection CrmConnection = null;
             var list = new List<string>();
-            if (form.ShowDialog() == DialogResult.OK)
+            var form = new FormConnection2(dte);
+            if (form.ShowDialog() == DialogResult.Cancel) return list;
+            if (form.Check == "1")
             {
-                var crmConnectionString = XrmHelper.BuildConnectionString(form.CrmConnection);
+                var loginForm = new FormLogin();
+                loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                loginForm.ShowDialog();
+                if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
+                {
+                    if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
+                    {
+                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
+                    }
+                    else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
+                    {
+                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
+                    }
+                    else
+                    {
+                        return list;
+                    }
+                }
+                else
+                {
+                    return list;
+                }
+            }
+            else
+            {
+                CrmConnection = form.CrmConnection;
+                CrmService = form.CrmService;
+            }
+
+            if (form.Check == "1")
+            {
+                var deployText = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.workflow.deploy.debug.bat");
+                deployText = deployText
+                    .Replace("set CrmConnection=\"$CrmConnectionString$\"\r\n", string.Empty)
+                    .Replace("/conn:%CrmConnection%", "/sdklogin:\"yes\"")
+                    .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
+                AddDeployBatIfNeed(dte, deployText);
+            }
+            else
+            {
+                var crmConnectionString = XrmHelper.BuildConnectionString(CrmConnection);
                 var deployText = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.workflow.deploy.debug.bat");
                 deployText = deployText
                     .Replace("$CrmConnectionString$", crmConnectionString)
                     .Replace("$ProjectName$", Path.GetFileNameWithoutExtension(dte.ActiveDocument.ProjectItem.ContainingProject.FullName));
                 AddDeployBatIfNeed(dte, deployText);
-                var fetchData = new
-                {
-                    ismanaged = "0",
-                    isworkflowactivity = "1",
-                    typename = fullName
-                };
-                var fetchXml = $@"
+            }
+            var fetchData = new
+            {
+                ismanaged = "0",
+                isworkflowactivity = "1",
+                typename = fullName
+            };
+            var fetchXml = $@"
 <fetch>
   <entity name='plugintype'>
     <attribute name='name' />
@@ -135,27 +179,26 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
   </entity>
 </fetch>";
 
-                var rows = form.CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
-                if (rows.Entities.Count == 0) return list;
-                foreach (var row in rows.Entities)
-                {
-                    var name = row.GetAttributeValue<string>("name");
-                    var friendlyname = row.GetAttributeValue<string>("friendlyname");
-                    var description = row.GetAttributeValue<string>("description");
-                    var workflowactivitygroupname = row.GetAttributeValue<string>("workflowactivitygroupname");
-                    var isolationMode = GetAliasedValue<OptionSetValue>(row, "a.isolationmode").Value;
-                    var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
-                    var attribute = string.Empty;
-                    attribute += $"\"{name}\"";
-                    attribute += $", \"{friendlyname}\"";
-                    attribute += $", \"{description}\"";
-                    attribute += $", \"{workflowactivitygroupname}\"";
-                    attribute += $", {isolationModeName}";
-                    list.Add(attribute);
-                }
-                return list;
+            var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return list;
+            foreach (var row in rows.Entities)
+            {
+                var name = row.GetAttributeValue<string>("name");
+                var friendlyname = row.GetAttributeValue<string>("friendlyname");
+                var description = row.GetAttributeValue<string>("description");
+                var workflowactivitygroupname = row.GetAttributeValue<string>("workflowactivitygroupname");
+                var isolationMode = GetAliasedValue<OptionSetValue>(row, "a.isolationmode").Value;
+                var isolationModeName = isolationMode == 0 ? "IsolationModeEnum.None" : "IsolationModeEnum.Sandbox";
+                var attribute = string.Empty;
+                attribute += $"\"{name}\"";
+                attribute += $", \"{friendlyname}\"";
+                attribute += $", \"{description}\"";
+                attribute += $", \"{workflowactivitygroupname}\"";
+                attribute += $", {isolationModeName}";
+                list.Add(attribute);
             }
             return list;
+
         }
 
         private static void AddImportSharedProjectIfNeed(DTE dte)
@@ -249,7 +292,6 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 login.Close();
             }
         }
-
 
         private static List<string> CrmPluginRegistrationDataForPlugin(DTE dte, string fullName)
         {
