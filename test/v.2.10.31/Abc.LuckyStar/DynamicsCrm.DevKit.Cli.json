@@ -185,8 +185,7 @@
       "entities": "account,contact"
     }
   ],
-  "visualstudio": {
-    "connection": "DEVKIT-ClientSecret",
+  "visualstudio": {    
     "webresourceprofile": "DEBUG"
   }
 }

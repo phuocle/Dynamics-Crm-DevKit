@@ -13,6 +13,10 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 	public enum AccountCategoryCode
 	{
 		/// <summary>
+		/// Other = 100000001
+		/// </summary>
+		Other = 100000001,
+		/// <summary>
 		/// Preferred_Customer = 1
 		/// </summary>
 		Preferred_Customer = 1,
@@ -23,11 +27,7 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 		/// <summary>
 		/// Standard_3 = 3
 		/// </summary>
-		Standard_3 = 3,
-		/// <summary>
-		/// Other = 100000001
-		/// </summary>
-		Other = 100000001
+		Standard_3 = 3
 	}
 
 	public enum AccountClassificationCode
@@ -53,17 +53,17 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Bill_To = 1,
 		/// <summary>
-		/// Ship_To = 2
+		/// Other = 4
 		/// </summary>
-		Ship_To = 2,
+		Other = 4,
 		/// <summary>
 		/// Primary = 3
 		/// </summary>
 		Primary = 3,
 		/// <summary>
-		/// Other = 4
+		/// Ship_To = 2
 		/// </summary>
-		Other = 4
+		Ship_To = 2
 	}
 
 	public enum Address1_FreightTermsCode
@@ -93,17 +93,17 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 		/// </summary>
 		FedEx = 3,
 		/// <summary>
-		/// UPS = 4
+		/// Full_Load = 6
 		/// </summary>
-		UPS = 4,
+		Full_Load = 6,
 		/// <summary>
 		/// Postal_Mail = 5
 		/// </summary>
 		Postal_Mail = 5,
 		/// <summary>
-		/// Full_Load = 6
+		/// UPS = 4
 		/// </summary>
-		Full_Load = 6,
+		UPS = 4,
 		/// <summary>
 		/// Will_Call = 7
 		/// </summary>
@@ -165,17 +165,21 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Customer = 3,
 		/// <summary>
+		/// Influencer = 6
+		/// </summary>
+		Influencer = 6,
+		/// <summary>
 		/// Investor = 4
 		/// </summary>
 		Investor = 4,
 		/// <summary>
+		/// Other = 12
+		/// </summary>
+		Other = 12,
+		/// <summary>
 		/// Partner = 5
 		/// </summary>
 		Partner = 5,
-		/// <summary>
-		/// Influencer = 6
-		/// </summary>
-		Influencer = 6,
 		/// <summary>
 		/// Press = 7
 		/// </summary>
@@ -195,11 +199,7 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 		/// <summary>
 		/// Vendor = 11
 		/// </summary>
-		Vendor = 11,
-		/// <summary>
-		/// Other = 12
-		/// </summary>
-		Other = 12
+		Vendor = 11
 	}
 
 	public enum IndustryCode
@@ -341,33 +341,33 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 	public enum OwnershipCode
 	{
 		/// <summary>
-		/// Public = 1
+		/// Other = 4
 		/// </summary>
-		Public = 1,
+		Other = 4,
 		/// <summary>
 		/// Private = 2
 		/// </summary>
 		Private = 2,
 		/// <summary>
+		/// Public = 1
+		/// </summary>
+		Public = 1,
+		/// <summary>
 		/// Subsidiary = 3
 		/// </summary>
-		Subsidiary = 3,
-		/// <summary>
-		/// Other = 4
-		/// </summary>
-		Other = 4
+		Subsidiary = 3
 	}
 
 	public enum PaymentTermsCode
 	{
 		/// <summary>
-		/// Net_30 = 1
-		/// </summary>
-		Net_30 = 1,
-		/// <summary>
 		/// _2_10_Net_30 = 2
 		/// </summary>
 		_2_10_Net_30 = 2,
+		/// <summary>
+		/// Net_30 = 1
+		/// </summary>
+		Net_30 = 1,
 		/// <summary>
 		/// Net_45 = 3
 		/// </summary>
@@ -381,13 +381,25 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 	public enum PreferredAppointmentDayCode
 	{
 		/// <summary>
-		/// Sunday = 0
+		/// Friday = 5
 		/// </summary>
-		Sunday = 0,
+		Friday = 5,
 		/// <summary>
 		/// Monday = 1
 		/// </summary>
 		Monday = 1,
+		/// <summary>
+		/// Saturday = 6
+		/// </summary>
+		Saturday = 6,
+		/// <summary>
+		/// Sunday = 0
+		/// </summary>
+		Sunday = 0,
+		/// <summary>
+		/// Thursday = 4
+		/// </summary>
+		Thursday = 4,
 		/// <summary>
 		/// Tuesday = 2
 		/// </summary>
@@ -395,27 +407,11 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 		/// <summary>
 		/// Wednesday = 3
 		/// </summary>
-		Wednesday = 3,
-		/// <summary>
-		/// Thursday = 4
-		/// </summary>
-		Thursday = 4,
-		/// <summary>
-		/// Friday = 5
-		/// </summary>
-		Friday = 5,
-		/// <summary>
-		/// Saturday = 6
-		/// </summary>
-		Saturday = 6
+		Wednesday = 3
 	}
 
 	public enum PreferredAppointmentTimeCode
 	{
-		/// <summary>
-		/// Morning = 1
-		/// </summary>
-		Morning = 1,
 		/// <summary>
 		/// Afternoon = 2
 		/// </summary>
@@ -423,7 +419,11 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 		/// <summary>
 		/// Evening = 3
 		/// </summary>
-		Evening = 3
+		Evening = 3,
+		/// <summary>
+		/// Morning = 1
+		/// </summary>
+		Morning = 1
 	}
 
 	public enum PreferredContactMethodCode
@@ -437,17 +437,17 @@ namespace Abc.LuckyStar.Shared.Entities.AccountOptionSets
 		/// </summary>
 		Email = 2,
 		/// <summary>
-		/// Phone = 3
-		/// </summary>
-		Phone = 3,
-		/// <summary>
 		/// Fax = 4
 		/// </summary>
 		Fax = 4,
 		/// <summary>
 		/// Mail = 5
 		/// </summary>
-		Mail = 5
+		Mail = 5,
+		/// <summary>
+		/// Phone = 3
+		/// </summary>
+		Phone = 3
 	}
 
 	public enum ShippingMethodCode

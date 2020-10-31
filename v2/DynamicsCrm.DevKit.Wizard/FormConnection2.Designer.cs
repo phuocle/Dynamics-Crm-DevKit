@@ -53,10 +53,10 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(369, 218);
+            this.btnCancel.Location = new System.Drawing.Point(320, 239);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(60, 20);
+            this.btnCancel.Size = new System.Drawing.Size(105, 28);
             this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -74,10 +74,10 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(304, 218);
+            this.btnOk.Location = new System.Drawing.Point(209, 239);
             this.btnOk.Margin = new System.Windows.Forms.Padding(2);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(60, 20);
+            this.btnOk.Size = new System.Drawing.Size(105, 28);
             this.btnOk.TabIndex = 8;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -111,7 +111,7 @@
             this.groupBoxConnection.Margin = new System.Windows.Forms.Padding(2);
             this.groupBoxConnection.Name = "groupBoxConnection";
             this.groupBoxConnection.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBoxConnection.Size = new System.Drawing.Size(410, 124);
+            this.groupBoxConnection.Size = new System.Drawing.Size(410, 162);
             this.groupBoxConnection.TabIndex = 11;
             this.groupBoxConnection.TabStop = false;
             // 
@@ -126,16 +126,16 @@
             "IFD",
             "Office365",
             "ClientSecret"});
-            this.cboType.Location = new System.Drawing.Point(74, 34);
+            this.cboType.Location = new System.Drawing.Point(88, 42);
             this.cboType.Margin = new System.Windows.Forms.Padding(2);
             this.cboType.Name = "cboType";
-            this.cboType.Size = new System.Drawing.Size(161, 21);
+            this.cboType.Size = new System.Drawing.Size(147, 21);
             this.cboType.TabIndex = 10;
             // 
             // labelType
             // 
             this.labelType.AutoSize = true;
-            this.labelType.Location = new System.Drawing.Point(4, 37);
+            this.labelType.Location = new System.Drawing.Point(4, 45);
             this.labelType.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelType.Name = "labelType";
             this.labelType.Size = new System.Drawing.Size(31, 13);
@@ -144,16 +144,16 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(74, 14);
+            this.txtName.Location = new System.Drawing.Point(88, 14);
             this.txtName.Margin = new System.Windows.Forms.Padding(2);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(161, 20);
+            this.txtName.Size = new System.Drawing.Size(147, 20);
             this.txtName.TabIndex = 8;
             // 
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(4, 16);
+            this.labelName.Location = new System.Drawing.Point(4, 17);
             this.labelName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(35, 13);
@@ -162,10 +162,10 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(297, 76);
+            this.btnConnect.Location = new System.Drawing.Point(299, 99);
             this.btnConnect.Margin = new System.Windows.Forms.Padding(2);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(109, 39);
+            this.btnConnect.Size = new System.Drawing.Size(107, 48);
             this.btnConnect.TabIndex = 4;
             this.btnConnect.Text = "Connect ?";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -173,17 +173,17 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(74, 96);
+            this.txtPassword.Location = new System.Drawing.Point(86, 127);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(2);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(221, 20);
+            this.txtPassword.Size = new System.Drawing.Size(209, 20);
             this.txtPassword.TabIndex = 3;
             // 
             // labelPassword
             // 
             this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(4, 98);
+            this.labelPassword.Location = new System.Drawing.Point(4, 130);
             this.labelPassword.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(73, 13);
@@ -192,16 +192,16 @@
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(74, 76);
+            this.txtUserName.Location = new System.Drawing.Point(88, 99);
             this.txtUserName.Margin = new System.Windows.Forms.Padding(2);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(221, 20);
+            this.txtUserName.Size = new System.Drawing.Size(207, 20);
             this.txtUserName.TabIndex = 2;
             // 
             // labelUserName
             // 
             this.labelUserName.AutoSize = true;
-            this.labelUserName.Location = new System.Drawing.Point(4, 78);
+            this.labelUserName.Location = new System.Drawing.Point(4, 102);
             this.labelUserName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelUserName.Name = "labelUserName";
             this.labelUserName.Size = new System.Drawing.Size(45, 13);
@@ -210,16 +210,16 @@
             // 
             // txtUrl
             // 
-            this.txtUrl.Location = new System.Drawing.Point(74, 55);
+            this.txtUrl.Location = new System.Drawing.Point(88, 71);
             this.txtUrl.Margin = new System.Windows.Forms.Padding(2);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(332, 20);
+            this.txtUrl.Size = new System.Drawing.Size(318, 20);
             this.txtUrl.TabIndex = 1;
             // 
             // labelUrl
             // 
             this.labelUrl.AutoSize = true;
-            this.labelUrl.Location = new System.Drawing.Point(4, 58);
+            this.labelUrl.Location = new System.Drawing.Point(4, 74);
             this.labelUrl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelUrl.Name = "labelUrl";
             this.labelUrl.Size = new System.Drawing.Size(20, 13);
@@ -236,7 +236,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(428, 174);
+            this.groupBox1.Size = new System.Drawing.Size(428, 210);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             // 
@@ -257,7 +257,7 @@
             // chkCheck1
             // 
             this.chkCheck1.AutoSize = true;
-            this.chkCheck1.Location = new System.Drawing.Point(19, 197);
+            this.chkCheck1.Location = new System.Drawing.Point(19, 229);
             this.chkCheck1.Margin = new System.Windows.Forms.Padding(2);
             this.chkCheck1.Name = "chkCheck1";
             this.chkCheck1.Size = new System.Drawing.Size(139, 17);
@@ -268,9 +268,8 @@
             // 
             // FormConnection2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(444, 246);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(444, 278);
             this.ControlBox = false;
             this.Controls.Add(this.chkCheck1);
             this.Controls.Add(this.groupBox1);

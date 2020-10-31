@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
@@ -12,7 +9,6 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 
 namespace DynamicsCrm.DevKit.Package.MenuItem

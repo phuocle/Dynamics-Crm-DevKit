@@ -181,7 +181,7 @@
     </Compile>
     <Compile Include="DevKitCommand.cs" />
     <Compile Include="MenuItem\AddCrmPluginRegistration.cs" />
-    <Compile Include="MenuItem\DeployReport.cs" />
+    <None Include="MenuItem\DeployReport.cs" />
     <Compile Include="MenuItem\DeployWebResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DevKitPackage.cs" />
@@ -222,6 +222,10 @@
     <ProjectReference Include="..\DynamicsCrm.DevKit.Resources\DynamicsCrm.DevKit.Resources.csproj">
       <Project>{c3d692c7-4d23-4f68-af38-ac9b375e4a56}</Project>
       <Name>DynamicsCrm.DevKit.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DynamicsCrm.DevKit.SdkLogin\DynamicsCrm.DevKit.SdkLogin.csproj">
+      <Project>{0bd4ada6-cf1e-4123-b30e-c9d33298bccd}</Project>
+      <Name>DynamicsCrm.DevKit.SdkLogin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +326,7 @@
     <Reference Include="NUglify, Version=1.9.9.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
       <HintPath>..\packages\NUglify.1.9.9\lib\net40\NUglify.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Activities" />
@@ -363,6 +368,7 @@
     <Reference Include="System.Workflow.Runtime" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
