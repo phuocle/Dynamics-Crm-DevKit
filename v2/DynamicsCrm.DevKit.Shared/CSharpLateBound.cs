@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Xml;
@@ -769,7 +770,12 @@ namespace DynamicsCrm.DevKit.Shared
                 else
                     values.Add(key, optionSetValues[key]);
             }
-            return values;
+            var newValues = new NameValueCollection();
+            var sortedKeys = values.AllKeys;
+            Array.Sort(sortedKeys);
+            foreach (var key in sortedKeys)
+                newValues.Add(key, values[key]);
+            return newValues;
         }
     }
 }

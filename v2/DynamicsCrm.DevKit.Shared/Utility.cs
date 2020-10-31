@@ -7,6 +7,7 @@ using EnvDTE;
 using NUglify;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Text;
+using Microsoft.CSharp;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -359,6 +360,8 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("__", "_");
                 var firstchar = name[0];
                 if (firstchar >= '0' && firstchar <= '9') name = "_" + name;
+                var cs = new CSharpCodeProvider();
+                name = cs.CreateValidIdentifier(name);
                 return name;
             }
             catch

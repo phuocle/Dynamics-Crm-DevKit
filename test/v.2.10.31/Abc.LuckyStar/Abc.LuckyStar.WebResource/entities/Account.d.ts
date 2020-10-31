@@ -540,14 +540,14 @@ declare namespace LuckyStar {
 declare namespace OptionSet {
 	namespace Account {
 		enum AccountCategoryCode {
+			/** 100000001 */
+			Other,
 			/** 1 */
 			Preferred_Customer,
 			/** 2 */
 			Standard_2,
 			/** 3 */
-			Standard_3,
-			/** 100000001 */
-			Other
+			Standard_3
 		}
 		enum AccountClassificationCode {
 			/** 1 */
@@ -560,12 +560,12 @@ declare namespace OptionSet {
 		enum Address1_AddressTypeCode {
 			/** 1 */
 			Bill_To,
-			/** 2 */
-			Ship_To,
+			/** 4 */
+			Other,
 			/** 3 */
 			Primary,
-			/** 4 */
-			Other
+			/** 2 */
+			Ship_To
 		}
 		enum Address1_FreightTermsCode {
 			/** 1 */
@@ -580,12 +580,12 @@ declare namespace OptionSet {
 			DHL,
 			/** 3 */
 			FedEx,
-			/** 4 */
-			UPS,
-			/** 5 */
-			Postal_Mail,
 			/** 6 */
 			Full_Load,
+			/** 5 */
+			Postal_Mail,
+			/** 4 */
+			UPS,
 			/** 7 */
 			Will_Call
 		}
@@ -616,12 +616,14 @@ declare namespace OptionSet {
 			Consultant,
 			/** 3 */
 			Customer,
-			/** 4 */
-			Investor,
-			/** 5 */
-			Partner,
 			/** 6 */
 			Influencer,
+			/** 4 */
+			Investor,
+			/** 12 */
+			Other,
+			/** 5 */
+			Partner,
 			/** 7 */
 			Press,
 			/** 8 */
@@ -631,9 +633,7 @@ declare namespace OptionSet {
 			/** 10 */
 			Supplier,
 			/** 11 */
-			Vendor,
-			/** 12 */
-			Other
+			Vendor
 		}
 		enum IndustryCode {
 			/** 1 */
@@ -704,60 +704,60 @@ declare namespace OptionSet {
 			Wholesale
 		}
 		enum OwnershipCode {
-			/** 1 */
-			Public,
+			/** 4 */
+			Other,
 			/** 2 */
 			Private,
+			/** 1 */
+			Public,
 			/** 3 */
-			Subsidiary,
-			/** 4 */
-			Other
+			Subsidiary
 		}
 		enum PaymentTermsCode {
-			/** 1 */
-			Net_30,
 			/** 2 */
 			_2_10_Net_30,
+			/** 1 */
+			Net_30,
 			/** 3 */
 			Net_45,
 			/** 4 */
 			Net_60
 		}
 		enum PreferredAppointmentDayCode {
-			/** 0 */
-			Sunday,
+			/** 5 */
+			Friday,
 			/** 1 */
 			Monday,
+			/** 6 */
+			Saturday,
+			/** 0 */
+			Sunday,
+			/** 4 */
+			Thursday,
 			/** 2 */
 			Tuesday,
 			/** 3 */
-			Wednesday,
-			/** 4 */
-			Thursday,
-			/** 5 */
-			Friday,
-			/** 6 */
-			Saturday
+			Wednesday
 		}
 		enum PreferredAppointmentTimeCode {
-			/** 1 */
-			Morning,
 			/** 2 */
 			Afternoon,
 			/** 3 */
-			Evening
+			Evening,
+			/** 1 */
+			Morning
 		}
 		enum PreferredContactMethodCode {
 			/** 1 */
 			Any,
 			/** 2 */
 			Email,
-			/** 3 */
-			Phone,
 			/** 4 */
 			Fax,
 			/** 5 */
-			Mail
+			Mail,
+			/** 3 */
+			Phone
 		}
 		enum ShippingMethodCode {
 			/** 1 */

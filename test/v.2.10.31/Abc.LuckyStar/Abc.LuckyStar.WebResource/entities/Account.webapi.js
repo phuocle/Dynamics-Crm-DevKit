@@ -258,10 +258,10 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.Account = {
 		AccountCategoryCode : {
+			Other: 100000001,
 			Preferred_Customer: 1,
 			Standard_2: 2,
-			Standard_3: 3,
-			Other: 100000001
+			Standard_3: 3
 		},
 		AccountClassificationCode : {
 			Default_Value: 1
@@ -271,9 +271,9 @@ var OptionSet;
 		},
 		Address1_AddressTypeCode : {
 			Bill_To: 1,
-			Ship_To: 2,
+			Other: 4,
 			Primary: 3,
-			Other: 4
+			Ship_To: 2
 		},
 		Address1_FreightTermsCode : {
 			FOB: 1,
@@ -283,9 +283,9 @@ var OptionSet;
 			Airborne: 1,
 			DHL: 2,
 			FedEx: 3,
-			UPS: 4,
-			Postal_Mail: 5,
 			Full_Load: 6,
+			Postal_Mail: 5,
+			UPS: 4,
 			Will_Call: 7
 		},
 		Address2_AddressTypeCode : {
@@ -307,15 +307,15 @@ var OptionSet;
 			Competitor: 1,
 			Consultant: 2,
 			Customer: 3,
-			Investor: 4,
-			Partner: 5,
 			Influencer: 6,
+			Investor: 4,
+			Other: 12,
+			Partner: 5,
 			Press: 7,
 			Prospect: 8,
 			Reseller: 9,
 			Supplier: 10,
-			Vendor: 11,
-			Other: 12
+			Vendor: 11
 		},
 		IndustryCode : {
 			Accounting: 1,
@@ -353,37 +353,37 @@ var OptionSet;
 			Wholesale: 33
 		},
 		OwnershipCode : {
-			Public: 1,
+			Other: 4,
 			Private: 2,
-			Subsidiary: 3,
-			Other: 4
+			Public: 1,
+			Subsidiary: 3
 		},
 		PaymentTermsCode : {
-			Net_30: 1,
 			_2_10_Net_30: 2,
+			Net_30: 1,
 			Net_45: 3,
 			Net_60: 4
 		},
 		PreferredAppointmentDayCode : {
-			Sunday: 0,
-			Monday: 1,
-			Tuesday: 2,
-			Wednesday: 3,
-			Thursday: 4,
 			Friday: 5,
-			Saturday: 6
+			Monday: 1,
+			Saturday: 6,
+			Sunday: 0,
+			Thursday: 4,
+			Tuesday: 2,
+			Wednesday: 3
 		},
 		PreferredAppointmentTimeCode : {
-			Morning: 1,
 			Afternoon: 2,
-			Evening: 3
+			Evening: 3,
+			Morning: 1
 		},
 		PreferredContactMethodCode : {
 			Any: 1,
 			Email: 2,
-			Phone: 3,
 			Fax: 4,
-			Mail: 5
+			Mail: 5,
+			Phone: 3
 		},
 		ShippingMethodCode : {
 			Default_Value: 1

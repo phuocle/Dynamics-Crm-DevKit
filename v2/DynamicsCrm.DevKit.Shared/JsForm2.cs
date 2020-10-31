@@ -657,7 +657,12 @@ namespace DynamicsCrm.DevKit.Shared
                 else
                     values.Add(key, optionSetValues[key]);
             }
-            return values;
+            var newValues = new NameValueCollection();
+            var sortedKeys = values.AllKeys;
+            Array.Sort(sortedKeys);
+            foreach (var key in sortedKeys)
+                newValues.Add(key, values[key]);
+            return newValues;
         }
         private string GetLogicalCollectionName(CrmAttribute crmAttribute)
         {
