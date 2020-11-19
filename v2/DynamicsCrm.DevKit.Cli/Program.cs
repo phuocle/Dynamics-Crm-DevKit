@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.10.31\Abc.LuckyStar2\Abc.LuckyStar2.ProxyTypes";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\Abc.LuckyStar2\Abc.LuckyStar2.ProxyTypes";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

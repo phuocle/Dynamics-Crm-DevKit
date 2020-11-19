@@ -32,15 +32,29 @@ namespace DynamicsCrm.DevKit.Wizard
 
         public FormConnection2(DTE dte, ProjectType projectType = ProjectType.Default, ItemType itemType = ItemType.Default)
         {
-            var executingAssembly = Assembly.GetExecutingAssembly();
-            var fInfo = new System.IO.FileInfo(executingAssembly.Location);
-            var checkFile = $"{fInfo.Directory.FullName}\\Microsoft.Xrm.Tooling.Ui.Styles.dll";
-            if (System.IO.File.Exists(checkFile))
+            var isLoaded = false;
+            try
             {
-                Assembly.LoadFrom(checkFile);
+                var executingAssembly = Assembly.GetExecutingAssembly();
+                var fInfo = new System.IO.FileInfo(executingAssembly.Location);
+                var checkFile = $"{fInfo.Directory.FullName}\\Microsoft.Xrm.Tooling.Ui.Styles.dll";
+                if (System.IO.File.Exists(checkFile))
+                {
+                    Assembly.LoadFrom(checkFile);
+                }
+                isLoaded = true;
+            }
+            catch
+            {
             }
 
             InitializeComponent();
+
+            if (!isLoaded)
+            {
+                chkCheck1.Enabled = false;
+                cboType.Enabled = true;
+            }
 
             ProjectType = projectType;
 

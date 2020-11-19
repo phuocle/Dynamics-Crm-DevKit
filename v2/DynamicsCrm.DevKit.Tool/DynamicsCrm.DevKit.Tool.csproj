@@ -46,8 +46,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Microsoft.VisualStudio.Coverage.Analysis.dll</HintPath>
     </Reference>
-    <Reference Include="NUglify, Version=1.9.9.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUglify.1.9.9\lib\net40\NUglify.dll</HintPath>
+    <Reference Include="NUglify, Version=1.11.0.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUglify.1.11.0\lib\net40\NUglify.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

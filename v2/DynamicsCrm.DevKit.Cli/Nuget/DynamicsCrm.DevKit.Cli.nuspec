@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>DynamicsCrm.DevKit.Cli</id>
-        <version>2.10.31</version>
         <title>DynamicsCrm.DevKit.Cli - CLI for DynamicsCrm.DevKit tool</title>
+        <version>2.12.31</version>
         <authors>PhuocLe</authors>
         <license type="file">license\LICENSE.txt</license>
         <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
