@@ -238,7 +238,7 @@ namespace DynamicsCrm.DevKit.Shared
                         webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: ?????????? }},\r\n";
                     }
                 }
-                if (!(crmAttribute.IsValidForCreate || crmAttribute.IsValidForUpdate))
+                if (!(crmAttribute.IsValidForCreate || crmAttribute.IsValidForUpdate) || crmAttribute.IsReadOnly)
                 {
                     webApiCode = webApiCode.TrimEnd(" },\r\n".ToCharArray());
                     webApiCode += $", r: true }},\r\n";

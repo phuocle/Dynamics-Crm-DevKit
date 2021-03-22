@@ -256,6 +256,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private void GeneratorWebApi()
         {
+            // /conn:"AuthType=Office365;Url=https://crmgridplus-developer.api.crm5.dynamics.com/XRMServices/2011/Organization.svc;Username=developer@crmgridplus.com;Password=67ubH5C8nrSvsmDAv/Zixw==;" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"JS-WEBAPI"
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "[GENERATOR JS WEBAPI]");
             CliLog.WriteLine();
 
