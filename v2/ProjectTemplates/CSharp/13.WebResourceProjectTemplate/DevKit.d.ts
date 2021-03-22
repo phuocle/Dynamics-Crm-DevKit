@@ -410,7 +410,7 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
              */
-            Value: string;
+            Value: any;
         }
         interface Date extends IControl {
             /**
@@ -418,7 +418,7 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
              */
-            Value: Date;
+            Value: any;
         }
         interface Lookup extends IControl {
             /**

@@ -462,7 +462,7 @@ namespace DynamicsCrm.DevKit.Shared
                 _d_ts += $"\t\t}}\r\n";
                 part1 += $"\t\t\t{name}: Process{name};\r\n";
             }
-            _d_ts += $"\t\tinterface Process extends DevKit.Controls.IProcess {{\r\n";
+            _d_ts += $"\t\tinterface Process extends DevKit.Controls.Process {{\r\n";
             _d_ts += part1;
             _d_ts += $"\t\t}}\r\n";
             return _d_ts;
