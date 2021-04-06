@@ -1,27 +1,25 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
-using Microsoft.Xrm.Sdk.Query;
 using System;
-using $SharedNameSpace$;
+using Abc.LuckyStar2.Shared;
 
-namespace $NameSpace$
+namespace Abc.LuckyStar2.DataProvider
 {
-    [CrmPluginRegistration("$NameSpace$.RetrieveMultiple", VirtualTablePlugin.RetrieveMultiple)]
-    public class RetrieveMultiple : IPlugin
+    [CrmPluginRegistration("Abc.LuckyStar2.DataProvider.Delete", VirtualTablePlugin.Delete)]
+    public class Delete : IPlugin
     {
         /*
           InputParameters:
-              Query                 Microsoft.Xrm.Sdk.Query.QueryBase - require
-              AppModuleId           System.Guid
-              IsAppModuleContext    System.Boolean
+              Target                 Microsoft.Xrm.Sdk.EntityReference - require
+              SolutionUniqueName     System.String
+              ConcurrencyBehavior    Microsoft.Xrm.Sdk.ConcurrencyBehavior
            OutputParameters:
-              EntityCollection      Microsoft.Xrm.Sdk.EntityCollection - require
         */
 
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-        //public RetrieveMultiple(string unsecureString, string secureString)
+        //public Delete(string unsecureString, string secureString)
         //{
         //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
         //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -36,12 +34,12 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //tracing.DebugMessage("Begin Data Provider: $NameSpace$.RetrieveMultiple");
+            //tracing.DebugMessage("Begin Data Provider: Abc.LuckyStar2.DataProvider.Delete");
             //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //tracing.DebugMessage("End Data Provider: $NameSpace$.RetrieveMultiple");
+            //tracing.DebugMessage("End Data Provider: Abc.LuckyStar2.DataProvider.Delete");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)
@@ -50,13 +48,10 @@ namespace $NameSpace$
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var query = context.InputParameterOrDefault<QueryExpression>("Query");
-            var entities = new EntityCollection();
+            var target = context.InputParameterOrDefault<EntityReference>("Target");
 
             //YOUR CODE ...
-            entities.EntityName = "???";
 
-            context.OutputParameters["BusinessEntityCollection"] = entities;
         }
     }
 }

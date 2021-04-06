@@ -1,18 +1,24 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
+using $SharedNameSpace$;
 
 namespace $NameSpace$
 {
+    [CrmPluginRegistration("$NameSpace$.Retrieve", VirtualTablePlugin.Retrieve)]
     public class Retrieve : IPlugin
     {
         /*
           InputParameters:
               Target                  Microsoft.Xrm.Sdk.EntityReference - require
               ColumnSet               Microsoft.Xrm.Sdk.Query.ColumnSet - require
+              RelatedEntitiesQuery    Microsoft.Xrm.Sdk.RelationshipQueryCollection
+              ReturnNotifications     System.Boolean
            OutputParameters:
               Entity                  Microsoft.Xrm.Sdk.Entity - require
+              Notifications            - require
         */
+
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
@@ -46,7 +52,6 @@ namespace $NameSpace$
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
             var target = context.InputParameterOrDefault<EntityReference>("Target");
-
             var entity = new Entity("???", target.Id);
 
             //YOUR CODE ...

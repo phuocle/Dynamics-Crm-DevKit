@@ -2,11 +2,11 @@
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.Query;
 using System;
-using $SharedNameSpace$;
+using Abc.LuckyStar2.Shared;
 
-namespace $NameSpace$
+namespace Abc.LuckyStar2.DataProvider
 {
-    [CrmPluginRegistration("$NameSpace$.RetrieveMultiple", VirtualTablePlugin.RetrieveMultiple)]
+    [CrmPluginRegistration("Abc.LuckyStar2.DataProvider.RetrieveMultiple", VirtualTablePlugin.RetrieveMultiple)]
     public class RetrieveMultiple : IPlugin
     {
         /*
@@ -36,12 +36,12 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //tracing.DebugMessage("Begin Data Provider: $NameSpace$.RetrieveMultiple");
+            //tracing.DebugMessage("Begin Data Provider: Abc.LuckyStar2.DataProvider.RetrieveMultiple");
             //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //tracing.DebugMessage("End Data Provider: $NameSpace$.RetrieveMultiple");
+            //tracing.DebugMessage("End Data Provider: Abc.LuckyStar2.DataProvider.RetrieveMultiple");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)

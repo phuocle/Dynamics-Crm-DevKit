@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>$guid1$</ProjectGuid>
+    <ProjectGuid>{4A39EC71-A411-47D8-A88A-C4403DE78D6A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>$NameSpace$</RootNamespace>
-    <AssemblyName>$ProjectName$</AssemblyName>
-    <TargetFrameworkVersion>v$ProjectNetVersion$</TargetFrameworkVersion>
+    <RootNamespace>Abc.LuckyStar2.DataProvider</RootNamespace>
+    <AssemblyName>Abc.LuckyStar2.DataProvider</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -26,7 +26,8 @@
     <OutputPath>..\Release\dll\</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -35,13 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.Version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.TargetFramework$\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.33\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.$Microsoft.CrmSdk.CoreAssemblies.Version$\lib\net$Microsoft.CrmSdk.CoreAssemblies.TargetFramework$\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.33\lib\net462\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Data">
-      <HintPath>..\packages\Microsoft.CrmSdk.Data.$Microsoft.CrmSdk.Data.Version$\lib\net$Microsoft.CrmSdk.Data.TargetFramework$\Microsoft.Xrm.Sdk.Data.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.Data.9.0.2.33\lib\net462\Microsoft.Xrm.Sdk.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -53,24 +54,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Retrieve.cs" />
-    <None Include="RetrieveMultiple.cs" />
-    <None Include="Create.cs" />
-    <None Include="Update.cs" />
-    <None Include="Delete.cs" />
+    <Compile Include="Retrieve.cs" />
+    <Compile Include="RetrieveMultiple.cs" />
+    <Compile Include="Create.cs" />
+    <Compile Include="Update.cs" />
+    <Compile Include="Delete.cs" />
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
-    <None Include="$ProjectName$.snk" />
+    <None Include="Abc.LuckyStar2.DataProvider.snk" />
   </ItemGroup>
-  <Import Project="..\$SharedProject$\$SharedProject$.projitems" Label="Shared" Condition="Exists('..\$SharedProject$\$SharedProject$.projitems')" />
+  <Import Project="..\Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems" Label="Shared" Condition="Exists('..\Abc.LuckyStar2.Shared\Abc.LuckyStar2.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>$ProjectName$.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Abc.LuckyStar2.DataProvider.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.$DynamicsCrm.DevKit.Analyzers.Version$\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.10.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
 </Project>

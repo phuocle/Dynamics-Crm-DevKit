@@ -45,6 +45,15 @@ namespace $NameSpace$
         PostOperation = 40
     }
 
+	public enum VirtualTablePlugin
+    {
+		Create,
+		Delete,
+		Retrieve,
+		RetrieveMultiple,
+		Update
+	}
+
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public class CrmPluginRegistrationAttribute : Attribute
@@ -69,6 +78,12 @@ namespace $NameSpace$
             GroupName = groupName;
             IsolationMode = isolationModel;
         }
+
+		public CrmPluginRegistrationAttribute(string name, VirtualTablePlugin virtualTablePlugin)
+        {
+			Name = name;
+			VirtualTablePlugin = virtualTablePlugin;
+		}
 
         public string RunAs { get; set; } = string.Empty;
         public string FriendlyName { get; set; } = string.Empty;
@@ -104,5 +119,6 @@ namespace $NameSpace$
         public string Image4Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image4Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image4Attributes { get; set; } = string.Empty;
+		public VirtualTablePlugin? VirtualTablePlugin { get; set; } = null;
     }
 }

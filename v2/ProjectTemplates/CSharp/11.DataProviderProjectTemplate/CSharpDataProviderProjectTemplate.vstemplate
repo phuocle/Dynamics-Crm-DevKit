@@ -26,6 +26,9 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Retrieve.cs">Retrieve.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="RetrieveMultiple.cs">RetrieveMultiple.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Create.cs">Create.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Update.cs">Update.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Delete.cs">Delete.cs</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="$ProjectName$.snk">key.snk</ProjectItem>
     </Project>
   </TemplateContent>

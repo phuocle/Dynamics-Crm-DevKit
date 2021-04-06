@@ -13,6 +13,7 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$CrmConnectionString$", form.WizardCrmConnectionString);
             replacementsDictionary.Add("$ShortCrmName$", form.WizardShortCrmName);
             replacementsDictionary.Add("$NameSpace$", Utility.SafeNamespace(form.WizardNameSpace));
+            replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
             var nameSpace = Utility.SafeNamespace(form.WizardNameSpace);
             if (nameSpace.Contains($".{ProjectType.Plugin.ToString()}."))
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));

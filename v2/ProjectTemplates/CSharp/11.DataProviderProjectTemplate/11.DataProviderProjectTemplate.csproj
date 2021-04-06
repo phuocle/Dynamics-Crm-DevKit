@@ -51,7 +51,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Delete.cs" />
+    <None Include="Update.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Create.cs" />
     <None Include="deploy.debug.bat" />
     <None Include="key.snk" />
     <None Include="Retrieve.cs" />
