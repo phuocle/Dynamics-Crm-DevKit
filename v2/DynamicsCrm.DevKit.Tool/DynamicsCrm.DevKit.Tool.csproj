@@ -71,10 +71,10 @@
     <None Include="App.config" />
     <None Include="Nuget\DynamicsCrm.DevKit.Tool.nuspec" />
     <None Include="Nuget\pack.bat" />
-    <None Include="packages.config" />
     <None Include="..\DynamicsCrm.DevKit.pfx">
       <Link>DynamicsCrm.DevKit.pfx</Link>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\Microsoft.VisualStudio.Coverage.Analysis.dll">

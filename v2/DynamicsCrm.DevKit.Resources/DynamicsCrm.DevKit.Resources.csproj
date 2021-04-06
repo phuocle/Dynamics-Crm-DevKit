@@ -94,5 +94,8 @@
   <ItemGroup>
     <EmbeddedResource Include="devkit.365.new.d.ts" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
