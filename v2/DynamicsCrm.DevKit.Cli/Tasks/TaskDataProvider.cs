@@ -26,6 +26,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         public TaskDataProvider(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
         {
+            // /conn:"AuthType=ClientSecret;Url=https://dev-devkit.crm5.dynamics.com;ClientId=e31fc7d6-4dce-46e3-8677-04ab0a2968e3;ClientSecret=?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"dataproviders" /profile:"DEBUG"
+
             this.crmServiceClient = crmServiceClient;
             this.currentDirectory = currentDirectory;
             this.arguments = arguments;
@@ -93,21 +95,42 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
             if (assembly == null) return;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
-            var pluginTypes = assembly.DefinedTypes.Where(p => p.GetInterfaces().FirstOrDefault(a => a.Name == typeof(IPlugin).Name) != null);
+            var pluginTypes = assembly.DefinedTypes.Where(p =>
+                p.GetInterfaces().FirstOrDefault(a => a.Name == typeof(IPlugin).Name) != null);
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
             var plugins = (from pluginType in pluginTypes
-                           where pluginType.Name != "PluginBase"
+                           where pluginType.IsAbstract == false
                            select pluginType
                 ).ToList();
             if (!plugins.Any()) return;
-            var found = plugins.FirstOrDefault(check => check.Name == "Retrieve" || check.Name == "RetrieveMultiple");
-            if (found == null) return;
             var pluginEntity = RegisterAssembly(assemblyFilePath, assembly, plugins);
             if (pluginEntity == null) return;
             AddAssemblyToSolution(pluginEntity);
             foreach (var plugin in plugins)
             {
-                RegisterPluginType(pluginEntity, plugin);
+                var pluginAttributes = plugin.GetCustomAttributesData()
+                                      .Where(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name);
+                var customAttributeDatas = pluginAttributes as CustomAttributeData[] ?? pluginAttributes.ToArray();
+                if (!customAttributeDatas.Any()) continue;
+                var isDataProvider = false;
+                foreach(var customAttribute in customAttributeDatas)
+                {
+                    if (customAttribute.ConstructorArguments.Count != 2)
+                        continue;
+                    foreach(var constructorArgument in customAttribute.ConstructorArguments)
+                    {
+                        if (constructorArgument.ArgumentType.Name == "VirtualTablePlugin")
+                        {
+                            isDataProvider = true;
+                            break;
+                        }
+                    }
+                    if (isDataProvider) break;
+                }
+                if (isDataProvider)
+                {
+                    RegisterPluginType(pluginEntity, plugin);
+                }
             }
         }
 

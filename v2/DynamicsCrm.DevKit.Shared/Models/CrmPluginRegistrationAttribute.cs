@@ -39,6 +39,14 @@ namespace DynamicsCrm.DevKit.Shared.Models
         PreOperation = 20,
         PostOperation = 40
     }
+    public enum VirtualTablePlugin
+    {
+        Create,
+        Delete,
+        Retrieve,
+        RetrieveMultiple,
+        Update
+    }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public class CrmPluginRegistrationAttribute : Attribute
@@ -81,5 +89,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Image4Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image4Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image4Attributes { get; set; } = string.Empty;
+        public VirtualTablePlugin? VirtualTablePlugin { get; set; } = null;
     }
 }

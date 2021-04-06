@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\azure\phuocle\git\CRMGRIDPLUS\CRMGRIDPLUS-CRM\src\PL.CrmGridPlus.WebResource\entities";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\Abc.LuckyStar2\Abc.LuckyStar2.DataProvider";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
