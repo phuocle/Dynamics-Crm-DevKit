@@ -52,6 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="Delete.cs" />
+    <None Include="deploy.datasource.bat" />
     <None Include="Update.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Create.cs" />
