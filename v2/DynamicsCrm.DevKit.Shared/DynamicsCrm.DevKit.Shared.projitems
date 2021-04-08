@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\DownloadFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\Json.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDataProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDataSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDownloadWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonPlugin.cs" />

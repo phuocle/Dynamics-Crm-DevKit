@@ -64,6 +64,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 //    var portal = new TaskPortal(crmServiceClient, currentDirectory, arguments);
                 //    portal.Run();
                 //    break;
+                case "datasources":
+                    var datasource = new TaskDataSource(crmServiceClient, currentDirectory, arguments);
+                    datasource.Run();
+                    break;
             }
         }
     }

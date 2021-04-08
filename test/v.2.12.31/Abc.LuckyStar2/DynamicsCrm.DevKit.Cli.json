@@ -78,6 +78,15 @@
       ]
     }
   ],
+  "datasources": [
+    {
+      "profile": "DEBUG",
+      "displayname": "Data 4 Source",
+      "pluralname": "Data 4 Sources",
+      "solution": "DEVKIT",
+      "name": "Data4Source"
+    }
+  ],
   "solutionpackagers": [
     {
       "profile": "Extract-Unmanaged",

@@ -78,6 +78,15 @@
       ]
     }
   ],
+  "datasources": [
+    {
+      "profile": "DEBUG",
+      "displayname": "???",
+      "pluralname": "???",
+      "solution": "???",
+      "name": "???"
+    }
+  ],
   "solutionpackagers": [
     {
       "profile": "Extract-Unmanaged",
@@ -124,7 +133,7 @@
       "crmversion": "365",
       "type": "CSharp",
       "entities": "",
-      "debug":  ""
+      "debug": ""
     },
     {
       "profile": "JS-FORM",
@@ -156,7 +165,7 @@
     {
       "profile": "DEBUG",
       "folder": "???",
-      "solution":  "???"
+      "solution": "???"
     }
   ],
   "proxytypes": [
@@ -164,7 +173,7 @@
       "profile": "ALL",
       "namespace": "???",
       "output": "GeneratedCode.cs",
-      "entities":  ""
+      "entities": ""
     }
   ],
   "visualstudio": {
