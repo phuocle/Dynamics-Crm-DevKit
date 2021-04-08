@@ -4,17 +4,20 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AF511858-3072-45D7-932D-C0D98470914E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DynamicsCrm.DevKit.CrmSvcUtilExtensions</RootNamespace>
-    <AssemblyName>DynamicsCrm.DevKit.CrmSvcUtilExtensions</AssemblyName>
+    <ProjectGuid>{A4BF7AB3-EBC2-4AC9-ACCE-4F2790236A02}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>DynamicsCrm.DevKit.Tool</RootNamespace>
+    <AssemblyName>DynamicsCrm.DevKit.Tool</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,10 +26,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\DynamicsCrm.DevKit.pfx</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Release\</OutputPath>
@@ -38,20 +39,18 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CrmSvcUtil.exe">
-      <HintPath>..\packages\Microsoft.CrmSdk.CoreTools.9.1.0.77\content\bin\coretools\CrmSvcUtil.exe</HintPath>
-      <Private>False</Private>
+    <Reference Include="CmdLine, Version=1.0.7.509, Culture=neutral, PublicKeyToken=e6ac9ead3d3b48e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\CmdLine.1.0.7.509\lib\net40-Client\CmdLine.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Coverage.Analysis, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Microsoft.VisualStudio.Coverage.Analysis.dll</HintPath>
+    </Reference>
+    <Reference Include="NUglify, Version=1.13.8.0, Culture=neutral, PublicKeyToken=15bc7810aec21b5e, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUglify.1.13.8\lib\net40\NUglify.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.DirectoryServices.AccountManagement" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,13 +59,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeWriterFilter .cs" />
+    <Compile Include="Args\CoverageToXmlArgs.cs" />
+    <Compile Include="Args\NUglifyArgs.cs" />
+    <Compile Include="Commands\TaskCoverageToXml.cs" />
+    <Compile Include="Commands\TaskNUglify.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Nuget\DynamicsCrm.DevKit.Tool.nuspec" />
+    <None Include="Nuget\pack.bat" />
     <None Include="..\DynamicsCrm.DevKit.pfx">
       <Link>DynamicsCrm.DevKit.pfx</Link>
     </None>
-    <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\Microsoft.VisualStudio.Coverage.Analysis.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\Microsoft.VisualStudio.Coverage.Interop.dll" />
+    <Content Include="license\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
