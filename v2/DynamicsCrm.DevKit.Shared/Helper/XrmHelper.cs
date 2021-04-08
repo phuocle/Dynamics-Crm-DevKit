@@ -11,6 +11,7 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Tooling.Connector;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 
 namespace DynamicsCrm.DevKit.Shared.Helper
 {
@@ -434,6 +435,68 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 return BuildConnectionString(authType, url, $"{domain}\\{userName}", password);
             }
             throw new Exception("Fail when BuildConnectionString");
+        }
+
+        public static bool IsExistDataSource(CrmServiceClient crmServiceClient, string logicalname)
+        {
+            var filterExpression = new MetadataFilterExpression();
+            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
+            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
+            {
+                "DataProviderId",
+                "LogicalName",
+                "SchemaName",
+                "MetadataId",
+                "DisplayName",
+                "ExternalName",
+                "DisplayCollectionName"
+            });
+            var entityQueryExpression = new EntityQueryExpression();
+            entityQueryExpression.Criteria = new MetadataFilterExpression();
+            entityQueryExpression.Criteria = filterExpression;
+            entityQueryExpression.Properties = propertiesExpression;
+            var request = new RetrieveMetadataChangesRequest
+            {
+                Query = entityQueryExpression
+            };
+            var response = (RetrieveMetadataChangesResponse)crmServiceClient.Execute(request);
+            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
+                if (entityMetadata.LogicalName == logicalname)
+                    return true;
+            return false;
+        }
+
+        public static bool IsExistSolution(CrmServiceClient crmServiceClient, string solutionuniquename, out Guid solutionId, out string prefix)
+        {
+            solutionId = Guid.Empty;
+            prefix = string.Empty;
+            var fetchData = new
+            {
+                uniquename = solutionuniquename
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='solution'>
+    <attribute name='solutionid' />
+    <filter>
+      <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+    </filter>
+    <link-entity name='publisher' from='publisherid' to='publisherid' alias='p'>
+      <attribute name='customizationprefix' />
+    </link-entity>
+  </entity>
+</fetch>";
+
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return false;
+            var entity = rows.Entities[0];
+            solutionId = entity.Id;
+            prefix = $"{ entity.GetAttributeValue<AliasedValue>("p.customizationprefix").Value}_";
+            return true;
+        }
+        public static bool IsVirtualTableSupportCRUD(CrmServiceClient crmServiceClient)
+        {
+            return crmServiceClient.ConnectedOrgVersion >= new Version("9.1.0.18950");
         }
     }
 }

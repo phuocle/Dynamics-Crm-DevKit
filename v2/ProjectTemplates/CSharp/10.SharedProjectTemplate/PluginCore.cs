@@ -47,11 +47,11 @@ namespace $NameSpace$
 
 	public enum VirtualTablePlugin
     {
-		Create,
-		Delete,
-		Retrieve,
-		RetrieveMultiple,
-		Update
+		Create = 0,
+		Delete = 1,
+		Retrieve = 2,
+		RetrieveMultiple = 3,
+		Update = 4
 	}
 
     [DebuggerNonUserCode()]

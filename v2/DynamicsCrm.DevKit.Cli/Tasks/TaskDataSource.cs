@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
 using System.Collections.ObjectModel;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -76,9 +77,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'name' can only contain alpha-numeric and underscore characters.");
             if (json.name.Contains(" "))
                 throw new Exception($"{LOG} 'name' can cannot contain space character.");
-            if (!IsExistSolution())
+            if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))
                 throw new Exception($"{LOG} solution '{json.solution}' not exist");
-            if (IsExistDataSource())
+            json.prefix = prefix;
+            if (XrmHelper.IsExistDataSource(crmServiceClient, $"{json.prefix}{json.name}"))
                 throw new Exception($"{LOG} name '{json.name}' exist");
             return true;
         }
@@ -191,60 +193,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             catch
             {
             }
-        }
-
-        private bool IsExistDataSource()
-        {
-            var filterExpression = new MetadataFilterExpression();
-            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
-            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
-            {
-                "DataProviderId",
-                "LogicalName",
-                "SchemaName",
-                "MetadataId",
-                "DisplayName",
-                "ExternalName",
-                "DisplayCollectionName"
-            });
-            var entityQueryExpression = new EntityQueryExpression();
-            entityQueryExpression.Criteria = new MetadataFilterExpression();
-            entityQueryExpression.Criteria = filterExpression;
-            entityQueryExpression.Properties = propertiesExpression;
-            var request = new RetrieveMetadataChangesRequest
-            {
-                Query = entityQueryExpression
-            };
-            var response = (RetrieveMetadataChangesResponse)crmServiceClient.Execute(request);
-            foreach(EntityMetadata entityMetadata in response.EntityMetadata)
-                if (entityMetadata.LogicalName == $"{json.prefix}{json.name}")
-                    return true;
-            return false;
-        }
-
-        private bool IsExistSolution()
-        {
-            var fetchData = new
-            {
-                uniquename = json.solution
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='solution'>
-    <filter>
-      <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
-    </filter>
-    <link-entity name='publisher' from='publisherid' to='publisherid' alias='p'>
-      <attribute name='customizationprefix' />
-    </link-entity>
-  </entity>
-</fetch>";
-
-            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return false;
-            var entity = rows.Entities[0];
-            json.prefix = $"{ entity.GetAttributeValue<AliasedValue>("p.customizationprefix").Value}_";
-            return true;
         }
     }
 }

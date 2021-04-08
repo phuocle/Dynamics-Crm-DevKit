@@ -70,6 +70,7 @@
       "profile": "DEBUG",
       "folder": "bin\\Debug",
       "solution": "???",
+      "datasource": "???",
       "includefiles": [
         "???.DataProvider.*.dll"
       ],

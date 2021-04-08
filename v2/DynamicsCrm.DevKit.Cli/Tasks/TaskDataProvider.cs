@@ -13,6 +13,10 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
 using System.ServiceModel;
+using Microsoft.Xrm.Sdk.Metadata.Query;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -23,7 +27,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private CommandLineArgs arguments;
         private const string LOG = "[DATAPROVIDER]";
         private JsonDataProvider json;
-
+        private Guid SolutionId = Guid.Empty;
+        private string Prefix = string.Empty;
         public TaskDataProvider(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
         {
             // /conn:"AuthType=ClientSecret;Url=https://dev-devkit.crm5.dynamics.com;ClientId=e31fc7d6-4dce-46e3-8677-04ab0a2968e3;ClientSecret=?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"dataproviders" /profile:"DEBUG"
@@ -41,7 +46,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "DATA-PROVIDER");
             CliLog.WriteLine();
 
+            json.datasource = json.datasource.ToLower();
+
             if (!IsValid()) return;
+
             foreach (var file in DataProviderFiles)
             {
                 RegisterDataProvider(file);
@@ -57,6 +65,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'profile' not found: '{arguments.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.solution.Length == 0 || json.solution == "???")
                 throw new Exception($"{LOG} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            if (json.datasource == null || json.datasource.Length == 0 || json.datasource == "???")
+                throw new Exception($"{LOG} 'datasource' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))
+                throw new Exception($"{LOG} solution '{json.solution}' not exist");
+            SolutionId = solutionId;
+            Prefix = prefix;
+            if (!XrmHelper.IsExistDataSource(crmServiceClient, $"{Prefix}{json.datasource}"))
+                throw new Exception($"{LOG} name '{json.datasource}' not exist with prefix: {Prefix}");
             return true;
         }
 
@@ -86,6 +102,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
+        private class DataProviderEvent
+        {
+            public Guid PluginTypeId { get; set; }
+            public VirtualTablePlugin VirtualTablePlugin { get; set; }
+        }
+
         private void RegisterDataProvider(string pluginFile)
         {
             var assemblyFilePath = new FileInfo(pluginFile);
@@ -106,6 +128,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var pluginEntity = RegisterAssembly(assemblyFilePath, assembly, plugins);
             if (pluginEntity == null) return;
             AddAssemblyToSolution(pluginEntity);
+            var dataProviderEvents = new List<DataProviderEvent>();
             foreach (var plugin in plugins)
             {
                 var pluginAttributes = plugin.GetCustomAttributesData()
@@ -113,7 +136,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var customAttributeDatas = pluginAttributes as CustomAttributeData[] ?? pluginAttributes.ToArray();
                 if (!customAttributeDatas.Any()) continue;
                 var isDataProvider = false;
-                foreach(var customAttribute in customAttributeDatas)
+                int virtualTablePlugin = -1;
+                foreach (var customAttribute in customAttributeDatas)
                 {
                     if (customAttribute.ConstructorArguments.Count != 2)
                         continue;
@@ -122,6 +146,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (constructorArgument.ArgumentType.Name == "VirtualTablePlugin")
                         {
                             isDataProvider = true;
+                            virtualTablePlugin = (int)constructorArgument.Value;
                             break;
                         }
                     }
@@ -129,12 +154,128 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 if (isDataProvider)
                 {
-                    RegisterPluginType(pluginEntity, plugin);
+                    var pluginTypeId = RegisterPluginType(pluginEntity, plugin);
+                    dataProviderEvents.Add(new DataProviderEvent {
+                        PluginTypeId = pluginTypeId,
+                        VirtualTablePlugin = (VirtualTablePlugin) virtualTablePlugin
+                    });
                 }
+            }
+            if (IsOkForRegisterDataProvider(dataProviderEvents))
+            {
+                var assemblyName = assembly.GetName().Name;
+                RegisterDataProvider(dataProviderEvents, assemblyName);
             }
         }
 
-        private void RegisterPluginType(Entity pluginEntity, TypeInfo plugin)
+        private void RegisterDataProvider(List<DataProviderEvent> dataProviderEvents, string dataProviderName)
+        {
+            var entity = new Entity("entitydataprovider");
+            entity.Attributes.Add("name", dataProviderName);
+            entity.Attributes.Add("datasourcelogicalname", $"{Prefix}{json.datasource}");
+            entity.Attributes.Add("solutionid", SolutionId);
+
+            var retrieve = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.Retrieve).FirstOrDefault();
+            if (retrieve == null)
+                entity.Attributes.Add("retrieveplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+            else
+                entity.Attributes.Add("retrieveplugin", retrieve.PluginTypeId);
+
+            var retrievemultiple = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.RetrieveMultiple).FirstOrDefault();
+            if (retrievemultiple == null)
+                entity.Attributes.Add("retrievemultipleplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+            else
+                entity.Attributes.Add("retrievemultipleplugin", retrievemultiple.PluginTypeId);
+            if (XrmHelper.IsVirtualTableSupportCRUD(crmServiceClient))
+            {
+                var create = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.Create).FirstOrDefault();
+                if (create == null)
+                    entity.Attributes.Add("createplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+                else
+                    entity.Attributes.Add("createplugin", create.PluginTypeId);
+
+                var update = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.Update).FirstOrDefault();
+                if (update == null)
+                    entity.Attributes.Add("updateplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+                else
+                    entity.Attributes.Add("updateplugin", update.PluginTypeId);
+
+                var delete = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.Delete).FirstOrDefault();
+                if (delete == null)
+                    entity.Attributes.Add("deleteplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
+                else
+                    entity.Attributes.Add("deleteplugin", delete.PluginTypeId);
+            }
+            var entityDataProviderId = GetEntityDataProviderId(dataProviderName);
+            if (entityDataProviderId == Guid.Empty)
+            {
+
+                var request = new CreateRequest();
+                if (request.Parameters == null)
+                    request.Parameters = new ParameterCollection();
+                request.Target = entity;
+                request.Parameters.Add("SuppressDuplicateDetection", true);
+                request.Parameters.Add("SolutionUniqueName", json.solution);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, " Registering", CliLog.ColorGreen, " Data Provider: ", CliLog.ColorCyan, $"{dataProviderName}");
+                crmServiceClient.Execute(request);
+            }
+            else
+            {
+                entity.Attributes.Add("entitydataproviderid", entityDataProviderId.Value);
+                var request = new UpdateRequest
+                {
+                    Target = entity
+                };
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, " Updating", CliLog.ColorGreen, " Data Provider: ", CliLog.ColorCyan, $"{dataProviderName}");
+                crmServiceClient.Execute(request);
+            }
+        }
+
+        private Guid? GetEntityDataProviderId(string dataProviderName)
+        {
+            var fetchData = new
+            {
+                datasourcelogicalname = $"{Prefix}{json.datasource}",
+                ismanaged = "0",
+                iscustomizable = "1",
+                name = dataProviderName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='entitydataprovider'>
+    <attribute name='entitydataproviderid' />
+    <filter>
+      <condition attribute='datasourcelogicalname' operator='eq' value='{fetchData.datasourcelogicalname}'/>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
+      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable}'/>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return Guid.Empty;
+            return rows.Entities[0].Id;
+        }
+
+        private bool IsOkForRegisterDataProvider(List<DataProviderEvent> dataProviderEvents)
+        {
+            var count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.Retrieve);
+            if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.Retrieve found");
+            count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.RetrieveMultiple);
+            if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.RetrieveMultiple found");
+            if (XrmHelper.IsVirtualTableSupportCRUD(crmServiceClient))
+            {
+                count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.Create);
+                if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.Create found");
+                count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.Update);
+                if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.Update found");
+                count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.Delete);
+                if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.Delete found");
+            }
+            return true;
+        }
+
+        private Guid RegisterPluginType(Entity pluginEntity, TypeInfo plugin)
         {
             var fetchData = new
             {
@@ -160,9 +301,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     ["friendlyname"] = plugin.FullName
                 };
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, " Registering", CliLog.ColorGreen, " Type: ", CliLog.ColorCyan, $"{plugin.FullName}");
-                var pluginTypeId = crmServiceClient.Create(pluginType);
-                pluginType["plugintypeid"] = pluginTypeId;
+                return crmServiceClient.Create(pluginType);
             }
+            else
+                return rows.Entities[0].Id;
         }
 
         private Entity RegisterAssembly(FileSystemInfo assemblyFilePath, Assembly assembly, IEnumerable<Type> plugins)
