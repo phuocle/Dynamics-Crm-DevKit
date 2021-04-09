@@ -24,6 +24,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private CommandLineArgs arguments;
         private const string LOG = "[DATASOURCE]";
         private JsonDataSource json;
+        private Guid SolutionId = Guid.Empty;
+        private string Prefix = string.Empty;
 
         public TaskDataSource(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
         {
@@ -46,11 +48,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (!IsValid()) return;
 
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Creating", CliLog.ColorGreen, " Data Source: ", CliLog.ColorCyan, $"{json.prefix}{json.name}");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Creating", CliLog.ColorGreen, " Data Source: ", CliLog.ColorCyan, $"{Prefix}{json.name}");
 
             RegisterDataSource();
 
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Created", CliLog.ColorGreen, " Data Source: ", CliLog.ColorCyan, $"{json.prefix}{json.name}");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Created", CliLog.ColorGreen, " Data Source: ", CliLog.ColorCyan, $"{Prefix}{json.name}");
 
             CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "DATA-SOURCE");
@@ -79,8 +81,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'name' can cannot contain space character.");
             if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))
                 throw new Exception($"{LOG} solution '{json.solution}' not exist");
-            json.prefix = prefix;
-            if (XrmHelper.IsExistDataSource(crmServiceClient, $"{json.prefix}{json.name}"))
+            SolutionId = solutionId;
+            Prefix = prefix;
+            if (XrmHelper.IsExistDataSource(crmServiceClient, $"{Prefix}{json.name}"))
                 throw new Exception($"{LOG} name '{json.name}' exist");
             return true;
         }
@@ -110,7 +113,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 HasActivities = false,
                 PrimaryAttribute = new StringAttributeMetadata
                 {
-                    SchemaName= $"{json.prefix}name",
+                    SchemaName= $"{Prefix}name",
                     RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.None),
                     MaxLength = 100,
                     DisplayName = new Label(json.displayname, languageCode),
@@ -120,7 +123,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     DataProviderId = new Guid?(new Guid("B2112A7E-B26C-42F7-9B63-9A809A9D716F")),
                     IsActivity = new bool?(false),
-                    SchemaName = string.Format("{0}{1}", (object)json.prefix, (object)json.name),
+                    SchemaName = string.Format("{0}{1}", (object)Prefix, (object)json.name),
                     DisplayName = new Label(json.displayname, languageCode),
                     DisplayCollectionName = new Label(json.pluralname, languageCode),
                     ExternalCollectionName = json.pluralname.Replace(" ", string.Empty),

@@ -1,76 +1,10 @@
 ﻿{
-  "plugins": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "???",
-      "includefiles": [
-        "Xyz.LuckyFather.Plugin.*.dll",
-        "Xyz.LuckyFather.CustomAction.*.dll"
-      ],
-      "excludefiles": [
-        "Xyz.LuckyFather.*.Test.dll"
-      ]
-    }
-  ],
-  "workflows": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "???",
-      "includefiles": [
-        "Xyz.LuckyFather.Workflow.*.dll"
-      ],
-      "excludefiles": [
-        "Xyz.LuckyFather.*.Test.dll"
-      ]
-    }
-  ],
-  "webresources": [
-    {
-      "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???",
-      "rootfolder": "",
-      "includefiles": [
-        "css\\**.css",
-        "entities\\*.js",
-        "html\\**.html",
-        "images\\**.png",
-        "js\\**.js",
-        "lib\\**.js",
-        "resources\\*.resx"
-      ],
-      "excludefiles": [
-        "test\\**.js"
-      ],
-      "dependencies": [
-        {
-          "webresources": [
-            "???_/entities/[entity].js"
-          ],
-          "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
-          ]
-        },
-        {
-          "webresources": [
-            "???_/entities/[entity].form.js"
-          ],
-          "dependencies": [
-            "???_/lib/devkit.js"
-          ]
-        }
-      ]
-    }
-  ],
   "dataproviders": [
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
-      "datasource": "???",
+      "solution": "VirtualTable",
+      "datasource": "AzureDataSource",
       "includefiles": [
         "Xyz.LuckyFather.DataProvider.*.dll"
       ],
@@ -82,102 +16,30 @@
   "datasources": [
     {
       "profile": "DEBUG",
-      "displayname": "???",
-      "pluralname": "???",
-      "solution": "???",
-      "name": "???"
+      "displayname": "Azure DataSource",
+      "pluralname": "Azure DataSources",
+      "solution": "VirtualTable",
+      "name": "AzureDataSource"
     }
   ],
   "solutionpackagers": [
     {
       "profile": "Extract-Unmanaged",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "VirtualTable",
       "solutiontype": "Unmanaged",
-      "folder": "???",
+      "folder": "VirtualTable",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Extract-Managed",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "VirtualTable",
       "solutiontype": "Managed",
-      "folder": "???",
+      "folder": "VirtualTable",
       "type": "Extract",
       "mapfile": ""
-    },
-    {
-      "profile": "Pack-Unmanaged",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Managed",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Managed",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
     }
-  ],
-  "generators": [
-    {
-      "profile": "LATEBOUND",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "crmversion": "365",
-      "type": "CSharp",
-      "entities": "",
-      "debug": ""
-    },
-    {
-      "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "crmversion": "365",
-      "type": "JsForm",
-      "entities": "",
-      "debug": ""
-    },
-    {
-      "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "crmversion": "365",
-      "type": "JsWebApi",
-      "entities": "",
-      "debug": ""
-    }
-  ],
-  "downloadwebresources": [
-    {
-      "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???"
-    }
-  ],
-  "downloadreports": [
-    {
-      "profile": "DEBUG",
-      "folder": "???",
-      "solution": "???"
-    }
-  ],
-  "proxytypes": [
-    {
-      "profile": "ALL",
-      "namespace": "???",
-      "output": "GeneratedCode.cs",
-      "entities": ""
-    }
-  ],
-  "visualstudio": {
-    "webresourceprofile": "???"
-  }
+  ]
 }

@@ -57,6 +57,8 @@ namespace Xyz.LuckyFather.DataProvider.AzureAccount
 
             //YOUR CODE ...
 
+            var a = string.Empty;
+
             context.OutputParameters["id"] = id;
         }
     }

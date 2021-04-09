@@ -70,7 +70,7 @@
       "profile": "DEBUG",
       "folder": "bin\\Debug",
       "solution": "DEVKIT",
-      "datasource": "Data4Source",
+      "datasource": "AzureDataSource",
       "includefiles": [
         "Abc.LuckyStar2.DataProvider.*.dll"
       ],

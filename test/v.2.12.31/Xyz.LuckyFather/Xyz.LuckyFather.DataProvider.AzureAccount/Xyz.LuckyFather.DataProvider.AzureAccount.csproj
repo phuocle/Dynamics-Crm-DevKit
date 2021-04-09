@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>ed2f4499-a433-4013-aae1-6dc19a590bc7</ProjectGuid>
+    <ProjectGuid>{ED2F4499-A433-4013-AAE1-6DC19A590BC7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xyz.LuckyFather.DataProvider.AzureAccount</RootNamespace>
@@ -26,7 +26,8 @@
     <OutputPath>..\Release\dll\</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -53,15 +54,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Retrieve.cs" />
-    <None Include="RetrieveMultiple.cs" />
-    <None Include="Create.cs" />
-    <None Include="Update.cs" />
-    <None Include="Delete.cs" />
+    <Compile Include="Retrieve.cs" />
+    <Compile Include="RetrieveMultiple.cs" />
+    <Compile Include="Create.cs" />
+    <Compile Include="Update.cs" />
+    <Compile Include="Delete.cs" />
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.datasource.bat" />
     <None Include="Xyz.LuckyFather.DataProvider.AzureAccount.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.12.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <Import Project="..\Xyz.LuckyFather.Shared\Xyz.LuckyFather.Shared.projitems" Label="Shared" Condition="Exists('..\Xyz.LuckyFather.Shared\Xyz.LuckyFather.Shared.projitems')" />
   <PropertyGroup>
@@ -71,7 +75,4 @@
     <AssemblyOriginatorKeyFile>Xyz.LuckyFather.DataProvider.AzureAccount.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.10.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
 </Project>

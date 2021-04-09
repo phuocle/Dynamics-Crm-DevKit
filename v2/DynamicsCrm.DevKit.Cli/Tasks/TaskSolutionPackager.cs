@@ -9,6 +9,7 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -60,6 +61,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.type.ToLower() != "Extract".ToLower() && json.type.ToLower() != "Pack".ToLower())
                 throw new Exception($"{LOG} 'type' should be: 'Extract' or 'Pack'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))
+                throw new Exception($"{LOG} solution '{json.solution}' not exist");
+            if (json.mapfile != null && json.mapfile.Length > 0)
+            {
+                var map = $"{currentDirectory}\\{json.mapfile}";
+                if (!File.Exists(map))
+                    throw new Exception($"{LOG} mapfile '{map}' not exist");
+            }
             return true;
         }
 
