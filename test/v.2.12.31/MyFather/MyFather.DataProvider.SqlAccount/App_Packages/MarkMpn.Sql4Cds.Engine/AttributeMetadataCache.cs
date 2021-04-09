@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace MarkMpn.Sql4Cds.Engine
         private readonly IOrganizationService _org;
         private readonly IDictionary<string, EntityMetadata> _metadata;
         private readonly ISet<string> _loading;
+        private readonly IDictionary<string, EntityMetadata> _minimalMetadata;
+        private readonly ISet<string> _minimalLoading;
 
         /// <summary>
         /// Creates a new <see cref="AttributeMetadataCache"/>
@@ -25,6 +28,8 @@ namespace MarkMpn.Sql4Cds.Engine
             _org = org;
             _metadata = new Dictionary<string, EntityMetadata>();
             _loading = new HashSet<string>();
+            _minimalMetadata = new Dictionary<string, EntityMetadata>();
+            _minimalLoading = new HashSet<string>();
         }
 
         /// <inheritdoc cref="IAttributeMetadataCache.this{string}"/>
@@ -61,26 +66,84 @@ namespace MarkMpn.Sql4Cds.Engine
             return false;
         }
 
-        /// <summary>
-        /// Loads the metadata for all entities in the background.
-        /// </summary>
-        /// <returns>A task that indicates when all the metadata has been loaded</returns>
-        public Task LoadAllAsync()
+        public bool TryGetMinimalData(string logicalName, out EntityMetadata metadata)
         {
-            var task = Task.Run(() =>
+            if (_metadata.TryGetValue(logicalName, out metadata))
+                return true;
+
+            if (_minimalMetadata.TryGetValue(logicalName, out metadata))
+                return true;
+
+            if (!_loading.Contains(logicalName) && _minimalLoading.Add(logicalName))
             {
-                var entities = ((RetrieveAllEntitiesResponse)_org.Execute(new RetrieveAllEntitiesRequest
+                var task = Task.Run(() =>
                 {
-                    EntityFilters = EntityFilters.Attributes | EntityFilters.Relationships
-                })).EntityMetadata;
+                    var metadataChanges = (RetrieveMetadataChangesResponse)_org.Execute(new RetrieveMetadataChangesRequest
+                    {
+                        Query = new EntityQueryExpression
+                        {
+                            Criteria = new MetadataFilterExpression
+                            {
+                                Conditions =
+                                {
+                                    new MetadataConditionExpression(nameof(EntityMetadata.LogicalName), MetadataConditionOperator.Equals, logicalName)
+                                }
+                            },
+                            Properties = new MetadataPropertiesExpression
+                            {
+                                PropertyNames =
+                                {
+                                    nameof(EntityMetadata.LogicalName),
+                                    nameof(EntityMetadata.DisplayName),
+                                    nameof(EntityMetadata.Description),
+                                    nameof(EntityMetadata.Attributes),
+                                    nameof(EntityMetadata.ManyToOneRelationships),
+                                    nameof(EntityMetadata.OneToManyRelationships),
+                                }
+                            },
+                            AttributeQuery = new AttributeQueryExpression
+                            {
+                                Properties = new MetadataPropertiesExpression
+                                {
+                                    PropertyNames =
+                                    {
+                                        nameof(AttributeMetadata.LogicalName),
+                                        nameof(AttributeMetadata.AttributeOf),
+                                        nameof(AttributeMetadata.DisplayName),
+                                        nameof(AttributeMetadata.Description),
+                                        nameof(AttributeMetadata.AttributeType),
+                                        nameof(AttributeMetadata.IsValidForUpdate),
+                                        nameof(AttributeMetadata.IsValidForCreate)
+                                    }
+                                }
+                            },
+                            RelationshipQuery = new RelationshipQueryExpression
+                            {
+                                Properties = new MetadataPropertiesExpression
+                                {
+                                    PropertyNames =
+                                    {
+                                        nameof(OneToManyRelationshipMetadata.ReferencedEntity),
+                                        nameof(OneToManyRelationshipMetadata.ReferencedAttribute),
+                                        nameof(OneToManyRelationshipMetadata.ReferencingEntity),
+                                        nameof(OneToManyRelationshipMetadata.ReferencingAttribute),
+                                    }
+                                }
+                            }
+                        }
+                    });
 
-                foreach (var entity in entities)
-                    _metadata[entity.LogicalName] = entity;
-            });
+                    _minimalMetadata[logicalName] = metadataChanges.EntityMetadata[0];
 
-            OnMetadataLoading(new MetadataLoadingEventArgs(null, task));
+                    var entityLogicalNameProp = typeof(AttributeMetadata).GetProperty(nameof(AttributeMetadata.EntityLogicalName));
+                    foreach (var attr in metadataChanges.EntityMetadata[0].Attributes)
+                        entityLogicalNameProp.SetValue(attr, logicalName, null);
+                });
+                OnMetadataLoading(new MetadataLoadingEventArgs(logicalName, task));
+            }
 
-            return task;
+            return false;
+            
         }
 
         public event EventHandler<MetadataLoadingEventArgs> MetadataLoading;
