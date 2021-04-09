@@ -54,9 +54,9 @@ namespace MyFather.DataProvider.SqlAccount
             var entities = new EntityCollection();
 
             //YOUR CODE ...
-            entities.EntityName = "???";
+            //entities.EntityName = "devkit_azureaccount";
 
-            context.OutputParameters["BusinessEntityCollection"] = entities;
+            context.OutputParameters["BusinessEntityCollection"] = SqlHelper.QueryToSql(context, service, tracing, dataSource);
         }
     }
 }

@@ -3,7 +3,7 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
+      "solution": "VirtualTable",
       "includefiles": [
         "MyFather.Plugin.*.dll",
         "MyFather.CustomAction.*.dll"

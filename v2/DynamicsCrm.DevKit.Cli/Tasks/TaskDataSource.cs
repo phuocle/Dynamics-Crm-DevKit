@@ -173,21 +173,39 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 EntityFilters = EntityFilters.All,
                 MetadataId = entityId
             };
-            EntityMetadata entityMetadata = ((RetrieveEntityResponse)crmServiceClient.Execute((OrganizationRequest)retrieveEntityRequest)).EntityMetadata;
-            RetrieveAttributeRequest attributeRequest1 = new RetrieveAttributeRequest()
+            EntityMetadata entityMetadata = ((RetrieveEntityResponse)crmServiceClient.Execute(retrieveEntityRequest)).EntityMetadata;
+
+            //Update field Id
+            var requestId = new RetrieveAttributeRequest()
             {
                 EntityLogicalName = entityMetadata.SchemaName,
-                LogicalName = string.Format("{0}id", (object)entityMetadata.SchemaName)
+                LogicalName = string.Format("{0}id", entityMetadata.SchemaName)
             };
-            AttributeMetadata attributeMetadata2 = ((RetrieveAttributeResponse)crmServiceClient.Execute((OrganizationRequest)attributeRequest1)).AttributeMetadata;
-            attributeMetadata2.ExternalName = json.displayname;
-            UpdateAttributeRequest attributeRequest2 = new UpdateAttributeRequest()
+            var attributeMetadataId = ((RetrieveAttributeResponse)crmServiceClient.Execute(requestId)).AttributeMetadata;
+            attributeMetadataId.ExternalName = $"{Prefix}{json.name}id".ToLower();
+            var updateRequestId = new UpdateAttributeRequest()
             {
-                Attribute = attributeMetadata2,
+                Attribute = attributeMetadataId,
                 EntityName = entityMetadata.SchemaName,
                 MergeLabels = false
             };
-             crmServiceClient.Execute((OrganizationRequest)attributeRequest2);
+            crmServiceClient.Execute(updateRequestId);
+            //Update field name
+            var requestName = new RetrieveAttributeRequest()
+            {
+                EntityLogicalName = entityMetadata.SchemaName,
+                LogicalName = string.Format("{0}name", Prefix)
+            };
+            var attributeMetadataName = ((RetrieveAttributeResponse)crmServiceClient.Execute(requestName)).AttributeMetadata;
+            attributeMetadataName.ExternalName = $"{Prefix}{json.name}name".ToLower();
+            var updateRequestName = new UpdateAttributeRequest()
+            {
+                Attribute = attributeMetadataName,
+                EntityName = entityMetadata.SchemaName,
+                MergeLabels = false
+            };
+            crmServiceClient.Execute(updateRequestName);
+
             try
             {
                 PublishAllXmlRequest publishAllXmlRequest = new PublishAllXmlRequest();
