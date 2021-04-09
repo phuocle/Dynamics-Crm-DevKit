@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="MyFather.DataProvider.SqlAccount, Version=1.0.0.0, Culture=en, PublicKeyToken=cfc9245348625d1a" PluginAssemblyId="c4d46e4b-e898-eb11-b1ac-00224816cf2f" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/MyFatherDataProviderSqlAccount-C4D46E4B-E898-EB11-B1AC-00224816CF2F/MyFatherDataProviderSqlAccount.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="MyFather.DataProvider.SqlAccount.Create, MyFather.DataProvider.SqlAccount, Version=1.0.0.0, Culture=en, PublicKeyToken=cfc9245348625d1a" PluginTypeId="9ca07c51-e898-eb11-b1ac-00224816cf2f" Name="MyFather.DataProvider.SqlAccount.Create">
+      <FriendlyName>MyFather.DataProvider.SqlAccount.Create</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="MyFather.DataProvider.SqlAccount.Delete, MyFather.DataProvider.SqlAccount, Version=1.0.0.0, Culture=en, PublicKeyToken=cfc9245348625d1a" PluginTypeId="d1a07c51-e898-eb11-b1ac-00224816cf2f" Name="MyFather.DataProvider.SqlAccount.Delete">
+      <FriendlyName>MyFather.DataProvider.SqlAccount.Delete</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="MyFather.DataProvider.SqlAccount.Retrieve, MyFather.DataProvider.SqlAccount, Version=1.0.0.0, Culture=en, PublicKeyToken=cfc9245348625d1a" PluginTypeId="0ad56e4b-e898-eb11-b1ac-00224816cf2f" Name="MyFather.DataProvider.SqlAccount.Retrieve">
+      <FriendlyName>MyFather.DataProvider.SqlAccount.Retrieve</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="MyFather.DataProvider.SqlAccount.RetrieveMultiple, MyFather.DataProvider.SqlAccount, Version=1.0.0.0, Culture=en, PublicKeyToken=cfc9245348625d1a" PluginTypeId="28d56e4b-e898-eb11-b1ac-00224816cf2f" Name="MyFather.DataProvider.SqlAccount.RetrieveMultiple">
+      <FriendlyName>MyFather.DataProvider.SqlAccount.RetrieveMultiple</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="MyFather.DataProvider.SqlAccount.Update, MyFather.DataProvider.SqlAccount, Version=1.0.0.0, Culture=en, PublicKeyToken=cfc9245348625d1a" PluginTypeId="b8a07c51-e898-eb11-b1ac-00224816cf2f" Name="MyFather.DataProvider.SqlAccount.Update">
+      <FriendlyName>MyFather.DataProvider.SqlAccount.Update</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="Source LCID" xml:space="preserve">
+    <value>1031</value>
+  </metadata>
+  <metadata name="Source file" xml:space="preserve">
+    <value>VirtualTable_1.0.0000.0_managed.zip</value>
+  </metadata>
+  <metadata name="Source package type" xml:space="preserve">
+    <value>Managed</value>
+  </metadata>
+  <metadata name="SolutionPackager Version" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>AAEAAAD/////AQAAAAAAAAAEAQAAAA5TeXN0ZW0uVmVyc2lvbgQAAAAGX01ham9yBl9NaW5vcgZfQnVpbGQJX1JldmlzaW9uAAAAAAgICAgJAAAAAAAAAAAAAAAAAAAACw==</value>
+  </metadata>
+  <metadata name="SolutionPackager Version String" xml:space="preserve">
+    <value>9.0.0.0</value>
+  </metadata>
+  <data name="15062:LocalizedName,devkitdevkit10000" xml:space="preserve">
+    <value />
+    <comment> 'devkit' : LocalizedName for Solution Publisher</comment>
+  </data>
+  <data name="15062:LocalizedName,VirtualTable" xml:space="preserve">
+    <value />
+    <comment> 'VirtualTable' : LocalizedName for Solution</comment>
+  </data>
+  <data name="1:Description,Azure Sql{825a6953-aabf-4d89-8497-50914c517ed5}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : Description for systemform in Entity FormXml ID: '{825a6953-aabf-4d89-8497-50914c517ed5}'</comment>
+  </data>
+  <data name="1:Description,Azure Sql{a4e04021-e898-eb11-b1ac-00224816cf2f}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : Description for SavedQuery on Entity QueryId: '{a4e04021-e898-eb11-b1ac-00224816cf2f}'</comment>
+  </data>
+  <data name="1:Description,Azure Sql{c7dffdd7-262e-4c75-87c1-c808d0efeb07}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : Description for systemform in Entity FormXml ID: '{c7dffdd7-262e-4c75-87c1-c808d0efeb07}'</comment>
+  </data>
+  <data name="1:Description,devkit_azuresqldevkit_azuresqlId" xml:space="preserve">
+    <value>Eindeutiger Bezeichner für Entitätsinstanzen</value>
+    <comment>'devkit_azuresql' : Description for Attribute 'devkit_azuresqlId' on Entity</comment>
+  </data>
+  <data name="1:Description,devkit_azuresqlentitydevkit_azuresql" xml:space="preserve">
+    <value />
+    <comment> 'devkit_azuresql' : Description for Entity</comment>
+  </data>
+  <data name="1:displayname,devkit_azuresqldevkit_azuresqlId" xml:space="preserve">
+    <value />
+    <comment>'devkit_azuresql' : displayname for Attribute 'devkit_azuresqlId' on Entity</comment>
+  </data>
+  <data name="1:displayname,devkit_azuresqldevkit_name" xml:space="preserve">
+    <value />
+    <comment>'devkit_azuresql' : displayname for Attribute 'devkit_name' on Entity</comment>
+  </data>
+  <data name="1:label,Azure Sql{0952a08a-dac4-456b-be68-6bf7be017e98}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for tab in Entity FormXml ID: '{0952a08a-dac4-456b-be68-6bf7be017e98}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{1ed39a39-d77b-4fc2-bba7-f4bada9fd639}" xml:space="preserve">
+    <value>ALLGEMEIN</value>
+    <comment>'Azure Sql' : label for section in Entity FormXml ID: '{1ed39a39-d77b-4fc2-bba7-f4bada9fd639}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{2c7dc797-2f03-4e79-929f-db8331f4b2c4}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{2c7dc797-2f03-4e79-929f-db8331f4b2c4}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{3c31812f-c558-47b4-98f4-bd46ba4c13b7}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for section in Entity FormXml ID: '{3c31812f-c558-47b4-98f4-bd46ba4c13b7}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{50859e01-2c64-48b5-a1a1-49b2045eaa6f}" xml:space="preserve">
+    <value>Fußzeile</value>
+    <comment>'Azure Sql' : label for section in Entity FormXml ID: '{50859e01-2c64-48b5-a1a1-49b2045eaa6f}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{5f5d5ae8-6f72-4eaa-a818-3945789780e3}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{5f5d5ae8-6f72-4eaa-a818-3945789780e3}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{6e5fa529-4ecb-4de1-9dfc-517112617000}" xml:space="preserve">
+    <value>Allgemein</value>
+    <comment>'Azure Sql' : label for tab in Entity FormXml ID: '{6e5fa529-4ecb-4de1-9dfc-517112617000}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{726482f1-405d-405a-804b-9cdbbe9a29bd}" xml:space="preserve">
+    <value>Allgemein</value>
+    <comment>'Azure Sql' : label for section in Entity FormXml ID: '{726482f1-405d-405a-804b-9cdbbe9a29bd}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{754fd333-e8ea-482d-a8da-e98709585f39}" xml:space="preserve">
+    <value>Kopfzeile</value>
+    <comment>'Azure Sql' : label for section in Entity FormXml ID: '{754fd333-e8ea-482d-a8da-e98709585f39}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{87a65690-326b-44f8-ab4c-8e920d6660b8}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{87a65690-326b-44f8-ab4c-8e920d6660b8}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{9b6c0661-88e5-4a47-a25d-2aa49bf6c3ad}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for section in Entity FormXml ID: '{9b6c0661-88e5-4a47-a25d-2aa49bf6c3ad}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{b08def1e-8715-47e2-92da-d524e1ce39e5}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{b08def1e-8715-47e2-92da-d524e1ce39e5}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{bc8f0924-b4fe-42ce-b73b-be396338c0f4}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for tab in Entity FormXml ID: '{bc8f0924-b4fe-42ce-b73b-be396338c0f4}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{bf620b9d-44c7-430e-8ce8-f2f4350f5e66}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{bf620b9d-44c7-430e-8ce8-f2f4350f5e66}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{c7f2ec30-3dbe-463e-be21-8c71be24ed60}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{c7f2ec30-3dbe-463e-be21-8c71be24ed60}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{d1440581-b44d-43af-bead-9e5da3eda5b2}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{d1440581-b44d-43af-bead-9e5da3eda5b2}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{d377b072-b639-452c-a14c-8014404ac960}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{d377b072-b639-452c-a14c-8014404ac960}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{dd6d92f1-9ad2-479b-b8bc-5128a42cf929}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{dd6d92f1-9ad2-479b-b8bc-5128a42cf929}'</comment>
+  </data>
+  <data name="1:LocalizedCollectionName,devkit_azuresqlentitydevkit_azuresql" xml:space="preserve">
+    <value />
+    <comment> 'devkit_azuresql' : LocalizedCollectionName for Entity</comment>
+  </data>
+  <data name="1:LocalizedName,Azure Sql{119e8b99-2daf-488b-a50b-dbdf35476397}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : LocalizedName for SavedQuery on Entity QueryId: '{119e8b99-2daf-488b-a50b-dbdf35476397}'</comment>
+  </data>
+  <data name="1:LocalizedName,Azure Sql{825a6953-aabf-4d89-8497-50914c517ed5}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : LocalizedName for systemform in Entity FormXml ID: '{825a6953-aabf-4d89-8497-50914c517ed5}'</comment>
+  </data>
+  <data name="1:LocalizedName,Azure Sql{a4e04021-e898-eb11-b1ac-00224816cf2f}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : LocalizedName for SavedQuery on Entity QueryId: '{a4e04021-e898-eb11-b1ac-00224816cf2f}'</comment>
+  </data>
+  <data name="1:LocalizedName,Azure Sql{c184b9f3-5e22-40ce-83f8-d31de5b50272}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : LocalizedName for SavedQuery on Entity QueryId: '{c184b9f3-5e22-40ce-83f8-d31de5b50272}'</comment>
+  </data>
+  <data name="1:LocalizedName,Azure Sql{c7dffdd7-262e-4c75-87c1-c808d0efeb07}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : LocalizedName for systemform in Entity FormXml ID: '{c7dffdd7-262e-4c75-87c1-c808d0efeb07}'</comment>
+  </data>
+  <data name="1:LocalizedName,Azure Sql{c858d802-449f-4fb9-b056-4dad1182b1d4}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : LocalizedName for SavedQuery on Entity QueryId: '{c858d802-449f-4fb9-b056-4dad1182b1d4}'</comment>
+  </data>
+  <data name="1:LocalizedName,Azure Sql{e5f9f40f-9928-491c-9d55-8094631f5846}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : LocalizedName for SavedQuery on Entity QueryId: '{e5f9f40f-9928-491c-9d55-8094631f5846}'</comment>
+  </data>
+  <data name="1:LocalizedName,Azure Sql{f78a55ab-3320-4979-a9fa-12f6a66f5fd9}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : LocalizedName for SavedQuery on Entity QueryId: '{f78a55ab-3320-4979-a9fa-12f6a66f5fd9}'</comment>
+  </data>
+  <data name="1:LocalizedName,Azure Sql{fec1a0d1-1998-4bd3-9574-4a4d271d4a5e}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : LocalizedName for systemform in Entity FormXml ID: '{fec1a0d1-1998-4bd3-9574-4a4d271d4a5e}'</comment>
+  </data>
+  <data name="1:LocalizedName,devkit_azuresqlentitydevkit_azuresql" xml:space="preserve">
+    <value />
+    <comment> 'devkit_azuresql' : LocalizedName for Entity</comment>
+  </data>
+</root>

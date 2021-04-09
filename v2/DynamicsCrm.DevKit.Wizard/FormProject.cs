@@ -113,8 +113,8 @@ namespace DynamicsCrm.DevKit.Wizard
                 {
                     link.Text = @"Add New Data Provider Project";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Data-Provider-Project-Template";
-                    textProjectName.Visible = false;
-                    comboBoxEntity.Visible = true;
+                    //textProjectName.Visible = false;
+                    //comboBoxEntity.Visible = true;
                 }
                 else if (_projectType == ProjectType.WebResource)
                 {
@@ -221,7 +221,7 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.ShowDialog() == DialogResult.Cancel) return;
             if (form.Check == "1")
             {
-                if (ProjectType == ProjectType.DataProvider ||
+                if (//ProjectType == ProjectType.DataProvider ||
                     ProjectType == ProjectType.CustomAction ||
                     ProjectType == ProjectType.Workflow ||
                     ProjectType == ProjectType.Report ||
@@ -344,24 +344,28 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Value = 100;
                     break;
                 case ProjectType.DataProvider:
-                    EnabledAll(false);
-                    List<XrmEntity> entitiesDataProvider = null;
-                    progressBar.Style = ProgressBarStyle.Marquee;
-                    Task taskDataProvider = Task.Factory.StartNew(() =>
-                    {
-                        entitiesDataProvider = XrmHelper.GetAllEntities(CrmService);
-                    });
-                    while (!taskDataProvider.IsCompleted)
-                    {
-                        Application.DoEvents();
-                    }
-                    LoadComboBoxEntity(entitiesDataProvider);
-                    comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
-                    buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
-                    buttonConnection.Enabled = true;
-                    buttonCancel.Enabled = true;
-                    progressBar.Style = ProgressBarStyle.Blocks;
+                    //EnabledAll(false);
+                    //List<XrmEntity> entitiesDataProvider = null;
+                    //progressBar.Style = ProgressBarStyle.Marquee;
+                    //Task taskDataProvider = Task.Factory.StartNew(() =>
+                    //{
+                    //    entitiesDataProvider = XrmHelper.GetAllEntities(CrmService);
+                    //});
+                    //while (!taskDataProvider.IsCompleted)
+                    //{
+                    //    Application.DoEvents();
+                    //}
+                    //LoadComboBoxEntity(entitiesDataProvider);
+                    //comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
+                    //buttonOk.Enabled = comboBoxEntity.Enabled;
+                    //comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
+                    //buttonConnection.Enabled = true;
+                    //buttonCancel.Enabled = true;
+                    //progressBar.Style = ProgressBarStyle.Blocks;
+                    //progressBar.Value = 100;
+                    //break;
+                    textProjectName.Enabled = true;
+                    textProjectName.Focus();
                     progressBar.Value = 100;
                     break;
                 case ProjectType.WebResource:
