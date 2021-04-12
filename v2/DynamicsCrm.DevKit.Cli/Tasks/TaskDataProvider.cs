@@ -32,6 +32,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public TaskDataProvider(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
         {
             // /conn:"AuthType=ClientSecret;Url=https://dev-devkit.crm5.dynamics.com;ClientId=e31fc7d6-4dce-46e3-8677-04ab0a2968e3;ClientSecret=?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"dataproviders" /profile:"DEBUG"
+            // /sdklogin:"yes" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"dataproviders" /profile:"DEBUG"
 
             this.crmServiceClient = crmServiceClient;
             this.currentDirectory = currentDirectory;
@@ -206,8 +207,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 else
                     entity.Attributes.Add("deleteplugin", delete.PluginTypeId);
             }
-            var entityDataProviderId = GetEntityDataProviderId(dataProviderName);
-            if (entityDataProviderId == Guid.Empty)
+            var entityDataProvider = GetEntityDataProviderId(dataProviderName);
+            if (entityDataProvider == null)
             {
 
                 var request = new CreateRequest();
@@ -221,17 +222,31 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                entity.Attributes.Add("entitydataproviderid", entityDataProviderId.Value);
-                var request = new UpdateRequest
+                var entitydataproviderid = entityDataProvider.GetAttributeValue<Guid?>("entitydataproviderid");
+                var retrieveplugin = entityDataProvider.GetAttributeValue<Guid?>("retrieveplugin");
+                var retrievemultipleplugin = entityDataProvider.GetAttributeValue<Guid?>("retrievemultipleplugin");
+                var createplugin = entityDataProvider.GetAttributeValue<Guid?>("createplugin");
+                var deleteplugin = entityDataProvider.GetAttributeValue<Guid?>("deleteplugin");
+                var updateplugin = entityDataProvider.GetAttributeValue<Guid?>("updateplugin");
+                if (retrievemultipleplugin != entity.GetAttributeValue<Guid>("retrievemultipleplugin") ||
+                    retrieveplugin != entity.GetAttributeValue<Guid>("retrieveplugin") ||
+                    createplugin != entity.GetAttributeValue<Guid>("createplugin") ||
+                    deleteplugin != entity.GetAttributeValue<Guid>("deleteplugin") ||
+                    updateplugin != entity.GetAttributeValue<Guid>("updateplugin")
+                    )
                 {
-                    Target = entity
-                };
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, " Updating", CliLog.ColorGreen, " Data Provider: ", CliLog.ColorCyan, $"{dataProviderName}");
-                crmServiceClient.Execute(request);
+                    entity.Attributes.Add("entitydataproviderid", entitydataproviderid.Value);
+                    var request = new UpdateRequest
+                    {
+                        Target = entity
+                    };
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, " Updating", CliLog.ColorGreen, " Data Provider: ", CliLog.ColorCyan, $"{dataProviderName}");
+                    crmServiceClient.Execute(request);
+                }
             }
         }
 
-        private Guid? GetEntityDataProviderId(string dataProviderName)
+        private Entity GetEntityDataProviderId(string dataProviderName)
         {
             var fetchData = new
             {
@@ -244,6 +259,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 <fetch>
   <entity name='entitydataprovider'>
     <attribute name='entitydataproviderid' />
+    <attribute name='retrievemultipleplugin' />
+    <attribute name='createplugin' />
+    <attribute name='deleteplugin' />
+    <attribute name='updateplugin' />
+    <attribute name='retrieveplugin' />
     <filter>
       <condition attribute='datasourcelogicalname' operator='eq' value='{fetchData.datasourcelogicalname}'/>
       <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
@@ -253,8 +273,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
             var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return Guid.Empty;
-            return rows.Entities[0].Id;
+            if (rows.Entities.Count != 1) return null;
+            return rows.Entities[0];
         }
 
         private bool IsOkForRegisterDataProvider(List<DataProviderEvent> dataProviderEvents)

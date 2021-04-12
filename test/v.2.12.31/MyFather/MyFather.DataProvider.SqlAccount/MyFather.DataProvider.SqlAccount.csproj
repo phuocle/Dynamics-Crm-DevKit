@@ -67,7 +67,6 @@
     <Compile Include="RetrieveMultiple.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="SqlHelper.cs" />
-    <Compile Include="SqlQueryVisitor.cs" />
     <Compile Include="Update.cs" />
     <Compile Include="Delete.cs" />
     <None Include="packages.config" />

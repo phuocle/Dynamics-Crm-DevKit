@@ -20,9 +20,8 @@ namespace MyFather.DataProvider.SqlAccount
             var sqlConnectionString = dataSource.GetAttributeValue<string>("devkit_sqlconnectionstring");
             if (sqlConnectionString == null) return collection;
             var query = context.InputParameters["Query"];
-            if (query == null) return collection;
             var fetchXml = string.Empty;
-            if (query is QueryExpression qe)
+            if (query is QueryExpression qe) 
             {
                 var convertRequest = new QueryExpressionToFetchXmlRequest();
                 convertRequest.Query = (QueryExpression)qe;
@@ -34,7 +33,7 @@ namespace MyFather.DataProvider.SqlAccount
                 fetchXml = fe.Query;
             }
             else
-                return collection; //only support QueryExpression and FetchExpression
+                return collection;
             var metadata = new AttributeMetadataCache(service);
             var fetch = Deserialize(fetchXml);
             var mapper = new GenericMapper(context, service,  tracing);

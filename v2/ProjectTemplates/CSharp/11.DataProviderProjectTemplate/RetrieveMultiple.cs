@@ -50,11 +50,19 @@ namespace $NameSpace$
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var query = context.InputParameterOrDefault<QueryExpression>("Query");
+            var query = context.InputParameters["Query"];
             var entities = new EntityCollection();
-
-            //YOUR CODE ...
-            entities.EntityName = "???";
+            entities.EntityName = context.PrimaryEntityName;
+            if (query is QueryExpression qe)
+            {
+                //UCI grid return QueryExpression
+            }
+            else if (query is FetchExpression fe)
+            {
+                //Advanced Find, Classic grid return FetchExpression
+            }
+            else
+                throw new InvalidPluginExecutionException("Somthing wrong with Query");
 
             context.OutputParameters["BusinessEntityCollection"] = entities;
         }
