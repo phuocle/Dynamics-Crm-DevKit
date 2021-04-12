@@ -11,6 +11,12 @@
       <grid name="resultset" jump="devkit_name" select="1" icon="1" preview="1">
         <row name="result" id="devkit_azureaccountid">
           <cell name="devkit_name" width="300" />
+          <cell name="devkit_accountid" width="100" />
+          <cell name="devkit_azureaccounttype" width="100" />
+          <cell name="devkit_category" width="100" />
+          <cell name="devkit_city" width="100" />
+          <cell name="devkit_price" width="100" />
+          <cell name="devkit_surface" width="100" />
         </row>
       </grid>
     </layoutxml>
@@ -18,8 +24,17 @@
     <fetchxml>
       <fetch version="1.0" mapping="logical">
         <entity name="devkit_azureaccount">
-          <attribute name="devkit_azureaccountid" />
           <attribute name="devkit_name" />
+          <attribute name="devkit_surface" />
+          <attribute name="devkit_price" />
+          <attribute name="devkit_city" />
+          <attribute name="devkit_category" />
+          <attribute name="devkit_azureaccounttype" />
+          <attribute name="devkit_accountid" />
+          <filter type="or" isquickfindfields="1">
+            <condition attribute="devkit_name" operator="like" value="{0}" />
+          </filter>
+          <attribute name="devkit_azureaccountid" />
         </entity>
       </fetch>
     </fetchxml>
