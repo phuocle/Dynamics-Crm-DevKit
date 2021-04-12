@@ -52,10 +52,10 @@ namespace MyFather.DataProvider.SqlAccount
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var target = context.InputParameterOrDefault<Entity>("Target");
+            //var target = context.InputParameterOrDefault<Entity>("Target");
 
             //YOUR CODE ...
-
+            SqlHelper.UpdateToSql(context, service, tracing, dataSource);
         }
     }
 }

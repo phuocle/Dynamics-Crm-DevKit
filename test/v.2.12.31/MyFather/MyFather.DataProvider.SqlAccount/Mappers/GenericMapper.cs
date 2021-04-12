@@ -186,6 +186,11 @@ namespace MyFather.DataProvider.SqlAccount.Mappers
                 var lookup = new EntityReference(lookupAttr.Targets[0], new Guid(lookupInt.ToString().PadLeft(32, 'a')));
                 return lookup;
             }
+            else if (entityAttribute is LookupAttributeMetadata lookupAttr2 && Guid.TryParse(value.ToString(), out Guid lookupGuid))
+            {
+                var lookup = new EntityReference(lookupAttr2.Targets[0], lookupGuid);
+                return lookup;
+            }
             else if ((entityAttribute is StatusAttributeMetadata || entityAttribute is StateAttributeMetadata || entityAttribute is PicklistAttributeMetadata) && Int32.TryParse(value.ToString(), out int picklistInt))
             {
                 return new OptionSetValue(picklistInt);

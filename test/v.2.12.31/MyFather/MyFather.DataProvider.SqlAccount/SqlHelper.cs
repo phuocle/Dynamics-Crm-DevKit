@@ -2,9 +2,13 @@
 using MarkMpn.Sql4Cds.Engine.FetchXml;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using MyFather.DataProvider.SqlAccount.Mappers;
+using MyFather.Shared;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -37,7 +41,6 @@ namespace MyFather.DataProvider.SqlAccount
             var metadata = new AttributeMetadataCache(service);
             var fetch = Deserialize(fetchXml);
             var mapper = new GenericMapper(context, service,  tracing);
-            //mapper.MapFetchXml(fetch);
             int page = -1;
             int count = -1;
             if (!string.IsNullOrEmpty(fetch.page))
@@ -82,6 +85,49 @@ namespace MyFather.DataProvider.SqlAccount
         }
 
 
+        public static void UpdateToSql(IPluginExecutionContext context, IOrganizationService service, ITracingService tracing, Entity dataSource)
+        {
+            var sqlConnectionString = dataSource.GetAttributeValue<string>("devkit_sqlconnectionstring");
+            var mapper = new GenericMapper(context, service, tracing);
+            var mappings = mapper.GetCustomMappings();
+            var entity = context.InputParameterOrDefault<Entity>("Target");
+            string sql = $"UPDATE {mappings[context.PrimaryEntityName]} SET {{0}} WHERE {mappings[mapper.PrimaryEntityMetadata.PrimaryIdAttribute]} = '{context.PrimaryEntityId}'";
+            using (SqlConnection sqlConnection = new SqlConnection(sqlConnectionString))
+            {
+                using(SqlCommand command = sqlConnection.CreateCommand())
+                {
+                    List<string> setList = new List<string>();
+                    foreach (var attribute in entity.Attributes)
+                    {
+                        if (attribute.Key == mapper.PrimaryEntityMetadata.PrimaryIdAttribute) continue;
+                        command.Parameters.AddWithValue($"@{mappings[attribute.Key]}", GetValueOfAttribute(attribute.Value));
+                        setList.Add($"{mappings[attribute.Key]}=@{mappings[attribute.Key]}");
+                    }
+                    sql = string.Format(sql, string.Join(", ", setList));
+                    command.CommandText = sql;
+                    sqlConnection.Open();
+                    command.ExecuteNonQuery();
+                    sqlConnection.Close();
+                }
+            }
+        }
+
+        private static object GetValueOfAttribute(object value)
+        {
+            if (value is AliasedValue)
+                return GetValueOfAttribute(((AliasedValue)value).Value);
+            else if (value is EntityReference)
+                return ((EntityReference)value).Id;
+            else if (value is OptionSetValue)
+                return ((OptionSetValue)value).Value;
+            else if (value is Money)
+                return ((Money)value).Value;
+            if (value != null)
+                return value;
+            else
+                return DBNull.Value;
+        }
+
         private static FetchType Deserialize(string fetchXml)
         {
             var serializer = new XmlSerializer(typeof(FetchType));
@@ -107,6 +153,7 @@ namespace MyFather.DataProvider.SqlAccount
             }
             return collection;
         }
+
 
     }
 }
