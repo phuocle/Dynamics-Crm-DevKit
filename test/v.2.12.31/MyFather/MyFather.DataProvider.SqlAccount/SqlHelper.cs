@@ -14,14 +14,14 @@ namespace MyFather.DataProvider.SqlAccount
 {
     public class SqlHelper
     {
-        public static EntityCollection QueryToSql(IPluginExecutionContext context, IOrganizationService service, ITracingService tracing, Entity dataSource)
+        public static EntityCollection RetrieveMultipleToSql(IPluginExecutionContext context, IOrganizationService service, ITracingService tracing, Entity dataSource)
         {
             var collection = new EntityCollection();
             var sqlConnectionString = dataSource.GetAttributeValue<string>("devkit_sqlconnectionstring");
             if (sqlConnectionString == null) return collection;
             var query = context.InputParameters["Query"];
             var fetchXml = string.Empty;
-            if (query is QueryExpression qe) 
+            if (query is QueryExpression qe)
             {
                 var convertRequest = new QueryExpressionToFetchXmlRequest();
                 convertRequest.Query = (QueryExpression)qe;
@@ -62,6 +62,25 @@ namespace MyFather.DataProvider.SqlAccount
             }
             return collection;
         }
+
+        public static Entity RetrieveToSql(IPluginExecutionContext context, IOrganizationService service, ITracingService tracing, Entity dataSource)
+        {
+            var sqlConnectionString = dataSource.GetAttributeValue<string>("devkit_sqlconnectionstring");
+            var entity = new Entity(context.PrimaryEntityName, context.PrimaryEntityId);
+            var mapper = new GenericMapper(context, service, tracing);
+            string sql = $"SELECT * FROM {context.PrimaryEntityName} WITH(NOLOCK) WHERE {mapper.PrimaryEntityMetadata.PrimaryIdAttribute} = '{mapper.MapToVirtualEntityValue(mapper.PrimaryEntityMetadata.PrimaryIdAttribute, context.PrimaryEntityId)}'";
+            sql = mapper.MapVirtualEntityAttributes(sql);
+
+            var entities = GetEntitiesFromSql(context, mapper, sqlConnectionString, sql, 1, 1);
+            if (entities.Entities != null && entities.Entities.Count > 0)
+            {
+                entity = entities.Entities[0];
+                entity.Id = context.PrimaryEntityId;
+                entity.LogicalName = context.PrimaryEntityName;
+            }
+            return entity;
+        }
+
 
         private static FetchType Deserialize(string fetchXml)
         {

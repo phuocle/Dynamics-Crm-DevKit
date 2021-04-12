@@ -66,7 +66,7 @@ namespace MyFather.DataProvider.SqlAccount
 
             context.OutputParameters["BusinessEntityCollection"] = entities;
             */
-            context.OutputParameters["BusinessEntityCollection"] = SqlHelper.QueryToSql(context, service, tracing, dataSource);
+            context.OutputParameters["BusinessEntityCollection"] = SqlHelper.RetrieveMultipleToSql(context, service, tracing, dataSource);
         }
     }
 }

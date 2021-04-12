@@ -51,12 +51,12 @@ namespace MyFather.DataProvider.SqlAccount
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var target = context.InputParameterOrDefault<EntityReference>("Target");
-            var entity = new Entity("???", target.Id);
+            //var target = context.InputParameterOrDefault<EntityReference>("Target");
+            //var entity = new Entity("???", target.Id);
 
             //YOUR CODE ...
 
-            context.OutputParameters["BusinessEntity"] = entity;
+            context.OutputParameters["BusinessEntity"] = SqlHelper.RetrieveToSql(context, service, tracing, dataSource);
         }
     }
 }
