@@ -48,10 +48,10 @@ namespace MyFather.DataProvider.SqlAccount
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var target = context.InputParameterOrDefault<EntityReference>("Target");
+            //var target = context.InputParameterOrDefault<EntityReference>("Target");
 
             //YOUR CODE ...
-
+            SqlHelper.DeleteToSql(context, service, tracing, dataSource);
         }
     }
 }

@@ -144,6 +144,24 @@ namespace MyFather.DataProvider.SqlAccount
             return id;
         }
 
+        public static void DeleteToSql(IPluginExecutionContext context, IOrganizationService service, ITracingService tracing, Entity dataSource)
+        {
+            var sqlConnectionString = dataSource.GetAttributeValue<string>("devkit_sqlconnectionstring");
+            var mapper = new GenericMapper(context, service, tracing);
+            var mappings = mapper.GetCustomMappings();
+            string sql = $"DELETE {mappings[context.PrimaryEntityName]} WHERE {mappings[mapper.PrimaryEntityMetadata.PrimaryIdAttribute]} = '{context.PrimaryEntityId}'";
+            using (SqlConnection sqlConnection = new SqlConnection(sqlConnectionString))
+            {
+                using (SqlCommand command = sqlConnection.CreateCommand())
+                {
+                    command.CommandText = sql;
+                    sqlConnection.Open();
+                    command.ExecuteNonQuery();
+                    sqlConnection.Close();
+                }
+            }
+        }
+
         private static object GetValueOfAttribute(object value)
         {
             if (value is AliasedValue)
