@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{5b4b7e98-556a-46d0-9c77-44d098d714c4}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="devkit_name" select="1" icon="1" preview="1">
+        <row name="result" id="devkit_azureaccountid">
+          <cell name="devkit_name" width="200" imageproviderfunctionname="" imageproviderwebresource="$webresource:" />
+          <cell name="devkit_azureaccounttype" width="100" />
+          <cell name="devkit_city" width="100" />
+          <cell name="devkit_price" width="100" />
+          <cell name="devkit_surface" width="100" />
+          <cell name="devkit_category" width="100" />
+          <cell name="devkit_accountid" width="100" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
+        <entity name="devkit_azureaccount">
+          <attribute name="devkit_name" />
+          <attribute name="devkit_city" />
+          <attribute name="devkit_price" />
+          <attribute name="devkit_surface" />
+          <attribute name="devkit_category" />
+          <attribute name="devkit_azureaccounttype" />
+          <order attribute="devkit_name" descending="false" />
+          <attribute name="devkit_accountid" />
+          <attribute name="devkit_azureaccountid" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="All Azure Accounts" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

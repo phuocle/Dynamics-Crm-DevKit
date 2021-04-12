@@ -62,10 +62,10 @@
     <value>1033</value>
   </metadata>
   <metadata name="Source file" xml:space="preserve">
-    <value>VirtualTable_1.0.0000.0_managed.zip</value>
+    <value>VirtualTable_1.0.0000.0.zip</value>
   </metadata>
   <metadata name="Source package type" xml:space="preserve">
-    <value>Managed</value>
+    <value>Unmanaged</value>
   </metadata>
   <metadata name="SolutionPackager Version" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>AAEAAAD/////AQAAAAAAAAAEAQAAAA5TeXN0ZW0uVmVyc2lvbgQAAAAGX01ham9yBl9NaW5vcgZfQnVpbGQJX1JldmlzaW9uAAAAAAgICAgJAAAAAAAAAAAAAAAAAAAACw==</value>
@@ -218,7 +218,7 @@
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{53b51a25-e9ab-b152-0b79-eac946990280}'</comment>
   </data>
   <data name="1:label,Azure Account{565792e8-3278-46c5-9992-d0c1107a619c}" xml:space="preserve">
-    <value />
+    <value>Name</value>
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{565792e8-3278-46c5-9992-d0c1107a619c}'</comment>
   </data>
   <data name="1:label,Azure Account{5ad13440-136d-4f43-ae95-a0a697b63732}" xml:space="preserve">
@@ -270,7 +270,7 @@
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{9b879c24-44fd-4cbe-8263-0e898ae2da39}'</comment>
   </data>
   <data name="1:label,Azure Account{b5dd25c0-d57b-4b26-91b4-b4b362c6fc1d}" xml:space="preserve">
-    <value />
+    <value>Name</value>
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{b5dd25c0-d57b-4b26-91b4-b4b362c6fc1d}'</comment>
   </data>
   <data name="1:label,Azure Account{c5d8a655-d846-9425-29a9-9a5156a805dc}" xml:space="preserve">
@@ -358,7 +358,7 @@
     <comment>'Azure Sql' : label for tab in Entity FormXml ID: '{bc8f0924-b4fe-42ce-b73b-be396338c0f4}'</comment>
   </data>
   <data name="1:label,Azure Sql{bf620b9d-44c7-430e-8ce8-f2f4350f5e66}" xml:space="preserve">
-    <value />
+    <value>Azure Sql</value>
     <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{bf620b9d-44c7-430e-8ce8-f2f4350f5e66}'</comment>
   </data>
   <data name="1:label,Azure Sql{c7f2ec30-3dbe-463e-be21-8c71be24ed60}" xml:space="preserve">
@@ -374,7 +374,7 @@
     <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{d377b072-b639-452c-a14c-8014404ac960}'</comment>
   </data>
   <data name="1:label,Azure Sql{dd6d92f1-9ad2-479b-b8bc-5128a42cf929}" xml:space="preserve">
-    <value />
+    <value>Azure Sql</value>
     <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{dd6d92f1-9ad2-479b-b8bc-5128a42cf929}'</comment>
   </data>
   <data name="1:LocalizedCollectionName,devkit_AzureAccountentitydevkit_AzureAccount" xml:space="preserve">

@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{8707bfd6-eec3-4399-ac21-4f2449885425}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{c8071fb9-2a55-4559-93cd-357478050384}" IsUserDefined="1">
+          <labels>
+            <label description="Allgemein" languagecode="1031" />
+            <label description="General" languagecode="1033" />
+            <label description="Tổng quát" languagecode="1066" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{9b489276-9b8e-49cc-9c78-4a68fd2c2420}">
+                  <labels>
+                    <label description="Allgemein" languagecode="1031" />
+                    <label description="General" languagecode="1033" />
+                    <label description="Tổng quát" languagecode="1066" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{e504b583-7fd8-406e-83b9-c540f7a7a13e}">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_name" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d1045269-66e8-678b-6a6d-aa545d48a725}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Account" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_accountid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="devkit_accountid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c5d8a655-d846-9425-29a9-9a5156a805dc}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="AzureAccountType" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_azureaccounttype" classid="{C6D124CA-7EDA-4a60-AEA9-7FB8D318B68F}" datafieldname="devkit_azureaccounttype" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{08a10169-98b2-8e62-7c80-2ad3280d9e31}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Category" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_category" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="devkit_category" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{6537251b-6357-b2bc-e49d-b0c220823583}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="City" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_city" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_city" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8e08033b-98a4-3c88-cdb1-ec549291b405}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Price" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_price" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079DFD8E}" datafieldname="devkit_price" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{53b51a25-e9ab-b152-0b79-eac946990280}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Surface" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_surface" classid="{0D2C745A-E5A8-4c8f-BA63-C6D3BB604660}" datafieldname="devkit_surface" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <Navigation>
+        <NavBar></NavBar>
+        <NavBarAreas>
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>
