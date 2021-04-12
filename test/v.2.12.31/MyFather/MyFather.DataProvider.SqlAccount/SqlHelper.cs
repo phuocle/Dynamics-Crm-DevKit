@@ -37,7 +37,7 @@ namespace MyFather.DataProvider.SqlAccount
             var metadata = new AttributeMetadataCache(service);
             var fetch = Deserialize(fetchXml);
             var mapper = new GenericMapper(context, service,  tracing);
-            mapper.MapFetchXml(fetch);
+            //mapper.MapFetchXml(fetch);
             int page = -1;
             int count = -1;
             if (!string.IsNullOrEmpty(fetch.page))

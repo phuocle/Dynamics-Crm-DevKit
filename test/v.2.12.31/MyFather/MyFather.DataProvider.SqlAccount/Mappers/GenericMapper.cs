@@ -129,7 +129,7 @@ namespace MyFather.DataProvider.SqlAccount.Mappers
                             var entityAttribute = this.PrimaryEntityMetadata.Attributes.FirstOrDefault(a => a.ExternalName == col.ColumnName);
                             if (entityAttribute != null)
                             {
-                                var value = MapToVirtualEntityValue(entityAttribute, row[col]); ;
+                                var value = MapToVirtualEntityValue(entityAttribute, row[col]);
                                 entity[entityAttribute.LogicalName] = value;
                                 if (entityAttribute.IsPrimaryId.Value)
                                 {
