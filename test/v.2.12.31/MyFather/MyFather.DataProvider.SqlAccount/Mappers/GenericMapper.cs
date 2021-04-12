@@ -47,22 +47,22 @@ namespace MyFather.DataProvider.SqlAccount.Mappers
 
         public virtual void MapFetchXml(object fetch)
         {
-            if (fetch is condition cond)
-            {
-                if (!string.IsNullOrEmpty(cond.value))
-                {
-                    cond.value = MapToVirtualEntityValue(cond.attribute, cond.value).ToString();
-                }
-                else if (cond.Items.Length > 0)
-                {
-                    for (int i = 0; i < cond.Items.Length; i++)
-                    {
-                        tracing.DebugMessage($"PreConvert: {cond.Items[i].Value}");
-                        cond.Items[i].Value = MapToVirtualEntityValue(cond.attribute, cond.Items[i].Value).ToString();
-                        tracing.DebugMessage($"PostConvert: {cond.Items[i].Value}");
-                    }
-                }
-            }
+            //if (fetch is condition cond)
+            //{
+            //    if (!string.IsNullOrEmpty(cond.value))
+            //    {
+            //        cond.value = MapToVirtualEntityValue(cond.attribute, cond.value).ToString();
+            //    }
+            //    else if (cond.Items.Length > 0)
+            //    {
+            //        for (int i = 0; i < cond.Items.Length; i++)
+            //        {
+            //            tracing.DebugMessage($"PreConvert: {cond.Items[i].Value}");
+            //            cond.Items[i].Value = MapToVirtualEntityValue(cond.attribute, cond.Items[i].Value).ToString();
+            //            tracing.DebugMessage($"PostConvert: {cond.Items[i].Value}");
+            //        }
+            //    }
+            //}
 
             if (fetch is FetchType ft)
             {
