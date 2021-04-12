@@ -52,12 +52,12 @@ namespace MyFather.DataProvider.SqlAccount
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var target = context.InputParameterOrDefault<Entity>("Target");
-            var id = Guid.NewGuid();
+            //var target = context.InputParameterOrDefault<Entity>("Target");
+            //var id = Guid.NewGuid();
 
             //YOUR CODE ...
 
-            context.OutputParameters["id"] = id;
+            context.OutputParameters["id"] = SqlHelper.CreateToSql(context, service, tracing, dataSource);
         }
     }
 }

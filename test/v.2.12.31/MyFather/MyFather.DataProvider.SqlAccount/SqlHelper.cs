@@ -3,10 +3,8 @@ using MarkMpn.Sql4Cds.Engine.FetchXml;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
-using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using MyFather.DataProvider.SqlAccount.Mappers;
-using MyFather.Shared;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -112,6 +110,40 @@ namespace MyFather.DataProvider.SqlAccount
             }
         }
 
+        public static Guid CreateToSql(IPluginExecutionContext context, IOrganizationService service, ITracingService tracing, Entity dataSource)
+        {
+            var sqlConnectionString = dataSource.GetAttributeValue<string>("devkit_sqlconnectionstring");
+            var mapper = new GenericMapper(context, service, tracing);
+            var mappings = mapper.GetCustomMappings();
+            var entity = context.InputParameterOrDefault<Entity>("Target");
+            string sql = $"INSERT INTO {mappings[context.PrimaryEntityName]}({{0}}) VALUES ({{1}})";
+            var id = Guid.NewGuid();
+            using (SqlConnection sqlConnection = new SqlConnection(sqlConnectionString))
+            {
+                using (SqlCommand command = sqlConnection.CreateCommand())
+                {
+                    List<string> columns = new List<string>();
+                    List<string> values = new List<string>();
+                    foreach (var attribute in entity.Attributes)
+                    {
+                        command.Parameters.AddWithValue($"@{mappings[attribute.Key]}", GetValueOfAttribute(attribute.Value));
+                        columns.Add($"{mappings[attribute.Key]}");
+                        values.Add($"@{mappings[attribute.Key]}");
+                    }
+                    columns.Add($"{mappings[mapper.PrimaryEntityMetadata.PrimaryIdAttribute]}");
+                    values.Add($"@{mappings[mapper.PrimaryEntityMetadata.PrimaryIdAttribute]}");
+                    command.Parameters.AddWithValue($"@{mappings[mapper.PrimaryEntityMetadata.PrimaryIdAttribute]}", id);
+
+                    sql = string.Format(sql, string.Join(", ", columns), string.Join(", ", values));
+                    command.CommandText = sql;
+                    sqlConnection.Open();
+                    command.ExecuteNonQuery();
+                    sqlConnection.Close();
+                }
+            }
+            return id;
+        }
+
         private static object GetValueOfAttribute(object value)
         {
             if (value is AliasedValue)
@@ -153,7 +185,5 @@ namespace MyFather.DataProvider.SqlAccount
             }
             return collection;
         }
-
-
     }
 }
