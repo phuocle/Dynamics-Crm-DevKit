@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using DynamicsCrm.DevKit.Shared;
-using System.Linq;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {

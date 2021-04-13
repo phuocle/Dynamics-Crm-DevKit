@@ -6,7 +6,7 @@
         <Identity Id="PL.DynamicsCrm.DevKit.B1629928-D42A-4437-ACFD-D0E417F5FA22" Version="2.12.31" Language="en-US"
                   Publisher="PhuocLe" />
         <DisplayName>DynamicsCrm.DevKit</DisplayName>
-        <Description xml:space="preserve">A collection of projects/items template for develop Dynamics 365 CRM/CDS (Oct-31-2020)</Description>
+        <Description xml:space="preserve">A collection of projects/items template for develop Dynamics 365 CRM/CDS (Dec-31-2020)</Description>
         <MoreInfo>https://github.com/phuocle/Dynamics-Crm-DevKit</MoreInfo>
         <License>License.txt</License>
         <Icon>icon.png</Icon>
@@ -52,8 +52,9 @@
 
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.Net.Component.4.5.2.TargetingPack" Version="[14.0,17.0]" DisplayName=".NET Framework 4.5.2 targeting pack" />
-        <Prerequisite Id="Microsoft.Net.Component.4.6.2.TargetingPack" Version="[14.0,17.0]" DisplayName=".NET Framework 4.6.2 targeting pack" />
-        <Prerequisite Id="Microsoft.Net.Component.4.TargetingPack" Version="[14.0,17.0]" DisplayName=".NET Framework 4 targeting pack" />
+        <Prerequisite Id="Microsoft.Net.Component.4.5.2.TargetingPack" Version="[15.0,17.0]" DisplayName=".NET Framework 4.5.2 targeting pack" />
+        <Prerequisite Id="Microsoft.Net.Component.4.6.2.TargetingPack" Version="[15.0,17.0]" DisplayName=".NET Framework 4.6.2 targeting pack" />
+        <Prerequisite Id="Microsoft.Net.Component.4.TargetingPack" Version="[15.0,17.0]" DisplayName=".NET Framework 4 targeting pack" />
+        <Prerequisite Id="Microsoft.Net.Component.4.7.2.TargetingPack" Version="[15.0,17.0]" DisplayName=".NET Framework 4.7.2 targeting pack" />
     </Prerequisites>
 </PackageManifest>

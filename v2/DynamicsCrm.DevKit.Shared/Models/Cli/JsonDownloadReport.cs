@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DynamicsCrm.DevKit.Shared.Models.Cli
+﻿namespace DynamicsCrm.DevKit.Shared.Models.Cli
 {
     public class JsonDownloadReport
     {
