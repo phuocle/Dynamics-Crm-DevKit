@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Basic shims for ScriptDom classes required to build a SQL statement from FetchXml
@@ -1009,7 +1007,7 @@ namespace Microsoft.SqlServer.TransactSql.ScriptDom
                     Values[i].ToString(buf, indent);
                 }
             }
-            
+
             buf.Append(")");
         }
     }
@@ -1206,7 +1204,7 @@ namespace Microsoft.SqlServer.TransactSql.ScriptDom
         public void ToString(StringBuilder buf, int indent)
         {
             Expression.ToString(buf, indent);
-            
+
             switch (SortOrder)
             {
                 case SortOrder.Ascending:

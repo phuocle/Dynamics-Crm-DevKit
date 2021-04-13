@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
-using Microsoft.Xrm.Sdk.Query;
-using System;
 using MyFather.Shared;
+using System;
 
 namespace MyFather.DataProvider.SqlAccount
 {

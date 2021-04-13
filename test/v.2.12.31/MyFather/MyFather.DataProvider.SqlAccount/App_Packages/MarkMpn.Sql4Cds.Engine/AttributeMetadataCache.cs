@@ -143,7 +143,7 @@ namespace MarkMpn.Sql4Cds.Engine
             }
 
             return false;
-            
+
         }
 
         public event EventHandler<MetadataLoadingEventArgs> MetadataLoading;

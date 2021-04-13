@@ -5,7 +5,6 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.Query;
 using MyFather.DataProvider.SqlAccount.Mappers;
-using MyFather.Shared;
 using MyFather.Shared.Entities;
 using System;
 using System.Collections.Generic;
@@ -41,7 +40,7 @@ namespace MyFather.DataProvider.SqlAccount
                 return collection;
             var metadata = new AttributeMetadataCache(service);
             var fetch = Deserialize(fetchXml);
-            var mapper = new GenericMapper(context, service,  tracing);
+            var mapper = new GenericMapper(context, service, tracing);
             int page = -1;
             int count = -1;
             if (!string.IsNullOrEmpty(fetch.page))
@@ -94,7 +93,7 @@ namespace MyFather.DataProvider.SqlAccount
             string sql = $"UPDATE {mappings[context.PrimaryEntityName]} SET {{0}} WHERE {mappings[mapper.PrimaryEntityMetadata.PrimaryIdAttribute]} = '{context.PrimaryEntityId}'";
             using (SqlConnection sqlConnection = new SqlConnection(setting.devkit_SqlConnectionString))
             {
-                using(SqlCommand command = sqlConnection.CreateCommand())
+                using (SqlCommand command = sqlConnection.CreateCommand())
                 {
                     List<string> setList = new List<string>();
                     foreach (var attribute in entity.Attributes)

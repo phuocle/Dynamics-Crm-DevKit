@@ -26,7 +26,7 @@ namespace MarkMpn.Sql4Cds.Engine
         /// <param name="metadata">The metadata cache to use for the conversion</param>
         /// <param name="fetch">The FetchXML string to convert</param>
         /// <returns>The converted SQL query</returns>
-        public static string Convert(IOrganizationService org, IAttributeMetadataCache metadata, string fetch, FetchXml2SqlOptions options, out IDictionary<string,object> parameterValues)
+        public static string Convert(IOrganizationService org, IAttributeMetadataCache metadata, string fetch, FetchXml2SqlOptions options, out IDictionary<string, object> parameterValues)
         {
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(fetch)))
             {
@@ -44,7 +44,7 @@ namespace MarkMpn.Sql4Cds.Engine
         /// <param name="metadata">The metadata cache to use for the conversion</param>
         /// <param name="fetch">The query object to convert</param>
         /// <returns>The converted SQL query</returns>
-        public static string Convert(IOrganizationService org, IAttributeMetadataCache metadata, FetchXml.FetchType fetch, FetchXml2SqlOptions options, out IDictionary<string,object> parameterValues)
+        public static string Convert(IOrganizationService org, IAttributeMetadataCache metadata, FetchXml.FetchType fetch, FetchXml2SqlOptions options, out IDictionary<string, object> parameterValues)
         {
             var ctes = new Dictionary<string, CommonTableExpression>();
             var select = new SelectStatement();
@@ -523,7 +523,7 @@ namespace MarkMpn.Sql4Cds.Engine
         /// <param name="prefix">The alias or name of the table that the <paramref name="condition"/> applies to</param>
         /// <param name="aliasToLogicalName">The mapping of table alias to logical name</param>
         /// <returns>The SQL condition equivalent of the <paramref name="condition"/></returns>
-        private static BooleanExpression GetCondition(IOrganizationService org, IAttributeMetadataCache metadata, condition condition, string prefix, IDictionary<string,string> aliasToLogicalName, FetchXml2SqlOptions options, IDictionary<string, CommonTableExpression> ctes)
+        private static BooleanExpression GetCondition(IOrganizationService org, IAttributeMetadataCache metadata, condition condition, string prefix, IDictionary<string, string> aliasToLogicalName, FetchXml2SqlOptions options, IDictionary<string, CommonTableExpression> ctes)
         {
             // Start with the field reference
             var field = new ColumnReferenceExpression
@@ -754,7 +754,7 @@ namespace MarkMpn.Sql4Cds.Engine
                                 startTime = DateTime.Now;
                                 endTime = DateTime.Today.AddHours(DateTime.Now.Hour + Int32.Parse(condition.value) + 1);
                                 break;
-                                
+
                             case @operator.nextxmonths:
                                 startTime = DateTime.Now;
                                 endTime = DateTime.Today.AddDays(1).AddMonths(Int32.Parse(condition.value));
@@ -818,7 +818,7 @@ namespace MarkMpn.Sql4Cds.Engine
                                 break;
 
                             case @operator.thisweek:
-                                startTime = DateTime.Today.AddDays(- (int) DateTime.Today.DayOfWeek);
+                                startTime = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
                                 endTime = startTime.Value.AddDays(7);
                                 break;
 
@@ -947,7 +947,8 @@ namespace MarkMpn.Sql4Cds.Engine
                                         endTime = startTime;
                                         startTime = endTime.Value.AddYears(-1);
                                     }
-                                } break;
+                                }
+                                break;
 
                             case @operator.thisfiscalperiod:
                                 {
@@ -957,7 +958,8 @@ namespace MarkMpn.Sql4Cds.Engine
 
                                     startTime = startDate;
                                     endTime = endDate;
-                                } break;
+                                }
+                                break;
 
                             case @operator.nextfiscalyear:
                                 {
@@ -973,7 +975,8 @@ namespace MarkMpn.Sql4Cds.Engine
                                         endTime = startTime;
                                         startTime = endTime.Value.AddYears(-1);
                                     }
-                                } break;
+                                }
+                                break;
 
                             case @operator.nextfiscalperiod:
                                 {
@@ -1328,7 +1331,7 @@ namespace MarkMpn.Sql4Cds.Engine
                 case @operator.between:
                 case @operator.notbetween:
                     return new BooleanTernaryExpression { FirstExpression = field, TernaryExpressionType = condition.@operator == @operator.between ? BooleanTernaryExpressionType.Between : BooleanTernaryExpressionType.NotBetween, SecondExpression = new StringLiteral { Value = condition.Items[0].Value }, ThirdExpression = new StringLiteral { Value = condition.Items[1].Value } };
-                    
+
                 case @operator.endswith:
                 case @operator.notendwith:
                     return new LikePredicate { FirstExpression = field, SecondExpression = new StringLiteral { Value = "%" + condition.value }, NotDefined = condition.@operator == @operator.notendwith };
@@ -1350,10 +1353,10 @@ namespace MarkMpn.Sql4Cds.Engine
                     var @in = new InPredicate { Expression = field, NotDefined = condition.@operator == @operator.notin };
 
                     foreach (var val in condition.Items)
-                        @in.Values.Add(new StringLiteral{Value = val.Value });
+                        @in.Values.Add(new StringLiteral { Value = val.Value });
 
                     return @in;
-                    
+
                 case @operator.le:
                     type = BooleanComparisonType.LessThanOrEqualTo;
                     break;
