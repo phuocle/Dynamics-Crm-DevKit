@@ -83,7 +83,6 @@ namespace MyFather.DataProvider.SqlAccount
             return entity;
         }
 
-
         public static void UpdateToSql(IPluginExecutionContext context, IOrganizationService service, ITracingService tracing, Entity dataSource)
         {
             var setting = new devkit_azuresql(dataSource);
@@ -139,11 +138,9 @@ namespace MyFather.DataProvider.SqlAccount
                         values.Add($"@{mappings[attribute.Key]}");
                         command.Parameters.AddWithValue($"@{mappings[attribute.Key]}", GetValueOfAttribute(attribute.Value));
                     }
-
                     columns.Add($"{mappings[mapper.PrimaryEntityMetadata.PrimaryIdAttribute]}");
                     values.Add($"@{mappings[mapper.PrimaryEntityMetadata.PrimaryIdAttribute]}");
                     command.Parameters.AddWithValue($"@{mappings[mapper.PrimaryEntityMetadata.PrimaryIdAttribute]}", id);
-
                     if (setting.devkit_ExternalCreatedOnField != null)
                     {
                         columns.Add($"{setting.devkit_ExternalCreatedOnField}");
@@ -156,7 +153,6 @@ namespace MyFather.DataProvider.SqlAccount
                         values.Add($"@{setting.devkit_ExternalModifiedOnField}");
                         command.Parameters.AddWithValue($"@{setting.devkit_ExternalModifiedOnField}", DateTime.UtcNow);
                     }
-
                     sql = string.Format(sql, string.Join(", ", columns), string.Join(", ", values));
                     command.CommandText = sql;
                     sqlConnection.Open();

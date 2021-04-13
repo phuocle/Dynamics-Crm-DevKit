@@ -129,6 +129,14 @@
     <value />
     <comment>'devkit_AzureAccount' : Description for Attribute 'devkit_City' on Entity</comment>
   </data>
+  <data name="1:Description,devkit_AzureAccountdevkit_CreatedOn" xml:space="preserve">
+    <value />
+    <comment>'devkit_AzureAccount' : Description for Attribute 'devkit_CreatedOn' on Entity</comment>
+  </data>
+  <data name="1:Description,devkit_AzureAccountdevkit_ModifiedOn" xml:space="preserve">
+    <value />
+    <comment>'devkit_AzureAccount' : Description for Attribute 'devkit_ModifiedOn' on Entity</comment>
+  </data>
   <data name="1:Description,devkit_AzureAccountdevkit_name" xml:space="preserve">
     <value />
     <comment>'devkit_AzureAccount' : Description for Attribute 'devkit_name' on Entity</comment>
@@ -148,6 +156,14 @@
   <data name="1:Description,devkit_azuresqldevkit_azuresqlId" xml:space="preserve">
     <value>Eindeutiger Bezeichner für Entitätsinstanzen</value>
     <comment>'devkit_azuresql' : Description for Attribute 'devkit_azuresqlId' on Entity</comment>
+  </data>
+  <data name="1:Description,devkit_azuresqldevkit_ExternalCreatedOnField" xml:space="preserve">
+    <value />
+    <comment>'devkit_azuresql' : Description for Attribute 'devkit_ExternalCreatedOnField' on Entity</comment>
+  </data>
+  <data name="1:Description,devkit_azuresqldevkit_ExternalModifiedOnField" xml:space="preserve">
+    <value />
+    <comment>'devkit_azuresql' : Description for Attribute 'devkit_ExternalModifiedOnField' on Entity</comment>
   </data>
   <data name="1:Description,devkit_azuresqldevkit_name" xml:space="preserve">
     <value />
@@ -181,6 +197,14 @@
     <value />
     <comment>'devkit_AzureAccount' : displayname for Attribute 'devkit_City' on Entity</comment>
   </data>
+  <data name="1:displayname,devkit_AzureAccountdevkit_CreatedOn" xml:space="preserve">
+    <value />
+    <comment>'devkit_AzureAccount' : displayname for Attribute 'devkit_CreatedOn' on Entity</comment>
+  </data>
+  <data name="1:displayname,devkit_AzureAccountdevkit_ModifiedOn" xml:space="preserve">
+    <value />
+    <comment>'devkit_AzureAccount' : displayname for Attribute 'devkit_ModifiedOn' on Entity</comment>
+  </data>
   <data name="1:displayname,devkit_AzureAccountdevkit_name" xml:space="preserve">
     <value />
     <comment>'devkit_AzureAccount' : displayname for Attribute 'devkit_name' on Entity</comment>
@@ -196,6 +220,14 @@
   <data name="1:displayname,devkit_azuresqldevkit_azuresqlId" xml:space="preserve">
     <value />
     <comment>'devkit_azuresql' : displayname for Attribute 'devkit_azuresqlId' on Entity</comment>
+  </data>
+  <data name="1:displayname,devkit_azuresqldevkit_ExternalCreatedOnField" xml:space="preserve">
+    <value />
+    <comment>'devkit_azuresql' : displayname for Attribute 'devkit_ExternalCreatedOnField' on Entity</comment>
+  </data>
+  <data name="1:displayname,devkit_azuresqldevkit_ExternalModifiedOnField" xml:space="preserve">
+    <value />
+    <comment>'devkit_azuresql' : displayname for Attribute 'devkit_ExternalModifiedOnField' on Entity</comment>
   </data>
   <data name="1:displayname,devkit_azuresqldevkit_name" xml:space="preserve">
     <value />
@@ -269,6 +301,10 @@
     <value />
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{9b879c24-44fd-4cbe-8263-0e898ae2da39}'</comment>
   </data>
+  <data name="1:label,Azure Account{a301aab4-2510-548d-9984-ba004312bcb9}" xml:space="preserve">
+    <value />
+    <comment>'Azure Account' : label for cell in Entity FormXml ID: '{a301aab4-2510-548d-9984-ba004312bcb9}'</comment>
+  </data>
   <data name="1:label,Azure Account{b5dd25c0-d57b-4b26-91b4-b4b362c6fc1d}" xml:space="preserve">
     <value />
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{b5dd25c0-d57b-4b26-91b4-b4b362c6fc1d}'</comment>
@@ -288,6 +324,10 @@
   <data name="1:label,Azure Account{e1115c89-c4cf-4d70-af44-5f054d7e19c4}" xml:space="preserve">
     <value />
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{e1115c89-c4cf-4d70-af44-5f054d7e19c4}'</comment>
+  </data>
+  <data name="1:label,Azure Account{e13eb3ee-9626-96cb-0c04-77ca22991166}" xml:space="preserve">
+    <value />
+    <comment>'Azure Account' : label for cell in Entity FormXml ID: '{e13eb3ee-9626-96cb-0c04-77ca22991166}'</comment>
   </data>
   <data name="1:label,Azure Account{e504b583-7fd8-406e-83b9-c540f7a7a13e}" xml:space="preserve">
     <value />
@@ -316,6 +356,10 @@
   <data name="1:label,Azure Sql{3c31812f-c558-47b4-98f4-bd46ba4c13b7}" xml:space="preserve">
     <value />
     <comment>'Azure Sql' : label for section in Entity FormXml ID: '{3c31812f-c558-47b4-98f4-bd46ba4c13b7}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{4bde0c6c-6376-c121-a932-36bcaa6033e2}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{4bde0c6c-6376-c121-a932-36bcaa6033e2}'</comment>
   </data>
   <data name="1:label,Azure Sql{50859e01-2c64-48b5-a1a1-49b2045eaa6f}" xml:space="preserve">
     <value>Fußzeile</value>
@@ -348,6 +392,10 @@
   <data name="1:label,Azure Sql{9b6c0661-88e5-4a47-a25d-2aa49bf6c3ad}" xml:space="preserve">
     <value />
     <comment>'Azure Sql' : label for section in Entity FormXml ID: '{9b6c0661-88e5-4a47-a25d-2aa49bf6c3ad}'</comment>
+  </data>
+  <data name="1:label,Azure Sql{ab5b5638-3c4b-2606-8abe-33b3c7816d88}" xml:space="preserve">
+    <value />
+    <comment>'Azure Sql' : label for cell in Entity FormXml ID: '{ab5b5638-3c4b-2606-8abe-33b3c7816d88}'</comment>
   </data>
   <data name="1:label,Azure Sql{b08def1e-8715-47e2-92da-d524e1ce39e5}" xml:space="preserve">
     <value />

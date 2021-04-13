@@ -39,6 +39,22 @@
                         <control id="devkit_sqlconnectionstring" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_sqlconnectionstring" disabled="false" />
                       </cell>
                     </row>
+                    <row>
+                      <cell id="{4bde0c6c-6376-c121-a932-36bcaa6033e2}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="External Created On Field" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_externalcreatedonfield" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_externalcreatedonfield" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{ab5b5638-3c4b-2606-8abe-33b3c7816d88}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="External Modified On Field" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_externalmodifiedonfield" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_externalmodifiedonfield" disabled="false" />
+                      </cell>
+                    </row>
                   </rows>
                 </section>
               </sections>

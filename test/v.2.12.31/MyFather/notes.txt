@@ -1,0 +1,12 @@
++ Calculated is not valid for virtual entity
++ Rollup is not valid for virtual entity
++ Business process flow cannot be enabled for Virtual Entity.
++ Custom plugins are not allowed for Virtual Entity.
++ Link from virtual table to CDS tables
++ Import from Excel
++ WF/Automate cannot
+
+
++ Reports OK
++ Word/Excel template OK
++ Export to Excel OK
