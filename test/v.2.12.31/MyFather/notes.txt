@@ -2,13 +2,13 @@
 + Rollup is not valid for virtual entity
 + Business process flow cannot be enabled for Virtual Entity.
 + Custom plugins are not allowed for Virtual Entity.
++ WF/Automate is not support for Virtual entity
++ Charts are not supported for Virtual Entity
++ Field level security is not supported for virtual entity
++ Keys can't be created on a virtual entity
 + Link from virtual table to CDS tables
 + Import from Excel
 + Update from Excel Online
-+ WF/Automate cannot
-+ Charts are not supported 
-+ Field level security is not supported for virtual entity
-+ Keys can't be created on a virtual entity
 + Quick create
 + Hierarchy 
 + Quick Create
@@ -35,3 +35,5 @@
 + Custom icon
 + PCF
 + C# SDK Create/Update/Delete/Retrieve/RetrieveMultiple request 
++ Pre Sync
++ custom ribbons

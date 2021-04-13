@@ -24,7 +24,7 @@ namespace MyFather.DataProvider.SqlAccount
             var setting = new devkit_azuresql(dataSource);
             if (setting.devkit_SqlConnectionString == null) return collection;
             var query = context.InputParameters["Query"];
-            var fetchXml = string.Empty;
+            string fetchXml;
             if (query is QueryExpression qe)
             {
                 var convertRequest = new QueryExpressionToFetchXmlRequest();
@@ -35,6 +35,7 @@ namespace MyFather.DataProvider.SqlAccount
             else if (query is FetchExpression fe)
             {
                 fetchXml = fe.Query;
+                throw new InvalidPluginExecutionException("A");
             }
             else
                 return collection;
