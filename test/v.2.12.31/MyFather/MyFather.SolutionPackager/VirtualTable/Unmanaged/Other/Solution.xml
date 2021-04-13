@@ -81,6 +81,7 @@
       <RootComponent type="1" schemaName="devkit_azureaccount" behavior="0" />
       <RootComponent type="1" schemaName="devkit_azuresql" behavior="0" />
       <RootComponent type="9" schemaName="devkit_category" behavior="0" />
+      <RootComponent type="29" id="{55e9a55b-239c-eb11-b1ac-000d3a80a4de}" behavior="0" />
       <RootComponent type="60" id="{8707bfd6-eec3-4399-ac21-4f2449885425}" behavior="0" />
       <RootComponent type="60" id="{c7dffdd7-262e-4c75-87c1-c808d0efeb07}" behavior="0" />
       <RootComponent type="62" schemaName="devkit_VirtualTable" behavior="0" />
@@ -91,8 +92,16 @@
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
-        <Required key="0" type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)" />
-        <Dependent key="1" type="80" schemaName="devkit_VirtualTable" displayName="VirtualTable" />
+        <Required key="0" type="60" displayName="QuickViewAccount" parentDisplayName="Account" solution="Active" id="{7dcbaf74-2f8b-4cc5-82a7-d69bc7d2ba49}" />
+        <Dependent key="1" type="60" displayName="Azure Account" parentDisplayName="Azure Account" id="{8707bfd6-eec3-4399-ac21-4f2449885425}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="2" type="66" schemaName="MscrmControls.OptionSet.OptionSetControl" displayName="MscrmControls.OptionSet.OptionSetControl" solution="CustomControlsCore (9.2.21032.00145)" />
+        <Dependent key="1" type="60" displayName="Azure Account" parentDisplayName="Azure Account" id="{8707bfd6-eec3-4399-ac21-4f2449885425}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required key="3" type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)" />
+        <Dependent key="4" type="80" schemaName="devkit_VirtualTable" displayName="VirtualTable" />
       </MissingDependency>
     </MissingDependencies>
   </SolutionManifest>

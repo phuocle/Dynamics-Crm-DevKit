@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using Microsoft.Xrm.Sdk.Query;
 using MyFather.DataProvider.SqlAccount.Mappers;
+using MyFather.Shared;
 using MyFather.Shared.Entities;
 using System;
 using System.Collections.Generic;

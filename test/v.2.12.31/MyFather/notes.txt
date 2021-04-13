@@ -4,9 +4,34 @@
 + Custom plugins are not allowed for Virtual Entity.
 + Link from virtual table to CDS tables
 + Import from Excel
++ Update from Excel Online
 + WF/Automate cannot
-
++ Charts are not supported 
++ Field level security is not supported for virtual entity
++ Keys can't be created on a virtual entity
++ Quick create
++ Hierarchy 
++ Quick Create
 
 + Reports OK
 + Word/Excel template OK
 + Export to Excel OK
++ Enable send EmailAddress OK, but cannot send and put in the TO, CC, BCC
++ NOTES OK
++ Business Rule OK
++ Views Advanced Find is OK
++ Quick Searck OK
++ Bulk edit OK
++ Bulk delete OK
++ Grid Fillter OK
++ Jumpbar ok
++ Paging ok
++ Security Role
++ Relationships ok (1:N N:1 N:N)
++ Quick form
++ js code
++ Activities for regarding field
++ bug datetime view in subgrid uci, adv find and form is ok
++ Custom icon
++ PCF
++ C# SDK Create/Update/Delete/Retrieve/RetrieveMultiple request 

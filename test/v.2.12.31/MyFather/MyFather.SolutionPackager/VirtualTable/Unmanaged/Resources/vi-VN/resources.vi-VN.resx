@@ -149,6 +149,10 @@
     <value />
     <comment>'devkit_AzureAccount' : Description for Attribute 'devkit_Surface' on Entity</comment>
   </data>
+  <data name="1:Description,devkit_AzureAccountEmailAddress" xml:space="preserve">
+    <value>Địa chỉ email chính cho thực thể.</value>
+    <comment>'devkit_AzureAccount' : Description for Attribute 'EmailAddress' on Entity</comment>
+  </data>
   <data name="1:Description,devkit_AzureAccountentitydevkit_AzureAccount" xml:space="preserve">
     <value />
     <comment> 'devkit_AzureAccount' : Description for Entity</comment>
@@ -217,6 +221,10 @@
     <value />
     <comment>'devkit_AzureAccount' : displayname for Attribute 'devkit_Surface' on Entity</comment>
   </data>
+  <data name="1:displayname,devkit_AzureAccountEmailAddress" xml:space="preserve">
+    <value>Địa chỉ Email</value>
+    <comment>'devkit_AzureAccount' : displayname for Attribute 'EmailAddress' on Entity</comment>
+  </data>
   <data name="1:displayname,devkit_azuresqldevkit_azuresqlId" xml:space="preserve">
     <value />
     <comment>'devkit_azuresql' : displayname for Attribute 'devkit_azuresqlId' on Entity</comment>
@@ -236,6 +244,10 @@
   <data name="1:displayname,devkit_azuresqldevkit_SqlConnectionString" xml:space="preserve">
     <value />
     <comment>'devkit_azuresql' : displayname for Attribute 'devkit_SqlConnectionString' on Entity</comment>
+  </data>
+  <data name="1:label,Azure Account{0072a9a9-6e33-34a4-5354-861b564c5e58}" xml:space="preserve">
+    <value />
+    <comment>'Azure Account' : label for cell in Entity FormXml ID: '{0072a9a9-6e33-34a4-5354-861b564c5e58}'</comment>
   </data>
   <data name="1:label,Azure Account{08a10169-98b2-8e62-7c80-2ad3280d9e31}" xml:space="preserve">
     <value />
@@ -265,6 +277,10 @@
     <value />
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{6537251b-6357-b2bc-e49d-b0c220823583}'</comment>
   </data>
+  <data name="1:label,Azure Account{658a20c4-2785-8d28-e9c5-159e3ace4a4e}" xml:space="preserve">
+    <value />
+    <comment>'Azure Account' : label for tab in Entity FormXml ID: '{658a20c4-2785-8d28-e9c5-159e3ace4a4e}'</comment>
+  </data>
   <data name="1:label,Azure Account{6bb4fe54-6987-4525-b39d-86848c35596e}" xml:space="preserve">
     <value />
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{6bb4fe54-6987-4525-b39d-86848c35596e}'</comment>
@@ -277,6 +293,10 @@
     <value />
     <comment>'Azure Account' : label for tab in Entity FormXml ID: '{79a3a1a4-446f-48ce-8d31-152b385d5992}'</comment>
   </data>
+  <data name="1:label,Azure Account{823d841a-0c37-93e3-e83c-a8d65e6da125}" xml:space="preserve">
+    <value />
+    <comment>'Azure Account' : label for section in Entity FormXml ID: '{823d841a-0c37-93e3-e83c-a8d65e6da125}'</comment>
+  </data>
   <data name="1:label,Azure Account{8c1334e5-d9f6-4933-98c6-34b22a47dec1}" xml:space="preserve">
     <value />
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{8c1334e5-d9f6-4933-98c6-34b22a47dec1}'</comment>
@@ -288,6 +308,14 @@
   <data name="1:label,Azure Account{93f63c53-2fab-4b7c-b08f-dd9797f9ed9d}" xml:space="preserve">
     <value />
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{93f63c53-2fab-4b7c-b08f-dd9797f9ed9d}'</comment>
+  </data>
+  <data name="1:label,Azure Account{948a704e-ac05-856b-d6b1-6b19d0e8dade}" xml:space="preserve">
+    <value />
+    <comment>'Azure Account' : label for tab in Entity FormXml ID: '{948a704e-ac05-856b-d6b1-6b19d0e8dade}'</comment>
+  </data>
+  <data name="1:label,Azure Account{99ad2529-98a9-9ae9-599e-d4eea07a6124}" xml:space="preserve">
+    <value />
+    <comment>'Azure Account' : label for cell in Entity FormXml ID: '{99ad2529-98a9-9ae9-599e-d4eea07a6124}'</comment>
   </data>
   <data name="1:label,Azure Account{9a806ab5-f664-40b7-b3c1-f8a6963464fe}" xml:space="preserve">
     <value>Các chi tiết</value>
@@ -321,6 +349,10 @@
     <value />
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{d1045269-66e8-678b-6a6d-aa545d48a725}'</comment>
   </data>
+  <data name="1:label,Azure Account{d15ce740-2a11-dbc1-deb6-c761a40d331d}" xml:space="preserve">
+    <value />
+    <comment>'Azure Account' : label for section in Entity FormXml ID: '{d15ce740-2a11-dbc1-deb6-c761a40d331d}'</comment>
+  </data>
   <data name="1:label,Azure Account{e1115c89-c4cf-4d70-af44-5f054d7e19c4}" xml:space="preserve">
     <value />
     <comment>'Azure Account' : label for cell in Entity FormXml ID: '{e1115c89-c4cf-4d70-af44-5f054d7e19c4}'</comment>
@@ -336,6 +368,10 @@
   <data name="1:label,Azure Account{ea7ebd5c-9408-40b6-969e-13e42ce66286}" xml:space="preserve">
     <value>TỔNG QUÁT</value>
     <comment>'Azure Account' : label for section in Entity FormXml ID: '{ea7ebd5c-9408-40b6-969e-13e42ce66286}'</comment>
+  </data>
+  <data name="1:label,Azure Account{eb1a9b3d-cd2b-e652-0ba7-d0e6a6a37466}" xml:space="preserve">
+    <value>Địa chỉ Email</value>
+    <comment>'Azure Account' : label for cell in Entity FormXml ID: '{eb1a9b3d-cd2b-e652-0ba7-d0e6a6a37466}'</comment>
   </data>
   <data name="1:label,Azure Account{ed4f58e5-2b6a-4add-aa3d-5b98fb3140a7}" xml:space="preserve">
     <value>Chân trang</value>
@@ -556,6 +592,14 @@
   <data name="1:Title,Azure SqlService{c7dffdd7-262e-4c75-87c1-c808d0efeb07}" xml:space="preserve">
     <value />
     <comment>'Azure Sql' : Title for NavBarArea in Entity FormXml ID: 'Service'</comment>
+  </data>
+  <data name="29:Description,{55e9a55b-239c-eb11-b1ac-000d3a80a4de}" xml:space="preserve">
+    <value />
+    <comment>'Lock Created On and Modified On' : Description for Workflow</comment>
+  </data>
+  <data name="29:LocalizedName,{55e9a55b-239c-eb11-b1ac-000d3a80a4de}" xml:space="preserve">
+    <value />
+    <comment>'Lock Created On and Modified On' : LocalizedName for Workflow</comment>
   </data>
   <data name="80:LocalizedName,devkit_VirtualTable" xml:space="preserve">
     <value />

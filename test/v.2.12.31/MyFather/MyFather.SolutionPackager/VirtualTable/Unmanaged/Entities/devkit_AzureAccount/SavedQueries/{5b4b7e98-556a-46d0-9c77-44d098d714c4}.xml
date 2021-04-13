@@ -17,6 +17,7 @@
           <cell name="devkit_surface" width="100" />
           <cell name="devkit_category" width="100" />
           <cell name="devkit_accountid" width="100" />
+          <cell name="devkit_modifiedon" width="100" />
         </row>
       </grid>
     </layoutxml>
@@ -30,8 +31,9 @@
           <attribute name="devkit_surface" />
           <attribute name="devkit_category" />
           <attribute name="devkit_azureaccounttype" />
-          <order attribute="devkit_name" descending="false" />
+          <order attribute="devkit_modifiedon" descending="true" />
           <attribute name="devkit_accountid" />
+          <attribute name="devkit_modifiedon" />
           <attribute name="devkit_azureaccountid" />
         </entity>
       </fetch>

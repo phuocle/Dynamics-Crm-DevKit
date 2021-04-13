@@ -5,12 +5,12 @@
     <IntroducedVersion>1.0.0.0</IntroducedVersion>
     <FormPresentation>1</FormPresentation>
     <FormActivationState>1</FormActivationState>
-    <form>
+    <form shownavigationbar="true" showImage="false" maxWidth="1920">
       <tabs>
-        <tab verticallayout="true" id="{c8071fb9-2a55-4559-93cd-357478050384}" IsUserDefined="1">
+        <tab verticallayout="true" id="{c8071fb9-2a55-4559-93cd-357478050384}" IsUserDefined="1" name="{c8071fb9-2a55-4559-93cd-357478050384}" locklevel="0" expanded="false" showlabel="true">
           <labels>
             <label description="Allgemein" languagecode="1031" />
-            <label description="General" languagecode="1033" />
+            <label description="GENERAL" languagecode="1033" />
             <label description="Tổng quát" languagecode="1066" />
           </labels>
           <columns>
@@ -52,7 +52,7 @@
                         <labels>
                           <label description="Category" languagecode="1033" />
                         </labels>
-                        <control id="devkit_category" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="devkit_category" disabled="false" />
+                        <control id="devkit_category" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" datafieldname="devkit_category" disabled="false" uniqueid="{da188ac9-1084-4414-a998-33d739d5a78c}" />
                       </cell>
                     </row>
                     <row>
@@ -80,11 +80,21 @@
                       </cell>
                     </row>
                     <row>
+                      <cell id="{eb1a9b3d-cd2b-e652-0ba7-d0e6a6a37466}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="Email Address" languagecode="1033" />
+                          <label description="E-Mail-Adresse" languagecode="1031" />
+                          <label description="Địa chỉ Email" languagecode="1066" />
+                        </labels>
+                        <control id="emailaddress" classid="{ADA2203E-B4CD-49be-9DDF-234642B43B52}" datafieldname="emailaddress" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
                       <cell id="{e13eb3ee-9626-96cb-0c04-77ca22991166}" showlabel="true" locklevel="0">
                         <labels>
                           <label description="Created On" languagecode="1033" />
                         </labels>
-                        <control id="devkit_createdon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_createdon" disabled="true" uniqueid="{7b184257-0e0c-3d9c-45a3-5e78da76c335}" />
+                        <control id="devkit_createdon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_createdon" disabled="false" uniqueid="{7b184257-0e0c-3d9c-45a3-5e78da76c335}" />
                       </cell>
                     </row>
                     <row>
@@ -92,9 +102,103 @@
                         <labels>
                           <label description="Modified On" languagecode="1033" />
                         </labels>
-                        <control id="devkit_modifiedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_modifiedon" disabled="true" uniqueid="{ba8c34e0-2219-3802-4757-756a48e9aee9}" />
+                        <control id="devkit_modifiedon" classid="{5B773807-9FB2-42db-97C3-7A91EFF8ADFF}" datafieldname="devkit_modifiedon" disabled="false" uniqueid="{ba8c34e0-2219-3802-4757-756a48e9aee9}" />
                       </cell>
                     </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_3" id="{658a20c4-2785-8d28-e9c5-159e3ace4a4e}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="false">
+          <labels>
+            <label description="ACCOUNT" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="tab_3_section_1" showlabel="false" showbar="false" locklevel="0" id="{d15ce740-2a11-dbc1-deb6-c761a40d331d}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Section" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{0072a9a9-6e33-34a4-5354-861b564c5e58}" showlabel="false" colspan="1" auto="false">
+                        <labels>
+                          <label description="ACCOUNT" languagecode="1033" />
+                        </labels>
+                        <control id="ACCOUNT" classid="{5C5600E0-1D6E-4205-A272-BE80DA87FD42}" datafieldname="devkit_accountid" disabled="false">
+                          <parameters>
+                            <QuickForms>&lt;QuickFormIds&gt;&lt;QuickFormId entityname="account"&gt;7dcbaf74-2f8b-4cc5-82a7-d69bc7d2ba49&lt;/QuickFormId&gt;&lt;/QuickFormIds&gt;</QuickForms>
+                            <ControlMode>Edit</ControlMode>
+                            <DisplayAsCustomer360Tile>false</DisplayAsCustomer360Tile>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_2" id="{948a704e-ac05-856b-d6b1-6b19d0e8dade}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="false">
+          <labels>
+            <label description="NOTES" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section name="tab_2_section_1" showlabel="false" showbar="false" locklevel="0" id="{823d841a-0c37-93e3-e83c-a8d65e6da125}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Section" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{99ad2529-98a9-9ae9-599e-d4eea07a6124}" showlabel="true" rowspan="15" auto="false" colspan="1" locklevel="0">
+                        <labels>
+                          <label description="Note Text" languagecode="1033" />
+                        </labels>
+                        <control id="notescontrol" classid="{06375649-c143-495e-a496-c962e5b4488e}" uniqueid="{98b03620-b23e-7b76-ecba-c070a7cb4aa1}" disabled="false">
+                          <parameters>
+                            <UClientUniqueName>NOTES</UClientUniqueName>
+                            <UClientModules>Activities,Notes</UClientModules>
+                            <UClientDefaultModuleForCreateExperience>Notes</UClientDefaultModuleForCreateExperience>
+                            <UClientShowFilterPane>false</UClientShowFilterPane>
+                            <UClientExpandFilterPane>false</UClientExpandFilterPane>
+                            <UClientOrderBy>descending</UClientOrderBy>
+                            <UClientRecordPerPage>10</UClientRecordPerPage>
+                            <UClientEnableWhatsNewFilter>false</UClientEnableWhatsNewFilter>
+                            <DefaultTabId>ActivitiesTab</DefaultTabId>
+                            <EmailConversationView>true</EmailConversationView>
+                            <ShowArticleTab>false</ShowArticleTab>
+                            <SelectDefaultLanguage>00000000-0000-0000-0000-000000000000</SelectDefaultLanguage>
+                            <UClientSortActivitiesByValue>modifiedon</UClientSortActivitiesByValue>
+                            <UClientDisplayActivityHeaderUsing>defaultformat</UClientDisplayActivityHeaderUsing>
+                            <UClientCreateActivityUsing>quickcreateform</UClientCreateActivityUsing>
+                            <UClientDisplayActivityUsing>cardform</UClientDisplayActivityUsing>
+                            <UClientActivityCardMap>appointment:4201:,email:4202:,fax:4204:,letter:4207:,phonecall:4210:,task:4212:,devkit_customactivity:10042:</UClientActivityCardMap>
+                            <OrderByActivityWall>descending</OrderByActivityWall>
+                            <SortActivityWall>modifiedon</SortActivityWall>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
+                    <row />
                   </rows>
                 </section>
               </sections>
@@ -132,12 +236,35 @@
           </NavBarArea>
         </NavBarAreas>
       </Navigation>
-      <controlDescriptions />
+      <controlDescriptions>
+        <controlDescription forControl="{da188ac9-1084-4414-a998-33d739d5a78c}">
+          <customControl id="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}">
+            <parameters>
+              <datafieldname>devkit_category</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.OptionSet.OptionSetControl">
+            <parameters>
+              <value>devkit_category</value>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.OptionSet.OptionSetControl">
+            <parameters>
+              <value>devkit_category</value>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.OptionSet.OptionSetControl">
+            <parameters>
+              <value>devkit_category</value>
+            </parameters>
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
     </form>
     <IsCustomizable>1</IsCustomizable>
     <CanBeDeleted>1</CanBeDeleted>
     <LocalizedNames>
-      <LocalizedName description="Information" languagecode="1033" />
+      <LocalizedName description="Azure Account" languagecode="1033" />
     </LocalizedNames>
     <Descriptions>
       <Description description="A form for this entity." languagecode="1033" />
