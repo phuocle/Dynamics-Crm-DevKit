@@ -67,7 +67,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
             ItemType = itemType;
 
-            cboType.SelectedIndex = 3;
+            cboType.SelectedIndex = 1;
 
             DTE = dte;
             LoadConnections();
@@ -284,6 +284,12 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             chkCheck0.Checked = !chkCheck1.Checked;
             btnOk.Enabled = true;
+        }
+
+        private void cboType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            labelUserName.Text = cboType.Text == "ClientSecret" ? "Client Id" : "User Name";
+            labelPassword.Text = cboType.Text == "ClientSecret" ? "Client Secret" : "Password";
         }
     }
 }

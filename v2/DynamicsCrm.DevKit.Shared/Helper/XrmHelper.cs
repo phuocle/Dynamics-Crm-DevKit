@@ -361,7 +361,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         {
             if (type == "ClientSecret")
                 return $"AuthType=ClientSecret;Url={url};ClientId={user};ClientSecret={pass};";
-            else if (type == "AD" || type == "IFD")
+            else if (type == "AD")
             {
                 var arr = user.Split("\\".ToCharArray());
                 if (arr.Length != 2)
