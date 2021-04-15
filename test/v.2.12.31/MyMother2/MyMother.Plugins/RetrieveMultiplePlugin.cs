@@ -23,8 +23,8 @@ namespace MyMother.Plugins
                     {
                         while (reader.Read())
                         {
-                            Entity e = new Entity("new_ticket");
-                            e.Attributes.Add("new_ticketid", reader.GetGuid(0));
+                            Entity e = new Entity("new_veticket");
+                            e.Attributes.Add("new_veticketid", reader.GetGuid(0));
                             e.Attributes.Add("new_severity", reader.GetInt32(1));
                             e.Attributes.Add("new_name", reader.GetString(2));
                             collection.Entities.Add(e);

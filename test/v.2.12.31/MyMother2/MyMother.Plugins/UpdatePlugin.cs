@@ -19,7 +19,7 @@ namespace MyMother.Plugins
                 SqlConnection connection = Connection.GetConnection();
                 using (SqlCommand command = connection.CreateCommand())
                 {
-                    command.Parameters.AddWithValue("@TicketID", entity["new_ticketid"]);
+                    command.Parameters.AddWithValue("@TicketID", entity["new_veticketid"]);
                     List<string> setList = new List<string>();
                     if (entity.Attributes.Contains("new_name"))
                     {
