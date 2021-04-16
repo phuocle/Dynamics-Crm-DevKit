@@ -74,6 +74,11 @@ var devKit = (function () {
                 contextDataEntity.addOnSave(callback);
             }
         };
+        form.PostSave = function (callback) {
+            if (has(contextDataEntity, 'addOnPostSave')) {
+                contextDataEntity.addOnPostSave(callback);
+            }
+        }
         form.RemoveOnSave = function (callback) {
             if (has(contextDataEntity, 'removeOnSave')) {
                 contextDataEntity.removeOnSave(callback);
@@ -222,7 +227,7 @@ var devKit = (function () {
         }
         form.FormNavigate = function (formId) {
             if (has(contextUiFormSelector, 'items')) {
-                var form = contextUiFormSelector.items.get(formId);
+                var form = contextUiFormSelector.items.get(formId) || contextUiFormSelector.items.get(formId.toLowerCase());
                 if (has(form, 'navigate')) {
                     form.navigate();
                 }
@@ -230,7 +235,7 @@ var devKit = (function () {
         };
         form.FormIsVisible = function (formId) {
             if (has(contextUiFormSelector, 'items')) {
-                var form = contextUiFormSelector.items.get(formId);
+                var form = contextUiFormSelector.items.get(formId) || contextUiFormSelector.items.get(formId.toLowerCase());
                 if (has(form, 'getVisible')) {
                     return form.getVisible();
                 }
@@ -239,7 +244,7 @@ var devKit = (function () {
         }
         form.FormSetVisible = function (formId, value) {
             if (has(contextUiFormSelector, 'items')) {
-                var form = contextUiFormSelector.items.get(formId);
+                var form = contextUiFormSelector.items.get(formId) || contextUiFormSelector.items.get(formId.toLowerCase());
                 if (has(form, 'setVisible')) {
                     form.setVisible(value);
                 }
@@ -1206,6 +1211,62 @@ var devKit = (function () {
                 }
             })();
             loadField(body[field], attribute, control);
+        }
+        if (type === "footer_") {
+            Object.defineProperty(body, 'BodyVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.footerSection.getVisible')) {
+                        return formContext.ui.footerSection.getVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.footerSection.setVisible')) {
+                        formContext.ui.footerSection.setVisible(value);
+                    }
+                }
+            });
+        }
+        else if (type === "header_") {
+            Object.defineProperty(body, 'BodyVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.headerSection.getBodyVisible')) {
+                        return formContext.ui.headerSection.getBodyVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.headerSection.setBodyVisible')) {
+                        formContext.ui.headerSection.setBodyVisible(value);
+                    }
+                }
+            });
+            Object.defineProperty(body, 'CommandBarVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.headerSection.getCommandBarVisible')) {
+                        return formContext.ui.headerSection.getCommandBarVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.headerSection.setCommandBarVisible')) {
+                        formContext.ui.headerSection.setCommandBarVisible(value);
+                    }
+                }
+            });
+            Object.defineProperty(body, 'TabNavigatorVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.headerSection.getTabNavigatorVisible')) {
+                        return formContext.ui.headerSection.getTabNavigatorVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.headerSection.setTabNavigatorVisible')) {
+                        formContext.ui.headerSection.setTabNavigatorVisible(value);
+                    }
+                }
+            });
         }
         return body;
     }
@@ -2435,6 +2496,30 @@ var devKit = (function () {
                     return executionContext.getEventArgs().getSaveMode();
                 }
                 return 1;
+            }
+        });
+        Object.defineProperty(obj, 'EntityReference', {
+            get: function () {
+                if (has(executionContext, 'getEntityReference')) {
+                    return executionContext.getEventArgs().getEntityReference();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(obj, 'IsSaveSuccess', {
+            get: function () {
+                if (has(executionContext, 'getIsSaveSuccess')) {
+                    return executionContext.getEventArgs().getIsSaveSuccess();
+                }
+                return false;
+            }
+        });
+        Object.defineProperty(obj, 'SaveErrorInfo', {
+            get: function () {
+                if (has(executionContext, 'getSaveErrorInfo')) {
+                    return executionContext.getEventArgs().getSaveErrorInfo();
+                }
+                return {};
             }
         });
         return obj;

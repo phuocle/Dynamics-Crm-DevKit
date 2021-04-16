@@ -1813,6 +1813,21 @@ declare namespace DevKit {
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
          */
         readonly SaveMode: OptionSet.SaveMode;
+        /**
+        * Use this method to know information about an entity being saved/updated. It returns entity ID, and entity name if success.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getentityreference
+        */
+        readonly EntityReference: DevKit.EntityReference;
+        /**
+        * Use this method to know whether the OnSave operation is successful or failed.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getissavesuccess
+        */
+        readonly IsSaveSuccess: boolean;
+        /**
+        * Use this method to know the error details on why an entity save failed.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsaveerrorinfo
+        */
+        readonly SaveErrorInfo: any;
     }
     interface Utility {
         /**
@@ -2289,6 +2304,12 @@ declare namespace DevKit {
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/addonsave
         */
         AddOnSave(callback: (executionContext: any) => void): void;
+        /**
+        * PostSave event occurs after the OnSave event is complete. This event is used to support or execute custom logic using web resources to perform after Save actions when the save event is successful or failed due to server errors
+        * @param callback The function to add to the PostSave event. The execution context is automatically passed as the first parameter to this function
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/events/postsave
+        */
+        PostSave(callback: (executionContext: any) => void): void;
         /**
         * Adds a function to be called when form data is loaded.
         * @param callback The function to be executed when the form data loads. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.

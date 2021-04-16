@@ -8,8 +8,6 @@ namespace DynamicsCrm.DevKit.Console
     {
         static void Main(string[] args)
         {
-            //XrmMock.Generator_xrm_mock_d_ts();
-            //XrmEnum.Generator();
             DevKitJsMinOld();
             DevKitJsMinNew();
         }
@@ -18,9 +16,9 @@ namespace DynamicsCrm.DevKit.Console
         {
             var file = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\v2\DynamicsCrm.DevKit.Resources\devkit.365.new.js";
             var devkitCode = File.ReadAllText(file);
-            var devkitCodeMin = Uglify.Js(devkitCode).Code;
+            //var devkitCodeMin = Uglify.Js(devkitCode).Code;
             var output = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\v2\ProjectTemplates\CSharp\13.WebResourceProjectTemplate\devkit.js";
-            File.WriteAllText(output, devkitCodeMin);
+            File.WriteAllText(output, devkitCode);
 
 
             var file_d_ts = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\v2\DynamicsCrm.DevKit.Resources\devkit.365.new.d.ts";

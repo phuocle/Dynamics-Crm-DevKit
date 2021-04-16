@@ -35,3 +35,14 @@ if %MsBuild%=="" (
 	cd ..\..
 	copy DynamicsCrm.DevKit\Release\DynamicsCrm.DevKit.vsix Published\%VERSION%\DynamicsCrm.DevKit.%VERSION%.vsix
 )
+echo
+echo
+echo
+echo
+echo ************************************************************
+echo PHUOC, MAKE SURE RUN THE DynamicsCrm.DevKit.Console TO UPDATE devkit.d.ts and devkit.js
+echo ************************************************************
+echo
+echo
+echo
+echo
