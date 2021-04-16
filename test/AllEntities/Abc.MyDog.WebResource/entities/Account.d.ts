@@ -148,7 +148,7 @@ declare namespace MyDog {
 			/** Type a second phone number for this account. */
 			Telephone2: DevKit.Controls.String;
 		}
-		interface Process extends DevKit.Controls.Process {
+		interface Process extends DevKit.Controls.IProcess {
 			BPF_Account_3: ProcessBPF_Account_3;
 			BPF_Account_1: ProcessBPF_Account_1;
 		}
