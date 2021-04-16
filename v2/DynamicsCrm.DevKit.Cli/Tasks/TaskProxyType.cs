@@ -65,13 +65,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var path = "\"" + GetParentFolder(currentDirectory) + $@"\packages\Microsoft.CrmSdk.CoreTools.{arguments.Version}\content\bin\coretools\CrmSvcUtil.exe" + "\"";
             CliLog.Write(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Executing", CliLog.ColorCyan, " CrmSvcUtil");
-            if (json.entities != null && json.entities.Length > 0)
+            if (json.entities == "*")
             {
-                CliLog.WriteLine(ConsoleColor.Green, " with entities filter: ", ConsoleColor.Cyan, json.entities);
+                CliLog.WriteLine(ConsoleColor.Green, " with ", ConsoleColor.Cyan, "all entities");
             }
             else
             {
-                CliLog.WriteLine(ConsoleColor.Green, " with ", ConsoleColor.Cyan, "all entities");
+                CliLog.WriteLine(ConsoleColor.Green, " with entities filter: ", ConsoleColor.Cyan, json.entities);
             }
             CliLog.WriteLine(CliLog.ColorCyan, " " + path + " " + CreateCommandArgsLog());
             CliLog.WriteLine();
