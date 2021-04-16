@@ -743,6 +743,11 @@ namespace DynamicsCrm.DevKit.Shared
             };
             return jsIntellisense.Intellisense;
         }
+
+        public IEnumerable<string> GetForms()
+        {
+            return Forms.Select(f => f.Name).ToList();
+        }
         public void GeneratorCode(List<string> checkedItems, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
         {
             var processForms = new List<SystemForm>();

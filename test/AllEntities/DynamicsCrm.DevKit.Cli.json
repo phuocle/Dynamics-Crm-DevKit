@@ -142,7 +142,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsForm",
-      "entities": "*",
+      "entities": "account,contact",
       "debug": "yes"
     },
     {

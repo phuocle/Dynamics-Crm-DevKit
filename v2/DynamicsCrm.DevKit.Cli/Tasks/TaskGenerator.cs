@@ -436,7 +436,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var i = 1;
             foreach (var entity in entities)
             {
-                var jsFormVersion = string.Empty;
+                var jsFormVersion = "v2";
                 var fileTypeScriptDeclaration = $"{currentDirectory}\\{json.rootfolder}\\{entity}.d.ts";
                 if (File.Exists(fileTypeScriptDeclaration))
                 {
@@ -487,7 +487,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var parts2 = json.rootnamespace.Split(".".ToCharArray());
                 var projectName2 = parts2.Length > 1 ? parts2[1] : parts2[0];
-                var jsForm2 = new JsForm(XrmHelper.GetIOrganizationService(crmServiceClient), projectName2, entity);
+                var jsForm2 = new JsForm2(XrmHelper.GetIOrganizationService(crmServiceClient), projectName2, entity);
                 forms = GetAllForms(entity, jsForm2);
             }
             if (forms.Count == 0)
@@ -573,7 +573,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var parts2 = json.rootnamespace.Split(".".ToCharArray());
                 var projectName2 = parts2.Length > 1 ? parts2[1] : parts2[0];
-                var jsForm2 = new JsForm(XrmHelper.GetIOrganizationService(crmServiceClient), projectName2, entity);
+                var jsForm2 = new JsForm2(XrmHelper.GetIOrganizationService(crmServiceClient), projectName2, entity);
                 forms = GetAllForms(entity, jsForm2);
             }
             if (forms.Count == 0)
@@ -635,11 +635,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             else
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".form.js");
         }
-        private List<string> GetAllForms(string entity, JsForm jsForm)
+        private List<string> GetAllForms(string entity, JsForm2 jsForm)
         {
             var forms = jsForm.GetForms().ToList();
             if (forms.Count == 0) return new List<string>();
             forms = forms.Distinct().ToList();
+            forms.Sort();
             return forms;
         }
 
