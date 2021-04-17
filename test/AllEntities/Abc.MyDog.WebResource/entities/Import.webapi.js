@@ -65,7 +65,7 @@ var MyDog;
             }
             return property;
         }
-		var import = {
+		var _import = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -88,20 +88,20 @@ var MyDog;
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in import) {
-			var a = import[field].a;
-			var b = import[field].b;
-			var c = import[field].c;
-			var d = import[field].d;
-			var g = import[field].g;
-			var r = import[field].r;
-			import[field] = webApiField(e, a, b, c, d, r, u, g);
+		for (var field in _import) {
+			var a = _import[field].a;
+			var b = _import[field].b;
+			var c = _import[field].c;
+			var d = _import[field].d;
+			var g = _import[field].g;
+			var r = _import[field].r;
+			_import[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
-		import.Entity = u;
-		import.EntityName = 'import';
-		import.EntityCollectionName = 'imports';
-		import['@odata.etag'] = e['@odata.etag'];
-		import.getAliasedValue = function (alias, isMultiOptionSet) {
+		_import.Entity = u;
+		_import.EntityName = '_import';
+		_import.EntityCollectionName = 'imports';
+		_import['@odata.etag'] = e['@odata.etag'];
+		_import.getAliasedValue = function (alias, isMultiOptionSet) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -110,7 +110,7 @@ var MyDog;
 			}
 			return e[alias];
 		}
-		import.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		_import.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
@@ -119,7 +119,7 @@ var MyDog;
 			}
 			return e[alias + f];
 		}
-		return import;
+		return _import;
 	};
 })(MyDog || (MyDog = {}));
 /** @namespace OptionSet */

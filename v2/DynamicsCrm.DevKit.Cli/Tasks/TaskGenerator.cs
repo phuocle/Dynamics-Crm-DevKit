@@ -322,7 +322,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var jsForm = new List<string>();
             var isDebugForm = false;
             var isDebugWebApi = false;
-            var jsFormVersion = string.Empty;
+            var jsFormVersion = "v2";
             if (!File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.js"))
             {
                 var text = string.Empty;

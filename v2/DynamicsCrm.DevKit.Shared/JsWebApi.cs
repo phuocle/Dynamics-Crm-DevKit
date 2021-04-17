@@ -58,6 +58,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private string GetLogicalCollectionName(string entity)
         {
+            if (entity.StartsWith("_")) entity = entity.Substring("@".Length);
             var request = new RetrieveEntityRequest
             {
                 EntityFilters = EntityFilters.Attributes,
@@ -124,10 +125,16 @@ namespace DynamicsCrm.DevKit.Shared
         public string WebApiCode { get; private set; } = string.Empty;
         public string WebApiCodeIntellisense { get; private set; } = string.Empty;
         public string WebApiCodeTypeScriptDeclaration { get; private set; } = string.Empty;
+        private string SafeJsName(string name)
+        {
+            if (name.ToLower() == "import")
+                return $"_{name}";
+            return name;
+        }
         public void GeneratorCode()
         {
             var webApiCode = string.Empty;
-            var @class = EntityName.ToLower();
+            var @class = SafeJsName(EntityName.ToLower());
             var Class = EntityName;
 
             webApiCode += $"var {ProjectName};\r\n";

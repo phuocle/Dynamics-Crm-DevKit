@@ -3,6 +3,56 @@
 var MyDog;
 (function (MyDog) {
 	'use strict';
+	MyDog.Formmsdyn_knowledgearticletemplate_Main_Form = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			msdyn_Content: {},
+			msdyn_Description: {},
+			msdyn_isinternal: {},
+			msdyn_keywords: {},
+			msdyn_languagelocaleid: {},
+			msdyn_LanguageLocaleIdName: {},
+			msdyn_name: {},
+			msdyn_subjectid: {},
+			msdyn_title: {},
+			OwnerId: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			_92E59EE7_820A_42FC_907F_F86D2C4677C2: {
+				Section: {
+					_92E59EE7_820A_42FC_907F_F86D2C4677C2_SECTION_1: {},
+					_92E59EE7_820A_42FC_907F_F86D2C4677C2_SECTION_2: {},
+					Content: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var navigation = {
+
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		return form;
+	};
 })(MyDog || (MyDog = {}));
 /** @namespace OptionSet */
 var OptionSet;
