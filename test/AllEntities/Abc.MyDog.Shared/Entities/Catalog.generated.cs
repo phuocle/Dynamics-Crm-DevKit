@@ -91,7 +91,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "catalog";
 
-		public const int EntityTypeCode = 10085;
+		public const int EntityTypeCode = 10048;
 
 		[DebuggerNonUserCode()]
 		public Catalog()

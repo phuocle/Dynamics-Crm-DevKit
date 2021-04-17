@@ -210,6 +210,22 @@ namespace Abc.MyDog.Shared.Entities.ContactOptionSets
 		Default_Value = 1
 	}
 
+	public enum msdyn_orgchangestatus
+	{
+		/// <summary>
+		/// Ignore = 2
+		/// </summary>
+		Ignore = 2,
+		/// <summary>
+		/// No_Feedback = 0
+		/// </summary>
+		No_Feedback = 0,
+		/// <summary>
+		/// Not_at_Company = 1
+		/// </summary>
+		Not_at_Company = 1
+	}
+
 	public enum PaymentTermsCode
 	{
 		/// <summary>
@@ -436,6 +452,8 @@ namespace Abc.MyDog.Shared.Entities
 			public const string AssistantPhone = "assistantphone";
 			public const string BirthDate = "birthdate";
 			public const string Business2 = "business2";
+			public const string BusinessCard = "businesscard";
+			public const string BusinessCardAttributes = "businesscardattributes";
 			public const string Callback = "callback";
 			public const string ChildrensNames = "childrensnames";
 			public const string Company = "company";
@@ -449,9 +467,9 @@ namespace Abc.MyDog.Shared.Entities
 			public const string CreditOnHold = "creditonhold";
 			public const string CustomerSizeCode = "customersizecode";
 			public const string CustomerTypeCode = "customertypecode";
+			public const string DefaultPriceLevelId = "defaultpricelevelid";
 			public const string Department = "department";
 			public const string Description = "description";
-			public const string devkit_LocationId = "devkit_locationid";
 			public const string DoNotBulkEMail = "donotbulkemail";
 			public const string DoNotBulkPostalMail = "donotbulkpostalmail";
 			public const string DoNotEMail = "donotemail";
@@ -497,9 +515,15 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedByExternalParty = "modifiedbyexternalparty";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_gdproptout = "msdyn_gdproptout";
+			public const string msdyn_orgchangestatus = "msdyn_orgchangestatus";
+			public const string msdyusd_CurrentProfile = "msdyusd_currentprofile";
+			public const string msdyusd_Facebook = "msdyusd_facebook";
+			public const string msdyusd_Twitter = "msdyusd_twitter";
 			public const string NickName = "nickname";
 			public const string NumberOfChildren = "numberofchildren";
 			public const string OnHoldTime = "onholdtime";
+			public const string OriginatingLeadId = "originatingleadid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -513,6 +537,8 @@ namespace Abc.MyDog.Shared.Entities
 			public const string PreferredAppointmentDayCode = "preferredappointmentdaycode";
 			public const string PreferredAppointmentTimeCode = "preferredappointmenttimecode";
 			public const string PreferredContactMethodCode = "preferredcontactmethodcode";
+			public const string PreferredEquipmentId = "preferredequipmentid";
+			public const string PreferredServiceId = "preferredserviceid";
 			public const string PreferredSystemUserId = "preferredsystemuserid";
 			public const string ProcessId = "processid";
 			public const string Salutation = "salutation";
@@ -525,6 +551,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string StatusCode = "statuscode";
 			public const string SubscriptionId = "subscriptionid";
 			public const string Suffix = "suffix";
+			public const string TeamsFollowed = "teamsfollowed";
 			public const string Telephone1 = "telephone1";
 			public const string Telephone2 = "telephone2";
 			public const string Telephone3 = "telephone3";
@@ -1812,6 +1839,30 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Stores Image of the Business Card</para>
+		/// <para>Memo - MaxLength: 1073741823</para>
+		/// <para>Business Card</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string BusinessCard
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.BusinessCard); }
+			set { Entity.Attributes[Fields.BusinessCard] = value; }
+		}
+
+		/// <summary>
+		/// <para>Stores Business Card Control Properties.</para>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>BusinessCardAttributes</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string BusinessCardAttributes
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.BusinessCardAttributes); }
+			set { Entity.Attributes[Fields.BusinessCardAttributes] = value; }
+		}
+
+		/// <summary>
 		/// <para>Type a callback phone number for this contact.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Callback Number</para>
@@ -2005,6 +2056,18 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Choose the default price list associated with the contact to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders.</para>
+		/// <para>Lookup</para>
+		/// <para>Price List</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference DefaultPriceLevelId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.DefaultPriceLevelId); }
+			set { Entity.Attributes[Fields.DefaultPriceLevelId] = value; }
+		}
+
+		/// <summary>
 		/// <para>Type the department or business unit where the contact works in the parent company or business.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Department</para>
@@ -2026,17 +2089,6 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Description); }
 			set { Entity.Attributes[Fields.Description] = value; }
-		}
-
-		/// <summary>
-		/// <para>Lookup</para>
-		/// <para>Location</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public EntityReference devkit_LocationId
-		{
-			get { return Entity.GetAttributeValue<EntityReference>(Fields.devkit_LocationId); }
-			set { Entity.Attributes[Fields.devkit_LocationId] = value; }
 		}
 
 		/// <summary>
@@ -2148,7 +2200,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		/// <summary>
 		/// <para>Type the primary email address for the contact.</para>
-		/// <para>Required - String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 100</para>
 		/// <para>Email</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -2623,6 +2675,74 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Describes whether contact is opted out or not</para>
+		/// <para>Boolean</para>
+		/// <para>GDPR Optout</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_gdproptout
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_gdproptout); }
+			set { Entity.Attributes[Fields.msdyn_gdproptout] = value; }
+		}
+
+		/// <summary>
+		/// <para>Whether or not the contact belongs to the associated account</para>
+		/// <para>Picklist</para>
+		/// <para>Not at Company Flag</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Abc.MyDog.Shared.Entities.ContactOptionSets.msdyn_orgchangestatus? msdyn_orgchangestatus
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_orgchangestatus);
+				if (value == null) return null;
+				return (Abc.MyDog.Shared.Entities.ContactOptionSets.msdyn_orgchangestatus)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_orgchangestatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_orgchangestatus] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Current Profile</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyusd_CurrentProfile
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyusd_CurrentProfile); }
+			set { Entity.Attributes[Fields.msdyusd_CurrentProfile] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 300</para>
+		/// <para>Facebook</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyusd_Facebook
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyusd_Facebook); }
+			set { Entity.Attributes[Fields.msdyusd_Facebook] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 300</para>
+		/// <para>Twitter</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyusd_Twitter
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyusd_Twitter); }
+			set { Entity.Attributes[Fields.msdyusd_Twitter] = value; }
+		}
+
+		/// <summary>
 		/// <para>Type the contact's nickname.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Nickname</para>
@@ -2655,6 +2775,18 @@ namespace Abc.MyDog.Shared.Entities
 		public int? OnHoldTime
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.OnHoldTime); }
+		}
+
+		/// <summary>
+		/// <para>Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics.</para>
+		/// <para>Lookup</para>
+		/// <para>Originating Lead</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference OriginatingLeadId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.OriginatingLeadId); }
+			set { Entity.Attributes[Fields.OriginatingLeadId] = value; }
 		}
 
 		/// <summary>
@@ -2854,6 +2986,30 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Choose the contact's preferred service facility or equipment to make sure services are scheduled correctly for the customer.</para>
+		/// <para>Lookup</para>
+		/// <para>Preferred Facility/Equipment</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference PreferredEquipmentId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.PreferredEquipmentId); }
+			set { Entity.Attributes[Fields.PreferredEquipmentId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Choose the contact's preferred service to make sure services are scheduled correctly for the customer.</para>
+		/// <para>Lookup</para>
+		/// <para>Preferred Service</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference PreferredServiceId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.PreferredServiceId); }
+			set { Entity.Attributes[Fields.PreferredServiceId] = value; }
+		}
+
+		/// <summary>
 		/// <para>Choose the regular or preferred customer service representative for reference when scheduling service activities for the contact.</para>
 		/// <para>Lookup</para>
 		/// <para>Preferred User</para>
@@ -3027,6 +3183,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Suffix); }
 			set { Entity.Attributes[Fields.Suffix] = value; }
+		}
+
+		/// <summary>
+		/// <para>Number of users or conversations followed the record</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>TeamsFollowed</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? TeamsFollowed
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.TeamsFollowed); }
+			set { Entity.Attributes[Fields.TeamsFollowed] = value; }
 		}
 
 		/// <summary>

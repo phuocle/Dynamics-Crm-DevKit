@@ -13,17 +13,69 @@ namespace Abc.MyDog.Shared.Entities.SocialActivityOptionSets
 	public enum Community
 	{
 		/// <summary>
+		/// Cortana = 5
+		/// </summary>
+		Cortana = 5,
+		/// <summary>
+		/// Direct_Line = 6
+		/// </summary>
+		Direct_Line = 6,
+		/// <summary>
+		/// Direct_Line_Speech = 8
+		/// </summary>
+		Direct_Line_Speech = 8,
+		/// <summary>
+		/// Email = 9
+		/// </summary>
+		Email = 9,
+		/// <summary>
 		/// Facebook = 1
 		/// </summary>
 		Facebook = 1,
+		/// <summary>
+		/// GroupMe = 10
+		/// </summary>
+		GroupMe = 10,
+		/// <summary>
+		/// Kik = 11
+		/// </summary>
+		Kik = 11,
+		/// <summary>
+		/// Line = 3
+		/// </summary>
+		Line = 3,
+		/// <summary>
+		/// Microsoft_Teams = 7
+		/// </summary>
+		Microsoft_Teams = 7,
 		/// <summary>
 		/// Other = 0
 		/// </summary>
 		Other = 0,
 		/// <summary>
+		/// Skype = 13
+		/// </summary>
+		Skype = 13,
+		/// <summary>
+		/// Slack = 14
+		/// </summary>
+		Slack = 14,
+		/// <summary>
+		/// Telegram = 12
+		/// </summary>
+		Telegram = 12,
+		/// <summary>
 		/// Twitter = 2
 		/// </summary>
-		Twitter = 2
+		Twitter = 2,
+		/// <summary>
+		/// Wechat = 4
+		/// </summary>
+		Wechat = 4,
+		/// <summary>
+		/// WhatsApp = 15
+		/// </summary>
+		WhatsApp = 15
 	}
 
 	public enum PostMessageType
@@ -146,6 +198,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ScheduledEnd = "scheduledend";
 			public const string ScheduledStart = "scheduledstart";
 			public const string SentimentValue = "sentimentvalue";
+			public const string ServiceId = "serviceid";
 			public const string SLAId = "slaid";
 			public const string SLAInvokedId = "slainvokedid";
 			public const string SocialAdditionalParams = "socialadditionalparams";
@@ -797,6 +850,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<double?>(Fields.SentimentValue); }
 			set { Entity.Attributes[Fields.SentimentValue] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for the associated service.</para>
+		/// <para>Lookup</para>
+		/// <para>Service</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference ServiceId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ServiceId); }
+			set { Entity.Attributes[Fields.ServiceId] = value; }
 		}
 
 		/// <summary>

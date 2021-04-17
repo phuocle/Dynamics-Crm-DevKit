@@ -46,6 +46,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string OrganizationId = "organizationid";
 			public const string Pattern = "pattern";
 			public const string Rank = "rank";
+			public const string ServiceId = "serviceid";
 			public const string StartTime = "starttime";
 			public const string SubCode = "subcode";
 			public const string TimeCode = "timecode";
@@ -423,6 +424,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.Rank); }
 			set { Entity.Attributes[Fields.Rank] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier of the service with which the calendar rule is associated.</para>
+		/// <para>Lookup</para>
+		/// <para>Service</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference ServiceId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ServiceId); }
+			set { Entity.Attributes[Fields.ServiceId] = value; }
 		}
 
 		/// <summary>

@@ -30,6 +30,18 @@ namespace Abc.MyDog.Shared.Entities.ConvertRuleOptionSets
 		Unpublished = 1
 	}
 
+	public enum SenderResolutionOption
+	{
+		/// <summary>
+		/// Creating_a_new_contact_automatically = 0
+		/// </summary>
+		Creating_a_new_contact_automatically = 0,
+		/// <summary>
+		/// Mapping_in_Power_Automate_manually = 1
+		/// </summary>
+		Mapping_in_Power_Automate_manually = 1
+	}
+
 	public enum SourceTypeCode
 	{
 		/// <summary>
@@ -82,6 +94,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ComponentState = "componentstate";
 			public const string ConvertRuleId = "convertruleid";
 			public const string ConvertRuleIdUnique = "convertruleidunique";
+			public const string ConvertRuleType = "convertruletype";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
@@ -102,6 +115,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ResolvedSince = "resolvedsince";
 			public const string ResponseTemplateId = "responsetemplateid";
 			public const string SendAutomaticResponse = "sendautomaticresponse";
+			public const string SenderResolutionOption = "senderresolutionoption";
 			public const string SolutionId = "solutionid";
 			public const string SourceChannelTypeCode = "sourcechanneltypecode";
 			public const string SourceTypeCode = "sourcetypecode";
@@ -281,6 +295,18 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Choose whether an ARC rule is modern or legacy.</para>
+		/// <para>Boolean</para>
+		/// <para>ARC Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? ConvertRuleType
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.ConvertRuleType); }
+			set { Entity.Attributes[Fields.ConvertRuleType] = value; }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier of the user who created the record.</para>
 		/// <para>ReadOnly - Lookup</para>
 		/// <para>Created By</para>
@@ -294,7 +320,7 @@ namespace Abc.MyDog.Shared.Entities
 		/// <summary>
 		/// <para>Date and time when the record was created.</para>
 		/// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
-		/// <para>Created On</para>
+		/// <para>Created on</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public DateTime? CreatedOnUtc
@@ -383,7 +409,7 @@ namespace Abc.MyDog.Shared.Entities
 		/// <summary>
 		/// <para>Type a title or name of the queue for which the setting is defined.</para>
 		/// <para>Required - String - MaxLength: 100</para>
-		/// <para>Name</para>
+		/// <para>Rule name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string Name
@@ -510,6 +536,29 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Choose whether an ARC rule should resolve email sender manually or automatically.</para>
+		/// <para>Picklist</para>
+		/// <para>Sender resolution options</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Abc.MyDog.Shared.Entities.ConvertRuleOptionSets.SenderResolutionOption? SenderResolutionOption
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.SenderResolutionOption);
+				if (value == null) return null;
+				return (Abc.MyDog.Shared.Entities.ConvertRuleOptionSets.SenderResolutionOption)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.SenderResolutionOption] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.SenderResolutionOption] = null;
+			}
+		}
+
+		/// <summary>
 		/// <para>Unique identifier of the associated solution.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
 		/// <para>Solution</para>
@@ -523,7 +572,7 @@ namespace Abc.MyDog.Shared.Entities
 		/// <summary>
 		/// <para>Identifies the Dynamics 365 activity that's the source of the record.</para>
 		/// <para>EntityName</para>
-		/// <para>Source Type</para>
+		/// <para>Monitored activity type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string SourceChannelTypeCode

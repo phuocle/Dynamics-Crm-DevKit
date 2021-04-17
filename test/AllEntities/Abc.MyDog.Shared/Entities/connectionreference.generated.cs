@@ -95,7 +95,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "connectionreference";
 
-		public const int EntityTypeCode = 10067;
+		public const int EntityTypeCode = 10029;
 
 		[DebuggerNonUserCode()]
 		public connectionreference()

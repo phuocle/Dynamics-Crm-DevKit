@@ -86,7 +86,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_kmfederatedsearchconfig";
 
-		public const int EntityTypeCode = 10100;
+		public const int EntityTypeCode = 10043;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kmfederatedsearchconfig()

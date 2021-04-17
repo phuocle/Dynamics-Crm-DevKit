@@ -64,7 +64,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_federatedarticleincident";
 
-		public const int EntityTypeCode = 10099;
+		public const int EntityTypeCode = 10042;
 
 		[DebuggerNonUserCode()]
 		public msdyn_federatedarticleincident()

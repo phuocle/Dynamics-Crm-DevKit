@@ -187,6 +187,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string RootArticleId = "rootarticleid";
 			public const string ScheduledStatusId = "scheduledstatusid";
 			public const string SetCategoryAssociations = "setcategoryassociations";
+			public const string SetProductAssociations = "setproductassociations";
 			public const string stageid = "stageid";
 			public const string StateCode = "statecode";
 			public const string StatusCode = "statuscode";
@@ -858,6 +859,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.SetCategoryAssociations); }
 			set { Entity.Attributes[Fields.SetCategoryAssociations] = value; }
+		}
+
+		/// <summary>
+		/// <para>Set Product Associations</para>
+		/// <para>Boolean</para>
+		/// <para>Set Product Associations</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? SetProductAssociations
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.SetProductAssociations); }
+			set { Entity.Attributes[Fields.SetProductAssociations] = value; }
 		}
 
 		/// <summary>

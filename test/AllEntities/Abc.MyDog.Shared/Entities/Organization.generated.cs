@@ -315,6 +315,18 @@ namespace Abc.MyDog.Shared.Entities.OrganizationOptionSets
 		No_preference_for_sending_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365 = 0
 	}
 
+	public enum SchedulingEngine
+	{
+		/// <summary>
+		/// Legacy_Scheduling_Engine = 0
+		/// </summary>
+		Legacy_Scheduling_Engine = 0,
+		/// <summary>
+		/// Universal_Resource_Scheduling = 192350000
+		/// </summary>
+		Universal_Resource_Scheduling = 192350000
+	}
+
 	public enum SharePointDeploymentType
 	{
 		/// <summary>
@@ -529,6 +541,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string IsDuplicateDetectionEnabledForOnlineCreateUpdate = "isduplicatedetectionenabledforonlinecreateupdate";
 			public const string IsEmailMonitoringAllowed = "isemailmonitoringallowed";
 			public const string IsEmailServerProfileContentFilteringEnabled = "isemailserverprofilecontentfilteringenabled";
+			public const string IsEmbedTeamsCollabEnabled = "isembedteamscollabenabled";
 			public const string IsEnabledForAllRoles = "isenabledforallroles";
 			public const string IsExternalFileStorageEnabled = "isexternalfilestorageenabled";
 			public const string IsExternalSearchIndexEnabled = "isexternalsearchindexenabled";
@@ -567,6 +580,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string IsResourceBookingExchangeSyncEnabled = "isresourcebookingexchangesyncenabled";
 			public const string IsRichTextNotesEnabled = "isrichtextnotesenabled";
 			public const string IsSalesAssistantEnabled = "issalesassistantenabled";
+			public const string IsSalesMobilePreviewEnabled = "issalesmobilepreviewenabled";
 			public const string IsSOPIntegrationEnabled = "issopintegrationenabled";
 			public const string IsTextWrapEnabled = "istextwrapenabled";
 			public const string IsUserAccessAuditEnabled = "isuseraccessauditenabled";
@@ -661,6 +675,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string RestrictStatusUpdate = "restrictstatusupdate";
 			public const string RiErrorStatus = "rierrorstatus";
 			public const string SampleDataImportId = "sampledataimportid";
+			public const string SchedulingEngine = "schedulingengine";
 			public const string SchemaNamePrefix = "schemanameprefix";
 			public const string SendBulkEmailInUCI = "sendbulkemailinuci";
 			public const string ServeStaticResourcesFromAzureCDN = "servestaticresourcesfromazurecdn";
@@ -2769,6 +2784,18 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Indicates whether embed Teams collaboration has been enabled for the organization</para>
+		/// <para>Boolean</para>
+		/// <para>Indicates whether embed Teams collaboration has been enabled for the organization</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsEmbedTeamsCollabEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsEmbedTeamsCollabEnabled); }
+			set { Entity.Attributes[Fields.IsEmbedTeamsCollabEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates whether appmodule is enabled for all roles</para>
 		/// <para>Boolean</para>
 		/// <para>option set values for isenabledforallroles</para>
@@ -3222,6 +3249,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.IsSalesAssistantEnabled); }
 			set { Entity.Attributes[Fields.IsSalesAssistantEnabled] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether Sales Mobile Preview has been enabled for the organization</para>
+		/// <para>Boolean</para>
+		/// <para>Indicates whether Sales Mobile Preview has been enabled for the organization</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsSalesMobilePreviewEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsSalesMobilePreviewEnabled); }
+			set { Entity.Attributes[Fields.IsSalesMobilePreviewEnabled] = value; }
 		}
 
 		/// <summary>
@@ -4372,6 +4411,29 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.SampleDataImportId); }
 			set { Entity.Attributes[Fields.SampleDataImportId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Scheduling engine for Appointments and Service Activities</para>
+		/// <para>Picklist</para>
+		/// <para>Scheduling engine for Appointments and Service Activities</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Abc.MyDog.Shared.Entities.OrganizationOptionSets.SchedulingEngine? SchedulingEngine
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.SchedulingEngine);
+				if (value == null) return null;
+				return (Abc.MyDog.Shared.Entities.OrganizationOptionSets.SchedulingEngine)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.SchedulingEngine] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.SchedulingEngine] = null;
+			}
 		}
 
 		/// <summary>

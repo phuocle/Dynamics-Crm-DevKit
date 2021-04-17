@@ -63,7 +63,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_solutionhealthruleset";
 
-		public const int EntityTypeCode = 10019;
+		public const int EntityTypeCode = 10081;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutionhealthruleset()

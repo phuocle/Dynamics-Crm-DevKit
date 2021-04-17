@@ -81,6 +81,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string SupportingSolutionId = "supportingsolutionid";
 			public const string TextAnalyticsEntityMappingId = "textanalyticsentitymappingid";
 			public const string TextAnalyticsEntityMappingIdUnique = "textanalyticsentitymappingidunique";
+			public const string TopicModelConfigurationId = "topicmodelconfigurationid";
 		}
 
 		public const string EntityLogicalName = "textanalyticsentitymapping";
@@ -397,6 +398,18 @@ namespace Abc.MyDog.Shared.Entities
 		public Guid? TextAnalyticsEntityMappingIdUnique
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.TextAnalyticsEntityMappingIdUnique); }
+		}
+
+		/// <summary>
+		/// <para>Topic Model Configuration associated with entity mapping.</para>
+		/// <para>Required - Lookup</para>
+		/// <para>Topic Model Configuration Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference TopicModelConfigurationId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.TopicModelConfigurationId); }
+			set { Entity.Attributes[Fields.TopicModelConfigurationId] = value; }
 		}
 	}
 }

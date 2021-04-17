@@ -70,7 +70,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "workflowbinary";
 
-		public const int EntityTypeCode = 10032;
+		public const int EntityTypeCode = 10028;
 
 		[DebuggerNonUserCode()]
 		public workflowbinary()

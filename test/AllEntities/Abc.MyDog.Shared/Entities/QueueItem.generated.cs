@@ -17,13 +17,57 @@ namespace Abc.MyDog.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
+		/// Agreement_Booking_Date = 10354
+		/// </summary>
+		Agreement_Booking_Date = 10354,
+		/// <summary>
+		/// Agreement_Booking_Setup = 10359
+		/// </summary>
+		Agreement_Booking_Setup = 10359,
+		/// <summary>
+		/// Agreement_Invoice_Date = 10360
+		/// </summary>
+		Agreement_Invoice_Date = 10360,
+		/// <summary>
+		/// Agreement_Invoice_Setup = 10362
+		/// </summary>
+		Agreement_Invoice_Setup = 10362,
+		/// <summary>
 		/// Appointment = 4201
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Custom_Activity = 10042
+		/// Booking_Alert = 10235
 		/// </summary>
-		Custom_Activity = 10042,
+		Booking_Alert = 10235,
+		/// <summary>
+		/// Campaign_Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign_Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case = 112
+		/// </summary>
+		Case = 112,
+		/// <summary>
+		/// Conversation = 10480
+		/// </summary>
+		Conversation = 10480,
+		/// <summary>
+		/// Customer_Voice_alert = 10216
+		/// </summary>
+		Customer_Voice_alert = 10216,
+		/// <summary>
+		/// Customer_Voice_survey_invite = 10225
+		/// </summary>
+		Customer_Voice_survey_invite = 10225,
+		/// <summary>
+		/// Customer_Voice_survey_response = 10227
+		/// </summary>
+		Customer_Voice_survey_response = 10227,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
@@ -33,25 +77,77 @@ namespace Abc.MyDog.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Fax = 4204,
 		/// <summary>
+		/// Fulfillment_Preference = 10258
+		/// </summary>
+		Fulfillment_Preference = 10258,
+		/// <summary>
+		/// Inventory_Adjustment = 10382
+		/// </summary>
+		Inventory_Adjustment = 10382,
+		/// <summary>
+		/// Inventory_Transfer = 10385
+		/// </summary>
+		Inventory_Transfer = 10385,
+		/// <summary>
+		/// IoT_Alert = 10105
+		/// </summary>
+		IoT_Alert = 10105,
+		/// <summary>
 		/// Knowledge_Article = 9953
 		/// </summary>
 		Knowledge_Article = 9953,
 		/// <summary>
-		/// Knowledge_Article_Template = 10022
+		/// Knowledge_Article_Template = 10047
 		/// </summary>
-		Knowledge_Article_Template = 10022,
+		Knowledge_Article_Template = 10047,
 		/// <summary>
 		/// Letter = 4207
 		/// </summary>
 		Letter = 4207,
 		/// <summary>
+		/// Ongoing_conversation_Deprecated = 10474
+		/// </summary>
+		Ongoing_conversation_Deprecated = 10474,
+		/// <summary>
+		/// Outbound_message = 10566
+		/// </summary>
+		Outbound_message = 10566,
+		/// <summary>
 		/// Phone_Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
+		/// Project = 10304
+		/// </summary>
+		Project = 10304,
+		/// <summary>
+		/// Project_Service_Approval = 10265
+		/// </summary>
+		Project_Service_Approval = 10265,
+		/// <summary>
+		/// Project_Task = 10309
+		/// </summary>
+		Project_Task = 10309,
+		/// <summary>
+		/// Quick_Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
 		/// Recurring_Appointment = 4251
 		/// </summary>
 		Recurring_Appointment = 4251,
+		/// <summary>
+		/// Resource_Request = 10327
+		/// </summary>
+		Resource_Request = 10327,
+		/// <summary>
+		/// Service_Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10489
+		/// </summary>
+		Session = 10489,
 		/// <summary>
 		/// Social_Activity = 4216
 		/// </summary>
@@ -61,9 +157,25 @@ namespace Abc.MyDog.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// WebApi = 10030
+		/// Time_Group_Detail = 10259
 		/// </summary>
-		WebApi = 10030
+		Time_Group_Detail = 10259,
+		/// <summary>
+		/// Work_Order = 10425
+		/// </summary>
+		Work_Order = 10425,
+		/// <summary>
+		/// Work_Order_Incident = 10428
+		/// </summary>
+		Work_Order_Incident = 10428,
+		/// <summary>
+		/// Work_Order_Service = 10431
+		/// </summary>
+		Work_Order_Service = 10431,
+		/// <summary>
+		/// Work_Order_Service_Task = 10432
+		/// </summary>
+		Work_Order_Service_Task = 10432
 	}
 
 	public enum StateCode

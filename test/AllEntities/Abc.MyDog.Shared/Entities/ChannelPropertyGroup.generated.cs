@@ -37,17 +37,49 @@ namespace Abc.MyDog.Shared.Entities.ChannelPropertyGroupOptionSets
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Custom_Activity = 10042
+		/// Booking_Alert = 10235
 		/// </summary>
-		Custom_Activity = 10042,
+		Booking_Alert = 10235,
+		/// <summary>
+		/// Conversation = 10480
+		/// </summary>
+		Conversation = 10480,
+		/// <summary>
+		/// Customer_Voice_alert = 10216
+		/// </summary>
+		Customer_Voice_alert = 10216,
+		/// <summary>
+		/// Customer_Voice_survey_invite = 10225
+		/// </summary>
+		Customer_Voice_survey_invite = 10225,
+		/// <summary>
+		/// Customer_Voice_survey_response = 10227
+		/// </summary>
+		Customer_Voice_survey_response = 10227,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
 		Email = 4202,
 		/// <summary>
+		/// Outbound_message = 10566
+		/// </summary>
+		Outbound_message = 10566,
+		/// <summary>
 		/// Phone_Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
+		/// <summary>
+		/// Project_Service_Approval = 10265
+		/// </summary>
+		Project_Service_Approval = 10265,
+		/// <summary>
+		/// Service_Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10489
+		/// </summary>
+		Session = 10489,
 		/// <summary>
 		/// Social_Activity = 4216
 		/// </summary>

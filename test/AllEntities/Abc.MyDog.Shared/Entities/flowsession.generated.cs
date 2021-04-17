@@ -104,8 +104,6 @@ namespace Abc.MyDog.Shared.Entities
 			public const string flowsessionId = "flowsessionid";
 			public const string Gateway = "gateway";
 			public const string ImportSequenceNumber = "importsequencenumber";
-			public const string MachineGroupId = "machinegroupid";
-			public const string MachineId = "machineid";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
@@ -308,28 +306,6 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.ImportSequenceNumber); }
 			set { Entity.Attributes[Fields.ImportSequenceNumber] = value; }
-		}
-
-		/// <summary>
-		/// <para>Lookup</para>
-		/// <para>Flow Machine Group</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public EntityReference MachineGroupId
-		{
-			get { return Entity.GetAttributeValue<EntityReference>(Fields.MachineGroupId); }
-			set { Entity.Attributes[Fields.MachineGroupId] = value; }
-		}
-
-		/// <summary>
-		/// <para>Lookup</para>
-		/// <para>Flow Machine</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public EntityReference MachineId
-		{
-			get { return Entity.GetAttributeValue<EntityReference>(Fields.MachineId); }
-			set { Entity.Attributes[Fields.MachineId] = value; }
 		}
 
 		/// <summary>

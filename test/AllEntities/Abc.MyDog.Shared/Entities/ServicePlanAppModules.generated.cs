@@ -51,7 +51,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "serviceplanappmodules";
 
-		public const int EntityTypeCode = 10035;
+		public const int EntityTypeCode = 10016;
 
 		[DebuggerNonUserCode()]
 		public ServicePlanAppModules()

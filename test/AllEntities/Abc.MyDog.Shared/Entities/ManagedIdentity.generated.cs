@@ -112,7 +112,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "managedidentity";
 
-		public const int EntityTypeCode = 10121;
+		public const int EntityTypeCode = 10633;
 
 		[DebuggerNonUserCode()]
 		public ManagedIdentity()

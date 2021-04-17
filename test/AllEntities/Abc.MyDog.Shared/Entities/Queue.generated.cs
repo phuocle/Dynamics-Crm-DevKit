@@ -70,6 +70,18 @@ namespace Abc.MyDog.Shared.Entities.QueueOptionSets
 		No_email_messages = 4
 	}
 
+	public enum msdyn_queuetype
+	{
+		/// <summary>
+		/// Entity = 192350001
+		/// </summary>
+		Entity = 192350001,
+		/// <summary>
+		/// Messaging = 192350000
+		/// </summary>
+		Messaging = 192350000
+	}
+
 	public enum OutgoingEmailDeliveryMethod
 	{
 		/// <summary>
@@ -150,6 +162,11 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_isdefaultqueue = "msdyn_isdefaultqueue";
+			public const string msdyn_isomnichannelqueue = "msdyn_isomnichannelqueue";
+			public const string msdyn_operatinghourid = "msdyn_operatinghourid";
+			public const string msdyn_priority = "msdyn_priority";
+			public const string msdyn_queuetype = "msdyn_queuetype";
 			public const string Name = "name";
 			public const string NumberOfItems = "numberofitems";
 			public const string NumberOfMembers = "numberofmembers";
@@ -446,6 +463,74 @@ namespace Abc.MyDog.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Shows whether the queue is set as default or not.</para>
+		/// <para>Boolean</para>
+		/// <para>Is Default Queue</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_isdefaultqueue
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isdefaultqueue); }
+			set { Entity.Attributes[Fields.msdyn_isdefaultqueue] = value; }
+		}
+
+		/// <summary>
+		/// <para>Shows whether the queue is used as Omnichannel queue for work distribution.</para>
+		/// <para>Required - Boolean</para>
+		/// <para>Is Omnichannel queue</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_isomnichannelqueue
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isomnichannelqueue); }
+			set { Entity.Attributes[Fields.msdyn_isomnichannelqueue] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Operating hour associated with Queue</para>
+		/// <para>Lookup</para>
+		/// <para>Operating Hours</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_operatinghourid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_operatinghourid); }
+			set { Entity.Attributes[Fields.msdyn_operatinghourid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Priority of the queue to indicate conversation assignment order to the agent.</para>
+		/// <para>Required - Integer - MinValue: 1 - MaxValue: 2,147,483,647</para>
+		/// <para>Priority</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_priority
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_priority); }
+			set { Entity.Attributes[Fields.msdyn_priority] = value; }
+		}
+
+		/// <summary>
+		/// <para>Defines the type of channels handled by this queue</para>
+		/// <para>Required - Picklist</para>
+		/// <para>Queue type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Abc.MyDog.Shared.Entities.QueueOptionSets.msdyn_queuetype? msdyn_queuetype
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_queuetype);
+				if (value == null) return null;
+				return (Abc.MyDog.Shared.Entities.QueueOptionSets.msdyn_queuetype)value.Value;
+			}
+			set
+	{
+		Entity.Attributes[Fields.msdyn_queuetype] = new OptionSetValue((int)value);
+}
 		}
 
 		/// <summary>

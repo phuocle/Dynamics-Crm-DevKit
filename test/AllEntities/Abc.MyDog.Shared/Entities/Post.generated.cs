@@ -68,7 +68,6 @@ namespace Abc.MyDog.Shared.Entities
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
-			public const string LargeText = "largetext";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
@@ -171,18 +170,6 @@ namespace Abc.MyDog.Shared.Entities
 		public EntityReference CreatedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.CreatedOnBehalfBy); }
-		}
-
-		/// <summary>
-		/// <para>Shows the text of a post.</para>
-		/// <para>Required - Memo - MaxLength: 1073741823</para>
-		/// <para>Text</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string LargeText
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.LargeText); }
-			set { Entity.Attributes[Fields.LargeText] = value; }
 		}
 
 		/// <summary>
@@ -323,7 +310,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the text of a post. If this is a manual post, it appears in plain text. If this is an auto post, it appears in XML.</para>
-		/// <para>Required - String - MaxLength: 2000</para>
+		/// <para>Required - String - MaxLength: 4000</para>
 		/// <para>Text</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

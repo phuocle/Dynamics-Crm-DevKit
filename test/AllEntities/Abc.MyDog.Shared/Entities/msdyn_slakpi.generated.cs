@@ -99,7 +99,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_slakpi";
 
-		public const int EntityTypeCode = 10044;
+		public const int EntityTypeCode = 10040;
 
 		[DebuggerNonUserCode()]
 		public msdyn_slakpi()

@@ -68,7 +68,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aiodlabel";
 
-		public const int EntityTypeCode = 10009;
+		public const int EntityTypeCode = 10071;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIOdLabel()

@@ -123,7 +123,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "settingdefinition";
 
-		public const int EntityTypeCode = 10064;
+		public const int EntityTypeCode = 10024;
 
 		[DebuggerNonUserCode()]
 		public SettingDefinition()

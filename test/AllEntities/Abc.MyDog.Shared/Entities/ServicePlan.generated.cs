@@ -73,7 +73,6 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
-			public const string MoreInfoUrl = "moreinfourl";
 			public const string Name = "name";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OverwriteTime = "overwritetime";
@@ -285,18 +284,6 @@ namespace Abc.MyDog.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
-		}
-
-		/// <summary>
-		/// <para>More Info Url of service plan</para>
-		/// <para>String - MaxLength: 2048</para>
-		/// <para>More Info Url</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string MoreInfoUrl
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.MoreInfoUrl); }
-			set { Entity.Attributes[Fields.MoreInfoUrl] = value; }
 		}
 
 		/// <summary>

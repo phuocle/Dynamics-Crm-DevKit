@@ -91,7 +91,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_helppage";
 
-		public const int EntityTypeCode = 10033;
+		public const int EntityTypeCode = 10030;
 
 		[DebuggerNonUserCode()]
 		public msdyn_helppage()
@@ -142,8 +142,9 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>For internal use only.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para></para>
+		/// <para>Row id unique</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? ComponentIdUnique
@@ -152,8 +153,9 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>For internal use only.</para>
 		/// <para>ReadOnly - Picklist</para>
-		/// <para></para>
+		/// <para>Component State</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Abc.MyDog.Shared.Entities.msdyn_helppageOptionSets.ComponentState? ComponentState
@@ -212,8 +214,9 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Indicates whether the solution component is part of a managed solution.</para>
 		/// <para>ReadOnly - Boolean</para>
-		/// <para></para>
+		/// <para>Is Managed</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? IsManaged
@@ -351,8 +354,9 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>For internal use only.</para>
 		/// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
-		/// <para></para>
+		/// <para>Record Overwrite Time</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public DateTime? OverwriteTimeUtc
@@ -361,8 +365,9 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Unique identifier of the associated solution.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para></para>
+		/// <para>Solution</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? SolutionId
@@ -417,8 +422,9 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>For internal use only.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para></para>
+		/// <para>Solution</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? SupportingSolutionId

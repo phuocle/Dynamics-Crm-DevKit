@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\AllEntities\Abc.MyDog.WebResource\entities";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\AllEntities\Abc.MyDog.Shared\Entities";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

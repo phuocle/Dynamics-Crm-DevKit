@@ -215,7 +215,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_analysisresult";
 
-		public const int EntityTypeCode = 10015;
+		public const int EntityTypeCode = 10077;
 
 		[DebuggerNonUserCode()]
 		public msdyn_analysisresult()

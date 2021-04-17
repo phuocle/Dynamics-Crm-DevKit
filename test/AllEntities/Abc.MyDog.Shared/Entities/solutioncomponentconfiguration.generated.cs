@@ -53,13 +53,9 @@ namespace Abc.MyDog.Shared.Entities.solutioncomponentconfigurationOptionSets
 		/// </summary>
 		Individual = 1,
 		/// <summary>
-		/// None_0 = 0
+		/// None = 0
 		/// </summary>
-		None_0 = 0,
-		/// <summary>
-		/// None_100000000 = 100000000
-		/// </summary>
-		None_100000000 = 100000000
+		None = 0
 	}
 
 	public enum statecode
@@ -125,7 +121,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "solutioncomponentconfiguration";
 
-		public const int EntityTypeCode = 10045;
+		public const int EntityTypeCode = 10003;
 
 		[DebuggerNonUserCode()]
 		public solutioncomponentconfiguration()

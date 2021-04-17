@@ -153,7 +153,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "customapirequestparameter";
 
-		public const int EntityTypeCode = 10089;
+		public const int EntityTypeCode = 10052;
 
 		[DebuggerNonUserCode()]
 		public CustomAPIRequestParameter()

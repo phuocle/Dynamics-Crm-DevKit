@@ -105,7 +105,7 @@ namespace Abc.MyDog.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier for entity instances</para>
 		/// <para>Primary Key - Uniqueidentifier</para>
-		/// <para>AttributeImageConfig</para>
+		/// <para>Image Attribute Configuration</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid AttributeImageConfigId
@@ -119,9 +119,9 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Logical name of image attribute</para>
+		/// <para>Logical Name of Image Attribute</para>
 		/// <para>String - MaxLength: 128</para>
-		/// <para>AttributeLogicalName</para>
+		/// <para>Logical Name of Image Attribute</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string AttributeLogicalName
@@ -133,7 +133,7 @@ namespace Abc.MyDog.Shared.Entities
 		/// <summary>
 		/// <para>Indicates if an image attribute can store full image</para>
 		/// <para>Required - Boolean</para>
-		/// <para>CanStoreFullImage</para>
+		/// <para>Can Store Full Image</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? CanStoreFullImage
@@ -192,9 +192,9 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Parent entity logical name</para>
+		/// <para>Parent Entity Logical Name</para>
 		/// <para>String - MaxLength: 128</para>
-		/// <para>ParentEntityLogicalName</para>
+		/// <para>Parent Entity Logical Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string ParentEntityLogicalName

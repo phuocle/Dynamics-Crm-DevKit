@@ -152,7 +152,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "customapiresponseproperty";
 
-		public const int EntityTypeCode = 10090;
+		public const int EntityTypeCode = 10053;
 
 		[DebuggerNonUserCode()]
 		public CustomAPIResponseProperty()

@@ -71,7 +71,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_odatav4ds";
 
-		public const int EntityTypeCode = 10000;
+		public const int EntityTypeCode = 10026;
 
 		[DebuggerNonUserCode()]
 		public msdyn_odatav4ds()

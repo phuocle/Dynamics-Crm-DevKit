@@ -24,8 +24,6 @@ namespace Abc.MyDog.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string DocumentBody = "documentbody";
-			public const string DummyFileName = "dummyfilename";
-			public const string DummyRegarding = "dummyregarding";
 			public const string FileName = "filename";
 			public const string FilePointer = "filepointer";
 			public const string FileSize = "filesize";
@@ -163,28 +161,6 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.DocumentBody); }
 			set { Entity.Attributes[Fields.DocumentBody] = value; }
-		}
-
-		/// <summary>
-		/// <para>Dummy attribute associated with the note attachment</para>
-		/// <para>ReadOnly - String - MaxLength: 500</para>
-		/// <para>File Name</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string DummyFileName
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.DummyFileName); }
-		}
-
-		/// <summary>
-		/// <para>Dummy attribute associated with the note regarding</para>
-		/// <para>ReadOnly - String - MaxLength: 500</para>
-		/// <para>Regarding</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string DummyRegarding
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.DummyRegarding); }
 		}
 
 		/// <summary>

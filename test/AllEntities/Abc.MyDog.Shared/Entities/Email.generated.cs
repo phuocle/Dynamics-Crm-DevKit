@@ -264,6 +264,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string SenderMailboxId = "sendermailboxid";
 			public const string SendersAccount = "sendersaccount";
 			public const string SentOn = "senton";
+			public const string ServiceId = "serviceid";
 			public const string SLAId = "slaid";
 			public const string SLAInvokedId = "slainvokedid";
 			public const string SortDate = "sortdate";
@@ -1171,7 +1172,7 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the record that the email relates to.</para>
+		/// <para>Unique identifier of the object with which the e-mail is associated.</para>
 		/// <para>Lookup</para>
 		/// <para>Regarding</para>
 		/// </summary>
@@ -1295,6 +1296,18 @@ namespace Abc.MyDog.Shared.Entities
 		public DateTime? SentOnUtc
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.SentOn); }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for the associated service.</para>
+		/// <para>Lookup</para>
+		/// <para>Service</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference ServiceId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ServiceId); }
+			set { Entity.Attributes[Fields.ServiceId] = value; }
 		}
 
 		/// <summary>

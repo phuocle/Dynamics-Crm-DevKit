@@ -75,11 +75,12 @@ namespace Abc.MyDog.Shared.Entities
 			public const string msdyn_workflowcategory = "msdyn_workflowcategory";
 			public const string msdyn_workflowcategoryname = "msdyn_workflowcategoryname";
 			public const string msdyn_workflowidunique = "msdyn_workflowidunique";
+			public const string OrganizationId = "organizationid";
 		}
 
 		public const string EntityLogicalName = "msdyn_solutioncomponentsummary";
 
-		public const int EntityTypeCode = 10001;
+		public const int EntityTypeCode = 10011;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutioncomponentsummary()
@@ -749,6 +750,17 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_workflowidunique); }
 			set { Entity.Attributes[Fields.msdyn_workflowidunique] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for the organization</para>
+		/// <para>ReadOnly - Uniqueidentifier</para>
+		/// <para>Organization Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid? OrganizationId
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.OrganizationId); }
 		}
 	}
 }

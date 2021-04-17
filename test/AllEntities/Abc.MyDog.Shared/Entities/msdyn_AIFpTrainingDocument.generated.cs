@@ -68,7 +68,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aifptrainingdocument";
 
-		public const int EntityTypeCode = 10007;
+		public const int EntityTypeCode = 10069;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIFpTrainingDocument()

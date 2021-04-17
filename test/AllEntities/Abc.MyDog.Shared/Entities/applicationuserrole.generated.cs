@@ -51,7 +51,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "applicationuserrole";
 
-		public const int EntityTypeCode = 10058;
+		public const int EntityTypeCode = 10018;
 
 		[DebuggerNonUserCode()]
 		public applicationuserrole()

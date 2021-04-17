@@ -91,7 +91,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "appelement";
 
-		public const int EntityTypeCode = 10060;
+		public const int EntityTypeCode = 10020;
 
 		[DebuggerNonUserCode()]
 		public AppElement()

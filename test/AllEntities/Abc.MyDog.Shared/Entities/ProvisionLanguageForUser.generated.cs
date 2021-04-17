@@ -48,7 +48,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "provisionlanguageforuser";
 
-		public const int EntityTypeCode = 10083;
+		public const int EntityTypeCode = 10013;
 
 		[DebuggerNonUserCode()]
 		public ProvisionLanguageForUser()

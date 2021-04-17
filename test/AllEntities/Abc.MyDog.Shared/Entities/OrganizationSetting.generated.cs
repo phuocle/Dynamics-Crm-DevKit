@@ -90,7 +90,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "organizationsetting";
 
-		public const int EntityTypeCode = 10114;
+		public const int EntityTypeCode = 10626;
 
 		[DebuggerNonUserCode()]
 		public OrganizationSetting()

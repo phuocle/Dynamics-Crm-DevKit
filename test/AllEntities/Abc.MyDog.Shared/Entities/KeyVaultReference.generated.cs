@@ -123,7 +123,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "keyvaultreference";
 
-		public const int EntityTypeCode = 10120;
+		public const int EntityTypeCode = 10632;
 
 		[DebuggerNonUserCode()]
 		public KeyVaultReference()

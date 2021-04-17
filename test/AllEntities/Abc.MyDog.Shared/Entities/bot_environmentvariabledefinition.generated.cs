@@ -51,7 +51,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "bot_environmentvariabledefinition";
 
-		public const int EntityTypeCode = 10123;
+		public const int EntityTypeCode = 10637;
 
 		[DebuggerNonUserCode()]
 		public bot_environmentvariabledefinition()

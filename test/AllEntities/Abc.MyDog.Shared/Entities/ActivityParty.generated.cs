@@ -106,6 +106,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string OwningUser = "owninguser";
 			public const string ParticipationTypeMask = "participationtypemask";
 			public const string PartyId = "partyid";
+			public const string ResourceSpecId = "resourcespecid";
 			public const string ScheduledEnd = "scheduledend";
 			public const string ScheduledStart = "scheduledstart";
 			public const string VersionNumber = "versionnumber";
@@ -373,6 +374,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.PartyId); }
 			set { Entity.Attributes[Fields.PartyId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier of the resource specification for the activity party.</para>
+		/// <para>Lookup</para>
+		/// <para>Resource Specification</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference ResourceSpecId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ResourceSpecId); }
+			set { Entity.Attributes[Fields.ResourceSpecId] = value; }
 		}
 
 		/// <summary>

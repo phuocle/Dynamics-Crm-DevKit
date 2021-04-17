@@ -70,7 +70,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "conversationtranscript";
 
-		public const int EntityTypeCode = 10092;
+		public const int EntityTypeCode = 10032;
 
 		[DebuggerNonUserCode()]
 		public conversationtranscript()

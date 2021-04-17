@@ -17,13 +17,37 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Account = 1,
 		/// <summary>
+		/// Account_Project_Price_List = 10264
+		/// </summary>
+		Account_Project_Price_List = 10264,
+		/// <summary>
+		/// AccountLeads = 16
+		/// </summary>
+		AccountLeads = 16,
+		/// <summary>
 		/// ACIViewMapper = 8040
 		/// </summary>
 		ACIViewMapper = 8040,
 		/// <summary>
+		/// Action_Call = 10579
+		/// </summary>
+		Action_Call = 10579,
+		/// <summary>
+		/// Action_Call_Workflow = 10578
+		/// </summary>
+		Action_Call_Workflow = 10578,
+		/// <summary>
 		/// Action_Card = 9962
 		/// </summary>
 		Action_Card = 9962,
+		/// <summary>
+		/// Action_Card_Regarding = 10197
+		/// </summary>
+		Action_Card_Regarding = 10197,
+		/// <summary>
+		/// Action_Card_Role_Setting = 10198
+		/// </summary>
+		Action_Card_Role_Setting = 10198,
 		/// <summary>
 		/// Action_Card_Type = 9983
 		/// </summary>
@@ -33,6 +57,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Action_Card_User_Settings = 9973,
 		/// <summary>
+		/// Action_Input_Parameter = 10144
+		/// </summary>
+		Action_Input_Parameter = 10144,
+		/// <summary>
+		/// Action_Output_Parameter = 10145
+		/// </summary>
+		Action_Output_Parameter = 10145,
+		/// <summary>
 		/// ActionCardUserState = 9968
 		/// </summary>
 		ActionCardUserState = 9968,
@@ -41,93 +73,185 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Activity_File_Attachment = 10145
+		/// Activity_monitor = 10087
 		/// </summary>
-		Activity_File_Attachment = 10145,
+		Activity_monitor = 10087,
 		/// <summary>
 		/// Activity_Party = 135
 		/// </summary>
 		Activity_Party = 135,
 		/// <summary>
+		/// Actual = 10233
+		/// </summary>
+		Actual = 10233,
+		/// <summary>
+		/// Actual_Data_Export_Deprecated = 10273
+		/// </summary>
+		Actual_Data_Export_Deprecated = 10273,
+		/// <summary>
+		/// Adaptive_Card_Configuration = 10153
+		/// </summary>
+		Adaptive_Card_Configuration = 10153,
+		/// <summary>
 		/// Address = 1071
 		/// </summary>
 		Address = 1071,
+		/// <summary>
+		/// admin_settings_entity = 10184
+		/// </summary>
+		admin_settings_entity = 10184,
 		/// <summary>
 		/// Advanced_Similarity_Rule = 9949
 		/// </summary>
 		Advanced_Similarity_Rule = 9949,
 		/// <summary>
-		/// AI_Builder_Dataset = 10037
+		/// Agent_script = 10141
 		/// </summary>
-		AI_Builder_Dataset = 10037,
+		Agent_script = 10141,
 		/// <summary>
-		/// AI_Builder_Dataset_File = 10038
+		/// Agent_Script_Answer = 10581
 		/// </summary>
-		AI_Builder_Dataset_File = 10038,
+		Agent_Script_Answer = 10581,
 		/// <summary>
-		/// AI_Builder_Dataset_Record = 10053
+		/// Agent_script_step = 10142
 		/// </summary>
-		AI_Builder_Dataset_Record = 10053,
+		Agent_script_step = 10142,
 		/// <summary>
-		/// AI_Builder_Datasets_Container = 10039
+		/// Agent_Script_Task = 10594
 		/// </summary>
-		AI_Builder_Datasets_Container = 10039,
+		Agent_Script_Task = 10594,
 		/// <summary>
-		/// AI_Builder_File = 10040
+		/// Agent_Script_Task_Category = 10580
 		/// </summary>
-		AI_Builder_File = 10040,
+		Agent_Script_Task_Category = 10580,
 		/// <summary>
-		/// AI_Builder_File_Attached_Data = 10041
+		/// Agent_Status_history = 10503
 		/// </summary>
-		AI_Builder_File_Attached_Data = 10041,
+		Agent_Status_history = 10503,
+		/// <summary>
+		/// Agreement = 10353
+		/// </summary>
+		Agreement = 10353,
+		/// <summary>
+		/// Agreement_Booking_Date = 10354
+		/// </summary>
+		Agreement_Booking_Date = 10354,
+		/// <summary>
+		/// Agreement_Booking_Incident = 10355
+		/// </summary>
+		Agreement_Booking_Incident = 10355,
+		/// <summary>
+		/// Agreement_Booking_Product = 10356
+		/// </summary>
+		Agreement_Booking_Product = 10356,
+		/// <summary>
+		/// Agreement_Booking_Service = 10357
+		/// </summary>
+		Agreement_Booking_Service = 10357,
+		/// <summary>
+		/// Agreement_Booking_Service_Task = 10358
+		/// </summary>
+		Agreement_Booking_Service_Task = 10358,
+		/// <summary>
+		/// Agreement_Booking_Setup = 10359
+		/// </summary>
+		Agreement_Booking_Setup = 10359,
+		/// <summary>
+		/// Agreement_Business_Process = 10368
+		/// </summary>
+		Agreement_Business_Process = 10368,
+		/// <summary>
+		/// Agreement_Invoice_Date = 10360
+		/// </summary>
+		Agreement_Invoice_Date = 10360,
+		/// <summary>
+		/// Agreement_Invoice_Product = 10361
+		/// </summary>
+		Agreement_Invoice_Product = 10361,
+		/// <summary>
+		/// Agreement_Invoice_Setup = 10362
+		/// </summary>
+		Agreement_Invoice_Setup = 10362,
+		/// <summary>
+		/// Agreement_Substatus = 10363
+		/// </summary>
+		Agreement_Substatus = 10363,
+		/// <summary>
+		/// AI_Builder_Dataset = 10063
+		/// </summary>
+		AI_Builder_Dataset = 10063,
+		/// <summary>
+		/// AI_Builder_Dataset_File = 10064
+		/// </summary>
+		AI_Builder_Dataset_File = 10064,
+		/// <summary>
+		/// AI_Builder_Dataset_Record = 10065
+		/// </summary>
+		AI_Builder_Dataset_Record = 10065,
+		/// <summary>
+		/// AI_Builder_Datasets_Container = 10066
+		/// </summary>
+		AI_Builder_Datasets_Container = 10066,
+		/// <summary>
+		/// AI_Builder_File = 10067
+		/// </summary>
+		AI_Builder_File = 10067,
+		/// <summary>
+		/// AI_Builder_File_Attached_Data = 10068
+		/// </summary>
+		AI_Builder_File_Attached_Data = 10068,
 		/// <summary>
 		/// AI_Configuration = 402
 		/// </summary>
 		AI_Configuration = 402,
 		/// <summary>
-		/// AI_Form_Processing_Document = 10007
+		/// AI_Form_Processing_Document = 10069
 		/// </summary>
-		AI_Form_Processing_Document = 10007,
+		AI_Form_Processing_Document = 10069,
 		/// <summary>
 		/// AI_Model = 401
 		/// </summary>
 		AI_Model = 401,
 		/// <summary>
-		/// AI_Object_Detection_Bounding_Box = 10010
+		/// AI_Object_Detection_Bounding_Box = 10072
 		/// </summary>
-		AI_Object_Detection_Bounding_Box = 10010,
+		AI_Object_Detection_Bounding_Box = 10072,
 		/// <summary>
-		/// AI_Object_Detection_Image = 10008
+		/// AI_Object_Detection_Image = 10070
 		/// </summary>
-		AI_Object_Detection_Image = 10008,
+		AI_Object_Detection_Image = 10070,
 		/// <summary>
-		/// AI_Object_Detection_Image_Mapping = 10011
+		/// AI_Object_Detection_Image_Mapping = 10073
 		/// </summary>
-		AI_Object_Detection_Image_Mapping = 10011,
+		AI_Object_Detection_Image_Mapping = 10073,
 		/// <summary>
-		/// AI_Object_Detection_Label = 10009
+		/// AI_Object_Detection_Label = 10071
 		/// </summary>
-		AI_Object_Detection_Label = 10009,
+		AI_Object_Detection_Label = 10071,
 		/// <summary>
 		/// AI_Template = 400
 		/// </summary>
 		AI_Template = 400,
 		/// <summary>
-		/// Analysis_Component = 10013
+		/// Analysis_Component = 10075
 		/// </summary>
-		Analysis_Component = 10013,
+		Analysis_Component = 10075,
 		/// <summary>
-		/// Analysis_Job = 10014
+		/// Analysis_Job = 10076
 		/// </summary>
-		Analysis_Job = 10014,
+		Analysis_Job = 10076,
 		/// <summary>
-		/// Analysis_Result = 10015
+		/// Analysis_Result = 10077
 		/// </summary>
-		Analysis_Result = 10015,
+		Analysis_Result = 10077,
 		/// <summary>
-		/// Analysis_Result_Detail = 10016
+		/// Analysis_Result_Detail = 10078
 		/// </summary>
-		Analysis_Result_Detail = 10016,
+		Analysis_Result_Detail = 10078,
+		/// <summary>
+		/// Analytics_and_insights = 10169
+		/// </summary>
+		Analytics_and_insights = 10169,
 		/// <summary>
 		/// Announcement = 132
 		/// </summary>
@@ -136,10 +260,6 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Annual_Fiscal_Calendar = 2000
 		/// </summary>
 		Annual_Fiscal_Calendar = 2000,
-		/// <summary>
-		/// ApiSettings = 10036
-		/// </summary>
-		ApiSettings = 10036,
 		/// <summary>
 		/// App_Config_Master = 9011
 		/// </summary>
@@ -161,6 +281,18 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		App_Module_Roles = 9009,
 		/// <summary>
+		/// App_Parameter_Definition_Deprecated = 10454
+		/// </summary>
+		App_Parameter_Definition_Deprecated = 10454,
+		/// <summary>
+		/// App_profile = 10123
+		/// </summary>
+		App_profile = 10123,
+		/// <summary>
+		/// Application_Extension = 10124
+		/// </summary>
+		Application_Extension = 10124,
+		/// <summary>
 		/// Application_File = 4707
 		/// </summary>
 		Application_File = 4707,
@@ -169,9 +301,21 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Application_Ribbons = 1120,
 		/// <summary>
-		/// ApplicationUser = 10057
+		/// Application_Tab_Template = 10125
 		/// </summary>
-		ApplicationUser = 10057,
+		Application_Tab_Template = 10125,
+		/// <summary>
+		/// Application_Tab_Template_Deprecated = 10456
+		/// </summary>
+		Application_Tab_Template_Deprecated = 10456,
+		/// <summary>
+		/// Application_Type_Deprecated = 10459
+		/// </summary>
+		Application_Type_Deprecated = 10459,
+		/// <summary>
+		/// ApplicationUser = 10017
+		/// </summary>
+		ApplicationUser = 10017,
 		/// <summary>
 		/// AppModule_Metadata = 8700
 		/// </summary>
@@ -201,6 +345,22 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Article_Template = 1016,
 		/// <summary>
+		/// Asset_Category_Template_Association = 10093
+		/// </summary>
+		Asset_Category_Template_Association = 10093,
+		/// <summary>
+		/// Asset_Suggestion = 10438
+		/// </summary>
+		Asset_Suggestion = 10438,
+		/// <summary>
+		/// Asset_Template_Association = 10094
+		/// </summary>
+		Asset_Template_Association = 10094,
+		/// <summary>
+		/// Attach_Skill = 10530
+		/// </summary>
+		Attach_Skill = 10530,
+		/// <summary>
 		/// Attachment_1001 = 1001
 		/// </summary>
 		Attachment_1001 = 1001,
@@ -217,6 +377,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Attribute_Map = 4601,
 		/// <summary>
+		/// Audio_File = 10520
+		/// </summary>
+		Audio_File = 10520,
+		/// <summary>
+		/// Audit_Diagnostics_Setting = 10582
+		/// </summary>
+		Audit_Diagnostics_Setting = 10582,
+		/// <summary>
 		/// Auditing = 4567
 		/// </summary>
 		Auditing = 4567,
@@ -225,37 +393,101 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Authorization_Server = 1094,
 		/// <summary>
-		/// Azure_Account = 10138
+		/// Auto_Capture_Rule = 10202
 		/// </summary>
-		Azure_Account = 10138,
+		Auto_Capture_Rule = 10202,
+		/// <summary>
+		/// Auto_Capture_Settings = 10203
+		/// </summary>
+		Auto_Capture_Settings = 10203,
+		/// <summary>
+		/// Available_Times = 10088
+		/// </summary>
+		Available_Times = 10088,
+		/// <summary>
+		/// Available_Times_Data_Source = 10089
+		/// </summary>
+		Available_Times_Data_Source = 10089,
 		/// <summary>
 		/// Azure_Service_Connection = 9936
 		/// </summary>
 		Azure_Service_Connection = 9936,
 		/// <summary>
-		/// Azure_Sql = 10135
+		/// Batch_Job = 10266
 		/// </summary>
-		Azure_Sql = 10135,
+		Batch_Job = 10266,
 		/// <summary>
-		/// BotContent = 10091
+		/// Bookable_Resource = 1150
 		/// </summary>
-		BotContent = 10091,
+		Bookable_Resource = 1150,
 		/// <summary>
-		/// BPF_Account_1 = 10065
+		/// Bookable_Resource_Association = 10234
 		/// </summary>
-		BPF_Account_1 = 10065,
+		Bookable_Resource_Association = 10234,
 		/// <summary>
-		/// BPF_Account_3 = 10066
+		/// Bookable_Resource_Booking = 1145
 		/// </summary>
-		BPF_Account_3 = 10066,
+		Bookable_Resource_Booking = 1145,
 		/// <summary>
-		/// BPF_Location_1 = 10070
+		/// Bookable_Resource_Booking_Header = 1146
 		/// </summary>
-		BPF_Location_1 = 10070,
+		Bookable_Resource_Booking_Header = 1146,
 		/// <summary>
-		/// BPF_Location_2 = 10071
+		/// Bookable_Resource_Booking_to_Exchange_Id_Mapping = 4421
 		/// </summary>
-		BPF_Location_2 = 10071,
+		Bookable_Resource_Booking_to_Exchange_Id_Mapping = 4421,
+		/// <summary>
+		/// Bookable_Resource_Category = 1147
+		/// </summary>
+		Bookable_Resource_Category = 1147,
+		/// <summary>
+		/// Bookable_Resource_Category_Assn = 1149
+		/// </summary>
+		Bookable_Resource_Category_Assn = 1149,
+		/// <summary>
+		/// Bookable_Resource_Characteristic = 1148
+		/// </summary>
+		Bookable_Resource_Characteristic = 1148,
+		/// <summary>
+		/// Bookable_Resource_Group = 1151
+		/// </summary>
+		Bookable_Resource_Group = 1151,
+		/// <summary>
+		/// Booking_Alert = 10235
+		/// </summary>
+		Booking_Alert = 10235,
+		/// <summary>
+		/// Booking_Alert_Status = 10236
+		/// </summary>
+		Booking_Alert_Status = 10236,
+		/// <summary>
+		/// Booking_Change = 10237
+		/// </summary>
+		Booking_Change = 10237,
+		/// <summary>
+		/// Booking_Journal = 10364
+		/// </summary>
+		Booking_Journal = 10364,
+		/// <summary>
+		/// Booking_Rule = 10238
+		/// </summary>
+		Booking_Rule = 10238,
+		/// <summary>
+		/// Booking_Setup_Metadata = 10239
+		/// </summary>
+		Booking_Setup_Metadata = 10239,
+		/// <summary>
+		/// Booking_Status = 1152
+		/// </summary>
+		Booking_Status = 1152,
+		/// <summary>
+		/// Booking_Timestamp = 10365
+		/// </summary>
+		Booking_Timestamp = 10365,
+		/// <summary>
+		/// BotContent = 10031
+		/// </summary>
+		BotContent = 10031,
 		/// <summary>
 		/// Bulk_Delete_Failure = 4425
 		/// </summary>
@@ -264,6 +496,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Bulk_Delete_Operation = 4424
 		/// </summary>
 		Bulk_Delete_Operation = 4424,
+		/// <summary>
+		/// Bulk_Operation_Log = 4405
+		/// </summary>
+		Bulk_Operation_Log = 4405,
+		/// <summary>
+		/// Business_Closure = 10240
+		/// </summary>
+		Business_Closure = 10240,
 		/// <summary>
 		/// Business_Data_Localized_Label = 4232
 		/// </summary>
@@ -293,33 +533,105 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Callback_Registration = 301,
 		/// <summary>
+		/// Campaign = 4400
+		/// </summary>
+		Campaign = 4400,
+		/// <summary>
+		/// Campaign_Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign_Activity_Item = 4404
+		/// </summary>
+		Campaign_Activity_Item = 4404,
+		/// <summary>
+		/// Campaign_Item = 4403
+		/// </summary>
+		Campaign_Item = 4403,
+		/// <summary>
+		/// Campaign_Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
 		/// Canvas_App = 300
 		/// </summary>
 		Canvas_App = 300,
 		/// <summary>
-		/// CanvasApp_Extended_Metadata = 10068
+		/// CanvasApp_Extended_Metadata = 10025
 		/// </summary>
-		CanvasApp_Extended_Metadata = 10068,
+		CanvasApp_Extended_Metadata = 10025,
 		/// <summary>
-		/// CascadeGrantRevokeAccessRecordsTracker = 10075
+		/// CascadeGrantRevokeAccessRecordsTracker = 10014
 		/// </summary>
-		CascadeGrantRevokeAccessRecordsTracker = 10075,
+		CascadeGrantRevokeAccessRecordsTracker = 10014,
 		/// <summary>
-		/// CascadeGrantRevokeAccessVersionTracker = 10076
+		/// CascadeGrantRevokeAccessVersionTracker = 10015
 		/// </summary>
-		CascadeGrantRevokeAccessVersionTracker = 10076,
+		CascadeGrantRevokeAccessVersionTracker = 10015,
 		/// <summary>
-		/// Catalog = 10085
+		/// Case = 112
 		/// </summary>
-		Catalog = 10085,
+		Case = 112,
 		/// <summary>
-		/// Catalog_Assignment = 10086
+		/// Case_Enrichment = 10156
 		/// </summary>
-		Catalog_Assignment = 10086,
+		Case_Enrichment = 10156,
+		/// <summary>
+		/// Case_Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Case_Suggestion = 10157
+		/// </summary>
+		Case_Suggestion = 10157,
+		/// <summary>
+		/// Case_Suggestion_Request_Payload = 10158
+		/// </summary>
+		Case_Suggestion_Request_Payload = 10158,
+		/// <summary>
+		/// Case_Suggestions_Data_Souce = 10159
+		/// </summary>
+		Case_Suggestions_Data_Souce = 10159,
+		/// <summary>
+		/// Case_to_Work_Order_Business_Process = 10367
+		/// </summary>
+		Case_to_Work_Order_Business_Process = 10367,
+		/// <summary>
+		/// Case_Topic = 10171
+		/// </summary>
+		Case_Topic = 10171,
+		/// <summary>
+		/// Case_topic_Incident_mapping = 10174
+		/// </summary>
+		Case_topic_Incident_mapping = 10174,
+		/// <summary>
+		/// Case_Topic_Setting = 10172
+		/// </summary>
+		Case_Topic_Setting = 10172,
+		/// <summary>
+		/// Case_Topic_Summary = 10173
+		/// </summary>
+		Case_Topic_Summary = 10173,
+		/// <summary>
+		/// Catalog = 10048
+		/// </summary>
+		Catalog = 10048,
+		/// <summary>
+		/// Catalog_Assignment = 10049
+		/// </summary>
+		Catalog_Assignment = 10049,
 		/// <summary>
 		/// Category = 9959
 		/// </summary>
 		Category = 9959,
+		/// <summary>
+		/// CFS_IoT_Alert_Process_Flow = 10440
+		/// </summary>
+		CFS_IoT_Alert_Process_Flow = 10440,
+		/// <summary>
+		/// channel = 10468
+		/// </summary>
+		channel = 10468,
 		/// <summary>
 		/// Channel_Access_Profile = 3005
 		/// </summary>
@@ -333,6 +645,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Channel_Access_Profile_Rule_Item = 9401,
 		/// <summary>
+		/// Channel_Capability = 10504
+		/// </summary>
+		Channel_Capability = 10504,
+		/// <summary>
+		/// Channel_Configuration = 10478
+		/// </summary>
+		Channel_Configuration = 10478,
+		/// <summary>
 		/// Channel_Property = 1236
 		/// </summary>
 		Channel_Property = 1236,
@@ -341,13 +661,53 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Channel_Property_Group = 1234,
 		/// <summary>
-		/// Chatbot = 10093
+		/// Channel_Provider_10135 = 10135
 		/// </summary>
-		Chatbot = 10093,
+		Channel_Provider_10135 = 10135,
 		/// <summary>
-		/// Chatbot_subcomponent = 10094
+		/// Channel_Provider_10451 = 10451
 		/// </summary>
-		Chatbot_subcomponent = 10094,
+		Channel_Provider_10451 = 10451,
+		/// <summary>
+		/// Channel_State_Configuration = 10479
+		/// </summary>
+		Channel_State_Configuration = 10479,
+		/// <summary>
+		/// Characteristic = 1141
+		/// </summary>
+		Characteristic = 1141,
+		/// <summary>
+		/// Chat_Authentication_Settings = 10532
+		/// </summary>
+		Chat_Authentication_Settings = 10532,
+		/// <summary>
+		/// Chat_Widget = 10537
+		/// </summary>
+		Chat_Widget = 10537,
+		/// <summary>
+		/// Chat_Widget_Languagedeprecated = 10536
+		/// </summary>
+		Chat_Widget_Languagedeprecated = 10536,
+		/// <summary>
+		/// Chat_Widget_Location = 10539
+		/// </summary>
+		Chat_Widget_Location = 10539,
+		/// <summary>
+		/// Chatbot = 10033
+		/// </summary>
+		Chatbot = 10033,
+		/// <summary>
+		/// Chatbot_subcomponent = 10034
+		/// </summary>
+		Chatbot_subcomponent = 10034,
+		/// <summary>
+		/// Child_Incident_Count = 113
+		/// </summary>
+		Child_Incident_Count = 113,
+		/// <summary>
+		/// Client_Extension = 10241
+		/// </summary>
+		Client_Extension = 10241,
 		/// <summary>
 		/// Client_update = 36
 		/// </summary>
@@ -361,6 +721,30 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Comment = 8005,
 		/// <summary>
+		/// Commitment = 4215
+		/// </summary>
+		Commitment = 4215,
+		/// <summary>
+		/// Competency_Requirement_Deprecated = 10269
+		/// </summary>
+		Competency_Requirement_Deprecated = 10269,
+		/// <summary>
+		/// Competitor = 123
+		/// </summary>
+		Competitor = 123,
+		/// <summary>
+		/// Competitor_Address = 1004
+		/// </summary>
+		Competitor_Address = 1004,
+		/// <summary>
+		/// Competitor_Product = 1006
+		/// </summary>
+		Competitor_Product = 1006,
+		/// <summary>
+		/// CompetitorSalesLiterature = 26
+		/// </summary>
+		CompetitorSalesLiterature = 26,
+		/// <summary>
 		/// Component_Layer = 10005
 		/// </summary>
 		Component_Layer = 10005,
@@ -369,13 +753,21 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Component_Layer_Data_Source = 10006,
 		/// <summary>
+		/// Configuration_10242 = 10242
+		/// </summary>
+		Configuration_10242 = 10242,
+		/// <summary>
+		/// Configuration_10583 = 10583
+		/// </summary>
+		Configuration_10583 = 10583,
+		/// <summary>
 		/// Connection = 3234
 		/// </summary>
 		Connection = 3234,
 		/// <summary>
-		/// Connection_Reference = 10067
+		/// Connection_Reference = 10029
 		/// </summary>
-		Connection_Reference = 10067,
+		Connection_Reference = 10029,
 		/// <summary>
 		/// Connection_Role = 3231
 		/// </summary>
@@ -393,29 +785,105 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Contact = 2,
 		/// <summary>
-		/// ConversationTranscript = 10092
+		/// Contact_Price_List = 10270
 		/// </summary>
-		ConversationTranscript = 10092,
+		Contact_Price_List = 10270,
+		/// <summary>
+		/// ContactInvoices = 17
+		/// </summary>
+		ContactInvoices = 17,
+		/// <summary>
+		/// ContactLeads = 22
+		/// </summary>
+		ContactLeads = 22,
+		/// <summary>
+		/// ContactOrders = 19
+		/// </summary>
+		ContactOrders = 19,
+		/// <summary>
+		/// ContactQuotes = 18
+		/// </summary>
+		ContactQuotes = 18,
+		/// <summary>
+		/// Context_item_value = 10481
+		/// </summary>
+		Context_item_value = 10481,
+		/// <summary>
+		/// Context_variable = 10484
+		/// </summary>
+		Context_variable = 10484,
+		/// <summary>
+		/// Contract = 1010
+		/// </summary>
+		Contract = 1010,
+		/// <summary>
+		/// Contract_Line = 1011
+		/// </summary>
+		Contract_Line = 1011,
+		/// <summary>
+		/// Contract_Line_Detail_Performance = 10346
+		/// </summary>
+		Contract_Line_Detail_Performance = 10346,
+		/// <summary>
+		/// Contract_Performance = 10347
+		/// </summary>
+		Contract_Performance = 10347,
+		/// <summary>
+		/// Contract_Template = 2011
+		/// </summary>
+		Contract_Template = 2011,
+		/// <summary>
+		/// Conversation = 10480
+		/// </summary>
+		Conversation = 10480,
+		/// <summary>
+		/// Conversation_Action = 10505
+		/// </summary>
+		Conversation_Action = 10505,
+		/// <summary>
+		/// Conversation_Action_Locale = 10506
+		/// </summary>
+		Conversation_Action_Locale = 10506,
+		/// <summary>
+		/// Conversation_Characteristic = 10527
+		/// </summary>
+		Conversation_Characteristic = 10527,
+		/// <summary>
+		/// Conversation_Data_Deprecated = 10185
+		/// </summary>
+		Conversation_Data_Deprecated = 10185,
+		/// <summary>
+		/// Conversation_Sentiment = 10483
+		/// </summary>
+		Conversation_Sentiment = 10483,
+		/// <summary>
+		/// conversationsuggestionrequestpayload = 10545
+		/// </summary>
+		conversationsuggestionrequestpayload = 10545,
+		/// <summary>
+		/// ConversationTranscript = 10032
+		/// </summary>
+		ConversationTranscript = 10032,
+		/// <summary>
+		/// CTI_Search = 10591
+		/// </summary>
+		CTI_Search = 10591,
 		/// <summary>
 		/// Currency = 9105
 		/// </summary>
 		Currency = 9105,
 		/// <summary>
-		/// Custom_Activity = 10042
+		/// Custom_API = 10051
 		/// </summary>
-		Custom_Activity = 10042,
+		Custom_API = 10051,
 		/// <summary>
-		/// Custom_API = 10088
+		/// Custom_API_Request_Parameter = 10052
 		/// </summary>
-		Custom_API = 10088,
+		Custom_API_Request_Parameter = 10052,
 		/// <summary>
-		/// Custom_API_Request_Parameter = 10089
+		/// Custom_API_Response_Property = 10053
 		/// </summary>
-		Custom_API_Request_Parameter = 10089,
-		/// <summary>
-		/// Custom_API_Response_Property = 10090
-		/// </summary>
-		Custom_API_Response_Property = 10090,
+		Custom_API_Response_Property = 10053,
 		/// <summary>
 		/// Custom_Control = 9753
 		/// </summary>
@@ -429,29 +897,121 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Custom_Control_Resource = 9754,
 		/// <summary>
+		/// Custom_messaging_account = 10477
+		/// </summary>
+		Custom_messaging_account = 10477,
+		/// <summary>
+		/// Custom_messaging_channel = 10553
+		/// </summary>
+		Custom_messaging_channel = 10553,
+		/// <summary>
+		/// Custom_Messaging_Engagement_Context = 10551
+		/// </summary>
+		Custom_Messaging_Engagement_Context = 10551,
+		/// <summary>
+		/// Customer_Asset = 10095
+		/// </summary>
+		Customer_Asset = 10095,
+		/// <summary>
+		/// Customer_Asset_Attachment = 10096
+		/// </summary>
+		Customer_Asset_Attachment = 10096,
+		/// <summary>
+		/// Customer_Asset_Category = 10097
+		/// </summary>
+		Customer_Asset_Category = 10097,
+		/// <summary>
 		/// Customer_Relationship = 4502
 		/// </summary>
 		Customer_Relationship = 4502,
+		/// <summary>
+		/// Customer_service_historical_analytics_preview = 10175
+		/// </summary>
+		Customer_service_historical_analytics_preview = 10175,
+		/// <summary>
+		/// Customer_Voice_alert = 10216
+		/// </summary>
+		Customer_Voice_alert = 10216,
+		/// <summary>
+		/// Customer_Voice_alert_rule = 10217
+		/// </summary>
+		Customer_Voice_alert_rule = 10217,
+		/// <summary>
+		/// Customer_Voice_file_response = 10636
+		/// </summary>
+		Customer_Voice_file_response = 10636,
+		/// <summary>
+		/// Customer_Voice_localized_survey_email_template = 10219
+		/// </summary>
+		Customer_Voice_localized_survey_email_template = 10219,
+		/// <summary>
+		/// Customer_Voice_project = 10220
+		/// </summary>
+		Customer_Voice_project = 10220,
+		/// <summary>
+		/// Customer_Voice_satisfaction_metric = 10223
+		/// </summary>
+		Customer_Voice_satisfaction_metric = 10223,
+		/// <summary>
+		/// Customer_Voice_survey = 10224
+		/// </summary>
+		Customer_Voice_survey = 10224,
+		/// <summary>
+		/// Customer_Voice_survey_email_template = 10218
+		/// </summary>
+		Customer_Voice_survey_email_template = 10218,
+		/// <summary>
+		/// Customer_Voice_survey_invite = 10225
+		/// </summary>
+		Customer_Voice_survey_invite = 10225,
+		/// <summary>
+		/// Customer_Voice_survey_question = 10221
+		/// </summary>
+		Customer_Voice_survey_question = 10221,
+		/// <summary>
+		/// Customer_Voice_survey_question_response = 10222
+		/// </summary>
+		Customer_Voice_survey_question_response = 10222,
+		/// <summary>
+		/// Customer_Voice_survey_reminder = 10226
+		/// </summary>
+		Customer_Voice_survey_reminder = 10226,
+		/// <summary>
+		/// Customer_Voice_survey_response = 10227
+		/// </summary>
+		Customer_Voice_survey_response = 10227,
+		/// <summary>
+		/// Customer_Voice_unsubscribed_recipient = 10228
+		/// </summary>
+		Customer_Voice_unsubscribed_recipient = 10228,
+		/// <summary>
+		/// Customization_File = 10584
+		/// </summary>
+		Customization_File = 10584,
+		/// <summary>
+		/// Data_Analytics_Report = 10168
+		/// </summary>
+		Data_Analytics_Report = 10168,
 		/// <summary>
 		/// Data_Import = 4410
 		/// </summary>
 		Data_Import = 4410,
 		/// <summary>
-		/// Data_Lake_Folder = 10081
+		/// Data_Lake_Folder = 10056
 		/// </summary>
-		Data_Lake_Folder = 10081,
+		Data_Lake_Folder = 10056,
 		/// <summary>
-		/// Data_Lake_Folder_Permission = 10082
+		/// Data_Lake_Folder_Permission = 10057
 		/// </summary>
-		Data_Lake_Folder_Permission = 10082,
+		Data_Lake_Folder_Permission = 10057,
 		/// <summary>
-		/// Data_Lake_Workspace = 10055
+		/// Data_Lake_Workspace = 10058
 		/// </summary>
-		Data_Lake_Workspace = 10055,
+		Data_Lake_Workspace = 10058,
 		/// <summary>
-		/// Data_Lake_Workspace_Permission = 10056
+		/// Data_Lake_Workspace_Permission = 10059
 		/// </summary>
-		Data_Lake_Workspace_Permission = 10056,
+		Data_Lake_Workspace_Permission = 10059,
 		/// <summary>
 		/// Data_Map = 4411
 		/// </summary>
@@ -461,9 +1021,17 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Data_Performance_Dashboard = 4450,
 		/// <summary>
+		/// Database_Version = 10083
+		/// </summary>
+		Database_Version = 10083,
+		/// <summary>
 		/// Dataflow = 418
 		/// </summary>
 		Dataflow = 418,
+		/// <summary>
+		/// Delegation = 10274
+		/// </summary>
+		Delegation = 10274,
 		/// <summary>
 		/// DelveActionHub = 9961
 		/// </summary>
@@ -480,6 +1048,26 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Dependency_Node = 7106
 		/// </summary>
 		Dependency_Node = 7106,
+		/// <summary>
+		/// Deprecated_Data_Analytics_Admin_Settings = 10167
+		/// </summary>
+		Deprecated_Data_Analytics_Admin_Settings = 10167,
+		/// <summary>
+		/// Deprecated_Dynamics_Customer_Service_Analytics = 10170
+		/// </summary>
+		Deprecated_Dynamics_Customer_Service_Analytics = 10170,
+		/// <summary>
+		/// Deprecated_Workstream_Entity_Configuration = 10473
+		/// </summary>
+		Deprecated_Workstream_Entity_Configuration = 10473,
+		/// <summary>
+		/// Discount = 1013
+		/// </summary>
+		Discount = 1013,
+		/// <summary>
+		/// Discount_List = 1080
+		/// </summary>
+		Discount_List = 1080,
 		/// <summary>
 		/// Display_String = 4102
 		/// </summary>
@@ -537,13 +1125,57 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Email_Template = 2010,
 		/// <summary>
-		/// Entity = 9800
+		/// Entitlement = 9700
 		/// </summary>
-		Entity = 9800,
+		Entitlement = 9700,
+		/// <summary>
+		/// Entitlement_Application = 10370
+		/// </summary>
+		Entitlement_Application = 10370,
+		/// <summary>
+		/// Entitlement_Channel = 9701
+		/// </summary>
+		Entitlement_Channel = 9701,
+		/// <summary>
+		/// Entitlement_Contact = 7272
+		/// </summary>
+		Entitlement_Contact = 7272,
+		/// <summary>
+		/// Entitlement_Entity_Allocation_Type_Mapping = 9704
+		/// </summary>
+		Entitlement_Entity_Allocation_Type_Mapping = 9704,
+		/// <summary>
+		/// Entitlement_Product = 6363
+		/// </summary>
+		Entitlement_Product = 6363,
+		/// <summary>
+		/// Entitlement_Template = 9702
+		/// </summary>
+		Entitlement_Template = 9702,
+		/// <summary>
+		/// Entitlement_Template_Channel = 9703
+		/// </summary>
+		Entitlement_Template_Channel = 9703,
+		/// <summary>
+		/// Entitlement_Template_Product = 4545
+		/// </summary>
+		Entitlement_Template_Product = 4545,
+		/// <summary>
+		/// Entity_10507 = 10507
+		/// </summary>
+		Entity_10507 = 10507,
+		/// <summary>
+		/// Entity_9800 = 9800
+		/// </summary>
+		Entity_9800 = 9800,
 		/// <summary>
 		/// Entity_Analytics_Config = 430
 		/// </summary>
 		Entity_Analytics_Config = 430,
+		/// <summary>
+		/// Entity_Configuration = 10443
+		/// </summary>
+		Entity_Configuration = 10443,
 		/// <summary>
 		/// Entity_Image_Configuration = 432
 		/// </summary>
@@ -561,6 +1193,22 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Entity_Relationship = 9811,
 		/// <summary>
+		/// Entity_Routing_Context = 10472
+		/// </summary>
+		Entity_Routing_Context = 10472,
+		/// <summary>
+		/// Entity_Search = 10586
+		/// </summary>
+		Entity_Search = 10586,
+		/// <summary>
+		/// Entity_Type = 10585
+		/// </summary>
+		Entity_Type = 10585,
+		/// <summary>
+		/// EntityRankingRule = 10199
+		/// </summary>
+		EntityRankingRule = 10199,
+		/// <summary>
 		/// Environment_Variable_Definition = 380
 		/// </summary>
 		Environment_Variable_Definition = 380,
@@ -568,6 +1216,18 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Environment_Variable_Value = 381
 		/// </summary>
 		Environment_Variable_Value = 381,
+		/// <summary>
+		/// Estimate = 10277
+		/// </summary>
+		Estimate = 10277,
+		/// <summary>
+		/// Estimate_Line = 10278
+		/// </summary>
+		Estimate_Line = 10278,
+		/// <summary>
+		/// Event = 10599
+		/// </summary>
+		Event = 10599,
 		/// <summary>
 		/// Exchange_Sync_Id_Mapping = 4120
 		/// </summary>
@@ -577,13 +1237,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Expander_Event = 4711,
 		/// <summary>
+		/// Expense = 10279
+		/// </summary>
+		Expense = 10279,
+		/// <summary>
+		/// Expense_Category = 10280
+		/// </summary>
+		Expense_Category = 10280,
+		/// <summary>
+		/// Expense_Receipt = 10281
+		/// </summary>
+		Expense_Receipt = 10281,
+		/// <summary>
 		/// Expired_Process = 955
 		/// </summary>
 		Expired_Process = 955,
 		/// <summary>
-		/// ExportSolutionUpload = 10073
+		/// ExportSolutionUpload = 10010
 		/// </summary>
-		ExportSolutionUpload = 10073,
+		ExportSolutionUpload = 10010,
 		/// <summary>
 		/// External_Party = 3008
 		/// </summary>
@@ -593,6 +1265,26 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		External_Party_Item = 9987,
 		/// <summary>
+		/// Facebook_Application = 10549
+		/// </summary>
+		Facebook_Application = 10549,
+		/// <summary>
+		/// Facebook_Engagement_Context = 10548
+		/// </summary>
+		Facebook_Engagement_Context = 10548,
+		/// <summary>
+		/// Facebook_Page = 10550
+		/// </summary>
+		Facebook_Page = 10550,
+		/// <summary>
+		/// FacilityEquipment = 4000
+		/// </summary>
+		FacilityEquipment = 4000,
+		/// <summary>
+		/// Fact = 10282
+		/// </summary>
+		Fact = 10282,
+		/// <summary>
 		/// Fax = 4204
 		/// </summary>
 		Fax = 4204,
@@ -600,6 +1292,10 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Feedback = 9958
 		/// </summary>
 		Feedback = 9958,
+		/// <summary>
+		/// Field_Computation = 10283
+		/// </summary>
+		Field_Computation = 10283,
 		/// <summary>
 		/// Field_Permission = 1201
 		/// </summary>
@@ -609,6 +1305,22 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Field_Security_Profile = 1200,
 		/// <summary>
+		/// Field_Service_Price_List_Item = 10371
+		/// </summary>
+		Field_Service_Price_List_Item = 10371,
+		/// <summary>
+		/// Field_Service_Setting = 10372
+		/// </summary>
+		Field_Service_Setting = 10372,
+		/// <summary>
+		/// Field_Service_SLA_Configuration = 10373
+		/// </summary>
+		Field_Service_SLA_Configuration = 10373,
+		/// <summary>
+		/// Field_Service_System_Job = 10374
+		/// </summary>
+		Field_Service_System_Job = 10374,
+		/// <summary>
 		/// Field_Sharing = 44
 		/// </summary>
 		Field_Sharing = 44,
@@ -617,29 +1329,85 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		FileAttachment = 55,
 		/// <summary>
+		/// Filter = 10215
+		/// </summary>
+		Filter = 10215,
+		/// <summary>
 		/// Filter_Template = 30
 		/// </summary>
 		Filter_Template = 30,
+		/// <summary>
+		/// Find_Work_Event_Deprecated_in_v30 = 10284
+		/// </summary>
+		Find_Work_Event_Deprecated_in_v30 = 10284,
 		/// <summary>
 		/// Fixed_Monthly_Fiscal_Calendar = 2004
 		/// </summary>
 		Fixed_Monthly_Fiscal_Calendar = 2004,
 		/// <summary>
-		/// Flow_Machine = 10125
-		/// </summary>
-		Flow_Machine = 10125,
-		/// <summary>
-		/// Flow_Machine_Group = 10126
-		/// </summary>
-		Flow_Machine_Group = 10126,
-		/// <summary>
 		/// Flow_Session = 4720
 		/// </summary>
 		Flow_Session = 4720,
 		/// <summary>
+		/// flowcardtype = 10200
+		/// </summary>
+		flowcardtype = 10200,
+		/// <summary>
 		/// Follow = 8003
 		/// </summary>
 		Follow = 8003,
+		/// <summary>
+		/// Forecast = 10192
+		/// </summary>
+		Forecast = 10192,
+		/// <summary>
+		/// Forecast_Configuration = 10190
+		/// </summary>
+		Forecast_Configuration = 10190,
+		/// <summary>
+		/// Forecast_definition = 10191
+		/// </summary>
+		Forecast_definition = 10191,
+		/// <summary>
+		/// Forecast_recurrence = 10193
+		/// </summary>
+		Forecast_recurrence = 10193,
+		/// <summary>
+		/// Form = 10587
+		/// </summary>
+		Form = 10587,
+		/// <summary>
+		/// Fulfillment_Preference = 10258
+		/// </summary>
+		Fulfillment_Preference = 10258,
+		/// <summary>
+		/// Functional_Location = 10098
+		/// </summary>
+		Functional_Location = 10098,
+		/// <summary>
+		/// Geo_Location_Provider = 10491
+		/// </summary>
+		Geo_Location_Provider = 10491,
+		/// <summary>
+		/// Geofence = 10444
+		/// </summary>
+		Geofence = 10444,
+		/// <summary>
+		/// Geofence_Event = 10445
+		/// </summary>
+		Geofence_Event = 10445,
+		/// <summary>
+		/// Geofencing_Settings = 10446
+		/// </summary>
+		Geofencing_Settings = 10446,
+		/// <summary>
+		/// Geolocation_Settings = 10441
+		/// </summary>
+		Geolocation_Settings = 10441,
+		/// <summary>
+		/// Geolocation_Tracking = 10442
+		/// </summary>
+		Geolocation_Tracking = 10442,
 		/// <summary>
 		/// Global_Search_Configuration = 54
 		/// </summary>
@@ -653,9 +1421,9 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Goal_Metric = 9603,
 		/// <summary>
-		/// Help_Page = 10033
+		/// Help_Page = 10030
 		/// </summary>
-		Help_Page = 10033,
+		Help_Page = 10030,
 		/// <summary>
 		/// Hierarchy_Rule = 8840
 		/// </summary>
@@ -668,6 +1436,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// HolidayWrapper = 9996
 		/// </summary>
 		HolidayWrapper = 9996,
+		/// <summary>
+		/// Hosted_Control = 10570
+		/// </summary>
+		Hosted_Control = 10570,
+		/// <summary>
+		/// icebreakersconfig = 10210
+		/// </summary>
+		icebreakersconfig = 10210,
 		/// <summary>
 		/// Image_Attribute_Configuration = 431
 		/// </summary>
@@ -697,9 +1473,73 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Import_Source_File = 4412,
 		/// <summary>
+		/// Incident_KnowledgeBaseRecord = 9931
+		/// </summary>
+		Incident_KnowledgeBaseRecord = 9931,
+		/// <summary>
+		/// Incident_Type = 10375
+		/// </summary>
+		Incident_Type = 10375,
+		/// <summary>
+		/// Incident_Type_Characteristic = 10376
+		/// </summary>
+		Incident_Type_Characteristic = 10376,
+		/// <summary>
+		/// Incident_Type_Product = 10377
+		/// </summary>
+		Incident_Type_Product = 10377,
+		/// <summary>
+		/// Incident_Type_Requirement_Group = 10381
+		/// </summary>
+		Incident_Type_Requirement_Group = 10381,
+		/// <summary>
+		/// Incident_Type_Service = 10378
+		/// </summary>
+		Incident_Type_Service = 10378,
+		/// <summary>
+		/// Incident_Type_Service_Task = 10379
+		/// </summary>
+		Incident_Type_Service_Task = 10379,
+		/// <summary>
+		/// Incident_Type_Suggestion_Result = 10436
+		/// </summary>
+		Incident_Type_Suggestion_Result = 10436,
+		/// <summary>
+		/// Incident_Type_Suggestion_Run_History = 10437
+		/// </summary>
+		Incident_Type_Suggestion_Run_History = 10437,
+		/// <summary>
+		/// Incident_Types_Setup = 10380
+		/// </summary>
+		Incident_Types_Setup = 10380,
+		/// <summary>
 		/// Indexed_Article = 126
 		/// </summary>
 		Indexed_Article = 126,
+		/// <summary>
+		/// Inspection = 10349
+		/// </summary>
+		Inspection = 10349,
+		/// <summary>
+		/// Inspection_Attachment = 10350
+		/// </summary>
+		Inspection_Attachment = 10350,
+		/// <summary>
+		/// Inspection_Response = 10352
+		/// </summary>
+		Inspection_Response = 10352,
+		/// <summary>
+		/// Inspection_Version = 10351
+		/// </summary>
+		Inspection_Version = 10351,
+		/// <summary>
+		/// Integration_Job = 10285
+		/// </summary>
+		Integration_Job = 10285,
+		/// <summary>
+		/// Integration_Job_Detail = 10286
+		/// </summary>
+		Integration_Job_Detail = 10286,
 		/// <summary>
 		/// Integration_Status = 3000
 		/// </summary>
@@ -717,21 +1557,133 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Internal_Address = 1003,
 		/// <summary>
-		/// Internal_Catalog_Assignment = 10087
+		/// Internal_Catalog_Assignment = 10050
 		/// </summary>
-		Internal_Catalog_Assignment = 10087,
+		Internal_Catalog_Assignment = 10050,
 		/// <summary>
 		/// Invalid_Dependency = 7107
 		/// </summary>
 		Invalid_Dependency = 7107,
 		/// <summary>
+		/// Inventory_Adjustment = 10382
+		/// </summary>
+		Inventory_Adjustment = 10382,
+		/// <summary>
+		/// Inventory_Adjustment_Product = 10383
+		/// </summary>
+		Inventory_Adjustment_Product = 10383,
+		/// <summary>
+		/// Inventory_Journal = 10384
+		/// </summary>
+		Inventory_Journal = 10384,
+		/// <summary>
+		/// Inventory_Transfer = 10385
+		/// </summary>
+		Inventory_Transfer = 10385,
+		/// <summary>
+		/// Invoice = 1090
+		/// </summary>
+		Invoice = 1090,
+		/// <summary>
+		/// Invoice_Frequency = 10287
+		/// </summary>
+		Invoice_Frequency = 10287,
+		/// <summary>
+		/// Invoice_Frequency_Detail = 10288
+		/// </summary>
+		Invoice_Frequency_Detail = 10288,
+		/// <summary>
+		/// Invoice_Line = 1091
+		/// </summary>
+		Invoice_Line = 1091,
+		/// <summary>
+		/// Invoice_Line_Detail = 10289
+		/// </summary>
+		Invoice_Line_Detail = 10289,
+		/// <summary>
+		/// Invoice_Process = 10268
+		/// </summary>
+		Invoice_Process = 10268,
+		/// <summary>
+		/// IoT_Alert = 10105
+		/// </summary>
+		IoT_Alert = 10105,
+		/// <summary>
+		/// IoT_Alert_to_Case_Process = 10121
+		/// </summary>
+		IoT_Alert_to_Case_Process = 10121,
+		/// <summary>
+		/// IoT_Device = 10106
+		/// </summary>
+		IoT_Device = 10106,
+		/// <summary>
+		/// IoT_Device_Category = 10107
+		/// </summary>
+		IoT_Device_Category = 10107,
+		/// <summary>
+		/// IoT_Device_Command = 10108
+		/// </summary>
+		IoT_Device_Command = 10108,
+		/// <summary>
+		/// IoT_Device_Command_Definition = 10109
+		/// </summary>
+		IoT_Device_Command_Definition = 10109,
+		/// <summary>
+		/// IoT_Device_Data_History = 10110
+		/// </summary>
+		IoT_Device_Data_History = 10110,
+		/// <summary>
+		/// IoT_Device_Property = 10111
+		/// </summary>
+		IoT_Device_Property = 10111,
+		/// <summary>
+		/// IoT_Device_Registration_History = 10112
+		/// </summary>
+		IoT_Device_Registration_History = 10112,
+		/// <summary>
+		/// IoT_Device_Visualization_Configuration = 10113
+		/// </summary>
+		IoT_Device_Visualization_Configuration = 10113,
+		/// <summary>
+		/// IoT_Field_Mapping = 10114
+		/// </summary>
+		IoT_Field_Mapping = 10114,
+		/// <summary>
+		/// IoT_Property_Definition = 10115
+		/// </summary>
+		IoT_Property_Definition = 10115,
+		/// <summary>
+		/// IoT_Provider = 10116
+		/// </summary>
+		IoT_Provider = 10116,
+		/// <summary>
+		/// IoT_Provider_Instance = 10117
+		/// </summary>
+		IoT_Provider_Instance = 10117,
+		/// <summary>
+		/// IoT_Settings = 10118
+		/// </summary>
+		IoT_Settings = 10118,
+		/// <summary>
 		/// ISV_Config = 4705
 		/// </summary>
 		ISV_Config = 4705,
 		/// <summary>
-		/// KeyVaultReference = 10120
+		/// Journal = 10290
 		/// </summary>
-		KeyVaultReference = 10120,
+		Journal = 10290,
+		/// <summary>
+		/// Journal_Line = 10291
+		/// </summary>
+		Journal_Line = 10291,
+		/// <summary>
+		/// KB_Enrichment = 10160
+		/// </summary>
+		KB_Enrichment = 10160,
+		/// <summary>
+		/// KeyVaultReference = 10632
+		/// </summary>
+		KeyVaultReference = 10632,
 		/// <summary>
 		/// Knowledge_Article = 9953
 		/// </summary>
@@ -741,17 +1693,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Knowledge_Article_Category = 9960,
 		/// <summary>
-		/// Knowledge_Article_Image = 10021
+		/// Knowledge_Article_Image = 10044
 		/// </summary>
-		Knowledge_Article_Image = 10021,
+		Knowledge_Article_Image = 10044,
 		/// <summary>
-		/// Knowledge_article_language_setting = 10140
+		/// Knowledge_Article_Incident = 9954
 		/// </summary>
-		Knowledge_article_language_setting = 10140,
+		Knowledge_Article_Incident = 9954,
 		/// <summary>
-		/// Knowledge_Article_Template = 10022
+		/// Knowledge_Article_Suggestion = 10161
 		/// </summary>
-		Knowledge_Article_Template = 10022,
+		Knowledge_Article_Suggestion = 10161,
+		/// <summary>
+		/// Knowledge_Article_Suggestion_Data_Source = 10162
+		/// </summary>
+		Knowledge_Article_Suggestion_Data_Source = 10162,
+		/// <summary>
+		/// Knowledge_Article_Template = 10047
+		/// </summary>
+		Knowledge_Article_Template = 10047,
 		/// <summary>
 		/// Knowledge_Article_Views = 9955
 		/// </summary>
@@ -761,45 +1721,73 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Knowledge_Base_Record = 9930,
 		/// <summary>
-		/// Knowledge_Federated_Article = 10098
+		/// Knowledge_Federated_Article = 10041
 		/// </summary>
-		Knowledge_Federated_Article = 10098,
+		Knowledge_Federated_Article = 10041,
 		/// <summary>
-		/// Knowledge_FederatedArticle_Incident = 10099
+		/// Knowledge_FederatedArticle_Incident = 10042
 		/// </summary>
-		Knowledge_FederatedArticle_Incident = 10099,
+		Knowledge_FederatedArticle_Incident = 10042,
 		/// <summary>
-		/// Knowledge_Interaction_Insight = 10079
+		/// Knowledge_Interaction_Insight = 10045
 		/// </summary>
-		Knowledge_Interaction_Insight = 10079,
+		Knowledge_Interaction_Insight = 10045,
 		/// <summary>
-		/// Knowledge_personalization = 10139
+		/// Knowledge_search_analytics_preview = 10176
 		/// </summary>
-		Knowledge_personalization = 10139,
+		Knowledge_search_analytics_preview = 10176,
 		/// <summary>
-		/// Knowledge_search_filter = 10142
+		/// Knowledge_Search_Insight = 10046
 		/// </summary>
-		Knowledge_search_filter = 10142,
-		/// <summary>
-		/// Knowledge_Search_Insight = 10080
-		/// </summary>
-		Knowledge_Search_Insight = 10080,
+		Knowledge_Search_Insight = 10046,
 		/// <summary>
 		/// Knowledge_Search_Model = 9947
 		/// </summary>
 		Knowledge_Search_Model = 9947,
 		/// <summary>
-		/// Knowledge_search_personal_filter_config = 10141
+		/// KPI_Event_Data = 10186
 		/// </summary>
-		Knowledge_search_personal_filter_config = 10141,
+		KPI_Event_Data = 10186,
 		/// <summary>
-		/// Language = 9957
+		/// KPI_Event_Definition = 10187
 		/// </summary>
-		Language = 9957,
+		KPI_Event_Definition = 10187,
+		/// <summary>
+		/// Language_10509 = 10509
+		/// </summary>
+		Language_10509 = 10509,
+		/// <summary>
+		/// Language_9957 = 9957
+		/// </summary>
+		Language_9957 = 9957,
+		/// <summary>
+		/// Language_Module = 10588
+		/// </summary>
+		Language_Module = 10588,
 		/// <summary>
 		/// Language_Provisioning_State = 9875
 		/// </summary>
 		Language_Provisioning_State = 9875,
+		/// <summary>
+		/// Lead = 4
+		/// </summary>
+		Lead = 4,
+		/// <summary>
+		/// Lead_Address = 1017
+		/// </summary>
+		Lead_Address = 1017,
+		/// <summary>
+		/// Lead_To_Opportunity_Sales_Process = 954
+		/// </summary>
+		Lead_To_Opportunity_Sales_Process = 954,
+		/// <summary>
+		/// LeadCompetitors = 24
+		/// </summary>
+		LeadCompetitors = 24,
+		/// <summary>
+		/// LeadProduct = 27
+		/// </summary>
+		LeadProduct = 27,
 		/// <summary>
 		/// Letter = 4207
 		/// </summary>
@@ -813,21 +1801,65 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Like = 8006,
 		/// <summary>
+		/// LINE_account = 10554
+		/// </summary>
+		LINE_account = 10554,
+		/// <summary>
+		/// LINE_Engagement_Context = 10552
+		/// </summary>
+		LINE_Engagement_Context = 10552,
+		/// <summary>
+		/// List_Operation = 10082
+		/// </summary>
+		List_Operation = 10082,
+		/// <summary>
 		/// List_Value_Mapping = 4418
 		/// </summary>
 		List_Value_Mapping = 4418,
+		/// <summary>
+		/// Live_Chat_Context = 10538
+		/// </summary>
+		Live_Chat_Context = 10538,
+		/// <summary>
+		/// Live_work_item_event = 10508
+		/// </summary>
+		Live_work_item_event = 10508,
+		/// <summary>
+		/// Live_Work_Item_Participant_Deprecated = 10482
+		/// </summary>
+		Live_Work_Item_Participant_Deprecated = 10482,
 		/// <summary>
 		/// LocalConfigStore = 9201
 		/// </summary>
 		LocalConfigStore = 9201,
 		/// <summary>
-		/// Location = 10069
+		/// Localization = 10485
 		/// </summary>
-		Location = 10069,
+		Localization = 10485,
+		/// <summary>
+		/// Localized_Survey_Question_Deprecated = 10540
+		/// </summary>
+		Localized_Survey_Question_Deprecated = 10540,
 		/// <summary>
 		/// Lookup_Mapping = 4419
 		/// </summary>
 		Lookup_Mapping = 4419,
+		/// <summary>
+		/// Macro_Action_Template = 10146
+		/// </summary>
+		Macro_Action_Template = 10146,
+		/// <summary>
+		/// Macro_Connector = 10148
+		/// </summary>
+		Macro_Connector = 10148,
+		/// <summary>
+		/// Macro_Run_History = 10149
+		/// </summary>
+		Macro_Run_History = 10149,
+		/// <summary>
+		/// Macro_Solution_Configuration = 10147
+		/// </summary>
+		Macro_Solution_Configuration = 10147,
 		/// <summary>
 		/// Mail_Merge_Template = 9106
 		/// </summary>
@@ -853,13 +1885,49 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Managed_Property = 9812,
 		/// <summary>
-		/// ManagedIdentity = 10121
+		/// ManagedIdentity = 10633
 		/// </summary>
-		ManagedIdentity = 10121,
+		ManagedIdentity = 10633,
+		/// <summary>
+		/// Marketing_List = 4300
+		/// </summary>
+		Marketing_List = 4300,
+		/// <summary>
+		/// Marketing_List_Member = 4301
+		/// </summary>
+		Marketing_List_Member = 4301,
+		/// <summary>
+		/// MarketingSiteMap = 10447
+		/// </summary>
+		MarketingSiteMap = 10447,
+		/// <summary>
+		/// Masking_Rule = 10476
+		/// </summary>
+		Masking_Rule = 10476,
+		/// <summary>
+		/// Message = 10490
+		/// </summary>
+		Message = 10490,
 		/// <summary>
 		/// Metadata_Difference = 4231
 		/// </summary>
 		Metadata_Difference = 4231,
+		/// <summary>
+		/// Microsoft_Teams_account = 10563
+		/// </summary>
+		Microsoft_Teams_account = 10563,
+		/// <summary>
+		/// Microsoft_Teams_Collaboration_entity = 10232
+		/// </summary>
+		Microsoft_Teams_Collaboration_entity = 10232,
+		/// <summary>
+		/// Microsoft_Teams_Graph_resource_Entity = 10229
+		/// </summary>
+		Microsoft_Teams_Graph_resource_Entity = 10229,
+		/// <summary>
+		/// Migration_tracker = 10092
+		/// </summary>
+		Migration_tracker = 10092,
 		/// <summary>
 		/// Mobile_Offline_Profile = 9866
 		/// </summary>
@@ -877,29 +1945,41 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Model_driven_App = 9006,
 		/// <summary>
-		/// Model_Driven_App_Component_Node = 10062
+		/// Model_Driven_App_Component_Node = 10022
 		/// </summary>
-		Model_Driven_App_Component_Node = 10062,
+		Model_Driven_App_Component_Node = 10022,
 		/// <summary>
-		/// Model_Driven_App_Component_Nodes_Edge = 10061
+		/// Model_Driven_App_Component_Nodes_Edge = 10021
 		/// </summary>
-		Model_Driven_App_Component_Nodes_Edge = 10061,
+		Model_Driven_App_Component_Nodes_Edge = 10021,
 		/// <summary>
-		/// Model_Driven_App_Element = 10060
+		/// Model_Driven_App_Element = 10020
 		/// </summary>
-		Model_Driven_App_Element = 10060,
+		Model_Driven_App_Element = 10020,
 		/// <summary>
-		/// Model_Driven_App_Setting = 10063
+		/// Model_Driven_App_Setting = 10023
 		/// </summary>
-		Model_Driven_App_Setting = 10063,
+		Model_Driven_App_Setting = 10023,
 		/// <summary>
-		/// Model_Driven_App_User_Setting = 10117
+		/// Model_Driven_App_User_Setting = 10629
 		/// </summary>
-		Model_Driven_App_User_Setting = 10117,
+		Model_Driven_App_User_Setting = 10629,
 		/// <summary>
 		/// Monthly_Fiscal_Calendar = 2003
 		/// </summary>
 		Monthly_Fiscal_Calendar = 2003,
+		/// <summary>
+		/// msdyn_msteamssetting = 10230
+		/// </summary>
+		msdyn_msteamssetting = 10230,
+		/// <summary>
+		/// msdyn_msteamssettingsv2 = 10231
+		/// </summary>
+		msdyn_msteamssettingsv2 = 10231,
+		/// <summary>
+		/// msdyn_relationshipinsightsunifiedconfig = 10194
+		/// </summary>
+		msdyn_relationshipinsightsunifiedconfig = 10194,
 		/// <summary>
 		/// Multi_Select_Option_Value = 9912
 		/// </summary>
@@ -909,10 +1989,6 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		MultiEntitySearch = 9910,
 		/// <summary>
-		/// My_Mother = 10146
-		/// </summary>
-		My_Mother = 10146,
-		/// <summary>
 		/// Navigation_Setting = 9900
 		/// </summary>
 		Navigation_Setting = 9900,
@@ -921,25 +1997,45 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		New_Process = 950,
 		/// <summary>
-		/// NonRelational_Data_Source = 10054
+		/// NonRelational_Data_Source = 10061
 		/// </summary>
-		NonRelational_Data_Source = 10054,
+		NonRelational_Data_Source = 10061,
 		/// <summary>
 		/// Note = 5
 		/// </summary>
 		Note = 5,
 		/// <summary>
-		/// Notification_10122 = 10122
+		/// Notes_analysis_Config = 10209
 		/// </summary>
-		Notification_10122 = 10122,
+		Notes_analysis_Config = 10209,
+		/// <summary>
+		/// Notification_10634 = 10634
+		/// </summary>
+		Notification_10634 = 10634,
 		/// <summary>
 		/// Notification_4110 = 4110
 		/// </summary>
 		Notification_4110 = 4110,
 		/// <summary>
-		/// OData_v4_Data_Source = 10000
+		/// Notification_Field = 10126
 		/// </summary>
-		OData_v4_Data_Source = 10000,
+		Notification_Field = 10126,
+		/// <summary>
+		/// Notification_Field_Deprecated = 10452
+		/// </summary>
+		Notification_Field_Deprecated = 10452,
+		/// <summary>
+		/// Notification_Template = 10127
+		/// </summary>
+		Notification_Template = 10127,
+		/// <summary>
+		/// Notification_Template_Deprecated = 10453
+		/// </summary>
+		Notification_Template_Deprecated = 10453,
+		/// <summary>
+		/// OData_v4_Data_Source = 10026
+		/// </summary>
+		OData_v4_Data_Source = 10026,
 		/// <summary>
 		/// Office_Document = 4490
 		/// </summary>
@@ -953,9 +2049,113 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Offline_Command_Definition = 9870,
 		/// <summary>
+		/// Omnichannel_Configuration = 10515
+		/// </summary>
+		Omnichannel_Configuration = 10515,
+		/// <summary>
+		/// Omnichannel_Personalization = 10492
+		/// </summary>
+		Omnichannel_Personalization = 10492,
+		/// <summary>
+		/// Omnichannel_Queue_Deprecated = 10493
+		/// </summary>
+		Omnichannel_Queue_Deprecated = 10493,
+		/// <summary>
+		/// Omnichannel_Request = 10487
+		/// </summary>
+		Omnichannel_Request = 10487,
+		/// <summary>
+		/// Omnichannel_Sync_Config = 10516
+		/// </summary>
+		Omnichannel_Sync_Config = 10516,
+		/// <summary>
+		/// Ongoing_conversation_Deprecated = 10474
+		/// </summary>
+		Ongoing_conversation_Deprecated = 10474,
+		/// <summary>
+		/// Operating_Hour = 10494
+		/// </summary>
+		Operating_Hour = 10494,
+		/// <summary>
+		/// Opportunity = 3
+		/// </summary>
+		Opportunity = 3,
+		/// <summary>
+		/// Opportunity_Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Opportunity_Line = 1083
+		/// </summary>
+		Opportunity_Line = 1083,
+		/// <summary>
+		/// Opportunity_Line_Detail_Deprecated = 10294
+		/// </summary>
+		Opportunity_Line_Detail_Deprecated = 10294,
+		/// <summary>
+		/// Opportunity_Line_Resource_Category_Deprecated = 10293
+		/// </summary>
+		Opportunity_Line_Resource_Category_Deprecated = 10293,
+		/// <summary>
+		/// Opportunity_Line_Transaction_Category_Deprecated = 10295
+		/// </summary>
+		Opportunity_Line_Transaction_Category_Deprecated = 10295,
+		/// <summary>
+		/// Opportunity_Line_Transaction_Classification_Deprecated = 10296
+		/// </summary>
+		Opportunity_Line_Transaction_Classification_Deprecated = 10296,
+		/// <summary>
+		/// Opportunity_Project_Price_List = 10297
+		/// </summary>
+		Opportunity_Project_Price_List = 10297,
+		/// <summary>
+		/// Opportunity_Relationship = 4503
+		/// </summary>
+		Opportunity_Relationship = 4503,
+		/// <summary>
+		/// Opportunity_Sales_Process = 953
+		/// </summary>
+		Opportunity_Sales_Process = 953,
+		/// <summary>
+		/// OpportunityCompetitors = 25
+		/// </summary>
+		OpportunityCompetitors = 25,
+		/// <summary>
+		/// Option = 10572
+		/// </summary>
+		Option = 10572,
+		/// <summary>
 		/// OptionSet = 9809
 		/// </summary>
 		OptionSet = 9809,
+		/// <summary>
+		/// Order = 1088
+		/// </summary>
+		Order = 1088,
+		/// <summary>
+		/// Order_Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Order_Invoicing_Date = 10386
+		/// </summary>
+		Order_Invoicing_Date = 10386,
+		/// <summary>
+		/// Order_Invoicing_Product = 10387
+		/// </summary>
+		Order_Invoicing_Product = 10387,
+		/// <summary>
+		/// Order_Invoicing_Setup = 10388
+		/// </summary>
+		Order_Invoicing_Setup = 10388,
+		/// <summary>
+		/// Order_Invoicing_Setup_Date = 10389
+		/// </summary>
+		Order_Invoicing_Setup_Date = 10389,
+		/// <summary>
+		/// Order_Line = 1089
+		/// </summary>
+		Order_Line = 1089,
 		/// <summary>
 		/// Organization = 1019
 		/// </summary>
@@ -969,9 +2169,9 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Organization_Insights_Notification = 9690,
 		/// <summary>
-		/// Organization_Setting = 10114
+		/// Organization_Setting = 10626
 		/// </summary>
-		Organization_Setting = 10114,
+		Organization_Setting = 10626,
 		/// <summary>
 		/// Organization_Statistic = 4708
 		/// </summary>
@@ -981,13 +2181,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Organization_UI = 1021,
 		/// <summary>
-		/// OrganizationDataSyncSubscription = 10115
+		/// Organizational_Unit = 10243
 		/// </summary>
-		OrganizationDataSyncSubscription = 10115,
+		Organizational_Unit = 10243,
 		/// <summary>
-		/// OrganizationDataSyncSubscriptionEntity = 10116
+		/// OrganizationDataSyncSubscription = 10627
 		/// </summary>
-		OrganizationDataSyncSubscriptionEntity = 10116,
+		OrganizationDataSyncSubscription = 10627,
+		/// <summary>
+		/// OrganizationDataSyncSubscriptionEntity = 10628
+		/// </summary>
+		OrganizationDataSyncSubscriptionEntity = 10628,
+		/// <summary>
+		/// Outbound_Configuration = 10565
+		/// </summary>
+		Outbound_Configuration = 10565,
+		/// <summary>
+		/// Outbound_message = 10566
+		/// </summary>
+		Outbound_message = 10566,
 		/// <summary>
 		/// Owner = 7
 		/// </summary>
@@ -997,25 +2209,93 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Owner_Mapping = 4420,
 		/// <summary>
-		/// Package = 10077
+		/// Package = 10007
 		/// </summary>
-		Package = 10077,
+		Package = 10007,
+		/// <summary>
+		/// Pane_tab_configuration = 10138
+		/// </summary>
+		Pane_tab_configuration = 10138,
+		/// <summary>
+		/// Pane_tool_configuration = 10139
+		/// </summary>
+		Pane_tool_configuration = 10139,
+		/// <summary>
+		/// Parameter_definition = 10150
+		/// </summary>
+		Parameter_definition = 10150,
+		/// <summary>
+		/// Parameter_Deprecated = 10457
+		/// </summary>
+		Parameter_Deprecated = 10457,
 		/// <summary>
 		/// Partner_Application = 1095
 		/// </summary>
 		Partner_Application = 1095,
 		/// <summary>
-		/// PDF_Setting = 10072
+		/// Payment = 10390
 		/// </summary>
-		PDF_Setting = 10072,
+		Payment = 10390,
+		/// <summary>
+		/// Payment_Detail = 10391
+		/// </summary>
+		Payment_Detail = 10391,
+		/// <summary>
+		/// Payment_Method = 10392
+		/// </summary>
+		Payment_Method = 10392,
+		/// <summary>
+		/// Payment_Term = 10393
+		/// </summary>
+		Payment_Term = 10393,
+		/// <summary>
+		/// PDF_Setting = 10038
+		/// </summary>
+		PDF_Setting = 10038,
 		/// <summary>
 		/// Personal_Document_Template = 9941
 		/// </summary>
 		Personal_Document_Template = 9941,
 		/// <summary>
+		/// Personal_quick_reply = 10517
+		/// </summary>
+		Personal_quick_reply = 10517,
+		/// <summary>
+		/// Personal_sound_setting = 10518
+		/// </summary>
+		Personal_sound_setting = 10518,
+		/// <summary>
 		/// Phone_Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
+		/// <summary>
+		/// Phone_To_Case_Process = 952
+		/// </summary>
+		Phone_To_Case_Process = 952,
+		/// <summary>
+		/// Playbook = 10181
+		/// </summary>
+		Playbook = 10181,
+		/// <summary>
+		/// Playbook_activity = 10178
+		/// </summary>
+		Playbook_activity = 10178,
+		/// <summary>
+		/// Playbook_activity_attribute = 10179
+		/// </summary>
+		Playbook_activity_attribute = 10179,
+		/// <summary>
+		/// Playbook_Callable_Context = 10177
+		/// </summary>
+		Playbook_Callable_Context = 10177,
+		/// <summary>
+		/// Playbook_category = 10180
+		/// </summary>
+		Playbook_category = 10180,
+		/// <summary>
+		/// Playbook_template = 10182
+		/// </summary>
+		Playbook_template = 10182,
 		/// <summary>
 		/// Plug_in_Assembly = 4605
 		/// </summary>
@@ -1041,6 +2321,10 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Post = 8000,
 		/// <summary>
+		/// Post_Configuration = 10212
+		/// </summary>
+		Post_Configuration = 10212,
+		/// <summary>
 		/// Post_Regarding = 8002
 		/// </summary>
 		Post_Regarding = 8002,
@@ -1049,9 +2333,45 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Post_Role = 8001,
 		/// <summary>
+		/// Post_Rule_Configuration = 10213
+		/// </summary>
+		Post_Rule_Configuration = 10213,
+		/// <summary>
+		/// Postal_Code = 10394
+		/// </summary>
+		Postal_Code = 10394,
+		/// <summary>
+		/// Power_BI_Configuration = 10470
+		/// </summary>
+		Power_BI_Configuration = 10470,
+		/// <summary>
+		/// Presence = 10495
+		/// </summary>
+		Presence = 10495,
+		/// <summary>
+		/// Price_List = 1022
+		/// </summary>
+		Price_List = 1022,
+		/// <summary>
+		/// Price_List_Item = 1026
+		/// </summary>
+		Price_List_Item = 1026,
+		/// <summary>
+		/// Pricing_Dimension = 10275
+		/// </summary>
+		Pricing_Dimension = 10275,
+		/// <summary>
+		/// Pricing_Dimension_Field_Name = 10276
+		/// </summary>
+		Pricing_Dimension_Field_Name = 10276,
+		/// <summary>
 		/// Principal_Sync_Attribute_Map = 1404
 		/// </summary>
 		Principal_Sync_Attribute_Map = 1404,
+		/// <summary>
+		/// Priority = 10244
+		/// </summary>
+		Priority = 10244,
 		/// <summary>
 		/// Privilege = 1023
 		/// </summary>
@@ -1060,6 +2380,10 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Privilege_Object_Type_Code = 31
 		/// </summary>
 		Privilege_Object_Type_Code = 31,
+		/// <summary>
+		/// Problematic_Asset_Feedback = 10439
+		/// </summary>
+		Problematic_Asset_Feedback = 10439,
 		/// <summary>
 		/// Process = 4703
 		/// </summary>
@@ -1077,6 +2401,10 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Process_Log = 4706,
 		/// <summary>
+		/// Process_Notes = 10303
+		/// </summary>
+		Process_Notes = 10303,
+		/// <summary>
 		/// Process_Session = 4710
 		/// </summary>
 		Process_Session = 4710,
@@ -1089,17 +2417,161 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Process_Trigger = 4712,
 		/// <summary>
-		/// Process_WebApi_1 = 10029
+		/// ProcessStageParameter = 10027
 		/// </summary>
-		Process_WebApi_1 = 10029,
+		ProcessStageParameter = 10027,
 		/// <summary>
-		/// ProcessStageParameter = 10052
+		/// Product = 1024
 		/// </summary>
-		ProcessStageParameter = 10052,
+		Product = 1024,
 		/// <summary>
-		/// ProvisionLanguageForUser = 10083
+		/// Product_Association = 1025
 		/// </summary>
-		ProvisionLanguageForUser = 10083,
+		Product_Association = 1025,
+		/// <summary>
+		/// Product_Inventory = 10395
+		/// </summary>
+		Product_Inventory = 10395,
+		/// <summary>
+		/// Product_Relationship = 1028
+		/// </summary>
+		Product_Relationship = 1028,
+		/// <summary>
+		/// Productivity_pane_configuration = 10137
+		/// </summary>
+		Productivity_pane_configuration = 10137,
+		/// <summary>
+		/// ProductSalesLiterature = 21
+		/// </summary>
+		ProductSalesLiterature = 21,
+		/// <summary>
+		/// Profile_Album = 10211
+		/// </summary>
+		Profile_Album = 10211,
+		/// <summary>
+		/// Project = 10304
+		/// </summary>
+		Project = 10304,
+		/// <summary>
+		/// Project_Approval = 10305
+		/// </summary>
+		Project_Approval = 10305,
+		/// <summary>
+		/// Project_Contract_Line_Detail = 10299
+		/// </summary>
+		Project_Contract_Line_Detail = 10299,
+		/// <summary>
+		/// Project_Contract_Line_Invoice_Schedule = 10271
+		/// </summary>
+		Project_Contract_Line_Invoice_Schedule = 10271,
+		/// <summary>
+		/// Project_Contract_Line_Milestone = 10272
+		/// </summary>
+		Project_Contract_Line_Milestone = 10272,
+		/// <summary>
+		/// Project_Contract_Line_Resource_Category = 10298
+		/// </summary>
+		Project_Contract_Line_Resource_Category = 10298,
+		/// <summary>
+		/// Project_Contract_Line_Transaction_Category = 10300
+		/// </summary>
+		Project_Contract_Line_Transaction_Category = 10300,
+		/// <summary>
+		/// Project_Contract_Line_Transaction_Classification = 10301
+		/// </summary>
+		Project_Contract_Line_Transaction_Classification = 10301,
+		/// <summary>
+		/// Project_Contract_Project_Price_List = 10302
+		/// </summary>
+		Project_Contract_Project_Price_List = 10302,
+		/// <summary>
+		/// Project_Parameter = 10306
+		/// </summary>
+		Project_Parameter = 10306,
+		/// <summary>
+		/// Project_Parameter_Price_List = 10307
+		/// </summary>
+		Project_Parameter_Price_List = 10307,
+		/// <summary>
+		/// Project_Price_List = 10308
+		/// </summary>
+		Project_Price_List = 10308,
+		/// <summary>
+		/// Project_Service_Approval = 10265
+		/// </summary>
+		Project_Service_Approval = 10265,
+		/// <summary>
+		/// Project_Stages = 10267
+		/// </summary>
+		Project_Stages = 10267,
+		/// <summary>
+		/// Project_Task = 10309
+		/// </summary>
+		Project_Task = 10309,
+		/// <summary>
+		/// Project_Task_Dependency = 10310
+		/// </summary>
+		Project_Task_Dependency = 10310,
+		/// <summary>
+		/// Project_Task_Status_User = 10311
+		/// </summary>
+		Project_Task_Status_User = 10311,
+		/// <summary>
+		/// Project_Team_Member = 10312
+		/// </summary>
+		Project_Team_Member = 10312,
+		/// <summary>
+		/// Project_Team_Member_Sign_Up_Deprecated_in_v30 = 10313
+		/// </summary>
+		Project_Team_Member_Sign_Up_Deprecated_in_v30 = 10313,
+		/// <summary>
+		/// Project_Transaction_Category_Deprecated = 10314
+		/// </summary>
+		Project_Transaction_Category_Deprecated = 10314,
+		/// <summary>
+		/// Property = 1048
+		/// </summary>
+		Property = 1048,
+		/// <summary>
+		/// Property_Asset_Association = 10100
+		/// </summary>
+		Property_Asset_Association = 10100,
+		/// <summary>
+		/// Property_Association = 1235
+		/// </summary>
+		Property_Association = 1235,
+		/// <summary>
+		/// Property_Definition = 10099
+		/// </summary>
+		Property_Definition = 10099,
+		/// <summary>
+		/// Property_Instance = 1333
+		/// </summary>
+		Property_Instance = 1333,
+		/// <summary>
+		/// Property_Log = 10101
+		/// </summary>
+		Property_Log = 10101,
+		/// <summary>
+		/// Property_Option_Set_Item = 1049
+		/// </summary>
+		Property_Option_Set_Item = 1049,
+		/// <summary>
+		/// Property_Template_Association = 10102
+		/// </summary>
+		Property_Template_Association = 10102,
+		/// <summary>
+		/// Provider = 10519
+		/// </summary>
+		Provider = 10519,
+		/// <summary>
+		/// Provisioning_State = 10486
+		/// </summary>
+		Provisioning_State = 10486,
+		/// <summary>
+		/// ProvisionLanguageForUser = 10013
+		/// </summary>
+		ProvisionLanguageForUser = 10013,
 		/// <summary>
 		/// Publisher = 7101
 		/// </summary>
@@ -1108,6 +2580,34 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Publisher_Address = 7102
 		/// </summary>
 		Publisher_Address = 7102,
+		/// <summary>
+		/// Purchase_Order = 10396
+		/// </summary>
+		Purchase_Order = 10396,
+		/// <summary>
+		/// Purchase_Order_Bill = 10397
+		/// </summary>
+		Purchase_Order_Bill = 10397,
+		/// <summary>
+		/// Purchase_Order_Business_Process = 10366
+		/// </summary>
+		Purchase_Order_Business_Process = 10366,
+		/// <summary>
+		/// Purchase_Order_Product = 10398
+		/// </summary>
+		Purchase_Order_Product = 10398,
+		/// <summary>
+		/// Purchase_Order_Receipt = 10399
+		/// </summary>
+		Purchase_Order_Receipt = 10399,
+		/// <summary>
+		/// Purchase_Order_Receipt_Product = 10400
+		/// </summary>
+		Purchase_Order_Receipt_Product = 10400,
+		/// <summary>
+		/// Purchase_Order_SubStatus = 10401
+		/// </summary>
+		Purchase_Order_SubStatus = 10401,
 		/// <summary>
 		/// Quarterly_Fiscal_Calendar = 2002
 		/// </summary>
@@ -1128,6 +2628,94 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// QueueMemberCount = 2024
 		/// </summary>
 		QueueMemberCount = 2024,
+		/// <summary>
+		/// Quick_Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quick_reply = 10471
+		/// </summary>
+		Quick_reply = 10471,
+		/// <summary>
+		/// Quote = 1084
+		/// </summary>
+		Quote = 1084,
+		/// <summary>
+		/// Quote_Booking_Incident = 10402
+		/// </summary>
+		Quote_Booking_Incident = 10402,
+		/// <summary>
+		/// Quote_Booking_Product = 10403
+		/// </summary>
+		Quote_Booking_Product = 10403,
+		/// <summary>
+		/// Quote_Booking_Service = 10404
+		/// </summary>
+		Quote_Booking_Service = 10404,
+		/// <summary>
+		/// Quote_Booking_Service_Task = 10405
+		/// </summary>
+		Quote_Booking_Service_Task = 10405,
+		/// <summary>
+		/// Quote_Booking_Setup = 10406
+		/// </summary>
+		Quote_Booking_Setup = 10406,
+		/// <summary>
+		/// Quote_Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Quote_Invoicing_Product = 10407
+		/// </summary>
+		Quote_Invoicing_Product = 10407,
+		/// <summary>
+		/// Quote_Invoicing_Setup = 10408
+		/// </summary>
+		Quote_Invoicing_Setup = 10408,
+		/// <summary>
+		/// Quote_Line = 1085
+		/// </summary>
+		Quote_Line = 1085,
+		/// <summary>
+		/// Quote_Line_Analytics_Breakdown = 10315
+		/// </summary>
+		Quote_Line_Analytics_Breakdown = 10315,
+		/// <summary>
+		/// Quote_Line_Detail = 10319
+		/// </summary>
+		Quote_Line_Detail = 10319,
+		/// <summary>
+		/// Quote_Line_Invoice_Schedule = 10316
+		/// </summary>
+		Quote_Line_Invoice_Schedule = 10316,
+		/// <summary>
+		/// Quote_Line_Milestone = 10318
+		/// </summary>
+		Quote_Line_Milestone = 10318,
+		/// <summary>
+		/// Quote_Line_Resource_Category = 10317
+		/// </summary>
+		Quote_Line_Resource_Category = 10317,
+		/// <summary>
+		/// Quote_Line_Transaction_Category = 10320
+		/// </summary>
+		Quote_Line_Transaction_Category = 10320,
+		/// <summary>
+		/// Quote_Line_Transaction_Classification = 10321
+		/// </summary>
+		Quote_Line_Transaction_Classification = 10321,
+		/// <summary>
+		/// Quote_Project_Price_List = 10322
+		/// </summary>
+		Quote_Project_Price_List = 10322,
+		/// <summary>
+		/// Rating_Model = 1144
+		/// </summary>
+		Rating_Model = 1144,
+		/// <summary>
+		/// Rating_Value = 1142
+		/// </summary>
+		Rating_Value = 1142,
 		/// <summary>
 		/// Record_Creation_and_Update_Rule = 9300
 		/// </summary>
@@ -1185,9 +2773,97 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Report_Visibility = 9103,
 		/// <summary>
-		/// RevokeInheritedAccessRecordsTracker = 10104
+		/// Requirement_Characteristic = 10245
 		/// </summary>
-		RevokeInheritedAccessRecordsTracker = 10104,
+		Requirement_Characteristic = 10245,
+		/// <summary>
+		/// Requirement_Dependency = 10262
+		/// </summary>
+		Requirement_Dependency = 10262,
+		/// <summary>
+		/// Requirement_Group = 10246
+		/// </summary>
+		Requirement_Group = 10246,
+		/// <summary>
+		/// Requirement_Organization_Unit = 10247
+		/// </summary>
+		Requirement_Organization_Unit = 10247,
+		/// <summary>
+		/// Requirement_Relationship = 10248
+		/// </summary>
+		Requirement_Relationship = 10248,
+		/// <summary>
+		/// Requirement_Resource_Category = 10249
+		/// </summary>
+		Requirement_Resource_Category = 10249,
+		/// <summary>
+		/// Requirement_Resource_Preference = 10250
+		/// </summary>
+		Requirement_Resource_Preference = 10250,
+		/// <summary>
+		/// Requirement_Status = 10251
+		/// </summary>
+		Requirement_Status = 10251,
+		/// <summary>
+		/// Resource = 4002
+		/// </summary>
+		Resource = 4002,
+		/// <summary>
+		/// Resource_Assignment = 10323
+		/// </summary>
+		Resource_Assignment = 10323,
+		/// <summary>
+		/// Resource_Assignment_Detail_Deprecated_in_v20 = 10324
+		/// </summary>
+		Resource_Assignment_Detail_Deprecated_in_v20 = 10324,
+		/// <summary>
+		/// Resource_Expansion = 4010
+		/// </summary>
+		Resource_Expansion = 4010,
+		/// <summary>
+		/// Resource_Group = 4007
+		/// </summary>
+		Resource_Group = 4007,
+		/// <summary>
+		/// resource_group_data_source = 10090
+		/// </summary>
+		resource_group_data_source = 10090,
+		/// <summary>
+		/// Resource_Pay_Type = 10409
+		/// </summary>
+		Resource_Pay_Type = 10409,
+		/// <summary>
+		/// Resource_Request = 10327
+		/// </summary>
+		Resource_Request = 10327,
+		/// <summary>
+		/// Resource_Requirement = 10252
+		/// </summary>
+		Resource_Requirement = 10252,
+		/// <summary>
+		/// Resource_Requirement_Detail = 10253
+		/// </summary>
+		Resource_Requirement_Detail = 10253,
+		/// <summary>
+		/// Resource_Restriction_Deprecated = 10430
+		/// </summary>
+		Resource_Restriction_Deprecated = 10430,
+		/// <summary>
+		/// Resource_Specification = 4006
+		/// </summary>
+		Resource_Specification = 4006,
+		/// <summary>
+		/// Resource_Territory = 10254
+		/// </summary>
+		Resource_Territory = 10254,
+		/// <summary>
+		/// Result_Cache = 10292
+		/// </summary>
+		Result_Cache = 10292,
+		/// <summary>
+		/// RevokeInheritedAccessRecordsTracker = 90001
+		/// </summary>
+		RevokeInheritedAccessRecordsTracker = 90001,
 		/// <summary>
 		/// Ribbon_Client_Metadata = 4579
 		/// </summary>
@@ -1217,13 +2893,49 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Ribbon_Tab_To_Command_Mapping = 1113,
 		/// <summary>
-		/// Rich_Text_Attachment = 10074
+		/// Rich_Text_Attachment = 10060
 		/// </summary>
-		Rich_Text_Attachment = 10074,
+		Rich_Text_Attachment = 10060,
+		/// <summary>
+		/// RMA = 10410
+		/// </summary>
+		RMA = 10410,
+		/// <summary>
+		/// RMA_Product = 10411
+		/// </summary>
+		RMA_Product = 10411,
+		/// <summary>
+		/// RMA_Receipt = 10412
+		/// </summary>
+		RMA_Receipt = 10412,
+		/// <summary>
+		/// RMA_Receipt_Product = 10413
+		/// </summary>
+		RMA_Receipt_Product = 10413,
+		/// <summary>
+		/// RMA_SubStatus = 10414
+		/// </summary>
+		RMA_SubStatus = 10414,
+		/// <summary>
+		/// Role_competency_requirement = 10328
+		/// </summary>
+		Role_competency_requirement = 10328,
+		/// <summary>
+		/// Role_Price = 10326
+		/// </summary>
+		Role_Price = 10326,
+		/// <summary>
+		/// Role_Price_Markup = 10325
+		/// </summary>
+		Role_Price_Markup = 10325,
 		/// <summary>
 		/// Role_Template = 1037
 		/// </summary>
 		Role_Template = 1037,
+		/// <summary>
+		/// Role_Utilization = 10329
+		/// </summary>
+		Role_Utilization = 10329,
 		/// <summary>
 		/// Rollup_Field = 9604
 		/// </summary>
@@ -1245,13 +2957,53 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Routing_Rule_Set = 8181,
 		/// <summary>
-		/// Rule_Item = 8199
+		/// RoutingRequest = 10496
 		/// </summary>
-		Rule_Item = 8199,
+		RoutingRequest = 10496,
+		/// <summary>
+		/// RTV = 10415
+		/// </summary>
+		RTV = 10415,
+		/// <summary>
+		/// RTV_Product = 10416
+		/// </summary>
+		RTV_Product = 10416,
+		/// <summary>
+		/// RTV_Substatus = 10417
+		/// </summary>
+		RTV_Substatus = 10417,
+		/// <summary>
+		/// Rule_Item_10488 = 10488
+		/// </summary>
+		Rule_Item_10488 = 10488,
+		/// <summary>
+		/// Rule_Item_8199 = 8199
+		/// </summary>
+		Rule_Item_8199 = 8199,
 		/// <summary>
 		/// RuntimeDependency = 7200
 		/// </summary>
 		RuntimeDependency = 7200,
+		/// <summary>
+		/// Sales_Attachment = 1070
+		/// </summary>
+		Sales_Attachment = 1070,
+		/// <summary>
+		/// Sales_Literature = 1038
+		/// </summary>
+		Sales_Literature = 1038,
+		/// <summary>
+		/// Sales_Process_Instance = 32
+		/// </summary>
+		Sales_Process_Instance = 32,
+		/// <summary>
+		/// salesinsightssettings = 10201
+		/// </summary>
+		salesinsightssettings = 10201,
+		/// <summary>
+		/// SalesSiteMap = 10448
+		/// </summary>
+		SalesSiteMap = 10448,
 		/// <summary>
 		/// Saved_Organization_Insights_Configuration = 1309
 		/// </summary>
@@ -1260,6 +3012,34 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Saved_View = 4230
 		/// </summary>
 		Saved_View = 4230,
+		/// <summary>
+		/// Scenario = 10469
+		/// </summary>
+		Scenario = 10469,
+		/// <summary>
+		/// Schedule_Board_Setting = 10255
+		/// </summary>
+		Schedule_Board_Setting = 10255,
+		/// <summary>
+		/// Scheduling_Feature_Flag = 10263
+		/// </summary>
+		Scheduling_Feature_Flag = 10263,
+		/// <summary>
+		/// Scheduling_Group = 4005
+		/// </summary>
+		Scheduling_Group = 4005,
+		/// <summary>
+		/// Scheduling_Parameter = 10256
+		/// </summary>
+		Scheduling_Parameter = 10256,
+		/// <summary>
+		/// Script_Task_Trigger = 10590
+		/// </summary>
+		Script_Task_Trigger = 10590,
+		/// <summary>
+		/// Scriptlet = 10589
+		/// </summary>
+		Scriptlet = 10589,
 		/// <summary>
 		/// Sdk_Message = 4606
 		/// </summary>
@@ -1301,25 +3081,61 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Sdk_Message_Response_Field = 4611,
 		/// <summary>
-		/// Search_provider = 10100
+		/// Search_Configuration = 10497
 		/// </summary>
-		Search_provider = 10100,
+		Search_Configuration = 10497,
 		/// <summary>
-		/// Search_Telemetry = 10101
+		/// Search_provider = 10043
 		/// </summary>
-		Search_Telemetry = 10101,
+		Search_provider = 10043,
+		/// <summary>
+		/// Search_Telemetry = 10062
+		/// </summary>
+		Search_Telemetry = 10062,
 		/// <summary>
 		/// Security_Role = 1036
 		/// </summary>
 		Security_Role = 1036,
 		/// <summary>
+		/// Self_service = 10523
+		/// </summary>
+		Self_service = 10523,
+		/// <summary>
 		/// Semiannual_Fiscal_Calendar = 2001
 		/// </summary>
 		Semiannual_Fiscal_Calendar = 2001,
 		/// <summary>
-		/// Service_Configuration = 10043
+		/// Sentiment_analysis = 10498
 		/// </summary>
-		Service_Configuration = 10043,
+		Sentiment_analysis = 10498,
+		/// <summary>
+		/// Sentiment_daily_topic = 10510
+		/// </summary>
+		Sentiment_daily_topic = 10510,
+		/// <summary>
+		/// Sentiment_daily_topic_keyword = 10511
+		/// </summary>
+		Sentiment_daily_topic_keyword = 10511,
+		/// <summary>
+		/// Sentiment_daily_topic_trending = 10512
+		/// </summary>
+		Sentiment_daily_topic_trending = 10512,
+		/// <summary>
+		/// Service = 4001
+		/// </summary>
+		Service = 4001,
+		/// <summary>
+		/// Service_Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Service_Configuration = 10039
+		/// </summary>
+		Service_Configuration = 10039,
+		/// <summary>
+		/// Service_Contract_Contact = 20
+		/// </summary>
+		Service_Contract_Contact = 20,
 		/// <summary>
 		/// Service_Endpoint = 4618
 		/// </summary>
@@ -1329,9 +3145,65 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Service_Plan = 101,
 		/// <summary>
-		/// Setting_Definition = 10064
+		/// Service_Task_Type = 10418
 		/// </summary>
-		Setting_Definition = 10064,
+		Service_Task_Type = 10418,
+		/// <summary>
+		/// ServicesSiteMap = 10449
+		/// </summary>
+		ServicesSiteMap = 10449,
+		/// <summary>
+		/// Session = 10489
+		/// </summary>
+		Session = 10489,
+		/// <summary>
+		/// Session_Characteristic = 10528
+		/// </summary>
+		Session_Characteristic = 10528,
+		/// <summary>
+		/// Session_Data_Deprecated = 10188
+		/// </summary>
+		Session_Data_Deprecated = 10188,
+		/// <summary>
+		/// Session_event = 10499
+		/// </summary>
+		Session_event = 10499,
+		/// <summary>
+		/// Session_Information = 10592
+		/// </summary>
+		Session_Information = 10592,
+		/// <summary>
+		/// Session_participant = 10500
+		/// </summary>
+		Session_participant = 10500,
+		/// <summary>
+		/// Session_Participant_Data_Deprecated = 10189
+		/// </summary>
+		Session_Participant_Data_Deprecated = 10189,
+		/// <summary>
+		/// Session_Sentiment = 10513
+		/// </summary>
+		Session_Sentiment = 10513,
+		/// <summary>
+		/// Session_Template = 10128
+		/// </summary>
+		Session_Template = 10128,
+		/// <summary>
+		/// Session_Templates_Deprecated = 10455
+		/// </summary>
+		Session_Templates_Deprecated = 10455,
+		/// <summary>
+		/// Session_Transfer = 10593
+		/// </summary>
+		Session_Transfer = 10593,
+		/// <summary>
+		/// Setting_Definition = 10024
+		/// </summary>
+		Setting_Definition = 10024,
+		/// <summary>
+		/// SettingsSiteMap = 10450
+		/// </summary>
+		SettingsSiteMap = 10450,
 		/// <summary>
 		/// SharePoint_Data = 9509
 		/// </summary>
@@ -1345,13 +3217,33 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		SharePoint_Site = 9502,
 		/// <summary>
+		/// Ship_Via = 10419
+		/// </summary>
+		Ship_Via = 10419,
+		/// <summary>
+		/// SI_Key_Value_Config = 10196
+		/// </summary>
+		SI_Key_Value_Config = 10196,
+		/// <summary>
+		/// siconfig = 10195
+		/// </summary>
+		siconfig = 10195,
+		/// <summary>
 		/// Similarity_Rule = 9951
 		/// </summary>
 		Similarity_Rule = 9951,
 		/// <summary>
+		/// Site = 4009
+		/// </summary>
+		Site = 4009,
+		/// <summary>
 		/// Site_Map = 4709
 		/// </summary>
 		Site_Map = 4709,
+		/// <summary>
+		/// Skill_Attachment_Rule = 10529
+		/// </summary>
+		Skill_Attachment_Rule = 10529,
 		/// <summary>
 		/// SLA = 9750
 		/// </summary>
@@ -1361,13 +3253,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		SLA_Item = 9751,
 		/// <summary>
-		/// SLA_KPI = 10044
+		/// SLA_KPI = 10040
 		/// </summary>
-		SLA_KPI = 10044,
+		SLA_KPI = 10040,
 		/// <summary>
 		/// SLA_KPI_Instance = 9752
 		/// </summary>
 		SLA_KPI_Instance = 9752,
+		/// <summary>
+		/// Smartassist_configuration = 10154
+		/// </summary>
+		Smartassist_configuration = 10154,
+		/// <summary>
+		/// SMS_Engagement_Context = 10546
+		/// </summary>
+		SMS_Engagement_Context = 10546,
+		/// <summary>
+		/// SMS_Number = 10547
+		/// </summary>
+		SMS_Number = 10547,
 		/// <summary>
 		/// Social_Activity = 4216
 		/// </summary>
@@ -1389,57 +3293,61 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Solution_Component = 7103,
 		/// <summary>
-		/// Solution_Component_Attribute_Configuration = 10034
+		/// Solution_Component_Attribute_Configuration = 10002
 		/// </summary>
-		Solution_Component_Attribute_Configuration = 10034,
+		Solution_Component_Attribute_Configuration = 10002,
 		/// <summary>
-		/// Solution_Component_Configuration = 10045
+		/// Solution_Component_Configuration = 10003
 		/// </summary>
-		Solution_Component_Configuration = 10045,
+		Solution_Component_Configuration = 10003,
 		/// <summary>
-		/// Solution_Component_Data_Source = 10002
+		/// Solution_Component_Data_Source = 10012
 		/// </summary>
-		Solution_Component_Data_Source = 10002,
+		Solution_Component_Data_Source = 10012,
 		/// <summary>
 		/// Solution_Component_Definition = 7104
 		/// </summary>
 		Solution_Component_Definition = 7104,
 		/// <summary>
-		/// Solution_Component_Relationship_Configuration = 10059
+		/// Solution_Component_Relationship_Configuration = 10004
 		/// </summary>
-		Solution_Component_Relationship_Configuration = 10059,
+		Solution_Component_Relationship_Configuration = 10004,
 		/// <summary>
-		/// Solution_Component_Summary = 10001
+		/// Solution_Component_Summary = 10011
 		/// </summary>
-		Solution_Component_Summary = 10001,
+		Solution_Component_Summary = 10011,
 		/// <summary>
-		/// Solution_Health_Rule = 10017
+		/// Solution_Health_Rule = 10079
 		/// </summary>
-		Solution_Health_Rule = 10017,
+		Solution_Health_Rule = 10079,
 		/// <summary>
-		/// Solution_Health_Rule_Argument = 10018
+		/// Solution_Health_Rule_Argument = 10080
 		/// </summary>
-		Solution_Health_Rule_Argument = 10018,
+		Solution_Health_Rule_Argument = 10080,
 		/// <summary>
-		/// Solution_Health_Rule_Set = 10019
+		/// Solution_Health_Rule_Set = 10081
 		/// </summary>
-		Solution_Health_Rule_Set = 10019,
+		Solution_Health_Rule_Set = 10081,
 		/// <summary>
-		/// Solution_History = 10003
+		/// Solution_History = 10000
 		/// </summary>
-		Solution_History = 10003,
+		Solution_History = 10000,
 		/// <summary>
-		/// Solution_History_Data_Source = 10004
+		/// Solution_History_Data_Source = 10001
 		/// </summary>
-		Solution_History_Data_Source = 10004,
+		Solution_History_Data_Source = 10001,
 		/// <summary>
 		/// SolutionHistoryData = 9890
 		/// </summary>
 		SolutionHistoryData = 9890,
 		/// <summary>
-		/// StageSolutionUpload = 10046
+		/// Sound_notification_setting = 10521
 		/// </summary>
-		StageSolutionUpload = 10046,
+		Sound_notification_setting = 10521,
+		/// <summary>
+		/// StageSolutionUpload = 10009
+		/// </summary>
+		StageSolutionUpload = 10009,
 		/// <summary>
 		/// Status_Map = 1075
 		/// </summary>
@@ -1485,9 +3393,61 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Subscription_Synchronization_Information = 33,
 		/// <summary>
+		/// Suggested_Activity = 10205
+		/// </summary>
+		Suggested_Activity = 10205,
+		/// <summary>
+		/// Suggested_Activity_Data_Source = 10206
+		/// </summary>
+		Suggested_Activity_Data_Source = 10206,
+		/// <summary>
+		/// Suggested_Contact = 10207
+		/// </summary>
+		Suggested_Contact = 10207,
+		/// <summary>
+		/// Suggested_contacts_data_source = 10208
+		/// </summary>
+		Suggested_contacts_data_source = 10208,
+		/// <summary>
+		/// Suggestion_Interaction = 10163
+		/// </summary>
+		Suggestion_Interaction = 10163,
+		/// <summary>
+		/// Suggestion_request_payload = 10164
+		/// </summary>
+		Suggestion_request_payload = 10164,
+		/// <summary>
 		/// SuggestionCardTemplate = 1190
 		/// </summary>
 		SuggestionCardTemplate = 1190,
+		/// <summary>
+		/// Suggestions_Model_Summary = 10165
+		/// </summary>
+		Suggestions_Model_Summary = 10165,
+		/// <summary>
+		/// Suggestions_Setting = 10166
+		/// </summary>
+		Suggestions_Setting = 10166,
+		/// <summary>
+		/// Survey_Answer_Option = 10533
+		/// </summary>
+		Survey_Answer_Option = 10533,
+		/// <summary>
+		/// Survey_Question = 10542
+		/// </summary>
+		Survey_Question = 10542,
+		/// <summary>
+		/// Survey_Question_Sequence = 10541
+		/// </summary>
+		Survey_Question_Sequence = 10541,
+		/// <summary>
+		/// Survey_Response = 10534
+		/// </summary>
+		Survey_Response = 10534,
+		/// <summary>
+		/// Survey_Response_Value = 10535
+		/// </summary>
+		Survey_Response_Value = 10535,
 		/// <summary>
 		/// Sync_Attribute_Mapping = 1401
 		/// </summary>
@@ -1525,17 +3485,33 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		System_User_Principal = 14,
 		/// <summary>
+		/// System_User_Scheduler_Setting = 10257
+		/// </summary>
+		System_User_Scheduler_Setting = 10257,
+		/// <summary>
 		/// SystemUser_BusinessUnit_Entity_Map = 42
 		/// </summary>
 		SystemUser_BusinessUnit_Entity_Map = 42,
 		/// <summary>
-		/// SystemUserAuthorizationChangeTracker = 10113
+		/// SystemUserAuthorizationChangeTracker = 60
 		/// </summary>
-		SystemUserAuthorizationChangeTracker = 10113,
+		SystemUserAuthorizationChangeTracker = 60,
+		/// <summary>
+		/// Tag = 10514
+		/// </summary>
+		Tag = 10514,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
 		Task = 4212,
+		/// <summary>
+		/// Tax_Code = 10420
+		/// </summary>
+		Tax_Code = 10420,
+		/// <summary>
+		/// Tax_Code_Detail = 10421
+		/// </summary>
+		Tax_Code_Detail = 10421,
 		/// <summary>
 		/// Team = 9
 		/// </summary>
@@ -1553,9 +3529,29 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Team_template = 92,
 		/// <summary>
-		/// TeamMobileOfflineProfileMembership = 10118
+		/// TeamMobileOfflineProfileMembership = 10630
 		/// </summary>
-		TeamMobileOfflineProfileMembership = 10118,
+		TeamMobileOfflineProfileMembership = 10630,
+		/// <summary>
+		/// Teams_Dialer_Admin_settings = 10635
+		/// </summary>
+		Teams_Dialer_Admin_settings = 10635,
+		/// <summary>
+		/// Teams_Engagement_Context = 10564
+		/// </summary>
+		Teams_Engagement_Context = 10564,
+		/// <summary>
+		/// Template_For_Properties = 10103
+		/// </summary>
+		Template_For_Properties = 10103,
+		/// <summary>
+		/// Template_Parameter = 10129
+		/// </summary>
+		Template_Parameter = 10129,
+		/// <summary>
+		/// Template_Tag_Deprecated = 10458
+		/// </summary>
+		Template_Tag_Deprecated = 10458,
 		/// <summary>
 		/// Territory = 2013
 		/// </summary>
@@ -1565,9 +3561,37 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Text_Analytics_Entity_Mapping = 9945,
 		/// <summary>
+		/// Text_Analytics_Topic = 9948
+		/// </summary>
+		Text_Analytics_Topic = 9948,
+		/// <summary>
 		/// Theme = 2015
 		/// </summary>
 		Theme = 2015,
+		/// <summary>
+		/// Three_Dimensional_Model = 10348
+		/// </summary>
+		Three_Dimensional_Model = 10348,
+		/// <summary>
+		/// Time_Entry = 10330
+		/// </summary>
+		Time_Entry = 10330,
+		/// <summary>
+		/// Time_Group_Detail = 10259
+		/// </summary>
+		Time_Group_Detail = 10259,
+		/// <summary>
+		/// Time_Off_Calendar = 10331
+		/// </summary>
+		Time_Off_Calendar = 10331,
+		/// <summary>
+		/// Time_Off_Request = 10422
+		/// </summary>
+		Time_Off_Request = 10422,
+		/// <summary>
+		/// Time_Source = 10345
+		/// </summary>
+		Time_Source = 10345,
 		/// <summary>
 		/// Time_Stamp_Date_Mapping = 9932
 		/// </summary>
@@ -1585,6 +3609,30 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Time_Zone_Rule = 4811,
 		/// <summary>
+		/// Toolbar = 10596
+		/// </summary>
+		Toolbar = 10596,
+		/// <summary>
+		/// Toolbar_Button = 10595
+		/// </summary>
+		Toolbar_Button = 10595,
+		/// <summary>
+		/// Topic_History = 9946
+		/// </summary>
+		Topic_History = 9946,
+		/// <summary>
+		/// Topic_Model = 9944
+		/// </summary>
+		Topic_Model = 9944,
+		/// <summary>
+		/// Topic_Model_Configuration = 9942
+		/// </summary>
+		Topic_Model_Configuration = 9942,
+		/// <summary>
+		/// Topic_Model_Execution_History = 9943
+		/// </summary>
+		Topic_Model_Execution_History = 9943,
+		/// <summary>
 		/// Trace = 8050
 		/// </summary>
 		Trace = 8050,
@@ -1597,9 +3645,45 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Trace_Regarding = 8052,
 		/// <summary>
+		/// Trace_Source_Setting = 10597
+		/// </summary>
+		Trace_Source_Setting = 10597,
+		/// <summary>
 		/// Tracking_information_for_deleted_entities = 35
 		/// </summary>
 		Tracking_information_for_deleted_entities = 35,
+		/// <summary>
+		/// Transaction_Category = 10332
+		/// </summary>
+		Transaction_Category = 10332,
+		/// <summary>
+		/// Transaction_Category_Classification = 10333
+		/// </summary>
+		Transaction_Category_Classification = 10333,
+		/// <summary>
+		/// Transaction_Category_Hierarchy_Element = 10334
+		/// </summary>
+		Transaction_Category_Hierarchy_Element = 10334,
+		/// <summary>
+		/// Transaction_Category_Price = 10335
+		/// </summary>
+		Transaction_Category_Price = 10335,
+		/// <summary>
+		/// Transaction_Connection = 10336
+		/// </summary>
+		Transaction_Connection = 10336,
+		/// <summary>
+		/// Transaction_Origin = 10260
+		/// </summary>
+		Transaction_Origin = 10260,
+		/// <summary>
+		/// Transaction_Type = 10337
+		/// </summary>
+		Transaction_Type = 10337,
+		/// <summary>
+		/// Transcript = 10501
+		/// </summary>
+		Transcript = 10501,
 		/// <summary>
 		/// Transformation_Mapping = 4426
 		/// </summary>
@@ -1613,13 +3697,93 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Translation_Process = 951,
 		/// <summary>
+		/// Twitter_account = 10555
+		/// </summary>
+		Twitter_account = 10555,
+		/// <summary>
+		/// Twitter_Engagement_Context = 10560
+		/// </summary>
+		Twitter_Engagement_Context = 10560,
+		/// <summary>
+		/// Twitter_handle = 10556
+		/// </summary>
+		Twitter_handle = 10556,
+		/// <summary>
+		/// UII_Action = 10567
+		/// </summary>
+		UII_Action = 10567,
+		/// <summary>
+		/// UII_Audit = 10568
+		/// </summary>
+		UII_Audit = 10568,
+		/// <summary>
+		/// UII_Context = 10569
+		/// </summary>
+		UII_Context = 10569,
+		/// <summary>
+		/// UII_Non_Hosted_Application = 10571
+		/// </summary>
+		UII_Non_Hosted_Application = 10571,
+		/// <summary>
+		/// UII_Saved_Session = 10573
+		/// </summary>
+		UII_Saved_Session = 10573,
+		/// <summary>
+		/// UII_Session_Transfer = 10574
+		/// </summary>
+		UII_Session_Transfer = 10574,
+		/// <summary>
+		/// UII_Workflow = 10575
+		/// </summary>
+		UII_Workflow = 10575,
+		/// <summary>
+		/// UII_Workflow_Step = 10576
+		/// </summary>
+		UII_Workflow_Step = 10576,
+		/// <summary>
+		/// UII_Workflow_Step_Mapping = 10577
+		/// </summary>
+		UII_Workflow_Step_Mapping = 10577,
+		/// <summary>
+		/// Unified_Interface_Settings = 10598
+		/// </summary>
+		Unified_Interface_Settings = 10598,
+		/// <summary>
+		/// Unique_Number = 10423
+		/// </summary>
+		Unique_Number = 10423,
+		/// <summary>
+		/// Unit = 1055
+		/// </summary>
+		Unit = 1055,
+		/// <summary>
+		/// Unit_Group = 1056
+		/// </summary>
+		Unit_Group = 1056,
+		/// <summary>
 		/// Unresolved_Address = 2012
 		/// </summary>
 		Unresolved_Address = 2012,
 		/// <summary>
+		/// UntrackedAppointment = 10204
+		/// </summary>
+		UntrackedAppointment = 10204,
+		/// <summary>
 		/// UntrackedEmail = 4220
 		/// </summary>
 		UntrackedEmail = 4220,
+		/// <summary>
+		/// Upgrade_Run = 10084
+		/// </summary>
+		Upgrade_Run = 10084,
+		/// <summary>
+		/// Upgrade_Step = 10085
+		/// </summary>
+		Upgrade_Step = 10085,
+		/// <summary>
+		/// Upgrade_Version = 10086
+		/// </summary>
+		Upgrade_Version = 10086,
 		/// <summary>
 		/// User = 8
 		/// </summary>
@@ -1657,17 +3821,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		User_Search_Facet = 52,
 		/// <summary>
-		/// User_Settings = 150
+		/// User_Setting = 10600
 		/// </summary>
-		User_Settings = 150,
+		User_Setting = 10600,
 		/// <summary>
-		/// UserMobileOfflineProfileMembership = 10119
+		/// User_settings_10522 = 10522
 		/// </summary>
-		UserMobileOfflineProfileMembership = 10119,
+		User_settings_10522 = 10522,
 		/// <summary>
-		/// VETicket = 10147
+		/// User_settings_150 = 150
 		/// </summary>
-		VETicket = 10147,
+		User_settings_150 = 150,
+		/// <summary>
+		/// User_Work_History = 10338
+		/// </summary>
+		User_Work_History = 10338,
+		/// <summary>
+		/// UserMobileOfflineProfileMembership = 10631
+		/// </summary>
+		UserMobileOfflineProfileMembership = 10631,
 		/// <summary>
 		/// View = 1039
 		/// </summary>
@@ -1681,6 +3853,18 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Virtual_Entity_Data_Source = 85,
 		/// <summary>
+		/// Virtual_Resource_Group_Resource = 10091
+		/// </summary>
+		Virtual_Resource_Group_Resource = 10091,
+		/// <summary>
+		/// Wall_View = 10214
+		/// </summary>
+		Wall_View = 10214,
+		/// <summary>
+		/// Warehouse = 10424
+		/// </summary>
+		Warehouse = 10424,
+		/// <summary>
 		/// Web_Resource = 9333
 		/// </summary>
 		Web_Resource = 9333,
@@ -1693,17 +3877,85 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Web_Wizard_Access_Privilege = 4803,
 		/// <summary>
-		/// WebApi = 10030
+		/// WeChat_account = 10557
 		/// </summary>
-		WebApi = 10030,
+		WeChat_account = 10557,
+		/// <summary>
+		/// WeChat_Engagement_Context = 10561
+		/// </summary>
+		WeChat_Engagement_Context = 10561,
+		/// <summary>
+		/// WhatsApp_account = 10558
+		/// </summary>
+		WhatsApp_account = 10558,
+		/// <summary>
+		/// WhatsApp_Engagement_Context = 10562
+		/// </summary>
+		WhatsApp_Engagement_Context = 10562,
+		/// <summary>
+		/// WhatsApp_number = 10559
+		/// </summary>
+		WhatsApp_number = 10559,
+		/// <summary>
+		/// Window_Navigation_Rule = 10601
+		/// </summary>
+		Window_Navigation_Rule = 10601,
 		/// <summary>
 		/// Wizard_Page = 4802
 		/// </summary>
 		Wizard_Page = 4802,
 		/// <summary>
-		/// Workflow_Binary = 10032
+		/// Work_Order = 10425
 		/// </summary>
-		Workflow_Binary = 10032,
+		Work_Order = 10425,
+		/// <summary>
+		/// Work_Order_Business_Process = 10369
+		/// </summary>
+		Work_Order_Business_Process = 10369,
+		/// <summary>
+		/// Work_Order_Characteristic_Deprecated = 10426
+		/// </summary>
+		Work_Order_Characteristic_Deprecated = 10426,
+		/// <summary>
+		/// Work_Order_Details_Generation_Queue_Deprecated = 10427
+		/// </summary>
+		Work_Order_Details_Generation_Queue_Deprecated = 10427,
+		/// <summary>
+		/// Work_Order_Incident = 10428
+		/// </summary>
+		Work_Order_Incident = 10428,
+		/// <summary>
+		/// Work_Order_Product = 10429
+		/// </summary>
+		Work_Order_Product = 10429,
+		/// <summary>
+		/// Work_Order_Service = 10431
+		/// </summary>
+		Work_Order_Service = 10431,
+		/// <summary>
+		/// Work_Order_Service_Task = 10432
+		/// </summary>
+		Work_Order_Service_Task = 10432,
+		/// <summary>
+		/// Work_Order_Substatus = 10433
+		/// </summary>
+		Work_Order_Substatus = 10433,
+		/// <summary>
+		/// Work_Order_Type = 10434
+		/// </summary>
+		Work_Order_Type = 10434,
+		/// <summary>
+		/// Work_Stream = 10475
+		/// </summary>
+		Work_Stream = 10475,
+		/// <summary>
+		/// Work_template = 10261
+		/// </summary>
+		Work_template = 10261,
+		/// <summary>
+		/// Workflow_Binary = 10028
+		/// </summary>
+		Workflow_Binary = 10028,
 		/// <summary>
 		/// Workflow_Wait_Subscription = 4702
 		/// </summary>
@@ -1737,13 +3989,37 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Account = 1,
 		/// <summary>
+		/// Account_Project_Price_List = 10264
+		/// </summary>
+		Account_Project_Price_List = 10264,
+		/// <summary>
+		/// AccountLeads = 16
+		/// </summary>
+		AccountLeads = 16,
+		/// <summary>
 		/// ACIViewMapper = 8040
 		/// </summary>
 		ACIViewMapper = 8040,
 		/// <summary>
+		/// Action_Call = 10579
+		/// </summary>
+		Action_Call = 10579,
+		/// <summary>
+		/// Action_Call_Workflow = 10578
+		/// </summary>
+		Action_Call_Workflow = 10578,
+		/// <summary>
 		/// Action_Card = 9962
 		/// </summary>
 		Action_Card = 9962,
+		/// <summary>
+		/// Action_Card_Regarding = 10197
+		/// </summary>
+		Action_Card_Regarding = 10197,
+		/// <summary>
+		/// Action_Card_Role_Setting = 10198
+		/// </summary>
+		Action_Card_Role_Setting = 10198,
 		/// <summary>
 		/// Action_Card_Type = 9983
 		/// </summary>
@@ -1753,6 +4029,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Action_Card_User_Settings = 9973,
 		/// <summary>
+		/// Action_Input_Parameter = 10144
+		/// </summary>
+		Action_Input_Parameter = 10144,
+		/// <summary>
+		/// Action_Output_Parameter = 10145
+		/// </summary>
+		Action_Output_Parameter = 10145,
+		/// <summary>
 		/// ActionCardUserState = 9968
 		/// </summary>
 		ActionCardUserState = 9968,
@@ -1761,93 +4045,185 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Activity_File_Attachment = 10145
+		/// Activity_monitor = 10087
 		/// </summary>
-		Activity_File_Attachment = 10145,
+		Activity_monitor = 10087,
 		/// <summary>
 		/// Activity_Party = 135
 		/// </summary>
 		Activity_Party = 135,
 		/// <summary>
+		/// Actual = 10233
+		/// </summary>
+		Actual = 10233,
+		/// <summary>
+		/// Actual_Data_Export_Deprecated = 10273
+		/// </summary>
+		Actual_Data_Export_Deprecated = 10273,
+		/// <summary>
+		/// Adaptive_Card_Configuration = 10153
+		/// </summary>
+		Adaptive_Card_Configuration = 10153,
+		/// <summary>
 		/// Address = 1071
 		/// </summary>
 		Address = 1071,
+		/// <summary>
+		/// admin_settings_entity = 10184
+		/// </summary>
+		admin_settings_entity = 10184,
 		/// <summary>
 		/// Advanced_Similarity_Rule = 9949
 		/// </summary>
 		Advanced_Similarity_Rule = 9949,
 		/// <summary>
-		/// AI_Builder_Dataset = 10037
+		/// Agent_script = 10141
 		/// </summary>
-		AI_Builder_Dataset = 10037,
+		Agent_script = 10141,
 		/// <summary>
-		/// AI_Builder_Dataset_File = 10038
+		/// Agent_Script_Answer = 10581
 		/// </summary>
-		AI_Builder_Dataset_File = 10038,
+		Agent_Script_Answer = 10581,
 		/// <summary>
-		/// AI_Builder_Dataset_Record = 10053
+		/// Agent_script_step = 10142
 		/// </summary>
-		AI_Builder_Dataset_Record = 10053,
+		Agent_script_step = 10142,
 		/// <summary>
-		/// AI_Builder_Datasets_Container = 10039
+		/// Agent_Script_Task = 10594
 		/// </summary>
-		AI_Builder_Datasets_Container = 10039,
+		Agent_Script_Task = 10594,
 		/// <summary>
-		/// AI_Builder_File = 10040
+		/// Agent_Script_Task_Category = 10580
 		/// </summary>
-		AI_Builder_File = 10040,
+		Agent_Script_Task_Category = 10580,
 		/// <summary>
-		/// AI_Builder_File_Attached_Data = 10041
+		/// Agent_Status_history = 10503
 		/// </summary>
-		AI_Builder_File_Attached_Data = 10041,
+		Agent_Status_history = 10503,
+		/// <summary>
+		/// Agreement = 10353
+		/// </summary>
+		Agreement = 10353,
+		/// <summary>
+		/// Agreement_Booking_Date = 10354
+		/// </summary>
+		Agreement_Booking_Date = 10354,
+		/// <summary>
+		/// Agreement_Booking_Incident = 10355
+		/// </summary>
+		Agreement_Booking_Incident = 10355,
+		/// <summary>
+		/// Agreement_Booking_Product = 10356
+		/// </summary>
+		Agreement_Booking_Product = 10356,
+		/// <summary>
+		/// Agreement_Booking_Service = 10357
+		/// </summary>
+		Agreement_Booking_Service = 10357,
+		/// <summary>
+		/// Agreement_Booking_Service_Task = 10358
+		/// </summary>
+		Agreement_Booking_Service_Task = 10358,
+		/// <summary>
+		/// Agreement_Booking_Setup = 10359
+		/// </summary>
+		Agreement_Booking_Setup = 10359,
+		/// <summary>
+		/// Agreement_Business_Process = 10368
+		/// </summary>
+		Agreement_Business_Process = 10368,
+		/// <summary>
+		/// Agreement_Invoice_Date = 10360
+		/// </summary>
+		Agreement_Invoice_Date = 10360,
+		/// <summary>
+		/// Agreement_Invoice_Product = 10361
+		/// </summary>
+		Agreement_Invoice_Product = 10361,
+		/// <summary>
+		/// Agreement_Invoice_Setup = 10362
+		/// </summary>
+		Agreement_Invoice_Setup = 10362,
+		/// <summary>
+		/// Agreement_Substatus = 10363
+		/// </summary>
+		Agreement_Substatus = 10363,
+		/// <summary>
+		/// AI_Builder_Dataset = 10063
+		/// </summary>
+		AI_Builder_Dataset = 10063,
+		/// <summary>
+		/// AI_Builder_Dataset_File = 10064
+		/// </summary>
+		AI_Builder_Dataset_File = 10064,
+		/// <summary>
+		/// AI_Builder_Dataset_Record = 10065
+		/// </summary>
+		AI_Builder_Dataset_Record = 10065,
+		/// <summary>
+		/// AI_Builder_Datasets_Container = 10066
+		/// </summary>
+		AI_Builder_Datasets_Container = 10066,
+		/// <summary>
+		/// AI_Builder_File = 10067
+		/// </summary>
+		AI_Builder_File = 10067,
+		/// <summary>
+		/// AI_Builder_File_Attached_Data = 10068
+		/// </summary>
+		AI_Builder_File_Attached_Data = 10068,
 		/// <summary>
 		/// AI_Configuration = 402
 		/// </summary>
 		AI_Configuration = 402,
 		/// <summary>
-		/// AI_Form_Processing_Document = 10007
+		/// AI_Form_Processing_Document = 10069
 		/// </summary>
-		AI_Form_Processing_Document = 10007,
+		AI_Form_Processing_Document = 10069,
 		/// <summary>
 		/// AI_Model = 401
 		/// </summary>
 		AI_Model = 401,
 		/// <summary>
-		/// AI_Object_Detection_Bounding_Box = 10010
+		/// AI_Object_Detection_Bounding_Box = 10072
 		/// </summary>
-		AI_Object_Detection_Bounding_Box = 10010,
+		AI_Object_Detection_Bounding_Box = 10072,
 		/// <summary>
-		/// AI_Object_Detection_Image = 10008
+		/// AI_Object_Detection_Image = 10070
 		/// </summary>
-		AI_Object_Detection_Image = 10008,
+		AI_Object_Detection_Image = 10070,
 		/// <summary>
-		/// AI_Object_Detection_Image_Mapping = 10011
+		/// AI_Object_Detection_Image_Mapping = 10073
 		/// </summary>
-		AI_Object_Detection_Image_Mapping = 10011,
+		AI_Object_Detection_Image_Mapping = 10073,
 		/// <summary>
-		/// AI_Object_Detection_Label = 10009
+		/// AI_Object_Detection_Label = 10071
 		/// </summary>
-		AI_Object_Detection_Label = 10009,
+		AI_Object_Detection_Label = 10071,
 		/// <summary>
 		/// AI_Template = 400
 		/// </summary>
 		AI_Template = 400,
 		/// <summary>
-		/// Analysis_Component = 10013
+		/// Analysis_Component = 10075
 		/// </summary>
-		Analysis_Component = 10013,
+		Analysis_Component = 10075,
 		/// <summary>
-		/// Analysis_Job = 10014
+		/// Analysis_Job = 10076
 		/// </summary>
-		Analysis_Job = 10014,
+		Analysis_Job = 10076,
 		/// <summary>
-		/// Analysis_Result = 10015
+		/// Analysis_Result = 10077
 		/// </summary>
-		Analysis_Result = 10015,
+		Analysis_Result = 10077,
 		/// <summary>
-		/// Analysis_Result_Detail = 10016
+		/// Analysis_Result_Detail = 10078
 		/// </summary>
-		Analysis_Result_Detail = 10016,
+		Analysis_Result_Detail = 10078,
+		/// <summary>
+		/// Analytics_and_insights = 10169
+		/// </summary>
+		Analytics_and_insights = 10169,
 		/// <summary>
 		/// Announcement = 132
 		/// </summary>
@@ -1856,10 +4232,6 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Annual_Fiscal_Calendar = 2000
 		/// </summary>
 		Annual_Fiscal_Calendar = 2000,
-		/// <summary>
-		/// ApiSettings = 10036
-		/// </summary>
-		ApiSettings = 10036,
 		/// <summary>
 		/// App_Config_Master = 9011
 		/// </summary>
@@ -1881,6 +4253,18 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		App_Module_Roles = 9009,
 		/// <summary>
+		/// App_Parameter_Definition_Deprecated = 10454
+		/// </summary>
+		App_Parameter_Definition_Deprecated = 10454,
+		/// <summary>
+		/// App_profile = 10123
+		/// </summary>
+		App_profile = 10123,
+		/// <summary>
+		/// Application_Extension = 10124
+		/// </summary>
+		Application_Extension = 10124,
+		/// <summary>
 		/// Application_File = 4707
 		/// </summary>
 		Application_File = 4707,
@@ -1889,9 +4273,21 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Application_Ribbons = 1120,
 		/// <summary>
-		/// ApplicationUser = 10057
+		/// Application_Tab_Template = 10125
 		/// </summary>
-		ApplicationUser = 10057,
+		Application_Tab_Template = 10125,
+		/// <summary>
+		/// Application_Tab_Template_Deprecated = 10456
+		/// </summary>
+		Application_Tab_Template_Deprecated = 10456,
+		/// <summary>
+		/// Application_Type_Deprecated = 10459
+		/// </summary>
+		Application_Type_Deprecated = 10459,
+		/// <summary>
+		/// ApplicationUser = 10017
+		/// </summary>
+		ApplicationUser = 10017,
 		/// <summary>
 		/// AppModule_Metadata = 8700
 		/// </summary>
@@ -1921,6 +4317,22 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Article_Template = 1016,
 		/// <summary>
+		/// Asset_Category_Template_Association = 10093
+		/// </summary>
+		Asset_Category_Template_Association = 10093,
+		/// <summary>
+		/// Asset_Suggestion = 10438
+		/// </summary>
+		Asset_Suggestion = 10438,
+		/// <summary>
+		/// Asset_Template_Association = 10094
+		/// </summary>
+		Asset_Template_Association = 10094,
+		/// <summary>
+		/// Attach_Skill = 10530
+		/// </summary>
+		Attach_Skill = 10530,
+		/// <summary>
 		/// Attachment_1001 = 1001
 		/// </summary>
 		Attachment_1001 = 1001,
@@ -1937,6 +4349,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Attribute_Map = 4601,
 		/// <summary>
+		/// Audio_File = 10520
+		/// </summary>
+		Audio_File = 10520,
+		/// <summary>
+		/// Audit_Diagnostics_Setting = 10582
+		/// </summary>
+		Audit_Diagnostics_Setting = 10582,
+		/// <summary>
 		/// Auditing = 4567
 		/// </summary>
 		Auditing = 4567,
@@ -1945,37 +4365,101 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Authorization_Server = 1094,
 		/// <summary>
-		/// Azure_Account = 10138
+		/// Auto_Capture_Rule = 10202
 		/// </summary>
-		Azure_Account = 10138,
+		Auto_Capture_Rule = 10202,
+		/// <summary>
+		/// Auto_Capture_Settings = 10203
+		/// </summary>
+		Auto_Capture_Settings = 10203,
+		/// <summary>
+		/// Available_Times = 10088
+		/// </summary>
+		Available_Times = 10088,
+		/// <summary>
+		/// Available_Times_Data_Source = 10089
+		/// </summary>
+		Available_Times_Data_Source = 10089,
 		/// <summary>
 		/// Azure_Service_Connection = 9936
 		/// </summary>
 		Azure_Service_Connection = 9936,
 		/// <summary>
-		/// Azure_Sql = 10135
+		/// Batch_Job = 10266
 		/// </summary>
-		Azure_Sql = 10135,
+		Batch_Job = 10266,
 		/// <summary>
-		/// BotContent = 10091
+		/// Bookable_Resource = 1150
 		/// </summary>
-		BotContent = 10091,
+		Bookable_Resource = 1150,
 		/// <summary>
-		/// BPF_Account_1 = 10065
+		/// Bookable_Resource_Association = 10234
 		/// </summary>
-		BPF_Account_1 = 10065,
+		Bookable_Resource_Association = 10234,
 		/// <summary>
-		/// BPF_Account_3 = 10066
+		/// Bookable_Resource_Booking = 1145
 		/// </summary>
-		BPF_Account_3 = 10066,
+		Bookable_Resource_Booking = 1145,
 		/// <summary>
-		/// BPF_Location_1 = 10070
+		/// Bookable_Resource_Booking_Header = 1146
 		/// </summary>
-		BPF_Location_1 = 10070,
+		Bookable_Resource_Booking_Header = 1146,
 		/// <summary>
-		/// BPF_Location_2 = 10071
+		/// Bookable_Resource_Booking_to_Exchange_Id_Mapping = 4421
 		/// </summary>
-		BPF_Location_2 = 10071,
+		Bookable_Resource_Booking_to_Exchange_Id_Mapping = 4421,
+		/// <summary>
+		/// Bookable_Resource_Category = 1147
+		/// </summary>
+		Bookable_Resource_Category = 1147,
+		/// <summary>
+		/// Bookable_Resource_Category_Assn = 1149
+		/// </summary>
+		Bookable_Resource_Category_Assn = 1149,
+		/// <summary>
+		/// Bookable_Resource_Characteristic = 1148
+		/// </summary>
+		Bookable_Resource_Characteristic = 1148,
+		/// <summary>
+		/// Bookable_Resource_Group = 1151
+		/// </summary>
+		Bookable_Resource_Group = 1151,
+		/// <summary>
+		/// Booking_Alert = 10235
+		/// </summary>
+		Booking_Alert = 10235,
+		/// <summary>
+		/// Booking_Alert_Status = 10236
+		/// </summary>
+		Booking_Alert_Status = 10236,
+		/// <summary>
+		/// Booking_Change = 10237
+		/// </summary>
+		Booking_Change = 10237,
+		/// <summary>
+		/// Booking_Journal = 10364
+		/// </summary>
+		Booking_Journal = 10364,
+		/// <summary>
+		/// Booking_Rule = 10238
+		/// </summary>
+		Booking_Rule = 10238,
+		/// <summary>
+		/// Booking_Setup_Metadata = 10239
+		/// </summary>
+		Booking_Setup_Metadata = 10239,
+		/// <summary>
+		/// Booking_Status = 1152
+		/// </summary>
+		Booking_Status = 1152,
+		/// <summary>
+		/// Booking_Timestamp = 10365
+		/// </summary>
+		Booking_Timestamp = 10365,
+		/// <summary>
+		/// BotContent = 10031
+		/// </summary>
+		BotContent = 10031,
 		/// <summary>
 		/// Bulk_Delete_Failure = 4425
 		/// </summary>
@@ -1984,6 +4468,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Bulk_Delete_Operation = 4424
 		/// </summary>
 		Bulk_Delete_Operation = 4424,
+		/// <summary>
+		/// Bulk_Operation_Log = 4405
+		/// </summary>
+		Bulk_Operation_Log = 4405,
+		/// <summary>
+		/// Business_Closure = 10240
+		/// </summary>
+		Business_Closure = 10240,
 		/// <summary>
 		/// Business_Data_Localized_Label = 4232
 		/// </summary>
@@ -2013,33 +4505,105 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Callback_Registration = 301,
 		/// <summary>
+		/// Campaign = 4400
+		/// </summary>
+		Campaign = 4400,
+		/// <summary>
+		/// Campaign_Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign_Activity_Item = 4404
+		/// </summary>
+		Campaign_Activity_Item = 4404,
+		/// <summary>
+		/// Campaign_Item = 4403
+		/// </summary>
+		Campaign_Item = 4403,
+		/// <summary>
+		/// Campaign_Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
 		/// Canvas_App = 300
 		/// </summary>
 		Canvas_App = 300,
 		/// <summary>
-		/// CanvasApp_Extended_Metadata = 10068
+		/// CanvasApp_Extended_Metadata = 10025
 		/// </summary>
-		CanvasApp_Extended_Metadata = 10068,
+		CanvasApp_Extended_Metadata = 10025,
 		/// <summary>
-		/// CascadeGrantRevokeAccessRecordsTracker = 10075
+		/// CascadeGrantRevokeAccessRecordsTracker = 10014
 		/// </summary>
-		CascadeGrantRevokeAccessRecordsTracker = 10075,
+		CascadeGrantRevokeAccessRecordsTracker = 10014,
 		/// <summary>
-		/// CascadeGrantRevokeAccessVersionTracker = 10076
+		/// CascadeGrantRevokeAccessVersionTracker = 10015
 		/// </summary>
-		CascadeGrantRevokeAccessVersionTracker = 10076,
+		CascadeGrantRevokeAccessVersionTracker = 10015,
 		/// <summary>
-		/// Catalog = 10085
+		/// Case = 112
 		/// </summary>
-		Catalog = 10085,
+		Case = 112,
 		/// <summary>
-		/// Catalog_Assignment = 10086
+		/// Case_Enrichment = 10156
 		/// </summary>
-		Catalog_Assignment = 10086,
+		Case_Enrichment = 10156,
+		/// <summary>
+		/// Case_Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Case_Suggestion = 10157
+		/// </summary>
+		Case_Suggestion = 10157,
+		/// <summary>
+		/// Case_Suggestion_Request_Payload = 10158
+		/// </summary>
+		Case_Suggestion_Request_Payload = 10158,
+		/// <summary>
+		/// Case_Suggestions_Data_Souce = 10159
+		/// </summary>
+		Case_Suggestions_Data_Souce = 10159,
+		/// <summary>
+		/// Case_to_Work_Order_Business_Process = 10367
+		/// </summary>
+		Case_to_Work_Order_Business_Process = 10367,
+		/// <summary>
+		/// Case_Topic = 10171
+		/// </summary>
+		Case_Topic = 10171,
+		/// <summary>
+		/// Case_topic_Incident_mapping = 10174
+		/// </summary>
+		Case_topic_Incident_mapping = 10174,
+		/// <summary>
+		/// Case_Topic_Setting = 10172
+		/// </summary>
+		Case_Topic_Setting = 10172,
+		/// <summary>
+		/// Case_Topic_Summary = 10173
+		/// </summary>
+		Case_Topic_Summary = 10173,
+		/// <summary>
+		/// Catalog = 10048
+		/// </summary>
+		Catalog = 10048,
+		/// <summary>
+		/// Catalog_Assignment = 10049
+		/// </summary>
+		Catalog_Assignment = 10049,
 		/// <summary>
 		/// Category = 9959
 		/// </summary>
 		Category = 9959,
+		/// <summary>
+		/// CFS_IoT_Alert_Process_Flow = 10440
+		/// </summary>
+		CFS_IoT_Alert_Process_Flow = 10440,
+		/// <summary>
+		/// channel = 10468
+		/// </summary>
+		channel = 10468,
 		/// <summary>
 		/// Channel_Access_Profile = 3005
 		/// </summary>
@@ -2053,6 +4617,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Channel_Access_Profile_Rule_Item = 9401,
 		/// <summary>
+		/// Channel_Capability = 10504
+		/// </summary>
+		Channel_Capability = 10504,
+		/// <summary>
+		/// Channel_Configuration = 10478
+		/// </summary>
+		Channel_Configuration = 10478,
+		/// <summary>
 		/// Channel_Property = 1236
 		/// </summary>
 		Channel_Property = 1236,
@@ -2061,13 +4633,53 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Channel_Property_Group = 1234,
 		/// <summary>
-		/// Chatbot = 10093
+		/// Channel_Provider_10135 = 10135
 		/// </summary>
-		Chatbot = 10093,
+		Channel_Provider_10135 = 10135,
 		/// <summary>
-		/// Chatbot_subcomponent = 10094
+		/// Channel_Provider_10451 = 10451
 		/// </summary>
-		Chatbot_subcomponent = 10094,
+		Channel_Provider_10451 = 10451,
+		/// <summary>
+		/// Channel_State_Configuration = 10479
+		/// </summary>
+		Channel_State_Configuration = 10479,
+		/// <summary>
+		/// Characteristic = 1141
+		/// </summary>
+		Characteristic = 1141,
+		/// <summary>
+		/// Chat_Authentication_Settings = 10532
+		/// </summary>
+		Chat_Authentication_Settings = 10532,
+		/// <summary>
+		/// Chat_Widget = 10537
+		/// </summary>
+		Chat_Widget = 10537,
+		/// <summary>
+		/// Chat_Widget_Languagedeprecated = 10536
+		/// </summary>
+		Chat_Widget_Languagedeprecated = 10536,
+		/// <summary>
+		/// Chat_Widget_Location = 10539
+		/// </summary>
+		Chat_Widget_Location = 10539,
+		/// <summary>
+		/// Chatbot = 10033
+		/// </summary>
+		Chatbot = 10033,
+		/// <summary>
+		/// Chatbot_subcomponent = 10034
+		/// </summary>
+		Chatbot_subcomponent = 10034,
+		/// <summary>
+		/// Child_Incident_Count = 113
+		/// </summary>
+		Child_Incident_Count = 113,
+		/// <summary>
+		/// Client_Extension = 10241
+		/// </summary>
+		Client_Extension = 10241,
 		/// <summary>
 		/// Client_update = 36
 		/// </summary>
@@ -2081,6 +4693,30 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Comment = 8005,
 		/// <summary>
+		/// Commitment = 4215
+		/// </summary>
+		Commitment = 4215,
+		/// <summary>
+		/// Competency_Requirement_Deprecated = 10269
+		/// </summary>
+		Competency_Requirement_Deprecated = 10269,
+		/// <summary>
+		/// Competitor = 123
+		/// </summary>
+		Competitor = 123,
+		/// <summary>
+		/// Competitor_Address = 1004
+		/// </summary>
+		Competitor_Address = 1004,
+		/// <summary>
+		/// Competitor_Product = 1006
+		/// </summary>
+		Competitor_Product = 1006,
+		/// <summary>
+		/// CompetitorSalesLiterature = 26
+		/// </summary>
+		CompetitorSalesLiterature = 26,
+		/// <summary>
 		/// Component_Layer = 10005
 		/// </summary>
 		Component_Layer = 10005,
@@ -2089,13 +4725,21 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Component_Layer_Data_Source = 10006,
 		/// <summary>
+		/// Configuration_10242 = 10242
+		/// </summary>
+		Configuration_10242 = 10242,
+		/// <summary>
+		/// Configuration_10583 = 10583
+		/// </summary>
+		Configuration_10583 = 10583,
+		/// <summary>
 		/// Connection = 3234
 		/// </summary>
 		Connection = 3234,
 		/// <summary>
-		/// Connection_Reference = 10067
+		/// Connection_Reference = 10029
 		/// </summary>
-		Connection_Reference = 10067,
+		Connection_Reference = 10029,
 		/// <summary>
 		/// Connection_Role = 3231
 		/// </summary>
@@ -2113,29 +4757,105 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Contact = 2,
 		/// <summary>
-		/// ConversationTranscript = 10092
+		/// Contact_Price_List = 10270
 		/// </summary>
-		ConversationTranscript = 10092,
+		Contact_Price_List = 10270,
+		/// <summary>
+		/// ContactInvoices = 17
+		/// </summary>
+		ContactInvoices = 17,
+		/// <summary>
+		/// ContactLeads = 22
+		/// </summary>
+		ContactLeads = 22,
+		/// <summary>
+		/// ContactOrders = 19
+		/// </summary>
+		ContactOrders = 19,
+		/// <summary>
+		/// ContactQuotes = 18
+		/// </summary>
+		ContactQuotes = 18,
+		/// <summary>
+		/// Context_item_value = 10481
+		/// </summary>
+		Context_item_value = 10481,
+		/// <summary>
+		/// Context_variable = 10484
+		/// </summary>
+		Context_variable = 10484,
+		/// <summary>
+		/// Contract = 1010
+		/// </summary>
+		Contract = 1010,
+		/// <summary>
+		/// Contract_Line = 1011
+		/// </summary>
+		Contract_Line = 1011,
+		/// <summary>
+		/// Contract_Line_Detail_Performance = 10346
+		/// </summary>
+		Contract_Line_Detail_Performance = 10346,
+		/// <summary>
+		/// Contract_Performance = 10347
+		/// </summary>
+		Contract_Performance = 10347,
+		/// <summary>
+		/// Contract_Template = 2011
+		/// </summary>
+		Contract_Template = 2011,
+		/// <summary>
+		/// Conversation = 10480
+		/// </summary>
+		Conversation = 10480,
+		/// <summary>
+		/// Conversation_Action = 10505
+		/// </summary>
+		Conversation_Action = 10505,
+		/// <summary>
+		/// Conversation_Action_Locale = 10506
+		/// </summary>
+		Conversation_Action_Locale = 10506,
+		/// <summary>
+		/// Conversation_Characteristic = 10527
+		/// </summary>
+		Conversation_Characteristic = 10527,
+		/// <summary>
+		/// Conversation_Data_Deprecated = 10185
+		/// </summary>
+		Conversation_Data_Deprecated = 10185,
+		/// <summary>
+		/// Conversation_Sentiment = 10483
+		/// </summary>
+		Conversation_Sentiment = 10483,
+		/// <summary>
+		/// conversationsuggestionrequestpayload = 10545
+		/// </summary>
+		conversationsuggestionrequestpayload = 10545,
+		/// <summary>
+		/// ConversationTranscript = 10032
+		/// </summary>
+		ConversationTranscript = 10032,
+		/// <summary>
+		/// CTI_Search = 10591
+		/// </summary>
+		CTI_Search = 10591,
 		/// <summary>
 		/// Currency = 9105
 		/// </summary>
 		Currency = 9105,
 		/// <summary>
-		/// Custom_Activity = 10042
+		/// Custom_API = 10051
 		/// </summary>
-		Custom_Activity = 10042,
+		Custom_API = 10051,
 		/// <summary>
-		/// Custom_API = 10088
+		/// Custom_API_Request_Parameter = 10052
 		/// </summary>
-		Custom_API = 10088,
+		Custom_API_Request_Parameter = 10052,
 		/// <summary>
-		/// Custom_API_Request_Parameter = 10089
+		/// Custom_API_Response_Property = 10053
 		/// </summary>
-		Custom_API_Request_Parameter = 10089,
-		/// <summary>
-		/// Custom_API_Response_Property = 10090
-		/// </summary>
-		Custom_API_Response_Property = 10090,
+		Custom_API_Response_Property = 10053,
 		/// <summary>
 		/// Custom_Control = 9753
 		/// </summary>
@@ -2149,29 +4869,121 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Custom_Control_Resource = 9754,
 		/// <summary>
+		/// Custom_messaging_account = 10477
+		/// </summary>
+		Custom_messaging_account = 10477,
+		/// <summary>
+		/// Custom_messaging_channel = 10553
+		/// </summary>
+		Custom_messaging_channel = 10553,
+		/// <summary>
+		/// Custom_Messaging_Engagement_Context = 10551
+		/// </summary>
+		Custom_Messaging_Engagement_Context = 10551,
+		/// <summary>
+		/// Customer_Asset = 10095
+		/// </summary>
+		Customer_Asset = 10095,
+		/// <summary>
+		/// Customer_Asset_Attachment = 10096
+		/// </summary>
+		Customer_Asset_Attachment = 10096,
+		/// <summary>
+		/// Customer_Asset_Category = 10097
+		/// </summary>
+		Customer_Asset_Category = 10097,
+		/// <summary>
 		/// Customer_Relationship = 4502
 		/// </summary>
 		Customer_Relationship = 4502,
+		/// <summary>
+		/// Customer_service_historical_analytics_preview = 10175
+		/// </summary>
+		Customer_service_historical_analytics_preview = 10175,
+		/// <summary>
+		/// Customer_Voice_alert = 10216
+		/// </summary>
+		Customer_Voice_alert = 10216,
+		/// <summary>
+		/// Customer_Voice_alert_rule = 10217
+		/// </summary>
+		Customer_Voice_alert_rule = 10217,
+		/// <summary>
+		/// Customer_Voice_file_response = 10636
+		/// </summary>
+		Customer_Voice_file_response = 10636,
+		/// <summary>
+		/// Customer_Voice_localized_survey_email_template = 10219
+		/// </summary>
+		Customer_Voice_localized_survey_email_template = 10219,
+		/// <summary>
+		/// Customer_Voice_project = 10220
+		/// </summary>
+		Customer_Voice_project = 10220,
+		/// <summary>
+		/// Customer_Voice_satisfaction_metric = 10223
+		/// </summary>
+		Customer_Voice_satisfaction_metric = 10223,
+		/// <summary>
+		/// Customer_Voice_survey = 10224
+		/// </summary>
+		Customer_Voice_survey = 10224,
+		/// <summary>
+		/// Customer_Voice_survey_email_template = 10218
+		/// </summary>
+		Customer_Voice_survey_email_template = 10218,
+		/// <summary>
+		/// Customer_Voice_survey_invite = 10225
+		/// </summary>
+		Customer_Voice_survey_invite = 10225,
+		/// <summary>
+		/// Customer_Voice_survey_question = 10221
+		/// </summary>
+		Customer_Voice_survey_question = 10221,
+		/// <summary>
+		/// Customer_Voice_survey_question_response = 10222
+		/// </summary>
+		Customer_Voice_survey_question_response = 10222,
+		/// <summary>
+		/// Customer_Voice_survey_reminder = 10226
+		/// </summary>
+		Customer_Voice_survey_reminder = 10226,
+		/// <summary>
+		/// Customer_Voice_survey_response = 10227
+		/// </summary>
+		Customer_Voice_survey_response = 10227,
+		/// <summary>
+		/// Customer_Voice_unsubscribed_recipient = 10228
+		/// </summary>
+		Customer_Voice_unsubscribed_recipient = 10228,
+		/// <summary>
+		/// Customization_File = 10584
+		/// </summary>
+		Customization_File = 10584,
+		/// <summary>
+		/// Data_Analytics_Report = 10168
+		/// </summary>
+		Data_Analytics_Report = 10168,
 		/// <summary>
 		/// Data_Import = 4410
 		/// </summary>
 		Data_Import = 4410,
 		/// <summary>
-		/// Data_Lake_Folder = 10081
+		/// Data_Lake_Folder = 10056
 		/// </summary>
-		Data_Lake_Folder = 10081,
+		Data_Lake_Folder = 10056,
 		/// <summary>
-		/// Data_Lake_Folder_Permission = 10082
+		/// Data_Lake_Folder_Permission = 10057
 		/// </summary>
-		Data_Lake_Folder_Permission = 10082,
+		Data_Lake_Folder_Permission = 10057,
 		/// <summary>
-		/// Data_Lake_Workspace = 10055
+		/// Data_Lake_Workspace = 10058
 		/// </summary>
-		Data_Lake_Workspace = 10055,
+		Data_Lake_Workspace = 10058,
 		/// <summary>
-		/// Data_Lake_Workspace_Permission = 10056
+		/// Data_Lake_Workspace_Permission = 10059
 		/// </summary>
-		Data_Lake_Workspace_Permission = 10056,
+		Data_Lake_Workspace_Permission = 10059,
 		/// <summary>
 		/// Data_Map = 4411
 		/// </summary>
@@ -2181,9 +4993,17 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Data_Performance_Dashboard = 4450,
 		/// <summary>
+		/// Database_Version = 10083
+		/// </summary>
+		Database_Version = 10083,
+		/// <summary>
 		/// Dataflow = 418
 		/// </summary>
 		Dataflow = 418,
+		/// <summary>
+		/// Delegation = 10274
+		/// </summary>
+		Delegation = 10274,
 		/// <summary>
 		/// DelveActionHub = 9961
 		/// </summary>
@@ -2200,6 +5020,26 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Dependency_Node = 7106
 		/// </summary>
 		Dependency_Node = 7106,
+		/// <summary>
+		/// Deprecated_Data_Analytics_Admin_Settings = 10167
+		/// </summary>
+		Deprecated_Data_Analytics_Admin_Settings = 10167,
+		/// <summary>
+		/// Deprecated_Dynamics_Customer_Service_Analytics = 10170
+		/// </summary>
+		Deprecated_Dynamics_Customer_Service_Analytics = 10170,
+		/// <summary>
+		/// Deprecated_Workstream_Entity_Configuration = 10473
+		/// </summary>
+		Deprecated_Workstream_Entity_Configuration = 10473,
+		/// <summary>
+		/// Discount = 1013
+		/// </summary>
+		Discount = 1013,
+		/// <summary>
+		/// Discount_List = 1080
+		/// </summary>
+		Discount_List = 1080,
 		/// <summary>
 		/// Display_String = 4102
 		/// </summary>
@@ -2257,13 +5097,57 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Email_Template = 2010,
 		/// <summary>
-		/// Entity = 9800
+		/// Entitlement = 9700
 		/// </summary>
-		Entity = 9800,
+		Entitlement = 9700,
+		/// <summary>
+		/// Entitlement_Application = 10370
+		/// </summary>
+		Entitlement_Application = 10370,
+		/// <summary>
+		/// Entitlement_Channel = 9701
+		/// </summary>
+		Entitlement_Channel = 9701,
+		/// <summary>
+		/// Entitlement_Contact = 7272
+		/// </summary>
+		Entitlement_Contact = 7272,
+		/// <summary>
+		/// Entitlement_Entity_Allocation_Type_Mapping = 9704
+		/// </summary>
+		Entitlement_Entity_Allocation_Type_Mapping = 9704,
+		/// <summary>
+		/// Entitlement_Product = 6363
+		/// </summary>
+		Entitlement_Product = 6363,
+		/// <summary>
+		/// Entitlement_Template = 9702
+		/// </summary>
+		Entitlement_Template = 9702,
+		/// <summary>
+		/// Entitlement_Template_Channel = 9703
+		/// </summary>
+		Entitlement_Template_Channel = 9703,
+		/// <summary>
+		/// Entitlement_Template_Product = 4545
+		/// </summary>
+		Entitlement_Template_Product = 4545,
+		/// <summary>
+		/// Entity_10507 = 10507
+		/// </summary>
+		Entity_10507 = 10507,
+		/// <summary>
+		/// Entity_9800 = 9800
+		/// </summary>
+		Entity_9800 = 9800,
 		/// <summary>
 		/// Entity_Analytics_Config = 430
 		/// </summary>
 		Entity_Analytics_Config = 430,
+		/// <summary>
+		/// Entity_Configuration = 10443
+		/// </summary>
+		Entity_Configuration = 10443,
 		/// <summary>
 		/// Entity_Image_Configuration = 432
 		/// </summary>
@@ -2281,6 +5165,22 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Entity_Relationship = 9811,
 		/// <summary>
+		/// Entity_Routing_Context = 10472
+		/// </summary>
+		Entity_Routing_Context = 10472,
+		/// <summary>
+		/// Entity_Search = 10586
+		/// </summary>
+		Entity_Search = 10586,
+		/// <summary>
+		/// Entity_Type = 10585
+		/// </summary>
+		Entity_Type = 10585,
+		/// <summary>
+		/// EntityRankingRule = 10199
+		/// </summary>
+		EntityRankingRule = 10199,
+		/// <summary>
 		/// Environment_Variable_Definition = 380
 		/// </summary>
 		Environment_Variable_Definition = 380,
@@ -2288,6 +5188,18 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Environment_Variable_Value = 381
 		/// </summary>
 		Environment_Variable_Value = 381,
+		/// <summary>
+		/// Estimate = 10277
+		/// </summary>
+		Estimate = 10277,
+		/// <summary>
+		/// Estimate_Line = 10278
+		/// </summary>
+		Estimate_Line = 10278,
+		/// <summary>
+		/// Event = 10599
+		/// </summary>
+		Event = 10599,
 		/// <summary>
 		/// Exchange_Sync_Id_Mapping = 4120
 		/// </summary>
@@ -2297,13 +5209,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Expander_Event = 4711,
 		/// <summary>
+		/// Expense = 10279
+		/// </summary>
+		Expense = 10279,
+		/// <summary>
+		/// Expense_Category = 10280
+		/// </summary>
+		Expense_Category = 10280,
+		/// <summary>
+		/// Expense_Receipt = 10281
+		/// </summary>
+		Expense_Receipt = 10281,
+		/// <summary>
 		/// Expired_Process = 955
 		/// </summary>
 		Expired_Process = 955,
 		/// <summary>
-		/// ExportSolutionUpload = 10073
+		/// ExportSolutionUpload = 10010
 		/// </summary>
-		ExportSolutionUpload = 10073,
+		ExportSolutionUpload = 10010,
 		/// <summary>
 		/// External_Party = 3008
 		/// </summary>
@@ -2313,6 +5237,26 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		External_Party_Item = 9987,
 		/// <summary>
+		/// Facebook_Application = 10549
+		/// </summary>
+		Facebook_Application = 10549,
+		/// <summary>
+		/// Facebook_Engagement_Context = 10548
+		/// </summary>
+		Facebook_Engagement_Context = 10548,
+		/// <summary>
+		/// Facebook_Page = 10550
+		/// </summary>
+		Facebook_Page = 10550,
+		/// <summary>
+		/// FacilityEquipment = 4000
+		/// </summary>
+		FacilityEquipment = 4000,
+		/// <summary>
+		/// Fact = 10282
+		/// </summary>
+		Fact = 10282,
+		/// <summary>
 		/// Fax = 4204
 		/// </summary>
 		Fax = 4204,
@@ -2320,6 +5264,10 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Feedback = 9958
 		/// </summary>
 		Feedback = 9958,
+		/// <summary>
+		/// Field_Computation = 10283
+		/// </summary>
+		Field_Computation = 10283,
 		/// <summary>
 		/// Field_Permission = 1201
 		/// </summary>
@@ -2329,6 +5277,22 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Field_Security_Profile = 1200,
 		/// <summary>
+		/// Field_Service_Price_List_Item = 10371
+		/// </summary>
+		Field_Service_Price_List_Item = 10371,
+		/// <summary>
+		/// Field_Service_Setting = 10372
+		/// </summary>
+		Field_Service_Setting = 10372,
+		/// <summary>
+		/// Field_Service_SLA_Configuration = 10373
+		/// </summary>
+		Field_Service_SLA_Configuration = 10373,
+		/// <summary>
+		/// Field_Service_System_Job = 10374
+		/// </summary>
+		Field_Service_System_Job = 10374,
+		/// <summary>
 		/// Field_Sharing = 44
 		/// </summary>
 		Field_Sharing = 44,
@@ -2337,29 +5301,85 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		FileAttachment = 55,
 		/// <summary>
+		/// Filter = 10215
+		/// </summary>
+		Filter = 10215,
+		/// <summary>
 		/// Filter_Template = 30
 		/// </summary>
 		Filter_Template = 30,
+		/// <summary>
+		/// Find_Work_Event_Deprecated_in_v30 = 10284
+		/// </summary>
+		Find_Work_Event_Deprecated_in_v30 = 10284,
 		/// <summary>
 		/// Fixed_Monthly_Fiscal_Calendar = 2004
 		/// </summary>
 		Fixed_Monthly_Fiscal_Calendar = 2004,
 		/// <summary>
-		/// Flow_Machine = 10125
-		/// </summary>
-		Flow_Machine = 10125,
-		/// <summary>
-		/// Flow_Machine_Group = 10126
-		/// </summary>
-		Flow_Machine_Group = 10126,
-		/// <summary>
 		/// Flow_Session = 4720
 		/// </summary>
 		Flow_Session = 4720,
 		/// <summary>
+		/// flowcardtype = 10200
+		/// </summary>
+		flowcardtype = 10200,
+		/// <summary>
 		/// Follow = 8003
 		/// </summary>
 		Follow = 8003,
+		/// <summary>
+		/// Forecast = 10192
+		/// </summary>
+		Forecast = 10192,
+		/// <summary>
+		/// Forecast_Configuration = 10190
+		/// </summary>
+		Forecast_Configuration = 10190,
+		/// <summary>
+		/// Forecast_definition = 10191
+		/// </summary>
+		Forecast_definition = 10191,
+		/// <summary>
+		/// Forecast_recurrence = 10193
+		/// </summary>
+		Forecast_recurrence = 10193,
+		/// <summary>
+		/// Form = 10587
+		/// </summary>
+		Form = 10587,
+		/// <summary>
+		/// Fulfillment_Preference = 10258
+		/// </summary>
+		Fulfillment_Preference = 10258,
+		/// <summary>
+		/// Functional_Location = 10098
+		/// </summary>
+		Functional_Location = 10098,
+		/// <summary>
+		/// Geo_Location_Provider = 10491
+		/// </summary>
+		Geo_Location_Provider = 10491,
+		/// <summary>
+		/// Geofence = 10444
+		/// </summary>
+		Geofence = 10444,
+		/// <summary>
+		/// Geofence_Event = 10445
+		/// </summary>
+		Geofence_Event = 10445,
+		/// <summary>
+		/// Geofencing_Settings = 10446
+		/// </summary>
+		Geofencing_Settings = 10446,
+		/// <summary>
+		/// Geolocation_Settings = 10441
+		/// </summary>
+		Geolocation_Settings = 10441,
+		/// <summary>
+		/// Geolocation_Tracking = 10442
+		/// </summary>
+		Geolocation_Tracking = 10442,
 		/// <summary>
 		/// Global_Search_Configuration = 54
 		/// </summary>
@@ -2373,9 +5393,9 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Goal_Metric = 9603,
 		/// <summary>
-		/// Help_Page = 10033
+		/// Help_Page = 10030
 		/// </summary>
-		Help_Page = 10033,
+		Help_Page = 10030,
 		/// <summary>
 		/// Hierarchy_Rule = 8840
 		/// </summary>
@@ -2388,6 +5408,14 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// HolidayWrapper = 9996
 		/// </summary>
 		HolidayWrapper = 9996,
+		/// <summary>
+		/// Hosted_Control = 10570
+		/// </summary>
+		Hosted_Control = 10570,
+		/// <summary>
+		/// icebreakersconfig = 10210
+		/// </summary>
+		icebreakersconfig = 10210,
 		/// <summary>
 		/// Image_Attribute_Configuration = 431
 		/// </summary>
@@ -2417,9 +5445,73 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Import_Source_File = 4412,
 		/// <summary>
+		/// Incident_KnowledgeBaseRecord = 9931
+		/// </summary>
+		Incident_KnowledgeBaseRecord = 9931,
+		/// <summary>
+		/// Incident_Type = 10375
+		/// </summary>
+		Incident_Type = 10375,
+		/// <summary>
+		/// Incident_Type_Characteristic = 10376
+		/// </summary>
+		Incident_Type_Characteristic = 10376,
+		/// <summary>
+		/// Incident_Type_Product = 10377
+		/// </summary>
+		Incident_Type_Product = 10377,
+		/// <summary>
+		/// Incident_Type_Requirement_Group = 10381
+		/// </summary>
+		Incident_Type_Requirement_Group = 10381,
+		/// <summary>
+		/// Incident_Type_Service = 10378
+		/// </summary>
+		Incident_Type_Service = 10378,
+		/// <summary>
+		/// Incident_Type_Service_Task = 10379
+		/// </summary>
+		Incident_Type_Service_Task = 10379,
+		/// <summary>
+		/// Incident_Type_Suggestion_Result = 10436
+		/// </summary>
+		Incident_Type_Suggestion_Result = 10436,
+		/// <summary>
+		/// Incident_Type_Suggestion_Run_History = 10437
+		/// </summary>
+		Incident_Type_Suggestion_Run_History = 10437,
+		/// <summary>
+		/// Incident_Types_Setup = 10380
+		/// </summary>
+		Incident_Types_Setup = 10380,
+		/// <summary>
 		/// Indexed_Article = 126
 		/// </summary>
 		Indexed_Article = 126,
+		/// <summary>
+		/// Inspection = 10349
+		/// </summary>
+		Inspection = 10349,
+		/// <summary>
+		/// Inspection_Attachment = 10350
+		/// </summary>
+		Inspection_Attachment = 10350,
+		/// <summary>
+		/// Inspection_Response = 10352
+		/// </summary>
+		Inspection_Response = 10352,
+		/// <summary>
+		/// Inspection_Version = 10351
+		/// </summary>
+		Inspection_Version = 10351,
+		/// <summary>
+		/// Integration_Job = 10285
+		/// </summary>
+		Integration_Job = 10285,
+		/// <summary>
+		/// Integration_Job_Detail = 10286
+		/// </summary>
+		Integration_Job_Detail = 10286,
 		/// <summary>
 		/// Integration_Status = 3000
 		/// </summary>
@@ -2437,21 +5529,133 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Internal_Address = 1003,
 		/// <summary>
-		/// Internal_Catalog_Assignment = 10087
+		/// Internal_Catalog_Assignment = 10050
 		/// </summary>
-		Internal_Catalog_Assignment = 10087,
+		Internal_Catalog_Assignment = 10050,
 		/// <summary>
 		/// Invalid_Dependency = 7107
 		/// </summary>
 		Invalid_Dependency = 7107,
 		/// <summary>
+		/// Inventory_Adjustment = 10382
+		/// </summary>
+		Inventory_Adjustment = 10382,
+		/// <summary>
+		/// Inventory_Adjustment_Product = 10383
+		/// </summary>
+		Inventory_Adjustment_Product = 10383,
+		/// <summary>
+		/// Inventory_Journal = 10384
+		/// </summary>
+		Inventory_Journal = 10384,
+		/// <summary>
+		/// Inventory_Transfer = 10385
+		/// </summary>
+		Inventory_Transfer = 10385,
+		/// <summary>
+		/// Invoice = 1090
+		/// </summary>
+		Invoice = 1090,
+		/// <summary>
+		/// Invoice_Frequency = 10287
+		/// </summary>
+		Invoice_Frequency = 10287,
+		/// <summary>
+		/// Invoice_Frequency_Detail = 10288
+		/// </summary>
+		Invoice_Frequency_Detail = 10288,
+		/// <summary>
+		/// Invoice_Line = 1091
+		/// </summary>
+		Invoice_Line = 1091,
+		/// <summary>
+		/// Invoice_Line_Detail = 10289
+		/// </summary>
+		Invoice_Line_Detail = 10289,
+		/// <summary>
+		/// Invoice_Process = 10268
+		/// </summary>
+		Invoice_Process = 10268,
+		/// <summary>
+		/// IoT_Alert = 10105
+		/// </summary>
+		IoT_Alert = 10105,
+		/// <summary>
+		/// IoT_Alert_to_Case_Process = 10121
+		/// </summary>
+		IoT_Alert_to_Case_Process = 10121,
+		/// <summary>
+		/// IoT_Device = 10106
+		/// </summary>
+		IoT_Device = 10106,
+		/// <summary>
+		/// IoT_Device_Category = 10107
+		/// </summary>
+		IoT_Device_Category = 10107,
+		/// <summary>
+		/// IoT_Device_Command = 10108
+		/// </summary>
+		IoT_Device_Command = 10108,
+		/// <summary>
+		/// IoT_Device_Command_Definition = 10109
+		/// </summary>
+		IoT_Device_Command_Definition = 10109,
+		/// <summary>
+		/// IoT_Device_Data_History = 10110
+		/// </summary>
+		IoT_Device_Data_History = 10110,
+		/// <summary>
+		/// IoT_Device_Property = 10111
+		/// </summary>
+		IoT_Device_Property = 10111,
+		/// <summary>
+		/// IoT_Device_Registration_History = 10112
+		/// </summary>
+		IoT_Device_Registration_History = 10112,
+		/// <summary>
+		/// IoT_Device_Visualization_Configuration = 10113
+		/// </summary>
+		IoT_Device_Visualization_Configuration = 10113,
+		/// <summary>
+		/// IoT_Field_Mapping = 10114
+		/// </summary>
+		IoT_Field_Mapping = 10114,
+		/// <summary>
+		/// IoT_Property_Definition = 10115
+		/// </summary>
+		IoT_Property_Definition = 10115,
+		/// <summary>
+		/// IoT_Provider = 10116
+		/// </summary>
+		IoT_Provider = 10116,
+		/// <summary>
+		/// IoT_Provider_Instance = 10117
+		/// </summary>
+		IoT_Provider_Instance = 10117,
+		/// <summary>
+		/// IoT_Settings = 10118
+		/// </summary>
+		IoT_Settings = 10118,
+		/// <summary>
 		/// ISV_Config = 4705
 		/// </summary>
 		ISV_Config = 4705,
 		/// <summary>
-		/// KeyVaultReference = 10120
+		/// Journal = 10290
 		/// </summary>
-		KeyVaultReference = 10120,
+		Journal = 10290,
+		/// <summary>
+		/// Journal_Line = 10291
+		/// </summary>
+		Journal_Line = 10291,
+		/// <summary>
+		/// KB_Enrichment = 10160
+		/// </summary>
+		KB_Enrichment = 10160,
+		/// <summary>
+		/// KeyVaultReference = 10632
+		/// </summary>
+		KeyVaultReference = 10632,
 		/// <summary>
 		/// Knowledge_Article = 9953
 		/// </summary>
@@ -2461,17 +5665,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Knowledge_Article_Category = 9960,
 		/// <summary>
-		/// Knowledge_Article_Image = 10021
+		/// Knowledge_Article_Image = 10044
 		/// </summary>
-		Knowledge_Article_Image = 10021,
+		Knowledge_Article_Image = 10044,
 		/// <summary>
-		/// Knowledge_article_language_setting = 10140
+		/// Knowledge_Article_Incident = 9954
 		/// </summary>
-		Knowledge_article_language_setting = 10140,
+		Knowledge_Article_Incident = 9954,
 		/// <summary>
-		/// Knowledge_Article_Template = 10022
+		/// Knowledge_Article_Suggestion = 10161
 		/// </summary>
-		Knowledge_Article_Template = 10022,
+		Knowledge_Article_Suggestion = 10161,
+		/// <summary>
+		/// Knowledge_Article_Suggestion_Data_Source = 10162
+		/// </summary>
+		Knowledge_Article_Suggestion_Data_Source = 10162,
+		/// <summary>
+		/// Knowledge_Article_Template = 10047
+		/// </summary>
+		Knowledge_Article_Template = 10047,
 		/// <summary>
 		/// Knowledge_Article_Views = 9955
 		/// </summary>
@@ -2481,45 +5693,73 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Knowledge_Base_Record = 9930,
 		/// <summary>
-		/// Knowledge_Federated_Article = 10098
+		/// Knowledge_Federated_Article = 10041
 		/// </summary>
-		Knowledge_Federated_Article = 10098,
+		Knowledge_Federated_Article = 10041,
 		/// <summary>
-		/// Knowledge_FederatedArticle_Incident = 10099
+		/// Knowledge_FederatedArticle_Incident = 10042
 		/// </summary>
-		Knowledge_FederatedArticle_Incident = 10099,
+		Knowledge_FederatedArticle_Incident = 10042,
 		/// <summary>
-		/// Knowledge_Interaction_Insight = 10079
+		/// Knowledge_Interaction_Insight = 10045
 		/// </summary>
-		Knowledge_Interaction_Insight = 10079,
+		Knowledge_Interaction_Insight = 10045,
 		/// <summary>
-		/// Knowledge_personalization = 10139
+		/// Knowledge_search_analytics_preview = 10176
 		/// </summary>
-		Knowledge_personalization = 10139,
+		Knowledge_search_analytics_preview = 10176,
 		/// <summary>
-		/// Knowledge_search_filter = 10142
+		/// Knowledge_Search_Insight = 10046
 		/// </summary>
-		Knowledge_search_filter = 10142,
-		/// <summary>
-		/// Knowledge_Search_Insight = 10080
-		/// </summary>
-		Knowledge_Search_Insight = 10080,
+		Knowledge_Search_Insight = 10046,
 		/// <summary>
 		/// Knowledge_Search_Model = 9947
 		/// </summary>
 		Knowledge_Search_Model = 9947,
 		/// <summary>
-		/// Knowledge_search_personal_filter_config = 10141
+		/// KPI_Event_Data = 10186
 		/// </summary>
-		Knowledge_search_personal_filter_config = 10141,
+		KPI_Event_Data = 10186,
 		/// <summary>
-		/// Language = 9957
+		/// KPI_Event_Definition = 10187
 		/// </summary>
-		Language = 9957,
+		KPI_Event_Definition = 10187,
+		/// <summary>
+		/// Language_10509 = 10509
+		/// </summary>
+		Language_10509 = 10509,
+		/// <summary>
+		/// Language_9957 = 9957
+		/// </summary>
+		Language_9957 = 9957,
+		/// <summary>
+		/// Language_Module = 10588
+		/// </summary>
+		Language_Module = 10588,
 		/// <summary>
 		/// Language_Provisioning_State = 9875
 		/// </summary>
 		Language_Provisioning_State = 9875,
+		/// <summary>
+		/// Lead = 4
+		/// </summary>
+		Lead = 4,
+		/// <summary>
+		/// Lead_Address = 1017
+		/// </summary>
+		Lead_Address = 1017,
+		/// <summary>
+		/// Lead_To_Opportunity_Sales_Process = 954
+		/// </summary>
+		Lead_To_Opportunity_Sales_Process = 954,
+		/// <summary>
+		/// LeadCompetitors = 24
+		/// </summary>
+		LeadCompetitors = 24,
+		/// <summary>
+		/// LeadProduct = 27
+		/// </summary>
+		LeadProduct = 27,
 		/// <summary>
 		/// Letter = 4207
 		/// </summary>
@@ -2533,21 +5773,65 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Like = 8006,
 		/// <summary>
+		/// LINE_account = 10554
+		/// </summary>
+		LINE_account = 10554,
+		/// <summary>
+		/// LINE_Engagement_Context = 10552
+		/// </summary>
+		LINE_Engagement_Context = 10552,
+		/// <summary>
+		/// List_Operation = 10082
+		/// </summary>
+		List_Operation = 10082,
+		/// <summary>
 		/// List_Value_Mapping = 4418
 		/// </summary>
 		List_Value_Mapping = 4418,
+		/// <summary>
+		/// Live_Chat_Context = 10538
+		/// </summary>
+		Live_Chat_Context = 10538,
+		/// <summary>
+		/// Live_work_item_event = 10508
+		/// </summary>
+		Live_work_item_event = 10508,
+		/// <summary>
+		/// Live_Work_Item_Participant_Deprecated = 10482
+		/// </summary>
+		Live_Work_Item_Participant_Deprecated = 10482,
 		/// <summary>
 		/// LocalConfigStore = 9201
 		/// </summary>
 		LocalConfigStore = 9201,
 		/// <summary>
-		/// Location = 10069
+		/// Localization = 10485
 		/// </summary>
-		Location = 10069,
+		Localization = 10485,
+		/// <summary>
+		/// Localized_Survey_Question_Deprecated = 10540
+		/// </summary>
+		Localized_Survey_Question_Deprecated = 10540,
 		/// <summary>
 		/// Lookup_Mapping = 4419
 		/// </summary>
 		Lookup_Mapping = 4419,
+		/// <summary>
+		/// Macro_Action_Template = 10146
+		/// </summary>
+		Macro_Action_Template = 10146,
+		/// <summary>
+		/// Macro_Connector = 10148
+		/// </summary>
+		Macro_Connector = 10148,
+		/// <summary>
+		/// Macro_Run_History = 10149
+		/// </summary>
+		Macro_Run_History = 10149,
+		/// <summary>
+		/// Macro_Solution_Configuration = 10147
+		/// </summary>
+		Macro_Solution_Configuration = 10147,
 		/// <summary>
 		/// Mail_Merge_Template = 9106
 		/// </summary>
@@ -2573,13 +5857,49 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Managed_Property = 9812,
 		/// <summary>
-		/// ManagedIdentity = 10121
+		/// ManagedIdentity = 10633
 		/// </summary>
-		ManagedIdentity = 10121,
+		ManagedIdentity = 10633,
+		/// <summary>
+		/// Marketing_List = 4300
+		/// </summary>
+		Marketing_List = 4300,
+		/// <summary>
+		/// Marketing_List_Member = 4301
+		/// </summary>
+		Marketing_List_Member = 4301,
+		/// <summary>
+		/// MarketingSiteMap = 10447
+		/// </summary>
+		MarketingSiteMap = 10447,
+		/// <summary>
+		/// Masking_Rule = 10476
+		/// </summary>
+		Masking_Rule = 10476,
+		/// <summary>
+		/// Message = 10490
+		/// </summary>
+		Message = 10490,
 		/// <summary>
 		/// Metadata_Difference = 4231
 		/// </summary>
 		Metadata_Difference = 4231,
+		/// <summary>
+		/// Microsoft_Teams_account = 10563
+		/// </summary>
+		Microsoft_Teams_account = 10563,
+		/// <summary>
+		/// Microsoft_Teams_Collaboration_entity = 10232
+		/// </summary>
+		Microsoft_Teams_Collaboration_entity = 10232,
+		/// <summary>
+		/// Microsoft_Teams_Graph_resource_Entity = 10229
+		/// </summary>
+		Microsoft_Teams_Graph_resource_Entity = 10229,
+		/// <summary>
+		/// Migration_tracker = 10092
+		/// </summary>
+		Migration_tracker = 10092,
 		/// <summary>
 		/// Mobile_Offline_Profile = 9866
 		/// </summary>
@@ -2597,29 +5917,41 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Model_driven_App = 9006,
 		/// <summary>
-		/// Model_Driven_App_Component_Node = 10062
+		/// Model_Driven_App_Component_Node = 10022
 		/// </summary>
-		Model_Driven_App_Component_Node = 10062,
+		Model_Driven_App_Component_Node = 10022,
 		/// <summary>
-		/// Model_Driven_App_Component_Nodes_Edge = 10061
+		/// Model_Driven_App_Component_Nodes_Edge = 10021
 		/// </summary>
-		Model_Driven_App_Component_Nodes_Edge = 10061,
+		Model_Driven_App_Component_Nodes_Edge = 10021,
 		/// <summary>
-		/// Model_Driven_App_Element = 10060
+		/// Model_Driven_App_Element = 10020
 		/// </summary>
-		Model_Driven_App_Element = 10060,
+		Model_Driven_App_Element = 10020,
 		/// <summary>
-		/// Model_Driven_App_Setting = 10063
+		/// Model_Driven_App_Setting = 10023
 		/// </summary>
-		Model_Driven_App_Setting = 10063,
+		Model_Driven_App_Setting = 10023,
 		/// <summary>
-		/// Model_Driven_App_User_Setting = 10117
+		/// Model_Driven_App_User_Setting = 10629
 		/// </summary>
-		Model_Driven_App_User_Setting = 10117,
+		Model_Driven_App_User_Setting = 10629,
 		/// <summary>
 		/// Monthly_Fiscal_Calendar = 2003
 		/// </summary>
 		Monthly_Fiscal_Calendar = 2003,
+		/// <summary>
+		/// msdyn_msteamssetting = 10230
+		/// </summary>
+		msdyn_msteamssetting = 10230,
+		/// <summary>
+		/// msdyn_msteamssettingsv2 = 10231
+		/// </summary>
+		msdyn_msteamssettingsv2 = 10231,
+		/// <summary>
+		/// msdyn_relationshipinsightsunifiedconfig = 10194
+		/// </summary>
+		msdyn_relationshipinsightsunifiedconfig = 10194,
 		/// <summary>
 		/// Multi_Select_Option_Value = 9912
 		/// </summary>
@@ -2629,10 +5961,6 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		MultiEntitySearch = 9910,
 		/// <summary>
-		/// My_Mother = 10146
-		/// </summary>
-		My_Mother = 10146,
-		/// <summary>
 		/// Navigation_Setting = 9900
 		/// </summary>
 		Navigation_Setting = 9900,
@@ -2641,25 +5969,45 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		New_Process = 950,
 		/// <summary>
-		/// NonRelational_Data_Source = 10054
+		/// NonRelational_Data_Source = 10061
 		/// </summary>
-		NonRelational_Data_Source = 10054,
+		NonRelational_Data_Source = 10061,
 		/// <summary>
 		/// Note = 5
 		/// </summary>
 		Note = 5,
 		/// <summary>
-		/// Notification_10122 = 10122
+		/// Notes_analysis_Config = 10209
 		/// </summary>
-		Notification_10122 = 10122,
+		Notes_analysis_Config = 10209,
+		/// <summary>
+		/// Notification_10634 = 10634
+		/// </summary>
+		Notification_10634 = 10634,
 		/// <summary>
 		/// Notification_4110 = 4110
 		/// </summary>
 		Notification_4110 = 4110,
 		/// <summary>
-		/// OData_v4_Data_Source = 10000
+		/// Notification_Field = 10126
 		/// </summary>
-		OData_v4_Data_Source = 10000,
+		Notification_Field = 10126,
+		/// <summary>
+		/// Notification_Field_Deprecated = 10452
+		/// </summary>
+		Notification_Field_Deprecated = 10452,
+		/// <summary>
+		/// Notification_Template = 10127
+		/// </summary>
+		Notification_Template = 10127,
+		/// <summary>
+		/// Notification_Template_Deprecated = 10453
+		/// </summary>
+		Notification_Template_Deprecated = 10453,
+		/// <summary>
+		/// OData_v4_Data_Source = 10026
+		/// </summary>
+		OData_v4_Data_Source = 10026,
 		/// <summary>
 		/// Office_Document = 4490
 		/// </summary>
@@ -2673,9 +6021,113 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Offline_Command_Definition = 9870,
 		/// <summary>
+		/// Omnichannel_Configuration = 10515
+		/// </summary>
+		Omnichannel_Configuration = 10515,
+		/// <summary>
+		/// Omnichannel_Personalization = 10492
+		/// </summary>
+		Omnichannel_Personalization = 10492,
+		/// <summary>
+		/// Omnichannel_Queue_Deprecated = 10493
+		/// </summary>
+		Omnichannel_Queue_Deprecated = 10493,
+		/// <summary>
+		/// Omnichannel_Request = 10487
+		/// </summary>
+		Omnichannel_Request = 10487,
+		/// <summary>
+		/// Omnichannel_Sync_Config = 10516
+		/// </summary>
+		Omnichannel_Sync_Config = 10516,
+		/// <summary>
+		/// Ongoing_conversation_Deprecated = 10474
+		/// </summary>
+		Ongoing_conversation_Deprecated = 10474,
+		/// <summary>
+		/// Operating_Hour = 10494
+		/// </summary>
+		Operating_Hour = 10494,
+		/// <summary>
+		/// Opportunity = 3
+		/// </summary>
+		Opportunity = 3,
+		/// <summary>
+		/// Opportunity_Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Opportunity_Line = 1083
+		/// </summary>
+		Opportunity_Line = 1083,
+		/// <summary>
+		/// Opportunity_Line_Detail_Deprecated = 10294
+		/// </summary>
+		Opportunity_Line_Detail_Deprecated = 10294,
+		/// <summary>
+		/// Opportunity_Line_Resource_Category_Deprecated = 10293
+		/// </summary>
+		Opportunity_Line_Resource_Category_Deprecated = 10293,
+		/// <summary>
+		/// Opportunity_Line_Transaction_Category_Deprecated = 10295
+		/// </summary>
+		Opportunity_Line_Transaction_Category_Deprecated = 10295,
+		/// <summary>
+		/// Opportunity_Line_Transaction_Classification_Deprecated = 10296
+		/// </summary>
+		Opportunity_Line_Transaction_Classification_Deprecated = 10296,
+		/// <summary>
+		/// Opportunity_Project_Price_List = 10297
+		/// </summary>
+		Opportunity_Project_Price_List = 10297,
+		/// <summary>
+		/// Opportunity_Relationship = 4503
+		/// </summary>
+		Opportunity_Relationship = 4503,
+		/// <summary>
+		/// Opportunity_Sales_Process = 953
+		/// </summary>
+		Opportunity_Sales_Process = 953,
+		/// <summary>
+		/// OpportunityCompetitors = 25
+		/// </summary>
+		OpportunityCompetitors = 25,
+		/// <summary>
+		/// Option = 10572
+		/// </summary>
+		Option = 10572,
+		/// <summary>
 		/// OptionSet = 9809
 		/// </summary>
 		OptionSet = 9809,
+		/// <summary>
+		/// Order = 1088
+		/// </summary>
+		Order = 1088,
+		/// <summary>
+		/// Order_Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Order_Invoicing_Date = 10386
+		/// </summary>
+		Order_Invoicing_Date = 10386,
+		/// <summary>
+		/// Order_Invoicing_Product = 10387
+		/// </summary>
+		Order_Invoicing_Product = 10387,
+		/// <summary>
+		/// Order_Invoicing_Setup = 10388
+		/// </summary>
+		Order_Invoicing_Setup = 10388,
+		/// <summary>
+		/// Order_Invoicing_Setup_Date = 10389
+		/// </summary>
+		Order_Invoicing_Setup_Date = 10389,
+		/// <summary>
+		/// Order_Line = 1089
+		/// </summary>
+		Order_Line = 1089,
 		/// <summary>
 		/// Organization = 1019
 		/// </summary>
@@ -2689,9 +6141,9 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Organization_Insights_Notification = 9690,
 		/// <summary>
-		/// Organization_Setting = 10114
+		/// Organization_Setting = 10626
 		/// </summary>
-		Organization_Setting = 10114,
+		Organization_Setting = 10626,
 		/// <summary>
 		/// Organization_Statistic = 4708
 		/// </summary>
@@ -2701,13 +6153,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Organization_UI = 1021,
 		/// <summary>
-		/// OrganizationDataSyncSubscription = 10115
+		/// Organizational_Unit = 10243
 		/// </summary>
-		OrganizationDataSyncSubscription = 10115,
+		Organizational_Unit = 10243,
 		/// <summary>
-		/// OrganizationDataSyncSubscriptionEntity = 10116
+		/// OrganizationDataSyncSubscription = 10627
 		/// </summary>
-		OrganizationDataSyncSubscriptionEntity = 10116,
+		OrganizationDataSyncSubscription = 10627,
+		/// <summary>
+		/// OrganizationDataSyncSubscriptionEntity = 10628
+		/// </summary>
+		OrganizationDataSyncSubscriptionEntity = 10628,
+		/// <summary>
+		/// Outbound_Configuration = 10565
+		/// </summary>
+		Outbound_Configuration = 10565,
+		/// <summary>
+		/// Outbound_message = 10566
+		/// </summary>
+		Outbound_message = 10566,
 		/// <summary>
 		/// Owner = 7
 		/// </summary>
@@ -2717,25 +6181,93 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Owner_Mapping = 4420,
 		/// <summary>
-		/// Package = 10077
+		/// Package = 10007
 		/// </summary>
-		Package = 10077,
+		Package = 10007,
+		/// <summary>
+		/// Pane_tab_configuration = 10138
+		/// </summary>
+		Pane_tab_configuration = 10138,
+		/// <summary>
+		/// Pane_tool_configuration = 10139
+		/// </summary>
+		Pane_tool_configuration = 10139,
+		/// <summary>
+		/// Parameter_definition = 10150
+		/// </summary>
+		Parameter_definition = 10150,
+		/// <summary>
+		/// Parameter_Deprecated = 10457
+		/// </summary>
+		Parameter_Deprecated = 10457,
 		/// <summary>
 		/// Partner_Application = 1095
 		/// </summary>
 		Partner_Application = 1095,
 		/// <summary>
-		/// PDF_Setting = 10072
+		/// Payment = 10390
 		/// </summary>
-		PDF_Setting = 10072,
+		Payment = 10390,
+		/// <summary>
+		/// Payment_Detail = 10391
+		/// </summary>
+		Payment_Detail = 10391,
+		/// <summary>
+		/// Payment_Method = 10392
+		/// </summary>
+		Payment_Method = 10392,
+		/// <summary>
+		/// Payment_Term = 10393
+		/// </summary>
+		Payment_Term = 10393,
+		/// <summary>
+		/// PDF_Setting = 10038
+		/// </summary>
+		PDF_Setting = 10038,
 		/// <summary>
 		/// Personal_Document_Template = 9941
 		/// </summary>
 		Personal_Document_Template = 9941,
 		/// <summary>
+		/// Personal_quick_reply = 10517
+		/// </summary>
+		Personal_quick_reply = 10517,
+		/// <summary>
+		/// Personal_sound_setting = 10518
+		/// </summary>
+		Personal_sound_setting = 10518,
+		/// <summary>
 		/// Phone_Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
+		/// <summary>
+		/// Phone_To_Case_Process = 952
+		/// </summary>
+		Phone_To_Case_Process = 952,
+		/// <summary>
+		/// Playbook = 10181
+		/// </summary>
+		Playbook = 10181,
+		/// <summary>
+		/// Playbook_activity = 10178
+		/// </summary>
+		Playbook_activity = 10178,
+		/// <summary>
+		/// Playbook_activity_attribute = 10179
+		/// </summary>
+		Playbook_activity_attribute = 10179,
+		/// <summary>
+		/// Playbook_Callable_Context = 10177
+		/// </summary>
+		Playbook_Callable_Context = 10177,
+		/// <summary>
+		/// Playbook_category = 10180
+		/// </summary>
+		Playbook_category = 10180,
+		/// <summary>
+		/// Playbook_template = 10182
+		/// </summary>
+		Playbook_template = 10182,
 		/// <summary>
 		/// Plug_in_Assembly = 4605
 		/// </summary>
@@ -2761,6 +6293,10 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Post = 8000,
 		/// <summary>
+		/// Post_Configuration = 10212
+		/// </summary>
+		Post_Configuration = 10212,
+		/// <summary>
 		/// Post_Regarding = 8002
 		/// </summary>
 		Post_Regarding = 8002,
@@ -2769,9 +6305,45 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Post_Role = 8001,
 		/// <summary>
+		/// Post_Rule_Configuration = 10213
+		/// </summary>
+		Post_Rule_Configuration = 10213,
+		/// <summary>
+		/// Postal_Code = 10394
+		/// </summary>
+		Postal_Code = 10394,
+		/// <summary>
+		/// Power_BI_Configuration = 10470
+		/// </summary>
+		Power_BI_Configuration = 10470,
+		/// <summary>
+		/// Presence = 10495
+		/// </summary>
+		Presence = 10495,
+		/// <summary>
+		/// Price_List = 1022
+		/// </summary>
+		Price_List = 1022,
+		/// <summary>
+		/// Price_List_Item = 1026
+		/// </summary>
+		Price_List_Item = 1026,
+		/// <summary>
+		/// Pricing_Dimension = 10275
+		/// </summary>
+		Pricing_Dimension = 10275,
+		/// <summary>
+		/// Pricing_Dimension_Field_Name = 10276
+		/// </summary>
+		Pricing_Dimension_Field_Name = 10276,
+		/// <summary>
 		/// Principal_Sync_Attribute_Map = 1404
 		/// </summary>
 		Principal_Sync_Attribute_Map = 1404,
+		/// <summary>
+		/// Priority = 10244
+		/// </summary>
+		Priority = 10244,
 		/// <summary>
 		/// Privilege = 1023
 		/// </summary>
@@ -2780,6 +6352,10 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Privilege_Object_Type_Code = 31
 		/// </summary>
 		Privilege_Object_Type_Code = 31,
+		/// <summary>
+		/// Problematic_Asset_Feedback = 10439
+		/// </summary>
+		Problematic_Asset_Feedback = 10439,
 		/// <summary>
 		/// Process = 4703
 		/// </summary>
@@ -2797,6 +6373,10 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Process_Log = 4706,
 		/// <summary>
+		/// Process_Notes = 10303
+		/// </summary>
+		Process_Notes = 10303,
+		/// <summary>
 		/// Process_Session = 4710
 		/// </summary>
 		Process_Session = 4710,
@@ -2809,17 +6389,161 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Process_Trigger = 4712,
 		/// <summary>
-		/// Process_WebApi_1 = 10029
+		/// ProcessStageParameter = 10027
 		/// </summary>
-		Process_WebApi_1 = 10029,
+		ProcessStageParameter = 10027,
 		/// <summary>
-		/// ProcessStageParameter = 10052
+		/// Product = 1024
 		/// </summary>
-		ProcessStageParameter = 10052,
+		Product = 1024,
 		/// <summary>
-		/// ProvisionLanguageForUser = 10083
+		/// Product_Association = 1025
 		/// </summary>
-		ProvisionLanguageForUser = 10083,
+		Product_Association = 1025,
+		/// <summary>
+		/// Product_Inventory = 10395
+		/// </summary>
+		Product_Inventory = 10395,
+		/// <summary>
+		/// Product_Relationship = 1028
+		/// </summary>
+		Product_Relationship = 1028,
+		/// <summary>
+		/// Productivity_pane_configuration = 10137
+		/// </summary>
+		Productivity_pane_configuration = 10137,
+		/// <summary>
+		/// ProductSalesLiterature = 21
+		/// </summary>
+		ProductSalesLiterature = 21,
+		/// <summary>
+		/// Profile_Album = 10211
+		/// </summary>
+		Profile_Album = 10211,
+		/// <summary>
+		/// Project = 10304
+		/// </summary>
+		Project = 10304,
+		/// <summary>
+		/// Project_Approval = 10305
+		/// </summary>
+		Project_Approval = 10305,
+		/// <summary>
+		/// Project_Contract_Line_Detail = 10299
+		/// </summary>
+		Project_Contract_Line_Detail = 10299,
+		/// <summary>
+		/// Project_Contract_Line_Invoice_Schedule = 10271
+		/// </summary>
+		Project_Contract_Line_Invoice_Schedule = 10271,
+		/// <summary>
+		/// Project_Contract_Line_Milestone = 10272
+		/// </summary>
+		Project_Contract_Line_Milestone = 10272,
+		/// <summary>
+		/// Project_Contract_Line_Resource_Category = 10298
+		/// </summary>
+		Project_Contract_Line_Resource_Category = 10298,
+		/// <summary>
+		/// Project_Contract_Line_Transaction_Category = 10300
+		/// </summary>
+		Project_Contract_Line_Transaction_Category = 10300,
+		/// <summary>
+		/// Project_Contract_Line_Transaction_Classification = 10301
+		/// </summary>
+		Project_Contract_Line_Transaction_Classification = 10301,
+		/// <summary>
+		/// Project_Contract_Project_Price_List = 10302
+		/// </summary>
+		Project_Contract_Project_Price_List = 10302,
+		/// <summary>
+		/// Project_Parameter = 10306
+		/// </summary>
+		Project_Parameter = 10306,
+		/// <summary>
+		/// Project_Parameter_Price_List = 10307
+		/// </summary>
+		Project_Parameter_Price_List = 10307,
+		/// <summary>
+		/// Project_Price_List = 10308
+		/// </summary>
+		Project_Price_List = 10308,
+		/// <summary>
+		/// Project_Service_Approval = 10265
+		/// </summary>
+		Project_Service_Approval = 10265,
+		/// <summary>
+		/// Project_Stages = 10267
+		/// </summary>
+		Project_Stages = 10267,
+		/// <summary>
+		/// Project_Task = 10309
+		/// </summary>
+		Project_Task = 10309,
+		/// <summary>
+		/// Project_Task_Dependency = 10310
+		/// </summary>
+		Project_Task_Dependency = 10310,
+		/// <summary>
+		/// Project_Task_Status_User = 10311
+		/// </summary>
+		Project_Task_Status_User = 10311,
+		/// <summary>
+		/// Project_Team_Member = 10312
+		/// </summary>
+		Project_Team_Member = 10312,
+		/// <summary>
+		/// Project_Team_Member_Sign_Up_Deprecated_in_v30 = 10313
+		/// </summary>
+		Project_Team_Member_Sign_Up_Deprecated_in_v30 = 10313,
+		/// <summary>
+		/// Project_Transaction_Category_Deprecated = 10314
+		/// </summary>
+		Project_Transaction_Category_Deprecated = 10314,
+		/// <summary>
+		/// Property = 1048
+		/// </summary>
+		Property = 1048,
+		/// <summary>
+		/// Property_Asset_Association = 10100
+		/// </summary>
+		Property_Asset_Association = 10100,
+		/// <summary>
+		/// Property_Association = 1235
+		/// </summary>
+		Property_Association = 1235,
+		/// <summary>
+		/// Property_Definition = 10099
+		/// </summary>
+		Property_Definition = 10099,
+		/// <summary>
+		/// Property_Instance = 1333
+		/// </summary>
+		Property_Instance = 1333,
+		/// <summary>
+		/// Property_Log = 10101
+		/// </summary>
+		Property_Log = 10101,
+		/// <summary>
+		/// Property_Option_Set_Item = 1049
+		/// </summary>
+		Property_Option_Set_Item = 1049,
+		/// <summary>
+		/// Property_Template_Association = 10102
+		/// </summary>
+		Property_Template_Association = 10102,
+		/// <summary>
+		/// Provider = 10519
+		/// </summary>
+		Provider = 10519,
+		/// <summary>
+		/// Provisioning_State = 10486
+		/// </summary>
+		Provisioning_State = 10486,
+		/// <summary>
+		/// ProvisionLanguageForUser = 10013
+		/// </summary>
+		ProvisionLanguageForUser = 10013,
 		/// <summary>
 		/// Publisher = 7101
 		/// </summary>
@@ -2828,6 +6552,34 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Publisher_Address = 7102
 		/// </summary>
 		Publisher_Address = 7102,
+		/// <summary>
+		/// Purchase_Order = 10396
+		/// </summary>
+		Purchase_Order = 10396,
+		/// <summary>
+		/// Purchase_Order_Bill = 10397
+		/// </summary>
+		Purchase_Order_Bill = 10397,
+		/// <summary>
+		/// Purchase_Order_Business_Process = 10366
+		/// </summary>
+		Purchase_Order_Business_Process = 10366,
+		/// <summary>
+		/// Purchase_Order_Product = 10398
+		/// </summary>
+		Purchase_Order_Product = 10398,
+		/// <summary>
+		/// Purchase_Order_Receipt = 10399
+		/// </summary>
+		Purchase_Order_Receipt = 10399,
+		/// <summary>
+		/// Purchase_Order_Receipt_Product = 10400
+		/// </summary>
+		Purchase_Order_Receipt_Product = 10400,
+		/// <summary>
+		/// Purchase_Order_SubStatus = 10401
+		/// </summary>
+		Purchase_Order_SubStatus = 10401,
 		/// <summary>
 		/// Quarterly_Fiscal_Calendar = 2002
 		/// </summary>
@@ -2848,6 +6600,94 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// QueueMemberCount = 2024
 		/// </summary>
 		QueueMemberCount = 2024,
+		/// <summary>
+		/// Quick_Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quick_reply = 10471
+		/// </summary>
+		Quick_reply = 10471,
+		/// <summary>
+		/// Quote = 1084
+		/// </summary>
+		Quote = 1084,
+		/// <summary>
+		/// Quote_Booking_Incident = 10402
+		/// </summary>
+		Quote_Booking_Incident = 10402,
+		/// <summary>
+		/// Quote_Booking_Product = 10403
+		/// </summary>
+		Quote_Booking_Product = 10403,
+		/// <summary>
+		/// Quote_Booking_Service = 10404
+		/// </summary>
+		Quote_Booking_Service = 10404,
+		/// <summary>
+		/// Quote_Booking_Service_Task = 10405
+		/// </summary>
+		Quote_Booking_Service_Task = 10405,
+		/// <summary>
+		/// Quote_Booking_Setup = 10406
+		/// </summary>
+		Quote_Booking_Setup = 10406,
+		/// <summary>
+		/// Quote_Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Quote_Invoicing_Product = 10407
+		/// </summary>
+		Quote_Invoicing_Product = 10407,
+		/// <summary>
+		/// Quote_Invoicing_Setup = 10408
+		/// </summary>
+		Quote_Invoicing_Setup = 10408,
+		/// <summary>
+		/// Quote_Line = 1085
+		/// </summary>
+		Quote_Line = 1085,
+		/// <summary>
+		/// Quote_Line_Analytics_Breakdown = 10315
+		/// </summary>
+		Quote_Line_Analytics_Breakdown = 10315,
+		/// <summary>
+		/// Quote_Line_Detail = 10319
+		/// </summary>
+		Quote_Line_Detail = 10319,
+		/// <summary>
+		/// Quote_Line_Invoice_Schedule = 10316
+		/// </summary>
+		Quote_Line_Invoice_Schedule = 10316,
+		/// <summary>
+		/// Quote_Line_Milestone = 10318
+		/// </summary>
+		Quote_Line_Milestone = 10318,
+		/// <summary>
+		/// Quote_Line_Resource_Category = 10317
+		/// </summary>
+		Quote_Line_Resource_Category = 10317,
+		/// <summary>
+		/// Quote_Line_Transaction_Category = 10320
+		/// </summary>
+		Quote_Line_Transaction_Category = 10320,
+		/// <summary>
+		/// Quote_Line_Transaction_Classification = 10321
+		/// </summary>
+		Quote_Line_Transaction_Classification = 10321,
+		/// <summary>
+		/// Quote_Project_Price_List = 10322
+		/// </summary>
+		Quote_Project_Price_List = 10322,
+		/// <summary>
+		/// Rating_Model = 1144
+		/// </summary>
+		Rating_Model = 1144,
+		/// <summary>
+		/// Rating_Value = 1142
+		/// </summary>
+		Rating_Value = 1142,
 		/// <summary>
 		/// Record_Creation_and_Update_Rule = 9300
 		/// </summary>
@@ -2905,9 +6745,97 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Report_Visibility = 9103,
 		/// <summary>
-		/// RevokeInheritedAccessRecordsTracker = 10104
+		/// Requirement_Characteristic = 10245
 		/// </summary>
-		RevokeInheritedAccessRecordsTracker = 10104,
+		Requirement_Characteristic = 10245,
+		/// <summary>
+		/// Requirement_Dependency = 10262
+		/// </summary>
+		Requirement_Dependency = 10262,
+		/// <summary>
+		/// Requirement_Group = 10246
+		/// </summary>
+		Requirement_Group = 10246,
+		/// <summary>
+		/// Requirement_Organization_Unit = 10247
+		/// </summary>
+		Requirement_Organization_Unit = 10247,
+		/// <summary>
+		/// Requirement_Relationship = 10248
+		/// </summary>
+		Requirement_Relationship = 10248,
+		/// <summary>
+		/// Requirement_Resource_Category = 10249
+		/// </summary>
+		Requirement_Resource_Category = 10249,
+		/// <summary>
+		/// Requirement_Resource_Preference = 10250
+		/// </summary>
+		Requirement_Resource_Preference = 10250,
+		/// <summary>
+		/// Requirement_Status = 10251
+		/// </summary>
+		Requirement_Status = 10251,
+		/// <summary>
+		/// Resource = 4002
+		/// </summary>
+		Resource = 4002,
+		/// <summary>
+		/// Resource_Assignment = 10323
+		/// </summary>
+		Resource_Assignment = 10323,
+		/// <summary>
+		/// Resource_Assignment_Detail_Deprecated_in_v20 = 10324
+		/// </summary>
+		Resource_Assignment_Detail_Deprecated_in_v20 = 10324,
+		/// <summary>
+		/// Resource_Expansion = 4010
+		/// </summary>
+		Resource_Expansion = 4010,
+		/// <summary>
+		/// Resource_Group = 4007
+		/// </summary>
+		Resource_Group = 4007,
+		/// <summary>
+		/// resource_group_data_source = 10090
+		/// </summary>
+		resource_group_data_source = 10090,
+		/// <summary>
+		/// Resource_Pay_Type = 10409
+		/// </summary>
+		Resource_Pay_Type = 10409,
+		/// <summary>
+		/// Resource_Request = 10327
+		/// </summary>
+		Resource_Request = 10327,
+		/// <summary>
+		/// Resource_Requirement = 10252
+		/// </summary>
+		Resource_Requirement = 10252,
+		/// <summary>
+		/// Resource_Requirement_Detail = 10253
+		/// </summary>
+		Resource_Requirement_Detail = 10253,
+		/// <summary>
+		/// Resource_Restriction_Deprecated = 10430
+		/// </summary>
+		Resource_Restriction_Deprecated = 10430,
+		/// <summary>
+		/// Resource_Specification = 4006
+		/// </summary>
+		Resource_Specification = 4006,
+		/// <summary>
+		/// Resource_Territory = 10254
+		/// </summary>
+		Resource_Territory = 10254,
+		/// <summary>
+		/// Result_Cache = 10292
+		/// </summary>
+		Result_Cache = 10292,
+		/// <summary>
+		/// RevokeInheritedAccessRecordsTracker = 90001
+		/// </summary>
+		RevokeInheritedAccessRecordsTracker = 90001,
 		/// <summary>
 		/// Ribbon_Client_Metadata = 4579
 		/// </summary>
@@ -2937,13 +6865,49 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Ribbon_Tab_To_Command_Mapping = 1113,
 		/// <summary>
-		/// Rich_Text_Attachment = 10074
+		/// Rich_Text_Attachment = 10060
 		/// </summary>
-		Rich_Text_Attachment = 10074,
+		Rich_Text_Attachment = 10060,
+		/// <summary>
+		/// RMA = 10410
+		/// </summary>
+		RMA = 10410,
+		/// <summary>
+		/// RMA_Product = 10411
+		/// </summary>
+		RMA_Product = 10411,
+		/// <summary>
+		/// RMA_Receipt = 10412
+		/// </summary>
+		RMA_Receipt = 10412,
+		/// <summary>
+		/// RMA_Receipt_Product = 10413
+		/// </summary>
+		RMA_Receipt_Product = 10413,
+		/// <summary>
+		/// RMA_SubStatus = 10414
+		/// </summary>
+		RMA_SubStatus = 10414,
+		/// <summary>
+		/// Role_competency_requirement = 10328
+		/// </summary>
+		Role_competency_requirement = 10328,
+		/// <summary>
+		/// Role_Price = 10326
+		/// </summary>
+		Role_Price = 10326,
+		/// <summary>
+		/// Role_Price_Markup = 10325
+		/// </summary>
+		Role_Price_Markup = 10325,
 		/// <summary>
 		/// Role_Template = 1037
 		/// </summary>
 		Role_Template = 1037,
+		/// <summary>
+		/// Role_Utilization = 10329
+		/// </summary>
+		Role_Utilization = 10329,
 		/// <summary>
 		/// Rollup_Field = 9604
 		/// </summary>
@@ -2965,13 +6929,53 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Routing_Rule_Set = 8181,
 		/// <summary>
-		/// Rule_Item = 8199
+		/// RoutingRequest = 10496
 		/// </summary>
-		Rule_Item = 8199,
+		RoutingRequest = 10496,
+		/// <summary>
+		/// RTV = 10415
+		/// </summary>
+		RTV = 10415,
+		/// <summary>
+		/// RTV_Product = 10416
+		/// </summary>
+		RTV_Product = 10416,
+		/// <summary>
+		/// RTV_Substatus = 10417
+		/// </summary>
+		RTV_Substatus = 10417,
+		/// <summary>
+		/// Rule_Item_10488 = 10488
+		/// </summary>
+		Rule_Item_10488 = 10488,
+		/// <summary>
+		/// Rule_Item_8199 = 8199
+		/// </summary>
+		Rule_Item_8199 = 8199,
 		/// <summary>
 		/// RuntimeDependency = 7200
 		/// </summary>
 		RuntimeDependency = 7200,
+		/// <summary>
+		/// Sales_Attachment = 1070
+		/// </summary>
+		Sales_Attachment = 1070,
+		/// <summary>
+		/// Sales_Literature = 1038
+		/// </summary>
+		Sales_Literature = 1038,
+		/// <summary>
+		/// Sales_Process_Instance = 32
+		/// </summary>
+		Sales_Process_Instance = 32,
+		/// <summary>
+		/// salesinsightssettings = 10201
+		/// </summary>
+		salesinsightssettings = 10201,
+		/// <summary>
+		/// SalesSiteMap = 10448
+		/// </summary>
+		SalesSiteMap = 10448,
 		/// <summary>
 		/// Saved_Organization_Insights_Configuration = 1309
 		/// </summary>
@@ -2980,6 +6984,34 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// Saved_View = 4230
 		/// </summary>
 		Saved_View = 4230,
+		/// <summary>
+		/// Scenario = 10469
+		/// </summary>
+		Scenario = 10469,
+		/// <summary>
+		/// Schedule_Board_Setting = 10255
+		/// </summary>
+		Schedule_Board_Setting = 10255,
+		/// <summary>
+		/// Scheduling_Feature_Flag = 10263
+		/// </summary>
+		Scheduling_Feature_Flag = 10263,
+		/// <summary>
+		/// Scheduling_Group = 4005
+		/// </summary>
+		Scheduling_Group = 4005,
+		/// <summary>
+		/// Scheduling_Parameter = 10256
+		/// </summary>
+		Scheduling_Parameter = 10256,
+		/// <summary>
+		/// Script_Task_Trigger = 10590
+		/// </summary>
+		Script_Task_Trigger = 10590,
+		/// <summary>
+		/// Scriptlet = 10589
+		/// </summary>
+		Scriptlet = 10589,
 		/// <summary>
 		/// Sdk_Message = 4606
 		/// </summary>
@@ -3021,25 +7053,61 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Sdk_Message_Response_Field = 4611,
 		/// <summary>
-		/// Search_provider = 10100
+		/// Search_Configuration = 10497
 		/// </summary>
-		Search_provider = 10100,
+		Search_Configuration = 10497,
 		/// <summary>
-		/// Search_Telemetry = 10101
+		/// Search_provider = 10043
 		/// </summary>
-		Search_Telemetry = 10101,
+		Search_provider = 10043,
+		/// <summary>
+		/// Search_Telemetry = 10062
+		/// </summary>
+		Search_Telemetry = 10062,
 		/// <summary>
 		/// Security_Role = 1036
 		/// </summary>
 		Security_Role = 1036,
 		/// <summary>
+		/// Self_service = 10523
+		/// </summary>
+		Self_service = 10523,
+		/// <summary>
 		/// Semiannual_Fiscal_Calendar = 2001
 		/// </summary>
 		Semiannual_Fiscal_Calendar = 2001,
 		/// <summary>
-		/// Service_Configuration = 10043
+		/// Sentiment_analysis = 10498
 		/// </summary>
-		Service_Configuration = 10043,
+		Sentiment_analysis = 10498,
+		/// <summary>
+		/// Sentiment_daily_topic = 10510
+		/// </summary>
+		Sentiment_daily_topic = 10510,
+		/// <summary>
+		/// Sentiment_daily_topic_keyword = 10511
+		/// </summary>
+		Sentiment_daily_topic_keyword = 10511,
+		/// <summary>
+		/// Sentiment_daily_topic_trending = 10512
+		/// </summary>
+		Sentiment_daily_topic_trending = 10512,
+		/// <summary>
+		/// Service = 4001
+		/// </summary>
+		Service = 4001,
+		/// <summary>
+		/// Service_Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Service_Configuration = 10039
+		/// </summary>
+		Service_Configuration = 10039,
+		/// <summary>
+		/// Service_Contract_Contact = 20
+		/// </summary>
+		Service_Contract_Contact = 20,
 		/// <summary>
 		/// Service_Endpoint = 4618
 		/// </summary>
@@ -3049,9 +7117,65 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Service_Plan = 101,
 		/// <summary>
-		/// Setting_Definition = 10064
+		/// Service_Task_Type = 10418
 		/// </summary>
-		Setting_Definition = 10064,
+		Service_Task_Type = 10418,
+		/// <summary>
+		/// ServicesSiteMap = 10449
+		/// </summary>
+		ServicesSiteMap = 10449,
+		/// <summary>
+		/// Session = 10489
+		/// </summary>
+		Session = 10489,
+		/// <summary>
+		/// Session_Characteristic = 10528
+		/// </summary>
+		Session_Characteristic = 10528,
+		/// <summary>
+		/// Session_Data_Deprecated = 10188
+		/// </summary>
+		Session_Data_Deprecated = 10188,
+		/// <summary>
+		/// Session_event = 10499
+		/// </summary>
+		Session_event = 10499,
+		/// <summary>
+		/// Session_Information = 10592
+		/// </summary>
+		Session_Information = 10592,
+		/// <summary>
+		/// Session_participant = 10500
+		/// </summary>
+		Session_participant = 10500,
+		/// <summary>
+		/// Session_Participant_Data_Deprecated = 10189
+		/// </summary>
+		Session_Participant_Data_Deprecated = 10189,
+		/// <summary>
+		/// Session_Sentiment = 10513
+		/// </summary>
+		Session_Sentiment = 10513,
+		/// <summary>
+		/// Session_Template = 10128
+		/// </summary>
+		Session_Template = 10128,
+		/// <summary>
+		/// Session_Templates_Deprecated = 10455
+		/// </summary>
+		Session_Templates_Deprecated = 10455,
+		/// <summary>
+		/// Session_Transfer = 10593
+		/// </summary>
+		Session_Transfer = 10593,
+		/// <summary>
+		/// Setting_Definition = 10024
+		/// </summary>
+		Setting_Definition = 10024,
+		/// <summary>
+		/// SettingsSiteMap = 10450
+		/// </summary>
+		SettingsSiteMap = 10450,
 		/// <summary>
 		/// SharePoint_Data = 9509
 		/// </summary>
@@ -3065,13 +7189,33 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		SharePoint_Site = 9502,
 		/// <summary>
+		/// Ship_Via = 10419
+		/// </summary>
+		Ship_Via = 10419,
+		/// <summary>
+		/// SI_Key_Value_Config = 10196
+		/// </summary>
+		SI_Key_Value_Config = 10196,
+		/// <summary>
+		/// siconfig = 10195
+		/// </summary>
+		siconfig = 10195,
+		/// <summary>
 		/// Similarity_Rule = 9951
 		/// </summary>
 		Similarity_Rule = 9951,
 		/// <summary>
+		/// Site = 4009
+		/// </summary>
+		Site = 4009,
+		/// <summary>
 		/// Site_Map = 4709
 		/// </summary>
 		Site_Map = 4709,
+		/// <summary>
+		/// Skill_Attachment_Rule = 10529
+		/// </summary>
+		Skill_Attachment_Rule = 10529,
 		/// <summary>
 		/// SLA = 9750
 		/// </summary>
@@ -3081,13 +7225,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		SLA_Item = 9751,
 		/// <summary>
-		/// SLA_KPI = 10044
+		/// SLA_KPI = 10040
 		/// </summary>
-		SLA_KPI = 10044,
+		SLA_KPI = 10040,
 		/// <summary>
 		/// SLA_KPI_Instance = 9752
 		/// </summary>
 		SLA_KPI_Instance = 9752,
+		/// <summary>
+		/// Smartassist_configuration = 10154
+		/// </summary>
+		Smartassist_configuration = 10154,
+		/// <summary>
+		/// SMS_Engagement_Context = 10546
+		/// </summary>
+		SMS_Engagement_Context = 10546,
+		/// <summary>
+		/// SMS_Number = 10547
+		/// </summary>
+		SMS_Number = 10547,
 		/// <summary>
 		/// Social_Activity = 4216
 		/// </summary>
@@ -3109,57 +7265,61 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Solution_Component = 7103,
 		/// <summary>
-		/// Solution_Component_Attribute_Configuration = 10034
+		/// Solution_Component_Attribute_Configuration = 10002
 		/// </summary>
-		Solution_Component_Attribute_Configuration = 10034,
+		Solution_Component_Attribute_Configuration = 10002,
 		/// <summary>
-		/// Solution_Component_Configuration = 10045
+		/// Solution_Component_Configuration = 10003
 		/// </summary>
-		Solution_Component_Configuration = 10045,
+		Solution_Component_Configuration = 10003,
 		/// <summary>
-		/// Solution_Component_Data_Source = 10002
+		/// Solution_Component_Data_Source = 10012
 		/// </summary>
-		Solution_Component_Data_Source = 10002,
+		Solution_Component_Data_Source = 10012,
 		/// <summary>
 		/// Solution_Component_Definition = 7104
 		/// </summary>
 		Solution_Component_Definition = 7104,
 		/// <summary>
-		/// Solution_Component_Relationship_Configuration = 10059
+		/// Solution_Component_Relationship_Configuration = 10004
 		/// </summary>
-		Solution_Component_Relationship_Configuration = 10059,
+		Solution_Component_Relationship_Configuration = 10004,
 		/// <summary>
-		/// Solution_Component_Summary = 10001
+		/// Solution_Component_Summary = 10011
 		/// </summary>
-		Solution_Component_Summary = 10001,
+		Solution_Component_Summary = 10011,
 		/// <summary>
-		/// Solution_Health_Rule = 10017
+		/// Solution_Health_Rule = 10079
 		/// </summary>
-		Solution_Health_Rule = 10017,
+		Solution_Health_Rule = 10079,
 		/// <summary>
-		/// Solution_Health_Rule_Argument = 10018
+		/// Solution_Health_Rule_Argument = 10080
 		/// </summary>
-		Solution_Health_Rule_Argument = 10018,
+		Solution_Health_Rule_Argument = 10080,
 		/// <summary>
-		/// Solution_Health_Rule_Set = 10019
+		/// Solution_Health_Rule_Set = 10081
 		/// </summary>
-		Solution_Health_Rule_Set = 10019,
+		Solution_Health_Rule_Set = 10081,
 		/// <summary>
-		/// Solution_History = 10003
+		/// Solution_History = 10000
 		/// </summary>
-		Solution_History = 10003,
+		Solution_History = 10000,
 		/// <summary>
-		/// Solution_History_Data_Source = 10004
+		/// Solution_History_Data_Source = 10001
 		/// </summary>
-		Solution_History_Data_Source = 10004,
+		Solution_History_Data_Source = 10001,
 		/// <summary>
 		/// SolutionHistoryData = 9890
 		/// </summary>
 		SolutionHistoryData = 9890,
 		/// <summary>
-		/// StageSolutionUpload = 10046
+		/// Sound_notification_setting = 10521
 		/// </summary>
-		StageSolutionUpload = 10046,
+		Sound_notification_setting = 10521,
+		/// <summary>
+		/// StageSolutionUpload = 10009
+		/// </summary>
+		StageSolutionUpload = 10009,
 		/// <summary>
 		/// Status_Map = 1075
 		/// </summary>
@@ -3205,9 +7365,61 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Subscription_Synchronization_Information = 33,
 		/// <summary>
+		/// Suggested_Activity = 10205
+		/// </summary>
+		Suggested_Activity = 10205,
+		/// <summary>
+		/// Suggested_Activity_Data_Source = 10206
+		/// </summary>
+		Suggested_Activity_Data_Source = 10206,
+		/// <summary>
+		/// Suggested_Contact = 10207
+		/// </summary>
+		Suggested_Contact = 10207,
+		/// <summary>
+		/// Suggested_contacts_data_source = 10208
+		/// </summary>
+		Suggested_contacts_data_source = 10208,
+		/// <summary>
+		/// Suggestion_Interaction = 10163
+		/// </summary>
+		Suggestion_Interaction = 10163,
+		/// <summary>
+		/// Suggestion_request_payload = 10164
+		/// </summary>
+		Suggestion_request_payload = 10164,
+		/// <summary>
 		/// SuggestionCardTemplate = 1190
 		/// </summary>
 		SuggestionCardTemplate = 1190,
+		/// <summary>
+		/// Suggestions_Model_Summary = 10165
+		/// </summary>
+		Suggestions_Model_Summary = 10165,
+		/// <summary>
+		/// Suggestions_Setting = 10166
+		/// </summary>
+		Suggestions_Setting = 10166,
+		/// <summary>
+		/// Survey_Answer_Option = 10533
+		/// </summary>
+		Survey_Answer_Option = 10533,
+		/// <summary>
+		/// Survey_Question = 10542
+		/// </summary>
+		Survey_Question = 10542,
+		/// <summary>
+		/// Survey_Question_Sequence = 10541
+		/// </summary>
+		Survey_Question_Sequence = 10541,
+		/// <summary>
+		/// Survey_Response = 10534
+		/// </summary>
+		Survey_Response = 10534,
+		/// <summary>
+		/// Survey_Response_Value = 10535
+		/// </summary>
+		Survey_Response_Value = 10535,
 		/// <summary>
 		/// Sync_Attribute_Mapping = 1401
 		/// </summary>
@@ -3245,17 +7457,33 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		System_User_Principal = 14,
 		/// <summary>
+		/// System_User_Scheduler_Setting = 10257
+		/// </summary>
+		System_User_Scheduler_Setting = 10257,
+		/// <summary>
 		/// SystemUser_BusinessUnit_Entity_Map = 42
 		/// </summary>
 		SystemUser_BusinessUnit_Entity_Map = 42,
 		/// <summary>
-		/// SystemUserAuthorizationChangeTracker = 10113
+		/// SystemUserAuthorizationChangeTracker = 60
 		/// </summary>
-		SystemUserAuthorizationChangeTracker = 10113,
+		SystemUserAuthorizationChangeTracker = 60,
+		/// <summary>
+		/// Tag = 10514
+		/// </summary>
+		Tag = 10514,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
 		Task = 4212,
+		/// <summary>
+		/// Tax_Code = 10420
+		/// </summary>
+		Tax_Code = 10420,
+		/// <summary>
+		/// Tax_Code_Detail = 10421
+		/// </summary>
+		Tax_Code_Detail = 10421,
 		/// <summary>
 		/// Team = 9
 		/// </summary>
@@ -3273,9 +7501,29 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Team_template = 92,
 		/// <summary>
-		/// TeamMobileOfflineProfileMembership = 10118
+		/// TeamMobileOfflineProfileMembership = 10630
 		/// </summary>
-		TeamMobileOfflineProfileMembership = 10118,
+		TeamMobileOfflineProfileMembership = 10630,
+		/// <summary>
+		/// Teams_Dialer_Admin_settings = 10635
+		/// </summary>
+		Teams_Dialer_Admin_settings = 10635,
+		/// <summary>
+		/// Teams_Engagement_Context = 10564
+		/// </summary>
+		Teams_Engagement_Context = 10564,
+		/// <summary>
+		/// Template_For_Properties = 10103
+		/// </summary>
+		Template_For_Properties = 10103,
+		/// <summary>
+		/// Template_Parameter = 10129
+		/// </summary>
+		Template_Parameter = 10129,
+		/// <summary>
+		/// Template_Tag_Deprecated = 10458
+		/// </summary>
+		Template_Tag_Deprecated = 10458,
 		/// <summary>
 		/// Territory = 2013
 		/// </summary>
@@ -3285,9 +7533,37 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Text_Analytics_Entity_Mapping = 9945,
 		/// <summary>
+		/// Text_Analytics_Topic = 9948
+		/// </summary>
+		Text_Analytics_Topic = 9948,
+		/// <summary>
 		/// Theme = 2015
 		/// </summary>
 		Theme = 2015,
+		/// <summary>
+		/// Three_Dimensional_Model = 10348
+		/// </summary>
+		Three_Dimensional_Model = 10348,
+		/// <summary>
+		/// Time_Entry = 10330
+		/// </summary>
+		Time_Entry = 10330,
+		/// <summary>
+		/// Time_Group_Detail = 10259
+		/// </summary>
+		Time_Group_Detail = 10259,
+		/// <summary>
+		/// Time_Off_Calendar = 10331
+		/// </summary>
+		Time_Off_Calendar = 10331,
+		/// <summary>
+		/// Time_Off_Request = 10422
+		/// </summary>
+		Time_Off_Request = 10422,
+		/// <summary>
+		/// Time_Source = 10345
+		/// </summary>
+		Time_Source = 10345,
 		/// <summary>
 		/// Time_Stamp_Date_Mapping = 9932
 		/// </summary>
@@ -3305,6 +7581,30 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Time_Zone_Rule = 4811,
 		/// <summary>
+		/// Toolbar = 10596
+		/// </summary>
+		Toolbar = 10596,
+		/// <summary>
+		/// Toolbar_Button = 10595
+		/// </summary>
+		Toolbar_Button = 10595,
+		/// <summary>
+		/// Topic_History = 9946
+		/// </summary>
+		Topic_History = 9946,
+		/// <summary>
+		/// Topic_Model = 9944
+		/// </summary>
+		Topic_Model = 9944,
+		/// <summary>
+		/// Topic_Model_Configuration = 9942
+		/// </summary>
+		Topic_Model_Configuration = 9942,
+		/// <summary>
+		/// Topic_Model_Execution_History = 9943
+		/// </summary>
+		Topic_Model_Execution_History = 9943,
+		/// <summary>
 		/// Trace = 8050
 		/// </summary>
 		Trace = 8050,
@@ -3317,9 +7617,45 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Trace_Regarding = 8052,
 		/// <summary>
+		/// Trace_Source_Setting = 10597
+		/// </summary>
+		Trace_Source_Setting = 10597,
+		/// <summary>
 		/// Tracking_information_for_deleted_entities = 35
 		/// </summary>
 		Tracking_information_for_deleted_entities = 35,
+		/// <summary>
+		/// Transaction_Category = 10332
+		/// </summary>
+		Transaction_Category = 10332,
+		/// <summary>
+		/// Transaction_Category_Classification = 10333
+		/// </summary>
+		Transaction_Category_Classification = 10333,
+		/// <summary>
+		/// Transaction_Category_Hierarchy_Element = 10334
+		/// </summary>
+		Transaction_Category_Hierarchy_Element = 10334,
+		/// <summary>
+		/// Transaction_Category_Price = 10335
+		/// </summary>
+		Transaction_Category_Price = 10335,
+		/// <summary>
+		/// Transaction_Connection = 10336
+		/// </summary>
+		Transaction_Connection = 10336,
+		/// <summary>
+		/// Transaction_Origin = 10260
+		/// </summary>
+		Transaction_Origin = 10260,
+		/// <summary>
+		/// Transaction_Type = 10337
+		/// </summary>
+		Transaction_Type = 10337,
+		/// <summary>
+		/// Transcript = 10501
+		/// </summary>
+		Transcript = 10501,
 		/// <summary>
 		/// Transformation_Mapping = 4426
 		/// </summary>
@@ -3333,13 +7669,93 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Translation_Process = 951,
 		/// <summary>
+		/// Twitter_account = 10555
+		/// </summary>
+		Twitter_account = 10555,
+		/// <summary>
+		/// Twitter_Engagement_Context = 10560
+		/// </summary>
+		Twitter_Engagement_Context = 10560,
+		/// <summary>
+		/// Twitter_handle = 10556
+		/// </summary>
+		Twitter_handle = 10556,
+		/// <summary>
+		/// UII_Action = 10567
+		/// </summary>
+		UII_Action = 10567,
+		/// <summary>
+		/// UII_Audit = 10568
+		/// </summary>
+		UII_Audit = 10568,
+		/// <summary>
+		/// UII_Context = 10569
+		/// </summary>
+		UII_Context = 10569,
+		/// <summary>
+		/// UII_Non_Hosted_Application = 10571
+		/// </summary>
+		UII_Non_Hosted_Application = 10571,
+		/// <summary>
+		/// UII_Saved_Session = 10573
+		/// </summary>
+		UII_Saved_Session = 10573,
+		/// <summary>
+		/// UII_Session_Transfer = 10574
+		/// </summary>
+		UII_Session_Transfer = 10574,
+		/// <summary>
+		/// UII_Workflow = 10575
+		/// </summary>
+		UII_Workflow = 10575,
+		/// <summary>
+		/// UII_Workflow_Step = 10576
+		/// </summary>
+		UII_Workflow_Step = 10576,
+		/// <summary>
+		/// UII_Workflow_Step_Mapping = 10577
+		/// </summary>
+		UII_Workflow_Step_Mapping = 10577,
+		/// <summary>
+		/// Unified_Interface_Settings = 10598
+		/// </summary>
+		Unified_Interface_Settings = 10598,
+		/// <summary>
+		/// Unique_Number = 10423
+		/// </summary>
+		Unique_Number = 10423,
+		/// <summary>
+		/// Unit = 1055
+		/// </summary>
+		Unit = 1055,
+		/// <summary>
+		/// Unit_Group = 1056
+		/// </summary>
+		Unit_Group = 1056,
+		/// <summary>
 		/// Unresolved_Address = 2012
 		/// </summary>
 		Unresolved_Address = 2012,
 		/// <summary>
+		/// UntrackedAppointment = 10204
+		/// </summary>
+		UntrackedAppointment = 10204,
+		/// <summary>
 		/// UntrackedEmail = 4220
 		/// </summary>
 		UntrackedEmail = 4220,
+		/// <summary>
+		/// Upgrade_Run = 10084
+		/// </summary>
+		Upgrade_Run = 10084,
+		/// <summary>
+		/// Upgrade_Step = 10085
+		/// </summary>
+		Upgrade_Step = 10085,
+		/// <summary>
+		/// Upgrade_Version = 10086
+		/// </summary>
+		Upgrade_Version = 10086,
 		/// <summary>
 		/// User = 8
 		/// </summary>
@@ -3377,17 +7793,25 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		User_Search_Facet = 52,
 		/// <summary>
-		/// User_Settings = 150
+		/// User_Setting = 10600
 		/// </summary>
-		User_Settings = 150,
+		User_Setting = 10600,
 		/// <summary>
-		/// UserMobileOfflineProfileMembership = 10119
+		/// User_settings_10522 = 10522
 		/// </summary>
-		UserMobileOfflineProfileMembership = 10119,
+		User_settings_10522 = 10522,
 		/// <summary>
-		/// VETicket = 10147
+		/// User_settings_150 = 150
 		/// </summary>
-		VETicket = 10147,
+		User_settings_150 = 150,
+		/// <summary>
+		/// User_Work_History = 10338
+		/// </summary>
+		User_Work_History = 10338,
+		/// <summary>
+		/// UserMobileOfflineProfileMembership = 10631
+		/// </summary>
+		UserMobileOfflineProfileMembership = 10631,
 		/// <summary>
 		/// View = 1039
 		/// </summary>
@@ -3401,6 +7825,18 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Virtual_Entity_Data_Source = 85,
 		/// <summary>
+		/// Virtual_Resource_Group_Resource = 10091
+		/// </summary>
+		Virtual_Resource_Group_Resource = 10091,
+		/// <summary>
+		/// Wall_View = 10214
+		/// </summary>
+		Wall_View = 10214,
+		/// <summary>
+		/// Warehouse = 10424
+		/// </summary>
+		Warehouse = 10424,
+		/// <summary>
 		/// Web_Resource = 9333
 		/// </summary>
 		Web_Resource = 9333,
@@ -3413,17 +7849,85 @@ namespace Abc.MyDog.Shared.Entities.SimilarityRuleOptionSets
 		/// </summary>
 		Web_Wizard_Access_Privilege = 4803,
 		/// <summary>
-		/// WebApi = 10030
+		/// WeChat_account = 10557
 		/// </summary>
-		WebApi = 10030,
+		WeChat_account = 10557,
+		/// <summary>
+		/// WeChat_Engagement_Context = 10561
+		/// </summary>
+		WeChat_Engagement_Context = 10561,
+		/// <summary>
+		/// WhatsApp_account = 10558
+		/// </summary>
+		WhatsApp_account = 10558,
+		/// <summary>
+		/// WhatsApp_Engagement_Context = 10562
+		/// </summary>
+		WhatsApp_Engagement_Context = 10562,
+		/// <summary>
+		/// WhatsApp_number = 10559
+		/// </summary>
+		WhatsApp_number = 10559,
+		/// <summary>
+		/// Window_Navigation_Rule = 10601
+		/// </summary>
+		Window_Navigation_Rule = 10601,
 		/// <summary>
 		/// Wizard_Page = 4802
 		/// </summary>
 		Wizard_Page = 4802,
 		/// <summary>
-		/// Workflow_Binary = 10032
+		/// Work_Order = 10425
 		/// </summary>
-		Workflow_Binary = 10032,
+		Work_Order = 10425,
+		/// <summary>
+		/// Work_Order_Business_Process = 10369
+		/// </summary>
+		Work_Order_Business_Process = 10369,
+		/// <summary>
+		/// Work_Order_Characteristic_Deprecated = 10426
+		/// </summary>
+		Work_Order_Characteristic_Deprecated = 10426,
+		/// <summary>
+		/// Work_Order_Details_Generation_Queue_Deprecated = 10427
+		/// </summary>
+		Work_Order_Details_Generation_Queue_Deprecated = 10427,
+		/// <summary>
+		/// Work_Order_Incident = 10428
+		/// </summary>
+		Work_Order_Incident = 10428,
+		/// <summary>
+		/// Work_Order_Product = 10429
+		/// </summary>
+		Work_Order_Product = 10429,
+		/// <summary>
+		/// Work_Order_Service = 10431
+		/// </summary>
+		Work_Order_Service = 10431,
+		/// <summary>
+		/// Work_Order_Service_Task = 10432
+		/// </summary>
+		Work_Order_Service_Task = 10432,
+		/// <summary>
+		/// Work_Order_Substatus = 10433
+		/// </summary>
+		Work_Order_Substatus = 10433,
+		/// <summary>
+		/// Work_Order_Type = 10434
+		/// </summary>
+		Work_Order_Type = 10434,
+		/// <summary>
+		/// Work_Stream = 10475
+		/// </summary>
+		Work_Stream = 10475,
+		/// <summary>
+		/// Work_template = 10261
+		/// </summary>
+		Work_template = 10261,
+		/// <summary>
+		/// Workflow_Binary = 10028
+		/// </summary>
+		Workflow_Binary = 10028,
 		/// <summary>
 		/// Workflow_Wait_Subscription = 4702
 		/// </summary>

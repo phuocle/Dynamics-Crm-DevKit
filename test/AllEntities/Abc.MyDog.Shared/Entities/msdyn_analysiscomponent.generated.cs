@@ -137,7 +137,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_analysiscomponent";
 
-		public const int EntityTypeCode = 10013;
+		public const int EntityTypeCode = 10075;
 
 		[DebuggerNonUserCode()]
 		public msdyn_analysiscomponent()

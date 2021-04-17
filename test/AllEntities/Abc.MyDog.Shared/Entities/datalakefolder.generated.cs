@@ -98,7 +98,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "datalakefolder";
 
-		public const int EntityTypeCode = 10081;
+		public const int EntityTypeCode = 10056;
 
 		[DebuggerNonUserCode()]
 		public datalakefolder()

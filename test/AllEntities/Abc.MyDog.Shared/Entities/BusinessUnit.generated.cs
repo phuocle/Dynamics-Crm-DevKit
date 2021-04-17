@@ -111,6 +111,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_Warehouse = "msdyn_warehouse";
 			public const string Name = "name";
 			public const string OrganizationId = "organizationid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
@@ -960,6 +961,18 @@ namespace Abc.MyDog.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Warehouse associated with Business Unit.</para>
+		/// <para>Lookup</para>
+		/// <para>Warehouse (Deprecated)</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_Warehouse
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_Warehouse); }
+			set { Entity.Attributes[Fields.msdyn_Warehouse] = value; }
 		}
 
 		/// <summary>

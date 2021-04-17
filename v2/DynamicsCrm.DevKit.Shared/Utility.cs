@@ -343,6 +343,7 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("]", string.Empty);
                 name = name.Replace("\"", string.Empty);
                 name = name.Replace("'", string.Empty);
+                name = name.Replace("’", string.Empty);
                 name = name.Replace(":", string.Empty);
                 name = name.Replace(";", string.Empty);
                 name = name.Replace("<", string.Empty);

@@ -78,7 +78,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgesearchinsight";
 
-		public const int EntityTypeCode = 10080;
+		public const int EntityTypeCode = 10046;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgesearchinsight()

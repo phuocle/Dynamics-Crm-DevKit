@@ -65,7 +65,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "organizationdatasyncsubscriptionentity";
 
-		public const int EntityTypeCode = 10116;
+		public const int EntityTypeCode = 10628;
 
 		[DebuggerNonUserCode()]
 		public organizationdatasyncsubscriptionentity()

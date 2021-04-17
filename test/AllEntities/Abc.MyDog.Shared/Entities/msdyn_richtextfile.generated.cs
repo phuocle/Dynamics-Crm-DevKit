@@ -68,7 +68,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_richtextfile";
 
-		public const int EntityTypeCode = 10074;
+		public const int EntityTypeCode = 10060;
 
 		[DebuggerNonUserCode()]
 		public msdyn_richtextfile()

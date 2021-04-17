@@ -72,7 +72,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgearticletemplate";
 
-		public const int EntityTypeCode = 10022;
+		public const int EntityTypeCode = 10047;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgearticletemplate()

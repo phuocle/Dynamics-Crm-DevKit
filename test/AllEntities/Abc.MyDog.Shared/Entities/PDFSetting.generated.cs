@@ -66,7 +66,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "pdfsetting";
 
-		public const int EntityTypeCode = 10072;
+		public const int EntityTypeCode = 10038;
 
 		[DebuggerNonUserCode()]
 		public PDFSetting()

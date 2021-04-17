@@ -198,6 +198,46 @@ namespace Abc.MyDog.Shared.Entities.SystemUserOptionSets
 		Invited = 1
 	}
 
+	public enum msdyn_AgentType
+	{
+		/// <summary>
+		/// Application_user = 192350000
+		/// </summary>
+		Application_user = 192350000,
+		/// <summary>
+		/// Bot_application_user = 192350001
+		/// </summary>
+		Bot_application_user = 192350001
+	}
+
+	public enum msdyn_BotProvider
+	{
+		/// <summary>
+		/// None = 192350002
+		/// </summary>
+		None = 192350002,
+		/// <summary>
+		/// Other = 192350001
+		/// </summary>
+		Other = 192350001,
+		/// <summary>
+		/// Virtual_Agent = 192350000
+		/// </summary>
+		Virtual_Agent = 192350000
+	}
+
+	public enum msdyn_UserType
+	{
+		/// <summary>
+		/// BOT_User = 192350001
+		/// </summary>
+		BOT_User = 192350001,
+		/// <summary>
+		/// CRM_User = 192350000
+		/// </summary>
+		CRM_User = 192350000
+	}
+
 	public enum OutgoingEmailDeliveryMethod
 	{
 		/// <summary>
@@ -351,6 +391,18 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_AgentType = "msdyn_agentType";
+			public const string msdyn_BotApplicationId = "msdyn_botapplicationid";
+			public const string msdyn_BotDescription = "msdyn_botdescription";
+			public const string msdyn_BotEndpoint = "msdyn_botendpoint";
+			public const string msdyn_BotProvider = "msdyn_botprovider";
+			public const string msdyn_BotSecretKeys = "msdyn_botsecretkeys";
+			public const string msdyn_Capacity = "msdyn_capacity";
+			public const string msdyn_DefaultPresenceIdUser = "msdyn_defaultpresenceiduser";
+			public const string msdyn_gdproptout = "msdyn_gdproptout";
+			public const string msdyn_gridwrappercontrolfield = "msdyn_gridwrappercontrolfield";
+			public const string msdyn_UserType = "msdyn_usertype";
+			public const string msdyusd_USDConfigurationId = "msdyusd_usdconfigurationid";
 			public const string NickName = "nickname";
 			public const string OrganizationId = "organizationid";
 			public const string OutgoingEmailDeliveryMethod = "outgoingemaildeliverymethod";
@@ -369,6 +421,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string Salutation = "salutation";
 			public const string SetupUser = "setupuser";
 			public const string SharePointEmailAddress = "sharepointemailaddress";
+			public const string SiteId = "siteid";
 			public const string Skills = "skills";
 			public const string StageId = "stageid";
 			public const string SystemUserId = "systemuserid";
@@ -1597,6 +1650,180 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Type of user - Application user or Bot application user</para>
+		/// <para>Picklist</para>
+		/// <para>User type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Abc.MyDog.Shared.Entities.SystemUserOptionSets.msdyn_AgentType? msdyn_AgentType
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_AgentType);
+				if (value == null) return null;
+				return (Abc.MyDog.Shared.Entities.SystemUserOptionSets.msdyn_AgentType)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_AgentType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_AgentType] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>Application ID of the bot.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Bot application ID</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_BotApplicationId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_BotApplicationId); }
+			set { Entity.Attributes[Fields.msdyn_BotApplicationId] = value; }
+		}
+
+		/// <summary>
+		/// <para>BOT User Description</para>
+		/// <para>Memo - MaxLength: 2000</para>
+		/// <para>Description</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_BotDescription
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_BotDescription); }
+			set { Entity.Attributes[Fields.msdyn_BotDescription] = value; }
+		}
+
+		/// <summary>
+		/// <para>Bot User Endpoint</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Endpoint</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_BotEndpoint
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_BotEndpoint); }
+			set { Entity.Attributes[Fields.msdyn_BotEndpoint] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates the type of bot</para>
+		/// <para>Required - Picklist</para>
+		/// <para>Bot Provider</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Abc.MyDog.Shared.Entities.SystemUserOptionSets.msdyn_BotProvider? msdyn_BotProvider
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_BotProvider);
+				if (value == null) return null;
+				return (Abc.MyDog.Shared.Entities.SystemUserOptionSets.msdyn_BotProvider)value.Value;
+			}
+			set
+	{
+		Entity.Attributes[Fields.msdyn_BotProvider] = new OptionSetValue((int)value);
+}
+		}
+
+		/// <summary>
+		/// <para>Bot User Secret Keys</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Secret Keys</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_BotSecretKeys
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_BotSecretKeys); }
+			set { Entity.Attributes[Fields.msdyn_BotSecretKeys] = value; }
+		}
+
+		/// <summary>
+		/// <para>Capacity associated with the User.</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
+		/// <para>Capacity</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_Capacity
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_Capacity); }
+			set { Entity.Attributes[Fields.msdyn_Capacity] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Presence associated with User.</para>
+		/// <para>Lookup</para>
+		/// <para>Default Presence</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_DefaultPresenceIdUser
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_DefaultPresenceIdUser); }
+			set { Entity.Attributes[Fields.msdyn_DefaultPresenceIdUser] = value; }
+		}
+
+		/// <summary>
+		/// <para>Describes whether user is opted out or not</para>
+		/// <para>Boolean</para>
+		/// <para>GDPR Optout</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_gdproptout
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_gdproptout); }
+			set { Entity.Attributes[Fields.msdyn_gdproptout] = value; }
+		}
+
+		/// <summary>
+		/// <para>Field to bind grid wrapper control</para>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>Grid Wrapper Control field</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_gridwrappercontrolfield
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_gridwrappercontrolfield); }
+			set { Entity.Attributes[Fields.msdyn_gridwrappercontrolfield] = value; }
+		}
+
+		/// <summary>
+		/// <para>Type of user - CRM or BOT user</para>
+		/// <para>Picklist</para>
+		/// <para>Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Abc.MyDog.Shared.Entities.SystemUserOptionSets.msdyn_UserType? msdyn_UserType
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_UserType);
+				if (value == null) return null;
+				return (Abc.MyDog.Shared.Entities.SystemUserOptionSets.msdyn_UserType)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_UserType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_UserType] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Configuration associated with User.</para>
+		/// <para>Lookup</para>
+		/// <para>Unified Service Desk Configuration</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyusd_USDConfigurationId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyusd_USDConfigurationId); }
+			set { Entity.Attributes[Fields.msdyusd_USDConfigurationId] = value; }
+		}
+
+		/// <summary>
 		/// <para>Nickname of the user.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Nickname</para>
@@ -1853,6 +2080,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.SharePointEmailAddress); }
 			set { Entity.Attributes[Fields.SharePointEmailAddress] = value; }
+		}
+
+		/// <summary>
+		/// <para>Site at which the user is located.</para>
+		/// <para>Lookup</para>
+		/// <para>Site</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference SiteId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.SiteId); }
+			set { Entity.Attributes[Fields.SiteId] = value; }
 		}
 
 		/// <summary>

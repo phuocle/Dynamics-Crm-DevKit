@@ -27,7 +27,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "package_solution";
 
-		public const int EntityTypeCode = 10078;
+		public const int EntityTypeCode = 10008;
 
 		[DebuggerNonUserCode()]
 		public package_solution()

@@ -65,7 +65,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "appusersetting";
 
-		public const int EntityTypeCode = 10117;
+		public const int EntityTypeCode = 10629;
 
 		[DebuggerNonUserCode()]
 		public AppUserSetting()

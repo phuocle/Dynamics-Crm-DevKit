@@ -66,7 +66,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "canvasappextendedmetadata";
 
-		public const int EntityTypeCode = 10068;
+		public const int EntityTypeCode = 10025;
 
 		[DebuggerNonUserCode()]
 		public CanvasAppExtendedMetadata()

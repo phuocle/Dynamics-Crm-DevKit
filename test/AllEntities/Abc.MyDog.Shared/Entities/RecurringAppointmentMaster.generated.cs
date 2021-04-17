@@ -298,6 +298,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ScheduledEnd = "scheduledend";
 			public const string ScheduledStart = "scheduledstart";
 			public const string SeriesStatus = "seriesstatus";
+			public const string ServiceId = "serviceid";
 			public const string SortDate = "sortdate";
 			public const string StageId = "stageid";
 			public const string StartTime = "starttime";
@@ -1096,7 +1097,7 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the record that the recurring appointment series relates to.</para>
+		/// <para>Unique identifier of the object with which the recurring appointment series is associated.</para>
 		/// <para>Lookup</para>
 		/// <para>Regarding</para>
 		/// </summary>
@@ -1174,6 +1175,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.SeriesStatus); }
 			set { Entity.Attributes[Fields.SeriesStatus] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for an associated service.</para>
+		/// <para>Lookup</para>
+		/// <para>Service</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference ServiceId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ServiceId); }
+			set { Entity.Attributes[Fields.ServiceId] = value; }
 		}
 
 		/// <summary>

@@ -249,7 +249,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "bot";
 
-		public const int EntityTypeCode = 10093;
+		public const int EntityTypeCode = 10033;
 
 		[DebuggerNonUserCode()]
 		public bot()

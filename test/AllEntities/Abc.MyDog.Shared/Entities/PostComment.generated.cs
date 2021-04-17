@@ -22,7 +22,6 @@ namespace Abc.MyDog.Shared.Entities
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
-			public const string LargeText = "largetext";
 			public const string OrganizationId = "organizationid";
 			public const string PostCommentId = "postcommentid";
 			public const string PostId = "postid";
@@ -117,18 +116,6 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the text of a post comment.</para>
-		/// <para>Required - Memo - MaxLength: 1073741823</para>
-		/// <para>Text</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string LargeText
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.LargeText); }
-			set { Entity.Attributes[Fields.LargeText] = value; }
-		}
-
-		/// <summary>
 		/// <para>Unique identifier of the organization associated with the solution.</para>
 		/// <para>ReadOnly - Lookup</para>
 		/// <para>Organization</para>
@@ -169,7 +156,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		/// <summary>
 		/// <para>Text of the comment.</para>
-		/// <para>Required - String - MaxLength: 1000</para>
+		/// <para>Required - String - MaxLength: 4000</para>
 		/// <para>Text</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

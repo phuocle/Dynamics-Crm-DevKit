@@ -66,7 +66,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "processstageparameter";
 
-		public const int EntityTypeCode = 10052;
+		public const int EntityTypeCode = 10027;
 
 		[DebuggerNonUserCode()]
 		public processstageparameter()

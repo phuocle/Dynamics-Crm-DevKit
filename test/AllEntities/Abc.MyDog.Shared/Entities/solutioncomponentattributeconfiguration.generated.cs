@@ -109,7 +109,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "solutioncomponentattributeconfiguration";
 
-		public const int EntityTypeCode = 10034;
+		public const int EntityTypeCode = 10002;
 
 		[DebuggerNonUserCode()]
 		public solutioncomponentattributeconfiguration()

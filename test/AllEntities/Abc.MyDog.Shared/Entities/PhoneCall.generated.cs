@@ -105,6 +105,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ScheduledDurationMinutes = "scheduleddurationminutes";
 			public const string ScheduledEnd = "scheduledend";
 			public const string ScheduledStart = "scheduledstart";
+			public const string ServiceId = "serviceid";
 			public const string SLAId = "slaid";
 			public const string SLAInvokedId = "slainvokedid";
 			public const string SortDate = "sortdate";
@@ -569,7 +570,7 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the record that the phone call relates to.</para>
+		/// <para>Unique identifier of the object with which the phone call activity is associated.</para>
 		/// <para>Lookup</para>
 		/// <para>Regarding</para>
 		/// </summary>
@@ -613,6 +614,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.ScheduledStart); }
 			set { Entity.Attributes[Fields.ScheduledStart] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for an associated service.</para>
+		/// <para>Lookup</para>
+		/// <para>Service</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference ServiceId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ServiceId); }
+			set { Entity.Attributes[Fields.ServiceId] = value; }
 		}
 
 		/// <summary>

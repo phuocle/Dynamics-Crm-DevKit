@@ -13,17 +13,69 @@ namespace Abc.MyDog.Shared.Entities.SocialProfileOptionSets
 	public enum Community
 	{
 		/// <summary>
+		/// Cortana = 5
+		/// </summary>
+		Cortana = 5,
+		/// <summary>
+		/// Direct_Line = 6
+		/// </summary>
+		Direct_Line = 6,
+		/// <summary>
+		/// Direct_Line_Speech = 8
+		/// </summary>
+		Direct_Line_Speech = 8,
+		/// <summary>
+		/// Email = 9
+		/// </summary>
+		Email = 9,
+		/// <summary>
 		/// Facebook = 1
 		/// </summary>
 		Facebook = 1,
+		/// <summary>
+		/// GroupMe = 10
+		/// </summary>
+		GroupMe = 10,
+		/// <summary>
+		/// Kik = 11
+		/// </summary>
+		Kik = 11,
+		/// <summary>
+		/// Line = 3
+		/// </summary>
+		Line = 3,
+		/// <summary>
+		/// Microsoft_Teams = 7
+		/// </summary>
+		Microsoft_Teams = 7,
 		/// <summary>
 		/// Other = 0
 		/// </summary>
 		Other = 0,
 		/// <summary>
+		/// Skype = 13
+		/// </summary>
+		Skype = 13,
+		/// <summary>
+		/// Slack = 14
+		/// </summary>
+		Slack = 14,
+		/// <summary>
+		/// Telegram = 12
+		/// </summary>
+		Telegram = 12,
+		/// <summary>
 		/// Twitter = 2
 		/// </summary>
-		Twitter = 2
+		Twitter = 2,
+		/// <summary>
+		/// Wechat = 4
+		/// </summary>
+		Wechat = 4,
+		/// <summary>
+		/// WhatsApp = 15
+		/// </summary>
+		WhatsApp = 15
 	}
 
 	public enum StateCode
@@ -69,6 +121,12 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_ocfollowercount = "msdyn_ocfollowercount";
+			public const string msdyn_ocfollowingcount = "msdyn_ocfollowingcount";
+			public const string msdyn_ocfriendcount = "msdyn_ocfriendcount";
+			public const string msdyn_octwitterhandleid = "msdyn_octwitterhandleid";
+			public const string msdyn_phonenumber = "msdyn_phonenumber";
+			public const string msdyn_profileimagelink = "msdyn_profileimagelink";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -285,6 +343,78 @@ namespace Abc.MyDog.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Customer's Followers on the Social channel.</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Follower Count</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_ocfollowercount
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_ocfollowercount); }
+			set { Entity.Attributes[Fields.msdyn_ocfollowercount] = value; }
+		}
+
+		/// <summary>
+		/// <para>Customer's followings on the Social channel</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Followings Count</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_ocfollowingcount
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_ocfollowingcount); }
+			set { Entity.Attributes[Fields.msdyn_ocfollowingcount] = value; }
+		}
+
+		/// <summary>
+		/// <para>Customer's Friend count on the Social Channel</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Friend Count</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_ocfriendcount
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_ocfriendcount); }
+			set { Entity.Attributes[Fields.msdyn_ocfriendcount] = value; }
+		}
+
+		/// <summary>
+		/// <para>Lookup for Twitter Handle entity.</para>
+		/// <para>Lookup</para>
+		/// <para>Twitter Handle Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_octwitterhandleid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_octwitterhandleid); }
+			set { Entity.Attributes[Fields.msdyn_octwitterhandleid] = value; }
+		}
+
+		/// <summary>
+		/// <para>The phone number of the social profile.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Phone number</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_phonenumber
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_phonenumber); }
+			set { Entity.Attributes[Fields.msdyn_phonenumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>Link to the Customer's Social Channel Profile image.</para>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>Profile Image Link</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_profileimagelink
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_profileimagelink); }
+			set { Entity.Attributes[Fields.msdyn_profileimagelink] = value; }
 		}
 
 		/// <summary>

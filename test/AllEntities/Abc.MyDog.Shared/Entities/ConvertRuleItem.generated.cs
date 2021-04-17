@@ -57,6 +57,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
 			public const string OwningUser = "owninguser";
+			public const string PrimaryCreateEntityLogicalName = "primarycreateentitylogicalname";
 			public const string PropertiesXml = "propertiesxml";
 			public const string QueueId = "queueid";
 			public const string SequenceNumber = "sequencenumber";
@@ -353,6 +354,18 @@ namespace Abc.MyDog.Shared.Entities
 		public EntityReference OwningUser
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.OwningUser); }
+		}
+
+		/// <summary>
+		/// <para>Primary create entity for a rule item</para>
+		/// <para>String - MaxLength: 500</para>
+		/// <para>Primary Create Entity Logical Name</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string PrimaryCreateEntityLogicalName
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.PrimaryCreateEntityLogicalName); }
+			set { Entity.Attributes[Fields.PrimaryCreateEntityLogicalName] = value; }
 		}
 
 		/// <summary>

@@ -63,7 +63,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "appmodulecomponentedge";
 
-		public const int EntityTypeCode = 10061;
+		public const int EntityTypeCode = 10021;
 
 		[DebuggerNonUserCode()]
 		public AppModuleComponentEdge()

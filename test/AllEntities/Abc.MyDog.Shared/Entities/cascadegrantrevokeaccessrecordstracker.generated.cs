@@ -63,7 +63,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "cascadegrantrevokeaccessrecordstracker";
 
-		public const int EntityTypeCode = 10075;
+		public const int EntityTypeCode = 10014;
 
 		[DebuggerNonUserCode()]
 		public cascadegrantrevokeaccessrecordstracker()

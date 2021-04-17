@@ -63,7 +63,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "teammobileofflineprofilemembership";
 
-		public const int EntityTypeCode = 10118;
+		public const int EntityTypeCode = 10630;
 
 		[DebuggerNonUserCode()]
 		public teammobileofflineprofilemembership()

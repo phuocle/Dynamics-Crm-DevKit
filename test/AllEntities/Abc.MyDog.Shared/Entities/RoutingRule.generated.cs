@@ -71,6 +71,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_entitylogicalname = "msdyn_entitylogicalname";
 			public const string Name = "name";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
@@ -193,7 +194,7 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type a short description about the objective of the routing rule.</para>
+		/// <para>Provide a description about the objective of the routing rule.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Description</para>
 		/// </summary>
@@ -260,7 +261,19 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Name of the Routing Rule.</para>
+		/// <para>Logical name of the entity.</para>
+		/// <para>String - MaxLength: 200</para>
+		/// <para>Entity</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_entitylogicalname
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_entitylogicalname); }
+			set { Entity.Attributes[Fields.msdyn_entitylogicalname] = value; }
+		}
+
+		/// <summary>
+		/// <para>Provide a name for the routing rule.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Name</para>
 		/// </summary>

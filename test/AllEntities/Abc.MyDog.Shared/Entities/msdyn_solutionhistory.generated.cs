@@ -124,7 +124,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_solutionhistory";
 
-		public const int EntityTypeCode = 10003;
+		public const int EntityTypeCode = 10000;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutionhistory()

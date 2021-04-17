@@ -127,7 +127,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "appnotification";
 
-		public const int EntityTypeCode = 10122;
+		public const int EntityTypeCode = 10634;
 
 		[DebuggerNonUserCode()]
 		public appnotification()

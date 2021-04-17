@@ -59,6 +59,9 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_actioncardregardingid = "msdyn_actioncardregardingid";
+			public const string msdyn_regardingobjectid = "msdyn_regardingobjectid";
+			public const string msdyn_regardingobjectlogicalname = "msdyn_regardingobjectlogicalname";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -295,6 +298,39 @@ namespace Abc.MyDog.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 36</para>
+		/// <para>actioncardregardingid</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_actioncardregardingid
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_actioncardregardingid); }
+			set { Entity.Attributes[Fields.msdyn_actioncardregardingid] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 36</para>
+		/// <para>regardingobjectid</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_regardingobjectid
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_regardingobjectid); }
+			set { Entity.Attributes[Fields.msdyn_regardingobjectid] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 128</para>
+		/// <para>regardingobjectlogicalname</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_regardingobjectlogicalname
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_regardingobjectlogicalname); }
+			set { Entity.Attributes[Fields.msdyn_regardingobjectlogicalname] = value; }
 		}
 
 		/// <summary>

@@ -33,7 +33,7 @@ namespace Abc.MyDog.Shared.Entities
 
 		public const string EntityLogicalName = "searchtelemetry";
 
-		public const int EntityTypeCode = 10101;
+		public const int EntityTypeCode = 10062;
 
 		[DebuggerNonUserCode()]
 		public searchtelemetry()

@@ -29,6 +29,18 @@ namespace Abc.MyDog.Shared.Entities.RoutingRuleItemOptionSets
 		/// </summary>
 		Unpublished = 1
 	}
+
+	public enum msdyn_routeto
+	{
+		/// <summary>
+		/// Queue = 1
+		/// </summary>
+		Queue = 1,
+		/// <summary>
+		/// UserTeam = 2
+		/// </summary>
+		UserTeam = 2
+	}
 }
 
 namespace Abc.MyDog.Shared.Entities
@@ -50,6 +62,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_routeto = "msdyn_routeto";
 			public const string Name = "name";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
@@ -122,7 +135,7 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Show who is assigned on item.</para>
+		/// <para>Look for user/team records or create a new record.</para>
 		/// <para>Lookup</para>
 		/// <para>Assign to User/Team</para>
 		/// </summary>
@@ -207,7 +220,7 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type additional information to describe the rule item.</para>
+		/// <para>Provide a description for the rule item.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Description</para>
 		/// </summary>
@@ -274,7 +287,30 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Name of the Routing Rule Item.</para>
+		/// <para>Choose if you want to route the record to queue or user/team.</para>
+		/// <para>Picklist</para>
+		/// <para>Route to</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Abc.MyDog.Shared.Entities.RoutingRuleItemOptionSets.msdyn_routeto? msdyn_routeto
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_routeto);
+				if (value == null) return null;
+				return (Abc.MyDog.Shared.Entities.RoutingRuleItemOptionSets.msdyn_routeto)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_routeto] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_routeto] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>Provide a name for the rule item.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Name</para>
 		/// </summary>
@@ -342,7 +378,7 @@ namespace Abc.MyDog.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the Queue that the item is assigned to.</para>
+		/// <para>Look for a queue or create a new queue.</para>
 		/// <para>Lookup</para>
 		/// <para>Add to Queue</para>
 		/// </summary>

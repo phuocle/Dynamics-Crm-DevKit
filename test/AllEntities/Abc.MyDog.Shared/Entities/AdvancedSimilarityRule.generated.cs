@@ -94,6 +94,7 @@ namespace Abc.MyDog.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string name = "name";
 			public const string NgramSize = "ngramsize";
+			public const string NoiseKeyphraseslist = "noisekeyphraseslist";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
 			public const string SolutionId = "solutionid";
@@ -416,6 +417,18 @@ namespace Abc.MyDog.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.NgramSize); }
 			set { Entity.Attributes[Fields.NgramSize] = value; }
+		}
+
+		/// <summary>
+		/// <para>Provide noise key phrases by a semicolon ( ; ). These phrases will be filtered while searching for similar cases</para>
+		/// <para>Memo - MaxLength: 2000</para>
+		/// <para>Noise Key Phrases</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string NoiseKeyphraseslist
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.NoiseKeyphraseslist); }
+			set { Entity.Attributes[Fields.NoiseKeyphraseslist] = value; }
 		}
 
 		/// <summary>
