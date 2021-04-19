@@ -1,8 +1,10 @@
+//@ts-check
 'use strict';
 var devKit = (function () {
+    //@ts-check
     'use strict';
     var EMPTY_STRING = '';
-    var EMPTY_GUID = '{00000000-0000-0000-0000-000000000000}';
+    var EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
     var EMPTY_REFERENCE = { entityType: EMPTY_STRING, id: EMPTY_GUID, name: EMPTY_STRING };
     var EMPTY_NUMBER = 0;
     var EMPTY_BOOL = false;
@@ -2445,7 +2447,7 @@ var devKit = (function () {
             if (has(executionContext, 'setSharedVariable')) {
                 return executionContext.setSharedVariable(key, value);
             }
-            return EMPTY_STRING;
+            return NULL;
         }
         obj.IsDefaultPrevented = function () {
             if (has(executionContext, 'getEventArgs')) {
@@ -2539,6 +2541,7 @@ var devKit = (function () {
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
+    //@ts-check
     OptionSet.FormType = {
         Undefined: 0,
         Create: 1,
