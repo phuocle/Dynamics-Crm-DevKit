@@ -1,0 +1,183 @@
+﻿{
+  "plugins": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "includefiles": [
+        "ReportsVs2019.Plugin.*.dll",
+        "ReportsVs2019.CustomAction.*.dll"
+      ],
+      "excludefiles": [
+        "ReportsVs2019.*.Test.dll"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "includefiles": [
+        "ReportsVs2019.Workflow.*.dll"
+      ],
+      "excludefiles": [
+        "ReportsVs2019.*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "???_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "???_/lib/devkit.js"
+          ]
+        }
+      ]
+    }
+  ],
+  "dataproviders": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "???",
+      "datasource": "???",
+      "includefiles": [
+        "ReportsVs2019.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "ReportsVs2019.*.Test.dll"
+      ]
+    }
+  ],
+  "datasources": [
+    {
+      "profile": "DEBUG",
+      "displayname": "???",
+      "pluralname": "???",
+      "solution": "???",
+      "name": "???"
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Unmanaged",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Extract-Managed",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Unmanaged",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Unmanaged",
+      "folder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Managed",
+      "rootfolder": "",
+      "solution": "???",
+      "solutiontype": "Managed",
+      "folder": "???",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "crmversion": "365",
+      "type": "CSharp",
+      "entities": "",
+      "debug": ""
+    },
+    {
+      "profile": "JS-FORM",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "crmversion": "365",
+      "type": "JsForm",
+      "entities": "",
+      "debug": ""
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "crmversion": "365",
+      "type": "JsWebApi",
+      "entities": "",
+      "debug": ""
+    }
+  ],
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???"
+    }
+  ],
+  "downloadreports": [
+    {
+      "profile": "DEBUG",
+      "folder": "???",
+      "solution": "???"
+    }
+  ],
+  "proxytypes": [
+    {
+      "profile": "ALL",
+      "namespace": "???",
+      "output": "GeneratedCode.cs",
+      "entities": ""
+    }
+  ],
+  "visualstudio": {
+    "webresourceprofile": "???"
+  }
+}

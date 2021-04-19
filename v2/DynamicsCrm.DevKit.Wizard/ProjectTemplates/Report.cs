@@ -44,8 +44,8 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             var reportFile = newProjectFolder + "\\" + ProjectName + ".rptproj";
             Utility.ForceWriteAllText(reportFile, report);
             var fullName = DTE.Solution.FullName;
+            DTE.Solution.AddFromFile(reportFile);
             DTE.Solution.SaveAs(fullName);
-            MessageBox.Show("The project report created. Please add project to Visual Studio 2015 solution to design reports.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)

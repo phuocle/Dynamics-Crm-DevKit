@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.png" />
-    <Content Include="note.v9.txt" />
+    <Content Include="notes.txt" />
     <Content Include="ProjectTemplate.csproj" />
   </ItemGroup>
   <ItemGroup>
