@@ -75,6 +75,7 @@ var MyDog;
 			ComponentState: { a: 'componentstate', r: true },
 			ConvertRuleId: { a: 'convertruleid' },
 			ConvertRuleIdUnique: { a: 'convertruleidunique', r: true },
+			ConvertRuleType: { a: 'convertruletype' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -96,6 +97,7 @@ var MyDog;
 			ResolvedSince: { a: 'resolvedsince' },
 			ResponseTemplateId: { b: 'responsetemplateid', a: '_responsetemplateid_value', c: 'templates', d: 'template' },
 			SendAutomaticResponse: { a: 'sendautomaticresponse' },
+			SenderResolutionOption: { a: 'senderresolutionoption' },
 			SolutionId: { a: 'solutionid', r: true },
 			SourceTypeCode: { a: 'sourcetypecode' },
 			StateCode: { a: 'statecode' },
@@ -150,6 +152,10 @@ var OptionSet;
 			Deleted_Unpublished: 3,
 			Published: 0,
 			Unpublished: 1
+		},
+		SenderResolutionOption : {
+			Creating_a_new_contact_automatically: 0,
+			Mapping_in_Power_Automate_manually: 1
 		},
 		SourceTypeCode : {
 			Email: 2,

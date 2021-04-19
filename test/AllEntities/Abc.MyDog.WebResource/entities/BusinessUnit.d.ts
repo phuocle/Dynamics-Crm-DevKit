@@ -229,6 +229,8 @@ declare namespace MyDog {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who last modified the businessunit. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for Warehouse associated with Business Unit. */
+		msdyn_Warehouse: DevKit.WebApi.LookupValue;
 		/** Name of the business unit. */
 		Name: DevKit.WebApi.StringValue;
 		/** Unique identifier of the organization associated with the business unit. */

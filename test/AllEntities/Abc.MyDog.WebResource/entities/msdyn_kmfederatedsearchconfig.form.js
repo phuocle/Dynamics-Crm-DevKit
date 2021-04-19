@@ -16,11 +16,13 @@ var MyDog;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			ConnectionId: {},
+			IsDefault: {},
 			msdyn_Description: {},
 			msdyn_Name: {},
 			Organization: {},
 			OwnerId: {},
 			SearchType: {},
+			SetAsDefault_Info: {},
 			SharepointURL: {},
 			WebResource_Disclaimer: {}
 		};

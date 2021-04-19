@@ -36,7 +36,7 @@ declare namespace MyDog {
 			DirectionCode: DevKit.Controls.Boolean;
 			/** Enter the account, contact, lead, or user who sent the letter. */
 			from: DevKit.Controls.Lookup;
-			/** Choose the record that the letter relates to. */
+			/** Unique identifier of the object with which the letter activity is associated. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Type a short description about the objective or primary topic of the letter. */
 			Subject: DevKit.Controls.String;
@@ -142,24 +142,196 @@ declare namespace MyDog {
 		PriorityCode: DevKit.WebApi.OptionSetValue;
 		/** Shows the ID of the process. */
 		ProcessId: DevKit.WebApi.GuidValue;
-		/** Choose the record that the letter relates to. */
+		/** Unique identifier of the object with which the letter activity is associated. */
 		regardingobjectid_account_letter: DevKit.WebApi.LookupValue;
-		/** Choose the record that the letter relates to. */
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_bookableresourcebooking_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_bookableresourcebookingheader_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_bulkoperation_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_campaign_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_campaignactivity_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
 		regardingobjectid_contact_letter: DevKit.WebApi.LookupValue;
-		/** Choose the record that the letter relates to. */
-		regardingobjectid_devkit_azureaccount_letter: DevKit.WebApi.LookupValue;
-		/** Choose the record that the letter relates to. */
-		regardingobjectid_devkit_webapi_letter: DevKit.WebApi.LookupValue;
-		/** Choose the record that the letter relates to. */
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_contract_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_entitlement_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_entitlementtemplate_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_incident_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_invoice_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
 		regardingobjectid_knowledgearticle_letter: DevKit.WebApi.LookupValue;
-		/** Choose the record that the letter relates to. */
+		/** Unique identifier of the object with which the letter activity is associated. */
 		regardingobjectid_knowledgebaserecord_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_lead_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreement_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreementbookingdate_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreementbookingincident_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreementbookingproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreementbookingservice_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreementbookingservicetask_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreementbookingsetup_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreementinvoicedate_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreementinvoiceproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_agreementinvoicesetup_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_bookingalertstatus_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_bookingrule_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_bookingtimestamp_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_customerasset_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_fieldservicesetting_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_incidenttypecharacteristic_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_incidenttypeproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_incidenttypeservice_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_inventoryadjustment_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_inventoryadjustmentproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_inventoryjournal_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_inventorytransfer_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_payment_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_paymentdetail_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_paymentmethod_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_paymentterm_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_playbookinstance_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_postalbum_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_postalcode_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_processnotes_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_productinventory_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_projectteam_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_purchaseorder_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_purchaseorderbill_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_purchaseorderproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_purchaseorderreceipt_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_purchaseordersubstatus_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_quotebookingincident_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_quotebookingproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_quotebookingservice_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_quotebookingservicetask_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_resourceterritory_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_rma_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_rmaproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_rmareceipt_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_rmareceiptproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_rmasubstatus_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_rtv_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_rtvproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_rtvsubstatus_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_shipvia_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_systemuserschedulersetting_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_timegroup_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_timegroupdetail_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_timeoffrequest_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_warehouse_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_workorder_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_workordercharacteristic_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_workorderincident_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_workorderproduct_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_workorderresourcerestriction_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_workorderservice_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_msdyn_workorderservicetask_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_opportunity_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_quote_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_salesorder_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_site_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_uii_action_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_uii_hostedapplication_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_uii_nonhostedapplication_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_uii_option_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_uii_savedsession_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_uii_workflow_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_uii_workflowstep_letter: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the letter activity is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_letter: DevKit.WebApi.LookupValue;
 		/** Scheduled duration of the letter activity, specified in minutes. */
 		ScheduledDurationMinutes: DevKit.WebApi.IntegerValueReadonly;
 		/** Enter the expected due date and time. */
 		ScheduledEnd_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Enter the expected due date and time. */
 		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Unique identifier for an associated service. */
+		ServiceId: DevKit.WebApi.LookupValue;
 		/** Choose the service level agreement (SLA) that you want to apply to the Letter record. */
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this Letter. This field is for internal use only. */

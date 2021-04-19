@@ -111,6 +111,8 @@ declare namespace MyDog {
 		Pattern: DevKit.WebApi.StringValue;
 		/** Rank of the calendar rule. */
 		Rank: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the service with which the calendar rule is associated. */
+		ServiceId: DevKit.WebApi.LookupValue;
 		/** Start time for the rule. */
 		StartTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Sub-type of calendar rule. */

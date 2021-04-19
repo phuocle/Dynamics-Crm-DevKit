@@ -126,12 +126,28 @@ declare namespace OptionSet {
 		enum RegardingTypeCode {
 			/** 4201 */
 			Appointment,
-			/** 10042 */
-			Custom_Activity,
+			/** 10235 */
+			Booking_Alert,
+			/** 10480 */
+			Conversation,
+			/** 10216 */
+			Customer_Voice_alert,
+			/** 10225 */
+			Customer_Voice_survey_invite,
+			/** 10227 */
+			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
+			/** 10566 */
+			Outbound_message,
 			/** 4210 */
 			Phone_Call,
+			/** 10265 */
+			Project_Service_Approval,
+			/** 4214 */
+			Service_Activity,
+			/** 10489 */
+			Session,
 			/** 4216 */
 			Social_Activity,
 			/** 4212 */

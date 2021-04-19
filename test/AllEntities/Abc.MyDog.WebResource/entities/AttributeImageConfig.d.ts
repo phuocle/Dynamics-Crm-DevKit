@@ -29,7 +29,7 @@ declare namespace MyDog {
 		"@odata.etag": string;
 		/** Unique identifier for entity instances */
 		AttributeImageConfigId: DevKit.WebApi.GuidValue;
-		/** Logical name of image attribute */
+		/** Logical Name of Image Attribute */
 		AttributeLogicalName: DevKit.WebApi.StringValue;
 		/** Indicates if an image attribute can store full image */
 		CanStoreFullImage: DevKit.WebApi.BooleanValue;
@@ -41,7 +41,7 @@ declare namespace MyDog {
 		IsManaged: DevKit.WebApi.BooleanValueReadonly;
 		/** For internal use only. */
 		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
-		/** Parent entity logical name */
+		/** Parent Entity Logical Name */
 		ParentEntityLogicalName: DevKit.WebApi.StringValue;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;

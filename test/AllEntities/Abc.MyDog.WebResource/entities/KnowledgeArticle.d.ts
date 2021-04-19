@@ -21,6 +21,7 @@ declare namespace MyDog {
 		interface tab_analytics_Sections {
 			Views: DevKit.Controls.Section;
 			Feedback: DevKit.Controls.Section;
+			Cases: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -102,6 +103,8 @@ declare namespace MyDog {
 			ReadyForReview: DevKit.Controls.Boolean;
 			/** Review */
 			Review: DevKit.Controls.OptionSet;
+			/** Set Product Associations */
+			SetProductAssociations: DevKit.Controls.Boolean;
 			/** Choose the subject of the article to assist with article searches. You can configure subjects under Business Management in the Settings area. */
 			SubjectId: DevKit.Controls.Lookup;
 			/** Update Content */
@@ -112,6 +115,8 @@ declare namespace MyDog {
 			ExpirationDate: DevKit.Controls.DateTime;
 			/** Select the language that the article's content is in. */
 			LanguageLocaleId: DevKit.Controls.Lookup;
+			/** Set Product Associations */
+			SetProductAssociations: DevKit.Controls.Boolean;
 		}
 		interface ProcessExpired_Process {
 			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
@@ -120,6 +125,10 @@ declare namespace MyDog {
 			ExpirationDate_1: DevKit.Controls.DateTime;
 			/** Expired Review Options */
 			ExpiredReviewOptions: DevKit.Controls.OptionSet;
+			/** Set Product Associations */
+			SetProductAssociations: DevKit.Controls.Boolean;
+			/** Set Product Associations */
+			SetProductAssociations_1: DevKit.Controls.Boolean;
 			/** Update Content */
 			UpdateContent: DevKit.Controls.Boolean;
 		}
@@ -131,8 +140,10 @@ declare namespace MyDog {
 		interface Grid {
 			RelatedTranslationsGrid: DevKit.Controls.Grid;
 			RelatedCategoriesGrid: DevKit.Controls.Grid;
+			AssociatedProductsGrid: DevKit.Controls.Grid;
 			KnowledgearticleviewsGrid: DevKit.Controls.Grid;
 			Feedback: DevKit.Controls.Grid;
+			RelatedCasesGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormKnowledge_Article extends DevKit.IForm {
@@ -175,6 +186,7 @@ declare namespace MyDog {
 		interface tab_analytics_Sections {
 			Views: DevKit.Controls.Section;
 			Feedback: DevKit.Controls.Section;
+			Cases: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -256,6 +268,8 @@ declare namespace MyDog {
 			ReadyForReview: DevKit.Controls.Boolean;
 			/** Review */
 			Review: DevKit.Controls.OptionSet;
+			/** Set Product Associations */
+			SetProductAssociations: DevKit.Controls.Boolean;
 			/** Choose the subject of the article to assist with article searches. You can configure subjects under Business Management in the Settings area. */
 			SubjectId: DevKit.Controls.Lookup;
 			/** Update Content */
@@ -266,6 +280,8 @@ declare namespace MyDog {
 			ExpirationDate: DevKit.Controls.DateTime;
 			/** Select the language that the article's content is in. */
 			LanguageLocaleId: DevKit.Controls.Lookup;
+			/** Set Product Associations */
+			SetProductAssociations: DevKit.Controls.Boolean;
 		}
 		interface ProcessExpired_Process {
 			/** Enter an expiration date for the article. Leave this field blank for no expiration date. */
@@ -274,6 +290,10 @@ declare namespace MyDog {
 			ExpirationDate_1: DevKit.Controls.DateTime;
 			/** Expired Review Options */
 			ExpiredReviewOptions: DevKit.Controls.OptionSet;
+			/** Set Product Associations */
+			SetProductAssociations: DevKit.Controls.Boolean;
+			/** Set Product Associations */
+			SetProductAssociations_1: DevKit.Controls.Boolean;
 			/** Update Content */
 			UpdateContent: DevKit.Controls.Boolean;
 		}
@@ -285,8 +305,10 @@ declare namespace MyDog {
 		interface Grid {
 			RelatedTranslationsGrid: DevKit.Controls.Grid;
 			RelatedCategoriesGrid: DevKit.Controls.Grid;
+			AssociatedProductsGrid: DevKit.Controls.Grid;
 			KnowledgearticleviewsGrid: DevKit.Controls.Grid;
 			Feedback: DevKit.Controls.Grid;
+			RelatedCasesGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormKnowledge_Article_for_Interactive_experience extends DevKit.IForm {
@@ -480,6 +502,8 @@ declare namespace MyDog {
 		ScheduledStatusId: DevKit.WebApi.IntegerValue;
 		/** Shows whether category associations have been set */
 		SetCategoryAssociations: DevKit.WebApi.BooleanValue;
+		/** Set Product Associations */
+		SetProductAssociations: DevKit.WebApi.BooleanValue;
 		/** Contains the id of the stage where the entity is located. */
 		stageid: DevKit.WebApi.GuidValue;
 		/** Shows whether the article is a draft or is published, archived, or discarded. Draft articles aren't available externally and can be edited. Published articles are available externally, based on applicable permissions, but can't be edited. All metadata changes are reflected in the published version. Archived and discarded articles aren't available externally and can't be edited. */

@@ -65,6 +65,7 @@ var MyDog;
 			Description: {},
 			EMailAddress: {},
 			IncomingEmailFilteringMethod: {},
+			msdyn_isomnichannelqueue: {},
 			Name: {},
 			OwnerId: {},
 			QueueItemsGrid: {},
@@ -82,6 +83,12 @@ var MyDog;
 					QueueItems: {},
 					QueueMembers: {},
 					QueueMembersNoRecord: {}
+				}
+			},
+			conflictstab: {
+				Section: {
+					general_section_7: {},
+					conflictssection: {}
 				}
 			}
 		};
@@ -131,6 +138,10 @@ var OptionSet;
 			Email_messages_from_Dynamics_365_records_that_are_email_enabled: 3,
 			Email_messages_in_response_to_Dynamics_365_email: 1,
 			No_email_messages: 4
+		},
+		msdyn_queuetype : {
+			Entity: 192350001,
+			Messaging: 192350000
 		},
 		OutgoingEmailDeliveryMethod : {
 			None: 0,

@@ -1,6 +1,49 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace MyDog {
+	namespace Formmsdyn_knowledgearticletemplate_Main_Form {
+		interface tab__92E59EE7_820A_42FC_907F_F86D2C4677C2_Sections {
+			_92E59EE7_820A_42FC_907F_F86D2C4677C2_SECTION_1: DevKit.Controls.Section;
+			_92E59EE7_820A_42FC_907F_F86D2C4677C2_SECTION_2: DevKit.Controls.Section;
+			Content: DevKit.Controls.Section;
+		}
+		interface tab__92E59EE7_820A_42FC_907F_F86D2C4677C2 extends DevKit.Controls.ITab {
+			Section: tab__92E59EE7_820A_42FC_907F_F86D2C4677C2_Sections;
+		}
+		interface Tabs {
+			_92E59EE7_820A_42FC_907F_F86D2C4677C2: tab__92E59EE7_820A_42FC_907F_F86D2C4677C2;
+		}
+		interface Body {
+			Tab: Tabs;
+			msdyn_content: DevKit.Controls.ActionCards;
+			msdyn_Description: DevKit.Controls.String;
+			/** Shows whether this article is only visible internally. */
+			msdyn_isinternal: DevKit.Controls.Boolean;
+			msdyn_keywords: DevKit.Controls.String;
+			msdyn_languagelocaleid: DevKit.Controls.String;
+			msdyn_LanguageLocaleIdName: DevKit.Controls.String;
+			/** Type a name for the Knowledge Article Template */
+			msdyn_name: DevKit.Controls.String;
+			/** Choose the subject of the article to assist with article searches. You can configure subjects under Business Management in the Settings area. */
+			msdyn_subjectid: DevKit.Controls.Lookup;
+			/** Type a title for the Knowledge Article Template */
+			msdyn_title: DevKit.Controls.String;
+			/** Owner Id */
+			OwnerId: DevKit.Controls.Lookup;
+		}
+	}
+	class Formmsdyn_knowledgearticletemplate_Main_Form extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form msdyn_knowledgearticletemplate_Main_Form
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form msdyn_knowledgearticletemplate_Main_Form */
+		Body: MyDog.Formmsdyn_knowledgearticletemplate_Main_Form.Body;
+	}
 	class msdyn_knowledgearticletemplateApi {
 		/**
 		* DynamicsCrm.DevKit msdyn_knowledgearticletemplateApi
@@ -113,4 +156,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Main Form'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

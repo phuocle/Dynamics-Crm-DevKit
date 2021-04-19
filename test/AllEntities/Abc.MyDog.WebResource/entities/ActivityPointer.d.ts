@@ -98,17 +98,187 @@ declare namespace MyDog {
 		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_account: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_bookableresourcebooking: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_bookableresourcebookingheader: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_bulkoperation: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_campaign: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_campaignactivity: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_contact: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_devkit_azureaccount: DevKit.WebApi.LookupValue;
+		regardingobjectid_contract: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_devkit_webapi: DevKit.WebApi.LookupValue;
+		regardingobjectid_entitlement: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_entitlementtemplate: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_incident: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_new_interactionforemail: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_invoice: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_knowledgebaserecord: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreement: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreementbookingincident: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreementbookingproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreementbookingservice: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreementbookingservicetask: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreementinvoiceproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_bookingalertstatus: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_bookingrule: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_bookingtimestamp: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_customerasset: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_fieldservicesetting: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_incidenttypecharacteristic: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_incidenttypeproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_incidenttypeservice: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_inventoryadjustmentproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_inventoryjournal: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_payment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_paymentdetail: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_paymentmethod: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_paymentterm: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_playbookinstance: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_postalbum: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_postalcode: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_processnotes: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_productinventory: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_projectteam: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_purchaseorder: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_purchaseorderbill: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_purchaseorderproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_purchaseorderreceipt: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_purchaseorderreceiptproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_purchaseordersubstatus: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_quotebookingincident: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_quotebookingproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_quotebookingservice: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_quotebookingservicetask: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_resourceterritory: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_rma: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_rmaproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_rmareceipt: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_rmareceiptproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_rmasubstatus: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_rtv: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_rtvproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_rtvsubstatus: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_shipvia: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_systemuserschedulersetting: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_timeoffrequest: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_warehouse: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_workorder: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_workordercharacteristic: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_workorderproduct: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_workorderresourcerestriction: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_quote: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_salesorder: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_site: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_uii_action: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_uii_hostedapplication: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_uii_nonhostedapplication: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_uii_option: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_uii_savedsession: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_uii_workflow: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_uii_workflowstep: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the activity is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping: DevKit.WebApi.LookupValue;
 		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;
 		/** Scheduled duration of the activity, specified in minutes. */
 		ScheduledDurationMinutes: DevKit.WebApi.IntegerValue;
@@ -122,6 +292,8 @@ declare namespace MyDog {
 		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Uniqueidentifier specifying the id of recurring series of an instance. */
 		SeriesId: DevKit.WebApi.GuidValueReadonly;
+		/** Unique identifier of an associated service. */
+		ServiceId: DevKit.WebApi.LookupValue;
 		/** Choose the service level agreement (SLA) that you want to apply to the case record. */
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this case. This field is for internal use only. */
@@ -154,6 +326,32 @@ declare namespace MyDog {
 declare namespace OptionSet {
 	namespace ActivityPointer {
 		enum Community {
+			/** 5 */
+			Cortana,
+			/** 6 */
+			Direct_Line,
+			/** 7 */
+			Microsoft_Teams,
+			/** 8 */
+			Direct_Line_Speech,
+			/** 9 */
+			Email,
+			/** 10 */
+			GroupMe,
+			/** 11 */
+			Kik,
+			/** 12 */
+			Telegram,
+			/** 13 */
+			Skype,
+			/** 14 */
+			Slack,
+			/** 15 */
+			WhatsApp,
+			/** 3 */
+			Line,
+			/** 4 */
+			Wechat,
 			/** 1 */
 			Facebook,
 			/** 2 */

@@ -41,7 +41,7 @@ declare namespace MyDog {
 			Description: DevKit.Controls.String;
 			/** Enter the sender of the email. */
 			from: DevKit.Controls.Lookup;
-			/** Choose the record that the email relates to. */
+			/** Unique identifier of the object with which the e-mail is associated. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Type a short description about the objective or primary topic of the email. */
 			Subject: DevKit.Controls.String;
@@ -108,7 +108,7 @@ declare namespace MyDog {
 			Description: DevKit.Controls.String;
 			/** Enter the sender of the email. */
 			from: DevKit.Controls.Lookup;
-			/** Choose the record that the email relates to. */
+			/** Unique identifier of the object with which the e-mail is associated. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Type a short description about the objective or primary topic of the email. */
 			Subject: DevKit.Controls.String;
@@ -150,14 +150,24 @@ declare namespace MyDog {
 			recipient_information: DevKit.Controls.Section;
 			Regarding_information: DevKit.Controls.Section;
 		}
+		interface tab_Email_Engagement_Sections {
+			emailengagementactions: DevKit.Controls.Section;
+			Emailrecipient_section_6: DevKit.Controls.Section;
+		}
 		interface tab_Email extends DevKit.Controls.ITab {
 			Section: tab_Email_Sections;
 		}
+		interface tab_Email_Engagement extends DevKit.Controls.ITab {
+			Section: tab_Email_Engagement_Sections;
+		}
 		interface Tabs {
 			Email: tab_Email;
+			Email_Engagement: tab_Email_Engagement;
 		}
 		interface Body {
 			Tab: Tabs;
+			emailengagementactionscontrol: DevKit.Controls.EmailEngagement;
+			emailrecipientactivitycontrol: DevKit.Controls.EmailRecipient;
 			/** Enter the recipients that are included on the email distribution, but are not displayed to other recipients. */
 			bcc: DevKit.Controls.Lookup;
 			/** Enter the recipients that should be copied on the email. */
@@ -166,7 +176,7 @@ declare namespace MyDog {
 			Description: DevKit.Controls.String;
 			/** Enter the sender of the email. */
 			from: DevKit.Controls.Lookup;
-			/** Choose the record that the email relates to. */
+			/** Unique identifier of the object with which the e-mail is associated. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Type a short description about the objective or primary topic of the email. */
 			Subject: DevKit.Controls.String;
@@ -235,7 +245,7 @@ declare namespace MyDog {
 			from: DevKit.Controls.Lookup;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
-			/** Choose the record that the email relates to. */
+			/** Unique identifier of the object with which the e-mail is associated. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Select the email's status. */
 			StatusCode: DevKit.Controls.OptionSet;
@@ -349,6 +359,10 @@ declare namespace MyDog {
 		/** Shows the sender of the email. */
 		emailsender_contact: DevKit.WebApi.LookupValueReadonly;
 		/** Shows the sender of the email. */
+		emailsender_equipment: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the sender of the email. */
+		emailsender_lead: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the sender of the email. */
 		emailsender_queue: DevKit.WebApi.LookupValueReadonly;
 		/** Shows the sender of the email. */
 		emailsender_systemuser: DevKit.WebApi.LookupValueReadonly;
@@ -418,20 +432,190 @@ declare namespace MyDog {
 		ProcessId: DevKit.WebApi.GuidValue;
 		/** Indicates that a read receipt is requested. */
 		ReadReceiptRequested: DevKit.WebApi.BooleanValue;
-		/** Choose the record that the email relates to. */
+		/** Unique identifier of the object with which the e-mail is associated. */
 		regardingobjectid_account_email: DevKit.WebApi.LookupValue;
-		/** Choose the record that the email relates to. */
+		/** Unique identifier of the object with which the e-mail is associated. */
 		regardingobjectid_asyncoperation: DevKit.WebApi.LookupValue;
-		/** Choose the record that the email relates to. */
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_bookableresourcebooking_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_bookableresourcebookingheader_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_bulkoperation_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_campaign_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_campaignactivity_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
 		regardingobjectid_contact_email: DevKit.WebApi.LookupValue;
-		/** Choose the record that the email relates to. */
-		regardingobjectid_devkit_azureaccount_email: DevKit.WebApi.LookupValue;
-		/** Choose the record that the email relates to. */
-		regardingobjectid_devkit_webapi_email: DevKit.WebApi.LookupValue;
-		/** Choose the record that the email relates to. */
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_contract_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_entitlement_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_entitlementtemplate_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_incident_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_invoice_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
 		regardingobjectid_knowledgearticle_email: DevKit.WebApi.LookupValue;
-		/** Choose the record that the email relates to. */
+		/** Unique identifier of the object with which the e-mail is associated. */
 		regardingobjectid_knowledgebaserecord_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_lead_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreement_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreementbookingdate_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreementbookingincident_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreementbookingproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreementbookingservice_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreementbookingservicetask_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreementbookingsetup_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreementinvoicedate_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreementinvoiceproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_agreementinvoicesetup_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_bookingalertstatus_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_bookingrule_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_bookingtimestamp_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_customerasset_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_fieldservicesetting_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_incidenttypecharacteristic_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_incidenttypeproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_incidenttypeservice_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_inventoryadjustment_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_inventoryadjustmentproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_inventoryjournal_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_inventorytransfer_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_payment_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_paymentdetail_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_paymentmethod_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_paymentterm_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_playbookinstance_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_postalbum_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_postalcode_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_processnotes_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_productinventory_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_projectteam_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_purchaseorder_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_purchaseorderbill_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_purchaseorderproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_purchaseorderreceipt_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_purchaseordersubstatus_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_quotebookingincident_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_quotebookingproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_quotebookingservice_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_quotebookingservicetask_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_resourceterritory_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_rma_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_rmaproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_rmareceipt_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_rmareceiptproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_rmasubstatus_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_rtv_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_rtvproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_rtvsubstatus_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_shipvia_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_systemuserschedulersetting_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_timegroup_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_timegroupdetail_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_timeoffrequest_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_warehouse_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_workorder_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_workordercharacteristic_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_workorderincident_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_workorderproduct_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_workorderresourcerestriction_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_workorderservice_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_msdyn_workorderservicetask_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_opportunity_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_quote_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_salesorder_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_site_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_uii_action_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_uii_hostedapplication_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_uii_nonhostedapplication_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_uii_option_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_uii_savedsession_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_uii_workflow_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_uii_workflowstep_email: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the e-mail is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_email: DevKit.WebApi.LookupValue;
 		/** Reminder Action Card Id. */
 		ReminderActionCardId: DevKit.WebApi.GuidValue;
 		/** Shows the number of replies received for an email. */
@@ -454,6 +638,8 @@ declare namespace MyDog {
 		SendersAccount: DevKit.WebApi.LookupValueReadonly;
 		/** Shows the date and time that the email was sent. */
 		SentOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier for the associated service. */
+		ServiceId: DevKit.WebApi.LookupValue;
 		/** Choose the service level agreement (SLA) that you want to apply to the email record. */
 		SLAId: DevKit.WebApi.LookupValue;
 		/** Last SLA that was applied to this email. This field is for internal use only. */

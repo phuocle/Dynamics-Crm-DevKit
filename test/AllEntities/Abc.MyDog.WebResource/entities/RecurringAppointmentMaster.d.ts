@@ -29,7 +29,7 @@ declare namespace MyDog {
 			Location: DevKit.Controls.String;
 			/** Enter the account, contact, lead, user, or other equipment resources that are not needed at the recurring appointment, but can optionally attend. */
 			OptionalAttendees: DevKit.Controls.Lookup;
-			/** Choose the record that the recurring appointment series relates to. */
+			/** Unique identifier of the object with which the recurring appointment series is associated. */
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Enter the account, contact, lead, user, or other equipment resources that are required to attend the recurring appointment. */
 			RequiredAttendees: DevKit.Controls.Lookup;
@@ -183,18 +183,188 @@ declare namespace MyDog {
 		ProcessId: DevKit.WebApi.GuidValue;
 		/** Select the pattern type for the recurring appointment to indicate whether the appointment occurs daily, weekly, monthly, or yearly. */
 		RecurrencePatternType: DevKit.WebApi.OptionSetValue;
-		/** Choose the record that the recurring appointment series relates to. */
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
 		regardingobjectid_account_recurringappointmentmaster: DevKit.WebApi.LookupValue;
-		/** Choose the record that the recurring appointment series relates to. */
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_bookableresourcebooking_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_bookableresourcebookingheader_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_bulkoperation_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_campaign_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_campaignactivity_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
 		regardingobjectid_contact_recurringappointmentmaster: DevKit.WebApi.LookupValue;
-		/** Choose the record that the recurring appointment series relates to. */
-		regardingobjectid_devkit_azureaccount_recurringappointmentmaster: DevKit.WebApi.LookupValue;
-		/** Choose the record that the recurring appointment series relates to. */
-		regardingobjectid_devkit_webapi_recurringappointmentmaster: DevKit.WebApi.LookupValue;
-		/** Choose the record that the recurring appointment series relates to. */
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_contract_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_entitlement_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_entitlementtemplate_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_incident_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_invoice_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
 		regardingobjectid_knowledgearticle_recurringappointmentmaster: DevKit.WebApi.LookupValue;
-		/** Choose the record that the recurring appointment series relates to. */
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
 		regardingobjectid_knowledgebaserecord_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_lead_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreement_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreementbookingdate_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreementbookingincident_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreementbookingproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreementbookingservice_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreementbookingservicetask_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreementbookingsetup_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreementinvoicedate_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreementinvoiceproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_agreementinvoicesetup_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_bookingalertstatus_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_bookingrule_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_bookingtimestamp_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_customerasset_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_fieldservicesetting_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_incidenttypecharacteristic_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_incidenttypeproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_incidenttypeservice_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_inventoryadjustment_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_inventoryadjustmentproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_inventoryjournal_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_inventorytransfer_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_payment_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_paymentdetail_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_paymentmethod_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_paymentterm_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_playbookinstance_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_postalbum_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_postalcode_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_processnotes_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_productinventory_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_projectteam_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_purchaseorder_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_purchaseorderbill_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_purchaseorderproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_purchaseorderreceipt_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_purchaseorderreceiptproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_purchaseordersubstatus_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_quotebookingincident_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_quotebookingproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_quotebookingservice_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_quotebookingservicetask_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_resourceterritory_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_rma_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_rmaproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_rmareceipt_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_rmareceiptproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_rmasubstatus_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_rtv_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_rtvproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_rtvsubstatus_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_shipvia_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_systemuserschedulersetting_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_timegroup_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_timegroupdetail_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_timeoffrequest_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_warehouse_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_workorder_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_workordercharacteristic_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_workorderincident_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_workorderproduct_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_workorderresourcerestriction_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_workorderservice_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_msdyn_workorderservicetask_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_opportunity_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_quote_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_salesorder_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_site_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_uii_action_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_uii_hostedapplication_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_uii_nonhostedapplication_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_uii_option_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_uii_savedsession_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_uii_workflow_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_uii_workflowstep_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the recurring appointment series is associated. */
+		regardingobjectid_uii_workflow_workflowstep_mapping_recurringappointmentmaster: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the recurrence rule that is associated with the recurring appointment series. */
 		RuleId: DevKit.WebApi.LookupValueReadonly;
 		/** Safe body text of the recurring appointment. */
@@ -205,6 +375,8 @@ declare namespace MyDog {
 		ScheduledStart_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Indicates whether the recurring appointment series is active or inactive. */
 		SeriesStatus: DevKit.WebApi.BooleanValue;
+		/** Unique identifier for an associated service. */
+		ServiceId: DevKit.WebApi.LookupValue;
 		/** Shows the date and time by which the activities are sorted. */
 		SortDate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
 		/** Shows the ID of the stage. */

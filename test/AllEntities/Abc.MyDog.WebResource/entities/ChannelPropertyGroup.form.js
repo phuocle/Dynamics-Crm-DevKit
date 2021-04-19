@@ -64,9 +64,17 @@ var OptionSet;
 		},
 		RegardingTypeCode : {
 			Appointment: 4201,
-			Custom_Activity: 10042,
+			Booking_Alert: 10235,
+			Conversation: 10480,
+			Customer_Voice_alert: 10216,
+			Customer_Voice_survey_invite: 10225,
+			Customer_Voice_survey_response: 10227,
 			Email: 4202,
+			Outbound_message: 10566,
 			Phone_Call: 4210,
+			Project_Service_Approval: 10265,
+			Service_Activity: 4214,
+			Session: 10489,
 			Social_Activity: 4216,
 			Task: 4212
 		},

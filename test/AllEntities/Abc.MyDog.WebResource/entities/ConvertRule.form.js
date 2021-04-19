@@ -77,6 +77,10 @@ var OptionSet;
 			Published: 0,
 			Unpublished: 1
 		},
+		SenderResolutionOption : {
+			Creating_a_new_contact_automatically: 0,
+			Mapping_in_Power_Automate_manually: 1
+		},
 		SourceTypeCode : {
 			Email: 2,
 			Social_Monitoring: 1

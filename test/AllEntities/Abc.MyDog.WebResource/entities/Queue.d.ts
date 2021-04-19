@@ -50,11 +50,19 @@ declare namespace MyDog {
 			QueueMembers: DevKit.Controls.Section;
 			QueueMembersNoRecord: DevKit.Controls.Section;
 		}
+		interface tab_conflictstab_Sections {
+			general_section_7: DevKit.Controls.Section;
+			conflictssection: DevKit.Controls.Section;
+		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
 		}
+		interface tab_conflictstab extends DevKit.Controls.ITab {
+			Section: tab_conflictstab_Sections;
+		}
 		interface Tabs {
 			general: tab_general;
+			conflictstab: tab_conflictstab;
 		}
 		interface Body {
 			Tab: Tabs;
@@ -66,6 +74,8 @@ declare namespace MyDog {
 			EMailAddress: DevKit.Controls.String;
 			/** Convert Incoming Email To Activities */
 			IncomingEmailFilteringMethod: DevKit.Controls.OptionSet;
+			/** Shows whether the queue is used as Omnichannel queue for work distribution. */
+			msdyn_isomnichannelqueue: DevKit.Controls.Boolean;
 			/** Name of the queue. */
 			Name: DevKit.Controls.String;
 			/** Unique identifier of the user or team who owns the queue. */
@@ -157,6 +167,16 @@ declare namespace MyDog {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who last modified the queue. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows whether the queue is set as default or not. */
+		msdyn_isdefaultqueue: DevKit.WebApi.BooleanValue;
+		/** Shows whether the queue is used as Omnichannel queue for work distribution. */
+		msdyn_isomnichannelqueue: DevKit.WebApi.BooleanValue;
+		/** Unique identifier for Operating hour associated with Queue */
+		msdyn_operatinghourid: DevKit.WebApi.LookupValue;
+		/** Priority of the queue to indicate conversation assignment order to the agent. */
+		msdyn_priority: DevKit.WebApi.IntegerValue;
+		/** Defines the type of channels handled by this queue */
+		msdyn_queuetype: DevKit.WebApi.OptionSetValue;
 		/** Name of the queue. */
 		Name: DevKit.WebApi.StringValue;
 		/** Number of Queue items associated with the queue. */
@@ -226,6 +246,12 @@ declare namespace OptionSet {
 			Email_messages_in_response_to_Dynamics_365_email,
 			/** 4 */
 			No_email_messages
+		}
+		enum msdyn_queuetype {
+			/** 192350001 */
+			Entity,
+			/** 192350000 */
+			Messaging
 		}
 		enum OutgoingEmailDeliveryMethod {
 			/** 0 */

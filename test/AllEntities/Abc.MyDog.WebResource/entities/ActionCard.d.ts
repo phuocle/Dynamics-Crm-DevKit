@@ -55,6 +55,9 @@ declare namespace MyDog {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Unique identifier of the delegate user who last modified action card. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		msdyn_actioncardregardingid: DevKit.WebApi.StringValue;
+		msdyn_regardingobjectid: DevKit.WebApi.StringValue;
+		msdyn_regardingobjectlogicalname: DevKit.WebApi.StringValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
@@ -86,17 +89,39 @@ declare namespace MyDog {
 		/** Choose the record that the card relates to. */
 		regardingobjectid_contact_actioncard: DevKit.WebApi.LookupValue;
 		/** Choose the record that the card relates to. */
-		regardingobjectid_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Choose the record that the card relates to. */
 		regardingobjectid_email_actioncard: DevKit.WebApi.LookupValue;
 		/** Choose the record that the card relates to. */
 		regardingobjectid_fax_actioncard: DevKit.WebApi.LookupValue;
 		/** Choose the record that the card relates to. */
+		regardingobjectid_incident_actioncard: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_lead_actioncard: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
 		regardingobjectid_letter_actioncard: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_msdyn_approval: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_msdyn_bookingalert: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_msfp_alert: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_msfp_surveyresponse: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_opportunity_actioncard: DevKit.WebApi.LookupValue;
 		/** Choose the record that the card relates to. */
 		regardingobjectid_phonecall_actioncard: DevKit.WebApi.LookupValue;
 		/** Choose the record that the card relates to. */
 		regardingobjectid_recurringappointmentmaster_actioncard: DevKit.WebApi.LookupValue;
+		/** Choose the record that the card relates to. */
+		regardingobjectid_serviceappointment_actioncard: DevKit.WebApi.LookupValue;
 		/** Choose the record that the card relates to. */
 		regardingobjectid_task_actioncard: DevKit.WebApi.LookupValue;
 		/** Source for the Action Card */

@@ -76,6 +76,7 @@ declare namespace MyDog {
 		interface tab_general_Sections {
 			General_Info: DevKit.Controls.Section;
 			Content: DevKit.Controls.Section;
+			Content_2: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -233,7 +234,9 @@ declare namespace MyDog {
 		/** Unique identifier of the delegate user who modified the record. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Shows the record in context of which feedback rating is being provided. */
-		msdyn_ContextObjectId: DevKit.WebApi.LookupValue;
+		msdyn_ContextObjectId_incident: DevKit.WebApi.LookupValue;
+		/** Shows the record in context of which feedback rating is being provided. */
+		msdyn_ContextObjectId_knowledgearticle: DevKit.WebApi.LookupValue;
 		/** Shows the rating scaled to a value between 0 and 1 based on minimum and maximum ratings. */
 		NormalizedRating: DevKit.WebApi.DecimalValueReadonly;
 		/** Date and time that the record was migrated. */
@@ -253,13 +256,23 @@ declare namespace MyDog {
 		/** Shows the record that the feedback is associated with. */
 		ContactId: DevKit.WebApi.LookupValue;
 		/** Shows the record that the feedback is associated with. */
-		regardingobjectid_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Shows the record that the feedback is associated with. */
-		regardingobjectid_devkit_webapi: DevKit.WebApi.LookupValue;
-		/** Shows the record that the feedback is associated with. */
 		_FeedbackId: DevKit.WebApi.LookupValue;
 		/** Shows the record that the feedback is associated with. */
 		KnowledgeArticleId: DevKit.WebApi.LookupValue;
+		/** Shows the record that the feedback is associated with. */
+		regardingobjectid_msdyn_liveconversation: DevKit.WebApi.LookupValue;
+		/** Shows the record that the feedback is associated with. */
+		regardingobjectid_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		/** Shows the record that the feedback is associated with. */
+		regardingobjectid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		/** Shows the record that the feedback is associated with. */
+		regardingobjectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		/** Shows the record that the feedback is associated with. */
+		regardingobjectid_msfp_alert: DevKit.WebApi.LookupValue;
+		/** Shows the record that the feedback is associated with. */
+		regardingobjectid_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		/** Shows the record that the feedback is associated with. */
+		regardingobjectid_msfp_surveyresponse: DevKit.WebApi.LookupValue;
 		/** Shows where the feedback was submitted from. */
 		Source: DevKit.WebApi.OptionSetValue;
 		/** Shows whether the feedback is open, rejected or closed. */

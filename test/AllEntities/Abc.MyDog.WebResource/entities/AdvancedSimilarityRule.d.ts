@@ -3,8 +3,6 @@
 declare namespace MyDog {
 	namespace FormAdvancedSimilarityRule_Information {
 		interface tab__67E8B341_A89A_4207_9BCC_4C1F9CC8B89D_Sections {
-			_89397326_037F_4A43_B362_6B9B04E7917B: DevKit.Controls.Section;
-			_29B6CE18_08E1_4B87_B532_B18A6987BBB2: DevKit.Controls.Section;
 		}
 		interface tab__3D17A623_BFEB_49F9_83C4_B5A02B96CAC0_Sections {
 			_0CBFC71F_6EFF_4583_9B38_7A9AE69C3AE1: DevKit.Controls.Section;
@@ -25,14 +23,14 @@ declare namespace MyDog {
 			Description: DevKit.Controls.String;
 			/** Filter Result By Status */
 			FilterResultByStatus: DevKit.Controls.OptionSet;
-			/** Use Text Analytics for Target Match */
-			IsAzureMLRequired: DevKit.Controls.Boolean;
-			/** Enter the maximum number of keywords and key phrases to use with text analytics. */
-			MaxNumberKeyphrases: DevKit.Controls.Integer;
+			filterresultbystatus_UC: DevKit.Controls.ActionCards;
 			/** Type a logical name for the similarity configuration */
 			name: DevKit.Controls.String;
+			/** Provide noise key phrases by a semicolon ( ; ). These phrases will be filtered while searching for similar cases */
+			NoiseKeyphraseslist: DevKit.Controls.String;
 			/** Enter an entity that similar records will be suggested for */
 			SourceEntity: DevKit.Controls.String;
+			sourceentity_UC: DevKit.Controls.ActionCards;
 		}
 		interface Grid {
 			textanalyticsentitymappings: DevKit.Controls.Grid;
@@ -120,6 +118,8 @@ declare namespace MyDog {
 		name: DevKit.WebApi.StringValue;
 		/** Enter the maximum number of words in a key phrase to use with text analytics. */
 		NgramSize: DevKit.WebApi.IntegerValue;
+		/** Provide noise key phrases by a semicolon ( ; ). These phrases will be filtered while searching for similar cases */
+		NoiseKeyphraseslist: DevKit.WebApi.StringValue;
 		/** Unique identifier of the organization associated with the advanced similarity rules */
 		OrganizationId: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the record was created. */

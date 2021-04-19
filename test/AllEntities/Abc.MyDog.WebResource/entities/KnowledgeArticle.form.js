@@ -16,6 +16,7 @@ var MyDog;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			ArticlePublicNumber: {},
+			AssociatedProductsGrid: {},
 			Content: {},
 			CreatedBy: {},
 			CreatedOn: {},
@@ -37,6 +38,7 @@ var MyDog;
 			primaryauthorid: {},
 			PublishOn: {},
 			Rating: {},
+			RelatedCasesGrid: {},
 			RelatedCategoriesGrid: {},
 			RelatedTranslationsGrid: {},
 			RootArticleId: {},
@@ -62,7 +64,8 @@ var MyDog;
 			analytics: {
 				Section: {
 					Views: {},
-					Feedback: {}
+					Feedback: {},
+					Cases: {}
 				}
 			}
 		};
@@ -88,6 +91,7 @@ var MyDog;
 			primaryauthorid: {},
 			ReadyForReview: {},
 			Review: {},
+			SetProductAssociations: {},
 			SubjectId: {},
 			UpdateContent: {}
 		}
@@ -95,7 +99,8 @@ var MyDog;
 		process.New_Process = _New_Process;
 		var _Translation_Process = {
 			ExpirationDate: {},
-			LanguageLocaleId: {}
+			LanguageLocaleId: {},
+			SetProductAssociations: {}
 		}
 		devKit.LoadFields(formContext, _Translation_Process, "header_process_");
 		process.Translation_Process = _Translation_Process;
@@ -103,6 +108,8 @@ var MyDog;
 			ExpirationDate: {},
 			ExpirationDate_1: {},
 			ExpiredReviewOptions: {},
+			SetProductAssociations: {},
+			SetProductAssociations_1: {},
 			UpdateContent: {}
 		}
 		devKit.LoadFields(formContext, _Expired_Process, "header_process_");
@@ -117,8 +124,10 @@ var MyDog;
 		var grid = {
 			RelatedTranslationsGrid: {},
 			RelatedCategoriesGrid: {},
+			AssociatedProductsGrid: {},
 			KnowledgearticleviewsGrid: {},
 			Feedback: {},
+			RelatedCasesGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -144,6 +153,7 @@ var MyDog;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			ArticlePublicNumber: {},
+			AssociatedProductsGrid: {},
 			Content: {},
 			CreatedBy: {},
 			CreatedOn: {},
@@ -165,6 +175,7 @@ var MyDog;
 			primaryauthorid: {},
 			PublishOn: {},
 			Rating: {},
+			RelatedCasesGrid: {},
 			RelatedCategoriesGrid: {},
 			RelatedTranslationsGrid: {},
 			RootArticleId: {},
@@ -190,7 +201,8 @@ var MyDog;
 			analytics: {
 				Section: {
 					Views: {},
-					Feedback: {}
+					Feedback: {},
+					Cases: {}
 				}
 			}
 		};
@@ -216,6 +228,7 @@ var MyDog;
 			primaryauthorid: {},
 			ReadyForReview: {},
 			Review: {},
+			SetProductAssociations: {},
 			SubjectId: {},
 			UpdateContent: {}
 		}
@@ -223,7 +236,8 @@ var MyDog;
 		process.New_Process = _New_Process;
 		var _Translation_Process = {
 			ExpirationDate: {},
-			LanguageLocaleId: {}
+			LanguageLocaleId: {},
+			SetProductAssociations: {}
 		}
 		devKit.LoadFields(formContext, _Translation_Process, "header_process_");
 		process.Translation_Process = _Translation_Process;
@@ -231,6 +245,8 @@ var MyDog;
 			ExpirationDate: {},
 			ExpirationDate_1: {},
 			ExpiredReviewOptions: {},
+			SetProductAssociations: {},
+			SetProductAssociations_1: {},
 			UpdateContent: {}
 		}
 		devKit.LoadFields(formContext, _Expired_Process, "header_process_");
@@ -245,8 +261,10 @@ var MyDog;
 		var grid = {
 			RelatedTranslationsGrid: {},
 			RelatedCategoriesGrid: {},
+			AssociatedProductsGrid: {},
 			KnowledgearticleviewsGrid: {},
 			Feedback: {},
+			RelatedCasesGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;

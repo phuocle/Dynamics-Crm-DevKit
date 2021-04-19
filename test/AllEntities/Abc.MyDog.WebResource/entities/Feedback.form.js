@@ -91,7 +91,8 @@ var MyDog;
 			general: {
 				Section: {
 					General_Info: {},
-					Content: {}
+					Content: {},
+					Content_2: {}
 				}
 			}
 		};

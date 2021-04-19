@@ -1,6 +1,52 @@
 ﻿//@ts-check
 ///<reference path="devkit.d.ts" />
 declare namespace MyDog {
+	namespace FormPersonalDocumentTemplate_Information {
+		interface tab_general_Sections {
+			Details: DevKit.Controls.Section;
+		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
+		interface Tabs {
+			general: tab_general;
+		}
+		interface Body {
+			Tab: Tabs;
+			/** Associated Entity Type Code. */
+			AssociatedEntityTypeCode: DevKit.Controls.String;
+			/** Unique identifier of the user who created the personal document template. */
+			CreatedBy: DevKit.Controls.Lookup;
+			/** Date and time when the personal document template was created. */
+			CreatedOn: DevKit.Controls.DateTime;
+			/** Additional information to describe the Personal Document Template */
+			Description: DevKit.Controls.String;
+			/** Option set for selecting the type of the personal document template */
+			DocumentType: DevKit.Controls.OptionSet;
+			/** Language of Personal Document Template. */
+			LanguageCode: DevKit.Controls.Integer;
+			/** Unique identifier of the user who last modified the personal document template. */
+			ModifiedBy: DevKit.Controls.Lookup;
+			/** Date and time when the personal document template was last modified. */
+			ModifiedOn: DevKit.Controls.DateTime;
+			/** Name of the personal document template. */
+			Name: DevKit.Controls.String;
+			/** Information about whether the personal document template is active. */
+			Status: DevKit.Controls.Boolean;
+		}
+	}
+	class FormPersonalDocumentTemplate_Information extends DevKit.IForm {
+		/**
+		* DynamicsCrm.DevKit form PersonalDocumentTemplate_Information
+		* @param executionContext the execution context
+		* @param defaultWebResourceName default resource name. E.g.: "devkit_/resources/Resource"
+		*/
+		constructor(executionContext: any, defaultWebResourceName?: string);
+		/** Utility functions/methods/objects for Dynamics 365 form */
+		Utility: DevKit.Utility;
+		/** The Body section of form PersonalDocumentTemplate_Information */
+		Body: MyDog.FormPersonalDocumentTemplate_Information.Body;
+	}
 	class PersonalDocumentTemplateApi {
 		/**
 		* DynamicsCrm.DevKit PersonalDocumentTemplateApi
@@ -94,4 +140,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':[],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

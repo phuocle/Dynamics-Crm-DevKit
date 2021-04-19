@@ -154,6 +154,8 @@ var MyDog;
 			bcc: {},
 			cc: {},
 			Description: {},
+			emailengagementactionscontrol: {},
+			emailrecipientactivitycontrol: {},
 			from: {},
 			RegardingObjectId: {},
 			Subject: {},
@@ -165,6 +167,12 @@ var MyDog;
 				Section: {
 					recipient_information: {},
 					Regarding_information: {}
+				}
+			},
+			Email_Engagement: {
+				Section: {
+					emailengagementactions: {},
+					Emailrecipient_section_6: {}
 				}
 			}
 		};

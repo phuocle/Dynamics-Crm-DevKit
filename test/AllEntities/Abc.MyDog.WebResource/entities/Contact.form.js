@@ -18,17 +18,24 @@ var MyDog;
 			ActionCards: {},
 			Address1_Composite: {},
 			Address1_FreightTermsCode: {},
+			Address1_Latitude: {},
+			Address1_Longitude: {},
 			Address1_ShippingMethodCode: {},
 			Anniversary: {},
 			BirthDate: {},
+			BusinessCard: {},
+			contactcasessgrid: {},
+			contactopportunitiesgrid: {},
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
+			DocumentsSubGrid: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
 			DoNotPhone: {},
 			DoNotPostalMail: {},
+			DoNotSendMM: {},
 			EMailAddress1: {},
 			FamilyStatusCode: {},
 			Fax: {},
@@ -36,14 +43,23 @@ var MyDog;
 			FullName: {},
 			GenderCode: {},
 			JobTitle: {},
+			LastUsedInCampaign: {},
 			mapcontrol: {},
 			MobilePhone: {},
+			msdyusd_CurrentProfile: {},
+			msdyusd_Facebook: {},
+			msdyusd_Twitter: {},
 			notescontrol: {},
+			OriginatingLeadId: {},
 			ParentCustomerId: {},
+			ParentCustomerId_1: {},
+			ParentCustomerId_2: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
 			PreferredContactMethodCode_1: {},
 			SpousesName: {},
+			subgrid_Entitlement: {},
+			TalkingPoints: {},
 			Telephone1: {},
 			TransactionCurrencyId: {}
 		};
@@ -53,17 +69,33 @@ var MyDog;
 				Section: {
 					CONTACT_INFORMATION: {},
 					MapSection: {},
+					BusinessCard: {},
 					SOCIAL_PANE_TAB: {},
-					Summary_section_6: {}
+					TalkingPoints_section: {},
+					Summary_section_6: {},
+					CUSTOMER_DETAILS_TAB: {}
 				}
 			},
 			DETAILS_TAB: {
 				Section: {
 					PERSONAL_INFORMATION: {},
 					PERSONAL_NOTES_SECTION: {},
+					marketing_information: {},
 					CONTACT_PREFERENCES: {},
 					billing_information: {},
 					shipping_information: {}
+				}
+			},
+			urstab: {
+				Section: {
+					urstab_section_general: {},
+					tab_3_section_2: {},
+					tab_3_section_3: {}
+				}
+			},
+			documents_sharepoint: {
+				Section: {
+					documents_sharepoint_section: {}
 				}
 			}
 		};
@@ -76,10 +108,18 @@ var MyDog;
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
 		var quickForm = {
-
+			contactquickform: {}
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
+		var grid = {
+			contactopportunitiesgrid: {},
+			contactcasessgrid: {},
+			subgrid_Entitlement: {},
+			DocumentsSubGrid: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
 		var navigation = {
 			navAddresses: {},
 			navSubConts: {},
@@ -88,7 +128,12 @@ var MyDog;
 			navOrders: {},
 			navInvoices: {},
 			navProcessSessions: {},
-			navAsyncOperations: {}
+			navAsyncOperations: {},
+			nav_contact_bookableresource_ContactId: {},
+			nav_msdyn_contact_msdyn_purchaseorder_VendorSalesPerson: {},
+			nav_msdyn_contact_msdyn_rma_RequestedByContact: {},
+			nav_msdyn_contact_msdyn_rtv_VendorContact: {},
+			nav_msdyn_contact_msdyn_workorder_ReportedByContact: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -128,6 +173,7 @@ var MyDog;
 			contactactivitiesgrid: {},
 			CreditLimit: {},
 			CreditOnHold: {},
+			DefaultPriceLevelId: {},
 			Department: {},
 			Description: {},
 			DoNotBulkEMail: {},
@@ -135,6 +181,7 @@ var MyDog;
 			DoNotFax: {},
 			DoNotPhone: {},
 			DoNotPostalMail: {},
+			DoNotSendMM: {},
 			EMailAddress1: {},
 			FamilyStatusCode: {},
 			Fax: {},
@@ -142,23 +189,36 @@ var MyDog;
 			GenderCode: {},
 			JobTitle: {},
 			LastName: {},
+			LastUsedInCampaign: {},
 			ManagerName: {},
 			ManagerPhone: {},
 			MiddleName: {},
 			MobilePhone: {},
 			notescontrol: {},
+			OriginatingLeadId: {},
 			OwnerId: {},
 			ParentCustomerId: {},
 			PaymentTermsCode: {},
+			PreferredAppointmentDayCode: {},
+			PreferredAppointmentTimeCode: {},
 			PreferredContactMethodCode: {},
+			PreferredEquipmentId: {},
+			PreferredServiceId: {},
+			PreferredSystemUserId: {},
 			Salutation: {},
 			SpousesName: {},
 			Telephone1: {},
 			Telephone2: {},
-			TransactionCurrencyId: {}
+			TransactionCurrencyId: {},
+			WebResource_RecordWall: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			tab_recordwall: {
+				Section: {
+					tab_recordwall_section_1: {}
+				}
+			},
 			general: {
 				Section: {
 					name: {},
@@ -184,6 +244,13 @@ var MyDog;
 					internal_information: {},
 					billing_information: {},
 					contact_methods: {}
+				}
+			},
+			conflictstab: {
+				Section: {
+					conflictssection: {},
+					marketing_information: {},
+					service_preferences: {}
 				}
 			}
 		};
@@ -237,6 +304,7 @@ var MyDog;
 			Address1_Line1: {},
 			Address1_Line2: {},
 			Address1_PostalCode: {},
+			BusinessCard: {},
 			Description: {},
 			EMailAddress1: {},
 			FirstName: {},
@@ -333,6 +401,11 @@ var OptionSet;
 		},
 		LeadSourceCode : {
 			Default_Value: 1
+		},
+		msdyn_orgchangestatus : {
+			Ignore: 2,
+			No_Feedback: 0,
+			Not_at_Company: 1
 		},
 		PaymentTermsCode : {
 			_2_10_Net_30: 2,

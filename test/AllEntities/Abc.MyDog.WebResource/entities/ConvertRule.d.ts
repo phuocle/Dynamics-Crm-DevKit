@@ -109,6 +109,8 @@ declare namespace MyDog {
 		ConvertRuleId: DevKit.WebApi.GuidValue;
 		/** For internal use only. */
 		ConvertRuleIdUnique: DevKit.WebApi.GuidValueReadonly;
+		/** Choose whether an ARC rule is modern or legacy. */
+		ConvertRuleType: DevKit.WebApi.BooleanValue;
 		/** Unique identifier of the user who created the record. */
 		CreatedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the record was created. */
@@ -151,6 +153,8 @@ declare namespace MyDog {
 		ResponseTemplateId: DevKit.WebApi.LookupValue;
 		/** Choose whether to send an automatic email response to the customer after a record is created. */
 		SendAutomaticResponse: DevKit.WebApi.BooleanValue;
+		/** Choose whether an ARC rule should resolve email sender manually or automatically. */
+		SenderResolutionOption: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** Source of the record. */
@@ -180,6 +184,12 @@ declare namespace OptionSet {
 			Published,
 			/** 1 */
 			Unpublished
+		}
+		enum SenderResolutionOption {
+			/** 0 */
+			Creating_a_new_contact_automatically,
+			/** 1 */
+			Mapping_in_Power_Automate_manually
 		}
 		enum SourceTypeCode {
 			/** 2 */

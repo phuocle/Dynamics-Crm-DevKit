@@ -9,15 +9,27 @@ declare namespace MyDog {
 		interface tab_SUMMARY_TAB_Sections {
 			CONTACT_INFORMATION: DevKit.Controls.Section;
 			MapSection: DevKit.Controls.Section;
+			BusinessCard: DevKit.Controls.Section;
 			SOCIAL_PANE_TAB: DevKit.Controls.Section;
+			TalkingPoints_section: DevKit.Controls.Section;
 			Summary_section_6: DevKit.Controls.Section;
+			CUSTOMER_DETAILS_TAB: DevKit.Controls.Section;
 		}
 		interface tab_DETAILS_TAB_Sections {
 			PERSONAL_INFORMATION: DevKit.Controls.Section;
 			PERSONAL_NOTES_SECTION: DevKit.Controls.Section;
+			marketing_information: DevKit.Controls.Section;
 			CONTACT_PREFERENCES: DevKit.Controls.Section;
 			billing_information: DevKit.Controls.Section;
 			shipping_information: DevKit.Controls.Section;
+		}
+		interface tab_urstab_Sections {
+			urstab_section_general: DevKit.Controls.Section;
+			tab_3_section_2: DevKit.Controls.Section;
+			tab_3_section_3: DevKit.Controls.Section;
+		}
+		interface tab_documents_sharepoint_Sections {
+			documents_sharepoint_section: DevKit.Controls.Section;
 		}
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
 			Section: tab_SUMMARY_TAB_Sections;
@@ -25,25 +37,40 @@ declare namespace MyDog {
 		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
 			Section: tab_DETAILS_TAB_Sections;
 		}
+		interface tab_urstab extends DevKit.Controls.ITab {
+			Section: tab_urstab_Sections;
+		}
+		interface tab_documents_sharepoint extends DevKit.Controls.ITab {
+			Section: tab_documents_sharepoint_Sections;
+		}
 		interface Tabs {
 			SUMMARY_TAB: tab_SUMMARY_TAB;
 			DETAILS_TAB: tab_DETAILS_TAB;
+			urstab: tab_urstab;
+			documents_sharepoint: tab_documents_sharepoint;
 		}
 		interface Body {
 			Tab: Tabs;
 			mapcontrol: DevKit.Controls.Map;
 			notescontrol: DevKit.Controls.Note;
+			TalkingPoints: DevKit.Controls.ActionCards;
 			ActionCards: DevKit.Controls.ActionCards;
 			/** Shows the complete primary address. */
 			Address1_Composite: DevKit.Controls.String;
 			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
 			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
+			/** Type the latitude value for the primary address for use in mapping and other applications. */
+			Address1_Latitude: DevKit.Controls.Double;
+			/** Type the longitude value for the primary address for use in mapping and other applications. */
+			Address1_Longitude: DevKit.Controls.Double;
 			/** Select a shipping method for deliveries sent to this address. */
 			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
 			/** Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications. */
 			Anniversary: DevKit.Controls.Date;
 			/** Enter the contact's birthday for use in customer gift programs or other communications. */
 			BirthDate: DevKit.Controls.Date;
+			/** Stores Image of the Business Card */
+			BusinessCard: DevKit.Controls.String;
 			/** Type the credit limit of the contact for reference when you address invoice and accounting issues with the customer. */
 			CreditLimit: DevKit.Controls.Money;
 			/** Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues. */
@@ -60,6 +87,8 @@ declare namespace MyDog {
 			DoNotPhone: DevKit.Controls.Boolean;
 			/** Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns. */
 			DoNotPostalMail: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives. */
+			DoNotSendMM: DevKit.Controls.Boolean;
 			/** Type the primary email address for the contact. */
 			EMailAddress1: DevKit.Controls.String;
 			/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
@@ -74,10 +103,19 @@ declare namespace MyDog {
 			GenderCode: DevKit.Controls.OptionSet;
 			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
 			JobTitle: DevKit.Controls.String;
+			/** Shows the date when the contact was last included in a marketing campaign or quick campaign. */
+			LastUsedInCampaign: DevKit.Controls.Date;
 			/** Type the mobile phone number for the contact. */
 			MobilePhone: DevKit.Controls.String;
+			msdyusd_CurrentProfile: DevKit.Controls.String;
+			msdyusd_Facebook: DevKit.Controls.String;
+			msdyusd_Twitter: DevKit.Controls.String;
+			/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
+			OriginatingLeadId: DevKit.Controls.Lookup;
 			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 			ParentCustomerId: DevKit.Controls.Lookup;
+			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
+			ParentCustomerId_1: DevKit.Controls.Lookup;
 			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
 			PaymentTermsCode: DevKit.Controls.OptionSet;
 			/** Select the preferred method of contact. */
@@ -90,6 +128,22 @@ declare namespace MyDog {
 			Telephone1: DevKit.Controls.String;
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface quickForm_contactquickform_Body {
+			EMailAddress1: DevKit.Controls.QuickView;
+			Telephone1: DevKit.Controls.QuickView;
+		}
+		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
+			Body: quickForm_contactquickform_Body;
+		}
+		interface QuickForm {
+			contactquickform: quickForm_contactquickform;
+		}
+		interface Grid {
+			contactopportunitiesgrid: DevKit.Controls.Grid;
+			contactcasessgrid: DevKit.Controls.Grid;
+			subgrid_Entitlement: DevKit.Controls.Grid;
+			DocumentsSubGrid: DevKit.Controls.Grid;
 		}
 	}
 	class FormContact extends DevKit.IForm {
@@ -105,6 +159,10 @@ declare namespace MyDog {
 		Body: MyDog.FormContact.Body;
 		/** The Header section of form Contact */
 		Header: MyDog.FormContact.Header;
+		/** The QuickForm of form Contact */
+		QuickForm: MyDog.FormContact.QuickForm;
+		/** The Grid of form Contact */
+		Grid: MyDog.FormContact.Grid;
 	}
 	namespace FormContact_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -114,6 +172,9 @@ declare namespace MyDog {
 			OwnerId: DevKit.Controls.Lookup;
 			/** Select the preferred method of contact. */
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+		}
+		interface tab_tab_recordwall_Sections {
+			tab_recordwall_section_1: DevKit.Controls.Section;
 		}
 		interface tab_general_Sections {
 			name: DevKit.Controls.Section;
@@ -134,6 +195,14 @@ declare namespace MyDog {
 			billing_information: DevKit.Controls.Section;
 			contact_methods: DevKit.Controls.Section;
 		}
+		interface tab_conflictstab_Sections {
+			conflictssection: DevKit.Controls.Section;
+			marketing_information: DevKit.Controls.Section;
+			service_preferences: DevKit.Controls.Section;
+		}
+		interface tab_tab_recordwall extends DevKit.Controls.ITab {
+			Section: tab_tab_recordwall_Sections;
+		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
 		}
@@ -146,14 +215,20 @@ declare namespace MyDog {
 		interface tab_administration extends DevKit.Controls.ITab {
 			Section: tab_administration_Sections;
 		}
+		interface tab_conflictstab extends DevKit.Controls.ITab {
+			Section: tab_conflictstab_Sections;
+		}
 		interface Tabs {
+			tab_recordwall: tab_tab_recordwall;
 			general: tab_general;
 			details: tab_details;
 			notes_and_activities: tab_notes_and_activities;
 			administration: tab_administration;
+			conflictstab: tab_conflictstab;
 		}
 		interface Body {
 			Tab: Tabs;
+			WebResource_RecordWall: DevKit.Controls.WebResource;
 			notescontrol: DevKit.Controls.Note;
 			/** Select the contact's role within the company or sales process, such as decision maker, employee, or influencer. */
 			AccountRoleCode: DevKit.Controls.OptionSet;
@@ -193,6 +268,8 @@ declare namespace MyDog {
 			CreditLimit: DevKit.Controls.Money;
 			/** Select whether the contact is on a credit hold, for reference when addressing invoice and accounting issues. */
 			CreditOnHold: DevKit.Controls.Boolean;
+			/** Choose the default price list associated with the contact to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders. */
+			DefaultPriceLevelId: DevKit.Controls.Lookup;
 			/** Type the department or business unit where the contact works in the parent company or business. */
 			Department: DevKit.Controls.String;
 			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
@@ -207,6 +284,8 @@ declare namespace MyDog {
 			DoNotPhone: DevKit.Controls.Boolean;
 			/** Select whether the contact allows direct mail. If Do Not Allow is selected, the contact will be excluded from letter activities distributed in marketing campaigns. */
 			DoNotPostalMail: DevKit.Controls.Boolean;
+			/** Select whether the contact accepts marketing materials, such as brochures or catalogs. Contacts that opt out can be excluded from marketing initiatives. */
+			DoNotSendMM: DevKit.Controls.Boolean;
 			/** Type the primary email address for the contact. */
 			EMailAddress1: DevKit.Controls.String;
 			/** Select the marital status of the contact for reference in follow-up phone calls and other communications. */
@@ -221,6 +300,8 @@ declare namespace MyDog {
 			JobTitle: DevKit.Controls.String;
 			/** Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
 			LastName: DevKit.Controls.String;
+			/** Shows the date when the contact was last included in a marketing campaign or quick campaign. */
+			LastUsedInCampaign: DevKit.Controls.Date;
 			/** Type the name of the contact's manager for use in escalating issues or other follow-up communications with the contact. */
 			ManagerName: DevKit.Controls.String;
 			/** Type the phone number for the contact's manager. */
@@ -229,14 +310,26 @@ declare namespace MyDog {
 			MiddleName: DevKit.Controls.String;
 			/** Type the mobile phone number for the contact. */
 			MobilePhone: DevKit.Controls.String;
+			/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
+			OriginatingLeadId: DevKit.Controls.Lookup;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
 			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 			ParentCustomerId: DevKit.Controls.Lookup;
 			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
 			PaymentTermsCode: DevKit.Controls.OptionSet;
+			/** Select the preferred day of the week for service appointments. */
+			PreferredAppointmentDayCode: DevKit.Controls.OptionSet;
+			/** Select the preferred time of day for service appointments. */
+			PreferredAppointmentTimeCode: DevKit.Controls.OptionSet;
 			/** Select the preferred method of contact. */
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
+			/** Choose the contact's preferred service facility or equipment to make sure services are scheduled correctly for the customer. */
+			PreferredEquipmentId: DevKit.Controls.Lookup;
+			/** Choose the contact's preferred service to make sure services are scheduled correctly for the customer. */
+			PreferredServiceId: DevKit.Controls.Lookup;
+			/** Choose the regular or preferred customer service representative for reference when scheduling service activities for the contact. */
+			PreferredSystemUserId: DevKit.Controls.Lookup;
 			/** Type the salutation of the contact to make sure the contact is addressed correctly in sales calls, email messages, and marketing campaigns. */
 			Salutation: DevKit.Controls.String;
 			/** Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact. */
@@ -299,6 +392,8 @@ declare namespace MyDog {
 			Address1_Line2: DevKit.Controls.String;
 			/** Type the ZIP Code or postal code for the primary address. */
 			Address1_PostalCode: DevKit.Controls.String;
+			/** Stores Image of the Business Card */
+			BusinessCard: DevKit.Controls.String;
 			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
 			Description: DevKit.Controls.String;
 			/** Type the primary email address for the contact. */
@@ -531,6 +626,10 @@ declare namespace MyDog {
 		BirthDate_DateOnly: DevKit.WebApi.DateOnlyValue;
 		/** Type a second business phone number for this contact. */
 		Business2: DevKit.WebApi.StringValue;
+		/** Stores Image of the Business Card */
+		BusinessCard: DevKit.WebApi.StringValue;
+		/** Stores Business Card Control Properties. */
+		BusinessCardAttributes: DevKit.WebApi.StringValue;
 		/** Type a callback phone number for this contact. */
 		Callback: DevKit.WebApi.StringValue;
 		/** Type the names of the contact's children for reference in communications and client programs. */
@@ -557,11 +656,12 @@ declare namespace MyDog {
 		CustomerSizeCode: DevKit.WebApi.OptionSetValue;
 		/** Select the category that best describes the relationship between the contact and your organization. */
 		CustomerTypeCode: DevKit.WebApi.OptionSetValue;
+		/** Choose the default price list associated with the contact to make sure the correct product prices for this customer are applied in sales opportunities, quotes, and orders. */
+		DefaultPriceLevelId: DevKit.WebApi.LookupValue;
 		/** Type the department or business unit where the contact works in the parent company or business. */
 		Department: DevKit.WebApi.StringValue;
 		/** Type additional information to describe the contact, such as an excerpt from the company's website. */
 		Description: DevKit.WebApi.StringValue;
-		devkit_LocationId: DevKit.WebApi.LookupValue;
 		/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
 		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
 		/** Select whether the contact accepts bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the letters. */
@@ -656,12 +756,21 @@ declare namespace MyDog {
 		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who last updated the record on behalf of another user. */
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Describes whether contact is opted out or not */
+		msdyn_gdproptout: DevKit.WebApi.BooleanValue;
+		/** Whether or not the contact belongs to the associated account */
+		msdyn_orgchangestatus: DevKit.WebApi.OptionSetValue;
+		msdyusd_CurrentProfile: DevKit.WebApi.StringValue;
+		msdyusd_Facebook: DevKit.WebApi.StringValue;
+		msdyusd_Twitter: DevKit.WebApi.StringValue;
 		/** Type the contact's nickname. */
 		NickName: DevKit.WebApi.StringValue;
 		/** Type the number of children the contact has for reference in follow-up phone calls and other communications. */
 		NumberOfChildren: DevKit.WebApi.IntegerValue;
 		/** Shows how long, in minutes, that the record was on hold. */
 		OnHoldTime: DevKit.WebApi.IntegerValueReadonly;
+		/** Shows the lead that the contact was created if the contact was created by converting a lead in Microsoft Dynamics 365. This is used to relate the contact to the data on the originating lead for use in reporting and analytics. */
+		OriginatingLeadId: DevKit.WebApi.LookupValue;
 		/** Date and time that the record was migrated. */
 		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
 		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
@@ -690,6 +799,10 @@ declare namespace MyDog {
 		PreferredAppointmentTimeCode: DevKit.WebApi.OptionSetValue;
 		/** Select the preferred method of contact. */
 		PreferredContactMethodCode: DevKit.WebApi.OptionSetValue;
+		/** Choose the contact's preferred service facility or equipment to make sure services are scheduled correctly for the customer. */
+		PreferredEquipmentId: DevKit.WebApi.LookupValue;
+		/** Choose the contact's preferred service to make sure services are scheduled correctly for the customer. */
+		PreferredServiceId: DevKit.WebApi.LookupValue;
 		/** Choose the regular or preferred customer service representative for reference when scheduling service activities for the contact. */
 		PreferredSystemUserId: DevKit.WebApi.LookupValue;
 		/** Shows the ID of the process. */
@@ -715,6 +828,8 @@ declare namespace MyDog {
 		SubscriptionId: DevKit.WebApi.GuidValue;
 		/** Type the suffix used in the contact's name, such as Jr. or Sr. to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
 		Suffix: DevKit.WebApi.StringValue;
+		/** Number of users or conversations followed the record */
+		TeamsFollowed: DevKit.WebApi.IntegerValue;
 		/** Type the main phone number for this contact. */
 		Telephone1: DevKit.WebApi.StringValue;
 		/** Type a second phone number for this contact. */
@@ -848,6 +963,14 @@ declare namespace OptionSet {
 		enum LeadSourceCode {
 			/** 1 */
 			Default_Value
+		}
+		enum msdyn_orgchangestatus {
+			/** 2 */
+			Ignore,
+			/** 0 */
+			No_Feedback,
+			/** 1 */
+			Not_at_Company
 		}
 		enum PaymentTermsCode {
 			/** 2 */

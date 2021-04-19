@@ -62,17 +62,39 @@ declare namespace MyDog {
 		/** Unique identifier of the party associated with the activity. */
 		partyid_account: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
+		partyid_bulkoperation: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_campaign: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_campaignactivity: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
 		partyid_contact: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_devkit_azureaccount: DevKit.WebApi.LookupValue;
+		partyid_contract: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_devkit_webapi: DevKit.WebApi.LookupValue;
+		partyid_entitlement: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_equipment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_incident: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_invoice: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
 		partyid_knowledgearticle: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
+		partyid_lead: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_opportunity: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
 		partyid_queue: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
+		partyid_quote: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
+		partyid_salesorder: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the party associated with the activity. */
 		partyid_systemuser: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the resource specification for the activity party. */
+		ResourceSpecId: DevKit.WebApi.LookupValue;
 		/** Scheduled end time of the activity. */
 		ScheduledEnd_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
 		/** Scheduled start time of the activity. */

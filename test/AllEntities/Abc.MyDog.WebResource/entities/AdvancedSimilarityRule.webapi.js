@@ -87,6 +87,7 @@ var MyDog;
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			name: { a: 'name' },
 			NgramSize: { a: 'ngramsize' },
+			NoiseKeyphraseslist: { a: 'noisekeyphraseslist' },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
 			SolutionId: { a: 'solutionid', r: true },

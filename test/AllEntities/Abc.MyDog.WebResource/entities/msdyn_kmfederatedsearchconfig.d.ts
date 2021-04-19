@@ -14,9 +14,11 @@ declare namespace MyDog {
 		}
 		interface Body {
 			Tab: Tabs;
+			SetAsDefault_Info: DevKit.Controls.WebResource;
 			WebResource_Disclaimer: DevKit.Controls.WebResource;
 			/** Unique identifier when you create a connector in Microsoft search, please check the documentation above. */
 			ConnectionId: DevKit.Controls.String;
+			IsDefault: DevKit.Controls.Boolean;
 			/** This field specifies the description of Search provider record */
 			msdyn_Description: DevKit.Controls.String;
 			/** The name of the search provider */

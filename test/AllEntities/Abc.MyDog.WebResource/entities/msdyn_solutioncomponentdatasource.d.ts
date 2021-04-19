@@ -49,6 +49,8 @@ declare namespace MyDog {
 		msdyn_name: DevKit.WebApi.StringValue;
 		/** Unique identifier for entity instances */
 		msdyn_solutioncomponentdatasourceId: DevKit.WebApi.GuidValue;
+		/** Unique identifier for the organization */
+		OrganizationId: DevKit.WebApi.GuidValueReadonly;
 	}
 }
 declare namespace OptionSet {

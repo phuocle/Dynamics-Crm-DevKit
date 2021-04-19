@@ -37,9 +37,9 @@ declare namespace MyDog {
 		IsManaged: DevKit.WebApi.BooleanValueReadonly;
 		/** For internal use only. */
 		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
-		/** Parent entity logical name */
+		/** Parent Entity Logical Name */
 		ParentEntityLogicalName: DevKit.WebApi.StringValue;
-		/** Logical name of the primary image attribute */
+		/** Logical Name of the Primary Image Attribute */
 		PrimaryImageAttribute: DevKit.WebApi.StringValue;
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;

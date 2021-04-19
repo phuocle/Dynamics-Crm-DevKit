@@ -151,7 +151,7 @@
       "rootfolder": "",
       "crmversion": "365",
       "type": "JsWebApi",
-      "entities": "import",
+      "entities": "*",
       "debug": "yes"
     }
   ],

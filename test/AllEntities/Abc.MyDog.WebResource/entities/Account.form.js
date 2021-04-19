@@ -18,23 +18,36 @@ var MyDog;
 			ActionCards: {},
 			Address1_Composite: {},
 			Address1_FreightTermsCode: {},
+			Address1_Latitude: {},
+			Address1_Longitude: {},
 			Address1_ShippingMethodCode: {},
-			ChildAccounts: {},
 			Contacts: {},
 			CreditLimit: {},
 			CreditOnHold: {},
+			CustomerTypeCode: {},
+			DefaultPriceLevelId: {},
+			DefaultPriceLevelId_1: {},
 			Description: {},
-			devkit_AzureAccountId: {},
-			devkit_AzureAccountId_1: {},
+			DocumentsSubGrid: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
 			DoNotPhone: {},
 			DoNotPostalMail: {},
 			Fax: {},
-			FollowEmail: {},
 			IndustryCode: {},
 			mapcontrol: {},
+			msdyn_BillingAccount: {},
+			msdyn_SalesTaxCode: {},
+			msdyn_ServiceTerritory: {},
+			msdyn_TaxExempt: {},
+			msdyn_TaxExemptNumber: {},
+			msdyn_TravelCharge: {},
+			msdyn_TravelChargeType: {},
+			msdyn_workhourtemplate: {},
+			msdyn_WorkOrderInstructions: {},
+			msdyusd_Facebook: {},
+			msdyusd_Twitter: {},
 			Name: {},
 			Name_1: {},
 			notescontrol: {},
@@ -42,6 +55,7 @@ var MyDog;
 			ParentAccountId: {},
 			PaymentTermsCode: {},
 			PreferredContactMethodCode: {},
+			PriceListsGrid: {},
 			PrimaryContactId: {},
 			PrimaryContactId_1: {},
 			SIC: {},
@@ -62,19 +76,41 @@ var MyDog;
 					SUMMARY_TAB_section_6: {}
 				}
 			},
+			Pricing: {
+				Section: {
+					tab_3_section_1: {}
+				}
+			},
 			DETAILS_TAB: {
 				Section: {
 					COMPANY_PROFILE: {},
 					DETAILS_TAB_section_6: {},
 					CONTACT_PREFERENCES: {},
 					BILLING: {},
-					SHIPPING: {},
-					ChildAccounts: {}
+					SHIPPING: {}
 				}
 			},
-			_64BC19B9_1311_4B93_BE4C_6407B98D2AB3: {
+			FieldService: {
 				Section: {
-					_64BC19B9_1311_4B93_BE4C_6407B98D2AB4: {}
+					DETAILS_TAB_section_8: {},
+					DETAILS_TAB_section_7: {}
+				}
+			},
+			urstab: {
+				Section: {
+					urstab_section_general: {},
+					tab_3_section_2: {},
+					tab_3_section_3: {}
+				}
+			},
+			documents_sharepoint: {
+				Section: {
+					documents_sharepoint_section: {}
+				}
+			},
+			AssetsAndLocationsTab: {
+				Section: {
+					AssetsAndLocationsSection: {}
 				}
 			}
 		};
@@ -88,53 +124,48 @@ var MyDog;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _BPF_Account_3 = {
-			AccountNumber: {},
-			Name: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_3, "header_process_");
-		process.BPF_Account_3 = _BPF_Account_3;
-		var _BPF_Account_1 = {
-			AccountCategoryCode: {},
-			AccountNumber: {},
-			Name: {},
-			Telephone1: {},
-			Telephone2: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_1, "header_process_");
-		process.BPF_Account_1 = _BPF_Account_1;
-		form.Process = process;
 		var quickForm = {
-			AzureAccount: {},
 			contactquickform: {}
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			ChildAccounts: {},
 			Contacts: {},
+			PriceListsGrid: {},
+			DocumentsSubGrid: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 		var navigation = {
-			navRelationships: {},
 			navAddresses: {},
 			navSubAccts: {},
-			navActivities: {},
+			navRelationships: {},
 			navCampaignsInSFA: {},
+			nav_msdyn_account_msdyn_project_Customer: {},
+			nav_msdyn_account_msdyn_accountpricelist_Account: {},
+			navService: {},
+			navActivities: {},
 			navSocialprofiles: {},
 			navContacts: {},
-			navSPDocuments: {},
 			navConnections: {},
-			navDocument: {},
-			navAsyncOperations: {},
-			nav_devkit_account_devkit_webapi_Customer: {},
-			navProcessSessions: {},
-			nav_bpf_account_devkit_bpfaccount1: {},
-			nav_bpf_account_devkit_bpfaccount3: {},
-			nav_devkit_account_devkit_location_Account: {},
-			nav_devkit_account_devkit_location_Customer: {}
+			nav_msdyn_account_msdyn_actualfact_AccountCustomer: {},
+			nav_msdyn_account_msdyn_actualfact_AccountVendor: {},
+			navEntitlement: {},
+			nav_msdyn_account_msdyn_rmaproduct_Changeownership: {},
+			nav_msdyn_account_msdyn_rmaproduct_ReturntoVendor: {},
+			nav_msdyn_account_product_DefaultVendor: {},
+			nav_msdyn_account_msdyn_customerasset_Account: {},
+			nav_msdyn_account_account_BillingAccount: {},
+			nav_msdyn_account_msdyn_agreement_ServiceAccount: {},
+			nav_msdyn_account_msdyn_workorder_ServiceAccount: {},
+			nav_msdyn_account_msdyn_workorderresourcerestriction_Account: {},
+			nav_msdyn_account_msdyn_rma_ServiceAccount: {},
+			nav_msdyn_account_msdyn_rtv_Vendor: {},
+			nav_msdyn_account_msdyn_agreement_BillingAccount: {},
+			nav_msdyn_account_msdyn_workorder_BillingAccount: {},
+			nav_msdyn_account_msdyn_rma_BillingAccount: {},
+			nav_msdyn_account_msdyn_payment_Account: {},
+			nav_msdyn_account_msdyn_purchaseorder_Vendor: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -154,6 +185,8 @@ var MyDog;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
+			accountcasessgrid: {},
+			accountopportunitiesgrid: {},
 			Address1_Composite: {},
 			Address1_FreightTermsCode: {},
 			Address1_ShippingMethodCode: {},
@@ -161,16 +194,20 @@ var MyDog;
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
+			Devices_Associated_View: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
 			DoNotPhone: {},
 			DoNotPostalMail: {},
+			DoNotSendMM: {},
 			Fax: {},
 			FollowEmail: {},
 			IndustryCode: {},
+			LastUsedInCampaign: {},
 			Name: {},
 			notescontrol: {},
+			OriginatingLeadId: {},
 			OwnershipCode: {},
 			ParentAccountId: {},
 			PaymentTermsCode: {},
@@ -178,6 +215,7 @@ var MyDog;
 			PrimaryContactId: {},
 			PrimaryContactId_1: {},
 			SIC: {},
+			subgrid_Entitlement: {},
 			Telephone1: {},
 			TransactionCurrencyId: {},
 			WebSiteURL: {}
@@ -194,9 +232,15 @@ var MyDog;
 				Section: {
 					COMPANY_PROFILE: {},
 					DETAILS_TAB_section_6: {},
+					MARKETING: {},
 					CONTACT_PREFERENCES: {},
 					BILLING: {},
 					SHIPPING: {}
+				}
+			},
+			Devices_Tab: {
+				Section: {
+					Devices_Tab_Section_1: {}
 				}
 			}
 		};
@@ -210,23 +254,6 @@ var MyDog;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _BPF_Account_3 = {
-			AccountNumber: {},
-			Name: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_3, "header_process_");
-		process.BPF_Account_3 = _BPF_Account_3;
-		var _BPF_Account_1 = {
-			AccountCategoryCode: {},
-			AccountNumber: {},
-			Name: {},
-			Telephone1: {},
-			Telephone2: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_1, "header_process_");
-		process.BPF_Account_1 = _BPF_Account_1;
-		form.Process = process;
 		var quickForm = {
 			contactquickform: {}
 		};
@@ -234,6 +261,10 @@ var MyDog;
 		form.QuickForm = quickForm;
 		var grid = {
 			Contacts: {},
+			accountopportunitiesgrid: {},
+			accountcasessgrid: {},
+			subgrid_Entitlement: {},
+			Devices_Associated_View: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
@@ -242,153 +273,12 @@ var MyDog;
 			navSubAccts: {},
 			navRelationships: {},
 			navProcessSessions: {},
-			navAsyncOperations: {}
-		};
-		devKit.LoadNavigations(formContext, navigation);
-		form.Navigation = navigation;
-		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
-		return form;
-	};
-	MyDog.FormAccount_Information = function(executionContext, defaultWebResourceName) {
-		var formContext = null;
-		if (executionContext !== undefined) {
-			if (executionContext.getFormContext === undefined) {
-				formContext = executionContext;
-			}
-			else {
-				formContext = executionContext.getFormContext();
-			}
-		}
-		var form = devKit.LoadForm(formContext);
-		var body = {
-			accountactivitiesgrid: {},
-			AccountCategoryCode: {},
-			accountContactsGrid: {},
-			AccountNumber: {},
-			Address1_AddressTypeCode: {},
-			Address1_City: {},
-			Address1_Country: {},
-			Address1_FreightTermsCode: {},
-			Address1_Line1: {},
-			Address1_Line2: {},
-			Address1_Line3: {},
-			Address1_Name: {},
-			Address1_PostalCode: {},
-			Address1_ShippingMethodCode: {},
-			Address1_StateOrProvince: {},
-			Address1_Telephone1: {},
-			CreditLimit: {},
-			CreditOnHold: {},
-			CustomerTypeCode: {},
-			Description: {},
-			DoNotBulkEMail: {},
-			DoNotEMail: {},
-			DoNotFax: {},
-			DoNotPhone: {},
-			DoNotPostalMail: {},
-			EMailAddress1: {},
-			Fax: {},
-			FollowEmail: {},
-			IndustryCode: {},
-			Name: {},
-			notescontrol: {},
-			NumberOfEmployees: {},
-			OwnerId: {},
-			OwnershipCode: {},
-			ParentAccountId: {},
-			PaymentTermsCode: {},
-			PreferredContactMethodCode: {},
-			PrimaryContactId: {},
-			Revenue: {},
-			SIC: {},
-			Telephone1: {},
-			Telephone2: {},
-			TickerSymbol: {},
-			TransactionCurrencyId: {},
-			WebSiteURL: {}
-		};
-		devKit.LoadFields(formContext, body);
-		var tab = {
-			general: {
-				Section: {
-					account_information: {},
-					address: {},
-					shipping_information: {},
-					description: {}
-				}
-			},
-			details: {
-				Section: {
-					professional_information: {},
-					description_2: {},
-					billing_information: {}
-				}
-			},
-			contacts: {
-				Section: {
-					contacts: {}
-				}
-			},
-			notes_and_activities: {
-				Section: {
-					activities: {},
-					notes: {}
-				}
-			},
-			administration: {
-				Section: {
-					internal_information: {},
-					contact_methods: {}
-				}
-			}
-		};
-		devKit.LoadTabs(formContext, tab);
-		body.Tab = tab;
-		form.Body = body;
-		var header = {
-			CreditLimit: {},
-			OwnerId: {},
-			PreferredContactMethodCode: {},
-			PrimaryContactId: {},
-			Revenue: {}
-		};
-		devKit.LoadFields(formContext, header, "header_");
-		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _BPF_Account_3 = {
-			AccountNumber: {},
-			Name: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_3, "header_process_");
-		process.BPF_Account_3 = _BPF_Account_3;
-		var _BPF_Account_1 = {
-			AccountCategoryCode: {},
-			AccountNumber: {},
-			Name: {},
-			Telephone1: {},
-			Telephone2: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_1, "header_process_");
-		process.BPF_Account_1 = _BPF_Account_1;
-		form.Process = process;
-		var quickForm = {
-
-		};
-		devKit.LoadQuickForms(formContext, quickForm);
-		form.QuickForm = quickForm;
-		var grid = {
-			accountContactsGrid: {},
-			accountactivitiesgrid: {},
-		};
-		devKit.LoadGrids(formContext, grid);
-		form.Grid = grid;
-		var navigation = {
-			navAddresses: {},
-			navSubAct: {},
-			navActivities: {},
-			navActivityHistory: {},
-			navRelationships: {}
+			navAsyncOperations: {},
+			navCampaignsInSFA: {},
+			navContracts: {},
+			navQuotes: {},
+			navOrders: {},
+			navInvoices: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -442,10 +332,8 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.Account = {
 		AccountCategoryCode : {
-			Other: 100000001,
 			Preferred_Customer: 1,
-			Standard_2: 2,
-			Standard_3: 3
+			Standard: 2
 		},
 		AccountClassificationCode : {
 			Default_Value: 1
@@ -535,6 +423,12 @@ var OptionSet;
 			Utility_Creation_and_Distribution: 31,
 			Vehicle_Retail: 32,
 			Wholesale: 33
+		},
+		msdyn_TravelChargeType : {
+			Fixed: 690970002,
+			Hourly: 690970000,
+			Mileage: 690970001,
+			None: 690970003
 		},
 		OwnershipCode : {
 			Other: 4,

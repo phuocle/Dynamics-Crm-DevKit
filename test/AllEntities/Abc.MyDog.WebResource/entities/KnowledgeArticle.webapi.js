@@ -118,6 +118,7 @@ var MyDog;
 			RootArticleId: { b: 'rootarticleid', a: '_rootarticleid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			ScheduledStatusId: { a: 'scheduledstatusid' },
 			SetCategoryAssociations: { a: 'setcategoryassociations' },
+			SetProductAssociations: { a: 'setproductassociations' },
 			stageid: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
 			StatusCode: { a: 'statuscode' },

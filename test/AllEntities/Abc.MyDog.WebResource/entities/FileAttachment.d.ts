@@ -52,8 +52,6 @@ declare namespace MyDog {
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_cascadegrantrevokeaccessrecordstracker: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_devkit_location: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_exportsolutionupload: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_flowsession: DevKit.WebApi.LookupValue;
@@ -66,7 +64,13 @@ declare namespace MyDog {
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_msdyn_aiconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_msdyn_customerassetattachment: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_msdyn_soundfile: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_msfp_fileresponse: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */

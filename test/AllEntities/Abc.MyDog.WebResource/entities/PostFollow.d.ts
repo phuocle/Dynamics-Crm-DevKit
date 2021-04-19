@@ -82,9 +82,17 @@ declare namespace MyDog {
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
 		regardingobjectid_appointment: DevKit.WebApi.LookupValue;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+		regardingobjectid_competitor: DevKit.WebApi.LookupValue;
+		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
 		regardingobjectid_contact: DevKit.WebApi.LookupValue;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+		regardingobjectid_incident: DevKit.WebApi.LookupValue;
+		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
 		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
+		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */
 		regardingobjectid_phonecall: DevKit.WebApi.LookupValue;
 		/** Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to. */

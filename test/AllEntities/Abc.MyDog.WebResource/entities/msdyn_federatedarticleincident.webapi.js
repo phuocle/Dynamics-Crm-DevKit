@@ -75,7 +75,7 @@ var MyDog;
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_federatedarticleid: { b: 'msdyn_federatedarticleid', a: '_msdyn_federatedarticleid_value', c: 'msdyn_federatedarticles', d: 'msdyn_federatedarticle' },
 			msdyn_federatedarticleincidentId: { a: 'msdyn_federatedarticleincidentid' },
-			msdyn_incidentid: { b: 'msdyn_incidentid', a: '_msdyn_incidentid_value', c: '', d: '' },
+			msdyn_incidentid: { b: 'msdyn_incidentid', a: '_msdyn_incidentid_value', c: 'incidents', d: 'incident' },
 			msdyn_name: { a: 'msdyn_name' },
 			msdyn_searchproviderarticleid: { a: 'msdyn_searchproviderarticleid' },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },

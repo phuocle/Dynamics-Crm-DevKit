@@ -90,23 +90,79 @@ declare namespace MyDog {
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_appointment: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_devkit_customactivity: DevKit.WebApi.LookupValue;
+		objectid_bulkoperation: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_devkit_webapi: DevKit.WebApi.LookupValue;
+		objectid_campaignactivity: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_campaignresponse: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_email: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_fax: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_incident: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_knowledgearticle: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_letter: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_agreementbookingdate: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_agreementbookingsetup: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_agreementinvoicedate: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_agreementinvoicesetup: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_approval: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_bookingalert: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_inventoryadjustment: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_inventorytransfer: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_iotalert: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_msdyn_knowledgearticletemplate: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_liveconversation: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_ocliveworkitem: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_ocoutboundmessage: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_ocsession: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_project: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_projecttask: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_resourcerequest: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_timegroup: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_timegroupdetail: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_workorder: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_workorderincident: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_workorderservice: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msdyn_workorderservicetask: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msfp_alert: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msfp_surveyinvite: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_msfp_surveyresponse: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_phonecall: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_recurringappointmentmaster: DevKit.WebApi.LookupValue;
+		/** Choose the activity, case, or article assigned to the queue. */
+		objectid_serviceappointment: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_socialactivity: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
@@ -156,30 +212,86 @@ declare namespace OptionSet {
 		enum ObjectTypeCode {
 			/** 4200 */
 			Activity,
+			/** 10354 */
+			Agreement_Booking_Date,
+			/** 10359 */
+			Agreement_Booking_Setup,
+			/** 10360 */
+			Agreement_Invoice_Date,
+			/** 10362 */
+			Agreement_Invoice_Setup,
 			/** 4201 */
 			Appointment,
-			/** 10042 */
-			Custom_Activity,
+			/** 10235 */
+			Booking_Alert,
+			/** 4402 */
+			Campaign_Activity,
+			/** 4401 */
+			Campaign_Response,
+			/** 112 */
+			Case,
+			/** 10480 */
+			Conversation,
+			/** 10216 */
+			Customer_Voice_alert,
+			/** 10225 */
+			Customer_Voice_survey_invite,
+			/** 10227 */
+			Customer_Voice_survey_response,
 			/** 4202 */
 			Email,
 			/** 4204 */
 			Fax,
+			/** 10258 */
+			Fulfillment_Preference,
+			/** 10382 */
+			Inventory_Adjustment,
+			/** 10385 */
+			Inventory_Transfer,
+			/** 10105 */
+			IoT_Alert,
 			/** 9953 */
 			Knowledge_Article,
-			/** 10022 */
+			/** 10047 */
 			Knowledge_Article_Template,
 			/** 4207 */
 			Letter,
+			/** 10474 */
+			Ongoing_conversation_Deprecated,
+			/** 10566 */
+			Outbound_message,
 			/** 4210 */
 			Phone_Call,
+			/** 10304 */
+			Project,
+			/** 10265 */
+			Project_Service_Approval,
+			/** 10309 */
+			Project_Task,
+			/** 4406 */
+			Quick_Campaign,
 			/** 4251 */
 			Recurring_Appointment,
+			/** 10327 */
+			Resource_Request,
+			/** 4214 */
+			Service_Activity,
+			/** 10489 */
+			Session,
 			/** 4216 */
 			Social_Activity,
 			/** 4212 */
 			Task,
-			/** 10030 */
-			WebApi
+			/** 10259 */
+			Time_Group_Detail,
+			/** 10425 */
+			Work_Order,
+			/** 10428 */
+			Work_Order_Incident,
+			/** 10431 */
+			Work_Order_Service,
+			/** 10432 */
+			Work_Order_Service_Task
 		}
 		enum StateCode {
 			/** 0 */

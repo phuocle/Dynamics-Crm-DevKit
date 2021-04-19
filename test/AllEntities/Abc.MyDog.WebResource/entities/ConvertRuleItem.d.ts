@@ -102,6 +102,8 @@ declare namespace MyDog {
 		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the user who owns the Convert Rule Item. */
 		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Primary create entity for a rule item */
+		PrimaryCreateEntityLogicalName: DevKit.WebApi.StringValue;
 		/** Set properties xml for convert rule item */
 		PropertiesXml: DevKit.WebApi.StringValue;
 		/** Choose the queue that the rule is assigned to. */

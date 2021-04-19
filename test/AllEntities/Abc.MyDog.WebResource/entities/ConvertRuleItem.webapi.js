@@ -87,6 +87,7 @@ var MyDog;
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
 			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
 			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
+			PrimaryCreateEntityLogicalName: { a: 'primarycreateentitylogicalname' },
 			PropertiesXml: { a: 'propertiesxml' },
 			QueueId: { b: 'queueid', a: '_queueid_value', c: 'queues', d: 'queue' },
 			SequenceNumber: { a: 'sequencenumber' },

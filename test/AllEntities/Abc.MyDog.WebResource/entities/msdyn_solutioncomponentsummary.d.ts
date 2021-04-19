@@ -104,6 +104,8 @@ declare namespace MyDog {
 		msdyn_workflowcategory: DevKit.WebApi.StringValue;
 		msdyn_workflowcategoryname: DevKit.WebApi.StringValue;
 		msdyn_workflowidunique: DevKit.WebApi.StringValue;
+		/** Unique identifier for the organization */
+		OrganizationId: DevKit.WebApi.GuidValueReadonly;
 	}
 }
 declare namespace OptionSet {

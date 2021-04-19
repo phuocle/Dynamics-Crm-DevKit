@@ -93,6 +93,7 @@ var MyDog;
 			OrganizationId: { a: 'organizationid', r: true },
 			Pattern: { a: 'pattern' },
 			Rank: { a: 'rank' },
+			ServiceId: { b: 'serviceid', a: '_serviceid_value', c: 'services', d: 'service' },
 			StartTime_UtcDateAndTime: { a: 'starttime' },
 			SubCode: { a: 'subcode' },
 			TimeCode: { a: 'timecode' },
