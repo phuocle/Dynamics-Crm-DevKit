@@ -201,6 +201,8 @@ namespace DynamicsCrm.DevKit.Shared
         {
             if (!File.Exists(file))
             {
+                var fInfo = new FileInfo(file);
+                if (!fInfo.Directory.Exists) fInfo.Directory.Create();
                 File.WriteAllText(file, content, System.Text.Encoding.UTF8);
             }
             else

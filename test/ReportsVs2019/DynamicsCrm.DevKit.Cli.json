@@ -165,8 +165,8 @@
   "downloadreports": [
     {
       "profile": "DEBUG",
-      "folder": "???",
-      "solution": "???"
+      "folder": "",
+      "solution": "TestReport"
     }
   ],
   "proxytypes": [

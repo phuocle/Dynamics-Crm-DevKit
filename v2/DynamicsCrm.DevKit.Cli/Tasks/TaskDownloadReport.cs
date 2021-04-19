@@ -36,7 +36,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (!IsValid()) return;
 
-            var folder = Path.Combine(currentDirectory, json.folder);
+            var folder = Path.Combine(currentDirectory, string.Empty);
             if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
             ReadDownloadedReportFiles(folder);
@@ -99,6 +99,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   <entity name='report'>
     <attribute name='filename' />
     <attribute name='bodytext' />
+    <attribute name='languagecode' />
     <filter>
       <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
     </filter>
@@ -122,8 +123,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 downloadedReportFiles.Add(new DownloadFile
                 {
                     Content = entity.GetAttributeValue<string>("bodytext"),
-                    FileName = Path.Combine(folder, entity.GetAttributeValue<string>("filename")),
-                    Name = Path.GetFileName(Path.Combine(folder, entity.GetAttributeValue<string>("filename")))
+                    FileName = Path.Combine(folder + "\\" + (entity.GetAttributeValue<int?>("languagecode") ?? 1033).ToString(), entity.GetAttributeValue<string>("filename")),
+                    Name = Path.GetFileName(Path.Combine(folder + "\\" + (entity.GetAttributeValue<int?>("languagecode") ?? 1033).ToString(), entity.GetAttributeValue<string>("filename")))
                 });
             }
         }
@@ -132,10 +133,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (json == null)
                 throw new Exception($"{LOG} 'profile' not found: '{arguments.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.solution == "???")
+            if (json.solution == "???" || (json.solution != null && json.solution.Trim().Length == 0))
                 throw new Exception($"{LOG} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.folder.Length == 0 || json.folder == "???")
-                throw new Exception($"{LOG} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             return true;
         }
     }
