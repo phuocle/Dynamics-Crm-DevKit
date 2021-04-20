@@ -15,6 +15,7 @@ namespace DynamicsCrm.DevKit.Wizard
 {
     public partial class FormConnection2 : Form
     {
+        public CrmServiceClient CrmServiceClient { get; set; }
         private DTE DTE { get; }
         private DevKitCrmConfig Config = null;
         public IOrganizationService CrmService { get; private set; } = null;
@@ -169,8 +170,8 @@ namespace DynamicsCrm.DevKit.Wizard
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                var crmServiceClient = new CrmServiceClient(connectionString);
-                CrmService = XrmHelper.GetIOrganizationService(crmServiceClient);
+                CrmServiceClient = new CrmServiceClient(connectionString);
+                CrmService = XrmHelper.GetIOrganizationService(CrmServiceClient);
                 CrmService.Execute(new WhoAmIRequest());
                 return true;
             }

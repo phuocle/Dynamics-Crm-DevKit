@@ -28,10 +28,10 @@ namespace DynamicsCrm.DevKit.Package
             oleMenuCommandAddCrmPluginRegistration.BeforeQueryStatus += OleMenuCommandAddCrmPluginRegistration_BeforeQueryStatus;
             MenuService.AddCommand(oleMenuCommandAddCrmPluginRegistration);
 
-            //var commandIdDeployReport = new CommandID(DeployReport.CommandSetDeployReport, DeployReport.CommandDeployReportId);
-            //var oleMenuCommandDeployReport = new OleMenuCommand((s, e) => oleMenuCommandDeployReport_Click(package), commandIdDeployReport);
-            //oleMenuCommandDeployReport.BeforeQueryStatus += oleMenuCommandDeployReport_BeforeQueryStatus;
-            //MenuService.AddCommand(oleMenuCommandDeployReport);
+            var commandIdDeployReport = new CommandID(DeployReport.CommandSetDeployReport, DeployReport.CommandDeployReportId);
+            var oleMenuCommandDeployReport = new OleMenuCommand((s, e) => oleMenuCommandDeployReport_Click(package), commandIdDeployReport);
+            oleMenuCommandDeployReport.BeforeQueryStatus += oleMenuCommandDeployReport_BeforeQueryStatus;
+            MenuService.AddCommand(oleMenuCommandDeployReport);
         }
 
         private static void OleMenuCommandAddCrmPluginRegistration_BeforeQueryStatus(object sender, EventArgs e)
@@ -54,14 +54,14 @@ namespace DynamicsCrm.DevKit.Package
             DeployWebResource.Click(dte);
         }
 
-        //private static void oleMenuCommandDeployReport_BeforeQueryStatus(object sender, EventArgs e)
-        //{
-        //    DeployReport.BeforeQueryStatus(sender, dte);
-        //}
+        private static void oleMenuCommandDeployReport_BeforeQueryStatus(object sender, EventArgs e)
+        {
+            DeployReport.BeforeQueryStatus(sender, dte);
+        }
 
-        //private static void oleMenuCommandDeployReport_Click(AsyncPackage package)
-        //{
-        //    DeployReport.Click(dte);
-        //}
+        private static void oleMenuCommandDeployReport_Click(AsyncPackage package)
+        {
+            DeployReport.Click(dte);
+        }
     }
 }

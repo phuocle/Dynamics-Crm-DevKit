@@ -178,6 +178,6 @@
     }
   ],
   "visualstudio": {
-    "webresourceprofile": "???"
+    "webresourceprofile": "DEBUG"
   }
 }
