@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.SdkLogin;
+using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Wizard;
 using EnvDTE;
 using Microsoft.Crm.Sdk.Messages;
@@ -18,11 +19,6 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 {
     public class DeployWebResource2
     {
-        private class NameValue
-        {
-            public string Name { get; set; }
-            public Guid Value { get; set; }
-        }
         public const int CommandDeployWebResourceId = 0x0100;
         public static readonly Guid CommandSetDeployWebResource = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
 
@@ -106,15 +102,15 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                     {
                         UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] WebResource: {fileName} not found", true);
                     }
-                    else if (resources.Count == 1)
-                    {
-                        resourceId = resources[0].Value;
-                        AddToCache(dte, fullFileName, resourceId);
-                        DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resourceId);
-                    }
                     else
                     {
-                        ;
+                        var formItems = new FormItems(resources);
+                        if (formItems.ShowDialog() == DialogResult.OK)
+                        {
+                            resourceId = formItems.ResourceId;
+                            AddToCache(dte, fullFileName, resourceId);
+                            DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resourceId);
+                        }
                     }
                 }
             }
@@ -126,9 +122,9 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
         private static void AddToCache(DTE dte, string fullFileName, Guid resourceId)
         {
-            var webResources = (List<NameValue>)UtilityPackage.GetGlobal("WebResource", dte);
-            if (webResources == null) webResources = new List<NameValue>();
-            webResources.Add(new NameValue
+            var webResources = (List<NameValueGuid>)UtilityPackage.GetGlobal("WebResources", dte);
+            if (webResources == null) webResources = new List<NameValueGuid>();
+            webResources.Add(new NameValueGuid
             {
                 Name = fullFileName,
                 Value = resourceId
@@ -138,7 +134,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
         private static Guid GetCachedResourceId(string fullFileName, DTE dte)
         {
-            var webResources = (List<NameValue>)UtilityPackage.GetGlobal("WebResources", dte);
+            var webResources = (List<NameValueGuid>)UtilityPackage.GetGlobal("WebResources", dte);
             if (webResources == null) return Guid.Empty;
             var webResource = webResources.Where(x => x.Name == fullFileName).FirstOrDefault();
             if (webResource == null) return Guid.Empty;
@@ -179,7 +175,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Deployed: {fileName}", true);
         }
 
-        private static List<NameValue> GetResources(CrmServiceClient crmServiceClient, string fullFileName)
+        private static List<NameValueGuid> GetResources(CrmServiceClient crmServiceClient, string fullFileName)
         {
             //fullFileName = C:\src\github\phuocle\Dynamics-Crm-DevKit\test\DownloadWebResources\2.after\WebProject\entities\Lead.js
             var parts = fullFileName.Split(@"\".ToCharArray());
@@ -203,11 +199,11 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
     </filter>
   </entity>
 </fetch>";
-            var webResources = new List<NameValue>();
+            var webResources = new List<NameValueGuid>();
             var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             foreach(var entity in rows.Entities)
             {
-                webResources.Add(new NameValue
+                webResources.Add(new NameValueGuid
                 {
                     Name = entity.GetAttributeValue<string>("name") ?? string.Empty,
                     Value = entity.Id

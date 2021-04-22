@@ -63,6 +63,12 @@
     <Compile Include="FormItemForm.Designer.cs">
       <DependentUpon>FormItemForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormItems.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormItems.Designer.cs">
+      <DependentUpon>FormItems.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormPlugin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +123,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormItemForm.resx">
       <DependentUpon>FormItemForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormItems.resx">
+      <DependentUpon>FormItems.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormPlugin.resx">
       <DependentUpon>FormPlugin.cs</DependentUpon>

@@ -159,6 +159,9 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\NameValue.cs">
       <Link>Links\NameValue.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\NameValueGuid.cs">
+      <Link>Links\NameValueGuid.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\PluginInputOutputParameter.cs">
       <Link>Links\PluginInputOutputParameter.cs</Link>
     </Compile>
@@ -185,6 +188,14 @@
       <Link>Links\FormConnection2.Designer.cs</Link>
       <DependentUpon>FormConnection2.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Wizard\FormItems.cs">
+      <Link>Links\FormItems.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Wizard\FormItems.Designer.cs">
+      <Link>Links\FormItems.Designer.cs</Link>
+      <DependentUpon>FormItems.cs</DependentUpon>
+    </Compile>
     <Compile Include="DevKitCommand.cs" />
     <Compile Include="MenuItem\AddCrmPluginRegistration.cs" />
     <Compile Include="MenuItem\DeployWebResource2.cs" />
@@ -210,6 +221,10 @@
     <EmbeddedResource Include="..\DynamicsCrm.DevKit.Wizard\FormConnection2.resx">
       <Link>Links\FormConnection2.resx</Link>
       <DependentUpon>FormConnection2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\DynamicsCrm.DevKit.Wizard\FormItems.resx">
+      <Link>Links\FormItems.resx</Link>
+      <DependentUpon>FormItems.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>

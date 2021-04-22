@@ -57,6 +57,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\DataSourceCrm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitCrmConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NameValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuid.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NugetPackage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PluginInputOutputParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />
