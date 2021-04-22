@@ -83,17 +83,6 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return string.Empty;
         }
-
-        public static string GetWebApiClientMin(string projectJsName)
-        {
-            var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.WebApiClient.min.js");
-            code += "\r\n";
-            var devKit = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.WebApiClient.js");
-            devKit = devKit.Replace("DevKit", projectJsName);
-            devKit = Uglify.Js(devKit).Code;
-            return code + devKit;
-        }
-
         public static bool ExistProject(DTE dte, string projectName)
         {
             var projects = GetProjects(dte.Solution);
