@@ -10,6 +10,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Microsoft.Xrm.Tooling.Connector;
 using NUglify;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -21,13 +22,13 @@ namespace DynamicsCrm.DevKit.Shared
         private int _objectTypeCode = -1;
         private DataCollection<Entity> _processes;
 
-        public JsForm2(IOrganizationService crmService, string projectName, string entityName)
+        public JsForm2(CrmServiceClient crmService, string projectName, string entityName)
         {
             CrmService = crmService;
             EntityName = entityName;
             ProjectName = projectName;
         }
-        private IOrganizationService CrmService { get; }
+        private CrmServiceClient CrmService { get; }
         private string EntityName { get; }
         private string ProjectName { get; }
         private int ObjectTypeCode

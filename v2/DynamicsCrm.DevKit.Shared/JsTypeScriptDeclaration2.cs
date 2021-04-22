@@ -10,14 +10,15 @@ using System;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk.Messages;
 using System.Collections.Specialized;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class JsTypeScriptDeclaration2
     {
-        private IOrganizationService service = null;
+        private CrmServiceClient service = null;
 
-        public JsTypeScriptDeclaration2(IOrganizationService crmService)
+        public JsTypeScriptDeclaration2(CrmServiceClient crmService)
         {
             service = crmService;
         }

@@ -11,6 +11,7 @@ using System.Linq;
 using Microsoft.Xrm.Sdk;
 using DynamicsCrm.DevKit.SdkLogin;
 using Microsoft.VisualStudio.TemplateWizard;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -19,7 +20,7 @@ namespace DynamicsCrm.DevKit.Wizard
         public string GeneratedLateBoundClass { get; set; }
         public string GeneratedJsWebApiCode { get; set; }
         public string GeneratedJsWebApiCodeTypeScriptDeclaration { get; set; }
-        public IOrganizationService CrmService { get; set; }
+        public CrmServiceClient CrmServiceClient { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string ComboBoxCrmName => comboBoxCrmName.Text;
         public string ComboBoxEntityName => comboBoxEntity.Text;
@@ -255,14 +256,14 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 EnabledAll(false);
                 progressBar.Style = ProgressBarStyle.Marquee;
-                var crmService = CrmService;
+                //var crmService = CrmService;
                 var crmName = ComboBoxCrmName;
                 var entityName = ComboBoxEntityName;
                 var nameSpace = NameSpace;
                 var sharedNameSpace = SharedNameSpace;
                 Task task1 = Task.Factory.StartNew(() =>
                 {
-                    GeneratedLateBoundClass = XrmHelper.GeneratedLateBoundClass(crmService, crmName, entityName, nameSpace, sharedNameSpace);
+                    GeneratedLateBoundClass = XrmHelper.GeneratedLateBoundClass(CrmServiceClient, crmName, entityName, nameSpace, sharedNameSpace);
                 });
                 while (!task1.IsCompleted)
                 {
@@ -291,7 +292,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 var jsGlobalNameSpace = Utility.GetJsGlobalNameSpace(DTE);
                 Task task2 = Task.Factory.StartNew(() =>
                 {
-                    var jsWebApi = new JsWebApi(CrmService, jsGlobalNameSpace, entityName, isDebug, jsForm, isDebugForm, jsFormVersion);
+                    var jsWebApi = new JsWebApi(CrmServiceClient, jsGlobalNameSpace, entityName, isDebug, jsForm, isDebugForm, jsFormVersion);
                     jsWebApi.GeneratorCode();
                     GeneratedJsWebApiCode = jsWebApi.WebApiCode;
                     GeneratedJsWebApiCodeTypeScriptDeclaration = jsWebApi.WebApiCodeTypeScriptDeclaration;
@@ -334,12 +335,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     loginForm.ShowDialog();
                     if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                     {
-                        if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
-                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
-                        else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
-                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
-                        else
-                            throw new WizardCancelledException();
+                        CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
                         CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
                     }
                     else
@@ -349,7 +345,7 @@ namespace DynamicsCrm.DevKit.Wizard
             else
             {
                 CrmConnection = form.CrmConnection;
-                CrmService = form.CrmService;
+                CrmServiceClient = form.CrmServiceClient;
             }
 
             buttonOk.Enabled = true;
@@ -368,7 +364,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task task1 = Task.Factory.StartNew(() =>
                     {
-                        entities1 = XrmHelper.GetAllEntities(CrmService);
+                        entities1 = XrmHelper.GetAllEntities(CrmServiceClient);
                     });
                     while (!task1.IsCompleted)
                     {
@@ -389,7 +385,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task task2 = Task.Factory.StartNew(() =>
                     {
-                        entities2 = XrmHelper.GetAllEntities(CrmService);
+                        entities2 = XrmHelper.GetAllEntities(CrmServiceClient);
                     });
                     while (!task2.IsCompleted)
                     {
@@ -411,7 +407,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task task3 = Task.Factory.StartNew(() =>
                     {
-                        entities3 = XrmHelper.GetAllEntities(CrmService);
+                        entities3 = XrmHelper.GetAllEntities(CrmServiceClient);
                     });
                     while (!task3.IsCompleted)
                     {
@@ -432,7 +428,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task task4 = Task.Factory.StartNew(() =>
                     {
-                        languages = XrmHelper.GetProvisionedLanguages(CrmService);
+                        languages = XrmHelper.GetProvisionedLanguages(CrmServiceClient);
                     });
                     while (!task4.IsCompleted)
                     {

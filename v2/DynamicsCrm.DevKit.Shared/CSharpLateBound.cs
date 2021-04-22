@@ -8,12 +8,13 @@ using Microsoft.CSharp;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class CSharpLateBound
     {
-        private IOrganizationService _crmService;
+        private CrmServiceClient _crmService;
         private List<CrmAttribute> Lists { get; set; }
         private int ObjectTypeCode { get; set; }
         private string EntityName { get; set; }
@@ -31,7 +32,7 @@ namespace DynamicsCrm.DevKit.Shared
             return "@" + identifier;
         }
 
-        internal string Go(IOrganizationService crmService, CrmVersionName crmVersionName, string entity, string rootNameSpace, string sharedNameSpace)
+        internal string Go(CrmServiceClient crmService, CrmVersionName crmVersionName, string entity, string rootNameSpace, string sharedNameSpace)
         {
             _crmService = crmService;
             LoadData(entity);

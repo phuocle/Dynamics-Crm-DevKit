@@ -15,7 +15,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
 {
     public class XrmHelper
     {
-        public static List<string> GetAllCustomActions(IOrganizationService service)
+        public static List<string> GetAllCustomActions(CrmServiceClient service)
         {
             var fetchData = new
             {
@@ -53,7 +53,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 .ToList();
         }
 
-        private static string GetSchemaName(IOrganizationService service, string logicalName)
+        private static string GetSchemaName(CrmServiceClient service, string logicalName)
         {
             if (logicalName == null || logicalName == "none") return "None";
             var request = new RetrieveEntityRequest
@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return response.EntityMetadata.SchemaName;
         }
 
-        public static List<XrmEntity> GetAllEntities(IOrganizationService service)
+        public static List<XrmEntity> GetAllEntities(CrmServiceClient service)
         {
             var request = new RetrieveAllEntitiesRequest
             {
@@ -87,7 +87,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return entities;
         }
 
-        public static List<int> GetProvisionedLanguages(IOrganizationService service)
+        public static List<int> GetProvisionedLanguages(CrmServiceClient service)
         {
             var request = new RetrieveProvisionedLanguagesRequest();
             var response = (RetrieveProvisionedLanguagesResponse)service.Execute(request);
@@ -163,7 +163,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return new NameValueCollection();
         }
 
-        public static List<string> GetSdkMessages(IOrganizationService service, string logicalName)
+        public static List<string> GetSdkMessages(CrmServiceClient service, string logicalName)
         {
             var request = new RetrieveEntityRequest
             {
@@ -196,13 +196,13 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return messages;
         }
 
-        public static string GeneratedLateBoundClass(IOrganizationService service, string crmName, string entitySchemaName, string nameSpace, string sharedNameSpace)
+        public static string GeneratedLateBoundClass(CrmServiceClient service, string crmName, string entitySchemaName, string nameSpace, string sharedNameSpace)
         {
             var lateBound = new CSharpLateBound();
             return lateBound.Go(service, Utility.ConvertCrmNameToCrmVersionName(crmName), entitySchemaName, nameSpace, sharedNameSpace);
         }
 
-        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(IOrganizationService service, string entityName, string requestName)
+        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(CrmServiceClient service, string entityName, string requestName)
         {
             var fetchData = new
             {
@@ -292,7 +292,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         }
 
 
-        public static int GetObjectTypeCode(IOrganizationService service, string logicalName)
+        public static int GetObjectTypeCode(CrmServiceClient service, string logicalName)
         {
             var request = new RetrieveEntityRequest
             {
@@ -305,7 +305,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return -1;
         }
 
-        public static List<string> GetForms(IOrganizationService service, string logicalName)
+        public static List<string> GetForms(CrmServiceClient service, string logicalName)
         {
             var fetchData = new
             {
@@ -340,15 +340,6 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 forms.Add(name);
             }
             return forms;
-        }
-
-        public static IOrganizationService GetIOrganizationService(CrmServiceClient crmServiceClient)
-        {
-            if (crmServiceClient.OrganizationServiceProxy != null)
-                return (IOrganizationService)crmServiceClient.OrganizationServiceProxy;
-            if (crmServiceClient.OrganizationWebProxyClient != null)
-                return (IOrganizationService)crmServiceClient.OrganizationWebProxyClient;
-            throw new Exception("Get IOrganizationService FAILED !!!");
         }
 
         public static string BuildConnectionString(CrmConnection crmConnection)

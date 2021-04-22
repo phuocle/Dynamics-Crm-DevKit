@@ -7,12 +7,13 @@ using Microsoft.Xrm.Sdk.Metadata;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Helper;
 using System;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class JsTypeScriptDeclaration
     {
-        public JsTypeScriptDeclaration(IOrganizationService crmService)
+        public JsTypeScriptDeclaration(CrmServiceClient crmService)
         {
 
         }

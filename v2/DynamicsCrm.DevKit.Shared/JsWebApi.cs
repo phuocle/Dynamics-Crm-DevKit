@@ -8,12 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Specialized;
 using System;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class JsWebApi
     {
-        public JsWebApi(IOrganizationService crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm, string jsFormVersion)
+        public JsWebApi(CrmServiceClient crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm, string jsFormVersion)
         {
             CrmService = crmService;
             ProjectName = projectName;
@@ -23,7 +24,7 @@ namespace DynamicsCrm.DevKit.Shared
             IsDebugWebApi = isDebugWebApi;
             JsFormVersion = jsFormVersion;
         }
-        private IOrganizationService CrmService { get; }
+        private CrmServiceClient CrmService { get; }
         private string EntityName { get; }
         private string ProjectName { get; }
         private List<string> CheckedItems { get; }

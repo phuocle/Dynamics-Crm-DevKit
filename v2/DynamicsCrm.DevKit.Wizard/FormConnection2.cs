@@ -18,7 +18,6 @@ namespace DynamicsCrm.DevKit.Wizard
         public CrmServiceClient CrmServiceClient { get; set; }
         private DTE DTE { get; }
         private DevKitCrmConfig Config = null;
-        public IOrganizationService CrmService { get; private set; } = null;
         public CrmConnection CrmConnection { get; private set; }
         private ProjectType ProjectType { get; set; }
         private ItemType ItemType { get; set; }
@@ -171,8 +170,7 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connectionString);
-                CrmService = XrmHelper.GetIOrganizationService(CrmServiceClient);
-                CrmService.Execute(new WhoAmIRequest());
+                CrmServiceClient.Execute(new WhoAmIRequest());
                 return true;
             }
             catch
@@ -188,8 +186,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 var connectionString = XrmHelper.BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connectionString);
-                CrmService = XrmHelper.GetIOrganizationService(CrmServiceClient);
-                CrmService.Execute(new WhoAmIRequest());
+                CrmServiceClient.Execute(new WhoAmIRequest());
                 return true;
             }
             catch

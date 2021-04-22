@@ -200,7 +200,6 @@
     <Compile Include="MenuItem\AddCrmPluginRegistration.cs" />
     <Compile Include="MenuItem\DeployWebResource2.cs" />
     <Compile Include="MenuItem\DeployReport.cs" />
-    <None Include="MenuItem\DeployWebResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DevKitPackage.cs" />
     <Compile Include="UtilityPackage.cs" />
