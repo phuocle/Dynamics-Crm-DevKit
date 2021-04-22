@@ -44,7 +44,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonProxyType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDownloadReport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonSolutionPackager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonVisualStudio.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonWorkflow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\WebResourceFile.cs" />

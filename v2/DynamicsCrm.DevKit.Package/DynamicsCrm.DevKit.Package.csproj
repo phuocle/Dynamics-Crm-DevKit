@@ -132,9 +132,6 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\Cli\JsonSolutionPackager.cs">
       <Link>Links\JsonSolutionPackager.cs</Link>
     </Compile>
-    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\Cli\JsonVisualStudio.cs">
-      <Link>Links\JsonVisualStudio.cs</Link>
-    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\Cli\JsonWebResource.cs">
       <Link>Links\JsonWebResource.cs</Link>
     </Compile>
