@@ -7,6 +7,7 @@
       <Group guid="guidSetDeployWebResource" id="groupCommandsWebResource" />
       <Group guid="guidSetAddCrmPluginRegistration" id="groupCommandsCrmPluginRegistration" />
       <Group guid="guidSetDeployReport" id="groupCommandsDeployReport" />
+      <Group guid="guidSetDeployReport2" id="groupCommandsDeployReport2" />
     </Groups>
     <Buttons>
       <Button guid="guidSetDeployWebResource" id="CommandDeployWebResourceId" type="Button">
@@ -31,6 +32,14 @@
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
           <ButtonText>Deploy Report</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidSetDeployReport2" id="CommandDeployReport2Id" type="Button">
+        <Icon guid="guidImages" id="bmpPicPL" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+            <ButtonText>Deploy WebResource</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -72,6 +81,13 @@
       <Parent guid="guidSetDeployReport" id="groupCommandsDeployReport"/>
     </CommandPlacement>
 
+    <CommandPlacement guid="guidSetDeployReport2" id="groupCommandsDeployReport2" priority="0xFFFF">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidSetDeployReport2" id="CommandDeployReport2Id" priority="0x004" >
+        <Parent guid="guidSetDeployReport2" id="groupCommandsDeployReport2"/>
+    </CommandPlacement>
+
   </CommandPlacements>
   <Symbols>
 
@@ -87,7 +103,10 @@
       <IDSymbol name="groupCommandsDeployReport" value="0x1030" />
       <IDSymbol name="CommandDeployReportId" value="0x0300" />
     </GuidSymbol>
-
+    <GuidSymbol name="guidSetDeployReport2" value="{0c1acc31-15ac-417c-86b2-eefdc669e8bd}">
+      <IDSymbol name="groupCommandsDeployReport2" value="0x1040" />
+      <IDSymbol name="CommandDeployReport2Id" value="0x0400" />
+    </GuidSymbol>
     <GuidSymbol name="guidWindowContextMenu" value="{7e37eef9-8cbe-4b10-81f7-66413cd2c9d3}" />
     <GuidSymbol name="guidImages" value="{68759f95-6f1d-4a77-87ea-192fc8d811f1}" >
       <IDSymbol name="bmpPicPL" value="1" />

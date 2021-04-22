@@ -187,6 +187,7 @@
     </Compile>
     <Compile Include="DevKitCommand.cs" />
     <Compile Include="MenuItem\AddCrmPluginRegistration.cs" />
+    <Compile Include="MenuItem\DeployWebResource2.cs" />
     <Compile Include="MenuItem\DeployReport.cs" />
     <Compile Include="MenuItem\DeployWebResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

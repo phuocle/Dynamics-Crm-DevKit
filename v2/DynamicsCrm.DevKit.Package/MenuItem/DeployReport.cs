@@ -7,6 +7,7 @@ using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Package.MenuItem
 {
@@ -57,23 +58,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                         loginForm.ShowDialog();
                         if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                         {
-                            if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
-                            {
-                                var CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
-                                UtilityPackage.SetGlobal("CrmUrl", new Uri(loginForm.CrmConnectionMgr.CrmSvc.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority), dte);
-                                UtilityPackage.SetGlobal("CrmService", CrmService, dte);
-                            }
-                            else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
-                            {
-                                var CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
-                                UtilityPackage.SetGlobal("CrmUrl", new Uri(loginForm.CrmConnectionMgr.CrmSvc.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority), dte);
-                                UtilityPackage.SetGlobal("CrmService", CrmService, dte);
-                            }
-                            else
-                            {
-                                UtilityPackage.SetDTEStatusBar(dte, "Connection failed", true);
-                                return;
-                            }
+                            UtilityPackage.SetGlobal("CrmServiceClient", loginForm.CrmConnectionMgr.CrmSvc, dte);
                         }
                         else
                         {
@@ -83,19 +68,18 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                     }
                     else
                     {
-                        var CrmService = form.CrmService;
                         UtilityPackage.SetGlobal("CrmUrl", new Uri(form.CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority), dte);
-                        UtilityPackage.SetGlobal("CrmService", CrmService, dte);
+                        UtilityPackage.SetGlobal("CrmServiceClient", form.CrmServiceClient, dte);
                     }
                 }
-                var crmService = (IOrganizationService)UtilityPackage.GetGlobal("CrmService", dte);
+                var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
                 var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
 
                 UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Connected");
 
                 var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
                 var fileName = Path.GetFileName(fullFileName);
-                var reportId = GetReportId(crmService, fileName);
+                var reportId = GetReportId(crmServiceClient, fileName);
                 if (reportId == Guid.Empty)
                 {
                     UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Report: {fileName} not found", true);
@@ -104,7 +88,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 {
                     var update = new Entity("report", reportId);
                     update["bodytext"] = File.ReadAllText(fullFileName);
-                    crmService.Update(update);
+                    crmServiceClient.Update(update);
                     UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Deployed: {fileName}", true);
                 }
             }
@@ -114,7 +98,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             }
         }
 
-        private static Guid GetReportId(IOrganizationService crmService, string fileName)
+        private static Guid GetReportId(CrmServiceClient crmServiceClient, string fileName)
         {
             var fetchData = new
             {
@@ -131,7 +115,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 </filter>
               </entity>
             </fetch>";
-            var rows = crmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count != 1) return Guid.Empty;
             return rows.Entities[0].Id;
         }
