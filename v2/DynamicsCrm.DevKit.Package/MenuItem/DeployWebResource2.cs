@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.SdkLogin;
@@ -10,6 +11,7 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Package.MenuItem
@@ -19,11 +21,13 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
         private class NameValue
         {
             public string Name { get; set; }
-            public string Value { get; set; }
+            public Guid Value { get; set; }
         }
+        public const int CommandDeployWebResourceId = 0x0100;
+        public static readonly Guid CommandSetDeployWebResource = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
 
-        public const int CommandDeployReportId = 0x0400;
-        public static readonly Guid CommandSetDeployReport = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bd");
+        public const int CommandDeployWebResource2Id = 0x0400;
+        public static readonly Guid CommandSetDeployWebResource2 = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bd");
 
         internal static void BeforeQueryStatus(object sender, DTE dte)
         {
@@ -56,7 +60,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             try
             {
                 dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
-                var check = UtilityPackage.GetGlobal("CrmService", dte);
+                var check = UtilityPackage.GetGlobal("CrmServiceClient", dte);
                 if (check == null)
                 {
                     var form = new FormConnection2(dte);
@@ -68,6 +72,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                         loginForm.ShowDialog();
                         if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                         {
+                            UtilityPackage.SetGlobal("CrmUrl", new Uri(loginForm.CrmConnectionMgr.CrmSvc.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority), dte);
                             UtilityPackage.SetGlobal("CrmServiceClient", loginForm.CrmConnectionMgr.CrmSvc, dte);
                         }
                         else
@@ -89,18 +94,28 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
                 var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
                 var fileName = Path.GetFileName(fullFileName);
-                var resources = GetResources(crmServiceClient, fullFileName);
-                if (resources.Count == 0)
+                var resourceId = GetCachedResourceId(fullFileName, dte);
+                if (resourceId != Guid.Empty)
                 {
-                    UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] WebResource: {fileName} not found", true);
-                }
-                else if (resources.Count == 1)
-                {
-                    DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resources[0].Value);
+                    DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resourceId);
                 }
                 else
                 {
-                    ;
+                    var resources = GetResources(crmServiceClient, fullFileName);
+                    if (resources.Count == 0)
+                    {
+                        UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] WebResource: {fileName} not found", true);
+                    }
+                    else if (resources.Count == 1)
+                    {
+                        resourceId = resources[0].Value;
+                        AddToCache(dte, fullFileName, resourceId);
+                        DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resourceId);
+                    }
+                    else
+                    {
+                        ;
+                    }
                 }
             }
             catch
@@ -109,11 +124,32 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             }
         }
 
-        private static void DeployWebResource(DTE dte, CrmServiceClient crmServiceClient, string crmUrl, string fullFileName, string fileName, string webResourceId)
+        private static void AddToCache(DTE dte, string fullFileName, Guid resourceId)
+        {
+            var webResources = (List<NameValue>)UtilityPackage.GetGlobal("WebResource", dte);
+            if (webResources == null) webResources = new List<NameValue>();
+            webResources.Add(new NameValue
+            {
+                Name = fullFileName,
+                Value = resourceId
+            });
+            UtilityPackage.SetGlobal("WebResources", webResources, dte);
+        }
+
+        private static Guid GetCachedResourceId(string fullFileName, DTE dte)
+        {
+            var webResources = (List<NameValue>)UtilityPackage.GetGlobal("WebResources", dte);
+            if (webResources == null) return Guid.Empty;
+            var webResource = webResources.Where(x => x.Name == fullFileName).FirstOrDefault();
+            if (webResource == null) return Guid.Empty;
+            return webResource.Value;
+        }
+
+        private static void DeployWebResource(DTE dte, CrmServiceClient crmServiceClient, string crmUrl, string fullFileName, string fileName, Guid webResourceId)
         {
             var requests = new OrganizationRequestCollection();
 
-            var webResource = new Entity("webresource") { Id = Guid.Parse(webResourceId) };
+            var webResource = new Entity("webresource") { Id = webResourceId };
             var content = File.ReadAllText(fullFileName);
             webResource["content"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(content));
             var request = new UpdateRequest { Target = webResource };
@@ -167,7 +203,17 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
     </filter>
   </entity>
 </fetch>";
-            return new List<NameValue>();
+            var webResources = new List<NameValue>();
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            foreach(var entity in rows.Entities)
+            {
+                webResources.Add(new NameValue
+                {
+                    Name = entity.GetAttributeValue<string>("name") ?? string.Empty,
+                    Value = entity.Id
+                });
+            }
+            return webResources;
         }
     }
 }

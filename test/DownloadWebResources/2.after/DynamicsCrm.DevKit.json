@@ -1,12 +1,13 @@
 ﻿{
-  "DefaultCrmName": "Dynamics 365 - 4.6.2",
-  "DefaultCrmConnection": "DEVKIT",
-  "CrmConnections": [
-    {
-      "Name": "DEVKIT",
-      "Url": "https://orgcaffa69c.api.crm5.dynamics.com/XRMServices/2011/Organization.svc",
-      "UserName": "dev@pldevkit.onmicrosoft.com",
-      "Password": "jx0fE8wm5wnmew2teG9PHg=="
-    }
-  ]
+    "DefaultCrmName": "Dynamics 365 - 4.6.2",
+    "DefaultCrmConnection": "ClientSecret",
+    "CrmConnections": [
+        {
+            "Name": "ClientSecret",
+            "Url": "https://dev-devkit.crm5.dynamics.com/main.aspx",
+            "UserName": "e31fc7d6-4dce-46e3-8677-04ab0a2968e3",
+            "Password": "?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h",
+            "Type": "ClientSecret"
+        }
+    ]
 }

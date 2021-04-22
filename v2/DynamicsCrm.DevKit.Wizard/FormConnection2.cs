@@ -187,8 +187,8 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 var connectionString = XrmHelper.BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                var crmServiceClient = new CrmServiceClient(connectionString);
-                CrmService = XrmHelper.GetIOrganizationService(crmServiceClient);
+                CrmServiceClient = new CrmServiceClient(connectionString);
+                CrmService = XrmHelper.GetIOrganizationService(CrmServiceClient);
                 CrmService.Execute(new WhoAmIRequest());
                 return true;
             }
@@ -244,31 +244,22 @@ namespace DynamicsCrm.DevKit.Wizard
                     }
                     CrmConnection.Password = password;
                 }
-                if (ProjectType == ProjectType.Test)
+                if (CanConnect(CrmConnection))
                 {
+                    if (CrmConnection.Type != "ClientSecret")
+                    {
+                        CrmConnection.Password = EncryptDecrypt.EncryptString(password);
+                    }
+                    Config.DefaultCrmConnection = cboConnection.Text;
+                    DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
                     DialogResult = DialogResult.OK;
                     Cursor = Cursors.Default;
                     Close();
                 }
                 else
                 {
-                    if (CanConnect(CrmConnection))
-                    {
-                        if (CrmConnection.Type != "ClientSecret")
-                        {
-                            CrmConnection.Password = EncryptDecrypt.EncryptString(password);
-                        }
-                        Config.DefaultCrmConnection = cboConnection.Text;
-                        DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
-                        DialogResult = DialogResult.OK;
-                        Cursor = Cursors.Default;
-                        Close();
-                    }
-                    else
-                    {
-                        Cursor = Cursors.Default;
-                        MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    Cursor = Cursors.Default;
+                    MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 EnabledControl(true);
             }
