@@ -11,13 +11,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/jasmine": "^3.5.14",
+    "@types/jasmine": "^3.6.9",
     "@types/requirejs": "^2.1.32",
-    "@types/sinon": "^9.0.8",
-    "@types/xrm": "^9.0.31",
-    "jasmine": "^3.6.1",
+    "@types/sinon": "^10.0.0",
+    "@types/xrm": "^9.0.38",
+    "jasmine": "^3.7.0",
     "requirejs": "^2.3.6",
-    "sinon": "^9.2.0",
-    "xrm-mock": "^3.4.21"
+    "sinon": "^10.0.0",
+    "xrm-mock": "^3.5.0"
   }
 }
