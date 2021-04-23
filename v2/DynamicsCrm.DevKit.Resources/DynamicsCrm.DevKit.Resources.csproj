@@ -46,9 +46,6 @@
     <EmbeddedResource Include="DynamicsCrm.DevKit.Cli.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WebSite.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="WebApi.js" />
   </ItemGroup>
   <ItemGroup>
