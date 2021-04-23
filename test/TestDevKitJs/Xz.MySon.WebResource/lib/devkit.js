@@ -1,7 +1,5 @@
-//@ts-check
 'use strict';
 var devKit = (function () {
-    //@ts-check
     'use strict';
     var EMPTY_STRING = '';
     var EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
@@ -2541,7 +2539,6 @@ var devKit = (function () {
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-    //@ts-check
     OptionSet.FormType = {
         Undefined: 0,
         Create: 1,
