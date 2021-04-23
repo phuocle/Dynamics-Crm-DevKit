@@ -772,6 +772,7 @@ define(['xrm-mock'], () => {
             var formDataAddOnLoad = function () { };
             expect(data.loadEventHandlers.length).toBe(0);
             form.DataAddOnLoad(formDataAddOnLoad);
+            expect(() => { form.PostSave(null) }).toThrow(new Error("Method not implemented."));
             expect(data.loadEventHandlers.length).toBe(1);
             expect(() => { form.Refresh(true, null, null) }).toThrow(new Error("refresh not implemented"));
             form.DataRemoveOnLoad(formDataAddOnLoad);
@@ -862,7 +863,7 @@ define(['xrm-mock'], () => {
         it('Process', () => {
             var stage1 = new xrmMock.StageMock("stage1", "Start", XrmEnum.StageStatus.Active, XrmEnum.StageCategory.Identify, [new xrmMock.StepMock("Stage1Step1", "abc_all", true), new xrmMock.StepMock("Stage1Step2", "abc_all2", true)]);
             var stage2 = new xrmMock.StageMock("stage2", "Finish", XrmEnum.StageStatus.Active, XrmEnum.StageCategory.Identify, [new xrmMock.StepMock("Stage2Step1", "abc_all", true)]);
-            var process1Control = new xrmMock.ProcessControlMock("expanded", new xrmMock.UiCanGetVisibleElementMock(true), null);
+            var process1Control = new xrmMock.ProcessControlMock("expanded", new xrmMock.UiCanGetVisibleElementMock(true), new xrmMock.UiCanSetVisibleElementMock());
             var process1 = new xrmMock.ProcessMock({ id: "Process_1", name: "PROCESS 1", rendered: true, stages: new xrmMock.ItemCollectionMock([stage1, stage2]) });
             var process = new xrmMock.ProcessManagerMock([process1]);
             var ui = new xrmMock.UiMock({
@@ -873,11 +874,13 @@ define(['xrm-mock'], () => {
             var form = new MySon.FormTest(executionContext);
 
             expect(() => { form.Process.AddOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Process.AddOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Process.RemoveOnPreProcessStatusChange(null) }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Process.AddOnProcessStatusChange(null) }).toThrow(new Error("add on process status change not implemented."));
             expect(() => { form.Process.RemoveOnProcessStatusChange(null) }).toThrow(new Error("remove on process status change not implemented."));
             expect(() => { form.Process.AddOnStageChange(null) }).toThrow(new Error("add on stage change not implemented"));
             expect(() => { form.Process.RemoveOnStageChange(null) }).toThrow(new Error("remove on stage change not implemented"));
+            expect(() => { form.Process.RemoveOnPreStageChange(null) }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Process.AddOnStageSelected(null) }).toThrow(new Error("add on stage selected not implemented"));
             expect(() => { form.Process.RemoveOnStageSelected(null) }).toThrow(new Error("remove on stage selected not implemented"));
             form.Process.EnabledProcesses(function (process) {
@@ -923,6 +926,7 @@ define(['xrm-mock'], () => {
             form.Process.DisplayState = OptionSet.ProcessDisplayState.Collapsed;
             expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Collapsed);
             expect(form.Process.Visible).toBeTruthy();
+            expect(() => { form.Process.Visible = false; }).toThrow(new Error("Method not implemented."));
             expect(() => { form.Process.ActivePath.get(0) }).toThrow(new Error("get active path not implemented"));
         });
     });

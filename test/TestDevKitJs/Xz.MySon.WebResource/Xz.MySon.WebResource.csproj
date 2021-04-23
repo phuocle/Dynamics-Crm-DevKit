@@ -71,8 +71,6 @@
     <None Include="chutzpah.json" />
     <Content Include="entities\devkit.d.ts" />
     <Content Include="lib\devkit.js" />
-    <Content Include="test\abc_Test.Atributes.test.js" />
-    <Content Include="test\abc_Test.Controls.test.js" />
     <Content Include="test\abc_Test.test.js" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
