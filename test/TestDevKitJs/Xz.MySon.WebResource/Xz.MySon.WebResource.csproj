@@ -56,6 +56,7 @@
     <Content Include="entities\abc_Test.form.js">
       <DependentUpon>abc_Test.js</DependentUpon>
     </Content>
+    <Content Include="entities\abc_Test.js" />
     <Content Include="entities\Account.form.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
@@ -63,35 +64,14 @@
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
-    <Content Include="entities\ActivityParty.webapi.js">
-      <DependentUpon>ActivityParty.js</DependentUpon>
-    </Content>
-    <Content Include="entities\Contact.webapi.js">
-      <DependentUpon>Contact.js</DependentUpon>
-    </Content>
-    <Content Include="entities\devkit_WebApi.webapi.js">
-      <DependentUpon>devkit_WebApi.js</DependentUpon>
-    </Content>
-    <Content Include="entities\Email.webapi.js">
-      <DependentUpon>Email.js</DependentUpon>
-    </Content>
     <Content Include="entities\generator.form.bat" />
     <Content Include="entities\generator.webapi.bat" />
     <None Include="packages.config" />
     <None Include="package.json" />
     <None Include="chutzpah.json" />
-    <Content Include="entities\abc_Test.js" />
-    <Content Include="entities\ActivityParty.js" />
-    <Content Include="entities\Contact.js" />
     <Content Include="entities\devkit.d.ts" />
-    <Content Include="entities\devkit_WebApi.js" />
-    <Content Include="entities\Email.js" />
-    <Content Include="entities\SystemUser.js" />
-    <Content Include="entities\SystemUser.webapi.js">
-      <DependentUpon>SystemUser.js</DependentUpon>
-    </Content>
     <Content Include="lib\devkit.js" />
-    <Content Include="test\abc_Test.WebApi.test.js" />
+    <Content Include="test\abc_Test.Atributes.test.js" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
   </ItemGroup>
@@ -113,21 +93,6 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\ActivityParty.d.ts">
-      <DependentUpon>ActivityParty.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\Contact.d.ts">
-      <DependentUpon>Contact.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\devkit_WebApi.d.ts">
-      <DependentUpon>devkit_WebApi.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\Email.d.ts">
-      <DependentUpon>Email.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\SystemUser.d.ts">
-      <DependentUpon>SystemUser.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>

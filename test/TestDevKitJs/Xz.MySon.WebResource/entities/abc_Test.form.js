@@ -1,9 +1,9 @@
 ﻿'use strict';
-/** @namespace Tomato */
-var Tomato;
-(function (Tomato) {
+/** @namespace MySon */
+var MySon;
+(function (MySon) {
 	'use strict';
-	Tomato.FormTest = function (executionContext, defaultWebResourceName) {
+	MySon.FormTest = function (executionContext, defaultWebResourceName) {
 		var formContext = null;
 		if (executionContext !== undefined) {
 			if (executionContext.getFormContext === undefined) {
@@ -13,7 +13,7 @@ var Tomato;
 				formContext = executionContext.getFormContext();
 			}
 		}
-        var form = devKit.LoadForm(formContext);
+		var form = devKit.LoadForm(formContext);
 		var body = {
 			abc_All: {},
 			abc_All_1: {},
@@ -40,19 +40,20 @@ var Tomato;
 					Tab2Section2: {}
 				}
 			},
-		}
+		};
 		devKit.LoadTabs(formContext, tab);
 		body.Tab = tab;
 		form.Body = body;
-
-		var header = {};
+		var header = {
+			abc_All: {}
+		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-
-		var footer = {};
+		var footer = {
+			abc_All: {}
+		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
-
 		var process = devKit.LoadProcess(formContext);
 		var _Process_1 = {
 			abc_All: {}
@@ -60,32 +61,26 @@ var Tomato;
 		devKit.LoadFields(formContext, _Process_1, "header_process_");
 		process.Process_1 = _Process_1;
 		form.Process = process;
-
 		var quickForm = {
 			QuickForm: {}
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
-
 		var grid = {
 			Contacts: {}
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
-
 		var navigation = {
 			nav01: {}
-		}
+		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
-
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
-
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
-
 		return form;
 	};
-})(Tomato || (Tomato = {}));
+})(MySon || (MySon = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
