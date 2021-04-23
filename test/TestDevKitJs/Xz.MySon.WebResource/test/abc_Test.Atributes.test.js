@@ -30,7 +30,7 @@ define(['xrm-mock'], () => {
                 }
             );
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new Tomato.FormTest(executionContext);
+            var form = new MySon.FormTest(executionContext);
             var addOnChangeData = "";
             var abc_AllAddOnChange = function (executionContent) { addOnChangeData = "ON-CHANGED"; }
             form.Body.abc_All.AddOnChange(abc_AllAddOnChange);
@@ -67,7 +67,7 @@ define(['xrm-mock'], () => {
             });
 
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new Tomato.FormTest(executionContext);
+            var form = new MySon.FormTest(executionContext);
             expect(form.Body.abc_Boolean.InitialValue).toBeTruthy();
         });
         it('Lookup attribute type', () => {
@@ -79,7 +79,7 @@ define(['xrm-mock'], () => {
                 })
             }));
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new Tomato.FormTest(executionContext);
+            var form = new MySon.FormTest(executionContext);
             expect(form.Body.abc_Lookup.IsPartyList).toBeTruthy();
         });
         it('MultiSelectOptionSet and OptionSet attribute types', () => {
@@ -109,7 +109,7 @@ define(['xrm-mock'], () => {
                 }
             );
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new Tomato.FormTest(executionContext);
+            var form = new MySon.FormTest(executionContext);
             expect(form.Body.abc_OptionSetCode.InitialValue).toBe(OptionSet.abc_Test.abc_OptionSetCode.Value_2);
             var option = form.Body.abc_OptionSetCode.Option("Value 6");
             expect(option.text).toBe("Value 6");
@@ -130,7 +130,7 @@ define(['xrm-mock'], () => {
                 precision: 2,
             });
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new Tomato.FormTest(executionContext);
+            var form = new MySon.FormTest(executionContext);
 
             expect(form.Body.abc_FloatingPointNumber.Max).toBe(123.78);
             expect(form.Body.abc_FloatingPointNumber.Min).toBe(12.84);
@@ -145,7 +145,7 @@ define(['xrm-mock'], () => {
                 maxLength: 100
             });
             var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new Tomato.FormTest(executionContext);
+            var form = new MySon.FormTest(executionContext);
 
             expect(form.Body.abc_All.MaxLength).toBe(100);
         });

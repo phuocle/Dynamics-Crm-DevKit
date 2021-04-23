@@ -4,21 +4,24 @@
   "TestHarnessReferenceMode": "AMD",
   "TestHarnessLocationMode": "SettingsFileAdjacent",
   "Engine": "Chrome",
+  "CodeCoverageExecutionMode": "Manual",
+  "CodeCoverageIncludes": [
+    "lib\\devkit.js",
+    "entities\\devkit_WebApi.webapi.js"
+  ],
+  "CodeCoverageExcludes": [
+  ],
   "References": [
-    {
-      "Path": "lib/WebApiClient.js",
-      "IsTestFrameworkFile": true
-    },
-    {
-      "Path": "test/XrmEnum.js",
-      "IsTestFrameworkFile": true
-    },
     {
       "Path": "node_modules/requirejs/require.js",
       "IsTestFrameworkFile": true
     },
     {
       "Path": "test/requirejsConfig.js",
+      "IsTestFrameworkFile": true
+    },
+    {
+      "Path": "test/XrmEnum.js",
       "IsTestFrameworkFile": true
     },
     {
@@ -44,12 +47,6 @@
       "Includes": [ "*.test.js" ]
     }
   ],
-  "CodeCoverageExecutionMode": "Manual",
-  "CodeCoverageIncludes": [
-    "lib\\devkit.js",
-    "entities\\devkit_WebApi.webapi.js"
-  ],
-  "CodeCoverageExcludes": [
-  ],
+
   "TestFileTimeout": 10000
 }

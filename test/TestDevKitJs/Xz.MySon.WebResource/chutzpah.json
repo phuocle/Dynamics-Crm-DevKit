@@ -5,6 +5,9 @@
   "TestHarnessLocationMode": "SettingsFileAdjacent",
   "Engine": "Chrome",
   "CodeCoverageExecutionMode": "Manual",
+  "CodeCoverageIncludes": [
+    "lib\\devkit.js"
+  ],
   "CodeCoverageExcludes": [
     "*.form.js",
     "*.webapi.js",
