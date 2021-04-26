@@ -1225,7 +1225,7 @@ var devKit = (function () {
             loadField(body[field], attribute, control);
         }
         if (type === "footer_") {
-            Object.defineProperty(body, 'BodyVisible', {
+            Object.defineProperty(body, 'Visible', {
                 get: function () {
                     if (has(formContext, 'ui.footerSection.getVisible')) {
                         return formContext.ui.footerSection.getVisible();

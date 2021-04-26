@@ -502,7 +502,7 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/getvisible
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/setvisible
              */
-            BodyVisible: boolean;
+            Visible: boolean;
         }
         interface IHeader {
             /**

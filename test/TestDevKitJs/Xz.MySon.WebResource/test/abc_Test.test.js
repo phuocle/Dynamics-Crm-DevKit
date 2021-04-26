@@ -678,9 +678,6 @@ define(['xrm-mock'], () => {
             expect(form.Body.abc_Timer.Label).toBe("TIMMER LABEL NEW");
             expect(() => { form.Body.abc_Timer.Visible = false }).toThrow(new Error("Method not implemented."));
         });
-        it('webresource control type', () => {
-            expect(true).toBeTruthy();
-        });
         it('date control type', () => {
             xrmMock.XrmMockGenerator.Attribute.createDate("abc_date", new Date());
             xrmMock.XrmMockGenerator.Attribute.createDate("abc_datetime", new Date());
@@ -785,7 +782,7 @@ define(['xrm-mock'], () => {
             expect(form.FormLabel).toBe("FORM1");
         });
     });
-    describe('', () => {
+    describe('Tab & Section', () => {
         beforeEach(function () {
             var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
             XrmMockGenerator.Panel = new xrmMock.PanelMock();
@@ -1200,27 +1197,80 @@ define(['xrm-mock'], () => {
             XrmMockGenerator.App = new xrmMock.AppMock();
         });
         it('Header', () => {
-            xrmMock.XrmMockGenerator.Attribute.createString({
-                attributeType: "string",
-                format: "text",
-                isDirty: true,
-                name: "abc_all",
-                requiredLevel: "required",
-                value: "ABC ALL VALUE",
-                maxLength: 100,
-                submitMode: "always"
-            },
-                [{
-                    controlType: "standard",
-                    disabled: true,
-                    label: "ABC ALL LABEL",
+
+            //xrmMock.XrmMockGenerator.Attribute.createString({
+            //    attributeType: "string",
+            //    format: "text",
+            //    isDirty: true,
+            //    name: "abc_all",
+            //    requiredLevel: "required",
+            //    value: "ABC ALL VALUE",
+            //    maxLength: 100,
+            //    submitMode: "always"
+            //},
+            //    [{
+            //        controlType: "standard",
+            //        disabled: true,
+            //        label: "ABC ALL LABEL",
+            //        name: "abc_all",
+            //        visible: true
+            //    }, {
+            //        label: "HEADER ABC ALL LABEL",
+            //        name: "header_abc_all",
+            //    }]
+            //);
+
+
+            //var frame = new xrmMock.IframeControlMock({
+            //    name: "abc_iframed",
+            //    controlType: "iframe",
+            //    label: "IFRAME LABEL",
+            //    visible: true
+            //});
+
+            var stringControl = new xrmMock.StringControlMock({
+                attribute: new xrmMock.StringAttributeMock({
                     name: "abc_all",
-                    visible: true
-                }, {
-                    label: "HEADER ABC ALL LABEL",
-                    name: "header_abc_all",
-                }]
-            );
+                    value: "ABC ALL VALUE"
+                }),
+                name: "abc_all",
+                label: "ABC ALL LABEL"
+            });
+            var stringHeaderControl = new xrmMock.StringControlMock({
+                attribute: new xrmMock.StringAttributeMock({
+                    name: "abc_all",
+                    value: "HEADER ABC ALL VALUE"
+                }),
+                name: "header_abc_all",
+                label: "HEADER ABC ALL LABEL"
+            });
+
+            var ui = new xrmMock.UiMock({
+                formSelector: new xrmMock.FormSelectorMock(new xrmMock.ItemCollectionMock([new xrmMock.FormItemMock({
+                    id: "form1",
+                    label: "FORM1",
+                    currentItem: true,
+                    formType: XrmEnum.FormType.Update
+                })])),
+                controls: new xrmMock.ItemCollectionMock([
+                    stringControl,
+                    stringHeaderControl
+                ]),
+                footerSection: new xrmMock.FooterSectionMock(true),
+                headerSection: new xrmMock.HeaderSectionMock(true, true, true)
+            });
+            var attributes = new xrmMock.ItemCollectionMock([
+                new xrmMock.AttributeMock({
+                    name: "abc_all",
+                    isDirty: true
+                })
+            ]);
+            var entity = new xrmMock.EntityMock({
+                attributes: attributes
+            });
+            var data = new xrmMock.DataMock(entity);
+            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new MySon.FormTest(executionContext);
 
@@ -1229,9 +1279,20 @@ define(['xrm-mock'], () => {
             expect(form.Header.abc_All.Label).toBe("HEADER ABC ALL LABEL");
             expect(form.Header.abc_All.ControlName).toBe("header_abc_all");
 
-            //form.Header.BodyVisible
-            //form.Header.CommandBarVisible
-            //form.Header.TabNavigatorVisible
+            expect(form.Header.BodyVisible).toBeTruthy();
+            expect(form.Header.CommandBarVisible).toBeTruthy();
+            expect(form.Header.TabNavigatorVisible).toBeTruthy();
+            expect(form.Footer.Visible).toBeTruthy();
+
+            form.Header.BodyVisible = false;
+            form.Header.CommandBarVisible = false;
+            form.Header.TabNavigatorVisible = false;
+            form.Footer.Visible = false;
+
+            expect(form.Header.BodyVisible).toBeFalsy();
+            expect(form.Header.CommandBarVisible).toBeFalsy();
+            expect(form.Header.TabNavigatorVisible).toBeFalsy();
+            expect(form.Footer.Visible).toBeFalsy();
         });
 
         it('Footer', () => {
@@ -1263,8 +1324,6 @@ define(['xrm-mock'], () => {
             expect(form.Body.abc_All.ControlName).toBe("abc_all");
             expect(form.Footer.abc_All.Label).toBe("FOOTER ABC ALL LABEL");
             expect(form.Footer.abc_All.ControlName).toBe("footer_abc_all");
-
-            //form.Footer.BodyVisible
         });
     });
 });
