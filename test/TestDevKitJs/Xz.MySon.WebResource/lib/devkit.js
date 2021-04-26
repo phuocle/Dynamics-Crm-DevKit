@@ -227,26 +227,38 @@ var devKit = (function () {
         }
         form.FormNavigate = function (formId) {
             if (has(contextUiFormSelector, 'items')) {
-                var form = contextUiFormSelector.items.get(formId) || contextUiFormSelector.items.get(formId.toLowerCase());
-                if (has(form, 'navigate')) {
-                    form.navigate();
+                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                    if (formId === contextUiFormSelector.items.get(i).getId()) {
+                        var form = contextUiFormSelector.items.get(i)
+                        if (has(form, 'navigate')) {
+                            form.navigate();
+                        }
+                    }
                 }
             }
         };
-        form.FormIsVisible = function (formId) {
+        form.FormIsVisible = function (formId) {            
             if (has(contextUiFormSelector, 'items')) {
-                var form = contextUiFormSelector.items.get(formId) || contextUiFormSelector.items.get(formId.toLowerCase());
-                if (has(form, 'getVisible')) {
-                    return form.getVisible();
+                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                    if (formId === contextUiFormSelector.items.get(i).getId()) {
+                        var form = contextUiFormSelector.items.get(i)
+                        if (has(form, 'getVisible')) {
+                            return form.getVisible();
+                        }
+                    }
                 }
             }
             //return EMPTY_BOOL;
         }
         form.FormSetVisible = function (formId, value) {
             if (has(contextUiFormSelector, 'items')) {
-                var form = contextUiFormSelector.items.get(formId) || contextUiFormSelector.items.get(formId.toLowerCase());
-                if (has(form, 'setVisible')) {
-                    form.setVisible(value);
+                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                    if (formId === contextUiFormSelector.items.get(i).getId()) {
+                        var form = contextUiFormSelector.items.get(i)
+                        if (has(form, 'setVisible')) {
+                            form.setVisible(value);
+                        }
+                    }
                 }
             }
         }
@@ -650,7 +662,7 @@ var devKit = (function () {
                         var stage = getProcess.getActivePath().get(index);
                         return loadStage(stage);
                     }
-                    return loadStage({});
+                    //return loadStage({});
                 }
                 obj.forEach = function (callback) {
                     if (has(getProcess, 'getActivePath')) {

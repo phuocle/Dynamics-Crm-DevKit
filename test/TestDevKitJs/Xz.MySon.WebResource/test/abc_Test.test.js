@@ -778,9 +778,9 @@ define(['xrm-mock'], () => {
             expect(() => { form.ViewPortWidth }).toThrow(new Error("getViewPortWidth not implemented"));
             expect(() => { form.UiAddOnLoad(null) }).toThrow(new Error("addOnLoad not implemented"));
             expect(() => { form.UiRemoveOnLoad(null) }).toThrow(new Error("removeOnLoad not implemented"));
-            expect(form.FormNavigate("form1")).toBeUndefined();
-            expect(form.FormSetVisible("form1", true)).toBeUndefined();
-            expect(form.FormIsVisible("form1")).toBeFalsy();
+            expect(() => { form.FormNavigate("form1") }).toThrow(new Error("Form navigation not implemented."));
+            expect(() => { form.FormSetVisible("form1", true) }).toThrow(new Error("setVisible not implemented."));
+            expect(() => { form.FormIsVisible("form1") }).toThrow(new Error("getVisible not implemented."));
             expect(form.FormId).toBe("form1");
             expect(form.FormLabel).toBe("FORM1");
         });
