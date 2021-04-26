@@ -35,6 +35,8 @@ declare namespace MySon {
 			abc_KbSearch: DevKit.Controls.Knowledge;
 			abc_TimelineWall: DevKit.Controls.TimelineWall;
 			abc_Timer: DevKit.Controls.Timer;
+			abc_Date: DevKit.Controls.Date;
+			abc_DateTime: DevKit.Controls.DateTime;
 		}
 		interface Footer extends DevKit.Controls.IFooter {
 			abc_All: DevKit.Controls.String;

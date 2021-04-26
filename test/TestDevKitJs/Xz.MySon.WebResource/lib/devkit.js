@@ -643,7 +643,7 @@ var devKit = (function () {
                     if (has(getProcess, 'getActivePath')) {
                         return getProcess.getActivePath().getLength();
                     }
-                    return EMPTY_NUMBER;
+                    //return EMPTY_NUMBER;
                 }
                 obj.get = function (index) {
                     if (has(getProcess, 'getActivePath')) {
@@ -1218,7 +1218,7 @@ var devKit = (function () {
                     if (has(formContext, 'ui.footerSection.getVisible')) {
                         return formContext.ui.footerSection.getVisible();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(formContext, 'ui.footerSection.setVisible')) {
@@ -1233,7 +1233,7 @@ var devKit = (function () {
                     if (has(formContext, 'ui.headerSection.getBodyVisible')) {
                         return formContext.ui.headerSection.getBodyVisible();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(formContext, 'ui.headerSection.setBodyVisible')) {
@@ -1246,7 +1246,7 @@ var devKit = (function () {
                     if (has(formContext, 'ui.headerSection.getCommandBarVisible')) {
                         return formContext.ui.headerSection.getCommandBarVisible();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(formContext, 'ui.headerSection.setCommandBarVisible')) {
@@ -1259,7 +1259,7 @@ var devKit = (function () {
                     if (has(formContext, 'ui.headerSection.getTabNavigatorVisible')) {
                         return formContext.ui.headerSection.getTabNavigatorVisible();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(formContext, 'ui.headerSection.setTabNavigatorVisible')) {
@@ -1364,7 +1364,7 @@ var devKit = (function () {
                     if (has(tabObject, 'getDisplayState')) {
                         return tabObject.getDisplayState();
                     }
-                    return 'expanded';
+                    //return 'expanded';
                 },
                 set: function (value) {
                     if (has(tabObject, 'setDisplayState')) {
@@ -1623,14 +1623,14 @@ var devKit = (function () {
                         if (has(row, 'data.entity.attributes')) {
                             return row.data.entity.attributes.getLength();
                         }
-                        return EMPTY_NUMBER;
+                        //return EMPTY_NUMBER;
                     }
                     obj.get = function (index) {
                         if (has(row, 'data.entity.attributes')) {
                             var column = row.data.entity.attributes.get(index);
                             return loadGridColumn(column);
                         }
-                        return loadGridColumn({});
+                        //return loadGridColumn({});
                     }
                     obj.forEach = function (callback) {
                         if (has(row, 'data.entity.attributes')) {
@@ -2277,7 +2277,7 @@ var devKit = (function () {
                 if (has(getGlobalContext, 'getCurrentAppUrl')) {
                     return getGlobalContext.getCurrentAppUrl();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(utility, 'Version', {

@@ -470,45 +470,6 @@ define(['xrm-mock'], () => {
             expect(form.QuickForm.QuickForm.Label).toBe("QUICK FORM LABEL NEW");
             expect(() => { form.QuickForm.QuickForm.Visible = false }).toThrow(new Error("Method not implemented."));
         });
-        //it('REMOVED quickform control type', () => {
-        //    var attributes = new xrmMock.ItemCollectionMock([
-        //        new xrmMock.AttributeMock({
-        //            name: "quickform1"
-        //        })
-        //    ]);
-        //    var entity = new xrmMock.EntityMock({
-        //        attributes: attributes
-        //    });
-        //    var data = new xrmMock.DataMock(entity);
-        //    var quickform = new xrmMock.QuickFormControlMock({
-        //        name: "QuickForm1",
-        //        controlType: "quickform",
-        //        label: "QUICK FORM LABEL",
-        //        visible: true
-        //    });
-        //    var ui = new xrmMock.UiMock({
-        //        quickForms: new xrmMock.ItemCollectionMock([quickform])
-        //    });
-        //    xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
-        //    var executionContext = xrmMock.XrmMockGenerator.formContext;
-        //    var form = new MySon.FormTest(executionContext);
-        //    expect(form.QuickForm.QuickForm.Controls().length).toBe(0);
-        //    expect(form.QuickForm.QuickForm.ControlType.toString()).toBe("");
-        //    expect(form.QuickForm.QuickForm.Disabled).toBeTruthy();
-        //    expect(form.QuickForm.QuickForm.Label).toBe("");
-        //    expect(form.QuickForm.QuickForm.ControlName).toBe("");
-        //    expect(form.QuickForm.QuickForm.ControlParent.length).toBe({}.length);
-        //    expect(form.QuickForm.QuickForm.Visible).toBeFalsy();
-        //    expect(form.QuickForm.QuickForm.IsLoaded()).toBeFalsy();
-        //    expect(form.QuickForm.QuickForm.Refresh()).toBeUndefined();
-        //    form.QuickForm.QuickForm.Disabled = true;
-        //    expect(form.QuickForm.QuickForm.Disabled).toBeTruthy();
-        //    expect(form.QuickForm.QuickForm.Focus()).toBeUndefined();
-        //    form.QuickForm.QuickForm.Label = "QUICK FORM LABEL NEW";
-        //    expect(form.QuickForm.QuickForm.Label).toBe("");
-        //    form.QuickForm.QuickForm.Visible = false;
-        //    expect(form.QuickForm.QuickForm.Visible).toBeFalsy();
-        //});
         it('subgrid control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([
                 new xrmMock.AttributeMock({
@@ -720,6 +681,19 @@ define(['xrm-mock'], () => {
         it('webresource control type', () => {
             expect(true).toBeTruthy();
         });
+        it('date control type', () => {
+            xrmMock.XrmMockGenerator.Attribute.createDate("abc_date", new Date());
+            xrmMock.XrmMockGenerator.Attribute.createDate("abc_datetime", new Date());
+
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new MySon.FormTest(executionContext);
+            expect(form.Body.abc_Date.ControlName).toBe("abc_date");
+            expect(form.Body.abc_DateTime.ControlName).toBe("abc_datetime");
+            form.Body.abc_DateTime.ShowTime = true;
+            expect(form.Body.abc_DateTime.ShowTime).toBeTruthy();
+            form.Body.abc_DateTime.ShowTime = false;
+            expect(form.Body.abc_DateTime.ShowTime).toBeFalsy();
+        });
     });
     describe('Form', () => {
         beforeEach(function () {
@@ -809,6 +783,58 @@ define(['xrm-mock'], () => {
             expect(form.FormIsVisible("form1")).toBeFalsy();
             expect(form.FormId).toBe("form1");
             expect(form.FormLabel).toBe("FORM1");
+        });
+    });
+    describe('', () => {
+        beforeEach(function () {
+            var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
+            XrmMockGenerator.Panel = new xrmMock.PanelMock();
+            XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
+            XrmMockGenerator.Device = new xrmMock.DeviceMock();
+            XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
+            XrmMockGenerator.App = new xrmMock.AppMock();
+        });
+        it('Tab', () => {
+            var tab1Section1 = xrmMock.XrmMockGenerator.Section.createSection("Tab1Section1", "LABEL-TAB1-SECTION1", true, null, null);
+            var tab1Section2 = xrmMock.XrmMockGenerator.Section.createSection("Tab1Section2", "LABEL-TAB1-SECTION2", false, null, null);
+            var tab1 = xrmMock.XrmMockGenerator.Tab.createTab("Tab1", "LABEL-TAB1", true, "expanded", null, new xrmMock.ItemCollectionMock([tab1Section1, tab1Section2]));
+            var addTabStateChange = function (executionContext) { }
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new MySon.FormTest(executionContext);
+            expect(tab1.tabStateChangeHandlers.length).toBe(0);
+            form.Body.Tab.Tab1.AddTabStateChange(addTabStateChange);
+            expect(tab1.tabStateChangeHandlers.length).toBe(1);
+            expect(form.Body.Tab.Tab1.DisplayState).toBe(OptionSet.TabDisplayState.Expanded);
+            form.Body.Tab.Tab1.DisplayState = OptionSet.TabDisplayState.Collapsed;
+            expect(form.Body.Tab.Tab1.DisplayState).toBe(OptionSet.TabDisplayState.Collapsed);
+            expect(form.Body.Tab.Tab1.Focus()).toBeUndefined();
+            expect(form.Body.Tab.Tab1.Label).toBe("LABEL-TAB1");
+            form.Body.Tab.Tab1.Label = "LABEL-TAB1-NEW";
+            expect(form.Body.Tab.Tab1.Label).toBe("LABEL-TAB1-NEW");
+            expect(form.Body.Tab.Tab1.Name).toBe("Tab1");
+            form.Body.Tab.Tab1.RemoveTabStateChange(addTabStateChange);
+            expect(tab1.tabStateChangeHandlers.length).toBe(0);
+            expect(form.Body.Tab.Tab1.Visible).toBeTruthy();
+            form.Body.Tab.Tab1.Visible = false;
+            expect(form.Body.Tab.Tab1.Visible).toBeFalsy();
+            expect(form.Body.Tab.Tab1.Section.Tab1Section1.Label).toBe("LABEL-TAB1-SECTION1");
+            form.Body.Tab.Tab1.Section.Tab1Section1.Label = "LABEL-TAB1-SECTION1-NEW";
+            expect(form.Body.Tab.Tab1.Section.Tab1Section1.Label).toBe("LABEL-TAB1-SECTION1-NEW");
+            expect(form.Body.Tab.Tab1.Section.Tab1Section1.Name).toBe("Tab1Section1");
+            expect(form.Body.Tab.Tab1.Section.Tab1Section1.Visible).toBeTruthy();
+            form.Body.Tab.Tab1.Section.Tab1Section1.Visible = false;
+            expect(form.Body.Tab.Tab1.Section.Tab1Section1.Visible).toBeFalsy();
+
+            expect(form.Body.Tab.Tab1.Section.Tab1Section1.Parent).toBeDefined();
+            expect(form.Body.Tab.Tab1.Parent).toBeDefined();
+        });
+        it('Tab/Section removed', () => {
+            var tab2Section1 = xrmMock.XrmMockGenerator.Section.createSection("Tab2Section1", "LABEL-TAB1-SECTION1", true, null, null);
+            var tab2Section2 = xrmMock.XrmMockGenerator.Section.createSection("Tab2Section2", "LABEL-TAB1-SECTION2", false, null, null);
+            var tab2 = xrmMock.XrmMockGenerator.Tab.createTab("Tab3", "LABEL-TAB2", true, "expanded", null, new xrmMock.ItemCollectionMock([tab2Section1, tab2Section2]));
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new MySon.FormTest(executionContext);
+            expect(true).toBeTruthy();
         });
     });
     describe('Navigation', () => {
@@ -965,43 +991,39 @@ define(['xrm-mock'], () => {
                 securityRolePrivileges: ["GUID1", "GUID2"],
                 securityRoles: ["NAME1", "NAME2", "NAME3"],
                 transactionCurrencyId: "VND-GUID",
-                //dateFormattingInfo: {
-                //    AMDesignator: "AM",
-                //    Calendar: {
-                //        MinSupportedDateTime: "0001-01-01T00:00:00",
-                //        MaxSupportedDateTime: "9999-12-31T23:59:59.9999999",
-                //        AlgorithmType: 1,
-                //        CalendarType: 1,
-                //        Eras: [ 1 ],
-                //        TwoDigitYearMax: 2029,
-                //        IsReadOnly: false
-                //    },
-                //    DateSeparator: "/",
-                //    FirstDayOfWeek: 0,
-                //    CalendarWeekRule: 0,
-                //    FullDateTimePattern: "dddd, MMMM d, yyyy h:mm:ss tt",
-                //    LongDatePattern: "dddd, MMMM d, yyyy",
-                //    LongTimePattern: "h:mm:ss tt",
-                //    MonthDayPattern: "MMMM dd",
-                //    PMDesignator: "PM",
-                //    RFC1123Pattern: "ddd, dd MMM yyyy HH':'mm':'ss 'GMT'",
-                //    ShortDatePattern: "M/d/yyyy",
-                //    ShortTimePattern: "h:mm tt",
-                //    SortableDateTimePattern: "yyyy'-'MM'-'dd'T'HH':'mm':'ss",
-                //    TimeSeparator: ":",
-                //    UniversalSortableDateTimePattern: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
-                //    YearMonthPattern: "MMMM yyyy",
-                //    AbbreviatedDayNames: [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ],
-                //    ShortestDayNames: [ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
-                //    DayNames: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
-                //    AbbreviatedMonthNames: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "" ],
-                //    MonthNames: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "" ],
-                //    IsReadOnly: false,
-                //    NativeCalendarName: "Gregorian Calendar",
-                //    AbbreviatedMonthGenitiveNames: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "" ],
-                //    MonthGenitiveNames: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "" ],
-                //    eras: [ 1, "A.D.", null, 0 ]
-                //},
+                dateFormattingInfo: {
+                    AmDesignator: "AM",
+                    Calendar: {
+                        MinSupportedDateTime: new Date(),
+                        MaxSupportedDateTime: new Date(),
+                        AlgorithmType: 1,
+                        CalendarType: 1,
+                        Eras: [ 1 ],
+                        TwoDigitYearMax: 2029,
+                        IsReadOnly: false
+                    },
+                    DateSeparator: "/",
+                    FirstDayOfWeek: 0,
+                    CalendarWeekRule: 0,
+                    FullDateTimePattern: "dddd, MMMM d, yyyy h:mm:ss tt",
+                    LongDatePattern: "dddd, MMMM d, yyyy",
+                    LongTimePattern: "h:mm:ss tt",
+                    MonthDayPattern: "MMMM dd",
+                    PmDesignator: "PM",
+                    ShortDatePattern: "M/d/yyyy",
+                    ShortTimePattern: "h:mm tt",
+                    SortableDateTimePattern: "yyyy'-'MM'-'dd'T'HH':'mm':'ss",
+                    TimeSeparator: ":",
+                    UniversalSortableDateTimePattern: "yyyy'-'MM'-'dd HH':'mm':'ss'Z'",
+                    YearMonthPattern: "MMMM yyyy",
+                    AbbreviatedDayNames: [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ],
+                    ShortestDayNames: [ "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+                    DayNames: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
+                    AbbreviatedMonthNames: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "" ],
+                    MonthNames: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "" ],
+                    AbbreviatedMonthGenitiveNames: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "" ],
+                    MonthGenitiveNames: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "" ],
+                },
                 roles: new xrmMock.ItemCollectionMock([new xrmMock.LookupValueMock("GUID1", "role", "ROLE-1"), new xrmMock.LookupValueMock("GUID2", "role", "ROLE-2")]),
                 transactionCurrency: new xrmMock.LookupValueMock("VND-GUID", "transactioncurrency", "VND")
             });
@@ -1059,41 +1081,37 @@ define(['xrm-mock'], () => {
             expect(form.Utility.OrganizationSettings.UseSkypeProtocol).toBeTruthy();
 
             //getGlobalContext.userSettings
-            //expect(form.Utility.UserSettings.DateFormattingInfo.AMDesignator).toBe("AM");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar).toBeDefined();
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.MinSupportedDateTime.toString()).toBe("0001-01-01T00:00:00");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.MaxSupportedDateTime.toString()).toBe("9999-12-31T23:59:59.9999999");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.AlgorithmType).toBe(1);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.CalendarType).toBe(1);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.Eras.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.TwoDigitYearMax).toBe(2029);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.IsReadOnly).toBeFalsy();
-            //expect(form.Utility.UserSettings.DateFormattingInfo.DateSeparator).toBe("/");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek).toBe(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.CalendarWeekRule).toBe(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern).toBe("dddd, MMMM d, yyyy h:mm:ss tt");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.LongDatePattern).toBe("dddd, MMMM d, yyyy");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.LongTimePattern).toBe("h:mm:ss tt");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.MonthDayPattern).toBe("MMMM dd");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.PMDesignator).toBe("PM");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.RFC1123Pattern).toBe("ddd, dd MMM yyyy HH':'mm':'ss 'GMT'");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern).toBe("M/d/yyyy");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern).toBe("h:mm tt");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.SortableDateTimePattern).toBe("yyyy'-'MM'-'dd'T'HH':'mm':'ss");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.TimeSeparator).toBe(":");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.UniversalSortableDateTimePattern).toBe("yyyy'-'MM'-'dd HH':'mm':'ss'Z'");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.YearMonthPattern).toBe("MMMM yyyy");
-            //expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedDayNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.ShortestDayNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.DayNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedMonthNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.MonthNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedMonthGenitiveNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.MonthGenitiveNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.DayNames.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.eras.length).toBeGreaterThan(0);
-            //expect(form.Utility.UserSettings.DateFormattingInfo.IsReadOnly).toBeFalsy();
-            //expect(form.Utility.UserSettings.DateFormattingInfo.NativeCalendarName).toBe("Gregorian Calendar");
+            expect(form.Utility.UserSettings.DateFormattingInfo.AmDesignator).toBe("AM");
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar).toBeDefined();
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.MinSupportedDateTime.toString()).toBeDefined();
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.MaxSupportedDateTime.toString()).toBeDefined();
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.AlgorithmType).toBe(1);
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.CalendarType).toBe(1);
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.Eras.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.TwoDigitYearMax).toBe(2029);
+            expect(form.Utility.UserSettings.DateFormattingInfo.Calendar.IsReadOnly).toBeFalsy();
+            expect(form.Utility.UserSettings.DateFormattingInfo.DateSeparator).toBe("/");
+            expect(form.Utility.UserSettings.DateFormattingInfo.FirstDayOfWeek).toBe(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.CalendarWeekRule).toBe(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.FullDateTimePattern).toBe("dddd, MMMM d, yyyy h:mm:ss tt");
+            expect(form.Utility.UserSettings.DateFormattingInfo.LongDatePattern).toBe("dddd, MMMM d, yyyy");
+            expect(form.Utility.UserSettings.DateFormattingInfo.LongTimePattern).toBe("h:mm:ss tt");
+            expect(form.Utility.UserSettings.DateFormattingInfo.MonthDayPattern).toBe("MMMM dd");
+            expect(form.Utility.UserSettings.DateFormattingInfo.PmDesignator).toBe("PM");
+            expect(form.Utility.UserSettings.DateFormattingInfo.ShortDatePattern).toBe("M/d/yyyy");
+            expect(form.Utility.UserSettings.DateFormattingInfo.ShortTimePattern).toBe("h:mm tt");
+            expect(form.Utility.UserSettings.DateFormattingInfo.SortableDateTimePattern).toBe("yyyy'-'MM'-'dd'T'HH':'mm':'ss");
+            expect(form.Utility.UserSettings.DateFormattingInfo.TimeSeparator).toBe(":");
+            expect(form.Utility.UserSettings.DateFormattingInfo.UniversalSortableDateTimePattern).toBe("yyyy'-'MM'-'dd HH':'mm':'ss'Z'");
+            expect(form.Utility.UserSettings.DateFormattingInfo.YearMonthPattern).toBe("MMMM yyyy");
+            expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedDayNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.ShortestDayNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.DayNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedMonthNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.MonthNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.AbbreviatedMonthGenitiveNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.MonthGenitiveNames.length).toBeGreaterThan(0);
+            expect(form.Utility.UserSettings.DateFormattingInfo.DayNames.length).toBeGreaterThan(0);
             expect(form.Utility.UserSettings.DefaultDashboardId).toBe("DEFAULT-DASHBOARD-ID");
             expect(form.Utility.UserSettings.IsGuidedHelpEnabled).toBeTruthy();
             expect(form.Utility.UserSettings.IsHighContrastEnabled).toBeFalsy();
@@ -1165,6 +1183,88 @@ define(['xrm-mock'], () => {
             expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("not implemented"));
             expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("not implemented"));
             expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("not implemented"));
+
+            expect(() => { form.ExecutionContext.EntityReference }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new Error("not implemented"));
+
+        });
+    });
+    describe('Header & Footer', () => {
+        beforeEach(function () {
+            var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
+            XrmMockGenerator.Panel = new xrmMock.PanelMock();
+            XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
+            XrmMockGenerator.Device = new xrmMock.DeviceMock();
+            XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
+            XrmMockGenerator.App = new xrmMock.AppMock();
+        });
+        it('Header', () => {
+            xrmMock.XrmMockGenerator.Attribute.createString({
+                attributeType: "string",
+                format: "text",
+                isDirty: true,
+                name: "abc_all",
+                requiredLevel: "required",
+                value: "ABC ALL VALUE",
+                maxLength: 100,
+                submitMode: "always"
+            },
+                [{
+                    controlType: "standard",
+                    disabled: true,
+                    label: "ABC ALL LABEL",
+                    name: "abc_all",
+                    visible: true
+                }, {
+                    label: "HEADER ABC ALL LABEL",
+                    name: "header_abc_all",
+                }]
+            );
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new MySon.FormTest(executionContext);
+
+            expect(form.Body.abc_All.Label).toBe("ABC ALL LABEL");
+            expect(form.Body.abc_All.ControlName).toBe("abc_all");
+            expect(form.Header.abc_All.Label).toBe("HEADER ABC ALL LABEL");
+            expect(form.Header.abc_All.ControlName).toBe("header_abc_all");
+
+            //form.Header.BodyVisible
+            //form.Header.CommandBarVisible
+            //form.Header.TabNavigatorVisible
+        });
+
+        it('Footer', () => {
+            xrmMock.XrmMockGenerator.Attribute.createString({
+                attributeType: "string",
+                format: "text",
+                isDirty: true,
+                name: "abc_all",
+                requiredLevel: "required",
+                value: "ABC ALL VALUE",
+                maxLength: 100,
+                submitMode: "always"
+            },
+                [{
+                    controlType: "standard",
+                    disabled: true,
+                    label: "ABC ALL LABEL",
+                    name: "abc_all",
+                    visible: true
+                }, {
+                    label: "FOOTER ABC ALL LABEL",
+                    name: "footer_abc_all",
+                }]
+            );
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new MySon.FormTest(executionContext);
+
+            expect(form.Body.abc_All.Label).toBe("ABC ALL LABEL");
+            expect(form.Body.abc_All.ControlName).toBe("abc_all");
+            expect(form.Footer.abc_All.Label).toBe("FOOTER ABC ALL LABEL");
+            expect(form.Footer.abc_All.ControlName).toBe("footer_abc_all");
+
+            //form.Footer.BodyVisible
         });
     });
 });

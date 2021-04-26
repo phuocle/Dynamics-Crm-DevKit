@@ -1827,7 +1827,7 @@ declare namespace DevKit {
         * Use this method to know the error details on why an entity save failed.
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsaveerrorinfo
         */
-        readonly SaveErrorInfo: any;
+        readonly SaveErrorInfo: string;
     }
     interface Utility {
         /**

@@ -24,7 +24,9 @@ var MySon;
 			abc_IFramed: {},
 			abc_KbSearch: {},
 			abc_TimelineWall: {},
-			abc_Timer: {}
+			abc_Timer: {},
+			abc_Date: {},
+			abc_DateTime: {}
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
