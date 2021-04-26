@@ -54,7 +54,7 @@ var devKit = (function () {
                 if (has(contextData, 'getIsDirty')) {
                     return contextData.getIsDirty();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             }
         });
         Object.defineProperty(form, 'DataIsValid', {
@@ -62,7 +62,7 @@ var devKit = (function () {
                 if (has(contextData, 'isValid')) {
                     return contextData.isValid();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             }
         });
         var contextDataEntity = NULL;
@@ -89,7 +89,7 @@ var devKit = (function () {
                 if (has(contextDataEntity, 'attributes')) {
                     return contextDataEntity.attributes;
                 }
-                return [];
+                //return [];
             }
         });
         Object.defineProperty(form, 'DataXml', {
@@ -97,7 +97,7 @@ var devKit = (function () {
                 if (has(contextDataEntity, 'getDataXml')) {
                     return contextDataEntity.getDataXml();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(form, 'EntityName', {
@@ -105,7 +105,7 @@ var devKit = (function () {
                 if (has(contextDataEntity, 'getEntityName')) {
                     return contextDataEntity.getEntityName();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(form, 'EntityReference', {
@@ -113,7 +113,7 @@ var devKit = (function () {
                 if (has(contextDataEntity, 'getEntityReference')) {
                     return contextDataEntity.getEntityReference();
                 }
-                return EMPTY_REFERENCE;
+                //return EMPTY_REFERENCE;
             }
         });
         Object.defineProperty(form, 'EntityId', {
@@ -121,7 +121,7 @@ var devKit = (function () {
                 if (has(contextDataEntity, 'getId')) {
                     return contextDataEntity.getId();
                 }
-                return EMPTY_GUID;
+                //return EMPTY_GUID;
             }
         });
         Object.defineProperty(form, 'EntityIsDirty', {
@@ -129,7 +129,7 @@ var devKit = (function () {
                 if (has(contextDataEntity, 'getIsDirty')) {
                     return contextDataEntity.getIsDirty();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             }
         });
         Object.defineProperty(form, 'PrimaryAttributeValue', {
@@ -137,7 +137,7 @@ var devKit = (function () {
                 if (has(contextDataEntity, 'getPrimaryAttributeValue')) {
                     return contextDataEntity.getPrimaryAttributeValue();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(form, 'EntityIsValid', {
@@ -145,7 +145,7 @@ var devKit = (function () {
                 if (has(contextDataEntity, 'isValid')) {
                     return contextDataEntity.isValid();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             }
         });
         var contextUi = NULL;
@@ -161,7 +161,7 @@ var devKit = (function () {
             if (has(contextUi, 'clearFormNotification')) {
                 return contextUi.clearFormNotification(uniqueId);
             }
-            return EMPTY_BOOL;
+            //return EMPTY_BOOL;
         };
         form.Close = function () {
             if (has(contextUi, 'close')) {
@@ -187,14 +187,14 @@ var devKit = (function () {
             if (has(contextUi, 'setFormNotification')) {
                 return contextUi.setFormNotification(message, level, uniqueId);
             }
-            return EMPTY_BOOL;
+            //return EMPTY_BOOL;
         };
         Object.defineProperty(form, 'Controls', {
             get: function () {
                 if (has(contextUi, 'controls')) {
                     return contextUi.controls;
                 }
-                return [];
+                //return [];
             }
         });
         Object.defineProperty(form, 'FormType', {
@@ -202,7 +202,7 @@ var devKit = (function () {
                 if (has(contextUi, 'getFormType')) {
                     return contextUi.getFormType();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             }
         });
         Object.defineProperty(form, 'ViewPortHeight', {
@@ -210,7 +210,7 @@ var devKit = (function () {
                 if (has(contextUi, 'getViewPortHeight')) {
                     return contextUi.getViewPortHeight();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             }
         });
         Object.defineProperty(form, 'ViewPortWidth', {
@@ -218,7 +218,7 @@ var devKit = (function () {
                 if (has(contextUi, 'getViewPortWidth')) {
                     return contextUi.getViewPortWidth();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             }
         });
         var contextUiFormSelector = NULL;
@@ -240,7 +240,7 @@ var devKit = (function () {
                     return form.getVisible();
                 }
             }
-            return EMPTY_BOOL;
+            //return EMPTY_BOOL;
         }
         form.FormSetVisible = function (formId, value) {
             if (has(contextUiFormSelector, 'items')) {
@@ -258,7 +258,7 @@ var devKit = (function () {
                         return form.getId();
                     }
                 }
-                return EMPTY_GUID;
+                //return EMPTY_GUID;
             }
         });
         Object.defineProperty(form, 'FormLabel', {
@@ -269,7 +269,7 @@ var devKit = (function () {
                         return form.getLabel();
                     }
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         return form;
@@ -282,7 +282,7 @@ var devKit = (function () {
                     if (has(step, 'getAttribute')) {
                         return step.getAttribute();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(obj, 'Name', {
@@ -290,7 +290,7 @@ var devKit = (function () {
                     if (has(step, 'getName')) {
                         return step.getName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(obj, 'Required', {
@@ -298,7 +298,7 @@ var devKit = (function () {
                     if (has(step, 'isRequired')) {
                         return step.isRequired();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 }
             });
             Object.defineProperty(obj, 'Progress', {
@@ -306,7 +306,7 @@ var devKit = (function () {
                     if (has(step, 'getProgress')) {
                         return step.getProgress();
                     }
-                    return EMPTY_NUMBER;
+                    //return EMPTY_NUMBER;
                 }
             });
             obj.SetProgress = function (stepProgress, message) {
@@ -323,7 +323,7 @@ var devKit = (function () {
                     if (has(stage, 'getCategory')) {
                         return stage.getCategory().getValue();
                     }
-                    return EMPTY_NUMBER;
+                    //return EMPTY_NUMBER;
                 }
             });
             Object.defineProperty(obj, 'EntityName', {
@@ -331,7 +331,7 @@ var devKit = (function () {
                     if (has(stage, 'getEntityName')) {
                         return stage.getEntityName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(obj, 'Id', {
@@ -339,7 +339,7 @@ var devKit = (function () {
                     if (has(stage, 'getId')) {
                         return stage.getId();
                     }
-                    return EMPTY_GUID;
+                    //return EMPTY_GUID;
                 }
             });
             Object.defineProperty(obj, 'Name', {
@@ -347,7 +347,7 @@ var devKit = (function () {
                     if (has(stage, 'getName')) {
                         return stage.getName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(obj, 'Status', {
@@ -355,7 +355,7 @@ var devKit = (function () {
                     if (has(stage, 'getStatus')) {
                         return stage.getStatus();
                     }
-                    return 'active';
+                    //return 'active';
                 }
             });
             obj.AllowCreateNew = function (callback) {
@@ -385,7 +385,7 @@ var devKit = (function () {
                     if (has(process, 'getId')) {
                         return process.getId();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(obj, 'Name', {
@@ -393,7 +393,7 @@ var devKit = (function () {
                     if (has(process, 'getName')) {
                         return process.getName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(obj, 'IsRendered', {
@@ -401,7 +401,7 @@ var devKit = (function () {
                     if (has(process, 'isRendered')) {
                         return process.isRendered();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 }
             });
             Object.defineProperty(obj, 'Stages', {
@@ -411,14 +411,14 @@ var devKit = (function () {
                         if (has(process, 'getStages')) {
                             return process.getStages().getLength();
                         }
-                        return EMPTY_NUMBER;
+                        //return EMPTY_NUMBER;
                     }
                     obj.get = function (index) {
                         if (has(process, 'getStages')) {
                             var stage = process.getStages().get(index);
                             return loadStage(stage);
                         }
-                        return loadStage({});
+                        //return loadStage({});
                     }
                     obj.forEach = function (callback) {
                         if (has(process, 'getStages')) {
@@ -569,7 +569,7 @@ var devKit = (function () {
                 if (has(getProcess, 'getSelectedStage')) {
                     selectedStage = getProcess.getSelectedStage();
                 }
-                return loadStage(selectedStage);
+                //return loadStage(selectedStage);
             }
         });
         Object.defineProperty(process, 'ActiveStage', {
@@ -586,7 +586,7 @@ var devKit = (function () {
                 if (has(getProcess, 'getInstanceId')) {
                     return getProcess.getInstanceId();
                 }
-                return EMPTY_GUID;
+                //return EMPTY_GUID;
             }
         });
         Object.defineProperty(process, 'InstanceName', {
@@ -594,7 +594,7 @@ var devKit = (function () {
                 if (has(getProcess, 'getInstanceName')) {
                     return getProcess.getInstanceName();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(process, 'Status', {
@@ -602,7 +602,7 @@ var devKit = (function () {
                 if (has(getProcess, 'getStatus')) {
                     return getProcess.getStatus();
                 }
-                return 'active';
+                //return 'active';
             },
             set: function (value) {
                 if (has(getProcess, 'setStatus')) {
@@ -615,7 +615,7 @@ var devKit = (function () {
                 if (has(getProcessUi, 'getDisplayState')) {
                     return getProcessUi.getDisplayState();
                 }
-                return 'expanded';
+                //return 'expanded';
             },
             set: function (value) {
                 if (has(getProcessUi, 'setDisplayState')) {
@@ -628,7 +628,7 @@ var devKit = (function () {
                 if (has(getProcessUi, 'getVisible')) {
                     return getProcessUi.getVisible();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             },
             set: function (value) {
                 if (has(getProcessUi, 'setVisible')) {
@@ -676,7 +676,7 @@ var devKit = (function () {
             if (has(attribute, 'getOption')) {
                 return attribute.getOption(value);
             }
-            return { text: EMPTY_STRING, value: EMPTY_NUMBER };
+            //return { text: EMPTY_STRING, value: EMPTY_NUMBER };
         };
         field.RemoveOnChange = function (callback) {
             if (has(attribute, 'removeOnChange')) {
@@ -717,7 +717,7 @@ var devKit = (function () {
             if (has(control, 'clearNotification')) {
                 return control.clearNotification(uniqueId);
             }
-            return EMPTY_BOOL;
+            //return EMPTY_BOOL;
         };
         field.ClearOptions = function () {
             if (has(control, 'clearOptions')) {
@@ -738,7 +738,7 @@ var devKit = (function () {
             if (has(control, 'openSearchResult')) {
                 return control.openSearchResult(resultNumber, mode);
             }
-            return EMPTY_BOOL;
+            //return EMPTY_BOOL;
         };
         field.Refresh = function () {
             if (has(control, 'refresh')) {
@@ -779,7 +779,7 @@ var devKit = (function () {
             if (has(control, 'setNotification')) {
                 return control.setNotification(message, uniqueId);
             }
-            return EMPTY_BOOL;
+            //return EMPTY_BOOL;
         };
         field.AddOption = function (text, value, index) {
             if (has(control, 'addOption')) {
@@ -793,7 +793,7 @@ var devKit = (function () {
                 var notification = { messages: [title], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
                 return control.addNotification(notification);
             }
-            return EMPTY_BOOL;
+            //return EMPTY_BOOL;
         };
         field.AddOnLookupTagClick = function (callback) {
             if (has(control, 'addOnLookupTagClick')) {
@@ -815,7 +815,7 @@ var devKit = (function () {
                 if (has(attribute, 'getAttributeType')) {
                     return attribute.getAttributeType();
                 }
-                return 'string';
+                //return 'string';
             }
         });
         Object.defineProperty(field, 'Format', {
@@ -823,7 +823,7 @@ var devKit = (function () {
                 if (has(attribute, 'getFormat')) {
                     return attribute.getFormat();
                 }
-                return NULL;
+                //return NULL;
             }
         });
         Object.defineProperty(field, 'InitialValue', {
@@ -831,7 +831,7 @@ var devKit = (function () {
                 if (has(attribute, 'getInitialValue')) {
                     return attribute.getInitialValue();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             }
         });
         Object.defineProperty(field, 'IsDirty', {
@@ -839,7 +839,7 @@ var devKit = (function () {
                 if (has(attribute, 'getIsDirty')) {
                     return attribute.getIsDirty();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             }
         });
         Object.defineProperty(field, 'IsPartyList', {
@@ -847,7 +847,7 @@ var devKit = (function () {
                 if (has(attribute, 'getIsPartyList')) {
                     return attribute.getIsPartyList();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             }
         });
         Object.defineProperty(field, 'Max', {
@@ -855,7 +855,7 @@ var devKit = (function () {
                 if (has(attribute, 'getMax')) {
                     return attribute.getMax();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             }
         });
         Object.defineProperty(field, 'MaxLength', {
@@ -863,7 +863,7 @@ var devKit = (function () {
                 if (has(attribute, 'getMaxLength')) {
                     return attribute.getMaxLength();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             }
         });
         Object.defineProperty(field, 'Min', {
@@ -871,7 +871,7 @@ var devKit = (function () {
                 if (has(attribute, 'getMin')) {
                     return attribute.getMin();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             }
         });
         Object.defineProperty(field, 'AttributeName', {
@@ -879,7 +879,7 @@ var devKit = (function () {
                 if (has(attribute, 'getName')) {
                     return attribute.getName();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(field, 'Options', {
@@ -887,7 +887,7 @@ var devKit = (function () {
                 if (has(attribute, 'getOptions')) {
                     return attribute.getOptions();
                 }
-                return [];
+                //return [];
             }
         });
         Object.defineProperty(field, 'ControlOptions', {
@@ -895,7 +895,7 @@ var devKit = (function () {
                 if (has(control, 'getOptions')) {
                     return control.getOptions();
                 }
-                return [];
+                //return [];
             }
         });
         Object.defineProperty(field, 'AttributeParent', {
@@ -903,7 +903,7 @@ var devKit = (function () {
                 if (has(attribute, 'getParent')) {
                     return attribute.getParent();
                 }
-                return NULL;
+                //return NULL;
             }
         });
         Object.defineProperty(field, 'SelectedOption', {
@@ -911,7 +911,7 @@ var devKit = (function () {
                 if (has(attribute, 'getSelectedOption')) {
                     return attribute.getSelectedOption();
                 }
-                return { text: EMPTY_STRING, value: EMPTY_NUMBER };
+                //return { text: EMPTY_STRING, value: EMPTY_NUMBER };
             }
         });
         Object.defineProperty(field, 'Text', {
@@ -919,7 +919,7 @@ var devKit = (function () {
                 if (has(attribute, 'getText')) {
                     return attribute.getText();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(field, 'UserPrivilege', {
@@ -927,7 +927,7 @@ var devKit = (function () {
                 if (has(attribute, 'getUserPrivilege')) {
                     return attribute.getUserPrivilege();
                 }
-                return { canRead: EMPTY_BOOL, canUpdate: EMPTY_BOOL, canCreate: EMPTY_BOOL };
+                //return { canRead: EMPTY_BOOL, canUpdate: EMPTY_BOOL, canCreate: EMPTY_BOOL };
             }
         });
         Object.defineProperty(field, 'IsValid', {
@@ -935,7 +935,7 @@ var devKit = (function () {
                 if (has(attribute, 'isValid')) {
                     return attribute.isValid();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             }
         });
         Object.defineProperty(field, 'ControlType', {
@@ -943,7 +943,7 @@ var devKit = (function () {
                 if (has(control, 'getControlType')) {
                     return control.getControlType();
                 }
-                return 'standard';
+                //return 'standard';
             }
         });
         Object.defineProperty(field, 'InitialUrl', {
@@ -951,7 +951,7 @@ var devKit = (function () {
                 if (has(control, 'getInitialUrl')) {
                     return control.getInitialUrl();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(field, 'ControlName', {
@@ -959,7 +959,7 @@ var devKit = (function () {
                 if (has(control, 'getName')) {
                     return control.getName();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(field, 'Object', {
@@ -967,7 +967,7 @@ var devKit = (function () {
                 if (has(control, 'getObject')) {
                     return control.getObject();
                 }
-                return {};
+                //return {};
             }
         });
         Object.defineProperty(field, 'ControlParent', {
@@ -975,7 +975,7 @@ var devKit = (function () {
                 if (has(control, 'getParent')) {
                     return control.getParent();
                 }
-                return NULL;
+                //return NULL;
             }
         });
         Object.defineProperty(field, 'State', {
@@ -983,7 +983,7 @@ var devKit = (function () {
                 if (has(control, 'getState')) {
                     return control.getState();
                 }
-                return 1;
+                //return 1;
             }
         });
         Object.defineProperty(field, 'TotalResultCount', {
@@ -991,7 +991,7 @@ var devKit = (function () {
                 if (has(control, 'getTotalResultCount')) {
                     return control.getTotalResultCount();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             }
         });
         Object.defineProperty(field, 'SelectedResults', {
@@ -999,7 +999,7 @@ var devKit = (function () {
                 if (has(control, 'getSelectedResults')) {
                     return control.getSelectedResults();
                 }
-                return {};
+                //return {};
             }
         });
         Object.defineProperty(field, 'Attribute', {
@@ -1007,7 +1007,7 @@ var devKit = (function () {
                 if (has(control, 'getAttribute')) {
                     return control.getAttribute();
                 }
-                return {};
+                //return {};
             }
         });
         Object.defineProperty(field, 'Precision', {
@@ -1015,7 +1015,7 @@ var devKit = (function () {
                 if (has(attribute, 'getPrecision')) {
                     return attribute.getPrecision();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             },
             set: function (value) {
                 if (has(attribute, 'setPrecision')) {
@@ -1028,7 +1028,7 @@ var devKit = (function () {
                 if (has(attribute, 'getRequiredLevel')) {
                     return attribute.getRequiredLevel();
                 }
-                return 'none';
+                //return 'none';
             },
             set: function (value) {
                 if (has(attribute, 'setRequiredLevel')) {
@@ -1041,7 +1041,7 @@ var devKit = (function () {
                 if (has(attribute, 'getSubmitMode')) {
                     return attribute.getSubmitMode();
                 }
-                return 'always';
+                //return 'always';
             },
             set: function (value) {
                 if (has(attribute, 'setSubmitMode')) {
@@ -1054,7 +1054,7 @@ var devKit = (function () {
                 if (has(attribute, 'getValue')) {
                     return attribute.getValue();
                 }
-                return NULL;
+                //return NULL;
             },
             set: function (value) {
                 if (has(attribute, 'setValue')) {
@@ -1067,7 +1067,7 @@ var devKit = (function () {
                 if (has(control, 'getData')) {
                     return control.getData();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             },
             set: function (value) {
                 if (has(control, 'setData')) {
@@ -1080,7 +1080,7 @@ var devKit = (function () {
                 if (has(control, 'getDefaultView')) {
                     return control.getDefaultView();
                 }
-                return EMPTY_GUID;
+                //return EMPTY_GUID;
             },
             set: function (value) {
                 if (has(control, 'setDefaultView')) {
@@ -1093,7 +1093,7 @@ var devKit = (function () {
                 if (has(control, 'getDisabled')) {
                     return control.getDisabled();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             },
             set: function (value) {
                 if (has(control, 'setDisabled')) {
@@ -1106,7 +1106,7 @@ var devKit = (function () {
                 if (has(control, 'getEntityTypes')) {
                     return control.getEntityTypes();
                 }
-                return [];
+                //return [];
             },
             set: function (value) {
                 if (has(control, 'setEntityTypes')) {
@@ -1119,7 +1119,7 @@ var devKit = (function () {
                 if (has(control, 'getLabel')) {
                     return control.getLabel();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             },
             set: function (value) {
                 if (has(control, 'setLabel')) {
@@ -1132,7 +1132,7 @@ var devKit = (function () {
                 if (has(control, 'getSearchQuery')) {
                     return control.getSearchQuery();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             },
             set: function (value) {
                 if (has(control, 'setSearchQuery')) {
@@ -1145,7 +1145,7 @@ var devKit = (function () {
                 if (has(control, 'getShowTime')) {
                     return control.getShowTime();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             },
             set: function (value) {
                 if (has(control, 'setShowTime')) {
@@ -1158,7 +1158,7 @@ var devKit = (function () {
                 if (has(control, 'getSrc')) {
                     return control.getSrc();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             },
             set: function (value) {
                 if (has(control, 'setSrc')) {
@@ -1171,7 +1171,7 @@ var devKit = (function () {
                 if (has(control, 'getVisible')) {
                     return control.getVisible();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             },
             set: function (value) {
                 if (has(control, 'setVisible')) {
@@ -1285,7 +1285,7 @@ var devKit = (function () {
                     if (has(sectionObject, 'getName')) {
                         return sectionObject.getName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(sections[section], 'Parent', {
@@ -1293,7 +1293,7 @@ var devKit = (function () {
                     if (has(sectionObject, 'getParent')) {
                         return sectionObject.getParent();
                     }
-                    return NULL;
+                    //return NULL;
                 }
             });
             Object.defineProperty(sections[section], 'Label', {
@@ -1301,7 +1301,7 @@ var devKit = (function () {
                     if (has(sectionObject, 'getLabel')) {
                         return sectionObject.getLabel();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 },
                 set: function (value) {
                     if (has(sectionObject, 'setLabel')) {
@@ -1314,7 +1314,7 @@ var devKit = (function () {
                     if (has(sectionObject, 'getVisible')) {
                         return sectionObject.getVisible();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(sectionObject, 'setVisible')) {
@@ -1348,7 +1348,7 @@ var devKit = (function () {
                     if (has(tabObject, 'getName')) {
                         return tabObject.getName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(tabs[tab], 'Parent', {
@@ -1356,7 +1356,7 @@ var devKit = (function () {
                     if (has(tabObject, 'getParent')) {
                         return tabObject.getParent();
                     }
-                    return NULL;
+                    //return NULL;
                 }
             });
             Object.defineProperty(tabs[tab], 'DisplayState', {
@@ -1377,7 +1377,7 @@ var devKit = (function () {
                     if (has(tabObject, 'getLabel')) {
                         return tabObject.getLabel();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 },
                 set: function (value) {
                     if (has(tabObject, 'setLabel')) {
@@ -1390,7 +1390,7 @@ var devKit = (function () {
                     if (has(tabObject, 'getVisible')) {
                         return tabObject.getVisible();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(tabObject, 'setVisible')) {
@@ -1426,7 +1426,7 @@ var devKit = (function () {
                     if (has(navigationItem, 'getId')) {
                         return navigationItem.getId();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(navigations[navigation], 'Label', {
@@ -1434,7 +1434,7 @@ var devKit = (function () {
                     if (has(navigationItem, 'getLabel')) {
                         return navigationItem.getLabel();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 },
                 set: function (value) {
                     if (has(navigationItem, 'setLabel')) {
@@ -1447,7 +1447,7 @@ var devKit = (function () {
                     if (has(navigationItem, 'getVisible')) {
                         return navigationItem.getVisible();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(navigationItem, 'setVisible')) {
@@ -1495,13 +1495,13 @@ var devKit = (function () {
                         return quickViewControl.getControl(arg);
                     }
                 }
-                return [];
+                //return [];
             };
             quickForms[quickForm].IsLoaded = function () {
                 if (has(quickViewControl, 'isLoaded')) {
                     return quickViewControl.isLoaded();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             };
             quickForms[quickForm].Refresh = function () {
                 if (has(quickViewControl, 'refresh')) {
@@ -1518,7 +1518,7 @@ var devKit = (function () {
                     if (has(quickViewControl, 'getControlType')) {
                         return quickViewControl.getControlType();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'Disabled', {
@@ -1526,7 +1526,7 @@ var devKit = (function () {
                     if (has(quickViewControl, 'getDisabled')) {
                         return quickViewControl.getDisabled();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(quickViewControl, 'setDisabled')) {
@@ -1539,7 +1539,7 @@ var devKit = (function () {
                     if (has(quickViewControl, 'getLabel')) {
                         return quickViewControl.getLabel();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 },
                 set: function (value) {
                     if (has(quickViewControl, 'setLabel')) {
@@ -1552,7 +1552,7 @@ var devKit = (function () {
                     if (has(quickViewControl, 'getName')) {
                         return quickViewControl.getName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'ControlParent', {
@@ -1560,7 +1560,7 @@ var devKit = (function () {
                     if (has(quickViewControl, 'getParent')) {
                         return quickViewControl.getParent();
                     }
-                    return NULL;
+                    //return NULL;
                 }
             });
             Object.defineProperty(quickForms[quickForm], 'Visible', {
@@ -1568,7 +1568,7 @@ var devKit = (function () {
                     if (has(quickViewControl, 'getVisible')) {
                         return quickViewControl.getVisible();
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(quickViewControl, 'setVisible')) {
@@ -1589,7 +1589,7 @@ var devKit = (function () {
                     if (has(row, 'data.entity.getEntityName')) {
                         return row.data.entity.getEntityName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(obj, 'EntityReference', {
@@ -1597,7 +1597,7 @@ var devKit = (function () {
                     if (has(row, 'data.entity.getEntityReference')) {
                         return row.data.entity.getEntityReference();
                     }
-                    return EMPTY_REFERENCE;
+                    //return EMPTY_REFERENCE;
                 }
             });
             Object.defineProperty(obj, 'EntityId', {
@@ -1605,7 +1605,7 @@ var devKit = (function () {
                     if (has(row, 'data.entity.getId')) {
                         return row.data.entity.getId();
                     }
-                    return EMPTY_GUID;
+                    //return EMPTY_GUID;
                 }
             });
             Object.defineProperty(obj, 'PrimaryAttributeValue', {
@@ -1613,7 +1613,7 @@ var devKit = (function () {
                     if (has(row, 'data.entity.getPrimaryAttributeValue')) {
                         return row.data.entity.getPrimaryAttributeValue();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(obj, 'Columns', {
@@ -1655,7 +1655,7 @@ var devKit = (function () {
                         return control.setNotification(message, uniqueId);
                     }
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             };
             obj.ClearNotification = function (uniqueId) {
                 if (has(col, 'controls.get')) {
@@ -1664,14 +1664,14 @@ var devKit = (function () {
                         return control.clearNotification(uniqueId);
                     }
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             };
             Object.defineProperty(obj, 'Name', {
                 get: function () {
                     if (has(col, 'getName')) {
                         return col.getName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(obj, 'RequiredLevel', {
@@ -1679,7 +1679,7 @@ var devKit = (function () {
                     if (has(col, 'getRequiredLevel')) {
                         return col.getRequiredLevel();
                     }
-                    return 'none';
+                    //return 'none';
                 },
                 set: function (value) {
                     if (has(col, 'setRequiredLevel')) {
@@ -1692,7 +1692,7 @@ var devKit = (function () {
                     if (has(col, 'getValue')) {
                         return col.getValue();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 },
                 set: function (value) {
                     if (has(col, 'setValue')) {
@@ -1708,7 +1708,7 @@ var devKit = (function () {
                             return control.getDisabled();
                         }
                     }
-                    return EMPTY_BOOL;
+                    //return EMPTY_BOOL;
                 },
                 set: function (value) {
                     if (has(col, 'controls.get')) {
@@ -1727,7 +1727,7 @@ var devKit = (function () {
                             return control.getLabel();
                         }
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             return obj;
@@ -1751,7 +1751,7 @@ var devKit = (function () {
                 if (has(gridControl, 'getUrl')) {
                     return gridControl.getUrl(client);
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             };
             grids[grid].Refresh = function () {
                 if (has(gridControl, 'refresh')) {
@@ -1773,7 +1773,7 @@ var devKit = (function () {
                     if (has(gridControl, 'getEntityName')) {
                         return gridControl.getEntityName();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(grids[grid], 'FetchXml', {
@@ -1781,7 +1781,7 @@ var devKit = (function () {
                     if (has(gridControl, 'getFetchXml')) {
                         return gridControl.getFetchXml();
                     }
-                    return EMPTY_STRING;
+                    //return EMPTY_STRING;
                 }
             });
             Object.defineProperty(grids[grid], 'GridType', {
@@ -1789,7 +1789,7 @@ var devKit = (function () {
                     if (has(gridControl, 'getGridType')) {
                         return gridControl.getGridType();
                     }
-                    return 2;
+                    //return 2;
                 }
             });
             Object.defineProperty(grids[grid], 'Relationship', {
@@ -1797,7 +1797,7 @@ var devKit = (function () {
                     if (has(gridControl, 'getRelationship')) {
                         return gridControl.getRelationship();
                     }
-                    return {};
+                    //return {};
                 }
             });
             Object.defineProperty(grids[grid], 'ViewSelector', {
@@ -1812,7 +1812,7 @@ var devKit = (function () {
                             if (has(viewSelector, 'getCurrentView')) {
                                 return viewSelector.getCurrentView();
                             }
-                            return EMPTY_REFERENCE;
+                            //return EMPTY_REFERENCE;
                         },
                         set: function (value) {
                             if (has(viewSelector, 'getCurrentView')) {
@@ -1825,7 +1825,7 @@ var devKit = (function () {
                             if (has(viewSelector, 'isVisible')) {
                                 return viewSelector.isVisible();
                             }
-                            return EMPTY_BOOL;
+                            //return EMPTY_BOOL;
                         },
                     });
                     return obj;
@@ -1842,13 +1842,13 @@ var devKit = (function () {
                         if (has(getGrid, 'getRows')) {
                             return getGrid.getRows().getLength();
                         }
-                        return EMPTY_NUMBER;
+                        //return EMPTY_NUMBER;
                     }
                     obj.get = function (index) {
                         if (has(getGrid, 'getRows')) {
                             return loadGridRow(getGrid.getRows().get(index));
                         }
-                        return loadGridRow({});
+                        //return loadGridRow({});
                     }
                     obj.forEach = function (callback) {
                         if (has(getGrid, 'getRows')) {
@@ -1873,13 +1873,13 @@ var devKit = (function () {
                         if (has(getGrid, 'getSelectedRows')) {
                             return getGrid.getSelectedRows().getLength();
                         }
-                        return EMPTY_NUMBER;
+                        //return EMPTY_NUMBER;
                     }
                     obj.get = function (index) {
                         if (has(getGrid, 'getSelectedRows')) {
                             return loadGridRow(getGrid.getSelectedRows().get(index));
                         }
-                        return loadGridRow({});
+                        //return loadGridRow({});
                     }
                     obj.forEach = function (callback) {
                         if (has(getGrid, 'getSelectedRows')) {
@@ -1907,7 +1907,7 @@ var devKit = (function () {
                     if (has(getGrid, 'getTotalRecordCount')) {
                         return getGrid.getTotalRecordCount();
                     }
-                    return EMPTY_NUMBER;
+                    //return EMPTY_NUMBER;
                 }
             });
         }
@@ -1947,7 +1947,7 @@ var devKit = (function () {
                     return getUtility.getResourceString(defaultWebResourceName, key);
                 }
             }
-            return EMPTY_STRING;
+            //return EMPTY_STRING;
         };
         utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) {
             if (has(getUtility, 'invokeProcessAction')) {
@@ -1974,7 +1974,7 @@ var devKit = (function () {
                 if (has(getUtility, 'getLearningPathAttributeName')) {
                     return getUtility.getLearningPathAttributeName();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(utility, 'PageContext', {
@@ -1982,7 +1982,7 @@ var devKit = (function () {
                 if (has(getUtility, 'getPageContext')) {
                     return getUtility.getPageContext();
                 }
-                return NULL;
+                //return NULL;
             }
         });
         var getGlobalContext = NULL;
@@ -1993,7 +1993,7 @@ var devKit = (function () {
             if (has(getGlobalContext, 'getAdvancedConfigSetting')) {
                 return getGlobalContext.getAdvancedConfigSetting(setting);
             }
-            return EMPTY_NUMBER;
+            //return EMPTY_NUMBER;
         };
         utility.CurrentAppName = function (successCallback, errorCallback) {
             if (has(getGlobalContext, 'getCurrentAppName')) {
@@ -2009,13 +2009,13 @@ var devKit = (function () {
             if (has(getGlobalContext, 'getWebResourceUrl')) {
                 return getGlobalContext.getWebResourceUrl(webResourceName);
             }
-            return EMPTY_STRING;
+            //return EMPTY_STRING;
         };
         utility.PrependOrgName = function (sPath) {
             if (has(getGlobalContext, 'prependOrgName')) {
                 return getGlobalContext.prependOrgName(sPath);
             }
-            return EMPTY_STRING;
+            //return EMPTY_STRING;
         };
         Object.defineProperty(utility, 'Client', {
             get: function () {
@@ -2029,7 +2029,7 @@ var devKit = (function () {
                         if (has(client, 'getClient')) {
                             return client.getClient();
                         }
-                        return 'Web';
+                        //return 'Web';
                     }
                 });
                 Object.defineProperty(obj, 'ClientState', {
@@ -2037,7 +2037,7 @@ var devKit = (function () {
                         if (has(client, 'getClientState')) {
                             return client.getClientState();
                         }
-                        return 'Online';
+                        //return 'Online';
                     }
                 });
                 Object.defineProperty(obj, 'FormFactor', {
@@ -2045,7 +2045,7 @@ var devKit = (function () {
                         if (has(client, 'getFormFactor')) {
                             return client.getFormFactor();
                         }
-                        return EMPTY_NUMBER;
+                        //return EMPTY_NUMBER;
                     }
                 });
                 Object.defineProperty(obj, 'IsOffline', {
@@ -2053,7 +2053,7 @@ var devKit = (function () {
                         if (has(client, 'isOffline')) {
                             return client.isOffline();
                         }
-                        return EMPTY_BOOL;
+                        //return EMPTY_BOOL;
                     }
                 });
                 return obj;
@@ -2071,7 +2071,7 @@ var devKit = (function () {
                         if (has(organizationSettings, 'attributes')) {
                             return organizationSettings.attributes;
                         }
-                        return {};
+                        //return {};
                     }
                 });
                 Object.defineProperty(obj, 'BaseCurrencyId', {
@@ -2079,7 +2079,7 @@ var devKit = (function () {
                         if (has(organizationSettings, 'baseCurrencyId')) {
                             return organizationSettings.baseCurrencyId;
                         }
-                        return EMPTY_GUID;
+                        //return EMPTY_GUID;
                     }
                 });
                 Object.defineProperty(obj, 'BaseCurrency', {
@@ -2087,7 +2087,7 @@ var devKit = (function () {
                         if (has(organizationSettings, 'baseCurrency')) {
                             return organizationSettings.baseCurrency;
                         }
-                        return EMPTY_REFERENCE;
+                        //return EMPTY_REFERENCE;
                     }
                 });
 
@@ -2096,7 +2096,7 @@ var devKit = (function () {
                         if (has(organizationSettings, 'defaultCountryCode')) {
                             return organizationSettings.defaultCountryCode;
                         }
-                        return NULL;
+                        //return NULL;
                     }
                 });
                 Object.defineProperty(obj, 'IsAutoSaveEnabled', {
@@ -2104,7 +2104,7 @@ var devKit = (function () {
                         if (has(organizationSettings, 'isAutoSaveEnabled')) {
                             return organizationSettings.isAutoSaveEnabled;
                         }
-                        return EMPTY_BOOL;
+                        //return EMPTY_BOOL;
                     }
                 });
                 Object.defineProperty(obj, 'LanguageId', {
@@ -2112,7 +2112,7 @@ var devKit = (function () {
                         if (has(organizationSettings, 'languageId')) {
                             return organizationSettings.languageId;
                         }
-                        return 1033;
+                        //return 1033;
                     }
                 });
                 Object.defineProperty(obj, 'OrganizationId', {
@@ -2120,7 +2120,7 @@ var devKit = (function () {
                         if (has(organizationSettings, 'organizationId')) {
                             return organizationSettings.organizationId;
                         }
-                        return EMPTY_STRING;
+                        //return EMPTY_STRING;
                     }
                 });
                 Object.defineProperty(obj, 'UniqueName', {
@@ -2128,7 +2128,7 @@ var devKit = (function () {
                         if (has(organizationSettings, 'uniqueName')) {
                             return organizationSettings.uniqueName;
                         }
-                        return EMPTY_STRING;
+                        //return EMPTY_STRING;
                     }
                 });
                 Object.defineProperty(obj, 'UseSkypeProtocol', {
@@ -2136,7 +2136,7 @@ var devKit = (function () {
                         if (has(organizationSettings, 'useSkypeProtocol')) {
                             return organizationSettings.useSkypeProtocol;
                         }
-                        return EMPTY_BOOL;
+                        //return EMPTY_BOOL;
                     }
                 });
                 return obj;
@@ -2154,7 +2154,7 @@ var devKit = (function () {
                         if (has(userSettings, 'dateFormattingInfo')) {
                             return userSettings.dateFormattingInfo;
                         }
-                        return {};
+                        //return {};
                     }
                 });
                 Object.defineProperty(obj, 'DefaultDashboardId', {
@@ -2162,7 +2162,7 @@ var devKit = (function () {
                         if (has(userSettings, 'defaultDashboardId')) {
                             return userSettings.defaultDashboardId;
                         }
-                        return EMPTY_GUID;
+                        //return EMPTY_GUID;
                     }
                 });
                 Object.defineProperty(obj, 'IsGuidedHelpEnabled', {
@@ -2170,7 +2170,7 @@ var devKit = (function () {
                         if (has(userSettings, 'isGuidedHelpEnabled')) {
                             return userSettings.isGuidedHelpEnabled;
                         }
-                        return EMPTY_BOOL;
+                        //return EMPTY_BOOL;
                     }
                 });
                 Object.defineProperty(obj, 'IsHighContrastEnabled', {
@@ -2178,7 +2178,7 @@ var devKit = (function () {
                         if (has(userSettings, 'isHighContrastEnabled')) {
                             return userSettings.isHighContrastEnabled;
                         }
-                        return EMPTY_BOOL;
+                        //return EMPTY_BOOL;
                     }
                 });
                 Object.defineProperty(obj, 'IsRTL', {
@@ -2186,7 +2186,7 @@ var devKit = (function () {
                         if (has(userSettings, 'isRTL')) {
                             return userSettings.isRTL;
                         }
-                        return EMPTY_BOOL;
+                        //return EMPTY_BOOL;
                     }
                 });
                 Object.defineProperty(obj, 'LanguageId', {
@@ -2194,7 +2194,7 @@ var devKit = (function () {
                         if (has(userSettings, 'languageId')) {
                             return userSettings.languageId;
                         }
-                        return 1033;
+                        //return 1033;
                     }
                 });
                 Object.defineProperty(obj, 'Roles', {
@@ -2202,7 +2202,7 @@ var devKit = (function () {
                         if (has(userSettings, 'roles')) {
                             return userSettings.roles;
                         }
-                        return [];
+                        //return [];
                     }
                 });
                 Object.defineProperty(obj, 'SecurityRolePrivileges', {
@@ -2210,7 +2210,7 @@ var devKit = (function () {
                         if (has(userSettings, 'securityRolePrivileges')) {
                             return userSettings.securityRolePrivileges;
                         }
-                        return [];
+                        //return [];
                     }
                 });
                 Object.defineProperty(obj, 'SecurityRoles', {
@@ -2218,7 +2218,7 @@ var devKit = (function () {
                         if (has(userSettings, 'securityRoles')) {
                             return userSettings.securityRoles;
                         }
-                        return [];
+                        //return [];
                     }
                 });
                 Object.defineProperty(obj, 'TransactionCurrency', {
@@ -2226,7 +2226,7 @@ var devKit = (function () {
                         if (has(userSettings, 'transactionCurrency')) {
                             return userSettings.transactionCurrency;
                         }
-                        return EMPTY_REFERENCE;
+                        //return EMPTY_REFERENCE;
                     }
                 });
                 Object.defineProperty(obj, 'TransactionCurrencyId', {
@@ -2234,7 +2234,7 @@ var devKit = (function () {
                         if (has(userSettings, 'transactionCurrencyId')) {
                             return userSettings.transactionCurrencyId;
                         }
-                        return EMPTY_STRING;
+                        //return EMPTY_STRING;
                     }
                 });
                 Object.defineProperty(obj, 'UserId', {
@@ -2242,7 +2242,7 @@ var devKit = (function () {
                         if (has(userSettings, 'userId')) {
                             return userSettings.userId;
                         }
-                        return EMPTY_STRING;
+                        //return EMPTY_STRING;
                     }
                 });
                 Object.defineProperty(obj, 'UserName', {
@@ -2250,7 +2250,7 @@ var devKit = (function () {
                         if (has(userSettings, 'userName')) {
                             return userSettings.userName;
                         }
-                        return EMPTY_STRING;
+                        //return EMPTY_STRING;
                     }
                 });
                 Object.defineProperty(obj, 'TimeZoneOffsetMinutes', {
@@ -2258,7 +2258,7 @@ var devKit = (function () {
                         if (has(userSettings, 'getTimeZoneOffsetMinutes')) {
                             return userSettings.getTimeZoneOffsetMinutes();
                         }
-                        return EMPTY_NUMBER;
+                        //return EMPTY_NUMBER;
                     }
                 });
                 return obj;
@@ -2269,7 +2269,7 @@ var devKit = (function () {
                 if (has(getGlobalContext, 'getClientUrl')) {
                     return getGlobalContext.getClientUrl();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(utility, 'CurrentAppUrl', {
@@ -2285,7 +2285,7 @@ var devKit = (function () {
                 if (has(getGlobalContext, 'getVersion')) {
                     return getGlobalContext.getVersion();
                 }
-                return EMPTY_STRING;
+                //return EMPTY_STRING;
             }
         });
         Object.defineProperty(utility, 'IsOnPremises', {
@@ -2293,7 +2293,7 @@ var devKit = (function () {
                 if (has(getGlobalContext, 'isOnPremises')) {
                     return getGlobalContext.isOnPremises();
                 }
-                return EMPTY_BOOL;
+                //return EMPTY_BOOL;
             }
         });
         var getNavigation = NULL;
@@ -2357,31 +2357,31 @@ var devKit = (function () {
             if (has(getEncoding, 'xmlAttributeEncode')) {
                 return getEncoding.xmlAttributeEncode(arg);
             }
-            return arg;
+            //return arg;
         };
         utility.XmlEncode = function (arg) {
             if (has(getEncoding, 'xmlEncode')) {
                 return getEncoding.xmlEncode(arg);
             }
-            return arg;
+            //return arg;
         };
         utility.HtmlAttributeEncode = function (arg) {
             if (has(getEncoding, 'htmlAttributeEncode')) {
                 return getEncoding.htmlAttributeEncode(arg);
             }
-            return arg;
+            //return arg;
         };
         utility.HtmlDecode = function (arg) {
             if (has(getEncoding, 'htmlDecode')) {
                 return getEncoding.htmlDecode(arg);
             }
-            return arg;
+            //return arg;
         };
         utility.HtmlEncode = function (arg) {
             if (has(getEncoding, 'htmlEncode')) {
                 return getEncoding.htmlEncode(arg);
             }
-            return arg;
+            //return arg;
         };
         var getDevice = NULL;
         if (has(Xrm, 'Device')) {
@@ -2439,19 +2439,19 @@ var devKit = (function () {
             if (has(executionContext, 'getSharedVariable')) {
                 return executionContext.getSharedVariable(key);
             }
-            return NULL;
+            //return NULL;
         }
         obj.SetSharedVariable = function (key, value) {
             if (has(executionContext, 'setSharedVariable')) {
                 return executionContext.setSharedVariable(key, value);
             }
-            return NULL;
+            //return NULL;
         }
         obj.IsDefaultPrevented = function () {
             if (has(executionContext, 'getEventArgs')) {
                 return executionContext.getEventArgs().isDefaultPrevented();
             }
-            return EMPTY_BOOL;
+            //return EMPTY_BOOL;
         }
         obj.SetPreventDefault = function () {
             if (has(executionContext, 'getEventArgs')) {
@@ -2463,7 +2463,7 @@ var devKit = (function () {
                 if (has(executionContext, 'getDepth')) {
                     return executionContext.getDepth();
                 }
-                return EMPTY_NUMBER;
+                //return EMPTY_NUMBER;
             }
         });
         Object.defineProperty(obj, 'EventArgs', {
@@ -2471,7 +2471,7 @@ var devKit = (function () {
                 if (has(executionContext, 'getEventArgs')) {
                     return executionContext.getEventArgs();
                 }
-                return {};
+                //return {};
             }
         });
         Object.defineProperty(obj, 'EventSource', {
@@ -2479,7 +2479,7 @@ var devKit = (function () {
                 if (has(executionContext, 'getEventSource')) {
                     return executionContext.getEventSource();
                 }
-                return {};
+                //return {};
             }
         });
         Object.defineProperty(obj, 'FormContext', {
@@ -2487,7 +2487,7 @@ var devKit = (function () {
                 if (has(executionContext, 'getFormContext')) {
                     return executionContext.getFormContext();
                 }
-                return {};
+                //return {};
             }
         });
         Object.defineProperty(obj, 'SaveMode', {
@@ -2495,7 +2495,7 @@ var devKit = (function () {
                 if (has(executionContext, 'getEventArgs')) {
                     return executionContext.getEventArgs().getSaveMode();
                 }
-                return 1;
+                //return 1;
             }
         });
         Object.defineProperty(obj, 'EntityReference', {
@@ -2503,7 +2503,7 @@ var devKit = (function () {
                 if (has(executionContext, 'getEntityReference')) {
                     return executionContext.getEventArgs().getEntityReference();
                 }
-                return {};
+                //return {};
             }
         });
         Object.defineProperty(obj, 'IsSaveSuccess', {
@@ -2511,7 +2511,7 @@ var devKit = (function () {
                 if (has(executionContext, 'getIsSaveSuccess')) {
                     return executionContext.getEventArgs().getIsSaveSuccess();
                 }
-                return false;
+                //return false;
             }
         });
         Object.defineProperty(obj, 'SaveErrorInfo', {
@@ -2519,7 +2519,7 @@ var devKit = (function () {
                 if (has(executionContext, 'getSaveErrorInfo')) {
                     return executionContext.getEventArgs().getSaveErrorInfo();
                 }
-                return {};
+                //return {};
             }
         });
         return obj;
