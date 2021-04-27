@@ -1205,37 +1205,6 @@ define(['xrm-mock', 'sinon'], () => {
             XrmMockGenerator.App = new xrmMock.AppMock();
         });
         it('Header', () => {
-
-            //xrmMock.XrmMockGenerator.Attribute.createString({
-            //    attributeType: "string",
-            //    format: "text",
-            //    isDirty: true,
-            //    name: "abc_all",
-            //    requiredLevel: "required",
-            //    value: "ABC ALL VALUE",
-            //    maxLength: 100,
-            //    submitMode: "always"
-            //},
-            //    [{
-            //        controlType: "standard",
-            //        disabled: true,
-            //        label: "ABC ALL LABEL",
-            //        name: "abc_all",
-            //        visible: true
-            //    }, {
-            //        label: "HEADER ABC ALL LABEL",
-            //        name: "header_abc_all",
-            //    }]
-            //);
-
-
-            //var frame = new xrmMock.IframeControlMock({
-            //    name: "abc_iframed",
-            //    controlType: "iframe",
-            //    label: "IFRAME LABEL",
-            //    visible: true
-            //});
-
             var stringControl = new xrmMock.StringControlMock({
                 attribute: new xrmMock.StringAttributeMock({
                     name: "abc_all",
@@ -1988,6 +1957,32 @@ define(['xrm-mock', 'sinon'], () => {
             expect(res.entities.length).toEqual(1);
             expect(res["@odata.nextLink"]).toBeUndefined();
 
+        });
+    });
+    describe('WebApi Insert', () => {
+        beforeEach(function () {
+            xrmMock.XrmMockGenerator.initialise();
+        });
+        it("Insert devkit_WebApiApi", async () => {
+            /** @type {any} */
+            var obj =
+            {
+                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f",
+                entityType: "devkit_webapi"
+            };
+            sinon.stub(Xrm.WebApi, 'createRecord')
+                .withArgs("devkit_webapi")
+                .returns(obj);
+            var webapi = new MySon.devkit_WebApiApi();
+            webapi.devkit_Name.Value = "OPTIONSET - INSERT";
+            webapi.devkit_SingleOptionSetCode.Value = OptionSet.devkit_WebApi.devkit_SingleOptionSetCode.Dynamics_365;
+            webapi.devkit_MultiOptionSetCode.Value = [OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2015, OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2016];
+            webapi.devkit_CustomerId_account.Value = "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f";
+            webapi.devkit_YesAndNo.Value = false;
+
+            var res = await Xrm.WebApi.createRecord(webapi.EntityName, webapi.Entity);
+            expect(res.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
+            expect(res.entityType).toBe("devkit_webapi");
         });
     });
     describe("WebApi Delete", () => {
