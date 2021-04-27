@@ -77,7 +77,6 @@
     <Content Include="entities\devkit.d.ts" />
     <Content Include="lib\devkit.js" />
     <Content Include="test\abc_Test.test.js" />
-    <Content Include="test\abc_Test.webapi.test.js" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
   </ItemGroup>
