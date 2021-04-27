@@ -57,13 +57,6 @@
       <DependentUpon>abc_Test.js</DependentUpon>
     </Content>
     <Content Include="entities\abc_Test.js" />
-    <Content Include="entities\Account.form.js">
-      <DependentUpon>Account.js</DependentUpon>
-    </Content>
-    <Content Include="entities\Account.js" />
-    <Content Include="entities\Account.webapi.js">
-      <DependentUpon>Account.js</DependentUpon>
-    </Content>
     <Content Include="entities\generator.form.bat" />
     <Content Include="entities\generator.webapi.bat" />
     <None Include="packages.config" />
@@ -72,6 +65,7 @@
     <Content Include="entities\devkit.d.ts" />
     <Content Include="lib\devkit.js" />
     <Content Include="test\abc_Test.test.js" />
+    <Content Include="test\abc_Test.webapi.test.js" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
   </ItemGroup>
@@ -90,9 +84,6 @@
   <ItemGroup>
     <TypeScriptCompile Include="entities\abc_Test.d.ts">
       <DependentUpon>abc_Test.js</DependentUpon>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="entities\Account.d.ts">
-      <DependentUpon>Account.js</DependentUpon>
     </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
