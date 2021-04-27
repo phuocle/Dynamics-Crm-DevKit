@@ -950,7 +950,14 @@ define(['xrm-mock'], () => {
             expect(form.Process.DisplayState).toBe(OptionSet.ProcessDisplayState.Collapsed);
             expect(form.Process.Visible).toBeTruthy();
             expect(() => { form.Process.Visible = false; }).toThrow(new Error("Method not implemented."));
+            expect(form.Process.ActivePath).toBeDefined();
+            expect(() => { form.Process.ActivePath.getLength() }).toThrow(new Error("get active path not implemented"));
             expect(() => { form.Process.ActivePath.get(0) }).toThrow(new Error("get active path not implemented"));
+            expect(() => {
+                form.Process.ActivePath.forEach(function (stage, index) {
+
+                });
+            }).toThrow(new Error("get active path not implemented"));
         });
     });
     describe('Utility', () => {
