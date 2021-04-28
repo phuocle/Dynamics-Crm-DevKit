@@ -1395,6 +1395,8 @@ define(['xrm-mock', 'sinon'], () => {
             //others
             expect(webapi["@odata.etag"]).toBe("W/\"588561\"");
             expect(webapi.Entity).toBeDefined();
+            expect(webapi.CreatedBy.Value).toBeNull();
+            expect(webapi.CreatedBy.FormattedValue).toBe("");
         });
         it('WebApi Retreive OPTIONSET', async () => {
             var entities = [
@@ -1502,6 +1504,9 @@ define(['xrm-mock', 'sinon'], () => {
             expect(webapi.devkit_YesAndNoCalculated.Value).toBeTruthy();
             expect(webapi.devkit_YesAndNoCalculated.FormattedValue).toEqual("Yes");
             expect(webapi.getAliasedValue("a.devkit_singleoptionsetcode")).toEqual(OptionSet.devkit_WebApi.devkit_SingleOptionSetCode.Crm_4);
+            expect(webapi.getAliasedValue("a.notfound")).toBeNull();
+            expect(webapi.getAliasedFormattedValue("a.devkit_singleoptionsetcode", false)).toEqual("Crm 4");
+            expect(webapi.getAliasedFormattedValue("a.notfound", true)).toBe("");
             var multi = webapi.getAliasedValue("a.devkit_multioptionsetcode", true);
             expect(multi.length).toEqual(3);
             expect(multi[0]).toEqual(OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_4);
@@ -1964,6 +1969,7 @@ define(['xrm-mock', 'sinon'], () => {
             xrmMock.XrmMockGenerator.initialise();
         });
         it("Insert devkit_WebApiApi", async () => {
+            //setup
             /** @type {any} */
             var obj =
             {
@@ -1973,13 +1979,42 @@ define(['xrm-mock', 'sinon'], () => {
             sinon.stub(Xrm.WebApi, 'createRecord')
                 .withArgs("devkit_webapi")
                 .returns(obj);
+            //run
             var webapi = new MySon.devkit_WebApiApi();
             webapi.devkit_Name.Value = "OPTIONSET - INSERT";
             webapi.devkit_SingleOptionSetCode.Value = OptionSet.devkit_WebApi.devkit_SingleOptionSetCode.Dynamics_365;
             webapi.devkit_MultiOptionSetCode.Value = [OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2015, OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2016];
             webapi.devkit_CustomerId_account.Value = "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f";
             webapi.devkit_YesAndNo.Value = false;
-
+            //result
+            var res = await Xrm.WebApi.createRecord(webapi.EntityName, webapi.Entity);
+            expect(res.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
+            expect(res.entityType).toBe("devkit_webapi");
+        });
+    });
+    describe('WebApi Update', () => {
+        beforeEach(function () {
+            xrmMock.XrmMockGenerator.initialise();
+        });
+        it("Insert devkit_WebApiApi", async () => {
+            //setup
+            /** @type {any} */
+            var obj =
+            {
+                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f",
+                entityType: "devkit_webapi"
+            };
+            sinon.stub(Xrm.WebApi, 'createRecord')
+                .withArgs("devkit_webapi")
+                .returns(obj);
+            //run
+            var webapi = new MySon.devkit_WebApiApi();
+            webapi.devkit_Name.Value = "OPTIONSET - INSERT";
+            webapi.devkit_SingleOptionSetCode.Value = OptionSet.devkit_WebApi.devkit_SingleOptionSetCode.Dynamics_365;
+            webapi.devkit_MultiOptionSetCode.Value = [OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2015, OptionSet.devkit_WebApi.devkit_MultiOptionSetCode.Crm_2016];
+            webapi.devkit_CustomerId_account.Value = "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f";
+            webapi.devkit_YesAndNo.Value = false;
+            //result
             var res = await Xrm.WebApi.createRecord(webapi.EntityName, webapi.Entity);
             expect(res.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
             expect(res.entityType).toBe("devkit_webapi");
