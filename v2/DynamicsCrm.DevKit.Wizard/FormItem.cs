@@ -123,7 +123,8 @@ namespace DynamicsCrm.DevKit.Wizard
                     comboBoxEntity.DropDownStyle = ComboBoxStyle.DropDownList;
                     var currentProjectName = Utility.GetCurrentProjectName(DTE);
                     if (currentProjectName.Contains(ProjectType.Plugin.ToString()) ||
-                        currentProjectName.Contains(ProjectType.CustomAction.ToString()))
+                        currentProjectName.Contains(ProjectType.CustomAction.ToString()) ||
+                        currentProjectName.Contains(ProjectType.CustomApi.ToString()))
                     {
                         var list = Utility.GetAllTestProjectItems(DTE)
                             .Where(x => x.Name.EndsWith(".cs"))

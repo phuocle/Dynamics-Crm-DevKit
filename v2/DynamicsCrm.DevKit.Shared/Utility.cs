@@ -288,6 +288,8 @@ namespace DynamicsCrm.DevKit.Shared
                     project.Name.EndsWith($".{ProjectType.Workflow.ToString()}") ||
                     project.Name.Contains($".{ProjectType.CustomAction.ToString()}.") ||
                     project.Name.EndsWith($".{ProjectType.CustomAction.ToString()}") ||
+                    project.Name.Contains($".{ProjectType.CustomApi.ToString()}.") ||
+                    project.Name.EndsWith($".{ProjectType.CustomApi.ToString()}") ||
                     project.Name.Contains($".{ProjectType.DataProvider.ToString()}.") ||
                     project.Name.EndsWith($".{ProjectType.DataProvider.ToString()}"))
                 {

@@ -13,7 +13,8 @@
     DataProvider,
     SolutionPackager,
     Portal,
-    Default
+    Default,
+    CustomApi
 }
 
 public enum ItemType

@@ -137,9 +137,10 @@
             this.labelDynamicsCrm.Location = new System.Drawing.Point(6, 65);
             this.labelDynamicsCrm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelDynamicsCrm.Name = "labelDynamicsCrm";
-            this.labelDynamicsCrm.Size = new System.Drawing.Size(35, 16);
+            this.labelDynamicsCrm.Size = new System.Drawing.Size(28, 13);
             this.labelDynamicsCrm.TabIndex = 3;
             this.labelDynamicsCrm.Text = "Crm:";
+            this.labelDynamicsCrm.Visible = false;
             // 
             // labelProjectName
             // 
@@ -156,7 +157,7 @@
             this.textProjectName.Location = new System.Drawing.Point(100, 12);
             this.textProjectName.Margin = new System.Windows.Forms.Padding(2);
             this.textProjectName.Name = "textProjectName";
-            this.textProjectName.Size = new System.Drawing.Size(273, 22);
+            this.textProjectName.Size = new System.Drawing.Size(273, 20);
             this.textProjectName.TabIndex = 1;
             this.textProjectName.TextChanged += new System.EventHandler(this.textProjectName_TextChanged);
             // 
@@ -166,7 +167,7 @@
             this.labelProject.Location = new System.Drawing.Point(6, 15);
             this.labelProject.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelProject.Name = "labelProject";
-            this.labelProject.Size = new System.Drawing.Size(93, 16);
+            this.labelProject.Size = new System.Drawing.Size(74, 13);
             this.labelProject.TabIndex = 0;
             this.labelProject.Text = "Project Name:";
             // 

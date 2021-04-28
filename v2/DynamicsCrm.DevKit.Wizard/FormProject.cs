@@ -109,6 +109,13 @@ namespace DynamicsCrm.DevKit.Wizard
                     textProjectName.Visible = false;
                     comboBoxEntity.Visible = true;
                 }
+                else if (_projectType == ProjectType.CustomApi)
+                {
+                    link.Text = @"Add new Custom Api Project";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Custom-Api-Project-Template";
+                    textProjectName.Visible = false;
+                    comboBoxEntity.Visible = true;
+                }
                 else if (_projectType == ProjectType.DataProvider)
                 {
                     link.Text = @"Add New Data Provider Project";
@@ -175,9 +182,12 @@ namespace DynamicsCrm.DevKit.Wizard
             comboBoxCrmName.ValueMember = "Version";
             comboBoxCrmName.DisplayMember = "Name";
 
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
-                comboBoxCrmName.Text = config.DefaultCrmName;
+            comboBoxCrmName.SelectedIndex = 0;
+            comboBoxCrmName.Enabled = false;
+
+            //var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+            //if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
+            //    comboBoxCrmName.Text = config.DefaultCrmName;
         }
 
         private void LoadComboBoxEntity(List<XrmEntity> entities)
@@ -223,6 +233,7 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 if (//ProjectType == ProjectType.DataProvider ||
                     ProjectType == ProjectType.CustomAction ||
+                    ProjectType == ProjectType.CustomApi ||
                     ProjectType == ProjectType.Workflow ||
                     //ProjectType == ProjectType.Report ||
                     ProjectType == ProjectType.Plugin)
@@ -246,7 +257,7 @@ namespace DynamicsCrm.DevKit.Wizard
             }
             Check = form.Check;
             buttonOk.Enabled = true;
-            comboBoxCrmName.Enabled = true;
+            //comboBoxCrmName.Enabled = true;
             CheckFormByFormType();
         }
 
@@ -287,7 +298,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(entitiesPlugin);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
+                    //comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
@@ -311,13 +322,14 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(entitiesWorkflow);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
+                    //comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
                     progressBar.Value = 100;
                     break;
                 case ProjectType.CustomAction:
+                case ProjectType.CustomApi:
                     EnabledAll(false);
                     List<XrmEntity> entitiesCustomAction = null;
                     progressBar.Style = ProgressBarStyle.Marquee;
@@ -332,7 +344,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(entitiesCustomAction);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
+                    //comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
@@ -388,7 +400,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(projects);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
+                    //comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
@@ -413,7 +425,7 @@ namespace DynamicsCrm.DevKit.Wizard
             buttonConnection.Enabled = value;
             buttonOk.Enabled = value;
             buttonCancel.Enabled = value;
-            comboBoxCrmName.Enabled = value;
+            //comboBoxCrmName.Enabled = value;
             textProjectName.Enabled = value;
             comboBoxEntity.Enabled = value;
         }
