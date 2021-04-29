@@ -1491,6 +1491,7 @@ var devKit = (function () {
             var fields = [];
             for (var field in quickForms[quickForm]) {
                 fields.push(field);
+                delete quickForms[quickForm][field];
             }
             if (has(formContext, 'ui.quickForms.get')) {
                 quickViewControl = formContext.ui.quickForms.get(quickForm);
