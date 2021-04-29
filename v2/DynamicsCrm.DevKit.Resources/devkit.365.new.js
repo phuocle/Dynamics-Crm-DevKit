@@ -1384,6 +1384,19 @@ var devKit = (function () {
                     }
                 }
             });
+            Object.defineProperty(tabs[tab], 'ContentType', {
+                get: function () {
+                    if (has(tabObject, 'getContentType')) {
+                        return tabObject.getContentType();
+                    }
+                    return 'cardSections';
+                },
+                set: function (value) {
+                    if (has(tabObject, 'setContentType')) {
+                        tabObject.setContentType(value);
+                    }
+                }
+            });
             Object.defineProperty(tabs[tab], 'Label', {
                 get: function () {
                     if (has(tabObject, 'getLabel')) {
@@ -2584,6 +2597,10 @@ var OptionSet;
     OptionSet.TabDisplayState = {
         Expanded: 'expanded',
         Collapsed: 'collapsed'
+    };
+    OptionSet.TabContentType = {
+        CardSections: 'cardSections',
+        SingleComponent: 'singleComponent'
     };
     OptionSet.ProcessDisplayState = {
         Expanded: 'expanded',
