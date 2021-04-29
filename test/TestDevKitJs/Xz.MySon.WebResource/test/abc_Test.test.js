@@ -825,6 +825,10 @@ define(['xrm-mock', 'sinon'], () => {
 
             expect(form.Body.Tab.Tab1.Section.Tab1Section1.Parent).toBeDefined();
             expect(form.Body.Tab.Tab1.Parent).toBeDefined();
+
+            expect(() => { form.Body.Tab.Tab1.ContentType }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Body.Tab.Tab1.ContentType = OptionSet.TabContentType.SingleComponent }).toThrow(new Error("Method not implemented."));
+
         });
         it('Tab/Section removed', () => {
             var tab2Section1 = xrmMock.XrmMockGenerator.Section.createSection("Tab2Section1", "LABEL-TAB1-SECTION1", true, null, null);

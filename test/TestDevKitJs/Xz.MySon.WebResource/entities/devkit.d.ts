@@ -353,7 +353,12 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setvisible
              */
             Visible: boolean;
-
+            /**
+             * Get/Set content type of the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getcontenttype
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setcontenttype
+             */
+            ContentType: OptionSet.TabContentType;
         }
         interface IControlSelect extends IControlSelectBase {
             /**
@@ -2861,6 +2866,13 @@ declare namespace OptionSet {
         Expanded,
         /** collapsed */
         Collapsed
+    }
+    /** The contry type of tab */
+    enum TabContentType {
+        /** cardSections: The default tab behavior */
+        CardSections,
+        /** singleComponent: Maximizes the content of the first component in the tab */
+        SingleComponent
     }
     /** */
     enum ProcessDisplayState {
