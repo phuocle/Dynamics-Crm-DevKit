@@ -333,6 +333,99 @@ namespace DynamicsCrm.DevKit.Shared
 
             return code;
         }
+
+        private void GetFormXml(string formId, out string formXml, out string entityLogicalName)
+        {
+            formXml = string.Empty;
+            entityLogicalName = string.Empty;
+            var fetchData = new
+            {
+                formid = formId
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='systemform'>
+    <attribute name='formxml' />
+    <attribute name='objecttypecode' />
+    <filter>
+      <condition attribute='formid' operator='eq' value='{fetchData.formid}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return;
+            var entity = rows.Entities[0];
+            formXml = entity.GetAttributeValue<string>("formxml");
+            entityLogicalName = entity.GetAttributeValue<string>("objecttypecode");
+        }
+
+        private string GetBodyOfQuickView(string formXml, string id)
+        {
+            var code = string.Empty;
+            var xdoc = XDocument.Parse(formXml);
+            var node = from x in xdoc
+                          .Descendants("tabs")
+                          .Descendants("tab")
+                          .Descendants("columns")
+                          .Descendants("column")
+                          .Descendants("sections")
+                          .Descendants("section")
+                          .Descendants("rows")
+                          .Descendants("row")
+                          .Descendants("cell")
+                          .Elements("control")
+                       where x?.Attribute("id")?.Value == id &&
+                             x?.Attribute("classid")?.Value == $"{{{ControlClassId.QUICK_VIEW_FORM}}}"
+                       select x;
+            var node2 = (from x in node
+                            .Descendants("parameters")
+                            .Descendants("QuickForms")
+                         select x.Value
+                         ).FirstOrDefault();
+            if (node2 == null) return string.Empty;
+            var xdoc2 = XDocument.Parse(node2);
+            var formId = (from x in xdoc2.Descendants("QuickFormId") select x.Value).FirstOrDefault();
+            if (formId == null) return string.Empty;
+            var quickViewFormXml = string.Empty;
+            var quickViewEntityLogicalName = string.Empty;
+            GetFormXml(formId, out quickViewFormXml, out quickViewEntityLogicalName);
+            if (quickViewFormXml == string.Empty) return string.Empty;
+            var xdoc3 = XDocument.Parse(quickViewFormXml);
+            var fields = (from x in xdoc3
+                          .Descendants("tabs")
+                          .Descendants("tab")
+                          .Descendants("columns")
+                          .Descendants("column")
+                          .Descendants("sections")
+                          .Descendants("section")
+                          .Descendants("rows")
+                          .Descendants("row")
+                          .Descendants("cell")
+                          .Descendants("control")
+                          select new IdName
+                          {
+                              Name = x?.Attribute("datafieldname")?.Value,
+                              Id = x?.Attribute("id").Value,
+                              ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                              ControlId = x?.Attribute("uniqueid")?.Value
+                          }).Distinct().ToList();
+            fields = fields.OrderBy(x => x.Name).ToList();
+            foreach (var field in fields)
+            {
+                if (field.ClassId == ControlClassId.SUB_GRID || field.ClassId == ControlClassId.SUB_GRID_PANEL || field.ClassId == ControlClassId.TIMER) continue;
+                var request = new RetrieveAttributeRequest
+                {
+                    EntityLogicalName = quickViewEntityLogicalName,
+                    LogicalName = field.Id,
+                    RetrieveAsIfPublished = false
+                };
+                var response = (RetrieveAttributeResponse)CrmService.Execute(request);
+                code += $"\t\t\t\t{response.AttributeMetadata.SchemaName}: {{}},\r\n";
+            }
+            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            return code;
+        }
+
         private string GetJsQuickFormCode(string formXml)
         {
             var code = string.Empty;
@@ -349,7 +442,12 @@ namespace DynamicsCrm.DevKit.Shared
                 where f.QuickForms.Count() != 0
                 select f.id).ToList();
             foreach (var quickForm in quickForms)
-                code += $"\t\t\t{quickForm}: {{}},\r\n";
+            {
+                //code += $"\t\t\t{quickForm}: {{}},\r\n";
+                code += $"\t\t\t{quickForm}: {{\r\n";
+                code += GetBodyOfQuickView(formXml, quickForm);
+                code += $"\t\t\t}},\r\n";
+            }
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return code;
         }

@@ -106,8 +106,21 @@ var DevKit;
 		process.BPF_Account_1 = _BPF_Account_1;
 		form.Process = process;
 		var quickForm = {
-			AzureAccount: {},
-			contactquickform: {}
+			AzureAccount: {
+				devkit_AzureAccountType: {},
+				devkit_Category: {},
+				devkit_City: {},
+				devkit_CreatedOn: {},
+				devkit_ModifiedOn: {},
+				devkit_name: {},
+				devkit_Price: {},
+				devkit_Surface: {},
+				EmailAddress: {}
+			},
+			contactquickform: {
+				EMailAddress1: {},
+				Telephone1: {}
+			}
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
