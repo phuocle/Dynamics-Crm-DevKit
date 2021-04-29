@@ -44,17 +44,6 @@ declare namespace MySon {
 		interface Navigation {
 			nav01: DevKit.Controls.NavigationItem
 		}
-		interface quickForm_AzureAccount_Body {
-			devkit_AzureAccountType: DevKit.Controls.QuickView;
-			devkit_Category: DevKit.Controls.QuickView;
-			devkit_City: DevKit.Controls.QuickView;
-			devkit_CreatedOn: DevKit.Controls.QuickView;
-			devkit_ModifiedOn: DevKit.Controls.QuickView;
-			devkit_name: DevKit.Controls.QuickView;
-			devkit_Price: DevKit.Controls.QuickView;
-			devkit_Surface: DevKit.Controls.QuickView;
-			EmailAddress: DevKit.Controls.QuickView;
-		}
 		interface quickForm_QuickForm_Body {
 			abc_All: DevKit.Controls.String;
 		}

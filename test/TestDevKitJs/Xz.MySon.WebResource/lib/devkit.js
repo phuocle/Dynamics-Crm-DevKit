@@ -1389,7 +1389,7 @@ var devKit = (function () {
                     if (has(tabObject, 'getContentType')) {
                         return tabObject.getContentType();
                     }
-                    return 'cardSections';
+                    //return 'cardSections';
                 },
                 set: function (value) {
                     if (has(tabObject, 'setContentType')) {

@@ -463,13 +463,14 @@ define(['xrm-mock', 'sinon'], () => {
             expect(form.QuickForm.QuickForm.ControlName).toBe("QuickForm");
             expect(form.QuickForm.QuickForm.ControlParent).toBeUndefined();
             expect(form.QuickForm.QuickForm.Visible).toBeTruthy();
-            expect(() => { form.QuickForm.QuickForm.IsLoaded() }).toThrow(new Error("Method not implemented."));
+            expect(form.QuickForm.QuickForm.IsLoaded()).toBeTruthy();
             expect(() => { form.QuickForm.QuickForm.Refresh() }).toThrow(new Error("Method not implemented."));
             expect(() => { form.QuickForm.QuickForm.Disabled = true }).toThrow(new Error("Method not implemented."));
             expect(() => { form.QuickForm.QuickForm.Focus() }).toThrow(new Error("Method not implemented."));
             form.QuickForm.QuickForm.Label = "QUICK FORM LABEL NEW";
             expect(form.QuickForm.QuickForm.Label).toBe("QUICK FORM LABEL NEW");
             expect(() => { form.QuickForm.QuickForm.Visible = false }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.QuickForm.QuickForm.Body.abc_All }).toThrow(new Error("Method not implemented."));
         });
         it('subgrid control type', () => {
             var attributes = new xrmMock.ItemCollectionMock([

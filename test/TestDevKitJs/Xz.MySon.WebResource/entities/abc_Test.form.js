@@ -64,7 +64,9 @@ var MySon;
 		process.Process_1 = _Process_1;
 		form.Process = process;
 		var quickForm = {
-			QuickForm: {}
+			QuickForm: {
+				abc_All: {}
+			}
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
