@@ -350,7 +350,6 @@ namespace DynamicsCrm.DevKit.Shared
                 select f.id).ToList();
             foreach (var quickForm in quickForms)
                 code += $"\t\t\t{quickForm}: {{}},\r\n";
-            ???
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return code;
         }

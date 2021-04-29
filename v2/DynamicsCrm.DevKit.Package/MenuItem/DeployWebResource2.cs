@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.SdkLogin;
+using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Wizard;
 using EnvDTE;
@@ -68,7 +69,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                         loginForm.ShowDialog();
                         if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                         {
-                            UtilityPackage.SetGlobal("CrmUrl", new Uri(loginForm.CrmConnectionMgr.CrmSvc.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority), dte);
+                            UtilityPackage.SetGlobal("CrmUrl", XrmHelper.ConnectedUrl(loginForm.CrmConnectionMgr.CrmSvc), dte);
                             UtilityPackage.SetGlobal("CrmServiceClient", loginForm.CrmConnectionMgr.CrmSvc, dte);
                         }
                         else
@@ -79,7 +80,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                     }
                     else
                     {
-                        UtilityPackage.SetGlobal("CrmUrl", new Uri(form.CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority), dte);
+                        UtilityPackage.SetGlobal("CrmUrl", XrmHelper.ConnectedUrl(form.CrmServiceClient), dte);
                         UtilityPackage.SetGlobal("CrmServiceClient", form.CrmServiceClient, dte);
                     }
                 }

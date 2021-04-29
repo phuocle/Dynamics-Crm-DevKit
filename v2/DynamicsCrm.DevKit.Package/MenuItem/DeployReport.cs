@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.SdkLogin;
+using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Wizard;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -68,7 +69,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                     }
                     else
                     {
-                        UtilityPackage.SetGlobal("CrmUrl", new Uri(form.CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority), dte);
+                        UtilityPackage.SetGlobal("CrmUrl", XrmHelper.ConnectedUrl(form.CrmServiceClient), dte);
                         UtilityPackage.SetGlobal("CrmServiceClient", form.CrmServiceClient, dte);
                     }
                 }

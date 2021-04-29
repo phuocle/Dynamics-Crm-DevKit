@@ -487,5 +487,10 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         {
             return crmServiceClient.ConnectedOrgVersion >= new Version("9.1.0.18950");
         }
+
+        public static string ConnectedUrl(CrmServiceClient crmServiceClient)
+        {
+            return new Uri(crmServiceClient?.CrmConnectOrgUriActual?.AbsoluteUri).GetLeftPart(UriPartial.Authority);
+        }
     }
 }

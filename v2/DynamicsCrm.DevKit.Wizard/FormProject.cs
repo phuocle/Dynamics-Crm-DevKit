@@ -259,6 +259,7 @@ namespace DynamicsCrm.DevKit.Wizard
             buttonOk.Enabled = true;
             //comboBoxCrmName.Enabled = true;
             CheckFormByFormType();
+            Text = $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}";
         }
 
         private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
