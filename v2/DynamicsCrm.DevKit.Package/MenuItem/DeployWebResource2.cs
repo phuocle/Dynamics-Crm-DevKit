@@ -106,7 +106,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                     }
                     else
                     {
-                        var formItems = new FormItems(resources, fullFileName);
+                        var formItems = new FormItems(CrmItemType.WebResouce, resources, fullFileName, crmUrl);
                         if (formItems.ShowDialog() == DialogResult.OK)
                         {
                             resourceId = formItems.ResourceId;
@@ -185,7 +185,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             var webResouceName = string.Empty;
             var selected = DevKitSetting.SelectedWebResources.Where(x => x.FullFileName == fullFileName).FirstOrDefault();
             if (selected != null) webResouceName = selected.WebResourceName;
-            UtilityPackage.SetDTEStatusBar(dte, $"Deployed: {fileName} to {webResouceName}", true);
+            UtilityPackage.SetDTEStatusBar(dte, $"Deployed: [{fileName}] to [{webResouceName}]", true);
         }
 
         private static List<NameValueGuid> GetResources(CrmServiceClient crmServiceClient, string fullFileName)

@@ -8,8 +8,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 using System.Collections.Generic;
 using DynamicsCrm.DevKit.Package.Helpers;
-using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.OLE.Interop;
+using EnvDTE;
 
 namespace DynamicsCrm.DevKit.Package
 {
@@ -25,13 +25,14 @@ namespace DynamicsCrm.DevKit.Package
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await DevKitCommand.InitializeAsync(this);
             await SolutionDevKitSettingInitializeAsync();
+            await DevKitCommand.InitializeAsync(this);
         }
 
         private async Task SolutionDevKitSettingInitializeAsync()
         {
-            IVsSolutionPersistence solutionPersistence = await this.GetServiceAsync((typeof(IVsSolutionPersistence))) as IVsSolutionPersistence ?? throw new ArgumentNullException(nameof(solutionPersistence));
+            ThreadHelper.ThrowIfNotOnUIThread();
+            IVsSolutionPersistence solutionPersistence = await GetServiceAsync(typeof(IVsSolutionPersistence)) as IVsSolutionPersistence ?? throw new ArgumentNullException(nameof(solutionPersistence));
             solutionPersistence.LoadPackageUserOpts(this, SELECTED_WEB_RESOURCES);
         }
 
@@ -89,6 +90,5 @@ namespace DynamicsCrm.DevKit.Package
             }
             return VSConstants.S_OK;
         }
-
     }
 }

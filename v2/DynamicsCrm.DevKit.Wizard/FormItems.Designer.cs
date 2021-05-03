@@ -53,10 +53,10 @@
             this.comboItems.DisplayMember = "Name";
             this.comboItems.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboItems.FormattingEnabled = true;
-            this.comboItems.Location = new System.Drawing.Point(60, 30);
+            this.comboItems.Location = new System.Drawing.Point(85, 30);
             this.comboItems.Margin = new System.Windows.Forms.Padding(2);
             this.comboItems.Name = "comboItems";
-            this.comboItems.Size = new System.Drawing.Size(307, 21);
+            this.comboItems.Size = new System.Drawing.Size(282, 21);
             this.comboItems.TabIndex = 4;
             this.comboItems.ValueMember = "Value";
             // 
@@ -66,9 +66,9 @@
             this.labelItem.Location = new System.Drawing.Point(5, 33);
             this.labelItem.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItem.Name = "labelItem";
-            this.labelItem.Size = new System.Drawing.Size(27, 13);
+            this.labelItem.Size = new System.Drawing.Size(76, 13);
             this.labelItem.TabIndex = 0;
-            this.labelItem.Text = "Item";
+            this.labelItem.Text = "WebResource";
             // 
             // buttonOk
             // 

@@ -34,6 +34,11 @@ public enum ItemType
     Default
 }
 
+public enum CrmItemType
+{
+    WebResouce
+}
+
 public enum ParameterType
 {
     Input,

@@ -22,6 +22,7 @@ namespace DynamicsCrm.DevKit.Shared
         public const string MicrosoftCrmSdkData = "Microsoft.CrmSdk.Data";
         public const string MicrosoftCrmSdkCoreTools = "Microsoft.CrmSdk.CoreTools";
         public const string DynamicsCrmDevKitCli = "DynamicsCrm.DevKit.Cli";
+        public const string DynamicsCrmDevKit = "DynamicsCrm.DevKit";
         public const string MicrosoftCrmSdkDeployment = "Microsoft.CrmSdk.Deployment";
         public const string MicrosoftCrmSdkWorkflow = "Microsoft.CrmSdk.Workflow";
         public const string MicrosoftCrmSdkXrmToolingCoreAssembly = "Microsoft.CrmSdk.XrmTooling.CoreAssembly";

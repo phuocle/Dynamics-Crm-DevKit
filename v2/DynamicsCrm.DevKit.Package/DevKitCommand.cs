@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using DynamicsCrm.DevKit.Package.MenuItem;
+using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
@@ -14,8 +15,8 @@ namespace DynamicsCrm.DevKit.Package
 
         public static async Task InitializeAsync(AsyncPackage package)
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            MenuService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService ?? throw new ArgumentNullException(nameof(MenuService));
+            ThreadHelper.ThrowIfNotOnUIThread();
+            MenuService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService ?? throw new ArgumentNullException(nameof(MenuService));
             dte = await package.GetServiceAsync(typeof(DTE)) as DTE ?? throw new ArgumentNullException(nameof(dte));
 
             var commandIdDeployWebResource = new CommandID(DeployWebResource2.CommandSetDeployWebResource, DeployWebResource2.CommandDeployWebResourceId);

@@ -9,12 +9,31 @@ namespace DynamicsCrm.DevKit.Wizard
 {
     public partial class FormItems : Form
     {
+        private CrmItemType _CrmItemType;
+        private CrmItemType CrmItemType
+        {
+            get => _CrmItemType;
+            set
+            {
+                _CrmItemType = value;
+                switch (_CrmItemType)
+                {
+                    case CrmItemType.WebResouce:
+                        labelItem.Text = "WebResource";
+                        break;
+                }
+            }
+        }
         public Guid ResourceId { get; set; } = Guid.Empty;
         public string ResourceName { get; set; } = string.Empty;
 
-        public FormItems(List<NameValueGuid> list, string fullFileName)
+        public FormItems(CrmItemType crmItemType, List<NameValueGuid> list, string fullFileName, string crmUrl)
         {
             InitializeComponent();
+
+            Text = $"Connected: {crmUrl}";
+
+            CrmItemType = crmItemType;
             comboItems.DataSource = list;
             var selected = DevKitSetting.SelectedWebResources.Where(x => x.FullFileName == fullFileName).FirstOrDefault();
             if (selected != null)
