@@ -1,37 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Threading;
+using DynamicsCrm.DevKit.Package.Helpers;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Task = System.Threading.Tasks.Task;
-using System.Collections.Generic;
-using DynamicsCrm.DevKit.Package.Helpers;
-using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.VisualStudio.OLE.Interop;
 
 namespace DynamicsCrm.DevKit.Package
 {
-    [InstalledProductRegistration("#110", "#112", Const.Version, IconResourceID = 400)]
-    [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(PackageGuidString)]
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
-    public sealed class DevKitPackage : AsyncPackage, IVsPersistSolutionOpts
+    public sealed class  SolutionDevKitSetting : IVsPersistSolutionOpts
     {
-        public const string PackageGuidString = "7e37eef9-8cbe-4b10-81f7-66413cd2c9d3";
-
-        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+        public async System.Threading.Tasks.Task InitializeAsync(AsyncPackage package)
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await DevKitCommand.InitializeAsync(this);
-            await SolutionDevKitSettingInitializeAsync();
-        }
-
-        private async Task SolutionDevKitSettingInitializeAsync()
-        {
-            IVsSolutionPersistence solutionPersistence = await this.GetServiceAsync((typeof(IVsSolutionPersistence))) as IVsSolutionPersistence ?? throw new ArgumentNullException(nameof(solutionPersistence));
+            IVsSolutionPersistence solutionPersistence = await package.GetServiceAsync((typeof(IVsSolutionPersistence))) as IVsSolutionPersistence ?? throw new ArgumentNullException(nameof(solutionPersistence));
             solutionPersistence.LoadPackageUserOpts(this, SELECTED_WEB_RESOURCES);
         }
 
@@ -56,16 +40,12 @@ namespace DynamicsCrm.DevKit.Package
                 {
                     value = bReader.ReadString();
                 }
-                try
+                switch (pszKey)
                 {
-                    switch (pszKey)
-                    {
-                        case SELECTED_WEB_RESOURCES:
-                            DevKitSetting.SelectedWebResources = SimpleJson.DeserializeObject<List<SavedMappingWebResource>>(value);
-                            break;
-                    }
+                    case SELECTED_WEB_RESOURCES:
+                        DevKitSetting.SelectedWebResources = SimpleJson.DeserializeObject<List<NameValueGuid>>(value);
+                        break;
                 }
-                catch { }
             }
             return VSConstants.S_OK;
         }
@@ -89,6 +69,5 @@ namespace DynamicsCrm.DevKit.Package
             }
             return VSConstants.S_OK;
         }
-
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.SdkLogin;
+using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Wizard;
@@ -105,11 +106,12 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                     }
                     else
                     {
-                        var formItems = new FormItems(resources);
+                        var formItems = new FormItems(resources, fullFileName);
                         if (formItems.ShowDialog() == DialogResult.OK)
                         {
                             resourceId = formItems.ResourceId;
-                            AddToCache(dte, fullFileName, resourceId);
+                            var resourceName = formItems.ResourceName;
+                            AddToCache(dte, fullFileName, resourceId, resourceName);
                             DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resourceId);
                         }
                     }
@@ -121,7 +123,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             }
         }
 
-        private static void AddToCache(DTE dte, string fullFileName, Guid resourceId)
+        private static void AddToCache(DTE dte, string fullFileName, Guid resourceId, string resourceName)
         {
             var webResources = (List<NameValueGuid>)UtilityPackage.GetGlobal("WebResources", dte);
             if (webResources == null) webResources = new List<NameValueGuid>();
@@ -131,6 +133,13 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 Value = resourceId
             });
             UtilityPackage.SetGlobal("WebResources", webResources, dte);
+            var selected = DevKitSetting.SelectedWebResources.Where(x => x.FullFileName == fullFileName).FirstOrDefault();
+            if (selected != null) DevKitSetting.SelectedWebResources.Remove(selected);
+            DevKitSetting.SelectedWebResources.Add(new SavedMappingWebResource
+            {
+                FullFileName = fullFileName,
+                WebResourceName = resourceName
+            });
         }
 
         private static Guid GetCachedResourceId(string fullFileName, DTE dte)
@@ -173,7 +182,10 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Deploy WebResource failed", true);
                 return;
             }
-            UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Deployed: {fileName}", true);
+            var webResouceName = string.Empty;
+            var selected = DevKitSetting.SelectedWebResources.Where(x => x.FullFileName == fullFileName).FirstOrDefault();
+            if (selected != null) webResouceName = selected.WebResourceName;
+            UtilityPackage.SetDTEStatusBar(dte, $"Deployed: {fileName} to {webResouceName}", true);
         }
 
         private static List<NameValueGuid> GetResources(CrmServiceClient crmServiceClient, string fullFileName)
@@ -191,6 +203,9 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 value = value.TrimEnd("/".ToCharArray());
                 condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>" + "\r\n";
             }
+            var fileNameWithoutExtension = "/" + Path.GetFileNameWithoutExtension(fullFileName) + "/" ;
+            condition += $"<condition attribute='name' operator='like' value='%{fileNameWithoutExtension}%'/>" + "\r\n";
+
             var fetchXml = $@"
 <fetch>
   <entity name='webresource'>

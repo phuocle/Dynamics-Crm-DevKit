@@ -78,6 +78,9 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\CSharpLateBound.cs">
       <Link>Links\CSharpLateBound.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\DevKitSetting.cs">
+      <Link>Links\DevKitSetting.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\EncryptDecrypt.cs">
       <Link>Links\EncryptDecrypt.cs</Link>
     </Compile>
@@ -199,6 +202,8 @@
     <Compile Include="MenuItem\DeployReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DevKitPackage.cs" />
+    <None Include="SolutionDevKitSetting.cs" />
+    <Compile Include="StreamEater.cs" />
     <Compile Include="UtilityPackage.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -290,6 +295,12 @@
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.7.10.6071\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.14.0.DesignTime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.8.0.8.0.50727\lib\Microsoft.VisualStudio.Shell.Interop.8.0.dll</HintPath>

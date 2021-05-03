@@ -7,6 +7,7 @@ var formAccount = (function () {
 		var form = new DevKit.FormAccount(executionContext);
 		debugger;
 		//var label = form.QuickForm.contactquickform.Body.EMailAddress1.Label;
+		var a = "";
 
 	}
 	async function onSave(executionContext) {

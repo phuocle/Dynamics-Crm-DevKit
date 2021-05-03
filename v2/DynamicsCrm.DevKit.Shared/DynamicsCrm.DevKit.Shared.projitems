@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CliLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ControlClassId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DevKitSetting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Attribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpLateBound.cs" />
