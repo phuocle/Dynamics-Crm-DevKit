@@ -8,6 +8,7 @@
       <Group guid="guidSetAddCrmPluginRegistration" id="groupCommandsCrmPluginRegistration" />
       <Group guid="guidSetDeployReport" id="groupCommandsDeployReport" />
       <Group guid="guidSetDeployReport2" id="groupCommandsDeployReport2" />
+      <Group guid="guidSetDeployReport3" id="groupCommandsDeployReport3" />
     </Groups>
     <Buttons>
       <Button guid="guidSetDeployWebResource" id="CommandDeployWebResourceId" type="Button">
@@ -46,6 +47,15 @@
             <ButtonText>Deploy WebResource</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidSetDeployReport3" id="CommandDeployReport3Id" type="Button">
+        <Icon guid="guidImages" id="bmpPicPL" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+            <ButtonText>Deploy New WebResource to ...</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
     <Bitmaps>
       <Bitmap guid="guidImages" href="icon-menu.png" usedList="bmpPicPL"/>
@@ -70,31 +80,32 @@
     <CommandPlacement guid="guidSetDeployWebResource" id="CommandDeployWebResourceId" priority="0x0001" >
       <Parent guid="guidSetDeployWebResource" id="groupCommandsWebResource"/>
     </CommandPlacement>
-
     <CommandPlacement guid="guidSetAddCrmPluginRegistration" id="groupCommandsCrmPluginRegistration" priority="0xFFFF">
       <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
     </CommandPlacement>
     <CommandPlacement guid="guidSetAddCrmPluginRegistration" id="CommandAddCrmPluginRegistrationId" priority="0x0002" >
       <Parent guid="guidSetAddCrmPluginRegistration" id="groupCommandsCrmPluginRegistration"/>
     </CommandPlacement>
-
     <CommandPlacement guid="guidSetDeployReport" id="groupCommandsDeployReport" priority="0xFFFF">
       <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
     </CommandPlacement>
     <CommandPlacement guid="guidSetDeployReport" id="CommandDeployReportId" priority="0x003" >
       <Parent guid="guidSetDeployReport" id="groupCommandsDeployReport"/>
     </CommandPlacement>
-
-    <CommandPlacement guid="guidSetDeployReport2" id="groupCommandsDeployReport2" priority="0xFFFF">
+    <CommandPlacement guid="guidSetDeployReport2" id="groupCommandsDeployReport2" priority="0xFFFE">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
     </CommandPlacement>
     <CommandPlacement guid="guidSetDeployReport2" id="CommandDeployReport2Id" priority="0x004" >
         <Parent guid="guidSetDeployReport2" id="groupCommandsDeployReport2"/>
     </CommandPlacement>
-
+    <CommandPlacement guid="guidSetDeployReport3" id="groupCommandsDeployReport3" priority="0xFFFF">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidSetDeployReport3" id="CommandDeployReport3Id" priority="0x005" >
+        <Parent guid="guidSetDeployReport3" id="groupCommandsDeployReport3"/>
+    </CommandPlacement>
   </CommandPlacements>
   <Symbols>
-
     <GuidSymbol name="guidSetDeployWebResource" value="{0c1acc31-15ac-417c-86b2-eefdc669e8bf}">
       <IDSymbol name="groupCommandsWebResource" value="0x1010" />
       <IDSymbol name="CommandDeployWebResourceId" value="0x0100" />
@@ -107,9 +118,13 @@
       <IDSymbol name="groupCommandsDeployReport" value="0x1030" />
       <IDSymbol name="CommandDeployReportId" value="0x0300" />
     </GuidSymbol>
-    <GuidSymbol name="guidSetDeployReport2" value="{0c1acc31-15ac-417c-86b2-eefdc669e8bd}">
+    <GuidSymbol name="guidSetDeployReport2" value="{0c1acc31-15ac-417c-86b2-eefdc669e8be}">
       <IDSymbol name="groupCommandsDeployReport2" value="0x1040" />
       <IDSymbol name="CommandDeployReport2Id" value="0x0400" />
+    </GuidSymbol>
+    <GuidSymbol name="guidSetDeployReport3" value="{0c1acc31-15ac-417c-86b2-eefdc669e8bf}">
+      <IDSymbol name="groupCommandsDeployReport3" value="0x1050" />
+      <IDSymbol name="CommandDeployReport3Id" value="0x0500" />
     </GuidSymbol>
     <GuidSymbol name="guidWindowContextMenu" value="{7e37eef9-8cbe-4b10-81f7-66413cd2c9d3}" />
     <GuidSymbol name="guidImages" value="{68759f95-6f1d-4a77-87ea-192fc8d811f1}" >

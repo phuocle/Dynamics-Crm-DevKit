@@ -1,9 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
-using DynamicsCrm.DevKit.SdkLogin;
-using DynamicsCrm.DevKit.Shared.Helper;
-using DynamicsCrm.DevKit.Wizard;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk;
@@ -34,45 +30,12 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             catch { }
         }
 
-        private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
-        {
-            if (sender is FormLogin login)
-            {
-                login.Close();
-            }
-        }
-
         internal static void Click(DTE dte)
         {
             try
             {
-                dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
-                var check = UtilityPackage.GetGlobal("CrmService", dte);
-                if (check == null)
-                {
-                    var form = new FormConnection2(dte);
-                    if (form.ShowDialog() == DialogResult.Cancel) return;
-                    if (form.Check == "1")
-                    {
-                        var loginForm = new FormLogin();
-                        loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
-                        loginForm.ShowDialog();
-                        if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
-                        {
-                            UtilityPackage.SetGlobal("CrmServiceClient", loginForm.CrmConnectionMgr.CrmSvc, dte);
-                        }
-                        else
-                        {
-                            UtilityPackage.SetDTEStatusBar(dte, "Connection failed", true);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        UtilityPackage.SetGlobal("CrmUrl", XrmHelper.ConnectedUrl(form.CrmServiceClient), dte);
-                        UtilityPackage.SetGlobal("CrmServiceClient", form.CrmServiceClient, dte);
-                    }
-                }
+                PackageHelper.GetCrmServiceClient(dte);
+
                 var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
                 var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
 

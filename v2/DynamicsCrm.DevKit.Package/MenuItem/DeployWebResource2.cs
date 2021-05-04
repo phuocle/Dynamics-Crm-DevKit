@@ -4,9 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using DynamicsCrm.DevKit.SdkLogin;
 using DynamicsCrm.DevKit.Shared;
-using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Wizard;
 using EnvDTE;
@@ -25,7 +23,10 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
         public static readonly Guid CommandSetDeployWebResource = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
 
         public const int CommandDeployWebResource2Id = 0x0400;
-        public static readonly Guid CommandSetDeployWebResource2 = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bd");
+        public static readonly Guid CommandSetDeployWebResource2 = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8be");
+
+        public const int CommandDeployWebResource3Id = 0x0500;
+        public static readonly Guid CommandSetDeployWebResource3 = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
 
         internal static void BeforeQueryStatus(object sender, DTE dte)
         {
@@ -45,46 +46,39 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             catch { }
         }
 
-        private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+
+
+        internal static void ClickNew(DTE dte)
         {
-            if (sender is FormLogin login)
+            try
             {
-                login.Close();
+                PackageHelper.GetCrmServiceClient(dte);
+
+                var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
+                var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
+
+                UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Connected");
+
+                var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
+                var fileName = Path.GetFileName(fullFileName);
+
+
+
+
+            }
+            catch
+            {
+                UtilityPackage.SetDTEStatusBar(dte, "Deploy WebResource failed", true);
             }
         }
+
 
         internal static void Click(DTE dte)
         {
             try
             {
-                dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
-                var check = UtilityPackage.GetGlobal("CrmServiceClient", dte);
-                if (check == null)
-                {
-                    var form = new FormConnection2(dte);
-                    if (form.ShowDialog() == DialogResult.Cancel) return;
-                    if (form.Check == "1")
-                    {
-                        var loginForm = new FormLogin();
-                        loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
-                        loginForm.ShowDialog();
-                        if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
-                        {
-                            UtilityPackage.SetGlobal("CrmUrl", XrmHelper.ConnectedUrl(loginForm.CrmConnectionMgr.CrmSvc), dte);
-                            UtilityPackage.SetGlobal("CrmServiceClient", loginForm.CrmConnectionMgr.CrmSvc, dte);
-                        }
-                        else
-                        {
-                            UtilityPackage.SetDTEStatusBar(dte, "Connection failed", true);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        UtilityPackage.SetGlobal("CrmUrl", XrmHelper.ConnectedUrl(form.CrmServiceClient), dte);
-                        UtilityPackage.SetGlobal("CrmServiceClient", form.CrmServiceClient, dte);
-                    }
-                }
+                PackageHelper.GetCrmServiceClient(dte);
+
                 var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
                 var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
 
@@ -106,7 +100,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                     }
                     else
                     {
-                        var formItems = new FormItems(CrmItemType.WebResouce, resources, fullFileName, crmUrl);
+                        var formItems = new FormItems(CrmItemType.WebResource, resources, fullFileName, crmUrl);
                         if (formItems.ShowDialog() == DialogResult.OK)
                         {
                             resourceId = formItems.ResourceId;

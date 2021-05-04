@@ -18,8 +18,10 @@ namespace DynamicsCrm.DevKit.Wizard
                 _CrmItemType = value;
                 switch (_CrmItemType)
                 {
-                    case CrmItemType.WebResouce:
+                    case CrmItemType.WebResource:
                         labelItem.Text = "WebResource";
+                        Size = new System.Drawing.Size(693, 120);
+                        groupBox.Size = new System.Drawing.Size(559, 66);
                         break;
                 }
             }
@@ -35,6 +37,7 @@ namespace DynamicsCrm.DevKit.Wizard
 
             CrmItemType = crmItemType;
             comboItems.DataSource = list;
+
             var selected = DevKitSetting.SelectedWebResources.Where(x => x.FullFileName == fullFileName).FirstOrDefault();
             if (selected != null)
             {

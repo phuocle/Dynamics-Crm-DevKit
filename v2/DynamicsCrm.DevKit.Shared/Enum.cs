@@ -36,7 +36,8 @@ public enum ItemType
 
 public enum CrmItemType
 {
-    WebResouce
+    WebResource,
+    NewWebResource
 }
 
 public enum ParameterType

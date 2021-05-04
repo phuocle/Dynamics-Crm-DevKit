@@ -38,6 +38,11 @@ namespace DynamicsCrm.DevKit.Package
             var oleMenuCommandDeployWebResource2 = new OleMenuCommand((s, e) => oleMenuCommandDeployWebResource2_Click(package), commandIdDeployWebResource2);
             oleMenuCommandDeployWebResource2.BeforeQueryStatus += oleMenuCommandDeployWebResource2_BeforeQueryStatus;
             MenuService.AddCommand(oleMenuCommandDeployWebResource2);
+
+            var commandIdDeployWebResource3 = new CommandID(DeployWebResource2.CommandSetDeployWebResource3, DeployWebResource2.CommandDeployWebResource3Id);
+            var oleMenuCommandDeployWebResource3 = new OleMenuCommand((s, e) => oleMenuCommandDeployWebResource3_Click(package), commandIdDeployWebResource3);
+            oleMenuCommandDeployWebResource3.BeforeQueryStatus += oleMenuCommandDeployWebResource3_BeforeQueryStatus;
+            MenuService.AddCommand(oleMenuCommandDeployWebResource3);
         }
 
         private static void OleMenuCommandAddCrmPluginRegistration_BeforeQueryStatus(object sender, EventArgs e)
@@ -78,6 +83,16 @@ namespace DynamicsCrm.DevKit.Package
         private static void oleMenuCommandDeployWebResource2_Click(AsyncPackage package)
         {
             DeployWebResource2.Click(dte);
+        }
+
+        private static void oleMenuCommandDeployWebResource3_BeforeQueryStatus(object sender, EventArgs e)
+        {
+            DeployWebResource2.BeforeQueryStatus(sender, dte);
+        }
+
+        private static void oleMenuCommandDeployWebResource3_Click(AsyncPackage package)
+        {
+            DeployWebResource2.ClickNew(dte);
         }
     }
 }
