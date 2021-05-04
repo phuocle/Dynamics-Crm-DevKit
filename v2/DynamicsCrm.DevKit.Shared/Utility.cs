@@ -397,6 +397,19 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
+        public static string GetCurrentProjectDirectoryName(DTE dte)
+        {
+            try
+            {
+                var Projects = (object[])dte.ActiveSolutionProjects;
+                var project = (Project)Projects[0];
+                return new FileInfo(project.FullName).DirectoryName;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
         public static List<ProjectItem> GetAllTestProjectItems(DTE dte)
         {
             var Projects = (object[])dte.ActiveSolutionProjects;

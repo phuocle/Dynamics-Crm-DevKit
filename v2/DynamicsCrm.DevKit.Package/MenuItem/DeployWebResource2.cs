@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Wizard;
 using EnvDTE;
@@ -46,74 +47,81 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             catch { }
         }
 
-
-
         internal static void ClickNew(DTE dte)
         {
             try
             {
-                PackageHelper.GetCrmServiceClient(dte);
+                dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
+                if (UtilityPackage.GetCrmServiceClient(dte))
+                {
+                    var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
+                    var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
 
-                var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
-                var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
+                    UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Connected");
 
-                UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Connected");
-
-                var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
-                var fileName = Path.GetFileName(fullFileName);
-
-
-
-
+                    var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
+                    var fileName = Path.GetFileName(fullFileName);
+                    var solutions = XrmHelper.GetAllSolutions(crmServiceClient);
+                    var formItems = new FormItems(CrmItemType.NewWebResource, solutions, fullFileName, crmUrl);
+                    formItems.SetWebResourceName(Utility.GetCurrentProjectDirectoryName(dte));
+                    if (formItems.ShowDialog() == DialogResult.OK)
+                    {
+                        var solutionUniqueName = formItems.SolutionUniqueName;
+                        var resourceName = formItems.ResourceName;
+                        var resourceId = DeployNewWebResource(dte, crmServiceClient, crmUrl, fullFileName, resourceName, solutionUniqueName);
+                        AddToCache(dte, fullFileName, resourceId, resourceName);
+                    }
+                }
+                dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
             }
             catch
             {
-                UtilityPackage.SetDTEStatusBar(dte, "Deploy WebResource failed", true);
+                UtilityPackage.SetDTEStatusBarAndStopAnimate(dte, "Deploy WebResource failed");
             }
         }
-
 
         internal static void Click(DTE dte)
         {
             try
             {
-                PackageHelper.GetCrmServiceClient(dte);
-
-                var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
-                var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
-
-                UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Connected");
-
-                var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
-                var fileName = Path.GetFileName(fullFileName);
-                var resourceId = GetCachedResourceId(fullFileName, dte);
-                if (resourceId != Guid.Empty)
+                dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
+                if (UtilityPackage.GetCrmServiceClient(dte))
                 {
-                    DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resourceId);
-                }
-                else
-                {
-                    var resources = GetResources(crmServiceClient, fullFileName);
-                    if (resources.Count == 0)
+                    var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
+                    var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
+                    UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Connected");
+                    var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
+                    var fileName = Path.GetFileName(fullFileName);
+                    var resourceId = GetCachedResourceId(fullFileName, dte);
+                    if (resourceId != Guid.Empty)
                     {
-                        UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] WebResource: {fileName} not found", true);
+                        DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resourceId);
                     }
                     else
                     {
-                        var formItems = new FormItems(CrmItemType.WebResource, resources, fullFileName, crmUrl);
-                        if (formItems.ShowDialog() == DialogResult.OK)
+                        var resources = GetResources(crmServiceClient, fullFileName);
+                        if (resources.Count == 0)
                         {
-                            resourceId = formItems.ResourceId;
-                            var resourceName = formItems.ResourceName;
-                            AddToCache(dte, fullFileName, resourceId, resourceName);
-                            DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resourceId);
+                            UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] WebResource: {fileName} not found");
+                        }
+                        else
+                        {
+                            var formItems = new FormItems(CrmItemType.WebResource, resources, fullFileName, crmUrl);
+                            if (formItems.ShowDialog() == DialogResult.OK)
+                            {
+                                resourceId = formItems.ObjectId;
+                                var resourceName = formItems.ResourceName;
+                                AddToCache(dte, fullFileName, resourceId, resourceName);
+                                DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, resourceId);
+                            }
                         }
                     }
                 }
+                dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
             }
             catch
             {
-                UtilityPackage.SetDTEStatusBar(dte, "Deploy WebResource failed", true);
+                UtilityPackage.SetDTEStatusBarAndStopAnimate(dte, "Deploy WebResource failed");
             }
         }
 
@@ -145,6 +153,138 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             return webResource.Value;
         }
 
+        private static Guid DeployNewWebResource(DTE dte, CrmServiceClient crmServiceClient, string crmUrl, string fullFileName, string webResourceName, string solutionUniqueName)
+        {
+            var webResourceId = GetWebResource(crmServiceClient, webResourceName);
+            var fileName = Path.GetFileNameWithoutExtension(fullFileName);
+            if (webResourceId == Guid.Empty)
+            {
+                webResourceId = DeployNewWebResource(dte, crmServiceClient, fullFileName, webResourceName);
+                AddWebResourceToSolution(dte, crmServiceClient, solutionUniqueName, webResourceId, webResourceName);
+                PublishWebResource(dte, crmServiceClient, webResourceId, crmUrl, webResourceName, fileName);
+            }
+            else
+            {
+                DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, webResourceId);
+            }
+            return webResourceId;
+        }
+
+        private static void PublishWebResource(DTE dte, CrmServiceClient crmServiceClient, Guid webResourceId, string crmUrl, string webResourceName, string fileName)
+        {
+            var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
+            var request = new PublishXmlRequest { ParameterXml = publishXml };
+            crmServiceClient.Execute(request);
+            UtilityPackage.SetDTEStatusBar(dte, $"Deployed: [{fileName}] to [{webResourceName}]");
+        }
+
+        private static Guid DeployNewWebResource(DTE dte, CrmServiceClient crmServiceClient, string fullFileName, string webResourceName)
+        {
+            var fileContent = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
+            var webResource = new Entity("webresource")
+            {
+                ["name"] = webResourceName,
+                ["displayname"] = webResourceName,
+                ["content"] = fileContent
+            };
+            var webResourceFileInfo = new FileInfo(fullFileName);
+            var fileType = WebResourceWebResourceType.ScriptJScript;
+            switch (webResourceFileInfo.Extension.ToLower().TrimStart('.'))
+            {
+                case "html":
+                case "htm":
+                    fileType = WebResourceWebResourceType.WebpageHtml;
+                    break;
+                case "js":
+                    fileType = WebResourceWebResourceType.ScriptJScript;
+                    break;
+                case "png":
+                    fileType = WebResourceWebResourceType.PngFormat;
+                    break;
+                case "gif":
+                    fileType = WebResourceWebResourceType.GifFormat;
+                    break;
+                case "jpg":
+                case "jpeg":
+                    fileType = WebResourceWebResourceType.JpgFormat;
+                    break;
+                case "css":
+                    fileType = WebResourceWebResourceType.StyleSheetCss;
+                    break;
+                case "ico":
+                    fileType = WebResourceWebResourceType.IcoFormat;
+                    break;
+                case "xml":
+                    fileType = WebResourceWebResourceType.DataXml;
+                    break;
+                case "xsl":
+                case "xslt":
+                    fileType = WebResourceWebResourceType.StyleSheetXsl;
+                    break;
+                case "xap":
+                    fileType = WebResourceWebResourceType.SilverlightXap;
+                    break;
+                case "resx":
+                    fileType = WebResourceWebResourceType.StringResx;
+                    break;
+                case "svg":
+                    fileType = WebResourceWebResourceType.SvgFormat;
+                    break;
+            }
+            webResource["webresourcetype"] = new OptionSetValue((int)fileType);
+            if (fileType == WebResourceWebResourceType.StringResx)
+            {
+                var fileName = webResourceFileInfo.Name.Substring(0, webResourceFileInfo.Name.Length - webResourceFileInfo.Extension.Length);
+                var arr = fileName.Split(".".ToCharArray());
+                if (int.TryParse(arr[arr.Length - 1], out var languagecode))
+                {
+                    var req = new RetrieveProvisionedLanguagesRequest();
+                    var res = (RetrieveProvisionedLanguagesResponse)crmServiceClient.Execute(req);
+                    if (res.RetrieveProvisionedLanguages.Contains(languagecode))
+                        webResource["languagecode"] = languagecode;
+                    else
+                    {
+                        throw new Exception($"Language code not found: {languagecode}");
+                    }
+                }
+            }
+            UtilityPackage.SetDTEStatusBar(dte, $"Created WebResource: [{webResourceName}]");
+            return crmServiceClient.Create(webResource);
+        }
+
+        private static void AddWebResourceToSolution(DTE dte, CrmServiceClient crmServiceClient, string solutionUniqueName, Guid webResourceId, string webResourceName)
+        {
+            var request = new AddSolutionComponentRequest
+            {
+                AddRequiredComponents = true,
+                ComponentType = 61,
+                ComponentId = webResourceId,
+                SolutionUniqueName = solutionUniqueName
+            };
+            crmServiceClient.Execute(request);
+            UtilityPackage.SetDTEStatusBar(dte, $"[{webResourceName}] Added to solution: [{solutionUniqueName}]");
+        }
+
+        private static Guid GetWebResource(CrmServiceClient crmServiceClient, string webResourceName)
+        {
+            var fetchData = new
+            {
+                name = webResourceName
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='webresourceid' />
+    <filter>
+      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return Guid.Empty;
+            return rows.Entities[0].Id;
+        }
+
         private static void DeployWebResource(DTE dte, CrmServiceClient crmServiceClient, string crmUrl, string fullFileName, string fileName, Guid webResourceId)
         {
             var requests = new OrganizationRequestCollection();
@@ -173,13 +313,13 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             foreach (var response in multipleResponse.Responses)
             {
                 if (response.Fault == null) continue;
-                UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Deploy WebResource failed", true);
+                UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Deploy WebResource failed");
                 return;
             }
-            var webResouceName = string.Empty;
+            var webResourceName = string.Empty;
             var selected = DevKitSetting.SelectedWebResources.Where(x => x.FullFileName == fullFileName).FirstOrDefault();
-            if (selected != null) webResouceName = selected.WebResourceName;
-            UtilityPackage.SetDTEStatusBar(dte, $"Deployed: [{fileName}] to [{webResouceName}]", true);
+            if (selected != null) webResourceName = selected.WebResourceName;
+            UtilityPackage.SetDTEStatusBar(dte, $"Deployed: [{fileName}] to [{webResourceName}]");
         }
 
         private static List<NameValueGuid> GetResources(CrmServiceClient crmServiceClient, string fullFileName)

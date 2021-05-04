@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using DynamicsCrm.DevKit.Shared;
@@ -16,47 +15,108 @@ namespace DynamicsCrm.DevKit.Wizard
             set
             {
                 _CrmItemType = value;
-                switch (_CrmItemType)
+                switch (CrmItemType)
                 {
                     case CrmItemType.WebResource:
                         labelItem.Text = "WebResource";
                         Size = new System.Drawing.Size(693, 120);
                         groupBox.Size = new System.Drawing.Size(559, 66);
+
+                        var selected = DevKitSetting.SelectedWebResources.Where(x => x.FullFileName == FullFileName).FirstOrDefault();
+                        if (selected != null)
+                        {
+                            comboItems.Text = selected.WebResourceName;
+                        }
+                        else
+                            comboItems.SelectedIndex = 0;
+
+                        break;
+                    case CrmItemType.NewWebResource:
+                        labelItem.Text = "Solution";
+                        labelWebResource.Visible = true;
+                        txtWebResource.Visible = true;
+                        txtWebResourcePrefix.Visible = true;
+                        groupBox.Size = new System.Drawing.Size(559, 90);
+                        Size = new System.Drawing.Size(693, 140);
+                        comboItems.SelectedIndex = 0;
+                        comboItems_SelectedIndexChanged(null, null);
                         break;
                 }
             }
         }
-        public Guid ResourceId { get; set; } = Guid.Empty;
-        public string ResourceName { get; set; } = string.Empty;
+        public Guid ObjectId {
+            get {
+                switch (CrmItemType)
+                {
+                    case CrmItemType.WebResource:
+                        return Guid.Parse(comboItems.SelectedValue.ToString());
+                }
+                throw new Exception("ResourceId");
+            }
+        }
 
-        public FormItems(CrmItemType crmItemType, List<NameValueGuid> list, string fullFileName, string crmUrl)
+        public string SolutionUniqueName {
+            get
+            {
+                switch(CrmItemType)
+                {
+                    case CrmItemType.NewWebResource:
+                        return ((NameValueGuidExtend)comboItems.SelectedItem).SolutionUniqueName;
+
+                }
+                throw new Exception("SolutionUniqueName");
+            }
+        }
+
+        public string ResourceName
+        {
+            get
+            {
+                switch (CrmItemType)
+                {
+                    case CrmItemType.WebResource:
+                        return ((NameValueGuid)comboItems.SelectedItem).Name;
+                    case CrmItemType.NewWebResource:
+                        return $"{txtWebResourcePrefix.Text}{txtWebResource.Text}";
+                }
+                throw new Exception("ResourceName");
+            }
+        }
+        private string FullFileName { get; set; }
+        public void SetWebResourceName(string webResourceName)
+        {
+            txtWebResource.Text = FullFileName.Substring(webResourceName.Length).Replace(@"\", "/");
+        }
+
+        public FormItems(CrmItemType crmItemType, object list, string fullFileName, string crmUrl)
         {
             InitializeComponent();
 
+            FullFileName = fullFileName;
             Text = $"Connected: {crmUrl}";
-
-            CrmItemType = crmItemType;
             comboItems.DataSource = list;
-
-            var selected = DevKitSetting.SelectedWebResources.Where(x => x.FullFileName == fullFileName).FirstOrDefault();
-            if (selected != null)
-            {
-                comboItems.Text = selected.WebResourceName;
-            }
-            else
-                comboItems.SelectedIndex = 0;
+            CrmItemType = crmItemType;
         }
 
         private void buttonOk_Click(object sender, EventArgs e)
         {
-            ResourceId = Guid.Parse(comboItems.SelectedValue.ToString());
-            ResourceName = ((NameValueGuid)comboItems.SelectedItem).Name;
             DialogResult = DialogResult.OK;
         }
 
         private void buttonancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+        }
+
+        private void comboItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch(CrmItemType)
+            {
+                case CrmItemType.NewWebResource:
+                    var selected = (NameValueGuidExtend)comboItems.SelectedItem;
+                    txtWebResourcePrefix.Text = selected.SolutionPrefix + "_";
+                    break;
+            }
         }
     }
 }

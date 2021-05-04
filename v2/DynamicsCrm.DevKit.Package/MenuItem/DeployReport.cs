@@ -34,31 +34,32 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
         {
             try
             {
-                PackageHelper.GetCrmServiceClient(dte);
-
-                var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
-                var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
-
-                UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Connected");
-
-                var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
-                var fileName = Path.GetFileName(fullFileName);
-                var reportId = GetReportId(crmServiceClient, fileName);
-                if (reportId == Guid.Empty)
+                dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
+                if (UtilityPackage.GetCrmServiceClient(dte))
                 {
-                    UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Report: {fileName} not found", true);
+                    var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
+                    var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
+                    UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Connected");
+                    var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
+                    var fileName = Path.GetFileName(fullFileName);
+                    var reportId = GetReportId(crmServiceClient, fileName);
+                    if (reportId == Guid.Empty)
+                    {
+                        UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Report: {fileName} not found");
+                    }
+                    else
+                    {
+                        var update = new Entity("report", reportId);
+                        update["bodytext"] = File.ReadAllText(fullFileName);
+                        crmServiceClient.Update(update);
+                        UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Deployed: {fileName}");
+                    }
                 }
-                else
-                {
-                    var update = new Entity("report", reportId);
-                    update["bodytext"] = File.ReadAllText(fullFileName);
-                    crmServiceClient.Update(update);
-                    UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Deployed: {fileName}", true);
-                }
+                dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
             }
             catch
             {
-                UtilityPackage.SetDTEStatusBar(dte, "Deploy report failed", true);
+                UtilityPackage.SetDTEStatusBarAndStopAnimate(dte, "Deploy report failed");
             }
         }
 

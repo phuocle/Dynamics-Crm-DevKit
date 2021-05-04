@@ -29,20 +29,20 @@
         private void InitializeComponent()
         {
             this.groupBox = new System.Windows.Forms.GroupBox();
+            this.txtWebResource = new System.Windows.Forms.TextBox();
+            this.txtWebResourcePrefix = new System.Windows.Forms.TextBox();
+            this.labelWebResource = new System.Windows.Forms.Label();
             this.comboItems = new System.Windows.Forms.ComboBox();
             this.labelItem = new System.Windows.Forms.Label();
             this.buttonOk = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.labelWebResource = new System.Windows.Forms.Label();
-            this.textWebResourcePrefix = new System.Windows.Forms.TextBox();
-            this.txtWebResource = new System.Windows.Forms.TextBox();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox
             // 
             this.groupBox.Controls.Add(this.txtWebResource);
-            this.groupBox.Controls.Add(this.textWebResourcePrefix);
+            this.groupBox.Controls.Add(this.txtWebResourcePrefix);
             this.groupBox.Controls.Add(this.labelWebResource);
             this.groupBox.Controls.Add(this.comboItems);
             this.groupBox.Controls.Add(this.labelItem);
@@ -53,6 +53,38 @@
             this.groupBox.Size = new System.Drawing.Size(559, 70);
             this.groupBox.TabIndex = 5;
             this.groupBox.TabStop = false;
+            // 
+            // txtWebResource
+            // 
+            this.txtWebResource.Location = new System.Drawing.Point(167, 55);
+            this.txtWebResource.Margin = new System.Windows.Forms.Padding(2);
+            this.txtWebResource.Name = "txtWebResource";
+            this.txtWebResource.Size = new System.Drawing.Size(379, 20);
+            this.txtWebResource.TabIndex = 1;
+            this.txtWebResource.Text = " ";
+            this.txtWebResource.Visible = false;
+            // 
+            // txtWebResourcePrefix
+            // 
+            this.txtWebResourcePrefix.Enabled = false;
+            this.txtWebResourcePrefix.Location = new System.Drawing.Point(97, 55);
+            this.txtWebResourcePrefix.Margin = new System.Windows.Forms.Padding(2);
+            this.txtWebResourcePrefix.Name = "txtWebResourcePrefix";
+            this.txtWebResourcePrefix.Size = new System.Drawing.Size(66, 20);
+            this.txtWebResourcePrefix.TabIndex = 6;
+            this.txtWebResourcePrefix.Text = " ";
+            this.txtWebResourcePrefix.Visible = false;
+            // 
+            // labelWebResource
+            // 
+            this.labelWebResource.AutoSize = true;
+            this.labelWebResource.Location = new System.Drawing.Point(5, 58);
+            this.labelWebResource.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelWebResource.Name = "labelWebResource";
+            this.labelWebResource.Size = new System.Drawing.Size(76, 13);
+            this.labelWebResource.TabIndex = 5;
+            this.labelWebResource.Text = "WebResource";
+            this.labelWebResource.Visible = false;
             // 
             // comboItems
             // 
@@ -65,6 +97,7 @@
             this.comboItems.Size = new System.Drawing.Size(449, 21);
             this.comboItems.TabIndex = 4;
             this.comboItems.ValueMember = "Value";
+            this.comboItems.SelectedIndexChanged += new System.EventHandler(this.comboItems_SelectedIndexChanged);
             // 
             // labelItem
             // 
@@ -98,38 +131,6 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonancel_Click);
             // 
-            // labelWebResource
-            // 
-            this.labelWebResource.AutoSize = true;
-            this.labelWebResource.Location = new System.Drawing.Point(5, 58);
-            this.labelWebResource.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelWebResource.Name = "labelWebResource";
-            this.labelWebResource.Size = new System.Drawing.Size(76, 13);
-            this.labelWebResource.TabIndex = 5;
-            this.labelWebResource.Text = "WebResource";
-            this.labelWebResource.Visible = false;
-            // 
-            // textWebResourcePrefix
-            // 
-            this.textWebResourcePrefix.Enabled = false;
-            this.textWebResourcePrefix.Location = new System.Drawing.Point(97, 55);
-            this.textWebResourcePrefix.Margin = new System.Windows.Forms.Padding(2);
-            this.textWebResourcePrefix.Name = "textWebResourcePrefix";
-            this.textWebResourcePrefix.Size = new System.Drawing.Size(40, 20);
-            this.textWebResourcePrefix.TabIndex = 6;
-            this.textWebResourcePrefix.Text = " ";
-            this.textWebResourcePrefix.Visible = false;
-            // 
-            // txtWebResource
-            // 
-            this.txtWebResource.Location = new System.Drawing.Point(141, 55);
-            this.txtWebResource.Margin = new System.Windows.Forms.Padding(2);
-            this.txtWebResource.Name = "txtWebResource";
-            this.txtWebResource.Size = new System.Drawing.Size(405, 20);
-            this.txtWebResource.TabIndex = 1;
-            this.txtWebResource.Text = " ";
-            this.txtWebResource.Visible = false;
-            // 
             // FormItems
             // 
             this.AcceptButton = this.buttonOk;
@@ -162,6 +163,6 @@
         private System.Windows.Forms.ComboBox comboItems;
         private System.Windows.Forms.Label labelWebResource;
         private System.Windows.Forms.TextBox txtWebResource;
-        private System.Windows.Forms.TextBox textWebResourcePrefix;
+        private System.Windows.Forms.TextBox txtWebResourcePrefix;
     }
 }

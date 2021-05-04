@@ -9,14 +9,13 @@ namespace DynamicsCrm.DevKit.Package
 {
     public static class PackageHelper
     {
-        public static void GetCrmServiceClient(DTE dte)
+        public static bool GetCrmServiceClient(DTE dte)
         {
-            dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
             var check = UtilityPackage.GetGlobal("CrmServiceClient", dte);
             if (check == null)
             {
                 var form = new FormConnection2(dte);
-                if (form.ShowDialog() == DialogResult.Cancel) return;
+                if (form.ShowDialog() == DialogResult.Cancel) return false;
                 if (form.Check == "1")
                 {
                     var loginForm = new FormLogin();
@@ -29,8 +28,8 @@ namespace DynamicsCrm.DevKit.Package
                     }
                     else
                     {
-                        UtilityPackage.SetDTEStatusBar(dte, "Connection failed", true);
-                        return;
+                        UtilityPackage.SetDTEStatusBar(dte, "Connection failed");
+                        return false;
                     }
                 }
                 else
@@ -39,6 +38,7 @@ namespace DynamicsCrm.DevKit.Package
                     UtilityPackage.SetGlobal("CrmServiceClient", form.CrmServiceClient, dte);
                 }
             }
+            return true;
         }
 
         private static void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
