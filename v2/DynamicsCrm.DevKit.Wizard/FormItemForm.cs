@@ -61,25 +61,27 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
+            comboBoxCrmName.Visible = false;
+
             progressBar.Visible = false;
 
             DTE = dte;
             ItemType = itemType;
             NameSpace = nameSpace;
             SharedNameSpace = sharedNameSpace;
-            LoadComboBoxCrmName();
+            //LoadComboBoxCrmName();
         }
 
-        private void LoadComboBoxCrmName()
-        {
-            var dataSource = Const.DataSourceCrm;
-            comboBoxCrmName.DataSource = dataSource;
-            comboBoxCrmName.ValueMember = "Version";
-            comboBoxCrmName.DisplayMember = "Name";
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
-                comboBoxCrmName.Text = config.DefaultCrmName;
-        }
+        //private void LoadComboBoxCrmName()
+        //{
+        //    var dataSource = Const.DataSourceCrm;
+        //    comboBoxCrmName.DataSource = dataSource;
+        //    comboBoxCrmName.ValueMember = "Version";
+        //    comboBoxCrmName.DisplayMember = "Name";
+        //    var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+        //    if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
+        //        comboBoxCrmName.Text = config.DefaultCrmName;
+        //}
 
         private void LoadComboBoxEntity(List<XrmEntity> entities)
         {
@@ -102,7 +104,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             if (!IsOk()) return;
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            config.DefaultCrmName = comboBoxCrmName.Text;
+            //config.DefaultCrmName = comboBoxCrmName.Text;
             DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
             if (ItemType == ItemType.JsForm)
             {

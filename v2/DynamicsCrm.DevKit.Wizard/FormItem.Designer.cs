@@ -35,8 +35,6 @@
             this.comboBoxWebResource = new System.Windows.Forms.ComboBox();
             this.checkBoxDebug = new System.Windows.Forms.CheckBox();
             this.comboBoxEntity = new System.Windows.Forms.ComboBox();
-            this.comboBoxCrmName = new System.Windows.Forms.ComboBox();
-            this.labelCrmName = new System.Windows.Forms.Label();
             this.labelItemName = new System.Windows.Forms.Label();
             this.textItemName = new System.Windows.Forms.TextBox();
             this.labelItem = new System.Windows.Forms.Label();
@@ -83,8 +81,6 @@
             this.groupBox.Controls.Add(this.comboBoxWebResource);
             this.groupBox.Controls.Add(this.checkBoxDebug);
             this.groupBox.Controls.Add(this.comboBoxEntity);
-            this.groupBox.Controls.Add(this.comboBoxCrmName);
-            this.groupBox.Controls.Add(this.labelCrmName);
             this.groupBox.Controls.Add(this.labelItemName);
             this.groupBox.Controls.Add(this.textItemName);
             this.groupBox.Controls.Add(this.labelItem);
@@ -108,7 +104,7 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxWebResource.Location = new System.Drawing.Point(101, 12);
+            this.comboBoxWebResource.Location = new System.Drawing.Point(101, 32);
             this.comboBoxWebResource.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxWebResource.Name = "comboBoxWebResource";
             this.comboBoxWebResource.Size = new System.Drawing.Size(272, 21);
@@ -121,10 +117,10 @@
             // 
             this.checkBoxDebug.AutoSize = true;
             this.checkBoxDebug.Enabled = false;
-            this.checkBoxDebug.Location = new System.Drawing.Point(309, 35);
+            this.checkBoxDebug.Location = new System.Drawing.Point(309, 65);
             this.checkBoxDebug.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDebug.Name = "checkBoxDebug";
-            this.checkBoxDebug.Size = new System.Drawing.Size(75, 20);
+            this.checkBoxDebug.Size = new System.Drawing.Size(64, 17);
             this.checkBoxDebug.TabIndex = 5;
             this.checkBoxDebug.Text = "DEBUG";
             this.checkBoxDebug.UseVisualStyleBackColor = true;
@@ -141,7 +137,7 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxEntity.Location = new System.Drawing.Point(101, 12);
+            this.comboBoxEntity.Location = new System.Drawing.Point(101, 32);
             this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxEntity.Name = "comboBoxEntity";
             this.comboBoxEntity.Size = new System.Drawing.Size(272, 21);
@@ -150,60 +146,32 @@
             this.comboBoxEntity.SelectedIndexChanged += new System.EventHandler(this.comboBoxEntity_SelectedIndexChanged);
             this.comboBoxEntity.TextUpdate += new System.EventHandler(this.comboBoxEntity_TextUpdate);
             // 
-            // comboBoxCrmName
-            // 
-            this.comboBoxCrmName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCrmName.Enabled = false;
-            this.comboBoxCrmName.FormattingEnabled = true;
-            this.comboBoxCrmName.Items.AddRange(new object[] {
-            "Dynamics 365",
-            "Dynamics Crm 2016",
-            "Dynamics Crm 2015",
-            "Dynamics Crm 2013",
-            "Dynamics Crm 2011",
-            "Dynamics Crm 4.0"});
-            this.comboBoxCrmName.Location = new System.Drawing.Point(101, 62);
-            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBoxCrmName.Name = "comboBoxCrmName";
-            this.comboBoxCrmName.Size = new System.Drawing.Size(272, 21);
-            this.comboBoxCrmName.TabIndex = 2;
-            // 
-            // labelCrmName
-            // 
-            this.labelCrmName.AutoSize = true;
-            this.labelCrmName.Location = new System.Drawing.Point(6, 64);
-            this.labelCrmName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelCrmName.Name = "labelCrmName";
-            this.labelCrmName.Size = new System.Drawing.Size(35, 16);
-            this.labelCrmName.TabIndex = 3;
-            this.labelCrmName.Text = "Crm:";
-            // 
             // labelItemName
             // 
             this.labelItemName.AutoSize = true;
             this.labelItemName.Location = new System.Drawing.Point(101, 33);
             this.labelItemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItemName.Name = "labelItemName";
-            this.labelItemName.Size = new System.Drawing.Size(0, 16);
+            this.labelItemName.Size = new System.Drawing.Size(0, 13);
             this.labelItemName.TabIndex = 2;
             // 
             // textItemName
             // 
             this.textItemName.Enabled = false;
-            this.textItemName.Location = new System.Drawing.Point(101, 12);
+            this.textItemName.Location = new System.Drawing.Point(101, 33);
             this.textItemName.Margin = new System.Windows.Forms.Padding(2);
             this.textItemName.Name = "textItemName";
-            this.textItemName.Size = new System.Drawing.Size(272, 22);
+            this.textItemName.Size = new System.Drawing.Size(272, 20);
             this.textItemName.TabIndex = 1;
             this.textItemName.TextChanged += new System.EventHandler(this.textItemName_TextChanged);
             // 
             // labelItem
             // 
             this.labelItem.AutoSize = true;
-            this.labelItem.Location = new System.Drawing.Point(6, 14);
+            this.labelItem.Location = new System.Drawing.Point(5, 36);
             this.labelItem.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItem.Name = "labelItem";
-            this.labelItem.Size = new System.Drawing.Size(76, 16);
+            this.labelItem.Size = new System.Drawing.Size(61, 13);
             this.labelItem.TabIndex = 0;
             this.labelItem.Text = "Item Name:";
             // 
@@ -264,8 +232,6 @@
         private System.Windows.Forms.TextBox textItemName;
         private System.Windows.Forms.Label labelItem;
         private System.Windows.Forms.Label labelItemName;
-        private System.Windows.Forms.ComboBox comboBoxCrmName;
-        private System.Windows.Forms.Label labelCrmName;
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.ComboBox comboBoxEntity;

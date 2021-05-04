@@ -102,7 +102,7 @@ namespace DynamicsCrm.DevKit.Wizard
             var AuthTypeValue = form?.CrmConnection?.Type;
             var UrlValue = form?.CrmConnection?.Url;
             var ClientIdValue = form?.CrmConnection?.UserName;
-            var ClientSecretValue = form?.CrmConnection?.Type == "ClientSecret" ? form?.CrmConnection?.Password : EncryptDecrypt.DecryptString(form?.CrmConnection?.Password);
+            var ClientSecretValue = form?.CrmConnection?.Type == "ClientSecret" ? form?.CrmConnection?.Password : (form?.CrmConnection?.Password != string.Empty ?  EncryptDecrypt.DecryptString(form?.CrmConnection?.Password) : string.Empty);
             replacementsDictionary.Add("$ClientId$", ClientIdName ?? string.Empty);
             replacementsDictionary.Add("$ClientSecret$", ClientSecretName ?? string.Empty);
             replacementsDictionary.Add("$AuthTypeValue$", AuthTypeValue ?? string.Empty);

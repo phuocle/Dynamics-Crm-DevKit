@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Wizard
         public string GeneratedJsWebApiCodeTypeScriptDeclaration { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public CrmConnection CrmConnection { get; set; }
-        public string ComboBoxCrmName => comboBoxCrmName.Text;
+        public string ComboBoxCrmName => Const.Dynamics365;
         public string ComboBoxEntityName => comboBoxEntity.Text;
         public string NameSpace { get; set; }
         public string SharedNameSpace { get; set; }
@@ -59,7 +59,6 @@ namespace DynamicsCrm.DevKit.Wizard
                 {
                     link.Text = @"Add new Workflow Class";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template";
-                    comboBoxCrmName.Enabled = true;
                     buttonConnection.Enabled = false;
                     textItemName.Enabled = true;
                     textItemName.Focus();
@@ -82,7 +81,6 @@ namespace DynamicsCrm.DevKit.Wizard
                     //buttonConnection.Enabled = false;
                     textItemName.Visible = false;
                     //buttonOk.Enabled = true;
-                    comboBoxCrmName.Enabled = true;
                     //comboBoxEntity.Enabled = true;
                     comboBoxEntity.Visible = true;
                     //comboBoxEntity.DataSource = Utility.GetLanguages();
@@ -106,7 +104,6 @@ namespace DynamicsCrm.DevKit.Wizard
                 {
                     link.Text = @"Add New Test UI Class";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Test-Ui-Item-Template";
-                    comboBoxCrmName.Enabled = true;
                     buttonConnection.Enabled = false;
                     textItemName.Enabled = true;
                     textItemName.Focus();
@@ -181,7 +178,6 @@ namespace DynamicsCrm.DevKit.Wizard
                     }
                     buttonOk.Enabled = comboBoxEntity.Items.Count > 0;
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
-                    comboBoxCrmName.Enabled = true;
                     progressBar.Value = 100;
                 }
                 else if (_itemType == ItemType.JsTest)
@@ -205,19 +201,19 @@ namespace DynamicsCrm.DevKit.Wizard
             ItemType = itemType;
             NameSpace = nameSpace;
             SharedNameSpace = sharedNameSpace;
-            LoadComboBoxCrmName();
+            //LoadComboBoxCrmName();
         }
 
-        private void LoadComboBoxCrmName()
-        {
-            var dataSource = Const.DataSourceCrm;
-            comboBoxCrmName.DataSource = dataSource;
-            comboBoxCrmName.ValueMember = "Version";
-            comboBoxCrmName.DisplayMember = "Name";
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
-                comboBoxCrmName.Text = config.DefaultCrmName;
-        }
+        //private void LoadComboBoxCrmName()
+        //{
+        //    var dataSource = Const.DataSourceCrm;
+        //    comboBoxCrmName.DataSource = dataSource;
+        //    comboBoxCrmName.ValueMember = "Version";
+        //    comboBoxCrmName.DisplayMember = "Name";
+        //    var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+        //    if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
+        //        comboBoxCrmName.Text = config.DefaultCrmName;
+        //}
 
         private void LoadComboBoxEntity(List<XrmEntity> entities)
         {
@@ -250,7 +246,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             if (!IsOk()) return;
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            config.DefaultCrmName = comboBoxCrmName.Text;
+            //config.DefaultCrmName = comboBoxCrmName.Text;
             DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
             progressBar.Visible = true;
             if(ItemType == ItemType.LateBound)
@@ -326,31 +322,23 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.ShowDialog() == DialogResult.Cancel) return;
             if (form.Check == "1")
             {
-                if (ItemType == ItemType.LateBound ||
-                    ItemType == ItemType.JsWebApi ||
-                    ItemType == ItemType.JsTest ||
-                    ItemType == ItemType.ResourceString)
+                var loginForm = new FormLogin();
+                loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                loginForm.ShowDialog();
+                if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                 {
-                    var loginForm = new FormLogin();
-                    loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
-                    loginForm.ShowDialog();
-                    if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
-                    {
-                        CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
-                        CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
-                    }
-                    else
-                        throw new WizardCancelledException();
+                    CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
+                    CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
                 }
+                else
+                    throw new WizardCancelledException();
             }
             else
             {
                 CrmConnection = form.CrmConnection;
                 CrmServiceClient = form.CrmServiceClient;
             }
-
             buttonOk.Enabled = true;
-            comboBoxCrmName.Enabled = true;
             CheckFormByFormType();
             Text = $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}";
         }
@@ -375,7 +363,6 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(entities1);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
@@ -396,7 +383,6 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(entities2);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     checkBoxDebug.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
@@ -418,7 +404,6 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(entities3);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
@@ -441,7 +426,6 @@ namespace DynamicsCrm.DevKit.Wizard
                     comboBoxWebResource.Enabled = comboBoxEntity.Enabled;
                     comboBoxEntity.SelectedIndex = 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = false;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
@@ -456,7 +440,6 @@ namespace DynamicsCrm.DevKit.Wizard
             buttonConnection.Enabled = value;
             buttonOk.Enabled = value;
             buttonCancel.Enabled = value;
-            comboBoxCrmName.Enabled = value;
             textItemName.Enabled = value;
             comboBoxEntity.Enabled = value;
             checkBoxDebug.Enabled = value;

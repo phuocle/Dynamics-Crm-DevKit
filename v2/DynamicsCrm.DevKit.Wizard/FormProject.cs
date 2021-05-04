@@ -28,9 +28,10 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                var crmName = Utility.GetCrmName(comboBoxCrmName.Text);
-                if (crmName.Length == 0) return crmName;
-                return crmName.Substring(crmName.LastIndexOf(" ")).Trim();
+                //var crmName = Utility.GetCrmName(comboBoxCrmName.Text);
+                //if (crmName.Length == 0) return crmName;
+                //return crmName.Substring(crmName.LastIndexOf(" ")).Trim();
+                return "365";
             }
         }
 
@@ -62,7 +63,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 return ProjectType.WebResource.ToString();
             }
         }
-        public string ComboBoxCrmName => comboBoxCrmName.Text;
+        public string ComboBoxCrmName => Const.Dynamics365;
         public string Check { get; set; } = "0";
 
         public DTE DTE { get; }
@@ -164,31 +165,31 @@ namespace DynamicsCrm.DevKit.Wizard
 
             DTE = dte;
             ProjectType = projectType;
-            LoadComboBoxCrmName();
+            //LoadComboBoxCrmName();
         }
 
-        private void LoadComboBoxCrmName()
-        {
-            var dataSource = Const.DataSourceCrm;
-            if (ProjectType == ProjectType.DataProvider)
-            {
-                dataSource = Const.DataSourceCrm.Where(x => x.Name.StartsWith(Const.Dynamics365)).ToList();
-            }
-            else if (ProjectType == ProjectType.UiTest)
-            {
-                dataSource = Const.DataSourceCrm.Where(x => x.Name.StartsWith(Const.Dynamics365) || x.Name.StartsWith(Const.DynamicsCrm2016)).ToList();
-            }
-            comboBoxCrmName.DataSource = dataSource;
-            comboBoxCrmName.ValueMember = "Version";
-            comboBoxCrmName.DisplayMember = "Name";
+        //private void LoadComboBoxCrmName()
+        //{
+        //    var dataSource = Const.DataSourceCrm;
+        //    if (ProjectType == ProjectType.DataProvider)
+        //    {
+        //        dataSource = Const.DataSourceCrm.Where(x => x.Name.StartsWith(Const.Dynamics365)).ToList();
+        //    }
+        //    else if (ProjectType == ProjectType.UiTest)
+        //    {
+        //        dataSource = Const.DataSourceCrm.Where(x => x.Name.StartsWith(Const.Dynamics365) || x.Name.StartsWith(Const.DynamicsCrm2016)).ToList();
+        //    }
+        //    comboBoxCrmName.DataSource = dataSource;
+        //    comboBoxCrmName.ValueMember = "Version";
+        //    comboBoxCrmName.DisplayMember = "Name";
 
-            comboBoxCrmName.SelectedIndex = 0;
-            comboBoxCrmName.Enabled = false;
+        //    comboBoxCrmName.SelectedIndex = 0;
+        //    comboBoxCrmName.Enabled = false;
 
-            //var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            //if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
-            //    comboBoxCrmName.Text = config.DefaultCrmName;
-        }
+        //    //var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+        //    //if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
+        //    //    comboBoxCrmName.Text = config.DefaultCrmName;
+        //}
 
         private void LoadComboBoxEntity(List<XrmEntity> entities)
         {
@@ -215,7 +216,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 return;
             }
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            config.DefaultCrmName = comboBoxCrmName.Text;
+            //config.DefaultCrmName = comboBoxCrmName.Text;
             DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
             DialogResult = DialogResult.OK;
         }
@@ -231,24 +232,16 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.ShowDialog() == DialogResult.Cancel) return;
             if (form.Check == "1")
             {
-                if (//ProjectType == ProjectType.DataProvider ||
-                    ProjectType == ProjectType.CustomAction ||
-                    ProjectType == ProjectType.CustomApi ||
-                    ProjectType == ProjectType.Workflow ||
-                    //ProjectType == ProjectType.Report ||
-                    ProjectType == ProjectType.Plugin)
+                var loginForm = new FormLogin();
+                loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                loginForm.ShowDialog();
+                if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                 {
-                    var loginForm = new FormLogin();
-                    loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
-                    loginForm.ShowDialog();
-                    if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
-                    {
-                        CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
-                        CrmConnection = new CrmConnection {Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
-                    }
-                    else
-                        throw new WizardCancelledException();
+                    CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
+                    CrmConnection = new CrmConnection {Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
                 }
+                else
+                    throw new WizardCancelledException();
             }
             else
             {
@@ -257,7 +250,6 @@ namespace DynamicsCrm.DevKit.Wizard
             }
             Check = form.Check;
             buttonOk.Enabled = true;
-            //comboBoxCrmName.Enabled = true;
             CheckFormByFormType();
             Text = $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}";
         }

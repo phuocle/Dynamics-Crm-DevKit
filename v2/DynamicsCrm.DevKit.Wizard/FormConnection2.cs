@@ -58,12 +58,12 @@ namespace DynamicsCrm.DevKit.Wizard
 
             ProjectType = projectType;
 
-            if (ProjectType == ProjectType.UiTest ||
-                ProjectType == ProjectType.Test)
-            {
-                chkCheck0.Enabled = false;
-                chkCheck1.Enabled = false;
-            }
+            //if (ProjectType == ProjectType.UiTest ||
+            //    ProjectType == ProjectType.Test)
+            //{
+            //    chkCheck0.Enabled = false;
+            //    chkCheck1.Enabled = false;
+            //}
 
             ItemType = itemType;
 

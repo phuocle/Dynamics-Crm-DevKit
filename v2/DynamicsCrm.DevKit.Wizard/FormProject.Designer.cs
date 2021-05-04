@@ -33,8 +33,6 @@
             this.link = new System.Windows.Forms.LinkLabel();
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.comboBoxEntity = new System.Windows.Forms.ComboBox();
-            this.comboBoxCrmName = new System.Windows.Forms.ComboBox();
-            this.labelDynamicsCrm = new System.Windows.Forms.Label();
             this.labelProjectName = new System.Windows.Forms.Label();
             this.textProjectName = new System.Windows.Forms.TextBox();
             this.labelProject = new System.Windows.Forms.Label();
@@ -79,8 +77,6 @@
             // groupBox
             // 
             this.groupBox.Controls.Add(this.comboBoxEntity);
-            this.groupBox.Controls.Add(this.comboBoxCrmName);
-            this.groupBox.Controls.Add(this.labelDynamicsCrm);
             this.groupBox.Controls.Add(this.labelProjectName);
             this.groupBox.Controls.Add(this.textProjectName);
             this.groupBox.Controls.Add(this.labelProject);
@@ -104,7 +100,7 @@
             "Dynamics Crm 2013",
             "Dynamics Crm 2011",
             "Dynamics Crm 4.0"});
-            this.comboBoxEntity.Location = new System.Drawing.Point(100, 12);
+            this.comboBoxEntity.Location = new System.Drawing.Point(100, 29);
             this.comboBoxEntity.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxEntity.Name = "comboBoxEntity";
             this.comboBoxEntity.Size = new System.Drawing.Size(273, 21);
@@ -113,38 +109,9 @@
             this.comboBoxEntity.SelectedIndexChanged += new System.EventHandler(this.comboBoxEntity_SelectedIndexChanged);
             this.comboBoxEntity.TextUpdate += new System.EventHandler(this.comboBoxEntity_TextUpdate);
             // 
-            // comboBoxCrmName
-            // 
-            this.comboBoxCrmName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxCrmName.Enabled = false;
-            this.comboBoxCrmName.FormattingEnabled = true;
-            this.comboBoxCrmName.Items.AddRange(new object[] {
-            "Dynamics 365",
-            "Dynamics Crm 2016",
-            "Dynamics Crm 2015",
-            "Dynamics Crm 2013",
-            "Dynamics Crm 2011",
-            "Dynamics Crm 4.0"});
-            this.comboBoxCrmName.Location = new System.Drawing.Point(103, 62);
-            this.comboBoxCrmName.Margin = new System.Windows.Forms.Padding(2);
-            this.comboBoxCrmName.Name = "comboBoxCrmName";
-            this.comboBoxCrmName.Size = new System.Drawing.Size(270, 21);
-            this.comboBoxCrmName.TabIndex = 2;
-            // 
-            // labelDynamicsCrm
-            // 
-            this.labelDynamicsCrm.AutoSize = true;
-            this.labelDynamicsCrm.Location = new System.Drawing.Point(6, 65);
-            this.labelDynamicsCrm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelDynamicsCrm.Name = "labelDynamicsCrm";
-            this.labelDynamicsCrm.Size = new System.Drawing.Size(28, 13);
-            this.labelDynamicsCrm.TabIndex = 3;
-            this.labelDynamicsCrm.Text = "Crm:";
-            this.labelDynamicsCrm.Visible = false;
-            // 
             // labelProjectName
             // 
-            this.labelProjectName.Location = new System.Drawing.Point(100, 32);
+            this.labelProjectName.Location = new System.Drawing.Point(100, 61);
             this.labelProjectName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelProjectName.Name = "labelProjectName";
             this.labelProjectName.Size = new System.Drawing.Size(273, 28);
@@ -154,7 +121,7 @@
             // textProjectName
             // 
             this.textProjectName.Enabled = false;
-            this.textProjectName.Location = new System.Drawing.Point(100, 12);
+            this.textProjectName.Location = new System.Drawing.Point(100, 29);
             this.textProjectName.Margin = new System.Windows.Forms.Padding(2);
             this.textProjectName.Name = "textProjectName";
             this.textProjectName.Size = new System.Drawing.Size(273, 20);
@@ -164,7 +131,7 @@
             // labelProject
             // 
             this.labelProject.AutoSize = true;
-            this.labelProject.Location = new System.Drawing.Point(6, 15);
+            this.labelProject.Location = new System.Drawing.Point(5, 32);
             this.labelProject.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelProject.Name = "labelProject";
             this.labelProject.Size = new System.Drawing.Size(74, 13);
@@ -205,7 +172,7 @@
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.link);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -228,8 +195,6 @@
         private System.Windows.Forms.TextBox textProjectName;
         private System.Windows.Forms.Label labelProject;
         private System.Windows.Forms.Label labelProjectName;
-        private System.Windows.Forms.ComboBox comboBoxCrmName;
-        private System.Windows.Forms.Label labelDynamicsCrm;
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.ComboBox comboBoxEntity;

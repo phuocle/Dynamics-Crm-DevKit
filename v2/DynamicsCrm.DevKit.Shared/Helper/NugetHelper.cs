@@ -54,14 +54,15 @@ namespace DynamicsCrm.DevKit.Shared.Helper
 
         public static CrmNuget GetLatestPackageVersion(string packageId, string comboboxCrmName)
         {
-            if (comboboxCrmName.Length == 0)
-            {
-                return new CrmNuget
-                {
-                    TargetFramework = "000",
-                    Version = "0.0.0"
-                };
-            }
+            //if (comboboxCrmName.Length == 0)
+            //{
+            //    return new CrmNuget
+            //    {
+            //        TargetFramework = "000",
+            //        Version = "0.0.0"
+            //    };
+            //}
+            comboboxCrmName = $"{Const.Dynamics365} - 4.6.2";
             var parts = comboboxCrmName.Split("-".ToCharArray());
             var crmName = parts[0].Trim();
             var crmVersion = parts[1].Trim();
