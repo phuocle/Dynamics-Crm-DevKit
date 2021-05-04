@@ -1,13 +1,13 @@
-﻿using Microsoft.Xrm.Sdk.Query;
+﻿using Dev.DevKit.Shared;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
-using System.Dynamic;
-using System.Linq;
-using $NameSpace$;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -443,7 +443,7 @@ namespace Microsoft.Xrm.Sdk
     }
 }
 
-namespace $NameSpace$
+namespace Dev.DevKit.Shared
 {
     [DebuggerNonUserCode()]
     public class TextValue
