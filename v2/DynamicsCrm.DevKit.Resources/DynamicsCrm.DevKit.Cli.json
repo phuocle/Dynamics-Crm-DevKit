@@ -134,7 +134,7 @@
       "rootfolder": "???",
       "type": "CSharp",
       "entities": "folder",
-      "debug": ""
+      "debug": "?"
     },
     {
       "profile": "JS-FORM",
@@ -142,7 +142,7 @@
       "rootfolder": "???",
       "type": "JsForm",
       "entities": "folder",
-      "debug": ""
+      "debug": "?"
     },
     {
       "profile": "JS-WEBAPI",
@@ -150,7 +150,7 @@
       "rootfolder": "???",
       "type": "JsWebApi",
       "entities": "folder",
-      "debug": ""
+      "debug": "?"
     }
   ],
   "downloadwebresources": [

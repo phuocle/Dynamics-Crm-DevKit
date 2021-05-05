@@ -132,28 +132,25 @@
       "profile": "LATEBOUND",
       "rootnamespace": "Dev.DevKit.Shared.Entities",
       "rootfolder": "",
-      "crmversion": "365",
       "type": "CSharp",
       "entities": "all",
-      "debug": ""
+      "debug": "?"
     },
     {
       "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "crmversion": "365",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "type": "JsForm",
-      "entities": "all",
-      "debug": ""
+      "entities": "account,contact",
+      "debug": "yes"
     },
     {
       "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "crmversion": "365",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "type": "JsWebApi",
-      "entities": "",
-      "debug": ""
+      "entities": "account,contact",
+      "debug": "yes"
     }
   ],
   "downloadwebresources": [

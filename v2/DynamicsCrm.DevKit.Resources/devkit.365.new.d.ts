@@ -1361,54 +1361,6 @@ declare namespace DevKit {
             message: string;
         }
     }
-    abstract class WebApi {
-        /**
-         * Creates an entity record
-         * @param entityLogicalName Logical name of the entity you want to create. For example: "account".
-         * @param entity A JSON object defining the attributes and values for the new entity record.
-         * @returns On success, returns a promise object containing the attributes specified earlier in the description of the successCallback parameter.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createrecord
-         */
-        CreateRecord(entityLogicalName: string, entity: any): WebApi.PromiseLike<WebApi.CreateResponse>;
-        /**
-         * Updates an entity record.
-         * @param entityLogicalName The entity logical name of the record you want to update. For example: "account".
-         * @param id GUID of the entity record you want to update.
-         * @param entity A JSON object containing key: value pairs, where key is the property of the entity and value is the value of the property you want update.
-         * @returns On success, returns a promise object containing the attributes specified earlier in the description of the successCallback parameter.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/updaterecord
-         */
-        UpdateRecord(entityLogicalName: string, id: string, entity: any): WebApi.PromiseLike<any>;
-        /**
-         * Deletes an entity record.
-         * @param entityLogicalName The entity logical name of the record you want to delete. For example: "account".
-         * @param id GUID of the entity record you want to delete.
-         * @returns On success, returns a promise object containing the attributes specified earlier in the description of the successCallback parameter.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/deleterecord
-         */
-        DeleteRecord(entityLogicalName: string, id: string): WebApi.PromiseLike<string>;
-        /**
-         * Retrieves an entity record.
-         * @param entityLogicalName The entity logical name of the record you want to retrieve. For example: "account".
-         * @param id GUID of the entity record you want to retrieve.
-         * @param options (Optional) OData system query options, $select and $expand, to retrieve your data.
-         * - Use the $select system query option to limit the properties returned by including a comma-separated
-         *   list of property names. This is an important performance best practice. If properties aren’t
-         *   specified using $select, all properties will be returned.
-         * - Use the $expand system query option to control what data from related entities is returned. If you
-         *   just include the name of the navigation property, you’ll receive all the properties for related
-         *   records. You can limit the properties returned for related records using the $select system query
-         *   option in parentheses after the navigation property name. Use this for both single-valued and
-         *   collection-valued navigation properties.
-         * - You can also specify multiple query options by using & to separate the query options.
-         * @example <caption>options example:</caption>
-         * options: $select=name&$expand=primarycontactid($select=contactid,fullname)
-         * @returns On success, returns a promise containing a JSON object with the retrieved attributes and their values.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
-         */
-        RetrieveRecord(entityLogicalName: string, id: string, options?: string): WebApi.PromiseLike<any>;
-
-    }
     interface IEntityBaseAttribute {
         /** Type of an attribute */
         readonly AttributeType: number;
