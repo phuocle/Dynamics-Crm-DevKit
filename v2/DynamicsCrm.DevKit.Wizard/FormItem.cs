@@ -51,6 +51,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 {
                     link.Text = @"Add new C# Late Bound Class";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Late-Bound-Class-Item-Template";
+                    labelItem.Text = "Table";
                     textItemName.Visible = false;
                     comboBoxEntity.Visible = true;
                     comboBoxEntity.DropDownStyle = ComboBoxStyle.DropDownList;

@@ -207,13 +207,14 @@ namespace DynamicsCrm.DevKit.Shared
                         dataType += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateAndTime";
                 }
             }
-            else
+            else if(crmAttribute.IsMultiSelectPicklist)
+                dataType += "MultiSelectPicklist";
+            else if (crmAttribute.FieldType == AttributeTypeCode.Lookup)
             {
-                if (crmAttribute.IsMultiSelectPicklist)
-                    dataType += "MultiSelectPicklist";
-                else
-                    dataType += crmAttribute.FieldType.ToString();
+                dataType += crmAttribute.FieldType.ToString() + " to " + crmAttribute.EntityReferenceLogicalName;
             }
+            else
+                dataType += crmAttribute.FieldType.ToString();
             if (crmAttribute.MaxLength.HasValue) dataType += " - MaxLength: " + crmAttribute.MaxLength;
             if (crmAttribute.Min.HasValue) dataType += " - MinValue: " + crmAttribute.Min.Value.ToString("#,##0");
             if (crmAttribute.Max.HasValue) dataType += " - MaxValue: " + crmAttribute.Max.Value.ToString("#,##0");

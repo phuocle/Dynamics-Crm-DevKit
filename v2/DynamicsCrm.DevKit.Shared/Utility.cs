@@ -8,6 +8,7 @@ using NUglify;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Text;
 using Microsoft.CSharp;
+using System.Globalization;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -356,6 +357,7 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("__", "_");
                 var firstchar = name[0];
                 if (firstchar >= '0' && firstchar <= '9') name = "_" + name;
+                name = string.Concat(name.Normalize(NormalizationForm.FormD).Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)).Normalize(NormalizationForm.FormC);
                 var cs = new CSharpCodeProvider();
                 name = cs.CreateValidIdentifier(name);
                 return name;
