@@ -141,7 +141,7 @@
       "rootnamespace": "DevKit",
       "rootfolder": "",
       "type": "JsForm",
-      "entities": "account,contact",
+      "entities": "all",
       "debug": "yes"
     },
     {
@@ -149,7 +149,7 @@
       "rootnamespace": "DevKit",
       "rootfolder": "",
       "type": "JsWebApi",
-      "entities": "account,contact",
+      "entities": "*",
       "debug": "yes"
     }
   ],

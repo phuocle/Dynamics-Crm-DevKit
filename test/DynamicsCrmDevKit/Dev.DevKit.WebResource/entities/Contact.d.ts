@@ -326,8 +326,6 @@ declare namespace DevKit {
 		constructor(executionContext: any, defaultWebResourceName?: string);
 		/** Utility functions/methods/objects for Dynamics 365 form */
 		Utility: DevKit.Utility;
-		/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */
-		WebApi: DevKit.WebApi;
 		/** The Body section of form Contact_Quick_Create */
 		Body: DevKit.FormContact_Quick_Create.Body;
 	}

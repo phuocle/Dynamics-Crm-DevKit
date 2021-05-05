@@ -1051,8 +1051,6 @@ namespace DynamicsCrm.DevKit.Shared
                 formBase += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
                 formBase += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
                 formBase += $"\t\tUtility: DevKit.Utility;\r\n";
-                formBase += $"\t\t/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */\r\n";
-                formBase += $"\t\tWebApi: DevKit.WebApi;\r\n";
                 if (form_d_ts_Body_QuickCreate.Length > 0)
                 {
                     formBase += $"\t\t/** The Body section of form {formName} */\r\n";
