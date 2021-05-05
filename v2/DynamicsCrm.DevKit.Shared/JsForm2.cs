@@ -852,15 +852,15 @@ namespace DynamicsCrm.DevKit.Shared
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)
             {
-                if (checkedItems.Contains($"{form.Name}"))
+                if (checkedItems.Any(x => form.Name.ToLower() == x.ToLower()))
                 {
                     processForms.Add(form);
-                    checkedItems.Remove(form.Name);
+                    checkedItems.RemoveAll(x => x.Equals(form.Name, StringComparison.OrdinalIgnoreCase));
                 }
             }
             foreach (var form in Forms)
             {
-                if (checkedItems.Any(x => form.Name.EndsWith(x)))
+                if (checkedItems.Any(x => form.Name.ToLower().EndsWith(x.ToLower())))
                     processForms.Add(form);
             }
             Form = GetForm(processForms);

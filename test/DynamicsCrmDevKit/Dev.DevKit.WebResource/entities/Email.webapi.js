@@ -66,8 +66,8 @@ var DevKit;
             return property;
         }
 		var email = {
-			acceptingentityid: { b: 'acceptingentityid', a: '_acceptingentityid_value', c: 'queues', d: 'queue' },
-			acceptingentityid: { b: 'acceptingentityid', a: '_acceptingentityid_value', c: 'systemusers', d: 'systemuser' },
+			acceptingentityid_queue: { b: 'acceptingentityid_queue', a: '_acceptingentityid_value', c: 'queues', d: 'queue' },
+			acceptingentityid_systemuser: { b: 'acceptingentityid_systemuser', a: '_acceptingentityid_value', c: 'systemusers', d: 'systemuser' },
 			ActivityAdditionalParams: { a: 'activityadditionalparams' },
 			ActivityId: { a: 'activityid' },
 			ActualDurationMinutes: { a: 'actualdurationminutes' },

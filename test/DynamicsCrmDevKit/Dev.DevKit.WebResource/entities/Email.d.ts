@@ -291,9 +291,9 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		/** The Entity that Accepted the Email */
-		acceptingentityid: DevKit.WebApi.LookupValue;
+		acceptingentityid_queue: DevKit.WebApi.LookupValue;
 		/** The Entity that Accepted the Email */
-		acceptingentityid: DevKit.WebApi.LookupValue;
+		acceptingentityid_systemuser: DevKit.WebApi.LookupValue;
 		/** For internal use only. */
 		ActivityAdditionalParams: DevKit.WebApi.StringValue;
 		/** Unique identifier of the email activity. */
