@@ -132,7 +132,6 @@
       "profile": "LATEBOUND",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "365",
       "type": "CSharp",
       "entities": "",
       "debug": ""
@@ -141,7 +140,6 @@
       "profile": "JS-FORM",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "365",
       "type": "JsForm",
       "entities": "",
       "debug": ""
@@ -150,7 +148,6 @@
       "profile": "JS-WEBAPI",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "365",
       "type": "JsWebApi",
       "entities": "",
       "debug": ""

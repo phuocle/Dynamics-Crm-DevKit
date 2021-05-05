@@ -131,10 +131,10 @@
     {
       "profile": "LATEBOUND",
       "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootfolder": "",
       "crmversion": "365",
       "type": "CSharp",
-      "entities": "",
+      "entities": "account,contact",
       "debug": ""
     },
     {

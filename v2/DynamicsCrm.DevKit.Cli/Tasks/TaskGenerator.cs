@@ -50,14 +50,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.rootfolder == "???")
                 throw new Exception($"{LOG} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.crmversion.Length == 0 || json.crmversion == "???")
-                throw new Exception($"{LOG} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.crmversion.ToLower() != "365".ToLower() &&
-                json.crmversion.ToLower() != "2016".ToLower() &&
-                json.crmversion.ToLower() != "2015".ToLower() &&
-                json.crmversion.ToLower() != "2013".ToLower() &&
-                json.crmversion.ToLower() != "2011".ToLower())
-                throw new Exception($"{LOG} 'crmversion' should be: '365' or '2016' or '2015' or '2013' or '2011'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            //if (json.crmversion.Length == 0 || json.crmversion == "???")
+            //    throw new Exception($"{LOG} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            //if (json.crmversion.ToLower() != "365".ToLower() &&
+            //    json.crmversion.ToLower() != "2016".ToLower() &&
+            //    json.crmversion.ToLower() != "2015".ToLower() &&
+            //    json.crmversion.ToLower() != "2013".ToLower() &&
+            //    json.crmversion.ToLower() != "2011".ToLower())
+            //    throw new Exception($"{LOG} 'crmversion' should be: '365' or '2016' or '2015' or '2013' or '2011'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.type.Length == 0 || json.type == "???")
                 throw new Exception($"{LOG} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.type.ToLower() != "JsForm".ToLower() &&
@@ -210,7 +210,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var lateBound = new CSharpLateBound();
             var rootNameSpace = json.rootnamespace;
             var sharedNameSpace = GetSharedNameSpace(json.rootnamespace);
-            var crmVersionName = (CrmVersionName)int.Parse(json.crmversion);
+            var crmVersionName = CrmVersionName._365;// (CrmVersionName)int.Parse(json.crmversion);
             var generated = lateBound.Go(crmServiceClient, crmVersionName, entity, rootNameSpace, sharedNameSpace);
             var file = $"{currentDirectory}\\{json.rootfolder}\\{entity}.generated.cs";
             var old = string.Empty;
