@@ -133,7 +133,7 @@
       "rootnamespace": "???",
       "rootfolder": "???",
       "type": "CSharp",
-      "entities": "",
+      "entities": "folder",
       "debug": ""
     },
     {
@@ -141,7 +141,7 @@
       "rootnamespace": "???",
       "rootfolder": "???",
       "type": "JsForm",
-      "entities": "",
+      "entities": "folder",
       "debug": ""
     },
     {
@@ -149,7 +149,7 @@
       "rootnamespace": "???",
       "rootfolder": "???",
       "type": "JsWebApi",
-      "entities": "",
+      "entities": "folder",
       "debug": ""
     }
   ],
