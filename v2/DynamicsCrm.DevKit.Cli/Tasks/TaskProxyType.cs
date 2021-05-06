@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var path = "\"" + GetParentFolder(currentDirectory) + $@"\packages\Microsoft.CrmSdk.CoreTools.{arguments.Version}\content\bin\coretools\CrmSvcUtil.exe" + "\"";
             CliLog.Write(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Executing", CliLog.ColorCyan, " CrmSvcUtil");
-            if (json.entities == "*")
+            if (json.entities == "*" || json.entities.ToLower() == "all")
             {
                 CliLog.WriteLine(ConsoleColor.Green, " with ", ConsoleColor.Cyan, "all entities");
             }
@@ -88,7 +88,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             };
             if (json.entities != null && json.entities.Length > 0)
             {
-                process.StartInfo.EnvironmentVariables.Add(ENVIRONMENT_ENTITIES, string.Join(",", json.entities));
+                if (json.entities != "*" && json.entities.ToLower() != "all")
+                {
+                    process.StartInfo.EnvironmentVariables.Add(ENVIRONMENT_ENTITIES, string.Join(",", json.entities));
+                }
             }
             process.Start();
             while (!process.StandardOutput.EndOfStream)
@@ -120,7 +123,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             command.Append($"/namespace:\"{json.@namespace}\" ");
             if (json.entities != null && json.entities.Length > 0)
             {
-                command.Append($"/codewriterfilter:\"DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions\" ");
+                if (json.entities != "*" && json.entities.ToLower() != "all")
+                {
+                    command.Append($"/codewriterfilter:\"DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions\" ");
+                }
             }
             command.Append($"/out:\"{json.output}\"");
             return command.ToString();
@@ -139,7 +145,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             if (json.entities != null && json.entities.Length > 0)
             {
-                command.Append($"/codewriterfilter:\"DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions\" ");
+                if (json.entities != "*" && json.entities.ToLower() != "all")
+                {
+                    command.Append($"/codewriterfilter:\"DynamicsCrm.DevKit.CrmSvcUtilExtensions.CodeWriterFilter,DynamicsCrm.DevKit.CrmSvcUtilExtensions\" ");
+                }
             }
             command.Append($"/nologo ");
             command.Append($"/namespace:\"{json.@namespace}\" ");
