@@ -149,7 +149,7 @@
             // labelItemName
             // 
             this.labelItemName.AutoSize = true;
-            this.labelItemName.Location = new System.Drawing.Point(101, 33);
+            this.labelItemName.Location = new System.Drawing.Point(101, 60);
             this.labelItemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItemName.Name = "labelItemName";
             this.labelItemName.Size = new System.Drawing.Size(0, 13);

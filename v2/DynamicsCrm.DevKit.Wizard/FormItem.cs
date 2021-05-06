@@ -61,6 +61,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     link.Text = @"Add new Workflow Class";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Workflow-Item-Template";
                     buttonConnection.Enabled = false;
+                    labelItem.Text = "Class";
                     textItemName.Enabled = true;
                     textItemName.Focus();
                     buttonOk.Enabled = true;

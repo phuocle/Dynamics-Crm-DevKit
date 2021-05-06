@@ -158,7 +158,8 @@ namespace DynamicsCrm.DevKit.Wizard
                     {
                         Application.DoEvents();
                     }
-                    entities2.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false  });
+                    entities2 = entities2.OrderBy(x => x.LogicalName).ToList();
+                    entities2.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
                     comboBoxEntity.Enabled = true;
                     comboBoxMessage.Enabled = true;
                     textPluginClass.Enabled = true;
@@ -241,6 +242,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     Application.DoEvents();
                 }
             }
+            list.Sort();
             comboBoxMessage.DataSource = list;
             buttonOk.Enabled = comboBoxMessage.Items.Count > 0;
             progressBar.Style = ProgressBarStyle.Blocks;
