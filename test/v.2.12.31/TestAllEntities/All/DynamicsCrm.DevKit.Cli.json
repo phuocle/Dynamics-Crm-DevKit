@@ -21,7 +21,7 @@
       "rootnamespace": "DevKit",
       "rootfolder": "",
       "type": "JsWebApi",
-      "entities": "email",
+      "entities": "all",
       "debug": "yes"
     }
   ],
