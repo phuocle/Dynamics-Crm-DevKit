@@ -196,7 +196,7 @@ declare namespace OptionSet {
 			ActionCardUserState,
 			/** 4200 */
 			Activity,
-			/** 10145 */
+			/** 10049 */
 			Activity_File_Attachment,
 			/** 135 */
 			Activity_Party,
@@ -204,48 +204,38 @@ declare namespace OptionSet {
 			Address,
 			/** 9949 */
 			Advanced_Similarity_Rule,
-			/** 10037 */
+			/** 10079 */
 			AI_Builder_Dataset,
-			/** 10038 */
+			/** 10080 */
 			AI_Builder_Dataset_File,
-			/** 10053 */
+			/** 10081 */
 			AI_Builder_Dataset_Record,
-			/** 10039 */
+			/** 10082 */
 			AI_Builder_Datasets_Container,
-			/** 10040 */
+			/** 10083 */
 			AI_Builder_File,
-			/** 10041 */
+			/** 10084 */
 			AI_Builder_File_Attached_Data,
 			/** 402 */
 			AI_Configuration,
-			/** 10007 */
+			/** 10085 */
 			AI_Form_Processing_Document,
 			/** 401 */
 			AI_Model,
-			/** 10010 */
+			/** 10088 */
 			AI_Object_Detection_Bounding_Box,
-			/** 10008 */
+			/** 10086 */
 			AI_Object_Detection_Image,
-			/** 10011 */
+			/** 10089 */
 			AI_Object_Detection_Image_Mapping,
-			/** 10009 */
+			/** 10087 */
 			AI_Object_Detection_Label,
 			/** 400 */
 			AI_Template,
-			/** 10013 */
-			Analysis_Component,
-			/** 10014 */
-			Analysis_Job,
-			/** 10015 */
-			Analysis_Result,
-			/** 10016 */
-			Analysis_Result_Detail,
 			/** 132 */
 			Announcement,
 			/** 2000 */
 			Annual_Fiscal_Calendar,
-			/** 10036 */
-			ApiSettings,
 			/** 9011 */
 			App_Config_Master,
 			/** 9012 */
@@ -260,7 +250,7 @@ declare namespace OptionSet {
 			Application_File,
 			/** 1120 */
 			Application_Ribbons,
-			/** 10057 */
+			/** 10021 */
 			ApplicationUser,
 			/** 8700 */
 			AppModule_Metadata,
@@ -288,26 +278,10 @@ declare namespace OptionSet {
 			Auditing,
 			/** 1094 */
 			Authorization_Server,
-			/** 10138 */
-			Azure_Account_10138,
-			/** 10151 */
-			Azure_Account_10151,
-			/** 10148 */
-			Azure_Contact,
 			/** 9936 */
 			Azure_Service_Connection,
-			/** 10135 */
-			Azure_Sql,
-			/** 10091 */
+			/** 10039 */
 			BotContent,
-			/** 10065 */
-			BPF_Account_1,
-			/** 10066 */
-			BPF_Account_3,
-			/** 10070 */
-			BPF_Location_1,
-			/** 10071 */
-			BPF_Location_2,
 			/** 4425 */
 			Bulk_Delete_Failure,
 			/** 4424 */
@@ -328,15 +302,15 @@ declare namespace OptionSet {
 			Callback_Registration,
 			/** 300 */
 			Canvas_App,
-			/** 10068 */
+			/** 10031 */
 			CanvasApp_Extended_Metadata,
-			/** 10075 */
+			/** 10018 */
 			CascadeGrantRevokeAccessRecordsTracker,
-			/** 10076 */
+			/** 10019 */
 			CascadeGrantRevokeAccessVersionTracker,
-			/** 10085 */
+			/** 10065 */
 			Catalog,
-			/** 10086 */
+			/** 10066 */
 			Catalog_Assignment,
 			/** 9959 */
 			Category,
@@ -350,9 +324,9 @@ declare namespace OptionSet {
 			Channel_Property,
 			/** 1234 */
 			Channel_Property_Group,
-			/** 10093 */
+			/** 10041 */
 			Chatbot,
-			/** 10094 */
+			/** 10042 */
 			Chatbot_subcomponent,
 			/** 36 */
 			Client_update,
@@ -366,7 +340,7 @@ declare namespace OptionSet {
 			Component_Layer_Data_Source,
 			/** 3234 */
 			Connection,
-			/** 10067 */
+			/** 10037 */
 			Connection_Reference,
 			/** 3231 */
 			Connection_Role,
@@ -376,17 +350,15 @@ declare namespace OptionSet {
 			Connector,
 			/** 2 */
 			Contact,
-			/** 10092 */
+			/** 10040 */
 			ConversationTranscript,
 			/** 9105 */
 			Currency,
-			/** 10042 */
-			Custom_Activity,
-			/** 10088 */
+			/** 10068 */
 			Custom_API,
-			/** 10089 */
+			/** 10069 */
 			Custom_API_Request_Parameter,
-			/** 10090 */
+			/** 10070 */
 			Custom_API_Response_Property,
 			/** 9753 */
 			Custom_Control,
@@ -398,13 +370,13 @@ declare namespace OptionSet {
 			Customer_Relationship,
 			/** 4410 */
 			Data_Import,
-			/** 10081 */
+			/** 10014 */
 			Data_Lake_Folder,
-			/** 10082 */
+			/** 10015 */
 			Data_Lake_Folder_Permission,
-			/** 10055 */
+			/** 10016 */
 			Data_Lake_Workspace,
-			/** 10056 */
+			/** 10017 */
 			Data_Lake_Workspace_Permission,
 			/** 4411 */
 			Data_Map,
@@ -470,7 +442,7 @@ declare namespace OptionSet {
 			Expander_Event,
 			/** 955 */
 			Expired_Process,
-			/** 10073 */
+			/** 10010 */
 			ExportSolutionUpload,
 			/** 3008 */
 			External_Party,
@@ -492,9 +464,9 @@ declare namespace OptionSet {
 			Filter_Template,
 			/** 2004 */
 			Fixed_Monthly_Fiscal_Calendar,
-			/** 10125 */
+			/** 10033 */
 			Flow_Machine,
-			/** 10126 */
+			/** 10034 */
 			Flow_Machine_Group,
 			/** 4720 */
 			Flow_Session,
@@ -506,8 +478,6 @@ declare namespace OptionSet {
 			Goal,
 			/** 9603 */
 			Goal_Metric,
-			/** 10033 */
-			Help_Page,
 			/** 8840 */
 			Hierarchy_Rule,
 			/** 9919 */
@@ -538,43 +508,43 @@ declare namespace OptionSet {
 			Interaction_for_Email,
 			/** 1003 */
 			Internal_Address,
-			/** 10087 */
+			/** 10067 */
 			Internal_Catalog_Assignment,
 			/** 7107 */
 			Invalid_Dependency,
 			/** 4705 */
 			ISV_Config,
-			/** 10120 */
+			/** 10063 */
 			KeyVaultReference,
 			/** 9953 */
 			Knowledge_Article,
 			/** 9960 */
 			Knowledge_Article_Category,
-			/** 10021 */
+			/** 10055 */
 			Knowledge_Article_Image,
-			/** 10140 */
+			/** 10058 */
 			Knowledge_article_language_setting,
-			/** 10022 */
+			/** 10060 */
 			Knowledge_Article_Template,
 			/** 9955 */
 			Knowledge_Article_Views,
 			/** 9930 */
 			Knowledge_Base_Record,
-			/** 10098 */
+			/** 10052 */
 			Knowledge_Federated_Article,
-			/** 10099 */
+			/** 10053 */
 			Knowledge_FederatedArticle_Incident,
-			/** 10079 */
+			/** 10056 */
 			Knowledge_Interaction_Insight,
-			/** 10139 */
+			/** 10059 */
 			Knowledge_personalization,
-			/** 10142 */
+			/** 10062 */
 			Knowledge_search_filter,
-			/** 10080 */
+			/** 10057 */
 			Knowledge_Search_Insight,
 			/** 9947 */
 			Knowledge_Search_Model,
-			/** 10141 */
+			/** 10061 */
 			Knowledge_search_personal_filter_config,
 			/** 9957 */
 			Language,
@@ -590,8 +560,6 @@ declare namespace OptionSet {
 			List_Value_Mapping,
 			/** 9201 */
 			LocalConfigStore,
-			/** 10069 */
-			Location,
 			/** 4419 */
 			Lookup_Mapping,
 			/** 9106 */
@@ -606,7 +574,7 @@ declare namespace OptionSet {
 			Mailbox_Tracking_Category,
 			/** 9812 */
 			Managed_Property,
-			/** 10121 */
+			/** 10064 */
 			ManagedIdentity,
 			/** 4231 */
 			Metadata_Difference,
@@ -618,15 +586,15 @@ declare namespace OptionSet {
 			Mobile_Offline_Profile_Item_Association,
 			/** 9006 */
 			Model_driven_App,
-			/** 10062 */
+			/** 10026 */
 			Model_Driven_App_Component_Node,
-			/** 10061 */
+			/** 10025 */
 			Model_Driven_App_Component_Nodes_Edge,
-			/** 10060 */
+			/** 10024 */
 			Model_Driven_App_Element,
-			/** 10063 */
+			/** 10027 */
 			Model_Driven_App_Setting,
-			/** 10117 */
+			/** 10028 */
 			Model_Driven_App_User_Setting,
 			/** 2003 */
 			Monthly_Fiscal_Calendar,
@@ -634,21 +602,19 @@ declare namespace OptionSet {
 			Multi_Select_Option_Value,
 			/** 9910 */
 			MultiEntitySearch,
-			/** 10146 */
-			My_Mother,
 			/** 9900 */
 			Navigation_Setting,
 			/** 950 */
 			New_Process,
-			/** 10054 */
+			/** 10077 */
 			NonRelational_Data_Source,
 			/** 5 */
 			Note,
-			/** 10122 */
-			Notification_10122,
+			/** 10075 */
+			Notification_10075,
 			/** 4110 */
 			Notification_4110,
-			/** 10000 */
+			/** 10032 */
 			OData_v4_Data_Source,
 			/** 4490 */
 			Office_Document,
@@ -664,25 +630,25 @@ declare namespace OptionSet {
 			Organization_Insights_Metric,
 			/** 9690 */
 			Organization_Insights_Notification,
-			/** 10114 */
+			/** 10029 */
 			Organization_Setting,
 			/** 4708 */
 			Organization_Statistic,
 			/** 1021 */
 			Organization_UI,
-			/** 10115 */
+			/** 10073 */
 			OrganizationDataSyncSubscription,
-			/** 10116 */
+			/** 10074 */
 			OrganizationDataSyncSubscriptionEntity,
 			/** 7 */
 			Owner,
 			/** 4420 */
 			Owner_Mapping,
-			/** 10077 */
+			/** 10007 */
 			Package,
 			/** 1095 */
 			Partner_Application,
-			/** 10072 */
+			/** 10048 */
 			PDF_Setting,
 			/** 9941 */
 			Personal_Document_Template,
@@ -696,6 +662,10 @@ declare namespace OptionSet {
 			Plug_in_Type,
 			/** 4603 */
 			Plug_in_Type_Statistic,
+			/** 10091 */
+			PM_Inferred_Task,
+			/** 10092 */
+			PM_Recording,
 			/** 50 */
 			Position,
 			/** 8000 */
@@ -724,11 +694,9 @@ declare namespace OptionSet {
 			Process_Stage,
 			/** 4712 */
 			Process_Trigger,
-			/** 10029 */
-			Process_WebApi_1,
-			/** 10052 */
+			/** 10035 */
 			ProcessStageParameter,
-			/** 10083 */
+			/** 10013 */
 			ProvisionLanguageForUser,
 			/** 7101 */
 			Publisher,
@@ -772,7 +740,7 @@ declare namespace OptionSet {
 			Report_Related_Entity,
 			/** 9103 */
 			Report_Visibility,
-			/** 10104 */
+			/** 90001 */
 			RevokeInheritedAccessRecordsTracker,
 			/** 4579 */
 			Ribbon_Client_Metadata,
@@ -788,7 +756,7 @@ declare namespace OptionSet {
 			Ribbon_Rule,
 			/** 1113 */
 			Ribbon_Tab_To_Command_Mapping,
-			/** 10074 */
+			/** 10076 */
 			Rich_Text_Attachment,
 			/** 1037 */
 			Role_Template,
@@ -830,21 +798,21 @@ declare namespace OptionSet {
 			Sdk_Message_Response,
 			/** 4611 */
 			Sdk_Message_Response_Field,
-			/** 10100 */
+			/** 10054 */
 			Search_provider,
-			/** 10101 */
+			/** 10078 */
 			Search_Telemetry,
 			/** 1036 */
 			Security_Role,
 			/** 2001 */
 			Semiannual_Fiscal_Calendar,
-			/** 10043 */
+			/** 10050 */
 			Service_Configuration,
 			/** 4618 */
 			Service_Endpoint,
 			/** 101 */
 			Service_Plan,
-			/** 10064 */
+			/** 10030 */
 			Setting_Definition,
 			/** 9509 */
 			SharePoint_Data,
@@ -860,7 +828,7 @@ declare namespace OptionSet {
 			SLA,
 			/** 9751 */
 			SLA_Item,
-			/** 10044 */
+			/** 10051 */
 			SLA_KPI,
 			/** 9752 */
 			SLA_KPI_Instance,
@@ -874,33 +842,25 @@ declare namespace OptionSet {
 			Solution,
 			/** 7103 */
 			Solution_Component,
-			/** 10034 */
+			/** 10000 */
 			Solution_Component_Attribute_Configuration,
-			/** 10045 */
+			/** 10001 */
 			Solution_Component_Configuration,
-			/** 10002 */
+			/** 10012 */
 			Solution_Component_Data_Source,
 			/** 7104 */
 			Solution_Component_Definition,
-			/** 10059 */
+			/** 10002 */
 			Solution_Component_Relationship_Configuration,
-			/** 10001 */
+			/** 10011 */
 			Solution_Component_Summary,
-			/** 10017 */
-			Solution_Health_Rule,
-			/** 10018 */
-			Solution_Health_Rule_Argument,
-			/** 10019 */
-			Solution_Health_Rule_Set,
 			/** 10003 */
 			Solution_History,
 			/** 10004 */
 			Solution_History_Data_Source,
 			/** 9890 */
 			SolutionHistoryData,
-			/** 10150 */
-			Sql_DataSource,
-			/** 10046 */
+			/** 10009 */
 			StageSolutionUpload,
 			/** 1075 */
 			Status_Map,
@@ -946,7 +906,7 @@ declare namespace OptionSet {
 			System_User_Principal,
 			/** 42 */
 			SystemUser_BusinessUnit_Entity_Map,
-			/** 10113 */
+			/** 60 */
 			SystemUserAuthorizationChangeTracker,
 			/** 4212 */
 			Task,
@@ -958,7 +918,7 @@ declare namespace OptionSet {
 			Team_Sync_Attribute_Mapping_Profiles,
 			/** 92 */
 			Team_template,
-			/** 10118 */
+			/** 10071 */
 			TeamMobileOfflineProfileMembership,
 			/** 2013 */
 			Territory,
@@ -1012,10 +972,8 @@ declare namespace OptionSet {
 			User_Search_Facet,
 			/** 150 */
 			User_Settings,
-			/** 10119 */
+			/** 10072 */
 			UserMobileOfflineProfileMembership,
-			/** 10147 */
-			VETicket,
 			/** 1039 */
 			View,
 			/** 78 */
@@ -1028,11 +986,9 @@ declare namespace OptionSet {
 			Web_Wizard,
 			/** 4803 */
 			Web_Wizard_Access_Privilege,
-			/** 10030 */
-			WebApi,
 			/** 4802 */
 			Wizard_Page,
-			/** 10032 */
+			/** 10036 */
 			Workflow_Binary,
 			/** 4702 */
 			Workflow_Wait_Subscription

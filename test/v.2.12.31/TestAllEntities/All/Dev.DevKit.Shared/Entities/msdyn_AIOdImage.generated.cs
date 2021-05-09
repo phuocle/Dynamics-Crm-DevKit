@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aiodimage";
 
-		public const int EntityTypeCode = 10008;
+		public const int EntityTypeCode = 10086;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIOdImage()

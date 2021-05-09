@@ -153,10 +153,6 @@ declare namespace DevKit {
 		/** Choose the record that the fax relates to. */
 		regardingobjectid_contact_fax: DevKit.WebApi.LookupValue;
 		/** Choose the record that the fax relates to. */
-		regardingobjectid_devkit_azureaccount_fax: DevKit.WebApi.LookupValue;
-		/** Choose the record that the fax relates to. */
-		regardingobjectid_devkit_webapi_fax: DevKit.WebApi.LookupValue;
-		/** Choose the record that the fax relates to. */
 		regardingobjectid_knowledgearticle_fax: DevKit.WebApi.LookupValue;
 		/** Choose the record that the fax relates to. */
 		regardingobjectid_knowledgebaserecord_fax: DevKit.WebApi.LookupValue;

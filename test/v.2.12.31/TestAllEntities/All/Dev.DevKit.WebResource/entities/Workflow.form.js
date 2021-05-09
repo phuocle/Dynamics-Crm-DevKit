@@ -110,6 +110,7 @@ var OptionSet;
 		},
 		UIFlowType : {
 			Power_Automate_Desktop: 2,
+			Recording: 101,
 			Selenium_IDE: 1,
 			Windows_recorder_V1: 0
 		},

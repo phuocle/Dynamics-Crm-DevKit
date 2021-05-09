@@ -95,8 +95,6 @@ var DevKit;
 			record1id_appointment: { b: 'record1id_appointment', a: '_record1id_value', c: 'appointments', d: 'appointment' },
 			profileruleid1: { b: 'profileruleid1', a: '_record1id_value', c: 'channelaccessprofilerules', d: 'channelaccessprofilerule' },
 			record1id_contact: { b: 'record1id_contact', a: '_record1id_value', c: 'contacts', d: 'contact' },
-			record1id_devkit_customactivity: { b: 'record1id_devkit_customactivity', a: '_record1id_value', c: 'devkit_customactivities', d: 'devkit_customactivity' },
-			record1id_devkit_webapi: { b: 'record1id_devkit_webapi', a: '_record1id_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			record1id_email: { b: 'record1id_email', a: '_record1id_value', c: 'emails', d: 'email' },
 			record1id_fax: { b: 'record1id_fax', a: '_record1id_value', c: 'faxes', d: 'fax' },
 			record1id_goal: { b: 'record1id_goal', a: '_record1id_value', c: 'goals', d: 'goal' },
@@ -120,8 +118,6 @@ var DevKit;
 			record2id_appointment: { b: 'record2id_appointment', a: '_record2id_value', c: 'appointments', d: 'appointment' },
 			channelaccessprofileruleid: { b: 'channelaccessprofileruleid', a: '_record2id_value', c: 'channelaccessprofilerules', d: 'channelaccessprofilerule' },
 			record2id_contact: { b: 'record2id_contact', a: '_record2id_value', c: 'contacts', d: 'contact' },
-			record2id_devkit_customactivity: { b: 'record2id_devkit_customactivity', a: '_record2id_value', c: 'devkit_customactivities', d: 'devkit_customactivity' },
-			record2id_devkit_webapi: { b: 'record2id_devkit_webapi', a: '_record2id_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			record2id_email: { b: 'record2id_email', a: '_record2id_value', c: 'emails', d: 'email' },
 			record2id_fax: { b: 'record2id_fax', a: '_record2id_value', c: 'faxes', d: 'fax' },
 			record2id_goal: { b: 'record2id_goal', a: '_record2id_value', c: 'goals', d: 'goal' },
@@ -192,7 +188,6 @@ var OptionSet;
 			Appointment: 4201,
 			Channel_Access_Profile_Rule: 9400,
 			Contact: 2,
-			Custom_Activity: 10042,
 			Email: 4202,
 			Fax: 4204,
 			Goal: 9600,
@@ -208,8 +203,7 @@ var OptionSet;
 			Task: 4212,
 			Team: 9,
 			Territory: 2013,
-			User: 8,
-			WebApi: 10030
+			User: 8
 		},
 		Record2ObjectTypeCode : {
 			Account: 1,
@@ -217,7 +211,6 @@ var OptionSet;
 			Appointment: 4201,
 			Channel_Access_Profile_Rule: 9400,
 			Contact: 2,
-			Custom_Activity: 10042,
 			Email: 4202,
 			Fax: 4204,
 			Goal: 9600,
@@ -233,8 +226,7 @@ var OptionSet;
 			Task: 4212,
 			Team: 9,
 			Territory: 2013,
-			User: 8,
-			WebApi: 10030
+			User: 8
 		},
 		StateCode : {
 			Active: 0,

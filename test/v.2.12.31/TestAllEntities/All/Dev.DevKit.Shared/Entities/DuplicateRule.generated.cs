@@ -41,9 +41,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Activity_File_Attachment = 10145
+		/// Activity_File_Attachment = 10049
 		/// </summary>
-		Activity_File_Attachment = 10145,
+		Activity_File_Attachment = 10049,
 		/// <summary>
 		/// Activity_Party = 135
 		/// </summary>
@@ -57,77 +57,61 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Advanced_Similarity_Rule = 9949,
 		/// <summary>
-		/// AI_Builder_Dataset = 10037
+		/// AI_Builder_Dataset = 10079
 		/// </summary>
-		AI_Builder_Dataset = 10037,
+		AI_Builder_Dataset = 10079,
 		/// <summary>
-		/// AI_Builder_Dataset_File = 10038
+		/// AI_Builder_Dataset_File = 10080
 		/// </summary>
-		AI_Builder_Dataset_File = 10038,
+		AI_Builder_Dataset_File = 10080,
 		/// <summary>
-		/// AI_Builder_Dataset_Record = 10053
+		/// AI_Builder_Dataset_Record = 10081
 		/// </summary>
-		AI_Builder_Dataset_Record = 10053,
+		AI_Builder_Dataset_Record = 10081,
 		/// <summary>
-		/// AI_Builder_Datasets_Container = 10039
+		/// AI_Builder_Datasets_Container = 10082
 		/// </summary>
-		AI_Builder_Datasets_Container = 10039,
+		AI_Builder_Datasets_Container = 10082,
 		/// <summary>
-		/// AI_Builder_File = 10040
+		/// AI_Builder_File = 10083
 		/// </summary>
-		AI_Builder_File = 10040,
+		AI_Builder_File = 10083,
 		/// <summary>
-		/// AI_Builder_File_Attached_Data = 10041
+		/// AI_Builder_File_Attached_Data = 10084
 		/// </summary>
-		AI_Builder_File_Attached_Data = 10041,
+		AI_Builder_File_Attached_Data = 10084,
 		/// <summary>
 		/// AI_Configuration = 402
 		/// </summary>
 		AI_Configuration = 402,
 		/// <summary>
-		/// AI_Form_Processing_Document = 10007
+		/// AI_Form_Processing_Document = 10085
 		/// </summary>
-		AI_Form_Processing_Document = 10007,
+		AI_Form_Processing_Document = 10085,
 		/// <summary>
 		/// AI_Model = 401
 		/// </summary>
 		AI_Model = 401,
 		/// <summary>
-		/// AI_Object_Detection_Bounding_Box = 10010
+		/// AI_Object_Detection_Bounding_Box = 10088
 		/// </summary>
-		AI_Object_Detection_Bounding_Box = 10010,
+		AI_Object_Detection_Bounding_Box = 10088,
 		/// <summary>
-		/// AI_Object_Detection_Image = 10008
+		/// AI_Object_Detection_Image = 10086
 		/// </summary>
-		AI_Object_Detection_Image = 10008,
+		AI_Object_Detection_Image = 10086,
 		/// <summary>
-		/// AI_Object_Detection_Image_Mapping = 10011
+		/// AI_Object_Detection_Image_Mapping = 10089
 		/// </summary>
-		AI_Object_Detection_Image_Mapping = 10011,
+		AI_Object_Detection_Image_Mapping = 10089,
 		/// <summary>
-		/// AI_Object_Detection_Label = 10009
+		/// AI_Object_Detection_Label = 10087
 		/// </summary>
-		AI_Object_Detection_Label = 10009,
+		AI_Object_Detection_Label = 10087,
 		/// <summary>
 		/// AI_Template = 400
 		/// </summary>
 		AI_Template = 400,
-		/// <summary>
-		/// Analysis_Component = 10013
-		/// </summary>
-		Analysis_Component = 10013,
-		/// <summary>
-		/// Analysis_Job = 10014
-		/// </summary>
-		Analysis_Job = 10014,
-		/// <summary>
-		/// Analysis_Result = 10015
-		/// </summary>
-		Analysis_Result = 10015,
-		/// <summary>
-		/// Analysis_Result_Detail = 10016
-		/// </summary>
-		Analysis_Result_Detail = 10016,
 		/// <summary>
 		/// Announcement = 132
 		/// </summary>
@@ -136,10 +120,6 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// Annual_Fiscal_Calendar = 2000
 		/// </summary>
 		Annual_Fiscal_Calendar = 2000,
-		/// <summary>
-		/// ApiSettings = 10036
-		/// </summary>
-		ApiSettings = 10036,
 		/// <summary>
 		/// App_Config_Master = 9011
 		/// </summary>
@@ -169,9 +149,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Application_Ribbons = 1120,
 		/// <summary>
-		/// ApplicationUser = 10057
+		/// ApplicationUser = 10021
 		/// </summary>
-		ApplicationUser = 10057,
+		ApplicationUser = 10021,
 		/// <summary>
 		/// AppModule_Metadata = 8700
 		/// </summary>
@@ -225,45 +205,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Authorization_Server = 1094,
 		/// <summary>
-		/// Azure_Account_10138 = 10138
-		/// </summary>
-		Azure_Account_10138 = 10138,
-		/// <summary>
-		/// Azure_Account_10151 = 10151
-		/// </summary>
-		Azure_Account_10151 = 10151,
-		/// <summary>
-		/// Azure_Contact = 10148
-		/// </summary>
-		Azure_Contact = 10148,
-		/// <summary>
 		/// Azure_Service_Connection = 9936
 		/// </summary>
 		Azure_Service_Connection = 9936,
 		/// <summary>
-		/// Azure_Sql = 10135
+		/// BotContent = 10039
 		/// </summary>
-		Azure_Sql = 10135,
-		/// <summary>
-		/// BotContent = 10091
-		/// </summary>
-		BotContent = 10091,
-		/// <summary>
-		/// BPF_Account_1 = 10065
-		/// </summary>
-		BPF_Account_1 = 10065,
-		/// <summary>
-		/// BPF_Account_3 = 10066
-		/// </summary>
-		BPF_Account_3 = 10066,
-		/// <summary>
-		/// BPF_Location_1 = 10070
-		/// </summary>
-		BPF_Location_1 = 10070,
-		/// <summary>
-		/// BPF_Location_2 = 10071
-		/// </summary>
-		BPF_Location_2 = 10071,
+		BotContent = 10039,
 		/// <summary>
 		/// Bulk_Delete_Failure = 4425
 		/// </summary>
@@ -305,25 +253,25 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Canvas_App = 300,
 		/// <summary>
-		/// CanvasApp_Extended_Metadata = 10068
+		/// CanvasApp_Extended_Metadata = 10031
 		/// </summary>
-		CanvasApp_Extended_Metadata = 10068,
+		CanvasApp_Extended_Metadata = 10031,
 		/// <summary>
-		/// CascadeGrantRevokeAccessRecordsTracker = 10075
+		/// CascadeGrantRevokeAccessRecordsTracker = 10018
 		/// </summary>
-		CascadeGrantRevokeAccessRecordsTracker = 10075,
+		CascadeGrantRevokeAccessRecordsTracker = 10018,
 		/// <summary>
-		/// CascadeGrantRevokeAccessVersionTracker = 10076
+		/// CascadeGrantRevokeAccessVersionTracker = 10019
 		/// </summary>
-		CascadeGrantRevokeAccessVersionTracker = 10076,
+		CascadeGrantRevokeAccessVersionTracker = 10019,
 		/// <summary>
-		/// Catalog = 10085
+		/// Catalog = 10065
 		/// </summary>
-		Catalog = 10085,
+		Catalog = 10065,
 		/// <summary>
-		/// Catalog_Assignment = 10086
+		/// Catalog_Assignment = 10066
 		/// </summary>
-		Catalog_Assignment = 10086,
+		Catalog_Assignment = 10066,
 		/// <summary>
 		/// Category = 9959
 		/// </summary>
@@ -349,13 +297,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Channel_Property_Group = 1234,
 		/// <summary>
-		/// Chatbot = 10093
+		/// Chatbot = 10041
 		/// </summary>
-		Chatbot = 10093,
+		Chatbot = 10041,
 		/// <summary>
-		/// Chatbot_subcomponent = 10094
+		/// Chatbot_subcomponent = 10042
 		/// </summary>
-		Chatbot_subcomponent = 10094,
+		Chatbot_subcomponent = 10042,
 		/// <summary>
 		/// Client_update = 36
 		/// </summary>
@@ -381,9 +329,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Connection = 3234,
 		/// <summary>
-		/// Connection_Reference = 10067
+		/// Connection_Reference = 10037
 		/// </summary>
-		Connection_Reference = 10067,
+		Connection_Reference = 10037,
 		/// <summary>
 		/// Connection_Role = 3231
 		/// </summary>
@@ -401,29 +349,25 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Contact = 2,
 		/// <summary>
-		/// ConversationTranscript = 10092
+		/// ConversationTranscript = 10040
 		/// </summary>
-		ConversationTranscript = 10092,
+		ConversationTranscript = 10040,
 		/// <summary>
 		/// Currency = 9105
 		/// </summary>
 		Currency = 9105,
 		/// <summary>
-		/// Custom_Activity = 10042
+		/// Custom_API = 10068
 		/// </summary>
-		Custom_Activity = 10042,
+		Custom_API = 10068,
 		/// <summary>
-		/// Custom_API = 10088
+		/// Custom_API_Request_Parameter = 10069
 		/// </summary>
-		Custom_API = 10088,
+		Custom_API_Request_Parameter = 10069,
 		/// <summary>
-		/// Custom_API_Request_Parameter = 10089
+		/// Custom_API_Response_Property = 10070
 		/// </summary>
-		Custom_API_Request_Parameter = 10089,
-		/// <summary>
-		/// Custom_API_Response_Property = 10090
-		/// </summary>
-		Custom_API_Response_Property = 10090,
+		Custom_API_Response_Property = 10070,
 		/// <summary>
 		/// Custom_Control = 9753
 		/// </summary>
@@ -445,21 +389,21 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Data_Import = 4410,
 		/// <summary>
-		/// Data_Lake_Folder = 10081
+		/// Data_Lake_Folder = 10014
 		/// </summary>
-		Data_Lake_Folder = 10081,
+		Data_Lake_Folder = 10014,
 		/// <summary>
-		/// Data_Lake_Folder_Permission = 10082
+		/// Data_Lake_Folder_Permission = 10015
 		/// </summary>
-		Data_Lake_Folder_Permission = 10082,
+		Data_Lake_Folder_Permission = 10015,
 		/// <summary>
-		/// Data_Lake_Workspace = 10055
+		/// Data_Lake_Workspace = 10016
 		/// </summary>
-		Data_Lake_Workspace = 10055,
+		Data_Lake_Workspace = 10016,
 		/// <summary>
-		/// Data_Lake_Workspace_Permission = 10056
+		/// Data_Lake_Workspace_Permission = 10017
 		/// </summary>
-		Data_Lake_Workspace_Permission = 10056,
+		Data_Lake_Workspace_Permission = 10017,
 		/// <summary>
 		/// Data_Map = 4411
 		/// </summary>
@@ -589,9 +533,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Expired_Process = 955,
 		/// <summary>
-		/// ExportSolutionUpload = 10073
+		/// ExportSolutionUpload = 10010
 		/// </summary>
-		ExportSolutionUpload = 10073,
+		ExportSolutionUpload = 10010,
 		/// <summary>
 		/// External_Party = 3008
 		/// </summary>
@@ -633,13 +577,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Fixed_Monthly_Fiscal_Calendar = 2004,
 		/// <summary>
-		/// Flow_Machine = 10125
+		/// Flow_Machine = 10033
 		/// </summary>
-		Flow_Machine = 10125,
+		Flow_Machine = 10033,
 		/// <summary>
-		/// Flow_Machine_Group = 10126
+		/// Flow_Machine_Group = 10034
 		/// </summary>
-		Flow_Machine_Group = 10126,
+		Flow_Machine_Group = 10034,
 		/// <summary>
 		/// Flow_Session = 4720
 		/// </summary>
@@ -660,10 +604,6 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// Goal_Metric = 9603
 		/// </summary>
 		Goal_Metric = 9603,
-		/// <summary>
-		/// Help_Page = 10033
-		/// </summary>
-		Help_Page = 10033,
 		/// <summary>
 		/// Hierarchy_Rule = 8840
 		/// </summary>
@@ -725,9 +665,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Internal_Address = 1003,
 		/// <summary>
-		/// Internal_Catalog_Assignment = 10087
+		/// Internal_Catalog_Assignment = 10067
 		/// </summary>
-		Internal_Catalog_Assignment = 10087,
+		Internal_Catalog_Assignment = 10067,
 		/// <summary>
 		/// Invalid_Dependency = 7107
 		/// </summary>
@@ -737,9 +677,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		ISV_Config = 4705,
 		/// <summary>
-		/// KeyVaultReference = 10120
+		/// KeyVaultReference = 10063
 		/// </summary>
-		KeyVaultReference = 10120,
+		KeyVaultReference = 10063,
 		/// <summary>
 		/// Knowledge_Article = 9953
 		/// </summary>
@@ -749,17 +689,17 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Knowledge_Article_Category = 9960,
 		/// <summary>
-		/// Knowledge_Article_Image = 10021
+		/// Knowledge_Article_Image = 10055
 		/// </summary>
-		Knowledge_Article_Image = 10021,
+		Knowledge_Article_Image = 10055,
 		/// <summary>
-		/// Knowledge_article_language_setting = 10140
+		/// Knowledge_article_language_setting = 10058
 		/// </summary>
-		Knowledge_article_language_setting = 10140,
+		Knowledge_article_language_setting = 10058,
 		/// <summary>
-		/// Knowledge_Article_Template = 10022
+		/// Knowledge_Article_Template = 10060
 		/// </summary>
-		Knowledge_Article_Template = 10022,
+		Knowledge_Article_Template = 10060,
 		/// <summary>
 		/// Knowledge_Article_Views = 9955
 		/// </summary>
@@ -769,37 +709,37 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Knowledge_Base_Record = 9930,
 		/// <summary>
-		/// Knowledge_Federated_Article = 10098
+		/// Knowledge_Federated_Article = 10052
 		/// </summary>
-		Knowledge_Federated_Article = 10098,
+		Knowledge_Federated_Article = 10052,
 		/// <summary>
-		/// Knowledge_FederatedArticle_Incident = 10099
+		/// Knowledge_FederatedArticle_Incident = 10053
 		/// </summary>
-		Knowledge_FederatedArticle_Incident = 10099,
+		Knowledge_FederatedArticle_Incident = 10053,
 		/// <summary>
-		/// Knowledge_Interaction_Insight = 10079
+		/// Knowledge_Interaction_Insight = 10056
 		/// </summary>
-		Knowledge_Interaction_Insight = 10079,
+		Knowledge_Interaction_Insight = 10056,
 		/// <summary>
-		/// Knowledge_personalization = 10139
+		/// Knowledge_personalization = 10059
 		/// </summary>
-		Knowledge_personalization = 10139,
+		Knowledge_personalization = 10059,
 		/// <summary>
-		/// Knowledge_search_filter = 10142
+		/// Knowledge_search_filter = 10062
 		/// </summary>
-		Knowledge_search_filter = 10142,
+		Knowledge_search_filter = 10062,
 		/// <summary>
-		/// Knowledge_Search_Insight = 10080
+		/// Knowledge_Search_Insight = 10057
 		/// </summary>
-		Knowledge_Search_Insight = 10080,
+		Knowledge_Search_Insight = 10057,
 		/// <summary>
 		/// Knowledge_Search_Model = 9947
 		/// </summary>
 		Knowledge_Search_Model = 9947,
 		/// <summary>
-		/// Knowledge_search_personal_filter_config = 10141
+		/// Knowledge_search_personal_filter_config = 10061
 		/// </summary>
-		Knowledge_search_personal_filter_config = 10141,
+		Knowledge_search_personal_filter_config = 10061,
 		/// <summary>
 		/// Language = 9957
 		/// </summary>
@@ -829,10 +769,6 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		LocalConfigStore = 9201,
 		/// <summary>
-		/// Location = 10069
-		/// </summary>
-		Location = 10069,
-		/// <summary>
 		/// Lookup_Mapping = 4419
 		/// </summary>
 		Lookup_Mapping = 4419,
@@ -861,9 +797,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Managed_Property = 9812,
 		/// <summary>
-		/// ManagedIdentity = 10121
+		/// ManagedIdentity = 10064
 		/// </summary>
-		ManagedIdentity = 10121,
+		ManagedIdentity = 10064,
 		/// <summary>
 		/// Metadata_Difference = 4231
 		/// </summary>
@@ -885,25 +821,25 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Model_driven_App = 9006,
 		/// <summary>
-		/// Model_Driven_App_Component_Node = 10062
+		/// Model_Driven_App_Component_Node = 10026
 		/// </summary>
-		Model_Driven_App_Component_Node = 10062,
+		Model_Driven_App_Component_Node = 10026,
 		/// <summary>
-		/// Model_Driven_App_Component_Nodes_Edge = 10061
+		/// Model_Driven_App_Component_Nodes_Edge = 10025
 		/// </summary>
-		Model_Driven_App_Component_Nodes_Edge = 10061,
+		Model_Driven_App_Component_Nodes_Edge = 10025,
 		/// <summary>
-		/// Model_Driven_App_Element = 10060
+		/// Model_Driven_App_Element = 10024
 		/// </summary>
-		Model_Driven_App_Element = 10060,
+		Model_Driven_App_Element = 10024,
 		/// <summary>
-		/// Model_Driven_App_Setting = 10063
+		/// Model_Driven_App_Setting = 10027
 		/// </summary>
-		Model_Driven_App_Setting = 10063,
+		Model_Driven_App_Setting = 10027,
 		/// <summary>
-		/// Model_Driven_App_User_Setting = 10117
+		/// Model_Driven_App_User_Setting = 10028
 		/// </summary>
-		Model_Driven_App_User_Setting = 10117,
+		Model_Driven_App_User_Setting = 10028,
 		/// <summary>
 		/// Monthly_Fiscal_Calendar = 2003
 		/// </summary>
@@ -917,10 +853,6 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		MultiEntitySearch = 9910,
 		/// <summary>
-		/// My_Mother = 10146
-		/// </summary>
-		My_Mother = 10146,
-		/// <summary>
 		/// Navigation_Setting = 9900
 		/// </summary>
 		Navigation_Setting = 9900,
@@ -929,25 +861,25 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		New_Process = 950,
 		/// <summary>
-		/// NonRelational_Data_Source = 10054
+		/// NonRelational_Data_Source = 10077
 		/// </summary>
-		NonRelational_Data_Source = 10054,
+		NonRelational_Data_Source = 10077,
 		/// <summary>
 		/// Note = 5
 		/// </summary>
 		Note = 5,
 		/// <summary>
-		/// Notification_10122 = 10122
+		/// Notification_10075 = 10075
 		/// </summary>
-		Notification_10122 = 10122,
+		Notification_10075 = 10075,
 		/// <summary>
 		/// Notification_4110 = 4110
 		/// </summary>
 		Notification_4110 = 4110,
 		/// <summary>
-		/// OData_v4_Data_Source = 10000
+		/// OData_v4_Data_Source = 10032
 		/// </summary>
-		OData_v4_Data_Source = 10000,
+		OData_v4_Data_Source = 10032,
 		/// <summary>
 		/// Office_Document = 4490
 		/// </summary>
@@ -977,9 +909,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Organization_Insights_Notification = 9690,
 		/// <summary>
-		/// Organization_Setting = 10114
+		/// Organization_Setting = 10029
 		/// </summary>
-		Organization_Setting = 10114,
+		Organization_Setting = 10029,
 		/// <summary>
 		/// Organization_Statistic = 4708
 		/// </summary>
@@ -989,13 +921,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Organization_UI = 1021,
 		/// <summary>
-		/// OrganizationDataSyncSubscription = 10115
+		/// OrganizationDataSyncSubscription = 10073
 		/// </summary>
-		OrganizationDataSyncSubscription = 10115,
+		OrganizationDataSyncSubscription = 10073,
 		/// <summary>
-		/// OrganizationDataSyncSubscriptionEntity = 10116
+		/// OrganizationDataSyncSubscriptionEntity = 10074
 		/// </summary>
-		OrganizationDataSyncSubscriptionEntity = 10116,
+		OrganizationDataSyncSubscriptionEntity = 10074,
 		/// <summary>
 		/// Owner = 7
 		/// </summary>
@@ -1005,17 +937,17 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Owner_Mapping = 4420,
 		/// <summary>
-		/// Package = 10077
+		/// Package = 10007
 		/// </summary>
-		Package = 10077,
+		Package = 10007,
 		/// <summary>
 		/// Partner_Application = 1095
 		/// </summary>
 		Partner_Application = 1095,
 		/// <summary>
-		/// PDF_Setting = 10072
+		/// PDF_Setting = 10048
 		/// </summary>
-		PDF_Setting = 10072,
+		PDF_Setting = 10048,
 		/// <summary>
 		/// Personal_Document_Template = 9941
 		/// </summary>
@@ -1040,6 +972,14 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// Plug_in_Type_Statistic = 4603
 		/// </summary>
 		Plug_in_Type_Statistic = 4603,
+		/// <summary>
+		/// PM_Inferred_Task = 10091
+		/// </summary>
+		PM_Inferred_Task = 10091,
+		/// <summary>
+		/// PM_Recording = 10092
+		/// </summary>
+		PM_Recording = 10092,
 		/// <summary>
 		/// Position = 50
 		/// </summary>
@@ -1097,17 +1037,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Process_Trigger = 4712,
 		/// <summary>
-		/// Process_WebApi_1 = 10029
+		/// ProcessStageParameter = 10035
 		/// </summary>
-		Process_WebApi_1 = 10029,
+		ProcessStageParameter = 10035,
 		/// <summary>
-		/// ProcessStageParameter = 10052
+		/// ProvisionLanguageForUser = 10013
 		/// </summary>
-		ProcessStageParameter = 10052,
-		/// <summary>
-		/// ProvisionLanguageForUser = 10083
-		/// </summary>
-		ProvisionLanguageForUser = 10083,
+		ProvisionLanguageForUser = 10013,
 		/// <summary>
 		/// Publisher = 7101
 		/// </summary>
@@ -1193,9 +1129,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Report_Visibility = 9103,
 		/// <summary>
-		/// RevokeInheritedAccessRecordsTracker = 10104
+		/// RevokeInheritedAccessRecordsTracker = 90001
 		/// </summary>
-		RevokeInheritedAccessRecordsTracker = 10104,
+		RevokeInheritedAccessRecordsTracker = 90001,
 		/// <summary>
 		/// Ribbon_Client_Metadata = 4579
 		/// </summary>
@@ -1225,9 +1161,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Ribbon_Tab_To_Command_Mapping = 1113,
 		/// <summary>
-		/// Rich_Text_Attachment = 10074
+		/// Rich_Text_Attachment = 10076
 		/// </summary>
-		Rich_Text_Attachment = 10074,
+		Rich_Text_Attachment = 10076,
 		/// <summary>
 		/// Role_Template = 1037
 		/// </summary>
@@ -1309,13 +1245,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Sdk_Message_Response_Field = 4611,
 		/// <summary>
-		/// Search_provider = 10100
+		/// Search_provider = 10054
 		/// </summary>
-		Search_provider = 10100,
+		Search_provider = 10054,
 		/// <summary>
-		/// Search_Telemetry = 10101
+		/// Search_Telemetry = 10078
 		/// </summary>
-		Search_Telemetry = 10101,
+		Search_Telemetry = 10078,
 		/// <summary>
 		/// Security_Role = 1036
 		/// </summary>
@@ -1325,9 +1261,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Semiannual_Fiscal_Calendar = 2001,
 		/// <summary>
-		/// Service_Configuration = 10043
+		/// Service_Configuration = 10050
 		/// </summary>
-		Service_Configuration = 10043,
+		Service_Configuration = 10050,
 		/// <summary>
 		/// Service_Endpoint = 4618
 		/// </summary>
@@ -1337,9 +1273,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Service_Plan = 101,
 		/// <summary>
-		/// Setting_Definition = 10064
+		/// Setting_Definition = 10030
 		/// </summary>
-		Setting_Definition = 10064,
+		Setting_Definition = 10030,
 		/// <summary>
 		/// SharePoint_Data = 9509
 		/// </summary>
@@ -1369,9 +1305,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		SLA_Item = 9751,
 		/// <summary>
-		/// SLA_KPI = 10044
+		/// SLA_KPI = 10051
 		/// </summary>
-		SLA_KPI = 10044,
+		SLA_KPI = 10051,
 		/// <summary>
 		/// SLA_KPI_Instance = 9752
 		/// </summary>
@@ -1397,41 +1333,29 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Solution_Component = 7103,
 		/// <summary>
-		/// Solution_Component_Attribute_Configuration = 10034
+		/// Solution_Component_Attribute_Configuration = 10000
 		/// </summary>
-		Solution_Component_Attribute_Configuration = 10034,
+		Solution_Component_Attribute_Configuration = 10000,
 		/// <summary>
-		/// Solution_Component_Configuration = 10045
+		/// Solution_Component_Configuration = 10001
 		/// </summary>
-		Solution_Component_Configuration = 10045,
+		Solution_Component_Configuration = 10001,
 		/// <summary>
-		/// Solution_Component_Data_Source = 10002
+		/// Solution_Component_Data_Source = 10012
 		/// </summary>
-		Solution_Component_Data_Source = 10002,
+		Solution_Component_Data_Source = 10012,
 		/// <summary>
 		/// Solution_Component_Definition = 7104
 		/// </summary>
 		Solution_Component_Definition = 7104,
 		/// <summary>
-		/// Solution_Component_Relationship_Configuration = 10059
+		/// Solution_Component_Relationship_Configuration = 10002
 		/// </summary>
-		Solution_Component_Relationship_Configuration = 10059,
+		Solution_Component_Relationship_Configuration = 10002,
 		/// <summary>
-		/// Solution_Component_Summary = 10001
+		/// Solution_Component_Summary = 10011
 		/// </summary>
-		Solution_Component_Summary = 10001,
-		/// <summary>
-		/// Solution_Health_Rule = 10017
-		/// </summary>
-		Solution_Health_Rule = 10017,
-		/// <summary>
-		/// Solution_Health_Rule_Argument = 10018
-		/// </summary>
-		Solution_Health_Rule_Argument = 10018,
-		/// <summary>
-		/// Solution_Health_Rule_Set = 10019
-		/// </summary>
-		Solution_Health_Rule_Set = 10019,
+		Solution_Component_Summary = 10011,
 		/// <summary>
 		/// Solution_History = 10003
 		/// </summary>
@@ -1445,13 +1369,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		SolutionHistoryData = 9890,
 		/// <summary>
-		/// Sql_DataSource = 10150
+		/// StageSolutionUpload = 10009
 		/// </summary>
-		Sql_DataSource = 10150,
-		/// <summary>
-		/// StageSolutionUpload = 10046
-		/// </summary>
-		StageSolutionUpload = 10046,
+		StageSolutionUpload = 10009,
 		/// <summary>
 		/// Status_Map = 1075
 		/// </summary>
@@ -1541,9 +1461,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		SystemUser_BusinessUnit_Entity_Map = 42,
 		/// <summary>
-		/// SystemUserAuthorizationChangeTracker = 10113
+		/// SystemUserAuthorizationChangeTracker = 60
 		/// </summary>
-		SystemUserAuthorizationChangeTracker = 10113,
+		SystemUserAuthorizationChangeTracker = 60,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
@@ -1565,9 +1485,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Team_template = 92,
 		/// <summary>
-		/// TeamMobileOfflineProfileMembership = 10118
+		/// TeamMobileOfflineProfileMembership = 10071
 		/// </summary>
-		TeamMobileOfflineProfileMembership = 10118,
+		TeamMobileOfflineProfileMembership = 10071,
 		/// <summary>
 		/// Territory = 2013
 		/// </summary>
@@ -1673,13 +1593,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		User_Settings = 150,
 		/// <summary>
-		/// UserMobileOfflineProfileMembership = 10119
+		/// UserMobileOfflineProfileMembership = 10072
 		/// </summary>
-		UserMobileOfflineProfileMembership = 10119,
-		/// <summary>
-		/// VETicket = 10147
-		/// </summary>
-		VETicket = 10147,
+		UserMobileOfflineProfileMembership = 10072,
 		/// <summary>
 		/// View = 1039
 		/// </summary>
@@ -1705,17 +1621,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Web_Wizard_Access_Privilege = 4803,
 		/// <summary>
-		/// WebApi = 10030
-		/// </summary>
-		WebApi = 10030,
-		/// <summary>
 		/// Wizard_Page = 4802
 		/// </summary>
 		Wizard_Page = 4802,
 		/// <summary>
-		/// Workflow_Binary = 10032
+		/// Workflow_Binary = 10036
 		/// </summary>
-		Workflow_Binary = 10032,
+		Workflow_Binary = 10036,
 		/// <summary>
 		/// Workflow_Wait_Subscription = 4702
 		/// </summary>
@@ -1753,9 +1665,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Activity_File_Attachment = 10145
+		/// Activity_File_Attachment = 10049
 		/// </summary>
-		Activity_File_Attachment = 10145,
+		Activity_File_Attachment = 10049,
 		/// <summary>
 		/// Activity_Party = 135
 		/// </summary>
@@ -1769,77 +1681,61 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Advanced_Similarity_Rule = 9949,
 		/// <summary>
-		/// AI_Builder_Dataset = 10037
+		/// AI_Builder_Dataset = 10079
 		/// </summary>
-		AI_Builder_Dataset = 10037,
+		AI_Builder_Dataset = 10079,
 		/// <summary>
-		/// AI_Builder_Dataset_File = 10038
+		/// AI_Builder_Dataset_File = 10080
 		/// </summary>
-		AI_Builder_Dataset_File = 10038,
+		AI_Builder_Dataset_File = 10080,
 		/// <summary>
-		/// AI_Builder_Dataset_Record = 10053
+		/// AI_Builder_Dataset_Record = 10081
 		/// </summary>
-		AI_Builder_Dataset_Record = 10053,
+		AI_Builder_Dataset_Record = 10081,
 		/// <summary>
-		/// AI_Builder_Datasets_Container = 10039
+		/// AI_Builder_Datasets_Container = 10082
 		/// </summary>
-		AI_Builder_Datasets_Container = 10039,
+		AI_Builder_Datasets_Container = 10082,
 		/// <summary>
-		/// AI_Builder_File = 10040
+		/// AI_Builder_File = 10083
 		/// </summary>
-		AI_Builder_File = 10040,
+		AI_Builder_File = 10083,
 		/// <summary>
-		/// AI_Builder_File_Attached_Data = 10041
+		/// AI_Builder_File_Attached_Data = 10084
 		/// </summary>
-		AI_Builder_File_Attached_Data = 10041,
+		AI_Builder_File_Attached_Data = 10084,
 		/// <summary>
 		/// AI_Configuration = 402
 		/// </summary>
 		AI_Configuration = 402,
 		/// <summary>
-		/// AI_Form_Processing_Document = 10007
+		/// AI_Form_Processing_Document = 10085
 		/// </summary>
-		AI_Form_Processing_Document = 10007,
+		AI_Form_Processing_Document = 10085,
 		/// <summary>
 		/// AI_Model = 401
 		/// </summary>
 		AI_Model = 401,
 		/// <summary>
-		/// AI_Object_Detection_Bounding_Box = 10010
+		/// AI_Object_Detection_Bounding_Box = 10088
 		/// </summary>
-		AI_Object_Detection_Bounding_Box = 10010,
+		AI_Object_Detection_Bounding_Box = 10088,
 		/// <summary>
-		/// AI_Object_Detection_Image = 10008
+		/// AI_Object_Detection_Image = 10086
 		/// </summary>
-		AI_Object_Detection_Image = 10008,
+		AI_Object_Detection_Image = 10086,
 		/// <summary>
-		/// AI_Object_Detection_Image_Mapping = 10011
+		/// AI_Object_Detection_Image_Mapping = 10089
 		/// </summary>
-		AI_Object_Detection_Image_Mapping = 10011,
+		AI_Object_Detection_Image_Mapping = 10089,
 		/// <summary>
-		/// AI_Object_Detection_Label = 10009
+		/// AI_Object_Detection_Label = 10087
 		/// </summary>
-		AI_Object_Detection_Label = 10009,
+		AI_Object_Detection_Label = 10087,
 		/// <summary>
 		/// AI_Template = 400
 		/// </summary>
 		AI_Template = 400,
-		/// <summary>
-		/// Analysis_Component = 10013
-		/// </summary>
-		Analysis_Component = 10013,
-		/// <summary>
-		/// Analysis_Job = 10014
-		/// </summary>
-		Analysis_Job = 10014,
-		/// <summary>
-		/// Analysis_Result = 10015
-		/// </summary>
-		Analysis_Result = 10015,
-		/// <summary>
-		/// Analysis_Result_Detail = 10016
-		/// </summary>
-		Analysis_Result_Detail = 10016,
 		/// <summary>
 		/// Announcement = 132
 		/// </summary>
@@ -1848,10 +1744,6 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// Annual_Fiscal_Calendar = 2000
 		/// </summary>
 		Annual_Fiscal_Calendar = 2000,
-		/// <summary>
-		/// ApiSettings = 10036
-		/// </summary>
-		ApiSettings = 10036,
 		/// <summary>
 		/// App_Config_Master = 9011
 		/// </summary>
@@ -1881,9 +1773,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Application_Ribbons = 1120,
 		/// <summary>
-		/// ApplicationUser = 10057
+		/// ApplicationUser = 10021
 		/// </summary>
-		ApplicationUser = 10057,
+		ApplicationUser = 10021,
 		/// <summary>
 		/// AppModule_Metadata = 8700
 		/// </summary>
@@ -1937,45 +1829,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Authorization_Server = 1094,
 		/// <summary>
-		/// Azure_Account_10138 = 10138
-		/// </summary>
-		Azure_Account_10138 = 10138,
-		/// <summary>
-		/// Azure_Account_10151 = 10151
-		/// </summary>
-		Azure_Account_10151 = 10151,
-		/// <summary>
-		/// Azure_Contact = 10148
-		/// </summary>
-		Azure_Contact = 10148,
-		/// <summary>
 		/// Azure_Service_Connection = 9936
 		/// </summary>
 		Azure_Service_Connection = 9936,
 		/// <summary>
-		/// Azure_Sql = 10135
+		/// BotContent = 10039
 		/// </summary>
-		Azure_Sql = 10135,
-		/// <summary>
-		/// BotContent = 10091
-		/// </summary>
-		BotContent = 10091,
-		/// <summary>
-		/// BPF_Account_1 = 10065
-		/// </summary>
-		BPF_Account_1 = 10065,
-		/// <summary>
-		/// BPF_Account_3 = 10066
-		/// </summary>
-		BPF_Account_3 = 10066,
-		/// <summary>
-		/// BPF_Location_1 = 10070
-		/// </summary>
-		BPF_Location_1 = 10070,
-		/// <summary>
-		/// BPF_Location_2 = 10071
-		/// </summary>
-		BPF_Location_2 = 10071,
+		BotContent = 10039,
 		/// <summary>
 		/// Bulk_Delete_Failure = 4425
 		/// </summary>
@@ -2017,25 +1877,25 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Canvas_App = 300,
 		/// <summary>
-		/// CanvasApp_Extended_Metadata = 10068
+		/// CanvasApp_Extended_Metadata = 10031
 		/// </summary>
-		CanvasApp_Extended_Metadata = 10068,
+		CanvasApp_Extended_Metadata = 10031,
 		/// <summary>
-		/// CascadeGrantRevokeAccessRecordsTracker = 10075
+		/// CascadeGrantRevokeAccessRecordsTracker = 10018
 		/// </summary>
-		CascadeGrantRevokeAccessRecordsTracker = 10075,
+		CascadeGrantRevokeAccessRecordsTracker = 10018,
 		/// <summary>
-		/// CascadeGrantRevokeAccessVersionTracker = 10076
+		/// CascadeGrantRevokeAccessVersionTracker = 10019
 		/// </summary>
-		CascadeGrantRevokeAccessVersionTracker = 10076,
+		CascadeGrantRevokeAccessVersionTracker = 10019,
 		/// <summary>
-		/// Catalog = 10085
+		/// Catalog = 10065
 		/// </summary>
-		Catalog = 10085,
+		Catalog = 10065,
 		/// <summary>
-		/// Catalog_Assignment = 10086
+		/// Catalog_Assignment = 10066
 		/// </summary>
-		Catalog_Assignment = 10086,
+		Catalog_Assignment = 10066,
 		/// <summary>
 		/// Category = 9959
 		/// </summary>
@@ -2061,13 +1921,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Channel_Property_Group = 1234,
 		/// <summary>
-		/// Chatbot = 10093
+		/// Chatbot = 10041
 		/// </summary>
-		Chatbot = 10093,
+		Chatbot = 10041,
 		/// <summary>
-		/// Chatbot_subcomponent = 10094
+		/// Chatbot_subcomponent = 10042
 		/// </summary>
-		Chatbot_subcomponent = 10094,
+		Chatbot_subcomponent = 10042,
 		/// <summary>
 		/// Client_update = 36
 		/// </summary>
@@ -2093,9 +1953,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Connection = 3234,
 		/// <summary>
-		/// Connection_Reference = 10067
+		/// Connection_Reference = 10037
 		/// </summary>
-		Connection_Reference = 10067,
+		Connection_Reference = 10037,
 		/// <summary>
 		/// Connection_Role = 3231
 		/// </summary>
@@ -2113,29 +1973,25 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Contact = 2,
 		/// <summary>
-		/// ConversationTranscript = 10092
+		/// ConversationTranscript = 10040
 		/// </summary>
-		ConversationTranscript = 10092,
+		ConversationTranscript = 10040,
 		/// <summary>
 		/// Currency = 9105
 		/// </summary>
 		Currency = 9105,
 		/// <summary>
-		/// Custom_Activity = 10042
+		/// Custom_API = 10068
 		/// </summary>
-		Custom_Activity = 10042,
+		Custom_API = 10068,
 		/// <summary>
-		/// Custom_API = 10088
+		/// Custom_API_Request_Parameter = 10069
 		/// </summary>
-		Custom_API = 10088,
+		Custom_API_Request_Parameter = 10069,
 		/// <summary>
-		/// Custom_API_Request_Parameter = 10089
+		/// Custom_API_Response_Property = 10070
 		/// </summary>
-		Custom_API_Request_Parameter = 10089,
-		/// <summary>
-		/// Custom_API_Response_Property = 10090
-		/// </summary>
-		Custom_API_Response_Property = 10090,
+		Custom_API_Response_Property = 10070,
 		/// <summary>
 		/// Custom_Control = 9753
 		/// </summary>
@@ -2157,21 +2013,21 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Data_Import = 4410,
 		/// <summary>
-		/// Data_Lake_Folder = 10081
+		/// Data_Lake_Folder = 10014
 		/// </summary>
-		Data_Lake_Folder = 10081,
+		Data_Lake_Folder = 10014,
 		/// <summary>
-		/// Data_Lake_Folder_Permission = 10082
+		/// Data_Lake_Folder_Permission = 10015
 		/// </summary>
-		Data_Lake_Folder_Permission = 10082,
+		Data_Lake_Folder_Permission = 10015,
 		/// <summary>
-		/// Data_Lake_Workspace = 10055
+		/// Data_Lake_Workspace = 10016
 		/// </summary>
-		Data_Lake_Workspace = 10055,
+		Data_Lake_Workspace = 10016,
 		/// <summary>
-		/// Data_Lake_Workspace_Permission = 10056
+		/// Data_Lake_Workspace_Permission = 10017
 		/// </summary>
-		Data_Lake_Workspace_Permission = 10056,
+		Data_Lake_Workspace_Permission = 10017,
 		/// <summary>
 		/// Data_Map = 4411
 		/// </summary>
@@ -2301,9 +2157,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Expired_Process = 955,
 		/// <summary>
-		/// ExportSolutionUpload = 10073
+		/// ExportSolutionUpload = 10010
 		/// </summary>
-		ExportSolutionUpload = 10073,
+		ExportSolutionUpload = 10010,
 		/// <summary>
 		/// External_Party = 3008
 		/// </summary>
@@ -2345,13 +2201,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Fixed_Monthly_Fiscal_Calendar = 2004,
 		/// <summary>
-		/// Flow_Machine = 10125
+		/// Flow_Machine = 10033
 		/// </summary>
-		Flow_Machine = 10125,
+		Flow_Machine = 10033,
 		/// <summary>
-		/// Flow_Machine_Group = 10126
+		/// Flow_Machine_Group = 10034
 		/// </summary>
-		Flow_Machine_Group = 10126,
+		Flow_Machine_Group = 10034,
 		/// <summary>
 		/// Flow_Session = 4720
 		/// </summary>
@@ -2372,10 +2228,6 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// Goal_Metric = 9603
 		/// </summary>
 		Goal_Metric = 9603,
-		/// <summary>
-		/// Help_Page = 10033
-		/// </summary>
-		Help_Page = 10033,
 		/// <summary>
 		/// Hierarchy_Rule = 8840
 		/// </summary>
@@ -2437,9 +2289,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Internal_Address = 1003,
 		/// <summary>
-		/// Internal_Catalog_Assignment = 10087
+		/// Internal_Catalog_Assignment = 10067
 		/// </summary>
-		Internal_Catalog_Assignment = 10087,
+		Internal_Catalog_Assignment = 10067,
 		/// <summary>
 		/// Invalid_Dependency = 7107
 		/// </summary>
@@ -2449,9 +2301,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		ISV_Config = 4705,
 		/// <summary>
-		/// KeyVaultReference = 10120
+		/// KeyVaultReference = 10063
 		/// </summary>
-		KeyVaultReference = 10120,
+		KeyVaultReference = 10063,
 		/// <summary>
 		/// Knowledge_Article = 9953
 		/// </summary>
@@ -2461,17 +2313,17 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Knowledge_Article_Category = 9960,
 		/// <summary>
-		/// Knowledge_Article_Image = 10021
+		/// Knowledge_Article_Image = 10055
 		/// </summary>
-		Knowledge_Article_Image = 10021,
+		Knowledge_Article_Image = 10055,
 		/// <summary>
-		/// Knowledge_article_language_setting = 10140
+		/// Knowledge_article_language_setting = 10058
 		/// </summary>
-		Knowledge_article_language_setting = 10140,
+		Knowledge_article_language_setting = 10058,
 		/// <summary>
-		/// Knowledge_Article_Template = 10022
+		/// Knowledge_Article_Template = 10060
 		/// </summary>
-		Knowledge_Article_Template = 10022,
+		Knowledge_Article_Template = 10060,
 		/// <summary>
 		/// Knowledge_Article_Views = 9955
 		/// </summary>
@@ -2481,37 +2333,37 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Knowledge_Base_Record = 9930,
 		/// <summary>
-		/// Knowledge_Federated_Article = 10098
+		/// Knowledge_Federated_Article = 10052
 		/// </summary>
-		Knowledge_Federated_Article = 10098,
+		Knowledge_Federated_Article = 10052,
 		/// <summary>
-		/// Knowledge_FederatedArticle_Incident = 10099
+		/// Knowledge_FederatedArticle_Incident = 10053
 		/// </summary>
-		Knowledge_FederatedArticle_Incident = 10099,
+		Knowledge_FederatedArticle_Incident = 10053,
 		/// <summary>
-		/// Knowledge_Interaction_Insight = 10079
+		/// Knowledge_Interaction_Insight = 10056
 		/// </summary>
-		Knowledge_Interaction_Insight = 10079,
+		Knowledge_Interaction_Insight = 10056,
 		/// <summary>
-		/// Knowledge_personalization = 10139
+		/// Knowledge_personalization = 10059
 		/// </summary>
-		Knowledge_personalization = 10139,
+		Knowledge_personalization = 10059,
 		/// <summary>
-		/// Knowledge_search_filter = 10142
+		/// Knowledge_search_filter = 10062
 		/// </summary>
-		Knowledge_search_filter = 10142,
+		Knowledge_search_filter = 10062,
 		/// <summary>
-		/// Knowledge_Search_Insight = 10080
+		/// Knowledge_Search_Insight = 10057
 		/// </summary>
-		Knowledge_Search_Insight = 10080,
+		Knowledge_Search_Insight = 10057,
 		/// <summary>
 		/// Knowledge_Search_Model = 9947
 		/// </summary>
 		Knowledge_Search_Model = 9947,
 		/// <summary>
-		/// Knowledge_search_personal_filter_config = 10141
+		/// Knowledge_search_personal_filter_config = 10061
 		/// </summary>
-		Knowledge_search_personal_filter_config = 10141,
+		Knowledge_search_personal_filter_config = 10061,
 		/// <summary>
 		/// Language = 9957
 		/// </summary>
@@ -2541,10 +2393,6 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		LocalConfigStore = 9201,
 		/// <summary>
-		/// Location = 10069
-		/// </summary>
-		Location = 10069,
-		/// <summary>
 		/// Lookup_Mapping = 4419
 		/// </summary>
 		Lookup_Mapping = 4419,
@@ -2573,9 +2421,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Managed_Property = 9812,
 		/// <summary>
-		/// ManagedIdentity = 10121
+		/// ManagedIdentity = 10064
 		/// </summary>
-		ManagedIdentity = 10121,
+		ManagedIdentity = 10064,
 		/// <summary>
 		/// Metadata_Difference = 4231
 		/// </summary>
@@ -2597,25 +2445,25 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Model_driven_App = 9006,
 		/// <summary>
-		/// Model_Driven_App_Component_Node = 10062
+		/// Model_Driven_App_Component_Node = 10026
 		/// </summary>
-		Model_Driven_App_Component_Node = 10062,
+		Model_Driven_App_Component_Node = 10026,
 		/// <summary>
-		/// Model_Driven_App_Component_Nodes_Edge = 10061
+		/// Model_Driven_App_Component_Nodes_Edge = 10025
 		/// </summary>
-		Model_Driven_App_Component_Nodes_Edge = 10061,
+		Model_Driven_App_Component_Nodes_Edge = 10025,
 		/// <summary>
-		/// Model_Driven_App_Element = 10060
+		/// Model_Driven_App_Element = 10024
 		/// </summary>
-		Model_Driven_App_Element = 10060,
+		Model_Driven_App_Element = 10024,
 		/// <summary>
-		/// Model_Driven_App_Setting = 10063
+		/// Model_Driven_App_Setting = 10027
 		/// </summary>
-		Model_Driven_App_Setting = 10063,
+		Model_Driven_App_Setting = 10027,
 		/// <summary>
-		/// Model_Driven_App_User_Setting = 10117
+		/// Model_Driven_App_User_Setting = 10028
 		/// </summary>
-		Model_Driven_App_User_Setting = 10117,
+		Model_Driven_App_User_Setting = 10028,
 		/// <summary>
 		/// Monthly_Fiscal_Calendar = 2003
 		/// </summary>
@@ -2629,10 +2477,6 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		MultiEntitySearch = 9910,
 		/// <summary>
-		/// My_Mother = 10146
-		/// </summary>
-		My_Mother = 10146,
-		/// <summary>
 		/// Navigation_Setting = 9900
 		/// </summary>
 		Navigation_Setting = 9900,
@@ -2641,25 +2485,25 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		New_Process = 950,
 		/// <summary>
-		/// NonRelational_Data_Source = 10054
+		/// NonRelational_Data_Source = 10077
 		/// </summary>
-		NonRelational_Data_Source = 10054,
+		NonRelational_Data_Source = 10077,
 		/// <summary>
 		/// Note = 5
 		/// </summary>
 		Note = 5,
 		/// <summary>
-		/// Notification_10122 = 10122
+		/// Notification_10075 = 10075
 		/// </summary>
-		Notification_10122 = 10122,
+		Notification_10075 = 10075,
 		/// <summary>
 		/// Notification_4110 = 4110
 		/// </summary>
 		Notification_4110 = 4110,
 		/// <summary>
-		/// OData_v4_Data_Source = 10000
+		/// OData_v4_Data_Source = 10032
 		/// </summary>
-		OData_v4_Data_Source = 10000,
+		OData_v4_Data_Source = 10032,
 		/// <summary>
 		/// Office_Document = 4490
 		/// </summary>
@@ -2689,9 +2533,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Organization_Insights_Notification = 9690,
 		/// <summary>
-		/// Organization_Setting = 10114
+		/// Organization_Setting = 10029
 		/// </summary>
-		Organization_Setting = 10114,
+		Organization_Setting = 10029,
 		/// <summary>
 		/// Organization_Statistic = 4708
 		/// </summary>
@@ -2701,13 +2545,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Organization_UI = 1021,
 		/// <summary>
-		/// OrganizationDataSyncSubscription = 10115
+		/// OrganizationDataSyncSubscription = 10073
 		/// </summary>
-		OrganizationDataSyncSubscription = 10115,
+		OrganizationDataSyncSubscription = 10073,
 		/// <summary>
-		/// OrganizationDataSyncSubscriptionEntity = 10116
+		/// OrganizationDataSyncSubscriptionEntity = 10074
 		/// </summary>
-		OrganizationDataSyncSubscriptionEntity = 10116,
+		OrganizationDataSyncSubscriptionEntity = 10074,
 		/// <summary>
 		/// Owner = 7
 		/// </summary>
@@ -2717,17 +2561,17 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Owner_Mapping = 4420,
 		/// <summary>
-		/// Package = 10077
+		/// Package = 10007
 		/// </summary>
-		Package = 10077,
+		Package = 10007,
 		/// <summary>
 		/// Partner_Application = 1095
 		/// </summary>
 		Partner_Application = 1095,
 		/// <summary>
-		/// PDF_Setting = 10072
+		/// PDF_Setting = 10048
 		/// </summary>
-		PDF_Setting = 10072,
+		PDF_Setting = 10048,
 		/// <summary>
 		/// Personal_Document_Template = 9941
 		/// </summary>
@@ -2752,6 +2596,14 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// Plug_in_Type_Statistic = 4603
 		/// </summary>
 		Plug_in_Type_Statistic = 4603,
+		/// <summary>
+		/// PM_Inferred_Task = 10091
+		/// </summary>
+		PM_Inferred_Task = 10091,
+		/// <summary>
+		/// PM_Recording = 10092
+		/// </summary>
+		PM_Recording = 10092,
 		/// <summary>
 		/// Position = 50
 		/// </summary>
@@ -2809,17 +2661,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Process_Trigger = 4712,
 		/// <summary>
-		/// Process_WebApi_1 = 10029
+		/// ProcessStageParameter = 10035
 		/// </summary>
-		Process_WebApi_1 = 10029,
+		ProcessStageParameter = 10035,
 		/// <summary>
-		/// ProcessStageParameter = 10052
+		/// ProvisionLanguageForUser = 10013
 		/// </summary>
-		ProcessStageParameter = 10052,
-		/// <summary>
-		/// ProvisionLanguageForUser = 10083
-		/// </summary>
-		ProvisionLanguageForUser = 10083,
+		ProvisionLanguageForUser = 10013,
 		/// <summary>
 		/// Publisher = 7101
 		/// </summary>
@@ -2905,9 +2753,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Report_Visibility = 9103,
 		/// <summary>
-		/// RevokeInheritedAccessRecordsTracker = 10104
+		/// RevokeInheritedAccessRecordsTracker = 90001
 		/// </summary>
-		RevokeInheritedAccessRecordsTracker = 10104,
+		RevokeInheritedAccessRecordsTracker = 90001,
 		/// <summary>
 		/// Ribbon_Client_Metadata = 4579
 		/// </summary>
@@ -2937,9 +2785,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Ribbon_Tab_To_Command_Mapping = 1113,
 		/// <summary>
-		/// Rich_Text_Attachment = 10074
+		/// Rich_Text_Attachment = 10076
 		/// </summary>
-		Rich_Text_Attachment = 10074,
+		Rich_Text_Attachment = 10076,
 		/// <summary>
 		/// Role_Template = 1037
 		/// </summary>
@@ -3021,13 +2869,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Sdk_Message_Response_Field = 4611,
 		/// <summary>
-		/// Search_provider = 10100
+		/// Search_provider = 10054
 		/// </summary>
-		Search_provider = 10100,
+		Search_provider = 10054,
 		/// <summary>
-		/// Search_Telemetry = 10101
+		/// Search_Telemetry = 10078
 		/// </summary>
-		Search_Telemetry = 10101,
+		Search_Telemetry = 10078,
 		/// <summary>
 		/// Security_Role = 1036
 		/// </summary>
@@ -3037,9 +2885,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Semiannual_Fiscal_Calendar = 2001,
 		/// <summary>
-		/// Service_Configuration = 10043
+		/// Service_Configuration = 10050
 		/// </summary>
-		Service_Configuration = 10043,
+		Service_Configuration = 10050,
 		/// <summary>
 		/// Service_Endpoint = 4618
 		/// </summary>
@@ -3049,9 +2897,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Service_Plan = 101,
 		/// <summary>
-		/// Setting_Definition = 10064
+		/// Setting_Definition = 10030
 		/// </summary>
-		Setting_Definition = 10064,
+		Setting_Definition = 10030,
 		/// <summary>
 		/// SharePoint_Data = 9509
 		/// </summary>
@@ -3081,9 +2929,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		SLA_Item = 9751,
 		/// <summary>
-		/// SLA_KPI = 10044
+		/// SLA_KPI = 10051
 		/// </summary>
-		SLA_KPI = 10044,
+		SLA_KPI = 10051,
 		/// <summary>
 		/// SLA_KPI_Instance = 9752
 		/// </summary>
@@ -3109,41 +2957,29 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Solution_Component = 7103,
 		/// <summary>
-		/// Solution_Component_Attribute_Configuration = 10034
+		/// Solution_Component_Attribute_Configuration = 10000
 		/// </summary>
-		Solution_Component_Attribute_Configuration = 10034,
+		Solution_Component_Attribute_Configuration = 10000,
 		/// <summary>
-		/// Solution_Component_Configuration = 10045
+		/// Solution_Component_Configuration = 10001
 		/// </summary>
-		Solution_Component_Configuration = 10045,
+		Solution_Component_Configuration = 10001,
 		/// <summary>
-		/// Solution_Component_Data_Source = 10002
+		/// Solution_Component_Data_Source = 10012
 		/// </summary>
-		Solution_Component_Data_Source = 10002,
+		Solution_Component_Data_Source = 10012,
 		/// <summary>
 		/// Solution_Component_Definition = 7104
 		/// </summary>
 		Solution_Component_Definition = 7104,
 		/// <summary>
-		/// Solution_Component_Relationship_Configuration = 10059
+		/// Solution_Component_Relationship_Configuration = 10002
 		/// </summary>
-		Solution_Component_Relationship_Configuration = 10059,
+		Solution_Component_Relationship_Configuration = 10002,
 		/// <summary>
-		/// Solution_Component_Summary = 10001
+		/// Solution_Component_Summary = 10011
 		/// </summary>
-		Solution_Component_Summary = 10001,
-		/// <summary>
-		/// Solution_Health_Rule = 10017
-		/// </summary>
-		Solution_Health_Rule = 10017,
-		/// <summary>
-		/// Solution_Health_Rule_Argument = 10018
-		/// </summary>
-		Solution_Health_Rule_Argument = 10018,
-		/// <summary>
-		/// Solution_Health_Rule_Set = 10019
-		/// </summary>
-		Solution_Health_Rule_Set = 10019,
+		Solution_Component_Summary = 10011,
 		/// <summary>
 		/// Solution_History = 10003
 		/// </summary>
@@ -3157,13 +2993,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		SolutionHistoryData = 9890,
 		/// <summary>
-		/// Sql_DataSource = 10150
+		/// StageSolutionUpload = 10009
 		/// </summary>
-		Sql_DataSource = 10150,
-		/// <summary>
-		/// StageSolutionUpload = 10046
-		/// </summary>
-		StageSolutionUpload = 10046,
+		StageSolutionUpload = 10009,
 		/// <summary>
 		/// Status_Map = 1075
 		/// </summary>
@@ -3253,9 +3085,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		SystemUser_BusinessUnit_Entity_Map = 42,
 		/// <summary>
-		/// SystemUserAuthorizationChangeTracker = 10113
+		/// SystemUserAuthorizationChangeTracker = 60
 		/// </summary>
-		SystemUserAuthorizationChangeTracker = 10113,
+		SystemUserAuthorizationChangeTracker = 60,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
@@ -3277,9 +3109,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Team_template = 92,
 		/// <summary>
-		/// TeamMobileOfflineProfileMembership = 10118
+		/// TeamMobileOfflineProfileMembership = 10071
 		/// </summary>
-		TeamMobileOfflineProfileMembership = 10118,
+		TeamMobileOfflineProfileMembership = 10071,
 		/// <summary>
 		/// Territory = 2013
 		/// </summary>
@@ -3385,13 +3217,9 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		User_Settings = 150,
 		/// <summary>
-		/// UserMobileOfflineProfileMembership = 10119
+		/// UserMobileOfflineProfileMembership = 10072
 		/// </summary>
-		UserMobileOfflineProfileMembership = 10119,
-		/// <summary>
-		/// VETicket = 10147
-		/// </summary>
-		VETicket = 10147,
+		UserMobileOfflineProfileMembership = 10072,
 		/// <summary>
 		/// View = 1039
 		/// </summary>
@@ -3417,17 +3245,13 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleOptionSets
 		/// </summary>
 		Web_Wizard_Access_Privilege = 4803,
 		/// <summary>
-		/// WebApi = 10030
-		/// </summary>
-		WebApi = 10030,
-		/// <summary>
 		/// Wizard_Page = 4802
 		/// </summary>
 		Wizard_Page = 4802,
 		/// <summary>
-		/// Workflow_Binary = 10032
+		/// Workflow_Binary = 10036
 		/// </summary>
-		Workflow_Binary = 10032,
+		Workflow_Binary = 10036,
 		/// <summary>
 		/// Workflow_Wait_Subscription = 4702
 		/// </summary>

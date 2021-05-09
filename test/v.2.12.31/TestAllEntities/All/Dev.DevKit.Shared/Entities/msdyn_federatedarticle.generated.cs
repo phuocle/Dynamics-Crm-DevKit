@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_federatedarticle";
 
-		public const int EntityTypeCode = 10098;
+		public const int EntityTypeCode = 10052;
 
 		[DebuggerNonUserCode()]
 		public msdyn_federatedarticle()

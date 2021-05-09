@@ -167,9 +167,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Parent entity logical name</para>
+		/// <para>Parent Entity Logical Name</para>
 		/// <para>String - MaxLength: 128</para>
-		/// <para>ParentEntityLogicalName</para>
+		/// <para>Parent Entity Logical Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string ParentEntityLogicalName
@@ -179,9 +179,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Logical name of the primary image attribute</para>
+		/// <para>Logical Name of the Primary Image Attribute</para>
 		/// <para>String - MaxLength: 128</para>
-		/// <para>PrimaryImageAttribute</para>
+		/// <para>Primary Image Attribute</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string PrimaryImageAttribute

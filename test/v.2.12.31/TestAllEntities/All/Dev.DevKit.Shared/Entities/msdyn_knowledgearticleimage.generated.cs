@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgearticleimage";
 
-		public const int EntityTypeCode = 10021;
+		public const int EntityTypeCode = 10055;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgearticleimage()

@@ -64,10 +64,6 @@ declare namespace DevKit {
 		/** Unique identifier of the party associated with the activity. */
 		partyid_contact: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
-		partyid_devkit_azureaccount: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the party associated with the activity. */
-		partyid_devkit_webapi: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the party associated with the activity. */
 		partyid_knowledgearticle: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the party associated with the activity. */
 		partyid_queue: DevKit.WebApi.LookupValue;

@@ -188,10 +188,6 @@ declare namespace DevKit {
 		/** Choose the record that the recurring appointment series relates to. */
 		regardingobjectid_contact_recurringappointmentmaster: DevKit.WebApi.LookupValue;
 		/** Choose the record that the recurring appointment series relates to. */
-		regardingobjectid_devkit_azureaccount_recurringappointmentmaster: DevKit.WebApi.LookupValue;
-		/** Choose the record that the recurring appointment series relates to. */
-		regardingobjectid_devkit_webapi_recurringappointmentmaster: DevKit.WebApi.LookupValue;
-		/** Choose the record that the recurring appointment series relates to. */
 		regardingobjectid_knowledgearticle_recurringappointmentmaster: DevKit.WebApi.LookupValue;
 		/** Choose the record that the recurring appointment series relates to. */
 		regardingobjectid_knowledgebaserecord_recurringappointmentmaster: DevKit.WebApi.LookupValue;

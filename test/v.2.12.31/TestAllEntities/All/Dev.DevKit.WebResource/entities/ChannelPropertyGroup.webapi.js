@@ -137,7 +137,6 @@ var OptionSet;
 		},
 		RegardingTypeCode : {
 			Appointment: 4201,
-			Custom_Activity: 10042,
 			Email: 4202,
 			Phone_Call: 4210,
 			Social_Activity: 4216,

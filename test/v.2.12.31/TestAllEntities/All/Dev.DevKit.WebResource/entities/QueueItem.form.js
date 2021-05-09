@@ -58,17 +58,15 @@ var OptionSet;
 		ObjectTypeCode : {
 			Activity: 4200,
 			Appointment: 4201,
-			Custom_Activity: 10042,
 			Email: 4202,
 			Fax: 4204,
 			Knowledge_Article: 9953,
-			Knowledge_Article_Template: 10022,
+			Knowledge_Article_Template: 10060,
 			Letter: 4207,
 			Phone_Call: 4210,
 			Recurring_Appointment: 4251,
 			Social_Activity: 4216,
-			Task: 4212,
-			WebApi: 10030
+			Task: 4212
 		},
 		StateCode : {
 			Active: 0,

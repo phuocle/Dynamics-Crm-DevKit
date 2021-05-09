@@ -100,10 +100,6 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_contact: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_devkit_azureaccount: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the activity is associated. */
-		regardingobjectid_devkit_webapi: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_new_interactionforemail: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the activity is associated. */
 		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;

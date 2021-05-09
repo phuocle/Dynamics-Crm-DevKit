@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "flowmachine";
 
-		public const int EntityTypeCode = 10125;
+		public const int EntityTypeCode = 10033;
 
 		[DebuggerNonUserCode()]
 		public flowmachine()

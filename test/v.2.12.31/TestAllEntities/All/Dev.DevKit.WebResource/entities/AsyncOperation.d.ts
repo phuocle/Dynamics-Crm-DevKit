@@ -157,8 +157,6 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_annualfiscalcalendar: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_apisettings: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_appelement: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_applicationuser: DevKit.WebApi.LookupValue;
@@ -234,20 +232,6 @@ declare namespace DevKit {
 		regardingobjectid_datalakeworkspace: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_devkit_bpfaccount1: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_devkit_bpfaccount3: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_devkit_bpf_location_1: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_devkit_location: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_devkit_processwebapi1: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_devkit_webapi: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_displaystring: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -357,21 +341,11 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_aitemplate: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_msdyn_analysiscomponent: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_msdyn_analysisjob: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_msdyn_analysisresult: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_msdyn_analysisresultdetail: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_dataflow: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_federatedarticle: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -391,19 +365,15 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_knowledgesearchinsight: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_pminferredtask: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_pmrecording: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_richtextfile: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_msdyn_solutionhealthrule: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_msdyn_solutionhealthruleargument: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_msdyn_solutionhealthruleset: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the system job is associated. */
-		regardingobjectid_new_bpf_301232cf016d4faebcee80f57b143c69: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_organization: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */

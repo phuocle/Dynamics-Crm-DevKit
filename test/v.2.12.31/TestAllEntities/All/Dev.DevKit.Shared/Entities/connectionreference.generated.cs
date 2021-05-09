@@ -95,7 +95,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "connectionreference";
 
-		public const int EntityTypeCode = 10067;
+		public const int EntityTypeCode = 10037;
 
 		[DebuggerNonUserCode()]
 		public connectionreference()

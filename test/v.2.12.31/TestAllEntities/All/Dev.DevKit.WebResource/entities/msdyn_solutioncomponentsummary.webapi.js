@@ -121,7 +121,8 @@ var DevKit;
 			msdyn_version: { a: 'msdyn_version' },
 			msdyn_workflowcategory: { a: 'msdyn_workflowcategory' },
 			msdyn_workflowcategoryname: { a: 'msdyn_workflowcategoryname' },
-			msdyn_workflowidunique: { a: 'msdyn_workflowidunique' }
+			msdyn_workflowidunique: { a: 'msdyn_workflowidunique' },
+			OrganizationId: { a: 'organizationid', r: true }
 		};
 		if (e === undefined) e = {};
 		var u = {};

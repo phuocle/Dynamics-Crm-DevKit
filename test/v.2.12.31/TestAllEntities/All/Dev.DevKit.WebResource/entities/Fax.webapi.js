@@ -100,8 +100,6 @@ var DevKit;
 			ProcessId: { a: 'processid' },
 			regardingobjectid_account_fax: { b: 'regardingobjectid_account_fax', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
 			regardingobjectid_contact_fax: { b: 'regardingobjectid_contact_fax', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
-			regardingobjectid_devkit_azureaccount_fax: { b: 'regardingobjectid_devkit_azureaccount_fax', a: '_regardingobjectid_value', c: 'devkit_azureaccounts', d: 'devkit_azureaccount' },
-			regardingobjectid_devkit_webapi_fax: { b: 'regardingobjectid_devkit_webapi_fax', a: '_regardingobjectid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			regardingobjectid_knowledgearticle_fax: { b: 'regardingobjectid_knowledgearticle_fax', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			regardingobjectid_knowledgebaserecord_fax: { b: 'regardingobjectid_knowledgebaserecord_fax', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
 			ScheduledDurationMinutes: { a: 'scheduleddurationminutes', r: true },

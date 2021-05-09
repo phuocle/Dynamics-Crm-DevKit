@@ -147,10 +147,6 @@ declare namespace DevKit {
 		/** Choose the primary account, contact, or other record involved in the connection. */
 		record1id_contact: DevKit.WebApi.LookupValue;
 		/** Choose the primary account, contact, or other record involved in the connection. */
-		record1id_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Choose the primary account, contact, or other record involved in the connection. */
-		record1id_devkit_webapi: DevKit.WebApi.LookupValue;
-		/** Choose the primary account, contact, or other record involved in the connection. */
 		record1id_email: DevKit.WebApi.LookupValue;
 		/** Choose the primary account, contact, or other record involved in the connection. */
 		record1id_fax: DevKit.WebApi.LookupValue;
@@ -196,10 +192,6 @@ declare namespace DevKit {
 		channelaccessprofileruleid: DevKit.WebApi.LookupValue;
 		/** Select the secondary account, contact, or other record involved in the connection. */
 		record2id_contact: DevKit.WebApi.LookupValue;
-		/** Select the secondary account, contact, or other record involved in the connection. */
-		record2id_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Select the secondary account, contact, or other record involved in the connection. */
-		record2id_devkit_webapi: DevKit.WebApi.LookupValue;
 		/** Select the secondary account, contact, or other record involved in the connection. */
 		record2id_email: DevKit.WebApi.LookupValue;
 		/** Select the secondary account, contact, or other record involved in the connection. */
@@ -261,8 +253,6 @@ declare namespace OptionSet {
 			Channel_Access_Profile_Rule,
 			/** 2 */
 			Contact,
-			/** 10042 */
-			Custom_Activity,
 			/** 4202 */
 			Email,
 			/** 4204 */
@@ -294,9 +284,7 @@ declare namespace OptionSet {
 			/** 2013 */
 			Territory,
 			/** 8 */
-			User,
-			/** 10030 */
-			WebApi
+			User
 		}
 		enum Record2ObjectTypeCode {
 			/** 1 */
@@ -309,8 +297,6 @@ declare namespace OptionSet {
 			Channel_Access_Profile_Rule,
 			/** 2 */
 			Contact,
-			/** 10042 */
-			Custom_Activity,
 			/** 4202 */
 			Email,
 			/** 4204 */
@@ -342,9 +328,7 @@ declare namespace OptionSet {
 			/** 2013 */
 			Territory,
 			/** 8 */
-			User,
-			/** 10030 */
-			WebApi
+			User
 		}
 		enum StateCode {
 			/** 0 */

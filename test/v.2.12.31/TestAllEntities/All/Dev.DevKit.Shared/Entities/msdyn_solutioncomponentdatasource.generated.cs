@@ -21,11 +21,12 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_solutioncomponentdatasourceId = "msdyn_solutioncomponentdatasourceid";
+			public const string OrganizationId = "organizationid";
 		}
 
 		public const string EntityLogicalName = "msdyn_solutioncomponentdatasource";
 
-		public const int EntityTypeCode = 10002;
+		public const int EntityTypeCode = 10012;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutioncomponentdatasource()
@@ -100,6 +101,17 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.msdyn_solutioncomponentdatasourceId] = value;
 				Entity.Id = value;
 			}
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for the organization</para>
+		/// <para>ReadOnly - Uniqueidentifier</para>
+		/// <para>Organization Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid? OrganizationId
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.OrganizationId); }
 		}
 	}
 }

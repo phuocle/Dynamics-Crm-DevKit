@@ -65,8 +65,6 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_activityfileattachment: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_apisettings: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_appelement: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_applicationuser: DevKit.WebApi.LookupValue;
@@ -120,20 +118,6 @@ declare namespace DevKit {
 		regardingobjectid_datalakeworkspace: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_devkit_bpfaccount1: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_devkit_bpfaccount3: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_devkit_bpf_location_1: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_devkit_location: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_devkit_processwebapi1: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_devkit_webapi: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_entityanalyticsconfig: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -189,21 +173,11 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_aitemplate: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analysiscomponent: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analysisjob: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analysisresult: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_analysisresultdetail: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_dataflow: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_federatedarticle: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
@@ -223,19 +197,15 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_knowledgesearchinsight: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_pminferredtask: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_msdyn_pmrecording: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_richtextfile: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_solutionhealthrule: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_solutionhealthruleargument: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_msdyn_solutionhealthruleset: DevKit.WebApi.LookupValue;
-		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
-		regardingobjectid_new_bpf_301232cf016d4faebcee80f57b143c69: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_organizationdatasyncsubscription: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */

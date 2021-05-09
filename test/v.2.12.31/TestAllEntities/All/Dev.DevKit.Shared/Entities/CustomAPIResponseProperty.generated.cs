@@ -152,7 +152,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "customapiresponseproperty";
 
-		public const int EntityTypeCode = 10090;
+		public const int EntityTypeCode = 10070;
 
 		[DebuggerNonUserCode()]
 		public CustomAPIResponseProperty()

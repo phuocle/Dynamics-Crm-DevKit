@@ -149,8 +149,7 @@ var OptionSet;
 		FileScope : {
 			Global: 2,
 			Individual: 1,
-			None_0: 0,
-			None_100000000: 100000000
+			None: 0
 		},
 		statecode : {
 			Active: 0,

@@ -717,7 +717,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the record that the social activity relates to.</para>
-		/// <para>Lookup to account;asyncoperation;contact;devkit_azureaccount;devkit_webapi;knowledgearticle;knowledgebaserecord</para>
+		/// <para>Lookup to account;asyncoperation;contact;knowledgearticle;knowledgebaserecord</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

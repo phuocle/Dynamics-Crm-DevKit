@@ -91,7 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "catalog";
 
-		public const int EntityTypeCode = 10085;
+		public const int EntityTypeCode = 10065;
 
 		[DebuggerNonUserCode()]
 		public Catalog()

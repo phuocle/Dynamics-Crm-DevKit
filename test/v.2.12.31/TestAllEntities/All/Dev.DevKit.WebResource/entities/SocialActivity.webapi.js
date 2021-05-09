@@ -110,8 +110,6 @@ var DevKit;
 			regardingobjectid_account_socialactivity: { b: 'regardingobjectid_account_socialactivity', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
 			regardingobjectid_asyncoperation: { b: 'regardingobjectid_asyncoperation', a: '_regardingobjectid_value', c: 'asyncoperations', d: 'asyncoperation' },
 			regardingobjectid_contact_socialactivity: { b: 'regardingobjectid_contact_socialactivity', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
-			regardingobjectid_devkit_azureaccount_socialactivity: { b: 'regardingobjectid_devkit_azureaccount_socialactivity', a: '_regardingobjectid_value', c: 'devkit_azureaccounts', d: 'devkit_azureaccount' },
-			regardingobjectid_devkit_webapi_socialactivity: { b: 'regardingobjectid_devkit_webapi_socialactivity', a: '_regardingobjectid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			regardingobjectid_knowledgearticle_socialactivity: { b: 'regardingobjectid_knowledgearticle_socialactivity', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			regardingobjectid_knowledgebaserecord_socialactivity: { b: 'regardingobjectid_knowledgebaserecord_socialactivity', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
 			RegardingObjectIdYomiName: { a: 'regardingobjectidyominame' },

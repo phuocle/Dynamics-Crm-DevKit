@@ -362,10 +362,6 @@ declare namespace DevKit {
 		/** Choose the record that the appointment relates to. */
 		regardingobjectid_contact_appointment: DevKit.WebApi.LookupValue;
 		/** Choose the record that the appointment relates to. */
-		regardingobjectid_devkit_azureaccount_appointment: DevKit.WebApi.LookupValue;
-		/** Choose the record that the appointment relates to. */
-		regardingobjectid_devkit_webapi_appointment: DevKit.WebApi.LookupValue;
-		/** Choose the record that the appointment relates to. */
 		regardingobjectid_knowledgearticle_appointment: DevKit.WebApi.LookupValue;
 		/** Choose the record that the appointment relates to. */
 		regardingobjectid_knowledgebaserecord_appointment: DevKit.WebApi.LookupValue;

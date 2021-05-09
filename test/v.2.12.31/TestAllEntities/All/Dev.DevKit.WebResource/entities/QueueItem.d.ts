@@ -90,10 +90,6 @@ declare namespace DevKit {
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_appointment: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Choose the activity, case, or article assigned to the queue. */
-		objectid_devkit_webapi: DevKit.WebApi.LookupValue;
-		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_email: DevKit.WebApi.LookupValue;
 		/** Choose the activity, case, or article assigned to the queue. */
 		objectid_fax: DevKit.WebApi.LookupValue;
@@ -158,15 +154,13 @@ declare namespace OptionSet {
 			Activity,
 			/** 4201 */
 			Appointment,
-			/** 10042 */
-			Custom_Activity,
 			/** 4202 */
 			Email,
 			/** 4204 */
 			Fax,
 			/** 9953 */
 			Knowledge_Article,
-			/** 10022 */
+			/** 10060 */
 			Knowledge_Article_Template,
 			/** 4207 */
 			Letter,
@@ -177,9 +171,7 @@ declare namespace OptionSet {
 			/** 4216 */
 			Social_Activity,
 			/** 4212 */
-			Task,
-			/** 10030 */
-			WebApi
+			Task
 		}
 		enum StateCode {
 			/** 0 */

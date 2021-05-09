@@ -427,7 +427,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the record that the feedback is associated with.</para>
-		/// <para>Lookup to contact;devkit_customactivity;devkit_webapi;feedback;knowledgearticle</para>
+		/// <para>Lookup to contact;feedback;knowledgearticle</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

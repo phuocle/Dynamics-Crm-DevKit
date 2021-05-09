@@ -77,7 +77,6 @@ var OptionSet;
 			Appointment: 4201,
 			Channel_Access_Profile_Rule: 9400,
 			Contact: 2,
-			Custom_Activity: 10042,
 			Email: 4202,
 			Fax: 4204,
 			Goal: 9600,
@@ -93,8 +92,7 @@ var OptionSet;
 			Task: 4212,
 			Team: 9,
 			Territory: 2013,
-			User: 8,
-			WebApi: 10030
+			User: 8
 		},
 		Record2ObjectTypeCode : {
 			Account: 1,
@@ -102,7 +100,6 @@ var OptionSet;
 			Appointment: 4201,
 			Channel_Access_Profile_Rule: 9400,
 			Contact: 2,
-			Custom_Activity: 10042,
 			Email: 4202,
 			Fax: 4204,
 			Goal: 9600,
@@ -118,8 +115,7 @@ var OptionSet;
 			Task: 4212,
 			Team: 9,
 			Territory: 2013,
-			User: 8,
-			WebApi: 10030
+			User: 8
 		},
 		StateCode : {
 			Active: 0,

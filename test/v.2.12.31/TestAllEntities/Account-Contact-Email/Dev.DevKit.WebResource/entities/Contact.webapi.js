@@ -168,7 +168,6 @@ var DevKit;
 			CustomerTypeCode: { a: 'customertypecode' },
 			Department: { a: 'department' },
 			Description: { a: 'description' },
-			devkit_LocationId: { b: 'devkit_LocationId', a: '_devkit_locationid_value', c: 'devkit_locations', d: 'devkit_location' },
 			DoNotBulkEMail: { a: 'donotbulkemail' },
 			DoNotBulkPostalMail: { a: 'donotbulkpostalmail' },
 			DoNotEMail: { a: 'donotemail' },

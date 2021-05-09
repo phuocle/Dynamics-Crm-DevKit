@@ -127,7 +127,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "appnotification";
 
-		public const int EntityTypeCode = 10122;
+		public const int EntityTypeCode = 10075;
 
 		[DebuggerNonUserCode()]
 		public appnotification()

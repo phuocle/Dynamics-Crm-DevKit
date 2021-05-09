@@ -76,7 +76,6 @@ declare namespace DevKit {
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Sequence number of the import that created this record. */
 		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
-		IsDefault: DevKit.WebApi.BooleanValue;
 		/** Unique identifier of the user who modified the record. */
 		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
 		/** Date and time when the record was modified. */

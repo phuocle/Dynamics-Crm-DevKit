@@ -108,8 +108,6 @@ var DevKit;
 			ProcessId: { a: 'processid' },
 			regardingobjectid_account_appointment: { b: 'regardingobjectid_account_appointment', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
 			regardingobjectid_contact_appointment: { b: 'regardingobjectid_contact_appointment', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
-			regardingobjectid_devkit_azureaccount_appointment: { b: 'regardingobjectid_devkit_azureaccount_appointment', a: '_regardingobjectid_value', c: 'devkit_azureaccounts', d: 'devkit_azureaccount' },
-			regardingobjectid_devkit_webapi_appointment: { b: 'regardingobjectid_devkit_webapi_appointment', a: '_regardingobjectid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			regardingobjectid_knowledgearticle_appointment: { b: 'regardingobjectid_knowledgearticle_appointment', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			regardingobjectid_knowledgebaserecord_appointment: { b: 'regardingobjectid_knowledgebaserecord_appointment', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
 			SafeDescription: { a: 'safedescription', r: true },

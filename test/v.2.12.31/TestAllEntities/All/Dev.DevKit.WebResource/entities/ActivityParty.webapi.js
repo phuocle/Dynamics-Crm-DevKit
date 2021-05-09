@@ -85,8 +85,6 @@ var DevKit;
 			ParticipationTypeMask: { a: 'participationtypemask' },
 			partyid_account: { b: 'partyid_account', a: '_partyid_value', c: 'accounts', d: 'account' },
 			partyid_contact: { b: 'partyid_contact', a: '_partyid_value', c: 'contacts', d: 'contact' },
-			partyid_devkit_azureaccount: { b: 'partyid_devkit_azureaccount', a: '_partyid_value', c: 'devkit_azureaccounts', d: 'devkit_azureaccount' },
-			partyid_devkit_webapi: { b: 'partyid_devkit_webapi', a: '_partyid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			partyid_knowledgearticle: { b: 'partyid_knowledgearticle', a: '_partyid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			partyid_queue: { b: 'partyid_queue', a: '_partyid_value', c: 'queues', d: 'queue' },
 			partyid_systemuser: { b: 'partyid_systemuser', a: '_partyid_value', c: 'systemusers', d: 'systemuser' },

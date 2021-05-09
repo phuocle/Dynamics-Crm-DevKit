@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "exportsolutionupload";
 
-		public const int EntityTypeCode = 10073;
+		public const int EntityTypeCode = 10010;
 
 		[DebuggerNonUserCode()]
 		public ExportSolutionUpload()

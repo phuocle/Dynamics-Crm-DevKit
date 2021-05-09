@@ -51,7 +51,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "botcomponent_workflow";
 
-		public const int EntityTypeCode = 10097;
+		public const int EntityTypeCode = 10047;
 
 		[DebuggerNonUserCode()]
 		public botcomponent_workflow()

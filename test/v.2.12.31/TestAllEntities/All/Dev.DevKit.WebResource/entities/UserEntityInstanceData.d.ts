@@ -50,8 +50,6 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_annotation: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
-		objectid_apisettings: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
 		objectid_appelement: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_applicationuser: DevKit.WebApi.LookupValue;
@@ -151,20 +149,6 @@ declare namespace DevKit {
 		objectid_dependency: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_dependencynode: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_devkit_bpfaccount1: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_devkit_bpfaccount3: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_devkit_bpf_location_1: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_devkit_location: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_devkit_processwebapi1: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_devkit_webapi: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_displaystring: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -298,21 +282,11 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_aitemplate: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
-		objectid_msdyn_analysiscomponent: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_msdyn_analysisjob: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_msdyn_analysisresult: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_msdyn_analysisresultdetail: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
 		objectid_msdyn_dataflow: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_federatedarticle: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_msdyn_helppage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -332,19 +306,15 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_knowledgesearchinsight: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_pminferredtask: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_msdyn_pmrecording: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_richtextfile: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_msdyn_solutionhealthrule: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_msdyn_solutionhealthruleargument: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_msdyn_solutionhealthruleset: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the source record. */
-		objectid_new_bpf_301232cf016d4faebcee80f57b143c69: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_notification: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */

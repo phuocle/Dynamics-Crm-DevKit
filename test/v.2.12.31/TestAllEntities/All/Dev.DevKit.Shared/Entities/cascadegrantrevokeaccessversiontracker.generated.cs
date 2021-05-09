@@ -62,7 +62,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "cascadegrantrevokeaccessversiontracker";
 
-		public const int EntityTypeCode = 10076;
+		public const int EntityTypeCode = 10019;
 
 		[DebuggerNonUserCode()]
 		public cascadegrantrevokeaccessversiontracker()

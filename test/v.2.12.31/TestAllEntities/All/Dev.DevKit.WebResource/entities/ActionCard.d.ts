@@ -86,8 +86,6 @@ declare namespace DevKit {
 		/** Choose the record that the card relates to. */
 		regardingobjectid_contact_actioncard: DevKit.WebApi.LookupValue;
 		/** Choose the record that the card relates to. */
-		regardingobjectid_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Choose the record that the card relates to. */
 		regardingobjectid_email_actioncard: DevKit.WebApi.LookupValue;
 		/** Choose the record that the card relates to. */
 		regardingobjectid_fax_actioncard: DevKit.WebApi.LookupValue;

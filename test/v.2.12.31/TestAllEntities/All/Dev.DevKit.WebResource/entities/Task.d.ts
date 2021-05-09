@@ -233,10 +233,6 @@ declare namespace DevKit {
 		/** Choose the record that the task relates to. */
 		regardingobjectid_contact_task: DevKit.WebApi.LookupValue;
 		/** Choose the record that the task relates to. */
-		regardingobjectid_devkit_azureaccount_task: DevKit.WebApi.LookupValue;
-		/** Choose the record that the task relates to. */
-		regardingobjectid_devkit_webapi_task: DevKit.WebApi.LookupValue;
-		/** Choose the record that the task relates to. */
 		regardingobjectid_knowledgearticle_task: DevKit.WebApi.LookupValue;
 		/** Choose the record that the task relates to. */
 		regardingobjectid_knowledgebaserecord_task: DevKit.WebApi.LookupValue;

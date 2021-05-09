@@ -95,7 +95,6 @@ var DevKit;
 			regardingobjectid_account_actioncard: { b: 'regardingobjectid_account_actioncard', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
 			regardingobjectid_appointment_actioncard: { b: 'regardingobjectid_appointment_actioncard', a: '_regardingobjectid_value', c: 'appointments', d: 'appointment' },
 			regardingobjectid_contact_actioncard: { b: 'regardingobjectid_contact_actioncard', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
-			regardingobjectid_devkit_customactivity: { b: 'regardingobjectid_devkit_customactivity', a: '_regardingobjectid_value', c: 'devkit_customactivities', d: 'devkit_customactivity' },
 			regardingobjectid_email_actioncard: { b: 'regardingobjectid_email_actioncard', a: '_regardingobjectid_value', c: 'emails', d: 'email' },
 			regardingobjectid_fax_actioncard: { b: 'regardingobjectid_fax_actioncard', a: '_regardingobjectid_value', c: 'faxes', d: 'fax' },
 			regardingobjectid_letter_actioncard: { b: 'regardingobjectid_letter_actioncard', a: '_regardingobjectid_value', c: 'letters', d: 'letter' },

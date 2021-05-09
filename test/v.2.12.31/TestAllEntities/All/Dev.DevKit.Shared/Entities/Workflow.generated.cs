@@ -201,6 +201,10 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// </summary>
 		Power_Automate_Desktop = 2,
 		/// <summary>
+		/// Recording = 101
+		/// </summary>
+		Recording = 101,
+		/// <summary>
 		/// Selenium_IDE = 1
 		/// </summary>
 		Selenium_IDE = 1,
@@ -1098,7 +1102,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type of the Desktop Flow process.</para>
+		/// <para>Type of the UI Flow process.</para>
 		/// <para>Picklist</para>
 		/// <para>Desktop Flow Type</para>
 		/// </summary>

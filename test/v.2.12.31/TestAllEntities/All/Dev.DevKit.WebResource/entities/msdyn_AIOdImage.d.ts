@@ -5,7 +5,6 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
-			notescontrol: DevKit.Controls.Note;
 			/** The name of the custom entity. */
 			msdyn_name: DevKit.Controls.String;
 			/** Owner Id */

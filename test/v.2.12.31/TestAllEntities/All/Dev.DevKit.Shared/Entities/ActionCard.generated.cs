@@ -428,7 +428,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the record that the card relates to.</para>
-		/// <para>Lookup to account;appointment;contact;devkit_customactivity;email;fax;letter;phonecall;recurringappointmentmaster;task</para>
+		/// <para>Lookup to account;appointment;contact;email;fax;letter;phonecall;recurringappointmentmaster;task</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

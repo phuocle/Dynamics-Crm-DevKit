@@ -37,10 +37,6 @@ namespace Dev.DevKit.Shared.Entities.ChannelPropertyGroupOptionSets
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Custom_Activity = 10042
-		/// </summary>
-		Custom_Activity = 10042,
-		/// <summary>
 		/// Email = 4202
 		/// </summary>
 		Email = 4202,

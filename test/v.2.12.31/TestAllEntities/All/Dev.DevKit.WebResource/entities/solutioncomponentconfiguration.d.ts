@@ -130,9 +130,7 @@ declare namespace OptionSet {
 			/** 1 */
 			Individual,
 			/** 0 */
-			None_0,
-			/** 100000000 */
-			None_100000000
+			None
 		}
 		enum statecode {
 			/** 0 */

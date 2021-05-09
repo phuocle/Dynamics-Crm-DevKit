@@ -16,7 +16,6 @@ var DevKit;
 		var form = devKit.LoadForm(formContext);
 		var body = {
 			msdyn_name: {},
-			notescontrol: {},
 			OwnerId: {}
 		};
 		devKit.LoadFields(formContext, body);

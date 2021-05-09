@@ -99,8 +99,6 @@ var DevKit;
 			ProcessId: { a: 'processid' },
 			regardingobjectid_account_phonecall: { b: 'regardingobjectid_account_phonecall', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
 			regardingobjectid_contact_phonecall: { b: 'regardingobjectid_contact_phonecall', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
-			regardingobjectid_devkit_azureaccount_phonecall: { b: 'regardingobjectid_devkit_azureaccount_phonecall', a: '_regardingobjectid_value', c: 'devkit_azureaccounts', d: 'devkit_azureaccount' },
-			regardingobjectid_devkit_webapi_phonecall: { b: 'regardingobjectid_devkit_webapi_phonecall', a: '_regardingobjectid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			regardingobjectid_knowledgearticle_phonecall: { b: 'regardingobjectid_knowledgearticle_phonecall', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			regardingobjectid_knowledgebaserecord_phonecall: { b: 'regardingobjectid_knowledgebaserecord_phonecall', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
 			ScheduledDurationMinutes: { a: 'scheduleddurationminutes', r: true },

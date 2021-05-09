@@ -259,10 +259,6 @@ declare namespace DevKit {
 		/** Choose the record that the phone call relates to. */
 		regardingobjectid_contact_phonecall: DevKit.WebApi.LookupValue;
 		/** Choose the record that the phone call relates to. */
-		regardingobjectid_devkit_azureaccount_phonecall: DevKit.WebApi.LookupValue;
-		/** Choose the record that the phone call relates to. */
-		regardingobjectid_devkit_webapi_phonecall: DevKit.WebApi.LookupValue;
-		/** Choose the record that the phone call relates to. */
 		regardingobjectid_knowledgearticle_phonecall: DevKit.WebApi.LookupValue;
 		/** Choose the record that the phone call relates to. */
 		regardingobjectid_knowledgebaserecord_phonecall: DevKit.WebApi.LookupValue;

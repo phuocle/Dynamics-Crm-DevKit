@@ -97,8 +97,6 @@ var DevKit;
 			ProcessId: { a: 'processid' },
 			regardingobjectid_account_letter: { b: 'regardingobjectid_account_letter', a: '_regardingobjectid_value', c: 'accounts', d: 'account' },
 			regardingobjectid_contact_letter: { b: 'regardingobjectid_contact_letter', a: '_regardingobjectid_value', c: 'contacts', d: 'contact' },
-			regardingobjectid_devkit_azureaccount_letter: { b: 'regardingobjectid_devkit_azureaccount_letter', a: '_regardingobjectid_value', c: 'devkit_azureaccounts', d: 'devkit_azureaccount' },
-			regardingobjectid_devkit_webapi_letter: { b: 'regardingobjectid_devkit_webapi_letter', a: '_regardingobjectid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			regardingobjectid_knowledgearticle_letter: { b: 'regardingobjectid_knowledgearticle_letter', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			regardingobjectid_knowledgebaserecord_letter: { b: 'regardingobjectid_knowledgebaserecord_letter', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
 			ScheduledDurationMinutes: { a: 'scheduleddurationminutes', r: true },

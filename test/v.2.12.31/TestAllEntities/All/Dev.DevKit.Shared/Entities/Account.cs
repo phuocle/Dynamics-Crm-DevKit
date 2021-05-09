@@ -1,5 +1,4 @@
-﻿
-namespace Dev.DevKit.Shared.Entities
+﻿namespace Dev.DevKit.Shared.Entities
 {
     public partial class Account
     {

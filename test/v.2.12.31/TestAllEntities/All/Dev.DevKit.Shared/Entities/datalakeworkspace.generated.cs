@@ -96,7 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "datalakeworkspace";
 
-		public const int EntityTypeCode = 10055;
+		public const int EntityTypeCode = 10016;
 
 		[DebuggerNonUserCode()]
 		public datalakeworkspace()

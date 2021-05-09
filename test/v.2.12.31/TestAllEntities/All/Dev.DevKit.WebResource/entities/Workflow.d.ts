@@ -174,7 +174,7 @@ declare namespace DevKit {
 		Type: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
 		UIData: DevKit.WebApi.StringValueReadonly;
-		/** Type of the Desktop Flow process. */
+		/** Type of the UI Flow process. */
 		UIFlowType: DevKit.WebApi.OptionSetValue;
 		/** Unique name of the process */
 		UniqueName: DevKit.WebApi.StringValue;
@@ -286,6 +286,8 @@ declare namespace OptionSet {
 		enum UIFlowType {
 			/** 2 */
 			Power_Automate_Desktop,
+			/** 101 */
+			Recording,
 			/** 1 */
 			Selenium_IDE,
 			/** 0 */

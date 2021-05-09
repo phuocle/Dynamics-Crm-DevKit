@@ -78,7 +78,6 @@ var DevKit;
 			objectid_asyncoperation: { b: 'objectid_asyncoperation', a: '_objectid_value', c: 'asyncoperations', d: 'asyncoperation' },
 			objectid_canvasapp: { b: 'objectid_canvasapp', a: '_objectid_value', c: 'canvasapps', d: 'canvasapp' },
 			objectid_cascadegrantrevokeaccessrecordstracker: { b: 'objectid_cascadegrantrevokeaccessrecordstracker', a: '_objectid_value', c: 'cascadegrantrevokeaccessrecordstrackers', d: 'cascadegrantrevokeaccessrecordstracker' },
-			objectid_devkit_location: { b: 'objectid_devkit_location', a: '_objectid_value', c: 'devkit_locations', d: 'devkit_location' },
 			objectid_exportsolutionupload: { b: 'objectid_exportsolutionupload', a: '_objectid_value', c: 'exportsolutionuploads', d: 'exportsolutionupload' },
 			objectid_flowsession: { b: 'objectid_flowsession', a: '_objectid_value', c: 'flowsessions', d: 'flowsession' },
 			objectid_imagedescriptor: { b: 'objectid_imagedescriptor', a: '_objectid_value', c: 'imagedescriptors', d: 'imagedescriptor' },

@@ -123,7 +123,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "keyvaultreference";
 
-		public const int EntityTypeCode = 10120;
+		public const int EntityTypeCode = 10063;
 
 		[DebuggerNonUserCode()]
 		public KeyVaultReference()

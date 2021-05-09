@@ -33,10 +33,6 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Contact = 2,
 		/// <summary>
-		/// Custom_Activity = 10042
-		/// </summary>
-		Custom_Activity = 10042,
-		/// <summary>
 		/// Email = 4202
 		/// </summary>
 		Email = 4202,
@@ -99,11 +95,7 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// <summary>
 		/// User = 8
 		/// </summary>
-		User = 8,
-		/// <summary>
-		/// WebApi = 10030
-		/// </summary>
-		WebApi = 10030
+		User = 8
 	}
 
 	public enum Record2ObjectTypeCode
@@ -129,10 +121,6 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// </summary>
 		Contact = 2,
 		/// <summary>
-		/// Custom_Activity = 10042
-		/// </summary>
-		Custom_Activity = 10042,
-		/// <summary>
 		/// Email = 4202
 		/// </summary>
 		Email = 4202,
@@ -195,11 +183,7 @@ namespace Dev.DevKit.Shared.Entities.ConnectionOptionSets
 		/// <summary>
 		/// User = 8
 		/// </summary>
-		User = 8,
-		/// <summary>
-		/// WebApi = 10030
-		/// </summary>
-		WebApi = 10030
+		User = 8
 	}
 
 	public enum StateCode
@@ -551,7 +535,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the primary account, contact, or other record involved in the connection.</para>
-		/// <para>Lookup to account;activitypointer;appointment;channelaccessprofilerule;contact;devkit_customactivity;devkit_webapi;email;fax;goal;knowledgearticle;knowledgebaserecord;letter;phonecall;position;processsession;recurringappointmentmaster;socialactivity;socialprofile;systemuser;task;team;territory</para>
+		/// <para>Lookup to account;activitypointer;appointment;channelaccessprofilerule;contact;email;fax;goal;knowledgearticle;knowledgebaserecord;letter;phonecall;position;processsession;recurringappointmentmaster;socialactivity;socialprofile;systemuser;task;team;territory</para>
 		/// <para>Connected From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -591,7 +575,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the secondary account, contact, or other record involved in the connection.</para>
-		/// <para>Lookup to account;activitypointer;appointment;channelaccessprofilerule;contact;devkit_customactivity;devkit_webapi;email;fax;goal;knowledgearticle;knowledgebaserecord;letter;phonecall;position;processsession;recurringappointmentmaster;socialactivity;socialprofile;systemuser;task;team;territory</para>
+		/// <para>Lookup to account;activitypointer;appointment;channelaccessprofilerule;contact;email;fax;goal;knowledgearticle;knowledgebaserecord;letter;phonecall;position;processsession;recurringappointmentmaster;socialactivity;socialprofile;systemuser;task;team;territory</para>
 		/// <para>Connected To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

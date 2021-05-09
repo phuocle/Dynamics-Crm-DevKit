@@ -26,22 +26,15 @@ declare namespace DevKit {
 			SHIPPING: DevKit.Controls.Section;
 			ChildAccounts: DevKit.Controls.Section;
 		}
-		interface tab__64BC19B9_1311_4B93_BE4C_6407B98D2AB3_Sections {
-			_64BC19B9_1311_4B93_BE4C_6407B98D2AB4: DevKit.Controls.Section;
-		}
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
 			Section: tab_SUMMARY_TAB_Sections;
 		}
 		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
 			Section: tab_DETAILS_TAB_Sections;
 		}
-		interface tab__64BC19B9_1311_4B93_BE4C_6407B98D2AB3 extends DevKit.Controls.ITab {
-			Section: tab__64BC19B9_1311_4B93_BE4C_6407B98D2AB3_Sections;
-		}
 		interface Tabs {
 			SUMMARY_TAB: tab_SUMMARY_TAB;
 			DETAILS_TAB: tab_DETAILS_TAB;
-			_64BC19B9_1311_4B93_BE4C_6407B98D2AB3: tab__64BC19B9_1311_4B93_BE4C_6407B98D2AB3;
 		}
 		interface Body {
 			Tab: Tabs;
@@ -60,7 +53,6 @@ declare namespace DevKit {
 			CreditOnHold: DevKit.Controls.Boolean;
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
 			Description: DevKit.Controls.String;
-			devkit_AzureAccountId: DevKit.Controls.Lookup;
 			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 			DoNotBulkEMail: DevKit.Controls.Boolean;
 			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
@@ -79,8 +71,6 @@ declare namespace DevKit {
 			IndustryCode: DevKit.Controls.OptionSet;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
-			/** Type the company or business name. */
-			Name_1: DevKit.Controls.String;
 			/** Select the account's ownership structure, such as public or private. */
 			OwnershipCode: DevKit.Controls.OptionSet;
 			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
@@ -102,59 +92,19 @@ declare namespace DevKit {
 			/** Type the account's website URL to get quick details about the company profile. */
 			WebSiteURL: DevKit.Controls.String;
 		}
-		interface Navigation {
-			nav_devkit_account_devkit_webapi_Customer: DevKit.Controls.NavigationItem
-		}
-		interface quickForm_AzureAccount_Body {
-			devkit_AzureAccountType: DevKit.Controls.QuickView;
-			devkit_Category: DevKit.Controls.QuickView;
-			devkit_City: DevKit.Controls.QuickView;
-			devkit_CreatedOn: DevKit.Controls.QuickView;
-			devkit_ModifiedOn: DevKit.Controls.QuickView;
-			devkit_name: DevKit.Controls.QuickView;
-			devkit_Price: DevKit.Controls.QuickView;
-			devkit_Surface: DevKit.Controls.QuickView;
-			EmailAddress: DevKit.Controls.QuickView;
-		}
 		interface quickForm_contactquickform_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
 			Telephone1: DevKit.Controls.QuickView;
-		}
-		interface quickForm_AzureAccount extends DevKit.Controls.IQuickView {
-			Body: quickForm_AzureAccount_Body;
 		}
 		interface quickForm_contactquickform extends DevKit.Controls.IQuickView {
 			Body: quickForm_contactquickform_Body;
 		}
 		interface QuickForm {
-			AzureAccount: quickForm_AzureAccount;
 			contactquickform: quickForm_contactquickform;
 		}
-		interface ProcessBPF_Account_3 {
-			/** Type an number or code for the account to quickly search and identify the account in system views. */
-			AccountNumber: DevKit.Controls.String;
-			/** Type the company or business name. */
-			Name: DevKit.Controls.String;
-		}
-		interface ProcessBPF_Account_1 {
-			/** Select a category to indicate whether the customer account is standard or preferred. */
-			AccountCategoryCode: DevKit.Controls.OptionSet;
-			/** Type an number or code for the account to quickly search and identify the account in system views. */
-			AccountNumber: DevKit.Controls.String;
-			/** Type the company or business name. */
-			Name: DevKit.Controls.String;
-			/** Type the main phone number for this account. */
-			Telephone1: DevKit.Controls.String;
-			/** Type a second phone number for this account. */
-			Telephone2: DevKit.Controls.String;
-		}
-		interface Process extends DevKit.Controls.IProcess {
-			BPF_Account_3: ProcessBPF_Account_3;
-			BPF_Account_1: ProcessBPF_Account_1;
-		}
 		interface Grid {
-			ChildAccounts: DevKit.Controls.Grid;
 			Contacts: DevKit.Controls.Grid;
+			ChildAccounts: DevKit.Controls.Grid;
 		}
 	}
 	class FormAccount extends DevKit.IForm {
@@ -170,12 +120,8 @@ declare namespace DevKit {
 		Body: DevKit.FormAccount.Body;
 		/** The Header section of form Account */
 		Header: DevKit.FormAccount.Header;
-		/** The Navigation of form Account */
-		Navigation: DevKit.FormAccount.Navigation;
 		/** The QuickForm of form Account */
 		QuickForm: DevKit.FormAccount.QuickForm;
-		/** The Process of form Account */
-		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
 	}
@@ -259,7 +205,7 @@ declare namespace DevKit {
 		AccountClassificationCode: DevKit.WebApi.OptionSetValue;
 		/** Unique identifier of the account. */
 		AccountId: DevKit.WebApi.GuidValue;
-		/** Type an number or code for the account to quickly search and identify the account in system views. */
+		/** Type an ID number or code for the account to quickly search and identify the account in system views. */
 		AccountNumber: DevKit.WebApi.StringValue;
 		/** Select a rating to indicate the value of the customer account. */
 		AccountRatingCode: DevKit.WebApi.OptionSetValue;
@@ -393,8 +339,6 @@ declare namespace DevKit {
 		CustomerTypeCode: DevKit.WebApi.OptionSetValue;
 		/** Type additional information to describe the account, such as an excerpt from the company's website. */
 		Description: DevKit.WebApi.StringValue;
-		devkit_AzureAccountId: DevKit.WebApi.LookupValue;
-		devkit_LocationId: DevKit.WebApi.LookupValue;
 		/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
 		/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
@@ -553,14 +497,10 @@ declare namespace DevKit {
 declare namespace OptionSet {
 	namespace Account {
 		enum AccountCategoryCode {
-			/** 100000001 */
-			Other,
 			/** 1 */
 			Preferred_Customer,
 			/** 2 */
-			Standard_2,
-			/** 3 */
-			Standard_3
+			Standard
 		}
 		enum AccountClassificationCode {
 			/** 1 */

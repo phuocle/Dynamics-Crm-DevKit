@@ -134,7 +134,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "customapi";
 
-		public const int EntityTypeCode = 10088;
+		public const int EntityTypeCode = 10068;
 
 		[DebuggerNonUserCode()]
 		public CustomAPI()

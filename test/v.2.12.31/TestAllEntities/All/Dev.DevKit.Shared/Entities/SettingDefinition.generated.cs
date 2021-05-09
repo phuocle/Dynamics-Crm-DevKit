@@ -144,7 +144,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "settingdefinition";
 
-		public const int EntityTypeCode = 10064;
+		public const int EntityTypeCode = 10030;
 
 		[DebuggerNonUserCode()]
 		public SettingDefinition()

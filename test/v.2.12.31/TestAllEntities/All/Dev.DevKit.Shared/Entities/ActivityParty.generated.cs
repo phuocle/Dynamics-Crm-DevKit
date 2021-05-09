@@ -365,7 +365,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the party associated with the activity.</para>
-		/// <para>Lookup to account;contact;devkit_azureaccount;devkit_webapi;knowledgearticle;queue;systemuser</para>
+		/// <para>Lookup to account;contact;knowledgearticle;queue;systemuser</para>
 		/// <para>Party</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

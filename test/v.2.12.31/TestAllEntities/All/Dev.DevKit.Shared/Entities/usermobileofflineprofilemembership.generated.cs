@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "usermobileofflineprofilemembership";
 
-		public const int EntityTypeCode = 10119;
+		public const int EntityTypeCode = 10072;
 
 		[DebuggerNonUserCode()]
 		public usermobileofflineprofilemembership()

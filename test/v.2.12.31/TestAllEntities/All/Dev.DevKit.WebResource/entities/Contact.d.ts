@@ -559,7 +559,6 @@ declare namespace DevKit {
 		Department: DevKit.WebApi.StringValue;
 		/** Type additional information to describe the contact, such as an excerpt from the company's website. */
 		Description: DevKit.WebApi.StringValue;
-		devkit_LocationId: DevKit.WebApi.LookupValue;
 		/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
 		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
 		/** Select whether the contact accepts bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the letters. */

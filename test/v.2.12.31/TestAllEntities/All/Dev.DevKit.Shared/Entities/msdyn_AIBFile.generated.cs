@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aibfile";
 
-		public const int EntityTypeCode = 10040;
+		public const int EntityTypeCode = 10083;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIBFile()

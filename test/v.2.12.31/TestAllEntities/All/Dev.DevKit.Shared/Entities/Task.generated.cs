@@ -539,7 +539,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the record that the task relates to.</para>
-		/// <para>Lookup to account;contact;devkit_azureaccount;devkit_webapi;knowledgearticle;knowledgebaserecord</para>
+		/// <para>Lookup to account;contact;knowledgearticle;knowledgebaserecord</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -24,8 +24,6 @@ var DevKit;
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
-			devkit_AzureAccountId: {},
-			devkit_AzureAccountId_1: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
@@ -36,7 +34,6 @@ var DevKit;
 			IndustryCode: {},
 			mapcontrol: {},
 			Name: {},
-			Name_1: {},
 			notescontrol: {},
 			OwnershipCode: {},
 			ParentAccountId: {},
@@ -71,11 +68,6 @@ var DevKit;
 					SHIPPING: {},
 					ChildAccounts: {}
 				}
-			},
-			_64BC19B9_1311_4B93_BE4C_6407B98D2AB3: {
-				Section: {
-					_64BC19B9_1311_4B93_BE4C_6407B98D2AB4: {}
-				}
 			}
 		};
 		devKit.LoadTabs(formContext, tab);
@@ -88,35 +80,7 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _BPF_Account_3 = {
-			AccountNumber: {},
-			Name: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_3, "header_process_");
-		process.BPF_Account_3 = _BPF_Account_3;
-		var _BPF_Account_1 = {
-			AccountCategoryCode: {},
-			AccountNumber: {},
-			Name: {},
-			Telephone1: {},
-			Telephone2: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_1, "header_process_");
-		process.BPF_Account_1 = _BPF_Account_1;
-		form.Process = process;
 		var quickForm = {
-			AzureAccount: {
-				devkit_AzureAccountType: {},
-				devkit_Category: {},
-				devkit_City: {},
-				devkit_CreatedOn: {},
-				devkit_ModifiedOn: {},
-				devkit_name: {},
-				devkit_Price: {},
-				devkit_Surface: {},
-				EmailAddress: {}
-			},
 			contactquickform: {
 				EMailAddress1: {},
 				Telephone1: {}
@@ -125,29 +89,18 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			ChildAccounts: {},
 			Contacts: {},
+			ChildAccounts: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 		var navigation = {
-			navRelationships: {},
 			navAddresses: {},
 			navSubAccts: {},
-			navActivities: {},
+			navRelationships: {},
 			navCampaignsInSFA: {},
-			navSocialprofiles: {},
-			navContacts: {},
-			navSPDocuments: {},
-			navConnections: {},
-			navDocument: {},
-			navAsyncOperations: {},
-			nav_devkit_account_devkit_webapi_Customer: {},
 			navProcessSessions: {},
-			nav_bpf_account_devkit_bpfaccount1: {},
-			nav_bpf_account_devkit_bpfaccount3: {},
-			nav_devkit_account_devkit_location_Account: {},
-			nav_devkit_account_devkit_location_Customer: {}
+			navAsyncOperations: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -201,10 +154,8 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.Account = {
 		AccountCategoryCode : {
-			Other: 100000001,
 			Preferred_Customer: 1,
-			Standard_2: 2,
-			Standard_3: 3
+			Standard: 2
 		},
 		AccountClassificationCode : {
 			Default_Value: 1

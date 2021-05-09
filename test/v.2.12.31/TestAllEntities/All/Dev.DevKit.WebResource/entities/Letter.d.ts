@@ -147,10 +147,6 @@ declare namespace DevKit {
 		/** Choose the record that the letter relates to. */
 		regardingobjectid_contact_letter: DevKit.WebApi.LookupValue;
 		/** Choose the record that the letter relates to. */
-		regardingobjectid_devkit_azureaccount_letter: DevKit.WebApi.LookupValue;
-		/** Choose the record that the letter relates to. */
-		regardingobjectid_devkit_webapi_letter: DevKit.WebApi.LookupValue;
-		/** Choose the record that the letter relates to. */
 		regardingobjectid_knowledgearticle_letter: DevKit.WebApi.LookupValue;
 		/** Choose the record that the letter relates to. */
 		regardingobjectid_knowledgebaserecord_letter: DevKit.WebApi.LookupValue;

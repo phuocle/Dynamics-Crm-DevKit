@@ -451,7 +451,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CustomerTypeCode = "customertypecode";
 			public const string Department = "department";
 			public const string Description = "description";
-			public const string devkit_LocationId = "devkit_locationid";
 			public const string DoNotBulkEMail = "donotbulkemail";
 			public const string DoNotBulkPostalMail = "donotbulkpostalmail";
 			public const string DoNotEMail = "donotemail";
@@ -2029,17 +2028,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Lookup to devkit_location</para>
-		/// <para>Location</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public EntityReference devkit_LocationId
-		{
-			get { return Entity.GetAttributeValue<EntityReference>(Fields.devkit_LocationId); }
-			set { Entity.Attributes[Fields.devkit_LocationId] = value; }
-		}
-
-		/// <summary>
 		/// <para>Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email.</para>
 		/// <para>Boolean</para>
 		/// <para>Do not allow Bulk Emails</para>
@@ -2148,7 +2136,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Type the primary email address for the contact.</para>
-		/// <para>Required - String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 100</para>
 		/// <para>Email</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

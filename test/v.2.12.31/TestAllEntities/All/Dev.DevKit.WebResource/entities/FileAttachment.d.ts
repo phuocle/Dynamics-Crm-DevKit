@@ -52,8 +52,6 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_cascadegrantrevokeaccessrecordstracker: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
-		objectid_devkit_location: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_exportsolutionupload: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_flowsession: DevKit.WebApi.LookupValue;

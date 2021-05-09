@@ -126,8 +126,6 @@ declare namespace OptionSet {
 		enum RegardingTypeCode {
 			/** 4201 */
 			Appointment,
-			/** 10042 */
-			Custom_Activity,
 			/** 4202 */
 			Email,
 			/** 4210 */

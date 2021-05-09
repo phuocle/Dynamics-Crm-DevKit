@@ -112,7 +112,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "managedidentity";
 
-		public const int EntityTypeCode = 10121;
+		public const int EntityTypeCode = 10064;
 
 		[DebuggerNonUserCode()]
 		public ManagedIdentity()

@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aibfileattacheddata";
 
-		public const int EntityTypeCode = 10041;
+		public const int EntityTypeCode = 10084;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIBFileAttachedData()

@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_kalanguagesetting";
 
-		public const int EntityTypeCode = 10140;
+		public const int EntityTypeCode = 10058;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kalanguagesetting()

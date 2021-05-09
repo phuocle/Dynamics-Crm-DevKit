@@ -431,10 +431,6 @@ declare namespace DevKit {
 		/** Choose the record that the email relates to. */
 		regardingobjectid_contact_email: DevKit.WebApi.LookupValue;
 		/** Choose the record that the email relates to. */
-		regardingobjectid_devkit_azureaccount_email: DevKit.WebApi.LookupValue;
-		/** Choose the record that the email relates to. */
-		regardingobjectid_devkit_webapi_email: DevKit.WebApi.LookupValue;
-		/** Choose the record that the email relates to. */
 		regardingobjectid_knowledgearticle_email: DevKit.WebApi.LookupValue;
 		/** Choose the record that the email relates to. */
 		regardingobjectid_knowledgebaserecord_email: DevKit.WebApi.LookupValue;

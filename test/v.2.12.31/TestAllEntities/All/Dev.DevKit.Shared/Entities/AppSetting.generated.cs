@@ -92,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "appsetting";
 
-		public const int EntityTypeCode = 10063;
+		public const int EntityTypeCode = 10027;
 
 		[DebuggerNonUserCode()]
 		public AppSetting()

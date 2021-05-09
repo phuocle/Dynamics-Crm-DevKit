@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgepersonalfilter";
 
-		public const int EntityTypeCode = 10141;
+		public const int EntityTypeCode = 10061;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgepersonalfilter()

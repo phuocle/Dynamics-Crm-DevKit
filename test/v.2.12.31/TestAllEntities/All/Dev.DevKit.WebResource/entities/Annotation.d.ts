@@ -112,10 +112,6 @@ declare namespace DevKit {
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		/** Contents of the note's attachment. */
 		DocumentBody: DevKit.WebApi.StringValue;
-		/** Dummy attribute associated with the note attachment */
-		DummyFileName: DevKit.WebApi.StringValueReadonly;
-		/** Dummy attribute associated with the note regarding */
-		DummyRegarding: DevKit.WebApi.StringValueReadonly;
 		/** File name of the note. */
 		FileName: DevKit.WebApi.StringValue;
 		/** File pointer of the attachment. */
@@ -156,14 +152,6 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_convertrule: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
-		objectid_devkit_azureaccount: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the note is associated. */
-		objectid_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the note is associated. */
-		objectid_devkit_location: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the note is associated. */
-		objectid_devkit_webapi: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the note is associated. */
 		objectid_duplicaterule: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_email: DevKit.WebApi.LookupValue;
@@ -189,10 +177,6 @@ declare namespace DevKit {
 		objectid_msdyn_aimodel: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_msdyn_aiodimage: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_solutioncomponentdatasource: DevKit.WebApi.LookupValue;
-		/** Unique identifier of the object with which the note is associated. */
-		objectid_msdyn_solutionhistorydatasource: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */
 		objectid_phonecall: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the note is associated. */

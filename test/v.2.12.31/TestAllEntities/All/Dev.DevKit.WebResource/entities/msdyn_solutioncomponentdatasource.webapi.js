@@ -67,7 +67,8 @@ var DevKit;
         }
 		var msdyn_solutioncomponentdatasource = {
 			msdyn_name: { a: 'msdyn_name' },
-			msdyn_solutioncomponentdatasourceId: { a: 'msdyn_solutioncomponentdatasourceid' }
+			msdyn_solutioncomponentdatasourceId: { a: 'msdyn_solutioncomponentdatasourceid' },
+			OrganizationId: { a: 'organizationid', r: true }
 		};
 		if (e === undefined) e = {};
 		var u = {};

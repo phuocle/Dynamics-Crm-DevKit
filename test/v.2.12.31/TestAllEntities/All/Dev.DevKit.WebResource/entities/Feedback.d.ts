@@ -76,6 +76,7 @@ declare namespace DevKit {
 		interface tab_general_Sections {
 			General_Info: DevKit.Controls.Section;
 			Content: DevKit.Controls.Section;
+			Content_2: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -250,10 +251,6 @@ declare namespace DevKit {
 		Rating: DevKit.WebApi.IntegerValue;
 		/** Shows the record that the feedback is associated with. */
 		ContactId: DevKit.WebApi.LookupValue;
-		/** Shows the record that the feedback is associated with. */
-		regardingobjectid_devkit_customactivity: DevKit.WebApi.LookupValue;
-		/** Shows the record that the feedback is associated with. */
-		regardingobjectid_devkit_webapi: DevKit.WebApi.LookupValue;
 		/** Shows the record that the feedback is associated with. */
 		_FeedbackId: DevKit.WebApi.LookupValue;
 		/** Shows the record that the feedback is associated with. */

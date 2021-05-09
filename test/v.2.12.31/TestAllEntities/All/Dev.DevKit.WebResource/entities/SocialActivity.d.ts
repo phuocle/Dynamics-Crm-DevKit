@@ -227,10 +227,6 @@ declare namespace DevKit {
 		/** Shows the record that the social activity relates to. */
 		regardingobjectid_contact_socialactivity: DevKit.WebApi.LookupValue;
 		/** Shows the record that the social activity relates to. */
-		regardingobjectid_devkit_azureaccount_socialactivity: DevKit.WebApi.LookupValue;
-		/** Shows the record that the social activity relates to. */
-		regardingobjectid_devkit_webapi_socialactivity: DevKit.WebApi.LookupValue;
-		/** Shows the record that the social activity relates to. */
 		regardingobjectid_knowledgearticle_socialactivity: DevKit.WebApi.LookupValue;
 		/** Shows the record that the social activity relates to. */
 		regardingobjectid_knowledgebaserecord_socialactivity: DevKit.WebApi.LookupValue;

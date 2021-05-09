@@ -686,7 +686,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the activity is associated.</para>
-		/// <para>Lookup to account;contact;devkit_azureaccount;devkit_webapi;interactionforemail;knowledgearticle;knowledgebaserecord</para>
+		/// <para>Lookup to account;contact;interactionforemail;knowledgearticle;knowledgebaserecord</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

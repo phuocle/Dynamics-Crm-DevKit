@@ -136,8 +136,6 @@ var DevKit;
 			CustomerSizeCode: { a: 'customersizecode' },
 			CustomerTypeCode: { a: 'customertypecode' },
 			Description: { a: 'description' },
-			devkit_AzureAccountId: { b: 'devkit_AzureAccountId', a: '_devkit_azureaccountid_value', c: 'devkit_azureaccounts', d: 'devkit_azureaccount' },
-			devkit_LocationId: { b: 'devkit_LocationId', a: '_devkit_locationid_value', c: 'devkit_locations', d: 'devkit_location' },
 			DoNotBulkEMail: { a: 'donotbulkemail' },
 			DoNotBulkPostalMail: { a: 'donotbulkpostalmail' },
 			DoNotEMail: { a: 'donotemail' },
@@ -259,10 +257,8 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.Account = {
 		AccountCategoryCode : {
-			Other: 100000001,
 			Preferred_Customer: 1,
-			Standard_2: 2,
-			Standard_3: 3
+			Standard: 2
 		},
 		AccountClassificationCode : {
 			Default_Value: 1

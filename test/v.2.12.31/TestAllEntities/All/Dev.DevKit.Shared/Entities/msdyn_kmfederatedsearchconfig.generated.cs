@@ -62,7 +62,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string ImportSequenceNumber = "importsequencenumber";
-			public const string IsDefault = "isdefault";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
@@ -86,7 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_kmfederatedsearchconfig";
 
-		public const int EntityTypeCode = 10100;
+		public const int EntityTypeCode = 10054;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kmfederatedsearchconfig()
@@ -191,17 +190,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.ImportSequenceNumber); }
 			set { Entity.Attributes[Fields.ImportSequenceNumber] = value; }
-		}
-
-		/// <summary>
-		/// <para>Boolean</para>
-		/// <para>Is Default</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public bool? IsDefault
-		{
-			get { return Entity.GetAttributeValue<bool?>(Fields.IsDefault); }
-			set { Entity.Attributes[Fields.IsDefault] = value; }
 		}
 
 		/// <summary>

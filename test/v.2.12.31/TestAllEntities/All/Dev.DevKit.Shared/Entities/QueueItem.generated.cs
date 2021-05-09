@@ -21,10 +21,6 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Custom_Activity = 10042
-		/// </summary>
-		Custom_Activity = 10042,
-		/// <summary>
 		/// Email = 4202
 		/// </summary>
 		Email = 4202,
@@ -37,9 +33,9 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// </summary>
 		Knowledge_Article = 9953,
 		/// <summary>
-		/// Knowledge_Article_Template = 10022
+		/// Knowledge_Article_Template = 10060
 		/// </summary>
-		Knowledge_Article_Template = 10022,
+		Knowledge_Article_Template = 10060,
 		/// <summary>
 		/// Letter = 4207
 		/// </summary>
@@ -59,11 +55,7 @@ namespace Dev.DevKit.Shared.Entities.QueueItemOptionSets
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
-		Task = 4212,
-		/// <summary>
-		/// WebApi = 10030
-		/// </summary>
-		WebApi = 10030
+		Task = 4212
 	}
 
 	public enum StateCode
@@ -280,7 +272,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the activity, case, or article assigned to the queue.</para>
-		/// <para>Required - Lookup to activitypointer;appointment;devkit_customactivity;devkit_webapi;email;fax;knowledgearticle;letter;msdyn_knowledgearticletemplate;phonecall;recurringappointmentmaster;socialactivity;task</para>
+		/// <para>Required - Lookup to activitypointer;appointment;email;fax;knowledgearticle;letter;msdyn_knowledgearticletemplate;phonecall;recurringappointmentmaster;socialactivity;task</para>
 		/// <para>Object</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

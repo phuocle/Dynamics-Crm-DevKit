@@ -77,8 +77,6 @@ var DevKit;
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			objectid_activitypointer: { b: 'objectid_activitypointer', a: '_objectid_value', c: 'activitypointers', d: 'activitypointer' },
 			objectid_appointment: { b: 'objectid_appointment', a: '_objectid_value', c: 'appointments', d: 'appointment' },
-			objectid_devkit_customactivity: { b: 'objectid_devkit_customactivity', a: '_objectid_value', c: 'devkit_customactivities', d: 'devkit_customactivity' },
-			objectid_devkit_webapi: { b: 'objectid_devkit_webapi', a: '_objectid_value', c: 'devkit_webapis', d: 'devkit_webapi' },
 			objectid_email: { b: 'objectid_email', a: '_objectid_value', c: 'emails', d: 'email' },
 			objectid_fax: { b: 'objectid_fax', a: '_objectid_value', c: 'faxes', d: 'fax' },
 			objectid_knowledgearticle: { b: 'objectid_knowledgearticle', a: '_objectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
@@ -151,17 +149,15 @@ var OptionSet;
 		ObjectTypeCode : {
 			Activity: 4200,
 			Appointment: 4201,
-			Custom_Activity: 10042,
 			Email: 4202,
 			Fax: 4204,
 			Knowledge_Article: 9953,
-			Knowledge_Article_Template: 10022,
+			Knowledge_Article_Template: 10060,
 			Letter: 4207,
 			Phone_Call: 4210,
 			Recurring_Appointment: 4251,
 			Social_Activity: 4216,
-			Task: 4212,
-			WebApi: 10030
+			Task: 4212
 		},
 		StateCode : {
 			Active: 0,

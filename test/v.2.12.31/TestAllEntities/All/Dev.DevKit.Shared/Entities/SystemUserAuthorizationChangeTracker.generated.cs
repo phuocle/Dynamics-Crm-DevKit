@@ -28,7 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "systemuserauthorizationchangetracker";
 
-		public const int EntityTypeCode = 10113;
+		public const int EntityTypeCode = 60;
 
 		[DebuggerNonUserCode()]
 		public SystemUserAuthorizationChangeTracker()

@@ -91,7 +91,8 @@ var DevKit;
 			general: {
 				Section: {
 					General_Info: {},
-					Content: {}
+					Content: {},
+					Content_2: {}
 				}
 			}
 		};

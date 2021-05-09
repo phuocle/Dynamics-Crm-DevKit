@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_nonrelationalds";
 
-		public const int EntityTypeCode = 10054;
+		public const int EntityTypeCode = 10077;
 
 		[DebuggerNonUserCode()]
 		public msdyn_nonrelationalds()

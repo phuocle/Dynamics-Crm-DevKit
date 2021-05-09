@@ -24,8 +24,6 @@ var DevKit;
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
-			devkit_AzureAccountId: {},
-			devkit_AzureAccountId_1: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
@@ -36,7 +34,6 @@ var DevKit;
 			IndustryCode: {},
 			mapcontrol: {},
 			Name: {},
-			Name_1: {},
 			notescontrol: {},
 			OwnershipCode: {},
 			ParentAccountId: {},
@@ -71,10 +68,101 @@ var DevKit;
 					SHIPPING: {},
 					ChildAccounts: {}
 				}
-			},
-			_64BC19B9_1311_4B93_BE4C_6407B98D2AB3: {
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			NumberOfEmployees: {},
+			OwnerId: {},
+			Revenue: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var quickForm = {
+			contactquickform: {
+				EMailAddress1: {},
+				Telephone1: {}
+			}
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var grid = {
+			Contacts: {},
+			ChildAccounts: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			navAddresses: {},
+			navSubAccts: {},
+			navRelationships: {},
+			navCampaignsInSFA: {},
+			navProcessSessions: {},
+			navAsyncOperations: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		return form;
+	};
+	DevKit.FormAccount_for_Interactive_experience = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			Address1_Composite: {},
+			Address1_FreightTermsCode: {},
+			Address1_ShippingMethodCode: {},
+			Contacts: {},
+			CreditLimit: {},
+			CreditOnHold: {},
+			Description: {},
+			DoNotBulkEMail: {},
+			DoNotEMail: {},
+			DoNotFax: {},
+			DoNotPhone: {},
+			DoNotPostalMail: {},
+			Fax: {},
+			FollowEmail: {},
+			IndustryCode: {},
+			Name: {},
+			notescontrol: {},
+			OwnershipCode: {},
+			ParentAccountId: {},
+			PaymentTermsCode: {},
+			PreferredContactMethodCode: {},
+			PrimaryContactId: {},
+			PrimaryContactId_1: {},
+			SIC: {},
+			Telephone1: {},
+			TransactionCurrencyId: {},
+			WebSiteURL: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			SUMMARY_TAB: {
 				Section: {
-					_64BC19B9_1311_4B93_BE4C_6407B98D2AB4: {}
+					ACCOUNT_INFORMATION: {},
+					Timeline: {}
+				}
+			},
+			DETAILS_TAB: {
+				Section: {
+					COMPANY_PROFILE: {},
+					DETAILS_TAB_section_6: {},
+					CONTACT_PREFERENCES: {},
+					BILLING: {},
+					SHIPPING: {}
 				}
 			}
 		};
@@ -88,35 +176,7 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
-		var process = devKit.LoadProcess(formContext);
-		var _BPF_Account_3 = {
-			AccountNumber: {},
-			Name: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_3, "header_process_");
-		process.BPF_Account_3 = _BPF_Account_3;
-		var _BPF_Account_1 = {
-			AccountCategoryCode: {},
-			AccountNumber: {},
-			Name: {},
-			Telephone1: {},
-			Telephone2: {}
-		}
-		devKit.LoadFields(formContext, _BPF_Account_1, "header_process_");
-		process.BPF_Account_1 = _BPF_Account_1;
-		form.Process = process;
 		var quickForm = {
-			AzureAccount: {
-				devkit_AzureAccountType: {},
-				devkit_Category: {},
-				devkit_City: {},
-				devkit_CreatedOn: {},
-				devkit_ModifiedOn: {},
-				devkit_name: {},
-				devkit_Price: {},
-				devkit_Surface: {},
-				EmailAddress: {}
-			},
 			contactquickform: {
 				EMailAddress1: {},
 				Telephone1: {}
@@ -125,29 +185,145 @@ var DevKit;
 		devKit.LoadQuickForms(formContext, quickForm);
 		form.QuickForm = quickForm;
 		var grid = {
-			ChildAccounts: {},
 			Contacts: {},
 		};
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 		var navigation = {
-			navRelationships: {},
 			navAddresses: {},
 			navSubAccts: {},
-			navActivities: {},
-			navCampaignsInSFA: {},
-			navSocialprofiles: {},
-			navContacts: {},
-			navSPDocuments: {},
-			navConnections: {},
-			navDocument: {},
-			navAsyncOperations: {},
-			nav_devkit_account_devkit_webapi_Customer: {},
+			navRelationships: {},
 			navProcessSessions: {},
-			nav_bpf_account_devkit_bpfaccount1: {},
-			nav_bpf_account_devkit_bpfaccount3: {},
-			nav_devkit_account_devkit_location_Account: {},
-			nav_devkit_account_devkit_location_Customer: {}
+			navAsyncOperations: {}
+		};
+		devKit.LoadNavigations(formContext, navigation);
+		form.Navigation = navigation;
+		form.Utility = devKit.LoadUtility(defaultWebResourceName);
+		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		return form;
+	};
+	DevKit.FormAccount_Information = function(executionContext, defaultWebResourceName) {
+		var formContext = null;
+		if (executionContext !== undefined) {
+			if (executionContext.getFormContext === undefined) {
+				formContext = executionContext;
+			}
+			else {
+				formContext = executionContext.getFormContext();
+			}
+		}
+		var form = devKit.LoadForm(formContext);
+		var body = {
+			accountactivitiesgrid: {},
+			AccountCategoryCode: {},
+			accountContactsGrid: {},
+			AccountNumber: {},
+			Address1_AddressTypeCode: {},
+			Address1_City: {},
+			Address1_Country: {},
+			Address1_FreightTermsCode: {},
+			Address1_Line1: {},
+			Address1_Line2: {},
+			Address1_Line3: {},
+			Address1_Name: {},
+			Address1_PostalCode: {},
+			Address1_ShippingMethodCode: {},
+			Address1_StateOrProvince: {},
+			Address1_Telephone1: {},
+			CreditLimit: {},
+			CreditOnHold: {},
+			CustomerTypeCode: {},
+			Description: {},
+			DoNotBulkEMail: {},
+			DoNotEMail: {},
+			DoNotFax: {},
+			DoNotPhone: {},
+			DoNotPostalMail: {},
+			EMailAddress1: {},
+			Fax: {},
+			FollowEmail: {},
+			IndustryCode: {},
+			Name: {},
+			notescontrol: {},
+			NumberOfEmployees: {},
+			OwnerId: {},
+			OwnershipCode: {},
+			ParentAccountId: {},
+			PaymentTermsCode: {},
+			PreferredContactMethodCode: {},
+			PrimaryContactId: {},
+			Revenue: {},
+			SIC: {},
+			Telephone1: {},
+			Telephone2: {},
+			TickerSymbol: {},
+			TransactionCurrencyId: {},
+			WebSiteURL: {}
+		};
+		devKit.LoadFields(formContext, body);
+		var tab = {
+			general: {
+				Section: {
+					account_information: {},
+					address: {},
+					shipping_information: {},
+					description: {}
+				}
+			},
+			details: {
+				Section: {
+					professional_information: {},
+					description_2: {},
+					billing_information: {}
+				}
+			},
+			contacts: {
+				Section: {
+					contacts: {}
+				}
+			},
+			notes_and_activities: {
+				Section: {
+					activities: {},
+					notes: {}
+				}
+			},
+			administration: {
+				Section: {
+					internal_information: {},
+					contact_methods: {}
+				}
+			}
+		};
+		devKit.LoadTabs(formContext, tab);
+		body.Tab = tab;
+		form.Body = body;
+		var header = {
+			CreditLimit: {},
+			OwnerId: {},
+			PreferredContactMethodCode: {},
+			PrimaryContactId: {},
+			Revenue: {}
+		};
+		devKit.LoadFields(formContext, header, "header_");
+		form.Header = header;
+		var quickForm = {
+
+		};
+		devKit.LoadQuickForms(formContext, quickForm);
+		form.QuickForm = quickForm;
+		var grid = {
+			accountContactsGrid: {},
+			accountactivitiesgrid: {},
+		};
+		devKit.LoadGrids(formContext, grid);
+		form.Grid = grid;
+		var navigation = {
+			navAddresses: {},
+			navSubAct: {},
+			navActivities: {},
+			navActivityHistory: {},
+			navRelationships: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -201,10 +377,8 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.Account = {
 		AccountCategoryCode : {
-			Other: 100000001,
 			Preferred_Customer: 1,
-			Standard_2: 2,
-			Standard_3: 3
+			Standard: 2
 		},
 		AccountClassificationCode : {
 			Default_Value: 1
