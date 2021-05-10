@@ -93,18 +93,18 @@
     {
       "profile": "Extract-Unmanaged",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "TestDynamicsCrmDevKit",
       "solutiontype": "Unmanaged",
-      "folder": "???",
+      "folder": "TestDynamicsCrmDevKit",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Extract-Managed",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "TestDynamicsCrmDevKit",
       "solutiontype": "Managed",
-      "folder": "???",
+      "folder": "TestDynamicsCrmDevKit",
       "type": "Extract",
       "mapfile": ""
     },

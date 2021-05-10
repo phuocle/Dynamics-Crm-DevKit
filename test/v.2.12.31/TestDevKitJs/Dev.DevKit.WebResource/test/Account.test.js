@@ -154,17 +154,34 @@ define(['xrm-mock', 'sinon'], function () {
             form.Body.devkit_CategoryCode.Value = null;
             expect(form.Body.devkit_CategoryCode.Value).toBeNull();
         });
-        it('Lookup attribute type', () => {
-            xrmMock.XrmMockGenerator.Control.createLookup(new xrmMock.LookupControlMock({
-                name: "to",
-                attribute: new xrmMock.LookupAttributeMock({
-                    name: "to",
-                    isPartyList: true
-                })
-            }));
-            var executionContext = xrmMock.XrmMockGenerator.formContext;
-            var form = new DevKit.FormEmail(executionContext);
-            expect(form.Body.to.IsPartyList).toBeTruthy();
+    });
+    describe('WebApi Insert Account', () => {
+        beforeEach(function () {
+            xrmMock.XrmMockGenerator.initialise();
+        });
+        it("Insert AccountApi", async () => {
+            //setup
+            /** @type {any} */
+            var obj =
+            {
+                id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f",
+                entityType: "account"
+            };
+            sinon.stub(Xrm.WebApi, 'createRecord')
+                .withArgs("account")
+                .returns(obj);
+            //run
+            var webapi = new DevKit.AccountApi();
+            webapi.Name.Value = "ACCOUNT NAME";
+            webapi.IndustryCode.Value = OptionSet.Account.IndustryCode.Brokers;
+            webapi.devkit_CategoryCode.Value = [OptionSet.Account.devkit_CategoryCode.Business, OptionSet.Account.IndustryCode.Brokers];
+            webapi.DoNotEMail.Value = false;
+            webapi.PrimaryContactId.Value = "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a";
+            webapi.CreditLimit.Value = 123.456;
+            //result
+            var res = await Xrm.WebApi.createRecord(webapi.EntityName, webapi.Entity);
+            expect(res.id).toBe("8d2dbd8c-c9f8-4cb5-8838-f5a916a6098f");
+            expect(res.entityType).toBe("account");
         });
     });
 });

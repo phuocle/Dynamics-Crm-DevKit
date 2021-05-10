@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{8448b78f-8f42-454e-8e2a-f8196b0419af}</formid>
+    <IntroducedVersion>5.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form showImage="true">
+      <tabs>
+        <tab name="SUMMARY_TAB" id="{3b0b63a9-d379-689a-0ec3-e71eb4c6a841}" IsUserDefined="0" showlabel="true" expanded="true" locklevel="0" ordinalvalue="0">
+          <columns>
+            <column width="33%" id="0">
+              <sections>
+                <section name="ACCOUNT_INFORMATION" showlabel="true" showbar="false" id="{0eb92e6c-bcb8-0d52-a188-d81543ddb7cd}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{b0e82a7e-5683-d90c-308a-0d779377ea8a}" showlabel="true" ordinalvalue="10000">
+                        <labels>
+                          <label description="Account Name" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{3441a91e-47c5-672c-7a20-902d6baa9036}" showlabel="true" ordinalvalue="10002" solutionaction="Modified" />
+                    </row>
+                    <row>
+                      <cell id="{8b98a55e-a345-b20e-d46e-801e79d5c1c1}" showlabel="true" ordinalvalue="10003" solutionaction="Modified">
+                        <labels>
+                          <label description="Fax" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{e6441984-4343-813a-aa7e-e2747ad35390}" showlabel="true" ordinalvalue="10004" solutionaction="Modified">
+                        <labels>
+                          <label description="Website" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{87DE203E-B03C-44CC-8B06-438202B82553}" ordinalvalue="10005" solutionaction="Modified">
+                        <labels>
+                          <label description="Parent Account" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5f38af3a-3307-47dc-b36d-d9a5de525e6e}" showlabel="true" ordinalvalue="10006" solutionaction="Modified">
+                        <labels>
+                          <label description="Ticker Symbol" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1d7654e6-bc4b-0e09-1e18-85e9dc4c71bc}" showlabel="true" locklevel="0" ordinalvalue="10001" solutionaction="Added">
+                        <labels>
+                          <label description="Category" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_categorycode" classid="{4AA28AB7-9C13-4F57-A73D-AD894D048B5F}" datafieldname="devkit_categorycode" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="ADDRESS" showlabel="true" locklevel="0" showbar="false" id="{cc0fe06e-4b5f-4648-A62d-84d1514e1fc5}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell id="{4913500e-605a-809b-e99e-69e2710d09bd}" showlabel="true" locklevel="0" ordinalvalue="10000">
+                        <labels>
+                          <label description="Address 1" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="25%" id="2">
+              <sections>
+                <section name="SUMMARY_TAB_section_6" showlabel="false" showbar="false" locklevel="0" id="{d4c3ee9c-ba71-5cdb-31be-2aa505750472}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Top" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell id="{b187688c-8410-5990-16ec-e153968ab583}" showlabel="true" locklevel="0" ordinalvalue="10000">
+                        <labels>
+                          <label description="Primary Contact" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0F664FFF-E39E-4676-9191-CBA16972B21D}" colspan="1" showlabel="false" ordinalvalue="10001">
+                        <labels>
+                          <label description="Primary Contact" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8e24c7e3-6a40-5abb-eadb-254eba5478e2}" showlabel="true" colspan="1" auto="false" rowspan="7" ordinalvalue="10002">
+                        <control id="Contacts" classid="{E7A81278-8635-4d9e-8D4D-59480B391C5B}">
+                          <parameters>
+                            <VisualizationId />
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="DETAILS_TAB" id="{11a42c72-9ded-ea04-253d-2143e731b795}" IsUserDefined="0" showlabel="true" expanded="true" ordinalvalue="1">
+          <columns>
+            <column width="34%" id="0">
+              <sections>
+                <section name="COMPANY_PROFILE" showlabel="true" showbar="false" id="{ca8587c5-18c0-cac1-7c34-6c639eade090}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{59782911-4d1a-38dc-ce49-7dae620dbc51}" showlabel="true" ordinalvalue="10000">
+                        <labels>
+                          <label description="Industry" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{930beba3-d531-0808-c403-de95e2ac3e62}" showlabel="true" ordinalvalue="10001">
+                        <labels>
+                          <label description="SIC Code" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{1c33ad89-92a1-8433-2378-306259eb57c0}" showlabel="true" ordinalvalue="10002">
+                        <labels>
+                          <label description="Ownership" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="DETAILS_TAB_section_6" showlabel="true" showbar="false" locklevel="0" id="{e201b9ce-c3d5-c922-dba5-528c25066940}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelalignment="Left" celllabelposition="Top" height="auto" ordinalvalue="1">
+                  <rows>
+                    <row>
+                      <cell id="{a4a726a2-8e3e-79d0-02c3-0a04a6b71089}" showlabel="false" locklevel="0" rowspan="3" auto="true" ordinalvalue="10000">
+                        <labels>
+                          <label description="Description" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="33%" id="2">
+              <sections>
+                <section name="BILLING" showlabel="true" showbar="false" id="{910de80a-a17e-092a-255d-44d775cb4207}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115" celllabelposition="Left" locklevel="0" celllabelalignment="Left" ordinalvalue="0">
+                  <rows>
+                    <row>
+                      <cell id="{7cd2b88c-b25c-4729-9c27-f59ebb5a1538}" ordinalvalue="10000">
+                        <labels>
+                          <label description="Currency" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0125719c-a5b0-4230-9817-3fba5d6ebfaf}" ordinalvalue="10001">
+                        <labels>
+                          <label description="Credit Limit" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{abc2c862-bcd4-4a4b-ac51-c311d4e66d5b}" ordinalvalue="10002">
+                        <labels>
+                          <label description="Credit Hold" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{0bab9157-d14e-441f-969d-80460634c15e}" ordinalvalue="10003">
+                        <labels>
+                          <label description="Payment Terms" languagecode="1033" solutionaction="Added" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{d5a03552-1183-4347-a237-1f894ba449eb}" columns="111" celllabelposition="Top" labelwidth="115">
+        <rows>
+          <row>
+            <cell id="{d3e19d4e-b2ae-409f-9b4e-5976527c6c83}" ordinalvalue="10000">
+              <labels>
+                <label description="Annual Revenue" languagecode="1033" solutionaction="Added" />
+              </labels>
+            </cell>
+            <cell id="{2adb5a52-604d-5aad-ba6a-2bbab6c33594}" showlabel="true" ordinalvalue="20001">
+              <labels>
+                <label description="Number of Employees" languagecode="1033" solutionaction="Added" />
+              </labels>
+            </cell>
+            <cell id="{54b2d0a2-eb77-b3cd-b60a-03ea6944e98e}" showlabel="true" locklevel="1" ordinalvalue="30002">
+              <labels>
+                <label description="Owner" languagecode="1033" solutionaction="Added" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <Navigation>
+        <NavBar />
+        <NavBarAreas solutionaction="Added">
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+    </form>
+    <LocalizedNames>
+      <LocalizedName description="Account" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Updated default Account form." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>
