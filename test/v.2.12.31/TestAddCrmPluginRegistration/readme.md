@@ -9,15 +9,16 @@ The imported solution contains:
   * AccountPlugin.PostDeleteAccount
   * AccountPlugin.PreAccountMergeSynchronous
   * AccountPlugin.PreDeleteAccount PRE VALIDATION
-* Workflow **CustomWorkflow** with these
-  * abc
+* Workflow **CustomWorkflow** with these workflows
+  * RetrieveUsers
+  * SendUsersMail
 
 # 2. Folder **1.before**
 This is the full source code of the solution **TestAddCrmPluginRegistration_1_0_0_0.zip** we use this source code to work with **DynamicsCrm.DevKit**
 
 # 3. Convert solution to work with **DynamicsCrm.DevKit**
 
-1. Copy the folder **1.before** to the same directory and renam to **2.after2**
+1. Copy the folder **1.before** to the same directory and rename to **2.after**
 2. Open the soltuion **SunFlower** with Visual Studio and Rebuild with all succeeded
 3. Open file **PostDeleteAccount.cs** then right click in Visual Studio and select **Add CrmPluginRegistration** and you get the error\
 ![TestAddCrmPluginRegistration](images/01.png)
@@ -52,4 +53,4 @@ This step you should manually add **CrmPluginRegistration** to the class attribu
 ![TestAddCrmPluginRegistration](images/11.png)
 16. Then run **deploy.debug.bat** to deploy\
 ![TestAddCrmPluginRegistration](images/12.png)
-17. **Congratulations** you converted all your plugin/workflow step to work with **DynamicsCrm.DevKit** by run the **.bat** file
+17. **Congratulations** you converted all your plugin/workflow steps to work with **DynamicsCrm.DevKit** by run the **.bat** file
