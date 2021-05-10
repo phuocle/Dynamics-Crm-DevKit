@@ -131,6 +131,29 @@ define(['xrm-mock', 'sinon'], function () {
             expect(selectedOption.value).toBe(1);
             expect(form.Body.IndustryCode.Text).toBe("Accounting");
         });
+        it('MultiOptionSet attribute types', () => {
+            xrmMock.XrmMockGenerator.Attribute.createOptionSet({
+                name: "devkit_categorycode",
+                options: [
+                    { text: "Business", value: 1 },
+                    { text: "Family", value: 2 },
+                    { text: "Social", value: 3 },
+                    { text: "Sales", value: 4 },
+                    { text: "Other", value: 5 }
+                ],
+                value: null
+            });
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new DevKit.FormAccount(executionContext);
+            expect(form.Body.devkit_CategoryCode.Value).toBeNull();
+            form.Body.devkit_CategoryCode.Value = [1, 2];
+            expect(form.Body.devkit_CategoryCode.Value.length).toBe(2);
+            var values = form.Body.devkit_CategoryCode.Value;
+            expect(values[0]).toBe(1);
+            expect(values[1]).toBe(2);
+            form.Body.devkit_CategoryCode.Value = null;
+            expect(form.Body.devkit_CategoryCode.Value).toBeNull();
+        });
         it('Lookup attribute type', () => {
             xrmMock.XrmMockGenerator.Control.createLookup(new xrmMock.LookupControlMock({
                 name: "to",
@@ -143,8 +166,5 @@ define(['xrm-mock', 'sinon'], function () {
             var form = new DevKit.FormEmail(executionContext);
             expect(form.Body.to.IsPartyList).toBeTruthy();
         });
-
-
-
     });
 });

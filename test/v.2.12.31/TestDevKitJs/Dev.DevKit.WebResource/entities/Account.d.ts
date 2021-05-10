@@ -53,6 +53,7 @@ declare namespace DevKit {
 			CreditOnHold: DevKit.Controls.Boolean;
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
 			Description: DevKit.Controls.String;
+			devkit_CategoryCode: DevKit.Controls.MultiOptionSet;
 			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 			DoNotBulkEMail: DevKit.Controls.Boolean;
 			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
@@ -291,6 +292,7 @@ declare namespace DevKit {
 		CustomerTypeCode: DevKit.WebApi.OptionSetValue;
 		/** Type additional information to describe the account, such as an excerpt from the company's website. */
 		Description: DevKit.WebApi.StringValue;
+		devkit_CategoryCode: DevKit.WebApi.MultiOptionSetValue;
 		/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
 		/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
@@ -539,6 +541,24 @@ declare namespace OptionSet {
 			Supplier,
 			/** 11 */
 			Vendor
+		}
+		enum devkit_CategoryCode {
+			/** 1 */
+			Business,
+			/** 2 */
+			Family,
+			/** 5 */
+			Other,
+			/** 4 */
+			Sales,
+			/** 1001 */
+			Sales_Team,
+			/** 1002 */
+			Service,
+			/** 3 */
+			Social,
+			/** 1000 */
+			Stakeholder
 		}
 		enum IndustryCode {
 			/** 1 */

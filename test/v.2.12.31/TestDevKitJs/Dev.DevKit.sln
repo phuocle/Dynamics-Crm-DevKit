@@ -7,6 +7,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.WebResource", "Dev.DevKit.WebResource\Dev.DevKit.WebResource.csproj", "{F0DF4609-1AEB-4462-96B9-DEDDC90AB2DE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70D34B81-3623-440B-B3C3-303AC3344BC1}"
+	ProjectSection(SolutionItems) = preProject
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{06938e5c-5008-4dae-804c-570e860b7946}*SharedItemsImports = 13

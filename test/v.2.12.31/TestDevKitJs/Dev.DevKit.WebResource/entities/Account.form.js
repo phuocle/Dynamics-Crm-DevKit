@@ -24,6 +24,7 @@ var DevKit;
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
+			devkit_CategoryCode: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
@@ -95,12 +96,12 @@ var DevKit;
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 		var navigation = {
+			navRelationships: {},
 			navAddresses: {},
 			navSubAccts: {},
-			navRelationships: {},
 			navCampaignsInSFA: {},
-			navProcessSessions: {},
-			navAsyncOperations: {}
+			navAsyncOperations: {},
+			navProcessSessions: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -170,6 +171,16 @@ var OptionSet;
 			Reseller: 9,
 			Supplier: 10,
 			Vendor: 11
+		},
+		devkit_CategoryCode : {
+			Business: 1,
+			Family: 2,
+			Other: 5,
+			Sales: 4,
+			Sales_Team: 1001,
+			Service: 1002,
+			Social: 3,
+			Stakeholder: 1000
 		},
 		IndustryCode : {
 			Accounting: 1,
