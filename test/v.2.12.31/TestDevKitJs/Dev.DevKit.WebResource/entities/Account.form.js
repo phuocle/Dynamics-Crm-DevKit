@@ -81,6 +81,14 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var footer = {
+			CreditLimit: {},
+			StateCode: {},
+			StatusCode: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, footer, "footer_");
+		form.Footer = footer;
 		var quickForm = {
 			contactquickform: {
 				EMailAddress1: {},

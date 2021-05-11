@@ -93,6 +93,16 @@ declare namespace DevKit {
 			/** Type the account's website URL to get quick details about the company profile. */
 			WebSiteURL: DevKit.Controls.String;
 		}
+		interface Footer extends DevKit.Controls.IFooter {
+			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Controls.Money;
+			/** Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated. */
+			StateCode: DevKit.Controls.OptionSet;
+			/** Select the account's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
 		interface quickForm_contactquickform_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
 			Telephone1: DevKit.Controls.QuickView;
@@ -119,6 +129,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Account */
 		Body: DevKit.FormAccount.Body;
+		/** The Footer section of form Account */
+		Footer: DevKit.FormAccount.Footer;
 		/** The Header section of form Account */
 		Header: DevKit.FormAccount.Header;
 		/** The QuickForm of form Account */

@@ -1,7 +1,6 @@
 ﻿//@ts-check
-define(['xrm-mock', 'sinon'], function () {
+define(['xrm-mock'], function () {
     var xrmMock = require('xrm-mock');
-    var sinon = require('sinon');
     describe('Atributes', () => {
         beforeEach(function () {
             var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
@@ -165,6 +164,92 @@ define(['xrm-mock', 'sinon'], function () {
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new DevKit.FormEmail(executionContext);
             expect(form.Body.to.IsPartyList).toBeTruthy();
+        });
+    });
+    describe('Header & Footer', () => {
+        beforeEach(function () {
+            var XrmMockGenerator = xrmMock.XrmMockGenerator.initialise();
+            XrmMockGenerator.Panel = new xrmMock.PanelMock();
+            XrmMockGenerator.Encoding = new xrmMock.EncodingMock();
+            XrmMockGenerator.Device = new xrmMock.DeviceMock();
+            XrmMockGenerator.Navigation = new xrmMock.NavigationStaticMock();
+            XrmMockGenerator.App = new xrmMock.AppMock();
+        });
+        it('Header', () => {
+            var stringControl = new xrmMock.StringControlMock({
+                attribute: new xrmMock.StringAttributeMock({
+                    name: "numberofemployees",
+                    value: "6200"
+                }),
+                name: "numberofemployees",
+                label: "Number of Employees"
+            });
+            var stringHeaderControl = new xrmMock.StringControlMock({
+                attribute: new xrmMock.StringAttributeMock({
+                    name: "numberofemployees",
+                    value: "6200"
+                }),
+                name: "header_numberofemployees",
+                label: "Number of Employees"
+            });
+            var ui = new xrmMock.UiMock({
+                formSelector: new xrmMock.FormSelectorMock(new xrmMock.ItemCollectionMock([new xrmMock.FormItemMock({
+                    id: "8d2dbd8c-c9f8-4cb5-8838-f5a916a6098a",
+                    label: "Account",
+                    currentItem: true,
+                    formType: XrmEnum.FormType.Update
+                })])),
+                controls: new xrmMock.ItemCollectionMock([
+                    stringControl,
+                    stringHeaderControl
+                ]),
+                footerSection: new xrmMock.FooterSectionMock(true),
+                headerSection: new xrmMock.HeaderSectionMock(true, true, true)
+            });
+            var attributes = new xrmMock.ItemCollectionMock([
+                new xrmMock.AttributeMock({
+                    name: "numberofemployees",
+                    isDirty: true
+                })
+            ]);
+            var entity = new xrmMock.EntityMock({
+                attributes: attributes
+            });
+            var data = new xrmMock.DataMock(entity);
+            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new DevKit.FormAccount(executionContext);
+            expect(form.Header.NumberOfEmployees.Label).toBe("Number of Employees");
+            expect(form.Header.NumberOfEmployees.ControlName).toBe("header_numberofemployees");
+            expect(form.Header.BodyVisible).toBeTruthy();
+            expect(form.Header.CommandBarVisible).toBeTruthy();
+            expect(form.Header.TabNavigatorVisible).toBeTruthy();
+            expect(form.Footer.Visible).toBeTruthy();
+            form.Header.BodyVisible = false;
+            form.Header.CommandBarVisible = false;
+            form.Header.TabNavigatorVisible = false;
+            form.Footer.Visible = false;
+            expect(form.Header.BodyVisible).toBeFalsy();
+            expect(form.Header.CommandBarVisible).toBeFalsy();
+            expect(form.Header.TabNavigatorVisible).toBeFalsy();
+            expect(form.Footer.Visible).toBeFalsy();
+        });
+        it('Footer', () => {
+            xrmMock.XrmMockGenerator.Control.createLookup({
+                name: "footer_transactioncurrencyid",
+                attribute: new xrmMock.LookupAttributeMock({
+                    name: "transactioncurrencyid",
+                    value: [new xrmMock.LookupValueMock("27ae35af-15ab-eb11-8236-000d3a80893f", "transactioncurrency", "US Dollar", )]
+                }),
+                label: "Currency"
+            });
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new DevKit.FormAccount(executionContext);
+            expect(form.Footer.TransactionCurrencyId.Label).toBe("Currency");
+            expect(form.Footer.TransactionCurrencyId.ControlName).toBe("footer_transactioncurrencyid");
+            expect(form.Footer.TransactionCurrencyId.Value[0].entityType).toBe("transactioncurrency");
+            expect(form.Footer.TransactionCurrencyId.Value[0].id).toBe("27ae35af-15ab-eb11-8236-000d3a80893f");
+            expect(form.Footer.TransactionCurrencyId.Value[0].name).toBe("US Dollar");
         });
     });
     describe('Real Account', () => {
