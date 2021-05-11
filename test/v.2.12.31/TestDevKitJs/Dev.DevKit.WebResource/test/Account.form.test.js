@@ -154,6 +154,18 @@ define(['xrm-mock', 'sinon'], function () {
             form.Body.devkit_CategoryCode.Value = null;
             expect(form.Body.devkit_CategoryCode.Value).toBeNull();
         });
+        it('Lookup attribute type', () => {
+            xrmMock.XrmMockGenerator.Control.createLookup(new xrmMock.LookupControlMock({
+                name: "to",
+                attribute: new xrmMock.LookupAttributeMock({
+                    name: "to",
+                    isPartyList: true
+                })
+            }));
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new DevKit.FormEmail(executionContext);
+            expect(form.Body.to.IsPartyList).toBeTruthy();
+        });
     });
     describe('Real Account', () => {
         beforeEach(function () {
