@@ -78,7 +78,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.prefix.Length == 0 || json.prefix == "???")
                 throw new Exception($"{LOG} 'prefix' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if(IsSupportWebResourceDependency)
+            if (!json.prefix.EndsWith("_"))
+                throw new Exception($"{LOG} 'prefix' should ends with _. Please check DynamicsCrm.DevKit.Cli.json file.");
+            if (IsSupportWebResourceDependency)
             {
                 foreach (var dependency in Dependencies)
                 {

@@ -7,11 +7,10 @@
   "CodeCoverageExecutionMode": "Manual",
   "CodeCoverageIncludes": [
     "lib\\devkit.js",
-    "entities\\devkit_WebApi.webapi.js"
+    "entities\\Account.webapi.js"
   ],
   "CodeCoverageExcludes": [
     "*.form.js",
-    "*.webapi.js",
     "*.test.js",
     "requirejsConfig.js",
     "XrmEnum.js",
