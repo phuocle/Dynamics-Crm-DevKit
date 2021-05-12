@@ -12,6 +12,7 @@ var formAccount = (function () {
 		var form = new DevKit.FormAccount(executionContext);
 		if (form.FormType === OptionSet.FormType.Update) {
 			form.Body.Name.Disabled = true;
+			form.Body.ModifiedOn.ShowTime = false;
         }
     }
 	return {

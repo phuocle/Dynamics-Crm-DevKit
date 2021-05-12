@@ -47,6 +47,8 @@ declare namespace DevKit {
 			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
 			/** Select a shipping method for deliveries sent to this address. */
 			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			CreatedOn: DevKit.Controls.DateTime;
 			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
 			CreditLimit: DevKit.Controls.Money;
 			/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
@@ -70,8 +72,12 @@ declare namespace DevKit {
 			FollowEmail: DevKit.Controls.Boolean;
 			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
 			IndustryCode: DevKit.Controls.OptionSet;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			ModifiedOn: DevKit.Controls.DateTime;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
 			/** Select the account's ownership structure, such as public or private. */
 			OwnershipCode: DevKit.Controls.OptionSet;
 			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
