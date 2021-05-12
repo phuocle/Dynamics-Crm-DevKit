@@ -340,7 +340,6 @@ define(['xrm-mock'], function () {
 
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             var form = new DevKit.FormAccount(executionContext);
-
             expect(() => { form.Body.IndustryCode.AddNotification(null) }).toThrow(new Error("Method not implemented."));
             expect(form.Body.IndustryCode.Options.length).toBe(6);
             expect(form.Body.IndustryCode.AddOption("Others", 999999, 6)).toBeUndefined();
@@ -369,6 +368,179 @@ define(['xrm-mock'], function () {
             expect(() => { form.Body.IndustryCode.SetNotification("Field Notification", "uniqueId") }).toThrow(new Error("set notification not implemented"));
             form.Body.IndustryCode.Visible = false;
             expect(form.Body.IndustryCode.Visible).toBeFalsy();
+        });
+        it('quickform control type', () => {
+            var attributes = new xrmMock.ItemCollectionMock([
+                new xrmMock.AttributeMock({
+                    name: "name"
+                })
+            ]);
+            var entity = new xrmMock.EntityMock({
+                attributes: attributes
+            });
+            var data = new xrmMock.DataMock(entity);
+            var quickform = new xrmMock.QuickFormControlMock({
+                name: "contactquickform",
+                controlType: "quickform",
+                label: "Contact Quick Form",
+                visible: true
+            });
+            var ui = new xrmMock.UiMock({
+                quickForms: new xrmMock.ItemCollectionMock([quickform])
+            });
+            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new DevKit.FormAccount(executionContext);
+
+            expect(() => { form.QuickForm.contactquickform .Controls() }).toThrow(new Error("Method not implemented."));
+            expect(form.QuickForm.contactquickform.ControlType).toBe(OptionSet.FieldControlType.QuickForm);
+            expect(() => { form.QuickForm.contactquickform.Disabled }).toThrow(new Error("Method not implemented."));
+            expect(form.QuickForm.contactquickform.Label).toBe("Contact Quick Form");
+            expect(form.QuickForm.contactquickform.ControlName).toBe("contactquickform");
+            expect(form.QuickForm.contactquickform.ControlParent).toBeUndefined();
+            expect(form.QuickForm.contactquickform.Visible).toBeTruthy();
+            expect(form.QuickForm.contactquickform.IsLoaded()).toBeTruthy();
+            expect(() => { form.QuickForm.contactquickform.Refresh() }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.QuickForm.contactquickform.Disabled = true }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.QuickForm.contactquickform.Focus() }).toThrow(new Error("Method not implemented."));
+            form.QuickForm.contactquickform.Label = "Contact Quick Form New";
+            expect(form.QuickForm.contactquickform.Label).toBe("Contact Quick Form New");
+            expect(() => { form.QuickForm.contactquickform.Visible = false }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.QuickForm.contactquickform.Body.EMailAddress1 }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.QuickForm.contactquickform.Body.Telephone1 }).toThrow(new Error("Method not implemented."));
+        });
+        it('subgrid control type', () => {
+            var attributes = new xrmMock.ItemCollectionMock([
+                new xrmMock.AttributeMock({
+                    name: "name"
+                })
+            ]);
+            var entity = new xrmMock.EntityMock({
+                attributes: attributes
+            });
+            var data = new xrmMock.DataMock(entity);
+
+            var grid = new xrmMock.GridControlMock({
+                name: "Contacts",
+                controlType: "subgrid",
+                label: "CONTACTS",
+                visible: true,
+                entityName: "contact",
+                contextType: XrmEnum.GridControlContext.FormContextRelated
+            });
+
+            var viewSelector = new xrmMock.ViewSelectorMock(true);
+            viewSelector.setCurrentView(new xrmMock.LookupValueMock("GUID-CONTACTS-I-FOLLOW", "1039", "Contacts I Follow"));
+            grid.viewSelector = viewSelector;
+
+            var relationship = new xrmMock.RelationshipMock({
+                name: "name",
+                attributeName: "attributeName",
+                navigationPropertyName: "navigationPropertyName",
+                relationshipType: XrmEnum.RelationshipType.OneToMany,
+                roleType: XrmEnum.RoleType.AssociationEntity
+            });
+            grid.relationship = relationship;
+
+            var row1Entity = new xrmMock.EntityMock({
+                id: "ROW1-GUID",
+                primaryValue: "ROW1-VALUE",
+                entityName: "contact",
+                attributes: new xrmMock.ItemCollectionMock([
+                    new xrmMock.StringAttributeMock({ name: "abc_col1", value: "ROW1-COL1", requiredLevel: "recommended", controls: new xrmMock.ItemCollectionMock([new xrmMock.StringControlMock({ attribute: null, name: 'abc_col1', disabled: true })]) }),
+                    new xrmMock.StringAttributeMock({ name: "abc_col2", value: "ROW1-COL2" }),
+                    new xrmMock.StringAttributeMock({ name: "abc_col3", value: "ROW1-COL3" }),
+                ])
+            });
+            var row1 = new xrmMock.GridRowMock(new xrmMock.DataMock(row1Entity), new xrmMock.GridRowDataMock(null));
+            var row2 = new xrmMock.GridRowMock(new xrmMock.DataMock(null), new xrmMock.GridRowDataMock(null));
+            var rows = new xrmMock.ItemCollectionMock([row1, row2]);
+            var selectedRows = new xrmMock.ItemCollectionMock([row1]);
+            grid.grid = new xrmMock.GridMock(rows, selectedRows);
+
+            var ui = new xrmMock.UiMock({
+                controls: new xrmMock.ItemCollectionMock([grid])
+            });
+            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+
+            var form = new DevKit.FormAccount(executionContext);
+            var ContactsAddOnLoad = function (executionContext) { }
+            expect(grid.onLoadHandlers.length).toBe(0);
+            form.Grid.Contacts.AddOnLoad(ContactsAddOnLoad);
+            expect(grid.onLoadHandlers.length).toBe(1);
+            expect(form.Grid.Contacts.EntityName).toBe("contact");
+            expect(() => { form.Grid.Contacts.FetchXml }).toThrow(new Error("getFetchXml not implemented."));
+            expect(() => { form.Grid.Contacts.GridType }).toThrow(new Error("getGridType not implemented."));
+            expect(form.Grid.Contacts.Relationship).toBeDefined();
+            expect(form.Grid.Contacts.Relationship.attributeName).toBe("attributeName");
+            expect(form.Grid.Contacts.Relationship.name).toBe("name");
+            expect(form.Grid.Contacts.Relationship.navigationPropertyName).toBe("navigationPropertyName");
+            expect(form.Grid.Contacts.Relationship.relationshipType).toBe(XrmEnum.RelationshipType.OneToMany);
+            expect(form.Grid.Contacts.Relationship.roleType).toBe(XrmEnum.RoleType.AssociationEntity);
+            expect(() => { form.Grid.Contacts.Url(0); }).toThrow(new Error("getUrl not implemented."));
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.entityType).toBe("1039");
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-CONTACTS-I-FOLLOW");
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("Contacts I Follow");
+            var newCurrentView = {
+                entityType: "1039",
+                id: "GUID-NEW",
+                name: "NAME-NEW"
+            };
+            form.Grid.Contacts.ViewSelector.CurrentView = newCurrentView;
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.entityType).toBe("1039");
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.id).toBe("GUID-NEW");
+            expect(form.Grid.Contacts.ViewSelector.CurrentView.name).toBe("NAME-NEW");
+            expect(form.Grid.Contacts.ViewSelector.Visible).toBeTruthy();
+            expect(() => { form.Grid.Contacts.Refresh(); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Grid.Contacts.RefreshRibbon(); }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.Grid.Contacts.OpenRelatedGrid(); }).toThrow(new Error("openRelatedGrid not implemented."));
+            form.Grid.Contacts.RemoveOnLoad(ContactsAddOnLoad);
+            expect(grid.onLoadHandlers.length).toBe(0);
+            expect(form.Grid.Contacts.Rows.getLength()).toBe(2);
+            var row0 = form.Grid.Contacts.Rows.get(0);
+            expect(row0.EntityId).toBe("ROW1-GUID")
+            expect(row0.EntityName).toBe("contact");
+            expect(row0.PrimaryAttributeValue).toBe("ROW1-VALUE");
+            expect(row0.EntityReference.id).toBe("ROW1-GUID");
+            expect(row0.EntityReference.entityType).toBe("contact");
+            expect(row0.EntityReference.name).toBe("ROW1-VALUE");
+            expect(row0.Columns).toBeDefined();
+            expect(row0.Columns.getLength()).toBe(3);
+            var row0col0 = row0.Columns.get("abc_col1");
+            expect(row0col0).toBeDefined();
+            expect(row0col0.Value).toBe("ROW1-COL1");
+            row0col0.Value = "ROW1-COL1-NEW";
+            expect(row0col0.Value).toBe("ROW1-COL1-NEW");
+            expect(row0col0.Name).toBe("abc_col1");
+            expect(row0col0.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Recommended);
+            row0col0.RequiredLevel = OptionSet.FieldRequiredLevel.Required;
+            expect(row0col0.RequiredLevel).toBe(OptionSet.FieldRequiredLevel.Required);
+            expect(row0col0.Disabled).toBeTruthy();
+            row0col0.Disabled = false;
+            expect(row0col0.Disabled).toBeFalsy();
+            expect(row0col0.Label).toBe("abc_col1");
+            expect(() => { row0col0.SetNotification(null, null) }).toThrow(new Error("set notification not implemented"));
+            expect(() => { row0col0.ClearNotification(null) }).toThrow(new Error("clear notification not implemented"));
+            form.Grid.Contacts.Rows.forEach(function (row, index) {
+                expect(row).toBeDefined();
+                row.Columns.forEach(function (column, index) {
+                    expect(column).toBeDefined();
+                });
+            });
+            var rowNotExist = form.Grid.Contacts.Rows.get(4);
+            expect(rowNotExist).toBeDefined();
+            //expect(rowNotExist.EntityId).toBe("{00000000-0000-0000-0000-000000000000}");
+            var columnNotExist = row0.Columns.get("col_not_exisit");
+            expect(columnNotExist).toBeDefined();
+            //expect(columnNotExist.Name).toBe("");
+            //expect(columnNotExist.Value).toBe("");
+            expect(form.Grid.Contacts.TotalRecordCount).toBe(2);
+            expect(form.Grid.Contacts.SelectedRows.getLength()).toBe(1);
+            expect(form.Grid.Contacts.SelectedRows.get(0)).toBeDefined();
+            form.Grid.Contacts.SelectedRows.forEach(function (row, index) {
+                expect(row).toBeDefined();
+            });
         });
     });
     describe('Form', () => {
@@ -864,6 +1036,7 @@ define(['xrm-mock'], function () {
                     controlName
                 ])
             });
+            xrmMock.XrmMockGenerator.Attribute.createDate("modifiedon", new Date());
             xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
             var executionContext = xrmMock.XrmMockGenerator.formContext;
             //run
@@ -871,6 +1044,7 @@ define(['xrm-mock'], function () {
             //result
             var form = new DevKit.FormAccount(executionContext);
             expect(form.Body.Name.Disabled).toBeFalsy();
+            expect(form.Body.ModifiedOn.ShowTime).toBeFalsy();
         });
         it('Account OnLoad with XrmEnum.FormType.Update', () => {
             //setup

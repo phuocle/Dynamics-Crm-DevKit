@@ -89,9 +89,21 @@
     <value>Updated default Account form.</value>
     <comment>'Account' : Description for systemform in Entity FormXml ID: '{8448b78f-8f42-454e-8e2a-f8196b0419af}'</comment>
   </data>
+  <data name="1:Description,Contactdevkit_CategoryCode" xml:space="preserve">
+    <value />
+    <comment>'Contact' : Description for Attribute 'devkit_CategoryCode' on Entity</comment>
+  </data>
+  <data name="1:Description,Contact{1fed44d1-ae68-4a41-bd2b-f13acac4acfa}" xml:space="preserve">
+    <value>Updated default Contact form.</value>
+    <comment>'Contact' : Description for systemform in Entity FormXml ID: '{1fed44d1-ae68-4a41-bd2b-f13acac4acfa}'</comment>
+  </data>
   <data name="1:displayname,Accountdevkit_CategoryCode" xml:space="preserve">
     <value>Category</value>
     <comment>'Account' : displayname for Attribute 'devkit_CategoryCode' on Entity</comment>
+  </data>
+  <data name="1:displayname,Contactdevkit_CategoryCode" xml:space="preserve">
+    <value>Category</value>
+    <comment>'Contact' : displayname for Attribute 'devkit_CategoryCode' on Entity</comment>
   </data>
   <data name="1:label,Account{0125719c-a5b0-4230-9817-3fba5d6ebfaf}" xml:space="preserve">
     <value>Credit Limit</value>
@@ -101,9 +113,17 @@
     <value>Payment Terms</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{0bab9157-d14e-441f-969d-80460634c15e}'</comment>
   </data>
+  <data name="1:label,Account{0e65c08d-5802-994a-b841-11c5d1eb736c}" xml:space="preserve">
+    <value>Credit Limit</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{0e65c08d-5802-994a-b841-11c5d1eb736c}'</comment>
+  </data>
   <data name="1:label,Account{0F664FFF-E39E-4676-9191-CBA16972B21D}" xml:space="preserve">
     <value>Primary Contact</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{0F664FFF-E39E-4676-9191-CBA16972B21D}'</comment>
+  </data>
+  <data name="1:label,Account{11b1278a-a7a9-48ca-5bd4-d1d4aa037825}" xml:space="preserve">
+    <value>Modified On</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{11b1278a-a7a9-48ca-5bd4-d1d4aa037825}'</comment>
   </data>
   <data name="1:label,Account{1c33ad89-92a1-8433-2378-306259eb57c0}" xml:space="preserve">
     <value>Ownership</value>
@@ -133,9 +153,21 @@
     <value>Ticker Symbol</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{5f38af3a-3307-47dc-b36d-d9a5de525e6e}'</comment>
   </data>
+  <data name="1:label,Account{64797191-d8e5-6673-3b22-d210483d5e8b}" xml:space="preserve">
+    <value>Account Name 2</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{64797191-d8e5-6673-3b22-d210483d5e8b}'</comment>
+  </data>
+  <data name="1:label,Account{73a086be-8ea3-ec87-48b9-21c767500b81}" xml:space="preserve">
+    <value>Currency</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{73a086be-8ea3-ec87-48b9-21c767500b81}'</comment>
+  </data>
   <data name="1:label,Account{7cd2b88c-b25c-4729-9c27-f59ebb5a1538}" xml:space="preserve">
     <value>Currency</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{7cd2b88c-b25c-4729-9c27-f59ebb5a1538}'</comment>
+  </data>
+  <data name="1:label,Account{7d92d35b-50e7-52e9-6ddc-25ca2b552052}" xml:space="preserve">
+    <value>Created On</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{7d92d35b-50e7-52e9-6ddc-25ca2b552052}'</comment>
   </data>
   <data name="1:label,Account{87DE203E-B03C-44CC-8B06-438202B82553}" xml:space="preserve">
     <value>Parent Account</value>
@@ -165,6 +197,14 @@
     <value>Primary Contact</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{b187688c-8410-5990-16ec-e153968ab583}'</comment>
   </data>
+  <data name="1:label,Account{b7cccd7d-a66d-5e59-183b-a7439cc2d0ae}" xml:space="preserve">
+    <value>Status</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{b7cccd7d-a66d-5e59-183b-a7439cc2d0ae}'</comment>
+  </data>
+  <data name="1:label,Account{c911d71c-584d-1d93-249c-4b0c3ce63139}" xml:space="preserve">
+    <value>Status Reason</value>
+    <comment>'Account' : label for cell in Entity FormXml ID: '{c911d71c-584d-1d93-249c-4b0c3ce63139}'</comment>
+  </data>
   <data name="1:label,Account{d3e19d4e-b2ae-409f-9b4e-5976527c6c83}" xml:space="preserve">
     <value>Annual Revenue</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{d3e19d4e-b2ae-409f-9b4e-5976527c6c83}'</comment>
@@ -173,9 +213,89 @@
     <value>Website</value>
     <comment>'Account' : label for cell in Entity FormXml ID: '{e6441984-4343-813a-aa7e-e2747ad35390}'</comment>
   </data>
+  <data name="1:label,Contact{07326cde-7529-ddc0-e421-c0bcddd07b8a}" xml:space="preserve">
+    <value>Job Title</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{07326cde-7529-ddc0-e421-c0bcddd07b8a}'</comment>
+  </data>
+  <data name="1:label,Contact{1b54cdb3-1582-c29e-cc9e-9d4bc2a5700b}" xml:space="preserve">
+    <value>Fax</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{1b54cdb3-1582-c29e-cc9e-9d4bc2a5700b}'</comment>
+  </data>
+  <data name="1:label,Contact{215da2d0-2b64-3481-8d2d-16107d4d7e5b}" xml:space="preserve">
+    <value>Business Phone</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{215da2d0-2b64-3481-8d2d-16107d4d7e5b}'</comment>
+  </data>
+  <data name="1:label,Contact{24be01cc-16a6-8eea-8916-42d20a1097ae}" xml:space="preserve">
+    <value>Owner</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{24be01cc-16a6-8eea-8916-42d20a1097ae}'</comment>
+  </data>
+  <data name="1:label,Contact{290b48ba-c0cc-7746-6dda-93e240e4cc78}" xml:space="preserve">
+    <value>Mobile Phone</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{290b48ba-c0cc-7746-6dda-93e240e4cc78}'</comment>
+  </data>
+  <data name="1:label,Contact{2d8cee50-7123-01e7-c2cc-0068c0ecc4c0}" xml:space="preserve">
+    <value>Marital Status</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{2d8cee50-7123-01e7-c2cc-0068c0ecc4c0}'</comment>
+  </data>
+  <data name="1:label,Contact{408dda0b-48a7-c05c-e29a-56a93eb97172}" xml:space="preserve">
+    <value>Preferred Method of Contact</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{408dda0b-48a7-c05c-e29a-56a93eb97172}'</comment>
+  </data>
+  <data name="1:label,Contact{450c5a59-c7de-1289-0934-9a04bc4e1c72}" xml:space="preserve">
+    <value>Spouse/Partner Name</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{450c5a59-c7de-1289-0934-9a04bc4e1c72}'</comment>
+  </data>
+  <data name="1:label,Contact{4e7b2783-1a45-4a13-bfd6-e12915e74161}" xml:space="preserve">
+    <value>Currency</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{4e7b2783-1a45-4a13-bfd6-e12915e74161}'</comment>
+  </data>
+  <data name="1:label,Contact{542e581d-cca1-5e40-e6d9-d67a9d1468b4}" xml:space="preserve">
+    <value>Full Name</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{542e581d-cca1-5e40-e6d9-d67a9d1468b4}'</comment>
+  </data>
+  <data name="1:label,Contact{64e56163-0a77-46c9-9872-50b94d661d96}" xml:space="preserve">
+    <value>Credit Hold</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{64e56163-0a77-46c9-9872-50b94d661d96}'</comment>
+  </data>
+  <data name="1:label,Contact{6b03860a-a677-48f1-bfdc-a04faf8b151c}" xml:space="preserve">
+    <value>Credit Limit</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{6b03860a-a677-48f1-bfdc-a04faf8b151c}'</comment>
+  </data>
+  <data name="1:label,Contact{786b389a-92d8-6bc9-68b3-721db25a9994}" xml:space="preserve">
+    <value>Category</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{786b389a-92d8-6bc9-68b3-721db25a9994}'</comment>
+  </data>
+  <data name="1:label,Contact{7d538a97-98eb-b438-72de-57a808b9a308}" xml:space="preserve">
+    <value>Email</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{7d538a97-98eb-b438-72de-57a808b9a308}'</comment>
+  </data>
+  <data name="1:label,Contact{9980090e-c75b-4bc9-834f-63ba6e3a93f2}" xml:space="preserve">
+    <value>Payment Terms</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{9980090e-c75b-4bc9-834f-63ba6e3a93f2}'</comment>
+  </data>
+  <data name="1:label,Contact{ba714204-2499-db47-78e0-d8795307301d}" xml:space="preserve">
+    <value>Anniversary</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{ba714204-2499-db47-78e0-d8795307301d}'</comment>
+  </data>
+  <data name="1:label,Contact{bac50a31-27a0-c7e2-3ab3-5d6aa8895c6e}" xml:space="preserve">
+    <value>Birthday</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{bac50a31-27a0-c7e2-3ab3-5d6aa8895c6e}'</comment>
+  </data>
+  <data name="1:label,Contact{cb391eb8-02ec-0ee6-9d92-6996d4311809}" xml:space="preserve">
+    <value>Gender</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{cb391eb8-02ec-0ee6-9d92-6996d4311809}'</comment>
+  </data>
+  <data name="1:label,Contact{d0c6aad7-7064-924e-b0e0-718dc557ccee}" xml:space="preserve">
+    <value>Description</value>
+    <comment>'Contact' : label for cell in Entity FormXml ID: '{d0c6aad7-7064-924e-b0e0-718dc557ccee}'</comment>
+  </data>
   <data name="1:LocalizedName,Account{8448b78f-8f42-454e-8e2a-f8196b0419af}" xml:space="preserve">
     <value>Account</value>
     <comment>'Account' : LocalizedName for systemform in Entity FormXml ID: '{8448b78f-8f42-454e-8e2a-f8196b0419af}'</comment>
+  </data>
+  <data name="1:LocalizedName,Contact{1fed44d1-ae68-4a41-bd2b-f13acac4acfa}" xml:space="preserve">
+    <value>Contact</value>
+    <comment>'Contact' : LocalizedName for systemform in Entity FormXml ID: '{1fed44d1-ae68-4a41-bd2b-f13acac4acfa}'</comment>
   </data>
   <data name="1:Title,AccountInfo{8448b78f-8f42-454e-8e2a-f8196b0419af}" xml:space="preserve">
     <value>Common</value>
@@ -196,5 +316,41 @@
   <data name="1:Title,AccountService{8448b78f-8f42-454e-8e2a-f8196b0419af}" xml:space="preserve">
     <value>Service</value>
     <comment>'Account' : Title for NavBarArea in Entity FormXml ID: 'Service'</comment>
+  </data>
+  <data name="1:Title,ContactInfo{1fed44d1-ae68-4a41-bd2b-f13acac4acfa}" xml:space="preserve">
+    <value>Common</value>
+    <comment>'Contact' : Title for NavBarArea in Entity FormXml ID: 'Info'</comment>
+  </data>
+  <data name="1:Title,ContactMarketing{1fed44d1-ae68-4a41-bd2b-f13acac4acfa}" xml:space="preserve">
+    <value>Marketing</value>
+    <comment>'Contact' : Title for NavBarArea in Entity FormXml ID: 'Marketing'</comment>
+  </data>
+  <data name="1:Title,ContactProcessCenter{1fed44d1-ae68-4a41-bd2b-f13acac4acfa}" xml:space="preserve">
+    <value>Process Sessions</value>
+    <comment>'Contact' : Title for NavBarArea in Entity FormXml ID: 'ProcessCenter'</comment>
+  </data>
+  <data name="1:Title,ContactSales{1fed44d1-ae68-4a41-bd2b-f13acac4acfa}" xml:space="preserve">
+    <value>Sales</value>
+    <comment>'Contact' : Title for NavBarArea in Entity FormXml ID: 'Sales'</comment>
+  </data>
+  <data name="1:Title,ContactService{1fed44d1-ae68-4a41-bd2b-f13acac4acfa}" xml:space="preserve">
+    <value>Service</value>
+    <comment>'Contact' : Title for NavBarArea in Entity FormXml ID: 'Service'</comment>
+  </data>
+  <data name="80:LocalizedName,devkit_DevKit" xml:space="preserve">
+    <value>DevKit</value>
+    <comment> 'devkit_DevKit' : LocalizedName for AppModule</comment>
+  </data>
+  <data name="81:LocalizedName,devkit_DevKit" xml:space="preserve">
+    <value>DevKit</value>
+    <comment>'devkit_DevKit' : LocalizedName for AppModuleSiteMap</comment>
+  </data>
+  <data name="81:Title,New_AreaNew_Area" xml:space="preserve">
+    <value>DynamicsCrm</value>
+    <comment>Title for Area 'New_Area' Area 'New_Area'</comment>
+  </data>
+  <data name="81:Title,New_AreaNew_Group" xml:space="preserve">
+    <value>DevKit</value>
+    <comment>Title for Area 'New_Area' Group 'New_Group'</comment>
   </data>
 </root>
