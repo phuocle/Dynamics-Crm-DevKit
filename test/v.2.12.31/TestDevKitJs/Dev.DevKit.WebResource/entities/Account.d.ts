@@ -26,21 +26,29 @@ declare namespace DevKit {
 			SHIPPING: DevKit.Controls.Section;
 			ChildAccounts: DevKit.Controls.Section;
 		}
+		interface tab_PHUOCLE_Sections {
+			tab_3_section_1: DevKit.Controls.Section;
+		}
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
 			Section: tab_SUMMARY_TAB_Sections;
 		}
 		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
 			Section: tab_DETAILS_TAB_Sections;
 		}
+		interface tab_PHUOCLE extends DevKit.Controls.ITab {
+			Section: tab_PHUOCLE_Sections;
+		}
 		interface Tabs {
 			SUMMARY_TAB: tab_SUMMARY_TAB;
 			DETAILS_TAB: tab_DETAILS_TAB;
+			PHUOCLE: tab_PHUOCLE;
 		}
 		interface Body {
 			Tab: Tabs;
 			mapcontrol: DevKit.Controls.Map;
 			notescontrol: DevKit.Controls.Note;
 			ActionCards: DevKit.Controls.ActionCards;
+			IFRAME_PHUOCLE: DevKit.Controls.IFrame;
 			/** Shows the complete primary address. */
 			Address1_Composite: DevKit.Controls.String;
 			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */

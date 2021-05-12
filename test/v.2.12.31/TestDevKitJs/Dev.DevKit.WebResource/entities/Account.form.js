@@ -33,6 +33,7 @@ var DevKit;
 			DoNotPostalMail: {},
 			Fax: {},
 			FollowEmail: {},
+			IFRAME_PHUOCLE: {},
 			IndustryCode: {},
 			mapcontrol: {},
 			ModifiedOn: {},
@@ -71,6 +72,11 @@ var DevKit;
 					BILLING: {},
 					SHIPPING: {},
 					ChildAccounts: {}
+				}
+			},
+			PHUOCLE: {
+				Section: {
+					tab_3_section_1: {}
 				}
 			}
 		};

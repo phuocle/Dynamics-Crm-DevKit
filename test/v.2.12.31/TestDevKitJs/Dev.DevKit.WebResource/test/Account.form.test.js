@@ -542,6 +542,47 @@ define(['xrm-mock'], function () {
                 expect(row).toBeDefined();
             });
         });
+        it('iframe control type', () => {
+            var attributes = new xrmMock.ItemCollectionMock([
+                new xrmMock.AttributeMock({
+                    name: "name"
+                })
+            ]);
+            var entity = new xrmMock.EntityMock({
+                attributes: attributes
+            });
+            var data = new xrmMock.DataMock(entity);
+            var frame = new xrmMock.IframeControlMock({
+                name: "IFRAME_PHUOCLE",
+                controlType: "iframe",
+                label: "PHUOCLE",
+                visible: true
+            });
+            var ui = new xrmMock.UiMock({
+                controls: new xrmMock.ItemCollectionMock([
+                    frame
+                ])
+            });
+            xrmMock.XrmMockGenerator.formContext = new xrmMock.FormContextMock(data, ui);
+            var executionContext = xrmMock.XrmMockGenerator.formContext;
+            var form = new DevKit.FormAccount(executionContext);
+            expect(() => { form.Body.IFRAME_PHUOCLE.ContentWindow(null, null) }).toThrow(new Error("getContentWindow not implemented."));
+            expect(form.Body.IFRAME_PHUOCLE.ControlType).toBe(OptionSet.FieldControlType.Iframe);
+            expect(() => { form.Body.IFRAME_PHUOCLE.Disabled }).toThrow(new Error("getDisabled not implemented."));
+            expect(() => { form.Body.IFRAME_PHUOCLE.InitialUrl }).toThrow(new Error("getInitialUrl not implemented."));
+            expect(form.Body.IFRAME_PHUOCLE.Label).toBe("PHUOCLE");
+            expect(form.Body.IFRAME_PHUOCLE.ControlName).toBe("IFRAME_PHUOCLE");
+            expect(() => { form.Body.IFRAME_PHUOCLE.Object }).toThrow(new Error("getObject not implemented."));
+            expect(form.Body.IFRAME_PHUOCLE.ControlParent).toBeUndefined();
+            expect(() => { form.Body.IFRAME_PHUOCLE.Src }).toThrow(new Error("getSrc not implemented."));
+            expect(form.Body.IFRAME_PHUOCLE.Visible).toBeTruthy();
+            expect(() => { form.Body.IFRAME_PHUOCLE.Disabled = true }).toThrow(new Error("setDisabled not implemented."));
+            expect(() => { form.Body.IFRAME_PHUOCLE.Focus() }).toThrow(new Error("setFocus not implemented."));
+            form.Body.IFRAME_PHUOCLE.Label = "PHUOCLE New";
+            expect(form.Body.IFRAME_PHUOCLE.Label).toBe("PHUOCLE New");
+            expect(() => { form.Body.IFRAME_PHUOCLE.Src = "https://www.phuocle.net" }).toThrow(new Error("setSrc not implemented."));
+            expect(() => { form.Body.IFRAME_PHUOCLE.Visible = true }).toThrow(new Error("setVisible not implemented."));
+        });
     });
     describe('Form', () => {
         beforeEach(function () {
