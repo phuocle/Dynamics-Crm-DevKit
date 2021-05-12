@@ -127,6 +127,21 @@ declare namespace DevKit {
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
 		}
+		interface ProcessBPF_Account {
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
+			NumberOfEmployees: DevKit.Controls.Integer;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			BPF_Account: ProcessBPF_Account;
+		}
 		interface Grid {
 			Contacts: DevKit.Controls.Grid;
 			ChildAccounts: DevKit.Controls.Grid;
@@ -149,6 +164,8 @@ declare namespace DevKit {
 		Header: DevKit.FormAccount.Header;
 		/** The QuickForm of form Account */
 		QuickForm: DevKit.FormAccount.QuickForm;
+		/** The Process of form Account */
+		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
 	}

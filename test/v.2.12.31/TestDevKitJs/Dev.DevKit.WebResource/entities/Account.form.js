@@ -98,6 +98,17 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, footer, "footer_");
 		form.Footer = footer;
+		var process = devKit.LoadProcess(formContext);
+		var _BPF_Account = {
+			IndustryCode: {},
+			Name: {},
+			NumberOfEmployees: {},
+			OwnerId: {},
+			Revenue: {}
+		}
+		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
+		process.BPF_Account = _BPF_Account;
+		form.Process = process;
 		var quickForm = {
 			contactquickform: {
 				EMailAddress1: {},
