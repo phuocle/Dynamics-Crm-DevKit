@@ -13,6 +13,9 @@ using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
+
+
+
     public class TaskSolutionPackager
     {
         private CrmServiceClient crmServiceClient;
@@ -169,7 +172,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (json.rootfolder.Length > 0)
                 currentDirectory += "\\" + json.rootfolder;
             var directory = new DirectoryInfo(currentDirectory);
-            return directory.Parent != null ? directory.Parent.FullName : string.Empty;
+            if (directory.Parent == null) throw new Exception($"{LOG} Not found packages folder");
+            if (Directory.Exists($"{directory.Parent.FullName}\\packages")) return directory.Parent.FullName;
+            return GetParentFolder(directory.Parent.FullName);
         }
 
         private string CreateCommandArgs(string solutionFile)
