@@ -157,7 +157,7 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected: ", CliLog.ColorWhite, XrmHelper.ConnectedUrl(CrmServiceClient));
             }
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             return true;
         }
 
