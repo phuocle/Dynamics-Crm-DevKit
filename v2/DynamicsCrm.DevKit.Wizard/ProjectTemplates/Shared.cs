@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
@@ -38,11 +39,15 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             var destinationDirectory = replacementsDictionary["$destinationdirectory$"];
-            //try
-            //{
+            try
+            {
                 DTE = (DTE)automationObject;
                 var form = new FormProject(ProjectType.Shared, DTE);
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
+
+                var solutionPath = Path.GetDirectoryName(DTE?.Solution?.FullName);
+                NugetHelper.DownoadDynamicsCrmDevKitPackage(solutionPath);
+
                 //Creating project ...
                 ProjectName = form.ProjectName;
                 replacementsDictionary.Add("$Check$", form.Check);
@@ -67,15 +72,15 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                         ;
                     Utility.ForceWriteAllText(file, json);
                 }
-            //}
-            //catch
-            //{
-            //    if (Directory.Exists(destinationDirectory))
-            //    {
-            //        Utility.TryDeleteDirectory(destinationDirectory);
-            //    }
-            //    throw;
-            //}
+            }
+            catch
+            {
+                if (Directory.Exists(destinationDirectory))
+                {
+                    Utility.TryDeleteDirectory(destinationDirectory);
+                }
+                throw;
+            }
         }
 
         public bool ShouldAddProjectItem(string filePath)

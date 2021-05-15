@@ -2,6 +2,7 @@
 using System.Linq;
 using NuGet;
 using DynamicsCrm.DevKit.Shared.Models;
+using System.IO;
 
 namespace DynamicsCrm.DevKit.Shared.Helper
 {
@@ -54,14 +55,6 @@ namespace DynamicsCrm.DevKit.Shared.Helper
 
         public static CrmNuget GetLatestPackageVersion(string packageId, string comboboxCrmName)
         {
-            //if (comboboxCrmName.Length == 0)
-            //{
-            //    return new CrmNuget
-            //    {
-            //        TargetFramework = "000",
-            //        Version = "0.0.0"
-            //    };
-            //}
             comboboxCrmName = $"{Const.Dynamics365} - 4.6.2";
             var parts = comboboxCrmName.Split("-".ToCharArray());
             var crmName = parts[0].Trim();
@@ -88,6 +81,20 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 TargetFramework = "000",
                 Version = "0.0.0"
             };
+        }
+
+        internal static void DownoadDynamicsCrmDevKitPackage(string solutionPath)
+        {
+            var packagesPath = $"{solutionPath}\\packages";
+            if (Directory.Exists(packagesPath))
+                if (Directory.GetDirectories(packagesPath, $"{Const.DynamicsCrmDevKitCli}.*").Length > 0)
+                    return;
+            if (!Directory.Exists(packagesPath)) Directory.CreateDirectory(packagesPath);
+            const string url = "https://www.nuget.org/api/v2/";
+            var repo = PackageRepositoryFactory.Default.CreateRepository(url);
+            var version = NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitCli);
+            var packageManager = new PackageManager(repo, packagesPath);
+            packageManager.InstallPackage(Const.DynamicsCrmDevKitCli, SemanticVersion.Parse(version));
         }
 
         private static string DefaultPackageTargetFramework(string packageId)

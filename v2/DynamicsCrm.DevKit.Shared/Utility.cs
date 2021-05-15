@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using EnvDTE;
-using NUglify;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Text;
 using Microsoft.CSharp;
@@ -148,6 +147,7 @@ namespace DynamicsCrm.DevKit.Shared
             var sharedProjectName = Utility.GetSharedProject(dte);
             return Utility.ExistProject(dte, sharedProjectName);
         }
+
 
         public static bool ProxyTypesProjectExist(DTE dte)
         {

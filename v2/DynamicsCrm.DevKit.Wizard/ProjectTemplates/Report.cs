@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
@@ -54,9 +55,11 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             try
             {
                 DTE = (DTE)automationObject;
+                Wizard.MakeSureSharedProjectExist(DTE);
                 var form = new FormProject(ProjectType.Report, DTE);
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
                 //Creating project ...
+                var solutionPath = Path.GetDirectoryName(DTE?.Solution?.FullName);
                 ProjectName = form.ProjectName;
                 replacementsDictionary.Add("$Check$", form.Check);
                 Wizard.ProcessProjectReplacementsDictionary(replacementsDictionary, form);

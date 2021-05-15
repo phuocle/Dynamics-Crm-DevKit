@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -165,6 +168,15 @@ namespace DynamicsCrm.DevKit.Wizard
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
             else
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
+        }
+
+        public static void MakeSureSharedProjectExist(DTE dte)
+        {
+            if (!Utility.SharedProjectExist(dte))
+            {
+                System.Windows.MessageBox.Show(@"Please add DynamicsCrm.DevKit Shared project and try it again", @"Error", (MessageBoxButton)System.Windows.Forms.MessageBoxButtons.OK, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Error);
+                throw new WizardCancelledException();
+            }
         }
     }
 }
