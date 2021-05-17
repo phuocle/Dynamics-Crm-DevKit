@@ -29,7 +29,9 @@ namespace Dev.DevKit.Console._2
                     return $"AuthType=ClientSecret;Url={Url};ClientId={UserName};ClientSecret={Password};";
                 if (AuthType == "OAuth")
                     return $"AuthType=OAuth;Url={Url};Username={UserName};Password={Password};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto";
-                return string.Empty;
+                var arr = UserName.Split("\\".ToCharArray());
+                if (arr.Length != 2) throw new Exception("Please enter UserName like: contoso\\jsmith");
+                return $"AuthType=AD;Url={Url};Domain={arr[0]};Username={arr[1]};Password={Password};";
             }
         }
     }
