@@ -1,7 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using System;
 
-namespace Dev.DevKit.Console
+namespace Dev.DevKit.Console._1
 {
     public class Program
     {

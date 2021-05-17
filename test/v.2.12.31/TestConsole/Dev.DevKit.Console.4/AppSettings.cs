@@ -2,7 +2,7 @@
 using System.Configuration;
 using Microsoft.Xrm.Tooling.Connector;
 
-namespace Dev.DevKit.Console._3
+namespace Dev.DevKit.Console._4
 {
     public static class AppSettings
     {

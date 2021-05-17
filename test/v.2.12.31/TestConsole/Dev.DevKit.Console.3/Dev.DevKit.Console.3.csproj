@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>439cbb97-4c98-456c-b6a5-3d4161a60b4b</ProjectGuid>
+    <ProjectGuid>{6671623E-F54E-425C-A44C-D0133EAAF766}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.Console._3</RootNamespace>
@@ -27,7 +27,8 @@
     <OutputPath>..\Release\console\Dev.DevKit.Console.3</OutputPath>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants></DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
@@ -113,7 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
-    
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -121,9 +121,8 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  
   <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.10.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.12.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

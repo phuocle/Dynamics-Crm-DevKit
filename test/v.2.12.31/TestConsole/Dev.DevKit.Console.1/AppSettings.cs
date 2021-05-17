@@ -1,13 +1,14 @@
 ﻿using System;
 using Microsoft.Xrm.Tooling.Connector;
 
-namespace Dev.DevKit.Console
+namespace Dev.DevKit.Console._1
 {
     public static class AppSettings
     {
         private static CrmServiceClient _Service = null;
         public static CrmServiceClient Service {
-            get {
+            get
+            {
                 if (_Service != null) return _Service;
                 var loginForm = new LoginForm();
                 loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;

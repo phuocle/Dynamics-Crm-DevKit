@@ -4,7 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace Dev.DevKit.Console
+namespace Dev.DevKit.Console._1
 {
     public partial class LoginForm : Window
     {
