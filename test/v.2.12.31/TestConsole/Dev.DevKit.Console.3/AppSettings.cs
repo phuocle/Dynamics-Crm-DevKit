@@ -2,7 +2,7 @@
 using System.Configuration;
 using Microsoft.Xrm.Tooling.Connector;
 
-namespace Dev.DevKit.Console._2
+namespace Dev.DevKit.Console._3
 {
     public static class AppSettings
     {
@@ -19,8 +19,8 @@ namespace Dev.DevKit.Console._2
         }
         private static string AuthType { get { return ConfigurationManager.AppSettings["AuthType"]; } }
         private static string Url { get { return ConfigurationManager.AppSettings["Url"]; } }
-        private static string UserName { get { return ConfigurationManager.AppSettings["Username"]; } }
-        private static string Password { get { return ConfigurationManager.AppSettings["Password"]; } }
+        private static string UserName { get { return ConfigurationManager.AppSettings["ClientId"]; } }
+        private static string Password { get { return ConfigurationManager.AppSettings["ClientSecret"]; } }
         private static string ConnectionString
         {
             get

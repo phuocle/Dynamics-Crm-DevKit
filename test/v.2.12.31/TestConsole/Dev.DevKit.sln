@@ -9,8 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console", "Dev.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.2", "Dev.DevKit.Console.2\Dev.DevKit.Console.2.csproj", "{6CD0CA0B-37F5-42E0-8C49-24E30EC02ADE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Console.3", "Dev.DevKit.Console.3\Dev.DevKit.Console.3.csproj", "{439CBB97-4C98-456C-B6A5-3D4161A60B4B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{439cbb97-4c98-456c-b6a5-3d4161a60b4b}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{4e7afec5-1251-4499-8103-f18d429af827}*SharedItemsImports = 13
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{5d6454a2-9b81-4d76-a59f-044791345ccb}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{6cd0ca0b-37f5-42e0-8c49-24e30ec02ade}*SharedItemsImports = 4
@@ -28,6 +31,10 @@ Global
 		{6CD0CA0B-37F5-42E0-8C49-24E30EC02ADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CD0CA0B-37F5-42E0-8C49-24E30EC02ADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CD0CA0B-37F5-42E0-8C49-24E30EC02ADE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{439CBB97-4C98-456C-B6A5-3D4161A60B4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{439CBB97-4C98-456C-B6A5-3D4161A60B4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{439CBB97-4C98-456C-B6A5-3D4161A60B4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{439CBB97-4C98-456C-B6A5-3D4161A60B4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
