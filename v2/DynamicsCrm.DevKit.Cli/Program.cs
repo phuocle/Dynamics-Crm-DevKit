@@ -177,6 +177,7 @@ namespace DynamicsCrm.DevKit.Cli
             if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
             {
                 CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
+                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 return true;
             }
             return false;
@@ -196,6 +197,7 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connection);
+                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 return true;
             }
             catch
@@ -210,6 +212,7 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connection);
+                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 return true;
             }
             catch
