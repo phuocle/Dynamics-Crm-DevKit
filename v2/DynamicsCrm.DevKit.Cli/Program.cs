@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\azure\hitachi\hisolcrm\TEL\SourceCode\Hsap.WO.SolutionPackager\R2";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\TestAllEntities\All\Dev.DevKit.ProxyTypes";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

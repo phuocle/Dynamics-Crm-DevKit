@@ -16,7 +16,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     public class ThreadWork
     {
-        public static void Dots()
+        public static void SolutionPackagerDots()
         {
             CliLog.Write(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Exporting ");
             while (true)
@@ -25,6 +25,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 Thread.Sleep(1000);
             }
         }
+
+        public static void ProxyTypeDots()
+        {
+            while (true)
+            {
+                CliLog.Write(CliLog.ColorWhite, ".");
+                Thread.Sleep(1000);
+            }
+        }
+
     }
 
     public class TaskSolutionPackager
@@ -57,6 +67,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
         }
 
         private bool IsValid()
@@ -102,7 +113,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
                 try
                 {
-                    var wait = new Thread(ThreadWork.Dots);
+                    var wait = new Thread(ThreadWork.SolutionPackagerDots);
                     wait.Start();
                     var response = (ExportSolutionResponse)crmServiceClient.Execute(request);
                     wait.Abort();

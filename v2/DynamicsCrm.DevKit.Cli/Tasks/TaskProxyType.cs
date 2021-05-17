@@ -9,6 +9,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
 using DynamicsCrm.DevKit.Shared.Helper;
 using System.Reflection;
+using System.Threading;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -34,7 +35,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             if (!IsValid()) return;
 
@@ -42,8 +43,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             RunProxyType();
 
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
         }
 
         private void CopyFile()
@@ -73,7 +75,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 CliLog.WriteLine(ConsoleColor.Green, " with entities filter: ", ConsoleColor.Cyan, json.entities);
             }
-            CliLog.WriteLine(CliLog.ColorCyan, " " + path + " " + CreateCommandArgsLog());
+            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, " " + path + " " + CreateCommandArgsLog());
             CliLog.WriteLine();
             var process = new Process
             {
@@ -93,9 +96,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     process.StartInfo.EnvironmentVariables.Add(ENVIRONMENT_ENTITIES, string.Join(",", json.entities));
                 }
             }
+
             process.Start();
+            var wait = new Thread(ThreadWork.ProxyTypeDots);
+            wait.Start();
+
             while (!process.StandardOutput.EndOfStream)
             {
+                wait.Abort();
+                CliLog.WriteLine();
+                CliLog.WriteLine();
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
                 var line = process.StandardOutput.ReadLine();
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, line);
             }
@@ -105,7 +116,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private string GetParentFolder(string currentDirectory)
         {
             var directory = new DirectoryInfo(currentDirectory);
-            return directory.Parent != null ? directory.Parent.FullName : string.Empty;
+            if (directory.Parent == null) throw new Exception($"{LOG} Not found packages folder");
+            if (Directory.Exists($"{directory.Parent.FullName}\\packages")) return directory.Parent.FullName;
+            return GetParentFolder(directory.Parent.FullName);
         }
 
         private string CreateCommandArgs()
