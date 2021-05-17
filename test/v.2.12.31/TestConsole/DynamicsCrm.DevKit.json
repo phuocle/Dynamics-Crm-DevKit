@@ -1,4 +1,12 @@
 ﻿{
-    "DefaultCrmConnection": null,
-    "CrmConnections": null
+    "DefaultCrmConnection": "OAuth",
+    "CrmConnections": [
+        {
+            "Name": "OAuth",
+            "Url": "https://dev2-devkit.crm5.dynamics.com",
+            "UserName": "dev2@pldevkit.onmicrosoft.com",
+            "Password": "67ubH5C8nrSvsmDAv/Zixw==",
+            "Type": "OAuth"
+        }
+    ]
 }

@@ -123,7 +123,7 @@
             this.cboType.Items.AddRange(new object[] {
             "AD",
             "ClientSecret",
-            "Office365"});
+            "OAuth"});
             this.cboType.Location = new System.Drawing.Point(98, 15);
             this.cboType.Margin = new System.Windows.Forms.Padding(2);
             this.cboType.Name = "cboType";
