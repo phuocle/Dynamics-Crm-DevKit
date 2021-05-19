@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Console
             if (!File.Exists(file)) return;
             var text = File.ReadAllText(file);
             text = text.Replace(find, replace);
-            File.WriteAllText(file, text);
+            File.WriteAllText(file, text, Encoding.UTF8);
         }
 
         private static void DevKitJsMinNew()
