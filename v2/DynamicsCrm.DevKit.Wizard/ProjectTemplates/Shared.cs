@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
                     json = json
                         .Replace("???.Plugin.*.dll", $"{solutionName}.Plugin.*.dll")
                         .Replace("???.CustomAction.*.dll", $"{solutionName}.CustomAction.*.dll")
-                        .Replace("???.CustomApi.*.dll", $"{solutionName}.CustomAction.*.dll")
+                        .Replace("???.CustomApi.*.dll", $"{solutionName}.CustomApi.*.dll")
                         .Replace("???.Workflow.*.dll", $"{solutionName}.Workflow.*.dll")
                         .Replace("???.DataProvider.*.dll", $"{solutionName}.DataProvider.*.dll")
                         .Replace("???.*.Test.dll", $"{solutionName}.*.Test.dll")
