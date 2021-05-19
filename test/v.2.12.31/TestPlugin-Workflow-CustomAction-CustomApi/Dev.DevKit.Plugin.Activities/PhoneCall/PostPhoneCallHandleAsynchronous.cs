@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.PluginActivities.PhoneCall
 {
     [CrmPluginRegistration("Handle", "phonecall", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    "Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostPhoneCallHandleAsynchronous : IPlugin
     {

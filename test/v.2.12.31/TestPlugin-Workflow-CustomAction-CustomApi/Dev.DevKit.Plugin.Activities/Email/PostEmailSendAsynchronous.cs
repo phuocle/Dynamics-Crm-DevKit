@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.PluginActivities.Email
 {
     [CrmPluginRegistration("Send", "email", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    "Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostEmailSendAsynchronous : IPlugin
     {

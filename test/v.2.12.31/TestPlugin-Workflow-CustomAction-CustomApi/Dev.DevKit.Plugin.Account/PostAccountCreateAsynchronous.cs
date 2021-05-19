@@ -1,12 +1,13 @@
 ﻿using Dev.DevKit.Shared;
+using Dev.DevKit.Shared.Entities;
 using Microsoft.Xrm.Sdk;
 using System;
 
 namespace Dev.DevKit.PluginAccount
 {
     [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostAccountCreateAsynchronous : IPlugin
     {
         /*
@@ -24,13 +25,13 @@ namespace Dev.DevKit.PluginAccount
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-        //public PostAccountCreateAsynchronous(string unsecureString, string secureString)
-        //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
-        //}
+    //public PostAccountCreateAsynchronous(string unsecureString, string secureString)
+    //{
+    //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
+    //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+    //}
 
-        public void Execute(IServiceProvider serviceProvider)
+    public void Execute(IServiceProvider serviceProvider)
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
@@ -41,12 +42,12 @@ namespace Dev.DevKit.PluginAccount
             if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

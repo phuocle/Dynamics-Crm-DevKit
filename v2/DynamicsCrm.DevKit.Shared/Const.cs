@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using DynamicsCrm.DevKit.Shared.Models;
 
@@ -16,6 +16,7 @@ namespace DynamicsCrm.DevKit.Shared
         };
         public const string PLDynamicsCrmDevKitResourcesDll = "DynamicsCrm.DevKit.Resources.dll";
         public const string Version = "2.12.31";
+        public const string BuildDate = "2021.05.19";
 
         public const string Chutzpah = "Chutzpah";
         public const string MicrosoftCrmSdkCoreAssemblies = "Microsoft.CrmSdk.CoreAssemblies";

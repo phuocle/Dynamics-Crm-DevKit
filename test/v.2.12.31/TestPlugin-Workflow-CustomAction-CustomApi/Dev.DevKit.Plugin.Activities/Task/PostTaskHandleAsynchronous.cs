@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.PluginActivities.Task
 {
     [CrmPluginRegistration("Handle", "task", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    "Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostTaskHandleAsynchronous : IPlugin
     {

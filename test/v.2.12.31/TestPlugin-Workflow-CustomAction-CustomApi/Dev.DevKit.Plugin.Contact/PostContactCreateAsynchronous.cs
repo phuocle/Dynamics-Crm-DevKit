@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.PluginContact
 {
     [CrmPluginRegistration("Create", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginContact.PostContactCreateAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    "Dev.DevKit.PluginContact.PostContactCreateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostContactCreateAsynchronous : IPlugin
     {

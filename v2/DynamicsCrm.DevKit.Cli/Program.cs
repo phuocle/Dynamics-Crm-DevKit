@@ -40,7 +40,7 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, "| | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
             CliLog.WriteLine(CliLog.ColorGreen, "| |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
             CliLog.WriteLine(CliLog.ColorGreen, "|____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
-            CliLog.WriteLine(CliLog.ColorGreen, "       |___/                                          ", CliLog.ColorWhite, "https://github.com/phuocle/Dynamics-Crm-DevKit", CliLog.ColorBlue, $" {Const.Version}");
+            CliLog.WriteLine(CliLog.ColorGreen, "       |___/                        ", CliLog.ColorWhite, "https://github.com/phuocle/Dynamics-Crm-DevKit", CliLog.ColorBlue, $" {Const.Version}", CliLog.ColorWhite, " Build: ", CliLog.ColorBlue, Const.BuildDate);
             CliLog.WriteLine();
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Current Directory path: ", CliLog.ColorWhite, CurrentDirectory);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.exe path: ", CliLog.ColorWhite, Assembly.GetExecutingAssembly().Location);

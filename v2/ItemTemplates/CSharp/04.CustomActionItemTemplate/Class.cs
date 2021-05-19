@@ -5,7 +5,7 @@ using $SharedNameSpace$;
 namespace $NameSpace$
 {
     [CrmPluginRegistration("$PluginMessage$", "$PluginLogicalName$", StageEnum.$PluginStage$, ExecutionModeEnum.$PluginExecution$, "",
-    "$NameSpace$.$PluginClass$$PluginOrder2$", $PluginOrder$, IsolationModeEnum.Sandbox,
+    "$NameSpace$.$PluginClass$$PluginOrder2$", $PluginOrder$/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class $PluginClass$$PluginOrder2$ : IPlugin
     {

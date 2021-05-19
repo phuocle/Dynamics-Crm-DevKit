@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.PluginAccount
 {
     [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "name",
-    "Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous", 1, IsolationModeEnum.Sandbox,
+    "Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PreAccountUpdateSynchronous : IPlugin
     {
@@ -41,12 +41,12 @@ namespace Dev.DevKit.PluginAccount
             if (context.MessageName.ToLower() != "Update".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Update");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

@@ -66,14 +66,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Const.cs">
+      <Link>Const.cs</Link>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\DataSourceCrm.cs">
+      <Link>DataSourceCrm.cs</Link>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XrmEnum.cs" />
-    <Compile Include="XrmMock.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
     <None Include="Packages\package-lock.json" />
     <None Include="Packages\package.json" />
   </ItemGroup>
