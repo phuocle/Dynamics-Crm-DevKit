@@ -4,7 +4,7 @@ using System;
 
 namespace Dev.DevKit.PluginActivities.Task
 {
-    [CrmPluginRegistration("Update", "task", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
+    [CrmPluginRegistration("Update", "task", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "statuscode,statecode",
     "Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous", 1, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostTaskUpdateAsynchronous : IPlugin

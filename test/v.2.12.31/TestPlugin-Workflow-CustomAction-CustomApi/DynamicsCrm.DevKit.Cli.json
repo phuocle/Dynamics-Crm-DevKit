@@ -12,6 +12,19 @@
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
       ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "includefiles": [
+        "Dev.DevKit.Plugin.*.dll",
+        "Dev.DevKit.CustomAction.*.dll",
+        "Dev.DevKit.CustomApi.*.dll"
+      ],
+      "excludefiles": [
+        "Dev.DevKit.*.Test.dll"
+      ]
     }
   ],
   "workflows": [
