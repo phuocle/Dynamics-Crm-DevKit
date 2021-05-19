@@ -10,10 +10,25 @@ namespace DynamicsCrm.DevKit.Console
     {
         static void Main(string[] args)
         {
-            DevKitJsMinOld();
-            DevKitJsMinNew();
-            GeneratorXrmEnum();
-            UpdateBuildDate();
+            if (args.Length == 0)
+            {
+                DevKitJsMinOld();
+                DevKitJsMinNew();
+                GeneratorXrmEnum();
+                UpdateBuildDate();
+            }
+            else
+            {
+                UpdateBuildDateBack();
+            }
+        }
+
+        private static void UpdateBuildDateBack()
+        {
+            var date = DateTime.Now.ToString("yyyy.MM.dd");
+            var currentDirectory = Directory.GetCurrentDirectory();
+            ReplaceInFile($@"{currentDirectory}\DynamicsCrm.DevKit\source.extension.vsixmanifest", date, "xxxx.xx.xx");
+            ReplaceInFile($@"{currentDirectory}\DynamicsCrm.DevKit.Shared\Const.cs", date, "xxxx.xx.xx");
         }
 
         private static void UpdateBuildDate()
