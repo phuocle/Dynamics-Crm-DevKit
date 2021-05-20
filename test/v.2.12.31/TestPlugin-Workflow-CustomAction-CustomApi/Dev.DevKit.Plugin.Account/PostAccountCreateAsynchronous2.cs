@@ -4,11 +4,11 @@ using System;
 
 namespace Dev.DevKit.PluginAccount
 {
-    [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "name,parentaccountid",
-    "Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
+    "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous2", 2/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "",
     Image2Name = "", Image2Alias = "", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "")]
-    public class PostAccountUpdateAsynchronous : IPlugin
+    public class PostAccountCreateAsynchronous2 : IPlugin
     {
         /*
           InputParameters:
@@ -17,15 +17,15 @@ namespace Dev.DevKit.PluginAccount
               CalculateMatchCodeSynchronously    System.Boolean
               SolutionUniqueName                 System.String
               MaintainLegacyAppServerBehavior    System.Boolean
-              ConcurrencyBehavior                Microsoft.Xrm.Sdk.ConcurrencyBehavior
               ReturnRowVersion                   System.Boolean
            OutputParameters:
+              id                                 System.Guid - require
         */
 
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-        //public PostAccountUpdateAsynchronous(string unsecureString, string secureString)
+        //public PostAccountCreateAsynchronous(string unsecureString, string secureString)
         //{
         //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
         //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -39,15 +39,15 @@ namespace Dev.DevKit.PluginAccount
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
             if (context.PrimaryEntityName.ToLower() != "account".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
-            if (context.MessageName.ToLower() != "Update".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Update");
+            if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous");
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous2");
             tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous2");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
@@ -56,7 +56,12 @@ namespace Dev.DevKit.PluginAccount
             //var preEntity = (Entity)context.PreEntityImages["PreImage"];
             //var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
+            LogicC(service, tracing);
+        }
 
+        private void LogicC(IOrganizationService service, ITracingService tracing)
+        {
+            tracing.DebugMessage("LogicC");
         }
     }
 }

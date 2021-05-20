@@ -7,7 +7,8 @@ namespace Dev.DevKit.PluginAccount
 {
     [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
     "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
-    Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "",
+    Image2Name = "", Image2Alias = "", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "")]
     public class PostAccountCreateAsynchronous : IPlugin
     {
         /*
@@ -56,7 +57,18 @@ namespace Dev.DevKit.PluginAccount
             //var preEntity = (Entity)context.PreEntityImages["PreImage"];
             //var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
+            LogicA(service, tracing);
+            LogicB(service, tracing);
+        }
 
+        private void LogicB(IOrganizationService service, ITracingService tracing)
+        {
+            tracing.DebugMessage("LogicB");
+        }
+
+        private void LogicA(IOrganizationService service, ITracingService tracing)
+        {
+            tracing.DebugMessage("LogicA");
         }
     }
 }
