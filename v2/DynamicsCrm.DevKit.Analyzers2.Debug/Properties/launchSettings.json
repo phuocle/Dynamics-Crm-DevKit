@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "DynamicsCrm.DevKit.Analyzers.Debug": {
+      "commandName": "Project"
+    }
+  }
+}
