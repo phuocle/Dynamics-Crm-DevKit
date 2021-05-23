@@ -53,7 +53,9 @@
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="Dev.DevKit.Plugin.Account.snk" />
-    <Compile Include="PostAccountUpdateAsynchronous.cs" />
+    <Compile Include="PostAccountCreateAsynchronous.cs" />
+    <Compile Include="PreAccountCreateSynchronous.cs" />
+    <Compile Include="PreValidationAccountCreateSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />

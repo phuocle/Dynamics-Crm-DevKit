@@ -32,5 +32,40 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.NotUseColumnSetTrue}",
             customTags: Array.Empty<string>()
             );
+
+        /// <summary>DEVKIT1003</summary>
+        public static readonly DiagnosticDescriptor PluginImage_PreCreate_PreImage = new DiagnosticDescriptor(
+            id: "DEVKIT1003",
+            title: "Plugin Pre Create not support Pre Image",
+            messageFormat: "Plugin Pre Create not support Pre Image",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "DynamicsCrm.DevKit: Plugin Pre Create not support Pre Image.",
+            helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
+            customTags: Array.Empty<string>()
+            );
+        public static readonly DiagnosticDescriptor PluginImage_PreCreate_PostImage = new DiagnosticDescriptor(
+            id: "DEVKIT1003",
+            title: "Plugin Pre Create not support Post Image",
+            messageFormat: "Plugin Pre Create not support Post Image",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "DynamicsCrm.DevKit: Plugin Pre Create not support Post Image.",
+            helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
+            customTags: Array.Empty<string>()
+            );
+        public static readonly DiagnosticDescriptor PluginImage_PostCreate_PreImage = new DiagnosticDescriptor(
+            id: "DEVKIT1003",
+            title: "Plugin Post Create not support Pre Image",
+            messageFormat: "Plugin Post Create not support Pre Image",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "DynamicsCrm.DevKit: Plugin Pre Create not support Post Image.",
+            helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
+            customTags: Array.Empty<string>()
+            );
     }
 }

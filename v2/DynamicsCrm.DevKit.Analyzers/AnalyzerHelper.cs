@@ -6,6 +6,7 @@ namespace DynamicsCrm.DevKit.Analyzers
     {
         public static string RemoveQuote(string text)
         {
+            if (text == null) return null;
             text = text.Substring(1);
             return text.Substring(0, text.Length - 1);
         }
