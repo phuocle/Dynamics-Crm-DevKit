@@ -25,7 +25,10 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                 return ImmutableArray.Create(
                     DiagnosticDescriptors.PluginImage_PreCreate_PreImage,
                     DiagnosticDescriptors.PluginImage_PreCreate_PostImage,
-                    DiagnosticDescriptors.PluginImage_PostCreate_PreImage
+                    DiagnosticDescriptors.PluginImage_PostCreate_PreImage,
+                    DiagnosticDescriptors.PluginImage_PreUpdate_PostImage,
+                    DiagnosticDescriptors.PluginImage_PreDelete_PostImage,
+                    DiagnosticDescriptors.PluginImage_PostDelete_PostImage
                 );
             }
         }
@@ -44,8 +47,9 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (context.Node is AttributeSyntax attribute &&attribute?.Name?.ToFullString() == "CrmPluginRegistration")
             {
                 attribute.TryFindArgument(0, "message", out var argurment0);
-                attribute.TryFindArgument(2, "stage", out var argurment2);
                 var message = AnalyzerHelper.RemoveQuote(argurment0?.ToFullString()).Trim().ToLower();
+                if (message != "create" && message != "update" && message != "delete") return;
+                attribute.TryFindArgument(2, "stage", out var argurment2);
                 var stage = argurment2?.ToFullString();
                 if (message == "create" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
                 {
@@ -77,22 +81,48 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
                         }
                     }
                 }
-                //else if (message == "update")
-                //{
-                //    foreach (var argument in attribute.ArgumentList.Arguments)
-                //    {
-                //        if (argument?.NameEquals?.Name.ToString() == "Image1Type" || argument?.NameEquals?.Name.ToString() == "Image2Type" || argument?.NameEquals?.Name.ToString() == "Image2Type" || argument?.NameEquals?.Name.ToString() == "Image2Type")
-                //        {
-                //            var t = string.Empty;
-                //        }
-                //    }
-                //    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.PluginImage, attribute.GetLocation());
-                //}
-                //else if (message == "delete")
-                //{
-
-                //}
-
+                else if (message == "update" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
+                {
+                    var images = GetImages(attribute.ArgumentList);
+                    if (images.Count > 0)
+                    {
+                        foreach (var image in images)
+                        {
+                            if (image.ImageType.EndsWith("ImageTypeEnum.PostImage"))
+                            {
+                                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.PluginImage_PreUpdate_PostImage, image.Location);
+                            }
+                        }
+                    }
+                }
+                else if (message == "delete" && stage != null && (stage.EndsWith("StageEnum.PreValidation") || stage.EndsWith("StageEnum.PreOperation")))
+                {
+                    var images = GetImages(attribute.ArgumentList);
+                    if (images.Count > 0)
+                    {
+                        foreach (var image in images)
+                        {
+                            if (image.ImageType.EndsWith("ImageTypeEnum.PostImage"))
+                            {
+                                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.PluginImage_PreDelete_PostImage, image.Location);
+                            }
+                        }
+                    }
+                }
+                else if (message == "delete" && stage != null && stage.EndsWith("PostOperation"))
+                {
+                    var images = GetImages(attribute.ArgumentList);
+                    if (images.Count > 0)
+                    {
+                        foreach (var image in images)
+                        {
+                            if (image.ImageType.EndsWith("ImageTypeEnum.PostImage"))
+                            {
+                                DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.PluginImage_PostDelete_PostImage, image.Location);
+                            }
+                        }
+                    }
+                }
             }
         }
 

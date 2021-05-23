@@ -4,6 +4,9 @@ using System;
 
 namespace Dev.DevKit.PluginAccount
 {
+
+    //DEVKIT1003
+
     [CrmPluginRegistration("Create", "account", Dev.DevKit.Shared.StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "",
     "Dev.DevKit.PluginAccount.PreAccountCreateSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
     Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name",

@@ -45,6 +45,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
             customTags: Array.Empty<string>()
             );
+        /// <summary>DEVKIT1003</summary>
         public static readonly DiagnosticDescriptor PluginImage_PreCreate_PostImage = new DiagnosticDescriptor(
             id: "DEVKIT1003",
             title: "Plugin Pre Create not support Post Image",
@@ -56,6 +57,7 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
             customTags: Array.Empty<string>()
             );
+        /// <summary>DEVKIT1003</summary>
         public static readonly DiagnosticDescriptor PluginImage_PostCreate_PreImage = new DiagnosticDescriptor(
             id: "DEVKIT1003",
             title: "Plugin Post Create not support Pre Image",
@@ -64,6 +66,42 @@ namespace DynamicsCrm.DevKit.Analyzers
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true,
             description: "DynamicsCrm.DevKit: Plugin Pre Create not support Post Image.",
+            helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
+            customTags: Array.Empty<string>()
+            );
+        /// <summary>DEVKIT1003</summary>
+        public static readonly DiagnosticDescriptor PluginImage_PreUpdate_PostImage = new DiagnosticDescriptor(
+            id: "DEVKIT1003",
+            title: "Plugin Pre Update not support Post Image",
+            messageFormat: "Plugin Pre Update not support Post Image",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "DynamicsCrm.DevKit: Plugin Pre Update not support Post Image.",
+            helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
+            customTags: Array.Empty<string>()
+            );
+        /// <summary>DEVKIT1003</summary>
+        public static readonly DiagnosticDescriptor PluginImage_PreDelete_PostImage = new DiagnosticDescriptor(
+            id: "DEVKIT1003",
+            title: "Plugin Pre Delete not support Post Image",
+            messageFormat: "Plugin Pre Delete not support Post Image",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "DynamicsCrm.DevKit: Plugin Pre Delete not support Post Image.",
+            helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
+            customTags: Array.Empty<string>()
+            );
+        /// <summary>DEVKIT1003</summary>
+        public static readonly DiagnosticDescriptor PluginImage_PostDelete_PostImage = new DiagnosticDescriptor(
+            id: "DEVKIT1003",
+            title: "Plugin Post Delete not support Post Image",
+            messageFormat: "Plugin Post Delete not support Post Image",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "DynamicsCrm.DevKit: Plugin Post Delete not support Post Image.",
             helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
             customTags: Array.Empty<string>()
             );
