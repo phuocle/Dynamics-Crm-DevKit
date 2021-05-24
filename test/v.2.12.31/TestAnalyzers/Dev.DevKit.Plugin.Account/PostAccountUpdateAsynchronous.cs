@@ -62,8 +62,8 @@ namespace Dev.DevKit.PluginAccount
             //var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
 
-            var entity1 = service.Retrieve("account", Guid.Empty, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
-            var entity2 = service.Retrieve("account", Guid.Empty, new ColumnSet(true));
+            //var entity1 = service.Retrieve("account", Guid.Empty, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
+            //var entity2 = service.Retrieve("account", Guid.Empty, new ColumnSet(true));
             var columnSet1 = new ColumnSet
             {
                 AllColumns = true
@@ -71,6 +71,7 @@ namespace Dev.DevKit.PluginAccount
             var columnSet2 = new ColumnSet(true);
             var columnSet3 = new ColumnSet();
             columnSet3.AllColumns = true;
+            columnSet3.ExtensionData = null;
             var columnSet4 = new ColumnSet(1 == 1 ? true : false);
             var @bool = true;
             var columnSẹt = new ColumnSet(@bool);
