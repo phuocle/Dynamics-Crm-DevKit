@@ -29,6 +29,7 @@ namespace DynamicsCrm.DevKit.Console
             var currentDirectory = Directory.GetCurrentDirectory();
             ReplaceInFile($@"{currentDirectory}\DynamicsCrm.DevKit\source.extension.vsixmanifest", date, "xxxx.xx.xx");
             ReplaceInFile($@"{currentDirectory}\DynamicsCrm.DevKit.Shared\Const.cs", date, "xxxx.xx.xx");
+            ReplaceInFile($@"{currentDirectory}\DynamicsCrm.DevKit.Package\VSPackage.resx", date, "xxxx.xx.xx");
         }
 
         private static void UpdateBuildDate()
@@ -37,6 +38,7 @@ namespace DynamicsCrm.DevKit.Console
             var currentDirectory = Directory.GetCurrentDirectory();
             ReplaceInFile($@"{currentDirectory}\DynamicsCrm.DevKit\source.extension.vsixmanifest", "xxxx.xx.xx", date);
             ReplaceInFile($@"{currentDirectory}\DynamicsCrm.DevKit.Shared\Const.cs", "xxxx.xx.xx", date);
+            ReplaceInFile($@"{currentDirectory}\DynamicsCrm.DevKit.Package\VSPackage.resx", "xxxx.xx.xx", date);
         }
 
         private static void ReplaceInFile(string file, string find, string replace)
