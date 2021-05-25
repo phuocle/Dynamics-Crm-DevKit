@@ -55,6 +55,8 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             $"{MicrosoftCrmSdkMessages}.RetrieveTeamsSystemUserResponse",
             $"{MicrosoftCrmSdkMessages}.RetrieveUserSettingsSystemUserRequest",
             $"{MicrosoftCrmSdkMessages}.RetrieveUserSettingsSystemUserResponse",
+            $"{MicrosoftCrmSdkMessages}.SetStateRequest",
+            $"{MicrosoftCrmSdkMessages}.SetStateResponse",
             $"{MicrosoftCrmSdkMessages}.UpdateUserSettingsSystemUserRequest",
             $"{MicrosoftCrmSdkMessages}.UpdateUserSettingsSystemUserResponse"
         };
