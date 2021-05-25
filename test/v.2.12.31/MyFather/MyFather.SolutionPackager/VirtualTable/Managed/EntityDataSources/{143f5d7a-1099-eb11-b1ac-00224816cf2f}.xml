@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<EntityDataSource EntityDataSourceId="{143f5d7a-1099-eb11-b1ac-00224816cf2f}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Name>MyFather.DataProvider.SqlAccount</Name>
-  <ConnectionDefinition>%7B%0D%0A++%22ExternalCreatedOnField%22%3A+%22CreatedOn%22%2C%0D%0A++%22azureaqlid%22%3A+%22143f5d7a-1099-eb11-b1ac-00224816cf2f%22%2C%0D%0A++%22sqlconnectionstring%22%3A+%22Server%3Dtcp%3Aphuocvirtualtable.database.windows.net%2C1433%3BInitial+Catalog%3DVirtualTable%3BPersist+Security+Info%3DFalse%3BUser+ID%3Dphuoc%3BPassword%3DAa%40134567801%3BMultipleActiveResultSets%3DFalse%3BEncrypt%3DTrue%3BTrustServerCertificate%3DFalse%3BConnection+Timeout%3D30%3B%22%2C%0D%0A++%22azuresqlname%22%3A+%22MyFather.DataProvider.SqlAccount%22%2C%0D%0A++%22ExternalModifiedOnField%22%3A+%22ModifiedOn%22%0D%0A%7D</ConnectionDefinition>
-  <EntityDataProviderId>{e7a07c51-e898-eb11-b1ac-00224816cf2f}</EntityDataProviderId>
-  <IsCustomizable>1</IsCustomizable>
-</EntityDataSource>
