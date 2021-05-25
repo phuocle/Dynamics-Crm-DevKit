@@ -129,6 +129,7 @@
   <ItemGroup>
     <Compile Include="AnalyzerHelper.cs" />
     <Compile Include="BaseDiagnosticAnalyzer.cs" />
+    <Compile Include="CrmAnalyzers\DeprecatedAnalyzer.cs" />
     <Compile Include="CrmAnalyzers\NotUseColumnSetTrueAnalyzer.cs" />
     <Compile Include="CrmAnalyzers\PluginImageAnalyzer.cs" />
     <Compile Include="CrmAnalyzers\UpdateMessageShouldHaveFilteringAttributesAnalyzer.cs" />

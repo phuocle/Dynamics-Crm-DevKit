@@ -105,5 +105,18 @@ namespace DynamicsCrm.DevKit.Analyzers
             helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.PluginImage}",
             customTags: Array.Empty<string>()
             );
+
+        /// <summary>DEVKIT1004</summary>
+        public static readonly DiagnosticDescriptor DeprecatedRequest = new DiagnosticDescriptor(
+            id: "DEVKIT1004",
+            title: "Use the deprecated message",
+            messageFormat: "Use the deprecated message",
+            category: DiagnosticCategories.Require,
+            defaultSeverity: DiagnosticSeverity.Warning,
+            isEnabledByDefault: true,
+            description: "DynamicsCrm.DevKit: Use the deprecated message.",
+            helpLinkUri: $"{HelpLinkUriRoot}{DiagnosticIdentifiers.DeprecatedRequest}",
+            customTags: Array.Empty<string>()
+            );
     }
 }

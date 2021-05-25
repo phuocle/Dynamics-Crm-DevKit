@@ -55,6 +55,7 @@
     <None Include="Dev.DevKit.Plugin.Account.snk" />
     <Compile Include="PostAccountCreateAsynchronous.cs" />
     <Compile Include="PostAccountDeleteAsynchronous.cs" />
+    <Compile Include="PostAccountMergeAsynchronous.cs" />
     <Compile Include="PostAccountUpdateAsynchronous.cs" />
     <Compile Include="PreAccountCreateSynchronous.cs" />
     <Compile Include="PreAccountDeleteSynchronous.cs" />
