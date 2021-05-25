@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.DevKit.Shared\Dev.DevKit.Shared.shproj", "{97ECF31F-1B27-41F9-889D-862CE74BF3AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account", "Dev.DevKit.Plugin.Account\Dev.DevKit.Plugin.Account.csproj", "{C52CE03A-1097-4277-81D9-672CF20B5BFD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E0BDC5BE-5B40-42FB-AB79-A3F4827DA706}"
+	ProjectSection(SolutionItems) = preProject
+		deploy-all-RELEASE.bat = deploy-all-RELEASE.bat
+		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
+		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Contact", "Dev.DevKit.Plugin.Contact\Dev.DevKit.Plugin.Contact.csproj", "{7BC97432-A0B2-43CB-8FC7-C2F88AAA55ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Activities", "Dev.DevKit.Plugin.Activities\Dev.DevKit.Plugin.Activities.csproj", "{C0494300-E8AA-414B-9A45-D4CBB24D528E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction", "Dev.DevKit.CustomAction\Dev.DevKit.CustomAction.csproj", "{C54917D3-58AE-4C41-8DCD-459342F1C2A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction.Entities", "Dev.DevKit.CustomAction.Entities\Dev.DevKit.CustomAction.Entities.csproj", "{8C82D211-F85A-430F-B103-F399F7393DF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{9CD888B0-37DD-4711-8377-45679C5ED56C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Workflow", "Dev.DevKit.Workflow\Dev.DevKit.Workflow.csproj", "{22DADE38-20A0-4418-9F3F-ADC8E86875C3}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{22dade38-20a0-4418-9f3f-adc8e86875c3}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{7bc97432-a0b2-43cb-8fc7-c2f88aaa55ed}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{8c82d211-f85a-430f-b103-f399f7393df0}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{97ecf31f-1b27-41f9-889d-862ce74bf3ac}*SharedItemsImports = 13
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{c0494300-e8aa-414b-9a45-d4cbb24d528e}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{c52ce03a-1097-4277-81d9-672cf20b5bfd}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{c54917d3-58ae-4c41-8dcd-459342f1c2a0}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C52CE03A-1097-4277-81D9-672CF20B5BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C52CE03A-1097-4277-81D9-672CF20B5BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C52CE03A-1097-4277-81D9-672CF20B5BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C52CE03A-1097-4277-81D9-672CF20B5BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BC97432-A0B2-43CB-8FC7-C2F88AAA55ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BC97432-A0B2-43CB-8FC7-C2F88AAA55ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BC97432-A0B2-43CB-8FC7-C2F88AAA55ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BC97432-A0B2-43CB-8FC7-C2F88AAA55ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0494300-E8AA-414B-9A45-D4CBB24D528E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0494300-E8AA-414B-9A45-D4CBB24D528E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0494300-E8AA-414B-9A45-D4CBB24D528E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0494300-E8AA-414B-9A45-D4CBB24D528E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C54917D3-58AE-4C41-8DCD-459342F1C2A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C54917D3-58AE-4C41-8DCD-459342F1C2A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C54917D3-58AE-4C41-8DCD-459342F1C2A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C54917D3-58AE-4C41-8DCD-459342F1C2A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C82D211-F85A-430F-B103-F399F7393DF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C82D211-F85A-430F-B103-F399F7393DF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C82D211-F85A-430F-B103-F399F7393DF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C82D211-F85A-430F-B103-F399F7393DF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CD888B0-37DD-4711-8377-45679C5ED56C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CD888B0-37DD-4711-8377-45679C5ED56C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CD888B0-37DD-4711-8377-45679C5ED56C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CD888B0-37DD-4711-8377-45679C5ED56C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22DADE38-20A0-4418-9F3F-ADC8E86875C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22DADE38-20A0-4418-9F3F-ADC8E86875C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22DADE38-20A0-4418-9F3F-ADC8E86875C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22DADE38-20A0-4418-9F3F-ADC8E86875C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {478EE8F5-54E1-431D-BEC8-72AC05F5AF8C}
+	EndGlobalSection
+EndGlobal
