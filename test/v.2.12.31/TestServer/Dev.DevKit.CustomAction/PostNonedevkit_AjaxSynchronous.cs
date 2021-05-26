@@ -52,7 +52,6 @@ namespace Dev.DevKit.CustomAction
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE
-
             return outputs;
         }
     }

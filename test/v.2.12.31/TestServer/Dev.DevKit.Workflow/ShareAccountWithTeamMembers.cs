@@ -40,7 +40,6 @@ namespace Dev.DevKit.Workflow
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
             //YOUR WORKFLOW-CODE GO HERE
-
         }
     }
 }
