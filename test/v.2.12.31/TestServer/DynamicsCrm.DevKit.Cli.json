@@ -102,6 +102,18 @@
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
       ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "datasource": "devkit_DataSource",
+      "includefiles": [
+        "Dev.DevKit.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "Dev.DevKit.*.Test.dll"
+      ]
     }
   ],
   "datasources": [

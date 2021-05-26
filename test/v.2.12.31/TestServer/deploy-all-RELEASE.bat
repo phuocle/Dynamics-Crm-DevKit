@@ -21,4 +21,5 @@ for /f "delims=" %%d in ('dir /a:d /o:-n /s packages\DynamicsCrm.DevKit.Cli.* /b
 :break
 "%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /sdklogin:"yes" /json:"DynamicsCrm.DevKit.Cli.json" /type:"plugins" /profile:"RELEASE"
 "%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /sdklogin:"yes" /json:"DynamicsCrm.DevKit.Cli.json" /type:"workflows" /profile:"RELEASE"
+"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /sdklogin:"yes" /json:"DynamicsCrm.DevKit.Cli.json" /type:"dataproviders" /profile:"RELEASE"
 exit
