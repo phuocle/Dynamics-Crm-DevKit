@@ -26,7 +26,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        public static void ProxyTypeDots()
+        public static void Dot()
         {
             while (true)
             {

@@ -94,8 +94,8 @@
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
-      "solution": "???",
-      "datasource": "???",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "datasource": "devkit_DataSource",
       "includefiles": [
         "Dev.DevKit.DataProvider.*.dll"
       ],
@@ -107,10 +107,10 @@
   "datasources": [
     {
       "profile": "DEBUG",
-      "displayname": "???",
-      "pluralname": "???",
-      "solution": "???",
-      "name": "???"
+      "displayname": "Data Source",
+      "pluralname": "Data Sources",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "name": "devkit_DataSource"
     }
   ],
   "solutionpackagers": [

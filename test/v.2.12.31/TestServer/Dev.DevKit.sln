@@ -28,9 +28,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Workflow", "Dev.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomApi", "Dev.DevKit.CustomApi\Dev.DevKit.CustomApi.csproj", "{A655F97B-308D-402D-B678-EA76E29829CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.DataProvider", "Dev.DevKit.DataProvider\Dev.DevKit.DataProvider.csproj", "{2445F41F-A5F6-4243-9E3C-E6AC1B92C364}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{22dade38-20a0-4418-9f3f-adc8e86875c3}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{2445f41f-a5f6-4243-9e3c-e6ac1b92c364}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{7bc97432-a0b2-43cb-8fc7-c2f88aaa55ed}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{8c82d211-f85a-430f-b103-f399f7393df0}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{97ecf31f-1b27-41f9-889d-862ce74bf3ac}*SharedItemsImports = 13
@@ -76,6 +79,10 @@ Global
 		{A655F97B-308D-402D-B678-EA76E29829CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A655F97B-308D-402D-B678-EA76E29829CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A655F97B-308D-402D-B678-EA76E29829CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2445F41F-A5F6-4243-9E3C-E6AC1B92C364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2445F41F-A5F6-4243-9E3C-E6AC1B92C364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2445F41F-A5F6-4243-9E3C-E6AC1B92C364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2445F41F-A5F6-4243-9E3C-E6AC1B92C364}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

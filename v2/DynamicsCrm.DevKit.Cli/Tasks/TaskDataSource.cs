@@ -11,9 +11,8 @@ using DynamicsCrm.DevKit.Shared.Models.Cli;
 using Microsoft.Xrm.Sdk.Messages;
 using System.Text.RegularExpressions;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Metadata.Query;
-using System.Collections.ObjectModel;
 using DynamicsCrm.DevKit.Shared.Helper;
+using System.Threading;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -24,13 +23,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private CommandLineArgs arguments;
         private const string LOG = "[DATASOURCE]";
         private JsonDataSource json;
-        private Guid SolutionId = Guid.Empty;
+        //private Guid SolutionId = Guid.Empty;
         private string Prefix = string.Empty;
+        private string DataSourceName = string.Empty;
 
         public TaskDataSource(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
         {
-            // /conn:"AuthType=ClientSecret;Url=https://dev-devkit.crm5.dynamics.com;ClientId=e31fc7d6-4dce-46e3-8677-04ab0a2968e3;ClientSecret=?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"datasources" /profile:"DEBUG"
-
             this.crmServiceClient = crmServiceClient;
             this.currentDirectory = currentDirectory;
             this.arguments = arguments;
@@ -42,19 +40,26 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "DATA-SOURCE");
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
-            json.name = json.name.ToLower();
+            //json.name = json.name.ToLower();
 
             if (!IsValid()) return;
 
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Creating", CliLog.ColorGreen, " Data Source: ", CliLog.ColorCyan, $"{Prefix}{json.name}");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Creating", CliLog.ColorGreen, " Data Source: ", CliLog.ColorCyan, $"{DataSourceName}");
+            CliLog.WriteLine(CliLog.ColorWhite, "| ");
+            CliLog.Write(CliLog.ColorWhite, "| ");
+            var wait = new Thread(ThreadWork.Dot);
+            wait.Start();
 
             RegisterDataSource();
 
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Created", CliLog.ColorGreen, " Data Source: ", CliLog.ColorCyan, $"{Prefix}{json.name}");
+            wait.Abort();
 
             CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "| ");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Created", CliLog.ColorGreen, " Data Source: ", CliLog.ColorCyan, $"{DataSourceName}");
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "DATA-SOURCE");
         }
 
@@ -81,10 +86,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'name' can cannot contain space character.");
             if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))
                 throw new Exception($"{LOG} solution '{json.solution}' not exist");
-            SolutionId = solutionId;
+            //SolutionId = solutionId;
             Prefix = prefix;
-            if (XrmHelper.IsExistDataSource(crmServiceClient, $"{Prefix}{json.name}"))
-                throw new Exception($"{LOG} name '{json.name}' exist");
+            DataSourceName = json.name.ToLower().StartsWith(prefix.ToLower()) ? json.name : $"{Prefix}{json.name}";
+            if (XrmHelper.IsExistDataSource(crmServiceClient, DataSourceName))
+                throw new Exception($"{LOG} name '{DataSourceName}' exist");
             return true;
         }
 
@@ -113,7 +119,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 HasActivities = false,
                 PrimaryAttribute = new StringAttributeMetadata
                 {
-                    SchemaName= $"{Prefix}name",
+                    SchemaName= $"{DataSourceName}Name",
                     RequiredLevel = new AttributeRequiredLevelManagedProperty(AttributeRequiredLevel.None),
                     MaxLength = 100,
                     DisplayName = new Label(json.displayname, languageCode),
@@ -123,7 +129,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     DataProviderId = new Guid?(new Guid("B2112A7E-B26C-42F7-9B63-9A809A9D716F")),
                     IsActivity = new bool?(false),
-                    SchemaName = string.Format("{0}{1}", (object)Prefix, (object)json.name),
+                    SchemaName = DataSourceName,
                     DisplayName = new Label(json.displayname, languageCode),
                     DisplayCollectionName = new Label(json.pluralname, languageCode),
                     ExternalCollectionName = json.pluralname.Replace(" ", string.Empty),
@@ -178,30 +184,30 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             //Update field Id
             var requestId = new RetrieveAttributeRequest()
             {
-                EntityLogicalName = entityMetadata.SchemaName,
-                LogicalName = string.Format("{0}id", entityMetadata.SchemaName)
+                EntityLogicalName = entityMetadata.LogicalName,
+                LogicalName = string.Format("{0}id", entityMetadata.LogicalName)
             };
             var attributeMetadataId = ((RetrieveAttributeResponse)crmServiceClient.Execute(requestId)).AttributeMetadata;
-            attributeMetadataId.ExternalName = $"{Prefix}{json.name}id".ToLower();
+            attributeMetadataId.ExternalName = $"{DataSourceName}Id";
             var updateRequestId = new UpdateAttributeRequest()
             {
                 Attribute = attributeMetadataId,
-                EntityName = entityMetadata.SchemaName,
+                EntityName = entityMetadata.LogicalName,
                 MergeLabels = false
             };
             crmServiceClient.Execute(updateRequestId);
             //Update field name
             var requestName = new RetrieveAttributeRequest()
             {
-                EntityLogicalName = entityMetadata.SchemaName,
-                LogicalName = string.Format("{0}name", Prefix)
+                EntityLogicalName = entityMetadata.LogicalName,
+                LogicalName = string.Format("{0}name", DataSourceName.ToLower())
             };
             var attributeMetadataName = ((RetrieveAttributeResponse)crmServiceClient.Execute(requestName)).AttributeMetadata;
-            attributeMetadataName.ExternalName = $"{Prefix}{json.name}name".ToLower();
+            attributeMetadataName.ExternalName = $"{DataSourceName}Name";
             var updateRequestName = new UpdateAttributeRequest()
             {
                 Attribute = attributeMetadataName,
-                EntityName = entityMetadata.SchemaName,
+                EntityName = entityMetadata.LogicalName,
                 MergeLabels = false
             };
             crmServiceClient.Execute(updateRequestName);
@@ -209,7 +215,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             try
             {
                 PublishAllXmlRequest publishAllXmlRequest = new PublishAllXmlRequest();
-                PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse) crmServiceClient.Execute((OrganizationRequest)publishAllXmlRequest);
+                PublishAllXmlResponse publishAllXmlResponse = (PublishAllXmlResponse) crmServiceClient.Execute(publishAllXmlRequest);
             }
             catch
             {

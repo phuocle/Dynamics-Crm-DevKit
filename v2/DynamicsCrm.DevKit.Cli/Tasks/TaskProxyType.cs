@@ -98,7 +98,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             process.Start();
-            var wait = new Thread(ThreadWork.ProxyTypeDots);
+            var wait = new Thread(ThreadWork.Dot);
             wait.Start();
 
             while (!process.StandardOutput.EndOfStream)

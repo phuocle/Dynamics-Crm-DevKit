@@ -429,6 +429,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         public static bool IsExistDataSource(CrmServiceClient crmServiceClient, string logicalname)
         {
             var filterExpression = new MetadataFilterExpression();
+            logicalname = logicalname.ToLower();
             filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
             var propertiesExpression = new MetadataPropertiesExpression(new string[7]
             {

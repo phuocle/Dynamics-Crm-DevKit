@@ -78,6 +78,7 @@
       </Addresses>
     </Publisher>
     <RootComponents>
+      <RootComponent type="1" schemaName="devkit_datasource" behavior="0" />
       <RootComponent type="29" id="{c249171f-afbe-4c9c-a129-c4b8e78785c6}" behavior="0" />
       <RootComponent type="29" id="{d0364d44-7d05-49c0-bca6-576791ea9603}" behavior="0" />
       <RootComponent type="29" id="{dc2b7307-4683-4eda-89ba-fdee89dfaf0b}" behavior="0" />
