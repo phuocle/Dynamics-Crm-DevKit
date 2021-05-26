@@ -6,15 +6,15 @@
     <isquickfindquery>0</isquickfindquery>
     <isprivate>0</isprivate>
     <isdefault>1</isdefault>
-    <savedqueryid>{4979ec7c-88e3-4798-82f0-152198494d98}</savedqueryid>
+    <savedqueryid>{7ce853aa-c33d-49d3-96bc-3346160fd3cb}</savedqueryid>
     <layoutxml>
-      <grid name="resultset" jump="devkit_datasourcename" select="1" icon="1" preview="1">
-        <row name="result" id="devkit_datasourceid">
+      <grid name="devkit_datasources" jump="devkit_datasourcename" select="1" icon="1" preview="0">
+        <row name="devkit_datasource" id="devkit_datasourceid">
           <cell name="devkit_datasourcename" width="300" />
         </row>
       </grid>
     </layoutxml>
-    <querytype>0</querytype>
+    <querytype>64</querytype>
     <fetchxml>
       <fetch version="1.0" mapping="logical">
         <entity name="devkit_datasource">
@@ -25,7 +25,7 @@
     </fetchxml>
     <IntroducedVersion>1.0.0.0</IntroducedVersion>
     <LocalizedNames>
-      <LocalizedName description="All Data Sources" languagecode="1033" />
+      <LocalizedName description="Data Source Lookup View" languagecode="1033" />
     </LocalizedNames>
   </savedquery>
 </savedqueries>

@@ -85,6 +85,7 @@
       <RootComponent type="29" id="{fa43886e-1f2f-475e-948b-55e75d501d53}" behavior="0" />
       <RootComponent type="91" id="{bc0f62a6-29bd-eb11-bacc-000d3a80a94b}" schemaName="Dev.DevKit.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=9e7f3d3c212e9bef" behavior="0" />
       <RootComponent type="91" id="{9d0f62a6-29bd-eb11-bacc-000d3a80a94b}" schemaName="Dev.DevKit.CustomAction.Entities, Version=1.0.0.0, Culture=en, PublicKeyToken=f4a3d4831e04a4ac" behavior="0" />
+      <RootComponent type="91" id="{29598036-d1bd-eb11-bacc-000d3a80a94b}" schemaName="Dev.DevKit.DataProvider, Version=1.0.0.0, Culture=en, PublicKeyToken=d17e5208fd48a6b3" behavior="0" />
       <RootComponent type="91" id="{700d609f-53b8-eb11-8236-00224817361b}" schemaName="Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=d4b48238df90c6aa" behavior="0" />
       <RootComponent type="91" id="{d3b911ac-53b8-eb11-8236-00224817361b}" schemaName="Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=490db677e51690eb" behavior="0" />
       <RootComponent type="91" id="{6551eeb8-53b8-eb11-8236-00224817361b}" schemaName="Dev.DevKit.Plugin.Contact, Version=1.0.0.0, Culture=en, PublicKeyToken=5848369e01ff44c3" behavior="0" />
@@ -103,6 +104,7 @@
       <RootComponent type="92" id="{dcb911ac-53b8-eb11-8236-00224817361b}" behavior="0" />
       <RootComponent type="92" id="{e5b911ac-53b8-eb11-8236-00224817361b}" behavior="0" />
       <RootComponent type="92" id="{e9b911ac-53b8-eb11-8236-00224817361b}" behavior="0" />
+      <RootComponent type="181" id="{31598036-d1bd-eb11-bacc-000d3a80a94b}" schemaName="Dev.DevKit.DataProvider" behavior="0" />
     </RootComponents>
     <MissingDependencies />
   </SolutionManifest>

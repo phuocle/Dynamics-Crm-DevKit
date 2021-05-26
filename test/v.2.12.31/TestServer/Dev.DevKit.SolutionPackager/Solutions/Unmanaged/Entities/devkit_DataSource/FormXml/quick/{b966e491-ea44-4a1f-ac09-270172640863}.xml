@@ -1,29 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <systemform>
-    <formid>{f3d08cde-febb-4168-9115-23bb32da7362}</formid>
+    <formid>{b966e491-ea44-4a1f-ac09-270172640863}</formid>
     <IntroducedVersion>1.0.0.0</IntroducedVersion>
     <FormPresentation>1</FormPresentation>
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{98d5536b-c1d3-4f77-93a4-f718a4476e33}" IsUserDefined="1">
+        <tab verticallayout="true" id="{c1c59499-1eee-481d-80cc-18bbe7384f8a}" IsUserDefined="1">
           <labels>
             <label description="" languagecode="1033" />
           </labels>
           <columns>
             <column width="100%">
               <sections>
-                <section showlabel="false" showbar="false" IsUserDefined="0" id="{894f1bfe-150f-4582-8fe3-b5c8664324b9}">
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{84ce7061-406c-46dc-8aac-b4ab87a59db2}">
                   <labels>
                     <label description="GENERAL" languagecode="1033" />
                     <label description="TỔNG QUÁT" languagecode="1066" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{f0455926-488f-4cf4-b085-c57f0ee3c9a8}">
+                      <cell id="{7e68b9f1-8d92-4e0a-8204-c154f70b2757}">
                         <labels>
-                          <label description="" languagecode="1033" />
+                          <label description="Data Source" languagecode="1033" />
                         </labels>
                         <control id="devkit_datasourcename" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_datasourcename" />
                       </cell>

@@ -3,18 +3,18 @@
   <savedquery>
     <IsCustomizable>1</IsCustomizable>
     <CanBeDeleted>0</CanBeDeleted>
-    <isquickfindquery>0</isquickfindquery>
+    <isquickfindquery>1</isquickfindquery>
     <isprivate>0</isprivate>
     <isdefault>1</isdefault>
-    <savedqueryid>{f02bdff6-ee5f-457a-97b2-20406083cc95}</savedqueryid>
+    <savedqueryid>{61d48f8f-d347-43e4-ac1d-df5bf7f134f5}</savedqueryid>
     <layoutxml>
-      <grid name="devkit_datasources" jump="devkit_datasourcename" select="1" icon="1" preview="1">
-        <row name="devkit_datasource" id="devkit_datasourceid">
+      <grid name="resultset" jump="devkit_datasourcename" select="1" icon="1" preview="1">
+        <row name="result" id="devkit_datasourceid">
           <cell name="devkit_datasourcename" width="300" />
         </row>
       </grid>
     </layoutxml>
-    <querytype>2</querytype>
+    <querytype>4</querytype>
     <fetchxml>
       <fetch version="1.0" mapping="logical">
         <entity name="devkit_datasource">
@@ -25,7 +25,7 @@
     </fetchxml>
     <IntroducedVersion>1.0.0.0</IntroducedVersion>
     <LocalizedNames>
-      <LocalizedName description="Data Source Associated View" languagecode="1033" />
+      <LocalizedName description="Quick Find Active Data Sources" languagecode="1033" />
     </LocalizedNames>
   </savedquery>
 </savedqueries>

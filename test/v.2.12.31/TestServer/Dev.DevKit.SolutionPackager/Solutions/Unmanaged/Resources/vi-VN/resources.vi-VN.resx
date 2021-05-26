@@ -105,17 +105,17 @@
     <value />
     <comment> 'TestPluginWorkflowCustomActionCustomApi' : LocalizedName for Solution</comment>
   </data>
-  <data name="1:Description,Data Source{090f71c7-cebd-eb11-bacc-000d3a80a94b}" xml:space="preserve">
+  <data name="1:Description,Data Source{1a90a451-7faf-4cb3-93cf-b35e222b44f0}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : Description for SavedQuery on Entity QueryId: '{090f71c7-cebd-eb11-bacc-000d3a80a94b}'</comment>
+    <comment>'Data Source' : Description for systemform in Entity FormXml ID: '{1a90a451-7faf-4cb3-93cf-b35e222b44f0}'</comment>
   </data>
-  <data name="1:Description,Data Source{619cb03c-9ffa-44b7-9ca6-1c67dc8b1fc7}" xml:space="preserve">
+  <data name="1:Description,Data Source{d2122b1a-d1bd-eb11-bacc-000d3a80a94b}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : Description for systemform in Entity FormXml ID: '{619cb03c-9ffa-44b7-9ca6-1c67dc8b1fc7}'</comment>
+    <comment>'Data Source' : Description for SavedQuery on Entity QueryId: '{d2122b1a-d1bd-eb11-bacc-000d3a80a94b}'</comment>
   </data>
-  <data name="1:Description,Data Source{eb740199-96e0-4ecd-872b-79a3972a066f}" xml:space="preserve">
+  <data name="1:Description,Data Source{ea493e6d-5c6a-4360-a172-ff23897fa918}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : Description for systemform in Entity FormXml ID: '{eb740199-96e0-4ecd-872b-79a3972a066f}'</comment>
+    <comment>'Data Source' : Description for systemform in Entity FormXml ID: '{ea493e6d-5c6a-4360-a172-ff23897fa918}'</comment>
   </data>
   <data name="1:Description,devkit_DataSourcedevkit_DataSourceId" xml:space="preserve">
     <value>Mã định danh duy nhất của phiên bản thực thể</value>
@@ -133,117 +133,117 @@
     <value />
     <comment>'devkit_DataSource' : displayname for Attribute 'devkit_DataSourceName' on Entity</comment>
   </data>
-  <data name="1:label,Data Source{243e7259-ec95-4fd1-b92d-68e71238e14c}" xml:space="preserve">
-    <value />
-    <comment>'Data Source' : label for cell in Entity FormXml ID: '{243e7259-ec95-4fd1-b92d-68e71238e14c}'</comment>
-  </data>
-  <data name="1:label,Data Source{295bb4e7-2351-4b1f-8880-571d7f6890de}" xml:space="preserve">
-    <value />
-    <comment>'Data Source' : label for cell in Entity FormXml ID: '{295bb4e7-2351-4b1f-8880-571d7f6890de}'</comment>
-  </data>
-  <data name="1:label,Data Source{4f787f2a-c09f-4b3b-8c0c-a516246f08b8}" xml:space="preserve">
-    <value />
-    <comment>'Data Source' : label for tab in Entity FormXml ID: '{4f787f2a-c09f-4b3b-8c0c-a516246f08b8}'</comment>
-  </data>
-  <data name="1:label,Data Source{52a7ae37-64e2-41d3-b1c9-fca04e36b7f4}" xml:space="preserve">
-    <value />
-    <comment>'Data Source' : label for cell in Entity FormXml ID: '{52a7ae37-64e2-41d3-b1c9-fca04e36b7f4}'</comment>
-  </data>
-  <data name="1:label,Data Source{646d1f1b-952b-497c-aaef-73412ac4cb5c}" xml:space="preserve">
-    <value>Chân trang</value>
-    <comment>'Data Source' : label for section in Entity FormXml ID: '{646d1f1b-952b-497c-aaef-73412ac4cb5c}'</comment>
-  </data>
-  <data name="1:label,Data Source{6db01de3-5a9f-4070-bf63-edc42ef0a9e4}" xml:space="preserve">
-    <value>Tổng quát</value>
-    <comment>'Data Source' : label for tab in Entity FormXml ID: '{6db01de3-5a9f-4070-bf63-edc42ef0a9e4}'</comment>
-  </data>
-  <data name="1:label,Data Source{852654f2-8b7f-47c3-a80d-2944a51359b8}" xml:space="preserve">
-    <value />
-    <comment>'Data Source' : label for cell in Entity FormXml ID: '{852654f2-8b7f-47c3-a80d-2944a51359b8}'</comment>
-  </data>
-  <data name="1:label,Data Source{87b0c11b-8d8c-43a0-8c63-6377059412b0}" xml:space="preserve">
-    <value />
-    <comment>'Data Source' : label for cell in Entity FormXml ID: '{87b0c11b-8d8c-43a0-8c63-6377059412b0}'</comment>
-  </data>
-  <data name="1:label,Data Source{894f1bfe-150f-4582-8fe3-b5c8664324b9}" xml:space="preserve">
-    <value>TỔNG QUÁT</value>
-    <comment>'Data Source' : label for section in Entity FormXml ID: '{894f1bfe-150f-4582-8fe3-b5c8664324b9}'</comment>
-  </data>
-  <data name="1:label,Data Source{98d5536b-c1d3-4f77-93a4-f718a4476e33}" xml:space="preserve">
-    <value />
-    <comment>'Data Source' : label for tab in Entity FormXml ID: '{98d5536b-c1d3-4f77-93a4-f718a4476e33}'</comment>
-  </data>
-  <data name="1:label,Data Source{98f53660-f5ea-42f0-b0d1-0a85c1f5cb4e}" xml:space="preserve">
+  <data name="1:label,Data Source{08155af2-4fbe-4cf7-bb9e-563200bfd6e0}" xml:space="preserve">
     <value>Đầu trang</value>
-    <comment>'Data Source' : label for section in Entity FormXml ID: '{98f53660-f5ea-42f0-b0d1-0a85c1f5cb4e}'</comment>
+    <comment>'Data Source' : label for section in Entity FormXml ID: '{08155af2-4fbe-4cf7-bb9e-563200bfd6e0}'</comment>
   </data>
-  <data name="1:label,Data Source{9c8d9eba-b123-447a-a3c5-b182ce0d7580}" xml:space="preserve">
+  <data name="1:label,Data Source{0a8de9df-ff19-481b-8d7c-96214db581ac}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : label for cell in Entity FormXml ID: '{9c8d9eba-b123-447a-a3c5-b182ce0d7580}'</comment>
+    <comment>'Data Source' : label for cell in Entity FormXml ID: '{0a8de9df-ff19-481b-8d7c-96214db581ac}'</comment>
   </data>
-  <data name="1:label,Data Source{9d966459-b91e-492a-9e4c-8b8f41b48e00}" xml:space="preserve">
-    <value />
-    <comment>'Data Source' : label for cell in Entity FormXml ID: '{9d966459-b91e-492a-9e4c-8b8f41b48e00}'</comment>
-  </data>
-  <data name="1:label,Data Source{a7d4a86f-f125-4f8f-8841-9f32e7291c8e}" xml:space="preserve">
-    <value />
-    <comment>'Data Source' : label for cell in Entity FormXml ID: '{a7d4a86f-f125-4f8f-8841-9f32e7291c8e}'</comment>
-  </data>
-  <data name="1:label,Data Source{b1820bfc-d381-49a3-b1d5-eaadbc5500ee}" xml:space="preserve">
-    <value>Các chi tiết</value>
-    <comment>'Data Source' : label for section in Entity FormXml ID: '{b1820bfc-d381-49a3-b1d5-eaadbc5500ee}'</comment>
-  </data>
-  <data name="1:label,Data Source{bfc98c4e-bb38-4849-b90b-d14168ce1b54}" xml:space="preserve">
+  <data name="1:label,Data Source{0c61c38c-a3ee-42e7-b9a8-0c384a621822}" xml:space="preserve">
     <value>Tổng quát</value>
-    <comment>'Data Source' : label for section in Entity FormXml ID: '{bfc98c4e-bb38-4849-b90b-d14168ce1b54}'</comment>
+    <comment>'Data Source' : label for section in Entity FormXml ID: '{0c61c38c-a3ee-42e7-b9a8-0c384a621822}'</comment>
   </data>
-  <data name="1:label,Data Source{f0455926-488f-4cf4-b085-c57f0ee3c9a8}" xml:space="preserve">
+  <data name="1:label,Data Source{12597302-6721-4a83-ba46-7419576bd9f7}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : label for cell in Entity FormXml ID: '{f0455926-488f-4cf4-b085-c57f0ee3c9a8}'</comment>
+    <comment>'Data Source' : label for tab in Entity FormXml ID: '{12597302-6721-4a83-ba46-7419576bd9f7}'</comment>
   </data>
-  <data name="1:label,Data Source{f638f280-f5f8-40ce-bd79-2fbc5c5049e6}" xml:space="preserve">
+  <data name="1:label,Data Source{17146de7-9113-4b13-8e43-5c02aa50c1e8}" xml:space="preserve">
+    <value>Chân trang</value>
+    <comment>'Data Source' : label for section in Entity FormXml ID: '{17146de7-9113-4b13-8e43-5c02aa50c1e8}'</comment>
+  </data>
+  <data name="1:label,Data Source{18f2a01b-7232-4a3a-9cb9-b6e694a40200}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : label for section in Entity FormXml ID: '{f638f280-f5f8-40ce-bd79-2fbc5c5049e6}'</comment>
+    <comment>'Data Source' : label for cell in Entity FormXml ID: '{18f2a01b-7232-4a3a-9cb9-b6e694a40200}'</comment>
+  </data>
+  <data name="1:label,Data Source{20bc6264-7b15-4733-9c48-96eb2211a89e}" xml:space="preserve">
+    <value />
+    <comment>'Data Source' : label for cell in Entity FormXml ID: '{20bc6264-7b15-4733-9c48-96eb2211a89e}'</comment>
+  </data>
+  <data name="1:label,Data Source{2a7855ed-611f-4bb8-9edc-46c67d422326}" xml:space="preserve">
+    <value />
+    <comment>'Data Source' : label for cell in Entity FormXml ID: '{2a7855ed-611f-4bb8-9edc-46c67d422326}'</comment>
+  </data>
+  <data name="1:label,Data Source{4819408e-ebb1-4fa5-9051-158260172619}" xml:space="preserve">
+    <value />
+    <comment>'Data Source' : label for section in Entity FormXml ID: '{4819408e-ebb1-4fa5-9051-158260172619}'</comment>
+  </data>
+  <data name="1:label,Data Source{50e248d6-bd3f-48b4-854d-69bf7a8e35c8}" xml:space="preserve">
+    <value />
+    <comment>'Data Source' : label for cell in Entity FormXml ID: '{50e248d6-bd3f-48b4-854d-69bf7a8e35c8}'</comment>
+  </data>
+  <data name="1:label,Data Source{7e68b9f1-8d92-4e0a-8204-c154f70b2757}" xml:space="preserve">
+    <value />
+    <comment>'Data Source' : label for cell in Entity FormXml ID: '{7e68b9f1-8d92-4e0a-8204-c154f70b2757}'</comment>
+  </data>
+  <data name="1:label,Data Source{84ce7061-406c-46dc-8aac-b4ab87a59db2}" xml:space="preserve">
+    <value>TỔNG QUÁT</value>
+    <comment>'Data Source' : label for section in Entity FormXml ID: '{84ce7061-406c-46dc-8aac-b4ab87a59db2}'</comment>
+  </data>
+  <data name="1:label,Data Source{8e341301-d9bb-478e-ad15-704ba8e6ad08}" xml:space="preserve">
+    <value>Các chi tiết</value>
+    <comment>'Data Source' : label for section in Entity FormXml ID: '{8e341301-d9bb-478e-ad15-704ba8e6ad08}'</comment>
+  </data>
+  <data name="1:label,Data Source{8ec791c9-004a-4298-a822-1ac41f8c601c}" xml:space="preserve">
+    <value />
+    <comment>'Data Source' : label for cell in Entity FormXml ID: '{8ec791c9-004a-4298-a822-1ac41f8c601c}'</comment>
+  </data>
+  <data name="1:label,Data Source{92c90cfa-22ce-4bf0-b8f7-ab7e3e705f1a}" xml:space="preserve">
+    <value />
+    <comment>'Data Source' : label for cell in Entity FormXml ID: '{92c90cfa-22ce-4bf0-b8f7-ab7e3e705f1a}'</comment>
+  </data>
+  <data name="1:label,Data Source{98852c15-c86f-426b-8d3a-fc44a0240705}" xml:space="preserve">
+    <value />
+    <comment>'Data Source' : label for cell in Entity FormXml ID: '{98852c15-c86f-426b-8d3a-fc44a0240705}'</comment>
+  </data>
+  <data name="1:label,Data Source{9f79e051-6907-4fb2-bed9-725b16c3e3e0}" xml:space="preserve">
+    <value>Tổng quát</value>
+    <comment>'Data Source' : label for tab in Entity FormXml ID: '{9f79e051-6907-4fb2-bed9-725b16c3e3e0}'</comment>
+  </data>
+  <data name="1:label,Data Source{c1c59499-1eee-481d-80cc-18bbe7384f8a}" xml:space="preserve">
+    <value />
+    <comment>'Data Source' : label for tab in Entity FormXml ID: '{c1c59499-1eee-481d-80cc-18bbe7384f8a}'</comment>
   </data>
   <data name="1:LocalizedCollectionName,devkit_DataSourceentitydevkit_DataSource" xml:space="preserve">
     <value />
     <comment> 'devkit_DataSource' : LocalizedCollectionName for Entity</comment>
   </data>
-  <data name="1:LocalizedName,Data Source{090f71c7-cebd-eb11-bacc-000d3a80a94b}" xml:space="preserve">
+  <data name="1:LocalizedName,Data Source{1a90a451-7faf-4cb3-93cf-b35e222b44f0}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{090f71c7-cebd-eb11-bacc-000d3a80a94b}'</comment>
+    <comment>'Data Source' : LocalizedName for systemform in Entity FormXml ID: '{1a90a451-7faf-4cb3-93cf-b35e222b44f0}'</comment>
   </data>
-  <data name="1:LocalizedName,Data Source{1fb78584-8fe8-437f-abc9-6f09717854c6}" xml:space="preserve">
+  <data name="1:LocalizedName,Data Source{1c7f3756-7df8-4af3-941b-ee7defa53a8b}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{1fb78584-8fe8-437f-abc9-6f09717854c6}'</comment>
+    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{1c7f3756-7df8-4af3-941b-ee7defa53a8b}'</comment>
   </data>
-  <data name="1:LocalizedName,Data Source{4979ec7c-88e3-4798-82f0-152198494d98}" xml:space="preserve">
+  <data name="1:LocalizedName,Data Source{2619ce8d-d9ca-4c29-974a-fc8748abc31d}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{4979ec7c-88e3-4798-82f0-152198494d98}'</comment>
+    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{2619ce8d-d9ca-4c29-974a-fc8748abc31d}'</comment>
   </data>
-  <data name="1:LocalizedName,Data Source{619cb03c-9ffa-44b7-9ca6-1c67dc8b1fc7}" xml:space="preserve">
+  <data name="1:LocalizedName,Data Source{61d48f8f-d347-43e4-ac1d-df5bf7f134f5}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : LocalizedName for systemform in Entity FormXml ID: '{619cb03c-9ffa-44b7-9ca6-1c67dc8b1fc7}'</comment>
+    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{61d48f8f-d347-43e4-ac1d-df5bf7f134f5}'</comment>
   </data>
-  <data name="1:LocalizedName,Data Source{cef29ac0-ed4f-41a3-b69d-740482647a83}" xml:space="preserve">
+  <data name="1:LocalizedName,Data Source{7ce853aa-c33d-49d3-96bc-3346160fd3cb}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{cef29ac0-ed4f-41a3-b69d-740482647a83}'</comment>
+    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{7ce853aa-c33d-49d3-96bc-3346160fd3cb}'</comment>
   </data>
-  <data name="1:LocalizedName,Data Source{e502b58f-63b3-44aa-a6b8-700da35c4693}" xml:space="preserve">
+  <data name="1:LocalizedName,Data Source{9a97ea1e-b1d2-47f2-981c-5b77e3151c2e}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{e502b58f-63b3-44aa-a6b8-700da35c4693}'</comment>
+    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{9a97ea1e-b1d2-47f2-981c-5b77e3151c2e}'</comment>
   </data>
-  <data name="1:LocalizedName,Data Source{eb740199-96e0-4ecd-872b-79a3972a066f}" xml:space="preserve">
+  <data name="1:LocalizedName,Data Source{b966e491-ea44-4a1f-ac09-270172640863}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : LocalizedName for systemform in Entity FormXml ID: '{eb740199-96e0-4ecd-872b-79a3972a066f}'</comment>
+    <comment>'Data Source' : LocalizedName for systemform in Entity FormXml ID: '{b966e491-ea44-4a1f-ac09-270172640863}'</comment>
   </data>
-  <data name="1:LocalizedName,Data Source{f02bdff6-ee5f-457a-97b2-20406083cc95}" xml:space="preserve">
+  <data name="1:LocalizedName,Data Source{d2122b1a-d1bd-eb11-bacc-000d3a80a94b}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{f02bdff6-ee5f-457a-97b2-20406083cc95}'</comment>
+    <comment>'Data Source' : LocalizedName for SavedQuery on Entity QueryId: '{d2122b1a-d1bd-eb11-bacc-000d3a80a94b}'</comment>
   </data>
-  <data name="1:LocalizedName,Data Source{f3d08cde-febb-4168-9115-23bb32da7362}" xml:space="preserve">
+  <data name="1:LocalizedName,Data Source{ea493e6d-5c6a-4360-a172-ff23897fa918}" xml:space="preserve">
     <value />
-    <comment>'Data Source' : LocalizedName for systemform in Entity FormXml ID: '{f3d08cde-febb-4168-9115-23bb32da7362}'</comment>
+    <comment>'Data Source' : LocalizedName for systemform in Entity FormXml ID: '{ea493e6d-5c6a-4360-a172-ff23897fa918}'</comment>
   </data>
   <data name="1:LocalizedName,devkit_DataSourceentitydevkit_DataSource" xml:space="preserve">
     <value />

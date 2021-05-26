@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <systemform>
-    <formid>{619cb03c-9ffa-44b7-9ca6-1c67dc8b1fc7}</formid>
+    <formid>{1a90a451-7faf-4cb3-93cf-b35e222b44f0}</formid>
     <IntroducedVersion>1.0.0.0</IntroducedVersion>
     <FormPresentation>1</FormPresentation>
     <FormActivationState>1</FormActivationState>
     <form>
       <tabs>
-        <tab verticallayout="true" id="{6db01de3-5a9f-4070-bf63-edc42ef0a9e4}" IsUserDefined="1">
+        <tab verticallayout="true" id="{9f79e051-6907-4fb2-bed9-725b16c3e3e0}" IsUserDefined="1">
           <labels>
             <label description="General" languagecode="1033" />
             <label description="Tổng quát" languagecode="1066" />
@@ -15,14 +15,14 @@
           <columns>
             <column width="100%">
               <sections>
-                <section showlabel="false" showbar="false" IsUserDefined="0" id="{bfc98c4e-bb38-4849-b90b-d14168ce1b54}">
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{0c61c38c-a3ee-42e7-b9a8-0c384a621822}">
                   <labels>
                     <label description="General" languagecode="1033" />
                     <label description="Tổng quát" languagecode="1066" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{852654f2-8b7f-47c3-a80d-2944a51359b8}">
+                      <cell id="{2a7855ed-611f-4bb8-9edc-46c67d422326}">
                         <labels>
                           <label description="Data Source" languagecode="1033" />
                         </labels>
