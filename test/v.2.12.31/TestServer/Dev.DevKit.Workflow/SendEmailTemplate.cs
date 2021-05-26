@@ -5,7 +5,7 @@ using System.Activities;
 
 namespace Dev.DevKit.Workflow
 {
-    [CrmPluginRegistration("SendEmailTemplate", "SendEmailTemplate", "", "Dev.DevKit.Workflow", IsolationModeEnum.Sandbox)]
+    [CrmPluginRegistration("SendEmailTemplate", "SendEmailTemplate", "", "Dev.DevKit.Workflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
     public class SendEmailTemplate : CodeActivity
     {
         //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity

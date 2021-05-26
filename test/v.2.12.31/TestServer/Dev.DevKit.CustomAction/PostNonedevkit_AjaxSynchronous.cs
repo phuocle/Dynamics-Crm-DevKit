@@ -6,7 +6,7 @@ namespace Dev.DevKit.CustomAction
 {
     [CrmPluginRegistration("devkit_Ajax", "none", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
     "Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "", PluginType = PluginType.CustomAction)]
     public class PostNonedevkit_AjaxSynchronous : IPlugin
     {
         /*

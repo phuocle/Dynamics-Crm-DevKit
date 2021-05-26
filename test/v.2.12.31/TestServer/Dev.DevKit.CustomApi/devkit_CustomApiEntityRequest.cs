@@ -4,9 +4,7 @@ using System;
 
 namespace Dev.DevKit.CustomApi
 {
-    [CrmPluginRegistration("devkit_CustomApiEntity", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.CustomApi.PostAccountdevkit_CustomApiEntitySynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    [CrmPluginRegistration("devkit_CustomApiEntityRequest", "devkit_CustomApiEntity", PluginType.CustomApi, EntityLogicalName = "account")]
     public class devkit_CustomApiEntityRequest : IPlugin
     {
         /*

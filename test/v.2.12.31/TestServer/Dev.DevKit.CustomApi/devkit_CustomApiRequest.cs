@@ -4,10 +4,8 @@ using System;
 
 namespace Dev.DevKit.CustomApi
 {
-    [CrmPluginRegistration("devkit_CustomApi", "none", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.CustomApi.PostNonedevkit_CustomApiSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
-    public class devkit_CustomApiRequest : IPlugin
+    [CrmPluginRegistration("devkit_CustomApi", "devkit_CustomApi", PluginType.CustomApi)]
+    public class devkit_CustomsApiRequest : IPlugin
     {
         /*
           InputParameters:

@@ -5,7 +5,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.DataProvider
 {
-    [CrmPluginRegistration("Dev.DevKit.DataProvider.Delete", VirtualTablePlugin.Delete)]
+    [CrmPluginRegistration("Dev.DevKit.DataProvider.Delete", "Delete", PluginType.DataProvider)]
     public class Delete : IPlugin
     {
         /*

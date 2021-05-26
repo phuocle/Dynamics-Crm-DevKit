@@ -6,7 +6,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.DataProvider
 {
-    [CrmPluginRegistration("Dev.DevKit.DataProvider.RetrieveMultiple", VirtualTablePlugin.RetrieveMultiple)]
+    [CrmPluginRegistration("Dev.DevKit.DataProvider.RetrieveMultiple", "RetrieveMultiple", PluginType.DataProvider)]
     public class RetrieveMultiple : IPlugin
     {
         /*

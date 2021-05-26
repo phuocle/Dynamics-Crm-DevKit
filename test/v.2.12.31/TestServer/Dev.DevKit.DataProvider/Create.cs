@@ -5,7 +5,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.DataProvider
 {
-    [CrmPluginRegistration("Dev.DevKit.DataProvider.Create", VirtualTablePlugin.Create)]
+    [CrmPluginRegistration("Dev.DevKit.DataProvider.Create", "Create", PluginType.DataProvider)]
     public class Create : IPlugin
     {
         /*
