@@ -39,13 +39,13 @@ namespace DynamicsCrm.DevKit.Shared.Models
         PreOperation = 20,
         PostOperation = 40
     }
-    public enum VirtualTablePlugin
+    public enum PluginType
     {
-        Create = 0,
-        Delete = 1,
-        Retrieve = 2,
-        RetrieveMultiple = 3,
-        Update = 4
+        Plugin = 0,
+        Workflow = 1,
+        CustomAction = 2,
+        DataProvider = 3,
+        CustomApi = 4
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
@@ -89,6 +89,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Image4Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image4Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image4Attributes { get; set; } = string.Empty;
-        public VirtualTablePlugin? VirtualTablePlugin { get; set; } = null;
+        public PluginType PluginType { get; set; }
     }
 }

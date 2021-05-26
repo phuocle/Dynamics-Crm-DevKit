@@ -5,7 +5,7 @@ using $SharedNameSpace$;
 
 namespace $NameSpace$
 {
-    [CrmPluginRegistration("$NameSpace$.Delete", VirtualTablePlugin.Delete)]
+    [CrmPluginRegistration("$NameSpace$.Delete", "Delete", PluginType.DataProvider)]
     public class Delete : IPlugin
     {
         /*

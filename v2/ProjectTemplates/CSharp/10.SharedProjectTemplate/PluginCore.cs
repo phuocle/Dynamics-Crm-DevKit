@@ -1,9 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace $NameSpace$
 {
@@ -45,13 +41,13 @@ namespace $NameSpace$
         PostOperation = 40
     }
 
-	public enum VirtualTablePlugin
+    public enum PluginType
     {
-		Create = 0,
-		Delete = 1,
-		Retrieve = 2,
-		RetrieveMultiple = 3,
-		Update = 4
+        Plugin = 0,
+        Workflow = 1,
+        CustomAction = 2,
+        DataProvider = 3,
+        CustomApi = 4
 	}
 
     [DebuggerNonUserCode()]
@@ -79,10 +75,15 @@ namespace $NameSpace$
             IsolationMode = isolationModel;
         }
 
-		public CrmPluginRegistrationAttribute(string name, VirtualTablePlugin virtualTablePlugin)
+        public CrmPluginRegistrationAttribute()
+        {
+        }
+
+        public CrmPluginRegistrationAttribute(string name, string message, PluginType pluginType)
         {
 			Name = name;
-			VirtualTablePlugin = virtualTablePlugin;
+            Message = message;
+            PluginType = pluginType;
 		}
 
         public string RunAs { get; set; } = string.Empty;
@@ -119,6 +120,6 @@ namespace $NameSpace$
         public string Image4Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image4Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image4Attributes { get; set; } = string.Empty;
-		public VirtualTablePlugin? VirtualTablePlugin { get; set; } = null;
+        public PluginType PluginType { get; set; }
     }
 }

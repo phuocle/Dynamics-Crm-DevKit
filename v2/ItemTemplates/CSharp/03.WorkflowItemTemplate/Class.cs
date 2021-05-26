@@ -5,7 +5,7 @@ using $SharedNameSpace$;
 
 namespace $NameSpace$
 {
-    [CrmPluginRegistration("$class$", "$class$", "", "$rootnamespace$", IsolationModeEnum.Sandbox)]
+    [CrmPluginRegistration("$class$", "$class$", "", "$rootnamespace$", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
     public class $class$ : CodeActivity
     {
         //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity

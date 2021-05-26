@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Crm.Sdk.Messages;
@@ -13,9 +11,7 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
 using System.ServiceModel;
-using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
 using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -107,7 +103,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private class DataProviderEvent
         {
             public Guid PluginTypeId { get; set; }
-            public VirtualTablePlugin VirtualTablePlugin { get; set; }
+            public string Message { get; set; }
         }
 
         private void RegisterDataProvider(string pluginFile)
@@ -136,37 +132,58 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var pluginAttributes = plugin.GetCustomAttributesData()
                                       .Where(a => a.AttributeType.Name == typeof(CrmPluginRegistrationAttribute).Name);
                 var customAttributeDatas = pluginAttributes as CustomAttributeData[] ?? pluginAttributes.ToArray();
-                if (!customAttributeDatas.Any()) continue;
                 var isDataProvider = false;
-                int virtualTablePlugin = -1;
                 foreach (var customAttribute in customAttributeDatas)
                 {
-                    if (customAttribute.ConstructorArguments.Count != 2)
-                        continue;
-                    foreach(var constructorArgument in customAttribute.ConstructorArguments)
+                    var constructorArgumentPluginType = customAttribute.ConstructorArguments.FirstOrDefault(x => x.ArgumentType.Name == "PluginType");
+                    var namedArgumentPluginType = customAttribute.NamedArguments.FirstOrDefault(x => x.MemberName == "PluginType");
+                    if (
+                        (constructorArgumentPluginType.Value != null && (PluginType)(int)constructorArgumentPluginType.Value == PluginType.DataProvider) ||
+                        (namedArgumentPluginType.TypedValue != null && (PluginType)(int)namedArgumentPluginType.TypedValue.Value == PluginType.DataProvider)
+                       )
                     {
-                        if (constructorArgument.ArgumentType.Name == "VirtualTablePlugin")
-                        {
-                            isDataProvider = true;
-                            virtualTablePlugin = (int)constructorArgument.Value;
-                            break;
-                        }
+                        isDataProvider = true;
+                        break;
                     }
-                    if (isDataProvider) break;
                 }
                 if (isDataProvider)
                 {
-                    var pluginTypeId = RegisterPluginType(pluginEntity, plugin);
-                    dataProviderEvents.Add(new DataProviderEvent {
-                        PluginTypeId = pluginTypeId,
-                        VirtualTablePlugin = (VirtualTablePlugin) virtualTablePlugin
-                    });
+                    foreach (var customAttribute in customAttributeDatas)
+                    {
+                        var constructorArgumentMessage = customAttribute.ConstructorArguments.Count >= 2 ? customAttribute.ConstructorArguments[1] : new CustomAttributeTypedArgument();
+                        var namedArgumentMessage = customAttribute.NamedArguments.FirstOrDefault(x => x.MemberName == "Message");
+                        if (constructorArgumentMessage.Value != null || namedArgumentMessage.TypedValue != null)
+                        {
+                            var pluginTypeId = RegisterPluginType(pluginEntity, plugin);
+                            if (constructorArgumentMessage.Value != null)
+                            {
+                                dataProviderEvents.Add(new DataProviderEvent
+                                {
+                                    PluginTypeId = pluginTypeId,
+                                    Message = (string)constructorArgumentMessage.Value
+                                });
+                                break;
+                            }
+                            else if (namedArgumentMessage.TypedValue != null)
+                            {
+                                dataProviderEvents.Add(new DataProviderEvent
+                                {
+                                    PluginTypeId = pluginTypeId,
+                                    Message = (string)namedArgumentMessage.TypedValue.Value
+                                });
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-            if (IsOkForRegisterDataProvider(dataProviderEvents))
+            if (dataProviderEvents.Count > 0)
             {
-                var assemblyName = assembly.GetName().Name;
-                RegisterDataProvider(dataProviderEvents, assemblyName);
+                if (IsOkForRegisterDataProvider(dataProviderEvents))
+                {
+                    var assemblyName = assembly.GetName().Name;
+                    RegisterDataProvider(dataProviderEvents, assemblyName);
+                }
             }
         }
 
@@ -177,37 +194,38 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             entity.Attributes.Add("datasourcelogicalname", $"{DataSourceName.ToLower()}");
             entity.Attributes.Add("solutionid", SolutionId);
 
-            var retrieve = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.Retrieve).FirstOrDefault();
+            var retrieve = dataProviderEvents.Where(x => x.Message == "Retrieve").FirstOrDefault();
             if (retrieve == null)
                 entity.Attributes.Add("retrieveplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
             else
                 entity.Attributes.Add("retrieveplugin", retrieve.PluginTypeId);
 
-            var retrievemultiple = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.RetrieveMultiple).FirstOrDefault();
+            var retrievemultiple = dataProviderEvents.Where(x => x.Message == "RetrieveMultiple").FirstOrDefault();
             if (retrievemultiple == null)
                 entity.Attributes.Add("retrievemultipleplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
             else
                 entity.Attributes.Add("retrievemultipleplugin", retrievemultiple.PluginTypeId);
             if (XrmHelper.IsVirtualTableSupportCRUD(crmServiceClient))
             {
-                var create = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.Create).FirstOrDefault();
+                var create = dataProviderEvents.Where(x => x.Message == "Create").FirstOrDefault();
                 if (create == null)
                     entity.Attributes.Add("createplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
                 else
                     entity.Attributes.Add("createplugin", create.PluginTypeId);
 
-                var update = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.Update).FirstOrDefault();
+                var update = dataProviderEvents.Where(x => x.Message == "Update").FirstOrDefault();
                 if (update == null)
                     entity.Attributes.Add("updateplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
                 else
                     entity.Attributes.Add("updateplugin", update.PluginTypeId);
 
-                var delete = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.Delete).FirstOrDefault();
+                var delete = dataProviderEvents.Where(x => x.Message == "Delete").FirstOrDefault();
                 if (delete == null)
                     entity.Attributes.Add("deleteplugin", new Guid("{c1919979-0021-4f11-a587-a8f904bdfdf9}"));
                 else
                     entity.Attributes.Add("deleteplugin", delete.PluginTypeId);
             }
+
             var entityDataProvider = GetEntityDataProviderId(dataProviderName);
             if (entityDataProvider == null)
             {
@@ -280,17 +298,17 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private bool IsOkForRegisterDataProvider(List<DataProviderEvent> dataProviderEvents)
         {
-            var count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.Retrieve);
+            var count = dataProviderEvents.Count(x => x.Message == "Retrieve");
             if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.Retrieve found");
-            count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.RetrieveMultiple);
+            count = dataProviderEvents.Count(x => x.Message == "RetrieveMultiple");
             if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.RetrieveMultiple found");
             if (XrmHelper.IsVirtualTableSupportCRUD(crmServiceClient))
             {
-                count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.Create);
+                count = dataProviderEvents.Count(x => x.Message == "Create");
                 if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.Create found");
-                count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.Update);
+                count = dataProviderEvents.Count(x => x.Message == "Update");
                 if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.Update found");
-                count = dataProviderEvents.Count(x => x.VirtualTablePlugin == VirtualTablePlugin.Delete);
+                count = dataProviderEvents.Count(x => x.Message == "Delete");
                 if (count != 0 && count != 1) throw new Exception($"{LOG} multiple message VirtualTablePlugin.Delete found");
             }
             return true;

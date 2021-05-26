@@ -5,7 +5,7 @@ using $SharedNameSpace$;
 
 namespace $NameSpace$
 {
-    [CrmPluginRegistration("$NameSpace$.Create", VirtualTablePlugin.Create)]
+    [CrmPluginRegistration("$NameSpace$.Create", "Create", PluginType.DataProvider)]
     public class Create : IPlugin
     {
         /*

@@ -5,7 +5,7 @@ using $SharedNameSpace$;
 
 namespace $NameSpace$
 {
-    [CrmPluginRegistration("$NameSpace$.Retrieve", VirtualTablePlugin.Retrieve)]
+    [CrmPluginRegistration("$NameSpace$.Retrieve", "Retrieve", PluginType.DataProvider)]
     public class Retrieve : IPlugin
     {
         /*

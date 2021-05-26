@@ -137,6 +137,9 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                     case "Image4Attributes":
                         attribute.Image4Attributes = (string)namedArgument.TypedValue.Value;
                         break;
+                    case "PluginType":
+                        attribute.PluginType = (PluginType)Enum.ToObject(typeof(PluginType), (int)namedArgument.TypedValue.Value);
+                        break;
                 }
             }
             return attribute;
