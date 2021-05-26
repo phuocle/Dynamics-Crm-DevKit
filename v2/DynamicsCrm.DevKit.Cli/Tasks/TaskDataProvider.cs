@@ -29,6 +29,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private JsonDataProvider json;
         private Guid SolutionId = Guid.Empty;
         private string Prefix = string.Empty;
+        private string DataSourceName = string.Empty;
+
         public TaskDataProvider(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
         {
             // /conn:"AuthType=ClientSecret;Url=https://dev-devkit.crm5.dynamics.com;ClientId=e31fc7d6-4dce-46e3-8677-04ab0a2968e3;ClientSecret=?-iwRSB0te8o]pHX_yVQLJnUqziB1E0h;" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"dataproviders" /profile:"DEBUG"
@@ -45,9 +47,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "DATA-PROVIDER");
-            CliLog.WriteLine();
-
-            json.datasource = json.datasource.ToLower();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             if (!IsValid()) return;
 
@@ -56,7 +56,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 RegisterDataProvider(file);
             }
 
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "DATA-PROVIDER");
         }
 
@@ -72,7 +72,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} solution '{json.solution}' not exist");
             SolutionId = solutionId;
             Prefix = prefix;
-            if (!XrmHelper.IsExistDataSource(crmServiceClient, $"{Prefix}{json.datasource}"))
+            DataSourceName = json.datasource.ToLower().StartsWith(prefix.ToLower()) ? json.datasource : $"{Prefix}{json.datasource}";
+            if (!XrmHelper.IsExistDataSource(crmServiceClient, $"{DataSourceName}"))
                 throw new Exception($"{LOG} name '{json.datasource}' not exist with prefix: {Prefix}");
             return true;
         }
@@ -173,7 +174,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var entity = new Entity("entitydataprovider");
             entity.Attributes.Add("name", dataProviderName);
-            entity.Attributes.Add("datasourcelogicalname", $"{Prefix}{json.datasource}");
+            entity.Attributes.Add("datasourcelogicalname", $"{DataSourceName.ToLower()}");
             entity.Attributes.Add("solutionid", SolutionId);
 
             var retrieve = dataProviderEvents.Where(x => x.VirtualTablePlugin == VirtualTablePlugin.Retrieve).FirstOrDefault();
@@ -250,7 +251,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var fetchData = new
             {
-                datasourcelogicalname = $"{Prefix}{json.datasource}",
+                datasourcelogicalname = $"{DataSourceName.ToLower()}",
                 ismanaged = "0",
                 iscustomizable = "1",
                 name = dataProviderName
