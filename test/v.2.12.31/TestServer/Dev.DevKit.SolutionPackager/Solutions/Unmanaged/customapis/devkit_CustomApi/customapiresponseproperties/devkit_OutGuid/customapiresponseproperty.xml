@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_OutGuid">
+  <description default="This is the OutGuid">
+    <label description="This is the OutGuid" languagecode="1033" />
+  </description>
+  <displayname default="OutGuid">
+    <label description="OutGuid" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>OutGuid</name>
+  <type>12</type>
+</customapiresponseproperty>

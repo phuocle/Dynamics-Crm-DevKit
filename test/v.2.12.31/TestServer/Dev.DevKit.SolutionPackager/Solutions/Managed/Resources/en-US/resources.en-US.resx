@@ -73,6 +73,30 @@
   <metadata name="SolutionPackager Version String" xml:space="preserve">
     <value>9.0.0.0</value>
   </metadata>
+  <data name="100000:label,customapidescription" xml:space="preserve">
+    <value>This is the Custom Api Global</value>
+    <comment>label</comment>
+  </data>
+  <data name="100000:label,customapidisplayname" xml:space="preserve">
+    <value>CustomApi Global</value>
+    <comment>label</comment>
+  </data>
+  <data name="100000:label,customapirequestparameterdescription" xml:space="preserve">
+    <value>This is the InPicklist</value>
+    <comment>label</comment>
+  </data>
+  <data name="100000:label,customapirequestparameterdisplayname" xml:space="preserve">
+    <value>InGuid</value>
+    <comment>label</comment>
+  </data>
+  <data name="100000:label,customapiresponsepropertydescription" xml:space="preserve">
+    <value>This is the OutBoolean</value>
+    <comment>label</comment>
+  </data>
+  <data name="100000:label,customapiresponsepropertydisplayname" xml:space="preserve">
+    <value>OutDateTime</value>
+    <comment>label</comment>
+  </data>
   <data name="15062:LocalizedName,DynamicsCrmDevKitdevkit50000" xml:space="preserve">
     <value>DynamicsCrm.DevKit</value>
     <comment> 'DynamicsCrmDevKit' : LocalizedName for Solution Publisher</comment>

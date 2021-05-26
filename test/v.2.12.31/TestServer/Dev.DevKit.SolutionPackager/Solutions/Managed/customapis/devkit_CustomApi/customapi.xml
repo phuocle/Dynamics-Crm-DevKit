@@ -1,0 +1,15 @@
+<customapi uniquename="devkit_CustomApi">
+  <allowedcustomprocessingsteptype>2</allowedcustomprocessingsteptype>
+  <bindingtype>0</bindingtype>
+  <description default="This is the Custom Api Global">
+    <label description="This is the Custom Api Global" languagecode="1033" />
+  </description>
+  <displayname default="CustomApi Global">
+    <label description="CustomApi Global" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isfunction>0</isfunction>
+  <isprivate>0</isprivate>
+  <name>CustomApi Global</name>
+  <workflowsdkstepenabled>1</workflowsdkstepenabled>
+</customapi>

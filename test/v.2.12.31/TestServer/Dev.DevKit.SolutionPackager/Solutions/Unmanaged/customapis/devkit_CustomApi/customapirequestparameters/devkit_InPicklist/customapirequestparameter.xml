@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InPicklist">
+  <description default="This is the InPicklist">
+    <label description="This is the InPicklist" languagecode="1033" />
+  </description>
+  <displayname default="InPicklist">
+    <label description="InPicklist" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>InPicklist</name>
+  <type>9</type>
+</customapirequestparameter>

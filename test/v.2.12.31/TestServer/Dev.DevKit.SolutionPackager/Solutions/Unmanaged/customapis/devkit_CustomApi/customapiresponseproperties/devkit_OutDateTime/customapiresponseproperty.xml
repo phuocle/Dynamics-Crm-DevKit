@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_OutDateTime">
+  <description default="This is the OutDateTime">
+    <label description="This is the OutDateTime" languagecode="1033" />
+  </description>
+  <displayname default="OutDateTime">
+    <label description="OutDateTime" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>OutDateTime</name>
+  <type>1</type>
+</customapiresponseproperty>

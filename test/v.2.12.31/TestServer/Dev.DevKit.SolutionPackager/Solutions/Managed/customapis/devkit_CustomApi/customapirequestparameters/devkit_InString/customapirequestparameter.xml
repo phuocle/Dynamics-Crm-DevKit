@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InString">
+  <description default="This is the InString">
+    <label description="This is the InString" languagecode="1033" />
+  </description>
+  <displayname default="InString">
+    <label description="InString" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>InString</name>
+  <type>10</type>
+</customapirequestparameter>
