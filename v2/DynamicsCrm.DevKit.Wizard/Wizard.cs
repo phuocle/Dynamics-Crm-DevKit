@@ -156,6 +156,7 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$PluginMessage$", form.PluginMessage);
             replacementsDictionary.Add("$PluginComment$", form.PluginComment);
             replacementsDictionary.Add("$PluginLogicalName$", form.PluginLogicalName);
+            replacementsDictionary.Add("$PluginLogicalNameInt$", form.PluginLogicalName == "none" ? "0" : "1");
             replacementsDictionary.Add("$PluginStage$", form.PluginStage);
             replacementsDictionary.Add("$PluginExecution$", form.PluginExecution);
             replacementsDictionary.Add("$PluginExecutionInt$", form.PluginExecution == "Synchronous" ? "0" : "1");

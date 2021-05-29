@@ -31,7 +31,8 @@ public enum ItemType
     JsTest,
     ResourceString,
     JsForm2,
-    Default
+    Default,
+    CustomApi
 }
 
 public enum CrmItemType

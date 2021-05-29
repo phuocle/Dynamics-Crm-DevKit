@@ -53,6 +53,33 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 .ToList();
         }
 
+        public static List<string> GetAllCustomApis(CrmServiceClient service, string entity)
+        {
+            var conditionEntity = string.Empty;
+            if (entity != "none")
+                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='eq' value='{entity}'/>";
+            else
+                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='null' />";
+            var fetchData = new
+            {
+                statecode = "0"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='customapi'>
+    <attribute name='name' />
+    <attribute name='sdkmessageid' />
+    <attribute name='boundentitylogicalname' />
+    <filter>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode}'/>
+      {conditionEntity}
+    </filter>
+  </entity>
+</fetch>";
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            return rows.Entities.Select(x => x.GetAttributeValue<EntityReference>("sdkmessageid")?.Name).ToList();
+        }
+
         private static string GetSchemaName(CrmServiceClient service, string logicalName)
         {
             if (logicalName == null || logicalName == "none") return "None";

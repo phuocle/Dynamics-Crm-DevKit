@@ -81,6 +81,7 @@
     <Compile Include="FormProject.Designer.cs">
       <DependentUpon>FormProject.cs</DependentUpon>
     </Compile>
+    <Compile Include="ItemTemplates\CustomApi.cs" />
     <Compile Include="ItemTemplates\CustomAction.cs" />
     <Compile Include="ItemTemplates\DownloadWebResource.cs" />
     <Compile Include="ItemTemplates\JsForm.cs" />

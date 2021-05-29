@@ -88,6 +88,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "14.CustomApiProjectTemplate
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Console", "DynamicsCrm.DevKit.Console\DynamicsCrm.DevKit.Console.csproj", "{26067BC0-588B-4079-BBF6-6E0964BFDEBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "14.CustomApiItemTemplate", "ItemTemplates\CSharp\14.CustomApiItemTemplate\14.CustomApiItemTemplate.csproj", "{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems*{aa712c45-5dec-46e5-9e02-497b2ebf9cab}*SharedItemsImports = 4
@@ -230,6 +232,10 @@ Global
 		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -264,6 +270,7 @@ Global
 		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{DBBAE77C-9754-4019-91B5-B16920F709C4} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}

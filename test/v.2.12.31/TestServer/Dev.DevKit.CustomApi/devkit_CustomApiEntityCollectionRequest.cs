@@ -4,18 +4,15 @@ using System;
 
 namespace Dev.DevKit.CustomApi
 {
-    [CrmPluginRegistration("devkit_CustomApiEntityRequest", "devkit_CustomApiEntity", PluginType.CustomApi, EntityLogicalName = "account")]
-    public class devkit_CustomApiEntityRequest : IPlugin
+    [CrmPluginRegistration("devkit_CustomApiEntityCollectionRequest", "devkit_CustomApiEntityCollection", PluginType.CustomApi, EntityLogicalName = "contact")]
+    public class devkit_CustomApiEntityCollectionRequest : IPlugin
     {
         /*
           InputParameters:
-              Target                       Microsoft.Xrm.Sdk.EntityReference - require
-              devkit_InEntity              Microsoft.Xrm.Sdk.Entity - require
-              devkit_InEntityReference     Microsoft.Xrm.Sdk.EntityReference - require
+              devkit_InEntityCollection     Microsoft.Xrm.Sdk.EntityCollection - require
+              devkit_InStringArray          System.String[] - require
            OutputParameters:
-              devkit_OutEntity             Microsoft.Xrm.Sdk.Entity - require
-              devkit_OutEntityReference    Microsoft.Xrm.Sdk.EntityReference - require
-              devkit_OutStringArray        System.String[] - require
+              devkit_OutEntityCollection    Microsoft.Xrm.Sdk.EntityCollection - require
         */
 
         public void Execute(IServiceProvider serviceProvider)
@@ -24,8 +21,8 @@ namespace Dev.DevKit.CustomApi
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            if (context.PrimaryEntityName.ToLower() != "account".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
-            //tracing.DebugMessage("Begin Custom Api: Dev.DevKit.CustomApi.devkit_CustomApiEntityRequest");
+            if (context.PrimaryEntityName.ToLower() != "contact".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals contact");
+            //tracing.DebugMessage("Begin Custom Api: Dev.DevKit.CustomApi.devkit_CustomApiEntityCollectionRequest");
             //tracing.DebugContext(context);
 
             var outputs = ExecuteCustomApi(context, serviceFactory, service, tracing);
@@ -33,7 +30,7 @@ namespace Dev.DevKit.CustomApi
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            //tracing.DebugMessage("End Custom Api: Dev.DevKit.CustomApi.devkit_CustomApiEntityRequest");
+            //tracing.DebugMessage("End Custom Api: Dev.DevKit.CustomApi.devkit_CustomApiEntityCollectionRequest");
         }
 
         private ParameterCollection ExecuteCustomApi(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

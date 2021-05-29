@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>13. C# Custom Api Class</Name>
+    <Description>C# Custom Action Class Template</Description>
+    <DefaultName>Class.cs</DefaultName>
+    <TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000014</TemplateID>
+    <Icon>icon.png</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>Visual C#</ProjectSubType>
+    <AppliesTo>CSharp</AppliesTo>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$PluginClass$$PluginOrder2$.cs">Class.cs</ProjectItem>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.12.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.CustomApi</FullClassName>
+  </WizardExtension>
+</VSTemplate>

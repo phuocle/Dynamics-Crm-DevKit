@@ -50,6 +50,7 @@
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="08.TestUiProjectTemplate" d:TargetPath="|08.TestUiProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="%CurrentProject%.SdkLogin" Path="|DynamicsCrm.DevKit.SdkLogin|" AssemblyName="|DynamicsCrm.DevKit.SdkLogin;AssemblyName|" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="14.CustomApiProjectTemplate" d:TargetPath="|14.CustomApiProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="14.CustomApiItemTemplate" d:TargetPath="|14.CustomApiItemTemplate;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
 
     </Assets>
     <Prerequisites>

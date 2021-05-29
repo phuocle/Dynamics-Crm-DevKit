@@ -4,8 +4,8 @@ using System;
 
 namespace Dev.DevKit.CustomApi
 {
-    [CrmPluginRegistration("devkit_CustomApi", "devkit_CustomApi", PluginType.CustomApi)]
-    public class devkit_CustomsApiRequest : IPlugin
+    [CrmPluginRegistration("devkit_CustomApiRequest", "devkit_CustomApi", PluginType.CustomApi)]
+    public class devkit_CustomApiRequest : IPlugin
     {
         /*
           InputParameters:
@@ -30,38 +30,25 @@ namespace Dev.DevKit.CustomApi
               devkit_OutGuid        System.Guid - require
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
-
-        //public PostNonedevkit_CustomApiSynchronous(string unsecureString, string secureString)
-        //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
-        //}
-
         public void Execute(IServiceProvider serviceProvider)
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
-            if (context.PrimaryEntityName.ToLower() != "none".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals none");
-            if (context.MessageName.ToLower() != "devkit_CustomApi".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals devkit_CustomApi");
-            if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            //tracing.DebugMessage("Begin Custom Action: Dev.DevKit.CustomApi.PostNonedevkit_CustomApiSynchronous");
+            //tracing.DebugMessage("Begin Custom Api: Dev.DevKit.CustomApi.devkit_CustomApiRequest");
             //tracing.DebugContext(context);
 
-            var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
+            var outputs = ExecuteCustomApi(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            //tracing.DebugMessage("End Custom Action: Dev.DevKit.CustomApi.PostNonedevkit_CustomApiSynchronous");
+            //tracing.DebugMessage("End Custom Api: Dev.DevKit.CustomApi.devkit_CustomApiRequest");
         }
 
-        private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
+        private ParameterCollection ExecuteCustomApi(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE

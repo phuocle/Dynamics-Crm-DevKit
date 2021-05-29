@@ -51,6 +51,19 @@ namespace DynamicsCrm.DevKit.Wizard
                     comboBoxEntity.Text = "";
                     comboBoxEntity.Enabled = false;
                 }
+                else if (_itemType == ItemType.CustomApi)
+                {
+                    link.Text = "Add New Custom Api Class";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template";
+                    comboBoxEntity.Text = "";
+                    comboBoxEntity.Enabled = false;
+                    labelStage.Visible = false;
+                    comboBoxStage.Visible = false;
+                    labelExecution.Visible = false;
+                    comboBoxExecution.Visible = false;
+                    groupBox.Size = new System.Drawing.Size(groupBox.Size.Width, 114);
+                    this.Size = new System.Drawing.Size(this.Size.Width, 174);
+                }
             }
         }
         public string Class
@@ -81,7 +94,8 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.Check == "1")
             {
                 if (ItemType == ItemType.Plugin ||
-                    ItemType == ItemType.CustomAction)
+                    ItemType == ItemType.CustomAction ||
+                    ItemType == ItemType.CustomApi)
                 {
                     var loginForm = new FormLogin();
                     loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
@@ -147,6 +161,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     comboBoxExecution.Text = "Synchronous";
                     break;
                 case ItemType.CustomAction:
+                case ItemType.CustomApi:
                     EnabledAll(false);
                     List<XrmEntity> entities2 = null;
                     progressBar.Style = ProgressBarStyle.Marquee;
@@ -242,6 +257,17 @@ namespace DynamicsCrm.DevKit.Wizard
                     Application.DoEvents();
                 }
             }
+            else if (ItemType == ItemType.CustomApi)
+            {
+                Task task2 = Task.Factory.StartNew(() =>
+                {
+                    list = XrmHelper.GetAllCustomApis(CrmServiceClient, entity.LogicalName);
+                });
+                while (!task2.IsCompleted)
+                {
+                    Application.DoEvents();
+                }
+            }
             list.Sort();
             comboBoxMessage.DataSource = list;
             buttonOk.Enabled = comboBoxMessage.Items.Count > 0;
@@ -257,12 +283,17 @@ namespace DynamicsCrm.DevKit.Wizard
             var entityName = comboBoxEntity.Text;
             var message = comboBoxMessage.Text;
             var execution = comboBoxExecution.Text;
-            textPluginClass.Text = $"{stage}{entityName}{message}{execution}";
+            if (ItemType == ItemType.CustomApi)
+            {
+                textPluginClass.Text = $"{message}Request";
+            }
+            else
+                textPluginClass.Text = $"{stage}{entityName}{message}{execution}";
         }
 
         private void comboBoxStage_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ItemType == ItemType.CustomAction)
+            if (ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
             {
                 if (comboBoxStage.Text == @"PreValidation" || comboBoxStage.Text == @"PreOperation")
                 {
