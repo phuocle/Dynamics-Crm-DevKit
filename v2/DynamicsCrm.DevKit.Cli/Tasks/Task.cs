@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -67,6 +68,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 case "datasources":
                     var datasource = new TaskDataSource(crmServiceClient, currentDirectory, arguments);
                     datasource.Run();
+                    break;
+                case "servers":
+                    var server = new TaskServer(crmServiceClient, currentDirectory, arguments);
+                    server.Run();
+                    break;
+                default:
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Type: ", CliLog.ColorRed, arguments.Type, CliLog.ColorGreen, " not support");
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
                     break;
             }
         }

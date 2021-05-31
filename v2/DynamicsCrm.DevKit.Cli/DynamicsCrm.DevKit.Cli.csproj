@@ -66,6 +66,7 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Helper\CliHelper.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Tasks\TaskDownloadReport.cs" />
     <Compile Include="Tasks\TaskDownloadWebResource.cs" />
     <Compile Include="Tasks\TaskGenerator.cs" />
+    <Compile Include="Tasks\TaskServer.cs" />
     <Compile Include="Tasks\TaskPlugin.cs" />
     <Compile Include="Tasks\TaskProxyType.cs" />
     <Compile Include="Tasks\TaskSolutionPackager.cs" />

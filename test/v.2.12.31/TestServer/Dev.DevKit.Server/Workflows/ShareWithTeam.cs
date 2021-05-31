@@ -5,7 +5,7 @@ using System.Activities;
 
 namespace Dev.DevKit.Server.Workflows
 {
-    [CrmPluginRegistration("ShareWithTeam", "ShareWithTeam", "", "Dev.DevKit.Server.Workflows", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
+    [CrmPluginRegistration("ShareWithTeam", "ShareWithTeam", "", "Dev.DevKit.Server.Workflows", IsolationModeEnum.Sandbox)]
     public class ShareWithTeam : CodeActivity
     {
         //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity

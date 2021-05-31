@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\TestServer\Dev.DevKit.DataProvider";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\TestServer\Dev.DevKit.Server";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -31,9 +31,9 @@ namespace DynamicsCrm.DevKit.Cli
         private static void CrmCli(CommandLineArgs arguments)
         {
 #if DEBUG
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength*2 + 2));
             CliLog.WriteLine(CliLog.ColorRed, " DEBUG MODE");
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength*2 + 2));
 #endif
             CliLog.WriteLine(CliLog.ColorGreen, " ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
             CliLog.WriteLine(CliLog.ColorGreen, "|  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
@@ -72,7 +72,9 @@ namespace DynamicsCrm.DevKit.Cli
 
             Run(arguments);
 #if DEBUG
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength*2 + 2));
             CliLog.WriteLine(CliLog.ColorRed, "!!! FINISHED !!!");
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength*2 + 2));
             Console.ReadKey();
 #endif
 #if !DEBUG

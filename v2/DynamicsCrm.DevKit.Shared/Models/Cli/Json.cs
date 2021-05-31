@@ -15,5 +15,6 @@ namespace DynamicsCrm.DevKit.Shared.Models.Cli
         public List<JsonDownloadWebResource> downloadwebresources { get; set; }
         public List<JsonPortal> portals { get; set; }
         public List<JsonDownloadReport> downloadreports { get; set; }
+        public List<JsonServer> servers { get; set; }
     }
 }

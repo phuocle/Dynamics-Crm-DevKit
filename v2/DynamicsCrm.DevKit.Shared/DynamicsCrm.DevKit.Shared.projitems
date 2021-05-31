@@ -40,6 +40,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDataSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDownloadWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonServer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonPlugin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonPortal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonProxyType.cs" />
