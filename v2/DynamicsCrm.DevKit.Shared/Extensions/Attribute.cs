@@ -12,6 +12,9 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
         {
             var attribute = new CrmPluginRegistrationAttribute();
             var arguments = data.ConstructorArguments.ToArray();
+            var hasNamedArgumentPluginType = false;
+            var isCodeActivity = false;
+            var isPlugin = false;
             if (arguments.Length == 8)
             {
                 attribute.Message = (string)arguments[0].Value;
@@ -22,6 +25,7 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                 attribute.Name = (string)arguments[5].Value;
                 attribute.ExecutionOrder = (int)arguments[6].Value;
                 attribute.IsolationMode = (IsolationModeEnum)Enum.ToObject(typeof(IsolationModeEnum), (int)arguments[7].Value);
+                isPlugin = true;
             }
             else if (arguments.Length == 5)
             {
@@ -30,6 +34,7 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                 attribute.Description = (string)arguments[2].Value;
                 attribute.GroupName = (string)arguments[3].Value;
                 attribute.IsolationMode = (IsolationModeEnum)Enum.ToObject(typeof(IsolationModeEnum), (int)arguments[4].Value);
+                isCodeActivity = true;
             }
             foreach (var namedArgument in data.NamedArguments)
             {
@@ -138,9 +143,16 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                         attribute.Image4Attributes = (string)namedArgument.TypedValue.Value;
                         break;
                     case "PluginType":
+                        hasNamedArgumentPluginType = true;
                         attribute.PluginType = (PluginType)Enum.ToObject(typeof(PluginType), (int)namedArgument.TypedValue.Value);
                         break;
                 }
+            }
+            if (!hasNamedArgumentPluginType)
+            {
+                if (isCodeActivity || attribute.GroupName.Length > 0) attribute.PluginType = PluginType.Workflow;
+                if (isPlugin) attribute.PluginType = PluginType.Plugin;
+                if (isPlugin && attribute.EntityLogicalName?.ToLower() == "none") attribute.PluginType = PluginType.CustomAction;
             }
             return attribute;
         }

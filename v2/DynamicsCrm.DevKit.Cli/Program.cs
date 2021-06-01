@@ -31,9 +31,9 @@ namespace DynamicsCrm.DevKit.Cli
         private static void CrmCli(CommandLineArgs arguments)
         {
 #if DEBUG
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength*2 + 2));
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 10));
             CliLog.WriteLine(CliLog.ColorRed, " DEBUG MODE");
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength*2 + 2));
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 10));
 #endif
             CliLog.WriteLine(CliLog.ColorGreen, " ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
             CliLog.WriteLine(CliLog.ColorGreen, "|  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
@@ -72,9 +72,9 @@ namespace DynamicsCrm.DevKit.Cli
 
             Run(arguments);
 #if DEBUG
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength*2 + 2));
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 10));
             CliLog.WriteLine(CliLog.ColorRed, "!!! FINISHED !!!");
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength*2 + 2));
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 10));
             Console.ReadKey();
 #endif
 #if !DEBUG

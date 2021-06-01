@@ -6,7 +6,8 @@ namespace Dev.DevKit.Server.Plugins.Contact
 {
     [CrmPluginRegistration("Merge", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
     "Dev.DevKit.Server.Plugins.Contact.PostContactMergeAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "firstname",
+    Image2Name = "PreImage", Image2Alias = "PreImage", Image2Type = ImageTypeEnum.PreImage, Image2Attributes = "firstname")]
     public class PostContactMergeAsynchronous : IPlugin
     {
         /*

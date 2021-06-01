@@ -4,10 +4,10 @@ using System;
 
 namespace Dev.DevKit.Server.Plugins.Account
 {
-    [CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.Server.Plugins.Account.PreAccountCreateSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
-    public class PreAccountCreateSynchronous : IPlugin
+    [CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.Server.Plugins.Account.PreAccountCreateSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "")]
+    [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "name", "Dev.DevKit.Server.Plugins.Account.PreAccountUpdateSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name")]
+    [CrmPluginRegistration("Delete", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.Server.Plugins.Account.PreAccountDeleteSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    public class PreAccountCreateUpdateDeleteSynchronous : IPlugin
     {
         /*
           InputParameters:
@@ -24,7 +24,7 @@ namespace Dev.DevKit.Server.Plugins.Account
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-        //public PreAccountCreateSynchronous(string unsecureString, string secureString)
+        //public PreAccountCreateUpdateDeleteSynchronous(string unsecureString, string secureString)
         //{
         //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
         //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -38,7 +38,7 @@ namespace Dev.DevKit.Server.Plugins.Account
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PreOperation) throw new InvalidPluginExecutionException("Stage does not equals PreOperation");
             if (context.PrimaryEntityName.ToLower() != "account".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
-            if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
+            //if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
             //tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Account.PreAccountCreateSynchronous");

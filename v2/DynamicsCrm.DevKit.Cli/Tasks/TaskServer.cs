@@ -60,13 +60,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         if (attributes.Count() == 1)
                         {
-                            attributes[0].PluginType = PluginType.Workflow;
                             RegisterPluginType(pluginAssemblyId, type, attributes[0]);
                         }
                     }
                     else
                     {
-
+                        var pluginTypeId = RegisterPluginType(pluginAssemblyId, type, attributes[0]);
+                        foreach(var attribute in attributes)
+                        {
+                            //var pluginStepId =
+                        }
                     }
 
                 }
@@ -90,20 +93,30 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             foreach (var type in types)
             {
+                var attributes = GetCrmPluginRegistrationAttributes(type);
                 if (IsCodeActivity(type))
                 {
-                    var attributes = GetCrmPluginRegistrationAttributes(type);
                     if (attributes.Count() > 1)
                     {
                         CliLog.WriteLine(CliLog.ColorWhite, "|");
-                        CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, " Workflow: ", CliLog.ColorRed, type.FullName, CliLog.ColorGreen, " have multi ", CliLog.ColorRed, "CrmPluginRegistration", CliLog.ColorGreen, " attribute");
+                        CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, " Workflow: ", CliLog.ColorRed, type.FullName, CliLog.ColorGreen, " has multi invalid attribute ", CliLog.ColorRed, "CrmPluginRegistration");
                         CliLog.WriteLine(CliLog.ColorWhite, "|");
                         return false;
                     }
                 }
                 else
                 {
-
+                    if (attributes.Count > 1)
+                    {
+                        var rows = attributes.GroupBy(x => x.PluginType);
+                        if (rows.Count() != 1)
+                        {
+                            CliLog.WriteLine(CliLog.ColorWhite, "|");
+                            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, " Plugin: ", CliLog.ColorRed, type.FullName, CliLog.ColorGreen, " has multi invalid attribute ", CliLog.ColorRed, "CrmPluginRegistration");
+                            CliLog.WriteLine(CliLog.ColorWhite, "|");
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
@@ -117,8 +130,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 list.Add(attribute.CreateFromData());
             return list;
         }
-
-
 
         private bool IsValid()
         {
@@ -180,7 +191,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var assemblyProperties = assembly.GetName().FullName.Split(",= ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             var assemblyName = assemblyProperties[0];
             var pluginAssemblyId = Guid.Empty;
-            var content = Convert.ToBase64String(File.ReadAllBytes(file));
+            var newContent = Convert.ToBase64String(File.ReadAllBytes(file));
             var fetchData = new
             {
                 name = assemblyName
@@ -213,7 +224,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             var plugin = new Entity("pluginassembly")
             {
-                ["content"] = content,
+                ["content"] = newContent,
                 ["name"] = assemblyProperties[0],
                 ["culture"] = assemblyProperties[4],
                 ["version"] = assemblyProperties[2],
@@ -234,29 +245,40 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                plugin["pluginassemblyid"] = pluginAssemblyId;
-                var request = new UpdateRequest
-                {
-                    Target = plugin
-                };
-                request.Parameters.Add("SolutionUniqueName", json.solution);
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Updating", CliLog.ColorGreen, " Assembly ", CliLog.ColorCyan, assemblyName);
-                try
-                {
-                    crmServiceClient.Execute(request);
+                var oldContent = rows.Entities[0].GetAttributeValue<string>("content");
+                if (IsEqualsContentAssembly(oldContent, newContent)) {
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Assembly ", CliLog.ColorCyan, assemblyName);
                 }
-                catch (FaultException fe)
-                {
-                    CliLog.WriteLine();
-                    CliLog.WriteLine();
-                    CliLog.WriteLine(ConsoleColor.White, fe.Message);
-                    CliLog.WriteLine();
-                    CliLog.WriteLine();
-                    CliLog.WriteLine(ConsoleColor.Red, $"!!! DEPLOY {LOG} FAILED !!!");
-                    throw;
+                else {
+                    plugin["pluginassemblyid"] = pluginAssemblyId;
+                    var request = new UpdateRequest
+                    {
+                        Target = plugin
+                    };
+                    request.Parameters.Add("SolutionUniqueName", json.solution);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "Updating", CliLog.ColorGreen, " Assembly ", CliLog.ColorCyan, assemblyName);
+                    try
+                    {
+                        crmServiceClient.Execute(request);
+                    }
+                    catch (FaultException fe)
+                    {
+                        CliLog.WriteLine();
+                        CliLog.WriteLine();
+                        CliLog.WriteLine(ConsoleColor.White, fe.Message);
+                        CliLog.WriteLine();
+                        CliLog.WriteLine();
+                        CliLog.WriteLine(ConsoleColor.Red, $"!!! DEPLOY {LOG} FAILED !!!");
+                        throw;
+                    }
                 }
                 return pluginAssemblyId;
             }
+        }
+
+        private bool IsEqualsContentAssembly(string oldContent, string newContent)
+        {
+            return oldContent == newContent;
         }
 
         private Guid RegisterPluginType(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute)

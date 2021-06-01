@@ -59,6 +59,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Plugins\Account\PreAccountCreateUpdateDeleteSynchronous.cs" />
     <Compile Include="Workflows\ShareWithTeam.cs" />
     <Compile Include="Workflows\ToUpperCase.cs" />
     <None Include="packages.config" />
@@ -69,7 +70,10 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.12.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Plugins\Contact\" />
+    <Folder Include="Plugins\PhoneCall\" />
+  </ItemGroup>
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
