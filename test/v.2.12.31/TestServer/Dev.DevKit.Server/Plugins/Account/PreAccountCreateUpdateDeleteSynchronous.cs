@@ -4,11 +4,11 @@ using System;
 
 namespace Dev.DevKit.Server.Plugins.Account
 {
-    [CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.Server.Plugins.Account.PreAccountCreateSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "", UnSecureConfiguration ="A", SecureConfiguration = "B")]
+    [CrmPluginRegistration("Create", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.Server.Plugins.Account.PreAccountCreateSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "")]
     [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "name", "Dev.DevKit.Server.Plugins.Account.PreAccountUpdateSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
         Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name,accountnumber",
         Image2Name = "PreImage2", Image2Alias = "PreImage2", Image2Type = ImageTypeEnum.PreImage, Image2Attributes = "name",
-        Image3Name = "PreImage3", Image3Alias = "PreImage3", Image3Type = ImageTypeEnum.PreImage, Image3Attributes = "name",
+        Image3Name = "PreImage3", Image3Alias = "PreImage3", Image3Type = ImageTypeEnum.PreImage, Image3Attributes = "",
         SecureConfiguration = "C")]
     [CrmPluginRegistration("Delete", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "", "Dev.DevKit.Server.Plugins.Account.PreAccountDeleteSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PreAccountCreateUpdateDeleteSynchronous : IPlugin

@@ -311,6 +311,75 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return rows.Entities[0].Id;
         }
 
+        private void RegisterPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
+        {
+            if (attribute?.Image1Name?.Length > 0 && attribute?.Image1Attributes?.Length > 0)
+                RegisterPluginImage(attribute.Message, attribute.Image1Name, attribute.Image1Alias, attribute.Image1Type, attribute.Image1Attributes, pluginStepId, attribute.Name);
+            if (attribute?.Image2Name?.Length > 0 && attribute?.Image2Attributes?.Length > 0)
+                RegisterPluginImage(attribute.Message, attribute.Image2Name, attribute.Image2Alias, attribute.Image2Type, attribute.Image2Attributes, pluginStepId, attribute.Name);
+            if (attribute?.Image3Name?.Length > 0 && attribute?.Image3Attributes?.Length > 0)
+                RegisterPluginImage(attribute.Message, attribute.Image3Name, attribute.Image3Alias, attribute.Image3Type, attribute.Image3Attributes, pluginStepId, attribute.Name);
+            if (attribute?.Image4Name?.Length > 0 && attribute?.Image4Attributes?.Length > 0)
+                RegisterPluginImage(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, pluginStepId, attribute.Name);
+        }
+
+        private Entity GetSecureEntity(Guid pluginStepId)
+        {
+            if (pluginStepId == Guid.Empty) return null;
+            var fetchData = new
+            {
+                sdkmessageprocessingstepid = pluginStepId
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='sdkmessageprocessingstep'>
+    <attribute name='name' />
+    <attribute name='sdkmessageprocessingstepid' />
+    <filter>
+      <condition attribute='sdkmessageprocessingstepid' operator='eq' value='{fetchData.sdkmessageprocessingstepid/*29ed2c38-79c3-eb11-bacc-00224816b7d6*/}'/>
+    </filter>
+    <link-entity name='sdkmessageprocessingstepsecureconfig' from='sdkmessageprocessingstepsecureconfigid' to='sdkmessageprocessingstepsecureconfigid' link-type='outer' alias='s'>
+      <attribute name='secureconfig' />
+      <attribute name='sdkmessageprocessingstepsecureconfigid' />
+    </link-entity>
+  </entity>
+</fetch>";
+
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return null;
+            return rows.Entities[0];
+        }
+
+        private bool IsChangedPluginStep(Entity check, Entity step)
+        {
+            foreach (var key in check.Attributes.Keys)
+            {
+                if (step.Attributes.Contains(key))
+                {
+                    object checkValue = null;
+                    object stepValue = null;
+                    if (check.Attributes[key] is OptionSetValue && step.Attributes[key] is OptionSetValue)
+                    {
+                        checkValue = ((OptionSetValue)check.Attributes[key]).Value;
+                        stepValue = ((OptionSetValue)step.Attributes[key]).Value;
+                    }
+                    else if (check.Attributes[key] is EntityReference && step.Attributes[key] is EntityReference)
+                    {
+                        checkValue = ((EntityReference)check.Attributes[key]).Id;
+                        stepValue = ((EntityReference)step.Attributes[key]).Id;
+                    }
+                    else
+                    {
+                        stepValue = step.Attributes[key];
+                        checkValue = check.Attributes[key];
+                    }
+                    if (stepValue?.ToString() != checkValue?.ToString())
+                        return true;
+                }
+            }
+            return false;
+        }
+
         private Guid RegisterAssembly(string file)
         {
             var assembly = Assembly.ReflectionOnlyLoadFrom(file);
@@ -470,7 +539,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 pluginType["plugintypeid"] = pluginTypeId;
                 if (IsEqualsPluginType(rows.Entities[0], pluginType))
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", "   ", CliLog.ColorGreen, $"{attribute.PluginType.ToString()} ", CliLog.ColorRed, $"{type.FullName}");
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", "   ", CliLog.ColorGreen, $"{attribute.PluginType.ToString()} ", CliLog.ColorCyan, $"{type.FullName}");
                 }
                 else
                 {
@@ -509,7 +578,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var fetchXml = $@"
 <fetch>
   <entity name='sdkmessageprocessingstep'>
-    <attribute name='sdkmessageprocessingstepid' />
+    <all-attributes />
     <filter type='and'>
       <condition attribute='plugintypeid' operator='eq' value='{fetchData.plugintypeid}'/>
       <condition attribute='name' operator='eq' value='{fetchData.name}'/>
@@ -518,20 +587,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
   </entity>
 </fetch>";
             var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (rows.Entities.Count > 0)
+            Entity oldPluginStep = null;
+            if (rows.Entities.Count == 0)
             {
-                if (rows.Entities.Count == 1)
-                {
-                    var entity = rows.Entities[0];
-                    pluginStepId = entity.Id;
-                }
-                else
-                {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|");
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, " ERROR: ", CliLog.ColorRed, $"Found more than 1 plugin step name: {type.FullName}");
-                    CliLog.WriteLine(CliLog.ColorWhite, "|");
-                    return Guid.Empty;
-                }
+                oldPluginStep = new Entity("sdkmessageprocessingstep", Guid.Empty);
+            }
+            else if (rows.Entities.Count == 1)
+            {
+                oldPluginStep = rows.Entities[0];
+                pluginStepId = oldPluginStep.Id;
+            }
+            else
+            {
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, " ERROR: ", CliLog.ColorRed, $"Found more than 1 plugin step name: {type.FullName}");
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                return Guid.Empty;
             }
             var sdkMessageFilterId = GetSdkMessageFilterId(attribute.EntityLogicalName, attribute.Message);
             var sdkMessageId = GetSdkMessageId(attribute.EntityLogicalName, attribute.Message);
@@ -581,7 +652,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var response = (CreateResponse)crmServiceClient.Execute(request);
                     pluginStepId = response.id;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     if (e.Message.Contains("The dependent component Attribute "))
                     {
@@ -591,32 +662,76 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     return Guid.Empty;
                 }
-
-                if (attribute.Action == PluginStepOperationEnum.Deactivate)
-                {
-                    var update = new Entity("sdkmessageprocessingstep", pluginStepId);
-                    update["statecode"] = new OptionSetValue(1);
-                    update["statuscode"] = new OptionSetValue(2);
-                    crmServiceClient.Update(update);
-                }
             }
             else
             {
+                var hasChangedPluginStep = false;
                 pluginStep["sdkmessageprocessingstepid"] = pluginStepId;
+                var entity = GetSecureEntity(pluginStepId);
+                if (entity != null)
+                {
+                    var secureconfig = entity.GetAttributeValue<AliasedValue>("s.secureconfig");
+                    if (secureconfig == null)
+                    {
+                        if (attribute.SecureConfiguration.Length > 0)
+                        {
+                            var secureEntity = new Entity("sdkmessageprocessingstepsecureconfig");
+                            secureEntity["secureconfig"] = attribute.SecureConfiguration;
+                            var sdkmessageprocessingstepsecureconfigid = crmServiceClient.Create(secureEntity);
+                            pluginStep["sdkmessageprocessingstepsecureconfigid"] = new EntityReference("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
+                            hasChangedPluginStep = true;
+                        }
+                    }
+                    else
+                    {
+                        var sdkmessageprocessingstepsecureconfigid = (Guid)entity.GetAttributeValue<AliasedValue>("s.sdkmessageprocessingstepsecureconfigid").Value;
+                        if (secureconfig.Value.ToString() != attribute.SecureConfiguration)
+                        {
+                            var update = new Entity("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
+                            update["secureconfig"] = attribute.SecureConfiguration;
+                            crmServiceClient.Update(update);
+                            hasChangedPluginStep = true;
+                        }
+                        else if (attribute.SecureConfiguration.Length == 0)
+                        {
+                            var update = new Entity("sdkmessageprocessingstepsecureconfig", sdkmessageprocessingstepsecureconfigid);
+                            update["secureconfig"] = null;
+                            crmServiceClient.Update(update);
+                            hasChangedPluginStep = true;
+                        }
+                    }
+                }
+                if (!hasChangedPluginStep && !IsChangedPluginStep(oldPluginStep, pluginStep))
+                {
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"      Step: ", CliLog.ColorCyan, $"{attribute.Name}");
+                }
+                else
+                {
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "      Updating", CliLog.ColorGreen, $" Step: ", CliLog.ColorCyan, $"{attribute.Name}");
+                    try
+                    {
+                        crmServiceClient.Update(pluginStep);
+                    }
+                    catch (FaultException e)
+                    {
+                        if (e.Message.Contains("The dependent component Attribute "))
+                        {
+                            CliLog.WriteLine(CliLog.ColorWhite, "|");
+                            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, " ERROR: ", CliLog.ColorRed, $"Plugin Step: {attribute.Name} have invalid Image Attribute: {attribute.FilteringAttributes}");
+                            CliLog.WriteLine(CliLog.ColorWhite, "|");
+                        }
+                        return Guid.Empty;
+                    }
+                }
+            }
+            if (attribute.Action == PluginStepOperationEnum.Deactivate)
+            {
+                var update = new Entity("sdkmessageprocessingstep", pluginStepId);
+                update["statecode"] = new OptionSetValue(1);
+                update["statuscode"] = new OptionSetValue(2);
+                crmServiceClient.Update(update);
             }
             return pluginStepId;
-        }
-
-        private void RegisterPluginImage(Guid pluginStepId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
-        {
-            if (attribute?.Image1Name?.Length > 0 && attribute?.Image1Attributes?.Length > 0)
-                RegisterPluginImage(attribute.Message, attribute.Image1Name, attribute.Image1Alias, attribute.Image1Type, attribute.Image1Attributes, pluginStepId, attribute.Name);
-            if (attribute?.Image2Name?.Length > 0 && attribute?.Image2Attributes?.Length > 0)
-                RegisterPluginImage(attribute.Message, attribute.Image2Name, attribute.Image2Alias, attribute.Image2Type, attribute.Image2Attributes, pluginStepId, attribute.Name);
-            if (attribute?.Image3Name?.Length > 0 && attribute?.Image3Attributes?.Length > 0)
-                RegisterPluginImage(attribute.Message, attribute.Image3Name, attribute.Image3Alias, attribute.Image3Type, attribute.Image3Attributes, pluginStepId, attribute.Name);
-            if (attribute?.Image4Name?.Length > 0 && attribute?.Image4Attributes?.Length > 0)
-                RegisterPluginImage(attribute.Message, attribute.Image4Name, attribute.Image4Alias, attribute.Image4Type, attribute.Image4Attributes, pluginStepId, attribute.Name);
         }
 
         private void RegisterPluginImage(string message, string imageName, string imageAliasName, ImageTypeEnum imageType, string imageAttributes, Guid pluginStepId, string pluginStepName)
@@ -700,7 +815,51 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-
+                var row = rows.Entities[0];
+                var name = row.GetAttributeValue<string>("name");
+                var entityalias = row.GetAttributeValue<string>("entityalias");
+                var attributes = row.GetAttributeValue<string>("attributes");
+                var imagetype = row.GetAttributeValue<OptionSetValue>("imagetype").Value;
+                if (name == imageName &&
+                    entityalias == imageAliasName &&
+                    attributes == imageAttributes &&
+                    imagetype == (int)imageType)
+                {
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"          Image: ", CliLog.ColorCyan, imageName);
+                }
+                else
+                {
+                    if (attributes != imageAttributes && imageAttributes.Length != 0)
+                    {
+                        pluginImage["sdkmessageprocessingstepimageid"] = rows.Entities[0].Id;
+                        CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "          Updating", CliLog.ColorGreen, " Image: ", CliLog.ColorCyan, $"{imageName}");
+                    }
+                    else if (imageAttributes.Length == 0)
+                    {
+                        CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "          Deleting", CliLog.ColorGreen, " Image: ", CliLog.ColorCyan, $"{imageName}");
+                        crmServiceClient.Delete("sdkmessageprocessingstepimage", rows.Entities[0].Id);
+                        pluginImage["sdkmessageprocessingstepimageid"] = null;
+                    }
+                    try
+                    {
+                        crmServiceClient.Update(pluginImage);
+                    }
+                    catch (Exception e)
+                    {
+                        if (e.Message.Contains("entity doesn't contain attribute with"))
+                        {
+                            CliLog.WriteLine(CliLog.ColorWhite, "|");
+                            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, " ERROR: ", CliLog.ColorRed, $"Plugin Step: {pluginStepName} have invalid Image Attribute: {imageAttributes}");
+                            CliLog.WriteLine(CliLog.ColorWhite, "|");
+                        }
+                        else
+                        {
+                            CliLog.WriteLine(CliLog.ColorWhite, "|");
+                            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, " ERROR: ", CliLog.ColorRed, $"Plugin Step: {pluginStepName} does not support: {imageType}");
+                            CliLog.WriteLine(CliLog.ColorWhite, "|");
+                        }
+                    }
+                }
             }
         }
     }
