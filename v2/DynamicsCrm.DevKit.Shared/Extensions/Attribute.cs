@@ -36,6 +36,12 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                 attribute.IsolationMode = (IsolationModeEnum)Enum.ToObject(typeof(IsolationModeEnum), (int)arguments[4].Value);
                 isCodeActivity = true;
             }
+            else if (arguments.Length == 3)
+            {
+                attribute.Name = (string)arguments[0].Value;
+                attribute.Message = (string)arguments[1].Value;
+                attribute.PluginType = (PluginType)Enum.ToObject(typeof(PluginType), (int)arguments[2].Value);
+            }
             foreach (var namedArgument in data.NamedArguments)
             {
                 switch (namedArgument.MemberName)
@@ -145,6 +151,9 @@ namespace DynamicsCrm.DevKit.Shared.Extensions
                     case "PluginType":
                         hasNamedArgumentPluginType = true;
                         attribute.PluginType = (PluginType)Enum.ToObject(typeof(PluginType), (int)namedArgument.TypedValue.Value);
+                        break;
+                    case "DataSource":
+                        attribute.DataSource = (string)namedArgument.TypedValue.Value;
                         break;
                 }
             }

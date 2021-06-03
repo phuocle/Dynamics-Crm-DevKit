@@ -90,5 +90,6 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public ImageTypeEnum Image4Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image4Attributes { get; set; } = string.Empty;
         public PluginType PluginType { get; set; }
+        public string DataSource { get; set; }
     }
 }

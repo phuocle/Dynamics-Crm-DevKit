@@ -59,15 +59,25 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomActions\Account\PostAccountdevkit_DeleteAllDataSynchronous.cs" />
+    <Compile Include="CustomActions\Account\PostAccountdevkit_SendEmailSynchronous.cs" />
+    <Compile Include="CustomActions\Contact\PostContactdevkit_SetPrimaryContactSynchronous.cs" />
+    <Compile Include="CustomActions\PostNonedevkit_AjaxSynchronous.cs" />
+    <Compile Include="DataProviders\MySql\Create.cs" />
+    <Compile Include="DataProviders\MySql\Delete.cs" />
+    <Compile Include="DataProviders\MySql\Retrieve.cs" />
+    <Compile Include="DataProviders\MySql\RetrieveMultiple.cs" />
+    <Compile Include="DataProviders\MySql\Update.cs" />
+    <Compile Include="DataProviders\SqlServer\Create.cs" />
+    <Compile Include="DataProviders\SqlServer\Delete.cs" />
+    <Compile Include="DataProviders\SqlServer\Retrieve.cs" />
+    <Compile Include="DataProviders\SqlServer\RetrieveMultiple.cs" />
+    <Compile Include="DataProviders\SqlServer\Update.cs" />
     <Compile Include="Workflows\ShareWithTeam.cs" />
     <Compile Include="Workflows\ToUpperCase.cs" />
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
     <None Include="Dev.DevKit.Server.snk" />
-    <Compile Include="CustomActions\Account\PostAccountdevkit_DeleteAllDataSynchronous.cs" />
-    <Compile Include="CustomActions\Account\PostAccountdevkit_SendEmailSynchronous.cs" />
-    <Compile Include="CustomActions\Contact\PostContactdevkit_SetPrimaryContactSynchronous.cs" />
-    <Compile Include="CustomActions\PostNonedevkit_AjaxSynchronous.cs" />
     <Compile Include="Plugins\Account\PostAccountAssignAsynchronous.cs" />
     <Compile Include="Plugins\Account\PostAccountDeleteAsynchronous.cs" />
     <Compile Include="Plugins\Account\PostAccountMergeAsynchronous.cs" />
