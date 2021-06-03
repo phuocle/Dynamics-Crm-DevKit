@@ -458,12 +458,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                     catch (FaultException fe)
                     {
-                        CliLog.WriteLine();
-                        CliLog.WriteLine();
-                        CliLog.WriteLine(ConsoleColor.White, fe.Message);
-                        CliLog.WriteLine();
-                        CliLog.WriteLine();
-                        CliLog.WriteLine(ConsoleColor.Red, $"!!! DEPLOY {LOG} FAILED !!!");
+                        CliLog.WriteLine(CliLog.ColorWhite, "|");
+                        CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, " ERROR: ", CliLog.ColorRed, fe.Message);
+                        CliLog.WriteLine(CliLog.ColorWhite, "|");
                         throw;
                     }
                 }
@@ -724,12 +721,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
-            if (attribute.Action == PluginStepOperationEnum.Deactivate)
+            if (oldPluginStep?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 0 && attribute.Action == PluginStepOperationEnum.Deactivate)
             {
                 var update = new Entity("sdkmessageprocessingstep", pluginStepId);
                 update["statecode"] = new OptionSetValue(1);
                 update["statuscode"] = new OptionSetValue(2);
                 crmServiceClient.Update(update);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "          Deactivated", CliLog.ColorGreen, $" Step: ", CliLog.ColorCyan, $"{attribute.Name}");
+            }
+            else if (oldPluginStep?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 1 && attribute.Action == PluginStepOperationEnum.Activate)
+            {
+                var update = new Entity("sdkmessageprocessingstep", pluginStepId);
+                update["statecode"] = new OptionSetValue(0);
+                update["statuscode"] = new OptionSetValue(1);
+                crmServiceClient.Update(update);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "          Activated", CliLog.ColorGreen, $" Step: ", CliLog.ColorCyan, $"{attribute.Name}");
             }
             return pluginStepId;
         }

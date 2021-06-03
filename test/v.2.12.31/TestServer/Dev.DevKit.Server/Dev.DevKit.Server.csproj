@@ -59,8 +59,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Plugins\Account\PostAccountAssignAsynchronous.cs" />
+    <Compile Include="Plugins\Account\PostAccountDeleteAsynchronous.cs" />
+    <Compile Include="Plugins\Account\PostAccountMergeAsynchronous.cs" />
     <Compile Include="Plugins\Account\PostAccountUpdateAsynchronous.cs" />
     <Compile Include="Plugins\Account\PreAccountCreateUpdateDeleteSynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostAccountRevokeAccessAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactGrantAccessAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PreContactMergeSynchronous.cs" />
+    <Compile Include="Plugins\PhoneCall\PostPhoneCallAssignAsynchronous.cs" />
     <Compile Include="Workflows\ShareWithTeam.cs" />
     <Compile Include="Workflows\ToUpperCase.cs" />
     <None Include="packages.config" />
