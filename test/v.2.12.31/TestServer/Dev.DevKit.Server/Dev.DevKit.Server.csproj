@@ -59,6 +59,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Workflows\ShareWithTeam.cs" />
+    <Compile Include="Workflows\ToUpperCase.cs" />
+    <None Include="packages.config" />
+    <None Include="deploy.debug.bat" />
+    <None Include="Dev.DevKit.Server.snk" />
+    <Compile Include="CustomActions\Account\PostAccountdevkit_DeleteAllDataSynchronous.cs" />
+    <Compile Include="CustomActions\Account\PostAccountdevkit_SendEmailSynchronous.cs" />
+    <Compile Include="CustomActions\Contact\PostContactdevkit_SetPrimaryContactSynchronous.cs" />
+    <Compile Include="CustomActions\PostNonedevkit_AjaxSynchronous.cs" />
     <Compile Include="Plugins\Account\PostAccountAssignAsynchronous.cs" />
     <Compile Include="Plugins\Account\PostAccountDeleteAsynchronous.cs" />
     <Compile Include="Plugins\Account\PostAccountMergeAsynchronous.cs" />
@@ -66,14 +75,9 @@
     <Compile Include="Plugins\Account\PreAccountCreateUpdateDeleteSynchronous.cs" />
     <Compile Include="Plugins\Contact\PostAccountRevokeAccessAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PostContactGrantAccessAsynchronous.cs" />
+    <Compile Include="Plugins\Contact\PostContactMergeAsynchronous.cs" />
     <Compile Include="Plugins\Contact\PreContactMergeSynchronous.cs" />
     <Compile Include="Plugins\PhoneCall\PostPhoneCallAssignAsynchronous.cs" />
-    <Compile Include="Workflows\ShareWithTeam.cs" />
-    <Compile Include="Workflows\ToUpperCase.cs" />
-    <None Include="packages.config" />
-    <None Include="deploy.debug.bat" />
-    <None Include="Dev.DevKit.Server.snk" />
-    <Compile Include="Plugins\Contact\PostContactMergeAsynchronous.cs" />
     <Compile Include="Plugins\PhoneCall\PreValidationPhoneCallDeleteSynchronous.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

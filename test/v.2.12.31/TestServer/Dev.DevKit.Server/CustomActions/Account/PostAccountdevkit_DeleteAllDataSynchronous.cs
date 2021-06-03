@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.Server.CustomActions.Account
 {
     [CrmPluginRegistration("devkit_DeleteAllData", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_DeleteAllDataSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction,
+    "Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_DeleteAllDataSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostAccountdevkit_DeleteAllDataSynchronous : IPlugin
     {

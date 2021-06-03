@@ -70,11 +70,24 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         if (pluginTypeId == Guid.Empty) continue;
                         foreach(var attribute in attributes)
                         {
-                            if (attribute.PluginType == PluginType.Plugin)
+                            if (attribute.PluginType == PluginType.Plugin ||
+                                attribute.PluginType == PluginType.CustomAction)
                             {
                                 var pluginStepId = RegisterPluginStep(pluginTypeId, type, attribute);
                                 if (pluginStepId == Guid.Empty) continue;
-                                RegisterPluginImage(pluginStepId, type, attribute);
+                                if (attribute.PluginType == PluginType.Plugin && HasPluginImage(attribute))
+                                {
+                                    if (IsSupportPluginImage(attribute))
+                                    {
+                                        RegisterPluginImage(pluginStepId, type, attribute);
+                                    }
+                                    else
+                                    {
+                                        CliLog.WriteLine(CliLog.ColorWhite, "|");
+                                        CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, " ERROR: ", CliLog.ColorRed, $"The message {attribute.Message} of {attribute.Name} not support Image");
+                                        CliLog.WriteLine(CliLog.ColorWhite, "|");
+                                    }
+                                }
                             }
                         }
                     }
@@ -86,7 +99,39 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
+        private bool HasPluginImage(CrmPluginRegistrationAttribute attribute)
+        {
+            if (attribute?.Image1Name?.Length > 0 && attribute?.Image1Attributes?.Length > 0)
+                return true;
+            if (attribute?.Image2Name?.Length > 0 && attribute?.Image2Attributes?.Length > 0)
+                return true;
+            if (attribute?.Image3Name?.Length > 0 && attribute?.Image3Attributes?.Length > 0)
+                return true;
+            if (attribute?.Image4Name?.Length > 0 && attribute?.Image4Attributes?.Length > 0)
+                return true;
+            return false;
+        }
 
+        private bool IsSupportPluginImage(CrmPluginRegistrationAttribute attribute)
+        {
+            switch (attribute?.Message?.ToLower())
+            {
+                case "assign":
+                case "create":
+                case "delete":
+                case "deliverincoming":
+                case "deliverpromote":
+                case "merge":
+                case "route":
+                case "send":
+                case "setstate":
+                case "setstatedynamicentity":
+                case "update":
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
         private bool IsCodeActivity(Type type)
         {
@@ -721,7 +766,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     }
                 }
             }
-            if (oldPluginStep?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 0 && attribute.Action == PluginStepOperationEnum.Deactivate)
+            if (
+                (oldPluginStep?.GetAttributeValue<OptionSetValue>("statecode")?.Value == 0 && attribute.Action == PluginStepOperationEnum.Deactivate) ||
+                (oldPluginStep?.GetAttributeValue<OptionSetValue>("statecode")?.Value == null && attribute.Action == PluginStepOperationEnum.Deactivate)
+               )
             {
                 var update = new Entity("sdkmessageprocessingstep", pluginStepId);
                 update["statecode"] = new OptionSetValue(1);

@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.Server.CustomActions
 {
     [CrmPluginRegistration("devkit_Ajax", "none", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction,
+    "Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostNonedevkit_AjaxSynchronous : IPlugin
     {
