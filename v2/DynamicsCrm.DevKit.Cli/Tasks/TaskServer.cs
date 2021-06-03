@@ -110,7 +110,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             }
                             else if (attribute.PluginType == PluginType.CustomApi)
                             {
-                                ;
+                                RegisterCustomApi(pluginTypeId, attribute);
                             }
                         }
                     }
@@ -1121,6 +1121,45 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "   DataProvider ", CliLog.ColorCyan, $"{logicalNameDataSource}");
                 }
+            }
+        }
+
+        private void RegisterCustomApi(Guid pluginTypeId, CrmPluginRegistrationAttribute attribute)
+        {
+            var fetchData = new
+            {
+                uniquename = attribute.Message
+            };
+            var fetchXml = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+  <entity name='customapi'>
+    <attribute name='customapiid'/>
+    <attribute name='plugintypeid'/>
+    <filter type='and'>
+      <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+    </filter>
+  </entity>
+</fetch>
+";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1)
+            {
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, " ERROR ", CliLog.ColorRed, $"Custom Api with message {attribute.Message} not found");
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                return;
+            }
+            var entity = rows.Entities[0];
+            if (entity.GetAttributeValue<EntityReference>("plugintypeid")?.Id.ToString("D") == pluginTypeId.ToString("D"))
+            {
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"      CustomApi ", CliLog.ColorCyan, $"{attribute.Message}");
+            }
+            else
+            {
+                var update = new Entity("customapi", entity.Id);
+                update["plugintypeid"] = new EntityReference("plugintype", pluginTypeId);
+                crmServiceClient.Update(update);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "      Updating", CliLog.ColorGreen, $" CustomApi ", CliLog.ColorCyan, $"{attribute.Message}");
             }
         }
     }
