@@ -5,8 +5,8 @@ using System;
 namespace Dev.DevKit.Server.Plugins.Account
 {
     [CrmPluginRegistration("Delete", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.Server.Plugins.Account.PostAccountDeleteAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    "Dev.DevKit.Server.Plugins.Account.PostAccountDeleteAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = false,
+    Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name")]
     public class PostAccountDeleteAsynchronous : IPlugin
     {
         /*

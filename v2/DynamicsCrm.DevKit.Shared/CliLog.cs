@@ -12,6 +12,8 @@ namespace DynamicsCrm.DevKit.Shared
         public const ConsoleColor ColorBlue = ConsoleColor.Blue;
         public const ConsoleColor ColorMagenta = ConsoleColor.Magenta;
         public const ConsoleColor ColorWhite = ConsoleColor.White;
+        public const ConsoleColor ColorGray = ConsoleColor.Gray;
+        public const ConsoleColor ColorDarkGray = ConsoleColor.DarkGray;
         public const int StarLength = 60;
 
         public static void WriteLine(params object[] values)

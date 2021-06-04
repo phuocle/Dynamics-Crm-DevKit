@@ -5,7 +5,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.DataProviders.MySql
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.MySql.Update", "Update", PluginType.DataProvider)]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.MySql.Update", "Update", PluginType.DataProvider, DataSource = "devkit_DataSource2")]
     public class Update : IPlugin
     {
         /*

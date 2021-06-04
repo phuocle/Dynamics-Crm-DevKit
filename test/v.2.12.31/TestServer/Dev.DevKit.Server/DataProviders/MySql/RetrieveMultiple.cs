@@ -6,7 +6,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.DataProviders.MySql
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.MySql.RetrieveMultiple", "RetrieveMultiple", PluginType.DataProvider)]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.MySql.RetrieveMultiple", "RetrieveMultiple", PluginType.DataProvider, DataSource = "devkit_DataSource2")]
     public class RetrieveMultiple : IPlugin
     {
         /*

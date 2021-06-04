@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.Server.Plugins.Account
 {
     [CrmPluginRegistration("Assign", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
+    "Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = false,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostAccountAssignAsynchronous : IPlugin
     {

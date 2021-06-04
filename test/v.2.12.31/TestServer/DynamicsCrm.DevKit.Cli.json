@@ -132,10 +132,10 @@
   "datasources": [
     {
       "profile": "DEBUG",
-      "displayname": "Data Source",
-      "pluralname": "Data Sources",
+      "displayname": "Data Source 3",
+      "pluralname": "Data Sources 3",
       "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "name": "devkit_DataSource"
+      "name": "devkit_DataSource3"
     }
   ],
   "solutionpackagers": [

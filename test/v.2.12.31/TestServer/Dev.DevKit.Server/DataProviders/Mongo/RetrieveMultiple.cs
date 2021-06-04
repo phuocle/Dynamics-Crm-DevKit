@@ -6,7 +6,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.DataProviders.Mongo
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Mongo.RetrieveMultiple", "RetrieveMultiple", PluginType.DataProvider)]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Mongo.RetrieveMultiple", "RetrieveMultiple", PluginType.DataProvider, DataSource = "DataSource3")]
     public class RetrieveMultiple : IPlugin
     {
         /*
