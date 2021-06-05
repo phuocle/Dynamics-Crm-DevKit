@@ -71,6 +71,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 case "servers":
                     var jsonServer = SimpleJson.DeserializeObject<Json>(File.ReadAllText(jsonFile)).servers.FirstOrDefault(x => x.profile == arguments.Profile);
                     if (jsonServer == null) throw new Exception($"{LOG} 'profile' not found '{arguments?.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                    json = jsonServer;
                     break;
                 default:
                     throw new Exception($"Not support this arguments.Type: {arguments.Type}");

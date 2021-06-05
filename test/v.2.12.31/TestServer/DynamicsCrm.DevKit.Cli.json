@@ -5,7 +5,25 @@
       "folder": "bin\\Debug",
       "solution": "TestPluginWorkflowCustomActionCustomApi",
       "includefiles": [
-        "Dev.DevKit.Server.*.dll"
+        "Dev.DevKit.Server.*.dll",
+        "Dev.DevKit.CustomApi.*.dll",
+        "Dev.DevKit.DataProvider.*.dll"
+      ],
+      "excludefiles": [
+        "Dev.DevKit.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "includefiles": [
+        "Dev.DevKit.CustomAction.*.dll",
+        "Dev.DevKit.CustomApi.*.dll",
+        "Dev.DevKit.DataProvider.*.dll",
+        "Dev.DevKit.Plugin.*.dll",
+        "Dev.DevKit.Server.*.dll",
+        "Dev.DevKit.Workflow.*.dll"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
