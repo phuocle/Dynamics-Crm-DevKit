@@ -12,5 +12,8 @@
   <isfunction>0</isfunction>
   <isprivate>0</isprivate>
   <name>CustomApi Entity</name>
+  <plugintypeid>
+    <plugintypeid>b8d20117-a5c5-eb11-bacc-00224816b7d6</plugintypeid>
+  </plugintypeid>
   <workflowsdkstepenabled>0</workflowsdkstepenabled>
 </customapi>

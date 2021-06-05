@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=9e7f3d3c212e9bef" PluginAssemblyId="02dbf098-a3c5-eb11-bacc-00224816b7d6" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitCustomAction-02DBF098-A3C5-EB11-BACC-00224816B7D6/DevDevKitCustomAction.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous, Dev.DevKit.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=9e7f3d3c212e9bef" PluginTypeId="05dbf098-a3c5-eb11-bacc-00224816b7d6" Name="Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous">
+      <FriendlyName>Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

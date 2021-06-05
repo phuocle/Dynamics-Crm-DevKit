@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml version="9.2.21044.125" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ImportExportXml version="9.2.21052.127" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SolutionManifest>
     <UniqueName>TestPluginWorkflowCustomActionCustomApi</UniqueName>
     <LocalizedNames>
@@ -79,32 +79,55 @@
     </Publisher>
     <RootComponents>
       <RootComponent type="1" schemaName="devkit_datasource" behavior="0" />
+      <RootComponent type="1" schemaName="devkit_datasource2" behavior="0" />
+      <RootComponent type="1" schemaName="devkit_datasource3" behavior="0" />
       <RootComponent type="29" id="{c249171f-afbe-4c9c-a129-c4b8e78785c6}" behavior="0" />
       <RootComponent type="29" id="{d0364d44-7d05-49c0-bca6-576791ea9603}" behavior="0" />
       <RootComponent type="29" id="{dc2b7307-4683-4eda-89ba-fdee89dfaf0b}" behavior="0" />
       <RootComponent type="29" id="{fa43886e-1f2f-475e-948b-55e75d501d53}" behavior="0" />
-      <RootComponent type="91" id="{bc0f62a6-29bd-eb11-bacc-000d3a80a94b}" schemaName="Dev.DevKit.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=9e7f3d3c212e9bef" behavior="0" />
-      <RootComponent type="91" id="{9d0f62a6-29bd-eb11-bacc-000d3a80a94b}" schemaName="Dev.DevKit.CustomAction.Entities, Version=1.0.0.0, Culture=en, PublicKeyToken=f4a3d4831e04a4ac" behavior="0" />
-      <RootComponent type="91" id="{29598036-d1bd-eb11-bacc-000d3a80a94b}" schemaName="Dev.DevKit.DataProvider, Version=1.0.0.0, Culture=en, PublicKeyToken=d17e5208fd48a6b3" behavior="0" />
-      <RootComponent type="91" id="{700d609f-53b8-eb11-8236-00224817361b}" schemaName="Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=d4b48238df90c6aa" behavior="0" />
-      <RootComponent type="91" id="{d3b911ac-53b8-eb11-8236-00224817361b}" schemaName="Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=490db677e51690eb" behavior="0" />
-      <RootComponent type="91" id="{6551eeb8-53b8-eb11-8236-00224817361b}" schemaName="Dev.DevKit.Plugin.Contact, Version=1.0.0.0, Culture=en, PublicKeyToken=5848369e01ff44c3" behavior="0" />
-      <RootComponent type="91" id="{1824bc06-2dbd-eb11-bacc-000d3a80a94b}" schemaName="Dev.DevKit.Workflow, Version=1.0.0.0, Culture=en, PublicKeyToken=a7ac8c9aa2c8a63b" behavior="0" />
-      <RootComponent type="92" id="{0b4264a5-53b8-eb11-8236-00224817361b}" behavior="0" />
-      <RootComponent type="92" id="{5bf52c93-27bd-eb11-bacc-000d3a80a94b}" behavior="0" />
-      <RootComponent type="92" id="{6a51eeb8-53b8-eb11-8236-00224817361b}" behavior="0" />
-      <RootComponent type="92" id="{740d609f-53b8-eb11-8236-00224817361b}" behavior="0" />
-      <RootComponent type="92" id="{780d609f-53b8-eb11-8236-00224817361b}" behavior="0" />
-      <RootComponent type="92" id="{7c0d609f-53b8-eb11-8236-00224817361b}" behavior="0" />
-      <RootComponent type="92" id="{a80f62a6-29bd-eb11-bacc-000d3a80a94b}" behavior="0" />
-      <RootComponent type="92" id="{af0f62a6-29bd-eb11-bacc-000d3a80a94b}" behavior="0" />
-      <RootComponent type="92" id="{b60f62a6-29bd-eb11-bacc-000d3a80a94b}" behavior="0" />
-      <RootComponent type="92" id="{c00f62a6-29bd-eb11-bacc-000d3a80a94b}" behavior="0" />
-      <RootComponent type="92" id="{d8b911ac-53b8-eb11-8236-00224817361b}" behavior="0" />
-      <RootComponent type="92" id="{dcb911ac-53b8-eb11-8236-00224817361b}" behavior="0" />
-      <RootComponent type="92" id="{e5b911ac-53b8-eb11-8236-00224817361b}" behavior="0" />
-      <RootComponent type="92" id="{e9b911ac-53b8-eb11-8236-00224817361b}" behavior="0" />
-      <RootComponent type="181" id="{31598036-d1bd-eb11-bacc-000d3a80a94b}" schemaName="Dev.DevKit.DataProvider" behavior="0" />
+      <RootComponent type="91" id="{02dbf098-a3c5-eb11-bacc-00224816b7d6}" schemaName="Dev.DevKit.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=9e7f3d3c212e9bef" behavior="0" />
+      <RootComponent type="91" id="{10c1f4a4-a3c5-eb11-bacc-00224816b7d6}" schemaName="Dev.DevKit.CustomAction.Entities, Version=1.0.0.0, Culture=en, PublicKeyToken=f4a3d4831e04a4ac" behavior="0" />
+      <RootComponent type="91" id="{4fb86f93-a4c5-eb11-bacc-00224816b7d6}" schemaName="Dev.DevKit.CustomApi, Version=1.0.0.0, Culture=en, PublicKeyToken=202c5dda16200c3d" behavior="0" />
+      <RootComponent type="91" id="{ff9ff0be-a4c5-eb11-bacc-00224816b7d6}" schemaName="Dev.DevKit.DataProvider, Version=1.0.0.0, Culture=en, PublicKeyToken=d17e5208fd48a6b3" behavior="0" />
+      <RootComponent type="91" id="{b1b9f8cd-a4c5-eb11-bacc-00224816b7d6}" schemaName="Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=d4b48238df90c6aa" behavior="0" />
+      <RootComponent type="91" id="{6afa31d6-a4c5-eb11-bacc-00224816b7d6}" schemaName="Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=490db677e51690eb" behavior="0" />
+      <RootComponent type="91" id="{c818cbe3-a4c5-eb11-bacc-00224816b7d6}" schemaName="Dev.DevKit.Plugin.Contact, Version=1.0.0.0, Culture=en, PublicKeyToken=5848369e01ff44c3" behavior="0" />
+      <RootComponent type="91" id="{ef141e0a-a5c5-eb11-bacc-00224816b7d6}" schemaName="Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=eb16a8b3c8f9c1ae" behavior="0" />
+      <RootComponent type="91" id="{98568eef-a4c5-eb11-bacc-00224816b7d6}" schemaName="Dev.DevKit.Workflow, Version=1.0.0.0, Culture=en, PublicKeyToken=a7ac8c9aa2c8a63b" behavior="0" />
+      <RootComponent type="92" id="{01151e0a-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{05151e0a-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{06dbf098-a3c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{0c2a36dc-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{102a36dc-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{14c1f4a4-a3c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{19c1f4a4-a3c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{1ec1f4a4-a3c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{6efa31d6-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{72fa31d6-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{7307a310-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{7707a310-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{7c02441d-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{8002441d-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{8107a310-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{8402441d-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{8802441d-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{8b07a310-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{8f07a310-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{9cd20117-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{a0d20117-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{a7d20117-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{b5b9f8cd-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{b9b9f8cd-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{bdb9f8cd-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{c1b9f8cd-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{c5b9f8cd-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{cc18cbe3-a4c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{f3141e0a-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{f7141e0a-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="92" id="{fb141e0a-a5c5-eb11-bacc-00224816b7d6}" behavior="0" />
+      <RootComponent type="181" id="{07a0f0be-a4c5-eb11-bacc-00224816b7d6}" schemaName="devkit_datasource" behavior="0" />
+      <RootComponent type="181" id="{8b02441d-a5c5-eb11-bacc-00224816b7d6}" schemaName="devkit_datasource2" behavior="0" />
+      <RootComponent type="181" id="{8e02441d-a5c5-eb11-bacc-00224816b7d6}" schemaName="devkit_datasource3" behavior="0" />
     </RootComponents>
     <MissingDependencies />
   </SolutionManifest>

@@ -11,5 +11,8 @@
   <isfunction>0</isfunction>
   <isprivate>0</isprivate>
   <name>CustomApi Global</name>
+  <plugintypeid>
+    <plugintypeid>52b86f93-a4c5-eb11-bacc-00224816b7d6</plugintypeid>
+  </plugintypeid>
   <workflowsdkstepenabled>1</workflowsdkstepenabled>
 </customapi>
