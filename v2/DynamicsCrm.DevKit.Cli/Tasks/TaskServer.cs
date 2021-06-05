@@ -42,9 +42,49 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             this.currentDirectory = currentDirectory;
             this.arguments = arguments;
             var jsonFile = Path.Combine(currentDirectory, arguments.Json);
-            this.json = SimpleJson.DeserializeObject<Json>(File.ReadAllText(jsonFile))
-                .servers.FirstOrDefault(x => x.profile == arguments.Profile);
+            switch (arguments.Type)
+            {
+                case "plugins":
+                    var jsonPlugin = SimpleJson.DeserializeObject<Json>(File.ReadAllText(jsonFile)).plugins.FirstOrDefault(x => x.profile == arguments.Profile);
+                    if (jsonPlugin == null) throw new Exception($"{LOG} 'profile' not found '{arguments?.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                    json = new JsonServer
+                    {
+                        excludefiles = jsonPlugin.excludefiles,
+                        folder = jsonPlugin.folder,
+                        includefiles = jsonPlugin.includefiles,
+                        profile = jsonPlugin.profile,
+                        solution = jsonPlugin.solution
+                    };
+                    break;
+                case "workflows":
+                    var jsonWorkflow = SimpleJson.DeserializeObject<Json>(File.ReadAllText(jsonFile)).workflows.FirstOrDefault(x => x.profile == arguments.Profile);
+                    if (jsonWorkflow == null) throw new Exception($"{LOG} 'profile' not found '{arguments?.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                    json = new JsonServer
+                    {
+                        excludefiles = jsonWorkflow.excludefiles,
+                        folder = jsonWorkflow.folder,
+                        includefiles = jsonWorkflow.includefiles,
+                        profile = jsonWorkflow.profile,
+                        solution = jsonWorkflow.solution
+                    };
+                    break;
+                case "servers":
+                    var jsonServer = SimpleJson.DeserializeObject<Json>(File.ReadAllText(jsonFile)).servers.FirstOrDefault(x => x.profile == arguments.Profile);
+                    if (jsonServer == null) throw new Exception($"{LOG} 'profile' not found '{arguments?.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                    break;
+                default:
+                    throw new Exception($"Not support this arguments.Type: {arguments.Type}");
+            }
         }
+
+        public TaskServer(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments, JsonServer json)
+        {
+            this.crmServiceClient = crmServiceClient;
+            this.currentDirectory = currentDirectory;
+            this.arguments = arguments;
+            this.json = json;
+        }
+
         public void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
@@ -62,7 +102,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (types.Count == 0) continue;
                 if (!IsValidTypes(types)) continue;
                 var pluginAssemblyId = RegisterAssembly(file);
-                if (arguments.OnlyUpdateAssembly?.Length > 0) continue;
+                if (arguments?.OnlyUpdateAssembly?.Length > 0) continue;
                 if (pluginAssemblyId == Guid.Empty) continue;
                 foreach (var type in types)
                 {
@@ -278,8 +318,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private bool IsValid()
         {
-            if (json == null)
-                throw new Exception($"{LOG} 'profile' not found '{arguments.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.solution.Length == 0 || json.solution == "???")
                 throw new Exception($"{LOG} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))

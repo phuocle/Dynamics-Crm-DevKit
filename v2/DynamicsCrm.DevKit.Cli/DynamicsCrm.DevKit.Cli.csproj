@@ -70,17 +70,17 @@
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tasks\TaskDataProvider.cs" />
+    <None Include="Tasks\TaskDataProvider.cs" />
     <Compile Include="Tasks\TaskDataSource.cs" />
     <Compile Include="Tasks\TaskDownloadReport.cs" />
     <Compile Include="Tasks\TaskDownloadWebResource.cs" />
     <Compile Include="Tasks\TaskGenerator.cs" />
     <Compile Include="Tasks\TaskServer.cs" />
-    <Compile Include="Tasks\TaskPlugin.cs" />
+    <None Include="Tasks\TaskPlugin.cs" />
     <Compile Include="Tasks\TaskProxyType.cs" />
     <Compile Include="Tasks\TaskSolutionPackager.cs" />
     <Compile Include="Tasks\TaskWebResource.cs" />
-    <Compile Include="Tasks\TaskWorkflow.cs" />
+    <None Include="Tasks\TaskWorkflow.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\version.txt">

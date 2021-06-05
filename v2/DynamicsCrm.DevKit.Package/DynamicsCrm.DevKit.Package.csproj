@@ -132,6 +132,9 @@
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\Cli\JsonProxyType.cs">
       <Link>Links\JsonProxyType.cs</Link>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\Cli\JsonServer.cs">
+      <Link>Links\JsonServer.cs</Link>
+    </Compile>
     <Compile Include="..\DynamicsCrm.DevKit.Shared\Models\Cli\JsonSolutionPackager.cs">
       <Link>Links\JsonSolutionPackager.cs</Link>
     </Compile>
