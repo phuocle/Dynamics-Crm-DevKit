@@ -59,8 +59,6 @@
     <None Include="packages.config" />
     <None Include="Dev.DevKit.CustomApi.snk" />
     <None Include="deploy.debug.bat" />
-    <Compile Include="devkit_CustomApiEntityCollectionRequest.cs" />
-    <Compile Include="devkit_CustomApiEntityRequest.cs" />
     <Compile Include="devkit_CustomApiRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

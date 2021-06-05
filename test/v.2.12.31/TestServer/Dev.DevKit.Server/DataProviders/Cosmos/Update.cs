@@ -5,7 +5,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.DataProviders.Cosmos
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cosmos.Update", "Update", PluginType.DataProvider)]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cosmos.Update", "Update", PluginType.DataProvider, DataSource = "devkit_datasource3")]
     public class Update : IPlugin
     {
         /*

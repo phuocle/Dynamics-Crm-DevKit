@@ -65,7 +65,6 @@
     <Compile Include="CustomActions\PostNonedevkit_AjaxSynchronous.cs" />
     <Compile Include="CustomApis\Account\devkit_CustomApiEntityRequest.cs" />
     <Compile Include="CustomApis\Contact\devkit_CustomApiEntityCollectionRequest.cs" />
-    <Compile Include="CustomApis\devkit_CustomApiRequest.cs" />
     <Compile Include="Workflows\ShareWithTeam.cs" />
     <Compile Include="Workflows\ToUpperCase.cs" />
     <None Include="packages.config" />
@@ -76,16 +75,6 @@
     <Compile Include="DataProviders\Cosmos\Retrieve.cs" />
     <Compile Include="DataProviders\Cosmos\RetrieveMultiple.cs" />
     <Compile Include="DataProviders\Cosmos\Update.cs" />
-    <Compile Include="DataProviders\Mongo\Create.cs" />
-    <Compile Include="DataProviders\Mongo\Delete.cs" />
-    <Compile Include="DataProviders\Mongo\Retrieve.cs" />
-    <Compile Include="DataProviders\Mongo\RetrieveMultiple.cs" />
-    <Compile Include="DataProviders\Mongo\Update.cs" />
-    <Compile Include="DataProviders\MySql\Create.cs" />
-    <Compile Include="DataProviders\MySql\Delete.cs" />
-    <Compile Include="DataProviders\MySql\Retrieve.cs" />
-    <Compile Include="DataProviders\MySql\RetrieveMultiple.cs" />
-    <Compile Include="DataProviders\MySql\Update.cs" />
     <Compile Include="DataProviders\SqlServer\Create.cs" />
     <Compile Include="DataProviders\SqlServer\Delete.cs" />
     <Compile Include="DataProviders\SqlServer\Retrieve.cs" />

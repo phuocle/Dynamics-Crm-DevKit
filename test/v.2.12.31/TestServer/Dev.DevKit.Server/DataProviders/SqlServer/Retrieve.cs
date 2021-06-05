@@ -5,7 +5,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.DataProviders.SqlServer
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.SqlServer.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "DataSource")]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.SqlServer.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "DataSource2")]
     public class Retrieve : IPlugin
     {
         /*

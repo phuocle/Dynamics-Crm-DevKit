@@ -5,7 +5,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.DataProviders.Cosmos
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cosmos.Retrieve", "Retrieve", PluginType.DataProvider)]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cosmos.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "devkit_datasource3")]
     public class Retrieve : IPlugin
     {
         /*

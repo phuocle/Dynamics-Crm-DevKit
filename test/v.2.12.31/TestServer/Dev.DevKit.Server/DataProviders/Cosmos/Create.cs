@@ -5,7 +5,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.DataProviders.Cosmos
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cosmos.Create", "Create", PluginType.DataProvider)]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.Cosmos.Create", "Create", PluginType.DataProvider, DataSource = "devkit_datasource3")]
     public class Create : IPlugin
     {
         /*

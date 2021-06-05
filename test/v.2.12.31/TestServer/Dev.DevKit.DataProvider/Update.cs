@@ -5,7 +5,7 @@ using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.DataProvider
 {
-    [CrmPluginRegistration("Dev.DevKit.DataProvider.Update", "Update", PluginType.DataProvider)]
+    [CrmPluginRegistration("Dev.DevKit.DataProvider.Update", "Update", PluginType.DataProvider, DataSource = "DataSource")]
     public class Update : IPlugin
     {
         /*
