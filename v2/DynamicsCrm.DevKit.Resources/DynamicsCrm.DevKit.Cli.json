@@ -1,5 +1,5 @@
 {
-  "plugins": [
+  "servers": [
     {
       "profile": "DEBUG",
       "folder": "bin\\Debug",
@@ -7,20 +7,9 @@
       "includefiles": [
         "???.Plugin.*.dll",
         "???.CustomAction.*.dll",
-        "???.CustomApi.*.dll"
-      ],
-      "excludefiles": [
-        "???.*.Test.dll"
-      ]
-    }
-  ],
-  "workflows": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "???",
-      "includefiles": [
-        "???.Workflow.*.dll"
+        "???.Workflow.*.dll",
+        "???.CustomApi.*.dll",
+        "???.DataProvider.*.dll"
       ],
       "excludefiles": [
         "???.*.Test.dll"
@@ -63,20 +52,6 @@
             "???_/lib/devkit.js"
           ]
         }
-      ]
-    }
-  ],
-  "dataproviders": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "???",
-      "datasource": "???",
-      "includefiles": [
-        "???.DataProvider.*.dll"
-      ],
-      "excludefiles": [
-        "???.*.Test.dll"
       ]
     }
   ],

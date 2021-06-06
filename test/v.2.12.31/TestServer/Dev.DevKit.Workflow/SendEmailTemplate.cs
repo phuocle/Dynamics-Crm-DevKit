@@ -24,17 +24,18 @@ namespace Dev.DevKit.Workflow
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
 
-            //tracing.DebugMessage("Begin Workflow: Dev.DevKit.Workflow.SendEmailTemplate");
-            //tracing.DebugContext(workflowContext);
+            tracing.DebugMessage("Begin Workflow: Dev.DevKit.Workflow.SendEmailTemplate");
+            tracing.DebugContext(workflowContext);
 
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Workflow: Dev.DevKit.Workflow.SendEmailTemplate");
+            tracing.DebugMessage("End Workflow: Dev.DevKit.Workflow.SendEmailTemplate");
         }
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
             //YOUR WORKFLOW-CODE GO HERE
+
         }
     }
 }

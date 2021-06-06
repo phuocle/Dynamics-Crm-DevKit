@@ -68,6 +68,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                         solution = jsonWorkflow.solution
                     };
                     break;
+                case "dataproviders":
+                    var jsonDataProvider = SimpleJson.DeserializeObject<Json>(File.ReadAllText(jsonFile)).dataproviders.FirstOrDefault(x => x.profile == arguments.Profile);
+                    if (jsonDataProvider == null) throw new Exception($"{LOG} 'profile' not found '{arguments?.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                    json = new JsonServer
+                    {
+                        excludefiles = jsonDataProvider.excludefiles,
+                        folder = jsonDataProvider.folder,
+                        includefiles = jsonDataProvider.includefiles,
+                        profile = jsonDataProvider.profile,
+                        solution = jsonDataProvider.solution
+                    };
+                    break;
                 case "servers":
                     var jsonServer = SimpleJson.DeserializeObject<Json>(File.ReadAllText(jsonFile)).servers.FirstOrDefault(x => x.profile == arguments.Profile);
                     if (jsonServer == null) throw new Exception($"{LOG} 'profile' not found '{arguments?.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");

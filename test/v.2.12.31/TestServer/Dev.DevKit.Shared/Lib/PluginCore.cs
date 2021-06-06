@@ -74,10 +74,11 @@ namespace Dev.DevKit.Shared
             GroupName = groupName;
             IsolationMode = isolationModel;
         }
+
         public CrmPluginRegistrationAttribute(string name, string message, PluginType pluginType)
         {
             Name = name;
-            Message = message;            
+            Message = message;
             PluginType = pluginType;
         }
 

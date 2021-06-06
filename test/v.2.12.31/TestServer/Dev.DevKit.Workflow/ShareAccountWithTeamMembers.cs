@@ -5,11 +5,10 @@ using System.Activities;
 
 namespace Dev.DevKit.Workflow
 {
-    [CrmPluginRegistration("ShareAccountWithTeamMembers", "ShareAccountWithTeamMembers", "", "Dev.DevKit.Workflow", IsolationModeEnum.Sandbox)]
+    [CrmPluginRegistration("ShareAccountWithTeamMembers", "ShareAccountWithTeamMembers", "", "Dev.DevKit.Workflow", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
     public class ShareAccountWithTeamMembers : CodeActivity
     {
         //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity
-
 
         [Input("Account")]
         [ReferenceTarget("account")]
@@ -29,17 +28,18 @@ namespace Dev.DevKit.Workflow
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
 
-            //tracing.DebugMessage("Begin Workflow: Dev.DevKit.Workflow.ShareAccountWithTeamMembers");
-            //tracing.DebugContext(workflowContext);
+            tracing.DebugMessage("Begin Workflow: Dev.DevKit.Workflow.ShareAccountWithTeamMembers");
+            tracing.DebugContext(workflowContext);
 
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Workflow: Dev.DevKit.Workflow.ShareAccountWithTeamMembers");
+            tracing.DebugMessage("End Workflow: Dev.DevKit.Workflow.ShareAccountWithTeamMembers");
         }
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
             //YOUR WORKFLOW-CODE GO HERE
+
         }
     }
 }

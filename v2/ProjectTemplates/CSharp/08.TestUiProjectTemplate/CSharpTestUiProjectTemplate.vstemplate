@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>08. Ui Test Project</Name>
+    <Name>14. Ui Test Project</Name>
     <Description>Ui Test Project Template</Description>
     <DefaultName>UiTestProject</DefaultName>
     <TemplateID>DynamicsCrm.DevKit.CSharpUiTestProject</TemplateID>
@@ -18,6 +18,7 @@
     <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
     <LanguageTag>CSharp</LanguageTag>
     <PlatformTag>Windows</PlatformTag>
+    <SortOrder>240</SortOrder>
   </TemplateData>
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">

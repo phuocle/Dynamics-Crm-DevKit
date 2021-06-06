@@ -21,6 +21,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{AD261470-D3E7-47B2-ABD7-8F6FD51B19C1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{BB9A9980-2BCB-4AD4-9271-97115EC06297}"
+	ProjectSection(SolutionItems) = preProject
+		ProjectTemplates\CSharp\Notes.txt = ProjectTemplates\CSharp\Notes.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Resources", "DynamicsCrm.DevKit.Resources\DynamicsCrm.DevKit.Resources.csproj", "{C3D692C7-4D23-4F68-AF38-AC9B375E4A56}"
 EndProject
@@ -45,8 +48,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03.PluginProjectTemplate", "ProjectTemplates\CSharp\03.PluginProjectTemplate\03.PluginProjectTemplate.csproj", "{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04.WorkflowProjectTemplate", "ProjectTemplates\CSharp\04.WorkflowProjectTemplate\04.WorkflowProjectTemplate.csproj", "{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05.WebResourceProjectTemplate", "ProjectTemplates\CSharp\05.WebResourceProjectTemplate\05.WebResourceProjectTemplate.csproj", "{AE2C2285-298E-47CD-80EB-11F44B9F3D42}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06.TestProjectTemplate", "ProjectTemplates\CSharp\06.TestProjectTemplate\06.TestProjectTemplate.csproj", "{547D1385-E9AA-47E5-A94B-D0B50719BBAB}"
 EndProject
@@ -148,10 +149,6 @@ Global
 		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -252,7 +249,6 @@ Global
 		{1C97EFE1-D106-42A3-97FF-FC22779C70F0} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{547D1385-E9AA-47E5-A94B-D0B50719BBAB} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{ACFB5F3D-6156-47F4-A879-C9552E7C334C} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{5259082A-3733-4FBE-B50B-C9BBA22D95AA} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}

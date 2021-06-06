@@ -3,7 +3,7 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>97ecf31f-1b27-41f9-889d-862ce74bf3ac</SharedGUID>
+    <SharedGUID>4578b7fe-fc80-464f-bd84-63e968a236d4</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Dev.DevKit.Shared</Import_RootNamespace>
@@ -18,10 +18,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.cs" />
-  <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.generated.cs">
-    <DependentUpon>ActivityParty.cs</DependentUpon>
-    <SubType>Code</SubType>
-  </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.generated.cs">
+      <DependentUpon>ActivityParty.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.generated.cs">
       <DependentUpon>Contact.cs</DependentUpon>
@@ -38,10 +38,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Task.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entities\Task.generated.cs">
-      <DependentUpon>Task.cs</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+  <Compile Include="$(MSBuildThisFileDirectory)Entities\Task.generated.cs">
+    <DependentUpon>Task.cs</DependentUpon>
+    <SubType>Code</SubType>
+  </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />

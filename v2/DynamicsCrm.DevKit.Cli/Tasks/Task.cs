@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 case "servers":
                 case "plugins":
                 case "workflows":
-                //case "dataproviders":
+                case "dataproviders":
                     var server = new TaskServer(crmServiceClient, currentDirectory, arguments);
                     server.Run();
                     break;
