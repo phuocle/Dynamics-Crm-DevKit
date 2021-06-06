@@ -7,8 +7,8 @@
       "includefiles": [
         "Dev.DevKit.Plugin.*.dll",
         "Dev.DevKit.CustomAction.*.dll",
-        "Dev.DevKit.CustomApi.*.dll",
         "Dev.DevKit.Workflow.*.dll",
+        "Dev.DevKit.CustomApi.*.dll",
         "Dev.DevKit.DataProvider.*.dll"
       ],
       "excludefiles": [

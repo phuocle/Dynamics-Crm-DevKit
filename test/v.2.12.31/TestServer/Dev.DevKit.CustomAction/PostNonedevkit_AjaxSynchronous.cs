@@ -5,8 +5,8 @@ using System;
 namespace Dev.DevKit.CustomAction
 {
     [CrmPluginRegistration("devkit_Ajax", "none", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "", PluginType = PluginType.CustomAction)]
+    "Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction,
+    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostNonedevkit_AjaxSynchronous : IPlugin
     {
         /*
@@ -52,6 +52,7 @@ namespace Dev.DevKit.CustomAction
         {
             var outputs = new ParameterCollection();
             //YOUR CUSTOM ACTION BEGIN HERE
+
             return outputs;
         }
     }
