@@ -1,14 +1,12 @@
 ﻿using Dev.DevKit.Shared;
-using Dev.DevKit.Shared.Entities;
 using Microsoft.Xrm.Sdk;
 using System;
 
 namespace Dev.DevKit.PluginAccount
 {
     [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "",
-    Image2Name = "", Image2Alias = "", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "", PluginType = PluginType.Plugin)]
+    "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
+    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostAccountCreateAsynchronous : IPlugin
     {
         /*
@@ -26,13 +24,13 @@ namespace Dev.DevKit.PluginAccount
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-    //public PostAccountCreateAsynchronous(string unsecureString, string secureString)
-    //{
-    //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-    //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
-    //}
+        //public PostAccountCreateAsynchronous(string unsecureString, string secureString)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
+        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //}
 
-    public void Execute(IServiceProvider serviceProvider)
+        public void Execute(IServiceProvider serviceProvider)
         {
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
@@ -57,18 +55,7 @@ namespace Dev.DevKit.PluginAccount
             //var preEntity = (Entity)context.PreEntityImages["PreImage"];
             //var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
-            LogicA(service, tracing);
-            LogicB(service, tracing);
-        }
 
-        private void LogicB(IOrganizationService service, ITracingService tracing)
-        {
-            tracing.DebugMessage("LogicB");
-        }
-
-        private void LogicA(IOrganizationService service, ITracingService tracing)
-        {
-            tracing.DebugMessage("LogicA");
         }
     }
 }

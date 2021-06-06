@@ -15,9 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Workflow", "Dev.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction", "Dev.DevKit.CustomAction\Dev.DevKit.CustomAction.csproj", "{3AD64E44-6747-4A10-9AED-7E7BA32D7AAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account", "Dev.DevKit.Plugin.Account\Dev.DevKit.Plugin.Account.csproj", "{3D20AE0A-DDBA-4BB6-87CF-AAA2C8D6D73D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3ad64e44-6747-4a10-9aed-7e7ba32d7aac}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3d20ae0a-ddba-4bb6-87cf-aaa2c8d6d73d}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{77c9c396-6865-47d9-ba0d-ac0c68256438}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{debf027a-0573-47db-838c-c4d3febee554}*SharedItemsImports = 13
 	EndGlobalSection
@@ -34,6 +37,10 @@ Global
 		{3AD64E44-6747-4A10-9AED-7E7BA32D7AAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AD64E44-6747-4A10-9AED-7E7BA32D7AAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AD64E44-6747-4A10-9AED-7E7BA32D7AAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D20AE0A-DDBA-4BB6-87CF-AAA2C8D6D73D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D20AE0A-DDBA-4BB6-87CF-AAA2C8D6D73D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D20AE0A-DDBA-4BB6-87CF-AAA2C8D6D73D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D20AE0A-DDBA-4BB6-87CF-AAA2C8D6D73D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

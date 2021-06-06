@@ -31,12 +31,12 @@ $PluginComment$
             if (context.MessageName.ToLower() != "$PluginMessage$".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals $PluginMessage$");
             if (context.Mode != (int)ExecutionModeEnum.$PluginExecution$) throw new InvalidPluginExecutionException("Execution does not equals $PluginExecution$");
 
-            //tracing.DebugMessage("Begin Plugin: $NameSpacePlugin$.$PluginClass$$PluginOrder2$");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: $NameSpacePlugin$.$PluginClass$$PluginOrder2$");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: $NameSpacePlugin$.$PluginClass$$PluginOrder2$");
+            tracing.DebugMessage("End Plugin: $NameSpacePlugin$.$PluginClass$$PluginOrder2$");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
