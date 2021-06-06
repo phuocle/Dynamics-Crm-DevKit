@@ -5,77 +5,11 @@
       "folder": "bin\\Debug",
       "solution": "TestPluginWorkflowCustomActionCustomApi",
       "includefiles": [
-        "Dev.DevKit.Server.*.dll",
+        "Dev.DevKit.Plugin.*.dll",
+        "Dev.DevKit.CustomAction.*.dll",
         "Dev.DevKit.CustomApi.*.dll",
+        "Dev.DevKit.Workflow.*.dll",
         "Dev.DevKit.DataProvider.*.dll"
-      ],
-      "excludefiles": [
-        "Dev.DevKit.*.Test.dll"
-      ]
-    },
-    {
-      "profile": "RELEASE",
-      "folder": "Release\\dll",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "includefiles": [
-        "Dev.DevKit.CustomAction.*.dll",
-        "Dev.DevKit.CustomApi.*.dll",
-        "Dev.DevKit.DataProvider.*.dll",
-        "Dev.DevKit.Plugin.*.dll",
-        "Dev.DevKit.Server.*.dll",
-        "Dev.DevKit.Workflow.*.dll"
-      ],
-      "excludefiles": [
-        "Dev.DevKit.*.Test.dll"
-      ]
-    }
-  ],
-  "plugins": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "includefiles": [
-        "Dev.DevKit.Plugin.*.dll",
-        "Dev.DevKit.CustomAction.*.dll",
-        "Dev.DevKit.CustomApi.*.dll"
-      ],
-      "excludefiles": [
-        "Dev.DevKit.*.Test.dll"
-      ]
-    },
-    {
-      "profile": "RELEASE",
-      "folder": "Release\\dll",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "includefiles": [
-        "Dev.DevKit.Plugin.*.dll",
-        "Dev.DevKit.CustomAction.*.dll",
-        "Dev.DevKit.CustomApi.*.dll"
-      ],
-      "excludefiles": [
-        "Dev.DevKit.*.Test.dll"
-      ]
-    }
-  ],
-  "workflows": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "includefiles": [
-        "Dev.DevKit.Workflow.*.dll"
-      ],
-      "excludefiles": [
-        "Dev.DevKit.*.Test.dll"
-      ]
-    },
-    {
-      "profile": "RELEASE",
-      "folder": "Release\\dll",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "includefiles": [
-        "Dev.DevKit.Workflow.*.dll"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
@@ -121,57 +55,31 @@
       ]
     }
   ],
-  "dataproviders": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "datasource": "devkit_DataSource",
-      "includefiles": [
-        "Dev.DevKit.DataProvider.*.dll"
-      ],
-      "excludefiles": [
-        "Dev.DevKit.*.Test.dll"
-      ]
-    },
-    {
-      "profile": "RELEASE",
-      "folder": "Release\\dll",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "datasource": "devkit_DataSource",
-      "includefiles": [
-        "Dev.DevKit.DataProvider.*.dll"
-      ],
-      "excludefiles": [
-        "Dev.DevKit.*.Test.dll"
-      ]
-    }
-  ],
   "datasources": [
     {
       "profile": "DEBUG",
-      "displayname": "Data Source 3",
-      "pluralname": "Data Sources 3",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "name": "devkit_DataSource3"
+      "displayname": "???",
+      "pluralname": "???",
+      "solution": "???",
+      "name": "???"
     }
   ],
   "solutionpackagers": [
     {
       "profile": "Extract-Unmanaged",
       "rootfolder": "",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "solution": "???",
       "solutiontype": "Unmanaged",
-      "folder": "Solutions",
+      "folder": "???",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Extract-Managed",
       "rootfolder": "",
-      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "solution": "???",
       "solutiontype": "Managed",
-      "folder": "Solutions",
+      "folder": "???",
       "type": "Extract",
       "mapfile": ""
     },

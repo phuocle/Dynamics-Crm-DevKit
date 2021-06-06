@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
-using System.Dynamic;
-using System.Linq;
 using $NameSpace$;
 
 namespace Microsoft.Xrm.Sdk
@@ -57,87 +57,94 @@ namespace Microsoft.Xrm.Sdk
 #if DEBUG
         private static object EntityToObject(Entity x)
         {
-            return new
+            try
             {
-                x.Attributes,
-                x.EntityState,
-                x.ExtensionData,
-                x.FormattedValues,
-                x.HasLazyFileAttribute,
-                x.Id,
-                x.KeyAttributes,
-                x.LazyFileAttributeKey,
-                x.LazyFileAttributeValue,
-                x.LazyFileSizeAttributeKey,
-                x.LazyFileSizeAttributeValue,
-                x.LogicalName,
-                x.RowVersion,
-                ToEntityReference = x.ToEntityReference()
-            };
+                return new
+                {
+                    x.Attributes,
+                    x.EntityState,
+                    x.ExtensionData,
+                    x.FormattedValues,
+                    x.HasLazyFileAttribute,
+                    x.Id,
+                    x.KeyAttributes,
+                    x.LazyFileAttributeKey,
+                    x.LazyFileAttributeValue,
+                    x.LazyFileSizeAttributeKey,
+                    x.LazyFileSizeAttributeValue,
+                    x.LogicalName,
+                    x.RowVersion,
+                    ToEntityReference = x.ToEntityReference()
+                };
+            }
+            catch {
+                return null;
+            }
         }
 #endif
 
-        public static void DebugContext(this ITracingService tracingService, IPluginExecutionContext context)
+        public static void DebugContext(this ITracingService tracingService, IExecutionContext context)
         {
 #if DEBUG
-            var preEntityImages = context.PreEntityImages == null ? null : context.PreEntityImages.Values.Select(x => EntityToObject(x));
-            var postEntityImages = context.PostEntityImages == null ? null : context.PostEntityImages.Values.Select(x => EntityToObject(x));
-            var inputParameters = new Dictionary<string, object>();
-            foreach (var key in context.InputParameters.Keys)
+            try
             {
-                if (context.InputParameters[key] is Entity x)
+                var preEntityImages = context?.PreEntityImages == null ? null : context?.PreEntityImages?.Values?.Select(x => EntityToObject(x));
+                var postEntityImages = context?.PostEntityImages == null ? null : context?.PostEntityImages?.Values?.Select(x => EntityToObject(x));
+                var inputParameters = new Dictionary<string, object>();
+                foreach (var key in context?.InputParameters?.Keys)
                 {
-                    inputParameters.Add(key, EntityToObject(x));
+                    if (context?.InputParameters?[key] is Entity x)
+                    {
+                        inputParameters.Add(key, EntityToObject(x));
+                    }
+                    else
+                    {
+                        inputParameters.Add(key, context?.InputParameters?[key]);
+                    }
                 }
-                else
+                var outputParameters = new Dictionary<string, object>();
+                foreach (var key in context?.OutputParameters?.Keys)
+                    {
+                        if (context?.OutputParameters?[key] is Entity x)
+                    {
+                        outputParameters.Add(key, EntityToObject(x));
+                    }
+                    else
+                    {
+                            outputParameters.Add(key, context?.OutputParameters?[key]);
+                    }
+                }
+                var obj = new
                 {
-                    inputParameters.Add(key, context.InputParameters[key]);
-                }
+                    BusinessUnitId = context?.BusinessUnitId,
+                    CorrelationId = context?.CorrelationId,
+                    Depth = context?.Depth,
+                    InitiatingUserId = context?.InitiatingUserId,
+                    IsExecutingOffline = context?.IsExecutingOffline,
+                    IsInTransaction = context?.IsInTransaction,
+                    IsOfflinePlayback = context?.IsOfflinePlayback,
+                    IsolationMode = context?.IsolationMode,
+                    MessageName = context?.MessageName,
+                    Mode = context?.Mode,
+                    OperationCreatedOn = context?.OperationCreatedOn,
+                    OperationId = context?.OperationId,
+                    OrganizationId = context?.OrganizationId,
+                    OrganizationName = context?.OrganizationName,
+                    OwningExtension = context?.OwningExtension,
+                    PrimaryEntityId = context?.PrimaryEntityId,
+                    PrimaryEntityName = context?.PrimaryEntityName,
+                    RequestId = context?.RequestId,
+                    SecondaryEntityName = context?.SecondaryEntityName,
+                    SharedVariables = context?.SharedVariables,
+                    UserId = context?.UserId,
+                    InputParameters = inputParameters,
+                    OutputParameters = outputParameters,
+                    PostEntityImages = postEntityImages,
+                    PreEntityImages = preEntityImages,
+                };
+                tracingService.LogMessage(SimpleJson.SerializeObject(obj));
             }
-            var outputParameters = new Dictionary<string, object>();
-            foreach (var key in context.OutputParameters.Keys)
-            {
-                if (context.OutputParameters[key] is Entity x)
-                {
-                    outputParameters.Add(key, EntityToObject(x));
-                }
-                else
-                {
-                    outputParameters.Add(key, context.OutputParameters[key]);
-                }
-            }
-            var obj = new
-            {
-                context.BusinessUnitId,
-                context.CorrelationId,
-                context.Depth,
-                context.InitiatingUserId,
-                context.IsExecutingOffline,
-                context.IsInTransaction,
-                context.IsOfflinePlayback,
-                context.IsolationMode,
-                context.MessageName,
-                context.Mode,
-                context.OperationCreatedOn,
-                context.OperationId,
-                context.OrganizationId,
-                context.OrganizationName,
-                context.OwningExtension,
-                context.PrimaryEntityId,
-                context.PrimaryEntityName,
-                context.RequestId,
-                context.SecondaryEntityName,
-                context.SharedVariables,
-                context.Stage,
-                context.UserId,
-                InputParameters = inputParameters,
-                OutputParameters = outputParameters,
-                PostEntityImages = postEntityImages,
-                PreEntityImages = preEntityImages,
-                IsAutoTransact = context.IsAutoTransact(),
-                IsWithinMainTransaction = context.IsWithinMainTransaction()
-            };
-            tracingService.LogMessage(SimpleJson.SerializeObject(obj));
+            catch { }
 #endif
         }
 
@@ -430,15 +437,6 @@ namespace Microsoft.Xrm.Sdk
                 }
             }
             return typeColumns;
-        }
-
-        public static string ToMobilePhone(this string mobilePhone)
-        {
-            return mobilePhone
-                .Replace(".", string.Empty)
-                .Replace(" ", string.Empty)
-                .Replace("-", string.Empty)
-                .Replace("_", string.Empty);
         }
     }
 }

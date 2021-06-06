@@ -197,93 +197,93 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\01.ConsoleProjectTemplate\01.ConsoleProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\01.ConsoleProjectTemplate\02.ConsoleProjectTemplate.csproj">
       <Project>{2C597B0B-F648-486D-BC45-593F584B8BCC}</Project>
-      <Name>01.ConsoleProjectTemplate</Name>
+      <Name>02.ConsoleProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\02.CustomActionProjectTemplate\02.CustomActionProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\02.CustomActionProjectTemplate\06.CustomActionProjectTemplate.csproj">
       <Project>{1C97EFE1-D106-42A3-97FF-FC22779C70F0}</Project>
-      <Name>02.CustomActionProjectTemplate</Name>
+      <Name>06.CustomActionProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\03.PluginProjectTemplate\03.PluginProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\03.PluginProjectTemplate\04.PluginProjectTemplate.csproj">
       <Project>{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}</Project>
-      <Name>03.PluginProjectTemplate</Name>
+      <Name>04.PluginProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\04.WorkflowProjectTemplate\04.WorkflowProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\04.WorkflowProjectTemplate\05.WorkflowProjectTemplate.csproj">
       <Project>{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}</Project>
-      <Name>04.WorkflowProjectTemplate</Name>
+      <Name>05.WorkflowProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\06.TestProjectTemplate\06.TestProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\06.TestProjectTemplate\13.TestProjectTemplate.csproj">
       <Project>{547D1385-E9AA-47E5-A94B-D0B50719BBAB}</Project>
-      <Name>06.TestProjectTemplate</Name>
+      <Name>13.TestProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\07.ReportProjectTemplate\07.ReportProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\07.ReportProjectTemplate\11.ReportProjectTemplate.csproj">
       <Project>{ACFB5F3D-6156-47F4-A879-C9552E7C334C}</Project>
-      <Name>07.ReportProjectTemplate</Name>
+      <Name>11.ReportProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\08.TestUiProjectTemplate\08.TestUiProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\08.TestUiProjectTemplate\14.TestUiProjectTemplate.csproj">
       <Project>{5259082A-3733-4FBE-B50B-C9BBA22D95AA}</Project>
-      <Name>08.TestUiProjectTemplate</Name>
+      <Name>14.TestUiProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\09.ProxyTypesProjectTemplate\09.ProxyTypesProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\09.ProxyTypesProjectTemplate\12.ProxyTypesProjectTemplate.csproj">
       <Project>{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}</Project>
-      <Name>09.ProxyTypesProjectTemplate</Name>
+      <Name>12.ProxyTypesProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\10.SharedProjectTemplate\10.SharedProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\10.SharedProjectTemplate\01.SharedProjectTemplate.csproj">
       <Project>{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}</Project>
-      <Name>10.SharedProjectTemplate</Name>
+      <Name>01.SharedProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\11.DataProviderProjectTemplate\11.DataProviderProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\11.DataProviderProjectTemplate\08.DataProviderProjectTemplate.csproj">
       <Project>{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}</Project>
-      <Name>11.DataProviderProjectTemplate</Name>
+      <Name>08.DataProviderProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\12.SolutionPackagerProjectTemplate\12.SolutionPackagerProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\12.SolutionPackagerProjectTemplate\10.SolutionPackagerProjectTemplate.csproj">
       <Project>{C555420B-02D8-4388-AADF-375A9809ACDA}</Project>
-      <Name>12.SolutionPackagerProjectTemplate</Name>
+      <Name>10.SolutionPackagerProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\13.WebResourceProjectTemplate\13.WebResourceProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\13.WebResourceProjectTemplate\09.WebResourceProjectTemplate.csproj">
       <Project>{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}</Project>
-      <Name>13.WebResourceProjectTemplate</Name>
+      <Name>09.WebResourceProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\CSharp\14.CustomApiProjectTemplate\14.CustomApiProjectTemplate.csproj">
+    <ProjectReference Include="..\ProjectTemplates\CSharp\14.CustomApiProjectTemplate\07.CustomApiProjectTemplate.csproj">
       <Project>{DBBAE77C-9754-4019-91B5-B16920F709C4}</Project>
-      <Name>14.CustomApiProjectTemplate</Name>
+      <Name>07.CustomApiProjectTemplate</Name>
       <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
