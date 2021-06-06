@@ -17,12 +17,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Account", "Dev.DevKit.Plugin.Account\Dev.DevKit.Plugin.Account.csproj", "{3D20AE0A-DDBA-4BB6-87CF-AAA2C8D6D73D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Contact", "Dev.DevKit.Plugin.Contact\Dev.DevKit.Plugin.Contact.csproj", "{ECD2D51C-D5CD-45B2-AE56-C9678FF03EA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Activities", "Dev.DevKit.Plugin.Activities\Dev.DevKit.Plugin.Activities.csproj", "{35BF489F-69A2-4661-AD26-5D1D2F79083B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{35bf489f-69a2-4661-ad26-5d1d2f79083b}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3ad64e44-6747-4a10-9aed-7e7ba32d7aac}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3d20ae0a-ddba-4bb6-87cf-aaa2c8d6d73d}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{77c9c396-6865-47d9-ba0d-ac0c68256438}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{debf027a-0573-47db-838c-c4d3febee554}*SharedItemsImports = 13
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{ecd2d51c-d5cd-45b2-ae56-c9678ff03ea0}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +47,14 @@ Global
 		{3D20AE0A-DDBA-4BB6-87CF-AAA2C8D6D73D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D20AE0A-DDBA-4BB6-87CF-AAA2C8D6D73D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D20AE0A-DDBA-4BB6-87CF-AAA2C8D6D73D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECD2D51C-D5CD-45B2-AE56-C9678FF03EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD2D51C-D5CD-45B2-AE56-C9678FF03EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD2D51C-D5CD-45B2-AE56-C9678FF03EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD2D51C-D5CD-45B2-AE56-C9678FF03EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35BF489F-69A2-4661-AD26-5D1D2F79083B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35BF489F-69A2-4661-AD26-5D1D2F79083B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35BF489F-69A2-4661-AD26-5D1D2F79083B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35BF489F-69A2-4661-AD26-5D1D2F79083B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

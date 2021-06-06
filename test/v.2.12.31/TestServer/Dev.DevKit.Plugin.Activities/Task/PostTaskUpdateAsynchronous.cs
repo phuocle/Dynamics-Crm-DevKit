@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.PluginActivities.Task
 {
     [CrmPluginRegistration("Update", "task", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "statuscode,statecode",
-    "Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    "Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostTaskUpdateAsynchronous : IPlugin
     {
@@ -41,12 +41,12 @@ namespace Dev.DevKit.PluginActivities.Task
             if (context.MessageName.ToLower() != "Update".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Update");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

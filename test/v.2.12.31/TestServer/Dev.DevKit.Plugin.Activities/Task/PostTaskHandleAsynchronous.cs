@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.PluginActivities.Task
 {
     [CrmPluginRegistration("Handle", "task", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    "Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostTaskHandleAsynchronous : IPlugin
     {
@@ -31,12 +31,12 @@ namespace Dev.DevKit.PluginActivities.Task
             if (context.MessageName.ToLower() != "Handle".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Handle");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

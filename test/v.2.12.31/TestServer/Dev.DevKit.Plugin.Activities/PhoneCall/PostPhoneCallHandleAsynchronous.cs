@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.PluginActivities.PhoneCall
 {
     [CrmPluginRegistration("Handle", "phonecall", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    "Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostPhoneCallHandleAsynchronous : IPlugin
     {
@@ -31,12 +31,12 @@ namespace Dev.DevKit.PluginActivities.PhoneCall
             if (context.MessageName.ToLower() != "Handle".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Handle");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

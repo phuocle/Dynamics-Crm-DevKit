@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.PluginActivities.Email
 {
     [CrmPluginRegistration("Send", "email", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true,
+    "Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostEmailSendAsynchronous : IPlugin
     {
@@ -38,12 +38,12 @@ namespace Dev.DevKit.PluginActivities.Email
             if (context.MessageName.ToLower() != "Send".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Send");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
