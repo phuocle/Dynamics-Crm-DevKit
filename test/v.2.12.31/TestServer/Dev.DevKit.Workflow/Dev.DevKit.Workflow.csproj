@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{716B7960-7423-4329-9B0B-A0F8FD23DFDF}</ProjectGuid>
+    <ProjectGuid>{77C9C396-6865-47D9-BA0D-AC0C68256438}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.Workflow</RootNamespace>

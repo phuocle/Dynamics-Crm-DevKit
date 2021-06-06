@@ -30,62 +30,70 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
-            if (CurrentProjectItem == null)
+            try
             {
-                CurrentProjectItem = projectItem;
+                if (CurrentProjectItem == null)
+                {
+                    CurrentProjectItem = projectItem;
+                }
+                if (projectItem.Name.Contains(".generated.cs"))
+                {
+                    ClassFileGenerated = projectItem.FileNames[0];
+                }
+                if (!ActiveProject.Name.EndsWith("Shared") && !projectItem.Name.Contains(".generated.cs"))
+                {
+                    projectItem.ProjectItems.AddFromFile(ClassFileGenerated);
+                    projectItem.ContainingProject.Save();
+                }
+                if (IsNew && ActiveProject.Name.EndsWith($"{ProjectType.Shared.ToString()}"))
+                {
+                    DTE.ExecuteCommand("File.SaveAll");
+                }
             }
-            if (projectItem.Name.Contains(".generated.cs"))
-            {
-                ClassFileGenerated = projectItem.FileNames[0];
-            }
-            if (!ActiveProject.Name.EndsWith("Shared") && !projectItem.Name.Contains(".generated.cs"))
-            {
-                projectItem.ProjectItems.AddFromFile(ClassFileGenerated);
-                projectItem.ContainingProject.Save();
-            }
-            if (IsNew && ActiveProject.Name.EndsWith($"{ProjectType.Shared.ToString()}"))
-            {
-                DTE.ExecuteCommand("File.SaveAll");
-            }
+            catch { }
         }
 
         public void RunFinished()
         {
-            CloseWindows();
-            if (!IsNew)
+            try
             {
-                Utility.ForceWriteAllText(ClassFileGenerated, GeneratedCode);
-            }
-            else
-            {
-                if (!ActiveProject.Name.EndsWith($"{ProjectType.Shared.ToString()}")) return;
-                var projectItemsFile = ActiveProject.FullName.Replace(".shproj", ".projitems");
-                var lines = File.ReadAllLines(projectItemsFile);
-                var text = string.Empty;
-                var @class = $"{Class}.cs";
-                var fInfoProject = new FileInfo(ActiveProject.FullName);
-                var dic = fInfoProject.Directory?.FullName;
-                if (dic != null)
+                CloseWindows();
+                if (!IsNew)
                 {
-                    var check = CurrentProjectItem.FileNames[0].Substring(dic.Length + 1);
-                    foreach (var line in lines)
+                    Utility.ForceWriteAllText(ClassFileGenerated, GeneratedCode);
+                }
+                else
+                {
+                    if (!ActiveProject.Name.EndsWith($"{ProjectType.Shared.ToString()}")) return;
+                    var projectItemsFile = ActiveProject.FullName.Replace(".shproj", ".projitems");
+                    var lines = File.ReadAllLines(projectItemsFile);
+                    var text = string.Empty;
+                    var @class = $"{Class}.cs";
+                    var fInfoProject = new FileInfo(ActiveProject.FullName);
+                    var dic = fInfoProject.Directory?.FullName;
+                    if (dic != null)
                     {
-                        if (line.EndsWith($"{check + (char)34} />", StringComparison.Ordinal))
+                        var check = CurrentProjectItem.FileNames[0].Substring(dic.Length + 1);
+                        foreach (var line in lines)
                         {
-                            text += $"  <Compile Include=\"$(MSBuildThisFileDirectory){check}\">\r\n";
-                            text += $"    <DependentUpon>{@class}</DependentUpon>\r\n";
-                            text += $"    <SubType>Code</SubType>\r\n";
-                            text += $"  </Compile>\r\n";
-                        }
-                        else
-                        {
-                            text += line + "\r\n";
+                            if (line.EndsWith($"{check + (char)34} />", StringComparison.Ordinal))
+                            {
+                                text += $"  <Compile Include=\"$(MSBuildThisFileDirectory){check}\">\r\n";
+                                text += $"    <DependentUpon>{@class}</DependentUpon>\r\n";
+                                text += $"    <SubType>Code</SubType>\r\n";
+                                text += $"  </Compile>\r\n";
+                            }
+                            else
+                            {
+                                text += line + "\r\n";
+                            }
                         }
                     }
+                    Utility.ForceWriteAllText(projectItemsFile, text);
+                    DTE.ExecuteCommand("File.SaveAll");
                 }
-                Utility.ForceWriteAllText(projectItemsFile, text);
-                DTE.ExecuteCommand("File.SaveAll");
             }
+            catch { }
         }
 
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)

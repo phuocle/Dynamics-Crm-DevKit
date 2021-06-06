@@ -438,15 +438,6 @@ namespace Microsoft.Xrm.Sdk
             }
             return typeColumns;
         }
-
-        public static string ToMobilePhone(this string mobilePhone)
-        {
-            return mobilePhone
-                .Replace(".", string.Empty)
-                .Replace(" ", string.Empty)
-                .Replace("-", string.Empty)
-                .Replace("_", string.Empty);
-        }
     }
 }
 

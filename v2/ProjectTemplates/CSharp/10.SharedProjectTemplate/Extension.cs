@@ -104,14 +104,14 @@ namespace Microsoft.Xrm.Sdk
                 }
                 var outputParameters = new Dictionary<string, object>();
                 foreach (var key in context?.OutputParameters?.Keys)
-                    {
-                        if (context?.OutputParameters?[key] is Entity x)
+                {
+                    if (context?.OutputParameters?[key] is Entity x)
                     {
                         outputParameters.Add(key, EntityToObject(x));
                     }
                     else
                     {
-                            outputParameters.Add(key, context?.OutputParameters?[key]);
+                        outputParameters.Add(key, context?.OutputParameters?[key]);
                     }
                 }
                 var obj = new
