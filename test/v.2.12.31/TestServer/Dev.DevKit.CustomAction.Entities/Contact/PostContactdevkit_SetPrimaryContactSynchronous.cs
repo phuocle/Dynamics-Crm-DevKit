@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.CustomAction.Entities.Contact
 {
     [CrmPluginRegistration("devkit_SetPrimaryContact", "contact", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
+    "Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostContactdevkit_SetPrimaryContactSynchronous : IPlugin
     {
@@ -36,15 +36,15 @@ namespace Dev.DevKit.CustomAction.Entities.Contact
             if (context.MessageName.ToLower() != "devkit_SetPrimaryContact".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals devkit_SetPrimaryContact");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            //tracing.DebugMessage("Begin Custom Action: Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Custom Action: Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous");
+            tracing.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            //tracing.DebugMessage("End Custom Action: Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous");
+            tracing.DebugMessage("End Custom Action: Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous");
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

@@ -7,6 +7,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dev.DevKit.Shared", "Dev.De
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5406160E-2C6E-4915-9062-4FA94E43C8BB}"
 	ProjectSection(SolutionItems) = preProject
+		deploy-all-RELEASE.bat = deploy-all-RELEASE.bat
 		DynamicsCrm.DevKit.Cli.json = DynamicsCrm.DevKit.Cli.json
 		DynamicsCrm.DevKit.json = DynamicsCrm.DevKit.json
 	EndProjectSection
@@ -21,12 +22,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Contact",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Plugin.Activities", "Dev.DevKit.Plugin.Activities\Dev.DevKit.Plugin.Activities.csproj", "{35BF489F-69A2-4661-AD26-5D1D2F79083B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomAction.Entities", "Dev.DevKit.CustomAction.Entities\Dev.DevKit.CustomAction.Entities.csproj", "{975C0E6A-A038-4209-B766-A1F07ED02D5B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{35bf489f-69a2-4661-ad26-5d1d2f79083b}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3ad64e44-6747-4a10-9aed-7e7ba32d7aac}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{3d20ae0a-ddba-4bb6-87cf-aaa2c8d6d73d}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{77c9c396-6865-47d9-ba0d-ac0c68256438}*SharedItemsImports = 4
+		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{975c0e6a-a038-4209-b766-a1f07ed02d5b}*SharedItemsImports = 4
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{debf027a-0573-47db-838c-c4d3febee554}*SharedItemsImports = 13
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{ecd2d51c-d5cd-45b2-ae56-c9678ff03ea0}*SharedItemsImports = 4
 	EndGlobalSection
@@ -55,6 +59,10 @@ Global
 		{35BF489F-69A2-4661-AD26-5D1D2F79083B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35BF489F-69A2-4661-AD26-5D1D2F79083B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35BF489F-69A2-4661-AD26-5D1D2F79083B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{975C0E6A-A038-4209-B766-A1F07ED02D5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{975C0E6A-A038-4209-B766-A1F07ED02D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{975C0E6A-A038-4209-B766-A1F07ED02D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{975C0E6A-A038-4209-B766-A1F07ED02D5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.CustomAction.Entities.Account
 {
     [CrmPluginRegistration("devkit_DeleteAllData", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_DeleteAllDataSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
+    "Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_DeleteAllDataSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostAccountdevkit_DeleteAllDataSynchronous : IPlugin
     {
@@ -35,15 +35,15 @@ namespace Dev.DevKit.CustomAction.Entities.Account
             if (context.MessageName.ToLower() != "devkit_DeleteAllData".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals devkit_DeleteAllData");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            //tracing.DebugMessage("Begin Custom Action: Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_DeleteAllDataSynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Custom Action: Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_DeleteAllDataSynchronous");
+            tracing.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            //tracing.DebugMessage("End Custom Action: Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_DeleteAllDataSynchronous");
+            tracing.DebugMessage("End Custom Action: Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_DeleteAllDataSynchronous");
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
