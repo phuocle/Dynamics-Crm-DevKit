@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>08. Data Provider Project</Name>
-    <Description>Data Provider Project Template</Description>
-    <DefaultName>DataProviderProject</DefaultName>
-    <TemplateID>DynamicsCrm.DevKit.CSharpDataProviderProject</TemplateID>
+    <Name>03. Server Project</Name>
+    <Description>Server Project Template</Description>
+    <DefaultName>ServerProject</DefaultName>
+    <TemplateID>DynamicsCrm.DevKit.CSharpServerProject</TemplateID>
     <TemplateGroupID>DynamicsCrm.DevKit</TemplateGroupID>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
@@ -18,19 +18,18 @@
     <ProjectTypeTag>DynamicsCrm.DevKit</ProjectTypeTag>
     <LanguageTag>CSharp</LanguageTag>
     <PlatformTag>Windows</PlatformTag>
-    <SortOrder>180</SortOrder>
+    <SortOrder>130</SortOrder>
   </TemplateData>
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="$ProjectName$.snk">key.snk</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="deploy.debug.bat">deploy.debug.bat</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="deploy.datasource.bat">deploy.datasource.bat</ProjectItem>
-      <ProjectItem ReplaceParameters="false" TargetFileName="$ProjectName$.snk">key.snk</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
     <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.12.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
-    <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.DataProvider</FullClassName>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.Server</FullClassName>
   </WizardExtension>
 </VSTemplate>

@@ -96,6 +96,7 @@
     <Compile Include="ItemTemplates\TestUi.cs" />
     <Compile Include="ItemTemplates\Workflow.cs" />
     <Compile Include="ProjectTemplates\Console.cs" />
+    <Compile Include="ProjectTemplates\Server.cs" />
     <Compile Include="ProjectTemplates\CustomApi.cs" />
     <Compile Include="ProjectTemplates\CustomAction.cs" />
     <Compile Include="ProjectTemplates\DataProvider.cs" />

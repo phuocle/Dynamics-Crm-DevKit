@@ -683,7 +683,8 @@ namespace DynamicsCrm.DevKit.Shared
                 data = data.Replace(".Report.", ".");
             if (data.EndsWith(".Test."))
                 data = data.Replace(".Test.", ".");
-            return $"{data}{projectType.ToString()}";
+            if (projectType == ProjectType.Server) return data.TrimEnd(".".ToCharArray());
+            return $"{data}{projectType}";
         }
 
         public static string[] ParseArguments(string commandLine)

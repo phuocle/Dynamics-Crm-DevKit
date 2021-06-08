@@ -14,7 +14,8 @@
     SolutionPackager,
     Portal,
     Default,
-    CustomApi
+    CustomApi,
+    Server
 }
 
 public enum ItemType

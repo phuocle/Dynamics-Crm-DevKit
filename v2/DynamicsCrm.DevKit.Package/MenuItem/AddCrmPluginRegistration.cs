@@ -38,7 +38,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
         {
             var menuCommand = sender as OleMenuCommand;
             menuCommand.Visible = false;
-            if (!(dte.ActiveDocument.Language.Equals("CSharp", StringComparison.OrdinalIgnoreCase))) return;
+            if (!(dte?.ActiveDocument?.Language?.Equals("CSharp", StringComparison.OrdinalIgnoreCase)) ?? false) return;
             var textDocument = (TextDocument)dte.ActiveDocument.Object();
             var activePoint = textDocument.Selection.ActivePoint;
             var currentClass = dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
