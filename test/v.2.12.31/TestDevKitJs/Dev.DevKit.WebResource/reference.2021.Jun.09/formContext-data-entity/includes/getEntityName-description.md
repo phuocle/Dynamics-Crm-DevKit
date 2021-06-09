@@ -1,0 +1,1 @@
+Returns a string representing the logical name of the table for the record.

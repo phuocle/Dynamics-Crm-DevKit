@@ -1,0 +1,1 @@
+Gets a boolean value indicating whether all of the table data is valid.
