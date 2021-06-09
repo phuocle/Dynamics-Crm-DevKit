@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" PluginAssemblyId="e019ad23-c2c6-eb11-bacc-000d3a807100" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitPluginActivities-E019AD23-C2C6-EB11-BACC-000D3A807100/DevDevKitPluginActivities.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous, Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" PluginTypeId="e719ad23-c2c6-eb11-bacc-000d3a807100" Name="Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous">
+      <FriendlyName>Dev.DevKit.PluginActivities.Email.PostEmailSendAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous, Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" PluginTypeId="e319ad23-c2c6-eb11-bacc-000d3a807100" Name="Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous">
+      <FriendlyName>Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous, Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" PluginTypeId="eb19ad23-c2c6-eb11-bacc-000d3a807100" Name="Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous">
+      <FriendlyName>Dev.DevKit.PluginActivities.Task.PostTaskHandleAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous, Dev.DevKit.Plugin.Activities, Version=1.0.0.0, Culture=en, PublicKeyToken=4b609534ceaa701a" PluginTypeId="ef19ad23-c2c6-eb11-bacc-000d3a807100" Name="Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous">
+      <FriendlyName>Dev.DevKit.PluginActivities.Task.PostTaskUpdateAsynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

@@ -85,18 +85,18 @@
     {
       "profile": "Extract-Unmanaged",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
       "solutiontype": "Unmanaged",
-      "folder": "???",
+      "folder": "Solutions",
       "type": "Extract",
       "mapfile": ""
     },
     {
       "profile": "Extract-Managed",
       "rootfolder": "",
-      "solution": "???",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
       "solutiontype": "Managed",
-      "folder": "???",
+      "folder": "Solutions",
       "type": "Extract",
       "mapfile": ""
     },

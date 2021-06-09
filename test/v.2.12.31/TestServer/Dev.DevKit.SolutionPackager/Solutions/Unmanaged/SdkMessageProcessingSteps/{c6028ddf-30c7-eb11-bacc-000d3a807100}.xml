@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous" SdkMessageProcessingStepId="{c6028ddf-30c7-eb11-bacc-000d3a807100}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>50a858ca-28bd-eb11-bacc-000d3a80a94b</SdkMessageId>
+  <PluginTypeName>Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous, Dev.DevKit.CustomAction.Entities, Version=1.0.0.0, Culture=en, PublicKeyToken=eb423a0f05629ed8</PluginTypeName>
+  <PluginTypeId>c5028ddf-30c7-eb11-bacc-000d3a807100</PluginTypeId>
+  <PrimaryEntity>contact</PrimaryEntity>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>0</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>

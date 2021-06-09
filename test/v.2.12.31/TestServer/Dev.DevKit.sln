@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.DataProvider", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Server", "Dev.DevKit.Server\Dev.DevKit.Server.csproj", "{8ED64CF1-180C-4344-AC99-74EBC2BC4077}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{C85F886B-EA26-45C7-94B6-90A9A56F9604}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{35bf489f-69a2-4661-ad26-5d1d2f79083b}*SharedItemsImports = 4
@@ -84,6 +86,10 @@ Global
 		{8ED64CF1-180C-4344-AC99-74EBC2BC4077}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ED64CF1-180C-4344-AC99-74EBC2BC4077}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ED64CF1-180C-4344-AC99-74EBC2BC4077}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C85F886B-EA26-45C7-94B6-90A9A56F9604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85F886B-EA26-45C7-94B6-90A9A56F9604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85F886B-EA26-45C7-94B6-90A9A56F9604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C85F886B-EA26-45C7-94B6-90A9A56F9604}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

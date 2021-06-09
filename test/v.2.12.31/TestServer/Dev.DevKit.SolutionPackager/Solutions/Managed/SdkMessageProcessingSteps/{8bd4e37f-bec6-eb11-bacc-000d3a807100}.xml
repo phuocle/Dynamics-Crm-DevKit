@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous" SdkMessageProcessingStepId="{8bd4e37f-bec6-eb11-bacc-000d3a807100}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>5d0ad7df-27bd-eb11-bacc-000d3a80a94b</SdkMessageId>
+  <PluginTypeName>Dev.DevKit.CustomAction.PostNonedevkit_AjaxSynchronous, Dev.DevKit.CustomAction, Version=1.0.0.0, Culture=en, PublicKeyToken=a3ae1a774b8980c3</PluginTypeName>
+  <PluginTypeId>8ad4e37f-bec6-eb11-bacc-000d3a807100</PluginTypeId>
+  <AsyncAutoDelete>0</AsyncAutoDelete>
+  <FilteringAttributes></FilteringAttributes>
+  <InvocationSource>0</InvocationSource>
+  <Mode>0</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages />
+</SdkMessageProcessingStep>

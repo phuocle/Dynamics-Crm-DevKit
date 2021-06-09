@@ -19,4 +19,3 @@ set /a "index=%position% + 27"
 set version=!MicrosoftCrmSdkCoreTools:~%index%,50!
 $if$($Check$==0)set CrmConnection="$CrmConnectionString$"
 "%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /conn:%CrmConnection% /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"solutionpackagers" /profile:"Pack-Managed" /version:"%version%"$endif$$if$($Check$==1)"%DynamicsCrmDevKitCli%\tools\DynamicsCrm.DevKit.Cli.exe" /sdklogin:"yes" /json:"..\DynamicsCrm.DevKit.Cli.json" /type:"solutionpackagers" /profile:"Pack-Managed" /version:"%version%"$endif$
-exit

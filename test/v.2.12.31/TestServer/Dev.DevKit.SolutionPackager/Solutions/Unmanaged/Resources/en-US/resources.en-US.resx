@@ -82,19 +82,19 @@
     <comment>label</comment>
   </data>
   <data name="100000:label,customapirequestparameterdescription" xml:space="preserve">
-    <value>This is the InPicklist</value>
+    <value>This is the InMoney</value>
     <comment>label</comment>
   </data>
   <data name="100000:label,customapirequestparameterdisplayname" xml:space="preserve">
-    <value>InFloat</value>
+    <value>InInteger</value>
     <comment>label</comment>
   </data>
   <data name="100000:label,customapiresponsepropertydescription" xml:space="preserve">
-    <value>This is the OutBoolean</value>
+    <value>This is the OutDateTime</value>
     <comment>label</comment>
   </data>
   <data name="100000:label,customapiresponsepropertydisplayname" xml:space="preserve">
-    <value>OutDateTime</value>
+    <value>OutFloat</value>
     <comment>label</comment>
   </data>
   <data name="15062:LocalizedName,DynamicsCrmDevKitdevkit50000" xml:space="preserve">
