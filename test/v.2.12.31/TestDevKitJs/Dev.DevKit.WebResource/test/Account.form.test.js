@@ -1120,19 +1120,19 @@ define(['xrm-mock'], function () {
             expect(() => { form.Utility.ClearGlobalNotification(null, null, null) }).toThrow(new Error("Method not implemented."));
 
             //Execution Context
-            expect(() => { form.ExecutionContext.Depth }).toThrow(new Error("not implemented"));
-            expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("not implemented"));
-            expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("not implemented"));
+            expect(form.ExecutionContext.Depth).toBe(1);
+            expect(() => { form.ExecutionContext.EventArgs }).toThrow(new Error("no event args given"));
+            expect(() => { form.ExecutionContext.EventSource }).toThrow(new Error("no event source given"));
             expect(form.ExecutionContext.FormContext).toBeDefined();
-            expect(() => { form.ExecutionContext.GetSharedVariable("A") }).toThrow(new Error("not implemented"));
-            expect(() => { form.ExecutionContext.SetSharedVariable("A", "B") }).toThrow(new Error("not implemented"));
-            expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("not implemented"));
-            expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("not implemented"));
-            expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("not implemented"));
+            expect(form.ExecutionContext.GetSharedVariable("A")).toBeUndefined();
+            expect(form.ExecutionContext.SetSharedVariable("A", "B")).toBeUndefined();
+            expect(() => { form.ExecutionContext.SaveMode }).toThrow(new Error("no event args given"));
+            expect(() => { form.ExecutionContext.IsDefaultPrevented() }).toThrow(new Error("no event args given"));
+            expect(() => { form.ExecutionContext.SetPreventDefault() }).toThrow(new Error("no event args given"));
 
-            expect(() => { form.ExecutionContext.EntityReference }).toThrow(new Error("not implemented"));
-            expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new Error("not implemented"));
-            expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new Error("not implemented"));
+            expect(() => { form.ExecutionContext.EntityReference }).toThrow(new Error("no event args given"));
+            expect(() => { form.ExecutionContext.IsSaveSuccess }).toThrow(new Error("no event args given"));
+            expect(() => { form.ExecutionContext.SaveErrorInfo }).toThrow(new Error("no event args given"));
 
         });
     });
