@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.Server.Plugins.Account
 {
     [CrmPluginRegistration("Assign", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = false,
+    "Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostAccountAssignAsynchronous : IPlugin
     {
@@ -36,12 +36,12 @@ namespace Dev.DevKit.Server.Plugins.Account
             if (context.MessageName.ToLower() != "Assign".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Assign");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

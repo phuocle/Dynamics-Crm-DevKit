@@ -4,10 +4,10 @@ using System;
 
 namespace Dev.DevKit.Server.Plugins.Contact
 {
-    [CrmPluginRegistration("RevokeAccess", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.Server.Plugins.Contact.PostAccountRevokeAccessAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
+    [CrmPluginRegistration("RevokeAccess", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
+    "Dev.DevKit.Server.Plugins.Contact.PostContactRevokeAccessAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
     Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
-    public class PostAccountRevokeAccessAsynchronous : IPlugin
+    public class PostContactRevokeAccessAsynchronous : IPlugin
     {
         /*
           InputParameters:
@@ -19,7 +19,7 @@ namespace Dev.DevKit.Server.Plugins.Contact
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-        //public PostAccountRevokeAccessAsynchronous(string unsecureString, string secureString)
+        //public PostContactRevokeAccessAsynchronous(string unsecureString, string secureString)
         //{
         //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
         //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -32,16 +32,16 @@ namespace Dev.DevKit.Server.Plugins.Contact
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.Stage != (int)StageEnum.PostOperation) throw new InvalidPluginExecutionException("Stage does not equals PostOperation");
-            if (context.PrimaryEntityName.ToLower() != "account".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
+            if (context.PrimaryEntityName.ToLower() != "contact".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals contact");
             if (context.MessageName.ToLower() != "RevokeAccess".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals RevokeAccess");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Contact.PostAccountRevokeAccessAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Contact.PostContactRevokeAccessAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Contact.PostAccountRevokeAccessAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Contact.PostContactRevokeAccessAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

@@ -38,12 +38,12 @@ namespace Dev.DevKit.Server.Plugins.Account
             if (context.MessageName.ToLower() != "Merge".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Merge");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountMergeAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountMergeAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountMergeAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountMergeAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

@@ -36,12 +36,12 @@ namespace Dev.DevKit.Server.Plugins.Contact
             if (context.MessageName.ToLower() != "GrantAccess".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals GrantAccess");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Contact.PostContactGrantAccessAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Contact.PostContactGrantAccessAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Contact.PostContactGrantAccessAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Contact.PostContactGrantAccessAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

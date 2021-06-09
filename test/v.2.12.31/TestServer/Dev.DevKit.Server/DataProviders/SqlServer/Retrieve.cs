@@ -1,11 +1,11 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using Dev.DevKit.Shared;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
-using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.DataProviders.SqlServer
 {
-    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.SqlServer.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "DataSource2")]
+    [CrmPluginRegistration("Dev.DevKit.Server.DataProviders.SqlServer.Retrieve", "Retrieve", PluginType.DataProvider, DataSource = "devkit_datasource2")]
     public class Retrieve : IPlugin
     {
         /*
@@ -37,12 +37,13 @@ namespace Dev.DevKit.Server.DataProviders.SqlServer
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //tracing.DebugMessage("Begin Data Provider: Dev.DevKit.DataProvider.Retrieve");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Data Provider: Dev.DevKit.Server.DataProviders.SqlServer.Retrieve");
+            tracing.DebugContext(context);
+            tracing.DebugMessage(dataSource.ToDebug());
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //tracing.DebugMessage("End Data Provider: Dev.DevKit.DataProvider.Retrieve");
+            tracing.DebugMessage("End Data Provider: Dev.DevKit.Server.DataProviders.SqlServer.Retrieve");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)

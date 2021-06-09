@@ -25,12 +25,12 @@ namespace Dev.DevKit.Server.Workflows
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
 
-            //tracing.DebugMessage("Begin Workflow: Dev.DevKit.Server.Workflows.ToUpperCase");
-            //tracing.DebugContext(workflowContext);
+            tracing.DebugMessage("Begin Workflow: Dev.DevKit.Server.Workflows.ToUpperCase");
+            tracing.DebugContext(workflowContext);
 
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Workflow: Dev.DevKit.Server.Workflows.ToUpperCase");
+            tracing.DebugMessage("End Workflow: Dev.DevKit.Server.Workflows.ToUpperCase");
         }
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

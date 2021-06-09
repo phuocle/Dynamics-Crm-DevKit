@@ -5,7 +5,7 @@ using System;
 namespace Dev.DevKit.Server.Plugins.Account
 {
     [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "name",
-    "Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, DeleteAsyncOperation = true, Action = PluginStepOperationEnum.Deactivate,
+    "Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, Action = PluginStepOperationEnum.Deactivate,
     Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name,modifiedon,ownerid",
     Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "name,modifiedon,ownerid,accountnumber,telephone1")]
     public class PostAccountUpdateAsynchronous : IPlugin
@@ -42,12 +42,12 @@ namespace Dev.DevKit.Server.Plugins.Account
             if (context.MessageName.ToLower() != "Update".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Update");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

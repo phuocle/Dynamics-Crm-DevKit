@@ -36,12 +36,12 @@ namespace Dev.DevKit.Server.Plugins.PhoneCall
             if (context.MessageName.ToLower() != "Assign".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Assign");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.PhoneCall.PostPhoneCallAssignAsynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.PhoneCall.PostPhoneCallAssignAsynchronous");
+            tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.PhoneCall.PostPhoneCallAssignAsynchronous");
+            tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.PhoneCall.PostPhoneCallAssignAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

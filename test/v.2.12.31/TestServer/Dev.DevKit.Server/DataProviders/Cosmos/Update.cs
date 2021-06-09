@@ -1,7 +1,7 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using Dev.DevKit.Shared;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Extensions;
 using System;
-using Dev.DevKit.Shared;
 
 namespace Dev.DevKit.Server.DataProviders.Cosmos
 {
@@ -38,12 +38,13 @@ namespace Dev.DevKit.Server.DataProviders.Cosmos
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //tracing.DebugMessage("Begin Data Provider: Dev.DevKit.DataProvider.Update");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Data Provider: Dev.DevKit.Server.DataProviders.Cosmos.Update");
+            tracing.DebugContext(context);
+            tracing.DebugMessage(dataSource.ToDebug());
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //tracing.DebugMessage("End Data Provider: Dev.DevKit.DataProvider.Update");
+            tracing.DebugMessage("End Data Provider: Dev.DevKit.Server.DataProviders.Cosmos.Update");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)

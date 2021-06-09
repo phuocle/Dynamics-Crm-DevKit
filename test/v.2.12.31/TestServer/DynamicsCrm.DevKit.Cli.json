@@ -9,7 +9,8 @@
         "Dev.DevKit.CustomAction.*.dll",
         "Dev.DevKit.Workflow.*.dll",
         "Dev.DevKit.CustomApi.*.dll",
-        "Dev.DevKit.DataProvider.*.dll"
+        "Dev.DevKit.DataProvider.*.dll",
+        "Dev.DevKit.Server.*.dll"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"
@@ -24,7 +25,8 @@
         "Dev.DevKit.CustomAction.*.dll",
         "Dev.DevKit.Workflow.*.dll",
         "Dev.DevKit.CustomApi.*.dll",
-        "Dev.DevKit.DataProvider.*.dll"
+        "Dev.DevKit.DataProvider.*.dll",
+        "Dev.DevKit.Server.*.dll"
       ],
       "excludefiles": [
         "Dev.DevKit.*.Test.dll"

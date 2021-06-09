@@ -5,8 +5,7 @@ using System;
 namespace Dev.DevKit.Server.CustomActions
 {
     [CrmPluginRegistration("devkit_Ajax", "none", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    "Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction)]
     public class PostNonedevkit_AjaxSynchronous : IPlugin
     {
         /*
@@ -37,15 +36,15 @@ namespace Dev.DevKit.Server.CustomActions
             if (context.MessageName.ToLower() != "devkit_Ajax".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals devkit_Ajax");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            //tracing.DebugMessage("Begin Custom Action: Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Custom Action: Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous");
+            tracing.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            //tracing.DebugMessage("End Custom Action: Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous");
+            tracing.DebugMessage("End Custom Action: Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous");
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
