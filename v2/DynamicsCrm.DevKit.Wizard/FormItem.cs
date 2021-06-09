@@ -8,7 +8,6 @@ using DynamicsCrm.DevKit.Shared.Models;
 using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
 using DynamicsCrm.DevKit.SdkLogin;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Tooling.Connector;
@@ -26,6 +25,14 @@ namespace DynamicsCrm.DevKit.Wizard
         public string ComboBoxEntityName => comboBoxEntity.Text;
         public string NameSpace { get; set; }
         public string SharedNameSpace { get; set; }
+        public string DataSource
+        {
+            get
+            {
+                if (ItemType == ItemType.DataProvider) return comboBoxEntity.Text;
+                return string.Empty;
+            }
+        }
         public string Class
         {
             get
@@ -67,6 +74,15 @@ namespace DynamicsCrm.DevKit.Wizard
                     buttonOk.Enabled = true;
                     progressBar.Value = 100;
                 }
+                else if (_itemType == ItemType.DataProvider)
+                {
+                    link.Text = @"Add new Data Provider Class";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dat-Provider-Item-Template";
+                    labelItem.Text = "Data Source";
+                    textItemName.Visible = false;
+                    comboBoxEntity.Visible = true;
+                    comboBoxEntity.DropDownStyle = ComboBoxStyle.DropDownList;
+                }
                 else if (_itemType == ItemType.JsWebApi)
                 {
                     link.Text = @"Add New Js WebApi Class";
@@ -80,16 +96,11 @@ namespace DynamicsCrm.DevKit.Wizard
                 {
                     link.Text = @"Add New Resource String";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Resource-String-Item-Template";
-                    //buttonConnection.Enabled = false;
                     textItemName.Visible = false;
-                    //buttonOk.Enabled = true;
-                    //comboBoxEntity.Enabled = true;
                     comboBoxEntity.Visible = true;
-                    //comboBoxEntity.DataSource = Utility.GetLanguages();
                     comboBoxEntity.DisplayMember = "Name";
                     comboBoxEntity.ValueMember = "Value";
                     comboBoxEntity.DropDownStyle = ComboBoxStyle.DropDownList;
-                    //comboBoxEntity.Text = "English-United States";
                     comboBoxWebResource.Size = new System.Drawing.Size(comboBoxWebResource.Size.Width / 2 - 50, comboBoxWebResource.Size.Height);
                     comboBoxEntity.Size = new System.Drawing.Size(comboBoxEntity.Size.Width / 2 + 50, comboBoxEntity.Size.Height);
                     comboBoxEntity.Location = new System.Drawing.Point(comboBoxWebResource.Location.X + comboBoxWebResource.Size.Width + 2, comboBoxEntity.Location.Y);
@@ -203,30 +214,13 @@ namespace DynamicsCrm.DevKit.Wizard
             ItemType = itemType;
             NameSpace = nameSpace;
             SharedNameSpace = sharedNameSpace;
-            //LoadComboBoxCrmName();
         }
-
-        //private void LoadComboBoxCrmName()
-        //{
-        //    var dataSource = Const.DataSourceCrm;
-        //    comboBoxCrmName.DataSource = dataSource;
-        //    comboBoxCrmName.ValueMember = "Version";
-        //    comboBoxCrmName.DisplayMember = "Name";
-        //    var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-        //    if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
-        //        comboBoxCrmName.Text = config.DefaultCrmName;
-        //}
 
         private void LoadComboBoxEntity(List<XrmEntity> entities)
         {
             comboBoxEntity.DataSource = entities;
             comboBoxEntity.ValueMember = "LogicalName";
             comboBoxEntity.DisplayMember = "Name";
-        }
-
-        private void LoadComboBoxEntity(List<string> projects)
-        {
-            comboBoxEntity.DataSource = projects;
         }
 
         private bool IsOk()
@@ -248,14 +242,12 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             if (!IsOk()) return;
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            //config.DefaultCrmName = comboBoxCrmName.Text;
             DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
             progressBar.Visible = true;
             if(ItemType == ItemType.LateBound)
             {
                 EnabledAll(false);
                 progressBar.Style = ProgressBarStyle.Marquee;
-                //var crmService = CrmService;
                 var crmName = ComboBoxCrmName;
                 var entityName = ComboBoxEntityName;
                 var nameSpace = NameSpace;
@@ -432,6 +424,29 @@ namespace DynamicsCrm.DevKit.Wizard
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
                     progressBar.Value = 100;
+                    break;
+                case ItemType.DataProvider:
+                    EnabledAll(false);
+                    List<string> dataSource = new List<string>();
+                    progressBar.Style = ProgressBarStyle.Marquee;
+                    Task task5 = Task.Factory.StartNew(() =>
+                    {
+                        dataSource = XrmHelper.GetAllDataSource(CrmServiceClient);
+                    });
+                    while (!task5.IsCompleted)
+                    {
+                        Application.DoEvents();
+                    }
+                    comboBoxEntity.DataSource = dataSource;
+                    comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
+                    comboBoxWebResource.Enabled = comboBoxEntity.Enabled;
+                    comboBoxEntity.SelectedIndex = 0;
+                    buttonOk.Enabled = comboBoxEntity.Enabled;
+                    buttonCancel.Enabled = true;
+                    progressBar.Style = ProgressBarStyle.Blocks;
+                    progressBar.Value = 100;
+                    break;
+                default:
                     break;
             }
             progressBar.Visible = false;

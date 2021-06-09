@@ -33,7 +33,8 @@ public enum ItemType
     ResourceString,
     JsForm2,
     Default,
-    CustomApi
+    CustomApi,
+    DataProvider
 }
 
 public enum CrmItemType

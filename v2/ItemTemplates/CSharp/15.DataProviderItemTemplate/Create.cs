@@ -5,24 +5,25 @@ using $SharedNameSpace$;
 
 namespace $NameSpace$
 {
-    [CrmPluginRegistration("$NameSpace$.Retrieve", "Retrieve", PluginType.DataProvider)]
-    public class Retrieve : IPlugin
+    [CrmPluginRegistration("$NameSpace$.Create", "Create", PluginType.DataProvider, DataSource = "$DataSource$")]
+    public class Create : IPlugin
     {
         /*
           InputParameters:
-              Target                  Microsoft.Xrm.Sdk.EntityReference - require
-              ColumnSet               Microsoft.Xrm.Sdk.Query.ColumnSet - require
-              RelatedEntitiesQuery    Microsoft.Xrm.Sdk.RelationshipQueryCollection
-              ReturnNotifications     System.Boolean
+              Target                             Microsoft.Xrm.Sdk.Entity - require
+              SuppressDuplicateDetection         System.Boolean
+              CalculateMatchCodeSynchronously    System.Boolean
+              SolutionUniqueName                 System.String
+              MaintainLegacyAppServerBehavior    System.Boolean
+              ReturnRowVersion                   System.Boolean
            OutputParameters:
-              Entity                  Microsoft.Xrm.Sdk.Entity - require
-              Notifications            - require
+              id                                 System.Guid - require
         */
 
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-        //public Retrieve(string unsecureString, string secureString)
+        //public Create(string unsecureString, string secureString)
         //{
         //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
         //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -37,12 +38,13 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //tracing.DebugMessage("Begin Data Provider: $NameSpace$.Retrieve");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Data Provider: $NameSpace$.Create");
+            tracing.DebugContext(context);
+            tracing.DebugMessage(dataSource.ToDebug());
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //tracing.DebugMessage("End Data Provider: $NameSpace$.Retrieve");
+            tracing.DebugMessage("End Data Provider: $NameSpace$.Create");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)
@@ -51,12 +53,12 @@ namespace $NameSpace$
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var target = context.InputParameterOrDefault<EntityReference>("Target");
-            var entity = new Entity("???", target.Id);
+            var target = context.InputParameterOrDefault<Entity>("Target");
+            var id = Guid.NewGuid();
 
             //YOUR CODE ...
 
-            context.OutputParameters["BusinessEntity"] = entity;
+            context.OutputParameters["id"] = id;
         }
     }
 }

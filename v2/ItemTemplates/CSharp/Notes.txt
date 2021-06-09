@@ -1,0 +1,14 @@
+110 01.LateBoundItemTemplate
+120 02.PluginItemTemplate
+130 03.WorkflowItemTemplate
+140 04.CustomActionItemTemplate
+150 05.TestItemTemplate
+160 06.TestUiItemTemplate
+170 13.JsFormItemTemplate
+180 08.JsWebApiItemTemplate
+190 09.JsTestItemTemplate
+200 10.ResourceStringItemTemplate
+210 11.DownloadWebResourcesItemTemplate
+220 12.JsDevkitItemTemplate
+230 14.CustomApiItemTemplate
+240 15.DataProviderItemTemplate

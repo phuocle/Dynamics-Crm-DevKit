@@ -209,7 +209,7 @@
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.link);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

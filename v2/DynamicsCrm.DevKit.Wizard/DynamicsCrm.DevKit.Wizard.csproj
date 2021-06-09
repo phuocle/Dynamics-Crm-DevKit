@@ -89,6 +89,7 @@
     <Compile Include="ItemTemplates\JsTest.cs" />
     <Compile Include="ItemTemplates\JsDevkit.cs" />
     <Compile Include="ItemTemplates\JsWebApi.cs" />
+    <Compile Include="ItemTemplates\DataProvider.cs" />
     <Compile Include="ItemTemplates\LateBound.cs" />
     <Compile Include="ItemTemplates\Plugin.cs" />
     <Compile Include="ItemTemplates\ResourceString.cs" />

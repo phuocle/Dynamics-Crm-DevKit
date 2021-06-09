@@ -5,8 +5,8 @@ using $SharedNameSpace$;
 
 namespace $NameSpace$
 {
-    [CrmPluginRegistration("$NameSpace$.Create", "Create", PluginType.DataProvider)]
-    public class Create : IPlugin
+    [CrmPluginRegistration("$NameSpace$.Update", "Update", PluginType.DataProvider, DataSource = "$DataSource$")]
+    public class Update : IPlugin
     {
         /*
           InputParameters:
@@ -15,15 +15,15 @@ namespace $NameSpace$
               CalculateMatchCodeSynchronously    System.Boolean
               SolutionUniqueName                 System.String
               MaintainLegacyAppServerBehavior    System.Boolean
+              ConcurrencyBehavior                Microsoft.Xrm.Sdk.ConcurrencyBehavior
               ReturnRowVersion                   System.Boolean
            OutputParameters:
-              id                                 System.Guid - require
         */
 
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-        //public Create(string unsecureString, string secureString)
+        //public Update(string unsecureString, string secureString)
         //{
         //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
         //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -38,12 +38,13 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //tracing.DebugMessage("Begin Data Provider: $NameSpace$.Create");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Data Provider: $NameSpace$.Update");
+            tracing.DebugContext(context);
+            tracing.DebugMessage(dataSource.ToDebug());
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //tracing.DebugMessage("End Data Provider: $NameSpace$.Create");
+            tracing.DebugMessage("End Data Provider: $NameSpace$.Update");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)
@@ -53,11 +54,9 @@ namespace $NameSpace$
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
             var target = context.InputParameterOrDefault<Entity>("Target");
-            var id = Guid.NewGuid();
 
             //YOUR CODE ...
 
-            context.OutputParameters["id"] = id;
         }
     }
 }

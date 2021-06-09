@@ -11,6 +11,7 @@
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
     <DefaultName>Javascript.cs</DefaultName>
+    <SortOrder>190</SortOrder>
   </TemplateData>
   <TemplateContent>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$.test.js">Javascript.js</ProjectItem>

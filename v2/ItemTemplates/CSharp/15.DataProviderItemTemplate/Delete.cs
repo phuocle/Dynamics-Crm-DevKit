@@ -5,25 +5,21 @@ using $SharedNameSpace$;
 
 namespace $NameSpace$
 {
-    [CrmPluginRegistration("$NameSpace$.Update", "Update", PluginType.DataProvider)]
-    public class Update : IPlugin
+    [CrmPluginRegistration("$NameSpace$.Delete", "Delete", PluginType.DataProvider, DataSource = "$DataSource$")]
+    public class Delete : IPlugin
     {
         /*
           InputParameters:
-              Target                             Microsoft.Xrm.Sdk.Entity - require
-              SuppressDuplicateDetection         System.Boolean
-              CalculateMatchCodeSynchronously    System.Boolean
-              SolutionUniqueName                 System.String
-              MaintainLegacyAppServerBehavior    System.Boolean
-              ConcurrencyBehavior                Microsoft.Xrm.Sdk.ConcurrencyBehavior
-              ReturnRowVersion                   System.Boolean
+              Target                 Microsoft.Xrm.Sdk.EntityReference - require
+              SolutionUniqueName     System.String
+              ConcurrencyBehavior    Microsoft.Xrm.Sdk.ConcurrencyBehavior
            OutputParameters:
         */
 
         //private readonly string _unsecureString = null;
         //private readonly string _secureString = null;
 
-        //public Update(string unsecureString, string secureString)
+        //public Delete(string unsecureString, string secureString)
         //{
         //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
         //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
@@ -38,12 +34,13 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            //tracing.DebugMessage("Begin Data Provider: $NameSpace$.Update");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Data Provider: $NameSpace$.Delete");
+            tracing.DebugContext(context);
+            tracing.DebugMessage(dataSource.ToDebug());
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            //tracing.DebugMessage("End Data Provider: $NameSpace$.Update");
+            tracing.DebugMessage("End Data Provider: $NameSpace$.Delete");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)
@@ -52,7 +49,7 @@ namespace $NameSpace$
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var target = context.InputParameterOrDefault<Entity>("Target");
+            var target = context.InputParameterOrDefault<EntityReference>("Target");
 
             //YOUR CODE ...
 

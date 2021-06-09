@@ -11,6 +11,7 @@
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
     <DefaultName>download.webresources.bat</DefaultName>
+    <SortOrder>210</SortOrder>
   </TemplateData>
   <TemplateContent>
     <ProjectItem ReplaceParameters="false" TargetFileName="download.webresources.bat">download.webresources.bat</ProjectItem>

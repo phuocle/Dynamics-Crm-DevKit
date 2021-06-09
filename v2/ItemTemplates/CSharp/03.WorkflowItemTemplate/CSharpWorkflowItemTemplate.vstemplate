@@ -11,6 +11,7 @@
     <AppliesTo>CSharp</AppliesTo>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <SortOrder>130</SortOrder>
   </TemplateData>
   <TemplateContent>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$.cs">Class.cs</ProjectItem>

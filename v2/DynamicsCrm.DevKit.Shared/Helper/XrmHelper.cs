@@ -563,5 +563,36 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             }
             return list;
         }
+
+        public static List<string> GetAllDataSource(CrmServiceClient crmServiceClient)
+        {
+            var list = new List<string>();
+            var filterExpression = new MetadataFilterExpression();
+            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
+            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
+            {
+                "DataProviderId",
+                "LogicalName",
+                "SchemaName",
+                "MetadataId",
+                "DisplayName",
+                "ExternalName",
+                "DisplayCollectionName"
+            });
+            var entityQueryExpression = new EntityQueryExpression
+            {
+                Criteria = new MetadataFilterExpression()
+            };
+            entityQueryExpression.Criteria = filterExpression;
+            entityQueryExpression.Properties = propertiesExpression;
+            var request = new RetrieveMetadataChangesRequest
+            {
+                Query = entityQueryExpression
+            };
+            var response = (RetrieveMetadataChangesResponse)crmServiceClient.Execute(request);
+            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
+                list.Add(entityMetadata.LogicalName);
+            return list;
+        }
     }
 }

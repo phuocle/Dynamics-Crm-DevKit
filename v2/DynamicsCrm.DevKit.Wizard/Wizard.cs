@@ -125,6 +125,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
             replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
             replacementsDictionary.Add("$ProxyTypesNameSpace$", Utility.GetProxyTypesNameSpace(form.DTE));
+            replacementsDictionary.Add("$DataSource$", form.DataSource);
             if (form.ItemType == ItemType.LateBound)
             {
                 replacementsDictionary.Add("$GeneratedLateBoundClass$", form.GeneratedLateBoundClass);

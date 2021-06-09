@@ -1,23 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>04. C# Custom Action Class</Name>
-    <Description>C# Custom Action Class Template</Description>
+    <Name>14. C# Data Provider Class</Name>
+    <Description>C# Data Provider Class Template</Description>
     <DefaultName>Class.cs</DefaultName>
-    <TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000004</TemplateID>
+    <TemplateID>AAAAAAAA-AAAA-AAAA-BBBB-000000000015</TemplateID>
     <Icon>icon.png</Icon>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>Visual C#</ProjectSubType>
     <AppliesTo>CSharp</AppliesTo>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
-    <SortOrder>140</SortOrder>
+    <SortOrder>240</SortOrder>
   </TemplateData>
   <TemplateContent>
-    <ProjectItem ReplaceParameters="true" TargetFileName="$PluginClass$$PluginOrder2$.cs">Class.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="Retrieve.cs">Retrieve.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="RetrieveMultiple.cs">RetrieveMultiple.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="Create.cs">Create.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="Update.cs">Update.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="Delete.cs">Delete.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
     <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.12.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
-    <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.CustomAction</FullClassName>
+    <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.DataProvider</FullClassName>
   </WizardExtension>
 </VSTemplate>

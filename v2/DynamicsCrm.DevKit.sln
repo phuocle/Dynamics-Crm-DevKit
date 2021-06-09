@@ -30,6 +30,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{B02EC0C1-6C75-4DB9-8AC5-B00F32F3F224}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}"
+	ProjectSection(SolutionItems) = preProject
+		ItemTemplates\CSharp\Notes.txt = ItemTemplates\CSharp\Notes.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "10.ResourceStringItemTemplate", "ItemTemplates\CSharp\10.ResourceStringItemTemplate\10.ResourceStringItemTemplate.csproj", "{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}"
 EndProject
@@ -73,8 +76,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "11.DownloadWebResourcesItem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "09.JsTestItemTemplate", "ItemTemplates\CSharp\09.JsTestItemTemplate\09.JsTestItemTemplate.csproj", "{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.JsFormItemTemplate", "ItemTemplates\CSharp\07.JsFormItemTemplate\07.JsFormItemTemplate.csproj", "{F3432EFE-5FE3-46F4-9335-703E658C022E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Package", "DynamicsCrm.DevKit.Package\DynamicsCrm.DevKit.Package.csproj", "{6302EA70-637D-4FDC-B169-1493427DD8D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12.JsDevkitItemTemplate", "ItemTemplates\CSharp\12.JsDevkitItemTemplate\12.JsDevkitItemTemplate.csproj", "{CCBD1381-E6A6-4A57-9853-E93A27A33F12}"
@@ -92,6 +93,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "14.CustomApiItemTemplate", "ItemTemplates\CSharp\14.CustomApiItemTemplate\14.CustomApiItemTemplate.csproj", "{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03.ServerProjectTemplate", "ProjectTemplates\CSharp\15.ServerProjectTemplate\03.ServerProjectTemplate.csproj", "{B7876A9B-2B63-4967-8C44-060E2C65523A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "15.DataProviderItemTemplate", "ItemTemplates\CSharp\15.DataProviderItemTemplate\15.DataProviderItemTemplate.csproj", "{DBC500F9-934B-4A10-9F79-5658731FE77C}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -199,10 +202,6 @@ Global
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -239,6 +238,10 @@ Global
 		{B7876A9B-2B63-4967-8C44-060E2C65523A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7876A9B-2B63-4967-8C44-060E2C65523A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7876A9B-2B63-4967-8C44-060E2C65523A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBC500F9-934B-4A10-9F79-5658731FE77C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBC500F9-934B-4A10-9F79-5658731FE77C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBC500F9-934B-4A10-9F79-5658731FE77C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBC500F9-934B-4A10-9F79-5658731FE77C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -267,13 +270,13 @@ Global
 		{B7281E07-25A1-4F0F-9595-A1394211DCD4} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{99DD3CAE-6D04-4BDA-BB2D-C4D7B28CA1E0} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
-		{F3432EFE-5FE3-46F4-9335-703E658C022E} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{DBBAE77C-9754-4019-91B5-B16920F709C4} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{B7876A9B-2B63-4967-8C44-060E2C65523A} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
+		{DBC500F9-934B-4A10-9F79-5658731FE77C} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}

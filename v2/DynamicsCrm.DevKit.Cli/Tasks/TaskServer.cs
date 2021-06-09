@@ -1166,7 +1166,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 request.Target = entity;
                 request.Parameters.Add("SuppressDuplicateDetection", true);
                 request.Parameters.Add("SolutionUniqueName", json.solution);
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "   Registering", CliLog.ColorMagenta, " Data Provider: ", CliLog.ColorCyan, $"{logicalNameDataSource}", CliLog.ColorWhite, " linked with events ", CliLog.ColorCyan, events);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "   Registering", CliLog.ColorMagenta, " DataProvider: ", CliLog.ColorCyan, $"{logicalNameDataSource}", CliLog.ColorWhite, " linked with events ", CliLog.ColorCyan, events);
                 crmServiceClient.Execute(request);
             }
             else
@@ -1189,7 +1189,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         Target = entity
                     };
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "   Updating", CliLog.ColorMagenta, " Data Provider ", CliLog.ColorCyan, $"{logicalNameDataSource}", CliLog.ColorWhite, " linked with events ", CliLog.ColorCyan, events);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorRed, "   Updating", CliLog.ColorMagenta, " DataProvider ", CliLog.ColorCyan, $"{logicalNameDataSource}", CliLog.ColorWhite, " linked with events ", CliLog.ColorCyan, events);
                     crmServiceClient.Execute(request);
                 }
                 else
