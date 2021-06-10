@@ -54,6 +54,21 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			DETAILS_TAB: {
+				Section: {
+					BILLING: {},
+					ChildAccounts: {},
+					COMPANY_PROFILE: {},
+					CONTACT_PREFERENCES: {},
+					DETAILS_TAB_section_6: {},
+					SHIPPING: {}
+				}
+			},
+			PHUOCLE: {
+				Section: {
+					tab_3_section_1: {}
+				}
+			},
 			SUMMARY_TAB: {
 				Section: {
 					ACCOUNT_INFORMATION: {},
@@ -62,21 +77,6 @@ var DevKit;
 					SOCIAL_PANE_TAB: {},
 					Summary_section_6: {},
 					SUMMARY_TAB_section_6: {}
-				}
-			},
-			DETAILS_TAB: {
-				Section: {
-					COMPANY_PROFILE: {},
-					DETAILS_TAB_section_6: {},
-					CONTACT_PREFERENCES: {},
-					BILLING: {},
-					SHIPPING: {},
-					ChildAccounts: {}
-				}
-			},
-			PHUOCLE: {
-				Section: {
-					tab_3_section_1: {}
 				}
 			}
 		};
@@ -124,12 +124,12 @@ var DevKit;
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 		var navigation = {
-			navRelationships: {},
 			navAddresses: {},
-			navSubAccts: {},
-			navCampaignsInSFA: {},
 			navAsyncOperations: {},
-			navProcessSessions: {}
+			navCampaignsInSFA: {},
+			navProcessSessions: {},
+			navRelationships: {},
+			navSubAccts: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;

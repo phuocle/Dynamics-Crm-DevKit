@@ -10,6 +10,17 @@ declare namespace DevKit {
 			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
 			Revenue: DevKit.Controls.Money;
 		}
+		interface tab_DETAILS_TAB_Sections {
+			BILLING: DevKit.Controls.Section;
+			ChildAccounts: DevKit.Controls.Section;
+			COMPANY_PROFILE: DevKit.Controls.Section;
+			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			DETAILS_TAB_section_6: DevKit.Controls.Section;
+			SHIPPING: DevKit.Controls.Section;
+		}
+		interface tab_PHUOCLE_Sections {
+			tab_3_section_1: DevKit.Controls.Section;
+		}
 		interface tab_SUMMARY_TAB_Sections {
 			ACCOUNT_INFORMATION: DevKit.Controls.Section;
 			ADDRESS: DevKit.Controls.Section;
@@ -18,37 +29,23 @@ declare namespace DevKit {
 			Summary_section_6: DevKit.Controls.Section;
 			SUMMARY_TAB_section_6: DevKit.Controls.Section;
 		}
-		interface tab_DETAILS_TAB_Sections {
-			COMPANY_PROFILE: DevKit.Controls.Section;
-			DETAILS_TAB_section_6: DevKit.Controls.Section;
-			CONTACT_PREFERENCES: DevKit.Controls.Section;
-			BILLING: DevKit.Controls.Section;
-			SHIPPING: DevKit.Controls.Section;
-			ChildAccounts: DevKit.Controls.Section;
-		}
-		interface tab_PHUOCLE_Sections {
-			tab_3_section_1: DevKit.Controls.Section;
-		}
-		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
-			Section: tab_SUMMARY_TAB_Sections;
-		}
 		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
 			Section: tab_DETAILS_TAB_Sections;
 		}
 		interface tab_PHUOCLE extends DevKit.Controls.ITab {
 			Section: tab_PHUOCLE_Sections;
 		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
 		interface Tabs {
-			SUMMARY_TAB: tab_SUMMARY_TAB;
 			DETAILS_TAB: tab_DETAILS_TAB;
 			PHUOCLE: tab_PHUOCLE;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
 		}
 		interface Body {
 			Tab: Tabs;
-			mapcontrol: DevKit.Controls.Map;
-			notescontrol: DevKit.Controls.Note;
 			ActionCards: DevKit.Controls.ActionCards;
-			IFRAME_PHUOCLE: DevKit.Controls.IFrame;
 			/** Shows the complete primary address. */
 			Address1_Composite: DevKit.Controls.String;
 			/** Select the freight terms for the primary address to make sure shipping orders are processed correctly. */
@@ -78,14 +75,17 @@ declare namespace DevKit {
 			Fax: DevKit.Controls.String;
 			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
 			FollowEmail: DevKit.Controls.Boolean;
+			IFRAME_PHUOCLE: DevKit.Controls.IFrame;
 			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
 			IndustryCode: DevKit.Controls.OptionSet;
+			mapcontrol: DevKit.Controls.Map;
 			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
 			ModifiedOn: DevKit.Controls.DateTime;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
 			/** Type the company or business name. */
 			Name_1: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Select the account's ownership structure, such as public or private. */
 			OwnershipCode: DevKit.Controls.OptionSet;
 			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
@@ -116,6 +116,14 @@ declare namespace DevKit {
 			StatusCode: DevKit.Controls.OptionSet;
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Navigation {
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navCampaignsInSFA: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubAccts: DevKit.Controls.NavigationItem
 		}
 		interface quickForm_contactquickform_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
@@ -162,6 +170,8 @@ declare namespace DevKit {
 		Footer: DevKit.FormAccount.Footer;
 		/** The Header section of form Account */
 		Header: DevKit.FormAccount.Header;
+		/** The Navigation of form Account */
+		Navigation: DevKit.FormAccount.Navigation;
 		/** The QuickForm of form Account */
 		QuickForm: DevKit.FormAccount.QuickForm;
 		/** The Process of form Account */

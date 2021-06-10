@@ -233,6 +233,7 @@ namespace DynamicsCrm.DevKit.Shared
                     Name = x?.Attribute("name")?.Value,
                     InnerText = x?.ToString()
                 };
+            tabs = tabs.OrderBy(x => x.Name).ToList();
             var existTabs = new List<string>();
             foreach (var tab in tabs)
             {
@@ -250,6 +251,7 @@ namespace DynamicsCrm.DevKit.Shared
                     {
                         Name = x2?.Attribute("name")?.Value
                     };
+                sections = sections.OrderBy(x => x.Name).ToList();
                 var existSections = new List<string>();
                 foreach (var section in sections)
                 {
@@ -295,7 +297,8 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var code = string.Empty;
             if (Processes.Count == 0) return string.Empty;
-            foreach (var entity in Processes)
+            var processed = Processes.OrderBy(x => x.LogicalName);
+            foreach (var entity in processed)
             {
                 var xaml = entity.GetAttributeValue<string>("xaml");
                 var name = entity.GetAttributeValue<string>("name");
@@ -441,6 +444,8 @@ namespace DynamicsCrm.DevKit.Shared
             var quickForms = (from f in fields
                 where f.QuickForms.Count() != 0
                 select f.id).ToList();
+
+            quickForms.Sort();
             foreach (var quickForm in quickForms)
             {
                 //code += $"\t\t\t{quickForm}: {{}},\r\n";
@@ -458,6 +463,7 @@ namespace DynamicsCrm.DevKit.Shared
             var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
                     .Descendants("NavBarByRelationshipItem")
                 select (string) x?.Attribute("Id")).ToList();
+            navigations.Sort();
             foreach (var navigation in navigations)
                 code += $"\t\t\t{navigation}: {{}},\r\n";
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
@@ -489,12 +495,6 @@ namespace DynamicsCrm.DevKit.Shared
             formCode += $"var {ProjectName};\r\n";
             formCode += $"(function ({ProjectName}) {{\r\n";
             formCode += $"\t'use strict';\r\n";
-            //var devKit = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.DevKit.js");
-            //if (!isDebug)
-            //{
-            //    devKit = devKit.Replace("else { throw new Error(", "//else { throw new Error(");
-            //}
-            //formCode += devKit + "\r\n";
             //FORM
             foreach (var form in processForms)
             {
@@ -704,6 +704,7 @@ namespace DynamicsCrm.DevKit.Shared
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
+            fields = fields.OrderBy(x => x.Name).ToList();
             var temp = string.Empty;
             foreach (var field in fields)
             {

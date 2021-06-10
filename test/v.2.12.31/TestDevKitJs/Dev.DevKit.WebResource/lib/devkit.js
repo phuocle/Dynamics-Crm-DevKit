@@ -74,7 +74,7 @@ var devKit = (function () {
                 contextDataEntity.addOnSave(callback);
             }
         };
-        form.PostSave = function (callback) {
+        form.AddPostSave = function (callback) {
             if (has(contextDataEntity, 'addOnPostSave')) {
                 contextDataEntity.addOnPostSave(callback);
             }
@@ -705,17 +705,17 @@ var devKit = (function () {
                 control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
             }
         };
-        field.AddOnPostSearch = function (callback) {
+        field.AddPostSearch = function (callback) {
             if (has(control, 'addOnPostSearch')) {
                 control.addOnPostSearch(callback);
             }
         };
-        field.AddOnResultOpened = function (callback) {
+        field.AddResultOpened = function (callback) {
             if (has(control, 'addOnResultOpened')) {
                 control.addOnResultOpened(callback);
             }
         };
-        field.AddOnSelection = function (callback) {
+        field.AddSelection = function (callback) {
             if (has(control, 'addOnSelection')) {
                 control.addOnSelection(callback);
             }
@@ -757,17 +757,17 @@ var devKit = (function () {
                 control.refresh();
             }
         };
-        field.RemoveOnPostSearch = function (callback) {
+        field.RemovePostSearch = function (callback) {
             if (has(control, 'removeOnPostSearch')) {
                 control.removeOnPostSearch(callback);
             }
         };
-        field.RemoveOnResultOpened = function (callback) {
+        field.RemoveResultOpened = function (callback) {
             if (has(control, 'removeOnResultOpened')) {
                 control.removeOnResultOpened(callback);
             }
         };
-        field.RemoveOnSelection = function (callback) {
+        field.RemoveSelection = function (callback) {
             if (has(control, 'removeOnSelection')) {
                 control.removeOnSelection(callback);
             }
@@ -807,12 +807,12 @@ var devKit = (function () {
             }
             return EMPTY_BOOL;
         };
-        field.AddOnLookupTagClick = function (callback) {
+        field.AddLookupTagClick = function (callback) {
             if (has(control, 'addOnLookupTagClick')) {
                 control.addOnLookupTagClick(callback);
             }
         };
-        field.RemoveOnLookupTagClick = function (callback) {
+        field.RemoveLookupTagClick = function (callback) {
             if (has(control, 'removeOnLookupTagClick')) {
                 control.removeOnLookupTagClick(callback);
             }
@@ -1957,6 +1957,12 @@ var devKit = (function () {
                 getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback);
             }
         };
+        utility.EntityMainFormDescriptor = function (entityName, formId) {
+            if (has(getUtility, 'getEntityMainFormDescriptor')) {
+                return getUtility.getEntityMainFormDescriptor(entityName, formId);
+            }
+            return NULL;
+        };
         utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) {
             if (has(getUtility, 'getEntityMetadata')) {
                 getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback);
@@ -2147,6 +2153,22 @@ var devKit = (function () {
                             return organizationSettings.organizationId;
                         }
                         return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, 'IsTrialOrganization', {
+                    get: function () {
+                        if (has(organizationSettings, 'isTrialOrganization')) {
+                            return organizationSettings.isTrialOrganization;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, 'OrganizationExpiryDate', {
+                    get: function () {
+                        if (has(organizationSettings, 'organizationExpiryDate')) {
+                            return organizationSettings.organizationExpiryDate;
+                        }
+                        return NULL;
                     }
                 });
                 Object.defineProperty(obj, 'UniqueName', {

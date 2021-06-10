@@ -637,7 +637,7 @@ define(['xrm-mock'], function () {
             var formDataAddOnLoad = function () { };
             expect(data.loadEventHandlers.length).toBe(0);
             form.DataAddOnLoad(formDataAddOnLoad);
-            expect(() => { form.PostSave(null) }).toThrow(new Error("Method not implemented."));
+            expect(() => { form.AddPostSave(null) }).toThrow(new Error("Method not implemented."));
             expect(data.loadEventHandlers.length).toBe(1);
             expect(() => { form.Refresh(true, null, null) }).toThrow(new Error("refresh not implemented"));
             form.DataRemoveOnLoad(formDataAddOnLoad);

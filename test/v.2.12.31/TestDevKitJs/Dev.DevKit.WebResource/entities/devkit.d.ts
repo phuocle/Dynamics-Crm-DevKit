@@ -605,13 +605,13 @@ declare namespace DevKit {
              * @param callback The function to add to the OnLookupTagClick event. The execution context is automatically passed as the first parameter to this function along with eventArgs that contain the tag value. More information: OnLookupTagClick event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonlookuptagclick
             */
-            AddOnLookupTagClick(callback: (executionContext: any) => void): void;
+            AddLookupTagClick(callback: (executionContext: any) => void): void;
             /**
              * Removes an event handler from the OnLookupTagClick event
              * @param callback The function to be removed from the OnLookupTagClick event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonlookuptagclick
              */
-            RemoveOnLookupTagClick(callback: (executionContext: any) => void): void;
+            RemoveLookupTagClick(callback: (executionContext: any) => void): void;
             /**
              * Returns a Boolean value indicating whether the lookup represents a partylist lookup. Partylist lookups allow for multiple records to be set, such as the To: field for an email entity record
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/getispartylist
@@ -643,19 +643,19 @@ declare namespace DevKit {
              * @param callback The function to add to the PostSearch event. The execution context is automatically passed as the first parameter to this function
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonpostsearch
              */
-            AddOnPostSearch(callback: (executionContext: any) => void): void;
+            AddPostSearch(callback: (executionContext: any) => void): void;
             /**
              * Adds an event handler to the OnResultOpened event
              * @param callback The function to add to the OnResultOpened event. The execution context is automatically passed as the first parameter to this function
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonresultopened
              */
-            AddOnResultOpened(callback: (executionContext: any) => void): void;
+            AddResultOpened(callback: (executionContext: any) => void): void;
             /**
              * Adds an event handler to the OnSelection event
              * @param callback The function to add to the OnSelection event. The execution context is automatically passed as the first parameter to this function
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonselection
              */
-            AddOnSelection(callback: (executionContext: any) => void): void;
+            AddSelection(callback: (executionContext: any) => void): void;
             /**
              * Opens a search result in the search control by specifying the result number
              * @param resultNumber Numerical value specifying the result number to be opened. Result number starts from 1
@@ -668,19 +668,19 @@ declare namespace DevKit {
              * @param callback The function to remove from the PostSearch event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonpostsearch
              */
-            RemoveOnPostSearch(callback: () => void): void;
+            RemovePostSearch(callback: () => void): void;
             /**
              * Removes an event handler from the OnResultOpened event
              * @param callback The function to remove from the OnResultOpened event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonresultopened
              */
-            RemoveOnResultOpened(callback: () => void): void;
+            RemoveResultOpened(callback: () => void): void;
             /**
              * Removes an event handler from the OnSelection even
              * @param callback The function to remove from the OnSelection event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonselection
              */
-            RemoveOnSelection(callback: () => void): void;
+            RemoveSelection(callback: () => void): void;
             /**
              * Gets the count of results found in the search control
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/gettotalresultcount
@@ -1803,6 +1803,13 @@ declare namespace DevKit {
          */
         AllowedStatusTransitions(entityName: string, statusCode: number, successCallback?: (statusCodes: Array<number>) => void, errorCallback?: (error: DevKit.Error) => void): void;
         /**
+         * Returns a promise containing the default main form descriptor with the following values.
+         * @param entityName The logical name of the entity.
+         * @param formId The form ID of the entity.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymainformdescriptor
+         */
+        EntityMainFormDescriptor(entityName: string, formId: string): any;
+        /**
          * Invokes the device camera to scan the barcode information, such as a product number. Note: This method is supported only for the mobile clients.
          * @param successCallback A function to call when the barcode value is returned as a String.
          * @param errorCallback A function to call when the operation fails. An error object with the message property (String) will be passed that describes the error details.
@@ -1979,7 +1986,7 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
          */
-        NavigateTo(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        NavigateTo(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
         /**
          * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients).
          * @param filePickOption An object pick file option
@@ -2170,7 +2177,17 @@ declare namespace DevKit {
         */
         readonly OrganizationId: DevKit.Guid;
         /**
-        * Returns the unique name of the current organization
+        * Returns the ID of the current organization
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#istrialorganization
+        */
+        readonly IsTrialOrganization: boolean;
+        /**
+        * Returns the expiry date of the current organization if it is a trial organization.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationexpirydate
+        */
+        readonly OrganizationExpiryDate: Date;
+        /**
+        * Returns a boolean indicating whether the organization is a trial organization.
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
         */
         readonly UniqueName: string;
@@ -2266,7 +2283,7 @@ declare namespace DevKit {
         * @param callback The function to add to the PostSave event. The execution context is automatically passed as the first parameter to this function
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/events/postsave
         */
-        PostSave(callback: (executionContext: any) => void): void;
+        AddPostSave(callback: (executionContext: any) => void): void;
         /**
         * Adds a function to be called when form data is loaded.
         * @param callback The function to be executed when the form data loads. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
@@ -2543,9 +2560,9 @@ declare namespace DevKit {
         /** Name of the navigation property for this relationship. */
         navigationPropertyName: string,
         /** Relationship type. Specify one of the following values: 0:OneToMany | 1:ManyToMany */
-        relationshipType: number,
+        relationshipType: 0 | 1;
         /** Role type in relationship. Specify one of the following values: 1:Referencing | 2:AssociationEntity */
-        roleType: number
+        roleType: 1 | 2;
     }
     interface PageInputEntityRecord {
         /** Specify "entityrecord" */
@@ -2573,6 +2590,12 @@ declare namespace DevKit {
         /** ID of the selected stage in business process instance. */
         selectedStageId?: string
     }
+    interface PageInputDashboard {
+        /** Specify "dashboard" */
+        pageType: "dashboard",
+        /** The ID of the dashboard to load. If you don't specify the ID, navigates to the default dashboard. */
+        dashboardId: string
+    }
     interface NavigationOptions {
         /** Specify 1 to open the page inline; 2 to open the page in a dialog. Entity lists can only be opened inline; web resources can be opened either inline or in a dialog. */
         target: 1 | 2;
@@ -2582,6 +2605,8 @@ declare namespace DevKit {
         height?: number | SizeValue;
         /** Specify 1 to open the dialog in center; 2 to open the dialog on the side. Default is 1 (center). */
         position?: 1 | 2;
+        /** The dialog title on top of the center or side dialog. */
+        title?: string;
     }
     interface SizeValue {
         /** The numerical value */

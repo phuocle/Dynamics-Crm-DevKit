@@ -81,7 +81,8 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             _d_ts += $"declare namespace OptionSet {{\r\n";
             _d_ts += $"\tnamespace {Class} {{\r\n";
-            foreach (var crmAttribute in Fields)
+            var fields = Fields.OrderBy(x => x.LogicalName).ToList();
+            foreach (var crmAttribute in fields)
             {
                 if (!crmAttribute.IsValidForRead) continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.Picklist ||
@@ -383,17 +384,14 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var _d_ts = string.Empty;
             var xdoc = XDocument.Parse(formXml);
-            var navigations = (from x in xdoc
-                               .Descendants("Navigation")
-                               .Descendants("NavBar")
-                               .Descendants("NavBarByRelationshipItem")
-                               where (string)x?.Attribute("Show") == null ||
-                                     (string)x?.Attribute("Show") == "true"
+            var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
+                    .Descendants("NavBarByRelationshipItem")
                                select (string)x?.Attribute("Id")).ToList();
+            navigations.Sort();
             if (navigations.Count == 0) return string.Empty;
+            navigations.Sort();
             foreach (var navigation in navigations)
             {
-
                 _d_ts += $"\t\t\t{navigation}: DevKit.Controls.NavigationItem,\r\n";
             }
             _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
@@ -425,7 +423,8 @@ namespace DynamicsCrm.DevKit.Shared
             if (Processes.Count == 0) return string.Empty;
             var _d_ts = string.Empty;
             var part1 = string.Empty;
-            foreach (var entity in Processes)
+            var processes = Processes.OrderBy(x => x.LogicalName);
+            foreach (var entity in processes)
             {
                 var xaml = entity.GetAttributeValue<string>("xaml");
                 var name = entity.GetAttributeValue<string>("name");
@@ -491,6 +490,7 @@ namespace DynamicsCrm.DevKit.Shared
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
+            fields = fields.OrderBy(x => x.Name).ToList();
             var temp = string.Empty;
             foreach (var field in fields)
             {
@@ -533,6 +533,7 @@ namespace DynamicsCrm.DevKit.Shared
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
+            fields = fields.OrderBy(x => x.Name).ToList();
             var temp = string.Empty;
             var temp1 = string.Empty;
             var temp2 = string.Empty;
@@ -664,6 +665,7 @@ namespace DynamicsCrm.DevKit.Shared
                            InnerText = x?.ToString()
                        };
             var existTabs = new List<string>();
+            rows = rows.OrderBy(x => x.Name).ToList();
             foreach (var row in rows)
             {
                 if (Utility.SafeName(row.Name).Length == 0) continue;
@@ -678,6 +680,7 @@ namespace DynamicsCrm.DevKit.Shared
                                 name = x2.Attribute("name")?.Value
                             };
                 var existSections = new List<string>();
+                rows2 = rows2.OrderBy(x => x.name).ToList();
                 foreach (var row2 in rows2)
                 {
                     if (row2 == null) continue;
@@ -715,7 +718,7 @@ namespace DynamicsCrm.DevKit.Shared
                           .Descendants("control")
                         select new IdName
                         {
-                            Name = x?.Attribute("datafieldname")?.Value,
+                            Name = x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value,
                             Id = x?.Attribute("id").Value,
                             ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                             ControlId = x?.Attribute("uniqueid")?.Value

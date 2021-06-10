@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 }
                 else if (_itemType == ItemType.JsForm2)
                 {
-                    link.Text = @"Add New Js Form Class (NEW)";
+                    link.Text = @"Add New Js Form Class";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template";
                 }
             }
