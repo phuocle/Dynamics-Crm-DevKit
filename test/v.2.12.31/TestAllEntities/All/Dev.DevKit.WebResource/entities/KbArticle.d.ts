@@ -2,6 +2,9 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormKbArticle_Information {
+		interface tab__B641B7D4_753C_C99A_5978_977E6912E856_Sections {
+			_493D7206_6935_E73D_75CC_44DC53D021E8: DevKit.Controls.Section;
+		}
 		interface tab_general_Sections {
 			article_information: DevKit.Controls.Section;
 			Article_Keywords: DevKit.Controls.Section;
@@ -10,8 +13,8 @@ declare namespace DevKit {
 		interface tab_notes_Sections {
 			notes: DevKit.Controls.Section;
 		}
-		interface tab__B641B7D4_753C_C99A_5978_977E6912E856_Sections {
-			_493D7206_6935_E73D_75CC_44DC53D021E8: DevKit.Controls.Section;
+		interface tab__B641B7D4_753C_C99A_5978_977E6912E856 extends DevKit.Controls.ITab {
+			Section: tab__B641B7D4_753C_C99A_5978_977E6912E856_Sections;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -19,23 +22,20 @@ declare namespace DevKit {
 		interface tab_notes extends DevKit.Controls.ITab {
 			Section: tab_notes_Sections;
 		}
-		interface tab__B641B7D4_753C_C99A_5978_977E6912E856 extends DevKit.Controls.ITab {
-			Section: tab__B641B7D4_753C_C99A_5978_977E6912E856_Sections;
-		}
 		interface Tabs {
+			_B641B7D4_753C_C99A_5978_977E6912E856: tab__B641B7D4_753C_C99A_5978_977E6912E856;
 			general: tab_general;
 			notes: tab_notes;
-			_B641B7D4_753C_C99A_5978_977E6912E856: tab__B641B7D4_753C_C99A_5978_977E6912E856;
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Shows the article content and formatting, stored as XML. */
 			ArticleXml: DevKit.Controls.String;
 			/** Keywords to be used for searches in knowledge base articles. */
 			KeyWords: DevKit.Controls.String;
 			/** Select which language the article must be available in. This list is based on the list of language packs that are installed in your Microsoft Dynamics 365 environment. */
 			LanguageCode: DevKit.Controls.Integer;
+			notescontrol: DevKit.Controls.Note;
 			/** Choose the subject of the article to assist with article searches. You can configure subjects under Business Management in the Settings area. */
 			SubjectId: DevKit.Controls.Lookup;
 			/** Type a subject or descriptive name for the article to assist with article searches. */

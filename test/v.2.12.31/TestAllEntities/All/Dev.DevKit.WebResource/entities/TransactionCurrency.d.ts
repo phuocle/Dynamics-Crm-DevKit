@@ -3,9 +3,9 @@
 declare namespace DevKit {
 	namespace FormTransactionCurrency_Information {
 		interface tab_general_Sections {
+			Currency_conversion: DevKit.Controls.Section;
 			Select_Base_Currency: DevKit.Controls.Section;
 			Transaction_currency_information: DevKit.Controls.Section;
-			Currency_conversion: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -15,7 +15,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			systemcurrency: DevKit.Controls.ActionCards;
 			/** Name of the transaction currency. */
 			CurrencyName: DevKit.Controls.String;
 			/** Number of decimal places that can be used for currency. */
@@ -26,6 +25,7 @@ declare namespace DevKit {
 			ExchangeRate: DevKit.Controls.Decimal;
 			/** ISO currency code for the transaction currency. */
 			ISOCurrencyCode: DevKit.Controls.String;
+			systemcurrency: DevKit.Controls.ActionCards;
 		}
 	}
 	class FormTransactionCurrency_Information extends DevKit.IForm {

@@ -26,10 +26,10 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					Details: {},
 					Categorization: {},
-					Ownership: {},
-					Language: {}
+					Details: {},
+					Language: {},
+					Ownership: {}
 				}
 			}
 		};

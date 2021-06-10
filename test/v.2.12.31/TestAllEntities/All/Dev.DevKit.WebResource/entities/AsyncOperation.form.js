@@ -30,9 +30,9 @@ var DevKit;
 		var tab = {
 			generaltab: {
 				Section: {
+					custom: {},
 					general: {},
-					systemlinksection: {},
-					custom: {}
+					systemlinksection: {}
 				}
 			}
 		};
@@ -134,6 +134,7 @@ var OptionSet;
 			Update_Contract_States: 27,
 			Update_Entitlement_States: 56,
 			Update_Knowledge_Article_States: 65,
+			Update_Modern_Flow_Async_Operation: 101,
 			Update_Organization_Database: 44,
 			Update_Solution: 45,
 			Update_Statistic_Intervals: 24,

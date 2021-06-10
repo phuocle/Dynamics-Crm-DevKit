@@ -98,34 +98,34 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			SUMMARY_TAB: {
-				Section: {
-					onpremise_account_information: {},
-					online_account_information: {},
-					user_information: {},
-					SOCIAL_PANE_TAB: {},
-					teams_information: {},
-					organization_information: {},
-					queue_selection: {},
-					queue_information: {}
-				}
-			},
-			DETAILS_TAB: {
-				Section: {
-					user_information_2: {},
-					mailing_address: {},
-					DirectReports: {}
-				}
-			},
 			ADMINISTRATION_TAB: {
 				Section: {
 					administration: {},
 					e_mail_configuration: {}
 				}
 			},
+			DETAILS_TAB: {
+				Section: {
+					DirectReports: {},
+					mailing_address: {},
+					user_information_2: {}
+				}
+			},
 			MobileOfflineProfile_TAB: {
 				Section: {
 					mobileofflineaccessinfo: {}
+				}
+			},
+			SUMMARY_TAB: {
+				Section: {
+					online_account_information: {},
+					onpremise_account_information: {},
+					organization_information: {},
+					queue_information: {},
+					queue_selection: {},
+					SOCIAL_PANE_TAB: {},
+					teams_information: {},
+					user_information: {}
 				}
 			}
 		};
@@ -190,21 +190,21 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			SUMMARY_TAB: {
-				Section: {
-					onpremise_account_information: {},
-					online_account_information: {},
-					user_information: {},
-					organization_information: {},
-					mailing_address: {},
-					TEAMS_TAB: {},
-					DirectReports: {}
-				}
-			},
 			ADMINISTRATION_TAB: {
 				Section: {
 					administration: {},
 					e_mail_configuration: {}
+				}
+			},
+			SUMMARY_TAB: {
+				Section: {
+					DirectReports: {},
+					mailing_address: {},
+					online_account_information: {},
+					onpremise_account_information: {},
+					organization_information: {},
+					TEAMS_TAB: {},
+					user_information: {}
 				}
 			}
 		};
@@ -228,16 +228,16 @@ var DevKit;
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 		var navigation = {
-			navTeams: {},
-			navRoles: {},
-			navFieldSecurityProfiles: {},
-			navServices: {},
-			navResourceGroups: {},
-			navMonthlyCalendar: {},
-			navConnections: {},
 			navAsyncOperations: {},
 			navAudit: {},
-			navProcessSessions: {}
+			navConnections: {},
+			navFieldSecurityProfiles: {},
+			navMonthlyCalendar: {},
+			navProcessSessions: {},
+			navResourceGroups: {},
+			navRoles: {},
+			navServices: {},
+			navTeams: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;

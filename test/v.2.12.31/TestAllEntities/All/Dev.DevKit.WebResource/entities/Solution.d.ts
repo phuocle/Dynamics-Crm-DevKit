@@ -2,32 +2,32 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormSolution_Information {
-		interface tab_general_Sections {
-			solution_information: DevKit.Controls.Section;
-			description: DevKit.Controls.Section;
-		}
 		interface tab__9129B06A_8446_77D8_2BD2_027C5006BE41_Sections {
 			solutionmarketplacesection: DevKit.Controls.Section;
 		}
-		interface tab_general extends DevKit.Controls.ITab {
-			Section: tab_general_Sections;
+		interface tab_general_Sections {
+			description: DevKit.Controls.Section;
+			solution_information: DevKit.Controls.Section;
 		}
 		interface tab__9129B06A_8446_77D8_2BD2_027C5006BE41 extends DevKit.Controls.ITab {
 			Section: tab__9129B06A_8446_77D8_2BD2_027C5006BE41_Sections;
 		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
 		interface Tabs {
-			general: tab_general;
 			_9129B06A_8446_77D8_2BD2_027C5006BE41: tab__9129B06A_8446_77D8_2BD2_027C5006BE41;
+			general: tab_general;
 		}
 		interface Body {
 			Tab: Tabs;
-			IFRAME_SolutionsMarketplace: DevKit.Controls.IFrame;
 			/** A link to an optional configuration page for this solution. */
 			ConfigurationPageId: DevKit.Controls.Lookup;
 			/** Description of the solution. */
 			Description: DevKit.Controls.String;
 			/** User display name for the solution. */
 			FriendlyName: DevKit.Controls.String;
+			IFRAME_SolutionsMarketplace: DevKit.Controls.IFrame;
 			/** Date and time when the solution was installed/upgraded. */
 			InstalledOn: DevKit.Controls.Date;
 			/** Indicates whether the solution is managed or unmanaged. */

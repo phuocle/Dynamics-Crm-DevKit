@@ -24,8 +24,8 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					General: {},
 					Description: {},
+					General: {},
 					Users: {}
 				}
 			}

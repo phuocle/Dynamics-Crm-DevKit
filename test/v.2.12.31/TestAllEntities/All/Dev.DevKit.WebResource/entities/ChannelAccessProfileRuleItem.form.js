@@ -22,15 +22,15 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			notes: {
+				Section: {
+					notes: {}
+				}
+			},
 			RuleCriteria: {
 				Section: {
 					ConditionControl: {},
 					rule_then_conditions: {}
-				}
-			},
-			notes: {
-				Section: {
-					notes: {}
 				}
 			}
 		};

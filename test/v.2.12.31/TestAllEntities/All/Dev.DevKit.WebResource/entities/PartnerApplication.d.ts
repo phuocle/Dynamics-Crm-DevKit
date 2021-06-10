@@ -5,11 +5,11 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
-			notescontrol: DevKit.Controls.Note;
 			/** Indicates the application role. */
 			ApplicationRole: DevKit.Controls.OptionSet;
 			/** Name of Partner Application. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Principal ID of the partner application. */
 			PrincipalId: DevKit.Controls.String;
 			/** Select whether the partner application uses an authorization server. */

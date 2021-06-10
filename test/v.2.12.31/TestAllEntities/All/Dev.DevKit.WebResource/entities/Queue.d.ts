@@ -3,9 +3,9 @@
 declare namespace DevKit {
 	namespace FormQueue_Information {
 		interface tab_general_Sections {
-			queue_information: DevKit.Controls.Section;
-			incoming_email: DevKit.Controls.Section;
 			email_configuration: DevKit.Controls.Section;
+			incoming_email: DevKit.Controls.Section;
+			queue_information: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -43,12 +43,12 @@ declare namespace DevKit {
 	}
 	namespace FormQueue {
 		interface tab_general_Sections {
-			queue_information: DevKit.Controls.Section;
 			incoming_email: DevKit.Controls.Section;
-			RecordCreationAndUpdateRule: DevKit.Controls.Section;
+			queue_information: DevKit.Controls.Section;
 			QueueItems: DevKit.Controls.Section;
 			QueueMembers: DevKit.Controls.Section;
 			QueueMembersNoRecord: DevKit.Controls.Section;
+			RecordCreationAndUpdateRule: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;

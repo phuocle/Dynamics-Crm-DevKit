@@ -24,6 +24,11 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			description: {
+				Section: {
+					description: {}
+				}
+			},
 			general: {
 				Section: {
 					_379F3DB8_82DF_4E44_930A_C7A22C0E5206: {}
@@ -32,11 +37,6 @@ var DevKit;
 			Rollup_Attributes: {
 				Section: {
 					_CEBD8001_3DD4_4ABB_99DE_9A3F2FD250EB: {}
-				}
-			},
-			description: {
-				Section: {
-					description: {}
 				}
 			}
 		};

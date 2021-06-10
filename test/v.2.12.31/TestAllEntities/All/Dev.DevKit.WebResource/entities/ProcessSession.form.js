@@ -39,14 +39,14 @@ var DevKit;
 					Details: {}
 				}
 			},
-			Summary: {
-				Section: {
-					Summary: {}
-				}
-			},
 			Comments: {
 				Section: {
 					Comments: {}
+				}
+			},
+			Details: {
+				Section: {
+					Details_2: {}
 				}
 			},
 			Linked_Sessions: {
@@ -54,9 +54,9 @@ var DevKit;
 					Linked_Sessions: {}
 				}
 			},
-			Details: {
+			Summary: {
 				Section: {
-					Details_2: {}
+					Summary: {}
 				}
 			}
 		};

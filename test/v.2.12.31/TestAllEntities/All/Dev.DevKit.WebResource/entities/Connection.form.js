@@ -26,16 +26,16 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			info: {
-				Section: {
-					info_s: {},
-					description: {}
-				}
-			},
 			details: {
 				Section: {
 					connect_from: {},
 					details: {}
+				}
+			},
+			info: {
+				Section: {
+					description: {},
+					info_s: {}
 				}
 			}
 		};

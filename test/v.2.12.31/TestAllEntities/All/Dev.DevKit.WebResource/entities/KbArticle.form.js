@@ -25,6 +25,11 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			_B641B7D4_753C_C99A_5978_977E6912E856: {
+				Section: {
+					_493D7206_6935_E73D_75CC_44DC53D021E8: {}
+				}
+			},
 			general: {
 				Section: {
 					article_information: {},
@@ -35,11 +40,6 @@ var DevKit;
 			notes: {
 				Section: {
 					notes: {}
-				}
-			},
-			_B641B7D4_753C_C99A_5978_977E6912E856: {
-				Section: {
-					_493D7206_6935_E73D_75CC_44DC53D021E8: {}
 				}
 			}
 		};

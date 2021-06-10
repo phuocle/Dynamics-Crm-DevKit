@@ -3,9 +3,9 @@
 declare namespace DevKit {
 	namespace FormMobile_Offline_Profile {
 		interface tab_GENERALINFORMATION_TAB_Sections {
-			property_bag_properties_1: DevKit.Controls.Section;
 			MOBILE_OFFLINE_PROFILE_ITEMS: DevKit.Controls.Section;
 			profile_users: DevKit.Controls.Section;
+			property_bag_properties_1: DevKit.Controls.Section;
 		}
 		interface tab_GENERALINFORMATION_TAB extends DevKit.Controls.ITab {
 			Section: tab_GENERALINFORMATION_TAB_Sections;

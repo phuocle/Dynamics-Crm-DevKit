@@ -3,8 +3,8 @@
 declare namespace DevKit {
 	namespace FormChannel_Property_Group {
 		interface tab_property_bag_summary_Sections {
-			property_bag_properties_1: DevKit.Controls.Section;
 			property_bag_items_1: DevKit.Controls.Section;
+			property_bag_properties_1: DevKit.Controls.Section;
 		}
 		interface tab_property_bag_summary extends DevKit.Controls.ITab {
 			Section: tab_property_bag_summary_Sections;

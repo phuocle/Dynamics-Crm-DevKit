@@ -31,15 +31,15 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			EntityPermissions: {
-				Section: {
-					tab_2_section_1: {}
-				}
-			},
 			ChannelAccess: {
 				Section: {
 					tab_3_section_1: {},
 					tab_3_section_2: {}
+				}
+			},
+			EntityPermissions: {
+				Section: {
+					tab_2_section_1: {}
 				}
 			},
 			KnowledgeSettings: {

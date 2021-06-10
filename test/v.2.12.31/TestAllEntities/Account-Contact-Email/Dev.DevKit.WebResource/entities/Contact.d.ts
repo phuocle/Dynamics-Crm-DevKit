@@ -6,33 +6,31 @@ declare namespace DevKit {
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
 		}
+		interface tab_DETAILS_TAB_Sections {
+			billing_information: DevKit.Controls.Section;
+			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			PERSONAL_INFORMATION: DevKit.Controls.Section;
+			PERSONAL_NOTES_SECTION: DevKit.Controls.Section;
+			shipping_information: DevKit.Controls.Section;
+		}
 		interface tab_SUMMARY_TAB_Sections {
 			CONTACT_INFORMATION: DevKit.Controls.Section;
 			MapSection: DevKit.Controls.Section;
 			SOCIAL_PANE_TAB: DevKit.Controls.Section;
 			Summary_section_6: DevKit.Controls.Section;
 		}
-		interface tab_DETAILS_TAB_Sections {
-			PERSONAL_INFORMATION: DevKit.Controls.Section;
-			PERSONAL_NOTES_SECTION: DevKit.Controls.Section;
-			CONTACT_PREFERENCES: DevKit.Controls.Section;
-			billing_information: DevKit.Controls.Section;
-			shipping_information: DevKit.Controls.Section;
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
 		}
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
 			Section: tab_SUMMARY_TAB_Sections;
 		}
-		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
-			Section: tab_DETAILS_TAB_Sections;
-		}
 		interface Tabs {
-			SUMMARY_TAB: tab_SUMMARY_TAB;
 			DETAILS_TAB: tab_DETAILS_TAB;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
 		}
 		interface Body {
 			Tab: Tabs;
-			mapcontrol: DevKit.Controls.Map;
-			notescontrol: DevKit.Controls.Note;
 			ActionCards: DevKit.Controls.ActionCards;
 			/** Shows the complete primary address. */
 			Address1_Composite: DevKit.Controls.String;
@@ -50,6 +48,7 @@ declare namespace DevKit {
 			CreditOnHold: DevKit.Controls.Boolean;
 			/** Type additional information to describe the contact, such as an excerpt from the company's website. */
 			Description: DevKit.Controls.String;
+			devkit_CategoryCode: DevKit.Controls.MultiOptionSet;
 			/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
 			DoNotBulkEMail: DevKit.Controls.Boolean;
 			/** Select whether the contact allows direct email sent from Microsoft Dynamics 365. If Do Not Allow is selected, Microsoft Dynamics 365 will not send the email. */
@@ -74,8 +73,10 @@ declare namespace DevKit {
 			GenderCode: DevKit.Controls.OptionSet;
 			/** Type the job title of the contact to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns. */
 			JobTitle: DevKit.Controls.String;
+			mapcontrol: DevKit.Controls.Map;
 			/** Type the mobile phone number for the contact. */
 			MobilePhone: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
 			ParentCustomerId: DevKit.Controls.Lookup;
 			/** Select the payment terms to indicate when the customer needs to pay the total amount. */
@@ -91,6 +92,13 @@ declare namespace DevKit {
 			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
+		interface Navigation {
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubConts: DevKit.Controls.NavigationItem
+		}
 	}
 	class FormContact extends DevKit.IForm {
 		/**
@@ -105,6 +113,8 @@ declare namespace DevKit {
 		Body: DevKit.FormContact.Body;
 		/** The Header section of form Contact */
 		Header: DevKit.FormContact.Header;
+		/** The Navigation of form Contact */
+		Navigation: DevKit.FormContact.Navigation;
 	}
 	namespace FormContact_Information {
 		interface Header extends DevKit.Controls.IHeader {
@@ -115,46 +125,45 @@ declare namespace DevKit {
 			/** Select the preferred method of contact. */
 			PreferredContactMethodCode: DevKit.Controls.OptionSet;
 		}
-		interface tab_general_Sections {
-			name: DevKit.Controls.Section;
-			address: DevKit.Controls.Section;
-			shipping_information: DevKit.Controls.Section;
-			description: DevKit.Controls.Section;
+		interface tab_administration_Sections {
+			billing_information: DevKit.Controls.Section;
+			contact_methods: DevKit.Controls.Section;
+			internal_information: DevKit.Controls.Section;
 		}
 		interface tab_details_Sections {
-			professional_information: DevKit.Controls.Section;
 			personal_information: DevKit.Controls.Section;
+			professional_information: DevKit.Controls.Section;
+		}
+		interface tab_general_Sections {
+			address: DevKit.Controls.Section;
+			description: DevKit.Controls.Section;
+			name: DevKit.Controls.Section;
+			shipping_information: DevKit.Controls.Section;
 		}
 		interface tab_notes_and_activities_Sections {
 			activities: DevKit.Controls.Section;
 			notes: DevKit.Controls.Section;
 		}
-		interface tab_administration_Sections {
-			internal_information: DevKit.Controls.Section;
-			billing_information: DevKit.Controls.Section;
-			contact_methods: DevKit.Controls.Section;
-		}
-		interface tab_general extends DevKit.Controls.ITab {
-			Section: tab_general_Sections;
+		interface tab_administration extends DevKit.Controls.ITab {
+			Section: tab_administration_Sections;
 		}
 		interface tab_details extends DevKit.Controls.ITab {
 			Section: tab_details_Sections;
 		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
 		interface tab_notes_and_activities extends DevKit.Controls.ITab {
 			Section: tab_notes_and_activities_Sections;
 		}
-		interface tab_administration extends DevKit.Controls.ITab {
-			Section: tab_administration_Sections;
-		}
 		interface Tabs {
-			general: tab_general;
-			details: tab_details;
-			notes_and_activities: tab_notes_and_activities;
 			administration: tab_administration;
+			details: tab_details;
+			general: tab_general;
+			notes_and_activities: tab_notes_and_activities;
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Select the contact's role within the company or sales process, such as decision maker, employee, or influencer. */
 			AccountRoleCode: DevKit.Controls.OptionSet;
 			/** Select the primary address type. */
@@ -229,6 +238,7 @@ declare namespace DevKit {
 			MiddleName: DevKit.Controls.String;
 			/** Type the mobile phone number for the contact. */
 			MobilePhone: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
 			/** Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities. */
@@ -249,11 +259,11 @@ declare namespace DevKit {
 			TransactionCurrencyId: DevKit.Controls.Lookup;
 		}
 		interface Navigation {
-			navAddresses: DevKit.Controls.NavigationItem,
-			navSubConts: DevKit.Controls.NavigationItem,
 			navActivities: DevKit.Controls.NavigationItem,
 			navActivityHistory: DevKit.Controls.NavigationItem,
-			navRelationships: DevKit.Controls.NavigationItem
+			navAddresses: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubConts: DevKit.Controls.NavigationItem
 		}
 		interface Grid {
 			contactactivitiesgrid: DevKit.Controls.Grid;
@@ -559,6 +569,7 @@ declare namespace DevKit {
 		Department: DevKit.WebApi.StringValue;
 		/** Type additional information to describe the contact, such as an excerpt from the company's website. */
 		Description: DevKit.WebApi.StringValue;
+		devkit_CategoryCode: DevKit.WebApi.MultiOptionSetValue;
 		/** Select whether the contact accepts bulk email sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the email. */
 		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
 		/** Select whether the contact accepts bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the contact can be added to marketing lists, but will be excluded from the letters. */
@@ -817,6 +828,24 @@ declare namespace OptionSet {
 		enum CustomerTypeCode {
 			/** 1 */
 			Default_Value
+		}
+		enum devkit_CategoryCode {
+			/** 1 */
+			Business,
+			/** 2 */
+			Family,
+			/** 5 */
+			Other,
+			/** 4 */
+			Sales,
+			/** 1001 */
+			Sales_Team,
+			/** 1002 */
+			Service,
+			/** 3 */
+			Social,
+			/** 1000 */
+			Stakeholder
 		}
 		enum EducationCode {
 			/** 1 */

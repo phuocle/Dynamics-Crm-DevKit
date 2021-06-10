@@ -47,49 +47,48 @@ declare namespace DevKit {
 		Footer: DevKit.FormApplication_User.Footer;
 	}
 	namespace FormUser {
-		interface tab_SUMMARY_TAB_Sections {
-			onpremise_account_information: DevKit.Controls.Section;
-			online_account_information: DevKit.Controls.Section;
-			user_information: DevKit.Controls.Section;
-			SOCIAL_PANE_TAB: DevKit.Controls.Section;
-			teams_information: DevKit.Controls.Section;
-			organization_information: DevKit.Controls.Section;
-			queue_selection: DevKit.Controls.Section;
-			queue_information: DevKit.Controls.Section;
-		}
-		interface tab_DETAILS_TAB_Sections {
-			user_information_2: DevKit.Controls.Section;
-			mailing_address: DevKit.Controls.Section;
-			DirectReports: DevKit.Controls.Section;
-		}
 		interface tab_ADMINISTRATION_TAB_Sections {
 			administration: DevKit.Controls.Section;
 			e_mail_configuration: DevKit.Controls.Section;
 		}
+		interface tab_DETAILS_TAB_Sections {
+			DirectReports: DevKit.Controls.Section;
+			mailing_address: DevKit.Controls.Section;
+			user_information_2: DevKit.Controls.Section;
+		}
 		interface tab_MobileOfflineProfile_TAB_Sections {
 			mobileofflineaccessinfo: DevKit.Controls.Section;
 		}
-		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
-			Section: tab_SUMMARY_TAB_Sections;
-		}
-		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
-			Section: tab_DETAILS_TAB_Sections;
+		interface tab_SUMMARY_TAB_Sections {
+			online_account_information: DevKit.Controls.Section;
+			onpremise_account_information: DevKit.Controls.Section;
+			organization_information: DevKit.Controls.Section;
+			queue_information: DevKit.Controls.Section;
+			queue_selection: DevKit.Controls.Section;
+			SOCIAL_PANE_TAB: DevKit.Controls.Section;
+			teams_information: DevKit.Controls.Section;
+			user_information: DevKit.Controls.Section;
 		}
 		interface tab_ADMINISTRATION_TAB extends DevKit.Controls.ITab {
 			Section: tab_ADMINISTRATION_TAB_Sections;
 		}
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
 		interface tab_MobileOfflineProfile_TAB extends DevKit.Controls.ITab {
 			Section: tab_MobileOfflineProfile_TAB_Sections;
 		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
 		interface Tabs {
-			SUMMARY_TAB: tab_SUMMARY_TAB;
-			DETAILS_TAB: tab_DETAILS_TAB;
 			ADMINISTRATION_TAB: tab_ADMINISTRATION_TAB;
+			DETAILS_TAB: tab_DETAILS_TAB;
 			MobileOfflineProfile_TAB: tab_MobileOfflineProfile_TAB;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Type of user. */
 			AccessMode: DevKit.Controls.OptionSet;
 			/** Shows the complete primary address. */
@@ -126,6 +125,7 @@ declare namespace DevKit {
 			MobileOfflineProfileId: DevKit.Controls.Lookup;
 			/** Mobile phone number for the user. */
 			MobilePhone: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Unique identifier of the manager of the user. */
 			ParentSystemUserId: DevKit.Controls.Lookup;
 			/** Personal email address of the user. */
@@ -170,28 +170,28 @@ declare namespace DevKit {
 		Grid: DevKit.FormUser.Grid;
 	}
 	namespace FormUser_form_Business {
-		interface tab_SUMMARY_TAB_Sections {
-			onpremise_account_information: DevKit.Controls.Section;
-			online_account_information: DevKit.Controls.Section;
-			user_information: DevKit.Controls.Section;
-			organization_information: DevKit.Controls.Section;
-			mailing_address: DevKit.Controls.Section;
-			TEAMS_TAB: DevKit.Controls.Section;
-			DirectReports: DevKit.Controls.Section;
-		}
 		interface tab_ADMINISTRATION_TAB_Sections {
 			administration: DevKit.Controls.Section;
 			e_mail_configuration: DevKit.Controls.Section;
 		}
-		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
-			Section: tab_SUMMARY_TAB_Sections;
+		interface tab_SUMMARY_TAB_Sections {
+			DirectReports: DevKit.Controls.Section;
+			mailing_address: DevKit.Controls.Section;
+			online_account_information: DevKit.Controls.Section;
+			onpremise_account_information: DevKit.Controls.Section;
+			organization_information: DevKit.Controls.Section;
+			TEAMS_TAB: DevKit.Controls.Section;
+			user_information: DevKit.Controls.Section;
 		}
 		interface tab_ADMINISTRATION_TAB extends DevKit.Controls.ITab {
 			Section: tab_ADMINISTRATION_TAB_Sections;
 		}
+		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
+			Section: tab_SUMMARY_TAB_Sections;
+		}
 		interface Tabs {
-			SUMMARY_TAB: tab_SUMMARY_TAB;
 			ADMINISTRATION_TAB: tab_ADMINISTRATION_TAB;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
 		}
 		interface Body {
 			Tab: Tabs;
@@ -230,6 +230,18 @@ declare namespace DevKit {
 			/** Information about whether the user is enabled. */
 			IsDisabled: DevKit.Controls.Boolean;
 		}
+		interface Navigation {
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navAudit: DevKit.Controls.NavigationItem,
+			navConnections: DevKit.Controls.NavigationItem,
+			navFieldSecurityProfiles: DevKit.Controls.NavigationItem,
+			navMonthlyCalendar: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navResourceGroups: DevKit.Controls.NavigationItem,
+			navRoles: DevKit.Controls.NavigationItem,
+			navServices: DevKit.Controls.NavigationItem,
+			navTeams: DevKit.Controls.NavigationItem
+		}
 		interface Grid {
 			TeamsSubGrid: DevKit.Controls.Grid;
 			DirectReports: DevKit.Controls.Grid;
@@ -248,6 +260,8 @@ declare namespace DevKit {
 		Body: DevKit.FormUser_form_Business.Body;
 		/** The Footer section of form User_form_Business */
 		Footer: DevKit.FormUser_form_Business.Footer;
+		/** The Navigation of form User_form_Business */
+		Navigation: DevKit.FormUser_form_Business.Navigation;
 		/** The Grid of form User_form_Business */
 		Grid: DevKit.FormUser_form_Business.Grid;
 	}

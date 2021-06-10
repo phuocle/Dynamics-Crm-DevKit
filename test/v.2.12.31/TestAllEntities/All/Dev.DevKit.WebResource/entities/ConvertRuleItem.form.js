@@ -21,11 +21,11 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					Name: {},
-					ConditionControl: {},
 					CaseProperties: {},
-					RegardingSettingsection: {},
+					ConditionControl: {},
+					Name: {},
 					primaryactionsection: {},
+					RegardingSettingsection: {},
 					secondaryactionsection: {}
 				}
 			}

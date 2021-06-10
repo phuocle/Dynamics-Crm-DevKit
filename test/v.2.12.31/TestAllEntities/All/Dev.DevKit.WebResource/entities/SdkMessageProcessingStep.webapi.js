@@ -68,6 +68,7 @@ var DevKit;
 		var sdkmessageprocessingstep = {
 			AsyncAutoDelete: { a: 'asyncautodelete' },
 			CanUseReadOnlyConnection: { a: 'canusereadonlyconnection' },
+			Category: { a: 'category' },
 			ComponentState: { a: 'componentstate', r: true },
 			Configuration: { a: 'configuration' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -92,6 +93,7 @@ var DevKit;
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
 			Rank: { a: 'rank' },
+			RuntimeIntegrationProperties: { a: 'runtimeintegrationproperties' },
 			SdkMessageFilterId: { b: 'sdkmessagefilterid', a: '_sdkmessagefilterid_value', c: 'sdkmessagefilters', d: 'sdkmessagefilter' },
 			SdkMessageId: { b: 'sdkmessageid', a: '_sdkmessageid_value', c: 'sdkmessages', d: 'sdkmessage' },
 			SdkMessageProcessingStepId: { a: 'sdkmessageprocessingstepid' },

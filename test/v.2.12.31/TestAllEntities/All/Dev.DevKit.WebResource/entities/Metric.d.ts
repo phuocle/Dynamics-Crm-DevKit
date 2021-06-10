@@ -2,14 +2,17 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormMetric_Information {
+		interface tab_description_Sections {
+			description: DevKit.Controls.Section;
+		}
 		interface tab_general_Sections {
 			_379F3DB8_82DF_4E44_930A_C7A22C0E5206: DevKit.Controls.Section;
 		}
 		interface tab_Rollup_Attributes_Sections {
 			_CEBD8001_3DD4_4ABB_99DE_9A3F2FD250EB: DevKit.Controls.Section;
 		}
-		interface tab_description_Sections {
-			description: DevKit.Controls.Section;
+		interface tab_description extends DevKit.Controls.ITab {
+			Section: tab_description_Sections;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -17,13 +20,10 @@ declare namespace DevKit {
 		interface tab_Rollup_Attributes extends DevKit.Controls.ITab {
 			Section: tab_Rollup_Attributes_Sections;
 		}
-		interface tab_description extends DevKit.Controls.ITab {
-			Section: tab_description_Sections;
-		}
 		interface Tabs {
+			description: tab_description;
 			general: tab_general;
 			Rollup_Attributes: tab_Rollup_Attributes;
-			description: tab_description;
 		}
 		interface Body {
 			Tab: Tabs;

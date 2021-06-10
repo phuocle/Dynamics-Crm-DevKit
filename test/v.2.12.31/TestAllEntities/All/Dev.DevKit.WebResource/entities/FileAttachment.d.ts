@@ -66,6 +66,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_msdyn_knowledgearticleimage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
+		objectid_pluginpackage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the attachment is associated. */
 		objectid_ribbonclientmetadata: DevKit.WebApi.LookupValue;

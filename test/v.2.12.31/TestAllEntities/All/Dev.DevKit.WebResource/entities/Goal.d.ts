@@ -2,39 +2,38 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormGoal_Information {
-		interface tab_general_Sections {
-			information: DevKit.Controls.Section;
+		interface tab__242FCD83_2A50_478E_922A_F4641920DDE0_Sections {
+			_8ECDE6CB_085B_46D1_97A9_E357C5799076: DevKit.Controls.Section;
 		}
 		interface tab__349A439D_6ED5_BAE8_7C7D_3721869367CA_Sections {
 			_3A5C2DC2_2EE7_848C_83EB_A2B1E4D1C703: DevKit.Controls.Section;
 		}
+		interface tab_general_Sections {
+			information: DevKit.Controls.Section;
+		}
 		interface tab_notes_Sections {
 			notes: DevKit.Controls.Section;
-		}
-		interface tab__242FCD83_2A50_478E_922A_F4641920DDE0_Sections {
-			_8ECDE6CB_085B_46D1_97A9_E357C5799076: DevKit.Controls.Section;
-		}
-		interface tab_general extends DevKit.Controls.ITab {
-			Section: tab_general_Sections;
-		}
-		interface tab__349A439D_6ED5_BAE8_7C7D_3721869367CA extends DevKit.Controls.ITab {
-			Section: tab__349A439D_6ED5_BAE8_7C7D_3721869367CA_Sections;
-		}
-		interface tab_notes extends DevKit.Controls.ITab {
-			Section: tab_notes_Sections;
 		}
 		interface tab__242FCD83_2A50_478E_922A_F4641920DDE0 extends DevKit.Controls.ITab {
 			Section: tab__242FCD83_2A50_478E_922A_F4641920DDE0_Sections;
 		}
+		interface tab__349A439D_6ED5_BAE8_7C7D_3721869367CA extends DevKit.Controls.ITab {
+			Section: tab__349A439D_6ED5_BAE8_7C7D_3721869367CA_Sections;
+		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
+		interface tab_notes extends DevKit.Controls.ITab {
+			Section: tab_notes_Sections;
+		}
 		interface Tabs {
-			general: tab_general;
-			_349A439D_6ED5_BAE8_7C7D_3721869367CA: tab__349A439D_6ED5_BAE8_7C7D_3721869367CA;
-			notes: tab_notes;
 			_242FCD83_2A50_478E_922A_F4641920DDE0: tab__242FCD83_2A50_478E_922A_F4641920DDE0;
+			_349A439D_6ED5_BAE8_7C7D_3721869367CA: tab__349A439D_6ED5_BAE8_7C7D_3721869367CA;
+			general: tab_general;
+			notes: tab_notes;
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Shows the actual value (Decimal type) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount and the amount data type is Decimal. */
 			ActualDecimal: DevKit.Controls.Decimal;
 			/** Shows the actual value (integer) achieved towards the target as of the last rolled-up date. This field appears when the metric type of the goal is Amount or Count and the amount data type is Integer. */
@@ -72,6 +71,7 @@ declare namespace DevKit {
 			/** Choose the metric for the goal. This metric determines how the goal is tracked. */
 			MetricId: DevKit.Controls.Lookup;
 			participatingrecordcontrol: DevKit.Controls.ActionCards;
+			notescontrol: DevKit.Controls.Note;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
 			/** Choose a parent goal if the current goal is a child goal. This sets up a parent-child relationship for reporting and analytics. */

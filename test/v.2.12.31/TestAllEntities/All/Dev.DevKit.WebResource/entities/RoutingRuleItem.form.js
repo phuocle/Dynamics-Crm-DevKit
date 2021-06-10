@@ -29,15 +29,15 @@ var DevKit;
 					rule_item_information: {}
 				}
 			},
+			notes: {
+				Section: {
+					notes: {}
+				}
+			},
 			RuleCriteria: {
 				Section: {
 					ConditionControl: {},
 					rule_then_conditions: {}
-				}
-			},
-			notes: {
-				Section: {
-					notes: {}
 				}
 			}
 		};

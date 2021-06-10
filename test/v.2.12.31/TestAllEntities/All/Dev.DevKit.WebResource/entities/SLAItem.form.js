@@ -39,11 +39,11 @@ var DevKit;
 		var tab = {
 			tabUC: {
 				Section: {
+					Actions: {},
 					ApplicableWhen: {},
-					SuccessConditions: {},
 					PauseConfiguration: {},
-					Warn_and_Fail_Duration: {},
-					Actions: {}
+					SuccessConditions: {},
+					Warn_and_Fail_Duration: {}
 				}
 			}
 		};

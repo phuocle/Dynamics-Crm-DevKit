@@ -5,36 +5,36 @@ declare namespace DevKit {
 		interface tab_general_Sections {
 			rule_item_information: DevKit.Controls.Section;
 		}
+		interface tab_notes_Sections {
+			notes: DevKit.Controls.Section;
+		}
 		interface tab_RuleCriteria_Sections {
 			ConditionControl: DevKit.Controls.Section;
 			rule_then_conditions: DevKit.Controls.Section;
 		}
-		interface tab_notes_Sections {
-			notes: DevKit.Controls.Section;
-		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
-		}
-		interface tab_RuleCriteria extends DevKit.Controls.ITab {
-			Section: tab_RuleCriteria_Sections;
 		}
 		interface tab_notes extends DevKit.Controls.ITab {
 			Section: tab_notes_Sections;
 		}
+		interface tab_RuleCriteria extends DevKit.Controls.ITab {
+			Section: tab_RuleCriteria_Sections;
+		}
 		interface Tabs {
 			general: tab_general;
-			RuleCriteria: tab_RuleCriteria;
 			notes: tab_notes;
+			RuleCriteria: tab_RuleCriteria;
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Show who is assigned on item. */
 			AssignObjectId: DevKit.Controls.Lookup;
 			/** Type additional information to describe the rule item. */
 			Description: DevKit.Controls.String;
 			/** Name of the Routing Rule Item. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Choose the Queue that the item is assigned to. */
 			RoutedQueueId: DevKit.Controls.Lookup;
 		}

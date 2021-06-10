@@ -27,9 +27,9 @@ var DevKit;
 		var tab = {
 			rule: {
 				Section: {
-					section_1: {},
 					criteria: {},
-					Rule_Conditions: {}
+					Rule_Conditions: {},
+					section_1: {}
 				}
 			}
 		};

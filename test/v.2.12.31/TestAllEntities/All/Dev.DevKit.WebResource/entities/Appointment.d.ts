@@ -11,10 +11,10 @@ declare namespace DevKit {
 			StateCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_appointment_Sections {
-			general_information: DevKit.Controls.Section;
-			attachments: DevKit.Controls.Section;
-			scheduling_information: DevKit.Controls.Section;
 			appointment_description: DevKit.Controls.Section;
+			attachments: DevKit.Controls.Section;
+			general_information: DevKit.Controls.Section;
+			scheduling_information: DevKit.Controls.Section;
 			tab_2_section_2: DevKit.Controls.Section;
 		}
 		interface tab_appointment extends DevKit.Controls.ITab {
@@ -78,10 +78,10 @@ declare namespace DevKit {
 			StateCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_tab_5_Sections {
-			tab_5_section_5: DevKit.Controls.Section;
-			tab_5_section_2: DevKit.Controls.Section;
 			appointment_description: DevKit.Controls.Section;
+			tab_5_section_2: DevKit.Controls.Section;
 			tab_5_section_3: DevKit.Controls.Section;
+			tab_5_section_5: DevKit.Controls.Section;
 		}
 		interface tab_tab_5 extends DevKit.Controls.ITab {
 			Section: tab_tab_5_Sections;
@@ -142,11 +142,11 @@ declare namespace DevKit {
 			PriorityCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_appointment_Sections {
-			Hidden_Section: DevKit.Controls.Section;
-			general_information: DevKit.Controls.Section;
-			attachments: DevKit.Controls.Section;
-			scheduling_information: DevKit.Controls.Section;
 			appointment_description: DevKit.Controls.Section;
+			attachments: DevKit.Controls.Section;
+			general_information: DevKit.Controls.Section;
+			Hidden_Section: DevKit.Controls.Section;
+			scheduling_information: DevKit.Controls.Section;
 		}
 		interface tab_appointment extends DevKit.Controls.ITab {
 			Section: tab_appointment_Sections;

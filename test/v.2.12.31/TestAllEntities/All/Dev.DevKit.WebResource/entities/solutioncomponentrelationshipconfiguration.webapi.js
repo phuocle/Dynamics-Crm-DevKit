@@ -67,6 +67,7 @@ var DevKit;
         }
 		var solutioncomponentrelationshipconfiguration = {
 			AddRelatedComponents: { a: 'addrelatedcomponents' },
+			CascadeRemoveComponents: { a: 'cascaderemovecomponents' },
 			ComponentIdUnique: { a: 'componentidunique', r: true },
 			ComponentState: { a: 'componentstate', r: true },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },

@@ -85,9 +85,9 @@ var DevKit;
 		var tab = {
 			tab_2: {
 				Section: {
+					Description: {},
 					tab_2_section_1: {},
-					tab_2_section_2: {},
-					Description: {}
+					tab_2_section_2: {}
 				}
 			}
 		};

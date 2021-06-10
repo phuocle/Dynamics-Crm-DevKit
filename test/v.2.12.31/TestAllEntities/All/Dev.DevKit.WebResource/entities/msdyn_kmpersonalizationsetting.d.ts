@@ -4,25 +4,25 @@ declare namespace DevKit {
 	namespace Formmsdyn_kmpersonalizationsetting_Information {
 		interface tab__ADE28570_C803_4349_927A_9A1B2269450E_Sections {
 		}
-		interface tab_knowledge_filter_settings_Sections {
-			tab_2_section_1: DevKit.Controls.Section;
-		}
 		interface tab_knowledge_authoring_language_settings_Sections {
 			tab_3_section_1: DevKit.Controls.Section;
+		}
+		interface tab_knowledge_filter_settings_Sections {
+			tab_2_section_1: DevKit.Controls.Section;
 		}
 		interface tab__ADE28570_C803_4349_927A_9A1B2269450E extends DevKit.Controls.ITab {
 			Section: tab__ADE28570_C803_4349_927A_9A1B2269450E_Sections;
 		}
-		interface tab_knowledge_filter_settings extends DevKit.Controls.ITab {
-			Section: tab_knowledge_filter_settings_Sections;
-		}
 		interface tab_knowledge_authoring_language_settings extends DevKit.Controls.ITab {
 			Section: tab_knowledge_authoring_language_settings_Sections;
 		}
+		interface tab_knowledge_filter_settings extends DevKit.Controls.ITab {
+			Section: tab_knowledge_filter_settings_Sections;
+		}
 		interface Tabs {
 			_ADE28570_C803_4349_927A_9A1B2269450E: tab__ADE28570_C803_4349_927A_9A1B2269450E;
-			knowledge_filter_settings: tab_knowledge_filter_settings;
 			knowledge_authoring_language_settings: tab_knowledge_authoring_language_settings;
+			knowledge_filter_settings: tab_knowledge_filter_settings;
 		}
 		interface Body {
 			Tab: Tabs;

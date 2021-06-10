@@ -14,7 +14,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			WebResource_Disclaimer: DevKit.Controls.WebResource;
 			/** Unique identifier when you create a connector in Microsoft search, please check the documentation above. */
 			ConnectionId: DevKit.Controls.String;
 			/** This field specifies the description of Search provider record */
@@ -26,6 +25,7 @@ declare namespace DevKit {
 			OwnerId: DevKit.Controls.Lookup;
 			SearchType: DevKit.Controls.OptionSet;
 			SharepointURL: DevKit.Controls.String;
+			WebResource_Disclaimer: DevKit.Controls.WebResource;
 		}
 	}
 	class FormSearch_provider_Main_form extends DevKit.IForm {
@@ -121,7 +121,7 @@ declare namespace OptionSet {
 			/** 100000000 */
 			Cross_Organizational_Search,
 			/** 100000002 */
-			Microsoft_Search_Connector,
+			Microsoft_Graph_Connector,
 			/** 100000001 */
 			Sharepoint
 		}

@@ -9,8 +9,8 @@ declare namespace DevKit {
 			StatusCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_tabUC_Sections {
-			tab_2_section_1: DevKit.Controls.Section;
 			sladetails: DevKit.Controls.Section;
+			tab_2_section_1: DevKit.Controls.Section;
 		}
 		interface tab_tabUC extends DevKit.Controls.ITab {
 			Section: tab_tabUC_Sections;
@@ -20,7 +20,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Select whether this SLA will allow pausing and resuming during the time calculation. */
 			AllowPauseResume: DevKit.Controls.Boolean;
 			/** Select the field that specifies the date and time from which the SLA items will be calculated. For example, if you select the Case Created On field, SLA calculation will begin from the time the case is created. */
@@ -35,6 +34,7 @@ declare namespace DevKit {
 			Name: DevKit.Controls.String;
 			/** Type a descriptive name of the service level agreement (SLA). */
 			Name_1: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Choose the entity type that the SLA is defined. */
 			ObjectTypeCode: DevKit.Controls.OptionSet;
 			/** Shows the primary entity that the SLA has been created for. */
@@ -282,6 +282,8 @@ declare namespace OptionSet {
 			Azure_Service_Connection,
 			/** 10039 */
 			BotContent,
+			/** 10115 */
+			BPF_Account,
 			/** 4425 */
 			Bulk_Delete_Failure,
 			/** 4424 */
@@ -382,6 +384,12 @@ declare namespace OptionSet {
 			Data_Map,
 			/** 4450 */
 			Data_Performance_Dashboard,
+			/** 10164 */
+			Data_Source,
+			/** 10167 */
+			Data_Source_2,
+			/** 10168 */
+			Data_Source_3,
 			/** 418 */
 			Dataflow,
 			/** 9961 */
@@ -450,6 +458,8 @@ declare namespace OptionSet {
 			External_Party_Item,
 			/** 4204 */
 			Fax,
+			/** 10165 */
+			FeatureControlSetting,
 			/** 9958 */
 			Feedback,
 			/** 1201 */
@@ -478,6 +488,8 @@ declare namespace OptionSet {
 			Goal,
 			/** 9603 */
 			Goal_Metric,
+			/** 10116 */
+			Help_Page,
 			/** 8840 */
 			Hierarchy_Rule,
 			/** 9919 */
@@ -662,6 +674,8 @@ declare namespace OptionSet {
 			Plug_in_Type,
 			/** 4603 */
 			Plug_in_Type_Statistic,
+			/** 10166 */
+			Plugin_Package,
 			/** 10091 */
 			PM_Inferred_Task,
 			/** 10092 */
@@ -844,6 +858,8 @@ declare namespace OptionSet {
 			Solution_Component,
 			/** 10000 */
 			Solution_Component_Attribute_Configuration,
+			/** 10169 */
+			Solution_Component_Batch_Configuration,
 			/** 10001 */
 			Solution_Component_Configuration,
 			/** 10012 */
@@ -934,6 +950,8 @@ declare namespace OptionSet {
 			Time_Zone_Localized_Name,
 			/** 4811 */
 			Time_Zone_Rule,
+			/** 10117 */
+			Tour,
 			/** 8050 */
 			Trace,
 			/** 8051 */
@@ -980,6 +998,8 @@ declare namespace OptionSet {
 			Virtual_Entity_Data_Provider,
 			/** 85 */
 			Virtual_Entity_Data_Source,
+			/** 10118 */
+			Virtual_Entity_Metadata,
 			/** 9333 */
 			Web_Resource,
 			/** 4800 */

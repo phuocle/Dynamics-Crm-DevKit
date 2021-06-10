@@ -5,39 +5,39 @@ declare namespace DevKit {
 		interface tab__474B8A52_CB22_4194_A5A6_F21FD40B7417_Sections {
 			Details: DevKit.Controls.Section;
 		}
-		interface tab_Summary_Sections {
-			Summary: DevKit.Controls.Section;
-		}
 		interface tab_Comments_Sections {
 			Comments: DevKit.Controls.Section;
-		}
-		interface tab_Linked_Sessions_Sections {
-			Linked_Sessions: DevKit.Controls.Section;
 		}
 		interface tab_Details_Sections {
 			Details_2: DevKit.Controls.Section;
 		}
+		interface tab_Linked_Sessions_Sections {
+			Linked_Sessions: DevKit.Controls.Section;
+		}
+		interface tab_Summary_Sections {
+			Summary: DevKit.Controls.Section;
+		}
 		interface tab__474B8A52_CB22_4194_A5A6_F21FD40B7417 extends DevKit.Controls.ITab {
 			Section: tab__474B8A52_CB22_4194_A5A6_F21FD40B7417_Sections;
-		}
-		interface tab_Summary extends DevKit.Controls.ITab {
-			Section: tab_Summary_Sections;
 		}
 		interface tab_Comments extends DevKit.Controls.ITab {
 			Section: tab_Comments_Sections;
 		}
-		interface tab_Linked_Sessions extends DevKit.Controls.ITab {
-			Section: tab_Linked_Sessions_Sections;
-		}
 		interface tab_Details extends DevKit.Controls.ITab {
 			Section: tab_Details_Sections;
 		}
+		interface tab_Linked_Sessions extends DevKit.Controls.ITab {
+			Section: tab_Linked_Sessions_Sections;
+		}
+		interface tab_Summary extends DevKit.Controls.ITab {
+			Section: tab_Summary_Sections;
+		}
 		interface Tabs {
 			_474B8A52_CB22_4194_A5A6_F21FD40B7417: tab__474B8A52_CB22_4194_A5A6_F21FD40B7417;
-			Summary: tab_Summary;
 			Comments: tab_Comments;
-			Linked_Sessions: tab_Linked_Sessions;
 			Details: tab_Details;
+			Linked_Sessions: tab_Linked_Sessions;
+			Summary: tab_Summary;
 		}
 		interface Body {
 			Tab: Tabs;
@@ -256,6 +256,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_devkit_bpfaccount: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_email: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_environmentvariabledefinition: DevKit.WebApi.LookupValue;
@@ -271,6 +273,8 @@ declare namespace DevKit {
 		externalpartyitem_processsession: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_fax: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_flowmachine: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
@@ -342,6 +346,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
@@ -369,6 +375,8 @@ declare namespace DevKit {
 		regardingobjectid_msdyn_serviceconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_msdyn_tour: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_newprocess: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
@@ -424,6 +432,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValue;
@@ -455,6 +465,8 @@ declare namespace DevKit {
 		regardingobjectid_usermapping: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_usermobileofflineprofilemembership: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the dialog session is associated. */
+		regardingobjectid_virtualentitymetadata: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the dialog session is associated. */
 		regardingobjectid_workflowbinary: DevKit.WebApi.LookupValue;
 		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;

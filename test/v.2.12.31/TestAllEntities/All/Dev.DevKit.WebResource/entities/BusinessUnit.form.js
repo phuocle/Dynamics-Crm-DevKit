@@ -40,15 +40,15 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			general: {
-				Section: {
-					section_1: {}
-				}
-			},
 			addresses: {
 				Section: {
 					bill_to_address: {},
 					ship_to_address: {}
+				}
+			},
+			general: {
+				Section: {
+					section_1: {}
 				}
 			}
 		};

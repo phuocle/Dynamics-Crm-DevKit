@@ -31,6 +31,8 @@ declare namespace DevKit {
 		ACIWebEndpointUrl: DevKit.WebApi.StringValue;
 		/** Unique identifier of the template to be used for acknowledgement when a user unsubscribes. */
 		AcknowledgementTemplateId: DevKit.WebApi.LookupValue;
+		/** Flag to indicate if the Advanced Lookup feature is enabled for lookup controls */
+		AdvancedLookupEnabled: DevKit.WebApi.BooleanValue;
 		/** Indicates whether background address book synchronization in Microsoft Office Outlook is allowed. */
 		AllowAddressBookSyncs: DevKit.WebApi.BooleanValue;
 		/** Indicates whether automatic response creation is allowed. */

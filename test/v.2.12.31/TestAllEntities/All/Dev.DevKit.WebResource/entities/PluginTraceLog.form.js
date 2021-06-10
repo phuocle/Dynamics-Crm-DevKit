@@ -37,8 +37,8 @@ var DevKit;
 		var tab = {
 			Configuration: {
 				Section: {
-					Configuration_General: {},
-					Configuration_Context: {}
+					Configuration_Context: {},
+					Configuration_General: {}
 				}
 			},
 			Execution: {

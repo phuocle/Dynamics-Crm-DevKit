@@ -3,9 +3,9 @@
 declare namespace DevKit {
 	namespace FormTeamTemplate {
 		interface tab_general_Sections {
-			General: DevKit.Controls.Section;
-			Description: DevKit.Controls.Section;
 			Access_Rights: DevKit.Controls.Section;
+			Description: DevKit.Controls.Section;
+			General: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;

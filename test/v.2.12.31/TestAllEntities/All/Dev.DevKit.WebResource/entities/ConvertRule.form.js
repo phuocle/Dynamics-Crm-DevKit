@@ -35,12 +35,12 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					ConvertToCaseSettings: {},
-					ChannelProperties: {},
-					SocialMonitoringCaseConditions: {},
-					EmailCaseConditions: {},
 					AutoResponseSettings: {},
-					CaseDetails: {}
+					CaseDetails: {},
+					ChannelProperties: {},
+					ConvertToCaseSettings: {},
+					EmailCaseConditions: {},
+					SocialMonitoringCaseConditions: {}
 				}
 			}
 		};

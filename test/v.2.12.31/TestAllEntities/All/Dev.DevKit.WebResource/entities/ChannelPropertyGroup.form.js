@@ -24,8 +24,8 @@ var DevKit;
 		var tab = {
 			property_bag_summary: {
 				Section: {
-					property_bag_properties_1: {},
-					property_bag_items_1: {}
+					property_bag_items_1: {},
+					property_bag_properties_1: {}
 				}
 			}
 		};

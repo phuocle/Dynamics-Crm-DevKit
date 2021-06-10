@@ -53,18 +53,18 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			tab_Request_Parameters: {
-				Section: {
-					tab_requestparameters_section_type: {},
-					tab_requestparameters_section_name: {},
-					tab_requestparameters_section_value: {}
-				}
-			},
 			tab_additional_parameters: {
 				Section: {
-					tab_additional_section_parametertype: {},
 					tab_additional_section_parametername: {},
+					tab_additional_section_parametertype: {},
 					tab_additional_section_value: {}
+				}
+			},
+			tab_Request_Parameters: {
+				Section: {
+					tab_requestparameters_section_name: {},
+					tab_requestparameters_section_type: {},
+					tab_requestparameters_section_value: {}
 				}
 			}
 		};

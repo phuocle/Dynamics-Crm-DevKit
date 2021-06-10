@@ -3,8 +3,8 @@
 declare namespace DevKit {
 	namespace FormPosition {
 		interface tab_general_Sections {
-			General: DevKit.Controls.Section;
 			Description: DevKit.Controls.Section;
+			General: DevKit.Controls.Section;
 			Users: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {

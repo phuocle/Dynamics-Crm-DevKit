@@ -74,6 +74,8 @@ declare namespace DevKit {
 		OrganizationId: DevKit.WebApi.LookupValueReadonly;
 		/** For internal use only. */
 		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		/** Unique identifier for Plugin Package associated with Plug-in Assembly. */
+		PackageId: DevKit.WebApi.LookupValue;
 		/** User Password */
 		Password: DevKit.WebApi.StringValue;
 		/** File name of the plug-in assembly. Used when the source type is set to 1. */

@@ -23,8 +23,8 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					section_1: {},
-					Holidays_List: {}
+					Holidays_List: {},
+					section_1: {}
 				}
 			}
 		};

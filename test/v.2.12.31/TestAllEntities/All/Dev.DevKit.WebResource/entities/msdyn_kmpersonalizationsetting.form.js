@@ -25,14 +25,14 @@ var DevKit;
 				Section: {
 				}
 			},
-			knowledge_filter_settings: {
-				Section: {
-					tab_2_section_1: {}
-				}
-			},
 			knowledge_authoring_language_settings: {
 				Section: {
 					tab_3_section_1: {}
+				}
+			},
+			knowledge_filter_settings: {
+				Section: {
+					tab_2_section_1: {}
 				}
 			}
 		};

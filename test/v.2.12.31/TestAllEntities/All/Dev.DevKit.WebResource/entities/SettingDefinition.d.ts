@@ -78,9 +78,9 @@ declare namespace DevKit {
 		/** Unique identifier of the associated solution. */
 		SolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** Status of the SettingDefinition */
-		statecode: DevKit.WebApi.OptionSetValueReadonly;
+		statecode: DevKit.WebApi.OptionSetValue;
 		/** Reason for the status of the SettingDefinition */
-		statuscode: DevKit.WebApi.OptionSetValueReadonly;
+		statuscode: DevKit.WebApi.OptionSetValue;
 		/** For internal use only. */
 		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
 		/** For internal use only. */

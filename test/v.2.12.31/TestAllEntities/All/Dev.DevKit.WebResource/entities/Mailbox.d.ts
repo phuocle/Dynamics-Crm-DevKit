@@ -20,7 +20,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Choose the delivery method for the mailbox for appointments, contacts, and tasks. */
 			ACTDeliveryMethod: DevKit.Controls.OptionSet;
 			/** Status of the Appointments, Contacts, and Tasks. */
@@ -41,6 +40,7 @@ declare namespace DevKit {
 			IsForwardMailbox: DevKit.Controls.Boolean;
 			/** Type the name of the mailbox. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Type the Oauth access token for the mailbox. */
 			OauthAccessToken: DevKit.Controls.String;
 			/** Select how outgoing email will be sent from the mailbox. */

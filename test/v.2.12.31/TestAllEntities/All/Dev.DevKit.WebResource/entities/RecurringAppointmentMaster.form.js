@@ -26,8 +26,8 @@ var DevKit;
 		var tab = {
 			SUMMARY_TAB: {
 				Section: {
-					general_information: {},
 					appointment_description: {},
+					general_information: {},
 					tab_2_section_2: {}
 				}
 			}

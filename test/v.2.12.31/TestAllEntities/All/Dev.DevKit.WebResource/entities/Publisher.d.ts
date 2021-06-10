@@ -4,12 +4,12 @@ declare namespace DevKit {
 	namespace FormPublisher_Information {
 		interface tab__70098AD5_4956_11DD_982E_00188B01DCE6_Sections {
 			_70098AD6_4956_11DD_982E_00188B01DCE6: DevKit.Controls.Section;
-			description: DevKit.Controls.Section;
 			_EAF2EDB4_7C5E_DD11_940F_00155D8AC303: DevKit.Controls.Section;
+			description: DevKit.Controls.Section;
 		}
 		interface tab__E1F7A9C9_A0E6_4C8B_ACBD_C6610FBD2343_Sections {
-			_CBF04024_5749_444C_BC51_CFAF839688BF: DevKit.Controls.Section;
 			_6FE75F79_0CA8_4DBE_8C7B_6E68C17DE013: DevKit.Controls.Section;
+			_CBF04024_5749_444C_BC51_CFAF839688BF: DevKit.Controls.Section;
 		}
 		interface tab_solutions_marketplace_Sections {
 			marketplacesection: DevKit.Controls.Section;
@@ -30,7 +30,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			IFRAME_SolutionsMarketplace: DevKit.Controls.IFrame;
 			/** City name for address 1. */
 			Address1_City: DevKit.Controls.String;
 			/** Country/region name for address 1. */
@@ -55,6 +54,7 @@ declare namespace DevKit {
 			EMailAddress: DevKit.Controls.String;
 			/** User display name for this publisher. */
 			FriendlyName: DevKit.Controls.String;
+			IFRAME_SolutionsMarketplace: DevKit.Controls.IFrame;
 			/** URL for the supporting website of this publisher. */
 			SupportingWebsiteUrl: DevKit.Controls.String;
 			/** The unique name of this publisher. */

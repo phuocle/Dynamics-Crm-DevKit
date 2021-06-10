@@ -11,8 +11,8 @@ declare namespace DevKit {
 			PrimaryEntity: DevKit.Controls.String;
 		}
 		interface tab_Configuration_Sections {
-			Configuration_General: DevKit.Controls.Section;
 			Configuration_Context: DevKit.Controls.Section;
+			Configuration_General: DevKit.Controls.Section;
 		}
 		interface tab_Execution_Sections {
 			Execution_Performance: DevKit.Controls.Section;

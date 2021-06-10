@@ -71,8 +71,8 @@ declare namespace DevKit {
 		}
 		interface tab_tab_2_Sections {
 			tab_2_section_1: DevKit.Controls.Section;
-			tab_2_section_4: DevKit.Controls.Section;
 			tab_2_section_2: DevKit.Controls.Section;
+			tab_2_section_4: DevKit.Controls.Section;
 		}
 		interface tab_tab_2 extends DevKit.Controls.ITab {
 			Section: tab_tab_2_Sections;

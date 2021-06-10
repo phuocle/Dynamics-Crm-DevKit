@@ -31,12 +31,12 @@ var DevKit;
 		var tab = {
 			Email: {
 				Section: {
-					recipient_information: {},
-					email_description: {},
-					Regarding_information: {},
 					attachments: {},
+					email_description: {},
 					emailengagementactions: {},
 					Emailrecipient_section_6: {},
+					recipient_information: {},
+					Regarding_information: {},
 					tab_4_section_2: {}
 				}
 			}
@@ -102,9 +102,9 @@ var DevKit;
 		var tab = {
 			tab_2: {
 				Section: {
-					tab_2_section_5: {},
 					tab_2_section_2: {},
-					tab_2_section_3: {}
+					tab_2_section_3: {},
+					tab_2_section_5: {}
 				}
 			}
 		};
@@ -232,10 +232,10 @@ var DevKit;
 		var tab = {
 			Email: {
 				Section: {
-					recipient_information: {},
-					Hidden_Section: {},
 					attachments: {},
 					email_description: {},
+					Hidden_Section: {},
+					recipient_information: {},
 					Regarding_information: {}
 				}
 			}

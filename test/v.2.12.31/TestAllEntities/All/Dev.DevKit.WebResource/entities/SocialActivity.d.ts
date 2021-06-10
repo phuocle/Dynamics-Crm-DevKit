@@ -65,9 +65,9 @@ declare namespace DevKit {
 			StateCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_tab_2_Sections {
+			Description: DevKit.Controls.Section;
 			tab_2_section_1: DevKit.Controls.Section;
 			tab_2_section_2: DevKit.Controls.Section;
-			Description: DevKit.Controls.Section;
 		}
 		interface tab_tab_2 extends DevKit.Controls.ITab {
 			Section: tab_tab_2_Sections;

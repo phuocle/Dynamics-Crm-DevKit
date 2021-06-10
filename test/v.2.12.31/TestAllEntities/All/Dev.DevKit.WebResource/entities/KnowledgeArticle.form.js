@@ -46,10 +46,16 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			analytics: {
+				Section: {
+					Feedback: {},
+					Views: {}
+				}
+			},
 			general: {
 				Section: {
-					Knowledge_Information: {},
-					Content: {}
+					Content: {},
+					Knowledge_Information: {}
 				}
 			},
 			summary: {
@@ -57,12 +63,6 @@ var DevKit;
 					Portal_Settings: {},
 					Publish_Settings: {},
 					Timeline: {}
-				}
-			},
-			analytics: {
-				Section: {
-					Views: {},
-					Feedback: {}
 				}
 			}
 		};
@@ -109,9 +109,9 @@ var DevKit;
 		process.Expired_Process = _Expired_Process;
 		form.Process = process;
 		var quickForm = {
-			relatedversionsquickform: {
-			},
 			relatedarticlequickform: {
+			},
+			relatedversionsquickform: {
 			}
 		};
 		devKit.LoadQuickForms(formContext, quickForm);
@@ -176,10 +176,16 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			analytics: {
+				Section: {
+					Feedback: {},
+					Views: {}
+				}
+			},
 			general: {
 				Section: {
-					Knowledge_Information: {},
-					Content: {}
+					Content: {},
+					Knowledge_Information: {}
 				}
 			},
 			summary: {
@@ -187,12 +193,6 @@ var DevKit;
 					Portal_Settings: {},
 					Publish_Settings: {},
 					Timeline: {}
-				}
-			},
-			analytics: {
-				Section: {
-					Views: {},
-					Feedback: {}
 				}
 			}
 		};
@@ -239,9 +239,9 @@ var DevKit;
 		process.Expired_Process = _Expired_Process;
 		form.Process = process;
 		var quickForm = {
-			relatedversionsquickform: {
-			},
 			relatedarticlequickform: {
+			},
+			relatedversionsquickform: {
 			}
 		};
 		devKit.LoadQuickForms(formContext, quickForm);

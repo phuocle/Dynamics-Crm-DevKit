@@ -87,8 +87,8 @@ var DevKit;
 			tab_2: {
 				Section: {
 					tab_2_section_1: {},
-					tab_2_section_4: {},
-					tab_2_section_2: {}
+					tab_2_section_2: {},
+					tab_2_section_4: {}
 				}
 			}
 		};

@@ -5,31 +5,28 @@ declare namespace DevKit {
 		interface tab_failureTab_Sections {
 			failureSection: DevKit.Controls.Section;
 		}
-		interface tab_successTab_Sections {
-			successSection: DevKit.Controls.Section;
-		}
 		interface tab_partialFailureTab_Sections {
 			partialFailureSection: DevKit.Controls.Section;
+		}
+		interface tab_successTab_Sections {
+			successSection: DevKit.Controls.Section;
 		}
 		interface tab_failureTab extends DevKit.Controls.ITab {
 			Section: tab_failureTab_Sections;
 		}
-		interface tab_successTab extends DevKit.Controls.ITab {
-			Section: tab_successTab_Sections;
-		}
 		interface tab_partialFailureTab extends DevKit.Controls.ITab {
 			Section: tab_partialFailureTab_Sections;
 		}
+		interface tab_successTab extends DevKit.Controls.ITab {
+			Section: tab_successTab_Sections;
+		}
 		interface Tabs {
 			failureTab: tab_failureTab;
-			successTab: tab_successTab;
 			partialFailureTab: tab_partialFailureTab;
+			successTab: tab_successTab;
 		}
 		interface Body {
 			Tab: Tabs;
-			import_Logs_Failures: DevKit.Controls.ActionCards;
-			import_Logs_Succes: DevKit.Controls.ActionCards;
-			import_Logs_Failure: DevKit.Controls.ActionCards;
 			/** Shows the date and time when the import associated with the import file was completed. */
 			CompletedOn: DevKit.Controls.Date;
 			/** Shows who created the record. */
@@ -40,6 +37,9 @@ declare namespace DevKit {
 			EnableDuplicateDetection: DevKit.Controls.Boolean;
 			/** Shows the number of records in the import file that cannot be imported. */
 			FailureCount: DevKit.Controls.Integer;
+			import_Logs_Failure: DevKit.Controls.ActionCards;
+			import_Logs_Failures: DevKit.Controls.ActionCards;
+			import_Logs_Succes: DevKit.Controls.ActionCards;
 			/** Choose a data map to match the import file and its column headers with the record types and fields in Microsoft Dynamics 365. If the column headers in the file match the display names of the target fields in Microsoft Dynamics 365, we import the data automatically. If not, you can manually define matches during import. */
 			ImportMapId: DevKit.Controls.Lookup;
 			/** Shows the name of the import file. This name is based on the name of the uploaded file. */

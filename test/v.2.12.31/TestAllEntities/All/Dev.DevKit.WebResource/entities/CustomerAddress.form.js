@@ -35,9 +35,9 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
+					additional_information: {},
 					customer_address_information: {},
-					phone_numbers: {},
-					additional_information: {}
+					phone_numbers: {}
 				}
 			}
 		};

@@ -3,12 +3,12 @@
 declare namespace DevKit {
 	namespace FormRecord_Creation_and_Update_Rule {
 		interface tab_general_Sections {
-			ConvertToCaseSettings: DevKit.Controls.Section;
-			ChannelProperties: DevKit.Controls.Section;
-			SocialMonitoringCaseConditions: DevKit.Controls.Section;
-			EmailCaseConditions: DevKit.Controls.Section;
 			AutoResponseSettings: DevKit.Controls.Section;
 			CaseDetails: DevKit.Controls.Section;
+			ChannelProperties: DevKit.Controls.Section;
+			ConvertToCaseSettings: DevKit.Controls.Section;
+			EmailCaseConditions: DevKit.Controls.Section;
+			SocialMonitoringCaseConditions: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;

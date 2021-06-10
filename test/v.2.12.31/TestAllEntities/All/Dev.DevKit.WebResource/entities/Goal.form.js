@@ -61,9 +61,9 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			general: {
+			_242FCD83_2A50_478E_922A_F4641920DDE0: {
 				Section: {
-					information: {}
+					_8ECDE6CB_085B_46D1_97A9_E357C5799076: {}
 				}
 			},
 			_349A439D_6ED5_BAE8_7C7D_3721869367CA: {
@@ -71,14 +71,14 @@ var DevKit;
 					_3A5C2DC2_2EE7_848C_83EB_A2B1E4D1C703: {}
 				}
 			},
+			general: {
+				Section: {
+					information: {}
+				}
+			},
 			notes: {
 				Section: {
 					notes: {}
-				}
-			},
-			_242FCD83_2A50_478E_922A_F4641920DDE0: {
-				Section: {
-					_8ECDE6CB_085B_46D1_97A9_E357C5799076: {}
 				}
 			}
 		};

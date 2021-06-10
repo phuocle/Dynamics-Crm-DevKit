@@ -68,6 +68,7 @@ var DevKit;
 		var organization = {
 			ACIWebEndpointUrl: { a: 'aciwebendpointurl' },
 			AcknowledgementTemplateId: { b: 'acknowledgementtemplateid', a: '_acknowledgementtemplateid_value', c: 'templates', d: 'template' },
+			AdvancedLookupEnabled: { a: 'advancedlookupenabled' },
 			AllowAddressBookSyncs: { a: 'allowaddressbooksyncs' },
 			AllowAutoResponseCreation: { a: 'allowautoresponsecreation' },
 			AllowAutoUnsubscribe: { a: 'allowautounsubscribe' },

@@ -3,8 +3,8 @@
 declare namespace DevKit {
 	namespace FormTerritory_Information {
 		interface tab_general_Sections {
-			territory_information: DevKit.Controls.Section;
 			description: DevKit.Controls.Section;
+			territory_information: DevKit.Controls.Section;
 		}
 		interface tab_subterritories_tab_Sections {
 			territory_tab1_section_1: DevKit.Controls.Section;

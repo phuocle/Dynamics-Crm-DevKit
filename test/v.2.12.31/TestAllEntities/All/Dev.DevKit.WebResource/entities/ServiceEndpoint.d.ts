@@ -76,6 +76,8 @@ declare namespace DevKit {
 		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
 		/** Path to the service endpoint. */
 		Path: DevKit.WebApi.StringValue;
+		/** For internal use only. Holds miscellaneous properties related to runtime integration. */
+		RuntimeIntegrationProperties: DevKit.WebApi.StringValue;
 		/** Shared Access Key */
 		SASKey: DevKit.WebApi.StringValue;
 		/** Shared Access Key Name */

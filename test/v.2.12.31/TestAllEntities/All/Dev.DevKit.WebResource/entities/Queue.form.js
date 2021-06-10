@@ -26,9 +26,9 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					queue_information: {},
+					email_configuration: {},
 					incoming_email: {},
-					email_configuration: {}
+					queue_information: {}
 				}
 			}
 		};
@@ -76,12 +76,12 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					queue_information: {},
 					incoming_email: {},
-					RecordCreationAndUpdateRule: {},
+					queue_information: {},
 					QueueItems: {},
 					QueueMembers: {},
-					QueueMembersNoRecord: {}
+					QueueMembersNoRecord: {},
+					RecordCreationAndUpdateRule: {}
 				}
 			}
 		};

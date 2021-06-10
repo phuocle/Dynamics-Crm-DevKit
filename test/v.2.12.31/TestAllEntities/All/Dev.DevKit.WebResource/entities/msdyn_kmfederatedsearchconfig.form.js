@@ -57,7 +57,7 @@ var OptionSet;
 	OptionSet.msdyn_kmfederatedsearchconfig = {
 		SearchType : {
 			Cross_Organizational_Search: 100000000,
-			Microsoft_Search_Connector: 100000002,
+			Microsoft_Graph_Connector: 100000002,
 			Sharepoint: 100000001
 		},
 		statecode : {

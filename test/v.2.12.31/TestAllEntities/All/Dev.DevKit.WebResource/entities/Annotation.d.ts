@@ -15,12 +15,11 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			regardingobject: DevKit.Controls.ActionCards;
-			filenameattachment: DevKit.Controls.ActionCards;
 			/** Unique identifier of the user who created the note. */
 			CreatedBy: DevKit.Controls.Lookup;
 			/** Date and time when the note was created. */
 			CreatedOn: DevKit.Controls.DateTime;
+			filenameattachment: DevKit.Controls.ActionCards;
 			/** File size of the note. */
 			FileSize: DevKit.Controls.Integer;
 			/** Specifies whether the note is an attachment. */
@@ -32,6 +31,7 @@ declare namespace DevKit {
 			notetext: DevKit.Controls.ActionCards;
 			/** Unique identifier of the user or team who owns the note. */
 			OwnerId: DevKit.Controls.Lookup;
+			regardingobject: DevKit.Controls.ActionCards;
 		}
 	}
 	class FormAnnotation_Information extends DevKit.IForm {
@@ -58,6 +58,7 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
+			attachment: DevKit.Controls.ELSE3???;//attachment - 537DE92A-7EE6-4843-B6E2-1EB0326F55C7 -- FOR DEBUG 
 			/** Text of the note. */
 			NoteText: DevKit.Controls.String;
 			/** Subject associated with the note. */

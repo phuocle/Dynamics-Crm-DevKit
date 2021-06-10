@@ -8,19 +8,22 @@ declare namespace DevKit {
 			/** Select the article's status. */
 			StatusCode: DevKit.Controls.OptionSet;
 		}
+		interface tab_analytics_Sections {
+			Feedback: DevKit.Controls.Section;
+			Views: DevKit.Controls.Section;
+		}
 		interface tab_general_Sections {
-			Knowledge_Information: DevKit.Controls.Section;
 			Content: DevKit.Controls.Section;
+			Knowledge_Information: DevKit.Controls.Section;
 		}
 		interface tab_summary_Sections {
 			Portal_Settings: DevKit.Controls.Section;
 			Publish_Settings: DevKit.Controls.Section;
-			Timeline: DevKit.Controls.Section;
 			ref_pan_Related: DevKit.Controls.Section;
+			Timeline: DevKit.Controls.Section;
 		}
-		interface tab_analytics_Sections {
-			Views: DevKit.Controls.Section;
-			Feedback: DevKit.Controls.Section;
+		interface tab_analytics extends DevKit.Controls.ITab {
+			Section: tab_analytics_Sections;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -28,17 +31,13 @@ declare namespace DevKit {
 		interface tab_summary extends DevKit.Controls.ITab {
 			Section: tab_summary_Sections;
 		}
-		interface tab_analytics extends DevKit.Controls.ITab {
-			Section: tab_analytics_Sections;
-		}
 		interface Tabs {
+			analytics: tab_analytics;
 			general: tab_general;
 			summary: tab_summary;
-			analytics: tab_analytics;
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Shows the automatically generated ID exposed to customers, partners, and other external users to reference and look up articles. */
 			ArticlePublicNumber: DevKit.Controls.String;
 			content: DevKit.Controls.ActionCards;
@@ -66,6 +65,7 @@ declare namespace DevKit {
 			ModifiedBy: DevKit.Controls.Lookup;
 			/** Date and time when the record was modified. */
 			ModifiedOn: DevKit.Controls.DateTime;
+			notescontrol: DevKit.Controls.Note;
 			/** Unique identifier of the user or team who owns the record. */
 			OwnerId: DevKit.Controls.Lookup;
 			/** Contains the id of the parent article content associated with the entity. */
@@ -162,19 +162,22 @@ declare namespace DevKit {
 			/** Select the article's status. */
 			StatusCode: DevKit.Controls.OptionSet;
 		}
+		interface tab_analytics_Sections {
+			Feedback: DevKit.Controls.Section;
+			Views: DevKit.Controls.Section;
+		}
 		interface tab_general_Sections {
-			Knowledge_Information: DevKit.Controls.Section;
 			Content: DevKit.Controls.Section;
+			Knowledge_Information: DevKit.Controls.Section;
 		}
 		interface tab_summary_Sections {
 			Portal_Settings: DevKit.Controls.Section;
 			Publish_Settings: DevKit.Controls.Section;
-			Timeline: DevKit.Controls.Section;
 			ref_pan_Related: DevKit.Controls.Section;
+			Timeline: DevKit.Controls.Section;
 		}
-		interface tab_analytics_Sections {
-			Views: DevKit.Controls.Section;
-			Feedback: DevKit.Controls.Section;
+		interface tab_analytics extends DevKit.Controls.ITab {
+			Section: tab_analytics_Sections;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -182,17 +185,13 @@ declare namespace DevKit {
 		interface tab_summary extends DevKit.Controls.ITab {
 			Section: tab_summary_Sections;
 		}
-		interface tab_analytics extends DevKit.Controls.ITab {
-			Section: tab_analytics_Sections;
-		}
 		interface Tabs {
+			analytics: tab_analytics;
 			general: tab_general;
 			summary: tab_summary;
-			analytics: tab_analytics;
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Shows the automatically generated ID exposed to customers, partners, and other external users to reference and look up articles. */
 			ArticlePublicNumber: DevKit.Controls.String;
 			content: DevKit.Controls.ActionCards;
@@ -220,6 +219,7 @@ declare namespace DevKit {
 			ModifiedBy: DevKit.Controls.Lookup;
 			/** Date and time when the record was modified. */
 			ModifiedOn: DevKit.Controls.DateTime;
+			notescontrol: DevKit.Controls.Note;
 			/** Unique identifier of the user or team who owns the record. */
 			OwnerId: DevKit.Controls.Lookup;
 			/** Contains the id of the parent article content associated with the entity. */

@@ -31,6 +31,8 @@ declare namespace DevKit {
 			Name: DevKit.Controls.String;
 			/** Next scheduled time for the bulk deletion job to run. */
 			NextRun: DevKit.Controls.DateTime;
+			/** Unique identifier of the user or team who owns the bulk delete operation. */
+			OwnerId: DevKit.Controls.Lookup;
 			/** Reason for the status of the bulk deletion job. */
 			StatusCode: DevKit.Controls.OptionSet;
 			/** Number of records deleted by the bulk deletion job. */

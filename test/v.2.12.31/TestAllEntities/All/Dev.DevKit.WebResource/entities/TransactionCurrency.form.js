@@ -27,9 +27,9 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
+					Currency_conversion: {},
 					Select_Base_Currency: {},
-					Transaction_currency_information: {},
-					Currency_conversion: {}
+					Transaction_currency_information: {}
 				}
 			}
 		};

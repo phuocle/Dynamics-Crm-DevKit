@@ -3,9 +3,9 @@
 declare namespace DevKit {
 	namespace FormAsyncOperation_Information {
 		interface tab_generaltab_Sections {
+			custom: DevKit.Controls.Section;
 			general: DevKit.Controls.Section;
 			systemlinksection: DevKit.Controls.Section;
-			custom: DevKit.Controls.Section;
 		}
 		interface tab_generaltab extends DevKit.Controls.ITab {
 			Section: tab_generaltab_Sections;
@@ -15,7 +15,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			WebResource_systemjob: DevKit.Controls.WebResource;
 			/** Date and time when the system job was completed. */
 			CompletedOn: DevKit.Controls.DateTime;
 			/** Date and time when the system job was created. */
@@ -34,6 +33,7 @@ declare namespace DevKit {
 			RegardingObjectId: DevKit.Controls.Lookup;
 			/** Number of times to retry the system job. */
 			RetryCount: DevKit.Controls.Integer;
+			WebResource_systemjob: DevKit.Controls.WebResource;
 		}
 	}
 	class FormAsyncOperation_Information extends DevKit.IForm {
@@ -233,6 +233,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_devkit_bpfaccount: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_displaystring: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_email: DevKit.WebApi.LookupValue;
@@ -256,6 +258,8 @@ declare namespace DevKit {
 		externalpartyitem_asyncoperations: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_fax: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_fixedmonthlyfiscalcalendar: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -347,6 +351,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_helppage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
@@ -375,6 +381,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_msdyn_tour: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_organization: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_organizationdatasyncsubscription: DevKit.WebApi.LookupValue;
@@ -388,6 +396,8 @@ declare namespace DevKit {
 		regardingobjectid_pdfsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_phonecall: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_pluginpackage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_position: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
@@ -449,6 +459,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValue;
@@ -484,6 +496,8 @@ declare namespace DevKit {
 		regardingobjectid_usermobileofflineprofilemembership: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_userquery: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_virtualentitymetadata: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_workflowbinary: DevKit.WebApi.LookupValue;
 		RegardingObjectIdYomiName: DevKit.WebApi.StringValue;
@@ -674,6 +688,8 @@ declare namespace OptionSet {
 			Update_Entitlement_States,
 			/** 65 */
 			Update_Knowledge_Article_States,
+			/** 101 */
+			Update_Modern_Flow_Async_Operation,
 			/** 44 */
 			Update_Organization_Database,
 			/** 45 */

@@ -150,6 +150,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_dependencynode: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_devkit_bpfaccount: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_displaystring: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_displaystringmap: DevKit.WebApi.LookupValue;
@@ -183,6 +185,8 @@ declare namespace DevKit {
 		externalparty_userentityinstancedatas: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_fax: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_fieldpermission: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -288,6 +292,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_helppage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
@@ -316,6 +322,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_msdyn_tour: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_notification: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_organization: DevKit.WebApi.LookupValue;
@@ -339,6 +347,8 @@ declare namespace DevKit {
 		objectid_picklistmapping: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_pluginassembly: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_pluginpackage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_plugintype: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
@@ -456,6 +466,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValue;
@@ -521,6 +533,8 @@ declare namespace DevKit {
 		objectid_userquery: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_userqueryvisualization: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
+		objectid_virtualentitymetadata: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_webresource: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */

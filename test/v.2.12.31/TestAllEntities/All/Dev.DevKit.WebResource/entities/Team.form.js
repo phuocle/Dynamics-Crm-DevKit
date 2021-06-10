@@ -28,8 +28,8 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					General: {},
 					Description: {},
+					General: {},
 					TeamMembers: {}
 				}
 			}
@@ -84,8 +84,8 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					General: {},
 					Description: {},
+					General: {},
 					TeamMembers: {}
 				}
 			}
@@ -104,13 +104,13 @@ var DevKit;
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 		var navigation = {
-			navMembers: {},
-			navRoles: {},
-			navFieldSecurityProfiles: {},
-			navConnections: {},
 			navAsyncOperations: {},
 			navAudit: {},
-			navProcessSessions: {}
+			navConnections: {},
+			navFieldSecurityProfiles: {},
+			navMembers: {},
+			navProcessSessions: {},
+			navRoles: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;

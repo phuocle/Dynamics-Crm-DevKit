@@ -2,22 +2,22 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormBusinessUnit_Information {
-		interface tab_general_Sections {
-			section_1: DevKit.Controls.Section;
-		}
 		interface tab_addresses_Sections {
 			bill_to_address: DevKit.Controls.Section;
 			ship_to_address: DevKit.Controls.Section;
 		}
-		interface tab_general extends DevKit.Controls.ITab {
-			Section: tab_general_Sections;
+		interface tab_general_Sections {
+			section_1: DevKit.Controls.Section;
 		}
 		interface tab_addresses extends DevKit.Controls.ITab {
 			Section: tab_addresses_Sections;
 		}
+		interface tab_general extends DevKit.Controls.ITab {
+			Section: tab_general_Sections;
+		}
 		interface Tabs {
-			general: tab_general;
 			addresses: tab_addresses;
+			general: tab_general;
 		}
 		interface Body {
 			Tab: Tabs;

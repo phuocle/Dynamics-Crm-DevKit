@@ -13,11 +13,11 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Description of the process. */
 			Description: DevKit.Controls.String;
 			/** Name of the process. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Unique identifier of the user or team who owns the process. */
 			OwnerId: DevKit.Controls.Lookup;
 		}

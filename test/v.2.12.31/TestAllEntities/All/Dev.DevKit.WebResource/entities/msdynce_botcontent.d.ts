@@ -5,9 +5,9 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
-			notescontrol: DevKit.Controls.Note;
 			/** Unique identifier, based on autonumbering, of bot content used by applications and services. */
 			msdynce_autonumber: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
 		}

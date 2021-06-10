@@ -3,11 +3,11 @@
 declare namespace DevKit {
 	namespace FormRecord_Creation_and_Update_Rule_Item {
 		interface tab_general_Sections {
-			Name: DevKit.Controls.Section;
-			ConditionControl: DevKit.Controls.Section;
 			CaseProperties: DevKit.Controls.Section;
-			RegardingSettingsection: DevKit.Controls.Section;
+			ConditionControl: DevKit.Controls.Section;
+			Name: DevKit.Controls.Section;
 			primaryactionsection: DevKit.Controls.Section;
+			RegardingSettingsection: DevKit.Controls.Section;
 			secondaryactionsection: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {

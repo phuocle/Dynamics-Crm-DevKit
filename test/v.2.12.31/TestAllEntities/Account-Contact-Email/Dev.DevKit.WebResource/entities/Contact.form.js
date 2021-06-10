@@ -24,6 +24,7 @@ var DevKit;
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
+			devkit_CategoryCode: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
@@ -49,21 +50,21 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			DETAILS_TAB: {
+				Section: {
+					billing_information: {},
+					CONTACT_PREFERENCES: {},
+					PERSONAL_INFORMATION: {},
+					PERSONAL_NOTES_SECTION: {},
+					shipping_information: {}
+				}
+			},
 			SUMMARY_TAB: {
 				Section: {
 					CONTACT_INFORMATION: {},
 					MapSection: {},
 					SOCIAL_PANE_TAB: {},
 					Summary_section_6: {}
-				}
-			},
-			DETAILS_TAB: {
-				Section: {
-					PERSONAL_INFORMATION: {},
-					PERSONAL_NOTES_SECTION: {},
-					CONTACT_PREFERENCES: {},
-					billing_information: {},
-					shipping_information: {}
 				}
 			}
 		};
@@ -82,13 +83,10 @@ var DevKit;
 		form.QuickForm = quickForm;
 		var navigation = {
 			navAddresses: {},
-			navSubConts: {},
-			navRelationships: {},
-			navQuotes: {},
-			navOrders: {},
-			navInvoices: {},
+			navAsyncOperations: {},
 			navProcessSessions: {},
-			navAsyncOperations: {}
+			navRelationships: {},
+			navSubConts: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -159,31 +157,31 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			general: {
+			administration: {
 				Section: {
-					name: {},
-					address: {},
-					shipping_information: {},
-					description: {}
+					billing_information: {},
+					contact_methods: {},
+					internal_information: {}
 				}
 			},
 			details: {
 				Section: {
-					professional_information: {},
-					personal_information: {}
+					personal_information: {},
+					professional_information: {}
+				}
+			},
+			general: {
+				Section: {
+					address: {},
+					description: {},
+					name: {},
+					shipping_information: {}
 				}
 			},
 			notes_and_activities: {
 				Section: {
 					activities: {},
 					notes: {}
-				}
-			},
-			administration: {
-				Section: {
-					internal_information: {},
-					billing_information: {},
-					contact_methods: {}
 				}
 			}
 		};
@@ -208,11 +206,11 @@ var DevKit;
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 		var navigation = {
-			navAddresses: {},
-			navSubConts: {},
 			navActivities: {},
 			navActivityHistory: {},
-			navRelationships: {}
+			navAddresses: {},
+			navRelationships: {},
+			navSubConts: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -314,6 +312,16 @@ var OptionSet;
 		},
 		CustomerTypeCode : {
 			Default_Value: 1
+		},
+		devkit_CategoryCode : {
+			Business: 1,
+			Family: 2,
+			Other: 5,
+			Sales: 4,
+			Sales_Team: 1001,
+			Service: 1002,
+			Social: 3,
+			Stakeholder: 1000
 		},
 		EducationCode : {
 			Default_Value: 1

@@ -3,8 +3,8 @@
 declare namespace DevKit {
 	namespace FormRollupField_Information {
 		interface tab_general_Sections {
-			_41A22D3A_56EC_4317_812A_AC5C92764CD5: DevKit.Controls.Section;
 			_27578C24_6DCB_7649_BA95_913C229C39EB: DevKit.Controls.Section;
+			_41A22D3A_56EC_4317_812A_AC5C92764CD5: DevKit.Controls.Section;
 			_6AD1C698_2E2E_8A08_B43A_B66815B9EB06: DevKit.Controls.Section;
 			_D65A4472_A959_3B9C_C416_D79C56E4A44B: DevKit.Controls.Section;
 		}
@@ -16,14 +16,26 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
+			/** Select a date field for the selected record type, such as Actual Closed Date for the Opportunity record type. A record participates in the goal rollup, if the selected date falls between the start date and the end date for the goal. */
+			DateAttribute: DevKit.Controls.String;
 			dateattribute_UC: DevKit.Controls.ActionCards;
+			/** Select the record type that contains the date field that will be considered while rolling up data to the goal. */
+			EntityForDateAttribute: DevKit.Controls.String;
 			entityfordateattribute_UC: DevKit.Controls.ActionCards;
+			/** Select a rollup field where the metric rollup data will be displayed in the goal. The options are an integer or money, depending on the Metric Type you chose for the goal metric. */
+			GoalAttribute: DevKit.Controls.String;
 			goalattribute_UC: DevKit.Controls.ActionCards;
+			/** Type the name of the field that the data for the goal rolls up from. */
+			SourceAttribute: DevKit.Controls.String;
 			sourceattribute_UC: DevKit.Controls.ActionCards;
 			/** Type the name of the record type (entity) that the data for the goal must roll up from. */
 			SourceEntity: DevKit.Controls.String;
 			sourceentity_UC: DevKit.Controls.ActionCards;
+			/** Select the state of the records you want to use as the source of the rollup data for the metric. */
+			SourceState: DevKit.Controls.Integer;
 			sourcestate_UC: DevKit.Controls.ActionCards;
+			/** Select the status of the records you want to use as the source of the rollup data for the metric. */
+			SourceStatus: DevKit.Controls.Integer;
 			sourcestatus_UC: DevKit.Controls.ActionCards;
 		}
 	}

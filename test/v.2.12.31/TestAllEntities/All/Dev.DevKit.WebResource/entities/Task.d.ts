@@ -13,10 +13,10 @@ declare namespace DevKit {
 			StateCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_TASK_TAB_Sections {
-			TASK: DevKit.Controls.Section;
 			Description: DevKit.Controls.Section;
-			task_details: DevKit.Controls.Section;
 			tab_2_section_2: DevKit.Controls.Section;
+			TASK: DevKit.Controls.Section;
+			task_details: DevKit.Controls.Section;
 		}
 		interface tab_TASK_TAB extends DevKit.Controls.ITab {
 			Section: tab_TASK_TAB_Sections;
@@ -62,9 +62,9 @@ declare namespace DevKit {
 			StateCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_tab_4_Sections {
-			tab_4_section_4: DevKit.Controls.Section;
-			tab_4_section_2: DevKit.Controls.Section;
 			tab_3_section_3: DevKit.Controls.Section;
+			tab_4_section_2: DevKit.Controls.Section;
+			tab_4_section_4: DevKit.Controls.Section;
 		}
 		interface tab_tab_4 extends DevKit.Controls.ITab {
 			Section: tab_tab_4_Sections;

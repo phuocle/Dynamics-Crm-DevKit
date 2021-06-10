@@ -2,25 +2,25 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace Formmsdyn_odatav4ds_Information {
-		interface tab_tab_Request_Parameters_Sections {
-			tab_requestparameters_section_type: DevKit.Controls.Section;
-			tab_requestparameters_section_name: DevKit.Controls.Section;
-			tab_requestparameters_section_value: DevKit.Controls.Section;
-		}
 		interface tab_tab_additional_parameters_Sections {
-			tab_additional_section_parametertype: DevKit.Controls.Section;
 			tab_additional_section_parametername: DevKit.Controls.Section;
+			tab_additional_section_parametertype: DevKit.Controls.Section;
 			tab_additional_section_value: DevKit.Controls.Section;
 		}
-		interface tab_tab_Request_Parameters extends DevKit.Controls.ITab {
-			Section: tab_tab_Request_Parameters_Sections;
+		interface tab_tab_Request_Parameters_Sections {
+			tab_requestparameters_section_name: DevKit.Controls.Section;
+			tab_requestparameters_section_type: DevKit.Controls.Section;
+			tab_requestparameters_section_value: DevKit.Controls.Section;
 		}
 		interface tab_tab_additional_parameters extends DevKit.Controls.ITab {
 			Section: tab_tab_additional_parameters_Sections;
 		}
+		interface tab_tab_Request_Parameters extends DevKit.Controls.ITab {
+			Section: tab_tab_Request_Parameters_Sections;
+		}
 		interface Tabs {
-			tab_Request_Parameters: tab_tab_Request_Parameters;
 			tab_additional_parameters: tab_tab_additional_parameters;
+			tab_Request_Parameters: tab_tab_Request_Parameters;
 		}
 		interface Body {
 			Tab: Tabs;

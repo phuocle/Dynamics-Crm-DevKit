@@ -3,8 +3,8 @@
 declare namespace DevKit {
 	namespace FormCalendar_Information {
 		interface tab_general_Sections {
-			section_1: DevKit.Controls.Section;
 			Holidays_List: DevKit.Controls.Section;
+			section_1: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;

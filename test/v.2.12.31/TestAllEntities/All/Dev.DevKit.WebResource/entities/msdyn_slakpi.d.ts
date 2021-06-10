@@ -13,7 +13,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			WebResource_preview: DevKit.Controls.WebResource;
 			msdyn_AdvancedPauseConfiguration: DevKit.Controls.Boolean;
 			msdyn_ApplicableFromField: DevKit.Controls.String;
 			msdyn_EntityName: DevKit.Controls.String;
@@ -23,6 +22,7 @@ declare namespace DevKit {
 			msdyn_pauseconfigurationxml: DevKit.Controls.ActionCards;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;
+			WebResource_preview: DevKit.Controls.WebResource;
 		}
 	}
 	class Formmsdyn_slakpi_Information extends DevKit.IForm {

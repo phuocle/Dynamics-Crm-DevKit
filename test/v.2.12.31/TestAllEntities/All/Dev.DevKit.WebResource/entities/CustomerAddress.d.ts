@@ -3,9 +3,9 @@
 declare namespace DevKit {
 	namespace FormCustomerAddress_Information {
 		interface tab_general_Sections {
+			additional_information: DevKit.Controls.Section;
 			customer_address_information: DevKit.Controls.Section;
 			phone_numbers: DevKit.Controls.Section;
-			additional_information: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;

@@ -6,12 +6,12 @@ declare namespace DevKit {
 			/** Select the the channel access profiles status. */
 			StatusCode: DevKit.Controls.OptionSet;
 		}
-		interface tab_EntityPermissions_Sections {
-			tab_2_section_1: DevKit.Controls.Section;
-		}
 		interface tab_ChannelAccess_Sections {
 			tab_3_section_1: DevKit.Controls.Section;
 			tab_3_section_2: DevKit.Controls.Section;
+		}
+		interface tab_EntityPermissions_Sections {
+			tab_2_section_1: DevKit.Controls.Section;
 		}
 		interface tab_KnowledgeSettings_Sections {
 			tab_4_section_1: DevKit.Controls.Section;
@@ -20,11 +20,11 @@ declare namespace DevKit {
 		interface tab_Note_Sections {
 			notes: DevKit.Controls.Section;
 		}
-		interface tab_EntityPermissions extends DevKit.Controls.ITab {
-			Section: tab_EntityPermissions_Sections;
-		}
 		interface tab_ChannelAccess extends DevKit.Controls.ITab {
 			Section: tab_ChannelAccess_Sections;
+		}
+		interface tab_EntityPermissions extends DevKit.Controls.ITab {
+			Section: tab_EntityPermissions_Sections;
 		}
 		interface tab_KnowledgeSettings extends DevKit.Controls.ITab {
 			Section: tab_KnowledgeSettings_Sections;
@@ -33,27 +33,27 @@ declare namespace DevKit {
 			Section: tab_Note_Sections;
 		}
 		interface Tabs {
-			EntityPermissions: tab_EntityPermissions;
 			ChannelAccess: tab_ChannelAccess;
+			EntityPermissions: tab_EntityPermissions;
 			KnowledgeSettings: tab_KnowledgeSettings;
 			Note: tab_Note;
 		}
 		interface Body {
 			Tab: Tabs;
-			Role_Control: DevKit.Controls.IFrame;
-			notescontrol: DevKit.Controls.Note;
 			/** Select whether access to the email channel is allowed. */
 			EmailAccess: DevKit.Controls.Boolean;
 			/** Select whether access to the Facebook channel is allowed. */
 			FacebookAccess: DevKit.Controls.Boolean;
 			/** Type a descriptive name for the channel access profile. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user or team. */
 			OwnerId: DevKit.Controls.Lookup;
 			/** Select whether access to the phone channel is allowed. */
 			PhoneAccess: DevKit.Controls.Boolean;
 			/** Select whether access to rate a knowledge article is allowed. */
 			RateKnowledgeArticles: DevKit.Controls.Boolean;
+			Role_Control: DevKit.Controls.IFrame;
 			/** Select whether access to submit feedback on knowledge articles is allowed. */
 			SubmitFeedback: DevKit.Controls.Boolean;
 			/** Select whether access to the Twitter channel is allowed. */

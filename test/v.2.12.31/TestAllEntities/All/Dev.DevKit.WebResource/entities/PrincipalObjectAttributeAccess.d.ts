@@ -96,6 +96,8 @@ declare namespace DevKit {
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_datalakeworkspacepermission: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
+		objectid_devkit_bpfaccount: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the entity instance with shared secured field */
 		objectid_email: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_entityanalyticsconfig: DevKit.WebApi.LookupValue;
@@ -109,6 +111,8 @@ declare namespace DevKit {
 		objectid_exportsolutionupload: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_fax: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the entity instance with shared secured field */
+		objectid_featurecontrolsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_feedback: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
@@ -176,6 +180,8 @@ declare namespace DevKit {
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_msdyn_federatedarticleincident: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
+		objectid_msdyn_helppage: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the entity instance with shared secured field */
 		objectid_msdyn_kalanguagesetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_msdyn_kmfederatedsearchconfig: DevKit.WebApi.LookupValue;
@@ -204,6 +210,8 @@ declare namespace DevKit {
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_msdyn_slakpi: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
+		objectid_msdyn_tour: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the entity instance with shared secured field */
 		objectid_organizationdatasyncsubscription: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_organizationdatasyncsubscriptionentity: DevKit.WebApi.LookupValue;
@@ -215,6 +223,8 @@ declare namespace DevKit {
 		objectid_pdfsetting: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_phonecall: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the entity instance with shared secured field */
+		objectid_pluginpackage: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_position: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
@@ -248,6 +258,8 @@ declare namespace DevKit {
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
+		objectid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the entity instance with shared secured field */
 		objectid_solutioncomponentconfiguration: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValue;
@@ -267,6 +279,8 @@ declare namespace DevKit {
 		objectid_territory: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_usermobileofflineprofilemembership: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the entity instance with shared secured field */
+		objectid_virtualentitymetadata: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_workflowbinary: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the associated organization. */

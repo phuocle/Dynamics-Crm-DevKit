@@ -7,11 +7,11 @@ declare namespace DevKit {
 			SLAId: DevKit.Controls.Lookup;
 		}
 		interface tab_tabUC_Sections {
-			ApplicableWhen: DevKit.Controls.Section;
-			SuccessConditions: DevKit.Controls.Section;
-			PauseConfiguration: DevKit.Controls.Section;
-			Warn_and_Fail_Duration: DevKit.Controls.Section;
 			Actions: DevKit.Controls.Section;
+			ApplicableWhen: DevKit.Controls.Section;
+			PauseConfiguration: DevKit.Controls.Section;
+			SuccessConditions: DevKit.Controls.Section;
+			Warn_and_Fail_Duration: DevKit.Controls.Section;
 		}
 		interface tab_tabUC extends DevKit.Controls.ITab {
 			Section: tab_tabUC_Sections;
@@ -21,16 +21,12 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			WebResource_slaitem_applicablewhen_notification: DevKit.Controls.WebResource;
-			applicablewhencontrol: DevKit.Controls.ActionCards;
-			WebResource_slaitem_success_notification: DevKit.Controls.WebResource;
-			successconditioncontrol: DevKit.Controls.ActionCards;
-			WebResource_preview: DevKit.Controls.WebResource;
 			/** Action URL */
 			ActionURL: DevKit.Controls.String;
 			/** Select whether this SLA will allow pausing and resuming during the time calculation. */
 			AllowPauseResume: DevKit.Controls.Boolean;
 			ApplicableEntity: DevKit.Controls.String;
+			applicablewhencontrol: DevKit.Controls.ActionCards;
 			/** Choose the business hours for calculating SLA item timelines. */
 			BusinessHoursId: DevKit.Controls.Lookup;
 			/** Select how soon the success criteria must be met until the SLA item is considered failed and failure actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
@@ -45,10 +41,14 @@ declare namespace DevKit {
 			Name: DevKit.Controls.String;
 			/** Type a descriptive name of the service level agreement (SLA) item. */
 			Name_1: DevKit.Controls.String;
+			successconditioncontrol: DevKit.Controls.ActionCards;
 			/** Select how soon the success criteria must be met before warning actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
 			WarnAfter: DevKit.Controls.Integer;
 			/** Select how soon the success criteria must be met before warning actions are initiated. The actual duration is based on the business hours as specified in the associated SLA record. */
 			WarnAfter_1: DevKit.Controls.Integer;
+			WebResource_preview: DevKit.Controls.WebResource;
+			WebResource_slaitem_applicablewhen_notification: DevKit.Controls.WebResource;
+			WebResource_slaitem_success_notification: DevKit.Controls.WebResource;
 		}
 	}
 	class FormSLAItem_Information extends DevKit.IForm {

@@ -2,32 +2,32 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormChannelAccessProfileRuleItem_Information {
+		interface tab_notes_Sections {
+			notes: DevKit.Controls.Section;
+		}
 		interface tab_RuleCriteria_Sections {
 			ConditionControl: DevKit.Controls.Section;
 			rule_then_conditions: DevKit.Controls.Section;
 		}
-		interface tab_notes_Sections {
-			notes: DevKit.Controls.Section;
+		interface tab_notes extends DevKit.Controls.ITab {
+			Section: tab_notes_Sections;
 		}
 		interface tab_RuleCriteria extends DevKit.Controls.ITab {
 			Section: tab_RuleCriteria_Sections;
 		}
-		interface tab_notes extends DevKit.Controls.ITab {
-			Section: tab_notes_Sections;
-		}
 		interface Tabs {
-			RuleCriteria: tab_RuleCriteria;
 			notes: tab_notes;
+			RuleCriteria: tab_RuleCriteria;
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Choose the channel access profile that the item is assigned to. */
 			AssociatedChannelAccessProfile: DevKit.Controls.Lookup;
 			/** Type additional information to describe the channel access profile rule item. */
 			Description: DevKit.Controls.String;
 			/** Type a descriptive name for the channel access profile rule item. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 		}
 	}
 	class FormChannelAccessProfileRuleItem_Information extends DevKit.IForm {

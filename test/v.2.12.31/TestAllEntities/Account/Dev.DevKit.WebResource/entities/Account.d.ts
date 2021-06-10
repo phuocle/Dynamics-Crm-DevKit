@@ -10,6 +10,17 @@ declare namespace DevKit {
 			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
 			Revenue: DevKit.Controls.Money;
 		}
+		interface tab_DETAILS_TAB_Sections {
+			BILLING: DevKit.Controls.Section;
+			ChildAccounts: DevKit.Controls.Section;
+			COMPANY_PROFILE: DevKit.Controls.Section;
+			CONTACT_PREFERENCES: DevKit.Controls.Section;
+			DETAILS_TAB_section_6: DevKit.Controls.Section;
+			SHIPPING: DevKit.Controls.Section;
+		}
+		interface tab_PHUOCLE_Sections {
+			tab_3_section_1: DevKit.Controls.Section;
+		}
 		interface tab_SUMMARY_TAB_Sections {
 			ACCOUNT_INFORMATION: DevKit.Controls.Section;
 			ADDRESS: DevKit.Controls.Section;
@@ -18,28 +29,22 @@ declare namespace DevKit {
 			Summary_section_6: DevKit.Controls.Section;
 			SUMMARY_TAB_section_6: DevKit.Controls.Section;
 		}
-		interface tab_DETAILS_TAB_Sections {
-			COMPANY_PROFILE: DevKit.Controls.Section;
-			DETAILS_TAB_section_6: DevKit.Controls.Section;
-			CONTACT_PREFERENCES: DevKit.Controls.Section;
-			BILLING: DevKit.Controls.Section;
-			SHIPPING: DevKit.Controls.Section;
-			ChildAccounts: DevKit.Controls.Section;
+		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
+			Section: tab_DETAILS_TAB_Sections;
+		}
+		interface tab_PHUOCLE extends DevKit.Controls.ITab {
+			Section: tab_PHUOCLE_Sections;
 		}
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
 			Section: tab_SUMMARY_TAB_Sections;
 		}
-		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
-			Section: tab_DETAILS_TAB_Sections;
-		}
 		interface Tabs {
-			SUMMARY_TAB: tab_SUMMARY_TAB;
 			DETAILS_TAB: tab_DETAILS_TAB;
+			PHUOCLE: tab_PHUOCLE;
+			SUMMARY_TAB: tab_SUMMARY_TAB;
 		}
 		interface Body {
 			Tab: Tabs;
-			mapcontrol: DevKit.Controls.Map;
-			notescontrol: DevKit.Controls.Note;
 			ActionCards: DevKit.Controls.ActionCards;
 			/** Shows the complete primary address. */
 			Address1_Composite: DevKit.Controls.String;
@@ -47,12 +52,15 @@ declare namespace DevKit {
 			Address1_FreightTermsCode: DevKit.Controls.OptionSet;
 			/** Select a shipping method for deliveries sent to this address. */
 			Address1_ShippingMethodCode: DevKit.Controls.OptionSet;
+			/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			CreatedOn: DevKit.Controls.DateTime;
 			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
 			CreditLimit: DevKit.Controls.Money;
 			/** Select whether the credit for the account is on hold. This is a useful reference while addressing the invoice and accounting issues with the customer. */
 			CreditOnHold: DevKit.Controls.Boolean;
 			/** Type additional information to describe the account, such as an excerpt from the company's website. */
 			Description: DevKit.Controls.String;
+			devkit_CategoryCode: DevKit.Controls.MultiOptionSet;
 			/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 			DoNotBulkEMail: DevKit.Controls.Boolean;
 			/** Select whether the account allows direct email sent from Microsoft Dynamics 365. */
@@ -67,10 +75,17 @@ declare namespace DevKit {
 			Fax: DevKit.Controls.String;
 			/** Information about whether to allow following email activity like opens, attachment views and link clicks for emails sent to the account. */
 			FollowEmail: DevKit.Controls.Boolean;
+			IFRAME_PHUOCLE: DevKit.Controls.IFrame;
 			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
 			IndustryCode: DevKit.Controls.OptionSet;
+			mapcontrol: DevKit.Controls.Map;
+			/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+			ModifiedOn: DevKit.Controls.DateTime;
 			/** Type the company or business name. */
 			Name: DevKit.Controls.String;
+			/** Type the company or business name. */
+			Name_1: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Select the account's ownership structure, such as public or private. */
 			OwnershipCode: DevKit.Controls.OptionSet;
 			/** Choose the parent account associated with this account to show parent and child businesses in reporting and analytics. */
@@ -92,6 +107,24 @@ declare namespace DevKit {
 			/** Type the account's website URL to get quick details about the company profile. */
 			WebSiteURL: DevKit.Controls.String;
 		}
+		interface Footer extends DevKit.Controls.IFooter {
+			/** Type the credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer. */
+			CreditLimit: DevKit.Controls.Money;
+			/** Shows whether the account is active or inactive. Inactive accounts are read-only and can't be edited unless they are reactivated. */
+			StateCode: DevKit.Controls.OptionSet;
+			/** Select the account's status. */
+			StatusCode: DevKit.Controls.OptionSet;
+			/** Choose the local currency for the record to make sure budgets are reported in the correct currency. */
+			TransactionCurrencyId: DevKit.Controls.Lookup;
+		}
+		interface Navigation {
+			navAddresses: DevKit.Controls.NavigationItem,
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navCampaignsInSFA: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navRelationships: DevKit.Controls.NavigationItem,
+			navSubAccts: DevKit.Controls.NavigationItem
+		}
 		interface quickForm_contactquickform_Body {
 			EMailAddress1: DevKit.Controls.QuickView;
 			Telephone1: DevKit.Controls.QuickView;
@@ -101,6 +134,21 @@ declare namespace DevKit {
 		}
 		interface QuickForm {
 			contactquickform: quickForm_contactquickform;
+		}
+		interface ProcessBPF_Account {
+			/** Select the account's primary industry for use in marketing segmentation and demographic analysis. */
+			IndustryCode: DevKit.Controls.OptionSet;
+			/** Type the company or business name. */
+			Name: DevKit.Controls.String;
+			/** Type the number of employees that work at the account for use in marketing segmentation and demographic analysis. */
+			NumberOfEmployees: DevKit.Controls.Integer;
+			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
+			OwnerId: DevKit.Controls.Lookup;
+			/** Type the annual revenue for the account, used as an indicator in financial performance analysis. */
+			Revenue: DevKit.Controls.Money;
+		}
+		interface Process extends DevKit.Controls.IProcess {
+			BPF_Account: ProcessBPF_Account;
 		}
 		interface Grid {
 			Contacts: DevKit.Controls.Grid;
@@ -118,10 +166,16 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Account */
 		Body: DevKit.FormAccount.Body;
+		/** The Footer section of form Account */
+		Footer: DevKit.FormAccount.Footer;
 		/** The Header section of form Account */
 		Header: DevKit.FormAccount.Header;
+		/** The Navigation of form Account */
+		Navigation: DevKit.FormAccount.Navigation;
 		/** The QuickForm of form Account */
 		QuickForm: DevKit.FormAccount.QuickForm;
+		/** The Process of form Account */
+		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
 	}
@@ -339,6 +393,7 @@ declare namespace DevKit {
 		CustomerTypeCode: DevKit.WebApi.OptionSetValue;
 		/** Type additional information to describe the account, such as an excerpt from the company's website. */
 		Description: DevKit.WebApi.StringValue;
+		devkit_CategoryCode: DevKit.WebApi.MultiOptionSetValue;
 		/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
 		/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
@@ -587,6 +642,24 @@ declare namespace OptionSet {
 			Supplier,
 			/** 11 */
 			Vendor
+		}
+		enum devkit_CategoryCode {
+			/** 1 */
+			Business,
+			/** 2 */
+			Family,
+			/** 5 */
+			Other,
+			/** 4 */
+			Sales,
+			/** 1001 */
+			Sales_Team,
+			/** 1002 */
+			Service,
+			/** 3 */
+			Social,
+			/** 1000 */
+			Stakeholder
 		}
 		enum IndustryCode {
 			/** 1 */

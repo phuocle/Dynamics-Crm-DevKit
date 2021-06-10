@@ -32,8 +32,8 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					feedback_Details: {},
-					feedback_Contacts: {}
+					feedback_Contacts: {},
+					feedback_Details: {}
 				}
 			}
 		};
@@ -90,9 +90,9 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					General_Info: {},
 					Content: {},
-					Content_2: {}
+					Content_2: {},
+					General_Info: {}
 				}
 			}
 		};
@@ -149,8 +149,8 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					feedback_Details: {},
-					feedback_Contacts: {}
+					feedback_Contacts: {},
+					feedback_Details: {}
 				}
 			}
 		}

@@ -7,8 +7,8 @@ declare namespace DevKit {
 			QueueId: DevKit.Controls.Lookup;
 		}
 		interface tab_general_Sections {
-			General: DevKit.Controls.Section;
 			Description: DevKit.Controls.Section;
+			General: DevKit.Controls.Section;
 			TeamMembers: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
@@ -55,8 +55,8 @@ declare namespace DevKit {
 	}
 	namespace FormTeam_form_Business {
 		interface tab_general_Sections {
-			General: DevKit.Controls.Section;
 			Description: DevKit.Controls.Section;
+			General: DevKit.Controls.Section;
 			TeamMembers: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
@@ -78,6 +78,15 @@ declare namespace DevKit {
 			/** Select the team type. */
 			TeamType: DevKit.Controls.OptionSet;
 		}
+		interface Navigation {
+			navAsyncOperations: DevKit.Controls.NavigationItem,
+			navAudit: DevKit.Controls.NavigationItem,
+			navConnections: DevKit.Controls.NavigationItem,
+			navFieldSecurityProfiles: DevKit.Controls.NavigationItem,
+			navMembers: DevKit.Controls.NavigationItem,
+			navProcessSessions: DevKit.Controls.NavigationItem,
+			navRoles: DevKit.Controls.NavigationItem
+		}
 		interface Grid {
 			Members: DevKit.Controls.Grid;
 		}
@@ -93,6 +102,8 @@ declare namespace DevKit {
 		Utility: DevKit.Utility;
 		/** The Body section of form Team_form_Business */
 		Body: DevKit.FormTeam_form_Business.Body;
+		/** The Navigation of form Team_form_Business */
+		Navigation: DevKit.FormTeam_form_Business.Navigation;
 		/** The Grid of form Team_form_Business */
 		Grid: DevKit.FormTeam_form_Business.Grid;
 	}

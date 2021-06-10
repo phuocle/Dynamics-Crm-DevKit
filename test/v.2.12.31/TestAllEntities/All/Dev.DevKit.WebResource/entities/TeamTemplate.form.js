@@ -24,9 +24,9 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					General: {},
+					Access_Rights: {},
 					Description: {},
-					Access_Rights: {}
+					General: {}
 				}
 			}
 		};

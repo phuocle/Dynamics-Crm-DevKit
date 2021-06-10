@@ -22,7 +22,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Type additional information that describes the email server profile. */
 			Description: DevKit.Controls.String;
 			/** Email Server Type Name */
@@ -53,6 +52,7 @@ declare namespace DevKit {
 			MoveUndeliveredEmails: DevKit.Controls.Boolean;
 			/** Type a meaningful name for the email server profile. This name is displayed when you need to select an email server profile. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** ClientId used for OAuth athentication scheme */
 			OauthClientId: DevKit.Controls.String;
 			/** Client secret used for the OAuth authentication scheme */

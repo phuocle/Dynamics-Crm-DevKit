@@ -78,6 +78,8 @@ declare namespace DevKit {
 		msdyn_ismanaged: DevKit.WebApi.BooleanValue;
 		msdyn_isoverwritecustomizations: DevKit.WebApi.BooleanValue;
 		msdyn_ispatch: DevKit.WebApi.BooleanValue;
+		/** Maximum number of retries. */
+		msdyn_maxretries: DevKit.WebApi.IntegerValue;
 		/** The name of the custom entity. */
 		msdyn_name: DevKit.WebApi.StringValue;
 		msdyn_operation: DevKit.WebApi.OptionSetValue;
@@ -86,6 +88,8 @@ declare namespace DevKit {
 		msdyn_publisherid: DevKit.WebApi.StringValue;
 		msdyn_publishername: DevKit.WebApi.StringValue;
 		msdyn_result: DevKit.WebApi.BooleanValue;
+		/** Retry count */
+		msdyn_retrycount: DevKit.WebApi.IntegerValue;
 		/** Unique identifier for entity instances */
 		msdyn_solutionhistoryId: DevKit.WebApi.GuidValue;
 		msdyn_solutionid: DevKit.WebApi.StringValue;

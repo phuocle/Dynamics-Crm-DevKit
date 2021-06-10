@@ -48,6 +48,7 @@ declare namespace DevKit {
 		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
 		"@odata.etag": string;
 		AddRelatedComponents: DevKit.WebApi.BooleanValue;
+		CascadeRemoveComponents: DevKit.WebApi.BooleanValue;
 		/** For internal use only. */
 		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
 		/** For internal use only. */

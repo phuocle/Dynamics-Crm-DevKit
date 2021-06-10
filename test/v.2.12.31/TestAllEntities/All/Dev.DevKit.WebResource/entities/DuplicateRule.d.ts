@@ -2,20 +2,17 @@
 ///<reference path="devkit.d.ts" />
 declare namespace DevKit {
 	namespace FormDuplicateRule_Information {
-		interface tab_rule_Sections {
-			section_1: DevKit.Controls.Section;
-			description: DevKit.Controls.Section;
-			criteria: DevKit.Controls.Section;
-			Rule_Conditions: DevKit.Controls.Section;
-		}
 		interface tab_administration_Sections {
 			section_1_2: DevKit.Controls.Section;
 		}
 		interface tab_notes_Sections {
 			notes: DevKit.Controls.Section;
 		}
-		interface tab_rule extends DevKit.Controls.ITab {
-			Section: tab_rule_Sections;
+		interface tab_rule_Sections {
+			criteria: DevKit.Controls.Section;
+			description: DevKit.Controls.Section;
+			Rule_Conditions: DevKit.Controls.Section;
+			section_1: DevKit.Controls.Section;
 		}
 		interface tab_administration extends DevKit.Controls.ITab {
 			Section: tab_administration_Sections;
@@ -23,15 +20,16 @@ declare namespace DevKit {
 		interface tab_notes extends DevKit.Controls.ITab {
 			Section: tab_notes_Sections;
 		}
+		interface tab_rule extends DevKit.Controls.ITab {
+			Section: tab_rule_Sections;
+		}
 		interface Tabs {
-			rule: tab_rule;
 			administration: tab_administration;
 			notes: tab_notes;
+			rule: tab_rule;
 		}
 		interface Body {
 			Tab: Tabs;
-			ruleconditioncontrol: DevKit.Controls.IFrame;
-			notescontrol: DevKit.Controls.Note;
 			/** Record type of the record being evaluated for potential duplicates. */
 			BaseEntityTypeCode: DevKit.Controls.OptionSet;
 			/** Unique identifier of the user who created the duplicate detection rule. */
@@ -52,8 +50,10 @@ declare namespace DevKit {
 			ModifiedOn: DevKit.Controls.DateTime;
 			/** Name of the duplicate detection rule. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** Unique identifier of the user or team who owns the duplicate detection rule. */
 			OwnerId: DevKit.Controls.Lookup;
+			ruleconditioncontrol: DevKit.Controls.IFrame;
 			/** Reason for the status of the duplicate detection rule. */
 			StatusCode: DevKit.Controls.OptionSet;
 		}
@@ -253,6 +253,8 @@ declare namespace OptionSet {
 			Azure_Service_Connection,
 			/** 10039 */
 			BotContent,
+			/** 10115 */
+			BPF_Account,
 			/** 4425 */
 			Bulk_Delete_Failure,
 			/** 4424 */
@@ -353,6 +355,12 @@ declare namespace OptionSet {
 			Data_Map,
 			/** 4450 */
 			Data_Performance_Dashboard,
+			/** 10164 */
+			Data_Source,
+			/** 10167 */
+			Data_Source_2,
+			/** 10168 */
+			Data_Source_3,
 			/** 418 */
 			Dataflow,
 			/** 9961 */
@@ -421,6 +429,8 @@ declare namespace OptionSet {
 			External_Party_Item,
 			/** 4204 */
 			Fax,
+			/** 10165 */
+			FeatureControlSetting,
 			/** 9958 */
 			Feedback,
 			/** 1201 */
@@ -449,6 +459,8 @@ declare namespace OptionSet {
 			Goal,
 			/** 9603 */
 			Goal_Metric,
+			/** 10116 */
+			Help_Page,
 			/** 8840 */
 			Hierarchy_Rule,
 			/** 9919 */
@@ -633,6 +645,8 @@ declare namespace OptionSet {
 			Plug_in_Type,
 			/** 4603 */
 			Plug_in_Type_Statistic,
+			/** 10166 */
+			Plugin_Package,
 			/** 10091 */
 			PM_Inferred_Task,
 			/** 10092 */
@@ -815,6 +829,8 @@ declare namespace OptionSet {
 			Solution_Component,
 			/** 10000 */
 			Solution_Component_Attribute_Configuration,
+			/** 10169 */
+			Solution_Component_Batch_Configuration,
 			/** 10001 */
 			Solution_Component_Configuration,
 			/** 10012 */
@@ -905,6 +921,8 @@ declare namespace OptionSet {
 			Time_Zone_Localized_Name,
 			/** 4811 */
 			Time_Zone_Rule,
+			/** 10117 */
+			Tour,
 			/** 8050 */
 			Trace,
 			/** 8051 */
@@ -951,6 +969,8 @@ declare namespace OptionSet {
 			Virtual_Entity_Data_Provider,
 			/** 85 */
 			Virtual_Entity_Data_Source,
+			/** 10118 */
+			Virtual_Entity_Metadata,
 			/** 9333 */
 			Web_Resource,
 			/** 4800 */
@@ -1065,6 +1085,8 @@ declare namespace OptionSet {
 			Azure_Service_Connection,
 			/** 10039 */
 			BotContent,
+			/** 10115 */
+			BPF_Account,
 			/** 4425 */
 			Bulk_Delete_Failure,
 			/** 4424 */
@@ -1165,6 +1187,12 @@ declare namespace OptionSet {
 			Data_Map,
 			/** 4450 */
 			Data_Performance_Dashboard,
+			/** 10164 */
+			Data_Source,
+			/** 10167 */
+			Data_Source_2,
+			/** 10168 */
+			Data_Source_3,
 			/** 418 */
 			Dataflow,
 			/** 9961 */
@@ -1233,6 +1261,8 @@ declare namespace OptionSet {
 			External_Party_Item,
 			/** 4204 */
 			Fax,
+			/** 10165 */
+			FeatureControlSetting,
 			/** 9958 */
 			Feedback,
 			/** 1201 */
@@ -1261,6 +1291,8 @@ declare namespace OptionSet {
 			Goal,
 			/** 9603 */
 			Goal_Metric,
+			/** 10116 */
+			Help_Page,
 			/** 8840 */
 			Hierarchy_Rule,
 			/** 9919 */
@@ -1445,6 +1477,8 @@ declare namespace OptionSet {
 			Plug_in_Type,
 			/** 4603 */
 			Plug_in_Type_Statistic,
+			/** 10166 */
+			Plugin_Package,
 			/** 10091 */
 			PM_Inferred_Task,
 			/** 10092 */
@@ -1627,6 +1661,8 @@ declare namespace OptionSet {
 			Solution_Component,
 			/** 10000 */
 			Solution_Component_Attribute_Configuration,
+			/** 10169 */
+			Solution_Component_Batch_Configuration,
 			/** 10001 */
 			Solution_Component_Configuration,
 			/** 10012 */
@@ -1717,6 +1753,8 @@ declare namespace OptionSet {
 			Time_Zone_Localized_Name,
 			/** 4811 */
 			Time_Zone_Rule,
+			/** 10117 */
+			Tour,
 			/** 8050 */
 			Trace,
 			/** 8051 */
@@ -1763,6 +1801,8 @@ declare namespace OptionSet {
 			Virtual_Entity_Data_Provider,
 			/** 85 */
 			Virtual_Entity_Data_Source,
+			/** 10118 */
+			Virtual_Entity_Metadata,
 			/** 9333 */
 			Web_Resource,
 			/** 4800 */

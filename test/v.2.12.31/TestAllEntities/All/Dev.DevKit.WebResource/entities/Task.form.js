@@ -24,10 +24,10 @@ var DevKit;
 		var tab = {
 			TASK_TAB: {
 				Section: {
-					TASK: {},
 					Description: {},
-					task_details: {},
-					tab_2_section_2: {}
+					tab_2_section_2: {},
+					TASK: {},
+					task_details: {}
 				}
 			}
 		};
@@ -78,9 +78,9 @@ var DevKit;
 		var tab = {
 			tab_4: {
 				Section: {
-					tab_4_section_4: {},
+					tab_3_section_3: {},
 					tab_4_section_2: {},
-					tab_3_section_3: {}
+					tab_4_section_4: {}
 				}
 			}
 		};

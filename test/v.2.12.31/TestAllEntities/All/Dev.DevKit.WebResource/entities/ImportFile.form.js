@@ -41,14 +41,14 @@ var DevKit;
 					failureSection: {}
 				}
 			},
-			successTab: {
-				Section: {
-					successSection: {}
-				}
-			},
 			partialFailureTab: {
 				Section: {
 					partialFailureSection: {}
+				}
+			},
+			successTab: {
+				Section: {
+					successSection: {}
 				}
 			}
 		};

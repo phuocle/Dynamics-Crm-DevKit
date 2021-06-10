@@ -3,9 +3,9 @@
 declare namespace DevKit {
 	namespace FormConnectionRole_Information {
 		interface tab_general_Sections {
+			_B0A70B0D_568C_10D3_1A3D_01C997A061C1: DevKit.Controls.Section;
 			step1: DevKit.Controls.Section;
 			step2: DevKit.Controls.Section;
-			_B0A70B0D_568C_10D3_1A3D_01C997A061C1: DevKit.Controls.Section;
 		}
 		interface tab_reciprocalroles_Sections {
 			roleGrid: DevKit.Controls.Section;
@@ -24,6 +24,7 @@ declare namespace DevKit {
 			Tab: Tabs;
 			/** Categories for connection roles. */
 			Category: DevKit.Controls.OptionSet;
+			connectionroleobjecttypecodelist: DevKit.Controls.ELSE3???;//connectionroleobjecttypecodelist - 821ACF1A-7E46-4A0C-965D-FE14A57D78C7 -- FOR DEBUG 
 			/** Description of the connection role. */
 			Description: DevKit.Controls.String;
 			/** Name of the connection role. */

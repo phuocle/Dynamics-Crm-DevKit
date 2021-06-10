@@ -11,11 +11,11 @@ declare namespace DevKit {
 		interface Tabs {
 		}
 		interface Body {
-			notescontrol: DevKit.Controls.Note;
 			/** Type a short description for the channel access profile rule. */
 			Description: DevKit.Controls.String;
 			/** Type a descriptive name for the channel access profile rule. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 		}
 		interface Grid {
 			ProfileRuleItems: DevKit.Controls.Grid;

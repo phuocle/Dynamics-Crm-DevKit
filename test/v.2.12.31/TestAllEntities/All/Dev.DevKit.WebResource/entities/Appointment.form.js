@@ -31,10 +31,10 @@ var DevKit;
 		var tab = {
 			appointment: {
 				Section: {
-					general_information: {},
-					attachments: {},
-					scheduling_information: {},
 					appointment_description: {},
+					attachments: {},
+					general_information: {},
+					scheduling_information: {},
 					tab_2_section_2: {}
 				}
 			}
@@ -97,10 +97,10 @@ var DevKit;
 		var tab = {
 			tab_5: {
 				Section: {
-					tab_5_section_5: {},
-					tab_5_section_2: {},
 					appointment_description: {},
-					tab_5_section_3: {}
+					tab_5_section_2: {},
+					tab_5_section_3: {},
+					tab_5_section_5: {}
 				}
 			}
 		};
@@ -163,11 +163,11 @@ var DevKit;
 		var tab = {
 			appointment: {
 				Section: {
-					Hidden_Section: {},
-					general_information: {},
+					appointment_description: {},
 					attachments: {},
-					scheduling_information: {},
-					appointment_description: {}
+					general_information: {},
+					Hidden_Section: {},
+					scheduling_information: {}
 				}
 			}
 		};

@@ -380,10 +380,16 @@
     <Content Include="entities\ExternalParty.form.js" />
     <Content Include="entities\ExternalParty.js" />
     <Content Include="entities\ExternalParty.webapi.js" />
-    <Content Include="entities\ExternalPartyItem.form.js" />
+    <Content Include="entities\ExternalPartyItem.form.js">
+      <DependentUpon>ExternalPartyItem.js</DependentUpon>
+    </Content>
     <Content Include="entities\ExternalPartyItem.js" />
-    <Content Include="entities\ExternalPartyItem.webapi.js" />
-    <Content Include="entities\Fax.form.js" />
+    <Content Include="entities\ExternalPartyItem.webapi.js">
+      <DependentUpon>ExternalPartyItem.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Fax.form.js">
+      <DependentUpon>Fax.js</DependentUpon>
+    </Content>
     <Content Include="entities\Fax.js" />
     <Content Include="entities\Fax.webapi.js" />
     <Content Include="entities\Feedback.form.js" />
@@ -1266,8 +1272,12 @@
     <TypeScriptCompile Include="entities\ExpiredProcess.d.ts" />
     <TypeScriptCompile Include="entities\ExportSolutionUpload.d.ts" />
     <TypeScriptCompile Include="entities\ExternalParty.d.ts" />
-    <TypeScriptCompile Include="entities\ExternalPartyItem.d.ts" />
-    <TypeScriptCompile Include="entities\Fax.d.ts" />
+    <TypeScriptCompile Include="entities\ExternalPartyItem.d.ts">
+      <DependentUpon>ExternalPartyItem.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Fax.d.ts">
+      <DependentUpon>Fax.js</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="entities\Feedback.d.ts" />
     <TypeScriptCompile Include="entities\FieldPermission.d.ts" />
     <TypeScriptCompile Include="entities\FieldSecurityProfile.d.ts" />

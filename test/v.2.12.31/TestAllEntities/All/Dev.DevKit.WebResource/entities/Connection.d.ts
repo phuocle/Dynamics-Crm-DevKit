@@ -6,23 +6,23 @@ declare namespace DevKit {
 			/** Choose the primary account, contact, or other record involved in the connection. */
 			Record1Id: DevKit.Controls.Lookup;
 		}
-		interface tab_info_Sections {
-			info_s: DevKit.Controls.Section;
-			description: DevKit.Controls.Section;
-		}
 		interface tab_details_Sections {
 			connect_from: DevKit.Controls.Section;
 			details: DevKit.Controls.Section;
 		}
-		interface tab_info extends DevKit.Controls.ITab {
-			Section: tab_info_Sections;
+		interface tab_info_Sections {
+			description: DevKit.Controls.Section;
+			info_s: DevKit.Controls.Section;
 		}
 		interface tab_details extends DevKit.Controls.ITab {
 			Section: tab_details_Sections;
 		}
+		interface tab_info extends DevKit.Controls.ITab {
+			Section: tab_info_Sections;
+		}
 		interface Tabs {
-			info: tab_info;
 			details: tab_details;
+			info: tab_info;
 		}
 		interface Body {
 			Tab: Tabs;

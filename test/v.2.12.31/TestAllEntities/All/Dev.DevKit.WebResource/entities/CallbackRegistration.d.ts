@@ -65,6 +65,8 @@ declare namespace DevKit {
 		PostponeUntil: DevKit.WebApi.StringValue;
 		/** Specifies the user context under which the callback will run */
 		RunAs: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. Holds miscellaneous properties related to runtime integration. */
+		RuntimeIntegrationProperties: DevKit.WebApi.StringValue;
 		/** Specifies the Scope */
 		Scope: DevKit.WebApi.OptionSetValue;
 		/** Name of the SDK message the subscriber is interested in */

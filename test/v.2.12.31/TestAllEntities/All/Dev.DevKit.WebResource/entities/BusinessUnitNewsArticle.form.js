@@ -24,8 +24,8 @@ var DevKit;
 		var tab = {
 			announcement: {
 				Section: {
-					announcement_information: {},
-					additional_settings: {}
+					additional_settings: {},
+					announcement_information: {}
 				}
 			}
 		};

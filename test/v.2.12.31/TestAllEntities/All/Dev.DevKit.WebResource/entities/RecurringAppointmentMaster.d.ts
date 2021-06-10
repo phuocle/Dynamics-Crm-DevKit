@@ -11,8 +11,8 @@ declare namespace DevKit {
 			StateCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_SUMMARY_TAB_Sections {
-			general_information: DevKit.Controls.Section;
 			appointment_description: DevKit.Controls.Section;
+			general_information: DevKit.Controls.Section;
 			tab_2_section_2: DevKit.Controls.Section;
 		}
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {

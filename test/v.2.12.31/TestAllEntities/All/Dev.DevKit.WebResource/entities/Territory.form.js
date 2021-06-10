@@ -25,8 +25,8 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
-					territory_information: {},
-					description: {}
+					description: {},
+					territory_information: {}
 				}
 			},
 			subterritories_tab: {

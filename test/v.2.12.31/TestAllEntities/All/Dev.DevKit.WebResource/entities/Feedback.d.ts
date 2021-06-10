@@ -11,8 +11,8 @@ declare namespace DevKit {
 			StatusCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_general_Sections {
-			feedback_Details: DevKit.Controls.Section;
 			feedback_Contacts: DevKit.Controls.Section;
+			feedback_Details: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -74,9 +74,9 @@ declare namespace DevKit {
 			StatusCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_general_Sections {
-			General_Info: DevKit.Controls.Section;
 			Content: DevKit.Controls.Section;
 			Content_2: DevKit.Controls.Section;
+			General_Info: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;
@@ -128,8 +128,8 @@ declare namespace DevKit {
 	}
 	namespace FormFeedback_Quick_Create {
 		interface tab_general_Sections {
-			feedback_Details: DevKit.Controls.Section;
 			feedback_Contacts: DevKit.Controls.Section;
+			feedback_Details: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;

@@ -3,9 +3,9 @@
 declare namespace DevKit {
 	namespace FormGoalRollupQuery_Information {
 		interface tab_rule_Sections {
-			section_1: DevKit.Controls.Section;
 			criteria: DevKit.Controls.Section;
 			Rule_Conditions: DevKit.Controls.Section;
+			section_1: DevKit.Controls.Section;
 		}
 		interface tab_rule extends DevKit.Controls.ITab {
 			Section: tab_rule_Sections;
@@ -15,17 +15,17 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			ruleconditioncontrol: DevKit.Controls.IFrame;
-			queryeditor_uc: DevKit.Controls.ActionCards;
 			/** Type a descriptive name for the goal rollup query. */
 			Name: DevKit.Controls.String;
 			/** Type a descriptive name for the goal rollup query. */
 			Name_1: DevKit.Controls.String;
 			/** Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user. */
 			OwnerId: DevKit.Controls.Lookup;
+			queryeditor_uc: DevKit.Controls.ActionCards;
 			/** Enter the record type of the rollup query. */
 			QueryEntityType: DevKit.Controls.String;
 			queryentitytype_uc: DevKit.Controls.ActionCards;
+			ruleconditioncontrol: DevKit.Controls.IFrame;
 		}
 	}
 	class FormGoalRollupQuery_Information extends DevKit.IForm {

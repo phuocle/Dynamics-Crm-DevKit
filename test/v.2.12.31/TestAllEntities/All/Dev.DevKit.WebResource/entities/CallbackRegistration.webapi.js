@@ -85,6 +85,7 @@ var DevKit;
 			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
 			PostponeUntil: { a: 'postponeuntil' },
 			RunAs: { a: 'runas' },
+			RuntimeIntegrationProperties: { a: 'runtimeintegrationproperties' },
 			Scope: { a: 'scope' },
 			SdkMessageName: { a: 'sdkmessagename' },
 			Url: { a: 'url' },

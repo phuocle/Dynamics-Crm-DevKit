@@ -20,11 +20,11 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			notescontrol: DevKit.Controls.Note;
 			/** Type a short description about the objective of the routing rule. */
 			Description: DevKit.Controls.String;
 			/** Name of the Routing Rule. */
 			Name: DevKit.Controls.String;
+			notescontrol: DevKit.Controls.Note;
 			/** For internal use only. */
 			OwnerId: DevKit.Controls.Lookup;
 		}

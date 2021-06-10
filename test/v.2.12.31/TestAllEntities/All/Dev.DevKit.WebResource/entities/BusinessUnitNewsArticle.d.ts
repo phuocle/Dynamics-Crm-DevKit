@@ -3,8 +3,8 @@
 declare namespace DevKit {
 	namespace FormBusinessUnitNewsArticle_Information {
 		interface tab_announcement_Sections {
-			announcement_information: DevKit.Controls.Section;
 			additional_settings: DevKit.Controls.Section;
+			announcement_information: DevKit.Controls.Section;
 		}
 		interface tab_announcement extends DevKit.Controls.ITab {
 			Section: tab_announcement_Sections;

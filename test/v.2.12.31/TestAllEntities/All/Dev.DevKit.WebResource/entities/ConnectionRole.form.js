@@ -25,9 +25,9 @@ var DevKit;
 		var tab = {
 			general: {
 				Section: {
+					_B0A70B0D_568C_10D3_1A3D_01C997A061C1: {},
 					step1: {},
-					step2: {},
-					_B0A70B0D_568C_10D3_1A3D_01C997A061C1: {}
+					step2: {}
 				}
 			},
 			reciprocalroles: {

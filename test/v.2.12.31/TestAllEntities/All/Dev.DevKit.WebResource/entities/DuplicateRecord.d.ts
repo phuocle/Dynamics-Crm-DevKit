@@ -76,6 +76,8 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_fax: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_featurecontrolsetting: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_feedback: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_flowmachinegroup: DevKit.WebApi.LookupValueReadonly;
@@ -174,6 +176,8 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_solutioncomponentconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_solutioncomponentrelationshipconfiguration: DevKit.WebApi.LookupValueReadonly;
@@ -237,6 +241,8 @@ declare namespace DevKit {
 		duplicaterecordid_exportsolutionupload: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_fax: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_featurecontrolsetting: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_feedback: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
@@ -335,6 +341,8 @@ declare namespace DevKit {
 		duplicaterecordid_socialprofile: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_solutioncomponentbatchconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_solutioncomponentconfiguration: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */

@@ -24,9 +24,9 @@ var DevKit;
 		var tab = {
 			GENERALINFORMATION_TAB: {
 				Section: {
-					property_bag_properties_1: {},
 					MOBILE_OFFLINE_PROFILE_ITEMS: {},
-					profile_users: {}
+					profile_users: {},
+					property_bag_properties_1: {}
 				}
 			}
 		};

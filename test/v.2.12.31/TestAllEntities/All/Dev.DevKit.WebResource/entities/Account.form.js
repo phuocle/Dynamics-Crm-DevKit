@@ -21,9 +21,11 @@ var DevKit;
 			Address1_ShippingMethodCode: {},
 			ChildAccounts: {},
 			Contacts: {},
+			CreatedOn: {},
 			CreditLimit: {},
 			CreditOnHold: {},
 			Description: {},
+			devkit_CategoryCode: {},
 			DoNotBulkEMail: {},
 			DoNotEMail: {},
 			DoNotFax: {},
@@ -31,9 +33,12 @@ var DevKit;
 			DoNotPostalMail: {},
 			Fax: {},
 			FollowEmail: {},
+			IFRAME_PHUOCLE: {},
 			IndustryCode: {},
 			mapcontrol: {},
+			ModifiedOn: {},
 			Name: {},
+			Name_1: {},
 			notescontrol: {},
 			OwnershipCode: {},
 			ParentAccountId: {},
@@ -49,6 +54,21 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			DETAILS_TAB: {
+				Section: {
+					BILLING: {},
+					ChildAccounts: {},
+					COMPANY_PROFILE: {},
+					CONTACT_PREFERENCES: {},
+					DETAILS_TAB_section_6: {},
+					SHIPPING: {}
+				}
+			},
+			PHUOCLE: {
+				Section: {
+					tab_3_section_1: {}
+				}
+			},
 			SUMMARY_TAB: {
 				Section: {
 					ACCOUNT_INFORMATION: {},
@@ -57,16 +77,6 @@ var DevKit;
 					SOCIAL_PANE_TAB: {},
 					Summary_section_6: {},
 					SUMMARY_TAB_section_6: {}
-				}
-			},
-			DETAILS_TAB: {
-				Section: {
-					COMPANY_PROFILE: {},
-					DETAILS_TAB_section_6: {},
-					CONTACT_PREFERENCES: {},
-					BILLING: {},
-					SHIPPING: {},
-					ChildAccounts: {}
 				}
 			}
 		};
@@ -80,6 +90,25 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var footer = {
+			CreditLimit: {},
+			StateCode: {},
+			StatusCode: {},
+			TransactionCurrencyId: {}
+		};
+		devKit.LoadFields(formContext, footer, "footer_");
+		form.Footer = footer;
+		var process = devKit.LoadProcess(formContext);
+		var _BPF_Account = {
+			IndustryCode: {},
+			Name: {},
+			NumberOfEmployees: {},
+			OwnerId: {},
+			Revenue: {}
+		}
+		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
+		process.BPF_Account = _BPF_Account;
+		form.Process = process;
 		var quickForm = {
 			contactquickform: {
 				EMailAddress1: {},
@@ -96,11 +125,11 @@ var DevKit;
 		form.Grid = grid;
 		var navigation = {
 			navAddresses: {},
-			navSubAccts: {},
-			navRelationships: {},
+			navAsyncOperations: {},
 			navCampaignsInSFA: {},
 			navProcessSessions: {},
-			navAsyncOperations: {}
+			navRelationships: {},
+			navSubAccts: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -150,19 +179,19 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			DETAILS_TAB: {
+				Section: {
+					BILLING: {},
+					COMPANY_PROFILE: {},
+					CONTACT_PREFERENCES: {},
+					DETAILS_TAB_section_6: {},
+					SHIPPING: {}
+				}
+			},
 			SUMMARY_TAB: {
 				Section: {
 					ACCOUNT_INFORMATION: {},
 					Timeline: {}
-				}
-			},
-			DETAILS_TAB: {
-				Section: {
-					COMPANY_PROFILE: {},
-					DETAILS_TAB_section_6: {},
-					CONTACT_PREFERENCES: {},
-					BILLING: {},
-					SHIPPING: {}
 				}
 			}
 		};
@@ -176,6 +205,17 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _BPF_Account = {
+			IndustryCode: {},
+			Name: {},
+			NumberOfEmployees: {},
+			OwnerId: {},
+			Revenue: {}
+		}
+		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
+		process.BPF_Account = _BPF_Account;
+		form.Process = process;
 		var quickForm = {
 			contactquickform: {
 				EMailAddress1: {},
@@ -191,10 +231,10 @@ var DevKit;
 		form.Grid = grid;
 		var navigation = {
 			navAddresses: {},
-			navSubAccts: {},
-			navRelationships: {},
+			navAsyncOperations: {},
 			navProcessSessions: {},
-			navAsyncOperations: {}
+			navRelationships: {},
+			navSubAccts: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -262,19 +302,10 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			general: {
+			administration: {
 				Section: {
-					account_information: {},
-					address: {},
-					shipping_information: {},
-					description: {}
-				}
-			},
-			details: {
-				Section: {
-					professional_information: {},
-					description_2: {},
-					billing_information: {}
+					contact_methods: {},
+					internal_information: {}
 				}
 			},
 			contacts: {
@@ -282,16 +313,25 @@ var DevKit;
 					contacts: {}
 				}
 			},
+			details: {
+				Section: {
+					billing_information: {},
+					description_2: {},
+					professional_information: {}
+				}
+			},
+			general: {
+				Section: {
+					account_information: {},
+					address: {},
+					description: {},
+					shipping_information: {}
+				}
+			},
 			notes_and_activities: {
 				Section: {
 					activities: {},
 					notes: {}
-				}
-			},
-			administration: {
-				Section: {
-					internal_information: {},
-					contact_methods: {}
 				}
 			}
 		};
@@ -307,6 +347,17 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, header, "header_");
 		form.Header = header;
+		var process = devKit.LoadProcess(formContext);
+		var _BPF_Account = {
+			IndustryCode: {},
+			Name: {},
+			NumberOfEmployees: {},
+			OwnerId: {},
+			Revenue: {}
+		}
+		devKit.LoadFields(formContext, _BPF_Account, "header_process_");
+		process.BPF_Account = _BPF_Account;
+		form.Process = process;
 		var quickForm = {
 
 		};
@@ -319,11 +370,11 @@ var DevKit;
 		devKit.LoadGrids(formContext, grid);
 		form.Grid = grid;
 		var navigation = {
-			navAddresses: {},
-			navSubAct: {},
 			navActivities: {},
 			navActivityHistory: {},
-			navRelationships: {}
+			navAddresses: {},
+			navRelationships: {},
+			navSubAct: {}
 		};
 		devKit.LoadNavigations(formContext, navigation);
 		form.Navigation = navigation;
@@ -433,6 +484,16 @@ var OptionSet;
 			Reseller: 9,
 			Supplier: 10,
 			Vendor: 11
+		},
+		devkit_CategoryCode : {
+			Business: 1,
+			Family: 2,
+			Other: 5,
+			Sales: 4,
+			Sales_Team: 1001,
+			Service: 1002,
+			Social: 3,
+			Stakeholder: 1000
 		},
 		IndustryCode : {
 			Accounting: 1,

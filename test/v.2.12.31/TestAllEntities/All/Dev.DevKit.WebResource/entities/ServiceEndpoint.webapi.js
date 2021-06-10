@@ -92,6 +92,7 @@ var DevKit;
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
 			Path: { a: 'path' },
+			RuntimeIntegrationProperties: { a: 'runtimeintegrationproperties' },
 			SASKey: { a: 'saskey' },
 			SASKeyName: { a: 'saskeyname' },
 			SASToken: { a: 'sastoken' },

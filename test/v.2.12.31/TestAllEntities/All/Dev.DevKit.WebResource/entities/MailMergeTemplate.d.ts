@@ -3,10 +3,10 @@
 declare namespace DevKit {
 	namespace FormMailMergeTemplate_Information {
 		interface tab_general_Sections {
-			Details: DevKit.Controls.Section;
 			Categorization: DevKit.Controls.Section;
-			Ownership: DevKit.Controls.Section;
+			Details: DevKit.Controls.Section;
 			Language: DevKit.Controls.Section;
+			Ownership: DevKit.Controls.Section;
 		}
 		interface tab_general extends DevKit.Controls.ITab {
 			Section: tab_general_Sections;

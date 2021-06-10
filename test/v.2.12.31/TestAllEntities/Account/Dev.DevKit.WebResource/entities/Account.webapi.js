@@ -136,6 +136,7 @@ var DevKit;
 			CustomerSizeCode: { a: 'customersizecode' },
 			CustomerTypeCode: { a: 'customertypecode' },
 			Description: { a: 'description' },
+			devkit_CategoryCode: { a: 'devkit_categorycode', g: true },
 			DoNotBulkEMail: { a: 'donotbulkemail' },
 			DoNotBulkPostalMail: { a: 'donotbulkpostalmail' },
 			DoNotEMail: { a: 'donotemail' },
@@ -313,6 +314,16 @@ var OptionSet;
 			Reseller: 9,
 			Supplier: 10,
 			Vendor: 11
+		},
+		devkit_CategoryCode : {
+			Business: 1,
+			Family: 2,
+			Other: 5,
+			Sales: 4,
+			Sales_Team: 1001,
+			Service: 1002,
+			Social: 3,
+			Stakeholder: 1000
 		},
 		IndustryCode : {
 			Accounting: 1,

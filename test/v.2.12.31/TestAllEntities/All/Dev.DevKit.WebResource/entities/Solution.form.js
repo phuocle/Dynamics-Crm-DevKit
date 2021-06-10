@@ -27,15 +27,15 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
-			general: {
-				Section: {
-					solution_information: {},
-					description: {}
-				}
-			},
 			_9129B06A_8446_77D8_2BD2_027C5006BE41: {
 				Section: {
 					solutionmarketplacesection: {}
+				}
+			},
+			general: {
+				Section: {
+					description: {},
+					solution_information: {}
 				}
 			}
 		};

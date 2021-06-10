@@ -27,13 +27,13 @@ var DevKit;
 		};
 		devKit.LoadFields(formContext, body);
 		var tab = {
+			Details: {
+				Section: {
+				}
+			},
 			General_Tab: {
 				Section: {
 					SYNCERROR_INFORMATION: {}
-				}
-			},
-			Details: {
-				Section: {
 				}
 			}
 		};
