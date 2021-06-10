@@ -311,7 +311,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     {
                         foreach (var form in comment.JsForm)
                         {
-                            if (form == checkListForm.Items[i].ToString() || checkListForm.Items[i].ToString().ToLower().EndsWith(form.ToLower()))
+                            if (form.ToLower() == checkListForm.Items[i].ToString().ToLower() /*|| checkListForm.Items[i].ToString().ToLower().EndsWith(form.ToLower())*/)
                             {
                                 checkListForm.SetItemChecked(i, true);
                             }

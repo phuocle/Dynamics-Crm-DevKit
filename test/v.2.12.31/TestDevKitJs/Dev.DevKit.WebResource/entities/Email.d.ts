@@ -13,12 +13,12 @@ declare namespace DevKit {
 			StatusCode: DevKit.Controls.OptionSet;
 		}
 		interface tab_Email_Sections {
-			recipient_information: DevKit.Controls.Section;
-			email_description: DevKit.Controls.Section;
-			Regarding_information: DevKit.Controls.Section;
 			attachments: DevKit.Controls.Section;
+			email_description: DevKit.Controls.Section;
 			emailengagementactions: DevKit.Controls.Section;
 			Emailrecipient_section_6: DevKit.Controls.Section;
+			recipient_information: DevKit.Controls.Section;
+			Regarding_information: DevKit.Controls.Section;
 			tab_4_section_2: DevKit.Controls.Section;
 		}
 		interface tab_Email extends DevKit.Controls.ITab {
@@ -29,8 +29,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			emailengagementactionscontrol: DevKit.Controls.EmailEngagement;
-			emailrecipientactivitycontrol: DevKit.Controls.EmailRecipient;
 			/** Type the number of minutes spent creating and sending the email. The duration is used in reporting. */
 			ActualDurationMinutes: DevKit.Controls.Integer;
 			/** Enter the recipients that are included on the email distribution, but are not displayed to other recipients. */
@@ -39,6 +37,8 @@ declare namespace DevKit {
 			cc: DevKit.Controls.Lookup;
 			/** Type the greeting and message text of the email. */
 			Description: DevKit.Controls.String;
+			emailengagementactionscontrol: DevKit.Controls.EmailEngagement;
+			emailrecipientactivitycontrol: DevKit.Controls.EmailRecipient;
 			/** Enter the sender of the email. */
 			from: DevKit.Controls.Lookup;
 			/** Choose the record that the email relates to. */

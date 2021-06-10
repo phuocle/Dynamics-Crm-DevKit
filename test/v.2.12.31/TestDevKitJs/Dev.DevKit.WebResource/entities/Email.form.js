@@ -31,12 +31,12 @@ var DevKit;
 		var tab = {
 			Email: {
 				Section: {
-					recipient_information: {},
-					email_description: {},
-					Regarding_information: {},
 					attachments: {},
+					email_description: {},
 					emailengagementactions: {},
 					Emailrecipient_section_6: {},
+					recipient_information: {},
+					Regarding_information: {},
 					tab_4_section_2: {}
 				}
 			}

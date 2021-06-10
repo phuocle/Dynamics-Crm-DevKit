@@ -100,7 +100,7 @@
             this.checkListForm.Location = new System.Drawing.Point(8, 57);
             this.checkListForm.Margin = new System.Windows.Forms.Padding(2);
             this.checkListForm.Name = "checkListForm";
-            this.checkListForm.Size = new System.Drawing.Size(373, 106);
+            this.checkListForm.Size = new System.Drawing.Size(373, 94);
             this.checkListForm.TabIndex = 22;
             this.checkListForm.SelectedIndexChanged += new System.EventHandler(this.CheckListForm_SelectedIndexChanged);
             // 
@@ -158,7 +158,7 @@
             this.labelItemName.Location = new System.Drawing.Point(70, 39);
             this.labelItemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItemName.Name = "labelItemName";
-            this.labelItemName.Size = new System.Drawing.Size(0, 16);
+            this.labelItemName.Size = new System.Drawing.Size(0, 13);
             this.labelItemName.TabIndex = 2;
             // 
             // labelItem
@@ -167,7 +167,7 @@
             this.labelItem.Location = new System.Drawing.Point(6, 18);
             this.labelItem.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelItem.Name = "labelItem";
-            this.labelItem.Size = new System.Drawing.Size(76, 16);
+            this.labelItem.Size = new System.Drawing.Size(61, 13);
             this.labelItem.TabIndex = 0;
             this.labelItem.Text = "Item Name:";
             // 
@@ -205,7 +205,7 @@
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.link);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
