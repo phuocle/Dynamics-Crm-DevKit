@@ -1746,6 +1746,11 @@ declare namespace DevKit {
          */
         SetPreventDefault(): void;
         /**
+         * Cancels the save operation if the event handler has a script error, returns a rejected promise for an async event handler or the operation times out.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefaultonerror
+         */
+        SetPreventDefaultOnError
+        /**
          * Returns a value that indicates the order in which this handler is executed.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/getdepth
          */
@@ -2526,9 +2531,11 @@ declare namespace DevKit {
         /** Decides whether to display the most recently used(MRU) item. Available only for Unified Interface */
         disableMru?: boolean;
         /** The entity types to display */
-        entityTypes?: Array<string>;
+        entityTypes: Array<string>;
         /** Used to filter the results */
         filters?: Array<LookupFilter>;
+        /** Indicates the default search term for the lookup control. */
+        searchText?: string;
         /** Indicates whether the lookup control should show the barcode scanner in mobile clients */
         showBarcodeScanner?: boolean;
         /** The views to be available in the view picker. Only system views are supported */

@@ -1,1 +1,0 @@
-Displays an error, information, warning, or success notification for an app, and lets you specify actions to execute based on the notification.

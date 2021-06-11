@@ -890,7 +890,23 @@ namespace DynamicsCrm.DevKit.Shared
                              item.ClassId == ControlClassId.UNKNOWN_5 ||
                              item.ClassId == ControlClassId.SUB_GRID ||
                              item.ClassId == ControlClassId.SUB_GRID_PANEL ||
-                             item.ClassId == ControlClassId.QUICK_VIEW_FORM)
+                             item.ClassId == ControlClassId.QUICK_VIEW_FORM ||
+                             item.ClassId == ControlClassId.CASERESEARCH_LINKCONTROL ||
+                             item.ClassId == ControlClassId.KBVIEWER ||
+                             item.ClassId == ControlClassId.CASE_KBSEARCHCONTROL ||
+                             item.ClassId == ControlClassId.ATTACHMENT ||
+                             item.ClassId == ControlClassId.ISMANAGED ||
+                             item.ClassId == ControlClassId.CONNECTIONROLEOBJECTTYPECODELIST||
+                             item.ClassId == ControlClassId.DYNAMICPROPERTIESLIST_LINKCONTROL ||
+                             item.ClassId == ControlClassId.MSDYN_SESSIONTYPE ||
+                             item.ClassId == ControlClassId.MSDYN_NAME ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_URL ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER2 ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER3 ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_WECHATCALLBACKURL ||
+                             item.ClassId == ControlClassId.MSDYN_SOURCEENTITYNAME
+                             )
                         continue;
                     else
                     {

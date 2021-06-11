@@ -1,1 +1,0 @@
-Clears a notification in the app.

@@ -166,6 +166,8 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             else
             {
                 DeployWebResource(dte, crmServiceClient, crmUrl, fullFileName, fileName, webResourceId);
+                AddWebResourceToSolution(dte, crmServiceClient, solutionUniqueName, webResourceId, webResourceName);
+                PublishWebResource(dte, crmServiceClient, webResourceId, crmUrl, webResourceName, fileName);
             }
             return webResourceId;
         }

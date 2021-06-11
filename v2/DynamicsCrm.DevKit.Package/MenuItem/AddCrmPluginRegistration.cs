@@ -185,6 +185,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 attribute += $", \"{description}\"";
                 attribute += $", \"{workflowactivitygroupname}\"";
                 attribute += $", {isolationModeName}";
+                attribute += $", PluginType = PluginType.Workflow";
                 list.Add(attribute);
             }
             return list;
@@ -403,8 +404,9 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 attribute += $", {modeName}";
                 attribute += $", \"{filteringAttributes}\",\r\n\t";
                 attribute += $"\"{name}\"";
-                attribute += $", {rank}";
-                attribute += $", {isolationModeName},\r\n\t";
+                attribute += $", {rank}/*ExecutionOrder*/";
+                attribute += $", {isolationModeName}";
+                attribute += $", PluginType = PluginType.Plugin,\r\n\t";
                 if (asyncautodelete)
                     attribute += $"DeleteAsyncOperation = true, ";
                 if (description != null)

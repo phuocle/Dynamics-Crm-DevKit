@@ -2506,6 +2506,11 @@ var devKit = (function () {
                 executionContext.getEventArgs().preventDefault();
             }
         }
+        obj.SetPreventDefaultOnError = function () {
+            if (has(executionContext, 'getEventArgs')) {
+                executionContext.getEventArgs().preventDefaultOnError();
+            }
+        }
         Object.defineProperty(obj, 'Depth', {
             get: function () {
                 if (has(executionContext, 'getDepth')) {

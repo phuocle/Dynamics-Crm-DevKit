@@ -44,7 +44,7 @@ namespace DynamicsCrm.DevKit.Cli.Helper
                     excludefiles.AddRange(Directory.GetFiles(folder, other).ToList());
                 }
             }
-            return includefiles.Where(file => !excludefiles.Contains(file)).ToList();
+            return includefiles.Where(file => !excludefiles.Contains(file)).Distinct().ToList();
         }
 
         public static bool IsPluginOrActivity(TypeInfo x)
