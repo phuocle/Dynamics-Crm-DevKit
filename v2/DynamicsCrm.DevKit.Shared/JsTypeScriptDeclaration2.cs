@@ -496,6 +496,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
+                if (temp.Contains($"\t\t\t{field.Id}: DevKit.Controls.Grid;\r\n")) continue;
                 temp += $"\t\t\t{field.Id}: DevKit.Controls.Grid;\r\n";
             }
             if (temp.Length > 0)
@@ -933,15 +934,15 @@ namespace DynamicsCrm.DevKit.Shared
                        select x;
             if (rows == null) return classId;
             var rows2 = (from x in rows.Elements("customControl")
-                        where x?.Attribute("id")?.Value != null
-                        select new
-                        {
-                            id = x?.Attribute("id")?.Value?.ToString()
-                        }).ToList();
+                         where x?.Attribute("id")?.Value != null
+                         select new
+                         {
+                             id = x?.Attribute("id")?.Value?.ToString()
+                         }).ToList();
             if (rows2.Count() == 0) return classId;
-            foreach(var row in rows2)
+            foreach (var row in rows2)
             {
-                if(Guid.TryParse(row.id, out var guid))
+                if (Guid.TryParse(row.id, out var guid))
                 {
                     return guid.ToString().ToUpper();
                 }

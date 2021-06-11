@@ -99,7 +99,6 @@ declare namespace DevKit {
 			BlockedProfile: DevKit.Controls.Boolean;
 			/** Select how contact about the case was originated, such as email, phone, or web, for use in reporting and analysis. */
 			CaseOriginCode: DevKit.Controls.OptionSet;
-			CaseResearch_LinkControl: DevKit.Controls.ELSE3???;//CaseResearch_LinkControl - DFDF1CDE-837B-4AC9-98CF-AC74361FD89D -- FOR DEBUG 
 			/** Select the type of case to identify the incident for use in case routing and analysis. */
 			CaseTypeCode: DevKit.Controls.OptionSet;
 			/** Choose the contract line that the case should be logged under to make sure the customer is charged correctly. */
@@ -128,7 +127,6 @@ declare namespace DevKit {
 			IsEscalated: DevKit.Controls.Boolean;
 			/** Choose the article that contains additional information or a resolution for the case, for reference during research or follow up with the customer. */
 			KbArticleId: DevKit.Controls.Lookup;
-			kbviewer: DevKit.Controls.ELSE3???;//kbviewer - A62B6FA9-169E-406C-B1AA-EAB828CB6026 -- FOR DEBUG 
 			/** Shows whether the post originated as a public or private message. */
 			MessageTypeCode: DevKit.Controls.OptionSet;
 			/** Case's functional location */
@@ -318,7 +316,6 @@ declare namespace DevKit {
 			Tab: Tabs;
 			/** Details whether the profile is blocked or not. */
 			BlockedProfile: DevKit.Controls.Boolean;
-			case_kbsearchcontrol: DevKit.Controls.ELSE3???;//case_kbsearchcontrol - 7CCD1494-1F7A-4E3A-8BDE-F32069DAEB9F -- FOR DEBUG 
 			/** Select how contact about the case was originated, such as email, phone, or web, for use in reporting and analysis. */
 			CaseOriginCode: DevKit.Controls.OptionSet;
 			/** Select how contact about the case was originated, such as email, phone, or web, for use in reporting and analysis. */
@@ -636,7 +633,6 @@ declare namespace DevKit {
 			FollowupBy: DevKit.Controls.Date;
 			/** Choose the article that contains additional information or a resolution for the case, for reference during research or follow up with the customer. */
 			KbArticleId: DevKit.Controls.Lookup;
-			kbviewer: DevKit.Controls.ELSE3???;//kbviewer - A62B6FA9-169E-406C-B1AA-EAB828CB6026 -- FOR DEBUG 
 			notescontrol: DevKit.Controls.Note;
 			/** Owner Id */
 			OwnerId: DevKit.Controls.Lookup;

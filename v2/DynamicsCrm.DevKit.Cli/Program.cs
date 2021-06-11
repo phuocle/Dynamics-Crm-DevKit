@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\TestAddCrmPluginRegistration\2.after\AccountPlugin";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\TestAllEntities\All-DEMO\Dev.DevKit.WebResource\entities";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
