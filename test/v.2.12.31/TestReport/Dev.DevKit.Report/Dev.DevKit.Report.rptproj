@@ -42,7 +42,6 @@
       <MimeType>text/plain</MimeType>
     </Report>
     <Report Include="ReportTemplate.rdl" />
-    <Report Include="Top10Account.rdl" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>

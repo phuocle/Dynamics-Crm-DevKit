@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 
@@ -32,19 +34,26 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         internal void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             if (!IsValid()) return;
 
-            var folder = Path.Combine(currentDirectory, string.Empty);
-            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+            var folder = Path.Combine(currentDirectory, json.solution);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+            else
+            {
+                var files = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories);
+                if (files.Count() > 0)
+                    throw new Exception($"{LOG} Folder '{folder}' have an exsiting file(s). Please delete all file(s) and try it again.");
+            }
 
             ReadDownloadedReportFiles(folder);
 
             if (downloadedReportFiles.Count() == 0)
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Not found any reports to download");
-                CliLog.WriteLine();
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
                 return;
             }
@@ -60,71 +69,49 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 i++;
             }
 
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
         private void ReadDownloadedReportFiles(string folder)
         {
-            var fetchXml = string.Empty;
-            if (json.solution.Length == 0)
+            var fetchData = new
             {
-
-                var fetchData = new
-                {
-                    ismanaged = "0"
-                };
-                fetchXml = $@"
-<fetch>
-  <entity name='report'>
-    <attribute name='filename' />
-    <attribute name='bodytext' />
-    <filter>
-      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
-    </filter>
-    <order attribute='filename' />
-  </entity>
-</fetch>";
-            }
-            else
-            {
-                var fetchData = new
-                {
-                    ismanaged = "0",
-                    componenttype = "31",
-                    uniquename = json.solution
-                };
-                fetchXml = $@"
+                componenttype = "31",
+                uniquename = json.solution
+            };
+            var fetchXml = $@"
 <fetch>
   <entity name='report'>
     <attribute name='filename' />
     <attribute name='bodytext' />
     <attribute name='languagecode' />
-    <filter>
-      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
-    </filter>
     <order attribute='filename' />
     <link-entity name='solutioncomponent' from='objectid' to='reportid' link-type='inner' alias='sc'>
       <filter type='and'>
-        <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype}'/>
+        <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype/*31*/}'/>
       </filter>
       <link-entity name='solution' from='solutionid' to='solutionid' link-type='inner' alias='s'>
         <filter type='and'>
-          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename/*TestReport*/}'/>
         </filter>
       </link-entity>
     </link-entity>
+    <link-entity name='languagelocale' from='localeid' to='languagecode' link-type='inner' alias='l'>
+      <attribute name='language' />
+    </link-entity>
   </entity>
 </fetch>";
-            }
+
             var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             foreach (var entity in rows.Entities)
             {
+                var reportFolder = folder + "\\" + (entity.GetAttributeValue<AliasedValue>("l.language")?.Value ?? "English");
                 downloadedReportFiles.Add(new DownloadFile
                 {
                     Content = entity.GetAttributeValue<string>("bodytext"),
-                    FileName = Path.Combine(folder + "\\" + (entity.GetAttributeValue<int?>("languagecode") ?? 1033).ToString(), entity.GetAttributeValue<string>("filename")),
-                    Name = Path.GetFileName(Path.Combine(folder + "\\" + (entity.GetAttributeValue<int?>("languagecode") ?? 1033).ToString(), entity.GetAttributeValue<string>("filename")))
+                    FileName = Path.Combine(reportFolder, entity.GetAttributeValue<string>("filename")),
+                    Name = Path.GetFileName(Path.Combine(reportFolder, entity.GetAttributeValue<string>("filename")))
                 });
             }
         }
@@ -133,8 +120,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (json == null)
                 throw new Exception($"{LOG} 'profile' not found: '{arguments.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.solution == "???" || (json.solution != null && json.solution.Trim().Length == 0))
+            if (json.solution == "???" || (json.solution != null && json?.solution?.Trim().Length == 0))
                 throw new Exception($"{LOG} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))
+                throw new Exception($"{LOG} solution '{json.solution}' not exist");
             return true;
         }
     }
