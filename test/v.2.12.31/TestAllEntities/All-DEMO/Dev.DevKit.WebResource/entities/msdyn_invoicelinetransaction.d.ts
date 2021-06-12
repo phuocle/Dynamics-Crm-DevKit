@@ -185,6 +185,169 @@ declare namespace DevKit {
 		/** The Body section of form msdyn_invoicelinetransaction_Quick_Create */
 		Body: DevKit.Formmsdyn_invoicelinetransaction_Quick_Create.Body;
 	}
+	class msdyn_invoicelinetransactionApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_invoicelinetransactionApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Exchange rate for the currency associated with the entity with respect to the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Select the customer who this invoice will be sent to. */
+		msdyn_AccountCustomer: DevKit.WebApi.LookupValue;
+		msdyn_AccountingDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		msdyn_AccountVendor: DevKit.WebApi.LookupValue;
+		/** Enter the amount on the transaction. */
+		msdyn_Amount: DevKit.WebApi.MoneyValue;
+		/** Value of the Amount in base currency. */
+		msdyn_amount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Select the name of the amount calculation method. */
+		msdyn_AmountMethod: DevKit.WebApi.OptionSetValue;
+		msdyn_BasisAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Basis Amount in base currency. */
+		msdyn_basisamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		msdyn_BasisPrice: DevKit.WebApi.MoneyValue;
+		/** Value of the Basis Price in base currency. */
+		msdyn_basisprice_Base: DevKit.WebApi.MoneyValueReadonly;
+		msdyn_BasisQuantity: DevKit.WebApi.DecimalValue;
+		/** Select whether this transaction will be charged to the customer or not. Only chargeable transactions will add to the invoice total */
+		msdyn_BillingType: DevKit.WebApi.OptionSetValue;
+		/** Shows the resource. */
+		msdyn_bookableresource: DevKit.WebApi.LookupValue;
+		/** Select the customer who this invoice will be sent to. */
+		msdyn_ContactCustomer: DevKit.WebApi.LookupValue;
+		msdyn_ContactVendor: DevKit.WebApi.LookupValue;
+		/** Select the organizational unit in charge of the related contract. */
+		msdyn_contractorganizationalunitid: DevKit.WebApi.LookupValue;
+		/** Indicates if this transaction is correcting a previous transaction. */
+		msdyn_Correction: DevKit.WebApi.BooleanValue;
+		/** Select whether the customer was a account or a contact */
+		msdyn_CustomerType: DevKit.WebApi.OptionSetValue;
+		/** Type a description of the Invoice line transaction. */
+		msdyn_description: DevKit.WebApi.StringValue;
+		/** Enter the date on which this invoice line detail was sent to the customer */
+		msdyn_DocumentDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Date of invoiced transaction */
+		msdyn_EndDateTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_ExchangeRateDate_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** The external description of the invoice line detail */
+		msdyn_externaldescription: DevKit.WebApi.StringValue;
+		/** The invoice to which this invoice line detail belongs. */
+		msdyn_Invoice: DevKit.WebApi.LookupValue;
+		/** Amount to be invoiced. This is the line amount less the previously invoiced amount when this is a correction. */
+		msdyn_InvoiceAmount: DevKit.WebApi.MoneyValueReadonly;
+		/** Value of the Invoice Amount in base currency. */
+		msdyn_invoiceamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** (Deprecated) Shows the invoice line that this invoice line transaction is associated to. */
+		msdyn_InvoiceLine: DevKit.WebApi.StringValue;
+		/** Unique identifier for Invoice Line associated with Invoice Line Detail. */
+		msdyn_InvoiceLineId: DevKit.WebApi.LookupValue;
+		/** Shows the entity instances. */
+		msdyn_invoicelinetransactionId: DevKit.WebApi.GuidValue;
+		/** The original transaction that is being corrected if this is a correction transaction. */
+		msdyn_OriginalInvoiceLineDetail: DevKit.WebApi.LookupValue;
+		/** Relevant when amount calculation method on the invoice line transaction is "Multiply basis amount by percent" */
+		msdyn_Percent: DevKit.WebApi.DecimalValue;
+		/** Amount that was previously invoiced if this is a correction. */
+		msdyn_PreviousAmount: DevKit.WebApi.MoneyValue;
+		/** Value of the Previous Amount in base currency. */
+		msdyn_previousamount_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Enter the price of the transaction. */
+		msdyn_Price: DevKit.WebApi.MoneyValue;
+		/** Value of the Price in base currency. */
+		msdyn_price_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Select the price list used for defaulting price on this transaction. */
+		msdyn_PriceList: DevKit.WebApi.LookupValue;
+		/** Select the product on this invoice line transaction. */
+		msdyn_Product: DevKit.WebApi.LookupValue;
+		/** Select the name of the project on which this transaction was created. */
+		msdyn_Project: DevKit.WebApi.LookupValue;
+		/** Enter the quantity of the transaction. */
+		msdyn_Quantity: DevKit.WebApi.DecimalValue;
+		/** Select the role that the user resource who logged this transaction worked as. */
+		msdyn_ResourceCategory: DevKit.WebApi.LookupValue;
+		/** Select the organizational unit at the time the entry was registered of the resource who performed the work. */
+		msdyn_ResourceOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		/** Select the name of the project contract that this invoice belongs to. */
+		msdyn_SalesContract: DevKit.WebApi.LookupValue;
+		/** (Deprecated) Shows the ID of the project contract line for this invoice line */
+		msdyn_SalesContractLine: DevKit.WebApi.StringValue;
+		/** Unique identifier for Order Line associated with Invoice Line Detail. */
+		msdyn_SalesContractLineId: DevKit.WebApi.LookupValue;
+		/** Enter the start date of the transaction. */
+		msdyn_StartDateTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Select the name of the project task for which this transaction was created. */
+		msdyn_Task: DevKit.WebApi.LookupValue;
+		/** Select the category of the transaction. */
+		msdyn_TransactionCategory: DevKit.WebApi.LookupValue;
+		/** Transaction classification of the invoice line */
+		msdyn_TransactionClassification: DevKit.WebApi.OptionSetValue;
+		/** Transaction type of the invoice line */
+		msdyn_TransactionTypeCode: DevKit.WebApi.OptionSetValue;
+		/** Select the unit of the transaction quantity. */
+		msdyn_Unit: DevKit.WebApi.LookupValue;
+		/** Select the unit group of the invoice line transaction. */
+		msdyn_UnitSchedule: DevKit.WebApi.LookupValue;
+		msdyn_VendorType: DevKit.WebApi.OptionSetValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Invoice Line Detail */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Invoice Line Detail */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Shows the currency associated with the entity. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_invoicelinetransaction {
@@ -284,4 +447,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information','Quick Create'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information','Quick Create'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

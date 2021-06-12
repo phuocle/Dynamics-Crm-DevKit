@@ -218,11 +218,14 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
                     var navigations = crmAttribute.NavigationPropertyName.Split(";".ToCharArray());
-                    for (var j = 0; j < entities.Length; j++)
+                    if (entities.Length == navigations.Length)
                     {
-                        if (jdoc.Length > 0)
-                            _d_ts += $"\t\t/** {jdoc} */\r\n";
-                        _d_ts += $"\t\t{navigations[j]}: DevKit.WebApi.LookupValue{Readonly};\r\n";
+                        for (var j = 0; j < entities.Length; j++)
+                        {
+                            if (jdoc.Length > 0)
+                                _d_ts += $"\t\t/** {jdoc} */\r\n";
+                            _d_ts += $"\t\t{navigations[j]}: DevKit.WebApi.LookupValue{Readonly};\r\n";
+                        }
                     }
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Owner)

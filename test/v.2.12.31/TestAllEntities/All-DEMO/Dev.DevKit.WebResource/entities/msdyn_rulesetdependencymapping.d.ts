@@ -23,6 +23,91 @@ declare namespace DevKit {
 		/** The Body section of form msdyn_rulesetdependencymapping_Information */
 		Body: DevKit.Formmsdyn_rulesetdependencymapping_Information.Body;
 	}
+	class msdyn_rulesetdependencymappingApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_rulesetdependencymappingApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** The name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Polymorphic entity id referenced by the ruleset */
+		msdyn_referencedpolymorphicentityid_msdyn_rulesetdependencymapping_characteristic: DevKit.WebApi.LookupValue;
+		/** Polymorphic entity id referenced by the ruleset */
+		msdyn_referencedpolymorphicentityid_msdyn_rulesetdependencymapping_msdyn_capacityprofile: DevKit.WebApi.LookupValue;
+		/** Polymorphic entity id referenced by the ruleset */
+		msdyn_referencedpolymorphicentityid_msdyn_rulesetdependencymapping_msdyn_decisionruleset: DevKit.WebApi.LookupValue;
+		/** Polymorphic entity id referenced by the ruleset */
+		msdyn_referencedpolymorphicentityid_msdyn_rulesetdependencymapping_queue: DevKit.WebApi.LookupValue;
+		/** Polymorphic entity id referenced by the ruleset */
+		msdyn_referencedpolymorphicentityid_msdyn_rulesetdependencymapping_ratingvalue: DevKit.WebApi.LookupValue;
+		/** Polymorphic entity logical name referenced by the ruleset */
+		msdyn_referencedpolymorphiclogicalname: DevKit.WebApi.StringValue;
+		/** Rule id referencing the polymorphic entity */
+		msdyn_referencingruleid: DevKit.WebApi.StringValue;
+		/** Rule name referencing the polymorphic entity */
+		msdyn_referencingrulename: DevKit.WebApi.StringValue;
+		/** Ruleset id containing rule referencing the polymorphic entity */
+		msdyn_referencingrulesetid: DevKit.WebApi.LookupValue;
+		/** Unique identifier for entity instances */
+		msdyn_rulesetdependencymappingId: DevKit.WebApi.GuidValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Rule set entity mapping */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Rule set entity mapping */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_rulesetdependencymapping {
@@ -56,4 +141,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

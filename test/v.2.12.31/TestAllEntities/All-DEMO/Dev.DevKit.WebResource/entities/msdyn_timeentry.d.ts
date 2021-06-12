@@ -343,6 +343,124 @@ declare namespace DevKit {
 		/** The Body section of form TESA_Time_Entry_Quick_Create_Form */
 		Body: DevKit.FormTESA_Time_Entry_Quick_Create_Form.Body;
 	}
+	class msdyn_timeentryApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_timeentryApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the bookable resource. */
+		msdyn_bookableresource: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Resource Booking associated with Time Entry. */
+		msdyn_BookableResourceBooking: DevKit.WebApi.LookupValue;
+		/** Booking Status */
+		msdyn_BookingStatus: DevKit.WebApi.LookupValue;
+		/** Enter the time entry date. */
+		msdyn_date_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Type the description of the time entry. */
+		msdyn_description: DevKit.WebApi.StringValue;
+		/** Shows the time spent. */
+		msdyn_duration: DevKit.WebApi.IntegerValue;
+		/** The end time of the time entry. */
+		msdyn_end_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Select the entry status. */
+		msdyn_entryStatus: DevKit.WebApi.OptionSetValue;
+		/** Type the external description of the time entry. */
+		msdyn_externalDescription: DevKit.WebApi.StringValue;
+		/** For internal use only. */
+		msdyn_internalflags: DevKit.WebApi.StringValue;
+		/** Select the manager of the time entry user. This field is used for approval. */
+		msdyn_manager: DevKit.WebApi.LookupValue;
+		/** Select the project that the time entry is related to. */
+		msdyn_project: DevKit.WebApi.LookupValue;
+		/** Select the project task that the time entry is related to. */
+		msdyn_projectTask: DevKit.WebApi.LookupValue;
+		/** The identifier of the related item. */
+		msdyn_relatedItemId: DevKit.WebApi.StringValue;
+		/** The related item type */
+		msdyn_relatedItemType: DevKit.WebApi.OptionSetValue;
+		/** Select the role that the user has in the project that the time entry is for. */
+		msdyn_resourceCategory: DevKit.WebApi.LookupValue;
+		/** Select the organizational unit at the time the entry was registered of the resource who performed the work. */
+		msdyn_ResourceOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		/** The start time of the time entry. */
+		msdyn_start_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_targetEntryStatus: DevKit.WebApi.OptionSetValue;
+		/** The unique identifier for a time entry. */
+		msdyn_timeentryId: DevKit.WebApi.GuidValue;
+		/** Unique identifier for Time Source associated with Time Entry. */
+		msdyn_timeentrysettingId: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Time Off Request associated with Time Entry. This field is auto-populated when a Time Entry is auto-created from a Time Off Request. */
+		msdyn_timeoffrequest: DevKit.WebApi.LookupValue;
+		/** Shows the transaction category. */
+		msdyn_transactioncategory: DevKit.WebApi.LookupValue;
+		/** Select the time entry type. */
+		msdyn_type: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier for Work Orders associated with Time Entry. */
+		msdyn_WorkOrder: DevKit.WebApi.LookupValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Contains the id of the process associated with the entity. */
+		processid: DevKit.WebApi.GuidValue;
+		/** Contains the id of the stage where the entity is located. */
+		stageid: DevKit.WebApi.GuidValue;
+		/** Status of the Time Entry */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Time Entry */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+		traversedpath: DevKit.WebApi.StringValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_timeentry {
@@ -428,4 +546,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Create Time Entry','Entry Edit Form','Field Service Information','Quick Create','Information','Row Edit Form','Main Form','Quick Create Form'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Create Time Entry','Entry Edit Form','Field Service Information','Information','Row Edit Form','Quick Create','Main Form','Quick Create Form'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

@@ -43,6 +43,103 @@ declare namespace DevKit {
 		/** The Body section of form msdyn_smartassistconfig_Information */
 		Body: DevKit.Formmsdyn_smartassistconfig_Information.Body;
 	}
+	class msdyn_smartassistconfigApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_smartassistconfigApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** For internal use only. */
+		ComponentIdUnique: DevKit.WebApi.GuidValueReadonly;
+		/** For internal use only. */
+		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** For internal use only. */
+		IsCustomizable: DevKit.WebApi.ManagedPropertyValue;
+		/** Indicates whether the solution component is part of a managed solution. */
+		IsManaged: DevKit.WebApi.BooleanValueReadonly;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Icon for the suggestion group container */
+		msdyn_IconURL: DevKit.WebApi.StringValue;
+		/** This field denotes whether config is default. */
+		msdyn_isDefault: DevKit.WebApi.BooleanValue;
+		/** This number denotes the maximum number of suggestions that can be displayed in smart assist control */
+		msdyn_maxsuggestioncount: DevKit.WebApi.IntegerValue;
+		/** The name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Order in which the entities are grouped in smart assist. */
+		msdyn_Order: DevKit.WebApi.IntegerValue;
+		/** Unique identifier for entity instances */
+		msdyn_smartassistconfigId: DevKit.WebApi.GuidValue;
+		/** Suggestion source entity logical name. */
+		msdyn_SourceEntityName: DevKit.WebApi.StringValue;
+		/** This will be used as a title for entity suggestion panel */
+		msdyn_Suggestioncontainertitle: DevKit.WebApi.StringValue;
+		/** Unique name of the suggestion control configuration entity. if suggestion type is adaptive card, then it should refer to the associated adaptive configuration. */
+		msdyn_SuggestionControlConfigUniquename: DevKit.WebApi.StringValue;
+		/** Denotes the control type for suggestions, (e.g) Adaptive card */
+		msdyn_Suggestioncontroltype: DevKit.WebApi.OptionSetValue;
+		/** Provide the class name of Suggestion provider */
+		msdyn_SuggestionProvider: DevKit.WebApi.StringValue;
+		/** Denotes the type of suggestions like Similar case or KB article suggestion */
+		msdyn_Suggestiontype: DevKit.WebApi.OptionSetValue;
+		/** Suggestion Webresource which brings smart assist actions or api to retrieve suggestions */
+		msdyn_SuggestionWebresourceURL: DevKit.WebApi.StringValue;
+		/** Unique Name for the entity. */
+		msdyn_UniqueName: DevKit.WebApi.StringValue;
+		/** Unique identifier for the organization */
+		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** For internal use only. */
+		OverwriteTime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the associated solution. */
+		SolutionId: DevKit.WebApi.GuidValueReadonly;
+		/** Status of the Smartassist configuration */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Smartassist configuration */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		SupportingSolutionId: DevKit.WebApi.GuidValueReadonly;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_smartassistconfig {
@@ -98,4 +195,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

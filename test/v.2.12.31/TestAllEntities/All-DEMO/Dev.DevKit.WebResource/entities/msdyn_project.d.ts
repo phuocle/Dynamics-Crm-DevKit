@@ -286,6 +286,235 @@ declare namespace DevKit {
 		/** The Body section of form Create_Project */
 		Body: DevKit.FormCreate_Project.Body;
 	}
+	class msdyn_projectApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_projectApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the exchange rate for the currency associated with the entity with respect to the base currency. */
+		ExchangeRate: DevKit.WebApi.DecimalValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the actual duration of the project in minutes. */
+		msdyn_actualdurationminutes: DevKit.WebApi.IntegerValue;
+		/** Enter the actual end time of the project. */
+		msdyn_actualend_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Shows the aggregate of actual expense cost on the project. System Field - For PSA Use Only. */
+		msdyn_actualexpensecost: DevKit.WebApi.MoneyValue;
+		/** Value of the Actual Expense Cost in base currency. System Field - For PSA Use Only. */
+		msdyn_actualexpensecost_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the aggregate of actual expense sales on the project - For PSA use only */
+		msdyn_ActualExpenseSales: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the actual expense sales in the base currency. System Field - For PSA Use Only. */
+		msdyn_actualexpensesales_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the total actual hours of the project. System Field - For PSA Use Only. */
+		msdyn_actualhours: DevKit.WebApi.DecimalValue;
+		/** Shows the aggregate of actual labor cost on the project. System Field - For PSA Use Only. */
+		msdyn_actuallaborcost: DevKit.WebApi.MoneyValue;
+		/** Value of the Actual Labor Cost in base currency. System Field - For PSA Use Only. */
+		msdyn_actuallaborcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the aggregate of actual labor sales on the project - For PSA use only */
+		msdyn_ActualSales: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the actual labor sales in the base currency. System Field - For PSA Use Only. */
+		msdyn_actualsales_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Enter the actual start time of the project. */
+		msdyn_actualstart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** The status of the bulk generation operations running on the project entity. If no operation is running, the value is null. System Field - For PSA Use Only. */
+		msdyn_BulkGenerationStatus: DevKit.WebApi.OptionSetValue;
+		/** Id of the calendar for the project. */
+		msdyn_calendarid: DevKit.WebApi.StringValue;
+		/** Enter the comments that are used to describe the current project status. */
+		msdyn_comments: DevKit.WebApi.StringValue;
+		/** Select the organizational unit sponsoring the project. */
+		msdyn_ContractOrganizationalUnitId: DevKit.WebApi.LookupValue;
+		/** Shows the actual cost divided by the estimated cost at completion. System Field - For PSA Use Only. */
+		msdyn_CostConsumption: DevKit.WebApi.DecimalValue;
+		/** Sum of Actual Cost and Remaining cost. System Field - For PSA Use Only. */
+		msdyn_CostEstimateAtComplete: DevKit.WebApi.MoneyValueReadonly;
+		/** Value of the Cost estimate at completion (EAC) in base currency. System Field - For PSA Use Only. */
+		msdyn_costestimateatcomplete_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** System Field - For PSA Use Only. */
+		msdyn_CostPerformence: DevKit.WebApi.OptionSetValueReadonly;
+		/** Variance between the estimated cost and the forecasted cost based on the estimate at completion (EAC). System Field - For PSA Use Only. */
+		msdyn_CostVariance: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the value of the cost variance in the base currency. System Field - For PSA Use Only. */
+		msdyn_costvariance_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Enter the customer who the project is associated with. */
+		msdyn_customer: DevKit.WebApi.LookupValue;
+		/** Enter a description of the project. */
+		msdyn_description: DevKit.WebApi.StringValue;
+		/** This is an internal field, mainly used during import so that we don't create a team member record for the project manager. System Field - For PSA Use Only. */
+		msdyn_disablecreateofteammemberformanager: DevKit.WebApi.BooleanValue;
+		/** Shows the total of actual hours and the remaining hours. */
+		msdyn_EffortestimateatcompleteEAC: DevKit.WebApi.DoubleValue;
+		/** Exchange rate for the currency associated with the project with respect to the base currency. */
+		msdyn_exchangerate: DevKit.WebApi.DecimalValue;
+		/** Specifies if the project is linked to a project in MS Project. System Field - For PSA Use Only. */
+		msdyn_IsLinkedToMSProjectClient: DevKit.WebApi.BooleanValue;
+		/** Shows if the project is a project template. System Field - For PSA Use Only. */
+		msdyn_istemplate: DevKit.WebApi.BooleanValue;
+		/** The URL for the linked document. System Field - For PSA Use Only. */
+		msdyn_linkeddocumenturl: DevKit.WebApi.StringValue;
+		/** Describes the project status. */
+		msdyn_overallprojectstatus: DevKit.WebApi.OptionSetValue;
+		/** Shows the aggregate of the planned expense cost of all the associated tasks. */
+		msdyn_plannedexpensecost: DevKit.WebApi.MoneyValue;
+		/** Value of the Estimated Expense Cost in base currency. System Field - For PSA Use Only. */
+		msdyn_plannedexpensecost_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the aggregate of estimated expense sales on the project - For PSA use only */
+		msdyn_PlannedExpenseSales: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the estimated expense sales in the base currency. System Field - For PSA Use Only. */
+		msdyn_plannedexpensesales_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the total estimate hours of the project. */
+		msdyn_plannedhours: DevKit.WebApi.DecimalValue;
+		/** Shows the aggregate of the planned labor cost of all the associated tasks. */
+		msdyn_plannedlaborcost: DevKit.WebApi.MoneyValue;
+		/** Value of the Estimated Labor Cost in base currency. System Field - For PSA Use Only. */
+		msdyn_plannedlaborcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the aggregate of estimated labor sales on the project - For PSA use only */
+		msdyn_PlannedSales: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the estimated labor sales in the base currency. System Field - For PSA Use Only. */
+		msdyn_plannedsales_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the actual hours divided by effort at estimate. */
+		msdyn_Progress: DevKit.WebApi.DecimalValue;
+		/** Shows the entity instances. */
+		msdyn_projectId: DevKit.WebApi.GuidValue;
+		/** Shows the project manager assigned to the project. */
+		msdyn_projectmanager: DevKit.WebApi.LookupValue;
+		/** Indicates if the project resource requirements are visible to the resources assigned to the project. */
+		msdyn_projectresourcerequirementsvisibletore: DevKit.WebApi.BooleanValue;
+		/** Select the Team associated with Project. */
+		msdyn_projectteamid: DevKit.WebApi.LookupValue;
+		/** Select the project template behind the project. */
+		msdyn_ProjectTemplate: DevKit.WebApi.LookupValue;
+		/** Shows the difference between the estimated labor cost and the actual labor cost. */
+		msdyn_RemainingCost: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the remaining labor cost in the  base currency. */
+		msdyn_remainingcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the difference between the estimate at completion (EAC) and the actual hours. */
+		msdyn_RemainingHours: DevKit.WebApi.DoubleValue;
+		/** Shows the difference between the estimated labor sales and the actual labor sales. */
+		msdyn_RemainingSales: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the remaining labor sales in the base currency. */
+		msdyn_remainingsales_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the actual sales divided by the estimated sales. */
+		msdyn_SalesConsumption: DevKit.WebApi.DecimalValueReadonly;
+		/** Shows the total of actual and remaining sales. */
+		msdyn_SalesEstimateAtCompleteEAC: DevKit.WebApi.MoneyValueReadonly;
+		/** Value of the Sales Estimate At Complete (EAC) in base currency. */
+		msdyn_salesestimateatcompleteeac_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the contract for this project. */
+		msdyn_salesorderid: DevKit.WebApi.LookupValue;
+		/** Shows the difference between the planned sales and the sales estimate at completion (EAC). */
+		msdyn_SalesVariance: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the value of the sales variance in the base currency. */
+		msdyn_salesvariance_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the scheduled duration of the project, specified in minutes. */
+		msdyn_scheduleddurationminutes: DevKit.WebApi.IntegerValue;
+		/** Enter the scheduled end time of the project. */
+		msdyn_scheduledend_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the scheduled start time of the project. */
+		msdyn_scheduledstart_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Describes the schedule performance of the project. */
+		msdyn_scheduleperformance: DevKit.WebApi.OptionSetValue;
+		/** Shows the difference between the planned effort and the estimate at completion (EAC). */
+		msdyn_ScheduleVariance: DevKit.WebApi.DoubleValue;
+		/** Shows the stage of the project (Deprecated in v3.0). */
+		msdyn_StageName: DevKit.WebApi.StringValue;
+		/** Shows the most recent update on a status field(comments or overall project status). */
+		msdyn_statusupdatedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Type the name of the custom entity. */
+		msdyn_subject: DevKit.WebApi.StringValue;
+		/** Shows the total number of team members assigned to this project */
+		msdyn_teamsize: DevKit.WebApi.IntegerValueReadonly;
+		/** Last Updated time of rollup field Team Size. */
+		msdyn_teamsize_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** State of rollup field Team Size. */
+		msdyn_teamsize_State: DevKit.WebApi.IntegerValueReadonly;
+		/** Shows the aggregated cost from actuals on the project. */
+		msdyn_TotalActualCost: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the total actual cost in the base currency. */
+		msdyn_totalactualcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows aggregated sales values from all project actuals - For PSA use only */
+		msdyn_TotalActualSales: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the actual total sales in the base currency. System Field - For PSA Use Only. */
+		msdyn_totalactualsales_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the aggregate of the total planned cost of all the associated tasks. */
+		msdyn_TotalPlannedCost: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the total planned cost in the base currency. */
+		msdyn_totalplannedcost_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows aggregate of estimated sales values on the project - For PSA use only */
+		msdyn_TotalPlannedSales: DevKit.WebApi.MoneyValue;
+		/** Shows the value of the estimated total sales in the base currency. System Field - For PSA Use Only. */
+		msdyn_totalplannedsales_Base: DevKit.WebApi.MoneyValueReadonly;
+		/** Shows the work breakdown structure (WBS) duration in days. */
+		msdyn_wbsduration: DevKit.WebApi.IntegerValue;
+		/** Select the work hour template used to create the project calendar. */
+		msdyn_workhourtemplate: DevKit.WebApi.LookupValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Contains the id of the process associated with the entity. */
+		processid: DevKit.WebApi.GuidValue;
+		/** Contains the id of the stage where the entity is located. */
+		stageid: DevKit.WebApi.GuidValue;
+		/** Status of the Project */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Project */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Shows the currency associated with the entity. */
+		TransactionCurrencyId: DevKit.WebApi.LookupValue;
+		/** A comma separated list of string values representing the unique identifiers of stages in a Business Process Flow Instance in the order that they occur. */
+		traversedpath: DevKit.WebApi.StringValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_project {
@@ -351,4 +580,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Create Project','Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Create Project','Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

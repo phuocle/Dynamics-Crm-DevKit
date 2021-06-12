@@ -74,6 +74,85 @@ declare namespace DevKit {
 		/** The Grid of form msdyn_projectparameter_Information */
 		Grid: DevKit.Formmsdyn_projectparameter_Information.Grid;
 	}
+	class msdyn_projectparameterApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_projectparameterApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Allow resources to update their skills via the Project Finder Mobile app. */
+		msdyn_Allowskillupdatebyresource: DevKit.WebApi.BooleanValue;
+		/** Select the default organizational unit that will be used for new resources. */
+		msdyn_defaultorganizationalunit: DevKit.WebApi.LookupValue;
+		/** Select the default work template for new projects. */
+		msdyn_defaultWorkTemplate: DevKit.WebApi.LookupValue;
+		/** Type the name of the project parameters. */
+		msdyn_description: DevKit.WebApi.StringValue;
+		/** Select the default frequency for generating invoices. */
+		msdyn_invoicefrequency: DevKit.WebApi.LookupValue;
+		/** Enabling this will make cost price list selection on projects agnostic of contracting unit currency and cost price lists will allow price setup in multiple currencies */
+		msdyn_pricelistdefaultingiscurrencyagnostic: DevKit.WebApi.BooleanValue;
+		/** Shows the default role to be used when a project manager is added to the project team. */
+		msdyn_projectmanagerrole: DevKit.WebApi.LookupValue;
+		/** Shows the entity instances. */
+		msdyn_projectparameterId: DevKit.WebApi.GuidValue;
+		/** Select whether project resource requirements are visible to resources. */
+		msdyn_Projectresourcerequirementsvisibletore: DevKit.WebApi.BooleanValue;
+		/** Select the default method for allocating resources to projects. */
+		msdyn_resourceallocationmode: DevKit.WebApi.OptionSetValue;
+		/** Shows the default role to be used when a team member is added to the project team. */
+		msdyn_teammemberrole: DevKit.WebApi.LookupValue;
+		/** For internal use only. */
+		msdyn_upgradebatchsize: DevKit.WebApi.IntegerValue;
+		/** Unique identifier for the organization */
+		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Status of the Project Parameter */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Project Parameter */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_projectparameter {
@@ -113,4 +192,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

@@ -162,6 +162,8 @@ declare namespace DevKit {
 		DefaultMobileOfflineProfileId: DevKit.WebApi.LookupValue;
 		/** Type of default recurrence end range date. */
 		DefaultRecurrenceEndRangeType: DevKit.WebApi.OptionSetValue;
+		/** Indicates whether the default teams linked chat title is the record name */
+		DefaultTeamsChatTitleRecordName: DevKit.WebApi.BooleanValue;
 		/** Default theme data for the organization. */
 		DefaultThemeData: DevKit.WebApi.StringValue;
 		/** Unique identifier of the delegated admin user for the organization. */
@@ -194,6 +196,8 @@ declare namespace DevKit {
 		EnableMicrosoftFlowIntegration: DevKit.WebApi.BooleanValue;
 		/** Enable pricing calculations on a Create call. */
 		EnablePricingOnCreate: DevKit.WebApi.BooleanValue;
+		/** Indicates whether privacy and sensitivity attributes for new team creation has been enabled */
+		EnableSensitivityLabelsForTeamsCollab: DevKit.WebApi.BooleanValue;
 		/** Use Smart Matching. */
 		EnableSmartMatching: DevKit.WebApi.BooleanValue;
 		/** Enable site map and commanding update */
@@ -346,6 +350,8 @@ declare namespace DevKit {
 		IsEmailMonitoringAllowed: DevKit.WebApi.BooleanValue;
 		/** Enable Email Server Profile content filtering */
 		IsEmailServerProfileContentFilteringEnabled: DevKit.WebApi.BooleanValue;
+		/** Indicates whether embed Teams collaboration has been enabled for the organization */
+		IsEmbedTeamsCollabEnabled: DevKit.WebApi.BooleanValue;
 		/** Indicates whether appmodule is enabled for all roles */
 		IsEnabledForAllRoles: DevKit.WebApi.BooleanValue;
 		/** Indicates whether the organization's files are being stored in Azure. */
@@ -422,6 +428,8 @@ declare namespace DevKit {
 		IsRichTextNotesEnabled: DevKit.WebApi.BooleanValue;
 		/** Indicates whether Sales Assistant mobile app has been enabled for the organization. */
 		IsSalesAssistantEnabled: DevKit.WebApi.BooleanValue;
+		/** Indicates whether Sales Mobile Preview has been enabled for the organization */
+		IsSalesMobilePreviewEnabled: DevKit.WebApi.BooleanValue;
 		/** Enable sales order processing integration. */
 		IsSOPIntegrationEnabled: DevKit.WebApi.BooleanValue;
 		/** Information on whether text wrap is enabled. */
@@ -608,6 +616,8 @@ declare namespace DevKit {
 		RiErrorStatus: DevKit.WebApi.IntegerValue;
 		/** Unique identifier of the sample data import job. */
 		SampleDataImportId: DevKit.WebApi.GuidValue;
+		/** Scheduling engine for Appointments and Service Activities */
+		SchedulingEngine: DevKit.WebApi.OptionSetValue;
 		/** Prefix used for custom entities and attributes. */
 		SchemaNamePrefix: DevKit.WebApi.StringValue;
 		/** Indicates whether Send Bulk Email in UCI is enabled for the org. */
@@ -887,6 +897,12 @@ declare namespace OptionSet {
 			Never_send_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365,
 			/** 0 */
 			No_preference_for_sending_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365
+		}
+		enum SchedulingEngine {
+			/** 0 */
+			Default_Scheduling_Engine,
+			/** 192350000 */
+			Deprecated_Universal_Resource_Scheduling
 		}
 		enum SharePointDeploymentType {
 			/** 1 */

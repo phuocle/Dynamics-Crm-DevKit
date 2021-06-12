@@ -66,7 +66,7 @@ var DevKit;
             return property;
         }
 		var textanalyticsentitymapping = {
-			AdvancedSimilarityRuleId: { b: 'advancedsimilarityruleid', a: '_advancedsimilarityruleid_value', c: '', d: '' },
+			AdvancedSimilarityRuleId: { b: 'advancedsimilarityruleid', a: '_advancedsimilarityruleid_value', c: 'incidents', d: 'incident' },
 			ComponentState: { a: 'componentstate', r: true },
 			Entity: { a: 'entity' },
 			EntityDisplayName: { a: 'entitydisplayname' },
@@ -76,7 +76,7 @@ var DevKit;
 			FieldPickList: { a: 'fieldpicklist' },
 			IsManaged: { a: 'ismanaged', r: true },
 			IsTextMatchMapping: { a: 'istextmatchmapping' },
-			KnowledgeSearchModelId: { b: 'knowledgesearchmodelid', a: '_knowledgesearchmodelid_value', c: '', d: '' },
+			KnowledgeSearchModelId: { b: 'knowledgesearchmodelid', a: '_knowledgesearchmodelid_value', c: 'incidents', d: 'incident' },
 			ModelType: { a: 'modeltype' },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
@@ -85,7 +85,8 @@ var DevKit;
 			SolutionId: { a: 'solutionid', r: true },
 			SupportingSolutionId: { a: 'supportingsolutionid', r: true },
 			TextAnalyticsEntityMappingId: { a: 'textanalyticsentitymappingid' },
-			TextAnalyticsEntityMappingIdUnique: { a: 'textanalyticsentitymappingidunique', r: true }
+			TextAnalyticsEntityMappingIdUnique: { a: 'textanalyticsentitymappingidunique', r: true },
+			TopicModelConfigurationId: { b: 'topicmodelconfigurationid', a: '_topicmodelconfigurationid_value', c: 'topicmodelconfigurations', d: 'topicmodelconfiguration' }
 		};
 		if (e === undefined) e = {};
 		var u = {};

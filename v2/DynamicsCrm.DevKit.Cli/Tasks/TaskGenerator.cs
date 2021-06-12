@@ -276,8 +276,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities.Trim().ToLower());
                     CliLog.WriteLine();
-
                     var schemas = GetAllEntitySchemas();
+
                     files = schemas.Select(e => $"{folder}{e}.webapi.js").ToArray();
                 }
                 else

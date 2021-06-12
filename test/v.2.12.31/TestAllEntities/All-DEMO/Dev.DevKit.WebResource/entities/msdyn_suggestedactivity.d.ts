@@ -20,6 +20,60 @@ declare namespace DevKit {
 		/** The Body section of form msdyn_suggestedactivity_Information */
 		Body: DevKit.Formmsdyn_suggestedactivity_Information.Body;
 	}
+	class msdyn_suggestedactivityApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_suggestedactivityApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		msdyn_ActivityType: DevKit.WebApi.StringValue;
+		msdyn_BodyPreview: DevKit.WebApi.StringValue;
+		/** Created Date */
+		msdyn_createddate_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_duration: DevKit.WebApi.StringValue;
+		/** End Time */
+		msdyn_endtime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Exchange web link */
+		msdyn_exchangeweblink: DevKit.WebApi.StringValue;
+		msdyn_Importance: DevKit.WebApi.StringValue;
+		/** Location */
+		msdyn_location: DevKit.WebApi.StringValue;
+		/** Regarding */
+		msdyn_regardingid: DevKit.WebApi.LookupValue;
+		/** Regarding Name */
+		msdyn_regardingname: DevKit.WebApi.StringValue;
+		/** Sender */
+		msdyn_sender: DevKit.WebApi.StringValue;
+		/** Sender's Name */
+		msdyn_sendername: DevKit.WebApi.StringValue;
+		/** Start Time */
+		msdyn_starttime_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_Subject: DevKit.WebApi.StringValue;
+		/** Unique identifier for entity instances */
+		msdyn_suggestedactivityId: DevKit.WebApi.GuidValue;
+		/** To */
+		msdyn_to: DevKit.WebApi.StringValue;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_suggestedactivity {
@@ -41,4 +95,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

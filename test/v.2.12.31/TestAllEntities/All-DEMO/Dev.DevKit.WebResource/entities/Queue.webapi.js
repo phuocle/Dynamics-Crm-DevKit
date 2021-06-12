@@ -86,6 +86,13 @@ var DevKit;
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			msdyn_assignmentinputcontractid: { b: 'msdyn_assignmentinputcontractid', a: '_msdyn_assignmentinputcontractid_value', c: 'msdyn_decisioncontracts', d: 'msdyn_decisioncontract' },
+			msdyn_assignmentstrategy: { a: 'msdyn_assignmentstrategy' },
+			msdyn_isdefaultqueue: { a: 'msdyn_isdefaultqueue' },
+			msdyn_isomnichannelqueue: { a: 'msdyn_isomnichannelqueue' },
+			msdyn_operatinghourid: { b: 'msdyn_operatinghourid', a: '_msdyn_operatinghourid_value', c: 'msdyn_operatinghours', d: 'msdyn_operatinghour' },
+			msdyn_priority: { a: 'msdyn_priority' },
+			msdyn_queuetype: { a: 'msdyn_queuetype' },
 			Name: { a: 'name' },
 			NumberOfItems: { a: 'numberofitems', r: true },
 			NumberOfMembers: { a: 'numberofmembers', r: true },
@@ -162,6 +169,15 @@ var OptionSet;
 			Email_messages_from_Dynamics_365_records_that_are_email_enabled: 3,
 			Email_messages_in_response_to_Dynamics_365_email: 1,
 			No_email_messages: 4
+		},
+		msdyn_assignmentstrategy : {
+			Custom_Assignment_Configuration: 192350002,
+			Omnichannel_Assignment: 192350000,
+			Round_Robin: 192350001
+		},
+		msdyn_queuetype : {
+			Entity: 192350001,
+			Messaging: 192350000
 		},
 		OutgoingEmailDeliveryMethod : {
 			None: 0,

@@ -159,6 +159,20 @@ var DevKit;
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			msdyn_AgentType: { a: 'msdyn_agentType' },
+			msdyn_BotApplicationId: { a: 'msdyn_botapplicationid' },
+			msdyn_BotDescription: { a: 'msdyn_botdescription' },
+			msdyn_BotEndpoint: { a: 'msdyn_botendpoint' },
+			msdyn_bothandle: { a: 'msdyn_bothandle' },
+			msdyn_BotProvider: { a: 'msdyn_botprovider' },
+			msdyn_BotSecretKeys: { a: 'msdyn_botsecretkeys' },
+			msdyn_Capacity: { a: 'msdyn_capacity' },
+			msdyn_DefaultPresenceIdUser: { b: 'msdyn_DefaultPresenceIdUser', a: '_msdyn_defaultpresenceiduser_value', c: 'msdyn_presences', d: 'msdyn_presence' },
+			msdyn_gdproptout: { a: 'msdyn_gdproptout' },
+			msdyn_gridwrappercontrolfield: { a: 'msdyn_gridwrappercontrolfield' },
+			msdyn_phonenumberid: { b: 'msdyn_phonenumberid', a: '_msdyn_phonenumberid_value', c: 'msdyn_ocphonenumbers', d: 'msdyn_ocphonenumber' },
+			msdyn_UserType: { a: 'msdyn_usertype' },
+			msdyusd_USDConfigurationId: { b: 'msdyusd_USDConfigurationId', a: '_msdyusd_usdconfigurationid_value', c: 'msdyusd_configurations', d: 'msdyusd_configuration' },
 			NickName: { a: 'nickname' },
 			OrganizationId: { a: 'organizationid', r: true },
 			OutgoingEmailDeliveryMethod: { a: 'outgoingemaildeliverymethod' },
@@ -177,6 +191,7 @@ var DevKit;
 			Salutation: { a: 'salutation' },
 			SetupUser: { a: 'setupuser' },
 			SharePointEmailAddress: { a: 'sharepointemailaddress' },
+			SiteId: { b: 'siteid', a: '_siteid_value', c: 'sites', d: 'site' },
 			Skills: { a: 'skills' },
 			StageId: { a: 'stageid' },
 			SystemUserId: { a: 'systemuserid' },
@@ -292,6 +307,19 @@ var OptionSet;
 			Invitation_Rejected: 5,
 			Invitation_Revoked: 6,
 			Invited: 1
+		},
+		msdyn_AgentType : {
+			Application_user: 192350000,
+			Bot_application_user: 192350001
+		},
+		msdyn_BotProvider : {
+			None: 192350002,
+			Other: 192350001,
+			Virtual_Agent: 192350000
+		},
+		msdyn_UserType : {
+			BOT_User: 192350001,
+			CRM_User: 192350000
 		},
 		OutgoingEmailDeliveryMethod : {
 			Microsoft_Dynamics_365_for_Outlook: 1,

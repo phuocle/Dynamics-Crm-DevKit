@@ -90,7 +90,6 @@ var DevKit;
 			Name: { a: 'name' },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
-			PackageId: { b: 'packageid', a: '_packageid_value', c: 'pluginpackages', d: 'pluginpackage' },
 			Password: { a: 'password' },
 			Path: { a: 'path' },
 			PluginAssemblyId: { a: 'pluginassemblyid' },

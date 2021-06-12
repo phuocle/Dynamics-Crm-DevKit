@@ -68,7 +68,6 @@ var DevKit;
 		var sdkmessageprocessingstep = {
 			AsyncAutoDelete: { a: 'asyncautodelete' },
 			CanUseReadOnlyConnection: { a: 'canusereadonlyconnection' },
-			Category: { a: 'category' },
 			ComponentState: { a: 'componentstate', r: true },
 			Configuration: { a: 'configuration' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },

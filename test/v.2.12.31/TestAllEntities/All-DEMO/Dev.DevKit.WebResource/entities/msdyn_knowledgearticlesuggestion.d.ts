@@ -21,6 +21,44 @@ declare namespace DevKit {
 		/** The Body section of form msdyn_knowledgearticlesuggestion_Information */
 		Body: DevKit.Formmsdyn_knowledgearticlesuggestion_Information.Body;
 	}
+	class msdyn_knowledgearticlesuggestionApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_knowledgearticlesuggestionApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		msdyn_additionalcontext: DevKit.WebApi.StringValue;
+		msdyn_confidencescore: DevKit.WebApi.DecimalValue;
+		msdyn_keyphrases: DevKit.WebApi.StringValue;
+		/** Unique identifier for entity instances */
+		msdyn_knowledgearticlesuggestionId: DevKit.WebApi.GuidValue;
+		/** The name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		msdyn_rank: DevKit.WebApi.IntegerValue;
+		msdyn_suggestedentity: DevKit.WebApi.LookupValue;
+		msdyn_suggestionforentitylogicalname: DevKit.WebApi.StringValue;
+		msdyn_suggestionforid: DevKit.WebApi.StringValue;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_knowledgearticlesuggestion {
@@ -42,4 +80,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

@@ -80,6 +80,12 @@ var DevKit;
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			msdyn_ocfollowercount: { a: 'msdyn_ocfollowercount' },
+			msdyn_ocfollowingcount: { a: 'msdyn_ocfollowingcount' },
+			msdyn_ocfriendcount: { a: 'msdyn_ocfriendcount' },
+			msdyn_octwitterhandleid: { b: 'msdyn_octwitterhandleid', a: '_msdyn_octwitterhandleid_value', c: 'msdyn_octwitterhandles', d: 'msdyn_octwitterhandle' },
+			msdyn_phonenumber: { a: 'msdyn_phonenumber' },
+			msdyn_profileimagelink: { a: 'msdyn_profileimagelink' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
@@ -139,9 +145,22 @@ var OptionSet;
 (function (OptionSet) {
 	OptionSet.SocialProfile = {
 		Community : {
+			Cortana: 5,
+			Direct_Line: 6,
+			Direct_Line_Speech: 8,
+			Email: 9,
 			Facebook: 1,
+			GroupMe: 10,
+			Kik: 11,
+			Line: 3,
+			Microsoft_Teams: 7,
 			Other: 0,
-			Twitter: 2
+			Skype: 13,
+			Slack: 14,
+			Telegram: 12,
+			Twitter: 2,
+			Wechat: 4,
+			WhatsApp: 15
 		},
 		StateCode : {
 			Active: 0,

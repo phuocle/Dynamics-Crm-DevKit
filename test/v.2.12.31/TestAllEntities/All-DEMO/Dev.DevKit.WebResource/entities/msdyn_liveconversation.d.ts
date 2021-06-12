@@ -45,6 +45,115 @@ declare namespace DevKit {
 		/** The Body section of form Ongoing_Conversation_Main_Form */
 		Body: DevKit.FormOngoing_Conversation_Main_Form.Body;
 	}
+	class msdyn_liveconversationApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_liveconversationApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the Ongoing Conversation. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the Ongoing Conversation was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the Ongoing Conversation. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of user who last modified the Ongoing Conversation. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when Ongoing Conversation was last modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who last modified the Ongoing Conversation. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when last agent was assigned to the conversation */
+		msdyn_activeagentassignedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Last agent assigned to the conversation */
+		msdyn_activeagentid: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Queue associated with Conversation. */
+		msdyn_cdsqueueid: DevKit.WebApi.LookupValue;
+		/** The channel(s) in the conversation. */
+		msdyn_channel: DevKit.WebApi.MultiOptionSetValue;
+		/** Date and time when conversation was closed */
+		msdyn_closedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Date and time when conversation was created */
+		msdyn_createdon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		msdyn_customer_msdyn_liveconversation_account: DevKit.WebApi.LookupValue;
+		msdyn_customer_msdyn_liveconversation_contact: DevKit.WebApi.LookupValue;
+		/** Customer Sentiment Label powered by Sentiment Service */
+		msdyn_customersentimentlabel: DevKit.WebApi.OptionSetValue;
+		/** Number of times conversation was escalated to Supervisor i.e. transferred to Supervisor */
+		msdyn_escalationcount: DevKit.WebApi.IntegerValue;
+		/** Time when conversation was initiated */
+		msdyn_initiatedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Id of this ongoing conversation record */
+		msdyn_liveconversationId: DevKit.WebApi.GuidValue;
+		/** Work stream associated to the conversation */
+		msdyn_liveworkstreamid: DevKit.WebApi.LookupValue;
+		/** Date and time when conversation was last modified */
+		msdyn_modifiedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Last agent session */
+		msdyn_oclastsessionid: DevKit.WebApi.StringValue;
+		/** Unique identifier for msdyn_omnichannelqueue associated with Conversation */
+		msdyn_queueid: DevKit.WebApi.LookupValue;
+		/** Date and time when conversation was started */
+		msdyn_startedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** State of the conversation record */
+		msdyn_statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of Ongoing conversation record */
+		msdyn_statuscode: DevKit.WebApi.OptionSetValue;
+		/** Date and time when conversation status was last modified */
+		msdyn_statusupdatedon_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue;
+		/** Subject associated with the conversation record */
+		msdyn_subject: DevKit.WebApi.StringValue;
+		/** Conversation Title */
+		msdyn_title: DevKit.WebApi.StringValue;
+		/** Number of times the conversation was transferred */
+		msdyn_transfercount: DevKit.WebApi.IntegerValue;
+		/** Work distribution mode of the associated work stream */
+		msdyn_workstreamworkdistributionmode: DevKit.WebApi.OptionSetValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the business unit that owns the Ongoing Conversation. */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the team that owns the Ongoing Conversation. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the user that owns the Ongoing Conversation. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Ongoing conversation record */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of Ongoing conversation record */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_liveconversation {
@@ -168,4 +277,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information','Main Form'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information','Main Form'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

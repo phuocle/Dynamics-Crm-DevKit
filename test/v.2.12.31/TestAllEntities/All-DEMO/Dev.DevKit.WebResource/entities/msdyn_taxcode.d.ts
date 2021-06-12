@@ -72,6 +72,83 @@ declare namespace DevKit {
 		/** The Grid of form msdyn_taxcode_Information */
 		Grid: DevKit.Formmsdyn_taxcode_Information.Grid;
 	}
+	class msdyn_taxcodeApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_taxcodeApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was created. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who created the record on behalf of another user. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Shows the date and time when the record was last updated. The date and time are displayed in the time zone selected in Microsoft Dynamics 365 options. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Shows who last updated the record on behalf of another user. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** If set as a Tax Group the tax rate will be the total of all the Tax Code details combined */
+		msdyn_ActasTaxGroup: DevKit.WebApi.BooleanValue;
+		/** Select whether this tax code applies to service agreements. */
+		msdyn_AgreementTaxable: DevKit.WebApi.BooleanValue;
+		/** Type the sales tax code name. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Select whether this tax code applies to products. */
+		msdyn_ProductsTaxable: DevKit.WebApi.BooleanValue;
+		/** Select whether this tax code applies to services. */
+		msdyn_ServicesTaxable: DevKit.WebApi.BooleanValue;
+		/** Shows the entity instances. */
+		msdyn_taxcodeId: DevKit.WebApi.GuidValue;
+		/** Enter the rate of this sales tax code. */
+		msdyn_TaxRate: DevKit.WebApi.DoubleValue;
+		/** Shows the date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Tax Code */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Tax Code */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Shows the time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_taxcode {
@@ -105,4 +182,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

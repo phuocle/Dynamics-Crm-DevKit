@@ -111,6 +111,111 @@ declare namespace DevKit {
 		/** The Grid of form msdyusd_windowroute_Information */
 		Grid: DevKit.Formmsdyusd_windowroute_Information.Grid;
 	}
+	class msdyusd_windowrouteApi {
+		/**
+		* DynamicsCrm.DevKit msdyusd_windowrouteApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		msdyusd_Action: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier for UII Hosted Application associated with Window Route. */
+		msdyusd_Application: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Agent Script Action associated with Window Route. */
+		msdyusd_ApplicationAction: DevKit.WebApi.LookupValue;
+		msdyusd_Condition: DevKit.WebApi.StringValue;
+		msdyusd_DashboardFrame: DevKit.WebApi.StringValue;
+		msdyusd_Destination: DevKit.WebApi.OptionSetValue;
+		msdyusd_Direction: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier for Entity Numeric Mapping associated with Window Route. */
+		msdyusd_Entity: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Entity Search associated with Routing Rule. */
+		msdyusd_EntitySearch: DevKit.WebApi.LookupValue;
+		msdyusd_field: DevKit.WebApi.StringValue;
+		/** Unique identifier for UII Hosted Application associated with Window Route. */
+		msdyusd_From: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Entity Search associated with Window Route. */
+		msdyusd_FromSearch: DevKit.WebApi.LookupValue;
+		msdyusd_HideNavBar: DevKit.WebApi.BooleanValue;
+		msdyusd_HideRibbon: DevKit.WebApi.BooleanValue;
+		/** Unique identifier for Entity Type associated with Routing Rule. */
+		msdyusd_InitiatingActivity: DevKit.WebApi.LookupValue;
+		msdyusd_loadarea: DevKit.WebApi.StringValue;
+		/** Unique identifier for Action Call associated with Routing Rule. */
+		msdyusd_MultipleMatches: DevKit.WebApi.LookupValue;
+		msdyusd_MultipleMatchesDecision: DevKit.WebApi.OptionSetValue;
+		/** The name of the custom entity. */
+		msdyusd_name: DevKit.WebApi.StringValue;
+		msdyusd_NoMatchDecision: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier for Action Call associated with Routing Rule. */
+		msdyusd_NoMatchesAction: DevKit.WebApi.LookupValue;
+		msdyusd_Order: DevKit.WebApi.IntegerValue;
+		msdyusd_RouteType: DevKit.WebApi.OptionSetValue;
+		/** Unique identifier for UII Hosted Application associated with Window Route. */
+		msdyusd_showtab: DevKit.WebApi.LookupValue;
+		/** Unique identifier for Action Call associated with Routing Rule. */
+		msdyusd_SingleMatchAction: DevKit.WebApi.LookupValue;
+		msdyusd_SingleMatchDecision: DevKit.WebApi.OptionSetValue;
+		msdyusd_SourceFrame: DevKit.WebApi.StringValue;
+		msdyusd_url: DevKit.WebApi.StringValue;
+		/** Unique identifier for entity instances */
+		msdyusd_windowrouteId: DevKit.WebApi.GuidValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Window Route */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Window Route */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyusd_windowroute {
@@ -208,4 +313,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

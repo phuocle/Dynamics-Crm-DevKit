@@ -38,9 +38,17 @@ declare namespace DevKit {
 		/** Choose the record that the post role relates to. */
 		regardingobjectid_appointment: DevKit.WebApi.LookupValue;
 		/** Choose the record that the post role relates to. */
+		regardingobjectid_competitor: DevKit.WebApi.LookupValue;
+		/** Choose the record that the post role relates to. */
 		regardingobjectid_contact: DevKit.WebApi.LookupValue;
 		/** Choose the record that the post role relates to. */
+		regardingobjectid_incident: DevKit.WebApi.LookupValue;
+		/** Choose the record that the post role relates to. */
 		regardingobjectid_knowledgearticle: DevKit.WebApi.LookupValue;
+		/** Choose the record that the post role relates to. */
+		regardingobjectid_lead: DevKit.WebApi.LookupValue;
+		/** Choose the record that the post role relates to. */
+		regardingobjectid_opportunity: DevKit.WebApi.LookupValue;
 		/** Choose the record that the post role relates to. */
 		regardingobjectid_phonecall: DevKit.WebApi.LookupValue;
 		/** Choose the record that the post role relates to. */

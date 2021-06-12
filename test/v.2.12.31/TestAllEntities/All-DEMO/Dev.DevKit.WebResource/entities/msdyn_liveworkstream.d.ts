@@ -196,6 +196,171 @@ declare namespace DevKit {
 		/** The Body section of form Information_New */
 		Body: DevKit.FormInformation_New.Body;
 	}
+	class msdyn_liveworkstreamApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_liveworkstreamApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Allowed base presences for the work stream */
+		msdyn_AllowedPresences: DevKit.WebApi.MultiOptionSetValue;
+		/** The API Key equivalent to password of account set up with TeleSign */
+		msdyn_APIKey: DevKit.WebApi.StringValue;
+		/** Version number of the API key */
+		msdyn_apikeyversionnumber: DevKit.WebApi.IntegerValue;
+		/** Set the time after which a work item can be assigned to the agent again after he/she has declined the work item or the request has timed out */
+		msdyn_AssignWorkItemAfterDecline: DevKit.WebApi.IntegerValue;
+		/** Set the time after which the work item will be closed if there is no activity on the work item. */
+		msdyn_AutoCloseAfterInactivity: DevKit.WebApi.IntegerValue;
+		/** The queue created for the bot in the workstream. */
+		msdyn_bot_queue: DevKit.WebApi.LookupValue;
+		/** The rule added to workstream for bot routing. */
+		msdyn_bot_rule: DevKit.WebApi.StringValue;
+		/** The user of the bot. */
+		msdyn_bot_user: DevKit.WebApi.LookupValue;
+		/** Defines how the work stream will measure capacity consumption */
+		msdyn_capacityformat: DevKit.WebApi.OptionSetValue;
+		/** The units of capacity that should be available for an item of this work stream to be processed. */
+		msdyn_CapacityRequired: DevKit.WebApi.IntegerValue;
+		/** Flow URL for Dynamics 365 connector */
+		msdyn_ConnectorsURL: DevKit.WebApi.StringValue;
+		/** Conversation mode of chat channels */
+		msdyn_conversationmode: DevKit.WebApi.OptionSetValue;
+		/** The Customer Id equivalent to username of account set up with TeleSign */
+		msdyn_CustomerID: DevKit.WebApi.StringValue;
+		/** Keep same agent for entire conversation */
+		msdyn_enableagentaffinity: DevKit.WebApi.BooleanValue;
+		/** Option for allowing automated messages or not */
+		msdyn_enableautomatedmessages: DevKit.WebApi.BooleanValue;
+		/** Agents can choose to work on items from push-based work streams. */
+		msdyn_enableselectingfrompushbasedworkstreams: DevKit.WebApi.BooleanValue;
+		/** Unique identifier for Workstream Entity Configuration associated with Work Stream. */
+		msdyn_EntityRoutingConfigurationId: DevKit.WebApi.LookupValue;
+		/** Fall back language to be used for Live chat */
+		msdyn_FallBackLanguage: DevKit.WebApi.StringValue;
+		/** Set the time after which the work item should be offered to an agent if the work item has been waiting for input. */
+		msdyn_FollowUpAfterWaiting: DevKit.WebApi.IntegerValue;
+		/** Declare the expected handling time under which work items for this work stream should get resolved */
+		msdyn_handlingtimethreshold: DevKit.WebApi.IntegerValue;
+		/** The time when Validation api was last run */
+		msdyn_LastValidationOn_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue;
+		/** The status of the last Validation results */
+		msdyn_LastValidationStatus: DevKit.WebApi.StringValue;
+		/** Unique identifier for entity instances */
+		msdyn_liveworkstreamId: DevKit.WebApi.GuidValue;
+		/** Unique identifier for master entity routing configuration associated with work stream. */
+		msdyn_masterentityroutingconfigurationid: DevKit.WebApi.LookupValue;
+		/** Matching logic used for Skill Based Routing like Exact Match or Closest match */
+		msdyn_matchinglogic: DevKit.WebApi.OptionSetValue;
+		/** Maximum number of concurrent sessions that an agent can work for a work item of a particular stream. */
+		msdyn_MaxConcurrentConnection: DevKit.WebApi.IntegerValue;
+		/** Mode of experience */
+		msdyn_mode: DevKit.WebApi.OptionSetValue;
+		/** Name of Work stream */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Notification type */
+		msdyn_Notification: DevKit.WebApi.OptionSetValue;
+		/** Notification association with scenarios */
+		msdyn_notificationscenarioplaceholder: DevKit.WebApi.StringValue;
+		/** Consult  notification template scenario */
+		msdyn_notificationtemplate_consult: DevKit.WebApi.StringValue;
+		/** Incoming authenticated notification template scenario */
+		msdyn_notificationtemplate_incoming_auth: DevKit.WebApi.StringValue;
+		/** Incoming unauthenticated notification template scenario */
+		msdyn_notificationtemplate_incoming_unauth: DevKit.WebApi.StringValue;
+		/** supervisorAssign notification template scenario */
+		msdyn_notificationtemplate_supervisorassign: DevKit.WebApi.StringValue;
+		/** Transfer notification template scenario */
+		msdyn_notificationtemplate_transfer: DevKit.WebApi.StringValue;
+		/** Record identification rule associated to a workstream */
+		msdyn_recordidentificationrule: DevKit.WebApi.StringValue;
+		/** Record Identification Validation Rule */
+		msdyn_RecordIdentificationValidationRule: DevKit.WebApi.StringValue;
+		/** Link contracts with live work streams. */
+		msdyn_routingcontractid: DevKit.WebApi.LookupValue;
+		/** Time duration for which notification will be shown to agent. */
+		msdyn_Screenpoptimeout: DevKit.WebApi.IntegerValue;
+		/** Time duration options for notification. */
+		msdyn_Screenpoptimeout_optionSet: DevKit.WebApi.OptionSetValue;
+		/** Session association with scenarios */
+		msdyn_sessionscenarioplaceholder: DevKit.WebApi.StringValue;
+		/** Default session template scenario */
+		msdyn_sessiontemplate_default: DevKit.WebApi.StringValue;
+		/** Skill Attachment Rules Count */
+		msdyn_skillattachmentrulescount: DevKit.WebApi.IntegerValueReadonly;
+		/** Last Updated time of rollup field Skill Attachment Rules Count. */
+		msdyn_skillattachmentrulescount_Date_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** State of rollup field Skill Attachment Rules Count. */
+		msdyn_skillattachmentrulescount_State: DevKit.WebApi.IntegerValueReadonly;
+		/** SMS Provider */
+		msdyn_smsprovider: DevKit.WebApi.OptionSetValue;
+		/** The channel to which this workstream is attached */
+		msdyn_streamsource: DevKit.WebApi.OptionSetValue;
+		/** URL for TeleSign Inbound link */
+		msdyn_TelesignInboundURL: DevKit.WebApi.StringValue;
+		/** URL for Twilio Inbound link */
+		msdyn_TwilioInboundURL: DevKit.WebApi.StringValue;
+		/** Declare the expected waiting time under which work items for this work stream should be assigned to agents */
+		msdyn_waitingtimethreshold: DevKit.WebApi.IntegerValue;
+		/** Specifies the mode i.e Push/Pick for the workstream */
+		msdyn_workdistributionmode: DevKit.WebApi.OptionSetValue;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */
+		OwnerId_systemuser: DevKit.WebApi.LookupValue;
+		/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */
+		OwnerId_team: DevKit.WebApi.LookupValue;
+		/** Unique identifier for the business unit that owns the record */
+		OwningBusinessUnit: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the team that owns the record. */
+		OwningTeam: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier for the user that owns the record. */
+		OwningUser: DevKit.WebApi.LookupValueReadonly;
+		/** Status of the Work stream */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Work stream */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_liveworkstream {
@@ -337,4 +502,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information','Information (New)'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information','Information (New)'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

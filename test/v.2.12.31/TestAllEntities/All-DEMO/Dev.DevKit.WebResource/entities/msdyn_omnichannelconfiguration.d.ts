@@ -334,6 +334,103 @@ declare namespace DevKit {
 		/** The Body section of form Supervisor_settings */
 		Body: DevKit.FormSupervisor_settings.Body;
 	}
+	class msdyn_omnichannelconfigurationApi {
+		/**
+		* DynamicsCrm.DevKit msdyn_omnichannelconfigurationApi
+		* @param entity The entity object
+		*/
+		constructor(entity?: any);
+		/**
+		 * Get the value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedValue(alias: string, isMultiOptionSet?: boolean): any;
+		/**
+		 * Get the formatted value of alias
+		 * @param alias the alias value
+		 * @param isMultiOptionSet true if the alias is multi OptionSet
+		 */
+		getAliasedFormattedValue(alias: string, isMultiOptionSet?: boolean): string;
+		/** The entity object */
+		Entity: any;
+		/** The entity name */
+		EntityName: string;
+		/** The entity collection name */
+		EntityCollectionName: string;
+		/** The @odata.etag is then used to build a cache of the response that is dependant on the fields that are retrieved */
+		"@odata.etag": string;
+		/** Unique identifier of the user who created the record. */
+		CreatedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was created. */
+		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who created the record. */
+		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Sequence number of the import that created this record. */
+		ImportSequenceNumber: DevKit.WebApi.IntegerValue;
+		/** Unique identifier of the user who modified the record. */
+		ModifiedBy: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time when the record was modified. */
+		ModifiedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
+		/** Unique identifier of the delegate user who modified the record. */
+		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Default language in which customer's messages are translated for an org */
+		msdyn_defaultAgentInputLanguage: DevKit.WebApi.OptionSetValue;
+		/** Setting to change advance entity routing for the org. */
+		msdyn_enable_advance_entity_routing: DevKit.WebApi.BooleanValue;
+		/** Setting to change agent status when a notification has been missed. */
+		msdyn_enable_missed_notifications: DevKit.WebApi.BooleanValue;
+		/** Enables supervisor assign feature for the org */
+		msdyn_enable_supervisor_assign: DevKit.WebApi.BooleanValue;
+		/** Enables supervisor monitor feature for the org */
+		msdyn_enable_supervisor_monitor: DevKit.WebApi.BooleanValue;
+		/** Setting to change unified routing diagnostic for the org. */
+		msdyn_enable_unified_routing_diagnostic: DevKit.WebApi.BooleanValue;
+		/** Enables self service feature for the org */
+		msdyn_enable_visitorjourney: DevKit.WebApi.BooleanValue;
+		/** Enable real time translation feature for the org */
+		msdyn_EnableRealTimeTranslation: DevKit.WebApi.BooleanValue;
+		/** Enable sound notifications feature */
+		msdyn_enablesoundnotifications: DevKit.WebApi.BooleanValue;
+		/** Lookup to display inactive presence settings. */
+		msdyn_inactive_presence_lookup: DevKit.WebApi.LookupValue;
+		msdyn_isdefaultpersonamapped: DevKit.WebApi.BooleanValue;
+		/** Allow agents to create personal sound settings */
+		msdyn_ispersonalizationofsoundenabled: DevKit.WebApi.BooleanValue;
+		/** Enable personal messages feature for the org */
+		msdyn_isPersonalMessagesEnabled: DevKit.WebApi.BooleanValue;
+		msdyn_ispersonasecurityrolemappingenabled: DevKit.WebApi.BooleanValue;
+		/** Enable Skill Based Routing for Agents & Supervisors */
+		msdyn_IsSkillBasedRoutingEnabled: DevKit.WebApi.BooleanValue;
+		/** This will enable agents to view and update skills for a conversation. */
+		msdyn_IsUpdateSkillsEnabled: DevKit.WebApi.BooleanValue;
+		/** Mask agent data */
+		msdyn_maskforagent: DevKit.WebApi.BooleanValue;
+		/** Mask customer data */
+		msdyn_maskforcustomer: DevKit.WebApi.BooleanValue;
+		/** The name of the custom entity. */
+		msdyn_name: DevKit.WebApi.StringValue;
+		/** Unique identifier for entity instances */
+		msdyn_omnichannelconfigurationId: DevKit.WebApi.GuidValue;
+		/** Field to host sound form control */
+		msdyn_SoundFormControl: DevKit.WebApi.StringValue;
+		/** Webresource URL used for real time translation of the messages */
+		msdyn_translationwebresourceurl: DevKit.WebApi.StringValue;
+		/** Unique identifier for the organization */
+		OrganizationId: DevKit.WebApi.LookupValueReadonly;
+		/** Date and time that the record was migrated. */
+		OverriddenCreatedOn_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue;
+		/** Status of the Omnichannel Configuration */
+		statecode: DevKit.WebApi.OptionSetValue;
+		/** Reason for the status of the Omnichannel Configuration */
+		statuscode: DevKit.WebApi.OptionSetValue;
+		/** For internal use only. */
+		TimeZoneRuleVersionNumber: DevKit.WebApi.IntegerValue;
+		/** Time zone code that was in use when the record was created. */
+		UTCConversionTimeZoneCode: DevKit.WebApi.IntegerValue;
+		/** Version Number */
+		VersionNumber: DevKit.WebApi.BigIntValueReadonly;
+	}
 }
 declare namespace OptionSet {
 	namespace msdyn_omnichannelconfiguration {
@@ -457,4 +554,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Information','Masking settings','Notifications','Personal quick replies','Real Time Translation Settings','Self service settings','Skill based routing settings','Supervisor settings'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Information','Masking settings','Notifications','Personal quick replies','Real Time Translation Settings','Self service settings','Skill based routing settings','Supervisor settings'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}

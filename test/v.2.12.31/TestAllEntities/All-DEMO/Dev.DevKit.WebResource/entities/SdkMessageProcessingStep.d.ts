@@ -32,8 +32,6 @@ declare namespace DevKit {
 		/** Identifies whether a SDK Message Processing Step type will be ReadOnly or Read Write. false - ReadWrite, true - ReadOnly  */
 		CanUseReadOnlyConnection: DevKit.WebApi.BooleanValue;
 		/** For internal use only. */
-		Category: DevKit.WebApi.StringValue;
-		/** For internal use only. */
 		ComponentState: DevKit.WebApi.OptionSetValueReadonly;
 		/** Step-specific configuration for the plug-in type. Passed to the plug-in constructor at run time. */
 		Configuration: DevKit.WebApi.StringValue;

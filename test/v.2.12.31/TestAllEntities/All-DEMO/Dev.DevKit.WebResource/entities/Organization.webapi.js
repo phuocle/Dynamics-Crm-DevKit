@@ -134,6 +134,7 @@ var DevKit;
 			DefaultEmailSettings: { a: 'defaultemailsettings' },
 			DefaultMobileOfflineProfileId: { b: 'defaultmobileofflineprofileid', a: '_defaultmobileofflineprofileid_value', c: 'mobileofflineprofiles', d: 'mobileofflineprofile' },
 			DefaultRecurrenceEndRangeType: { a: 'defaultrecurrenceendrangetype' },
+			DefaultTeamsChatTitleRecordName: { a: 'defaultteamschattitlerecordname' },
 			DefaultThemeData: { a: 'defaultthemedata' },
 			DelegatedAdminUserId: { a: 'delegatedadminuserid' },
 			DisabledReason: { a: 'disabledreason', r: true },
@@ -150,6 +151,7 @@ var DevKit;
 			EnableLPAuthoring: { a: 'enablelpauthoring' },
 			EnableMicrosoftFlowIntegration: { a: 'enablemicrosoftflowintegration' },
 			EnablePricingOnCreate: { a: 'enablepricingoncreate' },
+			EnableSensitivityLabelsForTeamsCollab: { a: 'enablesensitivitylabelsforteamscollab' },
 			EnableSmartMatching: { a: 'enablesmartmatching' },
 			EnableUnifiedInterfaceShellRefresh: { a: 'enableunifiedinterfaceshellrefresh' },
 			EnforceReadOnlyPlugins: { a: 'enforcereadonlyplugins' },
@@ -227,6 +229,7 @@ var DevKit;
 			IsDuplicateDetectionEnabledForOnlineCreateUpdate: { a: 'isduplicatedetectionenabledforonlinecreateupdate' },
 			IsEmailMonitoringAllowed: { a: 'isemailmonitoringallowed' },
 			IsEmailServerProfileContentFilteringEnabled: { a: 'isemailserverprofilecontentfilteringenabled' },
+			IsEmbedTeamsCollabEnabled: { a: 'isembedteamscollabenabled' },
 			IsEnabledForAllRoles: { a: 'isenabledforallroles' },
 			IsExternalFileStorageEnabled: { a: 'isexternalfilestorageenabled' },
 			IsExternalSearchIndexEnabled: { a: 'isexternalsearchindexenabled' },
@@ -265,6 +268,7 @@ var DevKit;
 			IsResourceBookingExchangeSyncEnabled: { a: 'isresourcebookingexchangesyncenabled' },
 			IsRichTextNotesEnabled: { a: 'isrichtextnotesenabled' },
 			IsSalesAssistantEnabled: { a: 'issalesassistantenabled' },
+			IsSalesMobilePreviewEnabled: { a: 'issalesmobilepreviewenabled' },
 			IsSOPIntegrationEnabled: { a: 'issopintegrationenabled' },
 			IsTextWrapEnabled: { a: 'istextwrapenabled' },
 			IsUserAccessAuditEnabled: { a: 'isuseraccessauditenabled' },
@@ -359,6 +363,7 @@ var DevKit;
 			RestrictStatusUpdate: { a: 'restrictstatusupdate' },
 			RiErrorStatus: { a: 'rierrorstatus' },
 			SampleDataImportId: { a: 'sampledataimportid' },
+			SchedulingEngine: { a: 'schedulingengine' },
 			SchemaNamePrefix: { a: 'schemanameprefix' },
 			SendBulkEmailInUCI: { a: 'sendbulkemailinuci' },
 			ServeStaticResourcesFromAzureCDN: { a: 'servestaticresourcesfromazurecdn' },
@@ -553,6 +558,10 @@ var OptionSet;
 			Automatically_send_an_error_report_to_Microsoft_without_asking_me_for_permission: 2,
 			Never_send_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365: 3,
 			No_preference_for_sending_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365: 0
+		},
+		SchedulingEngine : {
+			Default_Scheduling_Engine: 0,
+			Deprecated_Universal_Resource_Scheduling: 192350000
 		},
 		SharePointDeploymentType : {
 			On_Premises: 1,
