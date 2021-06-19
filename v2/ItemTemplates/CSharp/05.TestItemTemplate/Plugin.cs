@@ -98,7 +98,7 @@ namespace $NameSpace$
         public void _05_CrmPluginRegistration_Check()
         {
             var @class = new $class$();
-            foreach (var attribute in Attribute.GetCustomAttributes(@class.GetType()))
+            foreach (var attribute in System.Attribute.GetCustomAttributes(@class.GetType()))
             {
                 if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
                 {
