@@ -199,6 +199,14 @@
       <Link>Links\FormItems.Designer.cs</Link>
       <DependentUpon>FormItems.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Wizard\FormReport.cs">
+      <Link>Links\FormReport.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\DynamicsCrm.DevKit.Wizard\FormReport.Designer.cs">
+      <Link>Links\FormReport.Designer.cs</Link>
+      <DependentUpon>FormReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="DevKitCommand.cs" />
     <Compile Include="MenuItem\AddCrmPluginRegistration.cs" />
     <Compile Include="MenuItem\DeployWebResource2.cs" />
@@ -230,6 +238,10 @@
     <EmbeddedResource Include="..\DynamicsCrm.DevKit.Wizard\FormItems.resx">
       <Link>Links\FormItems.resx</Link>
       <DependentUpon>FormItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\DynamicsCrm.DevKit.Wizard\FormReport.resx">
+      <Link>Links\FormReport.resx</Link>
+      <DependentUpon>FormReport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>

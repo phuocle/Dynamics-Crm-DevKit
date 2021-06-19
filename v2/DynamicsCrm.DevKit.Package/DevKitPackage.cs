@@ -34,18 +34,22 @@ namespace DynamicsCrm.DevKit.Package
             ThreadHelper.ThrowIfNotOnUIThread();
             IVsSolutionPersistence solutionPersistence = await GetServiceAsync(typeof(IVsSolutionPersistence)) as IVsSolutionPersistence ?? throw new ArgumentNullException(nameof(solutionPersistence));
             solutionPersistence.LoadPackageUserOpts(this, SELECTED_WEB_RESOURCES);
+            solutionPersistence.LoadPackageUserOpts(this, SELECTED_REPORTS);
         }
 
         private const string SELECTED_WEB_RESOURCES = "SelectedWebResources";
+        private const string SELECTED_REPORTS = "SelectedReports";
 
         public int LoadUserOptions(IVsSolutionPersistence pPersistence, [ComAliasName("Microsoft.VisualStudio.Shell.Interop.VSLOADUSEROPTS")] uint grfLoadOpts)
         {
             pPersistence.LoadPackageUserOpts(this, SELECTED_WEB_RESOURCES);
+            pPersistence.LoadPackageUserOpts(this, SELECTED_REPORTS);
             return VSConstants.S_OK;
         }
         public int SaveUserOptions(IVsSolutionPersistence pPersistence)
         {
             pPersistence.SavePackageUserOpts(this, SELECTED_WEB_RESOURCES);
+            pPersistence.SavePackageUserOpts(this, SELECTED_REPORTS);
             return VSConstants.S_OK;
         }
         public int ReadUserOptions(IStream pOptionsStream, [ComAliasName("Microsoft.VisualStudio.OLE.Interop.LPCOLESTR")] string pszKey)
@@ -64,6 +68,9 @@ namespace DynamicsCrm.DevKit.Package
                         case SELECTED_WEB_RESOURCES:
                             DevKitSetting.SelectedWebResources = SimpleJson.DeserializeObject<List<SavedMappingWebResource>>(value);
                             break;
+                        case SELECTED_REPORTS:
+                            DevKitSetting.SelectedReports = SimpleJson.DeserializeObject<List<SavedMappingReport>>(value);
+                            break;
                     }
                 }
                 catch { }
@@ -77,6 +84,9 @@ namespace DynamicsCrm.DevKit.Package
             {
                 case SELECTED_WEB_RESOURCES:
                     value = SimpleJson.SerializeObject(DevKitSetting.SelectedWebResources);
+                    break;
+                case SELECTED_REPORTS:
+                    value = SimpleJson.SerializeObject(DevKitSetting.SelectedReports);
                     break;
                 default:
                     return VSConstants.S_OK;
