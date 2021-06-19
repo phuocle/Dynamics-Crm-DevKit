@@ -9,12 +9,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FEF66387-E54C-4CA4-873A-8042322AB80F}</ProjectGuid>
+    <ProjectGuid>{FC106367-16CF-4918-8968-55165D632F96}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dev.DevKit.WebResource</RootNamespace>
-    <AssemblyName>Dev.DevKit.WebResource</AssemblyName>
+    <RootNamespace>WebResource</RootNamespace>
+    <AssemblyName>WebResource</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -50,28 +50,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="deploy.debug.bat" />
-    <None Include="packages.config" />
-    <None Include="_package.json" />
-    <None Include="chutzpah.json" />
-    <Content Include="lib\devkit.js" />
-    <Content Include="entities\devkit.d.ts" />
-    <Content Include="test\requirejsConfig.js" />
-    <Content Include="test\XrmEnum.js" />
-    <None Include="entities\generator.form.bat" />
-    <None Include="entities\generator.webapi.bat" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="css\" />
-    <Folder Include="html\" />
-    <Folder Include="images\" />
-    <Folder Include="js\" />
-    <Folder Include="resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.12.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>
     <VisualStudio>
@@ -79,9 +60,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>64624</DevelopmentServerPort>
+          <DevelopmentServerPort>51823</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:64624/</IISUrl>
+          <IISUrl>http://localhost:51823/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -1,21 +1,4 @@
 ﻿{
-  "servers": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "???",
-      "includefiles": [
-        "Dev.DevKit.Plugin.*.dll",
-        "Dev.DevKit.CustomAction.*.dll",
-        "Dev.DevKit.Workflow.*.dll",
-        "Dev.DevKit.CustomApi.*.dll",
-        "Dev.DevKit.DataProvider.*.dll"
-      ],
-      "excludefiles": [
-        "Dev.DevKit.*.Test.dll"
-      ]
-    }
-  ],
   "webresources": [
     {
       "profile": "DEBUG",
@@ -55,98 +38,10 @@
       ]
     }
   ],
-  "datasources": [
-    {
-      "profile": "DEBUG",
-      "displayname": "???",
-      "pluralname": "???",
-      "solution": "???",
-      "name": "???"
-    }
-  ],
-  "solutionpackagers": [
-    {
-      "profile": "Extract-Unmanaged",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Extract-Managed",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Managed",
-      "folder": "???",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Unmanaged",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Managed",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Managed",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    }
-  ],
-  "generators": [
-    {
-      "profile": "LATEBOUND",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "type": "CSharp",
-      "entities": "folder",
-      "debug": "?"
-    },
-    {
-      "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "type": "JsForm",
-      "entities": "folder",
-      "debug": "?"
-    },
-    {
-      "profile": "JS-WEBAPI",
-      "rootnamespace": "???",
-      "rootfolder": "???",
-      "type": "JsWebApi",
-      "entities": "folder",
-      "debug": "?"
-    }
-  ],
   "downloadwebresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???"
-    }
-  ],
-  "downloadreports": [
-    {
-      "profile": "DEBUG",
-      "solution": "???"
-    }
-  ],
-  "proxytypes": [
-    {
-      "profile": "ALL",
-      "namespace": "???",
-      "output": "GeneratedCode.cs",
-      "entities": ""
+      "solution": "TestWebResources"
     }
   ]
 }

@@ -8,6 +8,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -19,6 +20,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private const string LOG = "[DOWNLOAD-WEB-RESOURCE]";
         private JsonDownloadWebResource json;
         private List<DownloadFile> downloadedFiles = null;
+
+        private string Prefix = string.Empty;
 
         public TaskDownloadWebResource(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
         {
@@ -34,15 +37,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         internal void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "[DOWNLOAD-WEBRESOURCES]");
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             if (!IsValid()) return;
 
-            if (!json.prefix.EndsWith("_")) json.prefix += "_";
-
             DownloadWebResources();
 
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, "[DOWNLOAD-WEBRESOURCES]");
         }
 
@@ -52,8 +53,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'profile' not found: '{arguments.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.solution == "???")
                 throw new Exception($"{LOG} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.prefix.Length == 0 || json.prefix == "???")
-                throw new Exception($"{LOG} 'prefix' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))
+                throw new Exception($"{LOG} solution '{json.solution}' not exist");
+            Prefix = prefix;
             return true;
         }
 
@@ -61,25 +63,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var fetchData = new
             {
-                ismanaged = "0",
-                iscustomizable = "1",
-                uniquename = json.solution,
-                name = json.prefix
+                uniquename = json.solution
             };
-            var fetchXml = string.Empty;
-            if (json.solution.Length > 0)
-            {
-                fetchXml = $@"
+            var fetchXml = $@"
 <fetch>
   <entity name='webresource'>
     <attribute name='name' />
     <attribute name='webresourcetype' />
     <attribute name='content' />
-    <filter type='and'>
-      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable}'/>
-      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
-      <condition attribute='name' operator='begins-with' value='{fetchData.name}'/>
-    </filter>
     <order attribute='name' />
     <link-entity name='solutioncomponent' from='objectid' to='webresourceid' link-type='inner' alias='sc'>
       <link-entity name='solution' from='solutionid' to='solutionid' link-type='inner' alias='s'>
@@ -90,23 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     </link-entity>
   </entity>
 </fetch>";
-            }
-            else
-            {
-                fetchXml = $@"
-<fetch>
-  <entity name='webresource'>
-    <attribute name='name' />
-    <attribute name='webresourcetype' />
-    <attribute name='content' />
-    <filter type='and'>
-      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable}'/>
-      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
-    </filter>
-    <order attribute='name' />
-  </entity>
-</fetch>";
-            }
+
             var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0)
                 throw new Exception("Not found any webresources to download");
@@ -115,6 +90,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var totalDownloadWebResources = downloadFiles.Count;
             var len = totalDownloadWebResources.ToString().Length;
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, totalDownloadWebResources, CliLog.ColorGreen, " webresources");
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             foreach (var downloadFile in downloadFiles)
             {
@@ -163,14 +139,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var content = entity.GetAttributeValue<string>("content");
                 var extension = GetExtension(webresourcetype);
                 if (name.StartsWith("/")) name = name.Substring(1);
-                if (name.StartsWith(json.prefix))
-                    name = name.Substring(json.prefix.Length);
-                if (name.StartsWith("/"))
-                    name = name.Substring(1);
-                else
-                    name = json.prefix + name;
-                if (name.EndsWith(extension))
-                    name = name.Substring(0, name.Length - extension.Length);
+                if (name.EndsWith(extension)) name = name.Substring(0, name.Length - extension.Length);
                 var fileName = $"{currentDirectory}\\{name.Replace("/", "\\")}{extension}";
                 list.Add(new DownloadFile
                 {
