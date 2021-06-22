@@ -214,6 +214,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DependencyFeature.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DependencyNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DependencyNode.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\devkit_bpfaccount.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\devkit_bpfaccount.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\devkit_DataSource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\devkit_DataSource.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\devkit_DataSource2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\devkit_DataSource2.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\devkit_DataSource3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\devkit_DataSource3.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DisplayString.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DisplayString.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\DisplayStringMap.cs" />
@@ -270,6 +278,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ExternalPartyItem.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Fax.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Fax.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\featurecontrolsetting.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\featurecontrolsetting.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Feedback.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\Feedback.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\FieldPermission.cs" />
@@ -428,6 +438,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_federatedarticle.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_federatedarticleincident.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_federatedarticleincident.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_helppage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_helppage.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_kalanguagesetting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_kalanguagesetting.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_kmfederatedsearchconfig.cs" />
@@ -468,6 +480,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_solutionhistory.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_solutionhistorydatasource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_solutionhistorydatasource.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_tour.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\msdyn_tour.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\MultiEntitySearch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\MultiEntitySearch.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\MultiEntitySearchEntities.cs" />
@@ -524,6 +538,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\PickListMapping.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\PluginAssembly.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\PluginAssembly.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\pluginpackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\pluginpackage.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\PluginTraceLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\PluginTraceLog.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\PluginType.cs" />
@@ -688,6 +704,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ServicePlan.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ServicePlanAppModules.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\ServicePlanAppModules.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ServicePlanMapping.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ServicePlanMapping.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SettingDefinition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SettingDefinition.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SharedObjectsForRead.cs" />
@@ -722,6 +740,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SolutionComponent.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\solutioncomponentattributeconfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\solutioncomponentattributeconfiguration.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\solutioncomponentbatchconfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\solutioncomponentbatchconfiguration.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\solutioncomponentconfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\solutioncomponentconfiguration.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\SolutionComponentDefinition.cs" />
@@ -860,6 +880,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UserSearchFacet.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UserSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\UserSettings.generated.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\VirtualEntityMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\VirtualEntityMetadata.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\WebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\WebResource.generated.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entities\WebWizard.cs" />

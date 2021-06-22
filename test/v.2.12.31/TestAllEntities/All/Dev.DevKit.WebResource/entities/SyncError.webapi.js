@@ -231,6 +231,7 @@ var DevKit;
 			regardingobjectid_savedquery_syncerror: { b: 'regardingobjectid_savedquery_syncerror', a: '_regardingobjectid_value', c: 'savedqueries', d: 'savedquery' },
 			regardingobjectid_savedqueryvisualization_syncerror: { b: 'regardingobjectid_savedqueryvisualization_syncerror', a: '_regardingobjectid_value', c: 'savedqueryvisualizations', d: 'savedqueryvisualization' },
 			regardingobjectid_serviceplan: { b: 'regardingobjectid_serviceplan', a: '_regardingobjectid_value', c: 'serviceplans', d: 'serviceplan' },
+			regardingobjectid_serviceplanmapping: { b: 'regardingobjectid_serviceplanmapping', a: '_regardingobjectid_value', c: 'serviceplanmappings', d: 'serviceplanmapping' },
 			regardingobjectid_settingdefinition: { b: 'regardingobjectid_settingdefinition', a: '_regardingobjectid_value', c: 'settingdefinitions', d: 'settingdefinition' },
 			regardingobjectid_sharepointdocumentlocation_syncerror: { b: 'regardingobjectid_sharepointdocumentlocation_syncerror', a: '_regardingobjectid_value', c: 'sharePointdocumentlocations', d: 'sharepointdocumentlocation' },
 			regardingobjectid_sharepointsite_syncerror: { b: 'regardingobjectid_sharepointsite_syncerror', a: '_regardingobjectid_value', c: 'sharepointsites', d: 'sharepointsite' },

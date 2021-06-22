@@ -246,6 +246,8 @@ declare namespace DevKit {
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_serviceplan: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
+		objectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the entity instance with shared secured field */
 		objectid_settingdefinition: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the entity instance with shared secured field */
 		objectid_sharepointdocumentlocation: DevKit.WebApi.LookupValue;

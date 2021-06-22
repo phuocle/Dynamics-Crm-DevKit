@@ -76,7 +76,7 @@ var DevKit;
 			msdyn_BlobFile_Name: { a: 'msdyn_blobfile_name', r: true },
 			msdyn_FileName: { a: 'msdyn_filename' },
 			msdyn_knowledgearticleimageId: { a: 'msdyn_knowledgearticleimageid' },
-			msdyn_ParentKnowledgeArticleID: { b: 'msdyn_ParentKnowledgeArticleID', a: '_msdyn_parentknowledgearticleid_value', c: '', d: '' },
+			msdyn_ParentKnowledgeArticleID: { b: 'msdyn_ParentKnowledgeArticleID', a: '_msdyn_parentknowledgearticleid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },

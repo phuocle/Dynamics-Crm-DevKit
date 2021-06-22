@@ -237,6 +237,8 @@ declare namespace DevKit {
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_serviceplan: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
+		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValue;
 		/** The regarding object such as Account, Contact, Lead etc. that the folder relates to. */
 		regardingobjectid_solutioncomponentattributeconfiguration: DevKit.WebApi.LookupValue;

@@ -310,6 +310,18 @@
     <Content Include="entities\DependencyNode.js" />
     <Content Include="entities\DependencyNode.webapi.js" />
     <Content Include="entities\devkit.d.ts" />
+    <Content Include="entities\devkit_bpfaccount.form.js" />
+    <Content Include="entities\devkit_bpfaccount.js" />
+    <Content Include="entities\devkit_bpfaccount.webapi.js" />
+    <Content Include="entities\devkit_DataSource.form.js" />
+    <Content Include="entities\devkit_DataSource.js" />
+    <Content Include="entities\devkit_DataSource.webapi.js" />
+    <Content Include="entities\devkit_DataSource2.form.js" />
+    <Content Include="entities\devkit_DataSource2.js" />
+    <Content Include="entities\devkit_DataSource2.webapi.js" />
+    <Content Include="entities\devkit_DataSource3.form.js" />
+    <Content Include="entities\devkit_DataSource3.js" />
+    <Content Include="entities\devkit_DataSource3.webapi.js" />
     <Content Include="entities\DisplayString.form.js" />
     <Content Include="entities\DisplayString.js" />
     <Content Include="entities\DisplayString.webapi.js" />
@@ -392,6 +404,9 @@
     </Content>
     <Content Include="entities\Fax.js" />
     <Content Include="entities\Fax.webapi.js" />
+    <Content Include="entities\featurecontrolsetting.form.js" />
+    <Content Include="entities\featurecontrolsetting.js" />
+    <Content Include="entities\featurecontrolsetting.webapi.js" />
     <Content Include="entities\Feedback.form.js" />
     <Content Include="entities\Feedback.js" />
     <Content Include="entities\Feedback.webapi.js" />
@@ -593,6 +608,9 @@
     <Content Include="entities\msdyn_federatedarticleincident.form.js" />
     <Content Include="entities\msdyn_federatedarticleincident.js" />
     <Content Include="entities\msdyn_federatedarticleincident.webapi.js" />
+    <Content Include="entities\msdyn_helppage.form.js" />
+    <Content Include="entities\msdyn_helppage.js" />
+    <Content Include="entities\msdyn_helppage.webapi.js" />
     <Content Include="entities\msdyn_kalanguagesetting.form.js" />
     <Content Include="entities\msdyn_kalanguagesetting.js" />
     <Content Include="entities\msdyn_kalanguagesetting.webapi.js" />
@@ -653,6 +671,9 @@
     <Content Include="entities\msdyn_solutionhistorydatasource.form.js" />
     <Content Include="entities\msdyn_solutionhistorydatasource.js" />
     <Content Include="entities\msdyn_solutionhistorydatasource.webapi.js" />
+    <Content Include="entities\msdyn_tour.form.js" />
+    <Content Include="entities\msdyn_tour.js" />
+    <Content Include="entities\msdyn_tour.webapi.js" />
     <Content Include="entities\MultiEntitySearch.js" />
     <Content Include="entities\MultiEntitySearch.webapi.js" />
     <Content Include="entities\MultiEntitySearchEntities.js" />
@@ -718,6 +739,8 @@
     <Content Include="entities\PickListMapping.webapi.js" />
     <Content Include="entities\PluginAssembly.js" />
     <Content Include="entities\PluginAssembly.webapi.js" />
+    <Content Include="entities\pluginpackage.js" />
+    <Content Include="entities\pluginpackage.webapi.js" />
     <Content Include="entities\PluginTraceLog.form.js" />
     <Content Include="entities\PluginTraceLog.js" />
     <Content Include="entities\PluginTraceLog.webapi.js" />
@@ -898,6 +921,8 @@
     <Content Include="entities\ServicePlan.webapi.js" />
     <Content Include="entities\ServicePlanAppModules.js" />
     <Content Include="entities\ServicePlanAppModules.webapi.js" />
+    <Content Include="entities\ServicePlanMapping.js" />
+    <Content Include="entities\ServicePlanMapping.webapi.js" />
     <Content Include="entities\SettingDefinition.js" />
     <Content Include="entities\SettingDefinition.webapi.js" />
     <Content Include="entities\SharedObjectsForRead.js" />
@@ -943,6 +968,9 @@
     <Content Include="entities\solutioncomponentattributeconfiguration.form.js" />
     <Content Include="entities\solutioncomponentattributeconfiguration.js" />
     <Content Include="entities\solutioncomponentattributeconfiguration.webapi.js" />
+    <Content Include="entities\solutioncomponentbatchconfiguration.form.js" />
+    <Content Include="entities\solutioncomponentbatchconfiguration.js" />
+    <Content Include="entities\solutioncomponentbatchconfiguration.webapi.js" />
     <Content Include="entities\solutioncomponentconfiguration.form.js" />
     <Content Include="entities\solutioncomponentconfiguration.js" />
     <Content Include="entities\solutioncomponentconfiguration.webapi.js" />
@@ -1099,6 +1127,9 @@
     <Content Include="entities\UserSearchFacet.webapi.js" />
     <Content Include="entities\UserSettings.js" />
     <Content Include="entities\UserSettings.webapi.js" />
+    <Content Include="entities\VirtualEntityMetadata.form.js" />
+    <Content Include="entities\VirtualEntityMetadata.js" />
+    <Content Include="entities\VirtualEntityMetadata.webapi.js" />
     <Content Include="entities\WebResource.js" />
     <Content Include="entities\WebResource.webapi.js" />
     <Content Include="entities\WebWizard.js" />
@@ -1243,6 +1274,10 @@
     <TypeScriptCompile Include="entities\Dependency.d.ts" />
     <TypeScriptCompile Include="entities\DependencyFeature.d.ts" />
     <TypeScriptCompile Include="entities\DependencyNode.d.ts" />
+    <TypeScriptCompile Include="entities\devkit_bpfaccount.d.ts" />
+    <TypeScriptCompile Include="entities\devkit_DataSource.d.ts" />
+    <TypeScriptCompile Include="entities\devkit_DataSource2.d.ts" />
+    <TypeScriptCompile Include="entities\devkit_DataSource3.d.ts" />
     <TypeScriptCompile Include="entities\DisplayString.d.ts" />
     <TypeScriptCompile Include="entities\DisplayStringMap.d.ts" />
     <TypeScriptCompile Include="entities\DocumentIndex.d.ts" />
@@ -1278,6 +1313,7 @@
     <TypeScriptCompile Include="entities\Fax.d.ts">
       <DependentUpon>Fax.js</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\featurecontrolsetting.d.ts" />
     <TypeScriptCompile Include="entities\Feedback.d.ts" />
     <TypeScriptCompile Include="entities\FieldPermission.d.ts" />
     <TypeScriptCompile Include="entities\FieldSecurityProfile.d.ts" />
@@ -1357,6 +1393,7 @@
     <TypeScriptCompile Include="entities\msdyn_dataflow.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_federatedarticle.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_federatedarticleincident.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_helppage.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_kalanguagesetting.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_kmfederatedsearchconfig.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_kmpersonalizationsetting.d.ts" />
@@ -1377,6 +1414,7 @@
     <TypeScriptCompile Include="entities\msdyn_solutioncomponentsummary.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_solutionhistory.d.ts" />
     <TypeScriptCompile Include="entities\msdyn_solutionhistorydatasource.d.ts" />
+    <TypeScriptCompile Include="entities\msdyn_tour.d.ts" />
     <TypeScriptCompile Include="entities\MultiEntitySearch.d.ts" />
     <TypeScriptCompile Include="entities\MultiEntitySearchEntities.d.ts" />
     <TypeScriptCompile Include="entities\MultiSelectAttributeOptionValues.d.ts" />
@@ -1405,6 +1443,7 @@
     <TypeScriptCompile Include="entities\PhoneCall.d.ts" />
     <TypeScriptCompile Include="entities\PickListMapping.d.ts" />
     <TypeScriptCompile Include="entities\PluginAssembly.d.ts" />
+    <TypeScriptCompile Include="entities\pluginpackage.d.ts" />
     <TypeScriptCompile Include="entities\PluginTraceLog.d.ts" />
     <TypeScriptCompile Include="entities\PluginType.d.ts" />
     <TypeScriptCompile Include="entities\PluginTypeStatistic.d.ts" />
@@ -1487,6 +1526,7 @@
     <TypeScriptCompile Include="entities\ServiceEndpoint.d.ts" />
     <TypeScriptCompile Include="entities\ServicePlan.d.ts" />
     <TypeScriptCompile Include="entities\ServicePlanAppModules.d.ts" />
+    <TypeScriptCompile Include="entities\ServicePlanMapping.d.ts" />
     <TypeScriptCompile Include="entities\SettingDefinition.d.ts" />
     <TypeScriptCompile Include="entities\SharedObjectsForRead.d.ts" />
     <TypeScriptCompile Include="entities\SharePointData.d.ts" />
@@ -1504,6 +1544,7 @@
     <TypeScriptCompile Include="entities\Solution.d.ts" />
     <TypeScriptCompile Include="entities\SolutionComponent.d.ts" />
     <TypeScriptCompile Include="entities\solutioncomponentattributeconfiguration.d.ts" />
+    <TypeScriptCompile Include="entities\solutioncomponentbatchconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\solutioncomponentconfiguration.d.ts" />
     <TypeScriptCompile Include="entities\SolutionComponentDefinition.d.ts" />
     <TypeScriptCompile Include="entities\solutioncomponentrelationshipconfiguration.d.ts" />
@@ -1573,6 +1614,7 @@
     <TypeScriptCompile Include="entities\UserQueryVisualization.d.ts" />
     <TypeScriptCompile Include="entities\UserSearchFacet.d.ts" />
     <TypeScriptCompile Include="entities\UserSettings.d.ts" />
+    <TypeScriptCompile Include="entities\VirtualEntityMetadata.d.ts" />
     <TypeScriptCompile Include="entities\WebResource.d.ts" />
     <TypeScriptCompile Include="entities\WebWizard.d.ts" />
     <TypeScriptCompile Include="entities\WizardAccessPrivilege.d.ts" />

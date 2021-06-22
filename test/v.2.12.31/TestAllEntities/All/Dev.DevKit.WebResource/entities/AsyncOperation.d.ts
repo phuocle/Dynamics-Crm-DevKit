@@ -443,6 +443,8 @@ declare namespace DevKit {
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_serviceplan: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
+		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the object with which the system job is associated. */
 		regardingobjectid_sharepointdocumentlocation: DevKit.WebApi.LookupValue;

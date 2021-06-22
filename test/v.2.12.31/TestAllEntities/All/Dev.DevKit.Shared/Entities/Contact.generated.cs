@@ -154,6 +154,42 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 		Default_Value = 1
 	}
 
+	public enum devkit_CategoryCode
+	{
+		/// <summary>
+		/// Business = 1
+		/// </summary>
+		Business = 1,
+		/// <summary>
+		/// Family = 2
+		/// </summary>
+		Family = 2,
+		/// <summary>
+		/// Other = 5
+		/// </summary>
+		Other = 5,
+		/// <summary>
+		/// Sales = 4
+		/// </summary>
+		Sales = 4,
+		/// <summary>
+		/// Sales_Team = 1001
+		/// </summary>
+		Sales_Team = 1001,
+		/// <summary>
+		/// Service = 1002
+		/// </summary>
+		Service = 1002,
+		/// <summary>
+		/// Social = 3
+		/// </summary>
+		Social = 3,
+		/// <summary>
+		/// Stakeholder = 1000
+		/// </summary>
+		Stakeholder = 1000
+	}
+
 	public enum EducationCode
 	{
 		/// <summary>
@@ -451,6 +487,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CustomerTypeCode = "customertypecode";
 			public const string Department = "department";
 			public const string Description = "description";
+			public const string devkit_CategoryCode = "devkit_categorycode";
 			public const string DoNotBulkEMail = "donotbulkemail";
 			public const string DoNotBulkPostalMail = "donotbulkpostalmail";
 			public const string DoNotEMail = "donotemail";
@@ -2025,6 +2062,44 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Description); }
 			set { Entity.Attributes[Fields.Description] = value; }
+		}
+
+		/// <summary>
+		/// <para>MultiSelectPicklist</para>
+		/// <para>Category</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public System.Collections.Generic.List<Dev.DevKit.Shared.Entities.ContactOptionSets.devkit_CategoryCode> devkit_CategoryCode
+		{
+			get
+			{
+				var data = new System.Collections.Generic.List<Dev.DevKit.Shared.Entities.ContactOptionSets.devkit_CategoryCode>();
+				var items = Entity.GetAttributeValue<OptionSetValueCollection>(Fields.devkit_CategoryCode);
+				if (items != null)
+				{
+					foreach (OptionSetValue item in items)
+					{
+						data.Add((Dev.DevKit.Shared.Entities.ContactOptionSets.devkit_CategoryCode)item.Value);
+					}
+				}
+				return data;
+			}
+			set
+			{
+				var data = new OptionSetValueCollection();
+				foreach (var item in value)
+				{
+					data.Add(new OptionSetValue((int)item));
+				}
+				if (data.Count == 0)
+				{
+					Entity.Attributes[Fields.devkit_CategoryCode] = null;
+				}
+				else
+				{
+					Entity.Attributes[Fields.devkit_CategoryCode] = data;
+				}
+			}
 		}
 
 		/// <summary>

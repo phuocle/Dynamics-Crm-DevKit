@@ -184,7 +184,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the attachment is associated.</para>
-		/// <para>Lookup to activityfileattachment;asyncoperation;canvasapp;cascadegrantrevokeaccessrecordstracker;exportsolutionupload;flowsession;imagedescriptor;mailbox;msdyn_aibfile;msdyn_aiconfiguration;msdyn_knowledgearticleimage;revokeinheritedaccessrecordstracker;ribbonclientmetadata;solution;stagesolutionupload;webresource;workflowbinary;workflowlog</para>
+		/// <para>Lookup to activityfileattachment;asyncoperation;canvasapp;cascadegrantrevokeaccessrecordstracker;exportsolutionupload;flowsession;imagedescriptor;mailbox;msdyn_aibfile;msdyn_aiconfiguration;msdyn_knowledgearticleimage;pluginpackage;revokeinheritedaccessrecordstracker;ribbonclientmetadata;solution;stagesolutionupload;webresource;workflowbinary;workflowlog</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

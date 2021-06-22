@@ -119,6 +119,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningUser = "owninguser";
 			public const string PostponeUntil = "postponeuntil";
 			public const string RunAs = "runas";
+			public const string RuntimeIntegrationProperties = "runtimeintegrationproperties";
 			public const string Scope = "scope";
 			public const string SdkMessageName = "sdkmessagename";
 			public const string Url = "url";
@@ -408,6 +409,18 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.RunAs] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>For internal use only. Holds miscellaneous properties related to runtime integration.</para>
+		/// <para>String - MaxLength: 512</para>
+		/// <para>Runtime Integration Properties</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string RuntimeIntegrationProperties
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.RuntimeIntegrationProperties); }
+			set { Entity.Attributes[Fields.RuntimeIntegrationProperties] = value; }
 		}
 
 		/// <summary>

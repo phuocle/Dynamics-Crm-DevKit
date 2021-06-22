@@ -223,7 +223,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Parent Knowledge Article ID</para>
-		/// <para>Lookup to </para>
+		/// <para>Lookup to knowledgearticle</para>
 		/// <para>ParentKnowledgeArticleID</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

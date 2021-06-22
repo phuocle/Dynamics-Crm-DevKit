@@ -416,6 +416,8 @@ declare namespace DevKit {
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_serviceplan: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
+		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		/** Choose the record that the sync error relates to. */
 		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValue;
 		/** Choose the record that the sync error relates to. */
 		regardingobjectid_sharepointdocumentlocation_syncerror: DevKit.WebApi.LookupValue;

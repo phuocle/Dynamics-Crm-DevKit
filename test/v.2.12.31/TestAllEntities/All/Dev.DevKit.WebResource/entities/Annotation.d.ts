@@ -58,7 +58,6 @@ declare namespace DevKit {
 		}
 		interface Body {
 			Tab: Tabs;
-			attachment: DevKit.Controls.ELSE3???;//attachment - 537DE92A-7EE6-4843-B6E2-1EB0326F55C7 -- FOR DEBUG 
 			/** Text of the note. */
 			NoteText: DevKit.Controls.String;
 			/** Subject associated with the note. */

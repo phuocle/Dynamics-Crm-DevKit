@@ -166,6 +166,8 @@ declare namespace DevKit {
 		/** Unique identifier of the base record. */
 		baserecordid_serviceplan: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
+		baserecordid_serviceplanmapping: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the base record. */
 		baserecordid_sharepointdocumentlocation: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the base record. */
 		baserecordid_sharepointsite: DevKit.WebApi.LookupValueReadonly;
@@ -331,6 +333,8 @@ declare namespace DevKit {
 		duplicaterecordid_revokeinheritedaccessrecordstracker: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_serviceplan: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the potential duplicate record. */
+		duplicaterecordid_serviceplanmapping: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */
 		duplicaterecordid_sharepointdocumentlocation: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the potential duplicate record. */

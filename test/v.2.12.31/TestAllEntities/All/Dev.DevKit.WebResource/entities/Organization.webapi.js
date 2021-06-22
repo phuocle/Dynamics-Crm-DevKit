@@ -349,6 +349,7 @@ var DevKit;
 			RecurrenceExpansionJobBatchInterval: { a: 'recurrenceexpansionjobbatchinterval' },
 			RecurrenceExpansionJobBatchSize: { a: 'recurrenceexpansionjobbatchsize' },
 			RecurrenceExpansionSynchCreateMax: { a: 'recurrenceexpansionsynchcreatemax' },
+			RelevanceSearchEnabledByPlatform: { a: 'relevancesearchenabledbyplatform' },
 			RenderSecureIFrameForEmail: { a: 'rendersecureiframeforemail' },
 			ReportingGroupId: { a: 'reportinggroupid' },
 			ReportingGroupName: { a: 'reportinggroupname' },

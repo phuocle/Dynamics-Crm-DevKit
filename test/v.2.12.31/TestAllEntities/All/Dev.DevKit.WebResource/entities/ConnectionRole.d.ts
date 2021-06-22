@@ -24,7 +24,6 @@ declare namespace DevKit {
 			Tab: Tabs;
 			/** Categories for connection roles. */
 			Category: DevKit.Controls.OptionSet;
-			connectionroleobjecttypecodelist: DevKit.Controls.ELSE3???;//connectionroleobjecttypecodelist - 821ACF1A-7E46-4A0C-965D-FE14A57D78C7 -- FOR DEBUG 
 			/** Description of the connection role. */
 			Description: DevKit.Controls.String;
 			/** Name of the connection role. */

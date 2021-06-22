@@ -276,6 +276,7 @@ var DevKit;
 			objectid_sdkmessageresponsefield: { b: 'objectid_sdkmessageresponsefield', a: '_objectid_value', c: 'sdkmessageresponsefields', d: 'sdkmessageresponsefield' },
 			objectid_serviceendpoint: { b: 'objectid_serviceendpoint', a: '_objectid_value', c: 'serviceendpoints', d: 'serviceendpoint' },
 			objectid_serviceplan: { b: 'objectid_serviceplan', a: '_objectid_value', c: 'serviceplans', d: 'serviceplan' },
+			objectid_serviceplanmapping: { b: 'objectid_serviceplanmapping', a: '_objectid_value', c: 'serviceplanmappings', d: 'serviceplanmapping' },
 			objectid_settingdefinition: { b: 'objectid_settingdefinition', a: '_objectid_value', c: 'settingdefinitions', d: 'settingdefinition' },
 			objectid_sharepointdocumentlocation: { b: 'objectid_sharepointdocumentlocation', a: '_objectid_value', c: 'sharePointdocumentlocations', d: 'sharepointdocumentlocation' },
 			objectid_sharepointsite: { b: 'objectid_sharepointsite', a: '_objectid_value', c: 'sharepointsites', d: 'sharepointsite' },

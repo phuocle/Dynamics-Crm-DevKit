@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
+			public const string EnableCollapsibleGroups = "enablecollapsiblegroups";
 			public const string IsAppAware = "isappaware";
 			public const string IsManaged = "ismanaged";
 			public const string ModifiedBy = "modifiedby";
@@ -48,6 +49,9 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
+			public const string ShowHome = "showhome";
+			public const string ShowPinned = "showpinned";
+			public const string ShowRecents = "showrecents";
 			public const string SiteMapId = "sitemapid";
 			public const string SiteMapIdUnique = "sitemapidunique";
 			public const string SiteMapName = "sitemapname";
@@ -160,6 +164,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Enable to allow sitemap groups to be collapsed.</para>
+		/// <para>Boolean</para>
+		/// <para>Enable Collapsible Groups</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? EnableCollapsibleGroups
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.EnableCollapsibleGroups); }
+			set { Entity.Attributes[Fields.EnableCollapsibleGroups] = value; }
+		}
+
+		/// <summary>
 		/// <para>Information about whether the site map is associated with app module.</para>
 		/// <para>Boolean</para>
 		/// <para>IsAppAware</para>
@@ -232,6 +248,42 @@ namespace Dev.DevKit.Shared.Entities
 		public DateTime? OverwriteTimeUtc
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.OverwriteTime); }
+		}
+
+		/// <summary>
+		/// <para>Enable to show the home button in the sitemap.</para>
+		/// <para>Boolean</para>
+		/// <para>Show Home</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? ShowHome
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.ShowHome); }
+			set { Entity.Attributes[Fields.ShowHome] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable to show the pinned dropdown in the sitemap.</para>
+		/// <para>Boolean</para>
+		/// <para>Show Pinned</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? ShowPinned
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.ShowPinned); }
+			set { Entity.Attributes[Fields.ShowPinned] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable to show the recents dropdown in the sitemap.</para>
+		/// <para>Boolean</para>
+		/// <para>Show Recents</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? ShowRecents
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.ShowRecents); }
+			set { Entity.Attributes[Fields.ShowRecents] = value; }
 		}
 
 		/// <summary>

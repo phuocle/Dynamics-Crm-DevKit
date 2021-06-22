@@ -245,6 +245,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		BotContent = 10039,
 		/// <summary>
+		/// BPF_Account = 10115
+		/// </summary>
+		BPF_Account = 10115,
+		/// <summary>
 		/// Bulk_Delete_Failure = 4425
 		/// </summary>
 		Bulk_Delete_Failure = 4425,
@@ -445,6 +449,18 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Data_Performance_Dashboard = 4450,
 		/// <summary>
+		/// Data_Source = 10164
+		/// </summary>
+		Data_Source = 10164,
+		/// <summary>
+		/// Data_Source_2 = 10167
+		/// </summary>
+		Data_Source_2 = 10167,
+		/// <summary>
+		/// Data_Source_3 = 10168
+		/// </summary>
+		Data_Source_3 = 10168,
+		/// <summary>
 		/// Dataflow = 418
 		/// </summary>
 		Dataflow = 418,
@@ -581,6 +597,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Fax = 4204,
 		/// <summary>
+		/// FeatureControlSetting = 10165
+		/// </summary>
+		FeatureControlSetting = 10165,
+		/// <summary>
 		/// Feedback = 9958
 		/// </summary>
 		Feedback = 9958,
@@ -636,6 +656,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// Goal_Metric = 9603
 		/// </summary>
 		Goal_Metric = 9603,
+		/// <summary>
+		/// Help_Page = 10116
+		/// </summary>
+		Help_Page = 10116,
 		/// <summary>
 		/// Hierarchy_Rule = 8840
 		/// </summary>
@@ -1005,6 +1029,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Plug_in_Type_Statistic = 4603,
 		/// <summary>
+		/// Plugin_Package = 10166
+		/// </summary>
+		Plugin_Package = 10166,
+		/// <summary>
 		/// PM_Inferred_Task = 10091
 		/// </summary>
 		PM_Inferred_Task = 10091,
@@ -1305,6 +1333,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Service_Plan = 101,
 		/// <summary>
+		/// Service_Plan_Mapping = 10170
+		/// </summary>
+		Service_Plan_Mapping = 10170,
+		/// <summary>
 		/// Setting_Definition = 10030
 		/// </summary>
 		Setting_Definition = 10030,
@@ -1368,6 +1400,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// Solution_Component_Attribute_Configuration = 10000
 		/// </summary>
 		Solution_Component_Attribute_Configuration = 10000,
+		/// <summary>
+		/// Solution_Component_Batch_Configuration = 10169
+		/// </summary>
+		Solution_Component_Batch_Configuration = 10169,
 		/// <summary>
 		/// Solution_Component_Configuration = 10001
 		/// </summary>
@@ -1549,6 +1585,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Time_Zone_Rule = 4811,
 		/// <summary>
+		/// Tour = 10117
+		/// </summary>
+		Tour = 10117,
+		/// <summary>
 		/// Trace = 8050
 		/// </summary>
 		Trace = 8050,
@@ -1640,6 +1680,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// Virtual_Entity_Data_Source = 85
 		/// </summary>
 		Virtual_Entity_Data_Source = 85,
+		/// <summary>
+		/// Virtual_Entity_Metadata = 10118
+		/// </summary>
+		Virtual_Entity_Metadata = 10118,
 		/// <summary>
 		/// Web_Resource = 9333
 		/// </summary>

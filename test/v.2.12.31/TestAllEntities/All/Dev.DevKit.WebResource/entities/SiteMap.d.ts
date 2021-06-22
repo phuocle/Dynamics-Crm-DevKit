@@ -34,6 +34,8 @@ declare namespace DevKit {
 		CreatedOn_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValueReadonly;
 		/** Shows who created the record on behalfÂ of another user. */
 		CreatedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
+		/** Enable to allow sitemap groups to be collapsed. */
+		EnableCollapsibleGroups: DevKit.WebApi.BooleanValue;
 		/** Information about whether the site map is associated with app module. */
 		IsAppAware: DevKit.WebApi.BooleanValue;
 		IsManaged: DevKit.WebApi.BooleanValueReadonly;
@@ -45,6 +47,12 @@ declare namespace DevKit {
 		ModifiedOnBehalfBy: DevKit.WebApi.LookupValueReadonly;
 		OrganizationId: DevKit.WebApi.LookupValueReadonly;
 		OverwriteTime_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValueReadonly;
+		/** Enable to show the home button in the sitemap. */
+		ShowHome: DevKit.WebApi.BooleanValue;
+		/** Enable to show the pinned dropdown in the sitemap. */
+		ShowPinned: DevKit.WebApi.BooleanValue;
+		/** Enable to show the recents dropdown in the sitemap. */
+		ShowRecents: DevKit.WebApi.BooleanValue;
 		SiteMapId: DevKit.WebApi.GuidValueReadonly;
 		SiteMapIdUnique: DevKit.WebApi.GuidValueReadonly;
 		SiteMapName: DevKit.WebApi.StringValue;

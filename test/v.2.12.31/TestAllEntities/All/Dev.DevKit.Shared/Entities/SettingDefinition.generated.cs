@@ -513,7 +513,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Status of the SettingDefinition</para>
-		/// <para>ReadOnly - State</para>
+		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -525,11 +525,18 @@ namespace Dev.DevKit.Shared.Entities
 				if (value == null) return null;
 				return (Dev.DevKit.Shared.Entities.SettingDefinitionOptionSets.statecode)value.Value;
 			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.statecode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.statecode] = null;
+			}
 		}
 
 		/// <summary>
 		/// <para>Reason for the status of the SettingDefinition</para>
-		/// <para>ReadOnly - Status</para>
+		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -540,6 +547,13 @@ namespace Dev.DevKit.Shared.Entities
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statuscode);
 				if (value == null) return null;
 				return (Dev.DevKit.Shared.Entities.SettingDefinitionOptionSets.statuscode)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.statuscode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.statuscode] = null;
 			}
 		}
 

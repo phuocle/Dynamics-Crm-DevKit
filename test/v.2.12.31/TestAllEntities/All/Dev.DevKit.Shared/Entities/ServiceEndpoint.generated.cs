@@ -206,6 +206,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
 			public const string Path = "path";
+			public const string RuntimeIntegrationProperties = "runtimeintegrationproperties";
 			public const string SASKey = "saskey";
 			public const string SASKeyName = "saskeyname";
 			public const string SASToken = "sastoken";
@@ -614,6 +615,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Path); }
 			set { Entity.Attributes[Fields.Path] = value; }
+		}
+
+		/// <summary>
+		/// <para>For internal use only. Holds miscellaneous properties related to runtime integration.</para>
+		/// <para>String - MaxLength: 512</para>
+		/// <para>Runtime Integration Properties</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string RuntimeIntegrationProperties
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.RuntimeIntegrationProperties); }
+			set { Entity.Attributes[Fields.RuntimeIntegrationProperties] = value; }
 		}
 
 		/// <summary>

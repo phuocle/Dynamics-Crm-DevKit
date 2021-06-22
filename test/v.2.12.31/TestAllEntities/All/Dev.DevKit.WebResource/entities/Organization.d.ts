@@ -588,6 +588,8 @@ declare namespace DevKit {
 		RecurrenceExpansionJobBatchSize: DevKit.WebApi.IntegerValue;
 		/** Specifies the maximum number of instances to be created synchronously after creating a recurring appointment. */
 		RecurrenceExpansionSynchCreateMax: DevKit.WebApi.IntegerValue;
+		/** Indicates whether relevance search was enabled for the environment as part of Dataverse's relevance search on-by-default sweep */
+		RelevanceSearchEnabledByPlatform: DevKit.WebApi.BooleanValue;
 		/** Flag to render the body of email in the Web form in an IFRAME with the security='restricted' attribute set. This is additional security but can cause a credentials prompt. */
 		RenderSecureIFrameForEmail: DevKit.WebApi.BooleanValue;
 		/** For internal use only. */

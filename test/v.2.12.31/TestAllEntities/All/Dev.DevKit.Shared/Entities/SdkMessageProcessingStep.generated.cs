@@ -163,6 +163,7 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string AsyncAutoDelete = "asyncautodelete";
 			public const string CanUseReadOnlyConnection = "canusereadonlyconnection";
+			public const string Category = "category";
 			public const string ComponentState = "componentstate";
 			public const string Configuration = "configuration";
 			public const string CreatedBy = "createdby";
@@ -184,6 +185,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
 			public const string Rank = "rank";
+			public const string RuntimeIntegrationProperties = "runtimeintegrationproperties";
 			public const string SdkMessageFilterId = "sdkmessagefilterid";
 			public const string SdkMessageId = "sdkmessageid";
 			public const string SdkMessageProcessingStepId = "sdkmessageprocessingstepid";
@@ -272,6 +274,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.CanUseReadOnlyConnection); }
 			set { Entity.Attributes[Fields.CanUseReadOnlyConnection] = value; }
+		}
+
+		/// <summary>
+		/// <para>For internal use only.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Category</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string Category
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Category); }
+			set { Entity.Attributes[Fields.Category] = value; }
 		}
 
 		/// <summary>
@@ -529,6 +543,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.Rank); }
 			set { Entity.Attributes[Fields.Rank] = value; }
+		}
+
+		/// <summary>
+		/// <para>For internal use only. Holds miscellaneous properties related to runtime integration.</para>
+		/// <para>String - MaxLength: 512</para>
+		/// <para>Runtime Integration Properties</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string RuntimeIntegrationProperties
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.RuntimeIntegrationProperties); }
+			set { Entity.Attributes[Fields.RuntimeIntegrationProperties] = value; }
 		}
 
 		/// <summary>

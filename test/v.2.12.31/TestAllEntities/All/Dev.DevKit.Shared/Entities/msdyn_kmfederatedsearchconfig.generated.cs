@@ -17,9 +17,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_kmfederatedsearchconfigOptionSets
 		/// </summary>
 		Cross_Organizational_Search = 100000000,
 		/// <summary>
-		/// Microsoft_Search_Connector = 100000002
+		/// Microsoft_Graph_Connector = 100000002
 		/// </summary>
-		Microsoft_Search_Connector = 100000002,
+		Microsoft_Graph_Connector = 100000002,
 		/// <summary>
 		/// Sharepoint = 100000001
 		/// </summary>

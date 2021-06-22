@@ -448,6 +448,8 @@ declare namespace DevKit {
 		/** Unique identifier of the source record. */
 		objectid_serviceplan: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
+		objectid_serviceplanmapping: DevKit.WebApi.LookupValue;
+		/** Unique identifier of the source record. */
 		objectid_settingdefinition: DevKit.WebApi.LookupValue;
 		/** Unique identifier of the source record. */
 		objectid_sharepointdocumentlocation: DevKit.WebApi.LookupValue;

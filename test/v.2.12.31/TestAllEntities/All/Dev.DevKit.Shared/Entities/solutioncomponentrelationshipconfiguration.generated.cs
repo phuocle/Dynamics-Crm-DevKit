@@ -86,6 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 		public struct Fields
 		{
 			public const string AddRelatedComponents = "addrelatedcomponents";
+			public const string CascadeRemoveComponents = "cascaderemovecomponents";
 			public const string ComponentIdUnique = "componentidunique";
 			public const string ComponentState = "componentstate";
 			public const string CreatedBy = "createdby";
@@ -174,6 +175,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.AddRelatedComponents); }
 			set { Entity.Attributes[Fields.AddRelatedComponents] = value; }
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>Cascade Remove Components</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? CascadeRemoveComponents
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.CascadeRemoveComponents); }
+			set { Entity.Attributes[Fields.CascadeRemoveComponents] = value; }
 		}
 
 		/// <summary>

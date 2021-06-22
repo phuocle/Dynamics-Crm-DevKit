@@ -321,6 +321,8 @@ declare namespace DevKit {
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_serviceplan: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
+		regardingobjectid_serviceplanmapping: DevKit.WebApi.LookupValueReadonly;
+		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_settingdefinition: DevKit.WebApi.LookupValueReadonly;
 		/** Unique identifier of the record that can not be deleted. */
 		regardingobjectid_sla: DevKit.WebApi.LookupValueReadonly;

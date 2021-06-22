@@ -406,6 +406,7 @@ var OptionSet;
 			Service_Configuration: 10050,
 			Service_Endpoint: 4618,
 			Service_Plan: 101,
+			Service_Plan_Mapping: 10170,
 			Setting_Definition: 10030,
 			SharePoint_Data: 9509,
 			Sharepoint_Document: 9507,

@@ -374,6 +374,7 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string ACIWebEndpointUrl = "aciwebendpointurl";
 			public const string AcknowledgementTemplateId = "acknowledgementtemplateid";
+			public const string AdvancedLookupEnabled = "advancedlookupenabled";
 			public const string AllowAddressBookSyncs = "allowaddressbooksyncs";
 			public const string AllowAutoResponseCreation = "allowautoresponsecreation";
 			public const string AllowAutoUnsubscribe = "allowautounsubscribe";
@@ -651,6 +652,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string RecurrenceExpansionJobBatchInterval = "recurrenceexpansionjobbatchinterval";
 			public const string RecurrenceExpansionJobBatchSize = "recurrenceexpansionjobbatchsize";
 			public const string RecurrenceExpansionSynchCreateMax = "recurrenceexpansionsynchcreatemax";
+			public const string RelevanceSearchEnabledByPlatform = "relevancesearchenabledbyplatform";
 			public const string RenderSecureIFrameForEmail = "rendersecureiframeforemail";
 			public const string ReportingGroupId = "reportinggroupid";
 			public const string ReportingGroupName = "reportinggroupname";
@@ -799,6 +801,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.AcknowledgementTemplateId); }
 			set { Entity.Attributes[Fields.AcknowledgementTemplateId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Flag to indicate if the Advanced Lookup feature is enabled for lookup controls</para>
+		/// <para>Boolean</para>
+		/// <para>Advanced lookup enabled</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? AdvancedLookupEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AdvancedLookupEnabled); }
+			set { Entity.Attributes[Fields.AdvancedLookupEnabled] = value; }
 		}
 
 		/// <summary>
@@ -4241,6 +4255,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.RecurrenceExpansionSynchCreateMax); }
 			set { Entity.Attributes[Fields.RecurrenceExpansionSynchCreateMax] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether relevance search was enabled for the environment as part of Dataverse's relevance search on-by-default sweep</para>
+		/// <para>Boolean</para>
+		/// <para>Relevance search enabled automatically by Dataverse</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? RelevanceSearchEnabledByPlatform
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.RelevanceSearchEnabledByPlatform); }
+			set { Entity.Attributes[Fields.RelevanceSearchEnabledByPlatform] = value; }
 		}
 
 		/// <summary>

@@ -743,6 +743,8 @@ declare namespace OptionSet {
 			Service_Endpoint,
 			/** 101 */
 			Service_Plan,
+			/** 10170 */
+			Service_Plan_Mapping,
 			/** 10030 */
 			Setting_Definition,
 			/** 9509 */
@@ -1585,6 +1587,8 @@ declare namespace OptionSet {
 			Service_Endpoint,
 			/** 101 */
 			Service_Plan,
+			/** 10170 */
+			Service_Plan_Mapping,
 			/** 10030 */
 			Setting_Definition,
 			/** 9509 */
