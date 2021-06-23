@@ -477,9 +477,14 @@ namespace DynamicsCrm.DevKit.Shared
             code += "\"use strict\";\r\n";
             foreach (var form in processForms)
             {
+                var type = $"{ProjectName}.Form{Utility.SafeName(form.Name)}";
                 code += $"var form{Utility.SafeName(form.Name)} = (function () {{\r\n";
-                code += "\t\"use strict\";\r\n";
+                code += $"\t\"use strict\";\r\n";
+                code += $"\t/** @type {type} */\r\n";
+                code += $"\tvar form = null;\r\n";
                 code += $"\tasync function onLoad(executionContext) {{\r\n";
+                code += $"\t\tform = new {type}(executionContext);\r\n";
+                code += $"\r\n";
                 code += $"\t}}\r\n";
                 code += $"\tasync function onSave(executionContext) {{\r\n";
                 code += $"\t}}\r\n";
