@@ -49,8 +49,10 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>TOP 10 Accounts English</Value>
-                    <Style />
+                    <Value>TOP 10 Accounts English ABC</Value>
+                    <Style>
+                      <FontSize>20pt</FontSize>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style />
@@ -59,8 +61,8 @@
             <rd:DefaultName>Textbox1</rd:DefaultName>
             <Top>0.3937cm</Top>
             <Left>0.54187cm</Left>
-            <Height>0.6cm</Height>
-            <Width>5.2305cm</Width>
+            <Height>1.10271cm</Height>
+            <Width>11.13071cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
