@@ -77,7 +77,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 else if (_itemType == ItemType.DataProvider)
                 {
                     link.Text = @"Add new Data Provider Class";
-                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Dat-Provider-Item-Template";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Data-Provider-Item-Template";
                     labelItem.Text = "Data Source";
                     textItemName.Visible = false;
                     comboBoxEntity.Visible = true;
