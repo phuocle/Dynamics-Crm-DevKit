@@ -6,7 +6,7 @@ namespace Dev.DevKit.PluginAccount
 {
     [CrmPluginRegistration("Update", "account", StageEnum.PreOperation, ExecutionModeEnum.Synchronous, "name",
     "Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name")]
     public class PreAccountUpdateSynchronous : IPlugin
     {
         /*
@@ -46,16 +46,18 @@ namespace Dev.DevKit.PluginAccount
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
+            tracing.DebugContext(context);
             tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            //var target = (???)context.InputParameters["Target"];
-            //var preEntity = (Entity)context.PreEntityImages["PreImage"];
+            var target = (Entity)context.InputParameters["Target"];
+            var preEntity = (Entity)context.PreEntityImages["PreImage"];
             //var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
-
+            if (target?["name"] != null)
+                target["name"] = target["name"].ToString().ToUpper();
         }
     }
 }

@@ -44,6 +44,7 @@ namespace $NameSpace$
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
+            tracing.DebugContext(context);
             tracing.DebugMessage("End Data Provider: $NameSpace$.Create");
         }
 

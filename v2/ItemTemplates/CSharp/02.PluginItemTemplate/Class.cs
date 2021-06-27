@@ -36,6 +36,7 @@ $PluginComment$
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
+            tracing.DebugContext(context);
             tracing.DebugMessage("End Plugin: $NameSpacePlugin$.$PluginClass$$PluginOrder2$");
         }
 

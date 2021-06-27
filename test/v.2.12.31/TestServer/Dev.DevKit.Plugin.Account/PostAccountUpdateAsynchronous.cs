@@ -6,7 +6,8 @@ namespace Dev.DevKit.PluginAccount
 {
     [CrmPluginRegistration("Update", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "name,parentaccountid,accountnumber,statuscode",
     "Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    Image1Name = "PreImage", Image1Alias = "PreImage", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "name",
+    Image2Name = "PostImage", Image2Alias = "PostImage", Image2Type = ImageTypeEnum.PostImage, Image2Attributes = "name,accountnumber")]
     public class PostAccountUpdateAsynchronous : IPlugin
     {
         /*
@@ -46,15 +47,20 @@ namespace Dev.DevKit.PluginAccount
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
+            tracing.DebugContext(context);
             tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            //var target = (???)context.InputParameters["Target"];
-            //var preEntity = (Entity)context.PreEntityImages["PreImage"];
-            //var postEntity = (Entity)context.PostEntityImages["PostImage"];
+            var target = (Entity)context.InputParameters["Target"];
+            var preEntity = (Entity)context.PreEntityImages["PreImage"];
+            var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
+
+            tracing.DebugMessage(target.ToDebug());
+            tracing.DebugMessage(preEntity.ToDebug());
+            tracing.DebugMessage(preEntity.ToDebug());
 
         }
     }
