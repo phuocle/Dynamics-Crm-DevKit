@@ -19,13 +19,13 @@ namespace $NameSpace$
               Notifications            - require
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public Retrieve(string unsecureString, string secureString)
+        //public Retrieve(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -43,7 +43,6 @@ namespace $NameSpace$
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            tracing.DebugContext(context);
             tracing.DebugMessage("End Data Provider: $NameSpace$.Retrieve");
         }
 

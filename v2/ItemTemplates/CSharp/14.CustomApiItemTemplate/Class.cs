@@ -25,7 +25,6 @@ $PluginComment$
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            tracing.DebugContext(context);
             tracing.DebugMessage("End Custom Api: $NameSpace$.$PluginClass$$PluginOrder2$");
         }
 

@@ -9,6 +9,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
+using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -19,6 +20,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private CommandLineArgs arguments;
         private const string LOG = "[WEBRESOURCE]";
         private JsonWebResource json;
+        private Guid SolutionId = Guid.Empty;
+        private string Prefix = string.Empty;
         private List<Guid> WebResourcesToPublish { get; }
 
         public TaskWebResource(CrmServiceClient crmServiceClient, string currentDirectory, CommandLineArgs arguments)
@@ -35,15 +38,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             if (!IsValid()) return;
-            if (!json.prefix.EndsWith("_")) json.prefix += "_";
 
             var totalWebResourceFiles = WebResourceFiles.Count;
 
-            CliLog.WriteLine(ConsoleColor.Red, "DEPLOYING WEBRESOURCES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", ConsoleColor.Red, "DEPLOYING WEBRESOURCES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, totalWebResourceFiles, CliLog.ColorGreen, " webresources");
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             var i = 1;
             foreach (var webResourceFile in WebResourceFiles)
             {
@@ -53,9 +57,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (IsSupportWebResourceDependency)
             {
                 var totalDependencyFiles = Dependencies.Count;
-                CliLog.WriteLine();
-                CliLog.WriteLine(ConsoleColor.Red, "DEPLOYING WEBRESOURCES DEPENDENCIES");
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", ConsoleColor.Red, "DEPLOYING WEBRESOURCES DEPENDENCIES");
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Found: ", CliLog.ColorYellow, totalDependencyFiles, CliLog.ColorGreen, " dependencies");
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
                 var j = 1;
                 foreach (var dependency in Dependencies)
                 {
@@ -66,7 +72,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (WebResourcesToPublish.Count > 0)
                 PublishWebResources();
 
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
         }
 
@@ -76,10 +82,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'profile' not found: '{arguments.Profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.solution.Length == 0 || json.solution == "???")
                 throw new Exception($"{LOG} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.prefix.Length == 0 || json.prefix == "???")
-                throw new Exception($"{LOG} 'prefix' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (!json.prefix.EndsWith("_"))
-                throw new Exception($"{LOG} 'prefix' should ends with _. Please check DynamicsCrm.DevKit.Cli.json file.");
+            if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))
+                throw new Exception($"{LOG} solution '{json.solution}' not exist");
+            SolutionId = solutionId;
+            Prefix = prefix;
             if (IsSupportWebResourceDependency)
             {
                 foreach (var dependency in Dependencies)
@@ -134,8 +140,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var name = file
                         .Substring($"{currentDirectory}\\{json.rootfolder}\\".Replace(@"\\", @"\").Length)
                         .Replace("\\", "/");
-                    if (!name.StartsWith(json.prefix))
-                        name = json.prefix + "/" + name;
+                    if (!name.StartsWith(Prefix))
+                        name = Prefix + "/" + name;
                     var webResourceFile = new WebResourceFile
                     {
                         file = file,
@@ -448,12 +454,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     "<webresource>" + webresources + "</webresource>" +
                     "</webresources></importexportxml>"
             };
-            CliLog.WriteLine();
-            CliLog.WriteLine(ConsoleColor.Red, "PUBLISHING WEBRESOURCES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", ConsoleColor.Red, "PUBLISHING WEBRESOURCES");
             crmServiceClient.Execute(publish);
 
-            CliLog.WriteLine();
-            CliLog.WriteLine(ConsoleColor.Red, "PUBLISHED WEBRESOURCES");
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
+            CliLog.WriteLine(CliLog.ColorWhite, "|", ConsoleColor.Red, "PUBLISHED WEBRESOURCES");
         }
 
         private void UpdateDependency(Dependency dependency, int j, int count)
@@ -462,7 +468,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             List<string> dependencies = dependency.dependencies;
             dependencies = dependencies.Distinct().ToList();
             dependency.dependencies = dependencies;
-            var dependencyXml = GetDependencyXml(dependency.dependencies);
+            var dependencyXml = GetDependencyXml(dependency.dependencies, out var foundDependencies);
             foreach (var webResourceName in dependency.webresources)
             {
                 var fetchXml = $@"
@@ -490,23 +496,26 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         ["dependencyxml"] = dependencyXml
                     };
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", j), ": ", CliLog.ColorMagenta, "Updating", CliLog.ColorGreen, " Dependency Webresource ", CliLog.ColorCyan, webResourceName, CliLog.ColorGreen, " to");
-                    foreach (var d in dependency.dependencies)
-                        CliLog.WriteLine(CliLog.ColorCyan, "\t" + d);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", j), ": ", CliLog.ColorMagenta, "Updating ", CliLog.ColorCyan, webResourceName, CliLog.ColorGreen, " dependencies");
+                    foreach (var d in foundDependencies)
+                        CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + d);
                     crmServiceClient.Update(entity);
                     if (!WebResourcesToPublish.Contains(webResourceId))
                         WebResourcesToPublish.Add(webResourceId);
                 }
                 else
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", j) + ": ", CliLog.ColorGreen, webResourceName);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + len + "}", "", j) + ": ", CliLog.ColorCyan, webResourceName, CliLog.ColorGreen, " dependencies");
+                    foreach (var d in foundDependencies)
+                        CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorCyan, "\t" + d);
                 }
             }
         }
 
-        private string GetDependencyXml(IEnumerable<string> dependencies)
+        private string GetDependencyXml(List<string> dependencies, out List<string> foundDependencies)
         {
             var library = string.Empty;
+            foundDependencies = new List<string>();
             foreach (var dependency in dependencies)
             {
                 var fetchData = new
@@ -537,6 +546,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var webresourceidunique = entity.GetAttributeValue<Guid>("webresourceidunique");
                     var languagecode = entity.GetAttributeValue<int?>("languagecode");
                     library += $"<Library name='{name}' displayName='{displayname}' languagecode='{languagecode}' description='{description}' libraryUniqueId='{{{webresourceidunique}}}'/>";
+                    foundDependencies.Add(dependency);
                 }
             }
             if (library.Length == 0) return library;

@@ -108,8 +108,7 @@ namespace Microsoft.Xrm.Sdk
                     x?.LazyFileSizeAttributeKey,
                     x?.LazyFileSizeAttributeValue,
                     x?.LogicalName,
-                    x?.RowVersion,
-                    ToEntityReference = x.ToEntityReference()
+                    x?.RowVersion
                 };
             }
             catch

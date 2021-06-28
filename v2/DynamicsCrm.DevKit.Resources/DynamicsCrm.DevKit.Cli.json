@@ -2,8 +2,8 @@
   "servers": [
     {
       "profile": "DEBUG",
-      "folder": "bin\\Debug",
       "solution": "???",
+      "folder": "bin\\Debug",
       "includefiles": [
         "???.Plugin.*.dll",
         "???.CustomAction.*.dll",
@@ -20,7 +20,6 @@
     {
       "profile": "DEBUG",
       "solution": "???",
-      "prefix": "???",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -58,17 +57,17 @@
   "datasources": [
     {
       "profile": "DEBUG",
+      "solution": "???",
       "displayname": "???",
       "pluralname": "???",
-      "solution": "???",
       "name": "???"
     }
   ],
   "solutionpackagers": [
     {
       "profile": "Extract-Unmanaged",
-      "rootfolder": "",
       "solution": "???",
+      "rootfolder": "",
       "solutiontype": "Unmanaged",
       "folder": "???",
       "type": "Extract",
@@ -76,8 +75,8 @@
     },
     {
       "profile": "Extract-Managed",
-      "rootfolder": "",
       "solution": "???",
+      "rootfolder": "",
       "solutiontype": "Managed",
       "folder": "???",
       "type": "Extract",
@@ -85,8 +84,8 @@
     },
     {
       "profile": "Pack-Unmanaged",
-      "rootfolder": "",
       "solution": "???",
+      "rootfolder": "",
       "solutiontype": "Unmanaged",
       "folder": "???",
       "type": "Pack",
@@ -94,8 +93,8 @@
     },
     {
       "profile": "Pack-Managed",
-      "rootfolder": "",
       "solution": "???",
+      "rootfolder": "",
       "solutiontype": "Managed",
       "folder": "???",
       "type": "Pack",
@@ -145,7 +144,7 @@
       "profile": "ALL",
       "namespace": "???",
       "output": "GeneratedCode.cs",
-      "entities": ""
+      "entities": "*"
     }
   ]
 }

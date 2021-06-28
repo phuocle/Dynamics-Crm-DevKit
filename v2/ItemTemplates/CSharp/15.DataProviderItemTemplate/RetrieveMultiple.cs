@@ -18,13 +18,13 @@ namespace $NameSpace$
               EntityCollection      Microsoft.Xrm.Sdk.EntityCollection - require
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public RetrieveMultiple(string unsecureString, string secureString)
+        //public RetrieveMultiple(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -42,7 +42,6 @@ namespace $NameSpace$
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
 
-            tracing.DebugContext(context);
             tracing.DebugMessage("End Data Provider: $NameSpace$.RetrieveMultiple");
         }
 
@@ -52,7 +51,7 @@ namespace $NameSpace$
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
 
-            var query = context.InputParameters["Query"];
+            var query = context?.InputParameters?["Query"];
             var entities = new EntityCollection();
             entities.EntityName = context.PrimaryEntityName;
             if (query is QueryExpression qe)

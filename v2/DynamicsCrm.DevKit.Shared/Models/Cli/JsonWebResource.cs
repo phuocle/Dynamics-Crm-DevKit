@@ -6,7 +6,6 @@ namespace DynamicsCrm.DevKit.Shared.Models.Cli
     {
         public string profile { get; set; }
         public string solution { get; set; }
-        public string prefix { get; set; }
         public string rootfolder { get; set; }
         public List<string> includefiles { get; set; }
         public List<string> excludefiles { get; set; }

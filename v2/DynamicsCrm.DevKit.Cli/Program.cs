@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\TestWebResouce\2.after\Dev.DevKit.WebResource";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\TestWebResource2\Dev.DevKit.WebResource";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -42,7 +42,7 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(CliLog.ColorGreen, "|____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
             CliLog.WriteLine(CliLog.ColorGreen, "       |___/                        ", CliLog.ColorWhite, "https://github.com/phuocle/Dynamics-Crm-DevKit", CliLog.ColorBlue, $" {Const.Version}", CliLog.ColorWhite, " Build: ", CliLog.ColorBlue, Const.BuildDate);
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Current Directory path: ", CliLog.ColorWhite, CurrentDirectory);
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Current directory path: ", CliLog.ColorWhite, CurrentDirectory);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.exe path: ", CliLog.ColorWhite, Assembly.GetExecutingAssembly().Location);
 #if !DEBUG
             try
@@ -157,6 +157,7 @@ namespace DynamicsCrm.DevKit.Cli
             }
             if (CrmServiceClient != null)
             {
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected: ", CliLog.ColorWhite, XrmHelper.ConnectedUrl(CrmServiceClient));
             }
             CliLog.WriteLine(CliLog.ColorWhite, "|");
