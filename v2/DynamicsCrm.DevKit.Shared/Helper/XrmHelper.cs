@@ -518,7 +518,9 @@ namespace DynamicsCrm.DevKit.Shared.Helper
 
         public static string ConnectedUrl(CrmServiceClient crmServiceClient)
         {
-            return new Uri(crmServiceClient?.CrmConnectOrgUriActual?.AbsoluteUri).GetLeftPart(UriPartial.Authority);
+            var url = new Uri(crmServiceClient?.CrmConnectOrgUriActual?.AbsoluteUri).GetLeftPart(UriPartial.Authority);
+            url = url?.Replace(".api.", ".");
+            return url;
         }
 
         public static List<NameValueGuidExtend> GetAllSolutions(CrmServiceClient crmServiceClient)

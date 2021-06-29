@@ -104,25 +104,25 @@
   "generators": [
     {
       "profile": "LATEBOUND",
+      "type": "CSharp",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "type": "CSharp",
       "entities": "folder",
       "debug": "?"
     },
     {
       "profile": "JS-FORM",
+      "type": "JsForm",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "type": "JsForm",
       "entities": "folder",
       "debug": "?"
     },
     {
       "profile": "JS-WEBAPI",
+      "type": "JsWebApi",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "type": "JsWebApi",
       "entities": "folder",
       "debug": "?"
     }

@@ -576,10 +576,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var fetchData = new
             {
-                datasourcelogicalname = dataSource,
-                ismanaged = "0",
-                iscustomizable = "1",
-                name = dataSource
+                datasourcelogicalname = dataSource
             };
             var fetchXml = $@"
 <fetch>
@@ -592,9 +589,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     <attribute name='retrieveplugin' />
     <filter>
       <condition attribute='datasourcelogicalname' operator='eq' value='{fetchData.datasourcelogicalname}'/>
-      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged}'/>
-      <condition attribute='iscustomizable' operator='eq' value='{fetchData.iscustomizable}'/>
-      <condition attribute='name' operator='eq' value='{fetchData.name}'/>
     </filter>
   </entity>
 </fetch>";

@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\TestWebResource2\Dev.DevKit.WebResource";
+                return @"C:\src\github\phuocle\d365events\src\VirtualTable\VirtualTable.DataProvider.D365vn";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
