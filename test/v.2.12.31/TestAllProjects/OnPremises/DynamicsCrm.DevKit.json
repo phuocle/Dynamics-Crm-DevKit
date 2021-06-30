@@ -1,0 +1,12 @@
+﻿{
+    "DefaultCrmConnection": "AD",
+    "CrmConnections": [
+        {
+            "Name": "AD",
+            "Url": "http://52.163.122.240/CRM",
+            "UserName": "crm\\crmadmin",
+            "Password": "",
+            "Type": "AD"
+        }
+    ]
+}
