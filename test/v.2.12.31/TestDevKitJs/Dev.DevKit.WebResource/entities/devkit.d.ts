@@ -923,11 +923,6 @@ declare namespace DevKit {
              */
             readonly SelectedRows: DevKit.Collections<DevKit.Controls.GridRow>;
             /**
-             * [Editable grids] The single row (record) is selected in the editable grid. This event won't occur if a user selects different cells in the same row, or selects multiple rows
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/events/grid-onrecordselect
-             */
-            readonly OnRecordSelect: DevKit.Controls.GridRow;
-            /**
              * [Editable grids] Returns the total number of records that match the filter criteria of the view, not limited by the number visible in a single page
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/gettotalrecordcount
              */

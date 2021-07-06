@@ -1919,11 +1919,6 @@ var devKit = (function () {
                     return obj;
                 }
             });
-            Object.defineProperty(grids[grid], 'OnRecordSelect', {
-                get: function () {
-                    return loadGridRow(formContext);
-                }
-            });
             Object.defineProperty(grids[grid], 'TotalRecordCount', {
                 get: function () {
                     var getGrid = NULL;
