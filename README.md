@@ -1,5 +1,3 @@
-# This tool don't have good document. I planned update it.
-
 # DynamicsCrm.DevKit contains:
 * [14 Visual Studio projects template.](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Projects-Template)
 * [14 Visual Studio items template.](https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Items-Template)
