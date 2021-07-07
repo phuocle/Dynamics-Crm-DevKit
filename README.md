@@ -16,7 +16,7 @@
 ## Form intellisense
 ![Form](/v2/images/form.gif)
 
-## Deploy webresouce from Visual Studio
+## Deploy webresource from Visual Studio
 ![Form](/v2/images/webresouce.gif)
 
 ## Deploy report from Visual Studio
