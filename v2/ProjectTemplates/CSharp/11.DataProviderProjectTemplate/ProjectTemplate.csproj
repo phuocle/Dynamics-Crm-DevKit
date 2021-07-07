@@ -53,10 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Retrieve.cs" />
-    <Compile Include="RetrieveMultiple.cs" />
     <None Include="packages.config" />
     <None Include="deploy.debug.bat" />
+    <None Include="deploy.datasource.bat" />
     <None Include="$ProjectName$.snk" />
   </ItemGroup>
   <Import Project="..\$SharedProject$\$SharedProject$.projitems" Label="Shared" Condition="Exists('..\$SharedProject$\$SharedProject$.projitems')" />

@@ -1,6 +1,4 @@
-﻿using DynamicsCrm.DevKit.Shared;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -10,12 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Specialized;
 using System;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class JsWebApi
     {
-        public JsWebApi(IOrganizationService crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm, string jsFormVersion)
+        public JsWebApi(CrmServiceClient crmService, string projectName, string entityName, bool isDebugWebApi, List<string> checkedItems, bool isDebugForm, string jsFormVersion)
         {
             CrmService = crmService;
             ProjectName = projectName;
@@ -25,7 +24,7 @@ namespace DynamicsCrm.DevKit.Shared
             IsDebugWebApi = isDebugWebApi;
             JsFormVersion = jsFormVersion;
         }
-        private IOrganizationService CrmService { get; }
+        private CrmServiceClient CrmService { get; }
         private string EntityName { get; }
         private string ProjectName { get; }
         private List<string> CheckedItems { get; }
@@ -60,6 +59,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         private string GetLogicalCollectionName(string entity)
         {
+            if (entity.StartsWith("_")) entity = entity.Substring("@".Length);
             var request = new RetrieveEntityRequest
             {
                 EntityFilters = EntityFilters.Attributes,
@@ -107,7 +107,8 @@ namespace DynamicsCrm.DevKit.Shared
         }
         private string GetNavigationPropertyName(CrmAttribute crmAttribute)
         {
-            if (crmAttribute.FieldType == AttributeTypeCode.Owner) return "ownerid;ownerid";
+            if (crmAttribute.FieldType == AttributeTypeCode.Owner) return "OwnerId_systemuser;OwnerId_team";
+            if (crmAttribute.LogicalName == "acceptingentityid") return "acceptingentityid_queue;acceptingentityid_systemuser";
             var value = string.Empty;
             var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
             foreach (var entity in entities)
@@ -126,10 +127,16 @@ namespace DynamicsCrm.DevKit.Shared
         public string WebApiCode { get; private set; } = string.Empty;
         public string WebApiCodeIntellisense { get; private set; } = string.Empty;
         public string WebApiCodeTypeScriptDeclaration { get; private set; } = string.Empty;
+        private string SafeJsName(string name)
+        {
+            if (name.ToLower() == "import")
+                return $"_{name}";
+            return name;
+        }
         public void GeneratorCode()
         {
             var webApiCode = string.Empty;
-            var @class = EntityName.ToLower();
+            var @class = SafeJsName(EntityName.ToLower());
             var Class = EntityName;
 
             webApiCode += $"var {ProjectName};\r\n";
@@ -187,8 +194,14 @@ namespace DynamicsCrm.DevKit.Shared
                             webApiCode += $"\t\t\t{crmAttribute.SchemaName}_UtcDateAndTime: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
                     }
                 }
+                else if (crmAttribute.FieldType == AttributeTypeCode.Owner)
+                {
+                    webApiCode += $"\t\t\tOwnerId_systemuser: {{ b: \"ownerid\", a: \"_ownerid_value\", c: \"systemusers\", d: \"systemuser\" }},\r\n";
+                    webApiCode += $"\t\t\tOwnerId_team: {{ b: \"ownerid\", a: \"_ownerid_value\", c: \"teams\", d: \"team\" }},\r\n";
+                }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Lookup ||
-                         crmAttribute.FieldType == AttributeTypeCode.Customer)
+                         crmAttribute.FieldType == AttributeTypeCode.Customer ||
+                         (crmAttribute.EntityReferenceLogicalName == null ? false : crmAttribute.EntityReferenceLogicalName.Contains(";")))
                 {
                     var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
                     crmAttribute.LogicalCollectionName = GetLogicalCollectionName(crmAttribute);
@@ -216,11 +229,6 @@ namespace DynamicsCrm.DevKit.Shared
                         }
                     }
                 }
-                else if (crmAttribute.FieldType == AttributeTypeCode.Owner)
-                {
-                    webApiCode += $"\t\t\tOwnerId_systemuser: {{ b: \"ownerid\", a: \"_ownerid_value\", c: \"systemusers\", d: \"systemuser\" }},\r\n";
-                    webApiCode += $"\t\t\tOwnerId_team: {{ b: \"ownerid\", a: \"_ownerid_value\", c: \"teams\", d: \"team\" }},\r\n";
-                }
                 else if (crmAttribute.FieldType == AttributeTypeCode.ManagedProperty)
                 {
                     webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: \"{crmAttribute.LogicalName}\" }},\r\n";
@@ -238,7 +246,7 @@ namespace DynamicsCrm.DevKit.Shared
                         webApiCode += $"\t\t\t{crmAttribute.SchemaName}: {{ a: ?????????? }},\r\n";
                     }
                 }
-                if (!(crmAttribute.IsValidForCreate || crmAttribute.IsValidForUpdate))
+                if (!(crmAttribute.IsValidForCreate || crmAttribute.IsValidForUpdate) || crmAttribute.IsReadOnly)
                 {
                     webApiCode = webApiCode.TrimEnd(" },\r\n".ToCharArray());
                     webApiCode += $", r: true }},\r\n";
@@ -322,15 +330,15 @@ namespace DynamicsCrm.DevKit.Shared
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)
             {
-                if (CheckedItems.Contains($"{form.Name}"))
+                if (CheckedItems.Any(x => form.Name.ToLower() == x.ToLower()))
                 {
                     processForms.Add(form);
-                    CheckedItems.Remove(form.Name);
+                    CheckedItems.RemoveAll(x => x.Equals(form.Name, StringComparison.OrdinalIgnoreCase));
                 }
             }
             foreach (var form in Forms)
             {
-                if (CheckedItems.Any(x => form.Name.EndsWith(x)))
+                if (CheckedItems.Any(x => form.Name.ToLower().EndsWith(x.ToLower())))
                     processForms.Add(form);
             }
             WebApiCodeTypeScriptDeclaration = GetWebApiCodeTypeScriptDeclaration(processForms, IsDebugForm, true, IsDebugWebApi, JsFormVersion);

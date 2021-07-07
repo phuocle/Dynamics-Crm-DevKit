@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.CustomAction.Entities, Version=1.0.0.0, Culture=en, PublicKeyToken=eb423a0f05629ed8" PluginAssemblyId="c2028ddf-30c7-eb11-bacc-000d3a807100" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitCustomActionEntities-C2028DDF-30C7-EB11-BACC-000D3A807100/DevDevKitCustomActionEntities.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_DeleteAllDataSynchronous, Dev.DevKit.CustomAction.Entities, Version=1.0.0.0, Culture=en, PublicKeyToken=eb423a0f05629ed8" PluginTypeId="c9028ddf-30c7-eb11-bacc-000d3a807100" Name="Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_DeleteAllDataSynchronous">
+      <FriendlyName>Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_DeleteAllDataSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_SendEmailSynchronous, Dev.DevKit.CustomAction.Entities, Version=1.0.0.0, Culture=en, PublicKeyToken=eb423a0f05629ed8" PluginTypeId="cd028ddf-30c7-eb11-bacc-000d3a807100" Name="Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_SendEmailSynchronous">
+      <FriendlyName>Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_SendEmailSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous, Dev.DevKit.CustomAction.Entities, Version=1.0.0.0, Culture=en, PublicKeyToken=eb423a0f05629ed8" PluginTypeId="c5028ddf-30c7-eb11-bacc-000d3a807100" Name="Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous">
+      <FriendlyName>Dev.DevKit.CustomAction.Entities.Contact.PostContactdevkit_SetPrimaryContactSynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

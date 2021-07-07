@@ -15,13 +15,15 @@ namespace DynamicsCrm.DevKit.Shared
             new DataSourceCrm{ Version = "4.0", Name = $"{Const.DynamicsCrm2011} - 4.0"}
         };
         public const string PLDynamicsCrmDevKitResourcesDll = "DynamicsCrm.DevKit.Resources.dll";
-        public const string Version = "2.10.31";
+        public const string Version = "2.12.31";
+        public const string BuildDate = "xxxx.xx.xx";
 
         public const string Chutzpah = "Chutzpah";
         public const string MicrosoftCrmSdkCoreAssemblies = "Microsoft.CrmSdk.CoreAssemblies";
         public const string MicrosoftCrmSdkData = "Microsoft.CrmSdk.Data";
         public const string MicrosoftCrmSdkCoreTools = "Microsoft.CrmSdk.CoreTools";
         public const string DynamicsCrmDevKitCli = "DynamicsCrm.DevKit.Cli";
+        public const string DynamicsCrmDevKit = "DynamicsCrm.DevKit";
         public const string MicrosoftCrmSdkDeployment = "Microsoft.CrmSdk.Deployment";
         public const string MicrosoftCrmSdkWorkflow = "Microsoft.CrmSdk.Workflow";
         public const string MicrosoftCrmSdkXrmToolingCoreAssembly = "Microsoft.CrmSdk.XrmTooling.CoreAssembly";

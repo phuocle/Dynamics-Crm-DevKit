@@ -5,7 +5,7 @@ using $SharedNameSpace$;
 
 namespace $NameSpace$
 {
-    [CrmPluginRegistration("$class$", "$class$", "", "$rootnamespace$", IsolationModeEnum.Sandbox)]
+    [CrmPluginRegistration("$class$", "$class$", "", "$rootnamespace$", IsolationModeEnum.Sandbox, PluginType = PluginType.Workflow)]
     public class $class$ : CodeActivity
     {
         //https://docs.microsoft.com/en-us/dynamics365/customer-engagement/developer/workflow/add-metadata-custom-workflow-activity
@@ -25,12 +25,12 @@ namespace $NameSpace$
             var service = serviceFactory.CreateOrganizationService(workflowContext.UserId);
             var tracing = executionContext.GetExtension<ITracingService>();
 
-            //tracing.DebugMessage("Begin Workflow: $NameSpace$.$class$");
-            //tracing.DebugContext(workflowContext);
+            tracing.DebugMessage("Begin Workflow: $NameSpace$.$class$");
+            tracing.DebugContext(workflowContext);
 
             ExecuteWorkflow(executionContext, workflowContext, serviceFactory, service, tracing);
 
-            //tracing.DebugMessage("End Workflow: $NameSpace$.$class$");
+            tracing.DebugMessage("End Workflow: $NameSpace$.$class$");
         }
 
         private void ExecuteWorkflow(CodeActivityContext executionContext, IWorkflowContext workflowContext, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

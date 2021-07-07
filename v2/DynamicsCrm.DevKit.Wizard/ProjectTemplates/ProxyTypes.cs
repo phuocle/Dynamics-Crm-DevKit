@@ -41,11 +41,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             try
             {
                 DTE = (DTE)automationObject;
-                if (!Utility.SharedProjectExist(DTE))
-                {
-                    MessageBox.Show(@"Please add DynamicsCrm.DevKit Shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    throw new WizardCancelledException();
-                }
+                Wizard.MakeSureSharedProjectExist(DTE);
                 var form = new FormProject(ProjectType.ProxyTypes, DTE);
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
                 //Creating project ...

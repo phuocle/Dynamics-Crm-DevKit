@@ -144,7 +144,7 @@ declare namespace DevKit {
              */
             readonly InitialValue: number;
         }
-        interface Process {
+        interface IProcess {
             /**
              * Adds a function as an event handler for the OnPreProcessStatusChange event so that it will be called before the business process flow status changes
              * @param callback The function to be executed when the business process flow status changes. The function will be added to the start of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
@@ -157,6 +157,18 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonpreprocessstatuschange
              */
             RemoveOnPreProcessStatusChange(callback: () => void): void;
+            /**
+             * Adds a function as an event handler for the OnPreStageChange event so that it will be called before the business process flow stage changes
+             * @param callback The function that runs before the business process flow stage changes. The function will be added to the start of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/addonprestagechange
+             */
+            AddOnPreStageChange(callback: (executionContext: any) => void): void;
+            /**
+             * Removes an event handler from the OnPreStageChange event
+             * @param callback The function to be removed from the OnPreStageChange event
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/eventhandlers/removeonprestagechange
+             */
+            RemoveOnPreStageChange(callback: () => void): void;
             /**
              * Adds a function as an event handler for the OnProcessStatusChange event so that it will be called when the business process flow status changes
              * @param callback The function to be executed when the business process flow status changes. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
@@ -295,6 +307,59 @@ declare namespace DevKit {
              */
             Status: OptionSet.ProcessStatus;
         }
+        interface ITab {
+            /**
+             * Adds a function to be called when the TabStateChange event occurs
+             * @param callback The function to be executed on the TabStateChange event. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/addtabstatechange
+             */
+            AddTabStateChange(callback: (executionContext: any) => void): void;
+            /**
+             * Sets the focus on the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setfocus
+             * */
+            Focus(): void;
+            /**
+             * Removes a function to be called when the TabStateChange event occurs
+             * @param callback The function to be removed from the TabStateChange event
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/removetabstatechange
+             */
+            RemoveTabStateChange(callback: (executionContext: any) => void): void;
+            /**
+             * Get the name of the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getname
+             */
+            readonly Name: string;
+            /**
+             * Get the formContext.ui object containing the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getparent
+             */
+            readonly Parent: any;
+            /**
+             * Get/Set display state of the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getdisplaystate
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setdisplaystate
+             */
+            DisplayState: OptionSet.TabDisplayState;
+            /**
+             * Get/Set the label for the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getlabel
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setlabel
+             */
+            Label: string;
+            /**
+             * Get/Set a value that indicates whether the tab is currently visible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setvisible
+             */
+            Visible: boolean;
+            /**
+             * Get/Set content type of the tab
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getcontenttype
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setcontenttype
+             */
+            ContentType: OptionSet.TabContentType;
+        }
         interface IControlSelect extends IControlSelectBase {
             /**
              * Returns an option object with the value matching the argument (label or enumeration value) passed to the method
@@ -380,6 +445,90 @@ declare namespace DevKit {
              */
             Value: number;
         }
+        interface IQuickView {
+            /**
+             * Gets the controls on a form or control on form by passing an argument
+             * @param arg You can access a single control in the constituent controls collection by passing an argument as either the name or the index value of the constituent control in a quick view control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
+             */
+            Controls(arg?: string | number): Array<any> | any;
+            /**
+             * Returns whether the data binding for the constituent controls in a quick view control is complete
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
+             */
+            IsLoaded(): boolean;
+            /**
+             * Refreshes the data displayed in a quick view control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/refresh
+             */
+            Refresh(): void;
+            /**
+             * Sets focus on the control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setfocus
+             */
+            Focus(): void;
+            /**
+             * Returns a string value that categorizes quick view controls
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrolhttps://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontroltype
+             */
+            readonly ControlType: OptionSet.FieldControlType;
+            /**
+             * [ReadOnly] Returns the name assigned to the quick view control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getname
+             */
+            readonly ControlName: string;
+            /**
+             * Returns a reference to the section object that contains the control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getparent
+             */
+            readonly ControlParent: any;
+            /**
+             * Get/Set a boolean value indicating whether the control is disabled. Or sets the state of the control to either enabled or disabled
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getdisabled
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setdisabled
+             */
+            Disabled: boolean;
+            /**
+             * Get/Set the label for the quick view control. Or sets the label for the quick view control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getlabel
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setlabel
+             */
+            Label: string;
+            /**
+             * Get/Set a value that indicates whether the quick view control is currently visible. Or displays or hides a control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setvisible
+             */
+            Visible: boolean;
+        }
+        interface IFooter {
+            /**
+             * Get/Set the visibility of footer section
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/getvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-footersection/setvisible
+             */
+            Visible: boolean;
+        }
+        interface IHeader {
+            /**
+             * Get/Set the visibility of header section
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getbodyvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setbodyvisible
+             */
+            BodyVisible: boolean;
+            /**
+             * Get/Set the command bar visibility
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/getcommandbarvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/setcommandbarvisible
+             */
+            CommandBarVisible: boolean;
+            /**
+             * Get/Set the tab navigator visibility
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/gettabnavigatorvisible
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-headersection/settabnavigatorvisible
+             */
+            TabNavigatorVisible: boolean;
+        }
         interface Integer extends IControlNumber {
 
         }
@@ -410,7 +559,7 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
              */
-            Value: string;
+            Value: any;
         }
         interface Date extends IControl {
             /**
@@ -418,7 +567,7 @@ declare namespace DevKit {
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/getvalue
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/setvalue
              */
-            Value: Date;
+            Value: any;
         }
         interface Lookup extends IControl {
             /**
@@ -456,13 +605,13 @@ declare namespace DevKit {
              * @param callback The function to add to the OnLookupTagClick event. The execution context is automatically passed as the first parameter to this function along with eventArgs that contain the tag value. More information: OnLookupTagClick event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonlookuptagclick
             */
-            AddOnLookupTagClick(callback: (executionContext: any) => void): void;
+            AddLookupTagClick(callback: (executionContext: any) => void): void;
             /**
              * Removes an event handler from the OnLookupTagClick event
              * @param callback The function to be removed from the OnLookupTagClick event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonlookuptagclick
              */
-            RemoveOnLookupTagClick(callback: (executionContext: any) => void): void;
+            RemoveLookupTagClick(callback: (executionContext: any) => void): void;
             /**
              * Returns a Boolean value indicating whether the lookup represents a partylist lookup. Partylist lookups allow for multiple records to be set, such as the To: field for an email entity record
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/attributes/getispartylist
@@ -494,19 +643,19 @@ declare namespace DevKit {
              * @param callback The function to add to the PostSearch event. The execution context is automatically passed as the first parameter to this function
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonpostsearch
              */
-            AddOnPostSearch(callback: (executionContext: any) => void): void;
+            AddPostSearch(callback: (executionContext: any) => void): void;
             /**
              * Adds an event handler to the OnResultOpened event
              * @param callback The function to add to the OnResultOpened event. The execution context is automatically passed as the first parameter to this function
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonresultopened
              */
-            AddOnResultOpened(callback: (executionContext: any) => void): void;
+            AddResultOpened(callback: (executionContext: any) => void): void;
             /**
              * Adds an event handler to the OnSelection event
              * @param callback The function to add to the OnSelection event. The execution context is automatically passed as the first parameter to this function
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/addonselection
              */
-            AddOnSelection(callback: (executionContext: any) => void): void;
+            AddSelection(callback: (executionContext: any) => void): void;
             /**
              * Opens a search result in the search control by specifying the result number
              * @param resultNumber Numerical value specifying the result number to be opened. Result number starts from 1
@@ -519,19 +668,19 @@ declare namespace DevKit {
              * @param callback The function to remove from the PostSearch event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonpostsearch
              */
-            RemoveOnPostSearch(callback: () => void): void;
+            RemovePostSearch(callback: () => void): void;
             /**
              * Removes an event handler from the OnResultOpened event
              * @param callback The function to remove from the OnResultOpened event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonresultopened
              */
-            RemoveOnResultOpened(callback: () => void): void;
+            RemoveResultOpened(callback: () => void): void;
             /**
              * Removes an event handler from the OnSelection even
              * @param callback The function to remove from the OnSelection event
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/removeonselection
              */
-            RemoveOnSelection(callback: () => void): void;
+            RemoveSelection(callback: () => void): void;
             /**
              * Gets the count of results found in the search control
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/gettotalresultcount
@@ -679,54 +828,7 @@ declare namespace DevKit {
              */
             Visible: boolean;
         }
-        interface Tab {
-            /**
-             * Adds a function to be called when the TabStateChange event occurs
-             * @param callback The function to be executed on the TabStateChange event. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/addtabstatechange
-             */
-            AddTabStateChange(callback: (executionContext: any) => void): void;
-            /**
-             * Sets the focus on the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setfocus
-             * */
-            Focus(): void;
-            /**
-             * Removes a function to be called when the TabStateChange event occurs
-             * @param callback The function to be removed from the TabStateChange event
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/removetabstatechange
-             */
-            RemoveTabStateChange(callback: (executionContext: any) => void): void;
-            /**
-             * Get the name of the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getname
-             */
-            readonly Name: string;
-            /**
-             * Get the formContext.ui object containing the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getparent
-             */
-            readonly Parent: any;
-            /**
-             * Get/Set display state of the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getdisplaystate
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setdisplaystate
-             */
-            DisplayState: OptionSet.TabDisplayState;
-            /**
-             * Get/Set the label for the tab
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getlabel
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setlabel
-             */
-            Label: string;
-            /**
-             * Get/Set a value that indicates whether the tab is currently visible
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/getvisible
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-tabs/setvisible
-             */
-            Visible: boolean;
 
-        }
         interface Section {
             /**
              * Get the name of the section
@@ -821,11 +923,6 @@ declare namespace DevKit {
              */
             readonly SelectedRows: DevKit.Collections<DevKit.Controls.GridRow>;
             /**
-             * [Editable grids] The single row (record) is selected in the editable grid. This event won't occur if a user selects different cells in the same row, or selects multiple rows
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/events/grid-onrecordselect
-             */
-            readonly OnRecordSelect: DevKit.Controls.GridRow;
-            /**
              * [Editable grids] Returns the total number of records that match the filter criteria of the view, not limited by the number visible in a single page
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/grids/grid/gettotalrecordcount
              */
@@ -894,8 +991,12 @@ declare namespace DevKit {
              */
             Label: string;
         }
-        interface Note {
-
+        interface Note extends IControl {
+            /**
+             * Refreshes the data displayed in a timelinewall and timer control
+             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/controls/refresh
+             */
+            Refresh(): void;
         }
         interface EmailEngagement {
 
@@ -909,67 +1010,23 @@ declare namespace DevKit {
         interface ActionCards {
 
         }
-        interface QuickView {
-            /**
-             * Gets the controls on a form or control on form by passing an argument
-             * @param arg You can access a single control in the constituent controls collection by passing an argument as either the name or the index value of the constituent control in a quick view control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrol
-             */
-            Controls(arg?: string | number): Array<any> | any;
-            /**
-             * Returns whether the data binding for the constituent controls in a quick view control is complete
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/isloaded
-             */
-            IsLoaded(): boolean;
-            /**
-             * Refreshes the data displayed in a quick view control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/refresh
-             */
-            Refresh(): void;
-            /**
-             * Sets focus on the control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setfocus
-             */
-            Focus(): void;
-            /**
-             * Returns a string value that categorizes quick view controls
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontrolhttps://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getcontroltype
-             */
-            readonly ControlType: OptionSet.FieldControlType;
-            /**
-             * Returns the name assigned to the quick view control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getname
-             */
-            readonly ControlName: string;
-            /**
-             * Returns a reference to the section object that contains the control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getparent
-             */
-            readonly ControlParent: any;
-            /**
-             * Get/Set a boolean value indicating whether the control is disabled. Or sets the state of the control to either enabled or disabled
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getdisabled
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setdisabled
-             */
-            Disabled: boolean;
-            /**
-             * Get/Set the label for the quick view control. Or sets the label for the quick view control
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getlabel
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setlabel
-             */
-            Label: string;
-            /**
-             * Get/Set a value that indicates whether the quick view control is currently visible. Or displays or hides a control.
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/getvisible
-             * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-quickforms/setvisible
-             */
-            Visible: boolean;
-        }
+
         interface AciWidget {
 
         }
         interface PowerBi {
 
+        }
+        interface File {
+
+        }
+        interface Image {
+
+        }
+        interface QuickView {
+            readonly Value: any;
+            Visible: boolean;
+            Label: string;
         }
     }
     namespace WebApi {
@@ -1299,54 +1356,6 @@ declare namespace DevKit {
             message: string;
         }
     }
-    abstract class WebApi {
-        /**
-         * Creates an entity record
-         * @param entityLogicalName Logical name of the entity you want to create. For example: "account".
-         * @param entity A JSON object defining the attributes and values for the new entity record.
-         * @returns On success, returns a promise object containing the attributes specified earlier in the description of the successCallback parameter.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/createrecord
-         */
-        CreateRecord(entityLogicalName: string, entity: any): WebApi.PromiseLike<WebApi.CreateResponse>;
-        /**
-         * Updates an entity record.
-         * @param entityLogicalName The entity logical name of the record you want to update. For example: "account".
-         * @param id GUID of the entity record you want to update.
-         * @param entity A JSON object containing key: value pairs, where key is the property of the entity and value is the value of the property you want update.
-         * @returns On success, returns a promise object containing the attributes specified earlier in the description of the successCallback parameter.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/updaterecord
-         */
-        UpdateRecord(entityLogicalName: string, id: string, entity: any): WebApi.PromiseLike<any>;
-        /**
-         * Deletes an entity record.
-         * @param entityLogicalName The entity logical name of the record you want to delete. For example: "account".
-         * @param id GUID of the entity record you want to delete.
-         * @returns On success, returns a promise object containing the attributes specified earlier in the description of the successCallback parameter.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/deleterecord
-         */
-        DeleteRecord(entityLogicalName: string, id: string): WebApi.PromiseLike<string>;
-        /**
-         * Retrieves an entity record.
-         * @param entityLogicalName The entity logical name of the record you want to retrieve. For example: "account".
-         * @param id GUID of the entity record you want to retrieve.
-         * @param options (Optional) OData system query options, $select and $expand, to retrieve your data.
-         * - Use the $select system query option to limit the properties returned by including a comma-separated
-         *   list of property names. This is an important performance best practice. If properties aren’t
-         *   specified using $select, all properties will be returned.
-         * - Use the $expand system query option to control what data from related entities is returned. If you
-         *   just include the name of the navigation property, you’ll receive all the properties for related
-         *   records. You can limit the properties returned for related records using the $select system query
-         *   option in parentheses after the navigation property name. Use this for both single-valued and
-         *   collection-valued navigation properties.
-         * - You can also specify multiple query options by using & to separate the query options.
-         * @example <caption>options example:</caption>
-         * options: $select=name&$expand=primarycontactid($select=contactid,fullname)
-         * @returns On success, returns a promise containing a JSON object with the retrieved attributes and their values.
-         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord
-         */
-        RetrieveRecord(entityLogicalName: string, id: string, options?: string): WebApi.PromiseLike<any>;
-
-    }
     interface IEntityBaseAttribute {
         /** Type of an attribute */
         readonly AttributeType: number;
@@ -1548,7 +1557,7 @@ declare namespace DevKit {
         readonly IsReadOnly: boolean;
     }
     interface DateFormattingInfo {
-        readonly AMDesignator: string;
+        readonly AmDesignator: string;
         readonly AbbreviatedDayNames: Array<string>;
         readonly AbbreviatedMonthGenitiveNames: Array<string>;
         readonly AbbreviatedMonthNames: Array<string>;
@@ -1558,15 +1567,12 @@ declare namespace DevKit {
         readonly DayNames: Array<string>;
         readonly FirstDayOfWeek: number;
         readonly FullDateTimePattern: string;
-        readonly IsReadOnly: boolean;
         readonly LongDatePattern: string;
         readonly LongTimePattern: string;
         readonly MonthDayPattern: string;
         readonly MonthGenitiveNames: Array<string>;
         readonly MonthNames: Array<string>;
-        readonly NativeCalendarName: string;
-        readonly PMDesignator: string;
-        readonly RFC1123Pattern: string;
+        readonly PmDesignator: string;
         readonly ShortDatePattern: string;
         readonly ShortTimePattern: string;
         readonly ShortestDayNames: Array<string>;
@@ -1574,7 +1580,6 @@ declare namespace DevKit {
         readonly TimeSeparator: string;
         readonly UniversalSortableDateTimePattern: string;
         readonly YearMonthPattern: string;
-        readonly eras: Array<string>;
     }
     interface AppProperty {
         readonly appId: string;
@@ -1736,6 +1741,11 @@ declare namespace DevKit {
          */
         SetPreventDefault(): void;
         /**
+         * Cancels the save operation if the event handler has a script error, returns a rejected promise for an async event handler or the operation times out.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/preventdefaultonerror
+         */
+        SetPreventDefaultOnError
+        /**
          * Returns a value that indicates the order in which this handler is executed.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/executioncontext/getdepth
          */
@@ -1760,6 +1770,21 @@ declare namespace DevKit {
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsavemode
          */
         readonly SaveMode: OptionSet.SaveMode;
+        /**
+        * Use this method to know information about an entity being saved/updated. It returns entity ID, and entity name if success.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getentityreference
+        */
+        readonly EntityReference: DevKit.EntityReference;
+        /**
+        * Use this method to know whether the OnSave operation is successful or failed.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getissavesuccess
+        */
+        readonly IsSaveSuccess: boolean;
+        /**
+        * Use this method to know the error details on why an entity save failed.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/save-event-arguments/getsaveerrorinfo
+        */
+        readonly SaveErrorInfo: string;
     }
     interface Utility {
         /**
@@ -1777,6 +1802,13 @@ declare namespace DevKit {
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getallowedstatustransitions
          */
         AllowedStatusTransitions(entityName: string, statusCode: number, successCallback?: (statusCodes: Array<number>) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        /**
+         * Returns a promise containing the default main form descriptor with the following values.
+         * @param entityName The logical name of the entity.
+         * @param formId The form ID of the entity.
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getentitymainformdescriptor
+         */
+        EntityMainFormDescriptor(entityName: string, formId: string): any;
         /**
          * Invokes the device camera to scan the barcode information, such as a product number. Note: This method is supported only for the mobile clients.
          * @param successCallback A function to call when the barcode value is returned as a String.
@@ -1954,7 +1986,7 @@ declare namespace DevKit {
          * @param errorCallback A function to execute when the operation fails.
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-navigation/navigateto
          */
-        NavigateTo(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
+        NavigateTo(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void;
         /**
          * Opens a dialog box to select files from your computer (web client) or mobile device (mobile clients).
          * @param filePickOption An object pick file option
@@ -2145,7 +2177,17 @@ declare namespace DevKit {
         */
         readonly OrganizationId: DevKit.Guid;
         /**
-        * Returns the unique name of the current organization
+        * Returns the ID of the current organization
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#istrialorganization
+        */
+        readonly IsTrialOrganization: boolean;
+        /**
+        * Returns the expiry date of the current organization if it is a trial organization.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#organizationexpirydate
+        */
+        readonly OrganizationExpiryDate: Date;
+        /**
+        * Returns a boolean indicating whether the organization is a trial organization.
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#uniquename
         */
         readonly UniqueName: string;
@@ -2236,6 +2278,12 @@ declare namespace DevKit {
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-entity/addonsave
         */
         AddOnSave(callback: (executionContext: any) => void): void;
+        /**
+        * PostSave event occurs after the OnSave event is complete. This event is used to support or execute custom logic using web resources to perform after Save actions when the save event is successful or failed due to server errors
+        * @param callback The function to add to the PostSave event. The execution context is automatically passed as the first parameter to this function
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/events/postsave
+        */
+        AddPostSave(callback: (executionContext: any) => void): void;
         /**
         * Adds a function to be called when form data is loaded.
         * @param callback The function to be executed when the form data loads. The function will be added to the bottom of the event handler pipeline. The execution context is automatically passed as the first parameter to the function. See Execution context for more information.
@@ -2478,9 +2526,11 @@ declare namespace DevKit {
         /** Decides whether to display the most recently used(MRU) item. Available only for Unified Interface */
         disableMru?: boolean;
         /** The entity types to display */
-        entityTypes?: Array<string>;
+        entityTypes: Array<string>;
         /** Used to filter the results */
         filters?: Array<LookupFilter>;
+        /** Indicates the default search term for the lookup control. */
+        searchText?: string;
         /** Indicates whether the lookup control should show the barcode scanner in mobile clients */
         showBarcodeScanner?: boolean;
         /** The views to be available in the view picker. Only system views are supported */
@@ -2512,9 +2562,9 @@ declare namespace DevKit {
         /** Name of the navigation property for this relationship. */
         navigationPropertyName: string,
         /** Relationship type. Specify one of the following values: 0:OneToMany | 1:ManyToMany */
-        relationshipType: number,
+        relationshipType: 0 | 1;
         /** Role type in relationship. Specify one of the following values: 1:Referencing | 2:AssociationEntity */
-        roleType: number
+        roleType: 1 | 2;
     }
     interface PageInputEntityRecord {
         /** Specify "entityrecord" */
@@ -2542,6 +2592,12 @@ declare namespace DevKit {
         /** ID of the selected stage in business process instance. */
         selectedStageId?: string
     }
+    interface PageInputDashboard {
+        /** Specify "dashboard" */
+        pageType: "dashboard",
+        /** The ID of the dashboard to load. If you don't specify the ID, navigates to the default dashboard. */
+        dashboardId: string
+    }
     interface NavigationOptions {
         /** Specify 1 to open the page inline; 2 to open the page in a dialog. Entity lists can only be opened inline; web resources can be opened either inline or in a dialog. */
         target: 1 | 2;
@@ -2551,6 +2607,8 @@ declare namespace DevKit {
         height?: number | SizeValue;
         /** Specify 1 to open the dialog in center; 2 to open the dialog on the side. Default is 1 (center). */
         position?: 1 | 2;
+        /** The dialog title on top of the center or side dialog. */
+        title?: string;
     }
     interface SizeValue {
         /** The numerical value */
@@ -2787,6 +2845,13 @@ declare namespace OptionSet {
         Expanded,
         /** collapsed */
         Collapsed
+    }
+    /** The contry type of tab */
+    enum TabContentType {
+        /** cardSections: The default tab behavior */
+        CardSections,
+        /** singleComponent: Maximizes the content of the first component in the tab */
+        SingleComponent
     }
     /** */
     enum ProcessDisplayState {

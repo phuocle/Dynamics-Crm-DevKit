@@ -13,7 +13,9 @@
     DataProvider,
     SolutionPackager,
     Portal,
-    Default
+    Default,
+    CustomApi,
+    Server
 }
 
 public enum ItemType
@@ -30,7 +32,15 @@ public enum ItemType
     JsTest,
     ResourceString,
     JsForm2,
-    Default
+    Default,
+    CustomApi,
+    DataProvider
+}
+
+public enum CrmItemType
+{
+    WebResource,
+    NewWebResource
 }
 
 public enum ParameterType

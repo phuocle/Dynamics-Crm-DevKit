@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
+using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
+using DynamicsCrm.DevKit.Wizard;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
-using Microsoft.Xrm.Sdk.Query;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Package.MenuItem
 {
@@ -15,8 +17,6 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
     {
         public const int CommandDeployReportId = 0x0300;
         public static readonly Guid CommandSetDeployReport = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bd");
-        private static string ProjectUniqueName { get; set; }
-        private static DTE DTE { get; set; }
 
         internal static void BeforeQueryStatus(object sender, DTE dte)
         {
@@ -37,101 +37,97 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
         internal static void Click(DTE dte)
         {
-            dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
-            var selectedItem = dte.SelectedItems.Item(1);
-            ProjectUniqueName = selectedItem.ProjectItem.ContainingProject.UniqueName;
-            var activeConfiguration = dte.Solution.SolutionBuild.ActiveConfiguration.Name;
-            DTE = dte;
             try
             {
-                UtilityPackage.SetDTEStatusBar(dte, "Building project report...");
-                dte.Events.BuildEvents.OnBuildProjConfigDone += BuildEvents_OnBuildProjConfigDone;
-                dte.Solution.SolutionBuild.BuildProject(activeConfiguration, ProjectUniqueName, true);
+                dte.StatusBar.Animate(true, vsStatusAnimation.vsStatusAnimationDeploy);
+                if (UtilityPackage.GetCrmServiceClient(dte))
+                {
+                    var crmServiceClient = (CrmServiceClient)UtilityPackage.GetGlobal("CrmServiceClient", dte);
+                    var crmUrl = (string)UtilityPackage.GetGlobal("CrmUrl", dte);
+                    UtilityPackage.SetDTEStatusBar(dte, $"[{crmUrl}] Connected");
+
+                    var fullFileName = dte.SelectedItems.Item(1).ProjectItem.FileNames[0];
+
+                    var cacheReportFromVS = GetCacheReportFromVS(dte, fullFileName);
+                    if (cacheReportFromVS == null)
+                    {
+                        var cacheReportFromFile = GetCacheReportFromFile(fullFileName);
+
+                        var formReport = new FormReport(crmServiceClient, cacheReportFromFile);
+                        if (formReport.ShowDialog() == DialogResult.OK)
+                        {
+                            var language = formReport.Language;
+                            var solution = formReport.Solution;
+                            var reportName = formReport.ReportName;
+                            var reportId = formReport.ReportId;
+
+                            DoDeployReport(dte, crmServiceClient, reportId, fullFileName);
+                            AddToCache(dte, language, solution, reportName, reportId, fullFileName);
+                        }
+                    }
+                    else
+                        DoDeployReport(dte, crmServiceClient, cacheReportFromVS.Value , fullFileName);
+
+                }
+                dte.StatusBar.Animate(false, vsStatusAnimation.vsStatusAnimationDeploy);
             }
             catch
             {
-                dte.Events.BuildEvents.OnBuildProjConfigDone -= BuildEvents_OnBuildProjConfigDone;
-                UtilityPackage.SetDTEStatusBar(dte, "   !!!   Building project report fail   !!!   ", true);
-                MessageBox.Show("Build report project fail. Please double check and try it again.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                UtilityPackage.SetDTEStatusBarAndStopAnimate(dte, "Deploy WebResource failed");
             }
         }
 
-        private static void BuildEvents_OnBuildProjConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
+        private static SavedMappingReport GetCacheReportFromFile(string fullFileName)
         {
-            DTE.Events.BuildEvents.OnBuildProjConfigDone -= BuildEvents_OnBuildProjConfigDone;
-            if (!Success || !ProjectUniqueName.EndsWith(Project)) return;
-            UtilityPackage.SetDTEStatusBar(DTE, "Build project report succeeded!");
-#if DEBUG
-            ProjectUniqueName = @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\TestReport\Test.Abc.Report.2015\Test.Abc.Report.2015.rptproj";
-#endif
-            var xml = File.ReadAllText(ProjectUniqueName);
-            var xdoc = XDocument.Parse(xml);
-            //Fist check for project VS2015
-            var node = (from x in xdoc?.Descendants("Project")?.Descendants("Configurations")?.Elements("Configuration")
-                        where x?.Element("Name")?.Value == ProjectConfig
-                        select x)?.FirstOrDefault();
-            var outputPath = node?.Descendants("Options")?.FirstOrDefault()?.Element("OutputPath")?.Value;
-            //if null, then check for project VS2017
-            if (outputPath == null)
-            {
-                var nodes = (from x in xdoc?.Root.Elements()
-                             where x?.Name?.LocalName == "PropertyGroup"
-                             select x);
-                foreach (var n in nodes)
-                {
-                    if (n.Elements().Where(x => x?.Name?.LocalName == "FullPath" && x?.Value == "Debug").Any())
-                    {
-                        outputPath = n.Elements().Where(x => x?.Name?.LocalName == "OutputPath").FirstOrDefault()?.Value;
-                        break;
-                    }
-                }
-            }
-            if (outputPath == null) throw new Exception("Cannot read the Output directory of the current report project");
-            var folderOutput = Path.Combine(Path.GetDirectoryName(ProjectUniqueName), outputPath);
-            var fileName = Path.GetFileName(DTE.SelectedItems.Item(1).ProjectItem.FileNames[0]);
-            var deployFile = Path.Combine(folderOutput, fileName);
-            if (!File.Exists(deployFile)) throw new Exception($"Cannot find deployable report: {deployFile}");
+            return DevKitSetting.SelectedReports.Where(x => x.FullFileName == fullFileName).FirstOrDefault();
+        }
 
-            var config = UtilityPackage.IsValid(DTE);
-            if (config == null) return;
-            UtilityPackage.SetDTEStatusBar(DTE, " !!! Read DynamicsCrm.DevKit.Cli.json config !!! ");
-            var check = UtilityPackage.GetGlobal("CrmService", DTE);
-            if (check == null)
-            {
-                var connection = UtilityPackage.IsConnection(config.CrmConnection);
-                if (connection == null)
-                {
-                    UtilityPackage.SetDTEStatusBar(DTE, " !!! Connection Dynamics CRM  failed !!! ", true);
-                    return;
-                }
-                UtilityPackage.SetGlobal("CrmService", connection, DTE);
-            }
-            var crmService = (IOrganizationService)UtilityPackage.GetGlobal("CrmService", DTE);
-            UtilityPackage.SetDTEStatusBar(DTE, " !!! Connected Dynamics CRM !!! ");
+        private static NameValueGuid GetCacheReportFromVS(DTE dte, string fullFileName)
+        {
+            var reports = (List<NameValueGuid>)UtilityPackage.GetGlobal("Reports", dte);
+            if (reports == null) return null;
+            return reports.Where(x => x.Name == fullFileName).FirstOrDefault();
+        }
 
-            var fetchData = new
+        private static void AddToCache(DTE dte, int language, string solution, string reportName, Guid reportId, string fullFileName)
+        {
+            //Save to VS caeched, get this first
+            var reports = (List<NameValueGuid>)UtilityPackage.GetGlobal("Reports", dte);
+            if (reports == null) reports = new List<NameValueGuid>();
+            var selectedCacheFromVS = reports.Where(x => x.Name == fullFileName).FirstOrDefault();
+            if (selectedCacheFromVS != null) reports.Remove(selectedCacheFromVS);
+            reports.Add(new NameValueGuid
             {
-                ismanaged = "0",
-                filename = fileName
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='report'>
-    <attribute name='reportid' />
-    <filter type='and'>
-      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
-      <condition attribute='filename' operator='eq' value='{fetchData.filename/*ReportTemplate.rdl*/}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = crmService.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (rows.Entities.Count == 0) throw new Exception("Please deploy this report first by Dynamics 365");
-            if (rows.Entities.Count != 1) throw new Exception($"Found {rows.Entities.Count} reports file name: {fileName} in the system. Cannot deploy.");
-            UtilityPackage.SetDTEStatusBar(DTE, "Deploying Report ...");
-            var update = new Entity("report", rows.Entities[0].Id);
-            update["bodytext"] = File.ReadAllText(deployFile);
-            crmService.Update(update);
-            UtilityPackage.SetDTEStatusBar(DTE, "   !!!   Deploy Report succeeded   !!!   ", true);
+                Name = fullFileName,
+                Value = reportId
+            });
+            UtilityPackage.SetGlobal("Reports", reports, dte);
+
+            //Saved to existing file, get later
+            var selectedCacheFromFile = DevKitSetting.SelectedReports.Where(x => x.FullFileName == fullFileName).FirstOrDefault();
+            if (selectedCacheFromFile != null) DevKitSetting.SelectedReports.Remove(selectedCacheFromFile);
+            DevKitSetting.SelectedReports.Add(new SavedMappingReport
+            {
+                Language = language,
+                FullFileName = fullFileName,
+                ReportName = reportName,
+                Solution = solution
+            });
+        }
+
+        private static void DoDeployReport(DTE dte, CrmServiceClient crmServiceClient, Guid reportId, string fullFileName)
+        {
+            var update = new Entity("report", reportId);
+            update["bodytext"] = File.ReadAllText(fullFileName);
+            try
+            {
+                crmServiceClient.Update(update);
+                UtilityPackage.SetDTEStatusBar(dte, $"Deployed: [{fullFileName}]");
+            }
+            catch
+            {
+                UtilityPackage.SetDTEStatusBar(dte, $"Deploy report failed !!!");
+            }
         }
     }
 }

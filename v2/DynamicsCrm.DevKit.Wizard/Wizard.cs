@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Forms;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using EnvDTE;
+using Microsoft.VisualStudio.TemplateWizard;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -13,6 +15,7 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$CrmConnectionString$", form.WizardCrmConnectionString);
             replacementsDictionary.Add("$ShortCrmName$", form.WizardShortCrmName);
             replacementsDictionary.Add("$NameSpace$", Utility.SafeNamespace(form.WizardNameSpace));
+            replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
             var nameSpace = Utility.SafeNamespace(form.WizardNameSpace);
             if (nameSpace.Contains($".{ProjectType.Plugin.ToString()}."))
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
@@ -30,7 +33,6 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$DynamicsCrm.DevKit.Cli.Version$", NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitCli));
             replacementsDictionary.Add("$DynamicsCrm.DevKit.Analyzers.Version$", NugetHelper.GetLatestPackageVersion(Const.DynamicsCrmDevKitAnalyzers));
 
-            replacementsDictionary.Add("$WebApiClientMin$", Utility.GetWebApiClientMin(form.ProjectJsName));
             replacementsDictionary.Add("$ProjectJsName$", form.ProjectJsName);
 
             var CoreAssemblies = NugetHelper.GetLatestPackageVersion(Const.MicrosoftCrmSdkCoreAssemblies, form.ComboBoxCrmName);
@@ -103,7 +105,7 @@ namespace DynamicsCrm.DevKit.Wizard
             var AuthTypeValue = form?.CrmConnection?.Type;
             var UrlValue = form?.CrmConnection?.Url;
             var ClientIdValue = form?.CrmConnection?.UserName;
-            var ClientSecretValue = form?.CrmConnection?.Type == "ClientSecret" ? form?.CrmConnection?.Password : EncryptDecrypt.DecryptString(form?.CrmConnection?.Password);
+            var ClientSecretValue = form?.CrmConnection?.Type == "ClientSecret" ? form?.CrmConnection?.Password : (form?.CrmConnection?.Password != string.Empty ?  EncryptDecrypt.DecryptString(form?.CrmConnection?.Password) : string.Empty);
             replacementsDictionary.Add("$ClientId$", ClientIdName ?? string.Empty);
             replacementsDictionary.Add("$ClientSecret$", ClientSecretName ?? string.Empty);
             replacementsDictionary.Add("$AuthTypeValue$", AuthTypeValue ?? string.Empty);
@@ -123,6 +125,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
             replacementsDictionary.Add("$SharedNameSpace$", Utility.GetSharedNameSpace(form.DTE));
             replacementsDictionary.Add("$ProxyTypesNameSpace$", Utility.GetProxyTypesNameSpace(form.DTE));
+            replacementsDictionary.Add("$DataSource$", form.DataSource);
             if (form.ItemType == ItemType.LateBound)
             {
                 replacementsDictionary.Add("$GeneratedLateBoundClass$", form.GeneratedLateBoundClass);
@@ -154,6 +157,7 @@ namespace DynamicsCrm.DevKit.Wizard
             replacementsDictionary.Add("$PluginMessage$", form.PluginMessage);
             replacementsDictionary.Add("$PluginComment$", form.PluginComment);
             replacementsDictionary.Add("$PluginLogicalName$", form.PluginLogicalName);
+            replacementsDictionary.Add("$PluginLogicalNameInt$", form.PluginLogicalName == "none" ? "0" : "1");
             replacementsDictionary.Add("$PluginStage$", form.PluginStage);
             replacementsDictionary.Add("$PluginExecution$", form.PluginExecution);
             replacementsDictionary.Add("$PluginExecutionInt$", form.PluginExecution == "Synchronous" ? "0" : "1");
@@ -166,6 +170,15 @@ namespace DynamicsCrm.DevKit.Wizard
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace.Replace($".{ItemType.Plugin.ToString()}.", $".{ItemType.Plugin.ToString()}"));
             else
                 replacementsDictionary.Add("$NameSpacePlugin$", nameSpace);
+        }
+
+        public static void MakeSureSharedProjectExist(DTE dte)
+        {
+            if (!Utility.SharedProjectExist(dte))
+            {
+                System.Windows.MessageBox.Show(@"Please add DynamicsCrm.DevKit Shared project and try it again", @"Error", (MessageBoxButton)System.Windows.Forms.MessageBoxButtons.OK, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Error);
+                throw new WizardCancelledException();
+            }
         }
     }
 }

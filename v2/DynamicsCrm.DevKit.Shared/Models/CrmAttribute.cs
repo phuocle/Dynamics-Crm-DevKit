@@ -58,7 +58,9 @@ namespace DynamicsCrm.DevKit.Shared.Models
                 {
                 }
             if (attribute is MultiSelectPicklistAttributeMetadata) IsMultiSelectPicklist = true;
+            IsReadOnly = attribute.SourceType == 1 || attribute.SourceType == 2;
         }
+        public bool IsReadOnly { get; set; }
         public bool IsCustomAttribute { get; set; }
         public string EntityName { get; set; }
         public string Name { get; set; }

@@ -3,17 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using EnvDTE;
-using Microsoft.Xrm.Sdk.Client;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
-using System.Drawing;
 using Microsoft.Xrm.Sdk;
 using DynamicsCrm.DevKit.SdkLogin;
 using Microsoft.VisualStudio.TemplateWizard;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -24,7 +23,7 @@ namespace DynamicsCrm.DevKit.Wizard
         public string GeneratedJsFormCodeTypeScriptDeclaration { get; set; }
         public string GeneratedJsFormCodeTypeScriptDeclaration2 { get; set; }
 
-        public IOrganizationService CrmService { get; set; }
+        public CrmServiceClient CrmServiceClient { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string ComboBoxCrmName => comboBoxCrmName.Text;
         public string NameSpace { get; set; }
@@ -52,7 +51,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 }
                 else if (_itemType == ItemType.JsForm2)
                 {
-                    link.Text = @"Add New Js Form Class (NEW)";
+                    link.Text = @"Add New Js Form Class";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/JavaScript-Form-Item-Template";
                 }
             }
@@ -62,25 +61,27 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             InitializeComponent();
 
+            comboBoxCrmName.Visible = false;
+
             progressBar.Visible = false;
 
             DTE = dte;
             ItemType = itemType;
             NameSpace = nameSpace;
             SharedNameSpace = sharedNameSpace;
-            LoadComboBoxCrmName();
+            //LoadComboBoxCrmName();
         }
 
-        private void LoadComboBoxCrmName()
-        {
-            var dataSource = Const.DataSourceCrm;
-            comboBoxCrmName.DataSource = dataSource;
-            comboBoxCrmName.ValueMember = "Version";
-            comboBoxCrmName.DisplayMember = "Name";
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
-                comboBoxCrmName.Text = config.DefaultCrmName;
-        }
+        //private void LoadComboBoxCrmName()
+        //{
+        //    var dataSource = Const.DataSourceCrm;
+        //    comboBoxCrmName.DataSource = dataSource;
+        //    comboBoxCrmName.ValueMember = "Version";
+        //    comboBoxCrmName.DisplayMember = "Name";
+        //    var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
+        //    if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
+        //        comboBoxCrmName.Text = config.DefaultCrmName;
+        //}
 
         private void LoadComboBoxEntity(List<XrmEntity> entities)
         {
@@ -103,7 +104,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             if (!IsOk()) return;
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            config.DefaultCrmName = comboBoxCrmName.Text;
+            //config.DefaultCrmName = comboBoxCrmName.Text;
             DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
             if (ItemType == ItemType.JsForm)
             {
@@ -131,7 +132,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 var @class = Class;
                 Task task2 = Task.Factory.StartNew(() =>
                 {
-                    var jsForm = new JsForm(CrmService, jsGlobalNameSpace, @class);
+                    var jsForm = new JsForm(CrmServiceClient, jsGlobalNameSpace, @class);
                     jsForm.GeneratorCode(forms, isDebugForm, jsWebApi, isDebugWebApi);
                     GeneratedJsForm = jsForm.Form;
                     GeneratedJsFormCode = jsForm.FormCode;
@@ -168,7 +169,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 var @class = Class;
                 Task task2 = Task.Factory.StartNew(() =>
                 {
-                    var jsForm2 = new JsForm2(CrmService, jsGlobalNameSpace, @class);
+                    var jsForm2 = new JsForm2(CrmServiceClient, jsGlobalNameSpace, @class);
                     jsForm2.GeneratorCode(forms, isDebugForm, jsWebApi, isDebugWebApi);
                     GeneratedJsForm = jsForm2.Form;
                     GeneratedJsFormCode = jsForm2.FormCode;
@@ -208,12 +209,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 loginForm.ShowDialog();
                 if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                 {
-                    if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
-                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
-                    else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
-                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
-                    else
-                        throw new WizardCancelledException();
+                    CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
                     CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
                 }
                 else
@@ -222,12 +218,13 @@ namespace DynamicsCrm.DevKit.Wizard
             else
             {
                 CrmConnection = form.CrmConnection;
-                CrmService = form.CrmService;
+                CrmServiceClient = form.CrmServiceClient;
             }
 
             buttonOk.Enabled = true;
             comboBoxCrmName.Enabled = true;
             CheckFormByFormType();
+            Text = $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}";
         }
 
         private void CheckFormByFormType()
@@ -241,7 +238,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task task2 = Task.Factory.StartNew(() =>
                     {
-                        entities2 = XrmHelper.GetAllEntities(CrmService);
+                        entities2 = XrmHelper.GetAllEntities(CrmServiceClient);
                     });
                     while (!task2.IsCompleted)
                     {
@@ -287,7 +284,7 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 Task task1 = Task.Factory.StartNew(() =>
                 {
-                    forms = XrmHelper.GetForms(CrmService, entity.LogicalName);
+                    forms = XrmHelper.GetForms(CrmServiceClient, entity.LogicalName);
                 });
                 while (!task1.IsCompleted)
                 {
@@ -314,7 +311,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     {
                         foreach (var form in comment.JsForm)
                         {
-                            if (form == checkListForm.Items[i].ToString() || checkListForm.Items[i].ToString().ToLower().EndsWith(form.ToLower()))
+                            if (form.ToLower() == checkListForm.Items[i].ToString().ToLower() /*|| checkListForm.Items[i].ToString().ToLower().EndsWith(form.ToLower())*/)
                             {
                                 checkListForm.SetItemChecked(i, true);
                             }

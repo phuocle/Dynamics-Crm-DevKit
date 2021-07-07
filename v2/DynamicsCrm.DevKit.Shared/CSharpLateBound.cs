@@ -8,12 +8,13 @@ using Microsoft.CSharp;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class CSharpLateBound
     {
-        private IOrganizationService _crmService;
+        private CrmServiceClient _crmService;
         private List<CrmAttribute> Lists { get; set; }
         private int ObjectTypeCode { get; set; }
         private string EntityName { get; set; }
@@ -31,7 +32,7 @@ namespace DynamicsCrm.DevKit.Shared
             return "@" + identifier;
         }
 
-        internal string Go(IOrganizationService crmService, CrmVersionName crmVersionName, string entity, string rootNameSpace, string sharedNameSpace)
+        internal string Go(CrmServiceClient crmService, CrmVersionName crmVersionName, string entity, string rootNameSpace, string sharedNameSpace)
         {
             _crmService = crmService;
             LoadData(entity);
@@ -206,13 +207,14 @@ namespace DynamicsCrm.DevKit.Shared
                         dataType += "DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateAndTime";
                 }
             }
-            else
+            else if(crmAttribute.IsMultiSelectPicklist)
+                dataType += "MultiSelectPicklist";
+            else if (crmAttribute.FieldType == AttributeTypeCode.Lookup)
             {
-                if (crmAttribute.IsMultiSelectPicklist)
-                    dataType += "MultiSelectPicklist";
-                else
-                    dataType += crmAttribute.FieldType.ToString();
+                dataType += crmAttribute.FieldType.ToString() + " to " + crmAttribute.EntityReferenceLogicalName;
             }
+            else
+                dataType += crmAttribute.FieldType.ToString();
             if (crmAttribute.MaxLength.HasValue) dataType += " - MaxLength: " + crmAttribute.MaxLength;
             if (crmAttribute.Min.HasValue) dataType += " - MinValue: " + crmAttribute.Min.Value.ToString("#,##0");
             if (crmAttribute.Max.HasValue) dataType += " - MaxValue: " + crmAttribute.Max.Value.ToString("#,##0");

@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InEntity">
+  <description default="This is the InEntity">
+    <label description="This is the InEntity" languagecode="1033" />
+  </description>
+  <displayname default="InEntity">
+    <label description="InEntity" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>InEntity</name>
+  <type>3</type>
+</customapirequestparameter>

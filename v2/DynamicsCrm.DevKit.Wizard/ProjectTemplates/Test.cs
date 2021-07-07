@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using DynamicsCrm.DevKit.Shared;
-using System.Linq;
 
 namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
 {
@@ -42,11 +41,7 @@ namespace DynamicsCrm.DevKit.Wizard.ProjectTemplates
             try
             {
                 DTE = (DTE)automationObject;
-                if (!Utility.SharedProjectExist(DTE))
-                {
-                    MessageBox.Show(@"Please add DynamicsCrm.DevKit Shared project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    throw new WizardCancelledException();
-                }
+                Wizard.MakeSureSharedProjectExist(DTE);
                 if (!Utility.ProxyTypesProjectExist(DTE))
                 {
                     MessageBox.Show(@"Please add DynamicsCrm.DevKit ProxyTypes project and try it again", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

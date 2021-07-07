@@ -10,6 +10,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using Microsoft.Xrm.Tooling.Connector;
 using NUglify;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -21,13 +22,13 @@ namespace DynamicsCrm.DevKit.Shared
         private int _objectTypeCode = -1;
         private DataCollection<Entity> _processes;
 
-        public JsForm2(IOrganizationService crmService, string projectName, string entityName)
+        public JsForm2(CrmServiceClient crmService, string projectName, string entityName)
         {
             CrmService = crmService;
             EntityName = entityName;
             ProjectName = projectName;
         }
-        private IOrganizationService CrmService { get; }
+        private CrmServiceClient CrmService { get; }
         private string EntityName { get; }
         private string ProjectName { get; }
         private int ObjectTypeCode
@@ -232,6 +233,7 @@ namespace DynamicsCrm.DevKit.Shared
                     Name = x?.Attribute("name")?.Value,
                     InnerText = x?.ToString()
                 };
+            tabs = tabs.OrderBy(x => x.Name).ToList();
             var existTabs = new List<string>();
             foreach (var tab in tabs)
             {
@@ -249,6 +251,7 @@ namespace DynamicsCrm.DevKit.Shared
                     {
                         Name = x2?.Attribute("name")?.Value
                     };
+                sections = sections.OrderBy(x => x.Name).ToList();
                 var existSections = new List<string>();
                 foreach (var section in sections)
                 {
@@ -294,7 +297,8 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var code = string.Empty;
             if (Processes.Count == 0) return string.Empty;
-            foreach (var entity in Processes)
+            var processed = Processes.OrderBy(x => x.LogicalName);
+            foreach (var entity in processed)
             {
                 var xaml = entity.GetAttributeValue<string>("xaml");
                 var name = entity.GetAttributeValue<string>("name");
@@ -332,6 +336,99 @@ namespace DynamicsCrm.DevKit.Shared
 
             return code;
         }
+
+        private void GetFormXml(string formId, out string formXml, out string entityLogicalName)
+        {
+            formXml = string.Empty;
+            entityLogicalName = string.Empty;
+            var fetchData = new
+            {
+                formid = formId
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='systemform'>
+    <attribute name='formxml' />
+    <attribute name='objecttypecode' />
+    <filter>
+      <condition attribute='formid' operator='eq' value='{fetchData.formid}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return;
+            var entity = rows.Entities[0];
+            formXml = entity.GetAttributeValue<string>("formxml");
+            entityLogicalName = entity.GetAttributeValue<string>("objecttypecode");
+        }
+
+        private string GetBodyOfQuickView(string formXml, string id)
+        {
+            var code = string.Empty;
+            var xdoc = XDocument.Parse(formXml);
+            var node = from x in xdoc
+                          .Descendants("tabs")
+                          .Descendants("tab")
+                          .Descendants("columns")
+                          .Descendants("column")
+                          .Descendants("sections")
+                          .Descendants("section")
+                          .Descendants("rows")
+                          .Descendants("row")
+                          .Descendants("cell")
+                          .Elements("control")
+                       where x?.Attribute("id")?.Value == id &&
+                             x?.Attribute("classid")?.Value == $"{{{ControlClassId.QUICK_VIEW_FORM}}}"
+                       select x;
+            var node2 = (from x in node
+                            .Descendants("parameters")
+                            .Descendants("QuickForms")
+                         select x.Value
+                         ).FirstOrDefault();
+            if (node2 == null) return string.Empty;
+            var xdoc2 = XDocument.Parse(node2);
+            var formId = (from x in xdoc2.Descendants("QuickFormId") select x.Value).FirstOrDefault();
+            if (formId == null) return string.Empty;
+            var quickViewFormXml = string.Empty;
+            var quickViewEntityLogicalName = string.Empty;
+            GetFormXml(formId, out quickViewFormXml, out quickViewEntityLogicalName);
+            if (quickViewFormXml == string.Empty) return string.Empty;
+            var xdoc3 = XDocument.Parse(quickViewFormXml);
+            var fields = (from x in xdoc3
+                          .Descendants("tabs")
+                          .Descendants("tab")
+                          .Descendants("columns")
+                          .Descendants("column")
+                          .Descendants("sections")
+                          .Descendants("section")
+                          .Descendants("rows")
+                          .Descendants("row")
+                          .Descendants("cell")
+                          .Descendants("control")
+                          select new IdName
+                          {
+                              Name = x?.Attribute("datafieldname")?.Value,
+                              Id = x?.Attribute("id").Value,
+                              ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
+                              ControlId = x?.Attribute("uniqueid")?.Value
+                          }).Distinct().ToList();
+            fields = fields.OrderBy(x => x.Name).ToList();
+            foreach (var field in fields)
+            {
+                if (field.ClassId == ControlClassId.SUB_GRID || field.ClassId == ControlClassId.SUB_GRID_PANEL || field.ClassId == ControlClassId.TIMER) continue;
+                var request = new RetrieveAttributeRequest
+                {
+                    EntityLogicalName = quickViewEntityLogicalName,
+                    LogicalName = field.Id,
+                    RetrieveAsIfPublished = false
+                };
+                var response = (RetrieveAttributeResponse)CrmService.Execute(request);
+                code += $"\t\t\t\t{response.AttributeMetadata.SchemaName}: {{}},\r\n";
+            }
+            code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
+            return code;
+        }
+
         private string GetJsQuickFormCode(string formXml)
         {
             var code = string.Empty;
@@ -347,8 +444,15 @@ namespace DynamicsCrm.DevKit.Shared
             var quickForms = (from f in fields
                 where f.QuickForms.Count() != 0
                 select f.id).ToList();
+
+            quickForms.Sort();
             foreach (var quickForm in quickForms)
-                code += $"\t\t\t{quickForm}: {{}},\r\n";
+            {
+                //code += $"\t\t\t{quickForm}: {{}},\r\n";
+                code += $"\t\t\t{quickForm}: {{\r\n";
+                code += GetBodyOfQuickView(formXml, quickForm);
+                code += $"\t\t\t}},\r\n";
+            }
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
             return code;
         }
@@ -359,6 +463,7 @@ namespace DynamicsCrm.DevKit.Shared
             var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
                     .Descendants("NavBarByRelationshipItem")
                 select (string) x?.Attribute("Id")).ToList();
+            navigations.Sort();
             foreach (var navigation in navigations)
                 code += $"\t\t\t{navigation}: {{}},\r\n";
             code = code.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
@@ -372,9 +477,14 @@ namespace DynamicsCrm.DevKit.Shared
             code += "\"use strict\";\r\n";
             foreach (var form in processForms)
             {
+                var type = $"{ProjectName}.Form{Utility.SafeName(form.Name)}";
                 code += $"var form{Utility.SafeName(form.Name)} = (function () {{\r\n";
-                code += "\t\"use strict\";\r\n";
+                code += $"\t\"use strict\";\r\n";
+                code += $"\t/** @type {type} */\r\n";
+                code += $"\tvar form = null;\r\n";
                 code += $"\tasync function onLoad(executionContext) {{\r\n";
+                code += $"\t\tform = new {type}(executionContext);\r\n";
+                code += $"\r\n";
                 code += $"\t}}\r\n";
                 code += $"\tasync function onSave(executionContext) {{\r\n";
                 code += $"\t}}\r\n";
@@ -390,12 +500,6 @@ namespace DynamicsCrm.DevKit.Shared
             formCode += $"var {ProjectName};\r\n";
             formCode += $"(function ({ProjectName}) {{\r\n";
             formCode += $"\t'use strict';\r\n";
-            //var devKit = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.DevKit.js");
-            //if (!isDebug)
-            //{
-            //    devKit = devKit.Replace("else { throw new Error(", "//else { throw new Error(");
-            //}
-            //formCode += devKit + "\r\n";
             //FORM
             foreach (var form in processForms)
             {
@@ -605,6 +709,7 @@ namespace DynamicsCrm.DevKit.Shared
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
+            fields = fields.OrderBy(x => x.Name).ToList();
             var temp = string.Empty;
             foreach (var field in fields)
             {
@@ -743,20 +848,25 @@ namespace DynamicsCrm.DevKit.Shared
             };
             return jsIntellisense.Intellisense;
         }
+
+        public IEnumerable<string> GetForms()
+        {
+            return Forms.Select(f => f.Name).ToList();
+        }
         public void GeneratorCode(List<string> checkedItems, bool isDebugForm, bool isJsWebApi, bool isDebugWebApi)
         {
             var processForms = new List<SystemForm>();
             foreach (var form in Forms)
             {
-                if (checkedItems.Contains($"{form.Name}"))
+                if (checkedItems.Any(x => form.Name.ToLower() == x.ToLower()))
                 {
                     processForms.Add(form);
-                    checkedItems.Remove(form.Name);
+                    checkedItems.RemoveAll(x => x.Equals(form.Name, StringComparison.OrdinalIgnoreCase));
                 }
             }
             foreach (var form in Forms)
             {
-                if (checkedItems.Any(x => form.Name.EndsWith(x)))
+                if (checkedItems.Any(x => form.Name.ToLower().EndsWith(x.ToLower())))
                     processForms.Add(form);
             }
             Form = GetForm(processForms);

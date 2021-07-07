@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{f8f08f4f-858e-4e5e-a3b9-6863ee30c560}</formid>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{911b2ba7-be83-47e1-b6ed-3015f626652b}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+            <label description="Tổng quát" languagecode="1066" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{e1f1c059-a5f1-40df-992b-5392aed988cd}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                    <label description="Tổng quát" languagecode="1066" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{3c96042b-d44a-43a7-97bb-514a8b9b3e4d}">
+                        <labels>
+                          <label description="Data Source 3" languagecode="1033" />
+                        </labels>
+                        <control id="devkit_datasource3name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="devkit_datasource3name" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

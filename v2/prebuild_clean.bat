@@ -1,6 +1,4 @@
-﻿@echo off
-
-REM ---------------------------------------------------------------------
+﻿REM ---------------------------------------------------------------------
 REM * Performs necessary clean-up pre-build for Experimental folders
 REM * that can linger in the users local cache.
 REM *

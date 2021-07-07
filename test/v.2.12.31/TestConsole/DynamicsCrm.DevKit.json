@@ -1,0 +1,26 @@
+﻿{
+    "DefaultCrmConnection": "AD",
+    "CrmConnections": [
+        {
+            "Name": "OAuth",
+            "Url": "https://dev2-devkit.crm5.dynamics.com",
+            "UserName": "dev2@pldevkit.onmicrosoft.com",
+            "Password": "jx0fadedm5wnddeew2teG9PHg==",
+            "Type": "OAuth"
+        },
+        {
+            "Name": "ClientSecret",
+            "Url": "https://dev2-devkit.crm5.dynamics.com",
+            "UserName": "e31fc7d6-4dce-46e3-8677-04ab0a2968e3",
+            "Password": "iwRSB0te8o]pHX_ayVQLJUqziB1E0h",
+            "Type": "ClientSecret"
+        },
+        {
+            "Name": "AD",
+            "Url": "http://localhost:1000/CRM",
+            "UserName": "crm\\admin",
+            "Password": "jx0fE8wm5wnmew2teG9PHg==",
+            "Type": "AD"
+        }
+    ]
+}

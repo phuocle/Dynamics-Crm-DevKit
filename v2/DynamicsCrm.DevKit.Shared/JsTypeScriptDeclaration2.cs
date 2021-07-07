@@ -10,14 +10,15 @@ using System;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk.Messages;
 using System.Collections.Specialized;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
 {
     public class JsTypeScriptDeclaration2
     {
-        private IOrganizationService service = null;
+        private CrmServiceClient service = null;
 
-        public JsTypeScriptDeclaration2(IOrganizationService crmService)
+        public JsTypeScriptDeclaration2(CrmServiceClient crmService)
         {
             service = crmService;
         }
@@ -80,7 +81,8 @@ namespace DynamicsCrm.DevKit.Shared
             var _d_ts = string.Empty;
             _d_ts += $"declare namespace OptionSet {{\r\n";
             _d_ts += $"\tnamespace {Class} {{\r\n";
-            foreach (var crmAttribute in Fields)
+            var fields = Fields.OrderBy(x => x.LogicalName).ToList();
+            foreach (var crmAttribute in fields)
             {
                 if (!crmAttribute.IsValidForRead) continue;
                 if (crmAttribute.FieldType == AttributeTypeCode.Picklist ||
@@ -198,6 +200,7 @@ namespace DynamicsCrm.DevKit.Shared
                     else
                     {
                         var navigations = crmAttribute.NavigationPropertyName.Split(";".ToCharArray());
+                        if (crmAttribute.LogicalName == "acceptingentityid") navigations = "acceptingentityid_queue;acceptingentityid_systemuser".Split(";".ToCharArray());
                         if (entities.Length != navigations.Length) continue;
                         var j = 0;
                         foreach (var entity in entities)
@@ -215,11 +218,14 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     var entities = crmAttribute.EntityReferenceLogicalName.Split(";".ToCharArray());
                     var navigations = crmAttribute.NavigationPropertyName.Split(";".ToCharArray());
-                    for (var j = 0; j < entities.Length; j++)
+                    if (entities.Length == navigations.Length)
                     {
-                        if (jdoc.Length > 0)
-                            _d_ts += $"\t\t/** {jdoc} */\r\n";
-                        _d_ts += $"\t\t{navigations[j]}: DevKit.WebApi.LookupValue{Readonly};\r\n";
+                        for (var j = 0; j < entities.Length; j++)
+                        {
+                            if (jdoc.Length > 0)
+                                _d_ts += $"\t\t/** {jdoc} */\r\n";
+                            _d_ts += $"\t\t{navigations[j]}: DevKit.WebApi.LookupValue{Readonly};\r\n";
+                        }
                     }
                 }
                 else if (crmAttribute.FieldType == AttributeTypeCode.Owner)
@@ -381,17 +387,14 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var _d_ts = string.Empty;
             var xdoc = XDocument.Parse(formXml);
-            var navigations = (from x in xdoc
-                               .Descendants("Navigation")
-                               .Descendants("NavBar")
-                               .Descendants("NavBarByRelationshipItem")
-                               where (string)x?.Attribute("Show") == null ||
-                                     (string)x?.Attribute("Show") == "true"
+            var navigations = (from x in xdoc.Descendants("Navigation").Descendants("NavBar")
+                    .Descendants("NavBarByRelationshipItem")
                                select (string)x?.Attribute("Id")).ToList();
+            navigations.Sort();
             if (navigations.Count == 0) return string.Empty;
+            navigations.Sort();
             foreach (var navigation in navigations)
             {
-
                 _d_ts += $"\t\t\t{navigation}: DevKit.Controls.NavigationItem,\r\n";
             }
             _d_ts = _d_ts.TrimEnd(",\r\n".ToCharArray()) + "\r\n";
@@ -423,7 +426,8 @@ namespace DynamicsCrm.DevKit.Shared
             if (Processes.Count == 0) return string.Empty;
             var _d_ts = string.Empty;
             var part1 = string.Empty;
-            foreach (var entity in Processes)
+            var processes = Processes.OrderBy(x => x.LogicalName);
+            foreach (var entity in processes)
             {
                 var xaml = entity.GetAttributeValue<string>("xaml");
                 var name = entity.GetAttributeValue<string>("name");
@@ -489,11 +493,13 @@ namespace DynamicsCrm.DevKit.Shared
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
+            fields = fields.OrderBy(x => x.Name).ToList();
             var temp = string.Empty;
             foreach (var field in fields)
             {
                 var classId = GetARealClassId(formXml, field.ClassId, field.ControlId);
                 if (classId != ControlClassId.SUB_GRID && classId != ControlClassId.SUB_GRID_PANEL) continue;
+                if (temp.Contains($"\t\t\t{field.Id}: DevKit.Controls.Grid;\r\n")) continue;
                 temp += $"\t\t\t{field.Id}: DevKit.Controls.Grid;\r\n";
             }
             if (temp.Length > 0)
@@ -531,6 +537,7 @@ namespace DynamicsCrm.DevKit.Shared
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
+            fields = fields.OrderBy(x => x.Name).ToList();
             var temp = string.Empty;
             var temp1 = string.Empty;
             var temp2 = string.Empty;
@@ -662,6 +669,7 @@ namespace DynamicsCrm.DevKit.Shared
                            InnerText = x?.ToString()
                        };
             var existTabs = new List<string>();
+            rows = rows.OrderBy(x => x.Name).ToList();
             foreach (var row in rows)
             {
                 if (Utility.SafeName(row.Name).Length == 0) continue;
@@ -676,6 +684,7 @@ namespace DynamicsCrm.DevKit.Shared
                                 name = x2.Attribute("name")?.Value
                             };
                 var existSections = new List<string>();
+                rows2 = rows2.OrderBy(x => x.name).ToList();
                 foreach (var row2 in rows2)
                 {
                     if (row2 == null) continue;
@@ -713,7 +722,7 @@ namespace DynamicsCrm.DevKit.Shared
                           .Descendants("control")
                         select new IdName
                         {
-                            Name = x?.Attribute("datafieldname")?.Value,
+                            Name = x?.Attribute("datafieldname")?.Value ?? x?.Attribute("id")?.Value,
                             Id = x?.Attribute("id").Value,
                             ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                             ControlId = x?.Attribute("uniqueid")?.Value
@@ -885,7 +894,23 @@ namespace DynamicsCrm.DevKit.Shared
                              item.ClassId == ControlClassId.UNKNOWN_5 ||
                              item.ClassId == ControlClassId.SUB_GRID ||
                              item.ClassId == ControlClassId.SUB_GRID_PANEL ||
-                             item.ClassId == ControlClassId.QUICK_VIEW_FORM)
+                             item.ClassId == ControlClassId.QUICK_VIEW_FORM ||
+                             item.ClassId == ControlClassId.CASERESEARCH_LINKCONTROL ||
+                             item.ClassId == ControlClassId.KBVIEWER ||
+                             item.ClassId == ControlClassId.CASE_KBSEARCHCONTROL ||
+                             item.ClassId == ControlClassId.ATTACHMENT ||
+                             item.ClassId == ControlClassId.ISMANAGED ||
+                             item.ClassId == ControlClassId.CONNECTIONROLEOBJECTTYPECODELIST||
+                             item.ClassId == ControlClassId.DYNAMICPROPERTIESLIST_LINKCONTROL ||
+                             item.ClassId == ControlClassId.MSDYN_SESSIONTYPE ||
+                             item.ClassId == ControlClassId.MSDYN_NAME ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_URL ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER2 ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_POSTCONVERSATIONSURVEYDISCLAIMER3 ||
+                             item.ClassId == ControlClassId.WEBRESOURCE_WECHATCALLBACKURL ||
+                             item.ClassId == ControlClassId.MSDYN_SOURCEENTITYNAME
+                             )
                         continue;
                     else
                     {
@@ -912,15 +937,15 @@ namespace DynamicsCrm.DevKit.Shared
                        select x;
             if (rows == null) return classId;
             var rows2 = (from x in rows.Elements("customControl")
-                        where x?.Attribute("id")?.Value != null
-                        select new
-                        {
-                            id = x?.Attribute("id")?.Value?.ToString()
-                        }).ToList();
+                         where x?.Attribute("id")?.Value != null
+                         select new
+                         {
+                             id = x?.Attribute("id")?.Value?.ToString()
+                         }).ToList();
             if (rows2.Count() == 0) return classId;
-            foreach(var row in rows2)
+            foreach (var row in rows2)
             {
-                if(Guid.TryParse(row.id, out var guid))
+                if (Guid.TryParse(row.id, out var guid))
                 {
                     return guid.ToString().ToUpper();
                 }
@@ -1050,8 +1075,6 @@ namespace DynamicsCrm.DevKit.Shared
                 formBase += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
                 formBase += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
                 formBase += $"\t\tUtility: DevKit.Utility;\r\n";
-                formBase += $"\t\t/** Provides properties and methods to use Web API to create and manage records and execute Web API actions and functions in Customer Engagement */\r\n";
-                formBase += $"\t\tWebApi: DevKit.WebApi;\r\n";
                 if (form_d_ts_Body_QuickCreate.Length > 0)
                 {
                     formBase += $"\t\t/** The Body section of form {formName} */\r\n";

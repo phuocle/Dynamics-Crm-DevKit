@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InBoolean">
+  <description default="This is the InBoolean">
+    <label description="This is the InBoolean" languagecode="1033" />
+  </description>
+  <displayname default="InBoolean">
+    <label description="InBoolean" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>InBoolean</name>
+  <type>0</type>
+</customapirequestparameter>

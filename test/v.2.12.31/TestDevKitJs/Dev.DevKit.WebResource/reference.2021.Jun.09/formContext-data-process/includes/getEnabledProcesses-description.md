@@ -1,0 +1,1 @@
+Asynchronously retrieves the business process flows enabled for a table that the current user can switch to.

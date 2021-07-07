@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project xmlns:xsi="http://schemas.microsoft.com/developer/msbuild/2003-instance" xmlns:xsd="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="2.0">
-  <DataSources />
-  <DataSets />
-  <Reports>
-    <ResourceProjectItem>
-      <Name>note.v9.txt</Name>
-      <FullPath>note.v9.txt</FullPath>
-    </ResourceProjectItem>
-    <ProjectItem>
-      <Name>ReportTemplate.rdl</Name>
-      <FullPath>ReportTemplate.rdl</FullPath>
-    </ProjectItem>
-    <ResourceProjectItem>
-      <Name>download.reports.bat</Name>
-      <FullPath>download.reports.bat</FullPath>
-    </ResourceProjectItem>
-  </Reports>
-  <Configurations>
-    <Configuration>
-      <Name>Debug</Name>
-      <Platform>Win32</Platform>
-      <PlatformTarget>x86</PlatformTarget>
-      <Options>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <FullPath>Debug</FullPath>
         <OutputPath>bin\Debug</OutputPath>
-        <TargetServerVersion>SSRS2008R2</TargetServerVersion>
-        <TargetFolder></TargetFolder>
-        <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
+        <ErrorLevel>2</ErrorLevel>
+        <OverwriteDatasets>False</OverwriteDatasets>
+        <OverwriteDataSources>False</OverwriteDataSources>
+        <TargetServerVersion>SSRS2016</TargetServerVersion>
+        <Platform>Win32</Platform>
+        <TargetReportFolder>Reports</TargetReportFolder>
         <TargetDatasetFolder>Datasets</TargetDatasetFolder>
+        <TargetDatasourceFolder>Data Sources</TargetDatasourceFolder>
         <TargetReportPartFolder>Report Parts</TargetReportPartFolder>
-      </Options>
-    </Configuration>
-    <Configuration>
-      <Name>Release</Name>
-      <Platform>Win32</Platform>
-      <PlatformTarget>x86</PlatformTarget>
-      <Options>
+        <TargetServerURL>http://localhost/reportserver</TargetServerURL>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <FullPath>Release</FullPath>
         <OutputPath>bin\Release</OutputPath>
-        <TargetServerVersion>SSRS2008R2</TargetServerVersion>
-        <TargetFolder></TargetFolder>
-        <TargetDataSourceFolder>Data Sources</TargetDataSourceFolder>
+        <ErrorLevel>2</ErrorLevel>
+        <OverwriteDatasets>False</OverwriteDatasets>
+        <OverwriteDataSources>False</OverwriteDataSources>
+        <TargetServerVersion>SSRS2016</TargetServerVersion>
+        <Platform>Win32</Platform>
+        <TargetReportFolder>Reports</TargetReportFolder>
         <TargetDatasetFolder>Datasets</TargetDatasetFolder>
+        <TargetDatasourceFolder>Data Sources</TargetDatasourceFolder>
         <TargetReportPartFolder>Report Parts</TargetReportPartFolder>
-      </Options>
-    </Configuration>
-  </Configurations>
+        <TargetServerURL>http://localhost/reportserver</TargetServerURL>
+    </PropertyGroup>
+    <PropertyGroup>
+        <DataSources>@(DataSource)</DataSources>
+        <DataSets>@(DataSet)</DataSets>
+        <Reports>@(Report)</Reports>
+    </PropertyGroup>
+    <ItemGroup>
+        <Report Include="download.reports.bat">
+            <MimeType>application/octet-stream</MimeType>
+        </Report>
+        <Report Include="notes.txt">
+            <MimeType>
+            </MimeType>
+        </Report>
+        <Report Include="ReportTemplate.rdl" />
+    </ItemGroup>
+    <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>

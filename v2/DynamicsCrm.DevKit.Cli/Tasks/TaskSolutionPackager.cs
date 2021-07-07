@@ -9,9 +9,34 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
+using DynamicsCrm.DevKit.Shared.Helper;
+using System.Threading;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
+    public class ThreadWork
+    {
+        public static void SolutionPackagerDots()
+        {
+            CliLog.Write(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Exporting ");
+            while (true)
+            {
+                CliLog.Write(CliLog.ColorWhite, ".");
+                Thread.Sleep(1000);
+            }
+        }
+
+        public static void Dot()
+        {
+            while (true)
+            {
+                CliLog.Write(CliLog.ColorWhite, ".");
+                Thread.Sleep(1000);
+            }
+        }
+
+    }
+
     public class TaskSolutionPackager
     {
         private CrmServiceClient crmServiceClient;
@@ -33,15 +58,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         internal void Run()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, LOG);
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             if (!IsValid()) return;
 
             var solution = GetSolutionFromCrm();
             Packger(solution);
 
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "END ", CliLog.ColorMagenta, LOG);
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
         }
 
         private bool IsValid()
@@ -60,6 +86,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.type.ToLower() != "Extract".ToLower() && json.type.ToLower() != "Pack".ToLower())
                 throw new Exception($"{LOG} 'type' should be: 'Extract' or 'Pack'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            if (!XrmHelper.IsExistSolution(crmServiceClient, json.solution, out var solutionId, out var prefix))
+                throw new Exception($"{LOG} solution '{json.solution}' not exist");
+            if (json.mapfile != null && json.mapfile.Length > 0)
+            {
+                var map = $"{currentDirectory}\\{json.mapfile}";
+                if (!File.Exists(map))
+                    throw new Exception($"{LOG} mapfile '{map}' not exist");
+            }
             return true;
         }
 
@@ -67,10 +101,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             if (json.type.ToLower().Trim() == "Extract".ToLower())
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Exporting ", CliLog.ColorCyan, json.solutiontype, CliLog.ColorGreen, " solution: ", CliLog.ColorCyan, json.solution, CliLog.ColorGreen, " to:");
+                var timer = Stopwatch.StartNew();
                 var fileName = Utility.FormatSolutionVersionString(json.solution, System.Version.Parse(CrmVersion), json.solutiontype);
                 var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", fileName);
-                CliLog.WriteLine(CliLog.ColorCyan, " " + solutionFile);
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Export ", CliLog.ColorCyan, json.solutiontype, CliLog.ColorGreen, " solution: ", CliLog.ColorCyan, json.solution, CliLog.ColorGreen, " to: ", CliLog.ColorCyan, solutionFile);
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
                 var request = new ExportSolutionRequest
                 {
                     Managed = json.solutiontype == "Managed",
@@ -78,20 +113,27 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 };
                 try
                 {
+                    var wait = new Thread(ThreadWork.SolutionPackagerDots);
+                    wait.Start();
                     var response = (ExportSolutionResponse)crmServiceClient.Execute(request);
+                    wait.Abort();
+                    CliLog.WriteLine();
                     var tempFile = Utility.WriteTempFile(fileName, response.ExportSolutionFile);
                     var dir = Path.GetDirectoryName(solutionFile);
                     if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                     File.Copy(tempFile, solutionFile, true);
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"Solution exported in  {timer.Elapsed:c}");
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
                     return solutionFile;
                 }
                 catch (TimeoutException te)
                 {
-                    CliLog.WriteLine();
-                    CliLog.WriteLine();
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
                     CliLog.WriteLine(ConsoleColor.White, te.Message);
-                    CliLog.WriteLine();
-                    CliLog.WriteLine();
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
                     CliLog.WriteLine(ConsoleColor.Red, "!!! [SOLUTION-PACKAGER] FAILED !!!");
                     throw;
                 }
@@ -132,8 +174,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var command = CreateCommandArgs(solutionFile);
             var path = "\"" + GetParentFolder(currentDirectory) + $@"\packages\Microsoft.CrmSdk.CoreTools.{arguments.Version}\content\bin\coretools\SolutionPackager.exe" + "\"";
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Executing ", CliLog.ColorCyan, "Solution Packager");
-            CliLog.WriteLine(CliLog.ColorCyan, " " + path + " " + command);
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Executing ", CliLog.ColorRed, "Solution Packager");
+            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, " " + path + " " + command);
             CliLog.WriteLine();
             var process = new Process
             {
@@ -160,7 +203,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             if (json.rootfolder.Length > 0)
                 currentDirectory += "\\" + json.rootfolder;
             var directory = new DirectoryInfo(currentDirectory);
-            return directory.Parent != null ? directory.Parent.FullName : string.Empty;
+            if (directory.Parent == null) throw new Exception($"{LOG} Not found packages folder");
+            if (Directory.Exists($"{directory.Parent.FullName}\\packages")) return directory.Parent.FullName;
+            return GetParentFolder(directory.Parent.FullName);
         }
 
         private string CreateCommandArgs(string solutionFile)

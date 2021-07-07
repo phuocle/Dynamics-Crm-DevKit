@@ -23,7 +23,9 @@ namespace DynamicsCrm.DevKit.Shared.Models
         [CommandLineParameter(Command = "command", Name = "Command", Required = false, Description = "Others command", Default = "")]
         public string Command { get; set; }
 
-        [CommandLineParameter(Command = "sdklogin", Name = "SdkLogin", Required = false, Description = "Login by Sdk Dorm", Default = "")]
+        [CommandLineParameter(Command = "sdklogin", Name = "SdkLogin", Required = false, Description = "Login by Sdk OOB dialog", Default = "")]
         public string SdkLogin { get; set; }
+        [CommandLineParameter(Command = "onlyupdateassembly", Name = "OnlyUpdateAssembly", Required = false, Description = "Fast deploy, only update the assembly", Default = "")]
+        public string OnlyUpdateAssembly { get; set; }
     }
 }

@@ -1,9 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace $NameSpace$
 {
@@ -45,6 +41,15 @@ namespace $NameSpace$
         PostOperation = 40
     }
 
+    public enum PluginType
+    {
+        Plugin = 0,
+        Workflow = 1,
+        CustomAction = 2,
+        DataProvider = 3,
+        CustomApi = 4
+	}
+
     [DebuggerNonUserCode()]
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public class CrmPluginRegistrationAttribute : Attribute
@@ -69,6 +74,13 @@ namespace $NameSpace$
             GroupName = groupName;
             IsolationMode = isolationModel;
         }
+
+        public CrmPluginRegistrationAttribute(string name, string message, PluginType pluginType)
+        {
+			Name = name;
+            Message = message;
+            PluginType = pluginType;
+		}
 
         public string RunAs { get; set; } = string.Empty;
         public string FriendlyName { get; set; } = string.Empty;
@@ -104,5 +116,7 @@ namespace $NameSpace$
         public string Image4Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image4Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image4Attributes { get; set; } = string.Empty;
+        public PluginType PluginType { get; set; }
+        public string DataSource { get; set; }
     }
 }

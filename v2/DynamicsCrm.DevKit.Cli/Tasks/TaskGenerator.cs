@@ -8,7 +8,6 @@ using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
-using DynamicsCrm.DevKit.Shared.Helper;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -50,14 +49,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'rootnamespace' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.rootfolder == "???")
                 throw new Exception($"{LOG} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.crmversion.Length == 0 || json.crmversion == "???")
-                throw new Exception($"{LOG} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.crmversion.ToLower() != "365".ToLower() &&
-                json.crmversion.ToLower() != "2016".ToLower() &&
-                json.crmversion.ToLower() != "2015".ToLower() &&
-                json.crmversion.ToLower() != "2013".ToLower() &&
-                json.crmversion.ToLower() != "2011".ToLower())
-                throw new Exception($"{LOG} 'crmversion' should be: '365' or '2016' or '2015' or '2013' or '2011'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            //if (json.crmversion.Length == 0 || json.crmversion == "???")
+            //    throw new Exception($"{LOG} 'rootfolder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            //if (json.crmversion.ToLower() != "365".ToLower() &&
+            //    json.crmversion.ToLower() != "2016".ToLower() &&
+            //    json.crmversion.ToLower() != "2015".ToLower() &&
+            //    json.crmversion.ToLower() != "2013".ToLower() &&
+            //    json.crmversion.ToLower() != "2011".ToLower())
+            //    throw new Exception($"{LOG} 'crmversion' should be: '365' or '2016' or '2015' or '2013' or '2011'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.type.Length == 0 || json.type == "???")
                 throw new Exception($"{LOG} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.type.ToLower() != "JsForm".ToLower() &&
@@ -70,33 +69,33 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private void GeneratorLateBound()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "[GENERATOR CSHARP LATE BOUND]");
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             var entities = new List<string>();
             string[] files = new string[] { };
             var folder = $"{currentDirectory}\\{json.rootfolder}";
             if (!folder.EndsWith("\\")) folder += "\\";
-            if (json.entities == null || json.entities.Trim().Length == 0)
+            if (json.entities == null || json.entities.Trim().Length == 0 || json.entities.Trim().ToLower() == "folder")
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "current folder", CliLog.ColorGreen, " with pattern values: ", CliLog.ColorCyan, "*.generated.cs");
-                CliLog.WriteLine();
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
                 var pattern = "*.generated.cs";
                 files = Directory.GetFiles(folder, pattern);
             }
             else
             {
-                if (json.entities.Trim().ToLower() == "*")
+                if (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all")
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, "*");
-                    CliLog.WriteLine();
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities.Trim().ToLower());
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
 
                     var schemas = GetAllEntitySchemas();
                     files = schemas.Select(e => $"{folder}{e}.generated.cs").ToArray();
                 }
                 else
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities);
-                    CliLog.WriteLine();
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities.Trim().ToLower());
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
 
                     files = json.entities.Split(",".ToCharArray()).Select(e => $"{folder}{e}.generated.cs").ToArray();
                     files = ConvertToSchemaName(files);
@@ -210,8 +209,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var lateBound = new CSharpLateBound();
             var rootNameSpace = json.rootnamespace;
             var sharedNameSpace = GetSharedNameSpace(json.rootnamespace);
-            var crmVersionName = (CrmVersionName)int.Parse(json.crmversion);
-            var generated = lateBound.Go(XrmHelper.GetIOrganizationService(crmServiceClient), crmVersionName, entity, rootNameSpace, sharedNameSpace);
+            var crmVersionName = CrmVersionName._365;// (CrmVersionName)int.Parse(json.crmversion);
+            var generated = lateBound.Go(crmServiceClient, crmVersionName, entity, rootNameSpace, sharedNameSpace);
             var file = $"{currentDirectory}\\{json.rootfolder}\\{entity}.generated.cs";
             var old = string.Empty;
             if (File.Exists(file))
@@ -256,34 +255,35 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private void GeneratorWebApi()
         {
+            // /conn:"AuthType=Office365;Url=https://crmgridplus-developer.api.crm5.dynamics.com/XRMServices/2011/Organization.svc;Username=developer@crmgridplus.com;Password=67ubH5C8nrSvsmDAv/Zixw==;" /json:"..\..\DynamicsCrm.DevKit.Cli.json" /type:"generators" /profile:"JS-WEBAPI"
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "[GENERATOR JS WEBAPI]");
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             var entities = new List<string>();
             string[] files = new string[] { };
             var folder = $"{currentDirectory}\\{json.rootfolder}";
             if (!folder.EndsWith("\\")) folder += "\\";
-            if (json.entities == null || json.entities.Trim().Length == 0)
+            if (json.entities == null || json.entities.Trim().Length == 0 || json.entities.Trim().ToLower() == "folder")
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "current folder", CliLog.ColorGreen, " with pattern values: ", CliLog.ColorCyan, "*.webapi.js");
-                CliLog.WriteLine();
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
                 var pattern = "*.webapi.js";
                 files = Directory.GetFiles(folder, pattern);
             }
             else
             {
-                if (json.entities.Trim().ToLower() == "*")
+                if (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all")
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, "*");
-                    CliLog.WriteLine();
-
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities.Trim().ToLower());
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
                     var schemas = GetAllEntitySchemas();
+
                     files = schemas.Select(e => $"{folder}{e}.webapi.js").ToArray();
                 }
                 else
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities);
-                    CliLog.WriteLine();
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities.Trim().ToLower());
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
 
                     files = json.entities.Split(",".ToCharArray()).Select(e => $"{folder}{e}.webapi.js").ToArray();
                     files = ConvertToSchemaNameWebApi(files);
@@ -321,7 +321,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var jsForm = new List<string>();
             var isDebugForm = false;
             var isDebugWebApi = false;
-            var jsFormVersion = string.Empty;
+            var jsFormVersion = "v2";
             if (!File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.js"))
             {
                 var text = string.Empty;
@@ -350,7 +350,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 isDebugWebApi = json.debug == "yes" ? true : false;
             }
-            var jsWebApi = new JsWebApi(XrmHelper.GetIOrganizationService(crmServiceClient), projectName, entity, isDebugWebApi, jsForm, isDebugForm, jsFormVersion);
+            var jsWebApi = new JsWebApi(crmServiceClient, projectName, entity, isDebugWebApi, jsForm, isDebugForm, jsFormVersion);
             jsWebApi.GeneratorCode();
             var old = string.Empty;
             if (File.Exists(fileTypeScriptDeclaration))
@@ -386,33 +386,33 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         private void GeneratorJsForm()
         {
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "START ", CliLog.ColorMagenta, "[GENERATOR JS FORM]");
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             var entities = new List<string>();
             string[] files = new string[] { };
             var folder = $"{currentDirectory}\\{json.rootfolder}";
             if (!folder.EndsWith("\\")) folder += "\\";
-            if (json.entities == null || json.entities.Trim().Length == 0)
+            if (json.entities == null || json.entities.Trim().Length == 0 || json.entities.Trim().ToLower() == "folder")
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "current folder", CliLog.ColorGreen, " with pattern values: ", CliLog.ColorCyan, "*.form.js");
-                CliLog.WriteLine();
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
                 var pattern = "*.form.js";
                 files = Directory.GetFiles(folder, pattern);
             }
             else
             {
-                if (json.entities.Trim().ToLower() == "*")
+                if (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all")
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, "*");
-                    CliLog.WriteLine();
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities.Trim().ToLower());
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
 
                     var schemas = GetAllEntitySchemas();
                     files = schemas.Select(e => $"{folder}{e}.form.js").ToArray();
                 }
                 else
                 {
-                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities);
-                    CliLog.WriteLine();
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Filter by: ", CliLog.ColorCyan, "json.entities", CliLog.ColorGreen, " with values: ", CliLog.ColorCyan, json.entities.Trim().ToLower());
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
 
                     files = json.entities.Split(",".ToCharArray()).Select(e => $"{folder}{e}.form.js").ToArray();
                     files = ConvertToSchemaNameJs(files);
@@ -435,7 +435,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var i = 1;
             foreach (var entity in entities)
             {
-                var jsFormVersion = string.Empty;
+                var jsFormVersion = "v2";
                 var fileTypeScriptDeclaration = $"{currentDirectory}\\{json.rootfolder}\\{entity}.d.ts";
                 if (File.Exists(fileTypeScriptDeclaration))
                 {
@@ -486,7 +486,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var parts2 = json.rootnamespace.Split(".".ToCharArray());
                 var projectName2 = parts2.Length > 1 ? parts2[1] : parts2[0];
-                var jsForm2 = new JsForm(XrmHelper.GetIOrganizationService(crmServiceClient), projectName2, entity);
+                var jsForm2 = new JsForm2(crmServiceClient, projectName2, entity);
                 forms = GetAllForms(entity, jsForm2);
             }
             if (forms.Count == 0)
@@ -508,7 +508,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             var parts = json.rootnamespace.Split(".".ToCharArray());
             var projectName = parts.Length > 1 ? parts[1] : parts[0];
-            var jsForm = new JsForm2(XrmHelper.GetIOrganizationService(crmServiceClient), projectName, entity);
+            var jsForm = new JsForm2(crmServiceClient, projectName, entity);
             if (json.debug.Length > 0) isDebugForm = json.debug == "yes" ? true : false;
             jsForm.GeneratorCode(forms, isDebugForm, webApi, isDebugWebApi);
             if (!File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.js"))
@@ -572,7 +572,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             {
                 var parts2 = json.rootnamespace.Split(".".ToCharArray());
                 var projectName2 = parts2.Length > 1 ? parts2[1] : parts2[0];
-                var jsForm2 = new JsForm(XrmHelper.GetIOrganizationService(crmServiceClient), projectName2, entity);
+                var jsForm2 = new JsForm2(crmServiceClient, projectName2, entity);
                 forms = GetAllForms(entity, jsForm2);
             }
             if (forms.Count == 0)
@@ -594,7 +594,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             var parts = json.rootnamespace.Split(".".ToCharArray());
             var projectName = parts.Length > 1 ? parts[1] : parts[0];
-            var jsForm = new JsForm(XrmHelper.GetIOrganizationService(crmServiceClient), projectName, entity);
+            var jsForm = new JsForm(crmServiceClient, projectName, entity);
             if (json.debug.Length > 0) isDebugForm = json.debug == "yes" ? true : false;
             jsForm.GeneratorCode(forms, isDebugForm, webApi, isDebugWebApi);
             if (!File.Exists($"{currentDirectory}\\{json.rootfolder}\\{entity}.js"))
@@ -634,11 +634,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             else
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorBlue, string.Format("{0,0}{1," + count.ToString().Length + "}", "", i) + ": ", CliLog.ColorGreen, entity, ".form.js");
         }
-        private List<string> GetAllForms(string entity, JsForm jsForm)
+        private List<string> GetAllForms(string entity, JsForm2 jsForm)
         {
             var forms = jsForm.GetForms().ToList();
             if (forms.Count == 0) return new List<string>();
             forms = forms.Distinct().ToList();
+            forms.Sort();
             return forms;
         }
 

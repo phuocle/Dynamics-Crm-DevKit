@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.10.31\Abc.LuckyStar2\Abc.LuckyStar2.ProxyTypes";
+                return @"C:\src\github\phuocle\d365events\src\VirtualTable\VirtualTable.DataProvider.D365vn";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -31,18 +31,18 @@ namespace DynamicsCrm.DevKit.Cli
         private static void CrmCli(CommandLineArgs arguments)
         {
 #if DEBUG
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 10));
             CliLog.WriteLine(CliLog.ColorRed, " DEBUG MODE");
-            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 2));
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 10));
 #endif
             CliLog.WriteLine(CliLog.ColorGreen, " ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
             CliLog.WriteLine(CliLog.ColorGreen, "|  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
             CliLog.WriteLine(CliLog.ColorGreen, "| | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
             CliLog.WriteLine(CliLog.ColorGreen, "| |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
             CliLog.WriteLine(CliLog.ColorGreen, "|____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
-            CliLog.WriteLine(CliLog.ColorGreen, "       |___/                                          ", CliLog.ColorWhite, "https://github.com/phuocle/Dynamics-Crm-DevKit", CliLog.ColorBlue, $" {Const.Version}");
+            CliLog.WriteLine(CliLog.ColorGreen, "       |___/                        ", CliLog.ColorWhite, "https://github.com/phuocle/Dynamics-Crm-DevKit", CliLog.ColorBlue, $" {Const.Version}", CliLog.ColorWhite, " Build: ", CliLog.ColorBlue, Const.BuildDate);
             CliLog.WriteLine();
-            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Current Directory path: ", CliLog.ColorWhite, CurrentDirectory);
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Current directory path: ", CliLog.ColorWhite, CurrentDirectory);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "DynamicsCrm.DevKit.Cli.exe path: ", CliLog.ColorWhite, Assembly.GetExecutingAssembly().Location);
 #if !DEBUG
             try
@@ -72,7 +72,9 @@ namespace DynamicsCrm.DevKit.Cli
 
             Run(arguments);
 #if DEBUG
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 10));
             CliLog.WriteLine(CliLog.ColorRed, "!!! FINISHED !!!");
+            CliLog.WriteLine(CliLog.ColorRed, new string('█', CliLog.StarLength + 10));
             Console.ReadKey();
 #endif
 #if !DEBUG
@@ -155,9 +157,10 @@ namespace DynamicsCrm.DevKit.Cli
             }
             if (CrmServiceClient != null)
             {
-                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected: ", CliLog.ColorWhite, new Uri(CrmServiceClient.CrmConnectOrgUriActual.AbsoluteUri).GetLeftPart(UriPartial.Authority));
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected: ", CliLog.ColorWhite, XrmHelper.ConnectedUrl(CrmServiceClient));
             }
-            CliLog.WriteLine();
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
             return true;
         }
 
@@ -177,6 +180,7 @@ namespace DynamicsCrm.DevKit.Cli
             if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
             {
                 CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
+                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 return true;
             }
             return false;
@@ -196,6 +200,7 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connection);
+                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 return true;
             }
             catch
@@ -210,6 +215,7 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 CrmServiceClient = new CrmServiceClient(connection);
+                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 return true;
             }
             catch

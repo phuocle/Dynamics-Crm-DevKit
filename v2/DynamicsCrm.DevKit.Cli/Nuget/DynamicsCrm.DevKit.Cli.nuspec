@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>DynamicsCrm.DevKit.Cli</id>
-        <version>2.10.31</version>
         <title>DynamicsCrm.DevKit.Cli - CLI for DynamicsCrm.DevKit tool</title>
+        <version>2.12.31</version>
         <authors>PhuocLe</authors>
         <license type="file">license\LICENSE.txt</license>
         <projectUrl>https://github.com/phuocle/Dynamics-Crm-DevKit</projectUrl>
@@ -26,7 +26,6 @@
         <file src="..\Release\Microsoft.Xrm.Sdk.Workflow.dll" target="tools\Microsoft.Xrm.Sdk.Workflow.dll" />
         <file src="..\Release\Microsoft.Xrm.Tooling.Connector.dll" target="tools\Microsoft.Xrm.Tooling.Connector.dll" />
         <file src="..\Release\Microsoft.Xrm.Sdk.Deployment.dll" target="tools\Microsoft.Xrm.Sdk.Deployment.dll" />
-        <file src="..\Release\System.Net.Http.dll" target="tools\System.Net.Http.dll" />
         <file src="..\Release\CmdLine.dll" target="tools\CmdLine.dll" />
         <file src="..\Release\NUglify.dll" target="tools\NUglify.dll" />
         <file src="..\Release\Microsoft.Rest.ClientRuntime.dll" target="tools\Microsoft.Rest.ClientRuntime.dll" />
@@ -37,10 +36,6 @@
         <file src="..\license\LICENSE.txt" target="license\LICENSE.txt" />
         <file src="..\Release\Newtonsoft.Json.dll" target="tools\Newtonsoft.Json.dll" />
         <file src="..\Release\NuGet.Core.dll" target="tools\NuGet.Core.dll" />
-        <file src="..\Release\System.Security.Cryptography.Algorithms.dll" target="tools\System.Security.Cryptography.Algorithms.dll" />
-        <file src="..\Release\System.Security.Cryptography.Encoding.dll" target="tools\System.Security.Cryptography.Encoding.dll" />
-        <file src="..\Release\System.Security.Cryptography.Primitives.dll" target="tools\System.Security.Cryptography.Primitives.dll" />
-        <file src="..\Release\System.Security.Cryptography.X509Certificates.dll" target="tools\System.Security.Cryptography.X509Certificates.dll" />
         <file src="..\Release\Microsoft.Web.XmlTransform.dll" target="tools\Microsoft.Web.XmlTransform.dll" />
     </files>
 </package>

@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
+﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
@@ -20,22 +21,22 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             switch (arguments.Type)
             {
-                case "plugins":
-                    var plugin = new TaskPlugin(crmServiceClient, currentDirectory, arguments);
-                    plugin.Run();
-                    break;
-                case "workflows":
-                    var workflow = new TaskWorkflow(crmServiceClient, currentDirectory, arguments);
-                    workflow.Run();
-                    break;
+                //case "plugins":
+                //    var plugin = new TaskPlugin(crmServiceClient, currentDirectory, arguments);
+                //    plugin.Run();
+                //    break;
+                //case "workflows":
+                //    var workflow = new TaskWorkflow(crmServiceClient, currentDirectory, arguments);
+                //    workflow.Run();
+                //    break;
                 case "webresources":
                     var webresource = new TaskWebResource(crmServiceClient, currentDirectory, arguments);
                     webresource.Run();
                     break;
-                case "dataproviders":
-                    var dataprovider = new TaskDataProvider(crmServiceClient, currentDirectory, arguments);
-                    dataprovider.Run();
-                    break;
+                //case "dataproviders":
+                //    var dataprovider = new TaskDataProvider(crmServiceClient, currentDirectory, arguments);
+                //    dataprovider.Run();
+                //    break;
                 case "solutionpackagers":
                     var solutionpackager = new TaskSolutionPackager(crmServiceClient, currentDirectory, arguments);
                     solutionpackager.Run();
@@ -64,6 +65,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 //    var portal = new TaskPortal(crmServiceClient, currentDirectory, arguments);
                 //    portal.Run();
                 //    break;
+                case "datasources":
+                    var datasource = new TaskDataSource(crmServiceClient, currentDirectory, arguments);
+                    datasource.Run();
+                    break;
+                case "servers":
+                case "plugins":
+                case "workflows":
+                case "dataproviders":
+                    var server = new TaskServer(crmServiceClient, currentDirectory, arguments);
+                    server.Run();
+                    break;
+                default:
+                    CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Type: ", CliLog.ColorRed, arguments.Type, CliLog.ColorGreen, " not support");
+                    CliLog.WriteLine(CliLog.ColorWhite, "|");
+                    break;
             }
         }
     }

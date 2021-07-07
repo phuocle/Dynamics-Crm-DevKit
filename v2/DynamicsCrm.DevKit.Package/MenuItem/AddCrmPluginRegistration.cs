@@ -11,6 +11,7 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Package.MenuItem
 {
@@ -37,7 +38,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
         {
             var menuCommand = sender as OleMenuCommand;
             menuCommand.Visible = false;
-            if (!(dte.ActiveDocument.Language.Equals("CSharp", StringComparison.OrdinalIgnoreCase))) return;
+            if (!(dte?.ActiveDocument?.Language?.Equals("CSharp", StringComparison.OrdinalIgnoreCase)) ?? false) return;
             var textDocument = (TextDocument)dte.ActiveDocument.Object();
             var activePoint = textDocument.Selection.ActivePoint;
             var currentClass = dte?.ActiveDocument?.ProjectItem?.FileCodeModel?.CodeElementFromPoint(activePoint, vsCMElement.vsCMElementClass);
@@ -99,7 +100,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
         private static List<string> CrmPluginRegistrationDataForWorkflow(DTE dte, string fullName)
         {
-            IOrganizationService CrmService = null;
+            CrmServiceClient crmServiceClient = null;
             Shared.Models.CrmConnection CrmConnection = null;
             var list = new List<string>();
             var form = new FormConnection2(dte);
@@ -111,18 +112,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 loginForm.ShowDialog();
                 if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                 {
-                    if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
-                    {
-                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
-                    }
-                    else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
-                    {
-                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
-                    }
-                    else
-                    {
-                        return list;
-                    }
+                    crmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
                 }
                 else
                 {
@@ -132,7 +122,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             else
             {
                 CrmConnection = form.CrmConnection;
-                CrmService = form.CrmService;
+                crmServiceClient = form.CrmServiceClient;
             }
 
             if (form.Check == "1")
@@ -179,7 +169,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
   </entity>
 </fetch>";
 
-            var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return list;
             foreach (var row in rows.Entities)
             {
@@ -195,6 +185,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 attribute += $", \"{description}\"";
                 attribute += $", \"{workflowactivitygroupname}\"";
                 attribute += $", {isolationModeName}";
+                attribute += $", PluginType = PluginType.Workflow";
                 list.Add(attribute);
             }
             return list;
@@ -220,7 +211,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             fileCodeModel2.AddImport(shareProjectName);
         }
 
-        private static List<CrmPluginImage> GetPluginImages(IOrganizationService crmService, string fullName, Guid sdkMessageProcessingStepId)
+        private static List<CrmPluginImage> GetPluginImages(CrmServiceClient crmServiceClient, string fullName, Guid sdkMessageProcessingStepId)
         {
             var list = new List<CrmPluginImage>();
             var fetchData = new
@@ -251,7 +242,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
     </link-entity>
   </entity>
 </fetch>";
-            var rows = crmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             foreach (var row in rows.Entities)
             {
                 list.Add(new CrmPluginImage
@@ -295,7 +286,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
 
         private static List<string> CrmPluginRegistrationDataForPlugin(DTE dte, string fullName)
         {
-            IOrganizationService CrmService = null;
+            CrmServiceClient crmServiceClient = null;
             Shared.Models.CrmConnection CrmConnection = null;
             var list = new List<string>();
             var form = new FormConnection2(dte);
@@ -307,18 +298,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 loginForm.ShowDialog();
                 if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                 {
-                    if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
-                    {
-                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
-                    }
-                    else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
-                    {
-                        CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
-                    }
-                    else
-                    {
-                        return list;
-                    }
+                    crmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
                 }
                 else
                 {
@@ -328,7 +308,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             else
             {
                 CrmConnection = form.CrmConnection;
-                CrmService = form.CrmService;
+                crmServiceClient = form.CrmServiceClient;
             }
             if (form.Check == "1")
             {
@@ -394,7 +374,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
   </entity>
 </fetch>";
 
-            var rows = CrmService.RetrieveMultiple(new FetchExpression(fetchXml));
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
             if (rows.Entities.Count == 0) return list;
             foreach (var row in rows.Entities)
             {
@@ -424,8 +404,9 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 attribute += $", {modeName}";
                 attribute += $", \"{filteringAttributes}\",\r\n\t";
                 attribute += $"\"{name}\"";
-                attribute += $", {rank}";
-                attribute += $", {isolationModeName},\r\n\t";
+                attribute += $", {rank}/*ExecutionOrder*/";
+                attribute += $", {isolationModeName}";
+                attribute += $", PluginType = PluginType.Plugin,\r\n\t";
                 if (asyncautodelete)
                     attribute += $"DeleteAsyncOperation = true, ";
                 if (description != null)
@@ -459,7 +440,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                     attribute = attribute.TrimEnd();
                     attribute += "\r\n\t";
                 }
-                var images = GetPluginImages(CrmService, fullName, row.Id);
+                var images = GetPluginImages(crmServiceClient, fullName, row.Id);
                 var image = "Image{0}Name = \"{1}\", Image{0}Alias = \"{2}\", Image{0}Type = ImageTypeEnum.{3}, Image{0}Attributes = \"{4}\",\r\n\t";
                 if (images.Count > 0)
                 {

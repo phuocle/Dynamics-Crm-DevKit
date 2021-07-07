@@ -21,12 +21,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{AD261470-D3E7-47B2-ABD7-8F6FD51B19C1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{BB9A9980-2BCB-4AD4-9271-97115EC06297}"
+	ProjectSection(SolutionItems) = preProject
+		ProjectTemplates\CSharp\Notes.txt = ProjectTemplates\CSharp\Notes.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Resources", "DynamicsCrm.DevKit.Resources\DynamicsCrm.DevKit.Resources.csproj", "{C3D692C7-4D23-4F68-AF38-AC9B375E4A56}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{B02EC0C1-6C75-4DB9-8AC5-B00F32F3F224}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}"
+	ProjectSection(SolutionItems) = preProject
+		ItemTemplates\CSharp\Notes.txt = ItemTemplates\CSharp\Notes.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "10.ResourceStringItemTemplate", "ItemTemplates\CSharp\10.ResourceStringItemTemplate\10.ResourceStringItemTemplate.csproj", "{AEC3BFCD-934B-48C6-8132-0ACAA0AB42D0}"
 EndProject
@@ -38,29 +44,27 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08.JsWebApiItemTemplate", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.LateBoundItemTemplate", "ItemTemplates\CSharp\01.LateBoundItemTemplate\01.LateBoundItemTemplate.csproj", "{921403BE-B301-40D8-B023-083C4747B50D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.ConsoleProjectTemplate", "ProjectTemplates\CSharp\01.ConsoleProjectTemplate\01.ConsoleProjectTemplate.csproj", "{2C597B0B-F648-486D-BC45-593F584B8BCC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02.ConsoleProjectTemplate", "ProjectTemplates\CSharp\01.ConsoleProjectTemplate\02.ConsoleProjectTemplate.csproj", "{2C597B0B-F648-486D-BC45-593F584B8BCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02.CustomActionProjectTemplate", "ProjectTemplates\CSharp\02.CustomActionProjectTemplate\02.CustomActionProjectTemplate.csproj", "{1C97EFE1-D106-42A3-97FF-FC22779C70F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06.CustomActionProjectTemplate", "ProjectTemplates\CSharp\02.CustomActionProjectTemplate\06.CustomActionProjectTemplate.csproj", "{1C97EFE1-D106-42A3-97FF-FC22779C70F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03.PluginProjectTemplate", "ProjectTemplates\CSharp\03.PluginProjectTemplate\03.PluginProjectTemplate.csproj", "{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04.PluginProjectTemplate", "ProjectTemplates\CSharp\03.PluginProjectTemplate\04.PluginProjectTemplate.csproj", "{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04.WorkflowProjectTemplate", "ProjectTemplates\CSharp\04.WorkflowProjectTemplate\04.WorkflowProjectTemplate.csproj", "{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05.WorkflowProjectTemplate", "ProjectTemplates\CSharp\04.WorkflowProjectTemplate\05.WorkflowProjectTemplate.csproj", "{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05.WebResourceProjectTemplate", "ProjectTemplates\CSharp\05.WebResourceProjectTemplate\05.WebResourceProjectTemplate.csproj", "{AE2C2285-298E-47CD-80EB-11F44B9F3D42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.TestProjectTemplate", "ProjectTemplates\CSharp\06.TestProjectTemplate\13.TestProjectTemplate.csproj", "{547D1385-E9AA-47E5-A94B-D0B50719BBAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06.TestProjectTemplate", "ProjectTemplates\CSharp\06.TestProjectTemplate\06.TestProjectTemplate.csproj", "{547D1385-E9AA-47E5-A94B-D0B50719BBAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "11.ReportProjectTemplate", "ProjectTemplates\CSharp\07.ReportProjectTemplate\11.ReportProjectTemplate.csproj", "{ACFB5F3D-6156-47F4-A879-C9552E7C334C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.ReportProjectTemplate", "ProjectTemplates\CSharp\07.ReportProjectTemplate\07.ReportProjectTemplate.csproj", "{ACFB5F3D-6156-47F4-A879-C9552E7C334C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "14.TestUiProjectTemplate", "ProjectTemplates\CSharp\08.TestUiProjectTemplate\14.TestUiProjectTemplate.csproj", "{5259082A-3733-4FBE-B50B-C9BBA22D95AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08.TestUiProjectTemplate", "ProjectTemplates\CSharp\08.TestUiProjectTemplate\08.TestUiProjectTemplate.csproj", "{5259082A-3733-4FBE-B50B-C9BBA22D95AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12.ProxyTypesProjectTemplate", "ProjectTemplates\CSharp\09.ProxyTypesProjectTemplate\12.ProxyTypesProjectTemplate.csproj", "{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "09.ProxyTypesProjectTemplate", "ProjectTemplates\CSharp\09.ProxyTypesProjectTemplate\09.ProxyTypesProjectTemplate.csproj", "{9172E6AA-6AD5-409E-81AF-37C7D03D4A3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.SharedProjectTemplate", "ProjectTemplates\CSharp\10.SharedProjectTemplate\01.SharedProjectTemplate.csproj", "{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "10.SharedProjectTemplate", "ProjectTemplates\CSharp\10.SharedProjectTemplate\10.SharedProjectTemplate.csproj", "{4170CD81-A77B-4C9A-BBAE-29DE390A4F9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08.DataProviderProjectTemplate", "ProjectTemplates\CSharp\11.DataProviderProjectTemplate\08.DataProviderProjectTemplate.csproj", "{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "11.DataProviderProjectTemplate", "ProjectTemplates\CSharp\11.DataProviderProjectTemplate\11.DataProviderProjectTemplate.csproj", "{7FCFE909-E28F-40A2-A7C3-0BD6F9A431E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12.SolutionPackagerProjectTemplate", "ProjectTemplates\CSharp\12.SolutionPackagerProjectTemplate\12.SolutionPackagerProjectTemplate.csproj", "{C555420B-02D8-4388-AADF-375A9809ACDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "10.SolutionPackagerProjectTemplate", "ProjectTemplates\CSharp\12.SolutionPackagerProjectTemplate\10.SolutionPackagerProjectTemplate.csproj", "{C555420B-02D8-4388-AADF-375A9809ACDA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02.PluginItemTemplate", "ItemTemplates\CSharp\02.PluginItemTemplate\02.PluginItemTemplate.csproj", "{6A978468-339C-4BD8-8AFF-481DE2038525}"
 EndProject
@@ -72,17 +76,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "11.DownloadWebResourcesItem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "09.JsTestItemTemplate", "ItemTemplates\CSharp\09.JsTestItemTemplate\09.JsTestItemTemplate.csproj", "{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.JsFormItemTemplate", "ItemTemplates\CSharp\07.JsFormItemTemplate\07.JsFormItemTemplate.csproj", "{F3432EFE-5FE3-46F4-9335-703E658C022E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Package", "DynamicsCrm.DevKit.Package\DynamicsCrm.DevKit.Package.csproj", "{6302EA70-637D-4FDC-B169-1493427DD8D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "12.JsDevkitItemTemplate", "ItemTemplates\CSharp\12.JsDevkitItemTemplate\12.JsDevkitItemTemplate.csproj", "{CCBD1381-E6A6-4A57-9853-E93A27A33F12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.WebResourceProjectTemplate", "ProjectTemplates\CSharp\13.WebResourceProjectTemplate\13.WebResourceProjectTemplate.csproj", "{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "09.WebResourceProjectTemplate", "ProjectTemplates\CSharp\13.WebResourceProjectTemplate\09.WebResourceProjectTemplate.csproj", "{67F16EA3-09BD-41BD-8CF7-48248C5D7B34}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "13.JsFormItemTemplate", "ItemTemplates\CSharp\13.JsFormItemTemplate\13.JsFormItemTemplate.csproj", "{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.SdkLogin", "DynamicsCrm.DevKit.SdkLogin\DynamicsCrm.DevKit.SdkLogin.csproj", "{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.CustomApiProjectTemplate", "ProjectTemplates\CSharp\14.CustomApiProjectTemplate\07.CustomApiProjectTemplate.csproj", "{DBBAE77C-9754-4019-91B5-B16920F709C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Console", "DynamicsCrm.DevKit.Console\DynamicsCrm.DevKit.Console.csproj", "{26067BC0-588B-4079-BBF6-6E0964BFDEBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "14.CustomApiItemTemplate", "ItemTemplates\CSharp\14.CustomApiItemTemplate\14.CustomApiItemTemplate.csproj", "{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03.ServerProjectTemplate", "ProjectTemplates\CSharp\15.ServerProjectTemplate\03.ServerProjectTemplate.csproj", "{B7876A9B-2B63-4967-8C44-060E2C65523A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "15.DataProviderItemTemplate", "ItemTemplates\CSharp\15.DataProviderItemTemplate\15.DataProviderItemTemplate.csproj", "{DBC500F9-934B-4A10-9F79-5658731FE77C}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -142,10 +154,6 @@ Global
 		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{547D1385-E9AA-47E5-A94B-D0B50719BBAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -194,10 +202,6 @@ Global
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3432EFE-5FE3-46F4-9335-703E658C022E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6302EA70-637D-4FDC-B169-1493427DD8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -218,6 +222,26 @@ Global
 		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBBAE77C-9754-4019-91B5-B16920F709C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBBAE77C-9754-4019-91B5-B16920F709C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBBAE77C-9754-4019-91B5-B16920F709C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBBAE77C-9754-4019-91B5-B16920F709C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26067BC0-588B-4079-BBF6-6E0964BFDEBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7876A9B-2B63-4967-8C44-060E2C65523A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7876A9B-2B63-4967-8C44-060E2C65523A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7876A9B-2B63-4967-8C44-060E2C65523A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7876A9B-2B63-4967-8C44-060E2C65523A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBC500F9-934B-4A10-9F79-5658731FE77C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBC500F9-934B-4A10-9F79-5658731FE77C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBC500F9-934B-4A10-9F79-5658731FE77C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBC500F9-934B-4A10-9F79-5658731FE77C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -234,7 +258,6 @@ Global
 		{1C97EFE1-D106-42A3-97FF-FC22779C70F0} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{0B6D03EF-0D6A-4DDD-93F4-F68BE1410996} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{13291ECF-23B1-4E4A-B9DF-1585EA9560A0} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
-		{AE2C2285-298E-47CD-80EB-11F44B9F3D42} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{547D1385-E9AA-47E5-A94B-D0B50719BBAB} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{ACFB5F3D-6156-47F4-A879-C9552E7C334C} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{5259082A-3733-4FBE-B50B-C9BBA22D95AA} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
@@ -247,10 +270,13 @@ Global
 		{B7281E07-25A1-4F0F-9595-A1394211DCD4} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{99DD3CAE-6D04-4BDA-BB2D-C4D7B28CA1E0} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{E2CCDEEC-0DD9-4F44-90A9-20AA31AD16E5} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
-		{F3432EFE-5FE3-46F4-9335-703E658C022E} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{CCBD1381-E6A6-4A57-9853-E93A27A33F12} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 		{67F16EA3-09BD-41BD-8CF7-48248C5D7B34} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
 		{6F2961C5-C5D6-49F3-AA19-52F8CE1BB432} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
+		{DBBAE77C-9754-4019-91B5-B16920F709C4} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
+		{0329193A-A5B9-41D9-BBAF-C0FB0E6BE7CC} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
+		{B7876A9B-2B63-4967-8C44-060E2C65523A} = {BB9A9980-2BCB-4AD4-9271-97115EC06297}
+		{DBC500F9-934B-4A10-9F79-5658731FE77C} = {DDFE2B44-AC2D-4741-A2D1-951F5D6FE8A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04C975FA-0E86-4259-8245-7DFA47D873BB}

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Windows.Forms;
-using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 

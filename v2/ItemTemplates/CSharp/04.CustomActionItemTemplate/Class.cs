@@ -5,19 +5,18 @@ using $SharedNameSpace$;
 namespace $NameSpace$
 {
     [CrmPluginRegistration("$PluginMessage$", "$PluginLogicalName$", StageEnum.$PluginStage$, ExecutionModeEnum.$PluginExecution$, "",
-    "$NameSpace$.$PluginClass$$PluginOrder2$", $PluginOrder$, IsolationModeEnum.Sandbox,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    "$NameSpace$.$PluginClass$$PluginOrder2$", $PluginOrder$/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction)]
     public class $PluginClass$$PluginOrder2$ : IPlugin
     {
 $PluginComment$
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public $PluginClass$(string unsecureString, string secureString)
+        //public $PluginClass$(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -31,15 +30,16 @@ $PluginComment$
             if (context.MessageName.ToLower() != "$PluginMessage$".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals $PluginMessage$");
             if (context.Mode != (int)ExecutionModeEnum.$PluginExecution$) throw new InvalidPluginExecutionException("Execution does not equals $PluginExecution$");
 
-            //tracing.DebugMessage("Begin Custom Action: $NameSpace$.$PluginClass$$PluginOrder2$");
-            //tracing.DebugContext(context);
+            tracing.DebugMessage("Begin Custom Action: $NameSpace$.$PluginClass$$PluginOrder2$");
+            tracing.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
+
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            //tracing.DebugMessage("End Custom Action: $NameSpace$.$PluginClass$$PluginOrder2$");
+            tracing.DebugMessage("End Custom Action: $NameSpace$.$PluginClass$$PluginOrder2$");
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

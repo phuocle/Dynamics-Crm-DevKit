@@ -1,1 +1,2739 @@
-"use strict";var devKit=function(){function n(n,t){return o(n)?i:Object.keys(n).length===0&&n.constructor===Object?i:t.split(".").every(function(t){return typeof n!="object"||n===r||!t in n?i:(n=n[t],!i)})}function o(n){return n===r?!i:n===undefined?!i:i}function h(o){var s={},l=r,c,h,a;return n(o,"data")&&(l=o.data),s.DataAddOnLoad=function(t){n(l,"addOnLoad")&&l.addOnLoad(t)},s.Refresh=function(t,i,r){n(l,"refresh")&&l.refresh(t).then(i,r)},s.DataRemoveOnLoad=function(t){n(l,"removeOnLoad")&&l.removeOnLoad(t)},s.Save=function(t,i,r){n(l,"save")&&l.save(t).then(i,r)},Object.defineProperty(s,"DataIsDirty",{get:function(){return n(l,"getIsDirty")?l.getIsDirty():i}}),Object.defineProperty(s,"DataIsValid",{get:function(){return n(l,"isValid")?l.isValid():i}}),c=r,n(o,"data.entity")&&(c=o.data.entity),s.AddOnSave=function(t){n(c,"addOnSave")&&c.addOnSave(t)},s.RemoveOnSave=function(t){n(c,"removeOnSave")&&c.removeOnSave(t)},Object.defineProperty(s,"Attributes",{get:function(){return n(c,"attributes")?c.attributes:[]}}),Object.defineProperty(s,"DataXml",{get:function(){return n(c,"getDataXml")?c.getDataXml():t}}),Object.defineProperty(s,"EntityName",{get:function(){return n(c,"getEntityName")?c.getEntityName():t}}),Object.defineProperty(s,"EntityReference",{get:function(){return n(c,"getEntityReference")?c.getEntityReference():e}}),Object.defineProperty(s,"EntityId",{get:function(){return n(c,"getId")?c.getId():f}}),Object.defineProperty(s,"EntityIsDirty",{get:function(){return n(c,"getIsDirty")?c.getIsDirty():i}}),Object.defineProperty(s,"PrimaryAttributeValue",{get:function(){return n(c,"getPrimaryAttributeValue")?c.getPrimaryAttributeValue():t}}),Object.defineProperty(s,"EntityIsValid",{get:function(){return n(c,"isValid")?c.isValid():i}}),h=r,n(o,"ui")&&(h=o.ui),s.UiAddOnLoad=function(t){n(h,"addOnLoad")&&h.addOnLoad(t)},s.ClearFormNotification=function(t){return n(h,"clearFormNotification")?h.clearFormNotification(t):i},s.Close=function(){n(h,"close")&&h.close()},s.RefreshRibbon=function(t){n(h,"refreshRibbon")&&h.refreshRibbon(t)},s.UiRemoveOnLoad=function(t){n(h,"removeOnLoad")&&h.removeOnLoad(t)},s.SetFormEntityName=function(t){n(h,"setFormEntityName")&&h.setFormEntityName(t)},s.SetFormNotification=function(t,r,u){return n(h,"setFormNotification")?h.setFormNotification(t,r,u):i},Object.defineProperty(s,"Controls",{get:function(){return n(h,"controls")?h.controls:[]}}),Object.defineProperty(s,"FormType",{get:function(){return n(h,"getFormType")?h.getFormType():u}}),Object.defineProperty(s,"ViewPortHeight",{get:function(){return n(h,"getViewPortHeight")?h.getViewPortHeight():u}}),Object.defineProperty(s,"ViewPortWidth",{get:function(){return n(h,"getViewPortWidth")?h.getViewPortWidth():u}}),a=r,n(o,"ui.formSelector")&&(a=o.ui.formSelector),s.FormNavigate=function(t){if(n(a,"items")){var i=a.items.get(t);n(i,"navigate")&&i.navigate()}},s.FormIsVisible=function(t){if(n(a,"items")){var r=a.items.get(t);if(n(r,"getVisible"))return r.getVisible()}return i},s.FormSetVisible=function(t,i){if(n(a,"items")){var r=a.items.get(t);n(r,"setVisible")&&r.setVisible(i)}},Object.defineProperty(s,"FormId",{get:function(){if(n(a,"getCurrentItem")){var t=a.getCurrentItem();if(n(t,"getId"))return t.getId()}return f}}),Object.defineProperty(s,"FormLabel",{get:function(){if(n(a,"getCurrentItem")){var i=a.getCurrentItem();if(n(i,"getLabel"))return i.getLabel()}return t}}),s}function c(e){var l=function(r){var f={};return Object.defineProperty(f,"Attribute",{get:function(){return n(r,"getAttribute")?r.getAttribute():t}}),Object.defineProperty(f,"Name",{get:function(){return n(r,"getName")?r.getName():t}}),Object.defineProperty(f,"Required",{get:function(){return n(r,"isRequired")?r.isRequired():i}}),Object.defineProperty(f,"Progress",{get:function(){return n(r,"getProgress")?r.getProgress():u}}),f.SetProgress=function(t,i){n(r,"setProgress")&&r.setProgress(t,i)},f},c=function(i){var r={};return Object.defineProperty(r,"Category",{get:function(){return n(i,"getCategory")?i.getCategory().getValue():u}}),Object.defineProperty(r,"EntityName",{get:function(){return n(i,"getEntityName")?i.getEntityName():t}}),Object.defineProperty(r,"Id",{get:function(){return n(i,"getId")?i.getId():f}}),Object.defineProperty(r,"Name",{get:function(){return n(i,"getName")?i.getName():t}}),Object.defineProperty(r,"Status",{get:function(){return n(i,"getStatus")?i.getStatus():"active"}}),r.AllowCreateNew=function(t){n(i,"getNavigationBehavior")&&(i.getNavigationBehavior().allowCreateNew=t)},Object.defineProperty(r,"Steps",{get:function(){var u=[],r,t,f;if(n(i,"getSteps"))for(r=i.getSteps(),t=0;t<r.length;t++)f=r[t],u.push(l(f));return u}}),r},a=function(r){var f={};return Object.defineProperty(f,"Id",{get:function(){return n(r,"getId")?r.getId():t}}),Object.defineProperty(f,"Name",{get:function(){return n(r,"getName")?r.getName():t}}),Object.defineProperty(f,"IsRendered",{get:function(){return n(r,"isRendered")?r.isRendered():i}}),Object.defineProperty(f,"Stages",{get:function(){var t={};return t.getLength=function(){return n(r,"getStages")?r.getStages().getLength():u},t.get=function(t){if(n(r,"getStages")){var i=r.getStages().get(t);return c(i)}return c({})},t.forEach=function(t){var u,i,f;if(n(r,"getStages"))for(u=r.getStages(),i=0;i<u.getLength();i++)f=u.get(i),t(c(f),i)},t}}),f},s={},o=r,h;return n(e,"data.process")&&(o=e.data.process),h=r,n(e,"ui.process")&&(h=e.ui.process),s.AddOnPreProcessStatusChange=function(t){n(o,"addOnPreProcessStatusChange")&&o.addOnPreProcessStatusChange(t)},s.RemoveOnPreProcessStatusChange=function(t){n(o,"removeOnPreProcessStatusChange")&&o.removeOnPreProcessStatusChange(t)},s.AddOnProcessStatusChange=function(t){n(o,"addOnProcessStatusChange")&&o.addOnProcessStatusChange(t)},s.RemoveOnProcessStatusChange=function(t){n(o,"removeOnProcessStatusChange")&&o.removeOnProcessStatusChange(t)},s.AddOnStageChange=function(t){n(o,"addOnStageChange")&&o.addOnStageChange(t)},s.RemoveOnStageChange=function(t){n(o,"removeOnStageChange")&&o.removeOnStageChange(t)},s.AddOnStageSelected=function(n){o&&o.addOnStageSelected(n)},s.RemoveOnStageSelected=function(t){n(o,"removeOnStageSelected")&&o.removeOnStageSelected(t)},s.EnabledProcesses=function(t){n(o,"getEnabledProcesses")&&o.getEnabledProcesses(function(n){var i=[];for(var r in n)i.push({ProcessId:r,ProcessName:n[r]});t(i)})},s.MoveNext=function(t){n(o,"moveNext")&&o.moveNext(t)},s.MovePrevious=function(t){n(o,"movePrevious")&&o.movePrevious(t)},s.ProcessInstances=function(t){n(o,"getProcessInstances")&&o.getProcessInstances(function(n){var r=[],u,i;for(u in n)i=n[u],r.push({ProcessId:i.ProcessDefinitionID,ProcessName:i.ProcessDefinitionName,CreatedOn:i.CreatedOn,CreatedOnDate:i.CreatedOnDate,InstanceId:i.ProcessInstanceID,InstanceName:i.ProcessInstanceName,Status:i.StatusCodeName});t(r)})},s.SetActiveStage=function(t,i){n(o,"setActiveStage")&&o.setActiveStage(t,i)},s.SetActiveProcessInstance=function(t,i){n(o,"setActiveProcessInstance")&&o.setActiveProcessInstance(t,i)},s.SetActiveProcess=function(t,i){n(o,"setActiveProcess")&&o.setActiveProcess(t,i)},s.Reflow=function(t,i,r){n(h,"reflow")&&h.reflow(t,i,r)},Object.defineProperty(s,"ActiveProcess",{get:function(){var t=r;return n(o,"getActiveProcess")&&(t=o.getActiveProcess()),a(t)}}),Object.defineProperty(s,"SelectedStage",{get:function(){var t=r;return n(o,"getSelectedStage")&&(t=o.getSelectedStage()),c(t)}}),Object.defineProperty(s,"ActiveStage",{get:function(){var t=r;return n(o,"getActiveStage")&&(t=o.getActiveStage()),c(t)}}),Object.defineProperty(s,"InstanceId",{get:function(){return n(o,"getInstanceId")?o.getInstanceId():f}}),Object.defineProperty(s,"InstanceName",{get:function(){return n(o,"getInstanceName")?o.getInstanceName():t}}),Object.defineProperty(s,"Status",{get:function(){return n(o,"getStatus")?o.getStatus():"active"},set:function(t){n(o,"setStatus")&&o.setStatus(t)}}),Object.defineProperty(s,"DisplayState",{get:function(){return n(h,"getDisplayState")?h.getDisplayState():"expanded"},set:function(t){n(h,"setDisplayState")&&h.setDisplayState(t)}}),Object.defineProperty(s,"Visible",{get:function(){return n(h,"getVisible")?h.getVisible():i},set:function(t){n(h,"setVisible")&&h.setVisible(t)}}),Object.defineProperty(s,"ActivePath",{get:function(){var t={};return t.getLength=function(){return n(o,"getActivePath")?o.getActivePath().getLength():u},t.get=function(t){if(n(o,"getActivePath")){var i=o.getActivePath().get(t);return c(i)}return c({})},t.forEach=function(t){var r,i,u;if(n(o,"getActivePath"))for(r=o.getActivePath(),i=0;i<r.getLength();i++)u=r.get(i),t(c(u),i)},t}}),s}function s(e,o,s){e.ContentWindow=function(t,i){n(s,"getContentWindow")&&s.getContentWindow().then(t,i)};e.Option=function(i){return n(o,"getOption")?o.getOption(i):{text:t,value:u}};e.RemoveOnChange=function(t){n(o,"removeOnChange")&&o.removeOnChange(t)};e.AddCustomFilter=function(t,i){n(s,"addCustomFilter")&&s.addCustomFilter(t,i)};e.AddCustomView=function(t,i,r,u,f,e){n(s,"addCustomView")&&s.addCustomView(t,i,r,u,f,e)};e.AddOnPostSearch=function(t){n(s,"addOnPostSearch")&&s.addOnPostSearch(t)};e.AddOnResultOpened=function(t){n(s,"addOnResultOpened")&&s.addOnResultOpened(t)};e.AddOnSelection=function(t){n(s,"addOnSelection")&&s.addOnSelection(t)};e.AddPreSearch=function(t){n(s,"addPreSearch")&&s.addPreSearch(t)};e.ClearNotification=function(t){return n(s,"clearNotification")?s.clearNotification(t):i};e.ClearOptions=function(){n(s,"clearOptions")&&s.clearOptions()};e.AddOnChange=function(t){n(o,"addOnChange")&&o.addOnChange(t)};e.FireOnChange=function(){n(o,"fireOnChange")&&o.fireOnChange()};e.OpenSearchResult=function(t,r){return n(s,"openSearchResult")?s.openSearchResult(t,r):i};e.Refresh=function(){n(s,"refresh")&&s.refresh()};e.RemoveOnPostSearch=function(t){n(s,"removeOnPostSearch")&&s.removeOnPostSearch(t)};e.RemoveOnResultOpened=function(t){n(s,"removeOnResultOpened")&&s.removeOnResultOpened(t)};e.RemoveOnSelection=function(t){n(s,"removeOnSelection")&&s.removeOnSelection(t)};e.RemoveOption=function(t){n(s,"removeOption")&&s.removeOption(t)};e.RemovePreSearch=function(t){n(s,"removePreSearch")&&s.removePreSearch(t)};e.Focus=function(){n(s,"setFocus")&&s.setFocus()};e.SetNotification=function(t,r){return n(s,"setNotification")?s.setNotification(t,r):i};e.AddOption=function(t,i,r){if(n(s,"addOption")){var u={text:t,value:i};s.addOption(u,r)}};e.AddNotification=function(t,r,u,f,e){if(n(s,"addNotification")){var o={message:r,actions:[e]},h={messages:[t],notificationLevel:u,uniqueId:f,actions:[o]};return s.addNotification(h)}return i};e.AddOnLookupTagClick=function(t){n(s,"addOnLookupTagClick")&&s.addOnLookupTagClick(t)};e.RemoveOnLookupTagClick=function(t){n(s,"removeOnLookupTagClick")&&s.removeOnLookupTagClick(t)};e.SetIsValid=function(t,i){n(o,"setIsValid")&&o.setIsValid(t,i)};Object.defineProperty(e,"AttributeType",{get:function(){return n(o,"getAttributeType")?o.getAttributeType():"string"}});Object.defineProperty(e,"Format",{get:function(){return n(o,"getFormat")?o.getFormat():r}});Object.defineProperty(e,"InitialValue",{get:function(){return n(o,"getInitialValue")?o.getInitialValue():u}});Object.defineProperty(e,"IsDirty",{get:function(){return n(o,"getIsDirty")?o.getIsDirty():i}});Object.defineProperty(e,"IsPartyList",{get:function(){return n(o,"getIsPartyList")?o.getIsPartyList():i}});Object.defineProperty(e,"Max",{get:function(){return n(o,"getMax")?o.getMax():u}});Object.defineProperty(e,"MaxLength",{get:function(){return n(o,"getMaxLength")?o.getMaxLength():u}});Object.defineProperty(e,"Min",{get:function(){return n(o,"getMin")?o.getMin():u}});Object.defineProperty(e,"AttributeName",{get:function(){return n(o,"getName")?o.getName():t}});Object.defineProperty(e,"Options",{get:function(){return n(o,"getOptions")?o.getOptions():[]}});Object.defineProperty(e,"ControlOptions",{get:function(){return n(s,"getOptions")?s.getOptions():[]}});Object.defineProperty(e,"AttributeParent",{get:function(){return n(o,"getParent")?o.getParent():r}});Object.defineProperty(e,"SelectedOption",{get:function(){return n(o,"getSelectedOption")?o.getSelectedOption():{text:t,value:u}}});Object.defineProperty(e,"Text",{get:function(){return n(o,"getText")?o.getText():t}});Object.defineProperty(e,"UserPrivilege",{get:function(){return n(o,"getUserPrivilege")?o.getUserPrivilege():{canRead:i,canUpdate:i,canCreate:i}}});Object.defineProperty(e,"IsValid",{get:function(){return n(o,"isValid")?o.isValid():i}});Object.defineProperty(e,"ControlType",{get:function(){return n(s,"getControlType")?s.getControlType():"standard"}});Object.defineProperty(e,"InitialUrl",{get:function(){return n(s,"getInitialUrl")?s.getInitialUrl():t}});Object.defineProperty(e,"ControlName",{get:function(){return n(s,"getName")?s.getName():t}});Object.defineProperty(e,"Object",{get:function(){return n(s,"getObject")?s.getObject():{}}});Object.defineProperty(e,"ControlParent",{get:function(){return n(s,"getParent")?s.getParent():r}});Object.defineProperty(e,"State",{get:function(){return n(s,"getState")?s.getState():1}});Object.defineProperty(e,"TotalResultCount",{get:function(){return n(s,"getTotalResultCount")?s.getTotalResultCount():u}});Object.defineProperty(e,"SelectedResults",{get:function(){return n(s,"getSelectedResults")?s.getSelectedResults():{}}});Object.defineProperty(e,"Attribute",{get:function(){return n(s,"getAttribute")?s.getAttribute():{}}});Object.defineProperty(e,"Precision",{get:function(){return n(o,"getPrecision")?o.getPrecision():u},set:function(t){n(o,"setPrecision")&&o.setPrecision(t)}});Object.defineProperty(e,"RequiredLevel",{get:function(){return n(o,"getRequiredLevel")?o.getRequiredLevel():"none"},set:function(t){n(o,"setRequiredLevel")&&o.setRequiredLevel(t)}});Object.defineProperty(e,"SubmitMode",{get:function(){return n(o,"getSubmitMode")?o.getSubmitMode():"always"},set:function(t){n(o,"setSubmitMode")&&o.setSubmitMode(t)}});Object.defineProperty(e,"Value",{get:function(){return n(o,"getValue")?o.getValue():r},set:function(t){n(o,"setValue")&&o.setValue(t)}});Object.defineProperty(e,"Data",{get:function(){return n(s,"getData")?s.getData():t},set:function(t){n(s,"setData")&&s.setData(t)}});Object.defineProperty(e,"DefaultView",{get:function(){return n(s,"getDefaultView")?s.getDefaultView():f},set:function(t){n(s,"setDefaultView")&&s.setDefaultView(t)}});Object.defineProperty(e,"Disabled",{get:function(){return n(s,"getDisabled")?s.getDisabled():i},set:function(t){n(s,"setDisabled")&&s.setDisabled(t)}});Object.defineProperty(e,"EntityTypes",{get:function(){return n(s,"getEntityTypes")?s.getEntityTypes():[]},set:function(t){n(s,"setEntityTypes")&&s.setEntityTypes(t)}});Object.defineProperty(e,"Label",{get:function(){return n(s,"getLabel")?s.getLabel():t},set:function(t){n(s,"setLabel")&&s.setLabel(t)}});Object.defineProperty(e,"SearchQuery",{get:function(){return n(s,"getSearchQuery")?s.getSearchQuery():t},set:function(t){n(s,"setSearchQuery")&&s.setSearchQuery(t)}});Object.defineProperty(e,"ShowTime",{get:function(){return n(s,"getShowTime")?s.getShowTime():i},set:function(t){n(s,"setShowTime")&&s.setShowTime(t)}});Object.defineProperty(e,"Src",{get:function(){return n(s,"getSrc")?s.getSrc():t},set:function(t){n(s,"setSrc")&&s.setSrc(t)}});Object.defineProperty(e,"Visible",{get:function(){return n(s,"getVisible")?s.getVisible():i},set:function(t){n(s,"setVisible")&&s.setVisible(t)}})}function l(n,t,i){var u,f,r,e;for(u in t)f=function(){return i===undefined?u.toLowerCase():(i+u).toLowerCase()}(),r=n.getControl(f),o(r)&&(r=n.getControl(u)),e=function(){var t;if(n&&(n.getAttribute&&(t=n.getAttribute(f),t)||r&&r.getAttribute&&(t=r.getAttribute(),t)))return t}(),s(t[u],e,r);return t}function a(u,f){var e=function(u,f,e,o){var h=r,s;n(u,"ui.tabs.get")&&(h=u.ui.tabs.get(f));s=r;n(h,"sections.get")&&(s=h.sections.get(o));Object.defineProperty(e[o],"Name",{get:function(){return n(s,"getName")?s.getName():t}});Object.defineProperty(e[o],"Parent",{get:function(){return n(s,"getParent")?s.getParent():r}});Object.defineProperty(e[o],"Label",{get:function(){return n(s,"getLabel")?s.getLabel():t},set:function(t){n(s,"setLabel")&&s.setLabel(t)}});Object.defineProperty(e[o],"Visible",{get:function(){return n(s,"getVisible")?s.getVisible():i},set:function(t){n(s,"setVisible")&&s.setVisible(t)}})},o=function(u,f,o){var s=r,h;n(u,"ui.tabs.get")&&(s=u.ui.tabs.get(o));f[o].AddTabStateChange=function(t){n(s,"addTabStateChange")&&s.addTabStateChange(t)};f[o].Focus=function(){n(s,"setFocus")&&s.setFocus()};f[o].RemoveTabStateChange=function(t){n(s,"removeTabStateChange")&&s.removeTabStateChange(t)};Object.defineProperty(f[o],"Name",{get:function(){return n(s,"getName")?s.getName():t}});Object.defineProperty(f[o],"Parent",{get:function(){return n(s,"getParent")?s.getParent():r}});Object.defineProperty(f[o],"DisplayState",{get:function(){return n(s,"getDisplayState")?s.getDisplayState():"expanded"},set:function(t){n(s,"setDisplayState")&&s.setDisplayState(t)}});Object.defineProperty(f[o],"Label",{get:function(){return n(s,"getLabel")?s.getLabel():t},set:function(t){n(s,"setLabel")&&s.setLabel(t)}});Object.defineProperty(f[o],"Visible",{get:function(){return n(s,"getVisible")?s.getVisible():i},set:function(t){n(s,"setVisible")&&s.setVisible(t)}});for(h in f[o].Section)e(u,o,f[o].Section,h)};for(var s in f)o(u,f,s)}function v(u,f){var e=function(u,f,e){var o=r,s;if(n(u,"ui.navigation.items.get"))for(s=0;s<u.ui.navigation.items.getLength();s++)e===u.ui.navigation.items.get(s).getId()&&(o=u.ui.navigation.items.get(s));f[e].Focus=function(){n(o,"setFocus")&&o.setFocus()};Object.defineProperty(f[e],"Id",{get:function(){return n(o,"getId")?o.getId():t}});Object.defineProperty(f[e],"Label",{get:function(){return n(o,"getLabel")?o.getLabel():t},set:function(t){n(o,"setLabel")&&o.setLabel(t)}});Object.defineProperty(f[e],"Visible",{get:function(){return n(o,"getVisible")?o.getVisible():i},set:function(t){n(o,"setVisible")&&o.setVisible(t)}})};for(var o in f)e(u,f,o)}function y(u,f){var e=function(u,f,e){var o=r,h=[];for(var c in f[e])h.push(c);n(u,"ui.quickForms.get")&&(o=u.ui.quickForms.get(e));Object.defineProperty(f[e],"Body",{get:function(){for(var t,i={},n=0;n<h.length;n++)if(t=h[n],o.isLoaded()){var r=o.getControl(t.toLowerCase()),f=r.getAttribute(),u={};s(u,f,r);i[t]=u}return i}});f[e].Controls=function(t){return n(o,"getControl")?t===undefined?o.getControl():o.getControl(t):[]};f[e].IsLoaded=function(){return n(o,"isLoaded")?o.isLoaded():i};f[e].Refresh=function(){n(o,"refresh")&&o.refresh()};f[e].Focus=function(){n(o,"setFocus")&&o.setFocus()};Object.defineProperty(f[e],"ControlType",{get:function(){return n(o,"getControlType")?o.getControlType():t}});Object.defineProperty(f[e],"Disabled",{get:function(){return n(o,"getDisabled")?o.getDisabled():i},set:function(t){n(o,"setDisabled")&&o.setDisabled(t)}});Object.defineProperty(f[e],"Label",{get:function(){return n(o,"getLabel")?o.getLabel():t},set:function(t){n(o,"setLabel")&&o.setLabel(t)}});Object.defineProperty(f[e],"ControlName",{get:function(){return n(o,"getName")?o.getName():t}});Object.defineProperty(f[e],"ControlParent",{get:function(){return n(o,"getParent")?o.getParent():r}});Object.defineProperty(f[e],"Visible",{get:function(){return n(o,"getVisible")?o.getVisible():i},set:function(t){n(o,"setVisible")&&o.setVisible(t)}})};for(var o in f)e(u,f,o)}function p(o,s){var h=function(i){var r={};return Object.defineProperty(r,"EntityName",{get:function(){return n(i,"data.entity.getEntityName")?i.data.entity.getEntityName():t}}),Object.defineProperty(r,"EntityReference",{get:function(){return n(i,"data.entity.getEntityReference")?i.data.entity.getEntityReference():e}}),Object.defineProperty(r,"EntityId",{get:function(){return n(i,"data.entity.getId")?i.data.entity.getId():f}}),Object.defineProperty(r,"PrimaryAttributeValue",{get:function(){return n(i,"data.entity.getPrimaryAttributeValue")?i.data.entity.getPrimaryAttributeValue():t}}),Object.defineProperty(r,"Columns",{get:function(){var t={};return t.getLength=function(){return n(i,"data.entity.attributes")?i.data.entity.attributes.getLength():u},t.get=function(t){if(n(i,"data.entity.attributes")){var r=i.data.entity.attributes.get(t);return c(r)}return c({})},t.forEach=function(t){var u,r,f;if(n(i,"data.entity.attributes"))for(u=i.data.entity.attributes,r=0;r<u.getLength();r++)f=u.get(r),t(c(f),r)},t}}),r},c=function(r){var u={};return u.SetNotification=function(t,u){if(n(r,"controls.get")){var f=r.controls.get(0);if(n(f,"setNotification"))return f.setNotification(t,u)}return i},u.ClearNotification=function(t){if(n(r,"controls.get")){var u=r.controls.get(0);if(n(u,"clearNotification"))return u.clearNotification(t)}return i},Object.defineProperty(u,"Name",{get:function(){return n(r,"getName")?r.getName():t}}),Object.defineProperty(u,"RequiredLevel",{get:function(){return n(r,"getRequiredLevel")?r.getRequiredLevel():"none"},set:function(t){n(r,"setRequiredLevel")&&r.setRequiredLevel(t)}}),Object.defineProperty(u,"Value",{get:function(){return n(r,"getValue")?r.getValue():t},set:function(t){n(r,"setValue")&&r.setValue(t)}}),Object.defineProperty(u,"Disabled",{get:function(){if(n(r,"controls.get")){var t=r.controls.get(0);if(n(t,"getDisabled"))return t.getDisabled()}return i},set:function(t){if(n(r,"controls.get")){var i=r.controls.get(0);n(i,"setDisabled")&&i.setDisabled(t)}}}),Object.defineProperty(u,"Label",{get:function(){if(n(r,"controls.get")){var i=r.controls.get(0);if(n(i,"getLabel"))return i.getLabel()}return t}}),u},l=function(f,o,s){var c=r;n(f,"getControl")&&(c=f.getControl(s));o[s].AddOnLoad=function(t){n(c,"addOnLoad")&&c.addOnLoad(t)};o[s].RemoveOnLoad=function(t){n(c,"removeOnLoad")&&c.removeOnLoad(t)};o[s].Url=function(i){return n(c,"getUrl")?c.getUrl(i):t};o[s].Refresh=function(){n(c,"refresh")&&c.refresh()};o[s].RefreshRibbon=function(){n(c,"refreshRibbon")&&c.refreshRibbon()};o[s].OpenRelatedGrid=function(){n(c,"openRelatedGrid")&&c.openRelatedGrid()};Object.defineProperty(o[s],"EntityName",{get:function(){return n(c,"getEntityName")?c.getEntityName():t}});Object.defineProperty(o[s],"FetchXml",{get:function(){return n(c,"getFetchXml")?c.getFetchXml():t}});Object.defineProperty(o[s],"GridType",{get:function(){return n(c,"getGridType")?c.getGridType():2}});Object.defineProperty(o[s],"Relationship",{get:function(){return n(c,"getRelationship")?c.getRelationship():{}}});Object.defineProperty(o[s],"ViewSelector",{get:function(){var t=r,u;return n(c,"getViewSelector")&&(t=c.getViewSelector()),u={},Object.defineProperty(u,"CurrentView",{get:function(){return n(t,"getCurrentView")?t.getCurrentView():e},set:function(i){n(t,"getCurrentView")&&t.setCurrentView(i)}}),Object.defineProperty(u,"Visible",{get:function(){return n(t,"isVisible")?t.isVisible():i}}),u}});Object.defineProperty(o[s],"Rows",{get:function(){var i={},t=r;return n(c,"getGrid")&&(t=c.getGrid()),i.getLength=function(){return n(t,"getRows")?t.getRows().getLength():u},i.get=function(i){return n(t,"getRows")?h(t.getRows().get(i)):h({})},i.forEach=function(i){var u,r,f;if(n(t,"getRows"))for(u=t.getRows(),r=0;r<u.getLength();r++)f=u.get(r),i(h(f),r)},i}});Object.defineProperty(o[s],"SelectedRows",{get:function(){var i={},t=r;return n(c,"getGrid")&&(t=c.getGrid()),i.getLength=function(){return n(t,"getSelectedRows")?t.getSelectedRows().getLength():u},i.get=function(i){return n(t,"getSelectedRows")?h(t.getSelectedRows().get(i)):h({})},i.forEach=function(i){var u,r,f;if(n(t,"getSelectedRows"))for(u=t.getSelectedRows(),r=0;r<u.getLength();r++)f=u.get(r),i(h(f),r)},i}});Object.defineProperty(o[s],"OnRecordSelect",{get:function(){return h(f)}});Object.defineProperty(o[s],"TotalRecordCount",{get:function(){var t=r;return(n(c,"getGrid")&&(t=c.getGrid()),n(t,"getTotalRecordCount"))?t.getTotalRecordCount():u}})};for(var a in s)l(o,s,a)}function w(s){var h={},l=r,c,a,w,y,v,p;return n(Xrm,"Utility")&&(l=Xrm.Utility),h.CloseProgressIndicator=function(){n(l,"closeProgressIndicator")&&l.closeProgressIndicator()},h.AllowedStatusTransitions=function(t,i,r,u){n(l,"getAllowedStatusTransitions")&&l.getAllowedStatusTransitions(t,i).then(r,u)},h.EntityMetadata=function(t,i,r,u){n(l,"getEntityMetadata")&&l.getEntityMetadata(t,i).then(r,u)},h.ResourceString=function(t,i){if(n(l,"getResourceString"))return l.getResourceString(t,i)},h.Resource=function(i){return!o(s)&&n(l,"getResourceString")?l.getResourceString(s,i):t},h.InvokeProcessAction=function(t,i,r,u){n(l,"invokeProcessAction")&&l.invokeProcessAction(t,i).then(r,u)},h.LookupObjects=function(t,i,r){n(l,"lookupObjects")&&l.lookupObjects(t).then(i,r)},h.RefreshParentGrid=function(t){n(l,"refreshParentGrid")&&l.refreshParentGrid(t)},h.ShowProgressIndicator=function(t){n(l,"showProgressIndicator")&&l.showProgressIndicator(t)},Object.defineProperty(h,"LearningPathAttributeName",{get:function(){return n(l,"getLearningPathAttributeName")?l.getLearningPathAttributeName():t}}),Object.defineProperty(h,"PageContext",{get:function(){return n(l,"getPageContext")?l.getPageContext():r}}),c=r,n(Xrm,"Utility.getGlobalContext")&&(c=Xrm.Utility.getGlobalContext()),h.AdvancedConfigSetting=function(t){return n(c,"getAdvancedConfigSetting")?c.getAdvancedConfigSetting(t):u},h.CurrentAppName=function(t,i){n(c,"getCurrentAppName")&&c.getCurrentAppName().then(t,i)},h.CurrentAppProperties=function(t,i){n(c,"getCurrentAppProperties")&&c.getCurrentAppProperties().then(t,i)},h.WebResourceUrl=function(i){return n(c,"getWebResourceUrl")?c.getWebResourceUrl(i):t},h.PrependOrgName=function(i){return n(c,"prependOrgName")?c.prependOrgName(i):t},Object.defineProperty(h,"Client",{get:function(){var f={},t=r;return n(c,"client")&&(t=c.client),Object.defineProperty(f,"ClientName",{get:function(){return n(t,"getClient")?t.getClient():"Web"}}),Object.defineProperty(f,"ClientState",{get:function(){return n(t,"getClientState")?t.getClientState():"Online"}}),Object.defineProperty(f,"FormFactor",{get:function(){return n(t,"getFormFactor")?t.getFormFactor():u}}),Object.defineProperty(f,"IsOffline",{get:function(){return n(t,"isOffline")?t.isOffline():i}}),f}}),Object.defineProperty(h,"OrganizationSettings",{get:function(){var o={},u=r;return n(c,"organizationSettings")&&(u=c.organizationSettings),Object.defineProperty(o,"Attributes",{get:function(){return n(u,"attributes")?u.attributes:{}}}),Object.defineProperty(o,"BaseCurrencyId",{get:function(){return n(u,"baseCurrencyId")?u.baseCurrencyId:f}}),Object.defineProperty(o,"BaseCurrency",{get:function(){return n(u,"baseCurrency")?u.baseCurrency:e}}),Object.defineProperty(o,"DefaultCountryCode",{get:function(){return n(u,"defaultCountryCode")?u.defaultCountryCode:r}}),Object.defineProperty(o,"IsAutoSaveEnabled",{get:function(){return n(u,"isAutoSaveEnabled")?u.isAutoSaveEnabled:i}}),Object.defineProperty(o,"LanguageId",{get:function(){return n(u,"languageId")?u.languageId:1033}}),Object.defineProperty(o,"OrganizationId",{get:function(){return n(u,"organizationId")?u.organizationId:t}}),Object.defineProperty(o,"UniqueName",{get:function(){return n(u,"uniqueName")?u.uniqueName:t}}),Object.defineProperty(o,"UseSkypeProtocol",{get:function(){return n(u,"useSkypeProtocol")?u.useSkypeProtocol:i}}),o}}),Object.defineProperty(h,"UserSettings",{get:function(){var s={},o=r;return n(c,"userSettings")&&(o=c.userSettings),Object.defineProperty(s,"DateFormattingInfo",{get:function(){return n(o,"dateFormattingInfo")?o.dateFormattingInfo:{}}}),Object.defineProperty(s,"DefaultDashboardId",{get:function(){return n(o,"defaultDashboardId")?o.defaultDashboardId:f}}),Object.defineProperty(s,"IsGuidedHelpEnabled",{get:function(){return n(o,"isGuidedHelpEnabled")?o.isGuidedHelpEnabled:i}}),Object.defineProperty(s,"IsHighContrastEnabled",{get:function(){return n(o,"isHighContrastEnabled")?o.isHighContrastEnabled:i}}),Object.defineProperty(s,"IsRTL",{get:function(){return n(o,"isRTL")?o.isRTL:i}}),Object.defineProperty(s,"LanguageId",{get:function(){return n(o,"languageId")?o.languageId:1033}}),Object.defineProperty(s,"Roles",{get:function(){return n(o,"roles")?o.roles:[]}}),Object.defineProperty(s,"SecurityRolePrivileges",{get:function(){return n(o,"securityRolePrivileges")?o.securityRolePrivileges:[]}}),Object.defineProperty(s,"SecurityRoles",{get:function(){return n(o,"securityRoles")?o.securityRoles:[]}}),Object.defineProperty(s,"TransactionCurrency",{get:function(){return n(o,"transactionCurrency")?o.transactionCurrency:e}}),Object.defineProperty(s,"TransactionCurrencyId",{get:function(){return n(o,"transactionCurrencyId")?o.transactionCurrencyId:t}}),Object.defineProperty(s,"UserId",{get:function(){return n(o,"userId")?o.userId:t}}),Object.defineProperty(s,"UserName",{get:function(){return n(o,"userName")?o.userName:t}}),Object.defineProperty(s,"TimeZoneOffsetMinutes",{get:function(){return n(o,"getTimeZoneOffsetMinutes")?o.getTimeZoneOffsetMinutes():u}}),s}}),Object.defineProperty(h,"ClientUrl",{get:function(){return n(c,"getClientUrl")?c.getClientUrl():t}}),Object.defineProperty(h,"CurrentAppUrl",{get:function(){return n(c,"getCurrentAppUrl")?c.getCurrentAppUrl():t}}),Object.defineProperty(h,"Version",{get:function(){return n(c,"getVersion")?c.getVersion():t}}),Object.defineProperty(h,"IsOnPremises",{get:function(){return n(c,"isOnPremises")?c.isOnPremises():i}}),a=r,n(Xrm,"Navigation")&&(a=Xrm.Navigation),h.OpenAlertDialog=function(t,i,r,u){n(a,"openAlertDialog")&&a.openAlertDialog(t,i).then(r,u)},h.OpenConfirmDialog=function(t,i,r,u){n(a,"openConfirmDialog")&&a.openConfirmDialog(t,i).then(r,u)},h.OpenErrorDialog=function(t,i,r){n(a,"openErrorDialog")&&a.openErrorDialog(t).then(i,r)},h.OpenFile=function(t,i){n(a,"openFile")&&a.openFile(t,i)},h.OpenForm=function(t,i,r,u){n(a,"openForm")&&a.openForm(t,i).then(r,u)},h.OpenUrl=function(t,i){n(a,"openUrl")&&a.openUrl(t,i)},h.OpenWebResource=function(t,i,r){n(a,"openWebResource")&&a.openWebResource(t,i,r)},h.NavigateTo=function(t,i,r,u){n(a,"navigateTo")&&a.navigateTo(t,i).then(r,u)},w=r,n(Xrm,"Panel")&&(w=Xrm.Panel),h.LoadPanel=function(t,i){n(w,"loadPanel")&&w.loadPanel(t,i)},y=r,n(Xrm,"Encoding")&&(y=Xrm.Encoding),h.XmlAttributeEncode=function(t){return n(y,"xmlAttributeEncode")?y.xmlAttributeEncode(t):t},h.XmlEncode=function(t){return n(y,"xmlEncode")?y.xmlEncode(t):t},h.HtmlAttributeEncode=function(t){return n(y,"htmlAttributeEncode")?y.htmlAttributeEncode(t):t},h.HtmlDecode=function(t){return n(y,"htmlDecode")?y.htmlDecode(t):t},h.HtmlEncode=function(t){return n(y,"htmlEncode")?y.htmlEncode(t):t},v=r,n(Xrm,"Device")&&(v=Xrm.Device),h.CaptureAudio=function(t,i){n(v,"captureAudio")&&v.captureAudio().then(t,i)},h.CaptureImage=function(t,i,r){n(v,"captureImage")&&v.captureImage(t).then(i,r)},h.CaptureVideo=function(t,i){n(v,"captureVideo")&&v.captureVideo().then(t,i)},h.BarcodeValue=function(t,i){n(v,"getBarcodeValue")&&v.getBarcodeValue().then(t,i)},h.CurrentPosition=function(t,i){n(v,"getCurrentPosition")&&v.getCurrentPosition().then(t,i)},h.PickFile=function(t,i,r){n(v,"pickFile")&&v.pickFile(t).then(i,r)},p=r,n(Xrm,"App")&&(p=Xrm.App),h.AddGlobalNotification=function(t,i,r){n(p,"addGlobalNotification")&&p.addGlobalNotification(t).then(i,r)},h.ClearGlobalNotification=function(t,i,r){n(p,"clearGlobalNotification")&&p.clearGlobalNotification(t).then(i,r)},h}function b(f){var e={};return e.GetSharedVariable=function(t){return n(f,"getSharedVariable")?f.getSharedVariable(t):r},e.SetSharedVariable=function(i,r){return n(f,"setSharedVariable")?f.setSharedVariable(i,r):t},e.IsDefaultPrevented=function(){return n(f,"getEventArgs")?f.getEventArgs().isDefaultPrevented():i},e.SetPreventDefault=function(){n(f,"getEventArgs")&&f.getEventArgs().preventDefault()},Object.defineProperty(e,"Depth",{get:function(){return n(f,"getDepth")?f.getDepth():u}}),Object.defineProperty(e,"EventArgs",{get:function(){return n(f,"getEventArgs")?f.getEventArgs():{}}}),Object.defineProperty(e,"EventSource",{get:function(){return n(f,"getEventSource")?f.getEventSource():{}}}),Object.defineProperty(e,"FormContext",{get:function(){return n(f,"getFormContext")?f.getFormContext():{}}}),Object.defineProperty(e,"SaveMode",{get:function(){return n(f,"getEventArgs")?f.getEventArgs().getSaveMode():1}}),e}var t="",f="{00000000-0000-0000-0000-000000000000}",e={entityType:t,id:f,name:t},u=0,i=!1,r=null;return{LoadForm:h,LoadProcess:c,LoadFields:l,LoadTabs:a,LoadNavigations:v,LoadQuickForms:y,LoadGrids:p,LoadUtility:w,LoadExecutionContext:b}}(),OptionSet;(function(n){n.FormType={Undefined:0,Create:1,Update:2,ReadOnly:3,Disabled:4,BulkEdit:5};n.SaveOption={SaveAndClose:"saveandclose",SaveAndNew:"saveandnew"};n.SaveMode={Save:1,SaveAndClose:2,Deactivate:5,Reactivate:6,Email:7,Disqualify:15,Qualify:16,Assign:47,SaveAsCompleted:58,SaveAndNew:59,AutoSave:70};n.FormNotificationLevel={Error:"ERROR",Warning:"WARNING",Info:"INFO"};n.TabDisplayState={Expanded:"expanded",Collapsed:"collapsed"};n.ProcessDisplayState={Expanded:"expanded",Collapsed:"collapsed",Floating:"floating"};n.ProcessStatus={Active:"active",Aborted:"aborted",Finished:"finished"};n.FieldAttributeType={Boolean:"boolean",DateTime:"datetime",Decimal:"decimal",Double:"double",Integer:"integer",Lookup:"lookup",Memo:"memo",Money:"money",MultiOptionSet:"multioptionset",OptionSet:"optionset",String:"string"};n.FieldFormat={Date:"date",DateTime:"datetime",Duration:"duration",Email:"email",Language:"language",None:"none",TextArea:"textarea",Text:"text",TickerSymbol:"tickersymbol",Phone:"phone",TimeZone:"timezone",Url:"url"};n.FieldRequiredLevel={None:"none",Required:"required",Recommended:"recommended"};n.FieldSubmitMode={Always:"always",Never:"never",Dirty:"dirty"};n.FieldControlType={Standard:"standard",Iframe:"iframe",KbSearch:"kbsearch",Lookup:"lookup",MultiSelectOptionset:"multiselectoptionset",Notes:"notes",OptionSet:"optionset",QuickForm:"quickform",SubGrid:"subgrid",TimerControl:"timercontrol",TimelineWall:"timelinewall",WebResource:"webresource"};n.FieldNotificationLevel={Error:"ERROR",Recommendation:"RECOMMENDATION"};n.ProcessCategory={Qualify:0,Develop:1,Propose:2,Close:3,Identify:4,Research:5,Resolve:6};n.TimerState={NotSet:1,InProgress:2,Warning:3,Violated:4,Success:5,Expired:6,Canceled:7,Paused:8};n.ClientName={Web:"Web",Outlook:"Outlook",Mobile:"Mobile"};n.ClientState={Online:"Online",Offline:"Offline"};n.FormFactor={Unknown:0,Desktop:1,Tablet:2,Phone:3};n.AdvancedConfigSetting={MaxChildIncidentNumber:"MaxChildIncidentNumber",MaxIncidentMergeNumber:"MaxIncidentMergeNumber"};n.OpenFileOption={Open:1,Save:2};n.GridType={HomePageGrid:1,Subgrid:2}})(OptionSet||(OptionSet={}))
+'use strict';
+var devKit = (function () {
+    'use strict';
+    var EMPTY_STRING = '';
+    var EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
+    var EMPTY_REFERENCE = { entityType: EMPTY_STRING, id: EMPTY_GUID, name: EMPTY_STRING };
+    var EMPTY_NUMBER = 0;
+    var EMPTY_BOOL = false;
+    var NULL = null;
+    function has(obj, key) {
+        if (isNullOrUndefined(obj)) return EMPTY_BOOL;
+        if (Object.keys(obj).length === 0 && obj.constructor === Object) return EMPTY_BOOL;
+        return key.split('.').every(function (x) {
+            if (typeof obj != 'object' || obj === NULL || !x in obj) {
+                return EMPTY_BOOL;
+            }
+            obj = obj[x];
+            return !EMPTY_BOOL;
+        });
+    }
+    function isNullOrUndefined(obj) {
+        if (obj === NULL) return !EMPTY_BOOL;
+        if (obj === undefined) return !EMPTY_BOOL;
+        return EMPTY_BOOL;
+    }
+    function loadForm(formContext) {
+        var form = {};
+        var contextData = NULL;
+        if (has(formContext, 'data')) {
+            contextData = formContext.data;
+        }
+        form.DataAddOnLoad = function (callback) {
+            if (has(contextData, 'addOnLoad')) {
+                contextData.addOnLoad(callback);
+            }
+        };
+        form.Refresh = function (save, successCallback, errorCallback) {
+            if (has(contextData, 'refresh')) {
+                contextData.refresh(save).then(successCallback, errorCallback);
+            }
+        };
+        form.DataRemoveOnLoad = function (callback) {
+            if (has(contextData, 'removeOnLoad')) {
+                contextData.removeOnLoad(callback);
+            }
+        };
+        form.Save = function (saveOptions, successCallback, errorCallback) {
+            if (has(contextData, 'save')) {
+                contextData.save(saveOptions).then(successCallback, errorCallback);
+            }
+        };
+        Object.defineProperty(form, 'DataIsDirty', {
+            get: function () {
+                if (has(contextData, 'getIsDirty')) {
+                    return contextData.getIsDirty();
+                }
+                return EMPTY_BOOL;
+            }
+        });
+        Object.defineProperty(form, 'DataIsValid', {
+            get: function () {
+                if (has(contextData, 'isValid')) {
+                    return contextData.isValid();
+                }
+                return EMPTY_BOOL;
+            }
+        });
+        var contextDataEntity = NULL;
+        if (has(formContext, 'data.entity')) {
+            contextDataEntity = formContext.data.entity;
+        }
+        form.AddOnSave = function (callback) {
+            if (has(contextDataEntity, 'addOnSave')) {
+                contextDataEntity.addOnSave(callback);
+            }
+        };
+        form.AddPostSave = function (callback) {
+            if (has(contextDataEntity, 'addOnPostSave')) {
+                contextDataEntity.addOnPostSave(callback);
+            }
+        }
+        form.RemoveOnSave = function (callback) {
+            if (has(contextDataEntity, 'removeOnSave')) {
+                contextDataEntity.removeOnSave(callback);
+            }
+        };
+        Object.defineProperty(form, 'Attributes', {
+            get: function () {
+                if (has(contextDataEntity, 'attributes')) {
+                    return contextDataEntity.attributes;
+                }
+                return [];
+            }
+        });
+        Object.defineProperty(form, 'DataXml', {
+            get: function () {
+                if (has(contextDataEntity, 'getDataXml')) {
+                    return contextDataEntity.getDataXml();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(form, 'EntityName', {
+            get: function () {
+                if (has(contextDataEntity, 'getEntityName')) {
+                    return contextDataEntity.getEntityName();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(form, 'EntityReference', {
+            get: function () {
+                if (has(contextDataEntity, 'getEntityReference')) {
+                    return contextDataEntity.getEntityReference();
+                }
+                return EMPTY_REFERENCE;
+            }
+        });
+        Object.defineProperty(form, 'EntityId', {
+            get: function () {
+                if (has(contextDataEntity, 'getId')) {
+                    return contextDataEntity.getId();
+                }
+                return EMPTY_GUID;
+            }
+        });
+        Object.defineProperty(form, 'EntityIsDirty', {
+            get: function () {
+                if (has(contextDataEntity, 'getIsDirty')) {
+                    return contextDataEntity.getIsDirty();
+                }
+                return EMPTY_BOOL;
+            }
+        });
+        Object.defineProperty(form, 'PrimaryAttributeValue', {
+            get: function () {
+                if (has(contextDataEntity, 'getPrimaryAttributeValue')) {
+                    return contextDataEntity.getPrimaryAttributeValue();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(form, 'EntityIsValid', {
+            get: function () {
+                if (has(contextDataEntity, 'isValid')) {
+                    return contextDataEntity.isValid();
+                }
+                return EMPTY_BOOL;
+            }
+        });
+        var contextUi = NULL;
+        if (has(formContext, 'ui')) {
+            contextUi = formContext.ui;
+        }
+        form.UiAddOnLoad = function (callback) {
+            if (has(contextUi, 'addOnLoad')) {
+                contextUi.addOnLoad(callback);
+            }
+        };
+        form.ClearFormNotification = function (uniqueId) {
+            if (has(contextUi, 'clearFormNotification')) {
+                return contextUi.clearFormNotification(uniqueId);
+            }
+            return EMPTY_BOOL;
+        };
+        form.Close = function () {
+            if (has(contextUi, 'close')) {
+                contextUi.close();
+            }
+        };
+        form.RefreshRibbon = function (refreshAll) {
+            if (has(contextUi, 'refreshRibbon')) {
+                contextUi.refreshRibbon(refreshAll);
+            }
+        };
+        form.UiRemoveOnLoad = function (callback) {
+            if (has(contextUi, 'removeOnLoad')) {
+                contextUi.removeOnLoad(callback);
+            }
+        };
+        form.SetFormEntityName = function (arg) {
+            if (has(contextUi, 'setFormEntityName')) {
+                contextUi.setFormEntityName(arg);
+            }
+        };
+        form.SetFormNotification = function (message, level, uniqueId) {
+            if (has(contextUi, 'setFormNotification')) {
+                return contextUi.setFormNotification(message, level, uniqueId);
+            }
+            return EMPTY_BOOL;
+        };
+        Object.defineProperty(form, 'Controls', {
+            get: function () {
+                if (has(contextUi, 'controls')) {
+                    return contextUi.controls;
+                }
+                return [];
+            }
+        });
+        Object.defineProperty(form, 'FormType', {
+            get: function () {
+                if (has(contextUi, 'getFormType')) {
+                    return contextUi.getFormType();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        Object.defineProperty(form, 'ViewPortHeight', {
+            get: function () {
+                if (has(contextUi, 'getViewPortHeight')) {
+                    return contextUi.getViewPortHeight();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        Object.defineProperty(form, 'ViewPortWidth', {
+            get: function () {
+                if (has(contextUi, 'getViewPortWidth')) {
+                    return contextUi.getViewPortWidth();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        var contextUiFormSelector = NULL;
+        if (has(formContext, 'ui.formSelector')) {
+            contextUiFormSelector = formContext.ui.formSelector;
+        }
+        form.FormNavigate = function (formId) {
+            if (has(contextUiFormSelector, 'items')) {
+                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                    if (formId === contextUiFormSelector.items.get(i).getId()) {
+                        var form = contextUiFormSelector.items.get(i)
+                        if (has(form, 'navigate')) {
+                            form.navigate();
+                        }
+                    }
+                }
+            }
+        };
+        form.FormIsVisible = function (formId) {
+            if (has(contextUiFormSelector, 'items')) {
+                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                    if (formId === contextUiFormSelector.items.get(i).getId()) {
+                        var form = contextUiFormSelector.items.get(i)
+                        if (has(form, 'getVisible')) {
+                            return form.getVisible();
+                        }
+                    }
+                }
+            }
+            return EMPTY_BOOL;
+        }
+        form.FormSetVisible = function (formId, value) {
+            if (has(contextUiFormSelector, 'items')) {
+                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                    if (formId === contextUiFormSelector.items.get(i).getId()) {
+                        var form = contextUiFormSelector.items.get(i)
+                        if (has(form, 'setVisible')) {
+                            form.setVisible(value);
+                        }
+                    }
+                }
+            }
+        }
+        Object.defineProperty(form, 'FormId', {
+            get: function () {
+                if (has(contextUiFormSelector, 'getCurrentItem')) {
+                    var form = contextUiFormSelector.getCurrentItem();
+                    if (has(form, 'getId')) {
+                        return form.getId();
+                    }
+                }
+                return EMPTY_GUID;
+            }
+        });
+        Object.defineProperty(form, 'FormLabel', {
+            get: function () {
+                if (has(contextUiFormSelector, 'getCurrentItem')) {
+                    var form = contextUiFormSelector.getCurrentItem();
+                    if (has(form, 'getLabel')) {
+                        return form.getLabel();
+                    }
+                }
+                return EMPTY_STRING;
+            }
+        });
+        return form;
+    }
+    function loadProcess(formContext) {
+        var loadStep = function (step) {
+            var obj = {};
+            Object.defineProperty(obj, 'Attribute', {
+                get: function () {
+                    if (has(step, 'getAttribute')) {
+                        return step.getAttribute();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, 'Name', {
+                get: function () {
+                    if (has(step, 'getName')) {
+                        return step.getName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, 'Required', {
+                get: function () {
+                    if (has(step, 'isRequired')) {
+                        return step.isRequired();
+                    }
+                    return EMPTY_BOOL;
+                }
+            });
+            Object.defineProperty(obj, 'Progress', {
+                get: function () {
+                    if (has(step, 'getProgress')) {
+                        return step.getProgress();
+                    }
+                    return EMPTY_NUMBER;
+                }
+            });
+            obj.SetProgress = function (stepProgress, message) {
+                if (has(step, 'setProgress')) {
+                    step.setProgress(stepProgress, message);
+                }
+            }
+            return obj;
+        }
+        var loadStage = function (stage) {
+            var obj = {};
+            Object.defineProperty(obj, 'Category', {
+                get: function () {
+                    if (has(stage, 'getCategory')) {
+                        return stage.getCategory().getValue();
+                    }
+                    return EMPTY_NUMBER;
+                }
+            });
+            Object.defineProperty(obj, 'EntityName', {
+                get: function () {
+                    if (has(stage, 'getEntityName')) {
+                        return stage.getEntityName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, 'Id', {
+                get: function () {
+                    if (has(stage, 'getId')) {
+                        return stage.getId();
+                    }
+                    return EMPTY_GUID;
+                }
+            });
+            Object.defineProperty(obj, 'Name', {
+                get: function () {
+                    if (has(stage, 'getName')) {
+                        return stage.getName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, 'Status', {
+                get: function () {
+                    if (has(stage, 'getStatus')) {
+                        return stage.getStatus();
+                    }
+                    return 'active';
+                }
+            });
+            obj.AllowCreateNew = function (callback) {
+                if (has(stage, 'getNavigationBehavior')) {
+                    stage.getNavigationBehavior().allowCreateNew = callback;
+                }
+            }
+            Object.defineProperty(obj, 'Steps', {
+                get: function () {
+                    var obj = [];
+                    if (has(stage, 'getSteps')) {
+                        var steps = stage.getSteps();
+                        for (var index = 0; index < steps.length; index++) {
+                            var step = steps[index];
+                            obj.push(loadStep(step));
+                        }
+                    }
+                    return obj;
+                }
+            });
+            return obj;
+        }
+        var loadProcess = function (process) {
+            var obj = {};
+            Object.defineProperty(obj, 'Id', {
+                get: function () {
+                    if (has(process, 'getId')) {
+                        return process.getId();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, 'Name', {
+                get: function () {
+                    if (has(process, 'getName')) {
+                        return process.getName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, 'IsRendered', {
+                get: function () {
+                    if (has(process, 'isRendered')) {
+                        return process.isRendered();
+                    }
+                    return EMPTY_BOOL;
+                }
+            });
+            Object.defineProperty(obj, 'Stages', {
+                get: function () {
+                    var obj = {};
+                    obj.getLength = function () {
+                        if (has(process, 'getStages')) {
+                            return process.getStages().getLength();
+                        }
+                        return EMPTY_NUMBER;
+                    }
+                    obj.get = function (index) {
+                        if (has(process, 'getStages')) {
+                            var stage = process.getStages().get(index);
+                            return loadStage(stage);
+                        }
+                        return loadStage({});
+                    }
+                    obj.forEach = function (callback) {
+                        if (has(process, 'getStages')) {
+                            var stages = process.getStages();
+                            for (var index = 0; index < stages.getLength(); index++) {
+                                var stage = stages.get(index);
+                                callback(loadStage(stage), index);
+                            }
+                        }
+                    }
+                    return obj;
+                }
+            });
+            return obj;
+        }
+        var process = {};
+        var getProcess = NULL;
+        if (has(formContext, 'data.process')) {
+            getProcess = formContext.data.process;
+        }
+        var getProcessUi = NULL;
+        if (has(formContext, 'ui.process')) {
+            getProcessUi = formContext.ui.process;
+        }
+        process.AddOnPreProcessStatusChange = function (callback) {
+            if (has(getProcess, 'addOnPreProcessStatusChange')) {
+                getProcess.addOnPreProcessStatusChange(callback);
+            }
+        };
+        process.RemoveOnPreProcessStatusChange = function (callback) {
+            if (has(getProcess, 'removeOnPreProcessStatusChange')) {
+                getProcess.removeOnPreProcessStatusChange(callback);
+            }
+        };
+        process.AddOnPreStageChange = function (callback) {
+            if (has(getProcess, 'addOnPreStageChange')) {
+                getProcess.addOnPreStageChange(callback);
+            }
+        };
+        process.RemoveOnPreStageChange = function (callback) {
+            if (has(getProcess, 'removeOnPreStageChange')) {
+                getProcess.removeOnPreStageChange(callback);
+            }
+        };
+        process.AddOnProcessStatusChange = function (callback) {
+            if (has(getProcess, 'addOnProcessStatusChange')) {
+                getProcess.addOnProcessStatusChange(callback);
+            }
+        };
+        process.RemoveOnProcessStatusChange = function (callback) {
+            if (has(getProcess, 'removeOnProcessStatusChange')) {
+                getProcess.removeOnProcessStatusChange(callback);
+            }
+        };
+        process.AddOnStageChange = function (callback) {
+            if (has(getProcess, 'addOnStageChange')) {
+                getProcess.addOnStageChange(callback);
+            }
+        };
+        process.RemoveOnStageChange = function (callback) {
+            if (has(getProcess, 'removeOnStageChange')) {
+                getProcess.removeOnStageChange(callback);
+            }
+        };
+        process.AddOnStageSelected = function (callback) {
+            if (getProcess) {
+                getProcess.addOnStageSelected(callback);
+            }
+        };
+        process.RemoveOnStageSelected = function (callback) {
+            if (has(getProcess, 'removeOnStageSelected')) {
+                getProcess.removeOnStageSelected(callback);
+            }
+        };
+        process.EnabledProcesses = function (callback) {
+            if (has(getProcess, 'getEnabledProcesses')) {
+                getProcess.getEnabledProcesses(function (enabledProcesses) {
+                    var processes = [];
+                    for (var processId in enabledProcesses) {
+                        processes.push({ ProcessId: processId, ProcessName: enabledProcesses[processId] });
+                    }
+                    callback(processes);
+                });
+            }
+        };
+        process.MoveNext = function (callback) {
+            if (has(getProcess, 'moveNext')) {
+                getProcess.moveNext(callback);
+            }
+        };
+        process.MovePrevious = function (callback) {
+            if (has(getProcess, 'movePrevious')) {
+                getProcess.movePrevious(callback);
+            }
+        };
+        process.ProcessInstances = function (callback) {
+            if (has(getProcess, 'getProcessInstances')) {
+                getProcess.getProcessInstances(function (processInstances) {
+                    var processes = [];
+                    for (var processId in processInstances) {
+                        var process = processInstances[processId];
+                        processes.push({
+                            ProcessId: process.ProcessDefinitionID,
+                            ProcessName: process.ProcessDefinitionName,
+                            CreatedOn: process.CreatedOn,
+                            CreatedOnDate: process.CreatedOnDate,
+                            InstanceId: process.ProcessInstanceID,
+                            InstanceName: process.ProcessInstanceName,
+                            Status: process.StatusCodeName
+                        });
+                    }
+                    callback(processes);
+                });
+            }
+        };
+        process.SetActiveStage = function (stageId, callback) {
+            if (has(getProcess, 'setActiveStage')) {
+                getProcess.setActiveStage(stageId, callback);
+            }
+        };
+        process.SetActiveProcessInstance = function (processInstanceId, callback) {
+            if (has(getProcess, 'setActiveProcessInstance')) {
+                getProcess.setActiveProcessInstance(processInstanceId, callback);
+            }
+        };
+        process.SetActiveProcess = function (processId, callback) {
+            if (has(getProcess, 'setActiveProcess')) {
+                getProcess.setActiveProcess(processId, callback);
+            }
+        };
+        process.Reflow = function (updateUi, parentStage, nextStage) {
+            if (has(getProcessUi, 'reflow')) {
+                getProcessUi.reflow(updateUi, parentStage, nextStage);
+            }
+        }
+        Object.defineProperty(process, 'ActiveProcess', {
+            get: function () {
+                var getActiveProcess = NULL;
+                if (has(getProcess, 'getActiveProcess')) {
+                    getActiveProcess = getProcess.getActiveProcess();
+                }
+                return loadProcess(getActiveProcess);
+            }
+        });
+        Object.defineProperty(process, 'SelectedStage', {
+            get: function () {
+                var selectedStage = NULL;
+                if (has(getProcess, 'getSelectedStage')) {
+                    selectedStage = getProcess.getSelectedStage();
+                }
+                return loadStage(selectedStage);
+            }
+        });
+        Object.defineProperty(process, 'ActiveStage', {
+            get: function () {
+                var activeStage = NULL;
+                if (has(getProcess, 'getActiveStage')) {
+                    activeStage = getProcess.getActiveStage();
+                }
+                return loadStage(activeStage);
+            }
+        });
+        Object.defineProperty(process, 'InstanceId', {
+            get: function () {
+                if (has(getProcess, 'getInstanceId')) {
+                    return getProcess.getInstanceId();
+                }
+                return EMPTY_GUID;
+            }
+        });
+        Object.defineProperty(process, 'InstanceName', {
+            get: function () {
+                if (has(getProcess, 'getInstanceName')) {
+                    return getProcess.getInstanceName();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(process, 'Status', {
+            get: function () {
+                if (has(getProcess, 'getStatus')) {
+                    return getProcess.getStatus();
+                }
+                return 'active';
+            },
+            set: function (value) {
+                if (has(getProcess, 'setStatus')) {
+                    getProcess.setStatus(value);
+                }
+            }
+        });
+        Object.defineProperty(process, 'DisplayState', {
+            get: function () {
+                if (has(getProcessUi, 'getDisplayState')) {
+                    return getProcessUi.getDisplayState();
+                }
+                return 'expanded';
+            },
+            set: function (value) {
+                if (has(getProcessUi, 'setDisplayState')) {
+                    getProcessUi.setDisplayState(value);
+                }
+            }
+        });
+        Object.defineProperty(process, 'Visible', {
+            get: function () {
+                if (has(getProcessUi, 'getVisible')) {
+                    return getProcessUi.getVisible();
+                }
+                return EMPTY_BOOL;
+            },
+            set: function (value) {
+                if (has(getProcessUi, 'setVisible')) {
+                    getProcessUi.setVisible(value);
+                }
+            }
+        });
+        Object.defineProperty(process, 'ActivePath', {
+            get: function () {
+                var obj = {};
+                obj.getLength = function () {
+                    if (has(getProcess, 'getActivePath')) {
+                        return getProcess.getActivePath().getLength();
+                    }
+                    return EMPTY_NUMBER;
+                }
+                obj.get = function (index) {
+                    if (has(getProcess, 'getActivePath')) {
+                        var stage = getProcess.getActivePath().get(index);
+                        return loadStage(stage);
+                    }
+                    return loadStage({});
+                }
+                obj.forEach = function (callback) {
+                    if (has(getProcess, 'getActivePath')) {
+                        var stages = getProcess.getActivePath();
+                        for (var index = 0; index < stages.getLength(); index++) {
+                            var stage = stages.get(index);
+                            callback(loadStage(stage), index);
+                        }
+                    }
+                }
+                return obj;
+            }
+        });
+        return process;
+    }
+    function loadField(field, attribute, control) {
+        field.ContentWindow = function (successCallback, errorCallback) {
+            if (has(control, 'getContentWindow')) {
+                control.getContentWindow().then(successCallback, errorCallback);
+            }
+        }
+        field.Option = function (value) {
+            if (has(attribute, 'getOption')) {
+                return attribute.getOption(value);
+            }
+            return { text: EMPTY_STRING, value: EMPTY_NUMBER };
+        };
+        field.RemoveOnChange = function (callback) {
+            if (has(attribute, 'removeOnChange')) {
+                attribute.removeOnChange(callback);
+            }
+        };
+        field.AddCustomFilter = function (filter, entityLogicaName) {
+            if (has(control, 'addCustomFilter')) {
+                control.addCustomFilter(filter, entityLogicaName);
+            }
+        };
+        field.AddCustomView = function (viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault) {
+            if (has(control, 'addCustomView')) {
+                control.addCustomView(viewId, entityName, viewDisplayName, fetchXml, layoutXml, isDefault);
+            }
+        };
+        field.AddPostSearch = function (callback) {
+            if (has(control, 'addOnPostSearch')) {
+                control.addOnPostSearch(callback);
+            }
+        };
+        field.AddResultOpened = function (callback) {
+            if (has(control, 'addOnResultOpened')) {
+                control.addOnResultOpened(callback);
+            }
+        };
+        field.AddSelection = function (callback) {
+            if (has(control, 'addOnSelection')) {
+                control.addOnSelection(callback);
+            }
+        };
+        field.AddPreSearch = function (callback) {
+            if (has(control, 'addPreSearch')) {
+                control.addPreSearch(callback);
+            }
+        };
+        field.ClearNotification = function (uniqueId) {
+            if (has(control, 'clearNotification')) {
+                return control.clearNotification(uniqueId);
+            }
+            return EMPTY_BOOL;
+        };
+        field.ClearOptions = function () {
+            if (has(control, 'clearOptions')) {
+                control.clearOptions();
+            }
+        };
+        field.AddOnChange = function (callback) {
+            if (has(attribute, 'addOnChange')) {
+                attribute.addOnChange(callback);
+            }
+        };
+        field.FireOnChange = function () {
+            if (has(attribute, 'fireOnChange')) {
+                attribute.fireOnChange();
+            }
+        };
+        field.OpenSearchResult = function (resultNumber, mode) {
+            if (has(control, 'openSearchResult')) {
+                return control.openSearchResult(resultNumber, mode);
+            }
+            return EMPTY_BOOL;
+        };
+        field.Refresh = function () {
+            if (has(control, 'refresh')) {
+                control.refresh();
+            }
+        };
+        field.RemovePostSearch = function (callback) {
+            if (has(control, 'removeOnPostSearch')) {
+                control.removeOnPostSearch(callback);
+            }
+        };
+        field.RemoveResultOpened = function (callback) {
+            if (has(control, 'removeOnResultOpened')) {
+                control.removeOnResultOpened(callback);
+            }
+        };
+        field.RemoveSelection = function (callback) {
+            if (has(control, 'removeOnSelection')) {
+                control.removeOnSelection(callback);
+            }
+        };
+        field.RemoveOption = function (value) {
+            if (has(control, 'removeOption')) {
+                control.removeOption(value);
+            }
+        };
+        field.RemovePreSearch = function (callback) {
+            if (has(control, 'removePreSearch')) {
+                control.removePreSearch(callback);
+            }
+        };
+        field.Focus = function () {
+            if (has(control, 'setFocus')) {
+                control.setFocus();
+            }
+        };
+        field.SetNotification = function (message, uniqueId) {
+            if (has(control, 'setNotification')) {
+                return control.setNotification(message, uniqueId);
+            }
+            return EMPTY_BOOL;
+        };
+        field.AddOption = function (text, value, index) {
+            if (has(control, 'addOption')) {
+                var option = { text: text, value: value };
+                control.addOption(option, index);
+            }
+        };
+        field.AddNotification = function (title, message, notificationLevel, uniqueId, callback) {
+            if (has(control, 'addNotification')) {
+                var actions = { message: message, actions: [callback] };
+                var notification = { messages: [title], notificationLevel: notificationLevel, uniqueId: uniqueId, actions: [actions] };
+                return control.addNotification(notification);
+            }
+            return EMPTY_BOOL;
+        };
+        field.AddLookupTagClick = function (callback) {
+            if (has(control, 'addOnLookupTagClick')) {
+                control.addOnLookupTagClick(callback);
+            }
+        };
+        field.RemoveLookupTagClick = function (callback) {
+            if (has(control, 'removeOnLookupTagClick')) {
+                control.removeOnLookupTagClick(callback);
+            }
+        };
+        field.SetIsValid = function (valid, message) {
+            if (has(attribute, 'setIsValid')) {
+                attribute.setIsValid(valid, message);
+            }
+        };
+        Object.defineProperty(field, 'AttributeType', {
+            get: function () {
+                if (has(attribute, 'getAttributeType')) {
+                    return attribute.getAttributeType();
+                }
+                return 'string';
+            }
+        });
+        Object.defineProperty(field, 'Format', {
+            get: function () {
+                if (has(attribute, 'getFormat')) {
+                    return attribute.getFormat();
+                }
+                return NULL;
+            }
+        });
+        Object.defineProperty(field, 'InitialValue', {
+            get: function () {
+                if (has(attribute, 'getInitialValue')) {
+                    return attribute.getInitialValue();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        Object.defineProperty(field, 'IsDirty', {
+            get: function () {
+                if (has(attribute, 'getIsDirty')) {
+                    return attribute.getIsDirty();
+                }
+                return EMPTY_BOOL;
+            }
+        });
+        Object.defineProperty(field, 'IsPartyList', {
+            get: function () {
+                if (has(attribute, 'getIsPartyList')) {
+                    return attribute.getIsPartyList();
+                }
+                return EMPTY_BOOL;
+            }
+        });
+        Object.defineProperty(field, 'Max', {
+            get: function () {
+                if (has(attribute, 'getMax')) {
+                    return attribute.getMax();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        Object.defineProperty(field, 'MaxLength', {
+            get: function () {
+                if (has(attribute, 'getMaxLength')) {
+                    return attribute.getMaxLength();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        Object.defineProperty(field, 'Min', {
+            get: function () {
+                if (has(attribute, 'getMin')) {
+                    return attribute.getMin();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        Object.defineProperty(field, 'AttributeName', {
+            get: function () {
+                if (has(attribute, 'getName')) {
+                    return attribute.getName();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(field, 'Options', {
+            get: function () {
+                if (has(attribute, 'getOptions')) {
+                    return attribute.getOptions();
+                }
+                return [];
+            }
+        });
+        Object.defineProperty(field, 'ControlOptions', {
+            get: function () {
+                if (has(control, 'getOptions')) {
+                    return control.getOptions();
+                }
+                return [];
+            }
+        });
+        Object.defineProperty(field, 'AttributeParent', {
+            get: function () {
+                if (has(attribute, 'getParent')) {
+                    return attribute.getParent();
+                }
+                return NULL;
+            }
+        });
+        Object.defineProperty(field, 'SelectedOption', {
+            get: function () {
+                if (has(attribute, 'getSelectedOption')) {
+                    return attribute.getSelectedOption();
+                }
+                return { text: EMPTY_STRING, value: EMPTY_NUMBER };
+            }
+        });
+        Object.defineProperty(field, 'Text', {
+            get: function () {
+                if (has(attribute, 'getText')) {
+                    return attribute.getText();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(field, 'UserPrivilege', {
+            get: function () {
+                if (has(attribute, 'getUserPrivilege')) {
+                    return attribute.getUserPrivilege();
+                }
+                return { canRead: EMPTY_BOOL, canUpdate: EMPTY_BOOL, canCreate: EMPTY_BOOL };
+            }
+        });
+        Object.defineProperty(field, 'IsValid', {
+            get: function () {
+                if (has(attribute, 'isValid')) {
+                    return attribute.isValid();
+                }
+                return EMPTY_BOOL;
+            }
+        });
+        Object.defineProperty(field, 'ControlType', {
+            get: function () {
+                if (has(control, 'getControlType')) {
+                    return control.getControlType();
+                }
+                return 'standard';
+            }
+        });
+        Object.defineProperty(field, 'InitialUrl', {
+            get: function () {
+                if (has(control, 'getInitialUrl')) {
+                    return control.getInitialUrl();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(field, 'ControlName', {
+            get: function () {
+                if (has(control, 'getName')) {
+                    return control.getName();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(field, 'Object', {
+            get: function () {
+                if (has(control, 'getObject')) {
+                    return control.getObject();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(field, 'ControlParent', {
+            get: function () {
+                if (has(control, 'getParent')) {
+                    return control.getParent();
+                }
+                return NULL;
+            }
+        });
+        Object.defineProperty(field, 'State', {
+            get: function () {
+                if (has(control, 'getState')) {
+                    return control.getState();
+                }
+                return 1;
+            }
+        });
+        Object.defineProperty(field, 'TotalResultCount', {
+            get: function () {
+                if (has(control, 'getTotalResultCount')) {
+                    return control.getTotalResultCount();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        Object.defineProperty(field, 'SelectedResults', {
+            get: function () {
+                if (has(control, 'getSelectedResults')) {
+                    return control.getSelectedResults();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(field, 'Attribute', {
+            get: function () {
+                if (has(control, 'getAttribute')) {
+                    return control.getAttribute();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(field, 'Precision', {
+            get: function () {
+                if (has(attribute, 'getPrecision')) {
+                    return attribute.getPrecision();
+                }
+                return EMPTY_NUMBER;
+            },
+            set: function (value) {
+                if (has(attribute, 'setPrecision')) {
+                    attribute.setPrecision(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'RequiredLevel', {
+            get: function () {
+                if (has(attribute, 'getRequiredLevel')) {
+                    return attribute.getRequiredLevel();
+                }
+                return 'none';
+            },
+            set: function (value) {
+                if (has(attribute, 'setRequiredLevel')) {
+                    attribute.setRequiredLevel(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'SubmitMode', {
+            get: function () {
+                if (has(attribute, 'getSubmitMode')) {
+                    return attribute.getSubmitMode();
+                }
+                return 'always';
+            },
+            set: function (value) {
+                if (has(attribute, 'setSubmitMode')) {
+                    attribute.setSubmitMode(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'Value', {
+            get: function () {
+                if (has(attribute, 'getValue')) {
+                    return attribute.getValue();
+                }
+                return NULL;
+            },
+            set: function (value) {
+                if (has(attribute, 'setValue')) {
+                    attribute.setValue(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'Data', {
+            get: function () {
+                if (has(control, 'getData')) {
+                    return control.getData();
+                }
+                return EMPTY_STRING;
+            },
+            set: function (value) {
+                if (has(control, 'setData')) {
+                    control.setData(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'DefaultView', {
+            get: function () {
+                if (has(control, 'getDefaultView')) {
+                    return control.getDefaultView();
+                }
+                return EMPTY_GUID;
+            },
+            set: function (value) {
+                if (has(control, 'setDefaultView')) {
+                    control.setDefaultView(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'Disabled', {
+            get: function () {
+                if (has(control, 'getDisabled')) {
+                    return control.getDisabled();
+                }
+                return EMPTY_BOOL;
+            },
+            set: function (value) {
+                if (has(control, 'setDisabled')) {
+                    control.setDisabled(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'EntityTypes', {
+            get: function () {
+                if (has(control, 'getEntityTypes')) {
+                    return control.getEntityTypes();
+                }
+                return [];
+            },
+            set: function (value) {
+                if (has(control, 'setEntityTypes')) {
+                    control.setEntityTypes(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'Label', {
+            get: function () {
+                if (has(control, 'getLabel')) {
+                    return control.getLabel();
+                }
+                return EMPTY_STRING;
+            },
+            set: function (value) {
+                if (has(control, 'setLabel')) {
+                    control.setLabel(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'SearchQuery', {
+            get: function () {
+                if (has(control, 'getSearchQuery')) {
+                    return control.getSearchQuery();
+                }
+                return EMPTY_STRING;
+            },
+            set: function (value) {
+                if (has(control, 'setSearchQuery')) {
+                    control.setSearchQuery(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'ShowTime', {
+            get: function () {
+                if (has(control, 'getShowTime')) {
+                    return control.getShowTime();
+                }
+                return EMPTY_BOOL;
+            },
+            set: function (value) {
+                if (has(control, 'setShowTime')) {
+                    control.setShowTime(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'Src', {
+            get: function () {
+                if (has(control, 'getSrc')) {
+                    return control.getSrc();
+                }
+                return EMPTY_STRING;
+            },
+            set: function (value) {
+                if (has(control, 'setSrc')) {
+                    control.setSrc(value);
+                }
+            }
+        });
+        Object.defineProperty(field, 'Visible', {
+            get: function () {
+                if (has(control, 'getVisible')) {
+                    return control.getVisible();
+                }
+                return EMPTY_BOOL;
+            },
+            set: function (value) {
+                if (has(control, 'setVisible')) {
+                    control.setVisible(value);
+                }
+            }
+        });
+    }
+    function loadFields(formContext, body, type) {
+        for (var field in body) {
+            var logicalName = (function () {
+                if (type === undefined) {
+                    return field.toLowerCase();
+                }
+                return (type + field).toLowerCase();
+            })();
+            var control = formContext.getControl(logicalName);
+            if (isNullOrUndefined(control)) {
+                control = formContext.getControl(field);
+            }
+            var attribute = (function () {
+                if (formContext) {
+                    if (formContext.getAttribute) {
+                        var attr = formContext.getAttribute(logicalName);
+                        if (attr) {
+                            return attr;
+                        }
+                    }
+                    if (control) {
+                        if (control.getAttribute) {
+                            var attr = control.getAttribute();
+                            if (attr) {
+                                return attr;
+                            }
+                        }
+                    }
+                }
+            })();
+            loadField(body[field], attribute, control);
+        }
+        if (type === "footer_") {
+            Object.defineProperty(body, 'Visible', {
+                get: function () {
+                    if (has(formContext, 'ui.footerSection.getVisible')) {
+                        return formContext.ui.footerSection.getVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.footerSection.setVisible')) {
+                        formContext.ui.footerSection.setVisible(value);
+                    }
+                }
+            });
+        }
+        else if (type === "header_") {
+            Object.defineProperty(body, 'BodyVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.headerSection.getBodyVisible')) {
+                        return formContext.ui.headerSection.getBodyVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.headerSection.setBodyVisible')) {
+                        formContext.ui.headerSection.setBodyVisible(value);
+                    }
+                }
+            });
+            Object.defineProperty(body, 'CommandBarVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.headerSection.getCommandBarVisible')) {
+                        return formContext.ui.headerSection.getCommandBarVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.headerSection.setCommandBarVisible')) {
+                        formContext.ui.headerSection.setCommandBarVisible(value);
+                    }
+                }
+            });
+            Object.defineProperty(body, 'TabNavigatorVisible', {
+                get: function () {
+                    if (has(formContext, 'ui.headerSection.getTabNavigatorVisible')) {
+                        return formContext.ui.headerSection.getTabNavigatorVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(formContext, 'ui.headerSection.setTabNavigatorVisible')) {
+                        formContext.ui.headerSection.setTabNavigatorVisible(value);
+                    }
+                }
+            });
+        }
+        return body;
+    }
+    function loadTabs(formContext, tabs) {
+        var loadSection = function (formContext, tab, sections, section) {
+            var tabObject = NULL;
+            if (has(formContext, 'ui.tabs.get')) {
+                tabObject = formContext.ui.tabs.get(tab);
+            }
+            var sectionObject = NULL;
+            if (has(tabObject, 'sections.get')) {
+                sectionObject = tabObject.sections.get(section);
+            }
+            Object.defineProperty(sections[section], 'Name', {
+                get: function () {
+                    if (has(sectionObject, 'getName')) {
+                        return sectionObject.getName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(sections[section], 'Parent', {
+                get: function () {
+                    if (has(sectionObject, 'getParent')) {
+                        return sectionObject.getParent();
+                    }
+                    return NULL;
+                }
+            });
+            Object.defineProperty(sections[section], 'Label', {
+                get: function () {
+                    if (has(sectionObject, 'getLabel')) {
+                        return sectionObject.getLabel();
+                    }
+                    return EMPTY_STRING;
+                },
+                set: function (value) {
+                    if (has(sectionObject, 'setLabel')) {
+                        sectionObject.setLabel(value);
+                    }
+                }
+            });
+            Object.defineProperty(sections[section], 'Visible', {
+                get: function () {
+                    if (has(sectionObject, 'getVisible')) {
+                        return sectionObject.getVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(sectionObject, 'setVisible')) {
+                        sectionObject.setVisible(value);
+                    }
+                }
+            });
+        }
+        var loadTab = function (formContext, tabs, tab) {
+            var tabObject = NULL;
+            if (has(formContext, 'ui.tabs.get')) {
+                tabObject = formContext.ui.tabs.get(tab);
+            }
+            tabs[tab].AddTabStateChange = function (callback) {
+                if (has(tabObject, 'addTabStateChange')) {
+                    tabObject.addTabStateChange(callback);
+                }
+            };
+            tabs[tab].Focus = function () {
+                if (has(tabObject, 'setFocus')) {
+                    tabObject.setFocus();
+                }
+            };
+            tabs[tab].RemoveTabStateChange = function (callback) {
+                if (has(tabObject, 'removeTabStateChange')) {
+                    tabObject.removeTabStateChange(callback);
+                }
+            };
+            Object.defineProperty(tabs[tab], 'Name', {
+                get: function () {
+                    if (has(tabObject, 'getName')) {
+                        return tabObject.getName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(tabs[tab], 'Parent', {
+                get: function () {
+                    if (has(tabObject, 'getParent')) {
+                        return tabObject.getParent();
+                    }
+                    return NULL;
+                }
+            });
+            Object.defineProperty(tabs[tab], 'DisplayState', {
+                get: function () {
+                    if (has(tabObject, 'getDisplayState')) {
+                        return tabObject.getDisplayState();
+                    }
+                    return 'expanded';
+                },
+                set: function (value) {
+                    if (has(tabObject, 'setDisplayState')) {
+                        tabObject.setDisplayState(value);
+                    }
+                }
+            });
+            Object.defineProperty(tabs[tab], 'ContentType', {
+                get: function () {
+                    if (has(tabObject, 'getContentType')) {
+                        return tabObject.getContentType();
+                    }
+                    return 'cardSections';
+                },
+                set: function (value) {
+                    if (has(tabObject, 'setContentType')) {
+                        tabObject.setContentType(value);
+                    }
+                }
+            });
+            Object.defineProperty(tabs[tab], 'Label', {
+                get: function () {
+                    if (has(tabObject, 'getLabel')) {
+                        return tabObject.getLabel();
+                    }
+                    return EMPTY_STRING;
+                },
+                set: function (value) {
+                    if (has(tabObject, 'setLabel')) {
+                        tabObject.setLabel(value);
+                    }
+                }
+            });
+            Object.defineProperty(tabs[tab], 'Visible', {
+                get: function () {
+                    if (has(tabObject, 'getVisible')) {
+                        return tabObject.getVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(tabObject, 'setVisible')) {
+                        tabObject.setVisible(value);
+                    }
+                }
+            });
+            for (var section in tabs[tab].Section) {
+                loadSection(formContext, tab, tabs[tab].Section, section);
+            }
+        }
+        for (var tab in tabs) {
+            loadTab(formContext, tabs, tab);
+        }
+    }
+    function loadNavigations(formContext, navigations) {
+        var loadNavigation = function (formContext, navigations, navigation) {
+            var navigationItem = NULL;
+            if (has(formContext, 'ui.navigation.items.get')) {
+                for (var i = 0; i < formContext.ui.navigation.items.getLength(); i++) {
+                    if (navigation === formContext.ui.navigation.items.get(i).getId()) {
+                        navigationItem = formContext.ui.navigation.items.get(i);
+                    }
+                }
+            }
+            navigations[navigation].Focus = function () {
+                if (has(navigationItem, 'setFocus')) {
+                    navigationItem.setFocus();
+                }
+            };
+            Object.defineProperty(navigations[navigation], 'Id', {
+                get: function () {
+                    if (has(navigationItem, 'getId')) {
+                        return navigationItem.getId();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(navigations[navigation], 'Label', {
+                get: function () {
+                    if (has(navigationItem, 'getLabel')) {
+                        return navigationItem.getLabel();
+                    }
+                    return EMPTY_STRING;
+                },
+                set: function (value) {
+                    if (has(navigationItem, 'setLabel')) {
+                        navigationItem.setLabel(value);
+                    }
+                }
+            });
+            Object.defineProperty(navigations[navigation], 'Visible', {
+                get: function () {
+                    if (has(navigationItem, 'getVisible')) {
+                        return navigationItem.getVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(navigationItem, 'setVisible')) {
+                        navigationItem.setVisible(value);
+                    }
+                }
+            });
+        }
+        for (var navigation in navigations) {
+            loadNavigation(formContext, navigations, navigation);
+        }
+    }
+    function loadQuickForms(formContext, quickForms) {
+        var loadQuickForm = function (formContext, quickForms, quickForm) {
+            var quickViewControl = NULL;
+            var fields = [];
+            for (var field in quickForms[quickForm]) {
+                fields.push(field);
+                delete quickForms[quickForm][field];
+            }
+            if (has(formContext, 'ui.quickForms.get')) {
+                quickViewControl = formContext.ui.quickForms.get(quickForm);
+            }
+            Object.defineProperty(quickForms[quickForm], 'Body', {
+                get: function () {
+                    var obj = {};
+                    for (var i = 0; i < fields.length; i++) {
+                        var field = fields[i];
+                        if (quickViewControl.isLoaded()) {
+                            var control = quickViewControl.getControl(field.toLowerCase());
+                            var attribute = control.getAttribute();
+                            var objField = {};
+                            loadField(objField, attribute, control);
+                            obj[field] = objField;
+                        }
+                    }
+                    return obj;
+                }
+            });
+            quickForms[quickForm].Controls = function (arg) {
+                if (has(quickViewControl, 'getControl')) {
+                    if (arg === undefined) {
+                        return quickViewControl.getControl();
+                    }
+                    else {
+                        return quickViewControl.getControl(arg);
+                    }
+                }
+                return [];
+            };
+            quickForms[quickForm].IsLoaded = function () {
+                if (has(quickViewControl, 'isLoaded')) {
+                    return quickViewControl.isLoaded();
+                }
+                return EMPTY_BOOL;
+            };
+            quickForms[quickForm].Refresh = function () {
+                if (has(quickViewControl, 'refresh')) {
+                    quickViewControl.refresh();
+                }
+            };
+            quickForms[quickForm].Focus = function () {
+                if (has(quickViewControl, 'setFocus')) {
+                    quickViewControl.setFocus();
+                }
+            };
+            Object.defineProperty(quickForms[quickForm], 'ControlType', {
+                get: function () {
+                    if (has(quickViewControl, 'getControlType')) {
+                        return quickViewControl.getControlType();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(quickForms[quickForm], 'Disabled', {
+                get: function () {
+                    if (has(quickViewControl, 'getDisabled')) {
+                        return quickViewControl.getDisabled();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(quickViewControl, 'setDisabled')) {
+                        quickViewControl.setDisabled(value);
+                    }
+                }
+            });
+            Object.defineProperty(quickForms[quickForm], 'Label', {
+                get: function () {
+                    if (has(quickViewControl, 'getLabel')) {
+                        return quickViewControl.getLabel();
+                    }
+                    return EMPTY_STRING;
+                },
+                set: function (value) {
+                    if (has(quickViewControl, 'setLabel')) {
+                        quickViewControl.setLabel(value);
+                    }
+                }
+            });
+            Object.defineProperty(quickForms[quickForm], 'ControlName', {
+                get: function () {
+                    if (has(quickViewControl, 'getName')) {
+                        return quickViewControl.getName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(quickForms[quickForm], 'ControlParent', {
+                get: function () {
+                    if (has(quickViewControl, 'getParent')) {
+                        return quickViewControl.getParent();
+                    }
+                    return NULL;
+                }
+            });
+            Object.defineProperty(quickForms[quickForm], 'Visible', {
+                get: function () {
+                    if (has(quickViewControl, 'getVisible')) {
+                        return quickViewControl.getVisible();
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(quickViewControl, 'setVisible')) {
+                        quickViewControl.setVisible(value);
+                    }
+                }
+            });
+        }
+        for (var quickForm in quickForms) {
+            loadQuickForm(formContext, quickForms, quickForm);
+        }
+    }
+    function loadGrids(formContext, grids) {
+        var loadGridRow = function (row) {
+            var obj = {};
+            Object.defineProperty(obj, 'EntityName', {
+                get: function () {
+                    if (has(row, 'data.entity.getEntityName')) {
+                        return row.data.entity.getEntityName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, 'EntityReference', {
+                get: function () {
+                    if (has(row, 'data.entity.getEntityReference')) {
+                        return row.data.entity.getEntityReference();
+                    }
+                    return EMPTY_REFERENCE;
+                }
+            });
+            Object.defineProperty(obj, 'EntityId', {
+                get: function () {
+                    if (has(row, 'data.entity.getId')) {
+                        return row.data.entity.getId();
+                    }
+                    return EMPTY_GUID;
+                }
+            });
+            Object.defineProperty(obj, 'PrimaryAttributeValue', {
+                get: function () {
+                    if (has(row, 'data.entity.getPrimaryAttributeValue')) {
+                        return row.data.entity.getPrimaryAttributeValue();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, 'Columns', {
+                get: function () {
+                    var obj = {};
+                    obj.getLength = function () {
+                        if (has(row, 'data.entity.attributes')) {
+                            return row.data.entity.attributes.getLength();
+                        }
+                        return EMPTY_NUMBER;
+                    }
+                    obj.get = function (index) {
+                        if (has(row, 'data.entity.attributes')) {
+                            var column = row.data.entity.attributes.get(index);
+                            return loadGridColumn(column);
+                        }
+                        return loadGridColumn({});
+                    }
+                    obj.forEach = function (callback) {
+                        if (has(row, 'data.entity.attributes')) {
+                            var columns = row.data.entity.attributes;
+                            for (var index = 0; index < columns.getLength(); index++) {
+                                var column = columns.get(index);
+                                callback(loadGridColumn(column), index);
+                            }
+                        }
+                    }
+                    return obj;
+                }
+            });
+            return obj;
+        }
+        var loadGridColumn = function (col) {
+            var obj = {};
+            obj.SetNotification = function (message, uniqueId) {
+                if (has(col, 'controls.get')) {
+                    var control = col.controls.get(0);
+                    if (has(control, 'setNotification')) {
+                        return control.setNotification(message, uniqueId);
+                    }
+                }
+                return EMPTY_BOOL;
+            };
+            obj.ClearNotification = function (uniqueId) {
+                if (has(col, 'controls.get')) {
+                    var control = col.controls.get(0);
+                    if (has(control, 'clearNotification')) {
+                        return control.clearNotification(uniqueId);
+                    }
+                }
+                return EMPTY_BOOL;
+            };
+            Object.defineProperty(obj, 'Name', {
+                get: function () {
+                    if (has(col, 'getName')) {
+                        return col.getName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(obj, 'RequiredLevel', {
+                get: function () {
+                    if (has(col, 'getRequiredLevel')) {
+                        return col.getRequiredLevel();
+                    }
+                    return 'none';
+                },
+                set: function (value) {
+                    if (has(col, 'setRequiredLevel')) {
+                        col.setRequiredLevel(value);
+                    }
+                }
+            });
+            Object.defineProperty(obj, 'Value', {
+                get: function () {
+                    if (has(col, 'getValue')) {
+                        return col.getValue();
+                    }
+                    return EMPTY_STRING;
+                },
+                set: function (value) {
+                    if (has(col, 'setValue')) {
+                        col.setValue(value);
+                    }
+                }
+            });
+            Object.defineProperty(obj, 'Disabled', {
+                get: function () {
+                    if (has(col, 'controls.get')) {
+                        var control = col.controls.get(0);
+                        if (has(control, 'getDisabled')) {
+                            return control.getDisabled();
+                        }
+                    }
+                    return EMPTY_BOOL;
+                },
+                set: function (value) {
+                    if (has(col, 'controls.get')) {
+                        var control = col.controls.get(0);
+                        if (has(control, 'setDisabled')) {
+                            control.setDisabled(value);
+                        }
+                    }
+                }
+            });
+            Object.defineProperty(obj, 'Label', {
+                get: function () {
+                    if (has(col, 'controls.get')) {
+                        var control = col.controls.get(0);
+                        if (has(control, 'getLabel')) {
+                            return control.getLabel();
+                        }
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            return obj;
+        }
+        var loadGrid = function (formContext, grids, grid) {
+            var gridControl = NULL;
+            if (has(formContext, 'getControl')) {
+                gridControl = formContext.getControl(grid);
+            }
+            grids[grid].AddOnLoad = function (callback) {
+                if (has(gridControl, 'addOnLoad')) {
+                    gridControl.addOnLoad(callback);
+                }
+            };
+            grids[grid].RemoveOnLoad = function (callback) {
+                if (has(gridControl, 'removeOnLoad')) {
+                    gridControl.removeOnLoad(callback);
+                }
+            };
+            grids[grid].Url = function (client) {
+                if (has(gridControl, 'getUrl')) {
+                    return gridControl.getUrl(client);
+                }
+                return EMPTY_STRING;
+            };
+            grids[grid].Refresh = function () {
+                if (has(gridControl, 'refresh')) {
+                    gridControl.refresh();
+                }
+            };
+            grids[grid].RefreshRibbon = function () {
+                if (has(gridControl, 'refreshRibbon')) {
+                    gridControl.refreshRibbon();
+                }
+            };
+            grids[grid].OpenRelatedGrid = function () {
+                if (has(gridControl, 'openRelatedGrid')) {
+                    gridControl.openRelatedGrid();
+                }
+            };
+            Object.defineProperty(grids[grid], 'EntityName', {
+                get: function () {
+                    if (has(gridControl, 'getEntityName')) {
+                        return gridControl.getEntityName();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(grids[grid], 'FetchXml', {
+                get: function () {
+                    if (has(gridControl, 'getFetchXml')) {
+                        return gridControl.getFetchXml();
+                    }
+                    return EMPTY_STRING;
+                }
+            });
+            Object.defineProperty(grids[grid], 'GridType', {
+                get: function () {
+                    if (has(gridControl, 'getGridType')) {
+                        return gridControl.getGridType();
+                    }
+                    return 2;
+                }
+            });
+            Object.defineProperty(grids[grid], 'Relationship', {
+                get: function () {
+                    if (has(gridControl, 'getRelationship')) {
+                        return gridControl.getRelationship();
+                    }
+                    return {};
+                }
+            });
+            Object.defineProperty(grids[grid], 'ViewSelector', {
+                get: function () {
+                    var viewSelector = NULL;
+                    if (has(gridControl, 'getViewSelector')) {
+                        viewSelector = gridControl.getViewSelector();
+                    }
+                    var obj = {};
+                    Object.defineProperty(obj, 'CurrentView', {
+                        get: function () {
+                            if (has(viewSelector, 'getCurrentView')) {
+                                return viewSelector.getCurrentView();
+                            }
+                            return EMPTY_REFERENCE;
+                        },
+                        set: function (value) {
+                            if (has(viewSelector, 'getCurrentView')) {
+                                viewSelector.setCurrentView(value);
+                            }
+                        }
+                    });
+                    Object.defineProperty(obj, 'Visible', {
+                        get: function () {
+                            if (has(viewSelector, 'isVisible')) {
+                                return viewSelector.isVisible();
+                            }
+                            return EMPTY_BOOL;
+                        },
+                    });
+                    return obj;
+                }
+            });
+            Object.defineProperty(grids[grid], 'Rows', {
+                get: function () {
+                    var obj = {};
+                    var getGrid = NULL;
+                    if (has(gridControl, 'getGrid')) {
+                        getGrid = gridControl.getGrid();
+                    }
+                    obj.getLength = function () {
+                        if (has(getGrid, 'getRows')) {
+                            return getGrid.getRows().getLength();
+                        }
+                        return EMPTY_NUMBER;
+                    }
+                    obj.get = function (index) {
+                        if (has(getGrid, 'getRows')) {
+                            return loadGridRow(getGrid.getRows().get(index));
+                        }
+                        return loadGridRow({});
+                    }
+                    obj.forEach = function (callback) {
+                        if (has(getGrid, 'getRows')) {
+                            var rows = getGrid.getRows();
+                            for (var index = 0; index < rows.getLength(); index++) {
+                                var row = rows.get(index);
+                                callback(loadGridRow(row), index);
+                            }
+                        }
+                    }
+                    return obj;
+                }
+            });
+            Object.defineProperty(grids[grid], 'SelectedRows', {
+                get: function () {
+                    var obj = {};
+                    var getGrid = NULL;
+                    if (has(gridControl, 'getGrid')) {
+                        getGrid = gridControl.getGrid();
+                    }
+                    obj.getLength = function () {
+                        if (has(getGrid, 'getSelectedRows')) {
+                            return getGrid.getSelectedRows().getLength();
+                        }
+                        return EMPTY_NUMBER;
+                    }
+                    obj.get = function (index) {
+                        if (has(getGrid, 'getSelectedRows')) {
+                            return loadGridRow(getGrid.getSelectedRows().get(index));
+                        }
+                        return loadGridRow({});
+                    }
+                    obj.forEach = function (callback) {
+                        if (has(getGrid, 'getSelectedRows')) {
+                            var rows = getGrid.getSelectedRows();
+                            for (var index = 0; index < rows.getLength(); index++) {
+                                var row = rows.get(index);
+                                callback(loadGridRow(row), index);
+                            }
+                        }
+                    }
+                    return obj;
+                }
+            });
+            Object.defineProperty(grids[grid], 'TotalRecordCount', {
+                get: function () {
+                    var getGrid = NULL;
+                    if (has(gridControl, 'getGrid')) {
+                        getGrid = gridControl.getGrid();
+                    }
+                    if (has(getGrid, 'getTotalRecordCount')) {
+                        return getGrid.getTotalRecordCount();
+                    }
+                    return EMPTY_NUMBER;
+                }
+            });
+        }
+        for (var grid in grids) {
+            loadGrid(formContext, grids, grid);
+        }
+    }
+    function loadUtility(defaultWebResourceName) {
+        var utility = {};
+        var getUtility = NULL;
+        if (has(Xrm, 'Utility')) {
+            getUtility = Xrm.Utility;
+        }
+        utility.CloseProgressIndicator = function () {
+            if (has(getUtility, 'closeProgressIndicator')) {
+                getUtility.closeProgressIndicator();
+            }
+        };
+        utility.AllowedStatusTransitions = function (entityName, stateCode, successCallback, errorCallback) {
+            if (has(getUtility, 'getAllowedStatusTransitions')) {
+                getUtility.getAllowedStatusTransitions(entityName, stateCode).then(successCallback, errorCallback);
+            }
+        };
+        utility.EntityMainFormDescriptor = function (entityName, formId) {
+            if (has(getUtility, 'getEntityMainFormDescriptor')) {
+                return getUtility.getEntityMainFormDescriptor(entityName, formId);
+            }
+            return NULL;
+        };
+        utility.EntityMetadata = function (entityName, attributes, successCallback, errorCallback) {
+            if (has(getUtility, 'getEntityMetadata')) {
+                getUtility.getEntityMetadata(entityName, attributes).then(successCallback, errorCallback);
+            }
+        };
+        utility.ResourceString = function (webResourceName, key) {
+            if (has(getUtility, 'getResourceString')) {
+                return getUtility.getResourceString(webResourceName, key);
+            }
+        };
+        utility.Resource = function (key) {
+            if (!isNullOrUndefined(defaultWebResourceName)) {
+                if (has(getUtility, 'getResourceString')) {
+                    return getUtility.getResourceString(defaultWebResourceName, key);
+                }
+            }
+            return EMPTY_STRING;
+        };
+        utility.InvokeProcessAction = function (name, parameters, successCallback, errorCallback) {
+            if (has(getUtility, 'invokeProcessAction')) {
+                getUtility.invokeProcessAction(name, parameters).then(successCallback, errorCallback);
+            }
+        };
+        utility.LookupObjects = function (lookupOptions, successCallback, errorCallback) {
+            if (has(getUtility, 'lookupObjects')) {
+                getUtility.lookupObjects(lookupOptions).then(successCallback, errorCallback);
+            }
+        };
+        utility.RefreshParentGrid = function (lookupOptions) {
+            if (has(getUtility, 'refreshParentGrid')) {
+                getUtility.refreshParentGrid(lookupOptions);
+            }
+        };
+        utility.ShowProgressIndicator = function (message) {
+            if (has(getUtility, 'showProgressIndicator')) {
+                getUtility.showProgressIndicator(message);
+            }
+        };
+        Object.defineProperty(utility, 'LearningPathAttributeName', {
+            get: function () {
+                if (has(getUtility, 'getLearningPathAttributeName')) {
+                    return getUtility.getLearningPathAttributeName();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(utility, 'PageContext', {
+            get: function () {
+                if (has(getUtility, 'getPageContext')) {
+                    return getUtility.getPageContext();
+                }
+                return NULL;
+            }
+        });
+        var getGlobalContext = NULL;
+        if (has(Xrm, 'Utility.getGlobalContext')) {
+            getGlobalContext = Xrm.Utility.getGlobalContext();
+        }
+        utility.AdvancedConfigSetting = function (setting) {
+            if (has(getGlobalContext, 'getAdvancedConfigSetting')) {
+                return getGlobalContext.getAdvancedConfigSetting(setting);
+            }
+            return EMPTY_NUMBER;
+        };
+        utility.CurrentAppName = function (successCallback, errorCallback) {
+            if (has(getGlobalContext, 'getCurrentAppName')) {
+                getGlobalContext.getCurrentAppName().then(successCallback, errorCallback);
+            }
+        };
+        utility.CurrentAppProperties = function (successCallback, errorCallback) {
+            if (has(getGlobalContext, 'getCurrentAppProperties')) {
+                getGlobalContext.getCurrentAppProperties().then(successCallback, errorCallback);
+            }
+        };
+        utility.WebResourceUrl = function (webResourceName) {
+            if (has(getGlobalContext, 'getWebResourceUrl')) {
+                return getGlobalContext.getWebResourceUrl(webResourceName);
+            }
+            return EMPTY_STRING;
+        };
+        utility.PrependOrgName = function (sPath) {
+            if (has(getGlobalContext, 'prependOrgName')) {
+                return getGlobalContext.prependOrgName(sPath);
+            }
+            return EMPTY_STRING;
+        };
+        Object.defineProperty(utility, 'Client', {
+            get: function () {
+                var obj = {};
+                var client = NULL;
+                if (has(getGlobalContext, 'client')) {
+                    client = getGlobalContext.client;
+                }
+                Object.defineProperty(obj, 'ClientName', {
+                    get: function () {
+                        if (has(client, 'getClient')) {
+                            return client.getClient();
+                        }
+                        return 'Web';
+                    }
+                });
+                Object.defineProperty(obj, 'ClientState', {
+                    get: function () {
+                        if (has(client, 'getClientState')) {
+                            return client.getClientState();
+                        }
+                        return 'Online';
+                    }
+                });
+                Object.defineProperty(obj, 'FormFactor', {
+                    get: function () {
+                        if (has(client, 'getFormFactor')) {
+                            return client.getFormFactor();
+                        }
+                        return EMPTY_NUMBER;
+                    }
+                });
+                Object.defineProperty(obj, 'IsOffline', {
+                    get: function () {
+                        if (has(client, 'isOffline')) {
+                            return client.isOffline();
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                return obj;
+            }
+        });
+        Object.defineProperty(utility, 'OrganizationSettings', {
+            get: function () {
+                var obj = {};
+                var organizationSettings = NULL;
+                if (has(getGlobalContext, 'organizationSettings')) {
+                    organizationSettings = getGlobalContext.organizationSettings;
+                }
+                Object.defineProperty(obj, 'Attributes', {
+                    get: function () {
+                        if (has(organizationSettings, 'attributes')) {
+                            return organizationSettings.attributes;
+                        }
+                        return {};
+                    }
+                });
+                Object.defineProperty(obj, 'BaseCurrencyId', {
+                    get: function () {
+                        if (has(organizationSettings, 'baseCurrencyId')) {
+                            return organizationSettings.baseCurrencyId;
+                        }
+                        return EMPTY_GUID;
+                    }
+                });
+                Object.defineProperty(obj, 'BaseCurrency', {
+                    get: function () {
+                        if (has(organizationSettings, 'baseCurrency')) {
+                            return organizationSettings.baseCurrency;
+                        }
+                        return EMPTY_REFERENCE;
+                    }
+                });
+
+                Object.defineProperty(obj, 'DefaultCountryCode', {
+                    get: function () {
+                        if (has(organizationSettings, 'defaultCountryCode')) {
+                            return organizationSettings.defaultCountryCode;
+                        }
+                        return NULL;
+                    }
+                });
+                Object.defineProperty(obj, 'IsAutoSaveEnabled', {
+                    get: function () {
+                        if (has(organizationSettings, 'isAutoSaveEnabled')) {
+                            return organizationSettings.isAutoSaveEnabled;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, 'LanguageId', {
+                    get: function () {
+                        if (has(organizationSettings, 'languageId')) {
+                            return organizationSettings.languageId;
+                        }
+                        return 1033;
+                    }
+                });
+                Object.defineProperty(obj, 'OrganizationId', {
+                    get: function () {
+                        if (has(organizationSettings, 'organizationId')) {
+                            return organizationSettings.organizationId;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, 'IsTrialOrganization', {
+                    get: function () {
+                        if (has(organizationSettings, 'isTrialOrganization')) {
+                            return organizationSettings.isTrialOrganization;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, 'OrganizationExpiryDate', {
+                    get: function () {
+                        if (has(organizationSettings, 'organizationExpiryDate')) {
+                            return organizationSettings.organizationExpiryDate;
+                        }
+                        return NULL;
+                    }
+                });
+                Object.defineProperty(obj, 'UniqueName', {
+                    get: function () {
+                        if (has(organizationSettings, 'uniqueName')) {
+                            return organizationSettings.uniqueName;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, 'UseSkypeProtocol', {
+                    get: function () {
+                        if (has(organizationSettings, 'useSkypeProtocol')) {
+                            return organizationSettings.useSkypeProtocol;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                return obj;
+            }
+        });
+        Object.defineProperty(utility, 'UserSettings', {
+            get: function () {
+                var obj = {};
+                var userSettings = NULL;
+                if (has(getGlobalContext, 'userSettings')) {
+                    userSettings = getGlobalContext.userSettings;
+                }
+                Object.defineProperty(obj, 'DateFormattingInfo', {
+                    get: function () {
+                        if (has(userSettings, 'dateFormattingInfo')) {
+                            return userSettings.dateFormattingInfo;
+                        }
+                        return {};
+                    }
+                });
+                Object.defineProperty(obj, 'DefaultDashboardId', {
+                    get: function () {
+                        if (has(userSettings, 'defaultDashboardId')) {
+                            return userSettings.defaultDashboardId;
+                        }
+                        return EMPTY_GUID;
+                    }
+                });
+                Object.defineProperty(obj, 'IsGuidedHelpEnabled', {
+                    get: function () {
+                        if (has(userSettings, 'isGuidedHelpEnabled')) {
+                            return userSettings.isGuidedHelpEnabled;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, 'IsHighContrastEnabled', {
+                    get: function () {
+                        if (has(userSettings, 'isHighContrastEnabled')) {
+                            return userSettings.isHighContrastEnabled;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, 'IsRTL', {
+                    get: function () {
+                        if (has(userSettings, 'isRTL')) {
+                            return userSettings.isRTL;
+                        }
+                        return EMPTY_BOOL;
+                    }
+                });
+                Object.defineProperty(obj, 'LanguageId', {
+                    get: function () {
+                        if (has(userSettings, 'languageId')) {
+                            return userSettings.languageId;
+                        }
+                        return 1033;
+                    }
+                });
+                Object.defineProperty(obj, 'Roles', {
+                    get: function () {
+                        if (has(userSettings, 'roles')) {
+                            return userSettings.roles;
+                        }
+                        return [];
+                    }
+                });
+                Object.defineProperty(obj, 'SecurityRolePrivileges', {
+                    get: function () {
+                        if (has(userSettings, 'securityRolePrivileges')) {
+                            return userSettings.securityRolePrivileges;
+                        }
+                        return [];
+                    }
+                });
+                Object.defineProperty(obj, 'SecurityRoles', {
+                    get: function () {
+                        if (has(userSettings, 'securityRoles')) {
+                            return userSettings.securityRoles;
+                        }
+                        return [];
+                    }
+                });
+                Object.defineProperty(obj, 'TransactionCurrency', {
+                    get: function () {
+                        if (has(userSettings, 'transactionCurrency')) {
+                            return userSettings.transactionCurrency;
+                        }
+                        return EMPTY_REFERENCE;
+                    }
+                });
+                Object.defineProperty(obj, 'TransactionCurrencyId', {
+                    get: function () {
+                        if (has(userSettings, 'transactionCurrencyId')) {
+                            return userSettings.transactionCurrencyId;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, 'UserId', {
+                    get: function () {
+                        if (has(userSettings, 'userId')) {
+                            return userSettings.userId;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, 'UserName', {
+                    get: function () {
+                        if (has(userSettings, 'userName')) {
+                            return userSettings.userName;
+                        }
+                        return EMPTY_STRING;
+                    }
+                });
+                Object.defineProperty(obj, 'TimeZoneOffsetMinutes', {
+                    get: function () {
+                        if (has(userSettings, 'getTimeZoneOffsetMinutes')) {
+                            return userSettings.getTimeZoneOffsetMinutes();
+                        }
+                        return EMPTY_NUMBER;
+                    }
+                });
+                return obj;
+            }
+        });
+        Object.defineProperty(utility, 'ClientUrl', {
+            get: function () {
+                if (has(getGlobalContext, 'getClientUrl')) {
+                    return getGlobalContext.getClientUrl();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(utility, 'CurrentAppUrl', {
+            get: function () {
+                if (has(getGlobalContext, 'getCurrentAppUrl')) {
+                    return getGlobalContext.getCurrentAppUrl();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(utility, 'Version', {
+            get: function () {
+                if (has(getGlobalContext, 'getVersion')) {
+                    return getGlobalContext.getVersion();
+                }
+                return EMPTY_STRING;
+            }
+        });
+        Object.defineProperty(utility, 'IsOnPremises', {
+            get: function () {
+                if (has(getGlobalContext, 'isOnPremises')) {
+                    return getGlobalContext.isOnPremises();
+                }
+                return EMPTY_BOOL;
+            }
+        });
+        var getNavigation = NULL;
+        if (has(Xrm, 'Navigation')) {
+            getNavigation = Xrm.Navigation;
+        }
+        utility.OpenAlertDialog = function (alertStrings, alertOptions, closeCallback, errorCallback) {
+            if (has(getNavigation, 'openAlertDialog')) {
+                getNavigation.openAlertDialog(alertStrings, alertOptions).then(closeCallback, errorCallback);
+            }
+        };
+        utility.OpenConfirmDialog = function (confirmStrings, confirmOptions, successCallback, errorCallback) {
+            if (has(getNavigation, 'openConfirmDialog')) {
+                getNavigation.openConfirmDialog(confirmStrings, confirmOptions).then(successCallback, errorCallback);
+            }
+        };
+        utility.OpenErrorDialog = function (errorOptions, successCallback, errorCallback) {
+            if (has(getNavigation, 'openErrorDialog')) {
+                getNavigation.openErrorDialog(errorOptions).then(successCallback, errorCallback);
+            }
+        };
+        utility.OpenFile = function (file, openFileOptions) {
+            if (has(getNavigation, 'openFile')) {
+                getNavigation.openFile(file, openFileOptions);
+            }
+        };
+        utility.OpenForm = function (entityFormOptions, formParameters, successCallback, errorCallback) {
+            if (has(getNavigation, 'openForm')) {
+                getNavigation.openForm(entityFormOptions, formParameters).then(successCallback, errorCallback);
+            }
+        };
+        utility.OpenUrl = function (url, openUrlOptions) {
+            if (has(getNavigation, 'openUrl')) {
+                getNavigation.openUrl(url, openUrlOptions);
+            }
+        };
+        utility.OpenWebResource = function (webResourceName, windowOptions, data) {
+            if (has(getNavigation, 'openWebResource')) {
+                getNavigation.openWebResource(webResourceName, windowOptions, data);
+            }
+        };
+        utility.NavigateTo = function (pageInput, navigationOptions, successCallback, errorCallback) {
+            if (has(getNavigation, 'navigateTo')) {
+                getNavigation.navigateTo(pageInput, navigationOptions).then(successCallback, errorCallback);
+            }
+        };
+        var getPanel = NULL;
+        if (has(Xrm, 'Panel')) {
+            getPanel = Xrm.Panel;
+        }
+        utility.LoadPanel = function (url, title) {
+            if (has(getPanel, 'loadPanel')) {
+                getPanel.loadPanel(url, title);
+            }
+        };
+        var getEncoding = NULL;
+        if (has(Xrm, 'Encoding')) {
+            getEncoding = Xrm.Encoding;
+        }
+        utility.XmlAttributeEncode = function (arg) {
+            if (has(getEncoding, 'xmlAttributeEncode')) {
+                return getEncoding.xmlAttributeEncode(arg);
+            }
+            return arg;
+        };
+        utility.XmlEncode = function (arg) {
+            if (has(getEncoding, 'xmlEncode')) {
+                return getEncoding.xmlEncode(arg);
+            }
+            return arg;
+        };
+        utility.HtmlAttributeEncode = function (arg) {
+            if (has(getEncoding, 'htmlAttributeEncode')) {
+                return getEncoding.htmlAttributeEncode(arg);
+            }
+            return arg;
+        };
+        utility.HtmlDecode = function (arg) {
+            if (has(getEncoding, 'htmlDecode')) {
+                return getEncoding.htmlDecode(arg);
+            }
+            return arg;
+        };
+        utility.HtmlEncode = function (arg) {
+            if (has(getEncoding, 'htmlEncode')) {
+                return getEncoding.htmlEncode(arg);
+            }
+            return arg;
+        };
+        var getDevice = NULL;
+        if (has(Xrm, 'Device')) {
+            getDevice = Xrm.Device;
+        }
+        utility.CaptureAudio = function (successCallback, errorCallback) {
+            if (has(getDevice, 'captureAudio')) {
+                getDevice.captureAudio().then(successCallback, errorCallback);
+            }
+        };
+        utility.CaptureImage = function (imageOptions, successCallback, errorCallback) {
+            if (has(getDevice, 'captureImage')) {
+                getDevice.captureImage(imageOptions).then(successCallback, errorCallback);
+            }
+        };
+        utility.CaptureVideo = function (successCallback, errorCallback) {
+            if (has(getDevice, 'captureVideo')) {
+                getDevice.captureVideo().then(successCallback, errorCallback);
+            }
+        };
+        utility.BarcodeValue = function (successCallback, errorCallback) {
+            if (has(getDevice, 'getBarcodeValue')) {
+                getDevice.getBarcodeValue().then(successCallback, errorCallback);
+            }
+        };
+        utility.CurrentPosition = function (successCallback, errorCallback) {
+            if (has(getDevice, 'getCurrentPosition')) {
+                getDevice.getCurrentPosition().then(successCallback, errorCallback);
+            }
+        };
+        utility.PickFile = function (pickFileOptions, successCallback, errorCallback) {
+            if (has(getDevice, 'pickFile')) {
+                getDevice.pickFile(pickFileOptions).then(successCallback, errorCallback);
+            }
+        };
+        var getApp = NULL;
+        if (has(Xrm, 'App')) {
+            getApp = Xrm.App;
+        }
+        utility.AddGlobalNotification = function (notification, successCallback, errorCallback) {
+            if (has(getApp, 'addGlobalNotification')) {
+                getApp.addGlobalNotification(notification).then(successCallback, errorCallback);
+            }
+        }
+        utility.ClearGlobalNotification = function (uniqueId, successCallback, errorCallback) {
+            if (has(getApp, 'clearGlobalNotification')) {
+                getApp.clearGlobalNotification(uniqueId).then(successCallback, errorCallback);
+            }
+        }
+        return utility;
+    }
+    function loadExecutionContext(executionContext) {
+        var obj = {};
+        obj.GetSharedVariable = function (key) {
+            if (has(executionContext, 'getSharedVariable')) {
+                return executionContext.getSharedVariable(key);
+            }
+            return NULL;
+        }
+        obj.SetSharedVariable = function (key, value) {
+            if (has(executionContext, 'setSharedVariable')) {
+                return executionContext.setSharedVariable(key, value);
+            }
+            return NULL;
+        }
+        obj.IsDefaultPrevented = function () {
+            if (has(executionContext, 'getEventArgs')) {
+                return executionContext.getEventArgs().isDefaultPrevented();
+            }
+            return EMPTY_BOOL;
+        }
+        obj.SetPreventDefault = function () {
+            if (has(executionContext, 'getEventArgs')) {
+                executionContext.getEventArgs().preventDefault();
+            }
+        }
+        obj.SetPreventDefaultOnError = function () {
+            if (has(executionContext, 'getEventArgs')) {
+                executionContext.getEventArgs().preventDefaultOnError();
+            }
+        }
+        Object.defineProperty(obj, 'Depth', {
+            get: function () {
+                if (has(executionContext, 'getDepth')) {
+                    return executionContext.getDepth();
+                }
+                return EMPTY_NUMBER;
+            }
+        });
+        Object.defineProperty(obj, 'EventArgs', {
+            get: function () {
+                if (has(executionContext, 'getEventArgs')) {
+                    return executionContext.getEventArgs();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(obj, 'EventSource', {
+            get: function () {
+                if (has(executionContext, 'getEventSource')) {
+                    return executionContext.getEventSource();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(obj, 'FormContext', {
+            get: function () {
+                if (has(executionContext, 'getFormContext')) {
+                    return executionContext.getFormContext();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(obj, 'SaveMode', {
+            get: function () {
+                if (has(executionContext, 'getEventArgs')) {
+                    return executionContext.getEventArgs().getSaveMode();
+                }
+                return 1;
+            }
+        });
+        Object.defineProperty(obj, 'EntityReference', {
+            get: function () {
+                if (has(executionContext, 'getEntityReference')) {
+                    return executionContext.getEventArgs().getEntityReference();
+                }
+                return {};
+            }
+        });
+        Object.defineProperty(obj, 'IsSaveSuccess', {
+            get: function () {
+                if (has(executionContext, 'getIsSaveSuccess')) {
+                    return executionContext.getEventArgs().getIsSaveSuccess();
+                }
+                return false;
+            }
+        });
+        Object.defineProperty(obj, 'SaveErrorInfo', {
+            get: function () {
+                if (has(executionContext, 'getSaveErrorInfo')) {
+                    return executionContext.getEventArgs().getSaveErrorInfo();
+                }
+                return {};
+            }
+        });
+        return obj;
+    }
+    return {
+        LoadForm: loadForm,
+        LoadProcess: loadProcess,
+        LoadFields: loadFields,
+        LoadTabs: loadTabs,
+        LoadNavigations: loadNavigations,
+        LoadQuickForms: loadQuickForms,
+        LoadGrids: loadGrids,
+        LoadUtility: loadUtility,
+        LoadExecutionContext: loadExecutionContext
+    }
+})();
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+    OptionSet.FormType = {
+        Undefined: 0,
+        Create: 1,
+        Update: 2,
+        ReadOnly: 3,
+        Disabled: 4,
+        BulkEdit: 5
+    };
+    OptionSet.SaveOption = {
+        SaveAndClose: 'saveandclose',
+        SaveAndNew: 'saveandnew'
+    };
+    OptionSet.SaveMode = {
+        Save: 1,
+        SaveAndClose: 2,
+        Deactivate: 5,
+        Reactivate: 6,
+        Email: 7,
+        Disqualify: 15,
+        Qualify: 16,
+        Assign: 47,
+        SaveAsCompleted: 58,
+        SaveAndNew: 59,
+        AutoSave: 70
+    };
+    OptionSet.FormNotificationLevel = {
+        Error: 'ERROR',
+        Warning: 'WARNING',
+        Info: 'INFO'
+    };
+    OptionSet.TabDisplayState = {
+        Expanded: 'expanded',
+        Collapsed: 'collapsed'
+    };
+    OptionSet.TabContentType = {
+        CardSections: 'cardSections',
+        SingleComponent: 'singleComponent'
+    };
+    OptionSet.ProcessDisplayState = {
+        Expanded: 'expanded',
+        Collapsed: 'collapsed',
+        Floating: 'floating'
+    };
+    OptionSet.ProcessStatus = {
+        Active: 'active',
+        Aborted: 'aborted',
+        Finished: 'finished'
+    };
+    OptionSet.FieldAttributeType = {
+        Boolean: 'boolean',
+        DateTime: 'datetime',
+        Decimal: 'decimal',
+        Double: 'double',
+        Integer: 'integer',
+        Lookup: 'lookup',
+        Memo: 'memo',
+        Money: 'money',
+        MultiOptionSet: 'multioptionset',
+        OptionSet: 'optionset',
+        String: 'string'
+    };
+    OptionSet.FieldFormat = {
+        Date: 'date',
+        DateTime: 'datetime',
+        Duration: 'duration',
+        Email: 'email',
+        Language: 'language',
+        None: 'none',
+        TextArea: 'textarea',
+        Text: 'text',
+        TickerSymbol: 'tickersymbol',
+        Phone: 'phone',
+        TimeZone: 'timezone',
+        Url: 'url'
+    };
+    OptionSet.FieldRequiredLevel = {
+        None: 'none',
+        Required: 'required',
+        Recommended: 'recommended'
+    };
+    OptionSet.FieldSubmitMode = {
+        Always: 'always',
+        Never: 'never',
+        Dirty: 'dirty'
+    };
+    OptionSet.FieldControlType = {
+        Standard: 'standard',
+        Iframe: 'iframe',
+        KbSearch: 'kbsearch',
+        Lookup: 'lookup',
+        MultiSelectOptionset: 'multiselectoptionset',
+        Notes: 'notes',
+        OptionSet: 'optionset',
+        QuickForm: 'quickform',
+        SubGrid: 'subgrid',
+        TimerControl: 'timercontrol',
+        TimelineWall: 'timelinewall',
+        WebResource: 'webresource'
+    };
+    OptionSet.FieldNotificationLevel = {
+        Error: 'ERROR',
+        Recommendation: 'RECOMMENDATION'
+    };
+    OptionSet.ProcessCategory = {
+        Qualify: 0,
+        Develop: 1,
+        Propose: 2,
+        Close: 3,
+        Identify: 4,
+        Research: 5,
+        Resolve: 6
+    };
+    OptionSet.TimerState = {
+        NotSet: 1,
+        InProgress: 2,
+        Warning: 3,
+        Violated: 4,
+        Success: 5,
+        Expired: 6,
+        Canceled: 7,
+        Paused: 8
+    };
+    OptionSet.ClientName = {
+        Web: 'Web',
+        Outlook: 'Outlook',
+        Mobile: 'Mobile'
+    };
+    OptionSet.ClientState = {
+        Online: 'Online',
+        Offline: 'Offline'
+    };
+    OptionSet.FormFactor = {
+        Unknown: 0,
+        Desktop: 1,
+        Tablet: 2,
+        Phone: 3
+    };
+    OptionSet.AdvancedConfigSetting = {
+        MaxChildIncidentNumber: 'MaxChildIncidentNumber',
+        MaxIncidentMergeNumber: 'MaxIncidentMergeNumber'
+    };
+    OptionSet.OpenFileOption = {
+        Open: 1,
+        Save: 2
+    };
+    OptionSet.GridType = {
+        HomePageGrid: 1,
+        Subgrid: 2
+    }
+})(OptionSet || (OptionSet = {}));

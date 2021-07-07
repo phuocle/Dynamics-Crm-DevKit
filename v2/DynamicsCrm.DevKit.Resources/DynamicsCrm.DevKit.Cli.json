@@ -1,25 +1,15 @@
 {
-  "plugins": [
+  "servers": [
     {
       "profile": "DEBUG",
-      "folder": "bin\\Debug",
       "solution": "???",
+      "folder": "bin\\Debug",
       "includefiles": [
         "???.Plugin.*.dll",
-        "???.CustomAction.*.dll"
-      ],
-      "excludefiles": [
-        "???.*.Test.dll"
-      ]
-    }
-  ],
-  "workflows": [
-    {
-      "profile": "DEBUG",
-      "folder": "bin\\Debug",
-      "solution": "???",
-      "includefiles": [
-        "???.Workflow.*.dll"
+        "???.CustomAction.*.dll",
+        "???.Workflow.*.dll",
+        "???.CustomApi.*.dll",
+        "???.DataProvider.*.dll"
       ],
       "excludefiles": [
         "???.*.Test.dll"
@@ -30,7 +20,6 @@
     {
       "profile": "DEBUG",
       "solution": "???",
-      "prefix": "???",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -65,24 +54,20 @@
       ]
     }
   ],
-  "dataproviders": [
+  "datasources": [
     {
       "profile": "DEBUG",
-      "folder": "bin\\Debug",
       "solution": "???",
-      "includefiles": [
-        "???.DataProvider.*.dll"
-      ],
-      "excludefiles": [
-        "???.*.Test.dll"
-      ]
+      "displayname": "???",
+      "pluralname": "???",
+      "name": "???"
     }
   ],
   "solutionpackagers": [
     {
       "profile": "Extract-Unmanaged",
-      "rootfolder": "",
       "solution": "???",
+      "rootfolder": "",
       "solutiontype": "Unmanaged",
       "folder": "???",
       "type": "Extract",
@@ -90,8 +75,8 @@
     },
     {
       "profile": "Extract-Managed",
-      "rootfolder": "",
       "solution": "???",
+      "rootfolder": "",
       "solutiontype": "Managed",
       "folder": "???",
       "type": "Extract",
@@ -99,8 +84,8 @@
     },
     {
       "profile": "Pack-Unmanaged",
-      "rootfolder": "",
       "solution": "???",
+      "rootfolder": "",
       "solutiontype": "Unmanaged",
       "folder": "???",
       "type": "Pack",
@@ -108,8 +93,8 @@
     },
     {
       "profile": "Pack-Managed",
-      "rootfolder": "",
       "solution": "???",
+      "rootfolder": "",
       "solutiontype": "Managed",
       "folder": "???",
       "type": "Pack",
@@ -119,44 +104,39 @@
   "generators": [
     {
       "profile": "LATEBOUND",
+      "type": "CSharp",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "365",
-      "type": "CSharp",
-      "entities": "",
-      "debug":  ""
+      "entities": "folder",
+      "debug": "?"
     },
     {
       "profile": "JS-FORM",
+      "type": "JsForm",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "365",
-      "type": "JsForm",
-      "entities": "",
-      "debug": ""
+      "entities": "folder",
+      "debug": "?"
     },
     {
       "profile": "JS-WEBAPI",
+      "type": "JsWebApi",
       "rootnamespace": "???",
       "rootfolder": "???",
-      "crmversion": "365",
-      "type": "JsWebApi",
-      "entities": "",
-      "debug": ""
+      "entities": "folder",
+      "debug": "?"
     }
   ],
   "downloadwebresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
-      "prefix": "???"
+      "solution": "???"
     }
   ],
   "downloadreports": [
     {
       "profile": "DEBUG",
-      "folder": "???",
-      "solution":  "???"
+      "solution": "???"
     }
   ],
   "proxytypes": [
@@ -164,10 +144,7 @@
       "profile": "ALL",
       "namespace": "???",
       "output": "GeneratedCode.cs",
-      "entities":  ""
+      "entities": "*"
     }
-  ],
-  "visualstudio": {
-    "webresourceprofile": "???"
-  }
+  ]
 }

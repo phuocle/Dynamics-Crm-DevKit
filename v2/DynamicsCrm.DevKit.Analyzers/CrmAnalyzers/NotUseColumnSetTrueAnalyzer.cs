@@ -34,19 +34,27 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
         {
             var semanticModel = context.SemanticModel;
             var cancellationToken = context.CancellationToken;
-            if (
-                context.Node is ObjectCreationExpressionSyntax objectCreationExpression &&
-                objectCreationExpression?.ArgumentList?.Arguments.Count == 1
-                )
+            if (context.Node is ObjectCreationExpressionSyntax objectCreationExpression)
             {
                 var typeInfo = semanticModel?.GetTypeInfo(objectCreationExpression, cancellationToken);
                 if (typeInfo?.Type?.ToDisplayString() != MicrosoftXrmSdkQueryColumnSet) return;
-                var argument = objectCreationExpression?.ArgumentList?.Arguments[0];
-                if (argument?.Expression is LiteralExpressionSyntax literalExpression &&
-                    literalExpression.Token.IsKind(SyntaxKind.TrueKeyword)
-                    )
+                if (objectCreationExpression?.ArgumentList?.Arguments.Count == 1)
                 {
-                    DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, objectCreationExpression?.GetLocation());
+                    var argument = objectCreationExpression?.ArgumentList?.Arguments[0];
+                    if (argument?.Expression is LiteralExpressionSyntax literalExpression &&
+                        literalExpression.Token.IsKind(SyntaxKind.TrueKeyword)
+                        )
+                    {
+                        DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, objectCreationExpression?.GetLocation());
+                    }
+                }
+                if (objectCreationExpression.Initializer != null)
+                {
+                    foreach(AssignmentExpressionSyntax expression in objectCreationExpression.Initializer.Expressions)
+                    {
+                        if (expression?.Right?.ToString() == "true" && expression?.Left?.ToString() == "AllColumns")
+                            DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.NotUseColumnSetTrue, expression?.GetLocation());
+                    }
                 }
             }
             else if (

@@ -1,0 +1,1 @@
+Returns a navigation behavior object for a stage that can be used to define whether the **Create** button is available for users to create other table record in a cross-table business process flow navigation scenario.

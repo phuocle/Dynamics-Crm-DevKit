@@ -39,6 +39,14 @@ namespace DynamicsCrm.DevKit.Shared.Models
         PreOperation = 20,
         PostOperation = 40
     }
+    public enum PluginType
+    {
+        Plugin = 0,
+        Workflow = 1,
+        CustomAction = 2,
+        DataProvider = 3,
+        CustomApi = 4
+    }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public class CrmPluginRegistrationAttribute : Attribute
@@ -81,5 +89,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
         public string Image4Alias { get; set; } = string.Empty;
         public ImageTypeEnum Image4Type { get; set; } = ImageTypeEnum.PostImage;
         public string Image4Attributes { get; set; } = string.Empty;
+        public PluginType PluginType { get; set; }
+        public string DataSource { get; set; }
     }
 }

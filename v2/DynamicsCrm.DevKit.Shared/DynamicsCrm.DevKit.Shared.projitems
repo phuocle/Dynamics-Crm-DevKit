@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CliLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ControlClassId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DevKitSetting.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Attribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpLateBound.cs" />
@@ -36,14 +37,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\DownloadFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\Json.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDataProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDataSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDownloadWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonServer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonPlugin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonPortal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonProxyType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonDownloadReport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonSolutionPackager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonVisualStudio.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\JsonWorkflow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Cli\WebResourceFile.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\DataSourceCrm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitCrmConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NameValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NameValueGuid.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NugetPackage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PluginInputOutputParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />

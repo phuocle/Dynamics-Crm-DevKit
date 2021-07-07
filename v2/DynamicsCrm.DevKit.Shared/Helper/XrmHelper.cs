@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Collections.Specialized;
-using DynamicsCrm.DevKit.Shared;
 using System;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Tooling.Connector;
+using Microsoft.Xrm.Sdk.Metadata.Query;
 
 namespace DynamicsCrm.DevKit.Shared.Helper
 {
     public class XrmHelper
     {
-        public static List<string> GetAllCustomActions(IOrganizationService service)
+        public static List<string> GetAllCustomActions(CrmServiceClient service)
         {
             var fetchData = new
             {
@@ -54,7 +53,34 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 .ToList();
         }
 
-        private static string GetSchemaName(IOrganizationService service, string logicalName)
+        public static List<string> GetAllCustomApis(CrmServiceClient service, string entity)
+        {
+            var conditionEntity = string.Empty;
+            if (entity != "none")
+                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='eq' value='{entity}'/>";
+            else
+                conditionEntity = $"<condition attribute='boundentitylogicalname' operator='null' />";
+            var fetchData = new
+            {
+                statecode = "0"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='customapi'>
+    <attribute name='name' />
+    <attribute name='sdkmessageid' />
+    <attribute name='boundentitylogicalname' />
+    <filter>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode}'/>
+      {conditionEntity}
+    </filter>
+  </entity>
+</fetch>";
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            return rows.Entities.Select(x => x.GetAttributeValue<EntityReference>("sdkmessageid")?.Name).ToList();
+        }
+
+        private static string GetSchemaName(CrmServiceClient service, string logicalName)
         {
             if (logicalName == null || logicalName == "none") return "None";
             var request = new RetrieveEntityRequest
@@ -66,7 +92,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return response.EntityMetadata.SchemaName;
         }
 
-        public static List<XrmEntity> GetAllEntities(IOrganizationService service)
+        public static List<XrmEntity> GetAllEntities(CrmServiceClient service)
         {
             var request = new RetrieveAllEntitiesRequest
             {
@@ -88,7 +114,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return entities;
         }
 
-        public static List<int> GetProvisionedLanguages(IOrganizationService service)
+        public static List<int> GetProvisionedLanguages(CrmServiceClient service)
         {
             var request = new RetrieveProvisionedLanguagesRequest();
             var response = (RetrieveProvisionedLanguagesResponse)service.Execute(request);
@@ -164,7 +190,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return new NameValueCollection();
         }
 
-        public static List<string> GetSdkMessages(IOrganizationService service, string logicalName)
+        public static List<string> GetSdkMessages(CrmServiceClient service, string logicalName)
         {
             var request = new RetrieveEntityRequest
             {
@@ -197,13 +223,13 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return messages;
         }
 
-        public static string GeneratedLateBoundClass(IOrganizationService service, string crmName, string entitySchemaName, string nameSpace, string sharedNameSpace)
+        public static string GeneratedLateBoundClass(CrmServiceClient service, string crmName, string entitySchemaName, string nameSpace, string sharedNameSpace)
         {
             var lateBound = new CSharpLateBound();
             return lateBound.Go(service, Utility.ConvertCrmNameToCrmVersionName(crmName), entitySchemaName, nameSpace, sharedNameSpace);
         }
 
-        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(IOrganizationService service, string entityName, string requestName)
+        public static List<PluginInputOutputParameter> GetPluginInputOutputParameters(CrmServiceClient service, string entityName, string requestName)
         {
             var fetchData = new
             {
@@ -293,7 +319,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         }
 
 
-        public static int GetObjectTypeCode(IOrganizationService service, string logicalName)
+        public static int GetObjectTypeCode(CrmServiceClient service, string logicalName)
         {
             var request = new RetrieveEntityRequest
             {
@@ -306,7 +332,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return -1;
         }
 
-        public static List<string> GetForms(IOrganizationService service, string logicalName)
+        public static List<string> GetForms(CrmServiceClient service, string logicalName)
         {
             var fetchData = new
             {
@@ -343,15 +369,6 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return forms;
         }
 
-        public static IOrganizationService GetIOrganizationService(CrmServiceClient crmServiceClient)
-        {
-            if (crmServiceClient.OrganizationServiceProxy != null)
-                return (IOrganizationService)crmServiceClient.OrganizationServiceProxy;
-            if (crmServiceClient.OrganizationWebProxyClient != null)
-                return (IOrganizationService)crmServiceClient.OrganizationWebProxyClient;
-            throw new Exception("Get IOrganizationService FAILED !!!");
-        }
-
         public static string BuildConnectionString(CrmConnection crmConnection)
         {
             if (crmConnection == null) return string.Empty;
@@ -362,7 +379,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
         {
             if (type == "ClientSecret")
                 return $"AuthType=ClientSecret;Url={url};ClientId={user};ClientSecret={pass};";
-            else if (type == "AD" || type == "IFD")
+            else if (type == "AD")
             {
                 var arr = user.Split("\\".ToCharArray());
                 if (arr.Length != 2)
@@ -371,7 +388,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 user = arr[1];
                 return $"AuthType={type};Url={url};Domain={domain};Username={user};Password={pass};";
             }
-            return $"AuthType=Office365;Url={url};Username={user};Password={pass};";
+            return $"AuthType=OAuth;Url={url};Username={user};Password={pass};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto";
         }
 
         public static string BuildConnectionString(string connectionString)
@@ -434,6 +451,150 @@ namespace DynamicsCrm.DevKit.Shared.Helper
                 return BuildConnectionString(authType, url, $"{domain}\\{userName}", password);
             }
             throw new Exception("Fail when BuildConnectionString");
+        }
+
+        public static bool IsExistDataSource(CrmServiceClient crmServiceClient, string logicalname)
+        {
+            var filterExpression = new MetadataFilterExpression();
+            logicalname = logicalname.ToLower();
+            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
+            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
+            {
+                "DataProviderId",
+                "LogicalName",
+                "SchemaName",
+                "MetadataId",
+                "DisplayName",
+                "ExternalName",
+                "DisplayCollectionName"
+            });
+            var entityQueryExpression = new EntityQueryExpression();
+            entityQueryExpression.Criteria = new MetadataFilterExpression();
+            entityQueryExpression.Criteria = filterExpression;
+            entityQueryExpression.Properties = propertiesExpression;
+            var request = new RetrieveMetadataChangesRequest
+            {
+                Query = entityQueryExpression
+            };
+            var response = (RetrieveMetadataChangesResponse)crmServiceClient.Execute(request);
+            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
+                if (entityMetadata.LogicalName == logicalname)
+                    return true;
+            return false;
+        }
+
+        public static bool IsExistSolution(CrmServiceClient crmServiceClient, string solutionuniquename, out Guid solutionId, out string prefix)
+        {
+            solutionId = Guid.Empty;
+            prefix = string.Empty;
+            var fetchData = new
+            {
+                uniquename = solutionuniquename
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='solution'>
+    <attribute name='solutionid' />
+    <filter>
+      <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+    </filter>
+    <link-entity name='publisher' from='publisherid' to='publisherid' alias='p'>
+      <attribute name='customizationprefix' />
+    </link-entity>
+  </entity>
+</fetch>";
+
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return false;
+            var entity = rows.Entities[0];
+            solutionId = entity.Id;
+            prefix = $"{ entity.GetAttributeValue<AliasedValue>("p.customizationprefix").Value}_";
+            return true;
+        }
+        public static bool IsVirtualTableSupportCRUD(CrmServiceClient crmServiceClient)
+        {
+            return crmServiceClient.ConnectedOrgVersion >= new Version("9.1.0.18950");
+        }
+
+        public static string ConnectedUrl(CrmServiceClient crmServiceClient)
+        {
+            var url = new Uri(crmServiceClient?.CrmConnectOrgUriActual?.AbsoluteUri).GetLeftPart(UriPartial.Authority);
+            url = url?.Replace(".api.", ".");
+            return url;
+        }
+
+        public static List<NameValueGuidExtend> GetAllSolutions(CrmServiceClient crmServiceClient)
+        {
+            var fetchData = new
+            {
+                ismanaged = "0",
+                uniquename = "Default",
+                uniquename2 = "Active",
+                uniquename3 = "Basic"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='solution'>
+    <attribute name='solutionid' />
+    <attribute name='uniquename' />
+    <filter>
+      <condition attribute='ismanaged' operator='eq' value='{fetchData.ismanaged/*0*/}'/>
+      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename/*Default*/}'/>
+      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename2/*Active*/}'/>
+      <condition attribute='uniquename' operator='neq' value='{fetchData.uniquename3/*Basic*/}'/>
+    </filter>
+    <order attribute='uniquename' />
+    <link-entity name='publisher' from='publisherid' to='publisherid' alias='p'>
+      <attribute name='customizationprefix' />
+      <filter>
+        <condition attribute='customizationprefix' operator='not-null' />
+      </filter>
+    </link-entity>
+  </entity>
+</fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var list = new List<NameValueGuidExtend>();
+            foreach(var entity in rows.Entities)
+            {
+                list.Add(new NameValueGuidExtend {
+                    Name = entity.GetAttributeValue<string>("uniquename") ?? string.Empty,
+                    Value = entity.Id,
+                    SolutionPrefix = entity.GetAttributeValue<AliasedValue>("p.customizationprefix")?.Value.ToString() ?? string.Empty,
+                    SolutionUniqueName = entity.GetAttributeValue<string>("uniquename") ?? string.Empty
+                });
+            }
+            return list;
+        }
+
+        public static List<string> GetAllDataSource(CrmServiceClient crmServiceClient)
+        {
+            var list = new List<string>();
+            var filterExpression = new MetadataFilterExpression();
+            filterExpression.Conditions.Add(new MetadataConditionExpression("DataProviderId", MetadataConditionOperator.Equals, Guid.Parse("B2112A7E-B26C-42F7-9B63-9A809A9D716F")));
+            var propertiesExpression = new MetadataPropertiesExpression(new string[7]
+            {
+                "DataProviderId",
+                "LogicalName",
+                "SchemaName",
+                "MetadataId",
+                "DisplayName",
+                "ExternalName",
+                "DisplayCollectionName"
+            });
+            var entityQueryExpression = new EntityQueryExpression
+            {
+                Criteria = new MetadataFilterExpression()
+            };
+            entityQueryExpression.Criteria = filterExpression;
+            entityQueryExpression.Properties = propertiesExpression;
+            var request = new RetrieveMetadataChangesRequest
+            {
+                Query = entityQueryExpression
+            };
+            var response = (RetrieveMetadataChangesResponse)crmServiceClient.Execute(request);
+            foreach (EntityMetadata entityMetadata in response.EntityMetadata)
+                list.Add(entityMetadata.LogicalName);
+            return list;
         }
     }
 }

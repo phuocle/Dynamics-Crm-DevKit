@@ -3,7 +3,6 @@ using System.IO;
 using DynamicsCrm.DevKit.Shared;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
-using NUglify;
 
 namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
 {
@@ -33,12 +32,11 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
             var devkitCode = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.devkit.365.new.js");
             var devkitDts = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.devkit.365.new.d.ts");
 
-            var devkitCodeMin = Uglify.Js(devkitCode).Code;
             if (File.Exists(devkitFileName))
-                Utility.ForceWriteAllText(devkitFileName, devkitCodeMin);
+                Utility.ForceWriteAllText(devkitFileName, devkitCode);
             else
             {
-                Utility.ForceWriteAllText(devkitFileName, devkitCodeMin);
+                Utility.ForceWriteAllText(devkitFileName, devkitCode);
                 SelectedProjectItem.ProjectItems.AddFromFile(devkitFileName);
             }
 

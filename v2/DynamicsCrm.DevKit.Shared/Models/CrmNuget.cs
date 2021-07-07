@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DynamicsCrm.DevKit.Shared.Models
+﻿namespace DynamicsCrm.DevKit.Shared.Models
 {
     public class CrmNuget
     {

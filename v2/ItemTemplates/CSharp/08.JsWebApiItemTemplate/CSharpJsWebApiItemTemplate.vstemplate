@@ -11,12 +11,13 @@
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
     <DefaultName>Javascript.cs</DefaultName>
+    <SortOrder>180</SortOrder>      
   </TemplateData>
   <TemplateContent>
     <ProjectItem ReplaceParameters="false" TargetFileName="Javascript.js">Javascript.js</ProjectItem>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.10.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.12.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.JsWebApi</FullClassName>
   </WizardExtension>
 </VSTemplate>

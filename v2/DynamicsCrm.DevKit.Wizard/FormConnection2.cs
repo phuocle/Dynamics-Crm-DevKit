@@ -15,9 +15,9 @@ namespace DynamicsCrm.DevKit.Wizard
 {
     public partial class FormConnection2 : Form
     {
+        public CrmServiceClient CrmServiceClient { get; set; }
         private DTE DTE { get; }
         private DevKitCrmConfig Config = null;
-        public IOrganizationService CrmService { get; private set; } = null;
         public CrmConnection CrmConnection { get; private set; }
         private ProjectType ProjectType { get; set; }
         private ItemType ItemType { get; set; }
@@ -32,28 +32,42 @@ namespace DynamicsCrm.DevKit.Wizard
 
         public FormConnection2(DTE dte, ProjectType projectType = ProjectType.Default, ItemType itemType = ItemType.Default)
         {
-            var executingAssembly = Assembly.GetExecutingAssembly();
-            var fInfo = new System.IO.FileInfo(executingAssembly.Location);
-            var checkFile = $"{fInfo.Directory.FullName}\\Microsoft.Xrm.Tooling.Ui.Styles.dll";
-            if (System.IO.File.Exists(checkFile))
+            var isLoaded = false;
+            try
             {
-                Assembly.LoadFrom(checkFile);
+                var executingAssembly = Assembly.GetExecutingAssembly();
+                var fInfo = new System.IO.FileInfo(executingAssembly.Location);
+                var checkFile = $"{fInfo.Directory.FullName}\\Microsoft.Xrm.Tooling.Ui.Styles.dll";
+                if (System.IO.File.Exists(checkFile))
+                {
+                    Assembly.LoadFrom(checkFile);
+                }
+                isLoaded = true;
+            }
+            catch
+            {
             }
 
             InitializeComponent();
 
+            if (!isLoaded)
+            {
+                chkCheck1.Enabled = false;
+                cboType.Enabled = true;
+            }
+
             ProjectType = projectType;
 
-            if (ProjectType == ProjectType.UiTest ||
-                ProjectType == ProjectType.Test)
-            {
-                chkCheck0.Enabled = false;
-                chkCheck1.Enabled = false;
-            }
+            //if (ProjectType == ProjectType.UiTest ||
+            //    ProjectType == ProjectType.Test)
+            //{
+            //    chkCheck0.Enabled = false;
+            //    chkCheck1.Enabled = false;
+            //}
 
             ItemType = itemType;
 
-            cboType.SelectedIndex = 3;
+            cboType.SelectedIndex = 1;
 
             DTE = dte;
             LoadConnections();
@@ -155,9 +169,8 @@ namespace DynamicsCrm.DevKit.Wizard
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                var crmServiceClient = new CrmServiceClient(connectionString);
-                CrmService = XrmHelper.GetIOrganizationService(crmServiceClient);
-                CrmService.Execute(new WhoAmIRequest());
+                CrmServiceClient = new CrmServiceClient(connectionString);
+                CrmServiceClient.Execute(new WhoAmIRequest());
                 return true;
             }
             catch
@@ -172,9 +185,8 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 var connectionString = XrmHelper.BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                var crmServiceClient = new CrmServiceClient(connectionString);
-                CrmService = XrmHelper.GetIOrganizationService(crmServiceClient);
-                CrmService.Execute(new WhoAmIRequest());
+                CrmServiceClient = new CrmServiceClient(connectionString);
+                CrmServiceClient.Execute(new WhoAmIRequest());
                 return true;
             }
             catch
@@ -229,31 +241,22 @@ namespace DynamicsCrm.DevKit.Wizard
                     }
                     CrmConnection.Password = password;
                 }
-                if (ProjectType == ProjectType.Test)
+                if (CanConnect(CrmConnection))
                 {
+                    if (CrmConnection.Type != "ClientSecret")
+                    {
+                        CrmConnection.Password = EncryptDecrypt.EncryptString(password);
+                    }
+                    Config.DefaultCrmConnection = cboConnection.Text;
+                    DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
                     DialogResult = DialogResult.OK;
                     Cursor = Cursors.Default;
                     Close();
                 }
                 else
                 {
-                    if (CanConnect(CrmConnection))
-                    {
-                        if (CrmConnection.Type != "ClientSecret")
-                        {
-                            CrmConnection.Password = EncryptDecrypt.EncryptString(password);
-                        }
-                        Config.DefaultCrmConnection = cboConnection.Text;
-                        DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, Config);
-                        DialogResult = DialogResult.OK;
-                        Cursor = Cursors.Default;
-                        Close();
-                    }
-                    else
-                    {
-                        Cursor = Cursors.Default;
-                        MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    Cursor = Cursors.Default;
+                    MessageBox.Show(@"Something wrong with your connection. Please try it again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 EnabledControl(true);
             }
@@ -270,6 +273,12 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             chkCheck0.Checked = !chkCheck1.Checked;
             btnOk.Enabled = true;
+        }
+
+        private void cboType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            labelUserName.Text = cboType.Text == "ClientSecret" ? "Client Id" : "User Name";
+            labelPassword.Text = cboType.Text == "ClientSecret" ? "Client Secret" : "Password";
         }
     }
 }

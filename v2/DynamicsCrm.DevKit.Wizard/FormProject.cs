@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EnvDTE;
 using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Helper;
 using DynamicsCrm.DevKit.Shared.Models;
-using System.Drawing;
-using Microsoft.Xrm.Sdk;
 using DynamicsCrm.DevKit.SdkLogin;
 using Microsoft.VisualStudio.TemplateWizard;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -28,15 +26,13 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             get
             {
-                var crmName = Utility.GetCrmName(comboBoxCrmName.Text);
-                if (crmName.Length == 0) return crmName;
-                return crmName.Substring(crmName.LastIndexOf(" ")).Trim();
+                return "365";
             }
         }
 
         public string WizardNameSpace => labelProjectName.Text;
 
-        public IOrganizationService CrmService { get; set; }
+        public CrmServiceClient CrmServiceClient { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public string ProjectName => labelProjectName.Text;
         public string ProjectJsName
@@ -62,7 +58,7 @@ namespace DynamicsCrm.DevKit.Wizard
                 return ProjectType.WebResource.ToString();
             }
         }
-        public string ComboBoxCrmName => comboBoxCrmName.Text;
+        public string ComboBoxCrmName => Const.Dynamics365;
         public string Check { get; set; } = "0";
 
         public DTE DTE { get; }
@@ -109,12 +105,22 @@ namespace DynamicsCrm.DevKit.Wizard
                     textProjectName.Visible = false;
                     comboBoxEntity.Visible = true;
                 }
+                else if (_projectType == ProjectType.CustomApi)
+                {
+                    link.Text = @"Add new Custom Api Project";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Custom-Api-Project-Template";
+                    textProjectName.Visible = false;
+                    comboBoxEntity.Visible = true;
+                }
+                else if (_projectType == ProjectType.Server)
+                {
+                    link.Text = @"Add new Server Project";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Server-Project-Template";
+                }
                 else if (_projectType == ProjectType.DataProvider)
                 {
                     link.Text = @"Add New Data Provider Project";
                     link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/Data-Provider-Project-Template";
-                    textProjectName.Visible = false;
-                    comboBoxEntity.Visible = true;
                 }
                 else if (_projectType == ProjectType.WebResource)
                 {
@@ -157,27 +163,6 @@ namespace DynamicsCrm.DevKit.Wizard
 
             DTE = dte;
             ProjectType = projectType;
-            LoadComboBoxCrmName();
-        }
-
-        private void LoadComboBoxCrmName()
-        {
-            var dataSource = Const.DataSourceCrm;
-            if (ProjectType == ProjectType.DataProvider)
-            {
-                dataSource = Const.DataSourceCrm.Where(x => x.Name.StartsWith(Const.Dynamics365)).ToList();
-            }
-            else if (ProjectType == ProjectType.UiTest)
-            {
-                dataSource = Const.DataSourceCrm.Where(x => x.Name.StartsWith(Const.Dynamics365) || x.Name.StartsWith(Const.DynamicsCrm2016)).ToList();
-            }
-            comboBoxCrmName.DataSource = dataSource;
-            comboBoxCrmName.ValueMember = "Version";
-            comboBoxCrmName.DisplayMember = "Name";
-
-            var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            if (config.DefaultCrmName != null || config.DefaultCrmName != "null")
-                comboBoxCrmName.Text = config.DefaultCrmName;
         }
 
         private void LoadComboBoxEntity(List<XrmEntity> entities)
@@ -196,7 +181,7 @@ namespace DynamicsCrm.DevKit.Wizard
         {
             if (Utility.ExistProject(DTE, textProjectName.Text))
             {
-                MessageBox.Show($@"{ProjectType.ToString()} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($@"{ProjectType} project exist!", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (Utility.ExistProject(DTE, ProjectName))
@@ -205,7 +190,6 @@ namespace DynamicsCrm.DevKit.Wizard
                 return;
             }
             var config = DevKitCrmConfigHelper.GetDevKitCrmConfig(DTE);
-            config.DefaultCrmName = comboBoxCrmName.Text;
             DevKitCrmConfigHelper.SetDevKitCrmConfig(DTE, config);
             DialogResult = DialogResult.OK;
         }
@@ -221,38 +205,26 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.ShowDialog() == DialogResult.Cancel) return;
             if (form.Check == "1")
             {
-                if (ProjectType == ProjectType.DataProvider ||
-                    ProjectType == ProjectType.CustomAction ||
-                    ProjectType == ProjectType.Workflow ||
-                    ProjectType == ProjectType.Report ||
-                    ProjectType == ProjectType.Plugin)
+                var loginForm = new FormLogin();
+                loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                loginForm.ShowDialog();
+                if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                 {
-                    var loginForm = new FormLogin();
-                    loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
-                    loginForm.ShowDialog();
-                    if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
-                    {
-                        if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
-                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
-                        else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
-                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
-                        else
-                            throw new WizardCancelledException();
-                        CrmConnection = new CrmConnection {Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
-                    }
-                    else
-                        throw new WizardCancelledException();
+                    CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
+                    CrmConnection = new CrmConnection {Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
                 }
+                else
+                    throw new WizardCancelledException();
             }
             else
             {
                 CrmConnection = form.CrmConnection;
-                CrmService = form.CrmService;
+                CrmServiceClient = form.CrmServiceClient;
             }
             Check = form.Check;
             buttonOk.Enabled = true;
-            comboBoxCrmName.Enabled = true;
             CheckFormByFormType();
+            Text = $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}";
         }
 
         private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
@@ -283,7 +255,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task taskPlugin = Task.Factory.StartNew(() =>
                     {
-                        entitiesPlugin = XrmHelper.GetAllEntities(CrmService);
+                        entitiesPlugin = XrmHelper.GetAllEntities(CrmServiceClient);
                     });
                     while (!taskPlugin.IsCompleted)
                     {
@@ -292,7 +264,6 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(entitiesPlugin);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
@@ -307,7 +278,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task taskWorkflow = Task.Factory.StartNew(() =>
                     {
-                        entitiesWorkflow = XrmHelper.GetAllEntities(CrmService);
+                        entitiesWorkflow = XrmHelper.GetAllEntities(CrmServiceClient);
                     });
                     while (!taskWorkflow.IsCompleted)
                     {
@@ -316,19 +287,19 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(entitiesWorkflow);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
                     progressBar.Value = 100;
                     break;
                 case ProjectType.CustomAction:
+                case ProjectType.CustomApi:
                     EnabledAll(false);
                     List<XrmEntity> entitiesCustomAction = null;
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task taskCustomAction = Task.Factory.StartNew(() =>
                     {
-                        entitiesCustomAction = XrmHelper.GetAllEntities(CrmService);
+                        entitiesCustomAction = XrmHelper.GetAllEntities(CrmServiceClient);
                     });
                     while (!taskCustomAction.IsCompleted)
                     {
@@ -337,31 +308,19 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(entitiesCustomAction);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
                     progressBar.Value = 100;
                     break;
                 case ProjectType.DataProvider:
-                    EnabledAll(false);
-                    List<XrmEntity> entitiesDataProvider = null;
-                    progressBar.Style = ProgressBarStyle.Marquee;
-                    Task taskDataProvider = Task.Factory.StartNew(() =>
-                    {
-                        entitiesDataProvider = XrmHelper.GetAllEntities(CrmService);
-                    });
-                    while (!taskDataProvider.IsCompleted)
-                    {
-                        Application.DoEvents();
-                    }
-                    LoadComboBoxEntity(entitiesDataProvider);
-                    comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
-                    buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
-                    buttonConnection.Enabled = true;
-                    buttonCancel.Enabled = true;
-                    progressBar.Style = ProgressBarStyle.Blocks;
+                    textProjectName.Enabled = true;
+                    textProjectName.Focus();
+                    progressBar.Value = 100;
+                    break;
+                case ProjectType.Server:
+                    textProjectName.Enabled = true;
+                    textProjectName.Focus();
                     progressBar.Value = 100;
                     break;
                 case ProjectType.WebResource:
@@ -389,7 +348,6 @@ namespace DynamicsCrm.DevKit.Wizard
                     LoadComboBoxEntity(projects);
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     buttonOk.Enabled = comboBoxEntity.Enabled;
-                    comboBoxCrmName.Enabled = comboBoxEntity.Enabled;
                     buttonConnection.Enabled = true;
                     buttonCancel.Enabled = true;
                     progressBar.Style = ProgressBarStyle.Blocks;
@@ -414,7 +372,6 @@ namespace DynamicsCrm.DevKit.Wizard
             buttonConnection.Enabled = value;
             buttonOk.Enabled = value;
             buttonCancel.Enabled = value;
-            comboBoxCrmName.Enabled = value;
             textProjectName.Enabled = value;
             comboBoxEntity.Enabled = value;
         }
@@ -446,17 +403,10 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 var solutionName = Utility.GetSolutionName(DTE);
                 if (!text.StartsWith(solutionName)) text = solutionName + "." + text;
-                var temp = $@"{text}.{ProjectType.ToString()}";
+                var temp = $@"{text}.{ProjectType}";
                 temp = temp.Replace("..", ".");
                 labelProjectName.Text = temp;
             }
-            //else if (ProjectType == ProjectType.Report)
-            //{
-            //        var temp = $@"{text}.Report";
-            //    if (temp.StartsWith("."))
-            //        temp = temp.Substring(1);
-            //    labelProjectName.Text = temp;
-            //}
             else
             {
                 var temp = $@"{labelProjectName.Tag}.{text}";

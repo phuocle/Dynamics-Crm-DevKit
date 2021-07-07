@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using EnvDTE;
-using NUglify;
 using DynamicsCrm.DevKit.Shared.Models;
 using System.Text;
 using Microsoft.CSharp;
+using System.Globalization;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -83,17 +83,6 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return string.Empty;
         }
-
-        public static string GetWebApiClientMin(string projectJsName)
-        {
-            var code = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.WebApiClient.min.js");
-            code += "\r\n";
-            var devKit = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Resources.WebApiClient.js");
-            devKit = devKit.Replace("DevKit", projectJsName);
-            devKit = Uglify.Js(devKit).Code;
-            return code + devKit;
-        }
-
         public static bool ExistProject(DTE dte, string projectName)
         {
             var projects = GetProjects(dte.Solution);
@@ -159,6 +148,7 @@ namespace DynamicsCrm.DevKit.Shared
             return Utility.ExistProject(dte, sharedProjectName);
         }
 
+
         public static bool ProxyTypesProjectExist(DTE dte)
         {
             var proxyTypesProjectName = Utility.GetProxyTypesProject(dte);
@@ -201,6 +191,8 @@ namespace DynamicsCrm.DevKit.Shared
         {
             if (!File.Exists(file))
             {
+                var fInfo = new FileInfo(file);
+                if (!fInfo.Directory.Exists) fInfo.Directory.Create();
                 File.WriteAllText(file, content, System.Text.Encoding.UTF8);
             }
             else
@@ -250,8 +242,9 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string GetProjectNetVersion(string comboboxCrmName)
         {
-            if (comboboxCrmName.Length == 0) return comboboxCrmName;
-            return comboboxCrmName.Split("-".ToCharArray())[1].Trim();
+            //if (comboboxCrmName.Length == 0) return comboboxCrmName;
+            //return comboboxCrmName.Split("-".ToCharArray())[1].Trim();
+            return "4.6.2";
         }
 
         public static string GetCrmName(string comboboxCrmName)
@@ -297,6 +290,8 @@ namespace DynamicsCrm.DevKit.Shared
                     project.Name.EndsWith($".{ProjectType.Workflow.ToString()}") ||
                     project.Name.Contains($".{ProjectType.CustomAction.ToString()}.") ||
                     project.Name.EndsWith($".{ProjectType.CustomAction.ToString()}") ||
+                    project.Name.Contains($".{ProjectType.CustomApi.ToString()}.") ||
+                    project.Name.EndsWith($".{ProjectType.CustomApi.ToString()}") ||
                     project.Name.Contains($".{ProjectType.DataProvider.ToString()}.") ||
                     project.Name.EndsWith($".{ProjectType.DataProvider.ToString()}"))
                 {
@@ -343,6 +338,7 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("]", string.Empty);
                 name = name.Replace("\"", string.Empty);
                 name = name.Replace("'", string.Empty);
+                name = name.Replace("’", string.Empty);
                 name = name.Replace(":", string.Empty);
                 name = name.Replace(";", string.Empty);
                 name = name.Replace("<", string.Empty);
@@ -361,6 +357,7 @@ namespace DynamicsCrm.DevKit.Shared
                 name = name.Replace("__", "_");
                 var firstchar = name[0];
                 if (firstchar >= '0' && firstchar <= '9') name = "_" + name;
+                name = string.Concat(name.Normalize(NormalizationForm.FormD).Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)).Normalize(NormalizationForm.FormC);
                 var cs = new CSharpCodeProvider();
                 name = cs.CreateValidIdentifier(name);
                 return name;
@@ -403,6 +400,19 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
+        public static string GetCurrentProjectDirectoryName(DTE dte)
+        {
+            try
+            {
+                var Projects = (object[])dte.ActiveSolutionProjects;
+                var project = (Project)Projects[0];
+                return new FileInfo(project.FullName).DirectoryName;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
         public static List<ProjectItem> GetAllTestProjectItems(DTE dte)
         {
             var Projects = (object[])dte.ActiveSolutionProjects;
@@ -673,7 +683,8 @@ namespace DynamicsCrm.DevKit.Shared
                 data = data.Replace(".Report.", ".");
             if (data.EndsWith(".Test."))
                 data = data.Replace(".Test.", ".");
-            return $"{data}{projectType.ToString()}";
+            if (projectType == ProjectType.Server) return data.TrimEnd(".".ToCharArray());
+            return $"{data}{projectType}";
         }
 
         public static string[] ParseArguments(string commandLine)

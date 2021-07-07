@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InFloat">
+  <description default="This is the InFloat">
+    <label description="This is the InFloat" languagecode="1033" />
+  </description>
+  <displayname default="InFloat">
+    <label description="InFloat" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>1</isoptional>
+  <name>InFloat</name>
+  <type>6</type>
+</customapirequestparameter>

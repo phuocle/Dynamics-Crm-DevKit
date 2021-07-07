@@ -9,6 +9,7 @@ using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Wizard
 {
@@ -24,7 +25,7 @@ namespace DynamicsCrm.DevKit.Wizard
             ItemType = itemType;
         }
         private bool IsLoadComboBoxEntity { get; set; } = true;
-        public IOrganizationService CrmService { get; set; }
+        public CrmServiceClient CrmServiceClient { get; set; }
         public CrmConnection CrmConnection { get; set; }
         public DTE DTE { get; }
         private ItemType _itemType;
@@ -49,6 +50,19 @@ namespace DynamicsCrm.DevKit.Wizard
                     comboBoxExecution.Enabled = false;
                     comboBoxEntity.Text = "";
                     comboBoxEntity.Enabled = false;
+                }
+                else if (_itemType == ItemType.CustomApi)
+                {
+                    link.Text = "Add New Custom Api Class";
+                    link.Tag = "https://github.com/phuocle/Dynamics-Crm-DevKit/wiki/CSharp-Custom-Api-Item-Template";
+                    comboBoxEntity.Text = "";
+                    comboBoxEntity.Enabled = false;
+                    labelStage.Visible = false;
+                    comboBoxStage.Visible = false;
+                    labelExecution.Visible = false;
+                    comboBoxExecution.Visible = false;
+                    groupBox.Size = new System.Drawing.Size(groupBox.Size.Width, 114);
+                    this.Size = new System.Drawing.Size(this.Size.Width, 174);
                 }
             }
         }
@@ -80,19 +94,15 @@ namespace DynamicsCrm.DevKit.Wizard
             if (form.Check == "1")
             {
                 if (ItemType == ItemType.Plugin ||
-                    ItemType == ItemType.CustomAction)
+                    ItemType == ItemType.CustomAction ||
+                    ItemType == ItemType.CustomApi)
                 {
                     var loginForm = new FormLogin();
                     loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
                     loginForm.ShowDialog();
                     if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                     {
-                        if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy != null)
-                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationServiceProxy;
-                        else if (loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient != null)
-                            CrmService = (IOrganizationService)loginForm.CrmConnectionMgr.CrmSvc.OrganizationWebProxyClient;
-                        else
-                            throw new WizardCancelledException();
+                        CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
                         CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
                     }
                     else
@@ -102,10 +112,11 @@ namespace DynamicsCrm.DevKit.Wizard
             else
             {
                 CrmConnection = form.CrmConnection;
-                CrmService = form.CrmService;
+                CrmServiceClient = form.CrmServiceClient;
             }
             buttonOk.Enabled = true;
             CheckFormByFormType();
+            Text = $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}";
         }
 
         private void CheckFormByFormType()
@@ -119,7 +130,7 @@ namespace DynamicsCrm.DevKit.Wizard
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task task1 = Task.Factory.StartNew(() =>
                     {
-                        entities1 = XrmHelper.GetAllEntities(CrmService);
+                        entities1 = XrmHelper.GetAllEntities(CrmServiceClient);
                     });
                     while (!task1.IsCompleted)
                     {
@@ -150,18 +161,20 @@ namespace DynamicsCrm.DevKit.Wizard
                     comboBoxExecution.Text = "Synchronous";
                     break;
                 case ItemType.CustomAction:
+                case ItemType.CustomApi:
                     EnabledAll(false);
                     List<XrmEntity> entities2 = null;
                     progressBar.Style = ProgressBarStyle.Marquee;
                     Task task2 = Task.Factory.StartNew(() =>
                     {
-                        entities2 = XrmHelper.GetAllEntities(CrmService);
+                        entities2 = XrmHelper.GetAllEntities(CrmServiceClient);
                     });
                     while (!task2.IsCompleted)
                     {
                         Application.DoEvents();
                     }
-                    entities2.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false  });
+                    entities2 = entities2.OrderBy(x => x.LogicalName).ToList();
+                    entities2.Insert(0, new XrmEntity { Name = "None", LogicalName = "none", EntityTypeCode = -1, HasImage = false, IsCustomEntity = false });
                     comboBoxEntity.Enabled = true;
                     comboBoxMessage.Enabled = true;
                     textPluginClass.Enabled = true;
@@ -223,7 +236,7 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 Task task1 = Task.Factory.StartNew(() =>
                 {
-                    list = XrmHelper.GetSdkMessages(CrmService, entity.LogicalName);
+                    list = XrmHelper.GetSdkMessages(CrmServiceClient, entity.LogicalName);
                 });
                 while (!task1.IsCompleted)
                 {
@@ -235,15 +248,27 @@ namespace DynamicsCrm.DevKit.Wizard
                 Task task2 = Task.Factory.StartNew(() =>
                 {
                     if (entity.LogicalName == "none")
-                        list = XrmHelper.GetAllCustomActions(CrmService);
+                        list = XrmHelper.GetAllCustomActions(CrmServiceClient);
                     else
-                        list = XrmHelper.GetSdkMessages(CrmService, entity.LogicalName);
+                        list = XrmHelper.GetSdkMessages(CrmServiceClient, entity.LogicalName);
                 });
                 while (!task2.IsCompleted)
                 {
                     Application.DoEvents();
                 }
             }
+            else if (ItemType == ItemType.CustomApi)
+            {
+                Task task2 = Task.Factory.StartNew(() =>
+                {
+                    list = XrmHelper.GetAllCustomApis(CrmServiceClient, entity.LogicalName);
+                });
+                while (!task2.IsCompleted)
+                {
+                    Application.DoEvents();
+                }
+            }
+            list.Sort();
             comboBoxMessage.DataSource = list;
             buttonOk.Enabled = comboBoxMessage.Items.Count > 0;
             progressBar.Style = ProgressBarStyle.Blocks;
@@ -258,12 +283,17 @@ namespace DynamicsCrm.DevKit.Wizard
             var entityName = comboBoxEntity.Text;
             var message = comboBoxMessage.Text;
             var execution = comboBoxExecution.Text;
-            textPluginClass.Text = $"{stage}{entityName}{message}{execution}";
+            if (ItemType == ItemType.CustomApi)
+            {
+                textPluginClass.Text = $"{message}Request";
+            }
+            else
+                textPluginClass.Text = $"{stage}{entityName}{message}{execution}";
         }
 
         private void comboBoxStage_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ItemType == ItemType.CustomAction)
+            if (ItemType == ItemType.CustomAction || ItemType == ItemType.CustomApi)
             {
                 if (comboBoxStage.Text == @"PreValidation" || comboBoxStage.Text == @"PreOperation")
                 {
@@ -400,7 +430,7 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 var entity = comboBoxEntity.SelectedItem as XrmEntity;
                 var message = comboBoxMessage.Text;
-                var list = XrmHelper.GetPluginInputOutputParameters(CrmService, entity.Name, message);
+                var list = XrmHelper.GetPluginInputOutputParameters(CrmServiceClient, entity.Name, message);
                 if (list.Count == 0) return string.Empty;
                 var max = list.OrderByDescending(s => s.Name.Length).First().Name.Length + 4;
                 var inputParameters = string.Empty;

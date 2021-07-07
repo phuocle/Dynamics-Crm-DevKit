@@ -11,6 +11,7 @@
     <AppliesTo>CSharp</AppliesTo>
     <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
     <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <SortOrder>150</SortOrder>
   </TemplateData>
   <TemplateContent>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">Plugin.cs</ProjectItem>
@@ -19,7 +20,7 @@
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">DataProvider.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.10.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.12.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ItemTemplates.Test</FullClassName>
   </WizardExtension>
 </VSTemplate>

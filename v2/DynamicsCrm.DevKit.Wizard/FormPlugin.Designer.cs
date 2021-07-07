@@ -85,7 +85,7 @@
             this.labelClass.Location = new System.Drawing.Point(6, 51);
             this.labelClass.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelClass.Name = "labelClass";
-            this.labelClass.Size = new System.Drawing.Size(45, 16);
+            this.labelClass.Size = new System.Drawing.Size(35, 13);
             this.labelClass.TabIndex = 12;
             this.labelClass.Text = "Class:";
             // 
@@ -95,7 +95,7 @@
             this.labelExecution.Location = new System.Drawing.Point(6, 147);
             this.labelExecution.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelExecution.Name = "labelExecution";
-            this.labelExecution.Size = new System.Drawing.Size(69, 16);
+            this.labelExecution.Size = new System.Drawing.Size(57, 13);
             this.labelExecution.TabIndex = 10;
             this.labelExecution.Text = "Execution:";
             // 
@@ -105,7 +105,7 @@
             this.labelStage.Location = new System.Drawing.Point(6, 114);
             this.labelStage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelStage.Name = "labelStage";
-            this.labelStage.Size = new System.Drawing.Size(47, 16);
+            this.labelStage.Size = new System.Drawing.Size(38, 13);
             this.labelStage.TabIndex = 9;
             this.labelStage.Text = "Stage:";
             // 
@@ -115,7 +115,7 @@
             this.textPluginClass.Location = new System.Drawing.Point(79, 49);
             this.textPluginClass.Margin = new System.Windows.Forms.Padding(2);
             this.textPluginClass.Name = "textPluginClass";
-            this.textPluginClass.Size = new System.Drawing.Size(290, 22);
+            this.textPluginClass.Size = new System.Drawing.Size(290, 20);
             this.textPluginClass.TabIndex = 2;
             // 
             // labelMessage
@@ -124,7 +124,7 @@
             this.labelMessage.Location = new System.Drawing.Point(6, 82);
             this.labelMessage.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelMessage.Name = "labelMessage";
-            this.labelMessage.Size = new System.Drawing.Size(68, 16);
+            this.labelMessage.Size = new System.Drawing.Size(53, 13);
             this.labelMessage.TabIndex = 8;
             this.labelMessage.Text = "Message:";
             // 
@@ -196,7 +196,7 @@
             this.labelEntity.Location = new System.Drawing.Point(6, 18);
             this.labelEntity.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelEntity.Name = "labelEntity";
-            this.labelEntity.Size = new System.Drawing.Size(43, 16);
+            this.labelEntity.Size = new System.Drawing.Size(36, 13);
             this.labelEntity.TabIndex = 0;
             this.labelEntity.Text = "Entity:";
             // 
@@ -249,14 +249,14 @@
             // 
             this.AcceptButton = this.buttonOk;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(494, 199);
+            this.ClientSize = new System.Drawing.Size(504, 199);
             this.ControlBox = false;
             this.Controls.Add(this.buttonConnection);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.link);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
