@@ -157,7 +157,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
             else
             {
-                command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionStringLog(arguments.Connection)}\" ");
+                command.Append($"/connectionstring:\"{XrmHelper.BuildConnectionStringLog2(arguments.Connection)}\" ");
             }
             if (json.entities != null && json.entities.Length > 0)
             {
