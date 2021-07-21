@@ -642,7 +642,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 ["version"] = assemblyProperties[2],
                 ["publickeytoken"] = assemblyProperties[6],
                 ["sourcetype"] = new OptionSetValue(0),
-                ["isolationmode"] = new OptionSetValue(2)
+                ["isolationmode"] = GetIsolationMode(file)
             };
             if (pluginAssemblyId == Guid.Empty)
             {
@@ -683,6 +683,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 return pluginAssemblyId;
             }
+        }
+
+        private OptionSetValue GetIsolationMode(string file)
+        {
+            var types = GetTypes(file);
+            foreach(var type in types)
+            {
+                if (IsCodeActivity(type)) continue;
+                var attributes = GetCrmPluginRegistrationAttributes(type);
+                foreach(var attribute in attributes)
+                {
+                    if (attribute.IsolationMode == IsolationModeEnum.None) return new OptionSetValue(1);
+                }
+            }
+            return new OptionSetValue(2);
         }
 
         private Guid RegisterPluginType(Guid pluginAssemblyId, TypeInfo type, CrmPluginRegistrationAttribute attribute)
