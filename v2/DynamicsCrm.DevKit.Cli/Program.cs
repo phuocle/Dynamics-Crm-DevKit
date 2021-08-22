@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\azure\phuocle\git\D365\D365ICONS\src\PL.D365IconsAndTooltips.SolutionPackager";
+                return @"C:\src\azure\abiz\git\ABIZ_DSMS\src\CDS\DNA.DSMS.WebResource\entities";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
