@@ -61,8 +61,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(CliLog.ColorWhite, "|");
 
             if (!IsValid()) return;
+            var solution = string.Empty;
 
-            var solution = GetSolutionFromCrm();
+            if (json.solutiontype.ToLower() == "Both".ToLower())
+                solution = GetSolutionFromCrmBoth();
+            else
+                solution = GetSolutionFromCrm();
             Packger(solution);
 
             CliLog.WriteLine(CliLog.ColorWhite, "|");
@@ -78,8 +82,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 throw new Exception($"{LOG} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.solutiontype.Length == 0 || json.solutiontype == "???")
                 throw new Exception($"{LOG} 'solutiontype' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
-            if (json.solutiontype.ToLower() != "Managed".ToLower() && json.solutiontype.ToLower() != "Unmanaged".ToLower())
-                throw new Exception($"{LOG} 'solutiontype' should be: 'Managed' or 'Unmanaged'. Please check DynamicsCrm.DevKit.Cli.json file.");
+            if (json.solutiontype.ToLower() != "Managed".ToLower() &&
+                json.solutiontype.ToLower() != "Unmanaged".ToLower() &&
+                json.solutiontype.ToLower() != "Both".ToLower())
+                throw new Exception($"{LOG} 'solutiontype' should be: 'Managed' or 'Unmanaged' or 'Both'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.folder.Length == 0 || json.folder == "???")
                 throw new Exception($"{LOG} 'folder' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
             if (json.type.Length == 0 || json.type == "???")
@@ -95,6 +101,61 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     throw new Exception($"{LOG} mapfile '{map}' not exist");
             }
             return true;
+        }
+
+        private string GetSolutionFromCrmBoth()
+        {
+            if (json.type.ToLower().Trim() == "Extract".ToLower())
+            {
+                ExportSolution("Managed");
+                return ExportSolution("Unmanaged");
+            }
+            else
+            {
+                var fileName = Utility.FormatSolutionVersionString(json.solution, System.Version.Parse(CrmVersion), "Unmanaged");
+                var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", fileName);
+                return solutionFile;
+            }
+        }
+
+        private string ExportSolution(string solutionType)
+        {
+            var timer = Stopwatch.StartNew();
+            var fileName = Utility.FormatSolutionVersionString(json.solution, System.Version.Parse(CrmVersion), solutionType);
+            var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", fileName);
+            CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Export ", CliLog.ColorCyan, solutionType, CliLog.ColorGreen, " solution: ", CliLog.ColorCyan, json.solution, CliLog.ColorGreen, " to: ", CliLog.ColorCyan, solutionFile);
+            CliLog.WriteLine(CliLog.ColorWhite, "|");
+            var request = new ExportSolutionRequest
+            {
+                Managed = solutionType == "Managed",
+                SolutionName = json.solution
+            };
+            try
+            {
+                var wait = new Thread(ThreadWork.SolutionPackagerDots);
+                wait.Start();
+                var response = (ExportSolutionResponse)crmServiceClient.Execute(request);
+                wait.Abort();
+                CliLog.WriteLine();
+                var tempFile = Utility.WriteTempFile(fileName, response.ExportSolutionFile);
+                var dir = Path.GetDirectoryName(solutionFile);
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                File.Copy(tempFile, solutionFile, true);
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, $"Solution exported in  {timer.Elapsed:c}");
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                return solutionFile;
+            }
+            catch (TimeoutException te)
+            {
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                CliLog.WriteLine(ConsoleColor.White, te.Message);
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                CliLog.WriteLine(CliLog.ColorWhite, "|");
+                CliLog.WriteLine(ConsoleColor.Red, "!!! [SOLUTION-PACKAGER] FAILED !!!");
+                throw;
+            }
         }
 
         private string GetSolutionFromCrm()

@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\azure\abiz\git\ABIZ_DSMS\src\CDS\DNA.DSMS.WebResource\entities";
+                return @"C:\src\azure\hitachi\hisolcrm\TEL\SourceCode\Hsap.WO.SolutionPackager";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
