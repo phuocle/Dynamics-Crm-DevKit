@@ -2572,6 +2572,33 @@ var devKit = (function () {
         });
         return obj;
     }
+    function loadSidePanes() {
+        var sidePanes = {};
+        sidePanes.Create = function (paneOptions, successCallback) {
+            Xrm.App.sidePanes.createPane(paneOptions).then(successCallback);
+        }
+        sidePanes.Get = function (paneId) {
+            return Xrm.App.sidePanes.getPane(paneId);
+        }
+        sidePanes.GetSelected = function () {
+            return Xrm.App.sidePanes.getSelectedPane();
+        }
+        sidePanes.GetAll = function () {
+            return Xrm.App.sidePanes.getAllPanes();
+        }
+        Object.defineProperty(sidePanes, 'DisplayState', {
+            get: function () {
+                return Xrm.App.sidePanes.state;
+            },
+            set: function (value) {
+                Xrm.App.sidePanes.state = value;
+            }
+        });
+        return sidePanes;
+    }
+    function loadOthers(formContext, form, defaultWebResourceName) {
+        form.SidePanes = loadSidePanes();
+    }
     return {
         LoadForm: loadForm,
         LoadProcess: loadProcess,
@@ -2581,7 +2608,8 @@ var devKit = (function () {
         LoadQuickForms: loadQuickForms,
         LoadGrids: loadGrids,
         LoadUtility: loadUtility,
-        LoadExecutionContext: loadExecutionContext
+        LoadExecutionContext: loadExecutionContext,        
+        LoadOthers: loadOthers
     }
 })();
 /** @namespace OptionSet */
@@ -2735,5 +2763,9 @@ var OptionSet;
     OptionSet.GridType = {
         HomePageGrid: 1,
         Subgrid: 2
+    };
+    OptionSet.SidePaneState = {
+        Collapsed: 0,
+        Expanded: 1        
     }
 })(OptionSet || (OptionSet = {}));

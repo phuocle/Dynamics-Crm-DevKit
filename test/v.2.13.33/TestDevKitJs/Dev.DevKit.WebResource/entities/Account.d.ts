@@ -178,6 +178,8 @@ declare namespace DevKit {
 		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
+		/** SidePanes of form Account */
+		SidePanes: DevKit.SidePanes;
 	}
 	class AccountApi {
 		/**
