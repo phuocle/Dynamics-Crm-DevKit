@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C85F886B-EA26-45C7-94B6-90A9A56F9604}</ProjectGuid>
+    <ProjectGuid>{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.SolutionPackager</RootNamespace>
@@ -36,43 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="bin\coretools\CrmSvcUtil.exe.config" />
-    <None Include="bin\coretools\LicenseTerms.docx" />
-    <None Include="bin\coretools\pacTelemetryUpload.exe.config" />
-    <None Include="bin\coretools\SolutionPackager.exe.config" />
-    <None Include="mapping.xml" />
-    <None Include="Extract-Managed.bat" />
-    <None Include="Extract-Unmanaged.bat" />
-    <None Include="Pack-Managed.bat" />
-    <None Include="Pack-Unmanaged.bat" />
     <None Include="packages.config" />
+    <None Include="mapping.xml" />
+    <None Include="Extract-Both.bat" />
+    <None Include="Pack-Both.bat" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\coretools\CrmSvcUtil.exe" />
-    <Content Include="bin\coretools\CrmSvcUtil.xml" />
-    <Content Include="bin\coretools\Microsoft.ApplicationInsights.dll" />
-    <Content Include="bin\coretools\Microsoft.Crm.Sdk.Proxy.dll" />
-    <Content Include="bin\coretools\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
-    <Content Include="bin\coretools\Microsoft.PowerPlatform.Tooling.BatchedTelemetry.dll" />
-    <Content Include="bin\coretools\Microsoft.Rest.ClientRuntime.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Sdk.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.Connector.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
-    <Content Include="bin\coretools\Newtonsoft.Json.dll" />
-    <Content Include="bin\coretools\Other Redistributable.txt" />
-    <Content Include="bin\coretools\pacTelemetryUpload.exe" />
-    <Content Include="bin\coretools\SolutionPackager.exe" />
-    <Content Include="bin\coretools\SolutionPackagerLib.dll" />
-    <Content Include="bin\coretools\System.Diagnostics.DiagnosticSource.dll" />
-    <Content Include="bin\coretools\System.Text.Json.dll" />
-    <Content Include="bin\coretools\System.ValueTuple.dll" />
-    <Content Include="bin\Debug\Dev.DevKit.SolutionPackager.dll" />
-    <Content Include="bin\Debug\Dev.DevKit.SolutionPackager.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

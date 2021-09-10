@@ -83,38 +83,20 @@
   ],
   "solutionpackagers": [
     {
-      "profile": "Extract-Unmanaged",
+      "profile": "Extract-Both",
       "rootfolder": "",
       "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "solutiontype": "Unmanaged",
-      "folder": "Solutions",
+      "solutiontype": "Both",
+      "folder": "TestPluginWorkflowCustomActionCustomApi",
       "type": "Extract",
       "mapfile": ""
     },
     {
-      "profile": "Extract-Managed",
+      "profile": "Pack-Both",
       "rootfolder": "",
       "solution": "TestPluginWorkflowCustomActionCustomApi",
-      "solutiontype": "Managed",
-      "folder": "Solutions",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Unmanaged",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Managed",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Managed",
-      "folder": "???",
+      "solutiontype": "Both",
+      "folder": "TestPluginWorkflowCustomActionCustomApi",
       "type": "Pack",
       "mapfile": ""
     }

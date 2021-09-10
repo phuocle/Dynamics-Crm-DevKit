@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.DataProvider", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Server", "Dev.DevKit.Server\Dev.DevKit.Server.csproj", "{8ED64CF1-180C-4344-AC99-74EBC2BC4077}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{C85F886B-EA26-45C7-94B6-90A9A56F9604}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.SolutionPackager", "Dev.DevKit.SolutionPackager\Dev.DevKit.SolutionPackager.csproj", "{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -87,10 +87,10 @@ Global
 		{8ED64CF1-180C-4344-AC99-74EBC2BC4077}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ED64CF1-180C-4344-AC99-74EBC2BC4077}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ED64CF1-180C-4344-AC99-74EBC2BC4077}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C85F886B-EA26-45C7-94B6-90A9A56F9604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C85F886B-EA26-45C7-94B6-90A9A56F9604}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C85F886B-EA26-45C7-94B6-90A9A56F9604}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C85F886B-EA26-45C7-94B6-90A9A56F9604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DD89E73-5314-4A94-AF3B-60FD5D2C572E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

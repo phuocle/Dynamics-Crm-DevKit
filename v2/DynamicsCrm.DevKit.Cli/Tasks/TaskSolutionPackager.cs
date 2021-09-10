@@ -122,7 +122,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         {
             var timer = Stopwatch.StartNew();
             var fileName = Utility.FormatSolutionVersionString(json.solution, System.Version.Parse(CrmVersion), solutionType);
-            var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions", fileName);
+            var solutionFile = Path.Combine(currentDirectory, json.folder, "Solutions-Extract", fileName);
             CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Export ", CliLog.ColorCyan, solutionType, CliLog.ColorGreen, " solution: ", CliLog.ColorCyan, json.solution, CliLog.ColorGreen, " to: ", CliLog.ColorCyan, solutionFile);
             CliLog.WriteLine(CliLog.ColorWhite, "|");
             var request = new ExportSolutionRequest

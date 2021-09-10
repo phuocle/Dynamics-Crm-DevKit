@@ -53,10 +53,8 @@
   <ItemGroup>
     <None Include="AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Extract-Unmanaged.bat" />
-    <None Include="Pack-Unmanaged.bat" />
-    <None Include="Pack-Managed.bat" />
-    <None Include="Extract-Managed.bat" />
+    <None Include="Extract-Both.bat" />
+    <None Include="Pack-Both.bat" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ProjectTemplate.csproj" />

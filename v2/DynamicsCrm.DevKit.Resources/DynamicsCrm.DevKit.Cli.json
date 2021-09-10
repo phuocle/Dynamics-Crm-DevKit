@@ -65,37 +65,19 @@
   ],
   "solutionpackagers": [
     {
-      "profile": "Extract-Unmanaged",
+      "profile": "Extract-Both",
       "solution": "???",
       "rootfolder": "",
-      "solutiontype": "Unmanaged",
+      "solutiontype": "Both",
       "folder": "???",
       "type": "Extract",
       "mapfile": ""
     },
     {
-      "profile": "Extract-Managed",
+      "profile": "Pack-Both",
       "solution": "???",
       "rootfolder": "",
-      "solutiontype": "Managed",
-      "folder": "???",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Unmanaged",
-      "solution": "???",
-      "rootfolder": "",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Managed",
-      "solution": "???",
-      "rootfolder": "",
-      "solutiontype": "Managed",
+      "solutiontype": "Both",
       "folder": "???",
       "type": "Pack",
       "mapfile": ""
