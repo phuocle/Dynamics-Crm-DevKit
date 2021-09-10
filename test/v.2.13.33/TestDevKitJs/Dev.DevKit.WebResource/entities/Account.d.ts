@@ -18,7 +18,7 @@ declare namespace DevKit {
 			DETAILS_TAB_section_6: DevKit.Controls.Section;
 			SHIPPING: DevKit.Controls.Section;
 		}
-		interface tab_PHUOCLE_Sections {
+		interface tab_RESOUCES_TAB_Sections {
 			tab_3_section_1: DevKit.Controls.Section;
 		}
 		interface tab_SUMMARY_TAB_Sections {
@@ -32,19 +32,21 @@ declare namespace DevKit {
 		interface tab_DETAILS_TAB extends DevKit.Controls.ITab {
 			Section: tab_DETAILS_TAB_Sections;
 		}
-		interface tab_PHUOCLE extends DevKit.Controls.ITab {
-			Section: tab_PHUOCLE_Sections;
+		interface tab_RESOUCES_TAB extends DevKit.Controls.ITab {
+			Section: tab_RESOUCES_TAB_Sections;
 		}
 		interface tab_SUMMARY_TAB extends DevKit.Controls.ITab {
 			Section: tab_SUMMARY_TAB_Sections;
 		}
 		interface Tabs {
 			DETAILS_TAB: tab_DETAILS_TAB;
-			PHUOCLE: tab_PHUOCLE;
+			RESOUCES_TAB: tab_RESOUCES_TAB;
 			SUMMARY_TAB: tab_SUMMARY_TAB;
 		}
 		interface Body {
 			Tab: Tabs;
+			/** Type an ID number or code for the account to quickly search and identify the account in system views. */
+			AccountNumber: DevKit.Controls.String;
 			ActionCards: DevKit.Controls.ActionCards;
 			/** Shows the complete primary address. */
 			Address1_Composite: DevKit.Controls.String;
@@ -178,7 +180,7 @@ declare namespace DevKit {
 		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
-		/** SidePanes of form Account */
+		/** The SidePanes of form Account */
 		SidePanes: DevKit.SidePanes;
 	}
 	class AccountApi {
@@ -348,6 +350,9 @@ declare namespace DevKit {
 		/** Type additional information to describe the account, such as an excerpt from the company's website. */
 		Description: DevKit.WebApi.StringValue;
 		devkit_CategoryCode: DevKit.WebApi.MultiOptionSetValue;
+		devkit_CurrencySymbolCalculated: DevKit.WebApi.StringValue;
+		devkit_IsParentCurrencySymbolCalculated: DevKit.WebApi.BooleanValueReadonly;
+		devkit_ParentCurrencySymbolCalculated: DevKit.WebApi.StringValue;
 		/** Select whether the account allows bulk email sent through campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but is excluded from email. */
 		DoNotBulkEMail: DevKit.WebApi.BooleanValue;
 		/** Select whether the account allows bulk postal mail sent through marketing campaigns or quick campaigns. If Do Not Allow is selected, the account can be added to marketing lists, but will be excluded from the postal mail. */
@@ -777,4 +782,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Account'],'JsWebApi':true,'IsDebugForm':true,'IsDebugWebApi':true,'Version':'2.13.33','JsFormVersion':'v2'}

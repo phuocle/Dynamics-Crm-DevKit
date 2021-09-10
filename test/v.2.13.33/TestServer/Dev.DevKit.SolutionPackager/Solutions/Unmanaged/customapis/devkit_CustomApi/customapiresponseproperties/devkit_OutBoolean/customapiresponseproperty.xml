@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_OutBoolean">
+  <description default="This is the OutBoolean">
+    <label description="This is the OutBoolean" languagecode="1033" />
+  </description>
+  <displayname default="OutBoolean">
+    <label description="OutBoolean" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>OutBoolean</name>
+  <type>0</type>
+</customapiresponseproperty>

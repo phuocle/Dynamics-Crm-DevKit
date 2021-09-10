@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InGuid">
+  <description default="This is the InGuid">
+    <label description="This is the InGuid" languagecode="1033" />
+  </description>
+  <displayname default="InGuid">
+    <label description="InGuid" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>InGuid</name>
+  <type>12</type>
+</customapirequestparameter>

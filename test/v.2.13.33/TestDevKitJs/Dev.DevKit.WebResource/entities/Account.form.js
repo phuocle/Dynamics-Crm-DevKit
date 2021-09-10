@@ -15,6 +15,7 @@ var DevKit;
 		}
 		var form = devKit.LoadForm(formContext);
 		var body = {
+			AccountNumber: {},
 			ActionCards: {},
 			Address1_Composite: {},
 			Address1_FreightTermsCode: {},
@@ -64,7 +65,7 @@ var DevKit;
 					SHIPPING: {}
 				}
 			},
-			PHUOCLE: {
+			RESOUCES_TAB: {
 				Section: {
 					tab_3_section_1: {}
 				}
