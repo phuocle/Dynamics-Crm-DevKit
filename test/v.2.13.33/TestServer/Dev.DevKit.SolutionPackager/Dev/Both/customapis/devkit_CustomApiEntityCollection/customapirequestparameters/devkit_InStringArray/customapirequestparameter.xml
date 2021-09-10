@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InStringArray">
+  <description default="This is the InStringArray">
+    <label description="This is the InStringArray" languagecode="1033" />
+  </description>
+  <displayname default="InStringArray">
+    <label description="InStringArray" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>InStringArray</name>
+  <type>11</type>
+</customapirequestparameter>

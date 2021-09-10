@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityDataProvider xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityDataProviderId>{072b6c9e-ecc8-eb11-bacc-000d3a807100}</EntityDataProviderId>
+  <Name>devkit_datasource3</Name>
+  <DataSourceLogicalName>devkit_datasource3</DataSourceLogicalName>
+  <IsCustomizable>1</IsCustomizable>
+  <RetrievePluginTypeId>05b81292-ecc8-eb11-bacc-000d3a807100</RetrievePluginTypeId>
+  <RetrieveMultiplePluginTypeId>06b81292-ecc8-eb11-bacc-000d3a807100</RetrieveMultiplePluginTypeId>
+  <CreatePluginTypeId>03b81292-ecc8-eb11-bacc-000d3a807100</CreatePluginTypeId>
+  <UpdatePluginTypeId>07b81292-ecc8-eb11-bacc-000d3a807100</UpdatePluginTypeId>
+  <DeletePluginTypeId>04b81292-ecc8-eb11-bacc-000d3a807100</DeletePluginTypeId>
+</EntityDataProvider>

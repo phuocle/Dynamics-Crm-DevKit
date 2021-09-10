@@ -87,7 +87,7 @@
       "rootfolder": "",
       "solution": "TestPluginWorkflowCustomActionCustomApi",
       "solutiontype": "Both",
-      "folder": "TestPluginWorkflowCustomActionCustomApi",
+      "folder": "Dev",
       "type": "Extract",
       "mapfile": ""
     },
@@ -96,7 +96,7 @@
       "rootfolder": "",
       "solution": "TestPluginWorkflowCustomActionCustomApi",
       "solutiontype": "Both",
-      "folder": "TestPluginWorkflowCustomActionCustomApi",
+      "folder": "Dev",
       "type": "Pack",
       "mapfile": ""
     }

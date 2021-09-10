@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.12.31\TestAllProjects\OAuth\Dev.DevKit.CustomApi";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.13.33\TestServer\Dev.DevKit.SolutionPackager";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

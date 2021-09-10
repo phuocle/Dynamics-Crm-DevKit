@@ -1,0 +1,12 @@
+<customapiresponseproperty uniquename="devkit_OutEntity">
+  <description default="This is the OutEntity">
+    <label description="This is the OutEntity" languagecode="1033" />
+  </description>
+  <displayname default="OutEntity">
+    <label description="OutEntity" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <logicalentityname>account</logicalentityname>
+  <name>OutEntity</name>
+  <type>3</type>
+</customapiresponseproperty>
