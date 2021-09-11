@@ -180,6 +180,8 @@ declare namespace DevKit {
 		Process: DevKit.FormAccount.Process;
 		/** The Grid of form Account */
 		Grid: DevKit.FormAccount.Grid;
+		/** The SidePanes of form Account */
+		SidePanes: DevKit.SidePanes;
 	}
 }
 declare namespace OptionSet {
@@ -456,4 +458,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Account'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Account'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.13.33','JsFormVersion':'v2'}

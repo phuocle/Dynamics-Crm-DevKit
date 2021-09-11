@@ -112,11 +112,11 @@
     },
     {
       "profile": "JS-FORM",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "Dev.DevKit",
+      "rootfolder": "",
       "type": "JsForm",
       "entities": "folder",
-      "debug": "?"
+      "debug": "yes"
     },
     {
       "profile": "JS-WEBAPI",
