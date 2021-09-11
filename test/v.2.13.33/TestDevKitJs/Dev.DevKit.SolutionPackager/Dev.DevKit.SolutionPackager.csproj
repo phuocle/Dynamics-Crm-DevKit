@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{16CCE8D6-EC77-43EF-8FE2-B83FF0B094D8}</ProjectGuid>
+    <ProjectGuid>{9001457D-214B-4891-B945-1CFC2AC0FC7C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.SolutionPackager</RootNamespace>
@@ -38,13 +38,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
     <None Include="mapping.xml" />
-    <None Include="Extract-Managed.bat" />
-    <None Include="Extract-Unmanaged.bat" />
-    <None Include="Pack-Managed.bat" />
-    <None Include="Pack-Unmanaged.bat" />
+    <None Include="Extract-Both.bat" />
+    <None Include="Pack-Both.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.12.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

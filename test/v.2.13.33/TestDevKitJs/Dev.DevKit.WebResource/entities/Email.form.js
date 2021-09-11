@@ -75,6 +75,7 @@ var DevKit;
 		form.Navigation = navigation;
 		form.Utility = devKit.LoadUtility(defaultWebResourceName);
 		form.ExecutionContext = devKit.LoadExecutionContext(executionContext);
+		devKit.LoadOthers(formContext, form, defaultWebResourceName);
 		return form;
 	};
 })(DevKit || (DevKit = {}));

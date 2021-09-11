@@ -75,6 +75,8 @@ declare namespace DevKit {
 		Header: DevKit.FormEmail.Header;
 		/** The Grid of form Email */
 		Grid: DevKit.FormEmail.Grid;
+		/** The SidePanes of form Email */
+		SidePanes: DevKit.SidePanes;
 	}
 }
 declare namespace OptionSet {
@@ -183,4 +185,4 @@ declare namespace OptionSet {
         }
 	}
 }
-//{'JsForm':['Email'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.12.31','JsFormVersion':'v2'}
+//{'JsForm':['Email'],'JsWebApi':false,'IsDebugForm':true,'IsDebugWebApi':false,'Version':'2.13.33','JsFormVersion':'v2'}

@@ -1,1 +1,0 @@
-Provides methods to create and manage records in the model-driven apps mobile clients while working in the *offline* mode. 

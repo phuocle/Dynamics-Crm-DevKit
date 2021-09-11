@@ -2608,7 +2608,7 @@ var devKit = (function () {
         LoadQuickForms: loadQuickForms,
         LoadGrids: loadGrids,
         LoadUtility: loadUtility,
-        LoadExecutionContext: loadExecutionContext,        
+        LoadExecutionContext: loadExecutionContext,
         LoadOthers: loadOthers
     }
 })();
@@ -2766,6 +2766,6 @@ var OptionSet;
     };
     OptionSet.SidePaneState = {
         Collapsed: 0,
-        Expanded: 1        
+        Expanded: 1
     }
 })(OptionSet || (OptionSet = {}));

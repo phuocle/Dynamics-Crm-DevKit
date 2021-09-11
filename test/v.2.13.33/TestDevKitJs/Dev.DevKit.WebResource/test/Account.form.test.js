@@ -274,7 +274,7 @@ define(['xrm-mock'], function () {
             form.Body.PrimaryContactId.AddCustomView("viewid", "enttiyName", "viewDisplayName", "fetchXml", "layoutXml", false);
             expect(lookup.views.length).toBe(3);
             expect(() => { form.Body.PrimaryContactId.AddNotification(null) }).toThrow(new Error("Method not implemented."));
-            expect(() => { form.Body.PrimaryContactId.AddOnLookupTagClick(null); }).toThrow(new Error("addOnLookupTagClick not implemented"))
+            expect(() => { form.Body.PrimaryContactId..AddLookupTagClick(null); }).toThrow(new Error("addOnLookupTagClick not implemented"))
             expect(() => { form.Body.PrimaryContactId.ClearNotification("uniqueId") }).toThrow(new Error("clear notification not implemented"));
             expect(form.Body.PrimaryContactId.Attribute).toBeDefined();
             expect(form.Body.PrimaryContactId.ControlType).toBe(OptionSet.FieldControlType.Lookup);
@@ -285,7 +285,7 @@ define(['xrm-mock'], function () {
             expect(form.Body.PrimaryContactId.ControlName).toBe("primarycontactid");
             expect(form.Body.PrimaryContactId.ControlParent).toBeUndefined();
             expect(form.Body.PrimaryContactId.Visible).toBeTruthy();
-            expect(() => { form.Body.PrimaryContactId.RemoveOnLookupTagClick(null); }).toThrow(new Error("removeOnLookupTagClick not implemented"))
+            expect(() => { form.Body.PrimaryContactId.RemoveLookupTagClick(null); }).toThrow(new Error("removeOnLookupTagClick not implemented"))
             expect(() => { form.Body.PrimaryContactId.RemovePreSearch(abc_LookupAddPreSearch) }).toThrow(new Error("remove presearch not implemented"));
             form.Body.PrimaryContactId.DefaultView = "DefaultViewId2";
             expect(form.Body.PrimaryContactId.DefaultView).toBe("DefaultViewId2");

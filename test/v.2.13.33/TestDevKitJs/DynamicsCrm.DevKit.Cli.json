@@ -91,38 +91,20 @@
   ],
   "solutionpackagers": [
     {
-      "profile": "Extract-Unmanaged",
+      "profile": "Extract-Both",
       "rootfolder": "",
       "solution": "TestDynamicsCrmDevKit",
-      "solutiontype": "Unmanaged",
+      "solutiontype": "Both",
       "folder": "TestDynamicsCrmDevKit",
       "type": "Extract",
       "mapfile": ""
     },
     {
-      "profile": "Extract-Managed",
+      "profile": "Pack-Both",
       "rootfolder": "",
       "solution": "TestDynamicsCrmDevKit",
-      "solutiontype": "Managed",
+      "solutiontype": "Both",
       "folder": "TestDynamicsCrmDevKit",
-      "type": "Extract",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Unmanaged",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Unmanaged",
-      "folder": "???",
-      "type": "Pack",
-      "mapfile": ""
-    },
-    {
-      "profile": "Pack-Managed",
-      "rootfolder": "",
-      "solution": "???",
-      "solutiontype": "Managed",
-      "folder": "???",
       "type": "Pack",
       "mapfile": ""
     }

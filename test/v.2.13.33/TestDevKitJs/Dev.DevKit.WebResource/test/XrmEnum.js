@@ -1,4 +1,4 @@
-﻿//xrm: 9.0.20
+﻿//xrm: 9.0.44
 var XrmEnum = {
 	FormType: {
         Undefined: 0,
@@ -89,10 +89,10 @@ var XrmEnum = {
         AssociationEntity: 2
 	},
 	ClientFormFactor: {
-        Unknown: 1,
-        Desktop: 2,
-        Tablet: 3,
-        Phone: 4
+        Unknown: 0,
+        Desktop: 1,
+        Tablet: 2,
+        Phone: 3
 	},
 	Client: {
         Web: "Web",
