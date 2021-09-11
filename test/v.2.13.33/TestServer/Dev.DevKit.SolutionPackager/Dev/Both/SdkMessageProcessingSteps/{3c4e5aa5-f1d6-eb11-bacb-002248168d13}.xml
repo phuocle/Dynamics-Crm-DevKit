@@ -5,6 +5,7 @@
   <PluginTypeId>3b4e5aa5-f1d6-eb11-bacb-002248168d13</PluginTypeId>
   <PrimaryEntity>account</PrimaryEntity>
   <AsyncAutoDelete>1</AsyncAutoDelete>
+  <Configuration>A</Configuration>
   <FilteringAttributes></FilteringAttributes>
   <InvocationSource>1</InvocationSource>
   <Mode>1</Mode>
