@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.13.33\TestServer\Dev.DevKit.SolutionPackager";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.13.33\TestServerUnitTest\Dev.DevKit.ProxyTypes";
 #else
                 return Directory.GetCurrentDirectory();
 #endif

@@ -9,7 +9,6 @@ using Microsoft.Xrm.Tooling.Connector;
 using DynamicsCrm.DevKit.Shared.Models.Cli;
 using DynamicsCrm.DevKit.Shared.Helper;
 using System.Reflection;
-using System.Threading;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -98,14 +97,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
 
             process.Start();
-            var wait = new Thread(ThreadWork.Dot);
-            wait.Start();
 
             while (!process.StandardOutput.EndOfStream)
             {
-                wait.Abort();
-                CliLog.WriteLine();
-                CliLog.WriteLine();
                 CliLog.WriteLine(CliLog.ColorWhite, "|");
                 var line = process.StandardOutput.ReadLine();
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorWhite, line);
@@ -135,7 +129,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             command.Append($"/nologo ");
             command.Append($"/SuppressGeneratedCodeAttribute ");
             command.Append($"/generateActions ");
-            //command.Append($"/serviceContextName:DEVKIT ");
             command.Append($"/namespace:\"{json.@namespace}\" ");
             if (json.entities != null && json.entities.Length > 0)
             {
@@ -169,7 +162,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             command.Append($"/nologo ");
             command.Append($"/SuppressGeneratedCodeAttribute ");
             command.Append($"/generateActions ");
-            //command.Append($"/serviceContextName:DEVKIT ");
             command.Append($"/namespace:\"{json.@namespace}\" ");
             command.Append($"/out:\"{json.output}\"");
             return command.ToString();
