@@ -1,0 +1,19 @@
+<customapi uniquename="devkit_CustomApiEntity">
+  <allowedcustomprocessingsteptype>2</allowedcustomprocessingsteptype>
+  <bindingtype>1</bindingtype>
+  <boundentitylogicalname>account</boundentitylogicalname>
+  <description default="This is the Custom Api Entity">
+    <label description="This is the Custom Api Entity" languagecode="1033" />
+  </description>
+  <displayname default="CustomApi Entity">
+    <label description="CustomApi Entity" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isfunction>0</isfunction>
+  <isprivate>0</isprivate>
+  <name>CustomApi Entity</name>
+  <plugintypeid>
+    <plugintypeid>0fb81292-ecc8-eb11-bacc-000d3a807100</plugintypeid>
+  </plugintypeid>
+  <workflowsdkstepenabled>0</workflowsdkstepenabled>
+</customapi>

@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="devkit_InDecimal">
+  <description default="This is the InDecimal">
+    <label description="This is the InDecimal" languagecode="1033" />
+  </description>
+  <displayname default="InDecimal">
+    <label description="InDecimal" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>InDecimal</name>
+  <type>2</type>
+</customapirequestparameter>

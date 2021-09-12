@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_OutEntityCollection">
+  <description default="This is the OutEntityCollection">
+    <label description="This is the OutEntityCollection" languagecode="1033" />
+  </description>
+  <displayname default="OutEntityCollection">
+    <label description="OutEntityCollection" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>OutEntityCollection</name>
+  <type>4</type>
+</customapiresponseproperty>

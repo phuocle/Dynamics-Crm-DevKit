@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SdkMessageProcessingStep Name="Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous" SdkMessageProcessingStepId="{444e5aa5-f1d6-eb11-bacb-002248168d13}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SdkMessageId>20bebb1b-ea3e-db11-86a7-000a3a5473e8</SdkMessageId>
+  <PluginTypeName>Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04</PluginTypeName>
+  <PluginTypeId>434e5aa5-f1d6-eb11-bacb-002248168d13</PluginTypeId>
+  <PrimaryEntity>account</PrimaryEntity>
+  <AsyncAutoDelete>1</AsyncAutoDelete>
+  <FilteringAttributes>name,parentaccountid,accountnumber,statuscode</FilteringAttributes>
+  <InvocationSource>1</InvocationSource>
+  <Mode>1</Mode>
+  <Rank>1</Rank>
+  <EventHandlerTypeCode>4602</EventHandlerTypeCode>
+  <Stage>40</Stage>
+  <IsCustomizable>1</IsCustomizable>
+  <IsHidden>0</IsHidden>
+  <SupportedDeployment>0</SupportedDeployment>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <SdkMessageProcessingStepImages>
+    <SdkMessageProcessingStepImage Name="PostImage">
+      <SdkMessageProcessingStepImageId>{484e5aa5-f1d6-eb11-bacb-002248168d13}</SdkMessageProcessingStepImageId>
+      <Attributes>name,accountnumber</Attributes>
+      <EntityAlias>PostImage</EntityAlias>
+      <ImageType>1</ImageType>
+      <MessagePropertyName>Target</MessagePropertyName>
+      <IsCustomizable>1</IsCustomizable>
+    </SdkMessageProcessingStepImage>
+    <SdkMessageProcessingStepImage Name="PreImage">
+      <SdkMessageProcessingStepImageId>{474e5aa5-f1d6-eb11-bacb-002248168d13}</SdkMessageProcessingStepImageId>
+      <Attributes>name</Attributes>
+      <EntityAlias>PreImage</EntityAlias>
+      <ImageType>0</ImageType>
+      <MessagePropertyName>Target</MessagePropertyName>
+      <IsCustomizable>1</IsCustomizable>
+    </SdkMessageProcessingStepImage>
+  </SdkMessageProcessingStepImages>
+</SdkMessageProcessingStep>

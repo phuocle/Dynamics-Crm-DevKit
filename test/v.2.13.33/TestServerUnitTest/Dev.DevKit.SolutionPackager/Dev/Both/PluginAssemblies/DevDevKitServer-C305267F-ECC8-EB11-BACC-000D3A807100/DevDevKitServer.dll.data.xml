@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginAssemblyId="c305267f-ecc8-eb11-bacc-000d3a807100" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitServer-C305267F-ECC8-EB11-BACC-000D3A807100/DevDevKitServer.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_DeleteAllDataSynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="41705e98-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_DeleteAllDataSynchronous">
+      <FriendlyName>Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_DeleteAllDataSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_SendEmailSynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="45705e98-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_SendEmailSynchronous">
+      <FriendlyName>Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_SendEmailSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomActions.Contact.PostContactdevkit_SetPrimaryContactSynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="15b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.CustomActions.Contact.PostContactdevkit_SetPrimaryContactSynchronous">
+      <FriendlyName>Dev.DevKit.Server.CustomActions.Contact.PostContactdevkit_SetPrimaryContactSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="11b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous">
+      <FriendlyName>Dev.DevKit.Server.CustomActions.PostNonedevkit_AjaxSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomApis.Account.devkit_CustomApiEntityRequest, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="0fb81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.CustomApis.Account.devkit_CustomApiEntityRequest">
+      <FriendlyName>Dev.DevKit.Server.CustomApis.Account.devkit_CustomApiEntityRequest</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.CustomApis.Contact.devkit_CustomApiEntityCollectionRequest, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="08b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.CustomApis.Contact.devkit_CustomApiEntityCollectionRequest">
+      <FriendlyName>Dev.DevKit.Server.CustomApis.Contact.devkit_CustomApiEntityCollectionRequest</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Cosmos.Create, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="03b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.Cosmos.Create">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.Cosmos.Create</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Cosmos.Delete, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="04b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.Cosmos.Delete">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.Cosmos.Delete</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Cosmos.Retrieve, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="05b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.Cosmos.Retrieve">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.Cosmos.Retrieve</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Cosmos.RetrieveMultiple, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="06b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.Cosmos.RetrieveMultiple">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.Cosmos.RetrieveMultiple</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.Cosmos.Update, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="07b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.Cosmos.Update">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.Cosmos.Update</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.SqlServer.Create, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="fdb71292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.SqlServer.Create">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.SqlServer.Create</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.SqlServer.Delete, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="feb71292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.SqlServer.Delete">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.SqlServer.Delete</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.SqlServer.Retrieve, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="ffb71292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.SqlServer.Retrieve">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.SqlServer.Retrieve</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.SqlServer.RetrieveMultiple, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="00b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.SqlServer.RetrieveMultiple">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.SqlServer.RetrieveMultiple</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.DataProviders.SqlServer.Update, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="01b81292-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.DataProviders.SqlServer.Update">
+      <FriendlyName>Dev.DevKit.Server.DataProviders.SqlServer.Update</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="69984b85-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.Account.PostAccountAssignAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Account.PostAccountDeleteAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="2374fb8b-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.Account.PostAccountDeleteAsynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.Account.PostAccountDeleteAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Account.PostAccountMergeAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="2874fb8b-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.Account.PostAccountMergeAsynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.Account.PostAccountMergeAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="2d74fb8b-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.Account.PostAccountUpdateAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Account.PreAccountCreateUpdateDeleteSynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="3574fb8b-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.Account.PreAccountCreateUpdateDeleteSynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.Account.PreAccountCreateUpdateDeleteSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Contact.PostContactGrantAccessAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="53984b85-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.Contact.PostContactGrantAccessAsynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.Contact.PostContactGrantAccessAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Contact.PostContactMergeAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="59984b85-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.Contact.PostContactMergeAsynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.Contact.PostContactMergeAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Contact.PostContactRevokeAccessAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="61984b85-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.Contact.PostContactRevokeAccessAsynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.Contact.PostContactRevokeAccessAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.Contact.PreContactMergeSynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="65984b85-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.Contact.PreContactMergeSynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.Contact.PreContactMergeSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.PhoneCall.PostPhoneCallAssignAsynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="c605267f-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.PhoneCall.PostPhoneCallAssignAsynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.PhoneCall.PostPhoneCallAssignAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Plugins.PhoneCall.PreValidationPhoneCallDeleteSynchronous, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="4f984b85-ecc8-eb11-bacc-000d3a807100" Name="Dev.DevKit.Server.Plugins.PhoneCall.PreValidationPhoneCallDeleteSynchronous">
+      <FriendlyName>Dev.DevKit.Server.Plugins.PhoneCall.PreValidationPhoneCallDeleteSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Workflows.ShareWithTeam, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="49705e98-ecc8-eb11-bacc-000d3a807100" Name="ShareWithTeam">
+      <FriendlyName>ShareWithTeam</FriendlyName>
+      <WorkflowActivityGroupName>Dev.DevKit.Server.Workflows</WorkflowActivityGroupName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.Server.Workflows.ToUpperCase, Dev.DevKit.Server, Version=1.0.0.0, Culture=en, PublicKeyToken=f16987165f9b56ef" PluginTypeId="4a705e98-ecc8-eb11-bacc-000d3a807100" Name="ToUpperCase">
+      <FriendlyName>ToUpperCase</FriendlyName>
+      <WorkflowActivityGroupName>Dev.DevKit.Server.Workflows</WorkflowActivityGroupName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

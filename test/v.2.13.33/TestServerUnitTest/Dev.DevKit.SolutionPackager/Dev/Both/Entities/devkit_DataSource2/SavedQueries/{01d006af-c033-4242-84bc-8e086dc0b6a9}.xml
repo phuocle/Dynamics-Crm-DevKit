@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>1</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{01d006af-c033-4242-84bc-8e086dc0b6a9}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="devkit_datasource2name" select="1" icon="1" preview="1">
+        <row name="result" id="devkit_datasource2id">
+          <cell name="devkit_datasource2name" width="300" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>4</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="devkit_datasource2">
+          <attribute name="devkit_datasource2id" />
+          <attribute name="devkit_datasource2name" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Quick Find Active Data Sources 2" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>
