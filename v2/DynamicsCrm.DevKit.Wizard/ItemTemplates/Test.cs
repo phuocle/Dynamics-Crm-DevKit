@@ -37,7 +37,8 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var project = (Project)projects[0];
                 if (project.Name.Contains(".Plugin") || project.Name.Contains(".Plugin."))
                     ClassType = "Plugin";
-                else if (project.Name.Contains(".CustomAction") || project.Name.EndsWith(".CustomAction."))
+                else if (project.Name.Contains(".CustomAction") || project.Name.EndsWith(".CustomAction.") ||
+                         project.Name.Contains(".CustomApi") || project.Name.EndsWith(".CustomApi."))
                     ClassType = "CustomAction";
                 else if (project.Name.Contains(".Workflow") || project.Name.EndsWith(".Workflow."))
                     ClassType = "Workflow";

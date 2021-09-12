@@ -12,19 +12,18 @@ namespace $NameSpace$
     public class $class$Test
     {
         public static XrmFakedContext Context { get; set; }
-        public static XrmFakedPluginExecutionContext PluginContext { get; set; }
+        public static XrmFakedPluginExecutionContext Plugin { get; set; }
 
         [ClassInitialize()]
         public static void ClassInit(TestContext context)
         {
             Context = new XrmFakedContext();
             Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
-            PluginContext = Context.GetDefaultPluginContext();
-            PluginContext.PrimaryEntityName = "$logicalname$";
-            PluginContext.MessageName = "$message$";
-            PluginContext.Stage = (int) StageEnum.$stage_string$;
-            PluginContext.Mode = (int) ExecutionModeEnum.$execution$;
-            PluginContext.InputParameters["Target"] = null;
+            Plugin = Context.GetDefaultPluginContext();
+            Plugin.PrimaryEntityName = "$logicalname$";
+            Plugin.MessageName = "$message$";
+            Plugin.Stage = (int) StageEnum.$stage_string$;
+            Plugin.Mode = (int) ExecutionModeEnum.$execution$;
         }
 
         /*
@@ -93,7 +92,6 @@ namespace $NameSpace$
             }, "Execution does not equals $execution$");
         }
 
-        /*
         [TestMethod]
         public void _05_CrmPluginRegistration_Check()
         {
@@ -103,19 +101,21 @@ namespace $NameSpace$
                 if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
                 {
                     var check = attribute as CrmPluginRegistrationAttribute;
-                    Assert.IsNotNull(check.Image1Attributes);
-                    Assert.IsNotNull(check.Image1Name);
-                    Assert.IsNotNull(check.Image1Type);
+                    Assert.IsNotNull(check);
                 }
                 else
                     Assert.Fail();
             }
         }
-        */
 
         [TestMethod]
-        public void _06()
+        public void _06_ExecutePlugin()
         {
+            //setup
+            //Plugin.InputParameters["???"] = ???
+            //run
+            Context.ExecutePluginWith<$class$>(Plugin);
+            //result
             Assert.IsTrue(true);
         }
     }
