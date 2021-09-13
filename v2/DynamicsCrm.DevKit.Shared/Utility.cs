@@ -284,21 +284,21 @@ namespace DynamicsCrm.DevKit.Shared
             foreach (Project project in projects)
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
-                if (project.Name.Contains($".{ProjectType.Plugin.ToString()}.") ||
-                    project.Name.Contains($".{ProjectType.Plugin.ToString()}") ||
-                    project.Name.Contains($".{ProjectType.Workflow.ToString()}.") ||
-                    project.Name.EndsWith($".{ProjectType.Workflow.ToString()}") ||
-                    project.Name.Contains($".{ProjectType.CustomAction.ToString()}.") ||
-                    project.Name.EndsWith($".{ProjectType.CustomAction.ToString()}") ||
-                    project.Name.Contains($".{ProjectType.CustomApi.ToString()}.") ||
-                    project.Name.EndsWith($".{ProjectType.CustomApi.ToString()}") ||
-                    project.Name.Contains($".{ProjectType.DataProvider.ToString()}.") ||
-                    project.Name.EndsWith($".{ProjectType.DataProvider.ToString()}"))
-                {
+                //if (project.Name.Contains($".{ProjectType.Plugin.ToString()}.") ||
+                //    project.Name.Contains($".{ProjectType.Plugin.ToString()}") ||
+                //    project.Name.Contains($".{ProjectType.Workflow.ToString()}.") ||
+                //    project.Name.EndsWith($".{ProjectType.Workflow.ToString()}") ||
+                //    project.Name.Contains($".{ProjectType.CustomAction.ToString()}.") ||
+                //    project.Name.EndsWith($".{ProjectType.CustomAction.ToString()}") ||
+                //    project.Name.Contains($".{ProjectType.CustomApi.ToString()}.") ||
+                //    project.Name.EndsWith($".{ProjectType.CustomApi.ToString()}") ||
+                //    project.Name.Contains($".{ProjectType.DataProvider.ToString()}.") ||
+                //    project.Name.EndsWith($".{ProjectType.DataProvider.ToString()}"))
+                //{
                     if (project.Name.EndsWith(".Test")) continue;
                     if (IsAddedTestProject(projects, $"{project.Name}.Test")) continue;
                     lists.Add(project.Name);
-                }
+                //}
             }
             return lists;
         }

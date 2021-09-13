@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.CustomApi.Test",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.DataProvider.Test", "Dev.DevKit.DataProvider.Test\Dev.DevKit.DataProvider.Test.csproj", "{AEC60511-B416-43BA-8F1E-1627926128E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.Server.Test", "Dev.DevKit.Server.Test\Dev.DevKit.Server.Test.csproj", "{713A3A1A-AEB3-4DE1-AEF9-379D07F9BE42}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dev.DevKit.Shared\Dev.DevKit.Shared.projitems*{35bf489f-69a2-4661-ad26-5d1d2f79083b}*SharedItemsImports = 4
@@ -145,6 +147,10 @@ Global
 		{AEC60511-B416-43BA-8F1E-1627926128E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEC60511-B416-43BA-8F1E-1627926128E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEC60511-B416-43BA-8F1E-1627926128E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{713A3A1A-AEB3-4DE1-AEF9-379D07F9BE42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{713A3A1A-AEB3-4DE1-AEF9-379D07F9BE42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{713A3A1A-AEB3-4DE1-AEF9-379D07F9BE42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{713A3A1A-AEB3-4DE1-AEF9-379D07F9BE42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

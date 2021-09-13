@@ -210,6 +210,38 @@ namespace DynamicsCrm.DevKit.Wizard
                         }
                         comboBoxEntity.DataSource = list3;
                     }
+                    else
+                    {
+                        var notIn = new List<string> { "Date", "EntityBase", "Extension", "PluginCore", "SimpleJson", "AssemblyInfo" };
+                        var listAll = Utility.GetAllTestProjectItems(DTE);
+                        var existClasses = listAll
+                            .Where(x => x.Name.EndsWith(".cs"))
+                            .Select(x => x.Name.Substring(0, x.Name.Length - ".cs".Length))
+                            .ToList();
+                        foreach (var item in listAll)
+                        {
+                            if (item.Name.EndsWith(".generated.cs"))
+                                notIn.Add(item.Name.Substring(0, item.Name.Length - ".generated.cs".Length));
+                        }
+                        var list = listAll
+                            .Where(x => x.Name.EndsWith(".cs"))
+                            .Select(x => x.Name.Split(".".ToCharArray())[0])
+                            .Distinct()
+                            .ToList();
+                        var list2 = new List<string>();
+                        foreach (var item in list)
+                        {
+                            if (notIn.Contains(item)) continue;
+                            list2.Add(item);
+                        }
+                        var list3 = new List<string>();
+                        foreach (var item2 in list2)
+                        {
+                            if (existClasses.Contains($"{item2}Test")) continue;
+                            list3.Add(item2);
+                        }
+                        comboBoxEntity.DataSource = list3;
+                    }
                     buttonOk.Enabled = comboBoxEntity.Items.Count > 0;
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     progressBar.Value = 100;
