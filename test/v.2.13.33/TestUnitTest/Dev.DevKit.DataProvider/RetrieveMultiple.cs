@@ -63,7 +63,7 @@ namespace Dev.DevKit.DataProvider
                 //Advanced Find, Classic grid return FetchExpression
             }
             else
-                throw new InvalidPluginExecutionException("Somthing wrong with Query");
+                throw new InvalidPluginExecutionException("Something wrong with Query");
 
             context.OutputParameters["BusinessEntityCollection"] = entities;
         }
