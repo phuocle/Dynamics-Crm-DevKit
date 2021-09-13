@@ -2,15 +2,13 @@
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml;
 
 namespace Microsoft.Xrm.Sdk
 {
-    [DebuggerNonUserCode()]
+    [System.Diagnostics.DebuggerNonUserCode()]
     public static class Extension
     {
         public static T RetrieveByGuid<T>(this IOrganizationService service, string entityName, Guid id, ColumnSet columns)
@@ -90,232 +88,11 @@ namespace Microsoft.Xrm.Sdk
             tracingService.Trace(message);
         }
 
-#if DEBUG
-        private static DebugEntity EntityToObject(Entity x)
-        {
-            return new DebugEntity
-            {
-                Attributes = x?.Attributes.ToDictionary(a => a.Key, a => AttributeValue(a.Value)),
-                FormattedValues = x?.FormattedValues.ToDictionary(a => a.Key, a => a.Value),                    
-                KeyAttributes = x?.KeyAttributes.ToDictionary(a => a.Key, a => AttributeValue(a.Value)),
-                Id = x?.Id,
-                LogicalName = x?.LogicalName,
-                RowVersion = x?.RowVersion                    
-            };
-        }
-
-        private static DebugEntityReference EntityReferenceToObject(EntityReference x)
-        {
-            return new DebugEntityReference
-            {
-                Id = x?.Id,
-                LogicalName = x?.LogicalName
-            };
-        }
-
-        private static DebugAttributeValue AttributeValue(object value)
-        {
-            if (value is EntityReference er)
-            {
-                return new DebugAttributeValue
-                {                    
-                    Type = nameof(EntityReference),
-                    Value = er.Id,
-                    EntityLogicalName = er.LogicalName
-                };
-            }
-            else if (value is OptionSetValue osv)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = nameof(OptionSetValue),
-                    Value = osv.Value
-                };
-            }
-            else if (value is int i)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = "int",
-                    Value = i
-                };
-            }
-            else if (value is bool b)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = "bool",
-                    Value = b
-                };
-            }
-            else if (value is double d)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = "double",
-                    Value = d
-                };
-            }
-            else if (value is decimal de)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = "decimal",
-                    Value = de
-                };
-            }
-            else if (value is Money m)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = nameof(Money),
-                    Value = m.Value
-                };
-            }
-            else if (value is DateTime dt)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = nameof(DateTime),
-                    Value = dt
-                };
-            }
-            else if (value is Guid g)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = nameof(Guid),
-                    Value = g
-                };
-            }
-            else if (value is string s)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = "string",
-                    Value = s
-                };
-            }
-            else if (value is byte[] by)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = "byte[]",
-                    Value = by
-                };
-            }
-            else if (value is long l)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = "long",
-                    Value = l
-                };
-            }
-            else if (value is OptionSetValueCollection ovc)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = nameof(OptionSetValueCollection),
-                    Value = ovc.Select(x => x.Value).ToList()
-                };
-            }
-            else if (value is EntityCollection ec)
-            {
-                return new DebugAttributeValue
-                {
-                    Type = nameof(EntityCollection),
-                    Value = ec.Entities.Select(x => EntityToObject(x)).ToList()
-                };
-            }
-            return new DebugAttributeValue
-            {
-                Type = "???",
-                Value = value
-            };
-        }
-#endif
-
         public static void DebugContext(this ITracingService tracingService, IExecutionContext context)
         {
 #if DEBUG
-            try
-            {
-                var preEntityImages = new Dictionary<string, object>();
-                foreach (var key in context?.PreEntityImages?.Keys)
-                {
-                    preEntityImages.Add(key, EntityToObject(context?.PreEntityImages?[key]));
-                }
-                var postEntityImages = new Dictionary<string, object>();
-                foreach (var key in context?.PostEntityImages?.Keys)
-                {
-                    postEntityImages.Add(key, EntityToObject(context?.PostEntityImages?[key]));
-                }
-                var inputParameters = new Dictionary<string, object>();
-                foreach (var key in context?.InputParameters?.Keys)
-                {
-                    if (context?.InputParameters?[key] is Entity x)
-                    {
-                        inputParameters.Add(key, EntityToObject(x));
-                    }
-                    else if (context?.InputParameters?[key] is EntityReference er)
-                    {
-                        inputParameters.Add(key, EntityReferenceToObject(er));
-                    }
-                    else
-                    {
-                        inputParameters.Add(key, context?.InputParameters?[key]);
-                    }
-                }
-                var outputParameters = new Dictionary<string, object>();
-                foreach (var key in context?.OutputParameters?.Keys)
-                {
-                    if (context?.OutputParameters?[key] is Entity x)
-                    {
-                        outputParameters.Add(key, EntityToObject(x));
-                    }
-                    else if (context?.OutputParameters?[key] is EntityReference er)
-                    {
-                        outputParameters.Add(key, EntityReferenceToObject(er));
-                    }
-                    else
-                    {
-                        outputParameters.Add(key, context?.OutputParameters?[key]);
-                    }
-                }
-                var debug = new DebugContext
-                {
-                    BusinessUnitId = context?.BusinessUnitId,
-                    CorrelationId = context?.CorrelationId,
-                    Depth = context?.Depth,
-                    InitiatingUserId = context?.InitiatingUserId,
-                    IsExecutingOffline = context?.IsExecutingOffline,
-                    IsInTransaction = context?.IsInTransaction,
-                    IsOfflinePlayback = context?.IsOfflinePlayback,
-                    IsolationMode = context?.IsolationMode,
-                    MessageName = context?.MessageName,
-                    Mode = context?.Mode,
-                    OperationCreatedOn = context?.OperationCreatedOn,
-                    OperationId = context?.OperationId,
-                    OrganizationId = context?.OrganizationId,
-                    OrganizationName = context?.OrganizationName,
-                    OwningExtension = EntityReferenceToObject(context?.OwningExtension),
-                    PrimaryEntityId = context?.PrimaryEntityId,
-                    PrimaryEntityName = context?.PrimaryEntityName,
-                    RequestId = context?.RequestId,
-                    SecondaryEntityName = context?.SecondaryEntityName,
-                    SharedVariables = context?.SharedVariables,
-                    UserId = context?.UserId,
-                    InputParameters = inputParameters,
-                    OutputParameters = outputParameters,
-                    PostEntityImages = postEntityImages,
-                    PreEntityImages = preEntityImages,
-                };
-                var json = SimpleJson.SerializeObject(debug);
-                json = json.Replace("\"", "'").Replace(":{}", ":null").Replace(": {}", ": null").Replace(",'EntityLogicalName':null", "");
-                tracingService.LogMessage(json);
-            }
-            catch { }
+            var json = Debug.DebugContext(context);
+            tracingService.LogMessage(json);         
 #endif
         }
 
@@ -331,7 +108,7 @@ namespace Microsoft.Xrm.Sdk
 #if DEBUG
             var records = new List<object>();
             foreach (var entity in entities)
-                records.Add(EntityToObject(entity));
+                records.Add(Debug.EntityToObject(entity));
             return SimpleJson.SerializeObject(records);
 #else
             return string.Empty;
@@ -341,7 +118,7 @@ namespace Microsoft.Xrm.Sdk
         public static string ToDebug(this Entity entity)
         {
 #if DEBUG
-            return SimpleJson.SerializeObject(EntityToObject(entity));
+            return SimpleJson.SerializeObject(Debug.EntityToObject(entity));
 #else
             return string.Empty;
 #endif
