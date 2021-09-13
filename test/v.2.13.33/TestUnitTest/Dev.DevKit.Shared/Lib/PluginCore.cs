@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace Dev.DevKit.Shared
 {
@@ -118,5 +121,55 @@ namespace Dev.DevKit.Shared
         public string Image4Attributes { get; set; } = string.Empty;
         public PluginType PluginType { get; set; }
         public string DataSource { get; set; }
+    }
+
+    public class DebugContext
+    {
+        public Guid? BusinessUnitId { get; set; }
+        public Guid? CorrelationId { get; set; }
+        public int? Depth { get; set; }
+        public Guid? InitiatingUserId { get; set; }
+        public bool? IsExecutingOffline { get; set; }
+        public bool? IsInTransaction { get; set; }
+        public bool? IsOfflinePlayback { get; set; }
+        public int? IsolationMode { get; set; }
+        public string MessageName { get; set; }
+        public int? Mode { get; set; }
+        public DateTime? OperationCreatedOn { get; set; }
+        public Guid? OperationId { get; set; }
+        public Guid? OrganizationId { get; set; }
+        public string OrganizationName { get; set; }
+        public DebugEntityReference OwningExtension { get; set; }
+        public Guid? PrimaryEntityId { get; set; }
+        public string PrimaryEntityName { get; set; }
+        public Guid? RequestId { get; set; }
+        public string SecondaryEntityName { get; set; }
+        public ParameterCollection SharedVariables { get; set; }
+        public Guid? UserId { get; set; }
+        public Dictionary<string, object> InputParameters { get; set; }
+        public Dictionary<string, object> OutputParameters { get; set; }
+        public Dictionary<string, object> PostEntityImages { get; set; }
+        public Dictionary<string, object> PreEntityImages { get; set; }
+    }
+    public class DebugEntity
+    {
+        public Dictionary<string, DebugAttributeValue> Attributes { get; set; }        
+        public Dictionary<string, string> FormattedValues { get; set; }        
+        public Dictionary<string, DebugAttributeValue> KeyAttributes { get; set; }
+        public Guid? Id { get; set; }
+        public string LogicalName { get; set; }
+        public string RowVersion { get; set; }
+    }
+
+    public class DebugEntityReference
+    {
+        public Guid? Id { get; set; }
+        public string LogicalName { get; set; }
+    }
+    public class DebugAttributeValue
+    {
+        public string Type { get; set; }        
+        public object Value { get; set; }        
+        public string EntityLogicalName { get; set; }
     }
 }

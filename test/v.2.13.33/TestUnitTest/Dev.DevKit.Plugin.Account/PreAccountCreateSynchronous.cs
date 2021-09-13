@@ -41,12 +41,12 @@ namespace Dev.DevKit.PluginAccount
             if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PreAccountCreateSynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PreAccountCreateSynchronous");
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PreAccountCreateSynchronous");
+            //tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PreAccountCreateSynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
