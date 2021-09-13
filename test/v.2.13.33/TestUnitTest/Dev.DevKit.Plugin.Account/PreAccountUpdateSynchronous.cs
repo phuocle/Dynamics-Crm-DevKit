@@ -52,12 +52,11 @@ namespace Dev.DevKit.PluginAccount
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            var target = (Entity)context.InputParameters["Target"];
-            var preEntity = (Entity)context.PreEntityImages["PreImage"];
+            //var target = (???)context.InputParameters["Target"];
+            //var preEntity = (Entity)context.PreEntityImages["PreImage"];
             //var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
-            if (target?["name"] != null)
-                target["name"] = target["name"].ToString().ToUpper();
+
         }
     }
 }

@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D49F440E-3FBE-4120-9C20-05FE72508AEE}</ProjectGuid>
+    <ProjectGuid>{0B106B9A-36FA-40E6-AB5D-E2F77EE8B968}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dev.DevKit.CustomAction.Test</RootNamespace>
-    <AssemblyName>Dev.DevKit.CustomAction.Test</AssemblyName>
+    <RootNamespace>Dev.DevKit.PluginAccount.Test</RootNamespace>
+    <AssemblyName>Dev.DevKit.Plugin.Account.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -86,6 +86,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PostAccountCreateAsynchronousTest.cs" />
+    <Compile Include="PostAccountUpdateAsynchronousTest.cs" />
+    <Compile Include="PreAccountCreateSynchronousTest.cs" />
+    <Compile Include="PreAccountUpdateSynchronousTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,8 +99,8 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Dev.DevKit.CustomAction\Dev.DevKit.CustomAction.csproj">
-      <Name>Dev.DevKit.CustomAction</Name>
+    <ProjectReference Include="..\Dev.DevKit.Plugin.Account\Dev.DevKit.Plugin.Account.csproj">
+      <Name>Dev.DevKit.Plugin.Account</Name>
     </ProjectReference>
     <ProjectReference Include="..\Dev.DevKit.ProxyTypes\Dev.DevKit.ProxyTypes.csproj">
       <Name>Dev.DevKit.ProxyTypes</Name>

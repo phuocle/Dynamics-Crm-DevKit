@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FDACCEA6-C0F4-46E2-BAE0-35CF6DFFD695}</ProjectGuid>
+    <ProjectGuid>{503F5961-E84C-4A52-BF86-425B1F1F85DA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dev.DevKit.CustomApi.Test</RootNamespace>
-    <AssemblyName>Dev.DevKit.CustomApi.Test</AssemblyName>
+    <RootNamespace>Dev.DevKit.CustomAction.Entities.Test</RootNamespace>
+    <AssemblyName>Dev.DevKit.CustomAction.Entities.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -86,6 +86,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\PostAccountdevkit_DeleteAllDataSynchronousTest.cs" />
+    <Compile Include="Account\PostAccountdevkit_SendEmailSynchronousTest.cs" />
+    <Compile Include="Contact\PostContactdevkit_SetPrimaryContactSynchronousTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,8 +98,8 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Dev.DevKit.CustomApi\Dev.DevKit.CustomApi.csproj">
-      <Name>Dev.DevKit.CustomApi</Name>
+    <ProjectReference Include="..\Dev.DevKit.CustomAction.Entities\Dev.DevKit.CustomAction.Entities.csproj">
+      <Name>Dev.DevKit.CustomAction.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Dev.DevKit.ProxyTypes\Dev.DevKit.ProxyTypes.csproj">
       <Name>Dev.DevKit.ProxyTypes</Name>
@@ -105,6 +108,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>

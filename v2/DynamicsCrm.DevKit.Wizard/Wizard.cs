@@ -142,10 +142,14 @@ namespace DynamicsCrm.DevKit.Wizard
                     var stage2 = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "Pre" : (form.Class.StartsWith("Post") ? "Post" : ""));
                     var message = form.Class.Substring(stage2.Length + logicalname.Length);
                     message = message.Substring(0, message.Length - execution.Length);
+                    if (stage == "") stage = "PostOperation";
+                    if (execution == "") execution = "Asynchronous";
                     replacementsDictionary.Add("$logicalname$", logicalname);
                     replacementsDictionary.Add("$execution$", execution);
                     replacementsDictionary.Add("$stage_string$", stage);
                     replacementsDictionary.Add("$message$", message);
+                    replacementsDictionary.Add("$custommessage$", "???");
+                    replacementsDictionary.Add("$customlogicalname$", "???");
                 }
                 catch { }
             }

@@ -37,7 +37,6 @@ namespace Dev.DevKit.CustomApi
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
 
-
             tracing.DebugMessage("Begin Custom Api: Dev.DevKit.CustomApi.devkit_CustomApiRequest");
             tracing.DebugContext(context);
 

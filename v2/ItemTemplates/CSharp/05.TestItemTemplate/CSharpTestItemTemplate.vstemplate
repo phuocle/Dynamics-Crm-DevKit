@@ -18,6 +18,7 @@
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">CustomAction.cs</ProjectItem>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">Workflow.cs</ProjectItem>
     <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">DataProvider.cs</ProjectItem>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$class$Test.cs">CustomApi.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
     <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.13.33.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>

@@ -1,5 +1,6 @@
 ﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
 namespace Dev.DevKit.PluginAccount
@@ -53,15 +54,11 @@ namespace Dev.DevKit.PluginAccount
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            var target = (Entity)context.InputParameters["Target"];
-            var preEntity = (Entity)context.PreEntityImages["PreImage"];
-            var postEntity = (Entity)context.PostEntityImages["PostImage"];
+            var target = context.InputParameterOrDefault<Entity>("Target");
+            //var preEntity = (Entity)context.PreEntityImages["PreImage"];
+            //var postEntity = (Entity)context.PostEntityImages["PostImage"];
             //YOUR PLUGIN-CODE GO HERE
-
-            tracing.DebugMessage(target.ToDebug());
-            tracing.DebugMessage(preEntity.ToDebug());
-            tracing.DebugMessage(preEntity.ToDebug());
-
+            //YOUR PLUGIN-CODE GO HERE
         }
     }
 }

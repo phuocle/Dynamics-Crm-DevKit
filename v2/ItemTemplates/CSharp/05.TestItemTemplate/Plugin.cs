@@ -37,7 +37,7 @@ namespace $NameSpace$
             PluginContext.InputParameters["Target"] = target;
             var unsecureString = "UnsecureString";
             var secureString = "SecureString";
-            Context.ExecutePluginWithConfigurations<$class$>(PluginContext, unsecureString, secureString);
+            Context.ExecutePluginWithConfigurations<$class$>(Plugin, unsecureString, secureString);
             Assert.IsTrue(target != null);
         }
         */

@@ -37,15 +37,16 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 var project = (Project)projects[0];
                 if (project.Name.Contains(".Plugin") || project.Name.Contains(".Plugin."))
                     ClassType = "Plugin";
-                else if (project.Name.Contains(".CustomAction") || project.Name.EndsWith(".CustomAction.") ||
-                         project.Name.Contains(".CustomApi") || project.Name.EndsWith(".CustomApi."))
+                else if (project.Name.Contains(".CustomAction") || project.Name.EndsWith(".CustomAction."))
                     ClassType = "CustomAction";
+                else if (project.Name.Contains(".CustomApi") || project.Name.EndsWith(".CustomApi."))
+                    ClassType = "CustomApi";
                 else if (project.Name.Contains(".Workflow") || project.Name.EndsWith(".Workflow."))
                     ClassType = "Workflow";
                 else if (project.Name.Contains(".DataProvider") || project.Name.EndsWith(".DataProvider."))
                     ClassType = "DataProvider";
                 else
-                    ClassType = "";
+                    ClassType = "Plugin";
                 Wizard.ProcessItemReplacementsDictionary(replacementsDictionary, form);
             }
             catch

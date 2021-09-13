@@ -15,8 +15,8 @@ $PluginComment$
             var serviceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
-            $if$($PluginLogicalNameInt$==1)if (context.PrimaryEntityName.ToLower() != "$PluginLogicalName$".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals $PluginLogicalName$");$endif$
-
+            $if$($PluginLogicalNameInt$==1)if (context.PrimaryEntityName.ToLower() != "$PluginLogicalName$".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals $PluginLogicalName$");
+$endif$
             tracing.DebugMessage("Begin Custom Api: $NameSpace$.$PluginClass$$PluginOrder2$");
             tracing.DebugContext(context);
 

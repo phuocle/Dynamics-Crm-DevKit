@@ -136,7 +136,14 @@ namespace DynamicsCrm.DevKit.Wizard
                         currentProjectName.Contains(ProjectType.CustomAction.ToString()) ||
                         currentProjectName.Contains(ProjectType.CustomApi.ToString()))
                     {
-                        var list = Utility.GetAllTestProjectItems(DTE)
+                        var notIn = new List<string> { "Date", "EntityBase", "Extension", "PluginCore", "SimpleJson", "AssemblyInfo" };
+                        var listAll = Utility.GetAllTestProjectItems(DTE);
+                        foreach (var item in listAll)
+                        {
+                            if (item.Name.EndsWith(".generated.cs"))
+                                notIn.Add(item.Name.Substring(0, item.Name.Length - ".generated.cs".Length));
+                        }
+                        var list = listAll
                             .Where(x => x.Name.EndsWith(".cs"))
                             .Select(x => x.Name.Split(".".ToCharArray())[0])
                             .Distinct()
@@ -151,10 +158,18 @@ namespace DynamicsCrm.DevKit.Wizard
                             list2.Add(item);
                         }
                         var list3 = new List<string>();
-                        var existClasses = Utility.GetAllProjectItems(DTE)
+                        var existClasses = listAll
                             .Where(x => x.Name.EndsWith(".cs"))
                             .Select(x => x.Name.Substring(0, x.Name.Length - ".cs".Length))
                             .ToList();
+                        if (list2.Count == 0)
+                        {
+                            foreach (var item in list)
+                            {
+                                if (notIn.Contains(item)) continue;
+                                list2.Add(item);
+                            }
+                        }
                         foreach (var item2 in list2)
                         {
                             if (existClasses.Contains($"{item2}Test")) continue;
@@ -166,7 +181,13 @@ namespace DynamicsCrm.DevKit.Wizard
                         currentProjectName.Contains(ProjectType.DataProvider.ToString()))
                     {
                         var notIn = new List<string> { "Date", "EntityBase", "Extension", "PluginCore", "SimpleJson", "AssemblyInfo" };
-                        var list = Utility.GetAllTestProjectItems(DTE)
+                        var listAll = Utility.GetAllTestProjectItems(DTE);
+                        foreach(var item in listAll)
+                        {
+                            if (item.Name.EndsWith(".generated.cs"))
+                                notIn.Add(item.Name.Substring(0, item.Name.Length - ".generated.cs".Length));
+                        }
+                        var list = listAll
                             .Where(x => x.Name.EndsWith(".cs"))
                             .Select(x => x.Name.Split(".".ToCharArray())[0])
                             .Distinct()

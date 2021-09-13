@@ -1,13 +1,13 @@
-﻿using FakeXrmEasy;
+﻿using Dev.DevKit.ProxyTypes;
+using Dev.DevKit.Shared;
+using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
-using $SharedNameSpace$;
-using $ProxyTypesNameSpace$;
 
-namespace $NameSpace$
+namespace Dev.DevKit.CustomApi.Test
 {
     [TestClass]
-    public class $class$Test
+    public class devkit_CustomApiRequestTest
     {
         public static XrmFakedContext Context { get; set; }
         public static XrmFakedPluginExecutionContext Plugin { get; set; }
@@ -23,7 +23,7 @@ namespace $NameSpace$
         [TestMethod]
         public void _01_CrmPluginRegistration_Check()
         {
-            var @class = new $class$();
+            var @class = new devkit_CustomApiRequest();
             foreach (var attribute in System.Attribute.GetCustomAttributes(@class.GetType()))
             {
                 if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
@@ -42,7 +42,7 @@ namespace $NameSpace$
             //setup
             //Plugin.InputParameters["???"] = ???
             //run
-            Context.ExecutePluginWith<$class$>(Plugin);
+            Context.ExecutePluginWith<devkit_CustomApiRequest>(Plugin);
             //result
             Assert.IsTrue(true);
         }

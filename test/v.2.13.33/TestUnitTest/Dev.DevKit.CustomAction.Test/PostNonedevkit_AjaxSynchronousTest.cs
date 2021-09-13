@@ -1,15 +1,15 @@
-﻿using FakeXrmEasy;
+﻿using Dev.DevKit.ProxyTypes;
+using Dev.DevKit.Shared;
+using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Reflection;
-using $SharedNameSpace$;
-using $ProxyTypesNameSpace$;
 
-namespace $NameSpace$
+namespace Dev.DevKit.CustomAction.Test
 {
     [TestClass]
-    public class $class$Test
+    public class PostNonedevkit_AjaxSynchronousTest
     {
         public static XrmFakedContext Context { get; set; }
         public static XrmFakedPluginExecutionContext Plugin { get; set; }
@@ -20,37 +20,38 @@ namespace $NameSpace$
             Context = new XrmFakedContext();
             Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
             Plugin = Context.GetDefaultPluginContext();
-            Plugin.PrimaryEntityName = "$customlogicalname$";
-            Plugin.MessageName = "$custommessage$";
-            Plugin.Stage = (int) StageEnum.$stage_string$;
-            Plugin.Mode = (int) ExecutionModeEnum.$execution$;
+            Plugin.PrimaryEntityName = "none";
+            Plugin.MessageName = "devkit_Ajax";
+            Plugin.Stage = (int)StageEnum.PostOperation;
+            Plugin.Mode = (int)ExecutionModeEnum.Synchronous;
         }
 
         /*
         [TestMethod]
         public void _00_UnsecureString_And_SecureString()
         {
-            var target = new Entity("$customlogicalname$")
+            var target = new Entity("???")
             {
-                ["$logicalname$id"] = Guid.NewGuid()
+                ["customactionid"] = Guid.NewGuid()
             };
             PluginContext.InputParameters["Target"] = target;
             var unsecureString = "UnsecureString";
             var secureString = "SecureString";
-            Context.ExecutePluginWithConfigurations<$class$>(Plugin, unsecureString, secureString);
+            Context.ExecutePluginWithConfigurations<PostNonedevkit_AjaxSynchronous>(Plugin, unsecureString, secureString);
             Assert.IsTrue(target != null);
         }
         */
 
         [TestMethod]
-        public void _01_Stage_Does_Not_Equals_$stage_string$()
+        public void _01_Stage_Does_Not_Equals_PostOperation()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = -1;
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => {
-                context.ExecutePluginWith<$class$>(plugin);
-            }, "Stage does not equals $stage_string$");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PostNonedevkit_AjaxSynchronous>(plugin);
+            }, "Stage does not equals PostOperation");
         }
 
         [TestMethod]
@@ -58,11 +59,12 @@ namespace $NameSpace$
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
-            plugin.Stage = (int) StageEnum.$stage_string$;
+            plugin.Stage = (int)StageEnum.PostOperation;
             plugin.PrimaryEntityName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => {
-                context.ExecutePluginWith<$class$>(plugin);
-            }, "PrimaryEntityName does not equals $customlogicalname$");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PostNonedevkit_AjaxSynchronous>(plugin);
+            }, "PrimaryEntityName does not equals ???");
         }
 
         [TestMethod]
@@ -70,32 +72,34 @@ namespace $NameSpace$
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
-            plugin.Stage = (int)StageEnum.$stage_string$;
-            plugin.PrimaryEntityName = "$customlogicalname$";
+            plugin.Stage = (int)StageEnum.PostOperation;
+            plugin.PrimaryEntityName = "???";
             plugin.MessageName = "abcd";
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => {
-                context.ExecutePluginWith<$class$>(plugin);
-            }, "MessageName does not equals $custommessage$");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PostNonedevkit_AjaxSynchronous>(plugin);
+            }, "MessageName does not equals ???");
         }
 
         [TestMethod]
-        public void _04_Mode_Does_Not_Equals_$execution$()
+        public void _04_Mode_Does_Not_Equals_Synchronous()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
-            plugin.Stage = (int)StageEnum.$stage_string$;
-            plugin.PrimaryEntityName = "$customlogicalname$";
-            plugin.MessageName = "$custommessage$";
+            plugin.Stage = (int)StageEnum.PostOperation;
+            plugin.PrimaryEntityName = "???";
+            plugin.MessageName = "???";
             plugin.Mode = -1;
-            Assert.ThrowsException<InvalidPluginExecutionException>(() => {
-                context.ExecutePluginWith<$class$>(plugin);
-            }, "Execution does not equals $execution$");
+            Assert.ThrowsException<InvalidPluginExecutionException>(() =>
+            {
+                context.ExecutePluginWith<PostNonedevkit_AjaxSynchronous>(plugin);
+            }, "Execution does not equals Synchronous");
         }
 
         [TestMethod]
         public void _05_CrmPluginRegistration_Check()
         {
-            var @class = new $class$();
+            var @class = new PostNonedevkit_AjaxSynchronous();
             foreach (var attribute in System.Attribute.GetCustomAttributes(@class.GetType()))
             {
                 if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
@@ -114,7 +118,7 @@ namespace $NameSpace$
             //setup
             //Plugin.InputParameters["???"] = ???
             //run
-            Context.ExecutePluginWith<$class$>(Plugin);
+            Context.ExecutePluginWith<PostNonedevkit_AjaxSynchronous>(Plugin);
             //result
             Assert.IsTrue(true);
         }
