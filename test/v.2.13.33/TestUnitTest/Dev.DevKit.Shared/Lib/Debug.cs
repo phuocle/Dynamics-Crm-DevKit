@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Dev.DevKit.Shared
-{
+{    
     public class DebugContext
     {
         public Guid? BusinessUnitId { get; set; }
@@ -35,32 +35,36 @@ namespace Dev.DevKit.Shared
     }
     public class DebugEntity
     {
-        public Dictionary<string, DebugAttributeValue> Attributes { get; set; }
+        public List<DebugAttributeValue> Attributes { get; set; }
         public Dictionary<string, string> FormattedValues { get; set; }
-        public Dictionary<string, DebugAttributeValue> KeyAttributes { get; set; }
-        public Guid? Id { get; set; }
+        public List<DebugAttributeValue> KeyAttributes { get; set; }
+        public Guid? EntityId { get; set; }
         public string LogicalName { get; set; }
         public string RowVersion { get; set; }
     }
     public class DebugEntityReference
     {
-        public Guid? Id { get; set; }
+        public Guid? EntityReferenceId { get; set; }
         public string LogicalName { get; set; }
     }
     public class DebugAttributeValue
     {
+        public string LogicalName { get; set; }
         public string Type { get; set; }
         public object Value { get; set; }
         public string EntityLogicalName { get; set; }
     }
+    [System.Diagnostics.DebuggerNonUserCode()]
     public static class Debug
     {
-        public static DebugAttributeValue AttributeValue(object value)
+        public static DebugAttributeValue AttributeValue(string key, object value)
         {
+            if (value == null) return null;
             if (value is EntityReference er)
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = nameof(EntityReference),
                     Value = er.Id,
                     EntityLogicalName = er.LogicalName
@@ -70,6 +74,7 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = nameof(OptionSetValue),
                     Value = osv.Value
                 };
@@ -78,6 +83,7 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = "int",
                     Value = i
                 };
@@ -86,6 +92,7 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = "bool",
                     Value = b
                 };
@@ -94,6 +101,7 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = "double",
                     Value = d
                 };
@@ -102,6 +110,7 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = "decimal",
                     Value = de
                 };
@@ -110,6 +119,7 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = nameof(Money),
                     Value = m.Value
                 };
@@ -118,6 +128,7 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = nameof(DateTime),
                     Value = dt
                 };
@@ -126,6 +137,7 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = nameof(Guid),
                     Value = g
                 };
@@ -134,22 +146,20 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = "string",
                     Value = s
                 };
             }
             else if (value is byte[] by)
             {
-                return new DebugAttributeValue
-                {
-                    Type = "byte[]",
-                    Value = by
-                };
+                return null;
             }
             else if (value is long l)
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = "long",
                     Value = l
                 };
@@ -158,20 +168,18 @@ namespace Dev.DevKit.Shared
             {
                 return new DebugAttributeValue
                 {
+                    LogicalName = key,
                     Type = nameof(OptionSetValueCollection),
                     Value = ovc.Select(x => x.Value).ToList()
                 };
             }
             else if (value is EntityCollection ec)
             {
-                return new DebugAttributeValue
-                {
-                    Type = nameof(EntityCollection),
-                    Value = ec.Entities.Select(x => EntityToObject(x)).ToList()
-                };
+                return null;
             }
             return new DebugAttributeValue
             {
+                LogicalName = key,
                 Type = "???",
                 Value = value
             };
@@ -180,10 +188,10 @@ namespace Dev.DevKit.Shared
         {
             return new DebugEntity
             {
-                Attributes = x?.Attributes.ToDictionary(a => a.Key, a => AttributeValue(a.Value)),
+                Attributes = x?.Attributes.Select(a => AttributeValue(a.Key, a.Value)).Where(b => b != null).ToList(),
                 FormattedValues = x?.FormattedValues.ToDictionary(a => a.Key, a => a.Value),
-                KeyAttributes = x?.KeyAttributes.ToDictionary(a => a.Key, a => AttributeValue(a.Value)),
-                Id = x?.Id,
+                KeyAttributes = x?.KeyAttributes.Select(a =>AttributeValue(a.Key, a.Value)).Where(b => b != null).ToList(),
+                EntityId = x?.Id,
                 LogicalName = x?.LogicalName,
                 RowVersion = x?.RowVersion
             };
@@ -192,7 +200,7 @@ namespace Dev.DevKit.Shared
         {
             return new DebugEntityReference
             {
-                Id = x?.Id,
+                EntityReferenceId = x?.Id,
                 LogicalName = x?.LogicalName
             };
         }
@@ -269,8 +277,91 @@ namespace Dev.DevKit.Shared
                 PreEntityImages = preEntityImages,
             };
             var json = SimpleJson.SerializeObject(debug);
-            json = json.Replace("\"", "'").Replace(":{}", ":null").Replace(": {}", ": null").Replace(",'EntityLogicalName':null", "");
+            json = json
+                .Replace("\"", "'")
+                .Replace(":{}", ":null")
+                .Replace(",'EntityLogicalName':null", "")
+                ;
             return json;
+        }
+        public static DebugContext JsonToDebugContext(string json)
+        {
+            json = json.Replace("'", "\"");
+            var debugContext = SimpleJson.DeserializeObject<DebugContext>(json);
+            debugContext.InputParameters = ConvertToEntityAndEntityReference(debugContext.InputParameters);
+            debugContext.OutputParameters = ConvertToEntityAndEntityReference(debugContext.OutputParameters);
+            debugContext.PreEntityImages = ConvertToEntityAndEntityReference(debugContext.PreEntityImages);
+            debugContext.PostEntityImages = ConvertToEntityAndEntityReference(debugContext.PostEntityImages);
+            return debugContext;
+        }
+        private static Dictionary<string, object> ConvertToEntityAndEntityReference(Dictionary<string, object> items)
+        {
+            var values = new Dictionary<string, object>();
+            if (items == null) return values;
+            foreach(var key in items.Keys)
+            {                
+                try
+                {
+                    var json = items[key].ToString();
+                    var er = SimpleJson.DeserializeObject<DebugEntityReference>(json);
+                    if (er != null && er.EntityReferenceId != null)
+                    {
+                        values.Add(key, new EntityReference(er.LogicalName, er.EntityReferenceId.Value));
+                    }
+                    else
+                    {
+                        var e = SimpleJson.DeserializeObject<DebugEntity>(json);
+                        values.Add(key, ConvertDebugEntityToEntity(e));
+                    }                    
+                }
+                catch
+                {
+                    values.Add(key, items[key]);
+                }
+            }
+            return values;
+        }
+        private static Entity ConvertDebugEntityToEntity(DebugEntity e)
+        {
+            var entity = new Entity(e.LogicalName, e.EntityId.Value);
+            foreach(var attribute in e.Attributes)
+            {
+                if (attribute.Value == null) continue;
+                if (attribute.Type == nameof(EntityReference))
+                    entity[attribute.LogicalName] = new EntityReference(attribute.LogicalName, Guid.Parse(attribute.Value.ToString()));
+                else if (attribute.Type == nameof(OptionSetValue))
+                    entity[attribute.LogicalName] = new OptionSetValue(int.Parse(attribute.Value.ToString()));
+                else if (attribute.Type == "int")
+                    entity[attribute.LogicalName] = int.Parse(attribute.Value.ToString());
+                else if (attribute.Type == "bool")
+                    entity[attribute.LogicalName] = bool.Parse(attribute.Value.ToString());
+                else if (attribute.Type == "double")
+                    entity[attribute.LogicalName] = double.Parse(attribute.Value.ToString());
+                else if (attribute.Type == "decimal")
+                    entity[attribute.LogicalName] = decimal.Parse(attribute.Value.ToString());
+                else if (attribute.Type == nameof(Money))
+                    entity[attribute.LogicalName] = new Money(decimal.Parse(attribute.Value.ToString()));
+                else if (attribute.Type == nameof(DateTime))
+                    entity[attribute.LogicalName] = DateTime.Parse(attribute.Value.ToString());
+                else if (attribute.Type == nameof(Guid))
+                    entity[attribute.LogicalName] = Guid.Parse(attribute.Value.ToString());
+                else if (attribute.Type == "string")
+                    entity[attribute.LogicalName] = attribute.Value.ToString();
+                else if (attribute.Type == "byte[]")
+                    continue;
+                else if (attribute.Type == "long")
+                    entity[attribute.LogicalName] = long.Parse(attribute.Value.ToString());
+                else if (attribute.Type == nameof(OptionSetValueCollection))
+                {
+                    var osvc = new OptionSetValueCollection();
+                    var items = attribute.Value.ToString().Split(",".ToCharArray());
+                    foreach (var item in items) osvc.Add(new OptionSetValue(int.Parse(item)));
+                    entity[attribute.LogicalName] = osvc;
+                }
+                else if (attribute.Type == nameof(EntityCollection))
+                    continue;
+            }
+            return entity;
         }
     }
 }

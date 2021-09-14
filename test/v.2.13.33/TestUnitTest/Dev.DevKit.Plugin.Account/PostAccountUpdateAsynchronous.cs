@@ -43,13 +43,13 @@ namespace Dev.DevKit.PluginAccount
             if (context.MessageName.ToLower() != "Update".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Update");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous");
+            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous");
             tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
 
-            tracing.DebugContext(context);
-            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous");
+            //tracing.DebugContext(context);
+            //tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
