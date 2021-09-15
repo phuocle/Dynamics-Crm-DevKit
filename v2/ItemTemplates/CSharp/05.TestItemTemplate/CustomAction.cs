@@ -112,7 +112,9 @@ namespace $NameSpace$
         public void _06_ExecutePlugin()
         {
             //setup
-            //Plugin.InputParameters["???"] = ???
+            //var json = "";
+            //var debugContext = Debug.JsonToDebugContext(json);
+            //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
             //run
             Context.ExecutePluginWith<$class$>(Plugin);
             //result

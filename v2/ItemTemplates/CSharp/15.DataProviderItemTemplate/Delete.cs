@@ -34,13 +34,9 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            tracing.DebugMessage("Begin Data Provider: $NameSpace$.Delete");
-            tracing.DebugContext(context);
-            tracing.DebugMessage(dataSource.ToDebug());
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
-
-            tracing.DebugMessage("End Data Provider: $NameSpace$.Delete");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)

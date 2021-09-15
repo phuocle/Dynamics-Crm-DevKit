@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Dev.DevKit.Shared
-{    
+namespace $SharedNameSpace$
+{
     public class DebugContext
     {
         public Guid? BusinessUnitId { get; set; }
@@ -185,7 +185,7 @@ namespace Dev.DevKit.Shared
             var values = new Dictionary<string, object>();
             if (items == null) return values;
             foreach(var key in items.Keys)
-            {                
+            {
                 try
                 {
                     var json = items[key].ToString();
@@ -196,7 +196,7 @@ namespace Dev.DevKit.Shared
                     {
                         var e = SimpleJson.DeserializeObject<DebugEntity>(json);
                         values.Add(key, ConvertDebugEntityToEntity(e));
-                    }                    
+                    }
                 }
                 catch
                 {

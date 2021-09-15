@@ -29,8 +29,10 @@ namespace DynamicsCrm.DevKit.Analyzers.CrmAnalyzers
             if (
                 context.Node is AttributeSyntax attribute &&
                 attribute?.Name?.ToFullString() == "CrmPluginRegistration" &&
-                attribute.TryFindArgument(0, "message", out var argurment0) && AnalyzerHelper.RemoveQuote(argurment0?.ToFullString().ToLower()) == "update" &&
-                attribute.TryFindArgument(4, "filteringAttributes", out var argurment4) && AnalyzerHelper.TestIsEmtpy(argurment4?.ToFullString())
+                attribute.TryFindArgument(0, "message", out var argurment0) &&
+                (AnalyzerHelper.RemoveQuote(argurment0?.ToFullString().ToLower()) == "Update".ToLower() || AnalyzerHelper.RemoveQuote(argurment0?.ToFullString().ToLower()) == "OnExternalUpdated".ToLower()) &&
+                attribute.TryFindArgument(4, "filteringAttributes", out var argurment4) &&
+                AnalyzerHelper.TestIsEmtpy(argurment4?.ToFullString())
                )
             {
                 DiagnosticHelpers.ReportDiagnostic(context, DiagnosticDescriptors.UpdateMessageShouldHaveFilteringAttributes, argurment4.GetLocation());

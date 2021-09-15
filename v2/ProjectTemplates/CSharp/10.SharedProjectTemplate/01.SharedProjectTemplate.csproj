@@ -77,6 +77,7 @@
     <None Include="PluginCore.cs" />
     <None Include="Extension.cs" />
     <None Include="EntityBase.cs" />
+    <None Include="Debug.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

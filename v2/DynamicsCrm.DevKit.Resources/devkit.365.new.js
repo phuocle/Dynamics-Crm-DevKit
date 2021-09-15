@@ -2182,6 +2182,14 @@ var devKit = (function () {
                         return EMPTY_BOOL;
                     }
                 });
+                Object.defineProperty(obj, 'FullNameConventionCode', {
+                    get: function () {
+                        if (has(organizationSettings, 'fullNameConventionCode')) {
+                            return organizationSettings.fullNameConventionCode;
+                        }
+                        return EMPTY_NUMBER;
+                    }
+                });
                 return obj;
             }
         });
@@ -2767,5 +2775,15 @@ var OptionSet;
     OptionSet.SidePaneState = {
         Collapsed: 0,
         Expanded: 1
-    }
+    };
+    OptionSet.FullNameConventionCode = {
+        LastName_Comma_FirstName = 0,
+        FirstName_LastName = 1,
+        LastName_Comma_FirstName_MiddleInitial = 2,
+        FirstName_MiddleInitial_LastName = 3,
+        LastName_Comma_FirstName_MiddleName = 4,
+        FirstName_MiddleName_LastName = 5,
+        LastName_FirstName = 6,
+        LastNameFirstName = 7
+    };
 })(OptionSet || (OptionSet = {}));

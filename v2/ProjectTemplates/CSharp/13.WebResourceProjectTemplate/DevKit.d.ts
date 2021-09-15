@@ -223,7 +223,7 @@ declare namespace DevKit {
              * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/setactivestage
              */
-            SetActiveStage(stageId: string, callback: (result: "success" | "invalid" | "unreachable" | "dirtyForm") => void): void;
+            SetActiveStage(stageId: string, callback: (result: "success" | "invalid" | "unreachable" | "dirtyForm" | "preventDefault") => void): void;
             /**
              * Progresses to the next stage. You can also move to a next stage in a different entity
              * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
@@ -2203,6 +2203,11 @@ declare namespace DevKit {
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
         */
         readonly UseSkypeProtocol: boolean;
+        /**
+        * Returns the FullNameConventionCode setting of the current organization.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
+        */
+        readonly FullNameConventionCode: OptionSet.FullNameConventionCode;
     }
     interface UserSettings {
         /**
@@ -3153,5 +3158,16 @@ declare namespace OptionSet {
         Expanded,
         /** collapsed */
         Collapsed
+    }
+    /** the full name conventionCode setting of the current organization */
+    enum FullNameConventionCode {
+        LastName_Comma_FirstName,
+        FirstName_LastName,
+        LastName_Comma_FirstName_MiddleInitial,
+        FirstName_MiddleInitial_LastName,
+        LastName_Comma_FirstName_MiddleName,
+        FirstName_MiddleName_LastName,
+        LastName_FirstName,
+        LastNameFirstName
     }
 }
