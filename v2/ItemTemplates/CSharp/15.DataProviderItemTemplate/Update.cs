@@ -48,9 +48,7 @@ namespace $NameSpace$
             //Get Parameter from DataSource
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
-
             var target = context.InputParameterOrDefault<Entity>("Target");
-
             //YOUR CODE ...
 
         }

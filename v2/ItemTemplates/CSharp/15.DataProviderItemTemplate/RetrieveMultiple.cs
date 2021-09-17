@@ -46,9 +46,7 @@ namespace $NameSpace$
             //Get Parameter from DataSource
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
-
             //YOUR CODE ...
-
             var query = context?.InputParameters?["Query"];
             var entities = new EntityCollection();
             entities.EntityName = context.PrimaryEntityName;

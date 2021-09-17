@@ -21,7 +21,7 @@ namespace $NameSpace$
         }
 
         [TestMethod]
-        public void _01_CrmPluginRegistration_Check()
+        public void _01_Check_CrmPluginRegistration()
         {
             var @class = new $class$();
             foreach (var attribute in System.Attribute.GetCustomAttributes(@class.GetType()))
