@@ -5,8 +5,7 @@ using System;
 namespace Dev.DevKit.CustomAction.Entities.Account
 {
     [CrmPluginRegistration("devkit_SendEmail", "account", StageEnum.PostOperation, ExecutionModeEnum.Synchronous, "",
-    "Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_SendEmailSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction,
-    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
+    "Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_SendEmailSynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.CustomAction)]
     public class PostAccountdevkit_SendEmailSynchronous : IPlugin
     {
         /*
@@ -15,13 +14,13 @@ namespace Dev.DevKit.CustomAction.Entities.Account
            OutputParameters:
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public PostAccountdevkit_SendEmailSynchronous(string unsecureString, string secureString)
+        //public PostAccountdevkit_SendEmailSynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -35,15 +34,14 @@ namespace Dev.DevKit.CustomAction.Entities.Account
             if (context.MessageName.ToLower() != "devkit_SendEmail".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals devkit_SendEmail");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            tracing.DebugMessage("Begin Custom Action: Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_SendEmailSynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            tracing.DebugMessage("End Custom Action: Dev.DevKit.CustomAction.Entities.Account.PostAccountdevkit_SendEmailSynchronous");
+            //tracing.DebugContext(context);
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

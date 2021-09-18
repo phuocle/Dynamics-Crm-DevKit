@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{94D91100-3BB0-4DDD-A862-9AEE5230F557}</ProjectGuid>
+    <ProjectGuid>{494B52E4-DD44-4705-AD11-103E414C3774}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.PluginContact.Test</RootNamespace>
@@ -44,9 +44,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.4.1\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="FakeXrmEasy">
       <HintPath>..\packages\FakeXrmEasy.9.1.57.1\lib\net462\FakeXrmEasy.dll</HintPath>
     </Reference>
@@ -68,6 +65,9 @@
     <Reference Include="Microsoft.Xrm.Tooling.Connector">
       <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.1.0.88\lib\net462\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.4.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="FakeItEasy">
       <HintPath>..\packages\FakeItEasy.6.2.1\lib\net45\FakeItEasy.dll</HintPath>
     </Reference>
@@ -79,7 +79,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />

@@ -2,6 +2,7 @@
 using Dev.DevKit.Shared;
 using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xrm.Sdk.Query;
 using System.Reflection;
 
 namespace Dev.DevKit.DataProvider.Test
@@ -21,7 +22,7 @@ namespace Dev.DevKit.DataProvider.Test
         }
 
         [TestMethod]
-        public void _01_CrmPluginRegistration_Check()
+        public void _01_Check_CrmPluginRegistration()
         {
             var @class = new RetrieveMultiple();
             foreach (var attribute in System.Attribute.GetCustomAttributes(@class.GetType()))
@@ -40,9 +41,11 @@ namespace Dev.DevKit.DataProvider.Test
         public void _02_ExecutePlugin()
         {
             //setup
-            //Plugin.InputParameters["???"] = ???
+            //var json = "";
+            //var debugContext = Debug.JsonToDebugContext(json);
+            Plugin.InputParameters["Query"] = new QueryExpression();
             //run
-            //Context.ExecutePluginWith<RetrieveMultiple>(Plugin);
+            Context.ExecutePluginWith<RetrieveMultiple>(Plugin);
             //result
             Assert.IsTrue(true);
         }

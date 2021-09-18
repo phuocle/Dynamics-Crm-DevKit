@@ -1,13 +1,13 @@
 ﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
 namespace Dev.DevKit.Server.Plugins.Contact
 {
     [CrmPluginRegistration("Merge", "contact", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
     "Dev.DevKit.Server.Plugins.Contact.PostContactMergeAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
-    Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "firstname",
-    Image2Name = "PreImage", Image2Alias = "PreImage", Image2Type = ImageTypeEnum.PreImage, Image2Attributes = "firstname")]
+    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostContactMergeAsynchronous : IPlugin
     {
         /*
@@ -19,13 +19,13 @@ namespace Dev.DevKit.Server.Plugins.Contact
            OutputParameters:
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public PostContactMergeAsynchronous(string unsecureString, string secureString)
+        //public PostContactMergeAsynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -39,19 +39,16 @@ namespace Dev.DevKit.Server.Plugins.Contact
             if (context.MessageName.ToLower() != "Merge".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Merge");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Contact.PostContactMergeAsynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
-
-            tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Contact.PostContactMergeAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            //var target = (???)context.InputParameters["Target"];
-            //var preEntity = (Entity)context.PreEntityImages["PreImage"];
-            //var postEntity = (Entity)context.PostEntityImages["PostImage"];
+            //var target = context.InputParameterOrDefault<???>("???");
+            //var preEntity = (Entity)context?.PreEntityImages?["???"];
+            //var postEntity = (Entity)context?.PostEntityImages?["???"];
             //YOUR PLUGIN-CODE GO HERE
 
         }

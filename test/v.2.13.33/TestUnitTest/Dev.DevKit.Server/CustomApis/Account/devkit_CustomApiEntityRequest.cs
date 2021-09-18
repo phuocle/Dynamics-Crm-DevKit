@@ -26,15 +26,14 @@ namespace Dev.DevKit.Server.CustomApis.Account
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             if (context.PrimaryEntityName.ToLower() != "account".ToLower()) throw new InvalidPluginExecutionException("PrimaryEntityName does not equals account");
 
-            tracing.DebugMessage("Begin Custom Api: Dev.DevKit.Server.CustomApis.Account.devkit_CustomApiEntityRequest");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
 
             var outputs = ExecuteCustomApi(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            tracing.DebugMessage("End Custom Api: Dev.DevKit.Server.CustomApis.Account.devkit_CustomApiEntityRequest");
+            //tracing.DebugContext(context);
         }
 
         private ParameterCollection ExecuteCustomApi(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

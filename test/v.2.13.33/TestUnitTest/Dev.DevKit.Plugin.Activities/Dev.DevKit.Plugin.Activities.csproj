@@ -84,13 +84,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Task\PostTaskHandleAsynchronous.cs" />
-    <Compile Include="Task\PostTaskUpdateAsynchronous.cs" />
-    <None Include="app.config" />
-    <None Include="deploy.debug.bat" />
-    <None Include="Dev.DevKit.Plugin.Activities.snk" />
     <Compile Include="Email\PostEmailSendAsynchronous.cs" />
     <Compile Include="PhoneCall\PostPhoneCallHandleAsynchronous.cs" />
+    <Compile Include="Task\PostTaskHandleAsynchronous.cs" />
+    <Compile Include="Task\PostTaskUpdateAsynchronous.cs" />
+    <None Include="deploy.debug.bat" />
+    <None Include="Dev.DevKit.Plugin.Activities.snk" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
   </ItemGroup>

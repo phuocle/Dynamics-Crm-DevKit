@@ -46,8 +46,8 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             if (!(currentClass is CodeClass @class)) return;
             if (@class.IsAbstract) return;
             if (!@class.IsCodeType) return;
-            if (!HasImplementedPlugin(@class) && !HasImplementedWorkflow(@class)) return;
-            if (HasAttributeCrmPluginRegistration(@class)) return;
+            if (!Utility.HasImplementedPlugin(@class) && !Utility.HasImplementedWorkflow(@class)) return;
+            if (Utility.HasAttributeCrmPluginRegistration(@class)) return;
             menuCommand.Visible = true;
         }
 
@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 MessageBox.Show("Please install DynamicsCrm.DevKit.Cli from Nuget and try it again.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (HasImplementedPlugin(@class))
+            if (Utility.HasImplementedPlugin(@class))
             {
                 var attributes = CrmPluginRegistrationDataForPlugin(dte, currentClass.FullName);
                 if (attributes.Count > 0)
@@ -84,7 +84,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
                 else
                     MessageBox.Show("DynamicsCrm.DevKit not found any plugin step register with this class.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else if (HasImplementedWorkflow(@class))
+            else if (Utility.HasImplementedWorkflow(@class))
             {
                 var attributes = CrmPluginRegistrationDataForWorkflow(dte, currentClass.FullName);
                 if (attributes.Count > 0)
@@ -479,42 +479,42 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             return content.IndexOf($"{shareProjectName}.projitems") > 0;
         }
 
-        private static bool HasImplementedPlugin(CodeClass @class)
-        {
-            foreach (CodeInterface @interface in @class.ImplementedInterfaces)
-            {
-                if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin")
-                    return true;
-            }
-            foreach (var @base in @class.Bases)
-            {
-                if (!(@base is CodeClass baseClass)) continue;
-                if (HasImplementedPlugin(baseClass))
-                    return true;
-            }
-            return false;
-        }
+        //private static bool HasImplementedPlugin(CodeClass @class)
+        //{
+        //    foreach (CodeInterface @interface in @class.ImplementedInterfaces)
+        //    {
+        //        if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin")
+        //            return true;
+        //    }
+        //    foreach (var @base in @class.Bases)
+        //    {
+        //        if (!(@base is CodeClass baseClass)) continue;
+        //        if (HasImplementedPlugin(baseClass))
+        //            return true;
+        //    }
+        //    return false;
+        //}
 
-        private static bool HasImplementedWorkflow(CodeClass @class)
-        {
-            foreach (var @base in @class.Bases)
-            {
-                if (!(@base is CodeClass baseClass)) continue;
-                if (baseClass.FullName == "System.Activities.CodeActivity")
-                    return true;
-                if (HasImplementedWorkflow(baseClass))
-                    return true;
-            }
-            return false;
-        }
+        //private static bool HasImplementedWorkflow(CodeClass @class)
+        //{
+        //    foreach (var @base in @class.Bases)
+        //    {
+        //        if (!(@base is CodeClass baseClass)) continue;
+        //        if (baseClass.FullName == "System.Activities.CodeActivity")
+        //            return true;
+        //        if (HasImplementedWorkflow(baseClass))
+        //            return true;
+        //    }
+        //    return false;
+        //}
 
-        private static bool HasAttributeCrmPluginRegistration(CodeClass @class)
-        {
-            foreach (CodeAttribute attribue in @class.Attributes)
-            {
-                if (attribue.Name == "CrmPluginRegistration") return true;
-            }
-            return false;
-        }
+        //private static bool HasAttributeCrmPluginRegistration(CodeClass @class)
+        //{
+        //    foreach (CodeAttribute attribue in @class.Attributes)
+        //    {
+        //        if (attribue.Name == "CrmPluginRegistration") return true;
+        //    }
+        //    return false;
+        //}
     }
 }

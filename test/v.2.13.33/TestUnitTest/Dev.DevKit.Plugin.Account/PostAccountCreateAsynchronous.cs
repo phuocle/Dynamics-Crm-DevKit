@@ -6,8 +6,8 @@ using System;
 namespace Dev.DevKit.PluginAccount
 {
     [CrmPluginRegistration("Create", "account", StageEnum.PostOperation, ExecutionModeEnum.Asynchronous, "",
-    "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true, UnSecureConfiguration = "A", SecureConfiguration = "B",
-    Image1Name = "PostImage", Image1Alias = "PostImage", Image1Type = ImageTypeEnum.PostImage, Image1Attributes = "name,accountnumber,telephone1")]
+    "Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous", 1/*ExecutionOrder*/, IsolationModeEnum.Sandbox, PluginType = PluginType.Plugin, DeleteAsyncOperation = true,
+    Image1Name = "", Image1Alias = "", Image1Type = ImageTypeEnum.PreImage, Image1Attributes = "")]
     public class PostAccountCreateAsynchronous : IPlugin
     {
         /*
@@ -42,20 +42,16 @@ namespace Dev.DevKit.PluginAccount
             if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            //tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
-
-            //tracing.DebugMessage("End Plugin: Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            //var target = (Entity)context?.InputParameters?["Target"];
-            var target = context.InputParameterOrDefault<Entity>("Target");
-            //var preEntity = (Entity)context.PreEntityImages["PreImage"];
-            //var postEntity = (Entity)context.PostEntityImages["PostImage"];
+            //var target = context.InputParameterOrDefault<???>("???");
+            //var preEntity = (Entity)context?.PreEntityImages?["???"];
+            //var postEntity = (Entity)context?.PostEntityImages?["???"];
             //YOUR PLUGIN-CODE GO HERE
 
         }

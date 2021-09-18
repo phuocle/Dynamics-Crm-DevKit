@@ -20,13 +20,13 @@ namespace Dev.DevKit.DataProvider
               id                                 System.Guid - require
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public Create(string unsecureString, string secureString)
+        //public Create(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -38,13 +38,9 @@ namespace Dev.DevKit.DataProvider
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            tracing.DebugMessage("Begin Data Provider: Dev.DevKit.DataProvider.Create");
-            tracing.DebugContext(context);
-            tracing.DebugMessage(dataSource.ToDebug());
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
-
-            tracing.DebugMessage("End Data Provider: Dev.DevKit.DataProvider.Create");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)
@@ -52,10 +48,8 @@ namespace Dev.DevKit.DataProvider
             //Get Parameter from DataSource
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
-
             var target = context.InputParameterOrDefault<Entity>("Target");
             var id = Guid.NewGuid();
-
             //YOUR CODE ...
 
             context.OutputParameters["id"] = id;

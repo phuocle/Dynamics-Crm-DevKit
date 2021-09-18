@@ -14,6 +14,8 @@ namespace Dev.DevKit.PluginActivities.Test.Task
     {
         public static XrmFakedContext Context { get; set; }
         public static XrmFakedPluginExecutionContext Plugin { get; set; }
+        private static string PrimaryEntityName { get; set; } = "task";
+        private static string MessageName { get; set; } = "Update";
 
         [ClassInitialize()]
         public static void ClassInit(TestContext context)
@@ -21,21 +23,21 @@ namespace Dev.DevKit.PluginActivities.Test.Task
             Context = new XrmFakedContext();
             Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
             Plugin = Context.GetDefaultPluginContext();
-            Plugin.PrimaryEntityName = "task";
-            Plugin.MessageName = "Update";
+            Plugin.PrimaryEntityName = PrimaryEntityName;
+            Plugin.MessageName = MessageName;
             Plugin.Stage = (int)StageEnum.PostOperation;
             Plugin.Mode = (int)ExecutionModeEnum.Asynchronous;
         }
 
         /*
         [TestMethod]
-        public void _00_UnsecureString_And_SecureString()
+        public void _00_Check_UnsecureString_And_SecureString()
         {
-            var target = new Entity("activities")
+            var target = new Entity(PrimaryEntityName)
             {
-                ["activitiesid"] = Guid.NewGuid()
+                [$"{PrimaryEntityName}id"] = Guid.NewGuid()
             };
-            PluginContext.InputParameters["Target"] = target;
+            Plugin.InputParameters["Target"] = target;
             var unsecureString = "UnsecureString";
             var secureString = "SecureString";
             Context.ExecutePluginWithConfigurations<PostTaskUpdateAsynchronous>(Plugin, unsecureString, secureString);
@@ -44,7 +46,7 @@ namespace Dev.DevKit.PluginActivities.Test.Task
         */
 
         [TestMethod]
-        public void _01_Stage_Does_Not_Equals_PostOperation()
+        public void _01_Check_Stage()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -56,7 +58,7 @@ namespace Dev.DevKit.PluginActivities.Test.Task
         }
 
         [TestMethod]
-        public void _02_PrimaryEntityName_Does_Not_Equals_activities()
+        public void _02_Check_PrimaryEntityName()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -65,31 +67,31 @@ namespace Dev.DevKit.PluginActivities.Test.Task
             Assert.ThrowsException<InvalidPluginExecutionException>(() =>
             {
                 context.ExecutePluginWith<PostTaskUpdateAsynchronous>(plugin);
-            }, "PrimaryEntityName does not equals activities");
+            }, $"PrimaryEntityName does not equals {PrimaryEntityName}");
         }
 
         [TestMethod]
-        public void _03_MessageName_Does_Not_Equals_Asynchronous()
+        public void _03_Check_MessageName()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int)StageEnum.PostOperation;
-            plugin.PrimaryEntityName = "activities";
+            plugin.PrimaryEntityName = PrimaryEntityName;
             plugin.MessageName = "abcd";
             Assert.ThrowsException<InvalidPluginExecutionException>(() =>
             {
                 context.ExecutePluginWith<PostTaskUpdateAsynchronous>(plugin);
-            }, "MessageName does not equals Asynchronous");
+            }, $"MessageName does not equals {MessageName}");
         }
 
         [TestMethod]
-        public void _04_Mode_Does_Not_Equals_Asynchronous()
+        public void _04_Check_Mode()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int)StageEnum.PostOperation;
-            plugin.PrimaryEntityName = "activities";
-            plugin.MessageName = "Asynchronous";
+            plugin.PrimaryEntityName = PrimaryEntityName;
+            plugin.MessageName = MessageName;
             plugin.Mode = -1;
             Assert.ThrowsException<InvalidPluginExecutionException>(() =>
             {
@@ -98,7 +100,7 @@ namespace Dev.DevKit.PluginActivities.Test.Task
         }
 
         [TestMethod]
-        public void _05_CrmPluginRegistration_Check()
+        public void _05_Check_CrmPluginRegistration()
         {
             var @class = new PostTaskUpdateAsynchronous();
             foreach (var attribute in System.Attribute.GetCustomAttributes(@class.GetType()))
@@ -117,7 +119,9 @@ namespace Dev.DevKit.PluginActivities.Test.Task
         public void _06_ExecutePlugin()
         {
             //setup
-            //Plugin.InputParameters["???"] = ???
+            //var json = "";
+            //var debugContext = Debug.JsonToDebugContext(json);
+            //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
             //run
             Context.ExecutePluginWith<PostTaskUpdateAsynchronous>(Plugin);
             //result

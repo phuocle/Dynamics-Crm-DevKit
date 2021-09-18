@@ -37,15 +37,14 @@ namespace Dev.DevKit.CustomApi
             var service = serviceFactory.CreateOrganizationService(context.UserId);
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
 
-            tracing.DebugMessage("Begin Custom Api: Dev.DevKit.CustomApi.devkit_CustomApiRequest");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
 
             var outputs = ExecuteCustomApi(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            tracing.DebugMessage("End Custom Api: Dev.DevKit.CustomApi.devkit_CustomApiRequest");
+            //tracing.DebugContext(context);
         }
 
         private ParameterCollection ExecuteCustomApi(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

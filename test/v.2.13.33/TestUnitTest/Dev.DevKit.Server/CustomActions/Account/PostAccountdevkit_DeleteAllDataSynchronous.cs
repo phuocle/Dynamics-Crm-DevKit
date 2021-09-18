@@ -14,13 +14,13 @@ namespace Dev.DevKit.Server.CustomActions.Account
            OutputParameters:
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public PostAccountdevkit_DeleteAllDataSynchronous(string unsecureString, string secureString)
+        //public PostAccountdevkit_DeleteAllDataSynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -34,15 +34,14 @@ namespace Dev.DevKit.Server.CustomActions.Account
             if (context.MessageName.ToLower() != "devkit_DeleteAllData".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals devkit_DeleteAllData");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            tracing.DebugMessage("Begin Custom Action: Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_DeleteAllDataSynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            tracing.DebugMessage("End Custom Action: Dev.DevKit.Server.CustomActions.Account.PostAccountdevkit_DeleteAllDataSynchronous");
+            //tracing.DebugContext(context);
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

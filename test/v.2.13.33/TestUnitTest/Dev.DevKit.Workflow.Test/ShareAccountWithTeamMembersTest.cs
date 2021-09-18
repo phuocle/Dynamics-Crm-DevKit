@@ -24,6 +24,9 @@ namespace Dev.DevKit.Workflow.Test
         public void _01_ExecuteWorkflow()
         {
             //setup
+            //var json = "";
+            //var debugContext = Debug.JsonToDebugContext(json);
+            //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
             var inputs = new Dictionary<string, object>() { };
             //run
             var outputs = Context.ExecuteCodeActivity<ShareAccountWithTeamMembers>(inputs);

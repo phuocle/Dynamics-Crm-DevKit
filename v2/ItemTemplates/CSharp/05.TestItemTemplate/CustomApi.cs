@@ -11,6 +11,7 @@ namespace $NameSpace$
     {
         public static XrmFakedContext Context { get; set; }
         public static XrmFakedPluginExecutionContext Plugin { get; set; }
+        private static string PrimaryEntityName { get; set; } = "???";
 
         [ClassInitialize()]
         public static void ClassInit(TestContext context)
@@ -18,6 +19,7 @@ namespace $NameSpace$
             Context = new XrmFakedContext();
             Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
             Plugin = Context.GetDefaultPluginContext();
+            Plugin.PrimaryEntityName = PrimaryEntityName;
         }
 
         [TestMethod]

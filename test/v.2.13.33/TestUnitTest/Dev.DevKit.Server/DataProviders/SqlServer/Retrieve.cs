@@ -19,13 +19,13 @@ namespace Dev.DevKit.Server.DataProviders.SqlServer
               Notifications            - require
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public Retrieve(string unsecureString, string secureString)
+        //public Retrieve(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -37,13 +37,9 @@ namespace Dev.DevKit.Server.DataProviders.SqlServer
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            tracing.DebugMessage("Begin Data Provider: Dev.DevKit.Server.DataProviders.SqlServer.Retrieve");
-            tracing.DebugContext(context);
-            tracing.DebugMessage(dataSource.ToDebug());
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
-
-            tracing.DebugMessage("End Data Provider: Dev.DevKit.Server.DataProviders.SqlServer.Retrieve");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)
@@ -51,10 +47,8 @@ namespace Dev.DevKit.Server.DataProviders.SqlServer
             //Get Parameter from DataSource
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
-
             var target = context.InputParameterOrDefault<EntityReference>("Target");
             var entity = new Entity("???", target.Id);
-
             //YOUR CODE ...
 
             context.OutputParameters["BusinessEntity"] = entity;

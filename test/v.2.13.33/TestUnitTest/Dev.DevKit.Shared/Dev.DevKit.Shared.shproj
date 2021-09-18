@@ -11,4 +11,4 @@
   <Import Project="Dev.DevKit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
 </Project>
-<!-- 2.12.31 -->
+<!-- 2.13.33 -->

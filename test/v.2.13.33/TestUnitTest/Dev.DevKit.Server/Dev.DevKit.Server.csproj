@@ -93,11 +93,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Workflows\ShareWithTeam.cs" />
-    <Compile Include="Workflows\ToUpperCase.cs" />
-    <None Include="app.config" />
-    <None Include="Dev.DevKit.Server.snk" />
-    <None Include="deploy.debug.bat" />
     <Compile Include="CustomActions\Account\PostAccountdevkit_DeleteAllDataSynchronous.cs" />
     <Compile Include="CustomActions\Account\PostAccountdevkit_SendEmailSynchronous.cs" />
     <Compile Include="CustomActions\Contact\PostContactdevkit_SetPrimaryContactSynchronous.cs" />
@@ -125,12 +120,17 @@
     <Compile Include="Plugins\Contact\PreContactMergeSynchronous.cs" />
     <Compile Include="Plugins\PhoneCall\PostPhoneCallAssignAsynchronous.cs" />
     <Compile Include="Plugins\PhoneCall\PreValidationPhoneCallDeleteSynchronous.cs" />
+    <Compile Include="Workflows\ShareWithTeam.cs" />
+    <Compile Include="Workflows\ToUpperCase.cs" />
+    <None Include="Dev.DevKit.Server.snk" />
+    <None Include="deploy.debug.bat" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems" Label="Shared" Condition="Exists('..\Dev.DevKit.Shared\Dev.DevKit.Shared.projitems')" />
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

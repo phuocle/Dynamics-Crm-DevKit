@@ -15,13 +15,13 @@ namespace Dev.DevKit.Server.CustomActions.Contact
            OutputParameters:
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public PostContactdevkit_SetPrimaryContactSynchronous(string unsecureString, string secureString)
+        //public PostContactdevkit_SetPrimaryContactSynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -35,15 +35,14 @@ namespace Dev.DevKit.Server.CustomActions.Contact
             if (context.MessageName.ToLower() != "devkit_SetPrimaryContact".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals devkit_SetPrimaryContact");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            tracing.DebugMessage("Begin Custom Action: Dev.DevKit.Server.CustomActions.Contact.PostContactdevkit_SetPrimaryContactSynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
 
             var outputs = ExecuteCustomAction(context, serviceFactory, service, tracing);
             foreach (var output in outputs)
                 if (context.OutputParameters.Contains(output.Key))
                     context.OutputParameters[output.Key] = output.Value;
 
-            tracing.DebugMessage("End Custom Action: Dev.DevKit.Server.CustomActions.Contact.PostContactdevkit_SetPrimaryContactSynchronous");
+            //tracing.DebugContext(context);
         }
 
         private ParameterCollection ExecuteCustomAction(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)

@@ -118,5 +118,5 @@ namespace Dev.DevKit.Shared
         public string Image4Attributes { get; set; } = string.Empty;
         public PluginType PluginType { get; set; }
         public string DataSource { get; set; }
-    }    
+    }
 }

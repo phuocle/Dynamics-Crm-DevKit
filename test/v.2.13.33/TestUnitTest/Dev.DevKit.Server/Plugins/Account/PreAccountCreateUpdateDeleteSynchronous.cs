@@ -1,5 +1,6 @@
 ﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
 namespace Dev.DevKit.Server.Plugins.Account
@@ -25,13 +26,13 @@ namespace Dev.DevKit.Server.Plugins.Account
               id                                 System.Guid - require
         */
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public PreAccountCreateUpdateDeleteSynchronous(string unsecureString, string secureString)
+        //public PreAccountCreateUpdateDeleteSynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -45,19 +46,16 @@ namespace Dev.DevKit.Server.Plugins.Account
             //if (context.MessageName.ToLower() != "Create".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Create");
             if (context.Mode != (int)ExecutionModeEnum.Synchronous) throw new InvalidPluginExecutionException("Execution does not equals Synchronous");
 
-            tracing.DebugMessage("Begin Plugin: Dev.DevKit.Server.Plugins.Account.PreAccountCreateUpdateDeleteSynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
-
-            tracing.DebugMessage("End Plugin: Dev.DevKit.Server.Plugins.Account.PreAccountCreateUpdateDeleteSynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            //var target = (???)context.InputParameters["Target"];
-            //var preEntity = (Entity)context.PreEntityImages["PreImage"];
-            //var postEntity = (Entity)context.PostEntityImages["PostImage"];
+            //var target = context.InputParameterOrDefault<???>("???");
+            //var preEntity = (Entity)context?.PreEntityImages?["???"];
+            //var postEntity = (Entity)context?.PostEntityImages?["???"];
             //YOUR PLUGIN-CODE GO HERE
 
         }

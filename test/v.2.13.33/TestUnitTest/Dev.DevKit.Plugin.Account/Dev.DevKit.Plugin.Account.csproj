@@ -84,7 +84,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="deploy.debug.bat" />
     <None Include="Dev.DevKit.Plugin.Account.snk" />
     <Compile Include="PostAccountCreateAsynchronous.cs" />

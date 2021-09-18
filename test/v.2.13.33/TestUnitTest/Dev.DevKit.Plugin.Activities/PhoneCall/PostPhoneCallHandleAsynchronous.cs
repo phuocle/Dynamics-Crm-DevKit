@@ -1,5 +1,6 @@
 ﻿using Dev.DevKit.Shared;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Extensions;
 using System;
 
 namespace Dev.DevKit.PluginActivities.PhoneCall
@@ -11,13 +12,13 @@ namespace Dev.DevKit.PluginActivities.PhoneCall
     {
 
 
-        //private readonly string _unsecureString = null;
-        //private readonly string _secureString = null;
+        //private readonly string unSecureConfiguration = null;
+        //private readonly string secureConfiguration = null;
 
-        //public PostPhoneCallHandleAsynchronous(string unsecureString, string secureString)
+        //public PostPhoneCallHandleAsynchronous(string unSecureConfiguration, string secureConfiguration)
         //{
-        //    if (!string.IsNullOrWhiteSpace(unsecureString)) _unsecureString = unsecureString;
-        //    if (!string.IsNullOrWhiteSpace(secureString)) _secureString = secureString;
+        //    this.unSecureConfiguration = unSecureConfiguration;
+        //    this.secureConfiguration = secureConfiguration;
         //}
 
         public void Execute(IServiceProvider serviceProvider)
@@ -31,19 +32,16 @@ namespace Dev.DevKit.PluginActivities.PhoneCall
             if (context.MessageName.ToLower() != "Handle".ToLower()) throw new InvalidPluginExecutionException("MessageName does not equals Handle");
             if (context.Mode != (int)ExecutionModeEnum.Asynchronous) throw new InvalidPluginExecutionException("Execution does not equals Asynchronous");
 
-            tracing.DebugMessage("Begin Plugin: Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous");
-            tracing.DebugContext(context);
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing);
-
-            tracing.DebugMessage("End Plugin: Dev.DevKit.PluginActivities.PhoneCall.PostPhoneCallHandleAsynchronous");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing)
         {
-            //var target = (???)context.InputParameters["Target"];
-            //var preEntity = (Entity)context.PreEntityImages["PreImage"];
-            //var postEntity = (Entity)context.PostEntityImages["PostImage"];
+            //var target = context.InputParameterOrDefault<???>("???");
+            //var preEntity = (Entity)context?.PreEntityImages?["???"];
+            //var postEntity = (Entity)context?.PostEntityImages?["???"];
             //YOUR PLUGIN-CODE GO HERE
 
         }

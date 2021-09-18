@@ -92,7 +92,7 @@ namespace Microsoft.Xrm.Sdk
         {
 #if DEBUG
             var json = Debug.DebugContext(context);
-            tracingService.LogMessage(json);         
+            tracingService.LogMessage(json);
 #endif
         }
 

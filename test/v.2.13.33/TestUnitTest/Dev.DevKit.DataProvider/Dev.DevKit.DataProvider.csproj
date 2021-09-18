@@ -93,7 +93,6 @@
     <Compile Include="Retrieve.cs" />
     <Compile Include="RetrieveMultiple.cs" />
     <Compile Include="Update.cs" />
-    <None Include="app.config" />
     <None Include="deploy.debug.bat" />
     <None Include="deploy.datasource.bat" />
     <None Include="Dev.DevKit.DataProvider.snk" />

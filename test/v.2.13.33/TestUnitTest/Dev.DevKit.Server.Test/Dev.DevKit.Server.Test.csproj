@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{713A3A1A-AEB3-4DE1-AEF9-379D07F9BE42}</ProjectGuid>
+    <ProjectGuid>{27FE5F05-3A45-4BEE-AFCF-24E52C8E7319}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev.DevKit.Server.Test</RootNamespace>
@@ -65,9 +65,9 @@
     <Reference Include="Microsoft.Xrm.Tooling.Connector">
       <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.1.0.88\lib\net462\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
     </Reference>
-	<Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-		<HintPath>..\packages\Castle.Core.4.4.1\lib\net45\Castle.Core.dll</HintPath>
-	</Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.4.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="FakeItEasy">
       <HintPath>..\packages\FakeItEasy.6.2.1\lib\net45\FakeItEasy.dll</HintPath>
     </Reference>
@@ -85,9 +85,31 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomActions\Account\PostAccountdevkit_DeleteAllDataSynchronousTest.cs" />
+    <Compile Include="CustomActions\Account\PostAccountdevkit_SendEmailSynchronousTest.cs" />
+    <Compile Include="CustomActions\Contact\PostContactdevkit_SetPrimaryContactSynchronousTest.cs" />
+    <Compile Include="CustomActions\PostNonedevkit_AjaxSynchronousTest.cs" />
+    <Compile Include="CustomApis\Account\devkit_CustomApiEntityRequestTest.cs" />
+    <Compile Include="CustomApis\Contact\devkit_CustomApiEntityCollectionRequestTest.cs" />
+    <Compile Include="DataProviders\SqlServer\CreateTest.cs" />
+    <Compile Include="DataProviders\SqlServer\DeleteTest.cs" />
+    <Compile Include="DataProviders\SqlServer\RetrieveMultipleTest.cs" />
+    <Compile Include="DataProviders\SqlServer\RetrieveTest.cs" />
+    <Compile Include="DataProviders\SqlServer\UpdateTest.cs" />
     <Compile Include="Plugins\Account\PostAccountAssignAsynchronousTest.cs" />
     <Compile Include="Plugins\Account\PostAccountDeleteAsynchronousTest.cs" />
+    <Compile Include="Plugins\Account\PostAccountMergeAsynchronousTest.cs" />
+    <Compile Include="Plugins\Account\PostAccountUpdateAsynchronousTest.cs" />
+    <Compile Include="Plugins\Account\PreAccountCreateUpdateDeleteSynchronousTest.cs" />
+    <Compile Include="Plugins\Contact\PostContactGrantAccessAsynchronousTest.cs" />
+    <Compile Include="Plugins\Contact\PostContactMergeAsynchronousTest.cs" />
+    <Compile Include="Plugins\Contact\PostContactRevokeAccessAsynchronousTest.cs" />
+    <Compile Include="Plugins\Contact\PreContactMergeSynchronousTest.cs" />
+    <Compile Include="Plugins\PhoneCall\PostPhoneCallAssignAsynchronousTest.cs" />
+    <Compile Include="Plugins\PhoneCall\PreValidationPhoneCallDeleteSynchronousTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Workflows\ShareWithTeamTest.cs" />
+    <Compile Include="Workflows\ToUpperCaseTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -107,15 +129,7 @@
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CustomActions\Account\" />
-    <Folder Include="CustomActions\Contact\" />
-    <Folder Include="CustomApis\Account\" />
-    <Folder Include="CustomApis\Contact\" />
     <Folder Include="DataProviders\Cosmos\" />
-    <Folder Include="DataProviders\SqlServer\" />
-    <Folder Include="Plugins\Contact\" />
-    <Folder Include="Plugins\PhoneCall\" />
-    <Folder Include="Workflows\" />
   </ItemGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

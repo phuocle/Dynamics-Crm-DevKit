@@ -13,8 +13,8 @@ namespace $NameSpace$
     {
         public static XrmFakedContext Context { get; set; }
         public static XrmFakedPluginExecutionContext Plugin { get; set; }
-        private static string PrimaryEntityName { get; set; } = "$logicalname$";
-        private static string MessageName { get; set; } = "$message$";
+        private static string PrimaryEntityName { get; set; } = "???";
+        private static string MessageName { get; set; } = "???";
 
         [ClassInitialize()]
         public static void ClassInit(TestContext context)

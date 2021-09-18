@@ -13,6 +13,8 @@ namespace Dev.DevKit.PluginAccount.Test
     {
         public static XrmFakedContext Context { get; set; }
         public static XrmFakedPluginExecutionContext Plugin { get; set; }
+        private static string PrimaryEntityName { get; set; } = "account";
+        private static string MessageName { get; set; } = "Update";
 
         [ClassInitialize()]
         public static void ClassInit(TestContext context)
@@ -20,30 +22,30 @@ namespace Dev.DevKit.PluginAccount.Test
             Context = new XrmFakedContext();
             Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
             Plugin = Context.GetDefaultPluginContext();
-            Plugin.PrimaryEntityName = "account";
-            Plugin.MessageName = "Update";
+            Plugin.PrimaryEntityName = PrimaryEntityName;
+            Plugin.MessageName = MessageName;
             Plugin.Stage = (int)StageEnum.PreOperation;
             Plugin.Mode = (int)ExecutionModeEnum.Synchronous;
         }
 
         /*
         [TestMethod]
-        public void _00_UnsecureString_And_SecureString()
+        public void _00_Check_UnsecureString_And_SecureString()
         {
-            var target = new Entity("account")
+            var target = new Entity(PrimaryEntityName)
             {
-                ["accountid"] = Guid.NewGuid()
+                [$"{PrimaryEntityName}id"] = Guid.NewGuid()
             };
-            PluginContext.InputParameters["Target"] = target;
+            Plugin.InputParameters["Target"] = target;
             var unsecureString = "UnsecureString";
             var secureString = "SecureString";
-            Context.ExecutePluginWithConfigurations<PreAccountUpdateSynchronous>(PluginContext, unsecureString, secureString);
+            Context.ExecutePluginWithConfigurations<PreAccountUpdateSynchronous>(Plugin, unsecureString, secureString);
             Assert.IsTrue(target != null);
         }
         */
 
         [TestMethod]
-        public void _01_Stage_Does_Not_Equals_PreOperation()
+        public void _01_Check_Stage()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -55,7 +57,7 @@ namespace Dev.DevKit.PluginAccount.Test
         }
 
         [TestMethod]
-        public void _02_PrimaryEntityName_Does_Not_Equals_account()
+        public void _02_Check_PrimaryEntityName()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
@@ -64,31 +66,31 @@ namespace Dev.DevKit.PluginAccount.Test
             Assert.ThrowsException<InvalidPluginExecutionException>(() =>
             {
                 context.ExecutePluginWith<PreAccountUpdateSynchronous>(plugin);
-            }, "PrimaryEntityName does not equals account");
+            }, $"PrimaryEntityName does not equals {PrimaryEntityName}");
         }
 
         [TestMethod]
-        public void _03_MessageName_Does_Not_Equals_Update()
+        public void _03_Check_MessageName()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int)StageEnum.PreOperation;
-            plugin.PrimaryEntityName = "account";
+            plugin.PrimaryEntityName = PrimaryEntityName;
             plugin.MessageName = "abcd";
             Assert.ThrowsException<InvalidPluginExecutionException>(() =>
             {
                 context.ExecutePluginWith<PreAccountUpdateSynchronous>(plugin);
-            }, "MessageName does not equals Update");
+            }, $"MessageName does not equals {MessageName}");
         }
 
         [TestMethod]
-        public void _04_Mode_Does_Not_Equals_Synchronous()
+        public void _04_Check_Mode()
         {
             var context = new XrmFakedContext();
             var plugin = context.GetDefaultPluginContext();
             plugin.Stage = (int)StageEnum.PreOperation;
-            plugin.PrimaryEntityName = "account";
-            plugin.MessageName = "Update";
+            plugin.PrimaryEntityName = PrimaryEntityName;
+            plugin.MessageName = MessageName;
             plugin.Mode = -1;
             Assert.ThrowsException<InvalidPluginExecutionException>(() =>
             {
@@ -97,7 +99,7 @@ namespace Dev.DevKit.PluginAccount.Test
         }
 
         [TestMethod]
-        public void _05_CrmPluginRegistration_Check()
+        public void _05_Check_CrmPluginRegistration()
         {
             var @class = new PreAccountUpdateSynchronous();
             foreach (var attribute in System.Attribute.GetCustomAttributes(@class.GetType()))
@@ -116,7 +118,9 @@ namespace Dev.DevKit.PluginAccount.Test
         public void _06_ExecutePlugin()
         {
             //setup
-            //Plugin.InputParameters["???"] = ???
+            //var json = "";
+            //var debugContext = Debug.JsonToDebugContext(json);
+            //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
             //run
             Context.ExecutePluginWith<PreAccountUpdateSynchronous>(Plugin);
             //result

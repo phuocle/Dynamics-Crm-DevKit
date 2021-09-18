@@ -21,7 +21,7 @@ namespace Dev.DevKit.DataProvider.Test
         }
 
         [TestMethod]
-        public void _01_CrmPluginRegistration_Check()
+        public void _01_Check_CrmPluginRegistration()
         {
             var @class = new Delete();
             foreach (var attribute in System.Attribute.GetCustomAttributes(@class.GetType()))
@@ -40,7 +40,9 @@ namespace Dev.DevKit.DataProvider.Test
         public void _02_ExecutePlugin()
         {
             //setup
-            //Plugin.InputParameters["???"] = ???
+            //var json = "";
+            //var debugContext = Debug.JsonToDebugContext(json);
+            //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
             //run
             Context.ExecutePluginWith<Delete>(Plugin);
             //result

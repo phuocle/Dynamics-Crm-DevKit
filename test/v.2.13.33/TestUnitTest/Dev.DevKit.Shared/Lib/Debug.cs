@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Dev.DevKit.Shared
-{    
+{
     public class DebugContext
     {
         public Guid? BusinessUnitId { get; set; }
@@ -96,7 +96,7 @@ namespace Dev.DevKit.Shared
             {
                 Attributes = x?.Attributes.Select(a => AttributeValue(a.Key, a.Value)).Where(b => b != null).ToList(),
                 FormattedValues = x?.FormattedValues.ToDictionary(a => a.Key, a => a.Value),
-                KeyAttributes = x?.KeyAttributes.Select(a =>AttributeValue(a.Key, a.Value)).Where(b => b != null).ToList(),
+                KeyAttributes = x?.KeyAttributes.Select(a => AttributeValue(a.Key, a.Value)).Where(b => b != null).ToList(),
                 EntityId = x?.Id,
                 LogicalName = x?.LogicalName,
                 RowVersion = x?.RowVersion
@@ -184,8 +184,8 @@ namespace Dev.DevKit.Shared
         {
             var values = new Dictionary<string, object>();
             if (items == null) return values;
-            foreach(var key in items.Keys)
-            {                
+            foreach (var key in items.Keys)
+            {
                 try
                 {
                     var json = items[key].ToString();
@@ -196,7 +196,7 @@ namespace Dev.DevKit.Shared
                     {
                         var e = SimpleJson.DeserializeObject<DebugEntity>(json);
                         values.Add(key, ConvertDebugEntityToEntity(e));
-                    }                    
+                    }
                 }
                 catch
                 {
@@ -208,7 +208,7 @@ namespace Dev.DevKit.Shared
         private static Entity ConvertDebugEntityToEntity(DebugEntity e)
         {
             var entity = new Entity(e.LogicalName, e.EntityId.Value);
-            foreach(var attribute in e.Attributes)
+            foreach (var attribute in e.Attributes)
             {
                 if (attribute.Value == null) continue;
                 if (attribute.Type == nameof(EntityReference))
