@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		notes.txt = notes.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.UiTest", "Dev.DevKit.UiTest\Dev.DevKit.UiTest.csproj", "{A554BB60-791D-4006-A23D-0790CD67A88E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.DevKit.UiTest", "Dev.DevKit.UiTest\Dev.DevKit.UiTest.csproj", "{5CE225C2-7C38-4B47-955E-9B59B9EC0FB8}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -23,10 +23,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A554BB60-791D-4006-A23D-0790CD67A88E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A554BB60-791D-4006-A23D-0790CD67A88E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A554BB60-791D-4006-A23D-0790CD67A88E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A554BB60-791D-4006-A23D-0790CD67A88E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CE225C2-7C38-4B47-955E-9B59B9EC0FB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE225C2-7C38-4B47-955E-9B59B9EC0FB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE225C2-7C38-4B47-955E-9B59B9EC0FB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE225C2-7C38-4B47-955E-9B59B9EC0FB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
