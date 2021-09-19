@@ -2777,13 +2777,13 @@ var OptionSet;
         Expanded: 1
     };
     OptionSet.FullNameConventionCode = {
-        LastName_Comma_FirstName = 0,
-        FirstName_LastName = 1,
-        LastName_Comma_FirstName_MiddleInitial = 2,
-        FirstName_MiddleInitial_LastName = 3,
-        LastName_Comma_FirstName_MiddleName = 4,
-        FirstName_MiddleName_LastName = 5,
-        LastName_FirstName = 6,
-        LastNameFirstName = 7
+        LastName_Comma_FirstName: 0,
+        FirstName_LastName: 1,
+        LastName_Comma_FirstName_MiddleInitial: 2,
+        FirstName_MiddleInitial_LastName: 3,
+        LastName_Comma_FirstName_MiddleName: 4,
+        FirstName_MiddleName_LastName: 5,
+        LastName_FirstName: 6,
+        LastNameFirstName: 7
     };
 })(OptionSet || (OptionSet = {}));
