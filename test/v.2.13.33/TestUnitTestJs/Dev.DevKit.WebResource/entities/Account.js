@@ -6,7 +6,12 @@ var formAccount = (function () {
 	/** @type DevKit.FormAccount */
 	var form = null;
 	async function onLoad(executionContext) {
+		debugger;
 		form = new DevKit.FormAccount(executionContext);
+
+		if (form.FormType !== OptionSet.FormType.Create) {
+			form.Body.Name.Disabled = true;
+		}
 
 	}
 	async function onSave(executionContext) {

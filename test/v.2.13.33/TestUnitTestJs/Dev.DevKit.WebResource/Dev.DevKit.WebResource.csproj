@@ -68,7 +68,7 @@
     </Content>
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
-    <Content Include="test\Account.test.js" />
+    <Content Include="test\Account.form.test.js" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
     <None Include="entities\generator.form.bat" />
