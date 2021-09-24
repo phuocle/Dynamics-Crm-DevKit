@@ -2324,7 +2324,13 @@ declare namespace DevKit {
          * @param formId The form Id that you want navigate
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
          */
-        FormNavigate(formId: DevKit.Guid): void;
+        FormNavigateToFormId(formId: DevKit.Guid): void;
+        /**
+         * Opens the specified form. When you use the navigate method while unsaved changes exist, the user is prompted to save changes before the new form can be displayed. The Onload event occurs when the new form loads
+         * @param formLabel The form Label that you want navigate
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
+         */
+        FormNavigateToFormLabel(formLabel: string): void;
         /**
          * Returns a value that indicates whether the form is currently visible.
          * @param formId The form Id that you want to check visible

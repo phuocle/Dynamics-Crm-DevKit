@@ -20,6 +20,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             var fetchData = new
             {
                 customizationlevel = "1",
+                primaryobjecttypecode = "none",
                 endpoint = "api/data"
             };
             var fetchXml = $@"
@@ -38,8 +39,15 @@ namespace DynamicsCrm.DevKit.Shared.Helper
   </entity>
 </fetch>";
             var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
-            var list = new List<XrmEntity>();
+            var list2 = new List<Entity>();
             foreach (var entity in rows.Entities)
+            {
+                var primaryobjecttypecode = entity.GetAttributeValue<string>("primaryobjecttypecode");
+                if (primaryobjecttypecode == null || primaryobjecttypecode == "none")
+                    list2.Add(entity);
+            }
+            var list = new List<XrmEntity>();
+            foreach (var entity in list2)
             {
                 list.Add(new XrmEntity {
                     LogicalName = entity.GetAttributeValue<string>("name"),

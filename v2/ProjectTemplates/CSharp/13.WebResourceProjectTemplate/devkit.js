@@ -225,10 +225,22 @@ var devKit = (function () {
         if (has(formContext, 'ui.formSelector')) {
             contextUiFormSelector = formContext.ui.formSelector;
         }
-        form.FormNavigate = function (formId) {
+        form.FormNavigateToFormId = function (formId) {
             if (has(contextUiFormSelector, 'items')) {
                 for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
                     if (formId === contextUiFormSelector.items.get(i).getId()) {
+                        var form = contextUiFormSelector.items.get(i)
+                        if (has(form, 'navigate')) {
+                            form.navigate();
+                        }
+                    }
+                }
+            }
+        };
+        form.FormNavigateToFormLabel = function (formLabel) {
+            if (has(contextUiFormSelector, 'items')) {
+                for (var i = 0; i < contextUiFormSelector.items.getLength(); i++) {
+                    if (formLabel === contextUiFormSelector.items.get(i).getLabel()) {
                         var form = contextUiFormSelector.items.get(i)
                         if (has(form, 'navigate')) {
                             form.navigate();

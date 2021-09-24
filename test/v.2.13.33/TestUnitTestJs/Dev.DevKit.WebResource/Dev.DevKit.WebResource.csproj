@@ -66,8 +66,24 @@
     <Content Include="entities\Account.webapi.js">
       <DependentUpon>Account.js</DependentUpon>
     </Content>
+    <Content Include="entities\ActivityParty.js" />
+    <Content Include="entities\ActivityParty.webapi.js">
+      <DependentUpon>ActivityParty.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Contact.form.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Contact.js" />
+    <Content Include="entities\Contact.webapi.js">
+      <DependentUpon>Contact.js</DependentUpon>
+    </Content>
+    <Content Include="entities\Email.js" />
+    <Content Include="entities\Email.webapi.js">
+      <DependentUpon>Email.js</DependentUpon>
+    </Content>
     <Content Include="lib\devkit.js" />
     <Content Include="entities\devkit.d.ts" />
+    <Content Include="lib\lodash.min.js" />
     <Content Include="test\Account.form.test.js" />
     <Content Include="test\requirejsConfig.js" />
     <Content Include="test\XrmEnum.js" />
@@ -81,7 +97,6 @@
     <Folder Include="html\" />
     <Folder Include="images\" />
     <Folder Include="js\" />
-    <Folder Include="resources\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
@@ -90,9 +105,21 @@
     <TypeScriptCompile Include="entities\Account.d.ts">
       <DependentUpon>Account.js</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\ActivityParty.d.ts">
+      <DependentUpon>ActivityParty.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Contact.d.ts">
+      <DependentUpon>Contact.js</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="entities\Email.d.ts">
+      <DependentUpon>Email.js</DependentUpon>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\Resources.1033.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>

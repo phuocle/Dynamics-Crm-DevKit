@@ -19,7 +19,7 @@
   "webresources": [
     {
       "profile": "DEBUG",
-      "solution": "???",
+      "solution": "TestUnitTestJs",
       "rootfolder": "",
       "includefiles": [
         "css\\**.css",
@@ -36,19 +36,37 @@
       "dependencies": [
         {
           "webresources": [
-            "???_/entities/[entity].js"
+            "d365vn_/entities/[entity].js"
           ],
           "dependencies": [
-            "???_/entities/[entity].form.js",
-            "???_/entities/[entity].webapi.js"
+            "d365vn_/entities/[entity].form.js",
+            "d365vn_/entities/[entity].webapi.js"
           ]
         },
         {
           "webresources": [
-            "???_/entities/[entity].form.js"
+            "d365vn_/entities/[entity].form.js"
           ],
           "dependencies": [
-            "???_/lib/devkit.js"
+            "d365vn_/lib/devkit.js"
+          ]
+        },
+        {
+          "webresources": [
+            "d365vn_/lib/devkit.js"
+          ],
+          "dependencies": [
+            "d365vn_/lib/lodash.min.js",
+            "d365vn_/resources/Resources.1033.resx"
+          ]
+        },
+        {
+          "webresources": [
+            "d365vn_/entities/Account.js"
+          ],
+          "dependencies": [
+            "d365vn_/entities/Email.webapi.js",
+            "d365vn_/entities/ActivityParty.webapi.js"
           ]
         }
       ]
@@ -95,18 +113,18 @@
     {
       "profile": "JS-FORM",
       "type": "JsForm",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "entities": "folder",
-      "debug": "?"
+      "debug": "Yes"
     },
     {
       "profile": "JS-WEBAPI",
       "type": "JsWebApi",
-      "rootnamespace": "???",
-      "rootfolder": "???",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
       "entities": "folder",
-      "debug": "?"
+      "debug": "Yes"
     }
   ],
   "downloadwebresources": [
