@@ -1,0 +1,19 @@
+<customapi uniquename="devkit_CustomApiEntityCollection">
+  <allowedcustomprocessingsteptype>2</allowedcustomprocessingsteptype>
+  <bindingtype>2</bindingtype>
+  <boundentitylogicalname>contact</boundentitylogicalname>
+  <description default="This is CustomApi Entity Collection">
+    <label description="This is CustomApi Entity Collection" languagecode="1033" />
+  </description>
+  <displayname default="CustomApi Entity Collection">
+    <label description="CustomApi Entity Collection" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isfunction>0</isfunction>
+  <isprivate>0</isprivate>
+  <name>CustomApi Entity Collection</name>
+  <plugintypeid>
+    <plugintypeid>08b81292-ecc8-eb11-bacc-000d3a807100</plugintypeid>
+  </plugintypeid>
+  <workflowsdkstepenabled>0</workflowsdkstepenabled>
+</customapi>

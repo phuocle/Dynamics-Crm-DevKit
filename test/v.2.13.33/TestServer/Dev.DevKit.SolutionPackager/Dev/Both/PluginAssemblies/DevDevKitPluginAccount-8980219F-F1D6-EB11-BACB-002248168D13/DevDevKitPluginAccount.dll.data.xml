@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginAssembly FullName="Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" PluginAssemblyId="8980219f-f1d6-eb11-bacb-002248168d13" CustomizationLevel="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <IsolationMode>2</IsolationMode>
+  <SourceType>0</SourceType>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <FileName>/PluginAssemblies/DevDevKitPluginAccount-8980219F-F1D6-EB11-BACB-002248168D13/DevDevKitPluginAccount.dll</FileName>
+  <PluginTypes>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" PluginTypeId="3b4e5aa5-f1d6-eb11-bacb-002248168d13" Name="Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous">
+      <FriendlyName>Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous2, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" PluginTypeId="3f4e5aa5-f1d6-eb11-bacb-002248168d13" Name="Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous2">
+      <FriendlyName>Dev.DevKit.PluginAccount.PostAccountCreateAsynchronous2</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" PluginTypeId="434e5aa5-f1d6-eb11-bacb-002248168d13" Name="Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous">
+      <FriendlyName>Dev.DevKit.PluginAccount.PostAccountUpdateAsynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginAccount.PreAccountCreateSynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" PluginTypeId="494e5aa5-f1d6-eb11-bacb-002248168d13" Name="Dev.DevKit.PluginAccount.PreAccountCreateSynchronous">
+      <FriendlyName>Dev.DevKit.PluginAccount.PreAccountCreateSynchronous</FriendlyName>
+    </PluginType>
+    <PluginType AssemblyQualifiedName="Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous, Dev.DevKit.Plugin.Account, Version=1.0.0.0, Culture=en, PublicKeyToken=9dcd893647daec04" PluginTypeId="4d4e5aa5-f1d6-eb11-bacb-002248168d13" Name="Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous">
+      <FriendlyName>Dev.DevKit.PluginAccount.PreAccountUpdateSynchronous</FriendlyName>
+    </PluginType>
+  </PluginTypes>
+</PluginAssembly>

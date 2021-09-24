@@ -20,6 +20,7 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             var fetchData = new
             {
                 customizationlevel = "1",
+                primaryobjecttypecode = "none",
                 endpoint = "api/data"
             };
             var fetchXml = $@"
@@ -38,8 +39,15 @@ namespace DynamicsCrm.DevKit.Shared.Helper
   </entity>
 </fetch>";
             var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            var list2 = new List<Entity>();
+            foreach (var entity in rows.Entities)
+            {
+                var primaryobjecttypecode = entity.GetAttributeValue<string>("primaryobjecttypecode");
+                if (primaryobjecttypecode == null || primaryobjecttypecode == "none")
+                    list2.Add(entity);
+            }
             var list = new List<XrmEntity>();
-            foreach(var entity in rows.Entities)
+            foreach (var entity in list2)
             {
                 list.Add(new XrmEntity {
                     LogicalName = entity.GetAttributeValue<string>("name"),
@@ -391,66 +399,114 @@ namespace DynamicsCrm.DevKit.Shared.Helper
             return $"AuthType=OAuth;Url={url};Username={user};Password={pass};AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto";
         }
 
+        //public static string BuildConnectionString(string connectionString)
+        //{
+        //    if (connectionString.IndexOf("=ClientSecret;") >= 0) return connectionString;
+        //    var array = connectionString.Split(";".ToCharArray());
+        //    if (array.Length == 5)
+        //    {
+        //        var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
+        //        var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
+        //        var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
+        //        var password = array.First(x => x.ToLower().StartsWith("password="));
+        //        if (password.EndsWith("=="))
+        //            password = password.Split("=".ToCharArray())[1] + "==";
+        //        else if (password.EndsWith("="))
+        //            password = password.Split("=".ToCharArray())[1] + "=";
+        //        else
+        //            password = password.Split("=".ToCharArray())[1];
+        //        password = EncryptDecrypt.DecryptString(password);
+        //        return BuildConnectionString(authType, url, userName, password);
+        //    }
+        //    else if (array.Length == 6)
+        //    {
+        //        var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
+        //        var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
+        //        var domain = array.First(x => x.ToLower().StartsWith("domain=")).Split("=".ToCharArray())[1];
+        //        var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
+        //        var password = array.First(x => x.ToLower().StartsWith("password="));
+        //        if (password.EndsWith("=="))
+        //            password = password.Split("=".ToCharArray())[1] + "==";
+        //        else if (password.EndsWith("="))
+        //            password = password.Split("=".ToCharArray())[1] + "=";
+        //        else
+        //            password = password.Split("=".ToCharArray())[1];
+        //        password = EncryptDecrypt.DecryptString(password);
+        //        return BuildConnectionString(authType, url, $"{domain}\\{userName}", password);
+        //    }
+        //    throw new Exception("Fail when BuildConnectionString");
+        //}
+
         public static string BuildConnectionString(string connectionString)
         {
-            if (connectionString.IndexOf("=ClientSecret;") >= 0) return connectionString;
-            var array = connectionString.Split(";".ToCharArray());
-            if (array.Length == 5)
+            if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
+            var value = string.Empty;
+            var arr = connectionString.Split(";".ToCharArray());
+            foreach (var item in arr)
             {
-                var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
-                var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
-                var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
-                var password = array.First(x => x.ToLower().StartsWith("password="));
-                if (password.EndsWith("=="))
-                    password = password.Split("=".ToCharArray())[1] + "==";
-                else if (password.EndsWith("="))
-                    password = password.Split("=".ToCharArray())[1] + "=";
+                if (item.ToLower().Contains("Password=".ToLower()))
+                {
+                    var password = string.Empty;
+                    if (item.EndsWith("=="))
+                        password = item.Split("=".ToCharArray())[1] + "==";
+                    else if (item.EndsWith("="))
+                        password = item.Split("=".ToCharArray())[1] + "=";
+                    else
+                        password = item.Split("=".ToCharArray())[1];
+                    password = EncryptDecrypt.DecryptString(password);
+                    value += "Password=" + password + ";";
+                }
                 else
-                    password = password.Split("=".ToCharArray())[1];
-                password = EncryptDecrypt.DecryptString(password);
-                return BuildConnectionString(authType, url, userName, password);
+                    value += item + ";";
             }
-            else if (array.Length == 6)
+            value = value.Replace(";;", ";");
+            if (value.ToLower().Contains("AuthType=OAuth".ToLower()))
             {
-                var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
-                var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
-                var domain = array.First(x => x.ToLower().StartsWith("domain=")).Split("=".ToCharArray())[1];
-                var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
-                var password = array.First(x => x.ToLower().StartsWith("password="));
-                if (password.EndsWith("=="))
-                    password = password.Split("=".ToCharArray())[1] + "==";
-                else if (password.EndsWith("="))
-                    password = password.Split("=".ToCharArray())[1] + "=";
-                else
-                    password = password.Split("=".ToCharArray())[1];
-                password = EncryptDecrypt.DecryptString(password);
-                return BuildConnectionString(authType, url, $"{domain}\\{userName}", password);
+                if (!value.ToLower().Contains("RedirectUri=".ToLower()))
+                {
+                    value += "AppId=51f81489-12ee-4a9e-aaae-a2591f45987d;RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97;LoginPrompt=Auto;";
+                }
             }
-            throw new Exception("Fail when BuildConnectionString");
+            return value;
         }
 
-        public static string BuildConnectionStringLog(string connectionString)
+        //public static string BuildConnectionStringLog(string connectionString)
+        //{
+        //    if (connectionString.ToLower().IndexOf("=ClientSecret;".ToLower()) >= 0) return connectionString;
+        //    var array = connectionString.Split(";".ToCharArray());
+        //    if (array.Length == 5)
+        //    {
+        //        var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
+        //        var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
+        //        var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
+        //        var password = "********";
+        //        return BuildConnectionString(authType, url, userName, password);
+        //    }
+        //    else if (array.Length == 6)
+        //    {
+        //        var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
+        //        var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
+        //        var domain = array.First(x => x.ToLower().StartsWith("domain=")).Split("=".ToCharArray())[1];
+        //        var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
+        //        var password = "********";
+        //        return BuildConnectionString(authType, url, $"{domain}\\{userName}", password);
+        //    }
+        //    throw new Exception("Fail when BuildConnectionString");
+        //}
+
+        public static string BuildConnectionStringLog2(string connectionString)
         {
-            if (connectionString.ToLower().IndexOf("=ClientSecret;".ToLower()) >= 0) return connectionString;
-            var array = connectionString.Split(";".ToCharArray());
-            if (array.Length == 5)
+            if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
+            var value = string.Empty;
+            var arr = connectionString.Split(";".ToCharArray());
+            foreach(var item in arr)
             {
-                var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
-                var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
-                var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
-                var password = "********";
-                return BuildConnectionString(authType, url, userName, password);
+                if (item.ToLower().Contains("Password=".ToLower()))
+                    value += "Password=********;";
+                else
+                    value += item + ";";
             }
-            else if (array.Length == 6)
-            {
-                var authType = array.First(x => x.ToLower().StartsWith("authtype=")).Split("=".ToCharArray())[1];
-                var url = array.First(x => x.ToLower().StartsWith("url=")).Split("=".ToCharArray())[1];
-                var domain = array.First(x => x.ToLower().StartsWith("domain=")).Split("=".ToCharArray())[1];
-                var userName = array.First(x => x.ToLower().StartsWith("username=")).Split("=".ToCharArray())[1];
-                var password = "********";
-                return BuildConnectionString(authType, url, $"{domain}\\{userName}", password);
-            }
-            throw new Exception("Fail when BuildConnectionString");
+            return value.Replace(";;", ";");
         }
 
         public static bool IsExistDataSource(CrmServiceClient crmServiceClient, string logicalname)

@@ -14,5 +14,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("PhuocLe")]
 [assembly: AssemblyCulture("en")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("2.12.31.0")]
-[assembly: AssemblyFileVersion("2.12.31.0")]
+[assembly: AssemblyVersion("2.13.33.0")]
+[assembly: AssemblyFileVersion("2.13.33.0")]

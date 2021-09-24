@@ -1,0 +1,151 @@
+﻿{
+  "servers": [
+    {
+      "profile": "DEBUG",
+      "folder": "bin\\Debug",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "includefiles": [
+        "Dev.DevKit.Plugin.*.dll",
+        "Dev.DevKit.CustomAction.*.dll",
+        "Dev.DevKit.Workflow.*.dll",
+        "Dev.DevKit.CustomApi.*.dll",
+        "Dev.DevKit.DataProvider.*.dll",
+        "Dev.DevKit.Server.*.dll"
+      ],
+      "excludefiles": [
+        "Dev.DevKit.*.Test.dll"
+      ]
+    },
+    {
+      "profile": "RELEASE",
+      "folder": "Release\\dll",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "includefiles": [
+        "Dev.DevKit.Plugin.*.dll",
+        "Dev.DevKit.CustomAction.*.dll",
+        "Dev.DevKit.Workflow.*.dll",
+        "Dev.DevKit.CustomApi.*.dll",
+        "Dev.DevKit.DataProvider.*.dll",
+        "Dev.DevKit.Server.*.dll"
+      ],
+      "excludefiles": [
+        "Dev.DevKit.*.Test.dll"
+      ]
+    }
+  ],
+  "webresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???",
+      "rootfolder": "",
+      "includefiles": [
+        "css\\**.css",
+        "entities\\*.js",
+        "html\\**.html",
+        "images\\**.png",
+        "js\\**.js",
+        "lib\\**.js",
+        "resources\\*.resx"
+      ],
+      "excludefiles": [
+        "test\\**.js"
+      ],
+      "dependencies": [
+        {
+          "webresources": [
+            "???_/entities/[entity].js"
+          ],
+          "dependencies": [
+            "???_/entities/[entity].form.js",
+            "???_/entities/[entity].webapi.js"
+          ]
+        },
+        {
+          "webresources": [
+            "???_/entities/[entity].form.js"
+          ],
+          "dependencies": [
+            "???_/lib/devkit.js"
+          ]
+        }
+      ]
+    }
+  ],
+  "datasources": [
+    {
+      "profile": "DEBUG",
+      "displayname": "???",
+      "pluralname": "???",
+      "solution": "???",
+      "name": "???"
+    }
+  ],
+  "solutionpackagers": [
+    {
+      "profile": "Extract-Both",
+      "rootfolder": "",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "solutiontype": "Both",
+      "folder": "Dev",
+      "type": "Extract",
+      "mapfile": ""
+    },
+    {
+      "profile": "Pack-Both",
+      "rootfolder": "",
+      "solution": "TestPluginWorkflowCustomActionCustomApi",
+      "solutiontype": "Both",
+      "folder": "Dev",
+      "type": "Pack",
+      "mapfile": ""
+    }
+  ],
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "CSharp",
+      "entities": "folder",
+      "debug": "?"
+    },
+    {
+      "profile": "JS-FORM",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "JsForm",
+      "entities": "folder",
+      "debug": "?"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "???",
+      "rootfolder": "???",
+      "type": "JsWebApi",
+      "entities": "folder",
+      "debug": "?"
+    }
+  ],
+  "downloadwebresources": [
+    {
+      "profile": "DEBUG",
+      "solution": "???",
+      "prefix": "???"
+    }
+  ],
+  "downloadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "???"
+    }
+  ],
+  "proxytypes": [
+    {
+      "profile": "ALL",
+      "namespace": "Dev.DevKit.ProxyTypes",
+      "output": "GeneratedCode.cs",
+      "entities": "*"
+    }
+  ]
+}

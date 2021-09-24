@@ -36,13 +36,9 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            tracing.DebugMessage("Begin Data Provider: $NameSpace$.RetrieveMultiple");
-            tracing.DebugContext(context);
-            tracing.DebugMessage(dataSource.ToDebug());
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
-
-            tracing.DebugMessage("End Data Provider: $NameSpace$.RetrieveMultiple");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)
@@ -50,9 +46,7 @@ namespace $NameSpace$
             //Get Parameter from DataSource
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
-
             //YOUR CODE ...
-
             var query = context?.InputParameters?["Query"];
             var entities = new EntityCollection();
             entities.EntityName = context.PrimaryEntityName;
@@ -65,7 +59,7 @@ namespace $NameSpace$
                 //Advanced Find, Classic grid return FetchExpression
             }
             else
-                throw new InvalidPluginExecutionException("Somthing wrong with Query");
+                throw new InvalidPluginExecutionException("Something wrong with Query");
 
             context.OutputParameters["BusinessEntityCollection"] = entities;
         }

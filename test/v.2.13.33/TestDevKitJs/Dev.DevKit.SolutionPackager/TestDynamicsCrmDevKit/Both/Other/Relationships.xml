@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="bpf_account_devkit_bpfaccount" />
+  <EntityRelationship Name="lk_devkit_bpfaccount_activestageid" />
+  <EntityRelationship Name="lk_devkit_bpfaccount_createdby" />
+  <EntityRelationship Name="lk_devkit_bpfaccount_modifiedby" />
+  <EntityRelationship Name="lk_devkit_bpfaccount_processid" />
+  <EntityRelationship Name="organization_devkit_bpfaccount" />
+</EntityRelationships>

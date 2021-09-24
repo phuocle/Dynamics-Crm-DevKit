@@ -83,7 +83,7 @@ namespace DynamicsCrm.DevKit.Wizard
             {
                 replacementsDictionary.Add("$Dynamics365.UIAutomation.Api.Version$", NugetHelper.GetLatestPackageVersion(Const.Dynamics365UIAutomationApi));
                 replacementsDictionary.Add("$Dynamics365.UIAutomation.Api.TargetFramework$", NugetHelper.GetLatestPackageTargetFramework(Const.Dynamics365UIAutomationApi));
-                replacementsDictionary.Add("$Selenium.Chrome.WebDriver.Version$", NugetHelper.GetLatestPackageVersion(Const.SeleniumChromeWebDriver));
+                replacementsDictionary.Add("$Selenium.Chrome.WebDriver.Version$", NugetHelper.GetLatestPackageVersion(Const.SeleniumWebDriverChromeDriver));
                 replacementsDictionary.Add("$Selenium.Support.Version$", NugetHelper.GetLatestPackageVersion(Const.SeleniumSupport));
                 replacementsDictionary.Add("$Selenium.Support.TargetFramework$", NugetHelper.GetLatestPackageTargetFramework(Const.SeleniumSupport));
                 replacementsDictionary.Add("$Selenium.WebDriver.Version$", NugetHelper.GetLatestPackageVersion(Const.SeleniumWebDriver));
@@ -141,11 +141,16 @@ namespace DynamicsCrm.DevKit.Wizard
                     var stage = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "PreOperation" : (form.Class.StartsWith("Post") ? "PostOperation" : ""));
                     var stage2 = form.Class.StartsWith("PreValidation") ? "PreValidation" : (form.Class.StartsWith("Pre") ? "Pre" : (form.Class.StartsWith("Post") ? "Post" : ""));
                     var message = form.Class.Substring(stage2.Length + logicalname.Length);
-                    message = message.Substring(0, message.Length - execution.Length);
+                    if (message.Length - execution.Length > 0)
+                        message = message.Substring(0, message.Length - execution.Length);
+                    if (stage == "") stage = "PostOperation";
+                    if (execution == "") execution = "Asynchronous";
                     replacementsDictionary.Add("$logicalname$", logicalname);
                     replacementsDictionary.Add("$execution$", execution);
                     replacementsDictionary.Add("$stage_string$", stage);
                     replacementsDictionary.Add("$message$", message);
+                    replacementsDictionary.Add("$custommessage$", "???");
+                    replacementsDictionary.Add("$customlogicalname$", "???");
                 }
                 catch { }
             }

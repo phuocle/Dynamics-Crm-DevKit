@@ -38,13 +38,9 @@ namespace $NameSpace$
             var retriever = serviceProvider.Get<IEntityDataSourceRetrieverService>();
             var dataSource = retriever.RetrieveEntityDataSource();
 
-            tracing.DebugMessage("Begin Data Provider: $NameSpace$.Create");
-            tracing.DebugContext(context);
-            tracing.DebugMessage(dataSource.ToDebug());
+            //tracing.DebugContext(context);
 
             ExecutePlugin(context, serviceFactory, service, tracing, dataSource);
-
-            tracing.DebugMessage("End Data Provider: $NameSpace$.Create");
         }
 
         private void ExecutePlugin(IPluginExecutionContext context, IOrganizationServiceFactory serviceFactory, IOrganizationService service, ITracingService tracing, Entity dataSource)
@@ -52,10 +48,8 @@ namespace $NameSpace$
             //Get Parameter from DataSource
             //var ??? = dataSource.GetAttributeValue<string>("???");
             //var ??? = dataSource.GetAttributeValue<int>("???");
-
             var target = context.InputParameterOrDefault<Entity>("Target");
             var id = Guid.NewGuid();
-
             //YOUR CODE ...
 
             context.OutputParameters["id"] = id;

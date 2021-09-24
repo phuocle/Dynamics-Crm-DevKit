@@ -15,7 +15,7 @@ namespace DynamicsCrm.DevKit.Shared
             new DataSourceCrm{ Version = "4.0", Name = $"{Const.DynamicsCrm2011} - 4.0"}
         };
         public const string PLDynamicsCrmDevKitResourcesDll = "DynamicsCrm.DevKit.Resources.dll";
-        public const string Version = "2.12.31";
+        public const string Version = "2.13.33";
         public const string BuildDate = "xxxx.xx.xx";
 
         public const string Chutzpah = "Chutzpah";
@@ -30,7 +30,7 @@ namespace DynamicsCrm.DevKit.Shared
         public const string MicrosoftCrmSdkXrmToolingWpfControls = "Microsoft.CrmSdk.XrmTooling.WpfControls";
         public const string DynamicsCrmDevKitAnalyzers = "DynamicsCrm.DevKit.Analyzers";
         public const string Dynamics365UIAutomationApi = "Dynamics365.UIAutomation.Api";
-        public const string SeleniumChromeWebDriver = "Selenium.Chrome.WebDriver";
+        public const string SeleniumWebDriverChromeDriver = "Selenium.WebDriver.ChromeDriver";
         public const string SeleniumSupport = "Selenium.Support";
         public const string SeleniumWebDriver = "Selenium.WebDriver";
         public const string NewtonsoftJson = "Newtonsoft.Json";

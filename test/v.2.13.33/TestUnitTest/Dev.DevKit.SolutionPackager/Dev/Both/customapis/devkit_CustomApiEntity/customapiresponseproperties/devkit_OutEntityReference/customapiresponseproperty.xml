@@ -1,0 +1,12 @@
+<customapiresponseproperty uniquename="devkit_OutEntityReference">
+  <description default="This is the OutEntityReference">
+    <label description="This is the OutEntityReference" languagecode="1033" />
+  </description>
+  <displayname default="OutEntityReference">
+    <label description="OutEntityReference" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <logicalentityname>task</logicalentityname>
+  <name>OutEntityReference</name>
+  <type>5</type>
+</customapiresponseproperty>

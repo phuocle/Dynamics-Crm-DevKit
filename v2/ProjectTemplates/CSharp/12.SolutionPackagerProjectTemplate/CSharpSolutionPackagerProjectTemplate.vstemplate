@@ -25,14 +25,12 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">_packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="false" TargetFileName="mapping.xml">mapping.xml</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Extract-Managed.bat">Extract-Managed.bat</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Extract-Unmanaged.bat">Extract-Unmanaged.bat</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Pack-Managed.bat">Pack-Managed.bat</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="Pack-Unmanaged.bat">Pack-Unmanaged.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Extract-Both.bat">Extract-Both.bat</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Pack-Both.bat">Pack-Both.bat</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
-    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.12.31.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
+    <Assembly>DynamicsCrm.DevKit.Wizard, Version=2.13.33.0, Culture=en, PublicKeyToken=98cbb7bd3db31604</Assembly>
     <FullClassName>DynamicsCrm.DevKit.Wizard.ProjectTemplates.SolutionPackager</FullClassName>
   </WizardExtension>
 </VSTemplate>

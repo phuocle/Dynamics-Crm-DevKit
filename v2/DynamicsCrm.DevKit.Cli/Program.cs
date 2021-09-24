@@ -19,7 +19,7 @@ namespace DynamicsCrm.DevKit.Cli
             get
             {
 #if DEBUG
-                return @"C:\src\github\phuocle\d365events\src\VirtualTable\VirtualTable.DataProvider.D365vn";
+                return @"C:\src\github\phuocle\Dynamics-Crm-DevKit\test\v.2.13.33\TestServerUnitTest\Dev.DevKit.ProxyTypes";
 #else
                 return Directory.GetCurrentDirectory();
 #endif
@@ -54,19 +54,19 @@ namespace DynamicsCrm.DevKit.Cli
             if (arguments.SdkLogin.Length > 0 && arguments.SdkLogin.ToLower() == "yes")
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Arguments: ",
-                CliLog.ColorMagenta, "/sdklogin:", CliLog.ColorWhite, "yes", " ",
-                CliLog.ColorMagenta, "/json:", CliLog.ColorWhite, arguments.Json, " ",
-                CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, arguments.Type, " ",
-                CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, arguments.Profile
+                CliLog.ColorMagenta, "/sdklogin:", CliLog.ColorWhite, "\"yes\"", " ",
+                CliLog.ColorMagenta, "/json:", CliLog.ColorWhite, "\"" + arguments.Json, "\" ",
+                CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, "\"" + arguments.Type, "\" ",
+                CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, "\"" + arguments.Profile + "\""
                 );
             }
             else
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Arguments: ",
-                CliLog.ColorMagenta, "/conn:", CliLog.ColorWhite, XrmHelper.BuildConnectionStringLog(arguments.Connection), " ",
-                CliLog.ColorMagenta, "/json:", CliLog.ColorWhite, arguments.Json, " ",
-                CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, arguments.Type, " ",
-                CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, arguments.Profile
+                CliLog.ColorMagenta, "/conn:", CliLog.ColorWhite, "\"" + XrmHelper.BuildConnectionStringLog2(arguments.Connection), "\" ",
+                CliLog.ColorMagenta, "/json:", CliLog.ColorWhite, "\"" + arguments.Json, "\" ",
+                CliLog.ColorMagenta, "/type:", CliLog.ColorWhite, "\"" + arguments.Type, "\" ",
+                CliLog.ColorMagenta, "/profile:", CliLog.ColorWhite, "\"" + arguments.Profile + "\""
                 );
             }
 
@@ -149,9 +149,9 @@ namespace DynamicsCrm.DevKit.Cli
             }
             else
             {
-                if (!IsConnectedDynamics365(arguments.Connection))
+                if (!IsConnectedDynamics365(XrmHelper.BuildConnectionString(arguments.Connection)))
                 {
-                    CliLog.WriteLine(CliLog.ColorError, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {arguments.Connection}");
+                    CliLog.WriteLine(CliLog.ColorError, $"/conn: Cannot connect to Dynamics 365 with your Connection String: {XrmHelper.BuildConnectionStringLog2(arguments.Connection)}");
                     return false;
                 }
             }
@@ -159,6 +159,7 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 CliLog.WriteLine(CliLog.ColorWhite, "|");
                 CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connected: ", CliLog.ColorWhite, XrmHelper.ConnectedUrl(CrmServiceClient));
+                CliLog.WriteLine(CliLog.ColorWhite, "|", CliLog.ColorGreen, "Connection Timeout (seconds): ", CliLog.ColorWhite, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"));
             }
             CliLog.WriteLine(CliLog.ColorWhite, "|");
             return true;
@@ -174,13 +175,13 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static bool IsConnectedDynamics365BySdkLogin()
         {
+            CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
             var loginForm = new FormLogin();
             loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
             loginForm.ShowDialog();
             if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
             {
                 CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
-                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
                 return true;
             }
             return false;
@@ -188,46 +189,17 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static bool IsConnectedDynamics365(string connection)
         {
-            if (IsUseClientIdAndClientSecrect(connection))
-                return IsConnectedDynamics365UseClientIdAndClientSecrect(connection);
-
-            var password = connection.Substring(connection.IndexOf("Password=", StringComparison.Ordinal));
-            password = password.Substring("Password=".Length);
-            password = password.Substring(0, password.Length - 1);
-            password = Utility.TryDecryptPassword(password);
-            connection = $"{connection.Substring(0, connection.IndexOf("Password=", StringComparison.Ordinal))}Password={password};";
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                CrmServiceClient = new CrmServiceClient(connection);
                 CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
+                CrmServiceClient = new CrmServiceClient(connection);
                 return true;
             }
             catch
             {
                 return false;
             }
-        }
-
-        private static bool IsConnectedDynamics365UseClientIdAndClientSecrect(string connection)
-        {
-            try
-            {
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                CrmServiceClient = new CrmServiceClient(connection);
-                CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static bool IsUseClientIdAndClientSecrect(string connection)
-        {
-            connection = connection.ToLower().Replace(" ", string.Empty);
-            return connection.IndexOf("clientid=") >= 0 && connection.IndexOf("clientsecret=") >= 0;
         }
     }
 }

@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_OutInteger">
+  <description default="This is the OutInteger">
+    <label description="This is the OutInteger" languagecode="1033" />
+  </description>
+  <displayname default="OutInteger">
+    <label description="OutInteger" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>OutInteger</name>
+  <type>7</type>
+</customapiresponseproperty>

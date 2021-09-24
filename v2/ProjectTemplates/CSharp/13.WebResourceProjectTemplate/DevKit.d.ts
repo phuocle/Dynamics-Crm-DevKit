@@ -223,7 +223,7 @@ declare namespace DevKit {
              * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
              * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-data-process/activestage/setactivestage
              */
-            SetActiveStage(stageId: string, callback: (result: "success" | "invalid" | "unreachable" | "dirtyForm") => void): void;
+            SetActiveStage(stageId: string, callback: (result: "success" | "invalid" | "unreachable" | "dirtyForm" | "preventDefault") => void): void;
             /**
              * Progresses to the next stage. You can also move to a next stage in a different entity
              * @param callback A function to call when the operation is complete. This callback function is passed one of the following string values to indicate the status of the operation
@@ -2117,6 +2117,13 @@ declare namespace DevKit {
          */
         readonly Version: string;
     }
+    interface SidePanes {
+        Create(paneOptions: DevKit.SidePaneOptions, successCallback: (pane: DevKit.SidePane) => void): void;
+        Get(paneId: string): DevKit.SidePane;
+        GetSelected(): DevKit.SidePane;
+        GetAll(): DevKit.Collections<DevKit.SidePane>;
+        DisplayState: OptionSet.SidePaneState;
+    }
     interface Client {
         /**
         *  Returns a value to indicate which client the script is executing in.
@@ -2196,6 +2203,11 @@ declare namespace DevKit {
         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#useskypeprotocol
         */
         readonly UseSkypeProtocol: boolean;
+        /**
+        * Returns the FullNameConventionCode setting of the current organization.
+        * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-utility/getglobalcontext/organizationsettings#fullnameconventioncode
+        */
+        readonly FullNameConventionCode: OptionSet.FullNameConventionCode;
     }
     interface UserSettings {
         /**
@@ -2312,7 +2324,13 @@ declare namespace DevKit {
          * @param formId The form Id that you want navigate
          * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
          */
-        FormNavigate(formId: DevKit.Guid): void;
+        FormNavigateToFormId(formId: DevKit.Guid): void;
+        /**
+         * Opens the specified form. When you use the navigate method while unsaved changes exist, the user is prompted to save changes before the new form can be displayed. The Onload event occurs when the new form loads
+         * @param formLabel The form Label that you want navigate
+         * @link https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/formcontext-ui-formselector/navigate
+         */
+        FormNavigateToFormLabel(formLabel: string): void;
         /**
          * Returns a value that indicates whether the form is currently visible.
          * @param formId The form Id that you want to check visible
@@ -2729,6 +2747,39 @@ declare namespace DevKit {
         /** Returns a boolean value to indicate whether the view selector is visible */
         readonly Visible: boolean;
     }
+    interface ISidePane {
+        /** The title of the pane. Used in pane header and for tooltip. */
+        title?: string,
+        /** The ID of the new pane. If the value is not passed, the ID value is auto-generated. */
+        paneId?: string,
+        /** Whether the pane header will show a close button or not. */
+        canClose?: boolean,
+        /** The path of the icon to show in the panel switcher control. */
+        imageSrc?: string,
+        /** The width of the pane in pixels. */
+        width?: number;
+        /** Hides the pane and tab. */
+        hidden?: boolean,
+        /** Prevents the pane from unmounting when it is hidden. */
+        alwaysRender?: boolean,
+        /** Prevents the badge from getting cleared when the pane becomes selected. */
+        keepBadgeOnSelect?: boolean
+    }
+    interface SidePaneOptions extends ISidePane {
+        /** Hides the header pane, including the title and close button. Default value is false. */
+        hideHeader?: boolean,
+        /** When set to false, the created pane is not selected and leaves the existing pane selected. It also does not expand the pane if collapsed. */
+        isSelected?: boolean
+    }
+    interface SidePane extends ISidePane {
+        /** Closes the side pane and removes it from the side bar. */
+        close(): void,
+        /** Specify whether the pane should be selected or expanded. */
+        select(): void,
+        /** Opens a page within the selected pane. This is similar to the navigateTo method. */
+        navigate(pageInput: DevKit.PageInputEntityList | DevKit.PageInputHtmlWebResource | DevKit.PageInputEntityRecord | DevKit.PageInputDashboard, navigationOptions?: DevKit.NavigationOptions, successCallback?: (result: any) => void, errorCallback?: (error: DevKit.Error) => void): void,
+        badge?: number
+    }
 }
 /** DynamicsCrm.DevKit for namespace OptionSet */
 declare namespace OptionSet {
@@ -3106,5 +3157,23 @@ declare namespace OptionSet {
         HomePageGrid,
         /** 2 */
         Subgrid
+    }
+    /** Display state of the side pane */
+    enum SidePaneState {
+        /** expanded */
+        Expanded,
+        /** collapsed */
+        Collapsed
+    }
+    /** the full name conventionCode setting of the current organization */
+    enum FullNameConventionCode {
+        LastName_Comma_FirstName,
+        FirstName_LastName,
+        LastName_Comma_FirstName_MiddleInitial,
+        FirstName_MiddleInitial_LastName,
+        LastName_Comma_FirstName_MiddleName,
+        FirstName_MiddleName_LastName,
+        LastName_FirstName,
+        LastNameFirstName
     }
 }

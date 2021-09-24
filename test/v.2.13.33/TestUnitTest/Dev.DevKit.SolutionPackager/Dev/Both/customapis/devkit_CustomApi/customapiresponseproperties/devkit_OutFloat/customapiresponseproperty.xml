@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="devkit_OutFloat">
+  <description default="This is the OutFloat">
+    <label description="This is the OutFloat" languagecode="1033" />
+  </description>
+  <displayname default="OutFloat">
+    <label description="OutFloat" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>OutFloat</name>
+  <type>6</type>
+</customapiresponseproperty>

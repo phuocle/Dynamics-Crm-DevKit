@@ -1,6 +1,7 @@
 ﻿using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
+using $SharedNameSpace$;
 using $ProxyTypesNameSpace$;
 
 namespace $NameSpace$
@@ -9,20 +10,42 @@ namespace $NameSpace$
     public class $class$Test
     {
         public static XrmFakedContext Context { get; set; }
-        public static XrmFakedPluginExecutionContext PluginContext { get; set; }
+        public static XrmFakedPluginExecutionContext Plugin { get; set; }
 
         [ClassInitialize()]
         public static void ClassInit(TestContext context)
         {
             Context = new XrmFakedContext();
             Context.ProxyTypesAssembly = Assembly.GetAssembly(typeof(ProxyTypesAssembly));
-            PluginContext = Context.GetDefaultPluginContext();
-            PluginContext.InputParameters["Target"] = null;
+            Plugin = Context.GetDefaultPluginContext();
         }
 
         [TestMethod]
-        public void _01()
+        public void _01_Check_CrmPluginRegistration()
         {
+            var @class = new $class$();
+            foreach (var attribute in System.Attribute.GetCustomAttributes(@class.GetType()))
+            {
+                if (attribute.GetType().Equals(typeof(CrmPluginRegistrationAttribute)))
+                {
+                    var check = attribute as CrmPluginRegistrationAttribute;
+                    Assert.IsNotNull(check);
+                }
+                else
+                    Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void _02_ExecutePlugin()
+        {
+            //setup
+            //var json = "";
+            //var debugContext = Debug.JsonToDebugContext(json);
+            //Plugin.InputParameters["???"] = (???)debugContext.InputParameters["???"];
+            //run
+            Context.ExecutePluginWith<$class$>(Plugin);
+            //result
             Assert.IsTrue(true);
         }
     }

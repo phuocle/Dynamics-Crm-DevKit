@@ -1,0 +1,12 @@
+﻿{
+    "DefaultCrmConnection": "org0b0aa09e",
+    "CrmConnections": [
+        {
+            "Name": "org0b0aa09e",
+            "Url": "https://org0b0aa09e.crm.dynamics.com",
+            "UserName": "admin@CRM232358.onmicrosoft.com",
+            "Password": "NZKFyxKkXVd9plGTk/0EeA==",
+            "Type": "OAuth"
+        }
+    ]
+}

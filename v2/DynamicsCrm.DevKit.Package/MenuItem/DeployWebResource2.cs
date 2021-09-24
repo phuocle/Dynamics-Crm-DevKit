@@ -292,8 +292,7 @@ namespace DynamicsCrm.DevKit.Package.MenuItem
             var requests = new OrganizationRequestCollection();
 
             var webResource = new Entity("webresource") { Id = webResourceId };
-            var content = File.ReadAllText(fullFileName);
-            webResource["content"] = Convert.ToBase64String(Encoding.UTF8.GetBytes(content));
+            webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
             var request = new UpdateRequest { Target = webResource };
             requests.Add(request);
 

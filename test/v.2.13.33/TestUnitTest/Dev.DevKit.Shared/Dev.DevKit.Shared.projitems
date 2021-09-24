@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>debf027a-0573-47db-838c-c4d3febee554</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Dev.DevKit.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Account.generated.cs">
+      <DependentUpon>Account.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\ActivityParty.generated.cs">
+      <DependentUpon>ActivityParty.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Contact.generated.cs">
+      <DependentUpon>Contact.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Email.generated.cs">
+      <DependentUpon>Email.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\PhoneCall.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\PhoneCall.generated.cs">
+      <DependentUpon>PhoneCall.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Task.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entities\Task.generated.cs">
+      <DependentUpon>Task.cs</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Date.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Debug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\PluginCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Extension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\EntityBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\SimpleJson.cs" />
+    <None Include="$(MSBuildThisFileDirectory)Entities\generator.bat" />
+  </ItemGroup>
+</Project>

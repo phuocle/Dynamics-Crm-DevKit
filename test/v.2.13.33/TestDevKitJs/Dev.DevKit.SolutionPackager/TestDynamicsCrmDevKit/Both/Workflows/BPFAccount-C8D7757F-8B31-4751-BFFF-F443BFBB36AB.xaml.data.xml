@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{c8d7757f-8b31-4751-bfff-f443bfbb36ab}" Name="BPF Account" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <XamlFileName>/Workflows/BPFAccount-C8D7757F-8B31-4751-BFFF-F443BFBB36AB.xaml</XamlFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>4</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>1</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <processorder>100</processorder>
+  <RunAs>1</RunAs>
+  <UniqueName>devkit_bpfaccount</UniqueName>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ProcessTriggerScope>1</ProcessTriggerScope>
+  <PrimaryEntity>Account</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="BPF Account" />
+  </LocalizedNames>
+  <labels>
+    <steplabels id="{36b104d2-22cb-4d74-99bf-c5d8e8b5ec42}">
+      <label languagecode="1033" description="Stage 1" />
+    </steplabels>
+    <steplabels id="{2f6ec026-d0fc-438c-9f01-f73b04e939af}">
+      <label languagecode="1033" description="Account Name" />
+    </steplabels>
+    <steplabels id="{abdfc149-a600-4a28-8ce9-c99b592c2558}">
+      <label languagecode="1033" description="Industry" />
+    </steplabels>
+    <steplabels id="{8cbaf36c-c163-4bb3-bc22-770cbf30fe03}">
+      <label languagecode="1033" description="Stage 2" />
+    </steplabels>
+    <steplabels id="{6975ac0a-f2c7-4c1b-961d-ed3d60423322}">
+      <label languagecode="1033" description="Number of Employees" />
+    </steplabels>
+    <steplabels id="{8ecdb808-cfc6-4c0f-82d2-205823e34817}">
+      <label languagecode="1033" description="Annual Revenue" />
+    </steplabels>
+    <steplabels id="{1bf8484b-23de-4b0b-aa59-b04bc6903733}">
+      <label languagecode="1033" description="Stage 3" />
+    </steplabels>
+    <steplabels id="{40c0e0d7-dcd3-4f4e-b570-ee90397a1bbd}">
+      <label languagecode="1033" description="Owner" />
+    </steplabels>
+  </labels>
+</Workflow>

@@ -1049,6 +1049,8 @@ namespace DynamicsCrm.DevKit.Shared
                     formBase += $"\t\t/** The Grid of form {formName} */\r\n";
                     formBase += $"\t\tGrid: {ProjectName}.Form{formName}.Grid;\r\n";
                 }
+                formBase += $"\t\t/** The SidePanes of form {formName} */\r\n";
+                formBase += $"\t\tSidePanes: DevKit.SidePanes;\r\n";
                 formBase += $"\t}}\r\n";
                 _d_ts += formBase;
             }

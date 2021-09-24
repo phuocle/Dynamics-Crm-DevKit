@@ -284,21 +284,21 @@ namespace DynamicsCrm.DevKit.Shared
             foreach (Project project in projects)
             {
                 if (project.ProjectItems == null || project.FileName.Length == 0) continue;
-                if (project.Name.Contains($".{ProjectType.Plugin.ToString()}.") ||
-                    project.Name.Contains($".{ProjectType.Plugin.ToString()}") ||
-                    project.Name.Contains($".{ProjectType.Workflow.ToString()}.") ||
-                    project.Name.EndsWith($".{ProjectType.Workflow.ToString()}") ||
-                    project.Name.Contains($".{ProjectType.CustomAction.ToString()}.") ||
-                    project.Name.EndsWith($".{ProjectType.CustomAction.ToString()}") ||
-                    project.Name.Contains($".{ProjectType.CustomApi.ToString()}.") ||
-                    project.Name.EndsWith($".{ProjectType.CustomApi.ToString()}") ||
-                    project.Name.Contains($".{ProjectType.DataProvider.ToString()}.") ||
-                    project.Name.EndsWith($".{ProjectType.DataProvider.ToString()}"))
-                {
+                //if (project.Name.Contains($".{ProjectType.Plugin.ToString()}.") ||
+                //    project.Name.Contains($".{ProjectType.Plugin.ToString()}") ||
+                //    project.Name.Contains($".{ProjectType.Workflow.ToString()}.") ||
+                //    project.Name.EndsWith($".{ProjectType.Workflow.ToString()}") ||
+                //    project.Name.Contains($".{ProjectType.CustomAction.ToString()}.") ||
+                //    project.Name.EndsWith($".{ProjectType.CustomAction.ToString()}") ||
+                //    project.Name.Contains($".{ProjectType.CustomApi.ToString()}.") ||
+                //    project.Name.EndsWith($".{ProjectType.CustomApi.ToString()}") ||
+                //    project.Name.Contains($".{ProjectType.DataProvider.ToString()}.") ||
+                //    project.Name.EndsWith($".{ProjectType.DataProvider.ToString()}"))
+                //{
                     if (project.Name.EndsWith(".Test")) continue;
                     if (IsAddedTestProject(projects, $"{project.Name}.Test")) continue;
                     lists.Add(project.Name);
-                }
+                //}
             }
             return lists;
         }
@@ -436,6 +436,79 @@ namespace DynamicsCrm.DevKit.Shared
             return projectItems;
         }
 
+        public static List<NameValue> GetAllClassesOfPluginAndWorkflow(DTE dte)
+        {
+            var list = new List<NameValue>();
+            var projectItems = Utility.GetAllTestProjectItems(dte);
+            foreach (var projectItem in projectItems)
+            {
+                if (projectItem.FileCodeModel == null) continue;
+                foreach (CodeElement codeElement in projectItem.FileCodeModel?.CodeElements)
+                {
+                    if (codeElement == null) continue;
+                    if (codeElement.Kind != vsCMElement.vsCMElementNamespace) continue;
+                    foreach (CodeElement codeClass in codeElement.Children)
+                    {
+                        if (codeClass.Kind != vsCMElement.vsCMElementClass) continue;
+                        var @class = codeClass as CodeClass;
+                        if (@class.IsAbstract) continue;
+                        if (!@class.IsCodeType) continue;
+                        if (!HasImplementedPlugin(@class) && !HasImplementedWorkflow(@class)) continue;
+                        if (!HasAttributeCrmPluginRegistration(@class)) continue;
+                        var className = codeClass.Name;
+                        list.Add(new NameValue
+                        {
+                            Name = className,
+                            Value = GetPluginType(@class)
+                        });
+                    }
+                }
+            }
+            return list;
+        }
+
+        private static string GetPluginType(CodeClass @class)
+        {
+            foreach(CodeAttribute attribute in @class.Attributes)
+            {
+                if (attribute.Name == "CrmPluginRegistration")
+                {
+                    if (attribute.Value.Contains("PluginType.Workflow")) return "Workflow";
+                    if (attribute.Value.Contains("PluginType.CustomAction")) return "CustomAction";
+                    if (attribute.Value.Contains("PluginType.CustomApi")) return "CustomApi";
+                    if (attribute.Value.Contains("PluginType.DataProvider")) return "DataProvider";
+                    if (attribute.Value.Contains("PluginType.Plugin")) return "Plugin";
+                    return "Plugin";
+                }
+            }
+            return "Plugin";
+        }
+
+        public static List<string> GetAllTestClasses(DTE dte)
+        {
+            var list = new List<string>();
+            var projectItems = Utility.GetAllProjectItems(dte);
+            foreach (var projectItem in projectItems)
+            {
+                if (projectItem.FileCodeModel == null) continue;
+                foreach (CodeElement codeElement in projectItem.FileCodeModel?.CodeElements)
+                {
+                    if (codeElement == null) continue;
+                    if (codeElement.Kind != vsCMElement.vsCMElementNamespace) continue;
+                    foreach (CodeElement codeClass in codeElement.Children)
+                    {
+                        if (codeClass.Kind != vsCMElement.vsCMElementClass) continue;
+                        var @class = codeClass as CodeClass;
+                        if (!Utility.HasAttributeTestClass(@class)) continue;
+                        var className = codeClass.Name;
+                        className = className.ToLower().EndsWith("test") ? className.Substring(0, className.Length - "Test".Length) : className;
+                        list.Add(className);
+                    }
+                }
+            }
+            return list;
+        }
+
         public static List<ProjectItem> GetAllProjectItems(DTE dte)
         {
             var Projects = (object[])dte.ActiveSolutionProjects;
@@ -456,6 +529,53 @@ namespace DynamicsCrm.DevKit.Shared
                 projectItems.Add(item2);
                 GetAllProjectItems(projectItems, item2);
             }
+        }
+
+        public static bool HasImplementedPlugin(CodeClass @class)
+        {
+            foreach (CodeInterface @interface in @class.ImplementedInterfaces)
+            {
+                if (@interface.FullName == "Microsoft.Xrm.Sdk.IPlugin")
+                    return true;
+            }
+            foreach (var @base in @class.Bases)
+            {
+                if (!(@base is CodeClass baseClass)) continue;
+                if (HasImplementedPlugin(baseClass))
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool HasImplementedWorkflow(CodeClass @class)
+        {
+            foreach (var @base in @class.Bases)
+            {
+                if (!(@base is CodeClass baseClass)) continue;
+                if (baseClass.FullName == "System.Activities.CodeActivity")
+                    return true;
+                if (HasImplementedWorkflow(baseClass))
+                    return true;
+            }
+            return false;
+        }
+
+        public static bool HasAttributeCrmPluginRegistration(CodeClass @class)
+        {
+            foreach (CodeAttribute attribute in @class.Attributes)
+            {
+                if (attribute.Name == "CrmPluginRegistration") return true;
+            }
+            return false;
+        }
+
+        public static bool HasAttributeTestClass(CodeClass @class)
+        {
+            foreach (CodeAttribute attribute in @class.Attributes)
+            {
+                if (attribute.Name == "TestClass") return true;
+            }
+            return false;
         }
 
         public static string GetJsGlobalNameSpace(DTE dte)

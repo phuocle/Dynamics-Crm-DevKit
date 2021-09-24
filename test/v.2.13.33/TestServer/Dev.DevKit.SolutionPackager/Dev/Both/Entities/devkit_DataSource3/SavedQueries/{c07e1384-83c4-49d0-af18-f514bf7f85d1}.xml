@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{c07e1384-83c4-49d0-af18-f514bf7f85d1}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="devkit_datasource3name" select="1" icon="1" preview="1">
+        <row name="result" id="devkit_datasource3id">
+          <cell name="devkit_datasource3name" width="300" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="devkit_datasource3">
+          <attribute name="devkit_datasource3id" />
+          <attribute name="devkit_datasource3name" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="All Data Sources 3" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

@@ -46,6 +46,15 @@ namespace DynamicsCrm.DevKit.Wizard
             }
         }
 
+        public string CrmPluginRegistrationPluginType
+        {
+            get
+            {
+                var nv = comboBoxEntity.SelectedItem as NameValue;
+                return nv.Value;
+            }
+        }
+
         public DTE DTE { get; }
         private ItemType _itemType;
         public ItemType ItemType
@@ -131,64 +140,12 @@ namespace DynamicsCrm.DevKit.Wizard
                     buttonConnection.Enabled = false;
                     comboBoxEntity.Visible = true;
                     comboBoxEntity.DropDownStyle = ComboBoxStyle.DropDownList;
-                    var currentProjectName = Utility.GetCurrentProjectName(DTE);
-                    if (currentProjectName.Contains(ProjectType.Plugin.ToString()) ||
-                        currentProjectName.Contains(ProjectType.CustomAction.ToString()) ||
-                        currentProjectName.Contains(ProjectType.CustomApi.ToString()))
-                    {
-                        var list = Utility.GetAllTestProjectItems(DTE)
-                            .Where(x => x.Name.EndsWith(".cs"))
-                            .Select(x => x.Name.Split(".".ToCharArray())[0])
-                            .Distinct()
-                            .ToList();
-                        var list2 = new List<string>();
-                        foreach (var item in list)
-                        {
-                            var execution = item.EndsWith("Asynchronous") ? "Asynchronous" : (item.EndsWith("Synchronous") ? "Synchronous" : "");
-                            if (execution.Length == 0) continue;
-                            var stage = item.StartsWith("PreValidation") ? "PreValidation" : (item.StartsWith("Pre") ? "Pre" : (item.StartsWith("Post") ? "Post" : ""));
-                            if (stage.Length == 0) continue;
-                            list2.Add(item);
-                        }
-                        var list3 = new List<string>();
-                        var existClasses = Utility.GetAllProjectItems(DTE)
-                            .Where(x => x.Name.EndsWith(".cs"))
-                            .Select(x => x.Name.Substring(0, x.Name.Length - ".cs".Length))
-                            .ToList();
-                        foreach (var item2 in list2)
-                        {
-                            if (existClasses.Contains($"{item2}Test")) continue;
-                            list3.Add(item2);
-                        }
-                        comboBoxEntity.DataSource = list3;
-                    }
-                    else if (currentProjectName.Contains(ProjectType.Workflow.ToString()) ||
-                        currentProjectName.Contains(ProjectType.DataProvider.ToString()))
-                    {
-                        var notIn = new List<string> { "Date", "EntityBase", "Extension", "PluginCore", "SimpleJson", "AssemblyInfo" };
-                        var list = Utility.GetAllTestProjectItems(DTE)
-                            .Where(x => x.Name.EndsWith(".cs"))
-                            .Select(x => x.Name.Split(".".ToCharArray())[0])
-                            .Distinct()
-                            .ToList();
-                        var list3 = new List<string>();
-                        var existClasses = Utility.GetAllProjectItems(DTE)
-                            .Where(x => x.Name.EndsWith(".cs"))
-                            .Select(x => x.Name.Substring(0, x.Name.Length - ".cs".Length))
-                            .ToList();
-                        var list2 = new List<string>();
-                        foreach (var item in list)
-                        {
-                            if (notIn.Contains(item)) continue;
-                            list2.Add(item);
-                        }
-                        foreach (var item2 in list2)
-                        {
-                            if (existClasses.Contains($"{item2}Test")) continue;
-                            list3.Add(item2);
-                        }
-                        comboBoxEntity.DataSource = list3;
-                    }
+                    var list = Utility.GetAllClassesOfPluginAndWorkflow(DTE);
+                    var list2 = Utility.GetAllTestClasses(DTE);
+                    var list3 = list.Where(x => !list2.Contains(x.Name)).ToList<NameValue>();
+                    comboBoxEntity.DisplayMember = "Name";
+                    comboBoxEntity.ValueMember = "Value";
+                    comboBoxEntity.DataSource = list3;
                     buttonOk.Enabled = comboBoxEntity.Items.Count > 0;
                     comboBoxEntity.Enabled = comboBoxEntity.Items.Count > 0;
                     progressBar.Value = 100;

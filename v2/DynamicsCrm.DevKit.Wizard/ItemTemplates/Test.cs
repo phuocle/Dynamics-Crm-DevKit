@@ -32,19 +32,7 @@ namespace DynamicsCrm.DevKit.Wizard.ItemTemplates
                 DTE = (DTE)automationObject;
                 var form = new FormItem(ItemType.Test, DTE, string.Empty, string.Empty);
                 if (form.ShowDialog() == DialogResult.Cancel) throw new WizardCancelledException();
-                //Creating item ...
-                var projects = (object[])DTE.ActiveSolutionProjects;
-                var project = (Project)projects[0];
-                if (project.Name.Contains(".Plugin") || project.Name.Contains(".Plugin."))
-                    ClassType = "Plugin";
-                else if (project.Name.Contains(".CustomAction") || project.Name.EndsWith(".CustomAction."))
-                    ClassType = "CustomAction";
-                else if (project.Name.Contains(".Workflow") || project.Name.EndsWith(".Workflow."))
-                    ClassType = "Workflow";
-                else if (project.Name.Contains(".DataProvider") || project.Name.EndsWith(".DataProvider."))
-                    ClassType = "DataProvider";
-                else
-                    ClassType = "";
+                ClassType = form.CrmPluginRegistrationPluginType;
                 Wizard.ProcessItemReplacementsDictionary(replacementsDictionary, form);
             }
             catch

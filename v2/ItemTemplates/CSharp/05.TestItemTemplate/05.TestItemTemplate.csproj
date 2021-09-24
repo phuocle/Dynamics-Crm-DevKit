@@ -75,6 +75,7 @@
     <None Include="CustomAction.cs" />
     <None Include="Workflow.cs" />
     <None Include="DataProvider.cs" />
+    <None Include="CustomApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
