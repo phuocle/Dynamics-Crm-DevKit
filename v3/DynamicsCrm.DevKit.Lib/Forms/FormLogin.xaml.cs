@@ -40,15 +40,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 if (MessageBox.Show("Credentials already saved in configuration\nChoose Yes to Auto Login or No to Reset Credentials", "DynamicsCrm.DevKit - Auto Login", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     CrmLoginCtrl.IsEnabled = false;
-                    mgr.ServerConnectionStatusUpdate += new EventHandler<ServerConnectStatusEventArgs>(mgr_ServerConnectionStatusUpdate);
-                    mgr.ConnectionCheckComplete += new EventHandler<ServerConnectStatusEventArgs>(mgr_ConnectionCheckComplete);
+                    mgr.ServerConnectionStatusUpdate += new EventHandler<ServerConnectStatusEventArgs>(Mgr_ServerConnectionStatusUpdate);
+                    mgr.ConnectionCheckComplete += new EventHandler<ServerConnectStatusEventArgs>(Mgr_ConnectionCheckComplete);
                     mgr.ConnectToServerCheck();
                     CrmLoginCtrl.ShowMessageGrid();
                 }
             }
         }
 
-        private void mgr_ServerConnectionStatusUpdate(object sender, ServerConnectStatusEventArgs e)
+        private void Mgr_ServerConnectionStatusUpdate(object sender, ServerConnectStatusEventArgs e)
         {
             Dispatcher.Invoke(DispatcherPriority.Normal,
                 new System.Action(() =>
@@ -58,10 +58,10 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             ));
         }
 
-        private void mgr_ConnectionCheckComplete(object sender, ServerConnectStatusEventArgs e)
+        private void Mgr_ConnectionCheckComplete(object sender, ServerConnectStatusEventArgs e)
         {
-            ((CrmConnectionManager)sender).ConnectionCheckComplete -= mgr_ConnectionCheckComplete;
-            ((CrmConnectionManager)sender).ServerConnectionStatusUpdate -= mgr_ServerConnectionStatusUpdate;
+            ((CrmConnectionManager)sender).ConnectionCheckComplete -= Mgr_ConnectionCheckComplete;
+            ((CrmConnectionManager)sender).ServerConnectionStatusUpdate -= Mgr_ServerConnectionStatusUpdate;
             if (!e.Connected)
             {
                 if (e.MultiOrgsFound)

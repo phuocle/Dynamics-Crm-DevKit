@@ -8,4 +8,7 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>DynamicsCrm.DevKit.Shared</Import_RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
+  </ItemGroup>
 </Project>

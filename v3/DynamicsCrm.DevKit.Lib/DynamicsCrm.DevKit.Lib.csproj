@@ -25,6 +25,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\devkit.d.ts" />
+    <EmbeddedResource Include="Resources\devkit.js" />
+    <EmbeddedResource Include="Resources\DynamicsCrm.DevKit.Cli.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Include="Forms\FormLogin.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
