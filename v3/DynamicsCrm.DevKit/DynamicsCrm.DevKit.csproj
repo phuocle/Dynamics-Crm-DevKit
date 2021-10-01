@@ -90,9 +90,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DynamicsCrm.DevKit.SdkLogin\DynamicsCrm.DevKit.SdkLogin.csproj">
+    <ProjectReference Include="..\DynamicsCrm.DevKit.Lib\DynamicsCrm.DevKit.Lib.csproj">
       <Project>{0bd4ada6-cf1e-4123-b30e-c9d33298bccd}</Project>
-      <Name>DynamicsCrm.DevKit.SdkLogin</Name>
+      <Name>DynamicsCrm.DevKit.Lib</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>

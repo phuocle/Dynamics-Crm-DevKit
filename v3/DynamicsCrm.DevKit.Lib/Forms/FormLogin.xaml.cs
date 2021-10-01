@@ -3,7 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace DynamicsCrm.DevKit.SdkLogin
+namespace DynamicsCrm.DevKit.Lib.Forms
 {
     public partial class FormLogin
     {

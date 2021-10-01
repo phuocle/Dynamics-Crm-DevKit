@@ -23,6 +23,6 @@
     </Prerequisites>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="%CurrentProject%.SdkLogin" Path="|DynamicsCrm.DevKit.SdkLogin|" AssemblyName="|DynamicsCrm.DevKit.SdkLogin;AssemblyName|" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="%CurrentProject%.Lib" Path="|DynamicsCrm.DevKit.Lib|" AssemblyName="|DynamicsCrm.DevKit.Lib;AssemblyName|" />
     </Assets>
 </PackageManifest>
