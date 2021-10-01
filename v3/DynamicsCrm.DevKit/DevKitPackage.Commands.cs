@@ -1,24 +1,25 @@
-﻿using EnvDTE;
+﻿using DynamicsCrm.DevKit.Commands;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.ComponentModel.Design;
 using System.Threading.Tasks;
 
-namespace DynamicsCrm.DevKit.Commands
+namespace DynamicsCrm.DevKit
 {
-    internal class Initialize
+    public partial class DevKitPackage
     {
         private static IMenuCommandService MenuService;
         private static DTE dte;
 
-        internal static async Task InitializeAsync(DevKitPackage package)
+        private async Task CommandsInitializeAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            MenuService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService ?? throw new ArgumentNullException(nameof(MenuService));
-            dte = await package.GetServiceAsync(typeof(DTE)) as DTE ?? throw new ArgumentNullException(nameof(dte));
+            MenuService = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService ?? throw new ArgumentNullException(nameof(MenuService));
+            dte = await GetServiceAsync(typeof(DTE)) as DTE ?? throw new ArgumentNullException(nameof(dte));
 
             var commandIdDeployWebResource = new CommandID(DeployWebResource.CommandSetDeployWebResource, DeployWebResource.CommandDeployWebResourceId);
-            var oleMenuCommandDeployWebResource = new OleMenuCommand((s, e) => oleMenuCommandDeployWebResource_Click(package), commandIdDeployWebResource);
+            var oleMenuCommandDeployWebResource = new OleMenuCommand((s, e) => oleMenuCommandDeployWebResource_Click(this), commandIdDeployWebResource);
             oleMenuCommandDeployWebResource.BeforeQueryStatus += oleMenuCommandDeployWebResource_BeforeQueryStatus;
             MenuService.AddCommand(oleMenuCommandDeployWebResource);
 
