@@ -1,4 +1,5 @@
-﻿using EnvDTE;
+﻿using DynamicsCrm.DevKit.Lib.Forms;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,10 @@ namespace DynamicsCrm.DevKit.Commands
 
         internal static void Click(DTE dte)
         {
-            throw new NotImplementedException();
+            var xamlDialog = new FormConnection("Microsoft.VisualStudio.PlatformUI.DialogWindow");
+            xamlDialog.HasMinimizeButton = false;
+            xamlDialog.HasMaximizeButton = false;
+            xamlDialog.ShowModal();
         }
     }
 }

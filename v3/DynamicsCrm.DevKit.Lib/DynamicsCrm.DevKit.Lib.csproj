@@ -25,12 +25,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Forms\FormConnection.xaml" />
+    <None Remove="Forms\icon-menu.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources\devkit.d.ts" />
     <EmbeddedResource Include="Resources\devkit.js" />
     <EmbeddedResource Include="Resources\DynamicsCrm.DevKit.Cli.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Page Include="Forms\FormConnection.xaml">
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
     <Page Include="Forms\FormLogin.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
@@ -40,12 +49,17 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.0.90" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.0.90" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.0-previews-4-31709-430" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Forms\icon-menu.png" />
   </ItemGroup>
 
 </Project>
