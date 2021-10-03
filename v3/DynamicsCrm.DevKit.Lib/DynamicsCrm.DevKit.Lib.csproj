@@ -62,4 +62,6 @@
     <Resource Include="Forms\icon-menu.png" />
   </ItemGroup>
 
+  <Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
+
 </Project>

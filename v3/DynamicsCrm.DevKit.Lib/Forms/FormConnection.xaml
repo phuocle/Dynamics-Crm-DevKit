@@ -1,16 +1,22 @@
-﻿<platformUi:DialogWindow  
+﻿<forms:BaseDialogWindow  xmlns:forms="clr-namespace:DynamicsCrm.DevKit.Lib.Forms" 
         x:Class="DynamicsCrm.DevKit.Lib.Forms.FormConnection"
-        xmlns:platformUi="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"         
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
         mc:Ignorable="d" 
-        WindowStartupLocation="CenterScreen" Title="DynamicsCrm.DevKit v.3.00.00 Build: 2022-01-18" Icon="/DynamicsCrm.DevKit.Lib;component/Forms/icon-menu.png" ResizeMode="NoResize" Width="450" Height="395"
+        WindowStartupLocation="CenterScreen" Icon="/DynamicsCrm.DevKit.Lib;component/Forms/icon-menu.png" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
     >
     <StackPanel>
-        <RadioButton Content="Connection String" Margin="10,10,10,0" IsChecked="True"/>
-        <StackPanel Margin="10,0,10,0">
+        <TextBlock Padding="10,10,10,10">
+            <TextBlock.Background>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </TextBlock.Background>            
+            <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://google.com">WIKI: Connections </wpfcontrols:ExternalBrowserHyperlink>
+        </TextBlock>
+        <RadioButton x:Name="radioButtonConnection" Content="Connection String" Margin="10,10,10,0" IsChecked="True"/>
+        <StackPanel x:Name="stackPanelConnectionString" Margin="10,0,10,0" IsEnabled="{Binding IsChecked, ElementName=radioButtonConnection}">
             <Border  BorderThickness="1">
                 <Grid Margin="0,5,0,0" >
                     <Grid.ColumnDefinitions>
@@ -22,11 +28,11 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Content="Saved Connections" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,0,5,0" />
+                    <ComboBox x:Name="comboBoxSavedConnection" Grid.Row="0" Grid.Column="1" Margin="0,0,5,0" />
                     <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="Gray" BorderThickness="1" Padding="10,10,10,10" Margin="5,5,5,5">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="80"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -38,13 +44,13 @@
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,5" Content="Type" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                            <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,5"  />
+                            <ComboBox x:Name="comboBoxType" Grid.Row="0" Grid.Column="1" Margin="0,0,0,5"  />
                             <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5"/>
+                            <TextBox x:Name="textboxName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5"/>
                             <Label Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Url" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                            <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5"/>
+                            <TextBox x:Name="textboxUrl" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5"/>
                             <Label Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="User Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                            <PasswordBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" PasswordChar="*" />
+                            <TextBox x:Name="textboxUser" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5"/>
                             <Label Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Center" />
                             <PasswordBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" PasswordChar="*" />
                             <Button Grid.Row="5" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left"/>
@@ -53,11 +59,11 @@
                 </Grid>
             </Border>
         </StackPanel>
-        <RadioButton Content="OOB SDK Control Login" Margin="10,10,10,0"/>
-        <WrapPanel HorizontalAlignment="Right" Margin="10,10,10,10">
-            <Button Content="OK" Margin="10,0,10,0" Width="100" Height="30"/>
-            <Button Content="Cancel" Margin="10,0,10,0" Width="100" Height="30"/>
+        <RadioButton x:Name="radioButtonOOBConnection" Content="OOB SDK Control Login" Margin="10,10,10,0"/>
+        <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">
+            <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="buttonOK_Click"/>
+            <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="buttonCancel_Click"/>
         </WrapPanel>
-
+        <ProgressBar x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" />
     </StackPanel>
-</platformUi:DialogWindow>
+</forms:BaseDialogWindow>

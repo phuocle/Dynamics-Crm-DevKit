@@ -13,10 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		version.txt = version.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicsCrm.DevKit.Lib", "DynamicsCrm.DevKit.Lib\DynamicsCrm.DevKit.Lib.csproj", "{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicsCrm.DevKit.Lib", "DynamicsCrm.DevKit.Lib\DynamicsCrm.DevKit.Lib.csproj", "{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems*{0bd4ada6-cf1e-4123-b30e-c9d33298bccd}*SharedItemsImports = 5
 		DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems*{46fd4c93-2194-4d15-bf8c-97cd23722dda}*SharedItemsImports = 13
 		DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems*{a886e86e-65bc-40c1-8494-fe7e80b7e1a3}*SharedItemsImports = 4
 	EndGlobalSection
@@ -43,14 +44,6 @@ Global
 		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Release|x86.ActiveCfg = Release|Any CPU
 		{0BD4ADA6-CF1E-4123-B30E-C9D33298BCCD}.Release|x86.Build.0 = Release|Any CPU
-		{383C9A50-26F2-437B-963B-907DC7FE91F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{383C9A50-26F2-437B-963B-907DC7FE91F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{383C9A50-26F2-437B-963B-907DC7FE91F4}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{383C9A50-26F2-437B-963B-907DC7FE91F4}.Debug|x86.Build.0 = Debug|Any CPU
-		{383C9A50-26F2-437B-963B-907DC7FE91F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{383C9A50-26F2-437B-963B-907DC7FE91F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{383C9A50-26F2-437B-963B-907DC7FE91F4}.Release|x86.ActiveCfg = Release|Any CPU
-		{383C9A50-26F2-437B-963B-907DC7FE91F4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

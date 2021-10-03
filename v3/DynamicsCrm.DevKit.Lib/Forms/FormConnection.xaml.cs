@@ -1,34 +1,23 @@
-﻿using Microsoft.VisualStudio.PlatformUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace DynamicsCrm.DevKit.Lib.Forms
+﻿namespace DynamicsCrm.DevKit.Lib.Forms
 {
     /// <summary>
     /// Interaction logic for FormConnection.xaml
     /// </summary>
-    public partial class FormConnection : DialogWindow
+    public partial class FormConnection : BaseDialogWindow
     {
-        public FormConnection(string helpTopic) : base(helpTopic)
+        public FormConnection()
         {
             InitializeComponent();
         }
 
-        public FormConnection()
+        private void buttonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            InitializeComponent();
+            DialogResult = false;
+        }
+
+        private void buttonOK_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DialogResult = true;
         }
     }
 }
