@@ -20,7 +20,7 @@
     </Window.Resources>
     <Grid>
         <StackPanel>
-            <TextBlock Text="DynamicsCrm.DevKit v.3.0.0.0" Margin="5,0,0,0" FontSize="18" FontWeight="Bold"  />
+            <TextBlock x:Name="textBlockHeader" Text="DynamicsCrm.DevKit v.3.0.0.0" Margin="5,0,0,0" FontSize="18" FontWeight="Bold"  />
             <CrmLoginCtrl:CrmServerLoginControl Name="CrmLoginCtrl" Grid.Row="1" ShowTitle="False"  Margin="10,0,10,0" VerticalAlignment="Bottom"  />
         </StackPanel>
     </Grid>

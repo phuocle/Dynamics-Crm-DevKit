@@ -1,4 +1,6 @@
-﻿using Microsoft.Xrm.Tooling.CrmConnectControl;
+﻿using DynamicsCrm.DevKit.Shared;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.Xrm.Tooling.CrmConnectControl;
 using System;
 using System.Windows;
 using System.Windows.Threading;
@@ -17,6 +19,8 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public FormLogin()
         {
             InitializeComponent();
+
+            textBlockHeader.Text = $"DynamicsCrm.DevKit { Const.VersionBuild }";
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -37,7 +41,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             CrmLoginCtrl.UserCancelClicked += new EventHandler(CrmLoginCtrl_UserCancelClicked);
             if (!mgr.RequireUserLogin())
             {
-                if (MessageBox.Show("Credentials already saved in configuration\nChoose Yes to Auto Login or No to Reset Credentials", "DynamicsCrm.DevKit - Auto Login", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MessageBox.Show("Found credentials already saved in configuration\nChoose Yes to Auto Login or No to reset credentials", $"DynamicsCrm.DevKit { Const.VersionBuild } - Auto Login", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     CrmLoginCtrl.IsEnabled = false;
                     mgr.ServerConnectionStatusUpdate += new EventHandler<ServerConnectStatusEventArgs>(Mgr_ServerConnectionStatusUpdate);
@@ -50,12 +54,11 @@ namespace DynamicsCrm.DevKit.Lib.Forms
 
         private void Mgr_ServerConnectionStatusUpdate(object sender, ServerConnectStatusEventArgs e)
         {
-            Dispatcher.Invoke(DispatcherPriority.Normal,
-                new System.Action(() =>
-                {
-                    this.Title = string.IsNullOrWhiteSpace(e.StatusMessage) ? e.ErrorMessage : e.StatusMessage;
-                }
-            ));
+            ThreadHelper.JoinableTaskFactory.Run(async delegate
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                this.Title = string.IsNullOrWhiteSpace(e.StatusMessage) ? e.ErrorMessage : e.StatusMessage;
+            });
         }
 
         private void Mgr_ConnectionCheckComplete(object sender, ServerConnectStatusEventArgs e)
@@ -70,14 +73,15 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                     MessageBox.Show("Unable to Login to CRM using cached credentials", "Login Failure");
                 resetUiFlag = true;
                 CrmLoginCtrl.GoBackToLogin();
-                Dispatcher.Invoke(DispatcherPriority.Normal,
-                       new System.Action(() =>
-                       {
-                           this.Title = "Failed to Login with cached credentials.";
-                           MessageBox.Show(this.Title, "Notification from ConnectionManager", MessageBoxButton.OK, MessageBoxImage.Error);
-                           CrmLoginCtrl.IsEnabled = true;
-                       }
-                        ));
+
+                ThreadHelper.JoinableTaskFactory.Run(async delegate
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    this.Title = "Failed to Login with cached credentials.";
+                    MessageBox.Show(this.Title, "Notification from ConnectionManager", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CrmLoginCtrl.IsEnabled = true;
+                });
+
                 resetUiFlag = false;
             }
             else
@@ -90,13 +94,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         private void CrmLoginCtrl_ConnectionCheckBegining(object sender, EventArgs e)
         {
             bIsConnectedComplete = false;
-            Dispatcher.Invoke(DispatcherPriority.Normal,
-                new System.Action(() =>
-                {
-                    this.Title = "Starting Login Process. ";
-                    CrmLoginCtrl.IsEnabled = true;
-                }
-            ));
+            ThreadHelper.JoinableTaskFactory.Run(async delegate
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                Title = "Starting Login Process. ";
+                CrmLoginCtrl.IsEnabled = true;
+            });
         }
 
         private void CrmLoginCtrl_ConnectionStatusEvent(object sender, ConnectStatusEventArgs e)
@@ -120,13 +123,12 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             resetUiFlag = true;
             bIsConnectedComplete = true;
             CrmLoginCtrl.GoBackToLogin();
-            Dispatcher.Invoke(DispatcherPriority.Normal,
-               new System.Action(() =>
-               {
-                   this.Title = "Notification from Parent";
-                   CrmLoginCtrl.IsEnabled = true;
-               }
-                ));
+            ThreadHelper.JoinableTaskFactory.Run(async delegate
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                this.Title = "Notification from Parent";
+                CrmLoginCtrl.IsEnabled = true;
+            });
             ConnectionToCrmCompleted?.Invoke(this, null);
             resetUiFlag = false;
         }
