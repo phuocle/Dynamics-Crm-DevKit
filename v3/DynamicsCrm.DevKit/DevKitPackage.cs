@@ -23,6 +23,6 @@ namespace DynamicsCrm.DevKit
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await CommandsInitializeAsync();
             await SolutionInitializeAsync();
-        }        
+        }
     }
 }

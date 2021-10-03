@@ -26,7 +26,9 @@
 
   <ItemGroup>
     <None Remove="Forms\FormConnection.xaml" />
+    <None Remove="Forms\FormProject.xaml" />
     <None Remove="Forms\icon-menu.png" />
+    <None Remove="WpfControls\UserControlConnection.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +45,14 @@
     <Page Include="Forms\FormLogin.xaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Forms\FormProject.xaml">
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+    <Page Include="WpfControls\UserControlConnection.xaml">
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
   </ItemGroup>
 

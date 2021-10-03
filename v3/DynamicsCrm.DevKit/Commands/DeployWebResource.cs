@@ -39,9 +39,7 @@ namespace DynamicsCrm.DevKit.Commands
 
         internal static void Click(DTE dte)
         {
-            var xamlDialog = new FormConnection();
-            xamlDialog.HasMinimizeButton = false;
-            xamlDialog.HasMaximizeButton = false;
+            var xamlDialog = new FormProject();            
             xamlDialog.ShowModal();
         }
     }

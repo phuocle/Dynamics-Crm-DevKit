@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen" Icon="/DynamicsCrm.DevKit.Lib;component/Forms/icon-menu.png" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
     >
     <StackPanel>
-        <TextBlock Padding="10,10,10,10">
+        <TextBlock Padding="10,5,10,5">
             <TextBlock.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
             </TextBlock.Background>            
@@ -61,8 +61,8 @@
         </StackPanel>
         <RadioButton x:Name="radioButtonOOBConnection" Content="OOB SDK Control Login" Margin="10,10,10,0"/>
         <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">
-            <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="buttonOK_Click"/>
-            <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="buttonCancel_Click"/>
+            <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click"/>
+            <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>
         </WrapPanel>
         <ProgressBar x:Name="progressBar" Height="5" IsIndeterminate="True" Visibility="Hidden" />
     </StackPanel>

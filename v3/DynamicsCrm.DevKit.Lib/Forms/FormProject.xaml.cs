@@ -3,9 +3,9 @@
     /// <summary>
     /// Interaction logic for FormConnection.xaml
     /// </summary>
-    public partial class FormConnection : BaseDialogWindow
+    public partial class FormProject : BaseDialogWindow
     {
-        public FormConnection()
+        public FormProject()
         {
             InitializeComponent();
         }
@@ -18,6 +18,10 @@
         private void ButtonOK_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             DialogResult = true;
+        }
+
+        private void Connection_Connected(object sender, System.EventArgs e)
+        {
         }
     }
 }
