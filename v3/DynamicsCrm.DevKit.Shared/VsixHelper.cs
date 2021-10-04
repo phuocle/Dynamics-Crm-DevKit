@@ -1,5 +1,7 @@
-﻿using EnvDTE;
+﻿using DynamicsCrm.DevKit.Shared.Models;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.IO;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -17,5 +19,27 @@ namespace DynamicsCrm.DevKit.Shared
             var fileName = selectedItem.ProjectItem.FileNames[0];
             return Path.GetExtension(fileName);
         }
+        public static string GetDynamicsCrmDevKitJsonFileName()
+        {
+            var solutionFullName = DTE?.Solution?.FullName;
+            var fInfo = new FileInfo(solutionFullName ?? throw new Exception($"{nameof(solutionFullName)} not found"));
+            return $"{fInfo.DirectoryName}\\{Const.DynamicsCrmDevKitJson}";
+        }
+
+        public static DevKitConnections GetDevKitConnections()
+        {
+            var fileName = GetDynamicsCrmDevKitJsonFileName();
+            if (!File.Exists(fileName)) return new DevKitConnections();
+            var json = File.ReadAllText(fileName);
+            return SimpleJson.DeserializeObject<DevKitConnections>(json);
+        }
+
+        public static void SaveDevKitConnections(DevKitConnections connections)
+        {
+            var json = SimpleJson.SerializeObject(connections);
+            var fileName = GetDynamicsCrmDevKitJsonFileName();
+            Utility.ForceWriteAllText(fileName, json);
+        }
+
     }
 }

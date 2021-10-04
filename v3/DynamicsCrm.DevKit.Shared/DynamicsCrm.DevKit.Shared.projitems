@@ -10,7 +10,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CrmConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitConnections.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VsixHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XrmHelper.cs" />
   </ItemGroup>
 </Project>

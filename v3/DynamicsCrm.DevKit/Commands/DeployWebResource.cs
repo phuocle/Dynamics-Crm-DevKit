@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Commands
 
         internal static void Click()
         {
-            var xamlDialog = new FormProject();            
+            var xamlDialog = new FormProject();
             xamlDialog.ShowModal();
         }
     }

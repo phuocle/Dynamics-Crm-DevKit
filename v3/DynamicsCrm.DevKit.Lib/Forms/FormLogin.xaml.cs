@@ -20,7 +20,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             InitializeComponent();
 
-            textBlockHeader.Text = $"DynamicsCrm.DevKit { Const.VersionBuild }";
+            textBlockHeader.Text = Const.WindowTitle;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

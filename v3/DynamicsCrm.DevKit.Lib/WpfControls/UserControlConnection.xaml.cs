@@ -58,10 +58,10 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                 else
                 {
                     IsConnected = true;//check saved connection string ;
-                }                
+                }
             }
-            else 
-                IsConnected = false;            
+            else
+                IsConnected = false;
         }
 
         private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
