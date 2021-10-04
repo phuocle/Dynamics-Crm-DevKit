@@ -1,4 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Shared;
+using EnvDTE;
+using EnvDTE80;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -18,9 +20,15 @@ namespace DynamicsCrm.DevKit
     {
         public const string PACKAGE_GUID_STRING = "7e37eef9-8cbe-4b10-81f7-66413cd2c9d3";
 
+        private static DTE dte;
+
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+            dte = await GetServiceAsync(typeof(DTE)) as DTE ?? throw new ArgumentNullException(nameof(dte));
+            VsixHelper.DTE = dte;
+
             await CommandsInitializeAsync();
             await SolutionInitializeAsync();
         }

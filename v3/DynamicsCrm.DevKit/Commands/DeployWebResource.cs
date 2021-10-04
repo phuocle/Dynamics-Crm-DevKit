@@ -1,9 +1,7 @@
 ﻿using DynamicsCrm.DevKit.Lib.Forms;
-using EnvDTE;
+using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio.Shell;
 using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace DynamicsCrm.DevKit.Commands
 {
@@ -18,26 +16,14 @@ namespace DynamicsCrm.DevKit.Commands
         public const int CommandDeployWebResource3Id = 0x0500;
         public static readonly Guid CommandSetDeployWebResource3 = new Guid("0c1acc31-15ac-417c-86b2-eefdc669e8bf");
 
-        internal static void BeforeQueryStatus(object sender, DTE dte)
+        internal static void BeforeQueryStatus(object sender)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var menuCommand = sender as OleMenuCommand;
-            menuCommand.Visible = false;
-            try
-            {
-                if (dte == null || dte.SelectedItems == null || dte.SelectedItems.Count != 1) return;
-                var selectedItem = dte.SelectedItems.Item(1);
-                if (selectedItem.ProjectItem == null) return;
-                var fileName = selectedItem.ProjectItem.FileNames[0];
-                var extension = Path.GetExtension(fileName);
-                var allowExtions = new List<string> { ".htm", ".html", ".css", ".js", ".xml", ".png", ".jpg", ".gif", ".xap", ".xsl", "xslt.", ".ico", ".svg", ".resx" };
-                if (!allowExtions.Contains(extension)) return;
-                menuCommand.Visible = true;
-            }
-            catch { }
+            menuCommand.Visible = Utility.IsWebResourceExtension(VsixHelper.GetSelectedItemExtension());
         }
 
-        internal static void Click(DTE dte)
+        internal static void Click()
         {
             var xamlDialog = new FormProject();            
             xamlDialog.ShowModal();

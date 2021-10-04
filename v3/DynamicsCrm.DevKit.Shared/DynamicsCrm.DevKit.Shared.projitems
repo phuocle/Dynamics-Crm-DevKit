@@ -10,5 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VsixHelper.cs" />
   </ItemGroup>
 </Project>

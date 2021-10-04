@@ -9,14 +9,12 @@ namespace DynamicsCrm.DevKit
 {
     public partial class DevKitPackage
     {
-        private static IMenuCommandService MenuService;
-        private static DTE dte;
+        private static IMenuCommandService MenuService;       
 
         private async Task CommandsInitializeAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             MenuService = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService ?? throw new ArgumentNullException(nameof(MenuService));
-            dte = await GetServiceAsync(typeof(DTE)) as DTE ?? throw new ArgumentNullException(nameof(dte));
 
             var commandIdDeployWebResource = new CommandID(DeployWebResource.CommandSetDeployWebResource, DeployWebResource.CommandDeployWebResourceId);
             var oleMenuCommandDeployWebResource = new OleMenuCommand((s, e) => OleMenuCommandDeployWebResource_Click(this), commandIdDeployWebResource);
@@ -56,12 +54,12 @@ namespace DynamicsCrm.DevKit
 
         private static void OleMenuCommandDeployWebResource_BeforeQueryStatus(object sender, EventArgs e)
         {
-            DeployWebResource.BeforeQueryStatus(sender, dte);
+            DeployWebResource.BeforeQueryStatus(sender);
         }
 
         private static void OleMenuCommandDeployWebResource_Click(AsyncPackage package)
         {
-            DeployWebResource.Click(dte);
+            DeployWebResource.Click();
         }
 
         //private static void oleMenuCommandDeployReport_BeforeQueryStatus(object sender, EventArgs e)
