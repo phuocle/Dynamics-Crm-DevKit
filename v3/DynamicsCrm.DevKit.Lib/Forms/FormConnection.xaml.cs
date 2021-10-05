@@ -3,7 +3,6 @@ using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Xrm.Tooling.Connector;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -12,9 +11,6 @@ using System.Windows.Controls;
 
 namespace DynamicsCrm.DevKit.Lib.Forms
 {
-    /// <summary>
-    /// Interaction logic for FormConnection.xaml
-    /// </summary>
     public partial class FormConnection : BaseDialogWindow
     {
         public FormConnection()
@@ -36,7 +32,6 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         public bool IsOOBConnection => radioButtonOOBConnection.IsChecked ?? false;
         public CrmServiceClient CrmServiceClient { get; set; }
 
-
         private void ButtonCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             DialogResult = false;
@@ -47,6 +42,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
         {
             if (IsOOBConnection)
             {
+                VsixHelper.SaveDefaultCrmConnection(null);
                 DialogResult = true;
                 Close();
             }
@@ -55,6 +51,7 @@ namespace DynamicsCrm.DevKit.Lib.Forms
                 stackPanelForm.IsEnabled = false;
                 progressBar.Visibility = System.Windows.Visibility.Visible;
                 var selectedCrmConnection = comboBoxSavedConnection.SelectedItem as CrmConnection;
+                VsixHelper.SaveDefaultCrmConnection(selectedCrmConnection.Name);
                 _ = Task.Factory.StartNew(() => {
                     CrmServiceClient = XrmHelper.IsConnected(selectedCrmConnection);
                     ThreadHelper.JoinableTaskFactory.Run(async delegate

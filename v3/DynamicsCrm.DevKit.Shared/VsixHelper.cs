@@ -42,12 +42,17 @@ namespace DynamicsCrm.DevKit.Shared
             if (devKitConnections.CrmConnections == null) devKitConnections.CrmConnections = new List<CrmConnection>();
             return devKitConnections;
         }
-
         public static void SaveDevKitConnections(DevKitConnections connections)
         {
             var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
             var fileName = GetDynamicsCrmDevKitJsonFileName();
             Utility.ForceWriteAllText(fileName, json);
+        }
+        public static void SaveDefaultCrmConnection(string defaultCrmConnection)
+        {
+            var devKitConnections = GetDevKitConnections();
+            devKitConnections.DefaultCrmConnection = defaultCrmConnection;
+            SaveDevKitConnections(devKitConnections);
         }
     }
 }
