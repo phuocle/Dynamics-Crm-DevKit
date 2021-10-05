@@ -15,7 +15,7 @@ namespace DynamicsCrm.DevKit
     [InstalledProductRegistration("#110", "#112", Const.Version, IconResourceID = 400)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PACKAGE_GUID_STRING)]
-    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string, PackageAutoLoadFlags.BackgroundLoad)]
     public sealed partial class DevKitPackage : AsyncPackage, IVsPersistSolutionOpts
     {
         public const string PACKAGE_GUID_STRING = "7e37eef9-8cbe-4b10-81f7-66413cd2c9d3";

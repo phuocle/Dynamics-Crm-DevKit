@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Reflection;
-using System.Windows.Forms;
-using DynamicsCrm.DevKit.Shared;
 using DynamicsCrm.DevKit.Shared.Models;
-using EnvDTE;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -35,32 +27,22 @@ namespace DynamicsCrm.DevKit.Shared
             return BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, crmConnection.Password);
         }
 
-        public static bool IsConnected(string connectionString)
-        {
-            try
-            {
-                var crmServiceClient = new CrmServiceClient(connectionString);
-                crmServiceClient.Execute(new WhoAmIRequest());
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public static bool IsConnected(CrmConnection crmConnection)
+        public static CrmServiceClient IsConnected(CrmConnection crmConnection)
         {
             var password = crmConnection.Password;
-            try
-            {
-                password = EncryptDecrypt.DecryptString(password);
-            }
-            catch
-            {
-            }
+            if (crmConnection.Type != "ClientSecret") password = EncryptDecrypt.DecryptString(password);
             var connectionString = BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, password);
-            return IsConnected(connectionString);
+            var crmServiceClient = new CrmServiceClient(connectionString);
+            if (crmServiceClient.LastCrmError?.Length != 0)
+                return null;
+            return crmServiceClient;
+        }
+
+        public static string ConnectedUrl(CrmServiceClient crmServiceClient)
+        {
+            var url = new Uri(crmServiceClient?.CrmConnectOrgUriActual?.AbsoluteUri).GetLeftPart(UriPartial.Authority);
+            url = url?.Replace(".api.", ".");
+            return url;
         }
     }
 }

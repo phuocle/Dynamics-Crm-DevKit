@@ -8,6 +8,13 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" Icon="/DynamicsCrm.DevKit.Lib;component/Forms/icon-menu.png" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
     >
+    <forms:BaseDialogWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StyleResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </forms:BaseDialogWindow.Resources>
     <StackPanel>
         <TextBlock Padding="10,5,10,5">
             <TextBlock.Background>
@@ -16,7 +23,7 @@
             <wpfcontrols:ExternalBrowserHyperlink NavigateUri="https://google.com">WIKI: Connections </wpfcontrols:ExternalBrowserHyperlink>
         </TextBlock>
         <StackPanel x:Name="stackPanelForm">
-            <RadioButton x:Name="radioButtonConnection" Content="Connection String" Margin="10,10,10,0" IsChecked="True"/>
+            <RadioButton x:Name="radioButtonConnection" Content="Connection String" Margin="10,10,10,0" IsChecked="True" Checked="RadioButtonConnection_Checked"/>
             <StackPanel x:Name="stackPanelConnectionString" Margin="10,0,10,0" IsEnabled="{Binding IsChecked, ElementName=radioButtonConnection}">
                 <Border  BorderThickness="1">
                     <Grid Margin="0,5,0,0" >
@@ -51,20 +58,20 @@
                                     <ComboBoxItem Name="OAuth">OAuth</ComboBoxItem>
                                 </ComboBox>
                                 <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <TextBox x:Name="textboxName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" Text="dynamicscrm-devkit-sep-2021"/>
+                                <TextBox x:Name="textboxName" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" />
                                 <Label Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" Content="Url" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <TextBox x:Name="textboxUrl" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" Text="https://dynamicscrm-devkit-sep-2021.crm.dynamics.com"/>
+                                <TextBox x:Name="textboxUrl" Grid.Row="2" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" />
                                 <Label x:Name="labelUser" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" Content="User Name" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <TextBox x:Name="textboxUser" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" Text="admin@CRM232358.onmicrosoft.com"/>
+                                <TextBox x:Name="textboxUser" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" />
                                 <Label x:Name="labelPassword" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <PasswordBox x:Name="textboxPassword" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" PasswordChar="*" Password="3Sg3T4Ya3P" />
+                                <PasswordBox x:Name="textboxPassword" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5"  HorizontalContentAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="0,5,0,5" PasswordChar="*" />
                                 <Button x:Name="buttonCheckConnection" Grid.Row="5" Grid.Column="1" Content="Check Connection ?" Width="200" Height="30" HorizontalAlignment="Left" Click="ButtonCheckConnection_Click"/>
                             </Grid>
                         </Border>
                     </Grid>
                 </Border>
             </StackPanel>
-            <RadioButton x:Name="radioButtonOOBConnection" Content="OOB SDK Control Login" Margin="10,10,10,0"/>
+            <RadioButton x:Name="radioButtonOOBConnection" Content="OOB SDK Control Login" Margin="10,10,10,0" Checked="RadioButtonOOBConnection_Checked"/>
             <WrapPanel HorizontalAlignment="Right" Margin="10,0,10,10">
                 <Button x:Name="buttonOK" Content="OK" Margin="5,0,5,0" Width="100" Height="30" Click="ButtonOK_Click" />
                 <Button x:Name="buttonCancel" Content="Cancel" Margin="5,0,5,0" Width="100" Height="30" IsCancel="True" Click="ButtonCancel_Click"/>

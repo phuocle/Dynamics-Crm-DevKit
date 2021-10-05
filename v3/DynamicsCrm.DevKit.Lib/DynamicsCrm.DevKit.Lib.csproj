@@ -28,6 +28,7 @@
     <None Remove="Forms\FormConnection.xaml" />
     <None Remove="Forms\FormProject.xaml" />
     <None Remove="Forms\icon-menu.png" />
+    <None Remove="Forms\StyleResourceDictionary.xaml" />
     <None Remove="WpfControls\UserControlConnection.xaml" />
   </ItemGroup>
 
@@ -50,11 +51,12 @@
       <Generator>XamlIntelliSenseFileGenerator</Generator>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Page>
+    <Page Include="Forms\StyleResourceDictionary.xaml" />
     <Page Include="WpfControls\UserControlConnection.xaml">
       <Generator>XamlIntelliSenseFileGenerator</Generator>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Page>
-  </ItemGroup>
+    </Page>	
+</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Community.VisualStudio.Toolkit" Version="17.0.76.268-pre" />

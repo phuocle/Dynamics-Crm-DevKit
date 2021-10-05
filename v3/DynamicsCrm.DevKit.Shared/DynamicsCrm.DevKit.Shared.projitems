@@ -11,6 +11,8 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsonHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CrmConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitConnections.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />

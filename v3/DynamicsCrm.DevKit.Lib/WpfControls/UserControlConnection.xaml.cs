@@ -1,4 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Lib.Forms;
+using DynamicsCrm.DevKit.Shared;
+using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.ComponentModel;
 using System.Windows;
@@ -21,7 +23,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
             set
             {
                 _isConnected = value;
-                labelInformation.Content = _isConnected ? $"Connected: https://......" : $"Please connect to your Dataverse/CDS";
+                labelInformation.Content = _isConnected ? $"Connected: {XrmHelper.ConnectedUrl(CrmServiceClient)}" : $"Please connect to your Dataverse/CDS";
                 if (_isConnected) {
                     var sender = new object();
                     Connected(sender, EventArgs.Empty);
@@ -29,6 +31,9 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                 NotifyPropertyChanged(nameof(IsConnected));
             }
         }
+
+        public bool IsOOBConnection { get; set; }
+        public CrmServiceClient CrmServiceClient { get; set; }
 
         public event EventHandler Connected;
 
@@ -50,15 +55,17 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                     loginForm.ShowDialog();
                     if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                     {
-                        //CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
-                        //CrmConnection = new CrmConnection { Name = string.Empty, Password = string.Empty, Type = string.Empty, Url = string.Empty, UserName = string.Empty };
+                        CrmServiceClient = loginForm.CrmConnectionMgr.CrmSvc;
+                        IsOOBConnection = true;
                         IsConnected = true;
                     }
                 }
                 else
                 {
-                    IsConnected = true;//check saved connection string ;
-                }
+                    IsOOBConnection = false;
+                    CrmServiceClient = formConnection.CrmServiceClient;
+                    IsConnected = CrmServiceClient != null;
+                }                
             }
             else
                 IsConnected = false;

@@ -2,6 +2,7 @@
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -29,17 +30,24 @@ namespace DynamicsCrm.DevKit.Shared
         public static DevKitConnections GetDevKitConnections()
         {
             var fileName = GetDynamicsCrmDevKitJsonFileName();
-            if (!File.Exists(fileName)) return new DevKitConnections();
+            if (!File.Exists(fileName))
+            {
+                return new DevKitConnections()
+                {
+                    CrmConnections = new List<CrmConnection>()
+                };
+            }
             var json = File.ReadAllText(fileName);
-            return SimpleJson.DeserializeObject<DevKitConnections>(json);
+            var devKitConnections = SimpleJson.DeserializeObject<DevKitConnections>(json);
+            if (devKitConnections.CrmConnections == null) devKitConnections.CrmConnections = new List<CrmConnection>();
+            return devKitConnections;
         }
 
         public static void SaveDevKitConnections(DevKitConnections connections)
         {
-            var json = SimpleJson.SerializeObject(connections);
+            var json = JsonHelper.FormatJson(SimpleJson.SerializeObject(connections));
             var fileName = GetDynamicsCrmDevKitJsonFileName();
             Utility.ForceWriteAllText(fileName, json);
         }
-
     }
 }
