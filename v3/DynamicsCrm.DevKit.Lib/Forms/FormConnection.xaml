@@ -6,7 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfcontrols="clr-namespace:DynamicsCrm.DevKit.Lib.WpfControls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" Icon="/DynamicsCrm.DevKit.Lib;component/Forms/icon-menu.png" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Width="500" Height="auto" SizeToContent="Height"
     >
     <forms:BaseDialogWindow.Resources>
         <ResourceDictionary>

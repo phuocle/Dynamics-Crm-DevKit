@@ -54,12 +54,20 @@ namespace DynamicsCrm.DevKit
 
         private static void OleMenuCommandDeployWebResource_BeforeQueryStatus(object sender, EventArgs e)
         {
-            DeployWebResource.BeforeQueryStatus(sender);
+            ThreadHelper.JoinableTaskFactory.Run(async delegate
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                DeployWebResource.BeforeQueryStatus(sender);
+            });
         }
 
         private static void OleMenuCommandDeployWebResource_Click(AsyncPackage package)
         {
-            DeployWebResource.Click();
+            ThreadHelper.JoinableTaskFactory.Run(async delegate
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                await DeployWebResource.ClickDeployWebResourceAsync();
+            });
         }
 
         //private static void oleMenuCommandDeployReport_BeforeQueryStatus(object sender, EventArgs e)

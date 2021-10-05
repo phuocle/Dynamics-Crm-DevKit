@@ -1,7 +1,9 @@
-﻿using DynamicsCrm.DevKit.Lib.Forms;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using Microsoft.VisualStudio.Shell;
 using System;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
 {
@@ -23,10 +25,18 @@ namespace DynamicsCrm.DevKit.Commands
             menuCommand.Visible = Utility.IsWebResourceExtension(VsixHelper.GetSelectedItemExtension());
         }
 
-        internal static void Click()
-        {
-            var xamlDialog = new FormProject();
-            xamlDialog.ShowModal();
+        internal static async Task ClickDeployWebResourceAsync()
+        {         
+            await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
+
+            var service = VsixHelper.GetCacheCrmServiceClient();
+            if (service != null)
+            {
+                await VS.StatusBar.ShowMessageAsync($"Connected: {XrmHelper.ConnectedUrl(service)}");
+
+            }
+
+            await VS.StatusBar.EndAnimationAsync(StatusAnimation.Deploy);
         }
     }
 }

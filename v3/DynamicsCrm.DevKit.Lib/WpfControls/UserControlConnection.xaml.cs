@@ -51,7 +51,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                 if (formConnection.IsOOBConnection)
                 {
                     var loginForm = new FormLogin();
-                    loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
+                    loginForm.ConnectionToCrmCompleted += LoginForm_ConnectionToCrmCompleted;
                     loginForm.ShowDialog();
                     if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
                     {
@@ -71,7 +71,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                 IsConnected = false;
         }
 
-        private void loginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
+        private void LoginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
         {
             if (sender is FormLogin login)
             {

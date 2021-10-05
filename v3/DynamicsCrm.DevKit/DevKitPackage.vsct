@@ -59,7 +59,7 @@
 			</Button>
 		</Buttons>
 		<Bitmaps>
-			<Bitmap guid="guidImages" href="icon-menu.png" usedList="bmpPicPL"/>
+			<Bitmap guid="guidImages" href="icon16.png" usedList="bmpPicPL"/>
 		</Bitmaps>
 	</Commands>
 	<CommandPlacements>

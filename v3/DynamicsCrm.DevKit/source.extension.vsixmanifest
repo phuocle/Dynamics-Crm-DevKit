@@ -6,8 +6,8 @@
         <Description xml:space="preserve">A collection of projects/items template for develop Dynamics 365 CRM/CDS (Build: xxxx.xx.xx)</Description>
         <MoreInfo>https://github.com/phuocle/Dynamics-Crm-DevKit</MoreInfo>
         <License>License.txt</License>
-        <Icon>icon.png</Icon>
-        <PreviewImage>icon.png</PreviewImage>
+        <Icon>icon32.png</Icon>
+        <PreviewImage>icon32.png</PreviewImage>
         <Tags>Dynamics; Dynamics 365; Dynamics CRM; Tool; JavaScript; CDS</Tags>
     </Metadata>
     <Installation>

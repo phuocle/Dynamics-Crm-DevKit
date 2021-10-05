@@ -23,15 +23,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Forms\FormConnection.xaml" />
-    <None Remove="Forms\FormProject.xaml" />
-    <None Remove="Forms\icon-menu.png" />
-    <None Remove="Forms\StyleResourceDictionary.xaml" />
-    <None Remove="WpfControls\UserControlConnection.xaml" />
-  </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Resources\devkit.d.ts" />
     <EmbeddedResource Include="Resources\devkit.js" />
@@ -69,10 +60,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Forms\icon-menu.png" />
   </ItemGroup>
 
   <Import Project="..\DynamicsCrm.DevKit.Shared\DynamicsCrm.DevKit.Shared.projitems" Label="Shared" />
