@@ -9,7 +9,7 @@ namespace DynamicsCrm.DevKit
 {
     public partial class DevKitPackage
     {
-        private static IMenuCommandService MenuService;       
+        private static IMenuCommandService MenuService;
 
         private async Task CommandsInitializeAsync()
         {
@@ -17,7 +17,7 @@ namespace DynamicsCrm.DevKit
             MenuService = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService ?? throw new ArgumentNullException(nameof(MenuService));
 
             var commandIdDeployWebResource = new CommandID(CommandWebResource.CommandSetDeployWebResource, CommandWebResource.CommandDeployWebResourceId);
-            var oleMenuCommandDeployWebResource = new OleMenuCommand((s, e) => OleMenuCommandDeployWebResource_Click(this), commandIdDeployWebResource);
+            var oleMenuCommandDeployWebResource = new OleMenuCommand((s, e) => OleMenuCommandDeployWebResource_Click(), commandIdDeployWebResource);
             oleMenuCommandDeployWebResource.BeforeQueryStatus += OleMenuCommandDeployWebResource_BeforeQueryStatus;
             MenuService.AddCommand(oleMenuCommandDeployWebResource);
 
@@ -52,22 +52,29 @@ namespace DynamicsCrm.DevKit
         //    AddCrmPluginRegistration.Click(dte);
         //}
 
-        private static void OleMenuCommandDeployWebResource_BeforeQueryStatus(object sender, EventArgs e)
+        public static void OleMenuCommandDeployWebResource_BeforeQueryStatus(object sender, EventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.Run(async delegate
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                CommandWebResource.BeforeQueryStatus(sender);
+                await OleMenuCommandDeployWebResource_BeforeQueryStatusAsync(sender);
             });
         }
-
-        private static void OleMenuCommandDeployWebResource_Click(AsyncPackage package)
+        public static async Task OleMenuCommandDeployWebResource_BeforeQueryStatusAsync(object sender)
         {
-            ThreadHelper.JoinableTaskFactory.Run(async delegate
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            CommandWebResource.BeforeQueryStatus(sender);
+        }
+        public static void OleMenuCommandDeployWebResource_Click()
+        {
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                await CommandWebResource.ClickDeployWebResourceAsync();
+                await OleMenuCommandDeployWebResource_ClickAsync();
             });
+        }
+        public static async Task OleMenuCommandDeployWebResource_ClickAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await CommandWebResource.ClickDeployWebResourceAsync();
         }
 
         //private static void oleMenuCommandDeployReport_BeforeQueryStatus(object sender, EventArgs e)

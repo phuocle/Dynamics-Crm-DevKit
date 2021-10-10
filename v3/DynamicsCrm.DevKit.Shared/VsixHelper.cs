@@ -9,42 +9,45 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class VsixHelper
     {
-        public static SolutionItem GetSelectedItemPhysicalFile()
+        public static class SelectedItem
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async delegate {
-                return await GetSelectedItemPhysicalFileAsync();
-            });
-        }
-        public static async Task<SolutionItem> GetSelectedItemPhysicalFileAsync()
-        {
-            var selectedItem = await VS.Solutions.GetActiveItemAsync();
-            return selectedItem;
-        }
-        public static string GetSelectedItemExtension()
-        {
-            var selectedItem = GetSelectedItemPhysicalFile();
-            return selectedItem?.FullPath == null ? null : Path.GetExtension(selectedItem.FullPath);
-        }
-        public static string GetSelectedItemFullFileName()
-        {
-            var selectedItem = GetSelectedItemPhysicalFile();
-            return selectedItem?.FullPath == null ? null : selectedItem.FullPath;
-        }
-        public static string GetSelectedItemFileName()
-        {
-            var fullFileName = GetSelectedItemFullFileName();
-            return fullFileName == null ? null : Path.GetFileName(fullFileName);
+            public static SolutionItem PhysicalFile()
+            {
+                return ThreadHelper.JoinableTaskFactory.Run(async () => {
+                    return await PhysicalFileAsync();
+                });
+            }
+            public static async Task<SolutionItem> PhysicalFileAsync()
+            {
+                var selectedItem = await VS.Solutions.GetActiveItemAsync();
+                return selectedItem;
+            }
+            public static string Extension()
+            {
+                var selectedItem = PhysicalFile();
+                return Path.GetExtension(selectedItem.FullPath);
+            }
+            public static string FullFileName()
+            {
+                var selectedItem = PhysicalFile();
+                return selectedItem.FullPath;
+            }
+            public static string FileName()
+            {
+                var fullFileName = FullFileName();
+                return Path.GetFileName(fullFileName);
+            }
         }
         public static string GetDynamicsCrmDevKitJsonFileName()
         {
-            return ThreadHelper.JoinableTaskFactory.Run(async delegate {
+            return ThreadHelper.JoinableTaskFactory.Run(async () => {
                 return await GetDynamicsCrmDevKitJsonFileNameAsync();
             });
         }
         public static async Task<string> GetDynamicsCrmDevKitJsonFileNameAsync()
         {
             var solution = await VS.Solutions.GetCurrentSolutionAsync();
-            return solution?.FullPath == null ? null : $"{solution.FullPath}\\{Const.DynamicsCrmDevKitJson}";
+            return $"{Path.GetDirectoryName(solution.FullPath)}\\{Const.DynamicsCrmDevKitJson}";
         }
         public static DevKitConnections GetDevKitConnections()
         {

@@ -1,4 +1,5 @@
-﻿using DynamicsCrm.DevKit.Lib.Forms;
+﻿using Community.VisualStudio.Toolkit;
+using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared.Models;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -6,6 +7,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -17,29 +19,36 @@ namespace DynamicsCrm.DevKit.Shared
             WebResources
         }
 
-        private DTE _dte = null;
-        public VsixSessionCache(DTE dte)
+        public object GetCached(string name)
         {
-            _dte = dte;
+            return ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                return await GetCachedAsync(name);
+            });
         }
-
-        private object GetCache(string name)
+        public async Task<object> GetCachedAsync(string name)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var globals = _dte.Globals;
-            return globals.VariableExists[name] ? globals[name] : null;
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            var dte = await VS.GetServiceAsync<DTE, DTE>();
+            return dte.Globals.VariableExists[name] ? dte.Globals[name] : null;
         }
-
-        private void SetCache(string name, object @object)
+        public void SetCached(string name, object @object)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var globals = _dte.Globals;
-            globals[name] = @object;
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await SetCachedAsync(name, @object);
+            });
+        }
+        public async Task SetCachedAsync(string name, object @object)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            var dte = await VS.GetServiceAsync<DTE, DTE>();
+            dte.Globals[name] = @object;
         }
 
         public CrmServiceClient GetCrmServiceClient()
         {
-            var cached = GetCache(nameof(VsixCache.CrmServiceClient));
+            var cached = GetCached(nameof(VsixCache.CrmServiceClient));
             if (cached == null)
             {
                 var formConnection = new FormConnection();
@@ -63,7 +72,7 @@ namespace DynamicsCrm.DevKit.Shared
                     }
                     if (service != null)
                     {
-                        SetCache(nameof(VsixCache.CrmServiceClient), service);
+                        SetCached(nameof(VsixCache.CrmServiceClient), service);
                         return service;
                     }
                     return null;
@@ -86,7 +95,7 @@ namespace DynamicsCrm.DevKit.Shared
 
         public DeployWebResource GetWebResource(string fullFileName)
         {
-            var cached = GetCache(nameof(VsixCache.WebResources));
+            var cached = GetCached(nameof(VsixCache.WebResources));
             if (cached == null) return null;
             var webResources = (List<DeployWebResource>)cached;
             return webResources.FirstOrDefault(x => x.FullFileName == fullFileName);

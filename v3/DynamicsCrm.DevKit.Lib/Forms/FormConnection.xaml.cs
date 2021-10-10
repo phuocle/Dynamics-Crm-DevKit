@@ -106,31 +106,37 @@ namespace DynamicsCrm.DevKit.Lib.Forms
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
         }
 
-        private void ClearData()
+        public void ClearData()
         {
-            ThreadHelper.JoinableTaskFactory.Run(async delegate {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                comboBoxType.SelectedIndex = -1;
-                textboxName.Text = null;
-                textboxUrl.Text = null;
-                textboxUser.Text = null;
-                textboxPassword.Password = null;
+            ThreadHelper.JoinableTaskFactory.Run(async () => {
+                await ClearDataAsync();
             });
         }
-
-        private void LoadConnections()
+        public async Task ClearDataAsync()
         {
-            ThreadHelper.JoinableTaskFactory.Run(async delegate
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            comboBoxType.SelectedIndex = -1;
+            textboxName.Text = null;
+            textboxUrl.Text = null;
+            textboxUser.Text = null;
+            textboxPassword.Password = null;
+        }
+        public void LoadConnections()
+        {
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                var devKitConnections = VsixHelper.GetDevKitConnections();
-                comboBoxSavedConnection.ItemsSource = devKitConnections.CrmConnections;
-                if (devKitConnections.DefaultCrmConnection != null)
-                    comboBoxSavedConnection.SelectedItem = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);
-                buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
+                await LoadConnectionsAsync();
             });
         }
-
+        public async Task LoadConnectionsAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            var devKitConnections = VsixHelper.GetDevKitConnections();
+            comboBoxSavedConnection.ItemsSource = devKitConnections.CrmConnections;
+            if (devKitConnections.DefaultCrmConnection != null)
+                comboBoxSavedConnection.SelectedItem = devKitConnections.CrmConnections.FirstOrDefault(x => x.Name == devKitConnections.DefaultCrmConnection);
+            buttonOK.IsEnabled = comboBoxSavedConnection.Items.Count > 0;
+        }
         private bool IsValid()
         {
             if (comboBoxType.Text.Length == 0)

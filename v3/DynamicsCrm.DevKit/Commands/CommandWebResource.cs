@@ -25,18 +25,18 @@ namespace DynamicsCrm.DevKit.Commands
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var menuCommand = sender as OleMenuCommand;
-            menuCommand.Visible = Utility.IsWebResourceExtension(VsixHelper.GetSelectedItemExtension());
+            menuCommand.Visible = Utility.IsWebResourceExtension(VsixHelper.SelectedItem.Extension());
         }
 
         internal static async Task ClickDeployWebResourceAsync()
         {
             await VS.StatusBar.StartAnimationAsync(StatusAnimation.Deploy);
-            var vsixSessionCache = new VsixSessionCache(null);
+            var vsixSessionCache = new VsixSessionCache();
             var serviceCache = vsixSessionCache.GetCrmServiceClient();
             if (serviceCache != null)
             {
                 await VS.StatusBar.ShowMessageAsync($"Connected: {XrmHelper.ConnectedUrl(serviceCache)}");
-                var fullFileName = VsixHelper.GetSelectedItemFullFileName();
+                var fullFileName = VsixHelper.SelectedItem.FullFileName();
                 var deployWebResourceCache = vsixSessionCache.GetWebResource(fullFileName);
                 if (deployWebResourceCache != null)
                     await DeployWebResourceAsync(serviceCache, deployWebResourceCache);
