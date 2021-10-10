@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -41,8 +44,48 @@ namespace DynamicsCrm.DevKit.Shared
         public static string ConnectedUrl(CrmServiceClient crmServiceClient)
         {
             var url = new Uri(crmServiceClient?.CrmConnectOrgUriActual?.AbsoluteUri).GetLeftPart(UriPartial.Authority);
-            url = url?.Replace(".api.", ".");
+            url = url.Replace(".api.", ".");
             return url;
+        }
+
+        public static List<DeployWebResource> GetWebResouces(CrmServiceClient service, string fullFileName)
+        {
+            //fullFileName = C:\src\github\phuocle\Dynamics-Crm-DevKit\test\DownloadWebResources\2.after\WebProject\entities\Lead.js
+            var parts = fullFileName.Split(@"\".ToCharArray());
+            var condition = string.Empty;
+            for (var i = parts.Length - 1; i > 0; i--)
+            {
+                var value = "/";
+                for (var j = i; j < parts.Length; j++)
+                {
+                    value += parts[j] + "/";
+                }
+                value = value.TrimEnd("/".ToCharArray());
+                condition += $"<condition attribute='name' operator='ends-with' value='{value}'/>" + "\r\n";
+            }
+            var fileNameWithoutExtension = "/" + Path.GetFileNameWithoutExtension(fullFileName) + "/";
+            condition += $"<condition attribute='name' operator='like' value='%{fileNameWithoutExtension}%'/>" + "\r\n";
+            var fetchXml = $@"
+<fetch>
+  <entity name='webresource'>
+    <attribute name='webresourceid' />
+    <attribute name='name' />
+    <filter type='or'>
+      {condition}
+    </filter>
+  </entity>
+</fetch>";
+            var rows = service.RetrieveMultiple(new FetchExpression(fetchXml));
+            var webResources = new List<DeployWebResource>();
+            foreach (var entity in rows.Entities)
+            {
+                webResources.Add(new DeployWebResource
+                {
+                    WebResourceName = entity.GetAttributeValue<string>("name") ?? string.Empty,
+                    WebResourceId = entity.Id
+                });
+            }
+            return webResources;
         }
     }
 }

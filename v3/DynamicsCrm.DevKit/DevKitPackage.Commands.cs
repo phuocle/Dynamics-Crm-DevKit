@@ -16,7 +16,7 @@ namespace DynamicsCrm.DevKit
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             MenuService = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService ?? throw new ArgumentNullException(nameof(MenuService));
 
-            var commandIdDeployWebResource = new CommandID(DeployWebResource.CommandSetDeployWebResource, DeployWebResource.CommandDeployWebResourceId);
+            var commandIdDeployWebResource = new CommandID(CommandWebResource.CommandSetDeployWebResource, CommandWebResource.CommandDeployWebResourceId);
             var oleMenuCommandDeployWebResource = new OleMenuCommand((s, e) => OleMenuCommandDeployWebResource_Click(this), commandIdDeployWebResource);
             oleMenuCommandDeployWebResource.BeforeQueryStatus += OleMenuCommandDeployWebResource_BeforeQueryStatus;
             MenuService.AddCommand(oleMenuCommandDeployWebResource);
@@ -57,7 +57,7 @@ namespace DynamicsCrm.DevKit
             ThreadHelper.JoinableTaskFactory.Run(async delegate
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                DeployWebResource.BeforeQueryStatus(sender);
+                CommandWebResource.BeforeQueryStatus(sender);
             });
         }
 
@@ -66,7 +66,7 @@ namespace DynamicsCrm.DevKit
             ThreadHelper.JoinableTaskFactory.Run(async delegate
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                await DeployWebResource.ClickDeployWebResourceAsync();
+                await CommandWebResource.ClickDeployWebResourceAsync();
             });
         }
 

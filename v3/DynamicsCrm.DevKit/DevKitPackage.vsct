@@ -18,7 +18,7 @@
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>Deploy WebResource</ButtonText>
+					<ButtonText>Deploy WebResource ...</ButtonText>
 				</Strings>
 			</Button>
 			<Button guid="guidSetAddCrmPluginRegistration" id="CommandAddCrmPluginRegistrationId" type="Button">

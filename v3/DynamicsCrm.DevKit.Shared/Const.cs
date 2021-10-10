@@ -11,9 +11,6 @@
         public static readonly string WindowTitle = $"DynamicsCrm.DevKit { Const.VersionBuild }";
         public static readonly string[] WEB_RESOURCE_EXTENSIONS = { ".htm", ".html", ".css", ".js", ".xml", ".png", ".jpg", ".gif", ".xap", ".xsl", "xslt.", ".ico", ".svg", ".resx" };
 
-        public enum CACHE
-        {
-            CrmServiceClient
-        }
+
     }
 }
