@@ -6,10 +6,10 @@
 	<Commands package="guidWindowContextMenu">
 		<Groups>
 			<Group guid="guidSetDeployWebResource" id="groupCommandsWebResource" />
-			<Group guid="guidSetAddCrmPluginRegistration" id="groupCommandsCrmPluginRegistration" />
+			<!--<Group guid="guidSetAddCrmPluginRegistration" id="groupCommandsCrmPluginRegistration" />
 			<Group guid="guidSetDeployReport" id="groupCommandsDeployReport" />
 			<Group guid="guidSetDeployReport2" id="groupCommandsDeployReport2" />
-			<Group guid="guidSetDeployReport3" id="groupCommandsDeployReport3" />
+			<Group guid="guidSetDeployReport3" id="groupCommandsDeployReport3" />-->
 		</Groups>
 		<Buttons>
 			<Button guid="guidSetDeployWebResource" id="CommandDeployWebResourceId" type="Button">
@@ -21,7 +21,7 @@
 					<ButtonText>Deploy WebResource ...</ButtonText>
 				</Strings>
 			</Button>
-			<Button guid="guidSetAddCrmPluginRegistration" id="CommandAddCrmPluginRegistrationId" type="Button">
+			<!--<Button guid="guidSetAddCrmPluginRegistration" id="CommandAddCrmPluginRegistrationId" type="Button">
 				<Icon guid="guidImages" id="bmpPicPL" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>TextChanges</CommandFlag>
@@ -56,7 +56,7 @@
 				<Strings>
 					<ButtonText>Deploy New WebResource to ...</ButtonText>
 				</Strings>
-			</Button>
+			</Button>-->
 		</Buttons>
 		<Bitmaps>
 			<Bitmap guid="guidImages" href="icon16.png" usedList="bmpPicPL"/>
@@ -78,10 +78,13 @@
 		<CommandPlacement guid="guidSetDeployWebResource" id="groupCommandsWebResource" priority="0xFFFF">
 			<Parent guid="HtmlEditorWindows2" id="IDMX_HTM_SOURCE_HTML"/>
 		</CommandPlacement>
+		<CommandPlacement guid="guidSetDeployWebResource" id="groupCommandsWebResource" priority="0xFFFF">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+		</CommandPlacement>
 		<CommandPlacement guid="guidSetDeployWebResource" id="CommandDeployWebResourceId" priority="0x0001" >
 			<Parent guid="guidSetDeployWebResource" id="groupCommandsWebResource"/>
 		</CommandPlacement>
-		<CommandPlacement guid="guidSetAddCrmPluginRegistration" id="groupCommandsCrmPluginRegistration" priority="0xFFFF">
+		<!--<CommandPlacement guid="guidSetAddCrmPluginRegistration" id="groupCommandsCrmPluginRegistration" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
 		<CommandPlacement guid="guidSetAddCrmPluginRegistration" id="CommandAddCrmPluginRegistrationId" priority="0x0002" >
@@ -104,14 +107,14 @@
 		</CommandPlacement>
 		<CommandPlacement guid="guidSetDeployReport3" id="CommandDeployReport3Id" priority="0x005" >
 			<Parent guid="guidSetDeployReport3" id="groupCommandsDeployReport3"/>
-		</CommandPlacement>
+		</CommandPlacement>-->
 	</CommandPlacements>
 	<Symbols>
-		<GuidSymbol name="guidSetDeployWebResource" value="{0c1acc31-15ac-417c-86b2-eefdc669e8bf}">
+		<GuidSymbol name="guidSetDeployWebResource" value="{0C1ACC31-15AC-417C-86B2-EEFDC669E8BF}">
 			<IDSymbol name="groupCommandsWebResource" value="0x1010" />
 			<IDSymbol name="CommandDeployWebResourceId" value="0x0100" />
 		</GuidSymbol>
-		<GuidSymbol name="guidSetAddCrmPluginRegistration" value="{0c1acc31-15ac-417c-86b2-eefdc669e8be}">
+		<!--<GuidSymbol name="guidSetAddCrmPluginRegistration" value="{0c1acc31-15ac-417c-86b2-eefdc669e8be}">
 			<IDSymbol name="groupCommandsCrmPluginRegistration" value="0x1020" />
 			<IDSymbol name="CommandAddCrmPluginRegistrationId" value="0x0200" />
 		</GuidSymbol>
@@ -126,9 +129,9 @@
 		<GuidSymbol name="guidSetDeployReport3" value="{0c1acc31-15ac-417c-86b2-eefdc669e8bf}">
 			<IDSymbol name="groupCommandsDeployReport3" value="0x1050" />
 			<IDSymbol name="CommandDeployReport3Id" value="0x0500" />
-		</GuidSymbol>
-		<GuidSymbol name="guidWindowContextMenu" value="{7e37eef9-8cbe-4b10-81f7-66413cd2c9d3}" />
-		<GuidSymbol name="guidImages" value="{68759f95-6f1d-4a77-87ea-192fc8d811f1}" >
+		</GuidSymbol>-->
+		<GuidSymbol name="guidWindowContextMenu" value="{7E37EEF9-8CBE-4B10-81F7-66413CD2C9D3}" />
+		<GuidSymbol name="guidImages" value="{68759F95-6F1D-4A77-87EA-192FC8D811F1}" >
 			<IDSymbol name="bmpPicPL" value="1" />
 		</GuidSymbol>
 		<GuidSymbol name="HtmlEditorWindows" value="{D7E8C5E1-BDB8-11D0-9C88-0000F8040A53}">

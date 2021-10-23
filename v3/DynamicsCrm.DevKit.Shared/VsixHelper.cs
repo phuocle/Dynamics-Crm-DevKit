@@ -11,31 +11,39 @@ namespace DynamicsCrm.DevKit.Shared
     {
         public static class SelectedItem
         {
-            public static SolutionItem PhysicalFile()
+            public static SolutionItem GetPhysicalFile()
             {
                 return ThreadHelper.JoinableTaskFactory.Run(async () => {
-                    return await PhysicalFileAsync();
+                    return await GetPhysicalFileAsync();
                 });
             }
-            public static async Task<SolutionItem> PhysicalFileAsync()
+            public static async Task<SolutionItem> GetPhysicalFileAsync()
             {
                 var selectedItem = await VS.Solutions.GetActiveItemAsync();
                 return selectedItem;
             }
-            public static string Extension()
+            public static string Extension
             {
-                var selectedItem = PhysicalFile();
-                return Path.GetExtension(selectedItem.FullPath);
+                get
+                {
+                    var selectedItem = GetPhysicalFile();
+                    return Path.GetExtension(selectedItem.FullPath);
+                }
             }
-            public static string FullFileName()
+            public static string FullFileName
             {
-                var selectedItem = PhysicalFile();
-                return selectedItem.FullPath;
+                get
+                {
+                    var selectedItem = GetPhysicalFile();
+                    return selectedItem.FullPath;
+                }
             }
-            public static string FileName()
+            public static string FileName
             {
-                var fullFileName = FullFileName();
-                return Path.GetFileName(fullFileName);
+                get
+                {
+                    return Path.GetFileName(FullFileName);
+                }
             }
         }
         public static string GetDynamicsCrmDevKitJsonFileName()

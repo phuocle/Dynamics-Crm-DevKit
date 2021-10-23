@@ -18,11 +18,18 @@ namespace DynamicsCrm.DevKit.Shared.CliTasks
         {
             return await Task.Run(() =>
             {
-                var webResource = new Entity("webresource") { Id = webResourceId };
-                webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
-                var request = new UpdateRequest { Target = webResource };
-                var response = (UpdateResponse)Service.Execute(request);
-                return true;
+                try
+                {
+                    var webResource = new Entity("webresource") { Id = webResourceId };
+                    webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fullFileName));
+                    var request = new UpdateRequest { Target = webResource };
+                    var response = (UpdateResponse)Service.Execute(request);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             });
         }
 
@@ -34,10 +41,17 @@ namespace DynamicsCrm.DevKit.Shared.CliTasks
         public async Task<bool> PublishWebResourceAsync(Guid webResourceId)
         {
             return await Task.Run(() => {
-                var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
-                var request = new PublishXmlRequest { ParameterXml = publishXml };
-                var response = (PublishXmlResponse) Service.Execute(request);
-                return true;
+                try
+                {
+                    var publishXml = $"<importexportxml><webresources><webresource>{webResourceId}</webresource></webresources></importexportxml>";
+                    var request = new PublishXmlRequest { ParameterXml = publishXml };
+                    var response = (PublishXmlResponse)Service.Execute(request);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             });
         }
     }

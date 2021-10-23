@@ -85,6 +85,17 @@ namespace DynamicsCrm.DevKit.Shared
                 return (CrmServiceClient)cached;
             }
         }
+
+        public DeployWebResource GetNewWebResource(string fullFileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DeployWebResource GetExistingWebResource(List<DeployWebResource> webResources, string fullFileName)
+        {
+            throw new NotImplementedException();
+        }
+
         private void LoginForm_ConnectionToCrmCompleted(object sender, EventArgs e)
         {
             if (sender is FormLogin login)
