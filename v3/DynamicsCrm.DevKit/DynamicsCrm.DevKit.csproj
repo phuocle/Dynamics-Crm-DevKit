@@ -47,19 +47,32 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Commands\CommandWebResource.cs" />
+    <None Include="Commands\CommandWebResource.cs" />
+    <Compile Include="Commands\DeployWebResource.cs" />
+    <Compile Include="DevKitPackageVsct.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DevKitPackageVsct.vsct</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DevKitPackage.cs" />
-    <Compile Include="DevKitPackage.Solution.cs">
+    <None Include="DevKitPackage.Solution.cs">
       <DependentUpon>DevKitPackage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DevKitPackage.Commands.cs">
+    </None>
+    <None Include="DevKitPackage.Commands.cs">
       <DependentUpon>DevKitPackage.cs</DependentUpon>
+    </None>
+    <Compile Include="source.extension.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
+      <Generator>VsixManifestGenerator</Generator>
+      <LastGenOutput>source.extension.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -102,10 +115,13 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <VSCTCompile Include="DevKitPackage.vsct">
+    <VSCTCompile Include="DevKitPackageVsct.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <Generator>VsctGenerator</Generator>
+      <LastGenOutput>DevKitPackageVsct.cs</LastGenOutput>
     </VSCTCompile>
     <Content Include="icon.ico" />
+    <Content Include="icon16.png" />
     <Content Include="icon32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

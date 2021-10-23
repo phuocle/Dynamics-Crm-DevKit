@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<Extern href="stdidcmd.h"/>
+	<Extern href="vsshlids.h"/>
+	<Include href="KnownImageIds.vsct"/>
+	<Include href="VSGlobals.vsct"/>
+
+	<Commands package="SingleFileGenerator">
+		<Groups>
+			<Group guid="SingleFileGenerator" id="MyMenuGroup" />				
+		</Groups>
+		<Buttons>
+			<Button guid="SingleFileGenerator" id="MyCommand" type="Button" priority="0x0001">
+				<Parent guid="SingleFileGenerator" id="MyMenuGroup"/>
+				<Icon guid="guidImages" id="bmpPicPL" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Deploy WebResource ...</ButtonText>
+				</Strings>
+			</Button>
+		</Buttons>
+		<Bitmaps>
+			<Bitmap guid="guidImages" href="icon16.png" usedList="bmpPicPL"/>
+		</Bitmaps>
+	</Commands>
+
+	<VisibilityConstraints>
+		<VisibilityItem guid="SingleFileGenerator" id="MyCommand" context="CommandVisisiblity" />
+	</VisibilityConstraints>
+
+	<CommandPlacements>
+		<CommandPlacement guid="SingleFileGenerator" id="MyMenuGroup" priority="0xFFFF">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+		</CommandPlacement>
+		<CommandPlacement guid="SingleFileGenerator" id="MyMenuGroup" priority="0xFFFF">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+		</CommandPlacement>
+		<CommandPlacement guid="SingleFileGenerator" id="MyMenuGroup" priority="0xFFFF">
+			<Parent guid="CssEditorWindows" id="IDMX_HTM_SOURCE_CSS" />
+		</CommandPlacement>
+		<CommandPlacement guid="SingleFileGenerator" id="MyMenuGroup" priority="0xFFFF">
+			<Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML"/>
+		</CommandPlacement>		
+	</CommandPlacements>
+	
+	<Symbols>
+		<GuidSymbol name="CommandVisisiblity" value="{525190a4-9c61-4aa5-8319-7c5fb75dae59}" />
+		<GuidSymbol name="guidImages" value="{68759F95-6F1D-4A77-87EA-192FC8D811F1}" >
+			<IDSymbol name="bmpPicPL" value="1" />
+		</GuidSymbol>		
+		<GuidSymbol name="CssEditorWindows" value="{64DA400E-B4AD-4D67-AA92-4B7ACB01ECD5}">
+			<IDSymbol name="IDMX_HTM_SOURCE_CSS" value="0x002" />
+		</GuidSymbol>
+		<GuidSymbol name="HtmlEditorWindows" value="{78F03954-2FB8-4087-8CE7-59D71710B3BB}">
+			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="1"/>
+		</GuidSymbol>		
+		<GuidSymbol name="SingleFileGenerator" value="{525190a4-9c61-4aa5-8319-7c5fb75dae58}">
+			<IDSymbol name="MyMenuGroup" value="0x0001" />
+			<IDSymbol name="MyCommand" value="0x0100" />
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>
