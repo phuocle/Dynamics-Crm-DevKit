@@ -6,13 +6,13 @@
 	<Include href="KnownImageIds.vsct"/>
 	<Include href="VSGlobals.vsct"/>
 
-	<Commands package="SingleFileGenerator">
+	<Commands package="DynamicsCrmDevKit">
 		<Groups>
-			<Group guid="SingleFileGenerator" id="MyMenuGroup" />				
+			<Group guid="DynamicsCrmDevKit" id="MenuGroup" />				
 		</Groups>
 		<Buttons>
-			<Button guid="SingleFileGenerator" id="MyCommand" type="Button" priority="0x0001">
-				<Parent guid="SingleFileGenerator" id="MyMenuGroup"/>
+			<Button guid="DynamicsCrmDevKit" id="CommandDeployWebResource" type="Button" priority="0x0001">
+				<Parent guid="DynamicsCrmDevKit" id="MenuGroup"/>
 				<Icon guid="guidImages" id="bmpPicPL" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
@@ -26,26 +26,26 @@
 	</Commands>
 
 	<VisibilityConstraints>
-		<VisibilityItem guid="SingleFileGenerator" id="MyCommand" context="CommandVisisiblity" />
+		<VisibilityItem guid="DynamicsCrmDevKit" id="CommandDeployWebResource" context="CommandVisisiblityDeployWebResource" />
 	</VisibilityConstraints>
 
 	<CommandPlacements>
-		<CommandPlacement guid="SingleFileGenerator" id="MyMenuGroup" priority="0xFFFF">
+		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroup" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
 		</CommandPlacement>
-		<CommandPlacement guid="SingleFileGenerator" id="MyMenuGroup" priority="0xFFFF">
+		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroup" priority="0xFFFF">
 			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
 		</CommandPlacement>
-		<CommandPlacement guid="SingleFileGenerator" id="MyMenuGroup" priority="0xFFFF">
+		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroup" priority="0xFFFF">
 			<Parent guid="CssEditorWindows" id="IDMX_HTM_SOURCE_CSS" />
 		</CommandPlacement>
-		<CommandPlacement guid="SingleFileGenerator" id="MyMenuGroup" priority="0xFFFF">
+		<CommandPlacement guid="DynamicsCrmDevKit" id="MenuGroup" priority="0xFFFF">
 			<Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML"/>
 		</CommandPlacement>		
 	</CommandPlacements>
 	
 	<Symbols>
-		<GuidSymbol name="CommandVisisiblity" value="{525190a4-9c61-4aa5-8319-7c5fb75dae59}" />
+		<GuidSymbol name="CommandVisisiblityDeployWebResource" value="{525190a4-9c61-4aa5-8319-7c5fb75dae59}" />
 		<GuidSymbol name="guidImages" value="{68759F95-6F1D-4A77-87EA-192FC8D811F1}" >
 			<IDSymbol name="bmpPicPL" value="1" />
 		</GuidSymbol>		
@@ -55,9 +55,9 @@
 		<GuidSymbol name="HtmlEditorWindows" value="{78F03954-2FB8-4087-8CE7-59D71710B3BB}">
 			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="1"/>
 		</GuidSymbol>		
-		<GuidSymbol name="SingleFileGenerator" value="{525190a4-9c61-4aa5-8319-7c5fb75dae58}">
-			<IDSymbol name="MyMenuGroup" value="0x0001" />
-			<IDSymbol name="MyCommand" value="0x0100" />
+		<GuidSymbol name="DynamicsCrmDevKit" value="{525190a4-9c61-4aa5-8319-7c5fb75dae58}">
+			<IDSymbol name="MenuGroup" value="0x0001" />
+			<IDSymbol name="CommandDeployWebResource" value="0x0100" />
 		</GuidSymbol>
 	</Symbols>
 </CommandTable>

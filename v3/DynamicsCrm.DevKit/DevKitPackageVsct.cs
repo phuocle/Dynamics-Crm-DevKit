@@ -12,8 +12,8 @@ namespace DynamicsCrm.DevKit
     /// </summary>
     internal sealed partial class PackageGuids
     {
-        public const string CommandVisisiblityString = "525190a4-9c61-4aa5-8319-7c5fb75dae59";
-        public static Guid CommandVisisiblity = new Guid(CommandVisisiblityString);
+        public const string CommandVisisiblityDeployWebResourceString = "525190a4-9c61-4aa5-8319-7c5fb75dae59";
+        public static Guid CommandVisisiblityDeployWebResource = new Guid(CommandVisisiblityDeployWebResourceString);
 
         public const string guidImagesString = "68759f95-6f1d-4a77-87ea-192fc8d811f1";
         public static Guid guidImages = new Guid(guidImagesString);
@@ -24,8 +24,8 @@ namespace DynamicsCrm.DevKit
         public const string HtmlEditorWindowsString = "78f03954-2fb8-4087-8ce7-59d71710b3bb";
         public static Guid HtmlEditorWindows = new Guid(HtmlEditorWindowsString);
 
-        public const string SingleFileGeneratorString = "525190a4-9c61-4aa5-8319-7c5fb75dae58";
-        public static Guid SingleFileGenerator = new Guid(SingleFileGeneratorString);
+        public const string DynamicsCrmDevKitString = "525190a4-9c61-4aa5-8319-7c5fb75dae58";
+        public static Guid DynamicsCrmDevKit = new Guid(DynamicsCrmDevKitString);
     }
     /// <summary>
     /// Helper class that encapsulates all CommandIDs uses across VS Package.
@@ -35,7 +35,7 @@ namespace DynamicsCrm.DevKit
         public const int bmpPicPL = 0x0001;
         public const int IDMX_HTM_SOURCE_CSS = 0x0002;
         public const int IDMX_HTM_SOURCE_HTML = 0x0001;
-        public const int MyMenuGroup = 0x0001;
-        public const int MyCommand = 0x0100;
+        public const int MenuGroup = 0x0001;
+        public const int CommandDeployWebResource = 0x0100;
     }
 }
