@@ -20,7 +20,7 @@ if %MsBuild%=="" (
 		del Published\%VERSION%\*.* /f /q
 	)
 	if not exist Published\%VERSION% ( md Published\%VERSION% )
-	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.sln    
+	call %MsBuild% /nologo /noautorsp /verbosity:minimal -p:Configuration=Release -target:Clean;Build DynamicsCrm.DevKit.sln
 
     echo ************************************************************
     echo NuGet pack ...

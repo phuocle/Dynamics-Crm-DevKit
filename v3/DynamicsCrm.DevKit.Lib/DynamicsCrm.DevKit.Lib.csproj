@@ -54,7 +54,7 @@
     <Page Include="WpfControls\UserControlConnection.xaml">
       <Generator>XamlIntelliSenseFileGenerator</Generator>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Page>	
+    </Page>
 </ItemGroup>
 
   <ItemGroup>
