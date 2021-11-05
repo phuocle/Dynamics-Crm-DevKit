@@ -87,5 +87,20 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return webResources;
         }
+
+        public static string BuildConnectionStringLog(string connectionString)
+        {
+            if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
+            var value = string.Empty;
+            var arr = connectionString.Split(";".ToCharArray());
+            foreach (var item in arr)
+            {
+                if (item.ToLower().Contains("Password=".ToLower()))
+                    value += "Password=********;";
+                else
+                    value += item + ";";
+            }
+            return value.Replace(";;", ";");
+        }
     }
 }
