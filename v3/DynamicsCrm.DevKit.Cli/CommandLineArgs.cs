@@ -1,4 +1,5 @@
 ﻿using CmdLine;
+using Microsoft.Xrm.Tooling.Connector;
 using System.IO;
 
 namespace DynamicsCrm.DevKit.Cli
@@ -35,6 +36,7 @@ namespace DynamicsCrm.DevKit.Cli
         public string JsonFile => Path.Combine(CurrentDirectory, Json);
 
         public bool IsSdkLogin => SdkLogin?.ToLower() == "yes";
+        public CrmServiceClient CrmServiceClient { get; set; }
     }
 
     internal enum CliType

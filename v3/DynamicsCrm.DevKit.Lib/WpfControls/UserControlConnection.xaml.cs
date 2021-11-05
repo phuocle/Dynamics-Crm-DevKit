@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
             if (result) {
                 if (formConnection.IsOOBConnection)
                 {
-                    var loginForm = new FormLogin();
+                    var loginForm = new FormLogin(false);
                     loginForm.ConnectionToCrmCompleted += LoginForm_ConnectionToCrmCompleted;
                     loginForm.ShowDialog();
                     if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
@@ -65,7 +65,7 @@ namespace DynamicsCrm.DevKit.Lib.WpfControls
                     IsOOBConnection = false;
                     CrmServiceClient = formConnection.CrmServiceClient;
                     IsConnected = CrmServiceClient != null;
-                }                
+                }
             }
             else
                 IsConnected = false;

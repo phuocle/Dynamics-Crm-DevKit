@@ -58,7 +58,7 @@ namespace DynamicsCrm.DevKit.Shared
                     CrmServiceClient service = null;
                     if (formConnection.IsOOBConnection)
                     {
-                        var loginForm = new FormLogin();
+                        var loginForm = new FormLogin(false);
                         loginForm.ConnectionToCrmCompleted += LoginForm_ConnectionToCrmCompleted;
                         loginForm.ShowDialog();
                         if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)

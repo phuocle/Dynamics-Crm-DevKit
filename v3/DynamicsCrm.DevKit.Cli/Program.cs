@@ -1,5 +1,6 @@
 ﻿using CmdLine;
 using DynamicsCrm.DevKit.Cli.Tasks;
+using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
@@ -36,12 +37,11 @@ namespace DynamicsCrm.DevKit.Cli
             CliLog.WriteLine(ConsoleColor.Green, "| |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
             CliLog.WriteLine(ConsoleColor.Green, "|____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
             CliLog.WriteLine(ConsoleColor.Green, "       |___/                        ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit", ConsoleColor.Blue, $" {Const.Version}", ConsoleColor.White, " Build: ", ConsoleColor.Blue, Const.Build);
-            CliLog.WriteLine();
+            CliLog.WriteLine(ConsoleColor.White, "|");
             if (IsValid(arguments))
             {
                 CliTask.Run(arguments);
             }
-            CliLog.WriteLine();
 #if DEBUG
             CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
             CliLog.WriteLine(ConsoleColor.Red, "!!! FINISHED !!!");
@@ -52,6 +52,7 @@ namespace DynamicsCrm.DevKit.Cli
 
         private static bool IsValid(CommandLineArgs arguments)
         {
+            CrmServiceClient = null;
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Current Directory ", ConsoleColor.Blue, "Path=", ConsoleColor.White, arguments.CurrentDirectory);
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "DynamicsCrm.DevKit.Cli.exe ", ConsoleColor.Blue, "Path=", ConsoleColor.White, Assembly.GetExecutingAssembly().Location);
             if (!File.Exists(arguments.JsonFile)) {
@@ -108,14 +109,23 @@ namespace DynamicsCrm.DevKit.Cli
             {
 
             }
-
+            if (CrmServiceClient == null)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"Something went wrong, please try again  !!!");
+                return false;
+            }
+            arguments.CrmServiceClient = CrmServiceClient;
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLineWarning(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ", ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Connection Timeout: ", ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"), ConsoleColor.Green, " (seconds)");
+            CliLog.WriteLine(ConsoleColor.White, "|");
             return true;
         }
 
         private static bool IsConnectedDynamics365BySdkLogin()
         {
             CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
-            var loginForm = new FormLogin();
+            var loginForm = new FormLogin(true);
             loginForm.ConnectionToCrmCompleted += loginForm_ConnectionToCrmCompleted;
             loginForm.ShowDialog();
             if (loginForm.CrmConnectionMgr != null && loginForm.CrmConnectionMgr.CrmSvc != null && loginForm.CrmConnectionMgr.CrmSvc.IsReady)
