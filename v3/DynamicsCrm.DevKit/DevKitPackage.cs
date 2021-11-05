@@ -1,4 +1,5 @@
 ﻿using Community.VisualStudio.Toolkit;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Runtime.InteropServices;
@@ -23,6 +24,7 @@ namespace DynamicsCrm.DevKit
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             await this.RegisterCommandsAsync();
+
         }
     }
 }

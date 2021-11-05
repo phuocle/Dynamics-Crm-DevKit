@@ -25,6 +25,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="C:\Users\ple\.nuget\packages\community.visualstudio.toolkit\17.0.76.268-pre\build\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Forms\FormWebResource.xaml" />
   </ItemGroup>
   <ItemGroup>

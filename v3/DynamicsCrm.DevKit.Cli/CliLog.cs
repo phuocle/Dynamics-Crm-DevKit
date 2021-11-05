@@ -10,6 +10,7 @@ namespace DynamicsCrm.DevKit.Cli
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Title = Const.WindowTitle;
+            Console.Clear();
         }
 
         public static void WriteLine(params object[] values)

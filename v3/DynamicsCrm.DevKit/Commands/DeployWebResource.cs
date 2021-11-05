@@ -1,5 +1,6 @@
 ﻿using Community.VisualStudio.Toolkit;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.Threading.Tasks;
 
 namespace DynamicsCrm.DevKit.Commands
@@ -9,8 +10,14 @@ namespace DynamicsCrm.DevKit.Commands
     {
         protected override Task InitializeCompletedAsync()
         {
-            Command.Supported = false;
+            Command.Supported = true;
             return base.InitializeCompletedAsync();
+        }
+
+        protected override void BeforeQueryStatus(EventArgs e)
+        {
+            this.Command.Visible = false;
+            base.BeforeQueryStatus(e);
         }
 
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
