@@ -1,4 +1,5 @@
 ﻿using CmdLine;
+using DynamicsCrm.DevKit.Cli.Models;
 using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
@@ -27,9 +28,9 @@ namespace DynamicsCrm.DevKit.Cli
         {
             CliLog.SetupCliLog();
 #if DEBUG
-            CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
-            CliLog.WriteLine(ConsoleColor.Red, "!!! DEBUG !!!");
-            CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
+            //CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
+            //CliLog.WriteLine(ConsoleColor.Red, "!!! DEBUG !!!");
+            //CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
 #endif
             CliLog.WriteLine(ConsoleColor.Green, " ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
             CliLog.WriteLine(ConsoleColor.Green, "|  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
@@ -43,9 +44,9 @@ namespace DynamicsCrm.DevKit.Cli
                 CliTask.Run(arguments);
             }
 #if DEBUG
-            CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
-            CliLog.WriteLine(ConsoleColor.Red, "!!! FINISHED !!!");
-            CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
+            //CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
+            //CliLog.WriteLine(ConsoleColor.Red, "!!! FINISHED !!!");
+            //CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
             Console.ReadKey();
 #endif
         }
@@ -63,10 +64,10 @@ namespace DynamicsCrm.DevKit.Cli
             if (arguments.IsSdkLogin)
             {
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ",
-                    ConsoleColor.Magenta, "/sdklogin:", ConsoleColor.White, "\"yes\"", " ",
-                    ConsoleColor.Magenta, "/json:", ConsoleColor.White, "\"" + arguments.Json, "\" ",
-                    ConsoleColor.Magenta, "/type:", ConsoleColor.White, "\"" + arguments.Type, "\" ",
-                    ConsoleColor.Magenta, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\""
+                    ConsoleColor.Blue, "/sdklogin:", ConsoleColor.White, "\"yes\"", " ",
+                    ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json, "\" ",
+                    ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type, "\" ",
+                    ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\""
                 );
             }
             else
@@ -77,10 +78,10 @@ namespace DynamicsCrm.DevKit.Cli
                     return false;
                 }
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Arguments: ",
-                    ConsoleColor.Magenta, "/conn:", ConsoleColor.White, "\"" + XrmHelper.BuildConnectionStringLog(arguments.Connection), "\" ",
-                    ConsoleColor.Magenta, "/json:", ConsoleColor.White, "\"" + arguments.Json, "\" ",
-                    ConsoleColor.Magenta, "/type:", ConsoleColor.White, "\"" + arguments.Type, "\" ",
-                    ConsoleColor.Magenta, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\""
+                    ConsoleColor.Blue, "/conn:", ConsoleColor.White, "\"" + XrmHelper.BuildConnectionStringLog(arguments.Connection), "\" ",
+                    ConsoleColor.Blue, "/json:", ConsoleColor.White, "\"" + arguments.Json, "\" ",
+                    ConsoleColor.Blue, "/type:", ConsoleColor.White, "\"" + arguments.Type, "\" ",
+                    ConsoleColor.Blue, "/profile:", ConsoleColor.White, "\"" + arguments.Profile + "\""
                 );
             }
             if (arguments.Type.Length == 0)
@@ -107,12 +108,12 @@ namespace DynamicsCrm.DevKit.Cli
             }
             else
             {
-
-            }
-            if (CrmServiceClient == null)
-            {
-                CliLog.WriteLineError(ConsoleColor.Yellow, $"Something went wrong, please try again  !!!");
-                return false;
+                CrmServiceClient = XrmHelper.IsConnected(arguments.Connection);
+                if (CrmServiceClient == null)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"Connection String failed !!!");
+                    return false;
+                }
             }
             arguments.CrmServiceClient = CrmServiceClient;
             CliLog.WriteLine(ConsoleColor.White, "|");

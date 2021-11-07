@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "DEBUG": {
+    "DEBUG-downloadreports": {
       "commandName": "Project",
-      "commandLineArgs": "/sdklogin:\"yes\" /json:\"DynamicsCrm.DevKit.Cli.json\" /type:\"servers\" /profile:\"RELEASE\"",
-      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.2.13.33\\TestServer"
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hslg2ewodev.crm7.dynamics.com;ClientId=881c7316-fcf9-4ba9-900e-3bf62b73b981;ClientSecret=7y[87[H5p_FJAw[ROTlm6]c3vWbn33UP;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"downloadreports\" /profile:\"DEBUG\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestExistingReports\\2.after\\Dev.DevKit.Report"
     }
   }
 }

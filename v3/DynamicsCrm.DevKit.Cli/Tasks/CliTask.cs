@@ -1,10 +1,22 @@
-﻿namespace DynamicsCrm.DevKit.Cli.Tasks
+﻿using DynamicsCrm.DevKit.Cli.Models;
+using DynamicsCrm.DevKit.Shared;
+using System.IO;
+using System.Linq;
+
+namespace DynamicsCrm.DevKit.Cli.Tasks
 {
     internal class CliTask
     {
         internal static void Run(CommandLineArgs arg)
         {
-            var t = string.Empty;
+            var json = SimpleJson.DeserializeObject<Json>(File.ReadAllText(arg.JsonFile));
+            switch (arg.Type)
+            {
+                case nameof(CliType.downloadreports):
+                    var downloadreport = new TaskDownloadReport(arg.CrmServiceClient, arg.CurrentDirectory, json.downloadreports.FirstOrDefault(x => x.profile == arg.Profile));
+                    downloadreport.Run();
+                    break;
+            }
         }
     }
 }

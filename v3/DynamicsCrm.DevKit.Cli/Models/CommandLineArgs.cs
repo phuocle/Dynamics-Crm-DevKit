@@ -2,7 +2,7 @@
 using Microsoft.Xrm.Tooling.Connector;
 using System.IO;
 
-namespace DynamicsCrm.DevKit.Cli
+namespace DynamicsCrm.DevKit.Cli.Models
 {
     [CommandLineArguments(Program = "DynamicsCrm.DevKit.Cli", Title = "DynamicsCrm.DevKit.Cli Tasks", Description = "DynamicsCrm.DevKit.Cli automation tasks")]
     internal class CommandLineArgs
@@ -37,20 +37,5 @@ namespace DynamicsCrm.DevKit.Cli
 
         public bool IsSdkLogin => SdkLogin?.ToLower() == "yes";
         public CrmServiceClient CrmServiceClient { get; set; }
-    }
-
-    internal enum CliType
-    {
-        proxytypes,
-        webresources,
-        solutionpackagers,
-        generators,
-        downloadwebresources,
-        downloadreports,
-        datasources,
-        servers,
-        plugins,
-        workflows,
-        dataproviders
     }
 }

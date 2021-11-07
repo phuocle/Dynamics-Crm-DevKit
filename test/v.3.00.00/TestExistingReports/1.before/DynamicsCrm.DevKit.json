@@ -1,0 +1,19 @@
+﻿{
+    "DefaultCrmConnection": "ClientSecret",
+    "CrmConnections": [
+        {
+            "Name": "UserPass",
+            "Url": "https://dynamicscrm-devkit-sep-2021.crm.dynamics.com",
+            "UserName": "admin@CRM232358.onmicrosoft.com",
+            "Password": "NZKFyxKkXVd9plGTk/0EeA==",
+            "Type": "OAuth"
+        },
+        {
+            "Name": "ClientSecret",
+            "Url": "https://dynamicscrm-devkit-sep-2021.crm.dynamics.com",
+            "UserName": "baaf08d8-d8f9-4930-97fa-874ffb09f31c",
+            "Password": "wUc7Q~3Pq06KQw42gKcl0y9ClyUaiEp_5Lo12",
+            "Type": "ClientSecret"
+        }
+    ]
+}

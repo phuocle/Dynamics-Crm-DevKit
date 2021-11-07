@@ -35,6 +35,12 @@ namespace DynamicsCrm.DevKit.Shared
             var password = crmConnection.Password;
             if (crmConnection.Type != "ClientSecret") password = EncryptDecrypt.DecryptString(password);
             var connectionString = BuildConnectionString(crmConnection.Type, crmConnection.Url, crmConnection.UserName, password);
+            return IsConnected(connectionString);
+        }
+
+        public static CrmServiceClient IsConnected(string connectionString)
+        {
+            CrmServiceClient.MaxConnectionTimeout = new TimeSpan(1, 0, 0);
             var crmServiceClient = new CrmServiceClient(connectionString);
             if (crmServiceClient.LastCrmError?.Length != 0)
                 return null;
@@ -50,7 +56,6 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static List<DeployWebResource> GetWebResouces(CrmServiceClient service, string fullFileName)
         {
-            //fullFileName = C:\src\github\phuocle\Dynamics-Crm-DevKit\test\DownloadWebResources\2.after\WebProject\entities\Lead.js
             var parts = fullFileName.Split(@"\".ToCharArray());
             var condition = string.Empty;
             for (var i = parts.Length - 1; i > 0; i--)
@@ -90,13 +95,17 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string BuildConnectionStringLog(string connectionString)
         {
-            if (!connectionString.ToLower().Contains("Password=".ToLower())) return connectionString;
+            if (!connectionString.ToLower().Contains("Password=".ToLower()) &&
+                !connectionString.ToLower().Contains("ClientSecret=".ToLower())
+                ) return connectionString;
             var value = string.Empty;
             var arr = connectionString.Split(";".ToCharArray());
             foreach (var item in arr)
             {
                 if (item.ToLower().Contains("Password=".ToLower()))
                     value += "Password=********;";
+                else if (item.ToLower().Contains("ClientSecret=".ToLower()))
+                    value += "ClientSecret=********;";
                 else
                     value += item + ";";
             }
