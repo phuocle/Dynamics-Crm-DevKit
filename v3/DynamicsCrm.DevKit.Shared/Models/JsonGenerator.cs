@@ -1,6 +1,6 @@
-﻿namespace DynamicsCrm.DevKit.Cli.Models
+﻿namespace DynamicsCrm.DevKit.Shared.Models
 {
-    internal class JsonGenerator : JsonBase
+    public class JsonGenerator : JsonBase
     {
         public string rootfolder { get; set; }
         public string rootnamespace { get; set; }

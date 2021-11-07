@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace DynamicsCrm.DevKit.Commands
 {
     [Command(PackageIds.CommandDeployWebResource)]
-    internal class DeployWebResource : BaseCommand<DeployWebResource>
+    public class DeployWebResource : BaseCommand<DeployWebResource>
     {
         protected override Task InitializeCompletedAsync()
         {

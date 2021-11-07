@@ -1,6 +1,6 @@
-﻿namespace DynamicsCrm.DevKit.Cli.Models
+﻿namespace DynamicsCrm.DevKit.Shared
 {
-    internal enum CliType
+    public enum CliType
     {
         proxytypes,
         webresources,

@@ -1,6 +1,6 @@
-﻿namespace DynamicsCrm.DevKit.Cli.Models
+﻿namespace DynamicsCrm.DevKit.Shared.Models
 {
-    internal class JsonDataSource : JsonBase
+    public class JsonDataSource : JsonBase
     {
         public string displayname { get; set; }
         public string pluralname { get; set; }

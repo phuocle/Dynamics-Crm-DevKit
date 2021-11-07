@@ -62,6 +62,7 @@
 </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CmdLine" Version="1.0.7.509" />
     <PackageReference Include="Community.VisualStudio.Toolkit" Version="17.0.76.268-pre" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="9.1.0.92" />
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.WpfControls" Version="9.1.0.92" />

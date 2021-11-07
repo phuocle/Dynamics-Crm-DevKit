@@ -1,24 +1,84 @@
-﻿using DynamicsCrm.DevKit.Cli.Models;
+﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
-    internal class TaskDownloadReport : ITask
+    public class TaskDownloadReport : ITask
     {
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
-        private JsonDownloadReport Json { get; set; }
-
+        public string TaskType => "[DOWNLOAD-REPORT]";
+        public bool IsValid()
+        {
+            if (json == null)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'profile' not found: '{json.profile}'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                return false;
+            }
+            if (json.solution == "???" || (json.solution != null && json?.solution?.Trim().Length == 0))
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'solution' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
+                return false;
+            }
+            if (!XrmHelper.IsExistSolution(CrmServiceClient, json.solution).IsOk)
+            {
+                CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} solution '{json.solution}' not exist");
+                return false;
+            }
+            var folder = Path.Combine(CurrentDirectory, json.solution);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+            else
+            {
+                var files = Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories);
+                if (files.Count() > 0)
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} Folder '{folder}' have an exsiting file(s). Please delete all file(s) and try it again.");
+                    return false;
+                }
+            }
+            return true;
+        }
+        private JsonDownloadReport json { get; set; }
         public TaskDownloadReport(CrmServiceClient crmServiceClient, string currentDirectory, JsonDownloadReport json)
         {
             CrmServiceClient = crmServiceClient;
             CurrentDirectory = currentDirectory;
-            Json = json;
+            this.json = json;
         }
 
         public void Run()
         {
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "START ", ConsoleColor.Blue, TaskType);
+            CliLog.WriteLine(ConsoleColor.White, "|");
 
+            if (IsValid())
+            {
+                var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, json.solution, Path.Combine(CurrentDirectory, json.solution));
+                if (reportFiles.Count == 0)
+                    CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any reports to download");
+                else
+                {
+                    var totalDownloadFiles = reportFiles.Count;
+                    var len = totalDownloadFiles.ToString().Length;
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalDownloadFiles, ConsoleColor.Green, " reports");
+                    CliLog.WriteLine(ConsoleColor.White, "|");
+                    var i = 1;
+                    foreach (var reportFile in reportFiles)
+                    {
+                        Utility.ForceWriteAllText(reportFile.FileName, reportFile.Content);
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, "Downloaded ", ConsoleColor.White, reportFile.Name, ConsoleColor.Green, " to: ", ConsoleColor.White, reportFile.FileName);
+                        i++;
+                    }
+                }
+            }
+
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ", ConsoleColor.Blue, TaskType);
         }
     }
 }

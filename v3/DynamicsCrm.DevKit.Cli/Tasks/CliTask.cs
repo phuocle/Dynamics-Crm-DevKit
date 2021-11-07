@@ -1,5 +1,5 @@
-﻿using DynamicsCrm.DevKit.Cli.Models;
-using DynamicsCrm.DevKit.Shared;
+﻿using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using System.IO;
 using System.Linq;
 

@@ -1,8 +1,8 @@
 ﻿using CmdLine;
-using DynamicsCrm.DevKit.Cli.Models;
 using DynamicsCrm.DevKit.Cli.Tasks;
 using DynamicsCrm.DevKit.Lib.Forms;
 using DynamicsCrm.DevKit.Shared;
+using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,6 @@ namespace DynamicsCrm.DevKit.Cli
 {
     public class Program
     {
-
         private static CrmServiceClient CrmServiceClient { get; set; }
 
         [STAThread]
@@ -116,8 +115,7 @@ namespace DynamicsCrm.DevKit.Cli
                 }
             }
             arguments.CrmServiceClient = CrmServiceClient;
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            CliLog.WriteLineWarning(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ", ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
+            CliLog.WriteLineWarning(ConsoleColor.Green, "Connected: ", ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Connection Timeout: ", ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"), ConsoleColor.Green, " (seconds)");
             CliLog.WriteLine(ConsoleColor.White, "|");
             return true;

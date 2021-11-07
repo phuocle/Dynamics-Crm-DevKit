@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace DynamicsCrm.DevKit.Cli.Models
+namespace DynamicsCrm.DevKit.Shared.Models
 {
-    internal class JsonPlugin
+    public class JsonServer
     {
         public string profile { get; set; }
         public string folder { get; set; }

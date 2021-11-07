@@ -2,10 +2,10 @@
 using Microsoft.Xrm.Tooling.Connector;
 using System.IO;
 
-namespace DynamicsCrm.DevKit.Cli.Models
+namespace DynamicsCrm.DevKit.Shared.Models
 {
     [CommandLineArguments(Program = "DynamicsCrm.DevKit.Cli", Title = "DynamicsCrm.DevKit.Cli Tasks", Description = "DynamicsCrm.DevKit.Cli automation tasks")]
-    internal class CommandLineArgs
+    public class CommandLineArgs
     {
         [CommandLineParameter(Command = "conn", Name = "Connection", Required = false, Description = "Dynamics 365 Connection String", Default = "")]
         public string Connection { get; set; }

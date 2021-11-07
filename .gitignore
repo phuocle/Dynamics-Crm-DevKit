@@ -274,3 +274,4 @@ __pycache__/
 /v2/DynamicsCrm.DevKit.Tool/Nuget/nuget.exe
 /v2/Published/2.1.1/DynamicsCrm.DevKit.Cli.exe
 /v2/Published/2.1.1/DynamicsCrm.DevKit.Tool.exe
+/test/v.3.00.00/TestExistingReports/2.after/Dev.DevKit.Report/TEL_WO_ReportDefinitions

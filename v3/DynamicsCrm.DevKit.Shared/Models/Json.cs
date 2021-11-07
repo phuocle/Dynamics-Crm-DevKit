@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace DynamicsCrm.DevKit.Cli.Models
+namespace DynamicsCrm.DevKit.Shared.Models
 {
-    internal class Json
+    public class Json
     {
         public List<JsonPlugin> plugins { get; set; }
         public List<JsonWorkflow> workflows { get; set; }

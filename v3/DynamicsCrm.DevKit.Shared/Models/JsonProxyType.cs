@@ -1,6 +1,6 @@
-﻿namespace DynamicsCrm.DevKit.Cli.Models
+﻿namespace DynamicsCrm.DevKit.Shared.Models
 {
-    internal class JsonProxyType : JsonBase
+    public class JsonProxyType : JsonBase
     {
         public string @namespace { get; set; }
         public string output { get; set; }

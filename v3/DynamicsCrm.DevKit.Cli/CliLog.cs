@@ -27,11 +27,12 @@ namespace DynamicsCrm.DevKit.Cli
 
         public static void WriteLineError(params object[] values)
         {
-            Console.WriteLine();
+            WriteLine(ConsoleColor.White, "|");
             var oldConsoleBackgroundColor = Console.BackgroundColor;
             var oldConsoleForegroundColor = Console.ForegroundColor;
             var countLength = 0;
             Console.BackgroundColor = ConsoleColor.Red;
+            Write(ConsoleColor.White, "|");
             foreach (var value in values)
                 if (value is ConsoleColor color)
                     Console.ForegroundColor = color;
@@ -45,6 +46,7 @@ namespace DynamicsCrm.DevKit.Cli
             Console.WriteLine();
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
+            WriteLine(ConsoleColor.White, "|");
         }
 
         public static void WriteLineChanged(params object[] values)
@@ -70,10 +72,12 @@ namespace DynamicsCrm.DevKit.Cli
 
         public static void WriteLineWarning(params object[] values)
         {
+            WriteLine(ConsoleColor.White, "|");
             var oldConsoleBackgroundColor = Console.BackgroundColor;
             var oldConsoleForegroundColor = Console.ForegroundColor;
             var countLength = 0;
             Console.BackgroundColor = ConsoleColor.DarkGray;
+            Write(ConsoleColor.White, "|");
             foreach (var value in values)
                 if (value is ConsoleColor color)
                     Console.ForegroundColor = color;
@@ -87,6 +91,7 @@ namespace DynamicsCrm.DevKit.Cli
             Console.WriteLine();
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
+            WriteLine(ConsoleColor.White, "|");
         }
 
         public static void Write(params object[] values)

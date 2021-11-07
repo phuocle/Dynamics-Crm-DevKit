@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 
@@ -110,6 +111,78 @@ namespace DynamicsCrm.DevKit.Shared
                     value += item + ";";
             }
             return value.Replace(";;", ";");
+        }
+
+        public static (bool IsOk, Guid SolutionId, string Prefix) IsExistSolution(CrmServiceClient crmServiceClient, string solutionuniquename)
+        {
+            var fetchData = new
+            {
+                uniquename = solutionuniquename
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='solution'>
+    <attribute name='solutionid' />
+    <filter>
+      <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
+    </filter>
+    <link-entity name='publisher' from='publisherid' to='publisherid' alias='p'>
+      <attribute name='customizationprefix' />
+    </link-entity>
+  </entity>
+</fetch>";
+
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count != 1) return (false, Guid.Empty, string.Empty);
+            var entity = rows.Entities[0];
+            var solutionId = entity.Id;
+            var prefix = $"{ entity.GetAttributeValue<AliasedValue>("p.customizationprefix").Value}_";
+            return (true, solutionId, prefix);
+        }
+
+        public static List<DownloadFile> GetReportsBySolution(CrmServiceClient crmServiceClient, string solution, string folder)
+        {
+            var fetchData = new
+            {
+                componenttype = "31",
+                uniquename = solution
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='report'>
+    <attribute name='filename' />
+    <attribute name='bodytext' />
+    <attribute name='languagecode' />
+    <order attribute='filename' />
+    <link-entity name='solutioncomponent' from='objectid' to='reportid' link-type='inner' alias='sc'>
+      <filter type='and'>
+        <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype/*31*/}'/>
+      </filter>
+      <link-entity name='solution' from='solutionid' to='solutionid' link-type='inner' alias='s'>
+        <filter type='and'>
+          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename/*TestReport*/}'/>
+        </filter>
+      </link-entity>
+    </link-entity>
+    <link-entity name='languagelocale' from='localeid' to='languagecode' link-type='inner' alias='l'>
+      <attribute name='language' />
+    </link-entity>
+  </entity>
+</fetch>";
+
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var list = new List<DownloadFile>();
+            foreach (var entity in rows.Entities)
+            {
+                var reportFolder = folder + "\\" + (entity.GetAttributeValue<AliasedValue>("l.language")?.Value ?? "English");
+                list.Add(new DownloadFile
+                {
+                    Content = entity.GetAttributeValue<string>("bodytext"),
+                    FileName = Path.Combine(reportFolder, entity.GetAttributeValue<string>("filename")),
+                    Name = Path.GetFileName(Path.Combine(reportFolder, entity.GetAttributeValue<string>("filename")))
+                });
+            }
+            return list;
         }
     }
 }

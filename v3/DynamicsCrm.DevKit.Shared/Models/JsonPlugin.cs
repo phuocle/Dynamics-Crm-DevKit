@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace DynamicsCrm.DevKit.Cli.Models
+namespace DynamicsCrm.DevKit.Shared.Models
 {
-    internal class JsonWebResource : JsonBase
+    public class JsonPlugin
     {
+        public string profile { get; set; }
+        public string folder { get; set; }
         public string solution { get; set; }
-        public string rootfolder { get; set; }
         public List<string> includefiles { get; set; }
         public List<string> excludefiles { get; set; }
-        public List<Dependency> dependencies { get; set; }
     }
 }

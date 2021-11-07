@@ -1,6 +1,6 @@
-﻿namespace DynamicsCrm.DevKit.Cli.Models
+﻿namespace DynamicsCrm.DevKit.Shared.Models
 {
-    internal class JsonSolutionPackager : JsonBase
+    public class JsonSolutionPackager : JsonBase
     {
         public string solution { get; set; }
         public string folder { get; set; }
