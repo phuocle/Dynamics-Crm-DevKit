@@ -12,6 +12,7 @@
         servers,
         plugins,
         workflows,
-        dataproviders
+        dataproviders,
+        uploadreports
     }
 }

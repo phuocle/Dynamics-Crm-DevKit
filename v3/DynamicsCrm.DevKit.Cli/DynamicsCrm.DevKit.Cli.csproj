@@ -45,5 +45,4 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\DynamicsCrm.DevKit.Lib\DynamicsCrm.DevKit.Lib.csproj" />
 	</ItemGroup>
-
 </Project>

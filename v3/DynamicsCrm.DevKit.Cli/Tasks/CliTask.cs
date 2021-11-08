@@ -16,6 +16,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var downloadreport = new TaskDownloadReport(arg.CrmServiceClient, arg.CurrentDirectory, json.downloadreports.FirstOrDefault(x => x.profile == arg.Profile));
                     downloadreport.Run();
                     break;
+                case nameof(CliType.uploadreports):
+                    var uploadreport = new TaskUploadReport(arg.CrmServiceClient, arg.CurrentDirectory, json.uploadreports.FirstOrDefault(x => x.profile == arg.Profile));
+                    uploadreport.Run();
+                    break;
             }
         }
     }

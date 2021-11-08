@@ -6,7 +6,7 @@ namespace DynamicsCrm.DevKit.Shared.Models
     {
         public string FileName { get; set; }
         public string Content { get; set; }
-        public string Name { get; set; }
         public Guid ObjectId { get; set; }
+        public string Language { get; set; }
     }
 }

@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommandLineArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CrmConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Dependency.cs" />
@@ -32,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonProxyType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonServer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonSolutionPackager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\JsonUploadReport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonWorkflow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Models.cs" />

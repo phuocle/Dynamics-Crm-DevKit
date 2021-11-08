@@ -140,7 +140,7 @@ namespace DynamicsCrm.DevKit.Shared
             return (true, solutionId, prefix);
         }
 
-        public static List<DownloadFile> GetReportsBySolution(CrmServiceClient crmServiceClient, string solution, string folder)
+        public static List<DownloadFile> GetReportsBySolution(CrmServiceClient crmServiceClient, string solution)
         {
             var fetchData = new
             {
@@ -156,11 +156,11 @@ namespace DynamicsCrm.DevKit.Shared
     <order attribute='filename' />
     <link-entity name='solutioncomponent' from='objectid' to='reportid' link-type='inner' alias='sc'>
       <filter type='and'>
-        <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype/*31*/}'/>
+        <condition attribute='componenttype' operator='eq' value='{fetchData.componenttype}'/>
       </filter>
       <link-entity name='solution' from='solutionid' to='solutionid' link-type='inner' alias='s'>
         <filter type='and'>
-          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename/*TestReport*/}'/>
+          <condition attribute='uniquename' operator='eq' value='{fetchData.uniquename}'/>
         </filter>
       </link-entity>
     </link-entity>
@@ -174,15 +174,22 @@ namespace DynamicsCrm.DevKit.Shared
             var list = new List<DownloadFile>();
             foreach (var entity in rows.Entities)
             {
-                var reportFolder = folder + "\\" + (entity.GetAttributeValue<AliasedValue>("l.language")?.Value ?? "English");
                 list.Add(new DownloadFile
                 {
                     Content = entity.GetAttributeValue<string>("bodytext"),
-                    FileName = Path.Combine(reportFolder, entity.GetAttributeValue<string>("filename")),
-                    Name = Path.GetFileName(Path.Combine(reportFolder, entity.GetAttributeValue<string>("filename")))
+                    FileName = entity.GetAttributeValue<string>("filename"),
+                    Language = entity.GetAttributeValue<AliasedValue>("l.language")?.Value?.ToString() ?? "English",
+                    ObjectId = entity.Id
                 });
             }
             return list;
+        }
+
+        public static void DeployReport(CrmServiceClient crmServiceClient, Guid reportId, string fullFileName)
+        {
+            var update = new Entity("report", reportId);
+            update["bodytext"] = File.ReadAllText(fullFileName);
+            crmServiceClient.Update(update);
         }
     }
 }

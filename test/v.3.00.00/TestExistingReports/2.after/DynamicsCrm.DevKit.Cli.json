@@ -128,5 +128,12 @@
       "output": "GeneratedCode.cs",
       "entities": "*"
     }
+  ],
+  "uploadreports": [
+    {
+      "profile": "DEBUG",
+      "solution": "TEL_WO_ReportDefinitions",
+      "language": "English"
+    }
   ]
 }

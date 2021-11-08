@@ -58,9 +58,11 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
             if (IsValid())
             {
-                var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, json.solution, Path.Combine(CurrentDirectory, json.solution));
+                var reportFiles = XrmHelper.GetReportsBySolution(CrmServiceClient, json.solution);
                 if (reportFiles.Count == 0)
+                {
                     CliLog.WriteLineWarning(ConsoleColor.Green, "Not found any reports to download");
+                }
                 else
                 {
                     var totalDownloadFiles = reportFiles.Count;
@@ -68,10 +70,21 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalDownloadFiles, ConsoleColor.Green, " reports");
                     CliLog.WriteLine(ConsoleColor.White, "|");
                     var i = 1;
+                    reportFiles = reportFiles.OrderBy(x => x.Language).ToList();
                     foreach (var reportFile in reportFiles)
                     {
-                        Utility.ForceWriteAllText(reportFile.FileName, reportFile.Content);
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, "Downloaded ", ConsoleColor.White, reportFile.Name, ConsoleColor.Green, " to: ", ConsoleColor.White, reportFile.FileName);
+                        var fileName = Path.Combine(CurrentDirectory, json.solution, reportFile.Language, reportFile.FileName);
+                        if (!File.Exists(fileName))
+                        {
+                            Utility.ForceWriteAllText(fileName, reportFile.Content);
+                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Downloaded, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Green, " to: ", ConsoleColor.White, fileName);
+                        }
+                        else
+                        {
+                            var newFileName = Utility.GeNextFileName(fileName);
+                            Utility.ForceWriteAllText(newFileName, reportFile.Content);
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Downloaded, ConsoleColor.White, reportFile.Language, ConsoleColor.Green, " report file name ", ConsoleColor.White, reportFile.FileName, ConsoleColor.Magenta, $" {CliAction.Duplicated}", ConsoleColor.Green, "to: ", ConsoleColor.White, newFileName);
+                        }
                         i++;
                     }
                 }
