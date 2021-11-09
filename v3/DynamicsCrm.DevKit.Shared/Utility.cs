@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -48,6 +49,39 @@ namespace DynamicsCrm.DevKit.Shared
                     path = path.Replace("(" + i + ")" + extension, "(" + ++i + ")" + extension);
             }
             return path;
+        }
+
+        public static string ReadAllText(string file)
+        {
+            try
+            {
+                return File.ReadAllText(file);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        public static string ReadEmbeddedResource(string path)
+        {
+            try
+            {
+                string data;
+                var executingAssembly = Assembly.GetExecutingAssembly();
+                var directoryName = Path.GetDirectoryName(executingAssembly.Location);
+                var assembly = Assembly.LoadFile(Path.Combine(directoryName, "Const.PLDynamicsCrmDevKitResourcesDll"));
+                using (var stream = assembly.GetManifestResourceStream(path))
+                using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
+                {
+                    data = reader.ReadToEnd();
+                }
+                return data;
+            }
+            catch
+            {
+            }
+            return string.Empty;
         }
     }
 }

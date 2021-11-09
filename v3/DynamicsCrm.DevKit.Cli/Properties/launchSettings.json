@@ -9,6 +9,11 @@
       "commandName": "Project",
       "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://hslg2ewodev.crm7.dynamics.com;ClientId=881c7316-fcf9-4ba9-900e-3bf62b73b981;ClientSecret=7y[87[H5p_FJAw[ROTlm6]c3vWbn33UP;\" /json:\"..\\DynamicsCrm.DevKit.Cli.json\" /type:\"uploadreports\" /profile:\"DEBUG\"",
       "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestExistingReports\\2.after\\Dev.DevKit.Report"
+    },
+    "generator-csharp": {
+      "commandName": "Project",
+      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dsms-dev.crm5.dynamics.com;ClientId=c8eeef7f-2a1b-47f8-925b-31963e1ad8ff;ClientSecret=67/VLGPU_:n/NG5BkF6o.su=-6OiI9:i;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
+      "workingDirectory": "C:\\src\\azure\\abiz\\git\\ABIZ_DSMS\\src\\CDS\\DNA.DSMS.Shared\\Entities"
     }
   }
 }

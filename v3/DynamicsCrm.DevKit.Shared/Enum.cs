@@ -15,4 +15,10 @@
         dataproviders,
         uploadreports
     }
+    public enum GeneratorType
+    {
+        jsform,
+        jswebapi,
+        csharp
+    }
 }

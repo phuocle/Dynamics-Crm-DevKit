@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CliTasks\CliTask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CliTasks\CliWebResource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Const.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpLateBound.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonHelper.cs" />

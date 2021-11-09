@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 
@@ -190,6 +193,17 @@ namespace DynamicsCrm.DevKit.Shared
             var update = new Entity("report", reportId);
             update["bodytext"] = File.ReadAllText(fullFileName);
             crmServiceClient.Update(update);
+        }
+
+        public static EntityMetadata[] GetEntitiesMetadata(CrmServiceClient crmServiceClient)
+        {
+            var request = new RetrieveAllEntitiesRequest
+            {
+                EntityFilters = EntityFilters.Entity,
+                RetrieveAsIfPublished = true
+            };
+            var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
+            return respone.EntityMetadata;
         }
     }
 }

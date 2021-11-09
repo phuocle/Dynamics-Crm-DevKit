@@ -20,6 +20,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var uploadreport = new TaskUploadReport(arg.CrmServiceClient, arg.CurrentDirectory, json.uploadreports.FirstOrDefault(x => x.profile == arg.Profile));
                     uploadreport.Run();
                     break;
+                case nameof(CliType.generators):
+                    var generator = new TaskGenerator(arg.CrmServiceClient, arg.CurrentDirectory, json.generators.FirstOrDefault(x => x.profile == arg.Profile));
+                    generator.Run();
+                    break;
             }
         }
     }
