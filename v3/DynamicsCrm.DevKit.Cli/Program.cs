@@ -31,12 +31,12 @@ namespace DynamicsCrm.DevKit.Cli
             //CliLog.WriteLine(ConsoleColor.Red, "!!! DEBUG !!!");
             //CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
 #endif
-            CliLog.WriteLine(ConsoleColor.Green, " ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
-            CliLog.WriteLine(ConsoleColor.Green, "|  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
-            CliLog.WriteLine(ConsoleColor.Green, "| | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
-            CliLog.WriteLine(ConsoleColor.Green, "| |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
-            CliLog.WriteLine(ConsoleColor.Green, "|____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
-            CliLog.WriteLine(ConsoleColor.Green, "       |___/                        ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit", ConsoleColor.Blue, $" {Const.Version}", ConsoleColor.White, " Build: ", ConsoleColor.Blue, Const.Build);
+            CliLog.WriteLine(ConsoleColor.Green, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
+            CliLog.WriteLine(ConsoleColor.Green, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
+            CliLog.WriteLine(ConsoleColor.Green, " | | | | | | | '_ \\ / _` | '_ ` _ \\| |/ __/ __| |   | '__| '_ ` _ \\  | | | |/ _ \\ \\ / / ' /| | __|| |   | | |");
+            CliLog.WriteLine(ConsoleColor.Green, " | |_| | |_| | | | | (_| | | | | | | | (__\\__ \\ |___| |  | | | | | |_| |_| |  __/\\ V /| . \\| | |_ | |___| | |");
+            CliLog.WriteLine(ConsoleColor.Green, " |____/ \\__, |_| |_|\\__,_|_| |_| |_|_|\\___|___/\\____|_|  |_| |_| |_(_)____/ \\___| \\_/ |_|\\_\\_|\\__(_)____|_|_|");
+            CliLog.WriteLine(ConsoleColor.Green, "        |___/                        ", ConsoleColor.White, "https://github.com/phuocle/Dynamics-Crm-DevKit", ConsoleColor.Blue, $" {Const.Version}", ConsoleColor.White, " Build: ", ConsoleColor.Blue, Const.Build);
             CliLog.WriteLine(ConsoleColor.White, "|");
             if (IsValid(arguments))
             {
@@ -115,7 +115,9 @@ namespace DynamicsCrm.DevKit.Cli
                 }
             }
             arguments.CrmServiceClient = CrmServiceClient;
-            CliLog.WriteLineWarning(ConsoleColor.Green, "Connected: ", ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
+            CliLog.Write(ConsoleColor.White, "|", ConsoleColor.Green, "Connected: ");
+            CliLog.WriteSuccess(ConsoleColor.White, XrmHelper.ConnectedUrl(CrmServiceClient));
+            CliLog.WriteLine(ConsoleColor.Black, "█");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Connection Timeout: ", ConsoleColor.White, CrmServiceClient.MaxConnectionTimeout.TotalSeconds.ToString("#,###"), ConsoleColor.Green, " (seconds)");
             CliLog.WriteLine(ConsoleColor.White, "|");
             return true;

@@ -94,16 +94,16 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (File.Exists(file))
                     {
                         Utility.ForceWriteAllText(file, newCsCode);
-                        CliLog.WriteLineChanged(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
                     }
                     else
                     {
                         var newFileName = Path.Combine(Path.GetDirectoryName(file), $"{schemaName}.cs");
                         var newFileNameContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.LateBound.cs");
                         Utility.ForceWriteAllText(newFileName, newFileNameContent);
-                        CliLog.WriteLineChanged(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}.cs");
+                        CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}.cs");
                         Utility.ForceWriteAllText(file, newCsCode);
-                        CliLog.WriteLineChanged(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
                     }
                 }
                 i++;
@@ -153,7 +153,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     CliLog.WriteLine(ConsoleColor.White, "|");
                     var entities = json.entities.Split(",".ToCharArray());
                     return EntitiesMetadata
-                        .Where(x => entities.Contains(x.SchemaName))
+                        .Where(x => entities.Contains(x.LogicalName))
                         .OrderBy(x => x.SchemaName)
                         .Select(x => $"{folder}{x.SchemaName}{endsWith}")
                         .ToArray();

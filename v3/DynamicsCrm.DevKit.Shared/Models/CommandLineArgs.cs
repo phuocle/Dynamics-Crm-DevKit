@@ -33,7 +33,14 @@ namespace DynamicsCrm.DevKit.Shared.Models
 
         public string CurrentDirectory => Directory.GetCurrentDirectory();
 
-        public string JsonFile => Path.Combine(CurrentDirectory, Json);
+        public string JsonFile {
+            get
+            {
+                var file = Path.Combine(CurrentDirectory, Json);
+                if (File.Exists(file)) return new FileInfo(file).FullName;
+                return null;
+            }
+        }
 
         public bool IsSdkLogin => SdkLogin?.ToLower() == "yes";
         public CrmServiceClient CrmServiceClient { get; set; }

@@ -34,6 +34,7 @@ namespace DynamicsCrm.DevKit.Cli
             Console.BackgroundColor = ConsoleColor.Red;
             Write(ConsoleColor.White, "|");
             foreach (var value in values)
+            {
                 if (value is ConsoleColor color)
                     Console.ForegroundColor = color;
                 else
@@ -41,44 +42,22 @@ namespace DynamicsCrm.DevKit.Cli
                     Console.Write(value);
                     countLength += value.ToString().Length;
                 }
-            if (StarLength - countLength > 0)
-                Console.Write(new string(' ', StarLength - countLength));
-            Console.WriteLine();
+            }
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
+            WriteLine(ConsoleColor.Black, "█");
             WriteLine(ConsoleColor.White, "|");
-        }
-
-        public static void WriteLineChanged(params object[] values)
-        {
-            var oldConsoleBackgroundColor = Console.BackgroundColor;
-            var oldConsoleForegroundColor = Console.ForegroundColor;
-            var countLength = 0;
-            Console.BackgroundColor = ConsoleColor.DarkMagenta;
-            foreach (var value in values)
-                if (value is ConsoleColor color)
-                    Console.ForegroundColor = color;
-                else
-                {
-                    Console.Write(value);
-                    countLength += value.ToString().Length;
-                }
-            if (StarLength - countLength > 0)
-                Console.Write(new string(' ', StarLength - countLength));
-            Console.WriteLine();
-            Console.ForegroundColor = oldConsoleForegroundColor;
-            Console.BackgroundColor = oldConsoleBackgroundColor;
         }
 
         public static void WriteLineWarning(params object[] values)
         {
-            WriteLine(ConsoleColor.White, "|");
             var oldConsoleBackgroundColor = Console.BackgroundColor;
             var oldConsoleForegroundColor = Console.ForegroundColor;
             var countLength = 0;
             Console.BackgroundColor = ConsoleColor.DarkGray;
             Write(ConsoleColor.White, "|");
             foreach (var value in values)
+            {
                 if (value is ConsoleColor color)
                     Console.ForegroundColor = color;
                 else
@@ -86,12 +65,50 @@ namespace DynamicsCrm.DevKit.Cli
                     Console.Write(value);
                     countLength += value.ToString().Length;
                 }
-            if (StarLength - countLength > 0)
-                Console.Write(new string(' ', StarLength - countLength));
-            Console.WriteLine();
+            }
             Console.ForegroundColor = oldConsoleForegroundColor;
             Console.BackgroundColor = oldConsoleBackgroundColor;
-            WriteLine(ConsoleColor.White, "|");
+            WriteLine(ConsoleColor.Black, "█");
+        }
+
+        public static void WriteWarning(params object[] values)
+        {
+            var oldConsoleBackgroundColor = Console.BackgroundColor;
+            var oldConsoleForegroundColor = Console.ForegroundColor;
+            var countLength = 0;
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            foreach (var value in values)
+            {
+                if (value is ConsoleColor color)
+                    Console.ForegroundColor = color;
+                else
+                {
+                    Console.Write(value);
+                    countLength += value.ToString().Length;
+                }
+            }
+            Console.ForegroundColor = oldConsoleForegroundColor;
+            Console.BackgroundColor = oldConsoleBackgroundColor;
+        }
+
+        public static void WriteSuccess(params object[] values)
+        {
+            var oldConsoleBackgroundColor = Console.BackgroundColor;
+            var oldConsoleForegroundColor = Console.ForegroundColor;
+            var countLength = 0;
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            foreach (var value in values)
+            {
+                if (value is ConsoleColor color)
+                    Console.ForegroundColor = color;
+                else
+                {
+                    Console.Write(value);
+                    countLength += value.ToString().Length;
+                }
+            }
+            Console.ForegroundColor = oldConsoleForegroundColor;
+            Console.BackgroundColor = oldConsoleBackgroundColor;
         }
 
         public static void Write(params object[] values)

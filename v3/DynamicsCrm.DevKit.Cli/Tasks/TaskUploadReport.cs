@@ -81,7 +81,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             }
                             else {
                                 XrmHelper.DeployReport(CrmServiceClient, report.ObjectId, file);
-                                CliLog.WriteLineChanged(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Deployed, ConsoleColor.White, json.language, ConsoleColor.Green, " report ", ConsoleColor.White, file, ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
+                                CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Deployed, ConsoleColor.White, json.language, ConsoleColor.Green, " report ", ConsoleColor.White, file, ConsoleColor.Green, " to ", ConsoleColor.White, fileName, ConsoleColor.Green, " report file name");
                             }
                         }
                         i++;
