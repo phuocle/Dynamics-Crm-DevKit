@@ -43,5 +43,64 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return values.OrderBy(x => x.Name).ToList();
         }
+
+        public static string GetEntityReferenceLogicalName(this AttributeMetadata attribute)
+        {
+            if (attribute.AttributeType == AttributeTypeCode.Owner)
+            {
+                return "systemuser;team";
+            }
+            else if (attribute.AttributeType == AttributeTypeCode.Lookup || attribute.AttributeType == AttributeTypeCode.Customer)
+            {
+                var lookup = (LookupAttributeMetadata)attribute;
+                var value = string.Empty;
+                foreach (var target in lookup.Targets)
+                    value += target + ";";
+                if (value.Length > 0) value = value.Substring(0, value.Length - 1);
+                return value;
+            }
+            return string.Empty;
+        }
+
+        public static int? GetMaxLength(this AttributeMetadata attribute)
+        {
+            if (attribute is StringAttributeMetadata attr1)
+                return attr1.MaxLength ?? (int?)null;
+            if (attribute is MemoAttributeMetadata attr2)
+                return attr2.MaxLength ?? (int?)null;
+            return (int?)null;
+        }
+
+        public static decimal? GetMinValue(this AttributeMetadata attribute)
+        {
+            if (attribute is IntegerAttributeMetadata attr1)
+                return attr1.MinValue ?? -1;
+            if (attribute is DecimalAttributeMetadata attr2)
+                return attr2.MinValue ?? -1;
+            if (attribute is MoneyAttributeMetadata attr3)
+                return attr3.MinValue != null ? (decimal)attr3.MinValue.Value : -1;
+            if (attribute is DoubleAttributeMetadata attr)
+                return attr.MinValue != null ? (decimal)attr.MinValue.Value : -1;
+            return (decimal?)null;
+        }
+
+        public static decimal? GetMaxValue(this AttributeMetadata attribute)
+        {
+            if (attribute is IntegerAttributeMetadata attr1)
+                return attr1.MaxValue ?? -1;
+            if (attribute is DecimalAttributeMetadata attr2)
+                return attr2.MaxValue ?? -1;
+            if (attribute is MoneyAttributeMetadata attr3)
+                return attr3.MaxValue != null ? (decimal)attr3.MaxValue.Value : -1;
+            if (attribute is DoubleAttributeMetadata attr)
+                return attr.MaxValue != null ? (decimal)attr.MaxValue.Value : -1;
+            return (decimal?)null;
+        }
+
+        public static string TrimNewLine(this string value)
+        {
+            if (value == null) return null;
+            return value.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+        }
     }
 }

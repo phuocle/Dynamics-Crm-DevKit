@@ -121,5 +121,16 @@ namespace DynamicsCrm.DevKit.Shared
             return result;
         }
 
+        public static string SafeDeclareName(string declareName, string schemaName)
+        {
+            declareName = SafeIdentifier(declareName);
+            if (declareName.ToLower() == schemaName.ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "Entity".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "Id".ToLower()) return declareName + "1";
+            return declareName;
+        }
+
     }
 }
