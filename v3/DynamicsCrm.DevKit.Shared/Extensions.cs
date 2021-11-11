@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 return "systemuser;team";
             }
-            else if (attribute.AttributeType == AttributeTypeCode.Lookup || attribute.AttributeType == AttributeTypeCode.Customer)
+            else if (attribute.AttributeType == AttributeTypeCode.Lookup || attribute.AttributeType == AttributeTypeCode.Customer || attribute.AttributeType == AttributeTypeCode.PartyList)
             {
                 var lookup = (LookupAttributeMetadata)attribute;
                 var value = string.Empty;
@@ -100,7 +100,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static string TrimNewLine(this string value)
         {
             if (value == null) return null;
-            return value.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+            return value.Trim().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
         }
     }
 }

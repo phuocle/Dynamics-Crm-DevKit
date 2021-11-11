@@ -1,5 +1,4 @@
-﻿using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System.Linq;
 using System.Security;
@@ -95,8 +94,53 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{GeneratorCode()}";
+            code += $"{NEW_LINE}";
+            code += $"{GeneratorImageCode()}";
+            code = code.TrimEnd($"{NEW_LINE}".ToCharArray());
+            code += $"{NEW_LINE}";
             code += $"{TAB}}}{NEW_LINE}";
             code += $"}}{NEW_LINE}";
+            return code;
+        }
+
+        private static string GetGeneratorImageCode(string schemaName)
+        {
+            var code = string.Empty;
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para>byte[]</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}public byte[] {schemaName}{NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<byte[]>(\"{schemaName.ToLower()}\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[\"{schemaName.ToLower()}\"] = value; }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// <para>ReadOnly - String</para>{NEW_LINE}";
+            code += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
+            code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
+            code += $"{TAB}{TAB}public string {schemaName}Url{NEW_LINE}";
+            code += $"{TAB}{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{schemaName.ToLower()}_url\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            return code;
+        }
+        private static string GeneratorImageCode()
+        {
+            var code = string.Empty;
+            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            {
+                if (attribute is ImageAttributeMetadata image)
+                {
+                    if (image.IsPrimaryImage ?? false)
+                        code += GetGeneratorImageCode("EntityImage");
+                    code += GetGeneratorImageCode(attribute.SchemaName);
+                }
+            }
+            code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
+            code += $"{NEW_LINE}";
             return code;
         }
 
@@ -165,9 +209,8 @@ namespace DynamicsCrm.DevKit.Shared
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
             {
                 if (!IsFieldOk(attribute)) continue;
-                if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion)) {
+                if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion))
                     code += $"{TAB}{TAB}{TAB}[System.Obsolete(\"Deprecated from version: {attribute.DeprecatedVersion}\")]{NEW_LINE}";
-                }
                 code += $"{TAB}{TAB}{TAB}public const string {attribute.SchemaName} = \"{attribute.LogicalName}\";{NEW_LINE}";
             }
             return code;
@@ -182,15 +225,14 @@ namespace DynamicsCrm.DevKit.Shared
                 var utc = string.Empty;
                 if (attribute is DateTimeAttributeMetadata datetime)
                     if (datetime.DateTimeBehavior == DateTimeBehavior.UserLocal) utc = "Utc";
-
                 code += $"{GetXml(attribute)}";
+                if (!string.IsNullOrWhiteSpace(attribute.DeprecatedVersion))
+                    code += $"{TAB}{TAB}[System.Obsolete(\"Deprecated from version: {attribute.DeprecatedVersion}\")]{NEW_LINE}";
                 code += $"{TAB}{TAB}public {DeclareType(attribute)} {Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName)}{utc}{NEW_LINE}";
                 code += $"{TAB}{TAB}{{{NEW_LINE}";
                 code += $"{GetGet(attribute)}";
                 if ((attribute.IsValidForCreate ?? false) || (attribute.IsValidForUpdate ?? false))
-                {
                     code += $"{GetSet(attribute)}";
-                }
                 code += $"{TAB}{TAB}}}{NEW_LINE}";
                 code += $"{NEW_LINE}";
             }
@@ -267,25 +309,14 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.Picklist:
                 case AttributeTypeCode.State:
                 case AttributeTypeCode.Status:
-                    //if (attribute.RequiredLevel?.Value == AttributeRequiredLevel.ApplicationRequired)
-                    //{
-                    //    code += $"{TAB}{TAB}{TAB}set{NEW_LINE}";
-                    //    code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
-                    //    code += $"{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = new OptionSetValue((int)value);{NEW_LINE}";
-                    //    code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
-                    //    return code;
-                    //}
-                    //else
-                    //{
-                        code += $"{TAB}{TAB}{TAB}set{NEW_LINE}";
-                        code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
-                        code += $"{TAB}{TAB}{TAB}{TAB}if (value.HasValue){NEW_LINE}";
-                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = new OptionSetValue((int)value.Value);{NEW_LINE}";
-                        code += $"{TAB}{TAB}{TAB}{TAB}else{NEW_LINE}";
-                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = null;{NEW_LINE}";
-                        code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
-                        return code;
-                    //}
+                    code += $"{TAB}{TAB}{TAB}set{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{TAB}if (value.HasValue){NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = new OptionSetValue((int)value.Value);{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{TAB}else{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = null;{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+                    return code;
                 case AttributeTypeCode.BigInt:
                     return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}] = value; }}{NEW_LINE}";
                 case AttributeTypeCode.Integer:
@@ -300,12 +331,12 @@ namespace DynamicsCrm.DevKit.Shared
                         code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}if (value.HasValue){NEW_LINE}";
                         code += $"{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
-                        code += $"\t\t\t\t\tDateTime" + (/*crmAttribute.IsRequired*/ true ? "" : "?") + " dateTime = value.Value.ToDateTime();\r\n";
-                        code += $"\t\t\t\t\tEntity.Attributes[Fields." + attribute.SchemaName + "] = dateTime;\r\n";
-                        code += $"\t\t\t\t}}\r\n";
-                        code += $"\t\t\t\telse\r\n";
-                        code += $"\t\t\t\t\tEntity.Attributes[Fields." + attribute.SchemaName + "] = null;\r\n";
-                        code += $"\t\t\t}}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}DateTime dateTime = value.Value.ToDateTime();{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = dateTime;{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}else{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = null;{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
                     else
@@ -349,39 +380,39 @@ namespace DynamicsCrm.DevKit.Shared
                 case AttributeTypeCode.String:
                     if (attribute is MultiSelectPicklistAttributeMetadata)
                     {
-                        code += "set\r\n";
-                        code += "\t\t\t{{\r\n";
-                        code += "\t\t\t\tvar data = new OptionSetValueCollection();\r\n";
-                        code += "\t\t\t\tforeach (var item in value)\r\n";
-                        code += "\t\t\t\t{{\r\n";
-                        code += "\t\t\t\t\tdata.Add(new OptionSetValue((int)item));\r\n";
-                        code += "\t\t\t\t}}\r\n";
-                        code += "\t\t\t\tif (data.Count == 0)\r\n";
-                        code += "\t\t\t\t{{\r\n";
-                        code += "\t\t\t\t\tEntity.Attributes[Fields." + attribute.SchemaName + "] = null;\r\n";
-                        code += "\t\t\t\t}}\r\n";
-                        code += "\t\t\t\telse\r\n";
-                        code += "\t\t\t\t{{\r\n";
-                        code += "\t\t\t\t\tEntity.Attributes[Fields." + attribute.SchemaName + "] = data;\r\n";
-                        code += "\t\t\t\t}}\r\n";
-                        code += "\t\t\t}}";
+                        code += $"{TAB}{TAB}{TAB}set{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}var data = new OptionSetValueCollection();{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}foreach (var item in value){NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}data.Add(new OptionSetValue((int)item));{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}if (data.Count == 0){NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = null;{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}else{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{{{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = data;{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{TAB}}}{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                         return code;
                     }
                     else
                         return $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[Fields.{attribute.SchemaName}] = value; }}{NEW_LINE}";
                 case AttributeTypeCode.PartyList:
-                    code += "set\r\n";
-                    code += "\t\t\t{{\r\n";
-                    code += "\t\t\t\tvar data = new EntityCollection();\r\n";
-                    code += "\t\t\t\tforeach (var item in value)\r\n";
-                    code += "\t\t\t\t\tdata.Entities.Add(item.Entity);\r\n";
-                    code += "\t\t\t\tEntity.Attributes[Fields." + attribute.SchemaName + "] = data;\r\n";
-                    code += "\t\t\t}}";
+                    code += $"{TAB}{TAB}{TAB}set{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{{{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{TAB}var data = new EntityCollection();{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{TAB}foreach (var item in value){NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{TAB}{TAB}data.Entities.Add(item.Entity);{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{TAB}Entity.Attributes[Fields.{attribute.SchemaName}] = data;{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                     return code;
                 case AttributeTypeCode.ManagedProperty:
-                    return "set;"; //return string.Empty;
+                    return "set;";
                 default:
-                    return "set;"; //return string.Empty;
+                    return "set;";
             }
         }
 
@@ -419,9 +450,7 @@ namespace DynamicsCrm.DevKit.Shared
                         return code;
                     }
                     else
-                    {
                         return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<DateTime?>(Fields.{attribute.SchemaName}); }}{NEW_LINE}";
-                    }
                 case AttributeTypeCode.Decimal:
                     return $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<decimal?>(Fields.{attribute.SchemaName}); }}{NEW_LINE}";
                 case AttributeTypeCode.Money:
@@ -480,7 +509,7 @@ namespace DynamicsCrm.DevKit.Shared
                     code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
                     return code;
                 default:
-                    return "?" + attribute.AttributeType.ToString();
+                    return $"?{attribute.AttributeType}";
             }
         }
 
@@ -498,13 +527,9 @@ namespace DynamicsCrm.DevKit.Shared
             if (attribute is DateTimeAttributeMetadata datetime)
             {
                 if (datetime.DateTimeBehavior == null)
-                {
                     dataType += "DateTime";
-                }
                 else if (datetime.DateTimeBehavior == DateTimeBehavior.DateOnly)
-                {
                     dataType += "DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly";
-                }
                 else if (datetime.DateTimeBehavior == DateTimeBehavior.UserLocal)
                 {
                     if (datetime.Format == DateTimeFormat.DateOnly)
@@ -523,29 +548,21 @@ namespace DynamicsCrm.DevKit.Shared
             else if (attribute is MultiSelectPicklistAttributeMetadata)
                 dataType += "MultiSelectPicklist";
             else if (attribute is LookupAttributeMetadata)
-            {
-                dataType += attribute.AttributeType.ToString() + " to " + attribute.GetEntityReferenceLogicalName();
-            }
+                dataType += $"{AttributeTypeCode.Lookup} to {attribute.GetEntityReferenceLogicalName()}";
             else
                 dataType += attribute.AttributeType.ToString();
             if (attribute.GetMaxLength().HasValue) dataType += " - MaxLength: " + attribute.GetMaxLength().Value;
             if (attribute.GetMinValue().HasValue) dataType += " - MinValue: " + attribute.GetMinValue().Value.ToString("#,##0");
             if (attribute.GetMaxValue().HasValue) dataType += " - MaxValue: " + attribute.GetMaxValue().Value.ToString("#,##0");
-
             var xml = $"{TAB}{TAB}/// <summary>{NEW_LINE}";
             var description = attribute?.Description?.UserLocalizedLabel?.Label;
             if (!string.IsNullOrWhiteSpace(description))
-            {
-                description = description.TrimNewLine();
-                xml += $"{TAB}{TAB}/// <para>{SecurityElement.Escape(description)}</para>{NEW_LINE}";
-            }
+                xml += $"{TAB}{TAB}/// <para>{SecurityElement.Escape(description.TrimNewLine())}</para>{NEW_LINE}";
             xml += $"{TAB}{TAB}/// <para>{dataType}</para>{NEW_LINE}";
             xml += $"{TAB}{TAB}/// <para>{attribute?.DisplayName?.UserLocalizedLabel?.Label.TrimNewLine()}</para>{NEW_LINE}";
             xml += $"{TAB}{TAB}/// </summary>\r\n";
             xml += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             return xml;
         }
-
-
     }
 }
