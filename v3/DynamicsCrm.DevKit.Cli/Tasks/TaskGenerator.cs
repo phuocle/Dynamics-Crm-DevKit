@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace DynamicsCrm.DevKit.Cli.Tasks
 {
@@ -82,9 +83,10 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var i = 1;
             foreach(var file in files)
             {
-                var schemaName = GetSchemaNameFromFile(file, endsWith);
+                var schemaName = Utility.GetSchemaNameFromFile(file, endsWith);
+                var entityMetadata = EntitiesMetadata.First(x => x.SchemaName == schemaName);
                 var oldCsCode = Utility.ReadAllText(file);
-                var newCsCode = CSharpLateBound.GetCsCode(CrmServiceClient, file, json.rootnamespace);
+                var newCsCode = CSharpLateBound.GetCsCode(CrmServiceClient, entityMetadata, schemaName, json.rootnamespace);
                 if (Utility.IsTheSame(oldCsCode, newCsCode))
                 {
                     CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
@@ -110,15 +112,14 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private string GetSchemaNameFromFile(string file, string endsWith)
-        {
-            var fileName = Path.GetFileName(file);
-            return fileName.Substring(0, fileName.Length - endsWith.Length);
-        }
-
         private string[] GetFiles(string endsWith)
         {
+            var wait = new Thread(CliLog.Waiting);
+            wait.Start();
             EntitiesMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient);
+            wait.Abort();
+            CliLog.WriteLine("");
+            CliLog.WriteLine(ConsoleColor.White, "|");
             var folder = $"{CurrentDirectory}\\{json.rootfolder}";
             if (!folder.EndsWith("\\")) folder += "\\";
             if (json.entities == null || json.entities.Trim().Length == 0 || json.entities.Trim().ToLower() == "folder")
@@ -128,7 +129,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 var pattern = $"*{endsWith}";
                 var entities = Directory
                     .GetFiles(folder, pattern)
-                    .Select(x => GetSchemaNameFromFile(x, endsWith))
+                    .Select(x => Utility.GetSchemaNameFromFile(x, endsWith))
                     .ToList();
                 return EntitiesMetadata
                         .Where(x => entities.Contains(x.SchemaName))

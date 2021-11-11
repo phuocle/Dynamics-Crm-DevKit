@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CSharp;
+using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -83,5 +87,39 @@ namespace DynamicsCrm.DevKit.Shared
             }
             return string.Empty;
         }
+
+        public static string GetSchemaNameFromFile(string file, string endsWith)
+        {
+            var fileName = Path.GetFileName(file);
+            return fileName.Substring(0, fileName.Length - endsWith.Length);
+        }
+
+        public static string SafeIdentifier(string name)
+        {
+            name = name.Trim();
+            name = name.Replace(" ", "_");
+            name = name.Replace("____", "_");
+            name = name.Replace("___", "_");
+            name = name.Replace("__", "_");
+            var sb = new StringBuilder();
+            if (!SyntaxFacts.IsIdentifierStartCharacter(name[0]))
+            {
+                sb.Append("_");
+            }
+            foreach (var ch in name)
+            {
+                if (SyntaxFacts.IsIdentifierPartCharacter(ch))
+                {
+                    sb.Append(ch);
+                }
+            }
+            var result = sb.ToString();
+            if (SyntaxFacts.GetKeywordKind(result) != SyntaxKind.None)
+            {
+                result = $"@{result}";
+            }
+            return result;
+        }
+
     }
 }

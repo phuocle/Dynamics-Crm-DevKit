@@ -1,5 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Shared;
 using System;
+using System.Threading;
 
 namespace DynamicsCrm.DevKit.Cli
 {
@@ -120,6 +121,16 @@ namespace DynamicsCrm.DevKit.Cli
                 else
                     Console.Write(value);
             Console.ForegroundColor = oldConsoleColor;
+        }
+
+        public static void Waiting()
+        {
+            Write(ConsoleColor.White, "|");
+            while (true)
+            {
+                CliLog.Write(ConsoleColor.White, ".");
+                Thread.Sleep(1000);
+            }
         }
     }
 }

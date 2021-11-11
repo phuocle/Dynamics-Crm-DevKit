@@ -97,6 +97,7 @@ namespace DynamicsCrm.DevKit.Shared
             return webResources;
         }
 
+
         public static string BuildConnectionStringLog(string connectionString)
         {
             if (!connectionString.ToLower().Contains("Password=".ToLower()) &&
@@ -199,11 +200,16 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var request = new RetrieveAllEntitiesRequest
             {
-                EntityFilters = EntityFilters.Entity,
+                EntityFilters = EntityFilters.All,
                 RetrieveAsIfPublished = true
             };
             var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
             return respone.EntityMetadata;
+        }
+
+        public static bool IsOptionSet(AttributeMetadata attribute)
+        {
+            return attribute is EnumAttributeMetadata;
         }
     }
 }

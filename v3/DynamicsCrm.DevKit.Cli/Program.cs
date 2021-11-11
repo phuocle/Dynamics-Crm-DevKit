@@ -27,9 +27,9 @@ namespace DynamicsCrm.DevKit.Cli
         {
             CliLog.SetupCliLog();
 #if DEBUG
-            //CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
-            //CliLog.WriteLine(ConsoleColor.Red, "!!! DEBUG !!!");
-            //CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
+            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
+            CliLog.WriteLine(ConsoleColor.Red, "!!! DEBUG !!!");
+            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
 #endif
             CliLog.WriteLine(ConsoleColor.Green, "  ____                              _           ____                  ____             _  ___ _     ____ _ _ ");
             CliLog.WriteLine(ConsoleColor.Green, " |  _ \\ _   _ _ __   __ _ _ __ ___ (_) ___ ___ / ___|_ __ _ __ ___   |  _ \\  _____   _| |/ (_) |_  / ___| (_)");
@@ -42,10 +42,11 @@ namespace DynamicsCrm.DevKit.Cli
             {
                 CliTask.Run(arguments);
             }
+            CliLog.WriteLine(ConsoleColor.White, "|");
 #if DEBUG
-            //CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
-            //CliLog.WriteLine(ConsoleColor.Red, "!!! FINISHED !!!");
-            //CliLog.WriteLineChanged(ConsoleColor.DarkMagenta, new string('█', CliLog.StarLength));
+            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
+            CliLog.WriteLine(ConsoleColor.Red, "!!! FINISHED !!!");
+            CliLog.WriteLineWarning(new string('█', CliLog.StarLength));
             Console.ReadKey();
 #endif
         }
