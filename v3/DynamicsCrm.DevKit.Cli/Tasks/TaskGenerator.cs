@@ -112,54 +112,56 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             }
         }
 
-        private string[] GetFiles(string endsWith)
+        private void GetEntitiesMetadata(string endsWith)
         {
             var wait = new Thread(CliLog.Waiting);
             wait.Start();
-            EntitiesMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient);
-            wait.Abort();
-            CliLog.WriteLine("");
-            CliLog.WriteLine(ConsoleColor.White, "|");
-            var folder = $"{CurrentDirectory}\\{json.rootfolder}";
-            if (!folder.EndsWith("\\")) folder += "\\";
             if (json.entities == null || json.entities.Trim().Length == 0 || json.entities.Trim().ToLower() == "folder")
             {
-                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "current folder", ConsoleColor.Green, " with pattern values: ", ConsoleColor.White, $"*{endsWith}");
-                CliLog.WriteLine(ConsoleColor.White, "|");
                 var pattern = $"*{endsWith}";
                 var entities = Directory
-                    .GetFiles(folder, pattern)
+                    .GetFiles(CurrentFolder, pattern)
                     .Select(x => Utility.GetSchemaNameFromFile(x, endsWith))
                     .ToList();
-                return EntitiesMetadata
-                        .Where(x => entities.Contains(x.SchemaName))
-                        .OrderBy(x => x.SchemaName)
-                        .Select(x => $"{folder}{x.SchemaName}{endsWith}")
-                        .ToArray();
+                EntitiesMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient, entities);
+            }
+            else if (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all")
+            {
+                EntitiesMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient);
             }
             else
             {
-                if (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all")
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim().ToLower());
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    return EntitiesMetadata
-                        .OrderBy(x => x.SchemaName)
-                        .Select(x=> $"{folder}{x.SchemaName}{endsWith}")
-                        .ToArray();
-                }
-                else
-                {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim().ToLower());
-                    CliLog.WriteLine(ConsoleColor.White, "|");
-                    var entities = json.entities.Split(",".ToCharArray());
-                    return EntitiesMetadata
-                        .Where(x => entities.Contains(x.LogicalName))
-                        .OrderBy(x => x.SchemaName)
-                        .Select(x => $"{folder}{x.SchemaName}{endsWith}")
-                        .ToArray();
-                }
+                var entities = json.entities.Split(",".ToCharArray()).ToList();
+                EntitiesMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient, entities);
             }
+            wait.Abort();
+            CliLog.WriteLine("");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+        }
+
+
+        private string[] GetFiles(string endsWith)
+        {
+            GetEntitiesMetadata(endsWith);
+            if (json.entities != null && (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all"))
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim().ToLower());
+                CliLog.WriteLine(ConsoleColor.White, "|");
+            }
+            else if (json.entities == null || json.entities.Trim().Length == 0 || json.entities.Trim().ToLower() == "folder")
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "current folder", ConsoleColor.Green, " with pattern values: ", ConsoleColor.White, $"*{endsWith}");
+                CliLog.WriteLine(ConsoleColor.White, "|");
+            }
+            else
+            {
+                CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim().ToLower());
+                CliLog.WriteLine(ConsoleColor.White, "|");
+            }
+            return EntitiesMetadata
+                    .OrderBy(x => x.SchemaName)
+                    .Select(x => $"{CurrentFolder}{x.SchemaName}{endsWith}")
+                    .ToArray();
         }
 
         private JsonGenerator json { get; set; }
@@ -171,5 +173,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         }
 
         private EntityMetadata[] EntitiesMetadata { get; set; }
+        private string CurrentFolder => $"{CurrentDirectory}\\{json.rootfolder}";
     }
 }

@@ -207,6 +207,31 @@ namespace DynamicsCrm.DevKit.Shared
             return respone.EntityMetadata;
         }
 
+        public static EntityMetadata[] GetEntitiesMetadata(CrmServiceClient crmServiceClient, List<string> entities)
+        {
+            var request = new ExecuteMultipleRequest()
+            {
+                Settings = new ExecuteMultipleSettings()
+                {
+                    ContinueOnError = true,
+                    ReturnResponses = true
+                },
+                Requests = new OrganizationRequestCollection()
+            };
+            foreach(var entity in entities)
+                request.Requests.Add( new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = entity.ToLower() });
+            var list = new List<EntityMetadata>();
+            ExecuteMultipleResponse response = (ExecuteMultipleResponse)crmServiceClient.Execute(request);
+            foreach(var result in response.Responses)
+                list.Add(((RetrieveEntityResponse)result.Response).EntityMetadata);
+            return list.ToArray();
+        }
+
+        public static EntityMetadata GetEntityMetadata(CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            return GetEntitiesMetadata(crmServiceClient, new List<string> { entityLogicalName }).FirstOrDefault(); ;
+        }
+
         public static bool IsOptionSet(AttributeMetadata attribute)
         {
             return attribute is EnumAttributeMetadata;

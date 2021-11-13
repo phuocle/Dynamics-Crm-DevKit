@@ -136,7 +136,8 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     if (image.IsPrimaryImage ?? false)
                         code += GetGeneratorImageCode("EntityImage");
-                    code += GetGeneratorImageCode(attribute.SchemaName);
+                    else
+                        code += GetGeneratorImageCode(attribute.SchemaName);
                 }
             }
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
