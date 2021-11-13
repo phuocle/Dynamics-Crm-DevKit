@@ -90,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocprovisioningstate";
 
-		public const int EntityTypeCode = 10570;
+		public const int EntityTypeCode = 10652;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocprovisioningstate()

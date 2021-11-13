@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_cannedmessage_msdyn_octag";
 
-		public const int EntityTypeCode = 10613;
+		public const int EntityTypeCode = 10688;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_cannedmessage_msdyn_octag()

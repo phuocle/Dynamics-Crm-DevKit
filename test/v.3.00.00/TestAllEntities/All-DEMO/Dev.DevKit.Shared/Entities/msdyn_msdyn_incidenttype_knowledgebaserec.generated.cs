@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_incidenttype_knowledgebaserec";
 
-		public const int EntityTypeCode = 10501;
+		public const int EntityTypeCode = 10565;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_incidenttype_knowledgebaserec()

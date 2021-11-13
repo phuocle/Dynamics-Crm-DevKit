@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_windowroute_ctisearch";
 
-		public const int EntityTypeCode = 10732;
+		public const int EntityTypeCode = 10811;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_windowroute_ctisearch()

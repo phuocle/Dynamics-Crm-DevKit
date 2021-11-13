@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_liveworkstreamcapacityprofile";
 
-		public const int EntityTypeCode = 10616;
+		public const int EntityTypeCode = 10692;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveworkstreamcapacityprofile()

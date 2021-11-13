@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_richtextfile";
 
-		public const int EntityTypeCode = 10078;
+		public const int EntityTypeCode = 10101;
 
 		[DebuggerNonUserCode()]
 		public msdyn_richtextfile()

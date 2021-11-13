@@ -107,7 +107,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_channelprovider";
 
-		public const int EntityTypeCode = 10156;
+		public const int EntityTypeCode = 10168;
 
 		[DebuggerNonUserCode()]
 		public msdyn_channelprovider()

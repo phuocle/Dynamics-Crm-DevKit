@@ -149,7 +149,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_pmrecording";
 
-		public const int EntityTypeCode = 10094;
+		public const int EntityTypeCode = 10104;
 
 		[DebuggerNonUserCode()]
 		public msdyn_pmrecording()

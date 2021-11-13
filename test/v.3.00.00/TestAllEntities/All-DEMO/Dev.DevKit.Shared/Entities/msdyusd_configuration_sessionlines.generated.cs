@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_configuration_sessionlines";
 
-		public const int EntityTypeCode = 10718;
+		public const int EntityTypeCode = 10797;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_configuration_sessionlines()

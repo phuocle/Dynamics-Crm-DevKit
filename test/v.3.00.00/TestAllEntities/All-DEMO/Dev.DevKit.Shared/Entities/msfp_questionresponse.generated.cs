@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_questionresponse";
 
-		public const int EntityTypeCode = 10245;
+		public const int EntityTypeCode = 10268;
 
 		[DebuggerNonUserCode()]
 		public msfp_questionresponse()

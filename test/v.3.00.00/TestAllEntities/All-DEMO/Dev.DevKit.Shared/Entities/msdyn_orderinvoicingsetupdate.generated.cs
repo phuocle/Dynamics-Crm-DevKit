@@ -89,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_orderinvoicingsetupdate";
 
-		public const int EntityTypeCode = 10449;
+		public const int EntityTypeCode = 10513;
 
 		[DebuggerNonUserCode()]
 		public msdyn_orderinvoicingsetupdate()

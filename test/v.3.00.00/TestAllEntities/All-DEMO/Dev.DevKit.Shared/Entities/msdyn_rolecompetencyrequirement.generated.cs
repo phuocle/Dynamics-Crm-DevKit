@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_rolecompetencyrequirement";
 
-		public const int EntityTypeCode = 10387;
+		public const int EntityTypeCode = 10450;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rolecompetencyrequirement()

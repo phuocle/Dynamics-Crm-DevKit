@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_timeoffcalendar";
 
-		public const int EntityTypeCode = 10390;
+		public const int EntityTypeCode = 10453;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timeoffcalendar()

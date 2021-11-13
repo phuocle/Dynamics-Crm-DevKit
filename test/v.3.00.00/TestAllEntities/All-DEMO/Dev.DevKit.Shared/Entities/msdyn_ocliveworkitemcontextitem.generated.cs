@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocliveworkitemcontextitem";
 
-		public const int EntityTypeCode = 10565;
+		public const int EntityTypeCode = 10647;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkitemcontextitem()

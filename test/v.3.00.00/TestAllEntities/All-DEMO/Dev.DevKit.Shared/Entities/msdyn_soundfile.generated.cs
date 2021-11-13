@@ -61,7 +61,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_soundfile";
 
-		public const int EntityTypeCode = 10606;
+		public const int EntityTypeCode = 10680;
 
 		[DebuggerNonUserCode()]
 		public msdyn_soundfile()

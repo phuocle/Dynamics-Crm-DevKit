@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_inspectionattachment";
 
-		public const int EntityTypeCode = 10409;
+		public const int EntityTypeCode = 10473;
 
 		[DebuggerNonUserCode()]
 		public msdyn_inspectionattachment()

@@ -106,7 +106,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_capacityprofile";
 
-		public const int EntityTypeCode = 10551;
+		public const int EntityTypeCode = 10620;
 
 		[DebuggerNonUserCode()]
 		public msdyn_capacityprofile()

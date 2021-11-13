@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_kbenrichment";
 
-		public const int EntityTypeCode = 10181;
+		public const int EntityTypeCode = 10193;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kbenrichment()

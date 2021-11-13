@@ -79,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "appmodulecomponentnode";
 
-		public const int EntityTypeCode = 10026;
+		public const int EntityTypeCode = 10033;
 
 		[DebuggerNonUserCode()]
 		public AppModuleComponentNode()

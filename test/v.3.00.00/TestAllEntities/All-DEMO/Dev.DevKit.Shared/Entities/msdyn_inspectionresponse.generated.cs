@@ -81,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_inspectionresponse";
 
-		public const int EntityTypeCode = 10412;
+		public const int EntityTypeCode = 10476;
 
 		[DebuggerNonUserCode()]
 		public msdyn_inspectionresponse()

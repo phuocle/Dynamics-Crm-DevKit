@@ -103,7 +103,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookingjournal";
 
-		public const int EntityTypeCode = 10424;
+		public const int EntityTypeCode = 10488;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingjournal()

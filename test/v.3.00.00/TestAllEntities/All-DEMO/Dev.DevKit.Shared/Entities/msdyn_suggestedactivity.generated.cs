@@ -39,7 +39,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_suggestedactivity";
 
-		public const int EntityTypeCode = 10227;
+		public const int EntityTypeCode = 10248;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestedactivity()

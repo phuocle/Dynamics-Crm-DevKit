@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aiodlabel";
 
-		public const int EntityTypeCode = 10083;
+		public const int EntityTypeCode = 10052;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIOdLabel()

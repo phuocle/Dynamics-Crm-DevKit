@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_servicetasktype";
 
-		public const int EntityTypeCode = 10478;
+		public const int EntityTypeCode = 10542;
 
 		[DebuggerNonUserCode()]
 		public msdyn_servicetasktype()

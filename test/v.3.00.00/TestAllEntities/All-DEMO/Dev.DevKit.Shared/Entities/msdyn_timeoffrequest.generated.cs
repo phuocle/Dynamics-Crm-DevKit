@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_timeoffrequest";
 
-		public const int EntityTypeCode = 10482;
+		public const int EntityTypeCode = 10546;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timeoffrequest()

@@ -74,7 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_facebookengagementctx";
 
-		public const int EntityTypeCode = 10655;
+		public const int EntityTypeCode = 10733;
 
 		[DebuggerNonUserCode()]
 		public msdyn_facebookengagementctx()

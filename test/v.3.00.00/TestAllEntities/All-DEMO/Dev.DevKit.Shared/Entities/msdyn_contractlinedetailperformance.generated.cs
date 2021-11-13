@@ -79,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_contractlinedetailperformance";
 
-		public const int EntityTypeCode = 10405;
+		public const int EntityTypeCode = 10469;
 
 		[DebuggerNonUserCode()]
 		public msdyn_contractlinedetailperformance()

@@ -81,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookingsetupmetadata";
 
-		public const int EntityTypeCode = 10298;
+		public const int EntityTypeCode = 10361;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingsetupmetadata()
@@ -357,6 +357,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Determines if a requirement should be created automatically when a booking is generated and there's no requirement for a scheduling entity.</para>
 		/// <para>Boolean</para>
 		/// <para>Disable Requirement Auto Creation for Bookings</para>
 		/// </summary>

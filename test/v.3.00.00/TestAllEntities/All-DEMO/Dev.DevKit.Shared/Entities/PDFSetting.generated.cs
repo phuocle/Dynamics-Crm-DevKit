@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "pdfsetting";
 
-		public const int EntityTypeCode = 10049;
+		public const int EntityTypeCode = 10073;
 
 		[DebuggerNonUserCode()]
 		public PDFSetting()

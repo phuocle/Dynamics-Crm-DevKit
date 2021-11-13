@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_userworkhistory";
 
-		public const int EntityTypeCode = 10397;
+		public const int EntityTypeCode = 10460;
 
 		[DebuggerNonUserCode()]
 		public msdyn_userworkhistory()

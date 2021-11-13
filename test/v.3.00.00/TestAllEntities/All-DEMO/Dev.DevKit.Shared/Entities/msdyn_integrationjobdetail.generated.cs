@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_integrationjobdetail";
 
-		public const int EntityTypeCode = 10345;
+		public const int EntityTypeCode = 10408;
 
 		[DebuggerNonUserCode()]
 		public msdyn_integrationjobdetail()

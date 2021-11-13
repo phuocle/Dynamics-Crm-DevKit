@@ -356,7 +356,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_hostedapplication";
 
-		public const int EntityTypeCode = 10677;
+		public const int EntityTypeCode = 10756;
 
 		[DebuggerNonUserCode()]
 		public UII_hostedapplication()

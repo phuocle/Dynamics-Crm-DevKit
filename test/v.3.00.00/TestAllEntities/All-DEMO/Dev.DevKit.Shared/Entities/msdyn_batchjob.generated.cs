@@ -120,7 +120,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_batchjob";
 
-		public const int EntityTypeCode = 10325;
+		public const int EntityTypeCode = 10388;
 
 		[DebuggerNonUserCode()]
 		public msdyn_batchjob()

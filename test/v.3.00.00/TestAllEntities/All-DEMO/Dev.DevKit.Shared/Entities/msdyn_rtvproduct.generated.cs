@@ -81,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_rtvproduct";
 
-		public const int EntityTypeCode = 10476;
+		public const int EntityTypeCode = 10540;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rtvproduct()

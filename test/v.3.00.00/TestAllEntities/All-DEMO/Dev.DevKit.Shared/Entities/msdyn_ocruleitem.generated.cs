@@ -87,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocruleitem";
 
-		public const int EntityTypeCode = 10572;
+		public const int EntityTypeCode = 10655;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocruleitem()

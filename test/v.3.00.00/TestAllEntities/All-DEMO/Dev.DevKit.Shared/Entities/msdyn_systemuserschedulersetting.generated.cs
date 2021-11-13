@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_systemuserschedulersetting";
 
-		public const int EntityTypeCode = 10316;
+		public const int EntityTypeCode = 10379;
 
 		[DebuggerNonUserCode()]
 		public msdyn_systemuserschedulersetting()

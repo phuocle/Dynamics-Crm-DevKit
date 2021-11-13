@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_solutioncomponentsummary";
 
-		public const int EntityTypeCode = 10011;
+		public const int EntityTypeCode = 10013;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutioncomponentsummary()

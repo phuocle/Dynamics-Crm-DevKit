@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_entityrankingrule";
 
-		public const int EntityTypeCode = 10221;
+		public const int EntityTypeCode = 10242;
 
 		[DebuggerNonUserCode()]
 		public msdyn_entityrankingrule()

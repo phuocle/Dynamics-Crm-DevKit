@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_alertrule";
 
-		public const int EntityTypeCode = 10239;
+		public const int EntityTypeCode = 10262;
 
 		[DebuggerNonUserCode()]
 		public msfp_alertrule()
@@ -225,7 +225,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Name of the alert rule.</para>
-		/// <para>Required - String - MaxLength: 50</para>
+		/// <para>Required - String - MaxLength: 850</para>
 		/// <para>Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

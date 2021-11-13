@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_configuration_option";
 
-		public const int EntityTypeCode = 10716;
+		public const int EntityTypeCode = 10795;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_configuration_option()

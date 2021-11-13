@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msteamssetting";
 
-		public const int EntityTypeCode = 10253;
+		public const int EntityTypeCode = 10225;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msteamssetting()

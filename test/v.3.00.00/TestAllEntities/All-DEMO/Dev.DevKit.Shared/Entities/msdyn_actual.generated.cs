@@ -356,7 +356,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_actual";
 
-		public const int EntityTypeCode = 10292;
+		public const int EntityTypeCode = 10355;
 
 		[DebuggerNonUserCode()]
 		public msdyn_actual()

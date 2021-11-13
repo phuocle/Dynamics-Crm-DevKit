@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_analytics";
 
-		public const int EntityTypeCode = 10554;
+		public const int EntityTypeCode = 10626;
 
 		[DebuggerNonUserCode()]
 		public msdyn_analytics()

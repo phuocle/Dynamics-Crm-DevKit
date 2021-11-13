@@ -102,7 +102,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocliveworkitemcharacteristic";
 
-		public const int EntityTypeCode = 10618;
+		public const int EntityTypeCode = 10694;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkitemcharacteristic()

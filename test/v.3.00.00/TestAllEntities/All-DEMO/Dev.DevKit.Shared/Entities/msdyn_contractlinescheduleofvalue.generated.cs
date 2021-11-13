@@ -171,7 +171,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_contractlinescheduleofvalue";
 
-		public const int EntityTypeCode = 10331;
+		public const int EntityTypeCode = 10394;
 
 		[DebuggerNonUserCode()]
 		public msdyn_contractlinescheduleofvalue()

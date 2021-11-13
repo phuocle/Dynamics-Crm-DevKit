@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "stagesolutionupload";
 
-		public const int EntityTypeCode = 10009;
+		public const int EntityTypeCode = 10010;
 
 		[DebuggerNonUserCode()]
 		public StageSolutionUpload()

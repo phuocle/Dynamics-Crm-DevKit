@@ -97,7 +97,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_questionsequence";
 
-		public const int EntityTypeCode = 10637;
+		public const int EntityTypeCode = 10716;
 
 		[DebuggerNonUserCode()]
 		public msdyn_questionsequence()

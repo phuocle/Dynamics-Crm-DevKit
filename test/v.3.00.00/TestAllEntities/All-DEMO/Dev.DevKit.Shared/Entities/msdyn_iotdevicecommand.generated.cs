@@ -89,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotdevicecommand";
 
-		public const int EntityTypeCode = 10129;
+		public const int EntityTypeCode = 10141;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotdevicecommand()
@@ -267,7 +267,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>The command will be sent to a device connected to this asset.</para>
 		/// <para>Lookup to msdyn_customerasset</para>
-		/// <para>Device</para>
+		/// <para>Customer Asset</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public EntityReference msdyn_CustomerAsset

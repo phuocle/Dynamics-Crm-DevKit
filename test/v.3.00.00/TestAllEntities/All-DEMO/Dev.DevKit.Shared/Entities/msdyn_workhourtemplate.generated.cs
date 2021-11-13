@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_workhourtemplate";
 
-		public const int EntityTypeCode = 10320;
+		public const int EntityTypeCode = 10383;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workhourtemplate()

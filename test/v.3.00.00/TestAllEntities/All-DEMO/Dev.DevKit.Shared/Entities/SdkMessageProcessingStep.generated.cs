@@ -163,6 +163,7 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string AsyncAutoDelete = "asyncautodelete";
 			public const string CanUseReadOnlyConnection = "canusereadonlyconnection";
+			public const string Category = "category";
 			public const string ComponentState = "componentstate";
 			public const string Configuration = "configuration";
 			public const string CreatedBy = "createdby";
@@ -273,6 +274,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.CanUseReadOnlyConnection); }
 			set { Entity.Attributes[Fields.CanUseReadOnlyConnection] = value; }
+		}
+
+		/// <summary>
+		/// <para>For internal use only.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Category</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string Category
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Category); }
+			set { Entity.Attributes[Fields.Category] = value; }
 		}
 
 		/// <summary>

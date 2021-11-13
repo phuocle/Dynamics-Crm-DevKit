@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_form_hostedapplication";
 
-		public const int EntityTypeCode = 10722;
+		public const int EntityTypeCode = 10801;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_form_hostedapplication()

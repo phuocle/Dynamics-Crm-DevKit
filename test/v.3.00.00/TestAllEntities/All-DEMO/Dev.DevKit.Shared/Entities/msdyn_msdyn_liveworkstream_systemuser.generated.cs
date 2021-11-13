@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_liveworkstream_systemuser";
 
-		public const int EntityTypeCode = 10627;
+		public const int EntityTypeCode = 10706;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_liveworkstream_systemuser()

@@ -106,7 +106,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "listoperation";
 
-		public const int EntityTypeCode = 10102;
+		public const int EntityTypeCode = 10113;
 
 		[DebuggerNonUserCode()]
 		public listoperation()

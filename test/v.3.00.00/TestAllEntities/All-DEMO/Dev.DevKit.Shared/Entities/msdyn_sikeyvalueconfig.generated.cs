@@ -62,7 +62,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_sikeyvalueconfig";
 
-		public const int EntityTypeCode = 10218;
+		public const int EntityTypeCode = 10239;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sikeyvalueconfig()

@@ -265,7 +265,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_liveconversation";
 
-		public const int EntityTypeCode = 10558;
+		public const int EntityTypeCode = 10634;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveconversation()

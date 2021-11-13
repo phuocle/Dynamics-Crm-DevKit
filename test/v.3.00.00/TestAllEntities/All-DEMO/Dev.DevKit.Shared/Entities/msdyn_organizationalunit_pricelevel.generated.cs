@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_organizationalunit_pricelevel";
 
-		public const int EntityTypeCode = 10400;
+		public const int EntityTypeCode = 10463;
 
 		[DebuggerNonUserCode()]
 		public msdyn_organizationalunit_pricelevel()

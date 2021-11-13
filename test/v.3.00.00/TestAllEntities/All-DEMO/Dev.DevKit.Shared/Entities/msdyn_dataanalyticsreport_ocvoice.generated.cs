@@ -91,7 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_dataanalyticsreport_ocvoice";
 
-		public const int EntityTypeCode = 10648;
+		public const int EntityTypeCode = 10725;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dataanalyticsreport_ocvoice()
@@ -287,7 +287,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Lookup to feature entity</para>
-		/// <para>Lookup to </para>
+		/// <para>Lookup to msdyn_datainsightsandanalyticsfeature</para>
 		/// <para>datainsightsandanalyticsfeatureId</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_entitlementapplication";
 
-		public const int EntityTypeCode = 10430;
+		public const int EntityTypeCode = 10494;
 
 		[DebuggerNonUserCode()]
 		public msdyn_entitlementapplication()

@@ -32,7 +32,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_casesuggestion";
 
-		public const int EntityTypeCode = 10178;
+		public const int EntityTypeCode = 10190;
 
 		[DebuggerNonUserCode()]
 		public msdyn_casesuggestion()

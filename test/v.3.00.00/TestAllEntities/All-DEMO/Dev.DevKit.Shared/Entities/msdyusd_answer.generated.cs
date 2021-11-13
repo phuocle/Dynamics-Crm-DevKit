@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_answer";
 
-		public const int EntityTypeCode = 10688;
+		public const int EntityTypeCode = 10767;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_answer()

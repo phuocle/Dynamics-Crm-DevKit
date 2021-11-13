@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_postruleconfig";
 
-		public const int EntityTypeCode = 10235;
+		public const int EntityTypeCode = 10258;
 
 		[DebuggerNonUserCode()]
 		public msdyn_PostRuleConfig()

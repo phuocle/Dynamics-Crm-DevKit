@@ -51,7 +51,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "applicationuserrole";
 
-		public const int EntityTypeCode = 10022;
+		public const int EntityTypeCode = 10042;
 
 		[DebuggerNonUserCode()]
 		public applicationuserrole()

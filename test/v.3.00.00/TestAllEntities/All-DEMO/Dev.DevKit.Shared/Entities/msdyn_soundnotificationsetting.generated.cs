@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_soundnotificationsetting";
 
-		public const int EntityTypeCode = 10607;
+		public const int EntityTypeCode = 10681;
 
 		[DebuggerNonUserCode()]
 		public msdyn_soundnotificationsetting()

@@ -76,7 +76,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_teamscollaboration";
 
-		public const int EntityTypeCode = 10255;
+		public const int EntityTypeCode = 10227;
 
 		[DebuggerNonUserCode()]
 		public msdyn_TeamsCollaboration()

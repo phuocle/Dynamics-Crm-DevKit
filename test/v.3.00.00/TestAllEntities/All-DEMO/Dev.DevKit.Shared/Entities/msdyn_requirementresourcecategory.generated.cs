@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementresourcecategory";
 
-		public const int EntityTypeCode = 10308;
+		public const int EntityTypeCode = 10371;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementresourcecategory()

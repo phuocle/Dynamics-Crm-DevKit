@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_transactionorigin";
 
-		public const int EntityTypeCode = 10319;
+		public const int EntityTypeCode = 10382;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transactionorigin()

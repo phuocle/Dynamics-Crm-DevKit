@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_ocliveworkitem_knowledgeartic";
 
-		public const int EntityTypeCode = 10640;
+		public const int EntityTypeCode = 10646;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_ocliveworkitem_knowledgeartic()

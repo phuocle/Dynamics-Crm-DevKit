@@ -75,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_fieldcomputation";
 
-		public const int EntityTypeCode = 10342;
+		public const int EntityTypeCode = 10405;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldcomputation()

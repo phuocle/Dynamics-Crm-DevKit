@@ -118,6 +118,18 @@ namespace Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets
 		Webhook = 8
 	}
 
+	public enum MessageCharset
+	{
+		/// <summary>
+		/// Default = 0
+		/// </summary>
+		Default = 0,
+		/// <summary>
+		/// UTF8 = 1
+		/// </summary>
+		UTF8 = 1
+	}
+
 	public enum MessageFormat
 	{
 		/// <summary>
@@ -196,6 +208,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsSASKeySet = "issaskeyset";
 			public const string IsSASTokenSet = "issastokenset";
 			public const string KeyVaultReferenceId = "keyvaultreferenceid";
+			public const string MessageCharset = "messagecharset";
 			public const string MessageFormat = "messageformat";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
@@ -478,6 +491,29 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.KeyVaultReferenceId); }
 			set { Entity.Attributes[Fields.KeyVaultReferenceId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Specifies the character encoding for message content</para>
+		/// <para>Picklist</para>
+		/// <para>Specifies the character encoding to be used for messages sent to a service endpoint</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets.MessageCharset? MessageCharset
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.MessageCharset);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.ServiceEndpointOptionSets.MessageCharset)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.MessageCharset] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.MessageCharset] = null;
+			}
 		}
 
 		/// <summary>

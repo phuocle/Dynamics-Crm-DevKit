@@ -134,7 +134,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_workorderservice";
 
-		public const int EntityTypeCode = 10491;
+		public const int EntityTypeCode = 10555;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderservice()

@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookableresourcecapacityprofile";
 
-		public const int EntityTypeCode = 10615;
+		public const int EntityTypeCode = 10691;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookableresourcecapacityprofile()

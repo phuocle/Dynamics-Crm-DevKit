@@ -92,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "activityfileattachment";
 
-		public const int EntityTypeCode = 10050;
+		public const int EntityTypeCode = 10074;
 
 		[DebuggerNonUserCode()]
 		public activityfileattachment()

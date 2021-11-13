@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_consoleapplicationtemplate_tags";
 
-		public const int EntityTypeCode = 10538;
+		public const int EntityTypeCode = 10607;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_consoleapplicationtemplate_tags()

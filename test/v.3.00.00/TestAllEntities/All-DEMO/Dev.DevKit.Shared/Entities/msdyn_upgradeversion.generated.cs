@@ -82,7 +82,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_upgradeversion";
 
-		public const int EntityTypeCode = 10106;
+		public const int EntityTypeCode = 10118;
 
 		[DebuggerNonUserCode()]
 		public msdyn_upgradeversion()

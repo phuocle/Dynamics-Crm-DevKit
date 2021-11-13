@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_workorderresourcerestriction";
 
-		public const int EntityTypeCode = 10490;
+		public const int EntityTypeCode = 10554;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderresourcerestriction()

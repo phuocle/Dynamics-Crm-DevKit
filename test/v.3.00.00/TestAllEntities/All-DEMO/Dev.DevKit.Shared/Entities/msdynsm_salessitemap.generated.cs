@@ -61,7 +61,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdynsm_salessitemap";
 
-		public const int EntityTypeCode = 10520;
+		public const int EntityTypeCode = 10589;
 
 		[DebuggerNonUserCode()]
 		public msdynsm_salessitemap()

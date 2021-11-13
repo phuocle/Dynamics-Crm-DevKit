@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_suggestedcontactsdatasource";
 
-		public const int EntityTypeCode = 10230;
+		public const int EntityTypeCode = 10251;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestedcontactsdatasource()

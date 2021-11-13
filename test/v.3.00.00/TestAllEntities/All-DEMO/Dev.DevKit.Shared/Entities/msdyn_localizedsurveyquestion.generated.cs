@@ -77,7 +77,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_localizedsurveyquestion";
 
-		public const int EntityTypeCode = 10636;
+		public const int EntityTypeCode = 10715;
 
 		[DebuggerNonUserCode()]
 		public msdyn_localizedsurveyquestion()

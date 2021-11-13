@@ -78,7 +78,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgesearchinsight";
 
-		public const int EntityTypeCode = 10058;
+		public const int EntityTypeCode = 10082;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgesearchinsight()

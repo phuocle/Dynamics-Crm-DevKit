@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_timegroup";
 
-		public const int EntityTypeCode = 10317;
+		public const int EntityTypeCode = 10380;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timegroup()

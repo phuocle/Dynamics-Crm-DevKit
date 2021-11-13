@@ -146,6 +146,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_AIConfigurationId = "msdyn_aiconfigurationid";
 			public const string msdyn_AIConfigurationIdUnique = "msdyn_aiconfigurationidunique";
 			public const string msdyn_AIModelId = "msdyn_aimodelid";
+			public const string msdyn_ConnectionReferenceId = "msdyn_connectionreferenceid";
 			public const string msdyn_CreatedFromConfigurationId = "msdyn_createdfromconfigurationid";
 			public const string msdyn_CustomConfiguration = "msdyn_customconfiguration";
 			public const string msdyn_DataBinding = "msdyn_databinding";
@@ -387,6 +388,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_AIModelId); }
 			set { Entity.Attributes[Fields.msdyn_AIModelId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Connection Reference associated with AIConfiguration.</para>
+		/// <para>Lookup to connectionreference</para>
+		/// <para>Connection Reference Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_ConnectionReferenceId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_ConnectionReferenceId); }
+			set { Entity.Attributes[Fields.msdyn_ConnectionReferenceId] = value; }
 		}
 
 		/// <summary>

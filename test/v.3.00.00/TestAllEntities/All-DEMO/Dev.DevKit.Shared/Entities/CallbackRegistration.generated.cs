@@ -13,49 +13,49 @@ namespace Dev.DevKit.Shared.Entities.CallbackRegistrationOptionSets
 	public enum Message
 	{
 		/// <summary>
-		/// Create = 1
+		/// Added = 1
 		/// </summary>
-		Create = 1,
+		Added = 1,
 		/// <summary>
-		/// Create_or_Delete = 5
+		/// Added_or_Deleted = 5
 		/// </summary>
-		Create_or_Delete = 5,
+		Added_or_Deleted = 5,
 		/// <summary>
-		/// Create_or_Update = 4
+		/// Added_or_Modified = 4
 		/// </summary>
-		Create_or_Update = 4,
+		Added_or_Modified = 4,
 		/// <summary>
-		/// Create_or_Update_or_Delete = 7
+		/// Added_or_Modified_or_Deleted = 7
 		/// </summary>
-		Create_or_Update_or_Delete = 7,
+		Added_or_Modified_or_Deleted = 7,
 		/// <summary>
-		/// Delete = 2
+		/// Deleted = 2
 		/// </summary>
-		Delete = 2,
+		Deleted = 2,
 		/// <summary>
-		/// Update = 3
+		/// Modified = 3
 		/// </summary>
-		Update = 3,
+		Modified = 3,
 		/// <summary>
-		/// Update_or_Delete = 6
+		/// Modified_or_Deleted = 6
 		/// </summary>
-		Update_or_Delete = 6
+		Modified_or_Deleted = 6
 	}
 
 	public enum RunAs
 	{
 		/// <summary>
-		/// Process_Owner = 3
+		/// Flow_owner = 3
 		/// </summary>
-		Process_Owner = 3,
+		Flow_owner = 3,
 		/// <summary>
-		/// Record_Owner = 2
+		/// Modifying_user = 1
 		/// </summary>
-		Record_Owner = 2,
+		Modifying_user = 1,
 		/// <summary>
-		/// Triggering_User = 1
+		/// Row_owner = 2
 		/// </summary>
-		Triggering_User = 1
+		Row_owner = 2
 	}
 
 	public enum Scope
@@ -122,6 +122,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string RuntimeIntegrationProperties = "runtimeintegrationproperties";
 			public const string Scope = "scope";
 			public const string SdkMessageName = "sdkmessagename";
+			public const string SoftDeleteStatus = "softdeletestatus";
 			public const string Url = "url";
 			public const string Version = "version";
 		}
@@ -456,6 +457,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.SdkMessageName); }
 			set { Entity.Attributes[Fields.SdkMessageName] = value; }
+		}
+
+		/// <summary>
+		/// <para>For internal use only. Holds soft delete information.</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Soft Delete Status</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? SoftDeleteStatus
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.SoftDeleteStatus); }
+			set { Entity.Attributes[Fields.SoftDeleteStatus] = value; }
 		}
 
 		/// <summary>

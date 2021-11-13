@@ -96,7 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_suggestionsmodelsummary";
 
-		public const int EntityTypeCode = 10186;
+		public const int EntityTypeCode = 10198;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestionsmodelsummary()

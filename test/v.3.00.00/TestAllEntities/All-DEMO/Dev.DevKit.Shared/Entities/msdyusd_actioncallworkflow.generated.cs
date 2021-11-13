@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_actioncallworkflow";
 
-		public const int EntityTypeCode = 10685;
+		public const int EntityTypeCode = 10764;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_actioncallworkflow()

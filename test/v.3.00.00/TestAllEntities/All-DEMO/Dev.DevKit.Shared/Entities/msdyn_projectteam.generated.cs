@@ -152,7 +152,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projectteam";
 
-		public const int EntityTypeCode = 10371;
+		public const int EntityTypeCode = 10434;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projectteam()

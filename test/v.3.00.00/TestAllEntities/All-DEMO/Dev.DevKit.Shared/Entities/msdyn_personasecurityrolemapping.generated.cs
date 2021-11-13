@@ -106,7 +106,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_personasecurityrolemapping";
 
-		public const int EntityTypeCode = 10604;
+		public const int EntityTypeCode = 10672;
 
 		[DebuggerNonUserCode()]
 		public msdyn_personasecurityrolemapping()

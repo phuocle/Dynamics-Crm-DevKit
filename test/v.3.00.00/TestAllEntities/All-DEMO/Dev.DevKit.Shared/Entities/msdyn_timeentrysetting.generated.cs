@@ -78,7 +78,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_timeentrysetting";
 
-		public const int EntityTypeCode = 10404;
+		public const int EntityTypeCode = 10467;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timeentrysetting()

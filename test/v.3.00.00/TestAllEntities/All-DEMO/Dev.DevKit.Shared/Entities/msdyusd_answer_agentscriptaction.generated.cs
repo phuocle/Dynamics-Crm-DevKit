@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_answer_agentscriptaction";
 
-		public const int EntityTypeCode = 10709;
+		public const int EntityTypeCode = 10788;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_answer_agentscriptaction()

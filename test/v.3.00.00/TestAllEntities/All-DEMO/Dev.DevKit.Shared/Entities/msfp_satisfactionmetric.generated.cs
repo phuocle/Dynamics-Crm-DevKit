@@ -89,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_satisfactionmetric";
 
-		public const int EntityTypeCode = 10246;
+		public const int EntityTypeCode = 10269;
 
 		[DebuggerNonUserCode()]
 		public msfp_satisfactionmetric()

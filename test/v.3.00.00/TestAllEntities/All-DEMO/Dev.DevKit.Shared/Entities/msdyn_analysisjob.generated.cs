@@ -70,6 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_EndTime = "msdyn_endtime";
 			public const string msdyn_ErrorCount = "msdyn_errorcount";
 			public const string msdyn_Exception = "msdyn_exception";
+			public const string msdyn_InAppNotificationEnabled = "msdyn_inappnotificationenabled";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_RuleFailCount = "msdyn_rulefailcount";
 			public const string msdyn_RulePassCount = "msdyn_rulepasscount";
@@ -98,7 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_analysisjob";
 
-		public const int EntityTypeCode = 10096;
+		public const int EntityTypeCode = 10106;
 
 		[DebuggerNonUserCode()]
 		public msdyn_analysisjob()
@@ -295,6 +296,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_Exception); }
 			set { Entity.Attributes[Fields.msdyn_Exception] = value; }
+		}
+
+		/// <summary>
+		/// <para>Health rule set Failure In App Notification Enabled.</para>
+		/// <para>Boolean</para>
+		/// <para>Health rule set Failure In App Notification Enabled.</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_InAppNotificationEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_InAppNotificationEnabled); }
+			set { Entity.Attributes[Fields.msdyn_InAppNotificationEnabled] = value; }
 		}
 
 		/// <summary>

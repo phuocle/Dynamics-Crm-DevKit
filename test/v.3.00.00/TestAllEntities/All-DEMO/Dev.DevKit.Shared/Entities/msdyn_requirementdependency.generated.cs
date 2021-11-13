@@ -75,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementdependency";
 
-		public const int EntityTypeCode = 10321;
+		public const int EntityTypeCode = 10384;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementdependency()

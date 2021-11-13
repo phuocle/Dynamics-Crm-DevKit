@@ -84,7 +84,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourcecategorymarkuppricelevel";
 
-		public const int EntityTypeCode = 10384;
+		public const int EntityTypeCode = 10447;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcecategorymarkuppricelevel()

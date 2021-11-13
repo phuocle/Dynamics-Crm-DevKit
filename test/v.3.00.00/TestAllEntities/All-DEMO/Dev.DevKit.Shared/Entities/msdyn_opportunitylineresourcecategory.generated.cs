@@ -87,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_opportunitylineresourcecategory";
 
-		public const int EntityTypeCode = 10352;
+		public const int EntityTypeCode = 10415;
 
 		[DebuggerNonUserCode()]
 		public msdyn_opportunitylineresourcecategory()

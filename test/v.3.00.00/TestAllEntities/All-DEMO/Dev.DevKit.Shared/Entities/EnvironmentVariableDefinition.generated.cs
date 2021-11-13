@@ -30,6 +30,18 @@ namespace Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets
 		Unpublished = 1
 	}
 
+	public enum SecretStore
+	{
+		/// <summary>
+		/// Azure_Key_Vault = 0
+		/// </summary>
+		Azure_Key_Vault = 0,
+		/// <summary>
+		/// Microsoft_Dataverse = 1
+		/// </summary>
+		Microsoft_Dataverse = 1
+	}
+
 	public enum statecode
 	{
 		/// <summary>
@@ -73,6 +85,10 @@ namespace Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets
 		/// </summary>
 		Number = 100000001,
 		/// <summary>
+		/// Secret = 100000005
+		/// </summary>
+		Secret = 100000005,
+		/// <summary>
 		/// String = 100000000
 		/// </summary>
 		String = 100000000
@@ -113,6 +129,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ParameterKey = "parameterkey";
 			public const string ParentDefinitionId = "parentdefinitionid";
 			public const string SchemaName = "schemaname";
+			public const string SecretStore = "secretstore";
 			public const string SolutionId = "solutionid";
 			public const string statecode = "statecode";
 			public const string statuscode = "statuscode";
@@ -504,6 +521,29 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.SchemaName); }
 			set { Entity.Attributes[Fields.SchemaName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Environment variable secret store.</para>
+		/// <para>Picklist</para>
+		/// <para>SecretStore</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets.SecretStore? SecretStore
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.SecretStore);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets.SecretStore)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.SecretStore] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.SecretStore] = null;
+			}
 		}
 
 		/// <summary>

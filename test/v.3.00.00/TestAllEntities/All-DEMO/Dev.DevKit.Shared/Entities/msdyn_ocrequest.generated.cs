@@ -79,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocrequest";
 
-		public const int EntityTypeCode = 10571;
+		public const int EntityTypeCode = 10654;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocrequest()

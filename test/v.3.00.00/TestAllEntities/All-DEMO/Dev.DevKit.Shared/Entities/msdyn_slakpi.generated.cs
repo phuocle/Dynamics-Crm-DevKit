@@ -99,7 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_slakpi";
 
-		public const int EntityTypeCode = 10052;
+		public const int EntityTypeCode = 10076;
 
 		[DebuggerNonUserCode()]
 		public msdyn_slakpi()

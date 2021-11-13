@@ -107,7 +107,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_action";
 
-		public const int EntityTypeCode = 10674;
+		public const int EntityTypeCode = 10753;
 
 		[DebuggerNonUserCode()]
 		public UII_action()

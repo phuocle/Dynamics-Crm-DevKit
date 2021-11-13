@@ -74,7 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3";
 
-		public const int EntityTypeCode = 10428;
+		public const int EntityTypeCode = 10492;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3()

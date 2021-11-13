@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_functionallocation_account";
 
-		public const int EntityTypeCode = 10125;
+		public const int EntityTypeCode = 10137;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_functionallocation_account()

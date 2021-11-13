@@ -145,7 +145,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projecttask";
 
-		public const int EntityTypeCode = 10368;
+		public const int EntityTypeCode = 10431;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projecttask()
@@ -1084,9 +1084,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Internal flag to avoid the update process on the estimate lines of the project task</para>
+		/// <para>Internal flag to avoid the update process on the estimate lines of the project task (Deprecated in v3.0)</para>
 		/// <para>Boolean</para>
-		/// <para>Skip Update Estimate Line</para>
+		/// <para>Skip Update Estimate Line (Deprecated in v3.0)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_skipupdateestimateline

@@ -89,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "catalogassignment";
 
-		public const int EntityTypeCode = 10067;
+		public const int EntityTypeCode = 10018;
 
 		[DebuggerNonUserCode()]
 		public CatalogAssignment()

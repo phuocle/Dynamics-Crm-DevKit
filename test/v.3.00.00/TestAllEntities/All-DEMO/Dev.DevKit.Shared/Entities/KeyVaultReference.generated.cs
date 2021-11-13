@@ -123,7 +123,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "keyvaultreference";
 
-		public const int EntityTypeCode = 10064;
+		public const int EntityTypeCode = 10091;
 
 		[DebuggerNonUserCode()]
 		public KeyVaultReference()
@@ -257,8 +257,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>For internal use only.</para>
 		/// <para>Boolean</para>
-		/// <para></para>
+		/// <para>Is Validated</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? IsValidated
@@ -280,8 +281,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>The type of key to use.</para>
 		/// <para>Picklist</para>
-		/// <para>KeyType</para>
+		/// <para>Key Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.KeyVaultReferenceOptionSets.KeyType? KeyType
@@ -318,9 +320,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Keyvault URI</para>
+		/// <para>The Uri for the Key Vault.</para>
 		/// <para>String - MaxLength: 100</para>
-		/// <para>Keyvault URI</para>
+		/// <para>Key Vault Uri</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string KeyVaultUri
@@ -443,8 +445,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>The type of pre-authorized application.</para>
 		/// <para>Picklist</para>
-		/// <para>PreAuthorizedApplicationType</para>
+		/// <para>Pre-Authorized Application Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.KeyVaultReferenceOptionSets.PreAuthorizedApplicationType? PreAuthorizedApplicationType
@@ -476,7 +479,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Status of the KeyVaultReference</para>
+		/// <para>Status of the Key Vault Reference</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -499,7 +502,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Reason for the status of the KeyVaultReference</para>
+		/// <para>Reason for the status of the Key Vault Reference</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

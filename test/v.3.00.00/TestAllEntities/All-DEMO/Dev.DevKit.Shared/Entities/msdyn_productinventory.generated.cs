@@ -72,7 +72,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_productinventory";
 
-		public const int EntityTypeCode = 10455;
+		public const int EntityTypeCode = 10519;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productinventory()

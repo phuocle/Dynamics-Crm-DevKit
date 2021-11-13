@@ -51,7 +51,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_prod_actioninputparameter_msdyn_par";
 
-		public const int EntityTypeCode = 10172;
+		public const int EntityTypeCode = 10184;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_prod_actioninputparameter_msdyn_par()

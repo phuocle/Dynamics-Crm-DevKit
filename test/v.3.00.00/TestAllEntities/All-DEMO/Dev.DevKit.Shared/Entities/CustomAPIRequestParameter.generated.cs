@@ -153,7 +153,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "customapirequestparameter";
 
-		public const int EntityTypeCode = 10070;
+		public const int EntityTypeCode = 10021;
 
 		[DebuggerNonUserCode()]
 		public CustomAPIRequestParameter()

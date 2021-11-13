@@ -87,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_emailtemplate";
 
-		public const int EntityTypeCode = 10240;
+		public const int EntityTypeCode = 10263;
 
 		[DebuggerNonUserCode()]
 		public msfp_emailtemplate()

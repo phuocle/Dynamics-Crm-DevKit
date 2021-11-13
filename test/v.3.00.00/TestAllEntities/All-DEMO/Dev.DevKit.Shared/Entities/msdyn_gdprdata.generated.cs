@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_gdprdata";
 
-		public const int EntityTypeCode = 10215;
+		public const int EntityTypeCode = 10236;
 
 		[DebuggerNonUserCode()]
 		public msdyn_gdprdata()

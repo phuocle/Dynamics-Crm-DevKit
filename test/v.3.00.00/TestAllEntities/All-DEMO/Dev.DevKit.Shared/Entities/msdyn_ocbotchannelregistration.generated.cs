@@ -75,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocbotchannelregistration";
 
-		public const int EntityTypeCode = 10561;
+		public const int EntityTypeCode = 10639;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocbotchannelregistration()

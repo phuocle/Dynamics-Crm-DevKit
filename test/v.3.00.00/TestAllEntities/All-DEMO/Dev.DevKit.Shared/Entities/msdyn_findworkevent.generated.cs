@@ -85,7 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_findworkevent";
 
-		public const int EntityTypeCode = 10343;
+		public const int EntityTypeCode = 10406;
 
 		[DebuggerNonUserCode()]
 		public msdyn_findworkevent()

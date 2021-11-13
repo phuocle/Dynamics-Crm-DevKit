@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_whatsappengagementctx";
 
-		public const int EntityTypeCode = 10669;
+		public const int EntityTypeCode = 10747;
 
 		[DebuggerNonUserCode()]
 		public msdyn_whatsappengagementctx()

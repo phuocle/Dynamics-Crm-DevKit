@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_customerasset_msdyn_3dmodel";
 
-		public const int EntityTypeCode = 10495;
+		public const int EntityTypeCode = 10559;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_customerasset_msdyn_3dmodel()

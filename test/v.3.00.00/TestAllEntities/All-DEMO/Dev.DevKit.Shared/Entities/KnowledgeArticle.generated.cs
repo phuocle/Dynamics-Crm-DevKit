@@ -166,6 +166,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_ingestedarticleurl = "msdyn_ingestedarticleurl";
 			public const string msdyn_isingestedarticle = "msdyn_isingestedarticle";
+			public const string msdyn_keywordsdescsuggestioncontrol = "msdyn_keywordsdescsuggestioncontrol";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -604,6 +605,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isingestedarticle); }
 			set { Entity.Attributes[Fields.msdyn_isingestedarticle] = value; }
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>Keywords and Description Suggestion control</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_keywordsdescsuggestioncontrol
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_keywordsdescsuggestioncontrol); }
+			set { Entity.Attributes[Fields.msdyn_keywordsdescsuggestioncontrol] = value; }
 		}
 
 		/// <summary>

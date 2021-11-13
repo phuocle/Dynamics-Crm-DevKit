@@ -112,7 +112,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_assignmentconfigurationstep";
 
-		public const int EntityTypeCode = 10550;
+		public const int EntityTypeCode = 10619;
 
 		[DebuggerNonUserCode()]
 		public msdyn_assignmentconfigurationstep()

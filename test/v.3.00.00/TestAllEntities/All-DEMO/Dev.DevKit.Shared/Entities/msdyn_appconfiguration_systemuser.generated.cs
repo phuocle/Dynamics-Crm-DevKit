@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_appconfiguration_systemuser";
 
-		public const int EntityTypeCode = 10155;
+		public const int EntityTypeCode = 10167;
 
 		[DebuggerNonUserCode()]
 		public msdyn_appconfiguration_systemuser()

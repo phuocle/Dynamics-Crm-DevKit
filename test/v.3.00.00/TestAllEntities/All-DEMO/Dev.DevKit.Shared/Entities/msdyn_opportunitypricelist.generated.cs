@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_opportunitypricelist";
 
-		public const int EntityTypeCode = 10356;
+		public const int EntityTypeCode = 10419;
 
 		[DebuggerNonUserCode()]
 		public msdyn_opportunitypricelist()

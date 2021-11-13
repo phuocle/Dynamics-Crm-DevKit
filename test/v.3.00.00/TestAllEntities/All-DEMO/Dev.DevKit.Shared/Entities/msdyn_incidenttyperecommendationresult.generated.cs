@@ -104,7 +104,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_incidenttyperecommendationresult";
 
-		public const int EntityTypeCode = 10503;
+		public const int EntityTypeCode = 10567;
 
 		[DebuggerNonUserCode()]
 		public msdyn_incidenttyperecommendationresult()
@@ -390,7 +390,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows unique identifier of the related run job.</para>
-		/// <para>Required - String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 100</para>
 		/// <para>Run Id</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

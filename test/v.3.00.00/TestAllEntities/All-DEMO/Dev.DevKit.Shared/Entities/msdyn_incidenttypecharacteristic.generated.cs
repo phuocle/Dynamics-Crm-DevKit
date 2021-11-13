@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_incidenttypecharacteristic";
 
-		public const int EntityTypeCode = 10436;
+		public const int EntityTypeCode = 10500;
 
 		[DebuggerNonUserCode()]
 		public msdyn_incidenttypecharacteristic()

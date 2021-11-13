@@ -84,7 +84,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_upgradestep";
 
-		public const int EntityTypeCode = 10105;
+		public const int EntityTypeCode = 10117;
 
 		[DebuggerNonUserCode()]
 		public msdyn_upgradestep()
@@ -239,7 +239,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Error text, if an error occurred during this step</para>
-		/// <para>Memo - MaxLength: 4000</para>
+		/// <para>Memo - MaxLength: 1048576</para>
 		/// <para>Errors</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

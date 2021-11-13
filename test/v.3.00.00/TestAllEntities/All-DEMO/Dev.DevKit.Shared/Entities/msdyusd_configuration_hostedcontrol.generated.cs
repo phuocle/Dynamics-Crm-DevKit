@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_configuration_hostedcontrol";
 
-		public const int EntityTypeCode = 10715;
+		public const int EntityTypeCode = 10794;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_configuration_hostedcontrol()

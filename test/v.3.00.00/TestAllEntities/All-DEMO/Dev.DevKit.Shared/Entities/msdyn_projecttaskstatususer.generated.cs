@@ -92,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projecttaskstatususer";
 
-		public const int EntityTypeCode = 10370;
+		public const int EntityTypeCode = 10433;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projecttaskstatususer()

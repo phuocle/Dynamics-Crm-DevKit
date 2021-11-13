@@ -241,6 +241,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_RecipientList = "msdyn_recipientlist";
 			public const string Notifications = "notifications";
 			public const string OnHoldTime = "onholdtime";
 			public const string OpenCount = "opencount";
@@ -1010,6 +1011,18 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Individual email will be sent to each recipient.</para>
+		/// <para>String - MaxLength: 8000</para>
+		/// <para>Recipient List</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_RecipientList
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_RecipientList); }
+			set { Entity.Attributes[Fields.msdyn_RecipientList] = value; }
 		}
 
 		/// <summary>

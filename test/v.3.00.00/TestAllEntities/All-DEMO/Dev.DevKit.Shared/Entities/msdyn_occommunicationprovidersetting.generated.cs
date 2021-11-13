@@ -10,6 +10,14 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.msdyn_occommunicationprovidersettingOptionSets
 {
+	public enum msdyn_appmodule
+	{
+		/// <summary>
+		/// Service = 192350000
+		/// </summary>
+		Service = 192350000
+	}
+
 	public enum msdyn_OcCommunicationProvider
 	{
 		/// <summary>
@@ -65,6 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_AccountSID = "msdyn_accountsid";
+			public const string msdyn_appmodule = "msdyn_appmodule";
 			public const string msdyn_isTrial = "msdyn_istrial";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_OcCommunicationProvider = "msdyn_occommunicationprovider";
@@ -84,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_occommunicationprovidersetting";
 
-		public const int EntityTypeCode = 10649;
+		public const int EntityTypeCode = 10727;
 
 		[DebuggerNonUserCode()]
 		public msdyn_occommunicationprovidersetting()
@@ -214,7 +223,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Account SID</para>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>String - MaxLength: 800</para>
 		/// <para>Account SID</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -222,6 +231,45 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_AccountSID); }
 			set { Entity.Attributes[Fields.msdyn_AccountSID] = value; }
+		}
+
+		/// <summary>
+		/// <para>Application module picklist</para>
+		/// <para>MultiSelectPicklist</para>
+		/// <para>Application module</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public System.Collections.Generic.List<Dev.DevKit.Shared.Entities.msdyn_occommunicationprovidersettingOptionSets.msdyn_appmodule> msdyn_appmodule
+		{
+			get
+			{
+				var data = new System.Collections.Generic.List<Dev.DevKit.Shared.Entities.msdyn_occommunicationprovidersettingOptionSets.msdyn_appmodule>();
+				var items = Entity.GetAttributeValue<OptionSetValueCollection>(Fields.msdyn_appmodule);
+				if (items != null)
+				{
+					foreach (OptionSetValue item in items)
+					{
+						data.Add((Dev.DevKit.Shared.Entities.msdyn_occommunicationprovidersettingOptionSets.msdyn_appmodule)item.Value);
+					}
+				}
+				return data;
+			}
+			set
+			{
+				var data = new OptionSetValueCollection();
+				foreach (var item in value)
+				{
+					data.Add(new OptionSetValue((int)item));
+				}
+				if (data.Count == 0)
+				{
+					Entity.Attributes[Fields.msdyn_appmodule] = null;
+				}
+				else
+				{
+					Entity.Attributes[Fields.msdyn_appmodule] = data;
+				}
+			}
 		}
 
 		/// <summary>

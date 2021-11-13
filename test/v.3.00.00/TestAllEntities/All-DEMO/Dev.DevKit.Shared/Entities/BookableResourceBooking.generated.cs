@@ -200,6 +200,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_projectteamid = "msdyn_projectteamid";
 			public const string msdyn_quickNoteAction = "msdyn_quickNoteAction";
 			public const string msdyn_requirementgroupid = "msdyn_requirementgroupid";
+			public const string msdyn_requirementgroupset = "msdyn_requirementgroupset";
 			public const string msdyn_resourcecategoryid = "msdyn_resourcecategoryid";
 			public const string msdyn_ResourceGroup = "msdyn_resourcegroup";
 			public const string msdyn_ResourceRequirement = "msdyn_resourcerequirement";
@@ -793,6 +794,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_requirementgroupid); }
 			set { Entity.Attributes[Fields.msdyn_requirementgroupid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Requirement Group Set</para>
+		/// <para>String - MaxLength: 40</para>
+		/// <para>Requirement Group Set</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_requirementgroupset
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_requirementgroupset); }
+			set { Entity.Attributes[Fields.msdyn_requirementgroupset] = value; }
 		}
 
 		/// <summary>

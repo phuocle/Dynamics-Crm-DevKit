@@ -126,7 +126,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotelineresourcecategory";
 
-		public const int EntityTypeCode = 10376;
+		public const int EntityTypeCode = 10439;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotelineresourcecategory()

@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreateMultiplePlugin = "createmultipleplugin";
 			public const string CreatePlugin = "createplugin";
 			public const string DataSourceLogicalName = "datasourcelogicalname";
+			public const string DeleteMultiplePlugin = "deletemultipleplugin";
 			public const string DeletePlugin = "deleteplugin";
 			public const string Description = "description";
 			public const string EntityDataProviderId = "entitydataproviderid";
@@ -163,6 +164,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.DataSourceLogicalName); }
 			set { Entity.Attributes[Fields.DataSourceLogicalName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Contains the deletemultipleplugin id that should be run when DeleteMultiple is invoked</para>
+		/// <para>Uniqueidentifier</para>
+		/// <para>Contains the deletemultipleplugin id that should be run when DeleteMultiple is invoked</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid? DeleteMultiplePlugin
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.DeleteMultiplePlugin); }
+			set { Entity.Attributes[Fields.DeleteMultiplePlugin] = value; }
 		}
 
 		/// <summary>

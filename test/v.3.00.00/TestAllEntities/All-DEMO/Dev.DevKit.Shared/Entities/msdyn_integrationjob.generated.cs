@@ -106,7 +106,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_integrationjob";
 
-		public const int EntityTypeCode = 10344;
+		public const int EntityTypeCode = 10407;
 
 		[DebuggerNonUserCode()]
 		public msdyn_integrationjob()

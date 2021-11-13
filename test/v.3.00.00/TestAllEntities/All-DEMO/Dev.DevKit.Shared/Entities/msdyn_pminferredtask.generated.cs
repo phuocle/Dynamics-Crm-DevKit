@@ -50,6 +50,38 @@ namespace Dev.DevKit.Shared.Entities.msdyn_pminferredtaskOptionSets
 		NotStarted = 200000000
 	}
 
+	public enum msdyn_reportprovisioningstatus
+	{
+		/// <summary>
+		/// Failed = 193350003
+		/// </summary>
+		Failed = 193350003,
+		/// <summary>
+		/// NotStarted = 193350000
+		/// </summary>
+		NotStarted = 193350000,
+		/// <summary>
+		/// Provisioned = 193350002
+		/// </summary>
+		Provisioned = 193350002,
+		/// <summary>
+		/// Provisioning = 193350001
+		/// </summary>
+		Provisioning = 193350001
+	}
+
+	public enum msdyn_source
+	{
+		/// <summary>
+		/// DataLake = 1
+		/// </summary>
+		DataLake = 1,
+		/// <summary>
+		/// Recording = 0
+		/// </summary>
+		Recording = 0
+	}
+
 	public enum statecode
 	{
 		/// <summary>
@@ -122,12 +154,18 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_automationdata = "msdyn_automationdata";
 			public const string msdyn_automationstatus = "msdyn_automationstatus";
 			public const string msdyn_description = "msdyn_description";
+			public const string msdyn_inputdatabinding = "msdyn_inputdatabinding";
+			public const string msdyn_isreportavailable = "msdyn_isreportavailable";
 			public const string msdyn_iterationid = "msdyn_iterationid";
 			public const string msdyn_lasterrors = "msdyn_lasterrors";
+			public const string msdyn_lastreportrefreshdate = "msdyn_lastreportrefreshdate";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_outputdata = "msdyn_outputdata";
 			public const string msdyn_pminferredtaskId = "msdyn_pminferredtaskid";
+			public const string msdyn_reportdata = "msdyn_reportdata";
+			public const string msdyn_reportprovisioningstatus = "msdyn_reportprovisioningstatus";
 			public const string msdyn_sharedrecordingmetadata = "msdyn_sharedrecordingmetadata";
+			public const string msdyn_source = "msdyn_source";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OverwriteTime = "overwritetime";
 			public const string OwnerId = "ownerid";
@@ -145,7 +183,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_pminferredtask";
 
-		public const int EntityTypeCode = 10093;
+		public const int EntityTypeCode = 10103;
 
 		[DebuggerNonUserCode()]
 		public msdyn_pminferredtask()
@@ -355,6 +393,30 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Location of the data used as input for Task Analysis.</para>
+		/// <para>Memo - MaxLength: 10000</para>
+		/// <para>Input Data Location</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_inputdatabinding
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_inputdatabinding); }
+			set { Entity.Attributes[Fields.msdyn_inputdatabinding] = value; }
+		}
+
+		/// <summary>
+		/// <para>Surfaces whether the analysis report is currently available.</para>
+		/// <para>Boolean</para>
+		/// <para>Is Report Available</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_isreportavailable
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isreportavailable); }
+			set { Entity.Attributes[Fields.msdyn_isreportavailable] = value; }
+		}
+
+		/// <summary>
 		/// <para>Identifies uniquely the last successful processing of the task.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Processing Iteration Id</para>
@@ -375,6 +437,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_lasterrors); }
 			set { Entity.Attributes[Fields.msdyn_lasterrors] = value; }
+		}
+
+		/// <summary>
+		/// <para>Date and time when the corresponding report was last refreshed.</para>
+		/// <para>DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateAndTime</para>
+		/// <para>Last Report Refresh Date</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? msdyn_lastreportrefreshdate
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.msdyn_lastreportrefreshdate); }
+			set { Entity.Attributes[Fields.msdyn_lastreportrefreshdate] = value; }
 		}
 
 		/// <summary>
@@ -417,6 +491,38 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Data related to the report for this task.</para>
+		/// <para>Memo - MaxLength: 10000</para>
+		/// <para>Report Data</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_reportdata
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_reportdata); }
+			set { Entity.Attributes[Fields.msdyn_reportdata] = value; }
+		}
+
+		/// <summary>
+		/// <para>The current status of the provisioning operation for the report associated to this task.</para>
+		/// <para>Required - Picklist</para>
+		/// <para>Report Provisioning Status</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_pminferredtaskOptionSets.msdyn_reportprovisioningstatus? msdyn_reportprovisioningstatus
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_reportprovisioningstatus);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_pminferredtaskOptionSets.msdyn_reportprovisioningstatus)value.Value;
+			}
+			set
+	{
+		Entity.Attributes[Fields.msdyn_reportprovisioningstatus] = new OptionSetValue((int)value);
+}
+		}
+
+		/// <summary>
 		/// <para>Memo - MaxLength: 1048576</para>
 		/// <para>Shared Recording Metadata</para>
 		/// </summary>
@@ -425,6 +531,29 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_sharedrecordingmetadata); }
 			set { Entity.Attributes[Fields.msdyn_sharedrecordingmetadata] = value; }
+		}
+
+		/// <summary>
+		/// <para>The data source of this Pm Inferred Task.</para>
+		/// <para>Picklist</para>
+		/// <para>Pm Inferred Task Source</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_pminferredtaskOptionSets.msdyn_source? msdyn_source
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_source);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_pminferredtaskOptionSets.msdyn_source)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_source] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_source] = null;
+			}
 		}
 
 		/// <summary>

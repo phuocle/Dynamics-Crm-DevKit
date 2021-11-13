@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_octwitterapplication";
 
-		public const int EntityTypeCode = 10662;
+		public const int EntityTypeCode = 10740;
 
 		[DebuggerNonUserCode()]
 		public msdyn_octwitterapplication()

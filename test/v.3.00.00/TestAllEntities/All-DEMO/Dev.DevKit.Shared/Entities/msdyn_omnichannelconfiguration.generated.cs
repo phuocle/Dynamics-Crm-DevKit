@@ -229,12 +229,18 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_defaultAgentInputLanguage = "msdyn_defaultagentinputlanguage";
+			public const string msdyn_dnd_presence_lookup = "msdyn_dnd_presence_lookup";
 			public const string msdyn_enable_advance_entity_routing = "msdyn_enable_advance_entity_routing";
+			public const string msdyn_enable_agent_reject_notifications = "msdyn_enable_agent_reject_notifications";
 			public const string msdyn_enable_missed_notifications = "msdyn_enable_missed_notifications";
+			public const string msdyn_enable_new_consult_exp = "msdyn_enable_new_consult_exp";
 			public const string msdyn_enable_supervisor_assign = "msdyn_enable_supervisor_assign";
 			public const string msdyn_enable_supervisor_monitor = "msdyn_enable_supervisor_monitor";
+			public const string msdyn_enable_supervisor_transfer = "msdyn_enable_supervisor_transfer";
 			public const string msdyn_enable_unified_routing_diagnostic = "msdyn_enable_unified_routing_diagnostic";
 			public const string msdyn_enable_visitorjourney = "msdyn_enable_visitorjourney";
+			public const string msdyn_enablemarkdown = "msdyn_enablemarkdown";
+			public const string msdyn_enablenewconversationform = "msdyn_enablenewconversationform";
 			public const string msdyn_EnableRealTimeTranslation = "msdyn_enablerealtimetranslation";
 			public const string msdyn_enablesoundnotifications = "msdyn_enablesoundnotifications";
 			public const string msdyn_inactive_presence_lookup = "msdyn_inactive_presence_lookup";
@@ -261,7 +267,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_omnichannelconfiguration";
 
-		public const int EntityTypeCode = 10600;
+		public const int EntityTypeCode = 10665;
 
 		[DebuggerNonUserCode()]
 		public msdyn_omnichannelconfiguration()
@@ -413,6 +419,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Lookup to display DND presence.</para>
+		/// <para>Lookup to msdyn_presence</para>
+		/// <para>DND Presnce</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_dnd_presence_lookup
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_dnd_presence_lookup); }
+			set { Entity.Attributes[Fields.msdyn_dnd_presence_lookup] = value; }
+		}
+
+		/// <summary>
 		/// <para>Setting to change advance entity routing for the org.</para>
 		/// <para>Boolean</para>
 		/// <para>Enable advance entity routing</para>
@@ -425,6 +443,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Setting to change agent status when agent rejects a notification.</para>
+		/// <para>Boolean</para>
+		/// <para>Enable Agent Reject Notification Setting</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enable_agent_reject_notifications
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_agent_reject_notifications); }
+			set { Entity.Attributes[Fields.msdyn_enable_agent_reject_notifications] = value; }
+		}
+
+		/// <summary>
 		/// <para>Setting to change agent status when a notification has been missed.</para>
 		/// <para>Boolean</para>
 		/// <para>Enable missed notifications setting</para>
@@ -434,6 +464,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_missed_notifications); }
 			set { Entity.Attributes[Fields.msdyn_enable_missed_notifications] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable new consult experience</para>
+		/// <para>Boolean</para>
+		/// <para>Enable new consult experience</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enable_new_consult_exp
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_new_consult_exp); }
+			set { Entity.Attributes[Fields.msdyn_enable_new_consult_exp] = value; }
 		}
 
 		/// <summary>
@@ -461,6 +503,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Enables supervisor transfer feature for the org</para>
+		/// <para>Required - Boolean</para>
+		/// <para>Enable supervisor transfer</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enable_supervisor_transfer
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_supervisor_transfer); }
+			set { Entity.Attributes[Fields.msdyn_enable_supervisor_transfer] = value; }
+		}
+
+		/// <summary>
 		/// <para>Setting to change unified routing diagnostic for the org.</para>
 		/// <para>Boolean</para>
 		/// <para>Enable unified routing diagnostic</para>
@@ -482,6 +536,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_visitorjourney); }
 			set { Entity.Attributes[Fields.msdyn_enable_visitorjourney] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable markdown support for messages</para>
+		/// <para>Boolean</para>
+		/// <para>Enable Markdown</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enablemarkdown
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enablemarkdown); }
+			set { Entity.Attributes[Fields.msdyn_enablemarkdown] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable new conversation form feature</para>
+		/// <para>Boolean</para>
+		/// <para>Enable new conversation form</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enablenewconversationform
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enablenewconversationform); }
+			set { Entity.Attributes[Fields.msdyn_enablenewconversationform] = value; }
 		}
 
 		/// <summary>

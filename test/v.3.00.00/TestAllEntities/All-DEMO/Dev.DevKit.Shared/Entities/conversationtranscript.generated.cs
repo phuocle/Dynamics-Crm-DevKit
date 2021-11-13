@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "conversationtranscript";
 
-		public const int EntityTypeCode = 10041;
+		public const int EntityTypeCode = 10065;
 
 		[DebuggerNonUserCode()]
 		public conversationtranscript()

@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsentimentdailytopictrending";
 
-		public const int EntityTypeCode = 10597;
+		public const int EntityTypeCode = 10658;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsentimentdailytopictrending()

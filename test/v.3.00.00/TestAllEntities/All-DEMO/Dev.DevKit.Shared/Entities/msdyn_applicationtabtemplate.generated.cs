@@ -132,7 +132,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_applicationtabtemplate";
 
-		public const int EntityTypeCode = 10146;
+		public const int EntityTypeCode = 10158;
 
 		[DebuggerNonUserCode()]
 		public msdyn_applicationtabtemplate()

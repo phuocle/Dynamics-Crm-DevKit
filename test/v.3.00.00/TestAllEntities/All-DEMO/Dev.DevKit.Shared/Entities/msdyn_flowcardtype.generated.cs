@@ -75,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_flowcardtype";
 
-		public const int EntityTypeCode = 10222;
+		public const int EntityTypeCode = 10243;
 
 		[DebuggerNonUserCode()]
 		public msdyn_flowcardtype()

@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocwhatsappchannelaccount";
 
-		public const int EntityTypeCode = 10665;
+		public const int EntityTypeCode = 10743;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocwhatsappchannelaccount()

@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "availabletimesdatasource";
 
-		public const int EntityTypeCode = 10110;
+		public const int EntityTypeCode = 10122;
 
 		[DebuggerNonUserCode()]
 		public availabletimesdatasource()

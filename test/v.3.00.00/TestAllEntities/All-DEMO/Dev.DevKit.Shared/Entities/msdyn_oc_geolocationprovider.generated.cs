@@ -83,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_oc_geolocationprovider";
 
-		public const int EntityTypeCode = 10575;
+		public const int EntityTypeCode = 10664;
 
 		[DebuggerNonUserCode()]
 		public msdyn_oc_geolocationprovider()

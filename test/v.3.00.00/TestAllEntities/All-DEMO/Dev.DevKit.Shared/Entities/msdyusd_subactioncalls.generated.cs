@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_subactioncalls";
 
-		public const int EntityTypeCode = 10723;
+		public const int EntityTypeCode = 10802;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_subactioncalls()

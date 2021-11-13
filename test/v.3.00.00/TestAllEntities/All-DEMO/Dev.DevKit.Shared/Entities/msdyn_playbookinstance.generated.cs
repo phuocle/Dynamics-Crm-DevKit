@@ -88,7 +88,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_playbookinstance";
 
-		public const int EntityTypeCode = 10202;
+		public const int EntityTypeCode = 10215;
 
 		[DebuggerNonUserCode()]
 		public msdyn_playbookinstance()

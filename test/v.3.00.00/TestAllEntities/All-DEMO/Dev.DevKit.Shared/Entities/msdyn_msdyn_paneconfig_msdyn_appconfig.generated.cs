@@ -51,7 +51,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_paneconfig_msdyn_appconfig";
 
-		public const int EntityTypeCode = 10161;
+		public const int EntityTypeCode = 10173;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_paneconfig_msdyn_appconfig()

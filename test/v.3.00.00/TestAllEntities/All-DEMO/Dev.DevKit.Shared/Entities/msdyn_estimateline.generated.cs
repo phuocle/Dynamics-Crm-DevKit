@@ -238,7 +238,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_estimateline";
 
-		public const int EntityTypeCode = 10337;
+		public const int EntityTypeCode = 10400;
 
 		[DebuggerNonUserCode()]
 		public msdyn_estimateline()

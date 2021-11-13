@@ -201,6 +201,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastconfigurationOptionSets
 		/// </summary>
 		Active = 3,
 		/// <summary>
+		/// Archived = 6
+		/// </summary>
+		Archived = 6,
+		/// <summary>
 		/// Draft = 1
 		/// </summary>
 		Draft = 1,
@@ -215,7 +219,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastconfigurationOptionSets
 		/// <summary>
 		/// Inactive = 5
 		/// </summary>
-		Inactive = 5
+		Inactive = 5,
+		/// <summary>
+		/// Invalidated = 7
+		/// </summary>
+		Invalidated = 7
 	}
 }
 
@@ -276,7 +284,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_forecastconfiguration";
 
-		public const int EntityTypeCode = 10211;
+		public const int EntityTypeCode = 10232;
 
 		[DebuggerNonUserCode()]
 		public msdyn_forecastconfiguration()

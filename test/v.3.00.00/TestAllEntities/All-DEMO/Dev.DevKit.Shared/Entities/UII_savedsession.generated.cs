@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_savedsession";
 
-		public const int EntityTypeCode = 10680;
+		public const int EntityTypeCode = 10759;
 
 		[DebuggerNonUserCode()]
 		public UII_savedsession()

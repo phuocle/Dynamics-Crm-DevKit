@@ -41,6 +41,14 @@ namespace Dev.DevKit.Shared.Entities.msdyn_decisionrulesetOptionSets
 	public enum msdyn_mlmodeltype
 	{
 		/// <summary>
+		/// Effort_based = 192350002
+		/// </summary>
+		Effort_based = 192350002,
+		/// <summary>
+		/// Sentiment_based = 192350001
+		/// </summary>
+		Sentiment_based = 192350001,
+		/// <summary>
 		/// Skill_based = 192350000
 		/// </summary>
 		Skill_based = 192350000
@@ -128,7 +136,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_decisionruleset";
 
-		public const int EntityTypeCode = 10543;
+		public const int EntityTypeCode = 10612;
 
 		[DebuggerNonUserCode()]
 		public msdyn_decisionruleset()

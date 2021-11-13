@@ -84,7 +84,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_project";
 
-		public const int EntityTypeCode = 10243;
+		public const int EntityTypeCode = 10266;
 
 		[DebuggerNonUserCode()]
 		public msfp_project()

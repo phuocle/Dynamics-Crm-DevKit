@@ -94,7 +94,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_forecastinstance";
 
-		public const int EntityTypeCode = 10213;
+		public const int EntityTypeCode = 10234;
 
 		[DebuggerNonUserCode()]
 		public msdyn_forecastinstance()

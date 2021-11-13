@@ -62,7 +62,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_routingrulesetsetting";
 
-		public const int EntityTypeCode = 10548;
+		public const int EntityTypeCode = 10617;
 
 		[DebuggerNonUserCode()]
 		public msdyn_routingrulesetsetting()

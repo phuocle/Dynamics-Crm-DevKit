@@ -306,7 +306,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_livechatconfig";
 
-		public const int EntityTypeCode = 10633;
+		public const int EntityTypeCode = 10712;
 
 		[DebuggerNonUserCode()]
 		public msdyn_livechatconfig()
@@ -953,7 +953,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Prechat Question set for authenticated users</para>
-		/// <para>Lookup to </para>
+		/// <para>Lookup to msdyn_questionsequence</para>
 		/// <para>Question Set for Authenticated Users</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -965,7 +965,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Prechat Question set for unauthenticated users</para>
-		/// <para>Lookup to </para>
+		/// <para>Lookup to msdyn_questionsequence</para>
 		/// <para>Question Set for Unauthenticated Users</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

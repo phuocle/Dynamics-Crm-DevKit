@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ciprovider_systemuser";
 
-		public const int EntityTypeCode = 10532;
+		public const int EntityTypeCode = 10601;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ciprovider_systemuser()

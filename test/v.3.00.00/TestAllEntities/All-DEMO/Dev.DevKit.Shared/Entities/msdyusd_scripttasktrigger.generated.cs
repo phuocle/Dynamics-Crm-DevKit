@@ -79,7 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_scripttasktrigger";
 
-		public const int EntityTypeCode = 10697;
+		public const int EntityTypeCode = 10776;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_scripttasktrigger()

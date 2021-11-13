@@ -104,7 +104,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_productivitymacroactiontemplate";
 
-		public const int EntityTypeCode = 10167;
+		public const int EntityTypeCode = 10179;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivitymacroactiontemplate()

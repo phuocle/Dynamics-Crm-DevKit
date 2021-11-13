@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_untrackedappointment";
 
-		public const int EntityTypeCode = 10226;
+		public const int EntityTypeCode = 10247;
 
 		[DebuggerNonUserCode()]
 		public msdyn_untrackedappointment()

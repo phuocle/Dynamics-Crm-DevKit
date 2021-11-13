@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "processstageparameter";
 
-		public const int EntityTypeCode = 10035;
+		public const int EntityTypeCode = 10047;
 
 		[DebuggerNonUserCode()]
 		public processstageparameter()

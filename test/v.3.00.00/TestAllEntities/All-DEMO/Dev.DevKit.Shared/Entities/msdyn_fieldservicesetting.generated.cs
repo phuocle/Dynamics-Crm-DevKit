@@ -13,9 +13,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_DefaultCrewStrategy
 	{
 		/// <summary>
-		/// Cascade_and_Accept_Cascade_Completely = 192350000
+		/// Cascade_and_Accept_Cascade_Completely_Not_Recommended = 192350000
 		/// </summary>
-		Cascade_and_Accept_Cascade_Completely = 192350000,
+		Cascade_and_Accept_Cascade_Completely_Not_Recommended = 192350000,
 		/// <summary>
 		/// Crew_Leader_Management = 192350001
 		/// </summary>
@@ -29,29 +29,29 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldservicesettingOptionSets
 	public enum msdyn_DefaultWorkOrderCompletedStatus
 	{
 		/// <summary>
-		/// Closed_Canceled = 690970005
+		/// Canceled = 690970005
 		/// </summary>
-		Closed_Canceled = 690970005,
+		Canceled = 690970005,
 		/// <summary>
-		/// Closed_Posted = 690970004
+		/// Completed = 690970003
 		/// </summary>
-		Closed_Posted = 690970004,
+		Completed = 690970003,
 		/// <summary>
-		/// Open_Completed = 690970003
+		/// In_Progress = 690970002
 		/// </summary>
-		Open_Completed = 690970003,
+		In_Progress = 690970002,
 		/// <summary>
-		/// Open_In_Progress = 690970002
+		/// Posted = 690970004
 		/// </summary>
-		Open_In_Progress = 690970002,
+		Posted = 690970004,
 		/// <summary>
-		/// Open_Scheduled = 690970001
+		/// Scheduled = 690970001
 		/// </summary>
-		Open_Scheduled = 690970001,
+		Scheduled = 690970001,
 		/// <summary>
-		/// Open_Unscheduled = 690970000
+		/// Unscheduled = 690970000
 		/// </summary>
-		Open_Unscheduled = 690970000
+		Unscheduled = 690970000
 	}
 
 	public enum msdyn_HistoricalDataFilter
@@ -234,6 +234,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_BookingAlertTemplate = "msdyn_bookingalerttemplate";
 			public const string msdyn_BreakPayType = "msdyn_breakpaytype";
 			public const string msdyn_BusinessClosurePayType = "msdyn_businessclosurepaytype";
+			public const string msdyn_CalculatePrice = "msdyn_calculateprice";
 			public const string msdyn_CalculateTax = "msdyn_calculatetax";
 			public const string msdyn_CancelCurrentSlotsWhenMoving = "msdyn_cancelcurrentslotswhenmoving";
 			public const string msdyn_CustomGPSData = "msdyn_customgpsdata";
@@ -243,6 +244,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_CustomGPSResourcefield = "msdyn_customgpsresourcefield";
 			public const string msdyn_CustomGPSTimestampfield = "msdyn_customgpstimestampfield";
 			public const string msdyn_DatabaseVersion = "msdyn_databaseversion";
+			public const string msdyn_datepopulationtype = "msdyn_datepopulationtype";
 			public const string msdyn_DeactivateBookingWhenCanceled = "msdyn_deactivatebookingwhencanceled";
 			public const string msdyn_DeactivateBookingWhenCompleted = "msdyn_deactivatebookingwhencompleted";
 			public const string msdyn_DeactivateWorkOrderWhenCanceled = "msdyn_deactivateworkorderwhencanceled";
@@ -265,6 +267,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_EnhancedBackgroundProcessing = "msdyn_enhancedbackgroundprocessing";
 			public const string msdyn_EntityNumberLength = "msdyn_entitynumberlength";
 			public const string msdyn_fieldservicesettingId = "msdyn_fieldservicesettingid";
+			public const string msdyn_GenerateActuals = "msdyn_generateactuals";
 			public const string msdyn_GenerateAgreementInvoicesXDaysInAdvance = "msdyn_generateagreementinvoicesxdaysinadvance";
 			public const string msdyn_GenerateAgreementWOXDaysInAdvance = "msdyn_generateagreementwoxdaysinadvance";
 			public const string msdyn_GenerateBookingDatesXMonthsInAdvance = "msdyn_generatebookingdatesxmonthsinadvance";
@@ -275,6 +278,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_InspectionAnalyticsEnabledOn = "msdyn_inspectionanalyticsenabledon";
 			public const string msdyn_InspectionAnalyticsFrequency = "msdyn_inspectionanalyticsfrequency";
 			public const string msdyn_InspectionAnalyticsRecommendedTime = "msdyn_inspectionanalyticsrecommendedtime";
+			public const string msdyn_InternalFlags = "msdyn_internalflags";
 			public const string msdyn_InventoryAdjustmentPrefix = "msdyn_inventoryadjustmentprefix";
 			public const string msdyn_InventoryAdjustmentStartingNumber = "msdyn_inventoryadjustmentstartingnumber";
 			public const string msdyn_InventoryTransferPrefix = "msdyn_inventorytransferprefix";
@@ -308,6 +312,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_SchedulerResourceTooltipView = "msdyn_schedulerresourcetooltipview";
 			public const string msdyn_SchedulerUnscheduledView = "msdyn_schedulerunscheduledview";
 			public const string msdyn_sdkapimapkey = "msdyn_sdkapimapkey";
+			public const string msdyn_ShowSimplifiedWorkOrderCommands = "msdyn_showsimplifiedworkordercommands";
 			public const string msdyn_suggestreparentingcustomerassets = "msdyn_suggestreparentingcustomerassets";
 			public const string msdyn_TimeCostActualsSource = "msdyn_timecostactualssource";
 			public const string msdyn_TimeEntryGenerationStrategy = "msdyn_timeentrygenerationstrategy";
@@ -336,7 +341,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_fieldservicesetting";
 
-		public const int EntityTypeCode = 10432;
+		public const int EntityTypeCode = 10496;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldservicesetting()
@@ -626,6 +631,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>When disabled, all price calculation logic on work orders, work order products, and work order services will be disabled and relevant pricing fields will be hidden.</para>
+		/// <para>Boolean</para>
+		/// <para>Calculate Price</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_CalculatePrice
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_CalculatePrice); }
+			set { Entity.Attributes[Fields.msdyn_CalculatePrice] = value; }
+		}
+
+		/// <summary>
 		/// <para>On disabling, all tax related fields will be removed and no tax calculations will be performed.</para>
 		/// <para>Boolean</para>
 		/// <para>Calculate Tax</para>
@@ -731,6 +748,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_DatabaseVersion); }
 			set { Entity.Attributes[Fields.msdyn_DatabaseVersion] = value; }
+		}
+
+		/// <summary>
+		/// <para>Pre/Post Booking Flexibility Date Field Population.</para>
+		/// <para>Boolean</para>
+		/// <para>Pre/Post Booking Flexibility Date Field Population</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_datepopulationtype
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_datepopulationtype); }
+			set { Entity.Attributes[Fields.msdyn_datepopulationtype] = value; }
 		}
 
 		/// <summary>
@@ -980,7 +1009,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>When this option is enabled, all asynchronous Field Service background processes will be processed through Flow or asynchronous plugins instead of the historic Field Service workflows. See documentation for more details.</para>
 		/// <para>Boolean</para>
-		/// <para>Use Enhanced Background Processing</para>
+		/// <para>Use Enhanced Background Processing (Preview)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_EnhancedBackgroundProcessing
@@ -1014,6 +1043,18 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.msdyn_fieldservicesettingId] = value;
 				Entity.Id = value;
 			}
+		}
+
+		/// <summary>
+		/// <para>On disabling, actuals will not be generated.</para>
+		/// <para>Boolean</para>
+		/// <para>Generate Actuals</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_GenerateActuals
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_GenerateActuals); }
+			set { Entity.Attributes[Fields.msdyn_GenerateActuals] = value; }
 		}
 
 		/// <summary>
@@ -1145,6 +1186,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.msdyn_InspectionAnalyticsRecommendedTime); }
 			set { Entity.Attributes[Fields.msdyn_InspectionAnalyticsRecommendedTime] = value; }
+		}
+
+		/// <summary>
+		/// <para>For Field Service internal use only.</para>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>Internal Flags</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_InternalFlags
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_InternalFlags); }
+			set { Entity.Attributes[Fields.msdyn_InternalFlags] = value; }
 		}
 
 		/// <summary>
@@ -1547,6 +1600,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_sdkapimapkey); }
 			set { Entity.Attributes[Fields.msdyn_sdkapimapkey] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable/disable out of the box logic to show or hide commands on the Work Order form and list view. If yes, only the most relevant buttons will be displayed.</para>
+		/// <para>Boolean</para>
+		/// <para>Show Simplified Work Order Commands</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_ShowSimplifiedWorkOrderCommands
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_ShowSimplifiedWorkOrderCommands); }
+			set { Entity.Attributes[Fields.msdyn_ShowSimplifiedWorkOrderCommands] = value; }
 		}
 
 		/// <summary>

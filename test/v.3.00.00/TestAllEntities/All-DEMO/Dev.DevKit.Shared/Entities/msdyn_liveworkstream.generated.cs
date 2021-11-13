@@ -58,6 +58,18 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 		Persistent_Chat = 192350001
 	}
 
+	public enum msdyn_direction
+	{
+		/// <summary>
+		/// Inbound = 0
+		/// </summary>
+		Inbound = 0,
+		/// <summary>
+		/// Outbound = 1
+		/// </summary>
+		Outbound = 1
+	}
+
 	public enum msdyn_matchinglogic
 	{
 		/// <summary>
@@ -277,6 +289,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ConnectorsURL = "msdyn_connectorsurl";
 			public const string msdyn_conversationmode = "msdyn_conversationmode";
 			public const string msdyn_CustomerID = "msdyn_customerid";
+			public const string msdyn_direction = "msdyn_direction";
 			public const string msdyn_enableagentaffinity = "msdyn_enableagentaffinity";
 			public const string msdyn_enableautomatedmessages = "msdyn_enableautomatedmessages";
 			public const string msdyn_enableselectingfrompushbasedworkstreams = "msdyn_enableselectingfrompushbasedworkstreams";
@@ -284,6 +297,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_FallBackLanguage = "msdyn_fallbacklanguage";
 			public const string msdyn_FollowUpAfterWaiting = "msdyn_followupafterwaiting";
 			public const string msdyn_handlingtimethreshold = "msdyn_handlingtimethreshold";
+			public const string msdyn_isdefault = "msdyn_isdefault";
 			public const string msdyn_LastValidationOn = "msdyn_lastvalidationon";
 			public const string msdyn_LastValidationStatus = "msdyn_lastvalidationstatus";
 			public const string msdyn_liveworkstreamId = "msdyn_liveworkstreamid";
@@ -299,6 +313,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_notificationtemplate_incoming_unauth = "msdyn_notificationtemplate_incoming_unauth";
 			public const string msdyn_notificationtemplate_supervisorassign = "msdyn_notificationtemplate_supervisorassign";
 			public const string msdyn_notificationtemplate_transfer = "msdyn_notificationtemplate_transfer";
+			public const string msdyn_outboundqueueid = "msdyn_outboundqueueid";
 			public const string msdyn_recordidentificationrule = "msdyn_recordidentificationrule";
 			public const string msdyn_RecordIdentificationValidationRule = "msdyn_recordidentificationvalidationrule";
 			public const string msdyn_routingcontractid = "msdyn_routingcontractid";
@@ -329,7 +344,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_liveworkstream";
 
-		public const int EntityTypeCode = 10559;
+		public const int EntityTypeCode = 10636;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveworkstream()
@@ -663,6 +678,26 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Direction to indicate if its an inbound or outbound workstream</para>
+		/// <para>Required - Picklist</para>
+		/// <para>Direction</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets.msdyn_direction? msdyn_direction
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_direction);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets.msdyn_direction)value.Value;
+			}
+			set
+	{
+		Entity.Attributes[Fields.msdyn_direction] = new OptionSetValue((int)value);
+}
+		}
+
+		/// <summary>
 		/// <para>Keep same agent for entire conversation</para>
 		/// <para>Boolean</para>
 		/// <para>Keep same agent for entire conversation</para>
@@ -744,6 +779,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_handlingtimethreshold); }
 			set { Entity.Attributes[Fields.msdyn_handlingtimethreshold] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether this is the default workstream or not.</para>
+		/// <para>Boolean</para>
+		/// <para>Is Default</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_isdefault
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isdefault); }
+			set { Entity.Attributes[Fields.msdyn_isdefault] = value; }
 		}
 
 		/// <summary>
@@ -961,6 +1008,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_notificationtemplate_transfer); }
 			set { Entity.Attributes[Fields.msdyn_notificationtemplate_transfer] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for outbound queue associated with workstream</para>
+		/// <para>Lookup to queue</para>
+		/// <para>Outbound queue</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_outboundqueueid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_outboundqueueid); }
+			set { Entity.Attributes[Fields.msdyn_outboundqueueid] = value; }
 		}
 
 		/// <summary>

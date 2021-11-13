@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsessioncharacteristic";
 
-		public const int EntityTypeCode = 10619;
+		public const int EntityTypeCode = 10695;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsessioncharacteristic()

@@ -111,7 +111,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_unifiedroutingdiagnostic";
 
-		public const int EntityTypeCode = 10545;
+		public const int EntityTypeCode = 10614;
 
 		[DebuggerNonUserCode()]
 		public msdyn_unifiedroutingdiagnostic()

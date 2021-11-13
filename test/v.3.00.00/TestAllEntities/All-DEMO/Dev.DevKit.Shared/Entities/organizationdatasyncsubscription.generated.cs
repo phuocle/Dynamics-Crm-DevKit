@@ -141,7 +141,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "organizationdatasyncsubscription";
 
-		public const int EntityTypeCode = 10075;
+		public const int EntityTypeCode = 10096;
 
 		[DebuggerNonUserCode()]
 		public organizationdatasyncsubscription()

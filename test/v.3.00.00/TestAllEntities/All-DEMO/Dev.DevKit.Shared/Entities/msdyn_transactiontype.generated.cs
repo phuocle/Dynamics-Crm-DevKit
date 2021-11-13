@@ -129,7 +129,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_transactiontype";
 
-		public const int EntityTypeCode = 10396;
+		public const int EntityTypeCode = 10459;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transactiontype()

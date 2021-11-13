@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_maskingrule";
 
-		public const int EntityTypeCode = 10560;
+		public const int EntityTypeCode = 10637;
 
 		[DebuggerNonUserCode()]
 		public msdyn_maskingrule()

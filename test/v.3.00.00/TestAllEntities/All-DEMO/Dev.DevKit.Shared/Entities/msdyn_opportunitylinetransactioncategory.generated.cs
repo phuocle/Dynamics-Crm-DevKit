@@ -87,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_opportunitylinetransactioncategory";
 
-		public const int EntityTypeCode = 10354;
+		public const int EntityTypeCode = 10417;
 
 		[DebuggerNonUserCode()]
 		public msdyn_opportunitylinetransactioncategory()

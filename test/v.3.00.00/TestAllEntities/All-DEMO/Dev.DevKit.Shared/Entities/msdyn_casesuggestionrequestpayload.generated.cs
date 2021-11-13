@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_casesuggestionrequestpayload";
 
-		public const int EntityTypeCode = 10179;
+		public const int EntityTypeCode = 10191;
 
 		[DebuggerNonUserCode()]
 		public msdyn_casesuggestionrequestpayload()

@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_geolocationtracking";
 
-		public const int EntityTypeCode = 10514;
+		public const int EntityTypeCode = 10578;
 
 		[DebuggerNonUserCode()]
 		public msdyn_geolocationtracking()
@@ -194,6 +194,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Time entry date and time.</para>
 		/// <para>Required - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
 		/// <para>Date and Time</para>
 		/// </summary>
@@ -221,6 +222,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>The location latitude.</para>
 		/// <para>Required - Decimal - MinValue: -90 - MaxValue: 90</para>
 		/// <para>Latitude</para>
 		/// </summary>
@@ -232,6 +234,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>The location longitude.</para>
 		/// <para>Required - Decimal - MinValue: -180 - MaxValue: 180</para>
 		/// <para>Longitude</para>
 		/// </summary>
@@ -255,6 +258,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Unique identifier of the user.</para>
 		/// <para>Required - Lookup to systemuser</para>
 		/// <para>User</para>
 		/// </summary>

@@ -286,6 +286,18 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		Work_based = 192350001
 	}
 
+	public enum msdyn_salesassignmentresult
+	{
+		/// <summary>
+		/// Failed = 1
+		/// </summary>
+		Failed = 1,
+		/// <summary>
+		/// Succeeded = 0
+		/// </summary>
+		Succeeded = 0
+	}
+
 	public enum Need
 	{
 		/// <summary>
@@ -550,6 +562,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_gdproptout = "msdyn_gdproptout";
 			public const string msdyn_ordertype = "msdyn_ordertype";
+			public const string msdyn_salesassignmentresult = "msdyn_salesassignmentresult";
+			public const string msdyn_segmentid = "msdyn_segmentid";
 			public const string Need = "need";
 			public const string NumberOfEmployees = "numberofemployees";
 			public const string OnHoldTime = "onholdtime";
@@ -2005,6 +2019,41 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.msdyn_ordertype] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>Result of the assignment rule process</para>
+		/// <para>Picklist</para>
+		/// <para>Assignment Rule Result</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.LeadOptionSets.msdyn_salesassignmentresult? msdyn_salesassignmentresult
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_salesassignmentresult);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.LeadOptionSets.msdyn_salesassignmentresult)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_salesassignmentresult] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_salesassignmentresult] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Segment associated with Lead.</para>
+		/// <para>Lookup to msdyn_segment</para>
+		/// <para>Segment Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_segmentid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_segmentid); }
+			set { Entity.Attributes[Fields.msdyn_segmentid] = value; }
 		}
 
 		/// <summary>

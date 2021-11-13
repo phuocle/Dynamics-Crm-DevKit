@@ -398,6 +398,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string AllowMarketingEmailExecution = "allowmarketingemailexecution";
 			public const string AllowOfflineScheduledSyncs = "allowofflinescheduledsyncs";
 			public const string AllowOutlookScheduledSyncs = "allowoutlookscheduledsyncs";
+			public const string AllowRedirectAdminSettingsToModernUI = "allowredirectadminsettingstomodernui";
 			public const string AllowUnresolvedPartiesOnEmailSend = "allowunresolvedpartiesonemailsend";
 			public const string AllowUserFormModePreference = "allowuserformmodepreference";
 			public const string AllowUsersSeeAppdownloadMessage = "allowusersseeappdownloadmessage";
@@ -430,6 +431,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ClientFeatureSet = "clientfeatureset";
 			public const string ContentSecurityPolicyConfiguration = "contentsecuritypolicyconfiguration";
 			public const string ContractPrefix = "contractprefix";
+			public const string CopresenceRefreshRate = "copresencerefreshrate";
 			public const string CortanaProactiveExperienceEnabled = "cortanaproactiveexperienceenabled";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
@@ -467,12 +469,14 @@ namespace Dev.DevKit.Shared.Entities
 			public const string EnableLivePersonaCardUCI = "enablelivepersonacarduci";
 			public const string EnableLivePersonCardIntegrationInOffice = "enablelivepersoncardintegrationinoffice";
 			public const string EnableLPAuthoring = "enablelpauthoring";
+			public const string EnableMakerSwitchToClassic = "enablemakerswitchtoclassic";
 			public const string EnableMicrosoftFlowIntegration = "enablemicrosoftflowintegration";
 			public const string EnablePricingOnCreate = "enablepricingoncreate";
 			public const string EnableSensitivityLabelsForTeamsCollab = "enablesensitivitylabelsforteamscollab";
 			public const string EnableSmartMatching = "enablesmartmatching";
 			public const string EnableUnifiedInterfaceShellRefresh = "enableunifiedinterfaceshellrefresh";
 			public const string EnforceReadOnlyPlugins = "enforcereadonlyplugins";
+			public const string EnhancedOQOIAddProductsSettings = "enhancedoqoiaddproductssettings";
 			public const string EntityImageId = "entityimageid";
 			public const string ExpireChangeTrackingInDays = "expirechangetrackingindays";
 			public const string ExpireSubscriptionsInDays = "expiresubscriptionsindays";
@@ -528,6 +532,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsAutoDataCaptureV2Enabled = "isautodatacapturev2enabled";
 			public const string IsAutoSaveEnabled = "isautosaveenabled";
 			public const string IsBPFEntityCustomizationFeatureEnabled = "isbpfentitycustomizationfeatureenabled";
+			public const string IsCollaborationExperienceEnabled = "iscollaborationexperienceenabled";
 			public const string IsConflictDetectionEnabledForMobileClient = "isconflictdetectionenabledformobileclient";
 			public const string IsContactMailingAddressSyncEnabled = "iscontactmailingaddresssyncenabled";
 			public const string IsContentSecurityPolicyEnabled = "iscontentsecuritypolicyenabled";
@@ -584,6 +589,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsRichTextNotesEnabled = "isrichtextnotesenabled";
 			public const string IsSalesAssistantEnabled = "issalesassistantenabled";
 			public const string IsSalesMobilePreviewEnabled = "issalesmobilepreviewenabled";
+			public const string IsSharingInOrgAllowed = "issharinginorgallowed";
 			public const string IsSOPIntegrationEnabled = "issopintegrationenabled";
 			public const string IsTextWrapEnabled = "istextwrapenabled";
 			public const string IsUserAccessAuditEnabled = "isuseraccessauditenabled";
@@ -599,6 +605,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string MailboxIntermittentIssueMinRange = "mailboxintermittentissueminrange";
 			public const string MailboxPermanentIssueMinRange = "mailboxpermanentissueminrange";
 			public const string MaxActionStepsInBPF = "maxactionstepsinbpf";
+			public const string MaxAllowedPendingRollupJobCount = "maxallowedpendingrollupjobcount";
+			public const string MaxAllowedPendingRollupJobPercentage = "maxallowedpendingrollupjobpercentage";
 			public const string MaxAppointmentDurationDays = "maxappointmentdurationdays";
 			public const string MaxConditionsForMobileOfflineFilters = "maxconditionsformobileofflinefilters";
 			public const string MaxDepthForHierarchicalSecurityModel = "maxdepthforhierarchicalsecuritymodel";
@@ -611,6 +619,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string MaxProductsInBundle = "maxproductsinbundle";
 			public const string MaxRecordsForExportToExcel = "maxrecordsforexporttoexcel";
 			public const string MaxRecordsForLookupFilters = "maxrecordsforlookupfilters";
+			public const string MaxRollupFieldsPerEntity = "maxrollupfieldsperentity";
+			public const string MaxRollupFieldsPerOrg = "maxrollupfieldsperorg";
 			public const string MaxSLAItemsPerSLA = "maxslaitemspersla";
 			public const string MaxSupportedInternetExplorerVersion = "maxsupportedinternetexplorerversion";
 			public const string MaxUploadFileSize = "maxuploadfilesize";
@@ -662,12 +672,17 @@ namespace Dev.DevKit.Shared.Entities
 			public const string PrivReportingGroupName = "privreportinggroupname";
 			public const string ProductRecommendationsEnabled = "productrecommendationsenabled";
 			public const string QualifyLeadAdditionalOptions = "qualifyleadadditionaloptions";
+			public const string QuickActionToOpenRecordsInSidePaneEnabled = "quickactiontoopenrecordsinsidepaneenabled";
 			public const string QuickFindRecordLimitEnabled = "quickfindrecordlimitenabled";
 			public const string QuotePrefix = "quoteprefix";
+			public const string RecalculateSLA = "recalculatesla";
 			public const string RecurrenceDefaultNumberOfOccurrences = "recurrencedefaultnumberofoccurrences";
 			public const string RecurrenceExpansionJobBatchInterval = "recurrenceexpansionjobbatchinterval";
 			public const string RecurrenceExpansionJobBatchSize = "recurrenceexpansionjobbatchsize";
 			public const string RecurrenceExpansionSynchCreateMax = "recurrenceexpansionsynchcreatemax";
+			public const string ReleaseWaveName = "releasewavename";
+			public const string RelevanceSearchEnabledByPlatform = "relevancesearchenabledbyplatform";
+			public const string RelevanceSearchModifiedOn = "relevancesearchmodifiedon";
 			public const string RenderSecureIFrameForEmail = "rendersecureiframeforemail";
 			public const string ReportingGroupId = "reportinggroupid";
 			public const string ReportingGroupName = "reportinggroupname";
@@ -682,6 +697,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string SchemaNamePrefix = "schemanameprefix";
 			public const string SendBulkEmailInUCI = "sendbulkemailinuci";
 			public const string ServeStaticResourcesFromAzureCDN = "servestaticresourcesfromazurecdn";
+			public const string SessionRecordingEnabled = "sessionrecordingenabled";
 			public const string SessionTimeoutEnabled = "sessiontimeoutenabled";
 			public const string SessionTimeoutInMins = "sessiontimeoutinmins";
 			public const string SessionTimeoutReminderInMins = "sessiontimeoutreminderinmins";
@@ -964,6 +980,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Control whether the organization Allow Redirect Legacy Admin Settings To Modern UI</para>
+		/// <para>Boolean</para>
+		/// <para>Allow Redirect Legacy Admin Settings To Modern UI</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? AllowRedirectAdminSettingsToModernUI
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AllowRedirectAdminSettingsToModernUI); }
+			set { Entity.Attributes[Fields.AllowRedirectAdminSettingsToModernUI] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates whether users are allowed to send email to unresolved parties (parties must still have an email address).</para>
 		/// <para>Boolean</para>
 		/// <para>Allow Unresolved Address Email Send</para>
@@ -1133,7 +1161,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Number of decimal places that can be used for the base currency.</para>
-		/// <para>ReadOnly - Integer - MinValue: 0 - MaxValue: 4</para>
+		/// <para>ReadOnly - Integer - MinValue: 0 - MaxValue: 10</para>
 		/// <para>Base Currency Precision</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1344,6 +1372,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Refresh rate for copresence data in seconds.</para>
+		/// <para>Integer - MinValue: 30 - MaxValue: 2,147,483,647</para>
+		/// <para>CopresenceRefreshRate</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? CopresenceRefreshRate
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CopresenceRefreshRate); }
+			set { Entity.Attributes[Fields.CopresenceRefreshRate] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates whether the feature CortanaProactiveExperience Flow processes should be enabled for the organization.</para>
 		/// <para>Boolean</para>
 		/// <para>Enable Cortana Proactive Experience Flow processes for this Organization</para>
@@ -1402,7 +1442,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Number of decimal places that can be used for currency.</para>
-		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 10</para>
 		/// <para>Currency Decimal Precision</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1847,6 +1887,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Control whether the organization Switch Maker Portal to Classic</para>
+		/// <para>Boolean</para>
+		/// <para>Switch Maker Portal to Classic</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? EnableMakerSwitchToClassic
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.EnableMakerSwitchToClassic); }
+			set { Entity.Attributes[Fields.EnableMakerSwitchToClassic] = value; }
+		}
+
+		/// <summary>
 		/// <para>Enable Integration with Microsoft Flow</para>
 		/// <para>Boolean</para>
 		/// <para>Enable Integration with Microsoft Flow</para>
@@ -1916,6 +1968,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.EnforceReadOnlyPlugins); }
 			set { Entity.Attributes[Fields.EnforceReadOnlyPlugins] = value; }
+		}
+
+		/// <summary>
+		/// <para>JSON string containing settings for enhanced add products experience in Sales</para>
+		/// <para>String - MaxLength: 1000</para>
+		/// <para>Enhanced Add Products Settings</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string EnhancedOQOIAddProductsSettings
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.EnhancedOQOIAddProductsSettings); }
+			set { Entity.Attributes[Fields.EnhancedOQOIAddProductsSettings] = value; }
 		}
 
 		/// <summary>
@@ -2632,6 +2696,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>IsCollaborationExperienceEnabled</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsCollaborationExperienceEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsCollaborationExperienceEnabled); }
+			set { Entity.Attributes[Fields.IsCollaborationExperienceEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>Information that specifies whether conflict detection for mobile client is enabled.</para>
 		/// <para>Boolean</para>
 		/// <para>Is Conflict Detection for Mobile Client enabled</para>
@@ -3303,6 +3378,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>IsSharingInOrgAllowed</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsSharingInOrgAllowed
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsSharingInOrgAllowed); }
+			set { Entity.Attributes[Fields.IsSharingInOrgAllowed] = value; }
+		}
+
+		/// <summary>
 		/// <para>Enable sales order processing integration.</para>
 		/// <para>Boolean</para>
 		/// <para>Is Sales Order Integration Enabled</para>
@@ -3483,6 +3569,30 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Maximum Allowed Pending Rollup Job Count</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
+		/// <para>MaxAllowedPendingRollupJobCount</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? MaxAllowedPendingRollupJobCount
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.MaxAllowedPendingRollupJobCount); }
+			set { Entity.Attributes[Fields.MaxAllowedPendingRollupJobCount] = value; }
+		}
+
+		/// <summary>
+		/// <para>Percentage Of Entity Table Size For Kicking Off Bootstrap Job</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 100</para>
+		/// <para>MaxAllowedPendingRollupJobPercentage</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? MaxAllowedPendingRollupJobPercentage
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.MaxAllowedPendingRollupJobPercentage); }
+			set { Entity.Attributes[Fields.MaxAllowedPendingRollupJobPercentage] = value; }
+		}
+
+		/// <summary>
 		/// <para>Maximum number of days an appointment can last.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Max Appointment Duration</para>
@@ -3624,6 +3734,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.MaxRecordsForLookupFilters); }
 			set { Entity.Attributes[Fields.MaxRecordsForLookupFilters] = value; }
+		}
+
+		/// <summary>
+		/// <para>Maximum Rollup Fields Per Entity</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 50</para>
+		/// <para>MaxRollupFieldsPerEntity</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? MaxRollupFieldsPerEntity
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.MaxRollupFieldsPerEntity); }
+			set { Entity.Attributes[Fields.MaxRollupFieldsPerEntity] = value; }
+		}
+
+		/// <summary>
+		/// <para>Maximum Rollup Fields Per Organization</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 500</para>
+		/// <para>MaxRollupFieldsPerOrg</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? MaxRollupFieldsPerOrg
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.MaxRollupFieldsPerOrg); }
+			set { Entity.Attributes[Fields.MaxRollupFieldsPerOrg] = value; }
 		}
 
 		/// <summary>
@@ -4167,7 +4301,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Number of decimal places that can be used for prices.</para>
-		/// <para>Integer - MinValue: 0 - MaxValue: 4</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 10</para>
 		/// <para>Pricing Decimal Precision</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -4250,6 +4384,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Flag to indicate if the feature to use quick action to open records in search side pane is enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Enable quick actions to open records in search side pane</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? QuickActionToOpenRecordsInSidePaneEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.QuickActionToOpenRecordsInSidePaneEnabled); }
+			set { Entity.Attributes[Fields.QuickActionToOpenRecordsInSidePaneEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>Indicates whether a quick find record limit should be enabled for this organization (allows for faster Quick Find queries but prevents overly broad searches).</para>
 		/// <para>Boolean</para>
 		/// <para>Quick Find Record Limit Enabled</para>
@@ -4271,6 +4417,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.QuotePrefix); }
 			set { Entity.Attributes[Fields.QuotePrefix] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether SLA Recalculation has been enabled for the organization</para>
+		/// <para>Boolean</para>
+		/// <para>Indicates whether SLA Recalculation has been enabled for the organization</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? RecalculateSLA
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.RecalculateSLA); }
+			set { Entity.Attributes[Fields.RecalculateSLA] = value; }
 		}
 
 		/// <summary>
@@ -4319,6 +4477,42 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.RecurrenceExpansionSynchCreateMax); }
 			set { Entity.Attributes[Fields.RecurrenceExpansionSynchCreateMax] = value; }
+		}
+
+		/// <summary>
+		/// <para>Release Wave Applied to Environment.</para>
+		/// <para>String - MaxLength: 200</para>
+		/// <para>Release Wave</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ReleaseWaveName
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ReleaseWaveName); }
+			set { Entity.Attributes[Fields.ReleaseWaveName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether relevance search was enabled for the environment as part of Dataverse's relevance search on-by-default sweep</para>
+		/// <para>Boolean</para>
+		/// <para>Relevance search enabled automatically by Dataverse</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? RelevanceSearchEnabledByPlatform
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.RelevanceSearchEnabledByPlatform); }
+			set { Entity.Attributes[Fields.RelevanceSearchEnabledByPlatform] = value; }
+		}
+
+		/// <summary>
+		/// <para>This setting contains the last modified date for relevance search setting that appears as a toggle in PPAC.</para>
+		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
+		/// <para>RelevanceSearchModifiedOnDate</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? RelevanceSearchModifiedOnUtc
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.RelevanceSearchModifiedOn); }
+			set { Entity.Attributes[Fields.RelevanceSearchModifiedOn] = value; }
 		}
 
 		/// <summary>
@@ -4509,6 +4703,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.ServeStaticResourcesFromAzureCDN); }
 			set { Entity.Attributes[Fields.ServeStaticResourcesFromAzureCDN] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable the session recording feature to record user sessions in UCI</para>
+		/// <para>Boolean</para>
+		/// <para>Enable the session recording feature</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? SessionRecordingEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.SessionRecordingEnabled); }
+			set { Entity.Attributes[Fields.SessionRecordingEnabled] = value; }
 		}
 
 		/// <summary>

@@ -127,7 +127,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_occhannelconfiguration";
 
-		public const int EntityTypeCode = 10562;
+		public const int EntityTypeCode = 10640;
 
 		[DebuggerNonUserCode()]
 		public msdyn_occhannelconfiguration()

@@ -267,7 +267,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_alert";
 
-		public const int EntityTypeCode = 10238;
+		public const int EntityTypeCode = 10261;
 
 		[DebuggerNonUserCode()]
 		public msfp_alert()

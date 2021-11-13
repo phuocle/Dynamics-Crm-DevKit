@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_processnotes";
 
-		public const int EntityTypeCode = 10362;
+		public const int EntityTypeCode = 10425;
 
 		[DebuggerNonUserCode()]
 		public msdyn_processnotes()

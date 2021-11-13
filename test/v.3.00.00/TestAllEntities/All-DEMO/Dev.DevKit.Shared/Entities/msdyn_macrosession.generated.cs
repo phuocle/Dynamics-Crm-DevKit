@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_macrosession";
 
-		public const int EntityTypeCode = 10170;
+		public const int EntityTypeCode = 10182;
 
 		[DebuggerNonUserCode()]
 		public msdyn_macrosession()

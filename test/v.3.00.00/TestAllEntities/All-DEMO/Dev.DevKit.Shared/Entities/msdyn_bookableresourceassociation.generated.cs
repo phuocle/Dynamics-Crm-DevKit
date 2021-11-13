@@ -77,7 +77,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookableresourceassociation";
 
-		public const int EntityTypeCode = 10293;
+		public const int EntityTypeCode = 10356;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookableresourceassociation()

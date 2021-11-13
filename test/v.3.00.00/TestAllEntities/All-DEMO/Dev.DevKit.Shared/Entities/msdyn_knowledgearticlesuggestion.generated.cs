@@ -32,7 +32,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgearticlesuggestion";
 
-		public const int EntityTypeCode = 10182;
+		public const int EntityTypeCode = 10194;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgearticlesuggestion()

@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_cannedmessage_liveworkstream";
 
-		public const int EntityTypeCode = 10612;
+		public const int EntityTypeCode = 10687;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_cannedmessage_liveworkstream()

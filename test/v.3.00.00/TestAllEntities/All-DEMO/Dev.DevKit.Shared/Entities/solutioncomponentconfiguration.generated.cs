@@ -121,7 +121,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "solutioncomponentconfiguration";
 
-		public const int EntityTypeCode = 10001;
+		public const int EntityTypeCode = 10002;
 
 		[DebuggerNonUserCode()]
 		public solutioncomponentconfiguration()

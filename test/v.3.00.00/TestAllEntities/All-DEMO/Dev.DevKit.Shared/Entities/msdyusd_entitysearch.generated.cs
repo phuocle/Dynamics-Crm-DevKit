@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_entitysearch";
 
-		public const int EntityTypeCode = 10693;
+		public const int EntityTypeCode = 10772;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_entitysearch()

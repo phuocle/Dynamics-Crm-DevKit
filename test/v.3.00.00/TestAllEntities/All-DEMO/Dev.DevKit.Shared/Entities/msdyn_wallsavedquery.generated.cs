@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_wallsavedquery";
 
-		public const int EntityTypeCode = 10236;
+		public const int EntityTypeCode = 10259;
 
 		[DebuggerNonUserCode()]
 		public msdyn_wallsavedquery()

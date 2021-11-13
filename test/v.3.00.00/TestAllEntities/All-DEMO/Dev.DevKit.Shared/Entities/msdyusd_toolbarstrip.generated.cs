@@ -82,7 +82,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_toolbarstrip";
 
-		public const int EntityTypeCode = 10703;
+		public const int EntityTypeCode = 10782;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_toolbarstrip()

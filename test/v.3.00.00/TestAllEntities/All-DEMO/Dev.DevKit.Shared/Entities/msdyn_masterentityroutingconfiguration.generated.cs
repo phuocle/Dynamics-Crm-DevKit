@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_masterentityroutingconfiguration";
 
-		public const int EntityTypeCode = 10547;
+		public const int EntityTypeCode = 10616;
 
 		[DebuggerNonUserCode()]
 		public msdyn_masterentityroutingconfiguration()

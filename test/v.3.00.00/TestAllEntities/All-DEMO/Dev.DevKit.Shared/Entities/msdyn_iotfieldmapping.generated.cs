@@ -136,7 +136,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotfieldmapping";
 
-		public const int EntityTypeCode = 10135;
+		public const int EntityTypeCode = 10147;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotfieldmapping()

@@ -105,7 +105,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_schedulingfeatureflag";
 
-		public const int EntityTypeCode = 10322;
+		public const int EntityTypeCode = 10385;
 
 		[DebuggerNonUserCode()]
 		public msdyn_schedulingfeatureflag()

@@ -88,7 +88,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_oclinechannelconfig";
 
-		public const int EntityTypeCode = 10661;
+		public const int EntityTypeCode = 10739;
 
 		[DebuggerNonUserCode()]
 		public msdyn_oclinechannelconfig()

@@ -215,7 +215,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_fact";
 
-		public const int EntityTypeCode = 10341;
+		public const int EntityTypeCode = 10404;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fact()

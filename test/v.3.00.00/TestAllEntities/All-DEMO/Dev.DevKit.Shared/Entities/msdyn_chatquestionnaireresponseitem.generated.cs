@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_chatquestionnaireresponseitem";
 
-		public const int EntityTypeCode = 10631;
+		public const int EntityTypeCode = 10710;
 
 		[DebuggerNonUserCode()]
 		public msdyn_chatquestionnaireresponseitem()

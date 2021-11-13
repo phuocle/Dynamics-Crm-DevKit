@@ -86,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_agreementsubstatus";
 
-		public const int EntityTypeCode = 10423;
+		public const int EntityTypeCode = 10487;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementsubstatus()

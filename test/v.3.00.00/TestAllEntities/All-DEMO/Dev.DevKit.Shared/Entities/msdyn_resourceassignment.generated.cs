@@ -108,7 +108,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourceassignment";
 
-		public const int EntityTypeCode = 10382;
+		public const int EntityTypeCode = 10445;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourceassignment()
@@ -522,7 +522,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the user whose capacity is assigned.</para>
-		/// <para>Lookup to </para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Resource (Deprecated in v3.0)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -68,6 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string ExtensionOfRecordId = "extensionofrecordid";
 			public const string ImportSequenceNumber = "importsequencenumber";
+			public const string IsChangedFieldsEnabledForUpdateEvent = "ischangedfieldsenabledforupdateevent";
 			public const string IsManaged = "ismanaged";
 			public const string IsOnExternalCreatedEnabled = "isonexternalcreatedenabled";
 			public const string IsOnExternalDeletedEnabled = "isonexternaldeletedenabled";
@@ -91,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "virtualentitymetadata";
 
-		public const int EntityTypeCode = 10072;
+		public const int EntityTypeCode = 10093;
 
 		[DebuggerNonUserCode()]
 		public VirtualEntityMetadata()
@@ -223,6 +224,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.ImportSequenceNumber); }
 			set { Entity.Attributes[Fields.ImportSequenceNumber] = value; }
+		}
+
+		/// <summary>
+		/// <para>Whether the OnExternalUpdated message ChangedFields parameter will include data about which fields have changed.</para>
+		/// <para>Boolean</para>
+		/// <para>Includes data on changed fields for the update message</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsChangedFieldsEnabledForUpdateEvent
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsChangedFieldsEnabledForUpdateEvent); }
+			set { Entity.Attributes[Fields.IsChangedFieldsEnabledForUpdateEvent] = value; }
 		}
 
 		/// <summary>

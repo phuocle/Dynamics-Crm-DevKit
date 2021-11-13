@@ -113,6 +113,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_ApprovalSet = "msdyn_approvalset";
 			public const string msdyn_ApprovedBy = "msdyn_approvedby";
 			public const string msdyn_ApprovedOn = "msdyn_approvedon";
 			public const string msdyn_BillingType = "msdyn_billingtype";
@@ -163,7 +164,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projectapproval";
 
-		public const int EntityTypeCode = 10364;
+		public const int EntityTypeCode = 10427;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projectapproval()
@@ -300,6 +301,18 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Shows the Approval Set that the transaction references.</para>
+		/// <para>Lookup to msdyn_approvalset</para>
+		/// <para>Approval Set</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_ApprovalSet
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_ApprovalSet); }
+			set { Entity.Attributes[Fields.msdyn_ApprovalSet] = value; }
 		}
 
 		/// <summary>

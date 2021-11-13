@@ -177,6 +177,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// </summary>
 		Customer_ended_conversation = 192350019,
 		/// <summary>
+		/// Customer_has_opted_out_from_Async_Conversation = 192350057
+		/// </summary>
+		Customer_has_opted_out_from_Async_Conversation = 192350057,
+		/// <summary>
 		/// Customer_is_next_in_line = 192350024
 		/// </summary>
 		Customer_is_next_in_line = 192350024,
@@ -200,6 +204,14 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// Customers_position_in_queue = 192350021
 		/// </summary>
 		Customers_position_in_queue = 192350021,
+		/// <summary>
+		/// End_conversation_due_to_overflow = 192350055
+		/// </summary>
+		End_conversation_due_to_overflow = 192350055,
+		/// <summary>
+		/// Greeting_Message_for_Async_Channels = 192350056
+		/// </summary>
+		Greeting_Message_for_Async_Channels = 192350056,
 		/// <summary>
 		/// Holiday_message_to_customer = 192350035
 		/// </summary>
@@ -301,6 +313,14 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsystemmessageOptionSets
 		/// </summary>
 		Transfer_to_queue_started = 192350011,
 		/// <summary>
+		/// Trial_conversation_time_limit_exceeded = 192350054
+		/// </summary>
+		Trial_conversation_time_limit_exceeded = 192350054,
+		/// <summary>
+		/// Trial_usage_limit_exceeded = 192350053
+		/// </summary>
+		Trial_usage_limit_exceeded = 192350053,
+		/// <summary>
 		/// Voice_call_accepted = 192350027
 		/// </summary>
 		Voice_call_accepted = 192350027,
@@ -379,7 +399,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsystemmessage";
 
-		public const int EntityTypeCode = 10574;
+		public const int EntityTypeCode = 10662;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsystemmessage()

@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_twitterengagementctx";
 
-		public const int EntityTypeCode = 10667;
+		public const int EntityTypeCode = 10745;
 
 		[DebuggerNonUserCode()]
 		public msdyn_twitterengagementctx()

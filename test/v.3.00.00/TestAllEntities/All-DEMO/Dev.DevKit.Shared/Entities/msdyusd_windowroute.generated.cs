@@ -219,7 +219,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_windowroute";
 
-		public const int EntityTypeCode = 10708;
+		public const int EntityTypeCode = 10787;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_windowroute()

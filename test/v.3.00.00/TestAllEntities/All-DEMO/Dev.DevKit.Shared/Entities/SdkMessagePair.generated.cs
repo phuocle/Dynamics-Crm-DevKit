@@ -288,7 +288,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>String - MaxLength: 256</para>
+		/// <para>String - MaxLength: 4000</para>
 		/// <para>SDK Message Binding Information</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

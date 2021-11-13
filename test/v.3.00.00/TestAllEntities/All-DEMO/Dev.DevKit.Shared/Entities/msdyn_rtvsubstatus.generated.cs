@@ -90,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_rtvsubstatus";
 
-		public const int EntityTypeCode = 10477;
+		public const int EntityTypeCode = 10541;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rtvsubstatus()

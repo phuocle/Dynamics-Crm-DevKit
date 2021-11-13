@@ -121,6 +121,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_customeroptout = "msdyn_customeroptout";
 			public const string msdyn_ocfollowercount = "msdyn_ocfollowercount";
 			public const string msdyn_ocfollowingcount = "msdyn_ocfollowingcount";
 			public const string msdyn_ocfriendcount = "msdyn_ocfriendcount";
@@ -343,6 +344,18 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Flag specifying whether Customer has opted out of getting messages using this SP.</para>
+		/// <para>Boolean</para>
+		/// <para>customeroptout</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_customeroptout
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_customeroptout); }
+			set { Entity.Attributes[Fields.msdyn_customeroptout] = value; }
 		}
 
 		/// <summary>

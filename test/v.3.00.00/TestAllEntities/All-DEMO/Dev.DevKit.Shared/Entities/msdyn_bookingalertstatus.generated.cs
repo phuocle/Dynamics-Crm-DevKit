@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookingalertstatus";
 
-		public const int EntityTypeCode = 10295;
+		public const int EntityTypeCode = 10358;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingalertstatus()

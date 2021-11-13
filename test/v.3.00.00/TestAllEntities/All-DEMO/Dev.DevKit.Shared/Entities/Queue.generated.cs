@@ -182,9 +182,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_assignmentstrategy = "msdyn_assignmentstrategy";
 			public const string msdyn_isdefaultqueue = "msdyn_isdefaultqueue";
 			public const string msdyn_isomnichannelqueue = "msdyn_isomnichannelqueue";
+			public const string msdyn_maxqueuesize = "msdyn_maxqueuesize";
 			public const string msdyn_operatinghourid = "msdyn_operatinghourid";
 			public const string msdyn_priority = "msdyn_priority";
 			public const string msdyn_queuetype = "msdyn_queuetype";
+			public const string msdyn_uniquename = "msdyn_uniquename";
 			public const string Name = "name";
 			public const string NumberOfItems = "numberofitems";
 			public const string NumberOfMembers = "numberofmembers";
@@ -542,6 +544,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Maximum queue size</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
+		/// <para>Maximum queue size</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_maxqueuesize
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_maxqueuesize); }
+			set { Entity.Attributes[Fields.msdyn_maxqueuesize] = value; }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier for Operating hour associated with Queue</para>
 		/// <para>Lookup to msdyn_operatinghour</para>
 		/// <para>Operating Hours</para>
@@ -583,6 +597,18 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		Entity.Attributes[Fields.msdyn_queuetype] = new OptionSetValue((int)value);
 }
+		}
+
+		/// <summary>
+		/// <para>Unique Name for the entity.</para>
+		/// <para>String - MaxLength: 128</para>
+		/// <para>Unique Name</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_uniquename
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_uniquename); }
+			set { Entity.Attributes[Fields.msdyn_uniquename] = value; }
 		}
 
 		/// <summary>

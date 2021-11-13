@@ -152,7 +152,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotalert";
 
-		public const int EntityTypeCode = 10126;
+		public const int EntityTypeCode = 10138;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotalert()
@@ -377,7 +377,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>The asset connected to the IoT device that raised the alert.</para>
 		/// <para>Lookup to msdyn_customerasset</para>
-		/// <para>Device</para>
+		/// <para>Customer Asset</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public EntityReference msdyn_CustomerAsset

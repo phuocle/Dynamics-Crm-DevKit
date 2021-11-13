@@ -99,7 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsitdimportconfig";
 
-		public const int EntityTypeCode = 10623;
+		public const int EntityTypeCode = 10699;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsitdimportconfig()

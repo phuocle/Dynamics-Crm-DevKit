@@ -61,6 +61,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_Allowskillupdatebyresource = "msdyn_allowskillupdatebyresource";
+			public const string msdyn_BackgroundApprovalThreshold = "msdyn_backgroundapprovalthreshold";
 			public const string msdyn_defaultorganizationalunit = "msdyn_defaultorganizationalunit";
 			public const string msdyn_defaultWorkTemplate = "msdyn_defaultworktemplate";
 			public const string msdyn_description = "msdyn_description";
@@ -83,7 +84,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projectparameter";
 
-		public const int EntityTypeCode = 10365;
+		public const int EntityTypeCode = 10428;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projectparameter()
@@ -221,6 +222,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_Allowskillupdatebyresource); }
 			set { Entity.Attributes[Fields.msdyn_Allowskillupdatebyresource] = value; }
+		}
+
+		/// <summary>
+		/// <para>Process approvals in the background when the number of approvals exceed this number.</para>
+		/// <para>Integer - MinValue: -1 - MaxValue: 2,147,483,647</para>
+		/// <para>Background Approval Threshold</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_BackgroundApprovalThreshold
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_BackgroundApprovalThreshold); }
+			set { Entity.Attributes[Fields.msdyn_BackgroundApprovalThreshold] = value; }
 		}
 
 		/// <summary>

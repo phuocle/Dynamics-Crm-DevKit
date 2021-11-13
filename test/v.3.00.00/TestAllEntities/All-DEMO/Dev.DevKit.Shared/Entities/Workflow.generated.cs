@@ -49,6 +49,10 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// </summary>
 		Modern_Flow = 5,
 		/// <summary>
+		/// Web_Client_API_Flow = 9000
+		/// </summary>
+		Web_Client_API_Flow = 9000,
+		/// <summary>
 		/// Workflow = 0
 		/// </summary>
 		Workflow = 0
@@ -163,7 +167,11 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// <summary>
 		/// Draft = 0
 		/// </summary>
-		Draft = 0
+		Draft = 0,
+		/// <summary>
+		/// Suspended = 2
+		/// </summary>
+		Suspended = 2
 	}
 
 	public enum StatusCode
@@ -172,6 +180,10 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// Activated = 2
 		/// </summary>
 		Activated = 2,
+		/// <summary>
+		/// CompanyDLPViolation = 3
+		/// </summary>
+		CompanyDLPViolation = 3,
 		/// <summary>
 		/// Draft = 1
 		/// </summary>
@@ -285,6 +297,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string TriggerOnCreate = "triggeroncreate";
 			public const string TriggerOnDelete = "triggerondelete";
 			public const string TriggerOnUpdateAttributeList = "triggeronupdateattributelist";
+			public const string TrustedAccess = "trustedaccess";
 			public const string Type = "type";
 			public const string UIData = "uidata";
 			public const string UIFlowType = "uiflowtype";
@@ -951,7 +964,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Status of the process.</para>
+		/// <para>Status of the workflow</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -974,7 +987,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Additional information about status of the process.</para>
+		/// <para>Reason for the status of the workflow</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -1065,6 +1078,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.TriggerOnUpdateAttributeList); }
 			set { Entity.Attributes[Fields.TriggerOnUpdateAttributeList] = value; }
+		}
+
+		/// <summary>
+		/// <para>For Internal Use Only.</para>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para>Trusted Access</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? TrustedAccess
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.TrustedAccess); }
 		}
 
 		/// <summary>

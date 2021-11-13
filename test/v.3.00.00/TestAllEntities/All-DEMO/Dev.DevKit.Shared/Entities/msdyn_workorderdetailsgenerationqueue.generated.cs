@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_workorderdetailsgenerationqueue";
 
-		public const int EntityTypeCode = 10487;
+		public const int EntityTypeCode = 10551;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderdetailsgenerationqueue()

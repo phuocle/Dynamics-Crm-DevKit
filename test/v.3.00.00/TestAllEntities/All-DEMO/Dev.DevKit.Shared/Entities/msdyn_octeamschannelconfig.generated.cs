@@ -86,7 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_octeamschannelconfig";
 
-		public const int EntityTypeCode = 10670;
+		public const int EntityTypeCode = 10748;
 
 		[DebuggerNonUserCode()]
 		public msdyn_octeamschannelconfig()

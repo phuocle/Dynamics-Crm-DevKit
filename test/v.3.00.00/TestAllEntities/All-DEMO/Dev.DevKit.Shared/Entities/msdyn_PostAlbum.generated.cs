@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_postalbum";
 
-		public const int EntityTypeCode = 10233;
+		public const int EntityTypeCode = 10256;
 
 		[DebuggerNonUserCode()]
 		public msdyn_PostAlbum()

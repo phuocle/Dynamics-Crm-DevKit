@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_skillattachmenttarget";
 
-		public const int EntityTypeCode = 10621;
+		public const int EntityTypeCode = 10697;
 
 		[DebuggerNonUserCode()]
 		public msdyn_skillattachmenttarget()

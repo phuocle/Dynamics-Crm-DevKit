@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotdeviceproperty";
 
-		public const int EntityTypeCode = 10132;
+		public const int EntityTypeCode = 10144;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotdeviceproperty()

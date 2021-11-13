@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_actioncardregarding";
 
-		public const int EntityTypeCode = 10219;
+		public const int EntityTypeCode = 10240;
 
 		[DebuggerNonUserCode()]
 		public msdyn_actioncardregarding()

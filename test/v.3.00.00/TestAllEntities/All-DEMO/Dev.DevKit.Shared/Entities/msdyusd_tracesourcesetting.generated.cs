@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_tracesourcesetting";
 
-		public const int EntityTypeCode = 10704;
+		public const int EntityTypeCode = 10783;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_tracesourcesetting()

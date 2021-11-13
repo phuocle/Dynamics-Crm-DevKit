@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "canvasappextendedmetadata";
 
-		public const int EntityTypeCode = 10031;
+		public const int EntityTypeCode = 10038;
 
 		[DebuggerNonUserCode()]
 		public CanvasAppExtendedMetadata()

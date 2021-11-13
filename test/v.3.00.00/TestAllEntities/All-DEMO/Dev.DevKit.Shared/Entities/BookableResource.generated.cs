@@ -13,9 +13,9 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceOptionSets
 	public enum msdyn_CrewStrategy
 	{
 		/// <summary>
-		/// Cascade_and_Accept_Cascade_Completely = 192350000
+		/// Cascade_and_Accept_Cascade_Completely_Not_Recommended = 192350000
 		/// </summary>
-		Cascade_and_Accept_Cascade_Completely = 192350000,
+		Cascade_and_Accept_Cascade_Completely_Not_Recommended = 192350000,
 		/// <summary>
 		/// Crew_Leader_Management = 192350001
 		/// </summary>
@@ -27,6 +27,18 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceOptionSets
 	}
 
 	public enum msdyn_EnableAppointments
+	{
+		/// <summary>
+		/// No = 192350000
+		/// </summary>
+		No = 192350000,
+		/// <summary>
+		/// Yes = 192350001
+		/// </summary>
+		Yes = 192350001
+	}
+
+	public enum msdyn_EnableOutlookSchedules
 	{
 		/// <summary>
 		/// No = 192350000
@@ -189,6 +201,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_EnableAppointments = "msdyn_enableappointments";
 			public const string msdyn_EnabledForFieldServiceMobile = "msdyn_enabledforfieldservicemobile";
 			public const string msdyn_EnableDripScheduling = "msdyn_enabledripscheduling";
+			public const string msdyn_EnableOutlookSchedules = "msdyn_enableoutlookschedules";
 			public const string msdyn_EndLocation = "msdyn_endlocation";
 			public const string msdyn_facilityequipmentid = "msdyn_facilityequipmentid";
 			public const string msdyn_GenericType = "msdyn_generictype";
@@ -537,6 +550,29 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>This only applies when directly calling the API. It does not apply when the Book button is clicked on the Schedule Board or on any schedulable entity.</para>
+		/// <para>Picklist</para>
+		/// <para>Include Outlook Free/Busy in Search Resource Availability API</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.BookableResourceOptionSets.msdyn_EnableOutlookSchedules? msdyn_EnableOutlookSchedules
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_EnableOutlookSchedules);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.BookableResourceOptionSets.msdyn_EnableOutlookSchedules)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_EnableOutlookSchedules] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_EnableOutlookSchedules] = null;
+			}
+		}
+
+		/// <summary>
 		/// <para>Shows the default ending location type when booking daily schedules for this resource.</para>
 		/// <para>Picklist</para>
 		/// <para>End Location</para>
@@ -656,6 +692,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>The location latitude.</para>
 		/// <para>Double - MinValue: -90 - MaxValue: 90</para>
 		/// <para>Latitude</para>
 		/// </summary>
@@ -679,6 +716,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>The location longitude.</para>
 		/// <para>Double - MinValue: -180 - MaxValue: 180</para>
 		/// <para>Longitude</para>
 		/// </summary>

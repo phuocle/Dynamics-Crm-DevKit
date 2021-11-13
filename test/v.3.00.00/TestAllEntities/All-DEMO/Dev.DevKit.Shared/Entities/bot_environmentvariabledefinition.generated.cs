@@ -51,7 +51,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "bot_environmentvariabledefinition";
 
-		public const int EntityTypeCode = 10045;
+		public const int EntityTypeCode = 10069;
 
 		[DebuggerNonUserCode()]
 		public bot_environmentvariabledefinition()

@@ -94,7 +94,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_notificationfield";
 
-		public const int EntityTypeCode = 10147;
+		public const int EntityTypeCode = 10159;
 
 		[DebuggerNonUserCode()]
 		public msdyn_notificationfield()

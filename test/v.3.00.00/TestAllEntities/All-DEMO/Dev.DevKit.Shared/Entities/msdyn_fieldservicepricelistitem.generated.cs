@@ -91,7 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_fieldservicepricelistitem";
 
-		public const int EntityTypeCode = 10431;
+		public const int EntityTypeCode = 10495;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldservicepricelistitem()

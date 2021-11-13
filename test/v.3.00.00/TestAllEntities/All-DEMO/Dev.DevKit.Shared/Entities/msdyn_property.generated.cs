@@ -85,7 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_property";
 
-		public const int EntityTypeCode = 10120;
+		public const int EntityTypeCode = 10132;
 
 		[DebuggerNonUserCode()]
 		public msdyn_property()

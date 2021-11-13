@@ -88,7 +88,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projecttaskdependency";
 
-		public const int EntityTypeCode = 10369;
+		public const int EntityTypeCode = 10432;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projecttaskdependency()

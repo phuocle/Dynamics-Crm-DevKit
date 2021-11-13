@@ -61,7 +61,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_octag";
 
-		public const int EntityTypeCode = 10599;
+		public const int EntityTypeCode = 10663;
 
 		[DebuggerNonUserCode()]
 		public msdyn_octag()

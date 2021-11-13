@@ -77,7 +77,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_forecastrecurrence";
 
-		public const int EntityTypeCode = 10214;
+		public const int EntityTypeCode = 10235;
 
 		[DebuggerNonUserCode()]
 		public msdyn_forecastrecurrence()

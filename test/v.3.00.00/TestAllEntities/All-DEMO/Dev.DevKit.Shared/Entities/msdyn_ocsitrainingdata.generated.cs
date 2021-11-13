@@ -88,7 +88,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsitrainingdata";
 
-		public const int EntityTypeCode = 10625;
+		public const int EntityTypeCode = 10701;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsitrainingdata()

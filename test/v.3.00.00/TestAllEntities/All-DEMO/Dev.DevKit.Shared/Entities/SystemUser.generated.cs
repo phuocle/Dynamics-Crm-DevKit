@@ -126,6 +126,18 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		Service = 10
 	}
 
+	public enum DeletedState
+	{
+		/// <summary>
+		/// Not_deleted = 0
+		/// </summary>
+		Not_deleted = 0,
+		/// <summary>
+		/// Soft_deleted = 1
+		/// </summary>
+		Soft_deleted = 1
+	}
+
 	public enum EmailRouterAccessApproval
 	{
 		/// <summary>
@@ -359,6 +371,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string DefaultFiltersPopulated = "defaultfilterspopulated";
 			public const string DefaultMailbox = "defaultmailbox";
 			public const string DefaultOdbFolderName = "defaultodbfoldername";
+			public const string DeletedState = "deletedstate";
 			public const string DisabledReason = "disabledreason";
 			public const string DisplayInServiceViews = "displayinserviceviews";
 			public const string DomainName = "domainname";
@@ -402,6 +415,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_DefaultPresenceIdUser = "msdyn_defaultpresenceiduser";
 			public const string msdyn_gdproptout = "msdyn_gdproptout";
 			public const string msdyn_gridwrappercontrolfield = "msdyn_gridwrappercontrolfield";
+			public const string msdyn_OwningEnvironmentId = "msdyn_owningenvironmentid";
 			public const string msdyn_phonenumberid = "msdyn_phonenumberid";
 			public const string msdyn_UserType = "msdyn_usertype";
 			public const string msdyusd_USDConfigurationId = "msdyusd_usdconfigurationid";
@@ -1249,6 +1263,22 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>User delete state</para>
+		/// <para>ReadOnly - Picklist</para>
+		/// <para>Deleted State</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.SystemUserOptionSets.DeletedState? DeletedState
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.DeletedState);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.SystemUserOptionSets.DeletedState)value.Value;
+			}
+		}
+
+		/// <summary>
 		/// <para>Reason for disabling the user.</para>
 		/// <para>ReadOnly - String - MaxLength: 500</para>
 		/// <para>Disabled Reason</para>
@@ -1800,6 +1830,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_gridwrappercontrolfield); }
 			set { Entity.Attributes[Fields.msdyn_gridwrappercontrolfield] = value; }
+		}
+
+		/// <summary>
+		/// <para>Environment Id of the CDS environment that owns the bot user.</para>
+		/// <para>String - MaxLength: 500</para>
+		/// <para>Owning Environment Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_OwningEnvironmentId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_OwningEnvironmentId); }
+			set { Entity.Attributes[Fields.msdyn_OwningEnvironmentId] = value; }
 		}
 
 		/// <summary>

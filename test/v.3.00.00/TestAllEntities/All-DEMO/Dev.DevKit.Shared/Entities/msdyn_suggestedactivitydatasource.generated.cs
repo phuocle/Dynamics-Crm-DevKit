@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_suggestedactivitydatasource";
 
-		public const int EntityTypeCode = 10228;
+		public const int EntityTypeCode = 10249;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestedactivitydatasource()

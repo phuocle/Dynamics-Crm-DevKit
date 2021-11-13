@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_form";
 
-		public const int EntityTypeCode = 10694;
+		public const int EntityTypeCode = 10773;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_form()

@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_siconfig";
 
-		public const int EntityTypeCode = 10217;
+		public const int EntityTypeCode = 10238;
 
 		[DebuggerNonUserCode()]
 		public msdyn_siconfig()

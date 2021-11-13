@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_customerassetcategory";
 
-		public const int EntityTypeCode = 10118;
+		public const int EntityTypeCode = 10130;
 
 		[DebuggerNonUserCode()]
 		public msdyn_customerassetcategory()

@@ -111,7 +111,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_auditanddiagnosticssetting";
 
-		public const int EntityTypeCode = 10689;
+		public const int EntityTypeCode = 10768;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_auditanddiagnosticssetting()

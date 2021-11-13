@@ -30,7 +30,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "virtualresourcegroupresource";
 
-		public const int EntityTypeCode = 10112;
+		public const int EntityTypeCode = 10124;
 
 		[DebuggerNonUserCode()]
 		public virtualresourcegroupresource()

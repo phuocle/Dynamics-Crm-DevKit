@@ -162,7 +162,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Number of decimal places that can be used for currency.</para>
-		/// <para>Integer - MinValue: 0 - MaxValue: 4</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 10</para>
 		/// <para>Currency Precision</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

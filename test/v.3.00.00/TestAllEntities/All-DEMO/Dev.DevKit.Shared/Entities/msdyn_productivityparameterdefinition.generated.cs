@@ -96,7 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_productivityparameterdefinition";
 
-		public const int EntityTypeCode = 10171;
+		public const int EntityTypeCode = 10183;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivityparameterdefinition()

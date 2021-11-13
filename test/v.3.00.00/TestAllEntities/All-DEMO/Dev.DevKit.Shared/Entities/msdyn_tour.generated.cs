@@ -90,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_tour";
 
-		public const int EntityTypeCode = 10039;
+		public const int EntityTypeCode = 10063;
 
 		[DebuggerNonUserCode()]
 		public msdyn_tour()

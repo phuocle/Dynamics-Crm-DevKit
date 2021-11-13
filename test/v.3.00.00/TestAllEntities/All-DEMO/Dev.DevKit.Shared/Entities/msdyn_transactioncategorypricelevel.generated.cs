@@ -87,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_transactioncategorypricelevel";
 
-		public const int EntityTypeCode = 10394;
+		public const int EntityTypeCode = 10457;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transactioncategorypricelevel()

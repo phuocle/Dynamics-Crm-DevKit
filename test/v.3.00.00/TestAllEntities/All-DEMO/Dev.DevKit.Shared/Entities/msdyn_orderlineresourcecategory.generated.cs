@@ -126,7 +126,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_orderlineresourcecategory";
 
-		public const int EntityTypeCode = 10357;
+		public const int EntityTypeCode = 10420;
 
 		[DebuggerNonUserCode()]
 		public msdyn_orderlineresourcecategory()

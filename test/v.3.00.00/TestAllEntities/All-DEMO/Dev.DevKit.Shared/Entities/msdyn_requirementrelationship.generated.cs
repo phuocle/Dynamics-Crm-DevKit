@@ -98,7 +98,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementrelationship";
 
-		public const int EntityTypeCode = 10307;
+		public const int EntityTypeCode = 10370;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementrelationship()

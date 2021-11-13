@@ -86,6 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_queue = "msdyn_queue";
 			public const string msdyn_routingduration = "msdyn_routingduration";
+			public const string msdyn_routingdurationinseconds = "msdyn_routingdurationinseconds";
 			public const string msdyn_routingstatus = "msdyn_routingstatus";
 			public const string msdyn_runnumber = "msdyn_runnumber";
 			public const string msdyn_starttime = "msdyn_starttime";
@@ -106,7 +107,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_unifiedroutingrun";
 
-		public const int EntityTypeCode = 10546;
+		public const int EntityTypeCode = 10615;
 
 		[DebuggerNonUserCode()]
 		public msdyn_unifiedroutingrun()
@@ -269,7 +270,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>The diagnostic item.</para>
-		/// <para>Required - String - MaxLength: 100</para>
+		/// <para>Required - String - MaxLength: 200</para>
 		/// <para>Diagnostic item</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -299,6 +300,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_routingduration); }
 			set { Entity.Attributes[Fields.msdyn_routingduration] = value; }
+		}
+
+		/// <summary>
+		/// <para>Routing duration in seconds</para>
+		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para>Duration (second)</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_routingdurationinseconds
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_routingdurationinseconds); }
+			set { Entity.Attributes[Fields.msdyn_routingdurationinseconds] = value; }
 		}
 
 		/// <summary>

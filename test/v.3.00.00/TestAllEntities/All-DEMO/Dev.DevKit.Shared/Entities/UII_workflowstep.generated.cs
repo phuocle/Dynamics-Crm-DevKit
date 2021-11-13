@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_workflowstep";
 
-		public const int EntityTypeCode = 10683;
+		public const int EntityTypeCode = 10762;
 
 		[DebuggerNonUserCode()]
 		public UII_workflowstep()

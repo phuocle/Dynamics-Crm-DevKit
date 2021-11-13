@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projectteammembersignup";
 
-		public const int EntityTypeCode = 10372;
+		public const int EntityTypeCode = 10435;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projectteammembersignup()

@@ -103,6 +103,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string Status = "status";
 			public const string SupportingSolutionId = "supportingsolutionid";
 			public const string Tags = "tags";
+			public const string UniqueCanvasAppId = "uniquecanvasappid";
 			public const string VersionNumber = "versionnumber";
 		}
 
@@ -719,6 +720,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Tags); }
 			set { Entity.Attributes[Fields.Tags] = value; }
+		}
+
+		/// <summary>
+		/// <para>The globally unique canvas app id</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Unique CanvasApp Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string UniqueCanvasAppId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.UniqueCanvasAppId); }
+			set { Entity.Attributes[Fields.UniqueCanvasAppId] = value; }
 		}
 
 		/// <summary>

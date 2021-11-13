@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aiodtrainingboundingbox";
 
-		public const int EntityTypeCode = 10084;
+		public const int EntityTypeCode = 10053;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIOdTrainingBoundingBox()

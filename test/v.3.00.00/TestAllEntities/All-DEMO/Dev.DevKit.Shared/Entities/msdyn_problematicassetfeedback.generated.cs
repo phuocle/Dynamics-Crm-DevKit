@@ -148,7 +148,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_problematicassetfeedback";
 
-		public const int EntityTypeCode = 10507;
+		public const int EntityTypeCode = 10571;
 
 		[DebuggerNonUserCode()]
 		public msdyn_problematicassetfeedback()

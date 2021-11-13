@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementcharacteristic";
 
-		public const int EntityTypeCode = 10304;
+		public const int EntityTypeCode = 10367;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementcharacteristic()

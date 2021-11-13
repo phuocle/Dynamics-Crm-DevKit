@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "adminsettingsentity";
 
-		public const int EntityTypeCode = 10205;
+		public const int EntityTypeCode = 10218;
 
 		[DebuggerNonUserCode()]
 		public adminsettingsentity()

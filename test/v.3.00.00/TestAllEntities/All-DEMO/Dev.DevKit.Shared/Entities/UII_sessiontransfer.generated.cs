@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_sessiontransfer";
 
-		public const int EntityTypeCode = 10681;
+		public const int EntityTypeCode = 10760;
 
 		[DebuggerNonUserCode()]
 		public UII_sessiontransfer()

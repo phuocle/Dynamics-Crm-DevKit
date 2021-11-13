@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotepricelist";
 
-		public const int EntityTypeCode = 10381;
+		public const int EntityTypeCode = 10444;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotepricelist()

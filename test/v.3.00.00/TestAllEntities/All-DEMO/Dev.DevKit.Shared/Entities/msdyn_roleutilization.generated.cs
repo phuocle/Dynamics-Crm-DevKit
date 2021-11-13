@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_roleutilization";
 
-		public const int EntityTypeCode = 10388;
+		public const int EntityTypeCode = 10451;
 
 		[DebuggerNonUserCode()]
 		public msdyn_roleutilization()

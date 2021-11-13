@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_skillattachmentruleitem";
 
-		public const int EntityTypeCode = 10620;
+		public const int EntityTypeCode = 10696;
 
 		[DebuggerNonUserCode()]
 		public msdyn_skillattachmentruleitem()

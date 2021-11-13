@@ -120,7 +120,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_expensecategory";
 
-		public const int EntityTypeCode = 10339;
+		public const int EntityTypeCode = 10402;
 
 		[DebuggerNonUserCode()]
 		public msdyn_expensecategory()

@@ -46,6 +46,18 @@ namespace Dev.DevKit.Shared.Entities.msdyn_schedulingparameterOptionSets
 		Yes = 192350001
 	}
 
+	public enum msdyn_EnableOutlookSchedules
+	{
+		/// <summary>
+		/// No = 192350000
+		/// </summary>
+		No = 192350000,
+		/// <summary>
+		/// Yes = 192350001
+		/// </summary>
+		Yes = 192350001
+	}
+
 	public enum statecode
 	{
 		/// <summary>
@@ -99,8 +111,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_EnableAppointments = "msdyn_enableappointments";
 			public const string msdyn_EnableCustomGeoLocation = "msdyn_enablecustomgeolocation";
 			public const string msdyn_enableOptimizer = "msdyn_enableoptimizer";
+			public const string msdyn_EnableOutlookSchedules = "msdyn_enableoutlookschedules";
 			public const string msdyn_GeoLocationExpiresAfterXMinutes = "msdyn_geolocationexpiresafterxminutes";
 			public const string msdyn_GeoLocationRefreshIntervalSeconds = "msdyn_geolocationrefreshintervalseconds";
+			public const string msdyn_internalflag = "msdyn_internalflag";
 			public const string msdyn_MapApiKey = "msdyn_mapapikey";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_SAAutoFilterServiceTerritory = "msdyn_saautofilterserviceterritory";
@@ -117,7 +131,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_schedulingparameter";
 
-		public const int EntityTypeCode = 10315;
+		public const int EntityTypeCode = 10378;
 
 		[DebuggerNonUserCode()]
 		public msdyn_schedulingparameter()
@@ -365,6 +379,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Choose the unit to display the distance on the Schedule Assistant experience</para>
 		/// <para>Picklist</para>
 		/// <para>Default Radius Unit</para>
 		/// </summary>
@@ -457,6 +472,29 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>This only applies when directly calling the API. It does not apply when the Book button is clicked on the Schedule Board or on any schedulable entity.</para>
+		/// <para>Picklist</para>
+		/// <para>Include Outlook Free/Busy in Search Resource Availability API</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_schedulingparameterOptionSets.msdyn_EnableOutlookSchedules? msdyn_EnableOutlookSchedules
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_EnableOutlookSchedules);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_schedulingparameterOptionSets.msdyn_EnableOutlookSchedules)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_EnableOutlookSchedules] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_EnableOutlookSchedules] = null;
+			}
+		}
+
+		/// <summary>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Geo Location Expires After X Minutes</para>
 		/// </summary>
@@ -476,6 +514,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_GeoLocationRefreshIntervalSeconds); }
 			set { Entity.Attributes[Fields.msdyn_GeoLocationRefreshIntervalSeconds] = value; }
+		}
+
+		/// <summary>
+		/// <para>For internal use</para>
+		/// <para>Memo - MaxLength: 1048576</para>
+		/// <para>For internal use</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_internalflag
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_internalflag); }
+			set { Entity.Attributes[Fields.msdyn_internalflag] = value; }
 		}
 
 		/// <summary>

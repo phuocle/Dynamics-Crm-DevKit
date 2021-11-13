@@ -89,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocliveworkstreamcontextvariable";
 
-		public const int EntityTypeCode = 10568;
+		public const int EntityTypeCode = 10650;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkstreamcontextvariable()

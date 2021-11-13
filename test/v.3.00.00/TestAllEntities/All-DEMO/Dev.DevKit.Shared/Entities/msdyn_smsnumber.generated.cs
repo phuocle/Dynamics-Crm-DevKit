@@ -114,7 +114,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_smsnumber";
 
-		public const int EntityTypeCode = 10653;
+		public const int EntityTypeCode = 10731;
 
 		[DebuggerNonUserCode()]
 		public msdyn_smsnumber()

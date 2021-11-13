@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "package_solution";
 
-		public const int EntityTypeCode = 10008;
+		public const int EntityTypeCode = 10009;
 
 		[DebuggerNonUserCode()]
 		public package_solution()

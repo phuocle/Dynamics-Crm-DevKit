@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_omnichannelpersonalization";
 
-		public const int EntityTypeCode = 10576;
+		public const int EntityTypeCode = 10666;
 
 		[DebuggerNonUserCode()]
 		public msdyn_omnichannelpersonalization()

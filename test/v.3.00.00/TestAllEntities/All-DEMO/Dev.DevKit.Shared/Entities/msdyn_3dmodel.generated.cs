@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_3dmodel";
 
-		public const int EntityTypeCode = 10407;
+		public const int EntityTypeCode = 10471;
 
 		[DebuggerNonUserCode()]
 		public msdyn_3dmodel()

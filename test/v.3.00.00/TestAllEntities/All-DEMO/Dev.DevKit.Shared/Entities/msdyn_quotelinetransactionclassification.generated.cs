@@ -125,7 +125,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotelinetransactionclassification";
 
-		public const int EntityTypeCode = 10380;
+		public const int EntityTypeCode = 10443;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotelinetransactionclassification()

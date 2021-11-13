@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourcerequirement_bookableresource";
 
-		public const int EntityTypeCode = 10401;
+		public const int EntityTypeCode = 10464;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcerequirement_bookableresource()

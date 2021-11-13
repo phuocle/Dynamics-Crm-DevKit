@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_rulesetdependencymapping";
 
-		public const int EntityTypeCode = 10544;
+		public const int EntityTypeCode = 10613;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rulesetdependencymapping()
@@ -211,7 +211,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Polymorphic entity id referenced by the ruleset</para>
-		/// <para>Lookup to characteristic;msdyn_capacityprofile;msdyn_decisionruleset;queue;ratingvalue</para>
+		/// <para>Lookup to characteristic;msdyn_capacityprofile;msdyn_decisionruleset;msdyn_liveworkstream;msdyn_ocliveworkstreamcontextvariable;queue;ratingvalue</para>
 		/// <para>Referenced polymorphic entity id</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

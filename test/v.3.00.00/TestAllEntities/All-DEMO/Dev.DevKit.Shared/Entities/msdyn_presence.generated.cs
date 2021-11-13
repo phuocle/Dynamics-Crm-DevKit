@@ -89,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_presence";
 
-		public const int EntityTypeCode = 10579;
+		public const int EntityTypeCode = 10673;
 
 		[DebuggerNonUserCode()]
 		public msdyn_presence()

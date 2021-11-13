@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_auditdiag_tracesourcesetting";
 
-		public const int EntityTypeCode = 10726;
+		public const int EntityTypeCode = 10805;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_auditdiag_tracesourcesetting()

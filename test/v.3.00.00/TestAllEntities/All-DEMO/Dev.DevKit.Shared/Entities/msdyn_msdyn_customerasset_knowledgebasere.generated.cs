@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_customerasset_knowledgebasere";
 
-		public const int EntityTypeCode = 10496;
+		public const int EntityTypeCode = 10560;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_customerasset_knowledgebasere()

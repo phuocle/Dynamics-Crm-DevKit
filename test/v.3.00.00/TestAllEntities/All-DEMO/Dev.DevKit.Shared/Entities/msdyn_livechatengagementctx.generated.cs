@@ -84,7 +84,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_livechatengagementctx";
 
-		public const int EntityTypeCode = 10634;
+		public const int EntityTypeCode = 10713;
 
 		[DebuggerNonUserCode()]
 		public msdyn_livechatengagementctx()

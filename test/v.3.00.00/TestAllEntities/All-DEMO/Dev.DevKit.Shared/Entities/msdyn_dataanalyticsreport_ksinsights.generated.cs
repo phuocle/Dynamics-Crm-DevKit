@@ -91,7 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_dataanalyticsreport_ksinsights";
 
-		public const int EntityTypeCode = 10197;
+		public const int EntityTypeCode = 10209;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dataanalyticsreport_ksinsights()

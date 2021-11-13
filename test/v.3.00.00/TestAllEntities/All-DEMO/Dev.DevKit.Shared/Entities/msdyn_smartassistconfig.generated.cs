@@ -123,7 +123,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_smartassistconfig";
 
-		public const int EntityTypeCode = 10175;
+		public const int EntityTypeCode = 10187;
 
 		[DebuggerNonUserCode()]
 		public msdyn_smartassistconfig()

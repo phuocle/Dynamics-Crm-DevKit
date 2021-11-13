@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_odatav4ds";
 
-		public const int EntityTypeCode = 10032;
+		public const int EntityTypeCode = 10044;
 
 		[DebuggerNonUserCode()]
 		public msdyn_odatav4ds()

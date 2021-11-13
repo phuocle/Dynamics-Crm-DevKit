@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_rmareceiptproduct";
 
-		public const int EntityTypeCode = 10473;
+		public const int EntityTypeCode = 10537;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rmareceiptproduct()

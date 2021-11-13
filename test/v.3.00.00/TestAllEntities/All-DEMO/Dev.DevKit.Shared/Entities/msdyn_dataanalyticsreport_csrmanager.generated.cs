@@ -91,7 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_dataanalyticsreport_csrmanager";
 
-		public const int EntityTypeCode = 10196;
+		public const int EntityTypeCode = 10208;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dataanalyticsreport_csrmanager()

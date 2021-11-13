@@ -37,49 +37,49 @@ namespace Dev.DevKit.Shared.Entities.ChannelPropertyGroupOptionSets
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Booking_Alert = 10294
+		/// Booking_Alert = 10357
 		/// </summary>
-		Booking_Alert = 10294,
+		Booking_Alert = 10357,
 		/// <summary>
-		/// Conversation = 10564
+		/// Conversation = 10644
 		/// </summary>
-		Conversation = 10564,
+		Conversation = 10644,
 		/// <summary>
-		/// Customer_Voice_alert = 10238
+		/// Customer_Voice_alert = 10261
 		/// </summary>
-		Customer_Voice_alert = 10238,
+		Customer_Voice_alert = 10261,
 		/// <summary>
-		/// Customer_Voice_survey_invite = 10248
+		/// Customer_Voice_survey_invite = 10271
 		/// </summary>
-		Customer_Voice_survey_invite = 10248,
+		Customer_Voice_survey_invite = 10271,
 		/// <summary>
-		/// Customer_Voice_survey_response = 10250
+		/// Customer_Voice_survey_response = 10273
 		/// </summary>
-		Customer_Voice_survey_response = 10250,
+		Customer_Voice_survey_response = 10273,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
 		Email = 4202,
 		/// <summary>
-		/// Outbound_message = 10673
+		/// Outbound_message = 10752
 		/// </summary>
-		Outbound_message = 10673,
+		Outbound_message = 10752,
 		/// <summary>
 		/// Phone_Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Project_Service_Approval = 10324
+		/// Project_Service_Approval = 10387
 		/// </summary>
-		Project_Service_Approval = 10324,
+		Project_Service_Approval = 10387,
 		/// <summary>
 		/// Service_Activity = 4214
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10573
+		/// Session = 10659
 		/// </summary>
-		Session = 10573,
+		Session = 10659,
 		/// <summary>
 		/// Social_Activity = 4216
 		/// </summary>

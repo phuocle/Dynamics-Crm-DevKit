@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_adminappstate";
 
-		public const int EntityTypeCode = 10587;
+		public const int EntityTypeCode = 10624;
 
 		[DebuggerNonUserCode()]
 		public msdyn_adminappstate()

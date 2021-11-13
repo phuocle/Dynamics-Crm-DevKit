@@ -48,7 +48,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "provisionlanguageforuser";
 
-		public const int EntityTypeCode = 10013;
+		public const int EntityTypeCode = 10023;
 
 		[DebuggerNonUserCode()]
 		public ProvisionLanguageForUser()

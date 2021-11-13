@@ -341,7 +341,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_surveyinvite";
 
-		public const int EntityTypeCode = 10248;
+		public const int EntityTypeCode = 10271;
 
 		[DebuggerNonUserCode()]
 		public msfp_surveyinvite()

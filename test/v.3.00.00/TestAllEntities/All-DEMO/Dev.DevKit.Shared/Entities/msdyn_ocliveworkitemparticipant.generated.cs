@@ -102,7 +102,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocliveworkitemparticipant";
 
-		public const int EntityTypeCode = 10566;
+		public const int EntityTypeCode = 10648;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkitemparticipant()

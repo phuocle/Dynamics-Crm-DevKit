@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_dimensionfieldname";
 
-		public const int EntityTypeCode = 10335;
+		public const int EntityTypeCode = 10398;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dimensionfieldname()

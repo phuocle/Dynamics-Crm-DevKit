@@ -87,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementresourcepreference";
 
-		public const int EntityTypeCode = 10309;
+		public const int EntityTypeCode = 10372;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementresourcepreference()

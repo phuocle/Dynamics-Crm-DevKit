@@ -162,7 +162,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocoutboundconfiguration";
 
-		public const int EntityTypeCode = 10672;
+		public const int EntityTypeCode = 10751;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocoutboundconfiguration()
@@ -373,7 +373,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier for Work Stream associated with Outbound Configuration</para>
 		/// <para>Required - Lookup to msdyn_liveworkstream</para>
-		/// <para>Work Stream</para>
+		/// <para>Work Stream (Deprecated)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public EntityReference msdyn_liveworkstreamid
@@ -425,7 +425,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Scope of the outbound configuration</para>
 		/// <para>Picklist</para>
-		/// <para>Scope</para>
+		/// <para>Scope (Deprecated)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.msdyn_ocoutboundconfigurationOptionSets.msdyn_ocscope? msdyn_ocscope

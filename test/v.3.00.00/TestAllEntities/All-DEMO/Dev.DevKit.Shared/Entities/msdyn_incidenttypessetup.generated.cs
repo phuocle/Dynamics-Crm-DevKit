@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_incidenttypessetup";
 
-		public const int EntityTypeCode = 10440;
+		public const int EntityTypeCode = 10504;
 
 		[DebuggerNonUserCode()]
 		public msdyn_incidenttypessetup()

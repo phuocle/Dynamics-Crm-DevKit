@@ -167,7 +167,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_personalmessage";
 
-		public const int EntityTypeCode = 10602;
+		public const int EntityTypeCode = 10670;
 
 		[DebuggerNonUserCode()]
 		public msdyn_personalmessage()

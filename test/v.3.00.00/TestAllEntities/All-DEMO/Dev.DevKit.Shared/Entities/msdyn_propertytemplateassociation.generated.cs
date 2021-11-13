@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_propertytemplateassociation";
 
-		public const int EntityTypeCode = 10123;
+		public const int EntityTypeCode = 10135;
 
 		[DebuggerNonUserCode()]
 		public msdyn_propertytemplateassociation()

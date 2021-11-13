@@ -83,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_dimension";
 
-		public const int EntityTypeCode = 10334;
+		public const int EntityTypeCode = 10397;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dimension()

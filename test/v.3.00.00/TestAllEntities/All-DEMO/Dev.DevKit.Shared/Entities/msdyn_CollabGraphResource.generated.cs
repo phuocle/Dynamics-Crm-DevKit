@@ -54,7 +54,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_collabgraphresource";
 
-		public const int EntityTypeCode = 10252;
+		public const int EntityTypeCode = 10224;
 
 		[DebuggerNonUserCode()]
 		public msdyn_CollabGraphResource()

@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_taxcode";
 
-		public const int EntityTypeCode = 10480;
+		public const int EntityTypeCode = 10544;
 
 		[DebuggerNonUserCode()]
 		public msdyn_taxcode()

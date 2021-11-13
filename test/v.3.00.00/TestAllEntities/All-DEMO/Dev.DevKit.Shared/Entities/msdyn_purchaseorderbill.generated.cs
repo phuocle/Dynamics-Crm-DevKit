@@ -83,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_purchaseorderbill";
 
-		public const int EntityTypeCode = 10457;
+		public const int EntityTypeCode = 10521;
 
 		[DebuggerNonUserCode()]
 		public msdyn_purchaseorderbill()

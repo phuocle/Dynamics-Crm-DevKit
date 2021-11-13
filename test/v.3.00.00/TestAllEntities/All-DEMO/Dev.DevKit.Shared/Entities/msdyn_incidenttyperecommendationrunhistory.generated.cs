@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_incidenttyperecommendationrunhistory";
 
-		public const int EntityTypeCode = 10504;
+		public const int EntityTypeCode = 10568;
 
 		[DebuggerNonUserCode()]
 		public msdyn_incidenttyperecommendationrunhistory()

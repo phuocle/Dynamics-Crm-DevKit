@@ -153,7 +153,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_urnotificationtemplate";
 
-		public const int EntityTypeCode = 10608;
+		public const int EntityTypeCode = 10683;
 
 		[DebuggerNonUserCode()]
 		public msdyn_urnotificationtemplate()

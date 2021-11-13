@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_paymentdetail";
 
-		public const int EntityTypeCode = 10451;
+		public const int EntityTypeCode = 10515;
 
 		[DebuggerNonUserCode()]
 		public msdyn_paymentdetail()

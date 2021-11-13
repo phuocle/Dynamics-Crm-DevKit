@@ -90,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "organizationsetting";
 
-		public const int EntityTypeCode = 10029;
+		public const int EntityTypeCode = 10036;
 
 		[DebuggerNonUserCode()]
 		public OrganizationSetting()

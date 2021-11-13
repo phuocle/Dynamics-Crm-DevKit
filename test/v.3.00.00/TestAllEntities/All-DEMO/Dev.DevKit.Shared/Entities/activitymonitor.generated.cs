@@ -81,6 +81,14 @@ namespace Dev.DevKit.Shared.Entities.activitymonitorOptionSets
 		/// </summary>
 		The_rule_doesnt_have_any_conditions_applicable_to_the_record = 13,
 		/// <summary>
+		/// The_rule_is_disconnected_from_the_Power_Automate_flow_To_reconnect_please_deactivate_and_reactivate_the_rule = 14
+		/// </summary>
+		The_rule_is_disconnected_from_the_Power_Automate_flow_To_reconnect_please_deactivate_and_reactivate_the_rule = 14,
+		/// <summary>
+		/// The_rule_is_disconnected_from_the_workflow_To_reconnect_please_deactivate_and_reactivate_the_rule = 15
+		/// </summary>
+		The_rule_is_disconnected_from_the_workflow_To_reconnect_please_deactivate_and_reactivate_the_rule = 15,
+		/// <summary>
 		/// The_rule_requires_a_connected_case_to_be_resolved_for_a_specific_amount_of_time_before_creating_a_new_one_This_connected_case_has_been_resolved_for_less_than_the_amount_of_time_selected = 5
 		/// </summary>
 		The_rule_requires_a_connected_case_to_be_resolved_for_a_specific_amount_of_time_before_creating_a_new_one_This_connected_case_has_been_resolved_for_less_than_the_amount_of_time_selected = 5,
@@ -152,7 +160,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "activitymonitor";
 
-		public const int EntityTypeCode = 10107;
+		public const int EntityTypeCode = 10119;
 
 		[DebuggerNonUserCode()]
 		public activitymonitor()

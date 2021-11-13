@@ -87,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_surveyreminder";
 
-		public const int EntityTypeCode = 10249;
+		public const int EntityTypeCode = 10272;
 
 		[DebuggerNonUserCode()]
 		public msfp_surveyreminder()

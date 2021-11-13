@@ -92,6 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_agentthreshold = "msdyn_agentthreshold";
 			public const string msdyn_driversenabled = "msdyn_driversenabled";
 			public const string msdyn_enabled = "msdyn_enabled";
+			public const string msdyn_enableur = "msdyn_enableur";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_sentimentanalysisId = "msdyn_sentimentanalysisid";
 			public const string msdyn_supervisorthreshold = "msdyn_supervisorthreshold";
@@ -108,7 +109,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_sentimentanalysis";
 
-		public const int EntityTypeCode = 10582;
+		public const int EntityTypeCode = 10677;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sentimentanalysis()
@@ -293,6 +294,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enabled); }
 			set { Entity.Attributes[Fields.msdyn_enabled] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable Unified Routing</para>
+		/// <para>Boolean</para>
+		/// <para>Enable Unified Routing</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enableur
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enableur); }
+			set { Entity.Attributes[Fields.msdyn_enableur] = value; }
 		}
 
 		/// <summary>

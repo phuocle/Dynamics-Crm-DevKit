@@ -91,7 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "appelement";
 
-		public const int EntityTypeCode = 10024;
+		public const int EntityTypeCode = 10031;
 
 		[DebuggerNonUserCode()]
 		public AppElement()

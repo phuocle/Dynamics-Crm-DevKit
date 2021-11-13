@@ -63,7 +63,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_transactioncategoryhierarchyelement";
 
-		public const int EntityTypeCode = 10393;
+		public const int EntityTypeCode = 10456;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transactioncategoryhierarchyelement()

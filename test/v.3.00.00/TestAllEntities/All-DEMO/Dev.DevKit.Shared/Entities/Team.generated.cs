@@ -68,6 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ExchangeRate = "exchangerate";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string IsDefault = "isdefault";
+			public const string IsSasTokenSet = "issastokenset";
 			public const string MembershipType = "membershiptype";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
@@ -78,6 +79,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ProcessId = "processid";
 			public const string QueueId = "queueid";
 			public const string RegardingObjectId = "regardingobjectid";
+			public const string SasToken = "sastoken";
+			public const string ShareLinkQualifier = "sharelinkqualifier";
 			public const string StageId = "stageid";
 			public const string SystemManaged = "systemmanaged";
 			public const string TeamId = "teamid";
@@ -269,6 +272,16 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para></para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsSasTokenSet
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsSasTokenSet); }
+		}
+
+		/// <summary>
 		/// <para>Picklist</para>
 		/// <para>Membership Type</para>
 		/// </summary>
@@ -392,6 +405,28 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.RegardingObjectId); }
 			set { Entity.Attributes[Fields.RegardingObjectId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Sas Token for Team.</para>
+		/// <para>ReadOnly - String - MaxLength: 50</para>
+		/// <para>Sas Token</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string SasToken
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.SasToken); }
+		}
+
+		/// <summary>
+		/// <para>For internal use only.</para>
+		/// <para>ReadOnly - String - MaxLength: 1250</para>
+		/// <para>Share Link Qualifier</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ShareLinkQualifier
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ShareLinkQualifier); }
 		}
 
 		/// <summary>

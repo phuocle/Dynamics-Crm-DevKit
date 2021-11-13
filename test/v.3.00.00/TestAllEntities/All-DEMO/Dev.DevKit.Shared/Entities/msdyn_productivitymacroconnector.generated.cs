@@ -102,7 +102,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_productivitymacroconnector";
 
-		public const int EntityTypeCode = 10169;
+		public const int EntityTypeCode = 10181;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivitymacroconnector()

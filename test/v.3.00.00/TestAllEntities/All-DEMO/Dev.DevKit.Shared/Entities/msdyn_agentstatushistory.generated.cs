@@ -70,7 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_agentstatushistory";
 
-		public const int EntityTypeCode = 10588;
+		public const int EntityTypeCode = 10625;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agentstatushistory()

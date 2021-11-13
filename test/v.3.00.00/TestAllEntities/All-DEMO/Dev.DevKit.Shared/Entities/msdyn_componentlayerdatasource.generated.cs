@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_componentlayerdatasource";
 
-		public const int EntityTypeCode = 10006;
+		public const int EntityTypeCode = 10007;
 
 		[DebuggerNonUserCode()]
 		public msdyn_componentlayerdatasource()

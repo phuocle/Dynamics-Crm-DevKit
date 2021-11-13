@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resolution";
 
-		public const int EntityTypeCode = 10508;
+		public const int EntityTypeCode = 10572;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resolution()

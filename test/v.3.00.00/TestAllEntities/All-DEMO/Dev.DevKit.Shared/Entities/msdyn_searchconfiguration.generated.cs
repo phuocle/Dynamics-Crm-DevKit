@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_searchconfiguration";
 
-		public const int EntityTypeCode = 10581;
+		public const int EntityTypeCode = 10676;
 
 		[DebuggerNonUserCode()]
 		public msdyn_searchconfiguration()

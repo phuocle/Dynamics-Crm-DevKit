@@ -120,7 +120,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_panetoolconfiguration";
 
-		public const int EntityTypeCode = 10160;
+		public const int EntityTypeCode = 10172;
 
 		[DebuggerNonUserCode()]
 		public msdyn_panetoolconfiguration()

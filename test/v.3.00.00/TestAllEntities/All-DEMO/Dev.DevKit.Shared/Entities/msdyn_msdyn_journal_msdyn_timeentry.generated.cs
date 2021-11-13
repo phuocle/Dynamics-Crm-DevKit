@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_journal_msdyn_timeentry";
 
-		public const int EntityTypeCode = 10399;
+		public const int EntityTypeCode = 10462;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_journal_msdyn_timeentry()

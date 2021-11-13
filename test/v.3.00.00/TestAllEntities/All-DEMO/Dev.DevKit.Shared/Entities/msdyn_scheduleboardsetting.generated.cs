@@ -129,7 +129,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_scheduleboardsetting";
 
-		public const int EntityTypeCode = 10314;
+		public const int EntityTypeCode = 10377;
 
 		[DebuggerNonUserCode()]
 		public msdyn_scheduleboardsetting()

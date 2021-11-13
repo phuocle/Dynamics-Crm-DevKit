@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_caseenrichment";
 
-		public const int EntityTypeCode = 10177;
+		public const int EntityTypeCode = 10189;
 
 		[DebuggerNonUserCode()]
 		public msdyn_caseenrichment()

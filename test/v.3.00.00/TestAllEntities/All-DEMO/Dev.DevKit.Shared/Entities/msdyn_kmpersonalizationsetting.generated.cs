@@ -63,7 +63,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_kmpersonalizationsetting";
 
-		public const int EntityTypeCode = 10060;
+		public const int EntityTypeCode = 10085;
 
 		[DebuggerNonUserCode()]
 		public msdyn_kmpersonalizationsetting()

@@ -62,7 +62,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_uniquenumber";
 
-		public const int EntityTypeCode = 10483;
+		public const int EntityTypeCode = 10547;
 
 		[DebuggerNonUserCode()]
 		public msdyn_uniquenumber()

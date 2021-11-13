@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_wechatengagementctx";
 
-		public const int EntityTypeCode = 10668;
+		public const int EntityTypeCode = 10746;
 
 		[DebuggerNonUserCode()]
 		public msdyn_wechatengagementctx()

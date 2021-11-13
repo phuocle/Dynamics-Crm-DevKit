@@ -51,7 +51,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "serviceplanappmodules";
 
-		public const int EntityTypeCode = 10020;
+		public const int EntityTypeCode = 10040;
 
 		[DebuggerNonUserCode()]
 		public ServicePlanAppModules()

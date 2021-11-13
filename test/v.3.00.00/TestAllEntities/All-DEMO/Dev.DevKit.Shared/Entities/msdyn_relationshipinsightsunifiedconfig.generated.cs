@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_relationshipinsightsunifiedconfig";
 
-		public const int EntityTypeCode = 10216;
+		public const int EntityTypeCode = 10237;
 
 		[DebuggerNonUserCode()]
 		public msdyn_relationshipinsightsunifiedconfig()

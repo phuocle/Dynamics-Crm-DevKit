@@ -90,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_purchaseordersubstatus";
 
-		public const int EntityTypeCode = 10461;
+		public const int EntityTypeCode = 10525;
 
 		[DebuggerNonUserCode()]
 		public msdyn_purchaseordersubstatus()

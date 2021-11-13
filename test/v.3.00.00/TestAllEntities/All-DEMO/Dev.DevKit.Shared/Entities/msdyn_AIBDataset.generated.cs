@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aibdataset";
 
-		public const int EntityTypeCode = 10087;
+		public const int EntityTypeCode = 10056;
 
 		[DebuggerNonUserCode()]
 		public msdyn_AIBDataset()

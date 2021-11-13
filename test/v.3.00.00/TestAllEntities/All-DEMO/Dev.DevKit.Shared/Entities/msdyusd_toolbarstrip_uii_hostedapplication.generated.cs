@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_toolbarstrip_uii_hostedapplication";
 
-		public const int EntityTypeCode = 10728;
+		public const int EntityTypeCode = 10807;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_toolbarstrip_uii_hostedapplication()

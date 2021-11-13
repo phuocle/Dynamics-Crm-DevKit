@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_omnichannelqueue";
 
-		public const int EntityTypeCode = 10577;
+		public const int EntityTypeCode = 10667;
 
 		[DebuggerNonUserCode()]
 		public msdyn_omnichannelqueue()

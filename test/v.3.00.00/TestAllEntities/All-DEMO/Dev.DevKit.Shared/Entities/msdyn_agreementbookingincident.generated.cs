@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_agreementbookingincident";
 
-		public const int EntityTypeCode = 10415;
+		public const int EntityTypeCode = 10479;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementbookingincident()

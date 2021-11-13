@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "revokeinheritedaccessrecordstracker";
 
-		public const int EntityTypeCode = 90001;
+		public const int EntityTypeCode = 10030;
 
 		[DebuggerNonUserCode()]
 		public revokeinheritedaccessrecordstracker()

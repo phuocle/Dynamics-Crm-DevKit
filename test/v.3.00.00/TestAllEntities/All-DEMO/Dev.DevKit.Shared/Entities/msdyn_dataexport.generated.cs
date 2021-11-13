@@ -90,7 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_dataexport";
 
-		public const int EntityTypeCode = 10332;
+		public const int EntityTypeCode = 10395;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dataexport()

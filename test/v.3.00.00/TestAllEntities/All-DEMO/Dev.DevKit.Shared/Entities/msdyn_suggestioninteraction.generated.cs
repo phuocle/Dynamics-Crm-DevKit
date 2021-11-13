@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_suggestioninteraction";
 
-		public const int EntityTypeCode = 10184;
+		public const int EntityTypeCode = 10196;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestioninteraction()

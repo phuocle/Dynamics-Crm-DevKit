@@ -122,7 +122,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_option";
 
-		public const int EntityTypeCode = 10679;
+		public const int EntityTypeCode = 10758;
 
 		[DebuggerNonUserCode()]
 		public uii_option()

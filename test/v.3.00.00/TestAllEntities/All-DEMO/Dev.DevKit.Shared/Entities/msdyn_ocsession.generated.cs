@@ -245,6 +245,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsessionOptionSets
 		/// </summary>
 		SupervisorAssignToQueue = 192350011,
 		/// <summary>
+		/// SupervisorTransferToAgent = 192350012
+		/// </summary>
+		SupervisorTransferToAgent = 192350012,
+		/// <summary>
 		/// VirtualAgentClosed = 192350009
 		/// </summary>
 		VirtualAgentClosed = 192350009
@@ -418,7 +422,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsession";
 
-		public const int EntityTypeCode = 10573;
+		public const int EntityTypeCode = 10659;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsession()

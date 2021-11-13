@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_toolbarbutton";
 
-		public const int EntityTypeCode = 10702;
+		public const int EntityTypeCode = 10781;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_toolbarbutton()

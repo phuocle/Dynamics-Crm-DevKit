@@ -495,6 +495,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ContractOrganizationalUnitId = "msdyn_contractorganizationalunitid";
 			public const string msdyn_forecastcategory = "msdyn_forecastcategory";
 			public const string msdyn_OrderType = "msdyn_ordertype";
+			public const string msdyn_segmentid = "msdyn_segmentid";
 			public const string msdyn_WorkOrderType = "msdyn_workordertype";
 			public const string Name = "name";
 			public const string Need = "need";
@@ -1423,6 +1424,18 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.msdyn_OrderType] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Segment associated with Opportunity.</para>
+		/// <para>Lookup to msdyn_segment</para>
+		/// <para>Segment Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_segmentid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_segmentid); }
+			set { Entity.Attributes[Fields.msdyn_segmentid] = value; }
 		}
 
 		/// <summary>

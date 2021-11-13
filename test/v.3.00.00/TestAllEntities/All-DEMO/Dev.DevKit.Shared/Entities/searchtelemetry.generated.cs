@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "searchtelemetry";
 
-		public const int EntityTypeCode = 10080;
+		public const int EntityTypeCode = 10102;
 
 		[DebuggerNonUserCode()]
 		public searchtelemetry()

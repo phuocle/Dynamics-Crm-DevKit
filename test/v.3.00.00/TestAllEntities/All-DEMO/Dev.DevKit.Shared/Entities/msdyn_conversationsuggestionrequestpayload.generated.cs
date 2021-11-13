@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_conversationsuggestionrequestpayload";
 
-		public const int EntityTypeCode = 10641;
+		public const int EntityTypeCode = 10718;
 
 		[DebuggerNonUserCode()]
 		public msdyn_conversationsuggestionrequestpayload()

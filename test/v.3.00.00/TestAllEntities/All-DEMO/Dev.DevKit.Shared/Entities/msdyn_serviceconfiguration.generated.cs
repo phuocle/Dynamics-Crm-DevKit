@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_serviceconfiguration";
 
-		public const int EntityTypeCode = 10051;
+		public const int EntityTypeCode = 10075;
 
 		[DebuggerNonUserCode()]
 		public msdyn_serviceconfiguration()

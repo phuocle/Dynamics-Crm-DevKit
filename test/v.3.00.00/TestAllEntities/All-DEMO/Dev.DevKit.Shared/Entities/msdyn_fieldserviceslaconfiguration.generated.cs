@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_fieldserviceslaconfiguration";
 
-		public const int EntityTypeCode = 10433;
+		public const int EntityTypeCode = 10497;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldserviceslaconfiguration()

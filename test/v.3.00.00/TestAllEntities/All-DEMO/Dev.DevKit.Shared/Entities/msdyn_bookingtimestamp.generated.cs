@@ -110,7 +110,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookingtimestamp";
 
-		public const int EntityTypeCode = 10425;
+		public const int EntityTypeCode = 10489;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingtimestamp()

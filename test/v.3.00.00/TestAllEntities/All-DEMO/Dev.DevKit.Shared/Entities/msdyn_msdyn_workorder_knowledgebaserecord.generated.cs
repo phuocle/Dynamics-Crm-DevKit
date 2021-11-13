@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_workorder_knowledgebaserecord";
 
-		public const int EntityTypeCode = 10509;
+		public const int EntityTypeCode = 10573;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_workorder_knowledgebaserecord()

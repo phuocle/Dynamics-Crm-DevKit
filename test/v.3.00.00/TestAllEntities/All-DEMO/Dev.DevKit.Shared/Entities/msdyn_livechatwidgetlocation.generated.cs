@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_livechatwidgetlocation";
 
-		public const int EntityTypeCode = 10635;
+		public const int EntityTypeCode = 10714;
 
 		[DebuggerNonUserCode()]
 		public msdyn_livechatwidgetlocation()

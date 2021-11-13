@@ -50,6 +50,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_FileName = "msdyn_filename";
 			public const string msdyn_knowledgearticleimageId = "msdyn_knowledgearticleimageid";
+			public const string msdyn_ParentEntityRecordID = "msdyn_parententityrecordid";
 			public const string msdyn_ParentKnowledgeArticleID = "msdyn_parentknowledgearticleid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
@@ -65,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgearticleimage";
 
-		public const int EntityTypeCode = 10056;
+		public const int EntityTypeCode = 10080;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgearticleimage()
@@ -222,8 +223,20 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Parent Knowledge Article ID</para>
+		/// <para>Parent entity record ID</para>
 		/// <para>Lookup to </para>
+		/// <para>msdyn_ParentEntityRecordID</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_ParentEntityRecordID
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_ParentEntityRecordID); }
+			set { Entity.Attributes[Fields.msdyn_ParentEntityRecordID] = value; }
+		}
+
+		/// <summary>
+		/// <para>Parent Knowledge Article ID</para>
+		/// <para>Lookup to knowledgearticle</para>
 		/// <para>ParentKnowledgeArticleID</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

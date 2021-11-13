@@ -123,7 +123,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_fieldservicesystemjob";
 
-		public const int EntityTypeCode = 10434;
+		public const int EntityTypeCode = 10498;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldservicesystemjob()

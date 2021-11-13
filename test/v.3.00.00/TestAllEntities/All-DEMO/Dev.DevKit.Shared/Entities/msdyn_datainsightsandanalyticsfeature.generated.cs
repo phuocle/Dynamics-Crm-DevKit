@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_analyticschecksum = "msdyn_analyticschecksum";
 			public const string msdyn_datainsightsandanalyticsfeatureId = "msdyn_datainsightsandanalyticsfeatureid";
+			public const string msdyn_isdemoenabled = "msdyn_isdemoenabled";
 			public const string msdyn_isenabled = "msdyn_isenabled";
 			public const string msdyn_lastaccesstime = "msdyn_lastaccesstime";
 			public const string msdyn_lastreportrefreshtime = "msdyn_lastreportrefreshtime";
@@ -113,7 +114,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_datainsightsandanalyticsfeature";
 
-		public const int EntityTypeCode = 10190;
+		public const int EntityTypeCode = 10202;
 
 		[DebuggerNonUserCode()]
 		public msdyn_datainsightsandanalyticsfeature()
@@ -305,6 +306,18 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.msdyn_datainsightsandanalyticsfeatureId] = value;
 				Entity.Id = value;
 			}
+		}
+
+		/// <summary>
+		/// <para>Is Demo Enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Is Demo Enabled</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_isdemoenabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isdemoenabled); }
+			set { Entity.Attributes[Fields.msdyn_isdemoenabled] = value; }
 		}
 
 		/// <summary>

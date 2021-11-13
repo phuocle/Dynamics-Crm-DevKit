@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourcepaytype";
 
-		public const int EntityTypeCode = 10469;
+		public const int EntityTypeCode = 10533;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcepaytype()

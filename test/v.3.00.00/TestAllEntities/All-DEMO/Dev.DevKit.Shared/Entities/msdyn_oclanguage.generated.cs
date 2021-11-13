@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_oclanguage";
 
-		public const int EntityTypeCode = 10594;
+		public const int EntityTypeCode = 10643;
 
 		[DebuggerNonUserCode()]
 		public msdyn_oclanguage()

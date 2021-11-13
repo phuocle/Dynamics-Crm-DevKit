@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "availabletimes";
 
-		public const int EntityTypeCode = 10109;
+		public const int EntityTypeCode = 10121;
 
 		[DebuggerNonUserCode()]
 		public availabletimes()

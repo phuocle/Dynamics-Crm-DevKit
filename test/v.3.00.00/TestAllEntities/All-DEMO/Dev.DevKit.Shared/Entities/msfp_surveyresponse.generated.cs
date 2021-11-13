@@ -236,10 +236,12 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msfp_name = "msfp_name";
 			public const string msfp_npsscore = "msfp_npsscore";
 			public const string msfp_otherproperties = "msfp_otherproperties";
+			public const string msfp_parent_survey_response_new = "msfp_parent_survey_response_new";
 			public const string msfp_parentsurveyresponse = "msfp_parentsurveyresponse";
 			public const string msfp_questionresponseslist = "msfp_questionresponseslist";
 			public const string msfp_respondent = "msfp_respondent";
 			public const string msfp_respondentemailaddress = "msfp_respondentemailaddress";
+			public const string msfp_responsetype = "msfp_responsetype";
 			public const string msfp_satisfactionmetriccalculated = "msfp_satisfactionmetriccalculated";
 			public const string msfp_satisfactionmetricvalue = "msfp_satisfactionmetricvalue";
 			public const string msfp_sentiment = "msfp_sentiment";
@@ -290,7 +292,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_surveyresponse";
 
-		public const int EntityTypeCode = 10250;
+		public const int EntityTypeCode = 10273;
 
 		[DebuggerNonUserCode()]
 		public msfp_surveyresponse()
@@ -873,6 +875,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Lookup to msfp_surveyresponse</para>
+		/// <para>parent_survey_response_new</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msfp_parent_survey_response_new
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msfp_parent_survey_response_new); }
+			set { Entity.Attributes[Fields.msfp_parent_survey_response_new] = value; }
+		}
+
+		/// <summary>
 		/// <para>Parent survey response for the chained survey</para>
 		/// <para>Lookup to </para>
 		/// <para>ParentSurveyResponse</para>
@@ -918,6 +931,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msfp_respondentemailaddress); }
 			set { Entity.Attributes[Fields.msfp_respondentemailaddress] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>ResponseType</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_responsetype
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_responsetype); }
+			set { Entity.Attributes[Fields.msfp_responsetype] = value; }
 		}
 
 		/// <summary>

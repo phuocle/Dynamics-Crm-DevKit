@@ -80,7 +80,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_characteristicreqforteammember";
 
-		public const int EntityTypeCode = 10328;
+		public const int EntityTypeCode = 10391;
 
 		[DebuggerNonUserCode()]
 		public msdyn_characteristicreqforteammember()

@@ -114,7 +114,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_productivityagentscriptstep";
 
-		public const int EntityTypeCode = 10163;
+		public const int EntityTypeCode = 10175;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivityagentscriptstep()

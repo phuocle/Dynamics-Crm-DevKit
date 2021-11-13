@@ -96,7 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "datalakefolderpermission";
 
-		public const int EntityTypeCode = 10015;
+		public const int EntityTypeCode = 10025;
 
 		[DebuggerNonUserCode()]
 		public datalakefolderpermission()

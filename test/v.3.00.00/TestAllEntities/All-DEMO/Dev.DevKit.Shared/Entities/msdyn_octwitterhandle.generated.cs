@@ -87,7 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_octwitterhandle";
 
-		public const int EntityTypeCode = 10663;
+		public const int EntityTypeCode = 10741;
 
 		[DebuggerNonUserCode()]
 		public msdyn_octwitterhandle()

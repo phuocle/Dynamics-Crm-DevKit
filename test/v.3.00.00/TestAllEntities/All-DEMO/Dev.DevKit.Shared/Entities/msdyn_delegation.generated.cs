@@ -81,7 +81,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_delegation";
 
-		public const int EntityTypeCode = 10333;
+		public const int EntityTypeCode = 10396;
 
 		[DebuggerNonUserCode()]
 		public msdyn_delegation()

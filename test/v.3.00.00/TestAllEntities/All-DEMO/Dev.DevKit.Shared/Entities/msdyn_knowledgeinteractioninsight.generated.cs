@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgeinteractioninsight";
 
-		public const int EntityTypeCode = 10057;
+		public const int EntityTypeCode = 10081;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgeinteractioninsight()

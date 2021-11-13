@@ -253,7 +253,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_conversationactionlocale";
 
-		public const int EntityTypeCode = 10591;
+		public const int EntityTypeCode = 10631;
 
 		[DebuggerNonUserCode()]
 		public msdyn_conversationactionlocale()

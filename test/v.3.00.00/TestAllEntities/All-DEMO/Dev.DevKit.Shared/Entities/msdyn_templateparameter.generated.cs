@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_templateparameter";
 
-		public const int EntityTypeCode = 10150;
+		public const int EntityTypeCode = 10162;
 
 		[DebuggerNonUserCode()]
 		public msdyn_templateparameter()

@@ -110,7 +110,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_priority";
 
-		public const int EntityTypeCode = 10303;
+		public const int EntityTypeCode = 10366;
 
 		[DebuggerNonUserCode()]
 		public msdyn_priority()

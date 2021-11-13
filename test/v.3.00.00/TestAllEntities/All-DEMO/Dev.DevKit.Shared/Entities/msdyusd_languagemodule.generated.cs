@@ -68,7 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_languagemodule";
 
-		public const int EntityTypeCode = 10695;
+		public const int EntityTypeCode = 10774;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_languagemodule()

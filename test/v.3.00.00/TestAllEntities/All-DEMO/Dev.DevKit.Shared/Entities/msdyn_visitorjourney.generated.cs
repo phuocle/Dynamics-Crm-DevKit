@@ -89,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_visitorjourney";
 
-		public const int EntityTypeCode = 10611;
+		public const int EntityTypeCode = 10686;
 
 		[DebuggerNonUserCode()]
 		public msdyn_visitorjourney()

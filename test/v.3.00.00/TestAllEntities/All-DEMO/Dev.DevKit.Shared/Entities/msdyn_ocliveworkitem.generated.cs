@@ -214,6 +214,42 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets
 		Very_positive = 13
 	}
 
+	public enum msdyn_urcustomersentimentlabel
+	{
+		/// <summary>
+		/// NA = 0
+		/// </summary>
+		NA = 0,
+		/// <summary>
+		/// Negative = 8
+		/// </summary>
+		Negative = 8,
+		/// <summary>
+		/// Neutral = 10
+		/// </summary>
+		Neutral = 10,
+		/// <summary>
+		/// Positive = 12
+		/// </summary>
+		Positive = 12,
+		/// <summary>
+		/// Slightly_negative = 9
+		/// </summary>
+		Slightly_negative = 9,
+		/// <summary>
+		/// Slightly_positive = 11
+		/// </summary>
+		Slightly_positive = 11,
+		/// <summary>
+		/// Very_negative = 7
+		/// </summary>
+		Very_negative = 7,
+		/// <summary>
+		/// Very_positive = 13
+		/// </summary>
+		Very_positive = 13
+	}
+
 	public enum msdyn_workstreamworkdistributionmode
 	{
 		/// <summary>
@@ -338,6 +374,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_activeagentassignedon = "msdyn_activeagentassignedon";
 			public const string msdyn_activeagentid = "msdyn_activeagentid";
+			public const string msdyn_activesessionparticipantid = "msdyn_activesessionparticipantid";
 			public const string msdyn_cdsqueueid = "msdyn_cdsqueueid";
 			public const string msdyn_channel = "msdyn_channel";
 			public const string msdyn_channelproviderName = "msdyn_channelproviderName";
@@ -349,6 +386,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_customerlocale = "msdyn_customerlocale";
 			public const string msdyn_customersentimentlabel = "msdyn_customersentimentlabel";
 			public const string msdyn_dailytopicid = "msdyn_dailytopicid";
+			public const string msdyn_effortpredictionresult = "msdyn_effortpredictionresult";
 			public const string msdyn_escalationcount = "msdyn_escalationcount";
 			public const string msdyn_initiatedon = "msdyn_initiatedon";
 			public const string msdyn_isoutbound = "msdyn_isoutbound";
@@ -369,6 +407,9 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_title = "msdyn_title";
 			public const string msdyn_TranscriptControl = "msdyn_transcriptcontrol";
 			public const string msdyn_transfercount = "msdyn_transfercount";
+			public const string msdyn_urcustomersentimentkeywords = "msdyn_urcustomersentimentkeywords";
+			public const string msdyn_urcustomersentimentlabel = "msdyn_urcustomersentimentlabel";
+			public const string msdyn_urcustomersentimentscore = "msdyn_urcustomersentimentscore";
 			public const string msdyn_workstreamworkdistributionmode = "msdyn_workstreamworkdistributionmode";
 			public const string msdyn_wrapupinitiatedon = "msdyn_wrapupinitiatedon";
 			public const string OnHoldTime = "onholdtime";
@@ -410,7 +451,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocliveworkitem";
 
-		public const int EntityTypeCode = 10564;
+		public const int EntityTypeCode = 10644;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkitem()
@@ -909,7 +950,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Last agent assigned to the conversation</para>
+		/// <para>Agent currently assigned to the conversation and last agent assigned for closed conversations</para>
 		/// <para>Lookup to systemuser</para>
 		/// <para>Active Agent</para>
 		/// </summary>
@@ -918,6 +959,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_activeagentid); }
 			set { Entity.Attributes[Fields.msdyn_activeagentid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Lookup to msdyn_sessionparticipant</para>
+		/// <para>Active session participant</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_activesessionparticipantid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_activesessionparticipantid); }
+			set { Entity.Attributes[Fields.msdyn_activesessionparticipantid] = value; }
 		}
 
 		/// <summary>
@@ -1091,6 +1143,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Lookup to msdyn_effortpredictionresult</para>
+		/// <para>Effort prediction result</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_effortpredictionresult
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_effortpredictionresult); }
+			set { Entity.Attributes[Fields.msdyn_effortpredictionresult] = value; }
+		}
+
+		/// <summary>
 		/// <para>Number of times conversation was escalated to Supervisor i.e. transferred to Supervisor</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Escalation Count</para>
@@ -1223,7 +1286,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique identifier of the routed record.</para>
+		/// <para>Unique identifier of the routed record. Records are of those entities enabled for Unified Routing and have at least one Workstream created. For internal use only.</para>
 		/// <para>Lookup to task</para>
 		/// <para>Routed record</para>
 		/// </summary>
@@ -1328,6 +1391,52 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_transfercount); }
 			set { Entity.Attributes[Fields.msdyn_transfercount] = value; }
+		}
+
+		/// <summary>
+		/// <para>UR Customer Sentiment Keywords</para>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>UR Customer Sentiment Keywords</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_urcustomersentimentkeywords
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_urcustomersentimentkeywords); }
+			set { Entity.Attributes[Fields.msdyn_urcustomersentimentkeywords] = value; }
+		}
+
+		/// <summary>
+		/// <para>Picklist</para>
+		/// <para>Sentiment Category</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets.msdyn_urcustomersentimentlabel? msdyn_urcustomersentimentlabel
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_urcustomersentimentlabel);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemOptionSets.msdyn_urcustomersentimentlabel)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_urcustomersentimentlabel] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_urcustomersentimentlabel] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>UR Customer Sentiment Score</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 100</para>
+		/// <para>UR Customer Sentiment Score</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_urcustomersentimentscore
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_urcustomersentimentscore); }
+			set { Entity.Attributes[Fields.msdyn_urcustomersentimentscore] = value; }
 		}
 
 		/// <summary>

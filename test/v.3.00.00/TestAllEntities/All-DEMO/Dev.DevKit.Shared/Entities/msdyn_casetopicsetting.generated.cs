@@ -113,7 +113,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_casetopicsetting";
 
-		public const int EntityTypeCode = 10193;
+		public const int EntityTypeCode = 10205;
 
 		[DebuggerNonUserCode()]
 		public msdyn_casetopicsetting()

@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_knowledgearticlesuggestiondatasource";
 
-		public const int EntityTypeCode = 10183;
+		public const int EntityTypeCode = 10195;
 
 		[DebuggerNonUserCode()]
 		public msdyn_knowledgearticlesuggestiondatasource()

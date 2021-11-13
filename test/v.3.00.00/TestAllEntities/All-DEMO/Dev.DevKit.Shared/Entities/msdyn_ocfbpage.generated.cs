@@ -88,7 +88,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocfbpage";
 
-		public const int EntityTypeCode = 10657;
+		public const int EntityTypeCode = 10735;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocfbpage()

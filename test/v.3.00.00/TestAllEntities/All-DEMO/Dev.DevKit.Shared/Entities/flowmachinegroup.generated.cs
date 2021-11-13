@@ -113,7 +113,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "flowmachinegroup";
 
-		public const int EntityTypeCode = 10034;
+		public const int EntityTypeCode = 10046;
 
 		[DebuggerNonUserCode()]
 		public flowmachinegroup()

@@ -75,7 +75,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_agreementinvoiceproduct";
 
-		public const int EntityTypeCode = 10421;
+		public const int EntityTypeCode = 10485;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementinvoiceproduct()

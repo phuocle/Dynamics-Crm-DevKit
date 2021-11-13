@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_consoleapplicationnotificationtag";
 
-		public const int EntityTypeCode = 10537;
+		public const int EntityTypeCode = 10606;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_consoleapplicationnotificationtag()

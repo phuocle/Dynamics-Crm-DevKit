@@ -101,7 +101,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_productivitymacrosolutionconfiguration";
 
-		public const int EntityTypeCode = 10168;
+		public const int EntityTypeCode = 10180;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivitymacrosolutionconfiguration()

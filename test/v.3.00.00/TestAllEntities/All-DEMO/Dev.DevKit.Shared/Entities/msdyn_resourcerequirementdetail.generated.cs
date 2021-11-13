@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourcerequirementdetail";
 
-		public const int EntityTypeCode = 10312;
+		public const int EntityTypeCode = 10375;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcerequirementdetail()

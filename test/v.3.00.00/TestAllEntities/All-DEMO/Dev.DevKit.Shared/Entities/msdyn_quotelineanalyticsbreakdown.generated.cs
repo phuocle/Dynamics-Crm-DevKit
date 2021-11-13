@@ -164,7 +164,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotelineanalyticsbreakdown";
 
-		public const int EntityTypeCode = 10374;
+		public const int EntityTypeCode = 10437;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotelineanalyticsbreakdown()

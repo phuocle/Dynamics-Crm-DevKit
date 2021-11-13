@@ -148,7 +148,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocskillidentmlmodel";
 
-		public const int EntityTypeCode = 10626;
+		public const int EntityTypeCode = 10702;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocskillidentmlmodel()

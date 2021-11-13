@@ -116,7 +116,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_migrationtracker";
 
-		public const int EntityTypeCode = 10113;
+		public const int EntityTypeCode = 10125;
 
 		[DebuggerNonUserCode()]
 		public msdyn_migrationtracker()

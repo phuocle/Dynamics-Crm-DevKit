@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_occommunicationprovidersettingentry";
 
-		public const int EntityTypeCode = 10650;
+		public const int EntityTypeCode = 10728;
 
 		[DebuggerNonUserCode()]
 		public msdyn_occommunicationprovidersettingentry()

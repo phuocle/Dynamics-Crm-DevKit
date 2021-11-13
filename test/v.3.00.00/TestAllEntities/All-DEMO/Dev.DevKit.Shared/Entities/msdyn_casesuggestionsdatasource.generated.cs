@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_casesuggestionsdatasource";
 
-		public const int EntityTypeCode = 10180;
+		public const int EntityTypeCode = 10192;
 
 		[DebuggerNonUserCode()]
 		public msdyn_casesuggestionsdatasource()

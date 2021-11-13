@@ -78,7 +78,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_audit";
 
-		public const int EntityTypeCode = 10675;
+		public const int EntityTypeCode = 10754;
 
 		[DebuggerNonUserCode()]
 		public UII_audit()

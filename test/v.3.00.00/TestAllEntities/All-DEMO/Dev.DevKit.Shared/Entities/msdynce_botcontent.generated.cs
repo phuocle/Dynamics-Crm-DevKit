@@ -78,7 +78,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdynce_botcontent";
 
-		public const int EntityTypeCode = 10040;
+		public const int EntityTypeCode = 10064;
 
 		[DebuggerNonUserCode()]
 		public msdynce_botcontent()

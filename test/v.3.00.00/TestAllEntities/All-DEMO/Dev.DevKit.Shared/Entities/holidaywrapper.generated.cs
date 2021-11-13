@@ -24,6 +24,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string Duration = "duration";
+			public const string enddatetime = "enddatetime";
 			public const string EndTime = "endtime";
 			public const string holidaywrapperId = "holidaywrapperid";
 			public const string ImportSequenceNumber = "importsequencenumber";
@@ -33,7 +34,9 @@ namespace Dev.DevKit.Shared.Entities
 			public const string name = "name";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string SelectedYear = "selectedyear";
+			public const string startdatetime = "startdatetime";
 			public const string StartTime = "starttime";
+			public const string startTime_DateOnlyForView = "starttime_dateonlyforview";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
@@ -148,6 +151,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Date and time when the business closure ends.</para>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>End</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string enddatetime
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.enddatetime); }
+			set { Entity.Attributes[Fields.enddatetime] = value; }
+		}
+
+		/// <summary>
 		/// <para>Required - DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
 		/// <para>End Time</para>
 		/// </summary>
@@ -256,6 +271,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Date and time when the business closure starts.</para>
+		/// <para>String - MaxLength: 4000</para>
+		/// <para>Start</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string startdatetime
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.startdatetime); }
+			set { Entity.Attributes[Fields.startdatetime] = value; }
+		}
+
+		/// <summary>
 		/// <para>Required - DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
 		/// <para>Start Time</para>
 		/// </summary>
@@ -264,6 +291,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.StartTime); }
 			set { Entity.Attributes[Fields.StartTime] = value; }
+		}
+
+		/// <summary>
+		/// <para>Start Date field which holds only date</para>
+		/// <para>DateTimeBehavior: TimeZoneIndependent - DateTimeFormat: DateOnly</para>
+		/// <para>Start Date</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? startTime_DateOnlyForView
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.startTime_DateOnlyForView); }
+			set { Entity.Attributes[Fields.startTime_DateOnlyForView] = value; }
 		}
 
 		/// <summary>

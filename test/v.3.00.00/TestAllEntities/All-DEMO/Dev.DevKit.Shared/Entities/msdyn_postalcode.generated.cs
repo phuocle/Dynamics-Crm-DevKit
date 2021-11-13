@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_postalcode";
 
-		public const int EntityTypeCode = 10454;
+		public const int EntityTypeCode = 10518;
 
 		[DebuggerNonUserCode()]
 		public msdyn_postalcode()

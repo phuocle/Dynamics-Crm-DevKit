@@ -249,7 +249,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_invoicefrequencydetail";
 
-		public const int EntityTypeCode = 10347;
+		public const int EntityTypeCode = 10410;
 
 		[DebuggerNonUserCode()]
 		public msdyn_invoicefrequencydetail()

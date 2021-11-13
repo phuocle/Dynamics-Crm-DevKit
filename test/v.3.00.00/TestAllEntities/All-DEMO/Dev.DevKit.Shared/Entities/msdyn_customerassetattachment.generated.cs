@@ -92,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_customerassetattachment";
 
-		public const int EntityTypeCode = 10117;
+		public const int EntityTypeCode = 10129;
 
 		[DebuggerNonUserCode()]
 		public msdyn_customerassetattachment()

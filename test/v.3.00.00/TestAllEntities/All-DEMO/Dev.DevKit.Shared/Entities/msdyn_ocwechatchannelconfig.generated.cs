@@ -91,7 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocwechatchannelconfig";
 
-		public const int EntityTypeCode = 10664;
+		public const int EntityTypeCode = 10742;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocwechatchannelconfig()

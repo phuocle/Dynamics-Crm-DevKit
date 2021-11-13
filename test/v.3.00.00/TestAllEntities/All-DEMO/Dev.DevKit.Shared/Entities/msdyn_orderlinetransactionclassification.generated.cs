@@ -125,7 +125,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_orderlinetransactionclassification";
 
-		public const int EntityTypeCode = 10360;
+		public const int EntityTypeCode = 10423;
 
 		[DebuggerNonUserCode()]
 		public msdyn_orderlinetransactionclassification()

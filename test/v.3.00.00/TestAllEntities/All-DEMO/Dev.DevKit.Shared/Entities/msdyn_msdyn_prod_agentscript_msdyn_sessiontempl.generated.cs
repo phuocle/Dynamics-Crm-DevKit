@@ -51,7 +51,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_prod_agentscript_msdyn_sessiontempl";
 
-		public const int EntityTypeCode = 10164;
+		public const int EntityTypeCode = 10176;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_prod_agentscript_msdyn_sessiontempl()

@@ -133,6 +133,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessioneventOptionSets
 		/// </summary>
 		SessionTimeout = 192350015,
 		/// <summary>
+		/// SupervisorTransferToAgent = 192350031
+		/// </summary>
+		SupervisorTransferToAgent = 192350031,
+		/// <summary>
 		/// TimedOut = 192350018
 		/// </summary>
 		TimedOut = 192350018,
@@ -317,7 +321,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_sessionevent";
 
-		public const int EntityTypeCode = 10583;
+		public const int EntityTypeCode = 10678;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sessionevent()

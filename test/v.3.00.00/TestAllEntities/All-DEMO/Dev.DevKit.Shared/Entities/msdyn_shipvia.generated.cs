@@ -64,7 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_shipvia";
 
-		public const int EntityTypeCode = 10479;
+		public const int EntityTypeCode = 10543;
 
 		[DebuggerNonUserCode()]
 		public msdyn_shipvia()

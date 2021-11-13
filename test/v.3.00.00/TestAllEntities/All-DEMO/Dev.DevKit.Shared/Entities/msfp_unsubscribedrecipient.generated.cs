@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_unsubscribedrecipient";
 
-		public const int EntityTypeCode = 10251;
+		public const int EntityTypeCode = 10274;
 
 		[DebuggerNonUserCode()]
 		public msfp_unsubscribedrecipient()

@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourceterritory";
 
-		public const int EntityTypeCode = 10313;
+		public const int EntityTypeCode = 10376;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourceterritory()

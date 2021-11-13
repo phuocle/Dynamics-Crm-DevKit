@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_transcript";
 
-		public const int EntityTypeCode = 10585;
+		public const int EntityTypeCode = 10682;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transcript()

@@ -66,7 +66,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotelineinvoiceschedule";
 
-		public const int EntityTypeCode = 10375;
+		public const int EntityTypeCode = 10438;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotelineinvoiceschedule()

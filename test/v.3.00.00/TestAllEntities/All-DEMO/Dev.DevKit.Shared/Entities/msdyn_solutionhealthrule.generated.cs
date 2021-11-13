@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_solutionhealthrule";
 
-		public const int EntityTypeCode = 10099;
+		public const int EntityTypeCode = 10109;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutionhealthrule()

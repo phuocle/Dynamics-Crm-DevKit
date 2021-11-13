@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_chatwidgetlanguage";
 
-		public const int EntityTypeCode = 10632;
+		public const int EntityTypeCode = 10711;
 
 		[DebuggerNonUserCode()]
 		public msdyn_chatwidgetlanguage()

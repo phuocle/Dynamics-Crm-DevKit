@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourcerequirement_systemuser";
 
-		public const int EntityTypeCode = 10403;
+		public const int EntityTypeCode = 10466;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcerequirement_systemuser()

@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_omnichannelsyncconfig";
 
-		public const int EntityTypeCode = 10601;
+		public const int EntityTypeCode = 10668;
 
 		[DebuggerNonUserCode()]
 		public msdyn_omnichannelsyncconfig()

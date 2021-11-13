@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "resourcegroupdatasource";
 
-		public const int EntityTypeCode = 10111;
+		public const int EntityTypeCode = 10123;
 
 		[DebuggerNonUserCode()]
 		public resourcegroupdatasource()

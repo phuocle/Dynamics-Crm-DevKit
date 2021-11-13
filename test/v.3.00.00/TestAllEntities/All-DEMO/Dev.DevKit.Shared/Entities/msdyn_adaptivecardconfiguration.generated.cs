@@ -89,7 +89,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_adaptivecardconfiguration";
 
-		public const int EntityTypeCode = 10174;
+		public const int EntityTypeCode = 10186;
 
 		[DebuggerNonUserCode()]
 		public msdyn_adaptivecardconfiguration()

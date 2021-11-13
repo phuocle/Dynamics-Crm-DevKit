@@ -97,7 +97,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookableresourcebookingquicknote";
 
-		public const int EntityTypeCode = 10500;
+		public const int EntityTypeCode = 10564;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookableresourcebookingquicknote()

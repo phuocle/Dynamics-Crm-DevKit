@@ -67,7 +67,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_autocapturerule";
 
-		public const int EntityTypeCode = 10224;
+		public const int EntityTypeCode = 10245;
 
 		[DebuggerNonUserCode()]
 		public msdyn_autocapturerule()

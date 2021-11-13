@@ -82,7 +82,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_kpieventdata";
 
-		public const int EntityTypeCode = 10207;
+		public const int EntityTypeCode = 10220;
 
 		[DebuggerNonUserCode()]
 		public msdyn_KPIEventData()

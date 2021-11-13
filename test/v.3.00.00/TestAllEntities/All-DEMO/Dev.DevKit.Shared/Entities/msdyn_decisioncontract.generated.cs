@@ -92,7 +92,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_decisioncontract";
 
-		public const int EntityTypeCode = 10542;
+		public const int EntityTypeCode = 10611;
 
 		[DebuggerNonUserCode()]
 		public msdyn_decisioncontract()

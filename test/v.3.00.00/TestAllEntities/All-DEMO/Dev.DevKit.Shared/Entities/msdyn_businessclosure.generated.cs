@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_businessclosure";
 
-		public const int EntityTypeCode = 10299;
+		public const int EntityTypeCode = 10362;
 
 		[DebuggerNonUserCode()]
 		public msdyn_businessclosure()

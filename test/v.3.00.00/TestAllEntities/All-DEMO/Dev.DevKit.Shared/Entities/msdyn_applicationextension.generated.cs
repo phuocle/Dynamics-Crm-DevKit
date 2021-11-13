@@ -119,7 +119,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_applicationextension";
 
-		public const int EntityTypeCode = 10145;
+		public const int EntityTypeCode = 10157;
 
 		[DebuggerNonUserCode()]
 		public msdyn_applicationextension()
