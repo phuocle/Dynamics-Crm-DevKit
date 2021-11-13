@@ -1,0 +1,36 @@
+﻿{
+  "generators": [
+    {
+      "profile": "LATEBOUND",
+      "rootnamespace": "Dev.DevKit.Shared.Entities",
+      "rootfolder": "",
+      "type": "CSharp",
+      "entities": "account,contact,email",
+      "debug": "?"
+    },
+    {
+      "profile": "JS-FORM",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
+      "type": "JsForm",
+      "entities": "account,contact,email",
+      "debug": "yes"
+    },
+    {
+      "profile": "JS-WEBAPI",
+      "rootnamespace": "DevKit",
+      "rootfolder": "",
+      "type": "JsWebApi",
+      "entities": "account,contact,email",
+      "debug": "yes"
+    }
+  ],
+  "proxytypes": [
+    {
+      "profile": "ALL",
+      "namespace": "Dev.DevKit.ProxyTypes",
+      "output": "GeneratedCode.cs",
+      "entities": "account,contact,email"
+    }
+  ]
+}
