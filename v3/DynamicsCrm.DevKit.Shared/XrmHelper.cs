@@ -196,7 +196,7 @@ namespace DynamicsCrm.DevKit.Shared
             crmServiceClient.Update(update);
         }
 
-        public static EntityMetadata[] GetEntitiesMetadata(CrmServiceClient crmServiceClient)
+        public static List<EntityMetadata> GetEntitiesMetadata(CrmServiceClient crmServiceClient)
         {
             var request = new RetrieveAllEntitiesRequest
             {
@@ -204,10 +204,10 @@ namespace DynamicsCrm.DevKit.Shared
                 RetrieveAsIfPublished = true
             };
             var respone = (RetrieveAllEntitiesResponse)crmServiceClient.Execute(request);
-            return respone.EntityMetadata;
+            return respone.EntityMetadata.ToList();
         }
 
-        public static EntityMetadata[] GetEntitiesMetadata(CrmServiceClient crmServiceClient, List<string> entities)
+        public static List<EntityMetadata> GetEntitiesMetadata(CrmServiceClient crmServiceClient, List<string> entities)
         {
             var request = new ExecuteMultipleRequest()
             {
@@ -224,7 +224,7 @@ namespace DynamicsCrm.DevKit.Shared
             ExecuteMultipleResponse response = (ExecuteMultipleResponse)crmServiceClient.Execute(request);
             foreach(var result in response.Responses)
                 list.Add(((RetrieveEntityResponse)result.Response).EntityMetadata);
-            return list.ToArray();
+            return list;
         }
 
         public static EntityMetadata GetEntityMetadata(CrmServiceClient crmServiceClient, string entityLogicalName)

@@ -43,6 +43,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}public const string EntityLogicalName = \"{EntityMetadata.LogicalName}\";{NEW_LINE}";
             code += $"{NEW_LINE}";
+            code += $"{TAB}{TAB}[System.Obsolete(\"This value is different for each instance. Please don't use it.\")]{NEW_LINE}";
             code += $"{TAB}{TAB}public const int EntityTypeCode = {EntityMetadata.ObjectTypeCode};{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";

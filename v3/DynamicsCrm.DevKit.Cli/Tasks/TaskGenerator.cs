@@ -15,6 +15,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
         public string TaskType => "[GENERATOR]";
+        private JsonGenerator json { get; set; }
+        private List<EntityMetadata> EntitiesMetadata { get; set; }
+        private string CurrentFolder => $"{CurrentDirectory}\\{json.rootfolder}";
 
         public bool IsValid()
         {
@@ -102,6 +105,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         var newFileName = Path.Combine(Path.GetDirectoryName(file), $"{schemaName}.cs");
                         var newFileNameContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.LateBound.cs");
+                        newFileNameContent = newFileNameContent
+                            .Replace("$NameSpace$", json.rootnamespace)
+                            .Replace("$class$", schemaName);
                         Utility.ForceWriteAllText(newFileName, newFileNameContent);
                         CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}.cs");
                         Utility.ForceWriteAllText(file, newCsCode);
@@ -139,10 +145,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CliLog.WriteLine(ConsoleColor.White, "|");
         }
 
-
-        private string[] GetFiles(string endsWith)
+        private List<string> GetFiles(string endsWith)
         {
-            GetEntitiesMetadata(endsWith);
             if (json.entities != null && (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all"))
             {
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim().ToLower());
@@ -158,21 +162,18 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim().ToLower());
                 CliLog.WriteLine(ConsoleColor.White, "|");
             }
+            GetEntitiesMetadata(endsWith);
             return EntitiesMetadata
                     .OrderBy(x => x.SchemaName)
                     .Select(x => $"{CurrentFolder}{x.SchemaName}{endsWith}")
-                    .ToArray();
+                    .ToList();
         }
 
-        private JsonGenerator json { get; set; }
         public TaskGenerator(CrmServiceClient crmServiceClient, string currentDirectory, JsonGenerator json)
         {
             CrmServiceClient = crmServiceClient;
             CurrentDirectory = currentDirectory;
             this.json = json;
         }
-
-        private EntityMetadata[] EntitiesMetadata { get; set; }
-        private string CurrentFolder => $"{CurrentDirectory}\\{json.rootfolder}";
     }
 }
