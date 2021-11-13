@@ -3147,9 +3147,6 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.12.31\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <TypeScriptCompile Include="entities\Account.d.ts" />
     <TypeScriptCompile Include="entities\AccountLeads.d.ts" />
     <TypeScriptCompile Include="entities\ACIViewMapper.d.ts" />
@@ -4298,6 +4295,9 @@
     <TypeScriptCompile Include="entities\WorkflowDependency.d.ts" />
     <TypeScriptCompile Include="entities\WorkflowLog.d.ts" />
     <TypeScriptCompile Include="entities\WorkflowWaitSubscription.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\DynamicsCrm.DevKit.Analyzers.2.13.33\analyzers\dotnet\cs\DynamicsCrm.DevKit.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v15.0\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>
