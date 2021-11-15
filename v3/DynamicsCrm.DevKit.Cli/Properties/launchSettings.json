@@ -2,8 +2,8 @@
   "profiles": {
     "generator-csharp": {
       "commandName": "Project",
-      "commandLineArgs": "/conn:\"AuthType=ClientSecret;Url=https://dsms-dev.crm5.dynamics.com;ClientId=c8eeef7f-2a1b-47f8-925b-31963e1ad8ff;ClientSecret=67/VLGPU_:n/NG5BkF6o.su=-6OiI9:i;\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
-      "workingDirectory": "C:\\src\\azure\\abiz\\git\\ABIZ_DSMS\\src\\CDS\\DNA.DSMS.Shared\\Entities"
+      "commandLineArgs": "/sdklogin:\"yes\" /json:\"..\\..\\DynamicsCrm.DevKit.Cli.json\" /type:\"generators\" /profile:\"LATEBOUND\"",
+      "workingDirectory": "C:\\src\\github\\phuocle\\Dynamics-Crm-DevKit\\test\\v.3.00.00\\TestAllEntities\\All-DEMO\\Dev.DevKit.Shared\\Entities"
     },
     "downloadreports": {
       "commandName": "Project",

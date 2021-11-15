@@ -101,10 +101,12 @@ namespace DynamicsCrm.DevKit.Shared
             name = name.Replace("____", "_");
             name = name.Replace("___", "_");
             name = name.Replace("__", "_");
+            if (name.Length == 0) return "_";
             var sb = new StringBuilder();
             if (!SyntaxFacts.IsIdentifierStartCharacter(name[0]))
             {
-                sb.Append("_");
+                if (name.Length == 1) sb.Append("_");
+                else if (name[1] != '_') sb.Append("_");
             }
             foreach (var ch in name)
             {

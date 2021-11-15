@@ -104,7 +104,7 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        private static string GetGeneratorImageCode(string schemaName)
+        private static string GetGeneratorImageCode(string schemaName, string logicalName)
         {
             var code = string.Empty;
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
@@ -113,8 +113,8 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public byte[] {schemaName}{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<byte[]>(\"{schemaName.ToLower()}\"); }}{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[\"{schemaName.ToLower()}\"] = value; }}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<byte[]>(\"{logicalName}\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}set {{ Entity.Attributes[\"{logicalName}\"] = value; }}{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             code += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
@@ -123,7 +123,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}[DebuggerNonUserCode()]{NEW_LINE}";
             code += $"{TAB}{TAB}public string {schemaName}Url{NEW_LINE}";
             code += $"{TAB}{TAB}{{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{schemaName.ToLower()}_url\"); }}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}get {{ return Entity.GetAttributeValue<string>(\"{logicalName}_url\"); }}{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{NEW_LINE}";
             return code;
@@ -135,10 +135,9 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (attribute is ImageAttributeMetadata image)
                 {
-                    if (image.IsPrimaryImage ?? false)
-                        code += GetGeneratorImageCode("EntityImage");
-                    else
-                        code += GetGeneratorImageCode(attribute.SchemaName);
+                    if ((image.IsPrimaryImage ?? false) && image.LogicalName != "entityimage")
+                        code += GetGeneratorImageCode("EntityImage", image.LogicalName);
+                    code += GetGeneratorImageCode(attribute.SchemaName, attribute.LogicalName);
                 }
             }
             code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
@@ -164,9 +163,9 @@ namespace DynamicsCrm.DevKit.Shared
                     foreach (var value in values)
                     {
                         tmp += $"{TAB}{TAB}/// <summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}/// {Utility.SafeIdentifier(value.Name)} = {value.Value}{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}/// {value.Label} = {value.Value}{NEW_LINE}";
                         tmp += $"{TAB}{TAB}/// </summary>{NEW_LINE}";
-                        tmp += $"{TAB}{TAB}{Utility.SafeIdentifier(value.Name)} = {value.Value},{NEW_LINE}";
+                        tmp += $"{TAB}{TAB}{value.Name} = {value.Value},{NEW_LINE}";
                     }
                     tmp = tmp.TrimEnd($",{NEW_LINE}".ToCharArray());
                     tmp += $"{NEW_LINE}";
@@ -181,6 +180,8 @@ namespace DynamicsCrm.DevKit.Shared
         private static bool IsFieldOk(AttributeMetadata attribute)
         {
             if (attribute.AttributeOf != null) return false;
+            if (attribute.AttributeTypeName == AttributeTypeDisplayName.ImageType) return false;
+            if (XrmHelper.IsOptionSet(attribute) && attribute.OptionSetValues().Count == 0) return false;
             if (attribute.AttributeType == AttributeTypeCode.Memo ||
                 attribute.AttributeType == AttributeTypeCode.Virtual ||
                 attribute.AttributeType == AttributeTypeCode.EntityName ||

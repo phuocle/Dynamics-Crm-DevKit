@@ -26,19 +26,22 @@ namespace DynamicsCrm.DevKit.Shared
             if (options == null) return values;
             foreach (var option in options)
             {
-                var suffix = string.Empty;
                 var name = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty;
+                if (name.Length == 0) continue;
+                name = Utility.SafeIdentifier(name);
                 var value = option?.Value ?? -1;
                 if (name.Length == 0 || value == -1) continue;
-                if (values.Any(x => x.Name2 == name)) {
+                var suffix = string.Empty;
+                if (options.Count(x => Utility.SafeIdentifier(x?.Label?.UserLocalizedLabel.Label) == name) > 1) {
                     var count = values.Count(x => x.Name2 == name);
-                    suffix = $" {count + 1}";
+                    suffix = $"_{value}";
                 }
                 values.Add(new NameValue
                 {
                     Name = $"{name}{suffix}",
                     Name2 = $"{name}",
-                    Value = $"{value}"
+                    Value = $"{value}",
+                    Label = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty
                 });
             }
             return values.OrderBy(x => x.Name).ToList();
