@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SalesLiteratureOptionSets
 		/// </summary>
 		Bulletins = 6,
 		/// <summary>
-		/// Company_Background = 9
+		/// Company Background = 9
 		/// </summary>
 		Company_Background = 9,
 		/// <summary>
@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.SalesLiteratureOptionSets
 		/// </summary>
 		Manuals = 8,
 		/// <summary>
-		/// Marketing_Collateral = 100001
+		/// Marketing Collateral = 100001
 		/// </summary>
 		Marketing_Collateral = 100001,
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.SalesLiteratureOptionSets
 		/// </summary>
 		News = 5,
 		/// <summary>
-		/// Policies_And_Procedures = 2
+		/// Policies And Procedures = 2
 		/// </summary>
 		Policies_And_Procedures = 2,
 		/// <summary>
@@ -41,15 +41,15 @@ namespace Dev.DevKit.Shared.Entities.SalesLiteratureOptionSets
 		/// </summary>
 		Presentation = 0,
 		/// <summary>
-		/// Price_Sheets = 7
+		/// Price Sheets = 7
 		/// </summary>
 		Price_Sheets = 7,
 		/// <summary>
-		/// Product_Sheet = 1
+		/// Product Sheet = 1
 		/// </summary>
 		Product_Sheet = 1,
 		/// <summary>
-		/// Sales_Literature = 3
+		/// Sales Literature = 3
 		/// </summary>
 		Sales_Literature = 3,
 		/// <summary>
@@ -97,6 +97,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "salesliterature";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1038;
 
 		[DebuggerNonUserCode()]
@@ -215,7 +216,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>

@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentDefinitionOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentDefinitionOptionSets
 		/// </summary>
 		Cascade = 2,
 		/// <summary>
-		/// No_Cascade = 1
+		/// No Cascade = 1
 		/// </summary>
 		No_Cascade = 1,
 		/// <summary>
@@ -96,6 +96,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "solutioncomponentdefinition";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 7104;
 
 		[DebuggerNonUserCode()]
@@ -235,7 +236,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Path to component's XML node</para>
+		/// <para>Path to component&apos;s XML node</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Component XPath</para>
 		/// </summary>

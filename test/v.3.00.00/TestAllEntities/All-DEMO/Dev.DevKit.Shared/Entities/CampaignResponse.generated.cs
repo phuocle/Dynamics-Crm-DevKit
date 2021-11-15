@@ -10,6 +10,102 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.CampaignResponseOptionSets
 {
+	public enum ActivityTypeCode
+	{
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Booking Alert = 10357
+		/// </summary>
+		Booking_Alert = 10357,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Conversation = 10644
+		/// </summary>
+		Conversation = 10644,
+		/// <summary>
+		/// Customer Voice alert = 10261
+		/// </summary>
+		Customer_Voice_alert = 10261,
+		/// <summary>
+		/// Customer Voice survey invite = 10271
+		/// </summary>
+		Customer_Voice_survey_invite = 10271,
+		/// <summary>
+		/// Customer Voice survey response = 10273
+		/// </summary>
+		Customer_Voice_survey_response = 10273,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Fax = 4204
+		/// </summary>
+		Fax = 4204,
+		/// <summary>
+		/// Letter = 4207
+		/// </summary>
+		Letter = 4207,
+		/// <summary>
+		/// Opportunity Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Order Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Outbound message = 10752
+		/// </summary>
+		Outbound_message = 10752,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Project Service Approval = 10387
+		/// </summary>
+		Project_Service_Approval = 10387,
+		/// <summary>
+		/// Quick Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quote Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Recurring Appointment = 4251
+		/// </summary>
+		Recurring_Appointment = 4251,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10659
+		/// </summary>
+		Session = 10659,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
+
 	public enum ChannelTypeCode
 	{
 		/// <summary>
@@ -45,11 +141,11 @@ namespace Dev.DevKit.Shared.Entities.CampaignResponseOptionSets
 		/// </summary>
 		Cortana = 5,
 		/// <summary>
-		/// Direct_Line = 6
+		/// Direct Line = 6
 		/// </summary>
 		Direct_Line = 6,
 		/// <summary>
-		/// Direct_Line_Speech = 8
+		/// Direct Line Speech = 8
 		/// </summary>
 		Direct_Line_Speech = 8,
 		/// <summary>
@@ -73,7 +169,7 @@ namespace Dev.DevKit.Shared.Entities.CampaignResponseOptionSets
 		/// </summary>
 		Line = 3,
 		/// <summary>
-		/// Microsoft_Teams = 7
+		/// Microsoft Teams = 7
 		/// </summary>
 		Microsoft_Teams = 7,
 		/// <summary>
@@ -125,23 +221,23 @@ namespace Dev.DevKit.Shared.Entities.CampaignResponseOptionSets
 	public enum InstanceTypeCode
 	{
 		/// <summary>
-		/// Not_Recurring = 0
+		/// Not Recurring = 0
 		/// </summary>
 		Not_Recurring = 0,
 		/// <summary>
-		/// Recurring_Exception = 3
+		/// Recurring Exception = 3
 		/// </summary>
 		Recurring_Exception = 3,
 		/// <summary>
-		/// Recurring_Future_Exception = 4
+		/// Recurring Future Exception = 4
 		/// </summary>
 		Recurring_Future_Exception = 4,
 		/// <summary>
-		/// Recurring_Instance = 2
+		/// Recurring Instance = 2
 		/// </summary>
 		Recurring_Instance = 2,
 		/// <summary>
-		/// Recurring_Master = 1
+		/// Recurring Master = 1
 		/// </summary>
 		Recurring_Master = 1
 	}
@@ -165,7 +261,7 @@ namespace Dev.DevKit.Shared.Entities.CampaignResponseOptionSets
 	public enum ResponseCode
 	{
 		/// <summary>
-		/// Do_Not_Send_Marketing_Materials = 3
+		/// Do Not Send Marketing Materials = 3
 		/// </summary>
 		Do_Not_Send_Marketing_Materials = 3,
 		/// <summary>
@@ -177,7 +273,7 @@ namespace Dev.DevKit.Shared.Entities.CampaignResponseOptionSets
 		/// </summary>
 		Interested = 1,
 		/// <summary>
-		/// Not_Interested = 2
+		/// Not Interested = 2
 		/// </summary>
 		Not_Interested = 2
 	}
@@ -309,6 +405,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "campaignresponse";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4401;
 
 		[DebuggerNonUserCode()]
@@ -397,7 +494,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Type the number of minutes spent on this activity. The duration is used in reporting.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
-		/// <para>Actual Duration </para>
+		/// <para>Actual Duration</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public int? ActualDurationMinutes
@@ -432,7 +529,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Blind Carbon-copy (bcc) recipients of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;systemuser</para>
 		/// <para>BCC</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -468,7 +565,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Carbon-copy (cc) recipients of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;systemuser</para>
 		/// <para>CC</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -583,7 +680,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, or lead that submitted the campaign response, if it was received from an existing prospect or customer.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;lead</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -607,7 +704,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Customer with which the activity is associated.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact</para>
 		/// <para>Customers</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -676,7 +773,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the responder's email address.</para>
+		/// <para>Type the responder&apos;s email address.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Email</para>
 		/// </summary>
@@ -700,7 +797,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -723,7 +820,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the responder's fax number.</para>
+		/// <para>Type the responder&apos;s fax number.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Fax</para>
 		/// </summary>
@@ -735,7 +832,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the responder's first name if the campaign response was received from a new prospect or customer.</para>
+		/// <para>Type the responder&apos;s first name if the campaign response was received from a new prospect or customer.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>First Name</para>
 		/// </summary>
@@ -748,7 +845,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>For system use only.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;systemuser</para>
 		/// <para>From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -846,7 +943,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the responder's last name if the campaign response was received from a new prospect or customer.</para>
+		/// <para>Type the responder&apos;s last name if the campaign response was received from a new prospect or customer.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Last Name</para>
 		/// </summary>
@@ -927,7 +1024,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of optional attendees for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;systemuser</para>
 		/// <para>Optional Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -951,7 +1048,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who organized the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Organizer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -999,7 +1096,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the activity.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1044,7 +1141,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the vendor account or contact to capture any third-party used to obtain the campaign response.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact</para>
 		/// <para>Outsource Vendor</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1068,7 +1165,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Outsource vendor with which activity is associated.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact</para>
 		/// <para>Outsource Vendors</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1161,7 +1258,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the parent campaign so that the campaign's response rate is tracked correctly.</para>
+		/// <para>Choose the parent campaign so that the campaign&apos;s response rate is tracked correctly.</para>
 		/// <para>Required - Lookup to bulkoperation;campaign</para>
 		/// <para>Parent Campaign</para>
 		/// </summary>
@@ -1174,7 +1271,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of required attendees for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;systemuser</para>
 		/// <para>Required Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1198,7 +1295,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Users or facility/equipment that are required for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Resources</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1371,7 +1468,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the campaign response is open, closed, or canceled. Closed and canceled campaign responses are read-only and can't be edited.</para>
+		/// <para>Shows whether the campaign response is open, closed, or canceled. Closed and canceled campaign responses are read-only and can&apos;t be edited.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -1394,7 +1491,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the campaign response's status.</para>
+		/// <para>Select the campaign response&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -1441,7 +1538,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the responder's primary phone number.</para>
+		/// <para>Type the responder&apos;s primary phone number.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Phone</para>
 		/// </summary>
@@ -1466,7 +1563,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who is the receiver of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;systemuser</para>
 		/// <para>To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1548,7 +1645,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the campaign responder's first name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.</para>
+		/// <para>Type the phonetic spelling of the campaign responder&apos;s first name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi First Name</para>
 		/// </summary>
@@ -1560,7 +1657,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the campaign responder's last name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.</para>
+		/// <para>Type the phonetic spelling of the campaign responder&apos;s last name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi Last Name</para>
 		/// </summary>

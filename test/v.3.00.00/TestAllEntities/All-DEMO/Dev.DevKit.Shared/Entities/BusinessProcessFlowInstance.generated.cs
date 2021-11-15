@@ -52,15 +52,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string Entity1Id = "entity1id";
-			public const string Entity1ObjectTypeCode = "entity1objecttypecode";
 			public const string Entity2Id = "entity2id";
-			public const string Entity2ObjectTypeCode = "entity2objecttypecode";
 			public const string Entity3Id = "entity3id";
-			public const string Entity3ObjectTypeCode = "entity3objecttypecode";
 			public const string Entity4Id = "entity4id";
-			public const string Entity4ObjectTypeCode = "entity4objecttypecode";
 			public const string Entity5Id = "entity5id";
-			public const string Entity5ObjectTypeCode = "entity5objecttypecode";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
@@ -75,6 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "businessprocessflowinstance";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4725;
 
 		[DebuggerNonUserCode()]
@@ -209,18 +205,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Object type code for the first entity of the business process flow instance.</para>
-		/// <para>EntityName</para>
-		/// <para>Entity1ObjectTypeCode</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string Entity1ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.Entity1ObjectTypeCode); }
-			set { Entity.Attributes[Fields.Entity1ObjectTypeCode] = value; }
-		}
-
-		/// <summary>
 		/// <para>Unique identifier of the second entity instance.</para>
 		/// <para>Uniqueidentifier</para>
 		/// <para>Entity 2 ID</para>
@@ -230,18 +214,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.Entity2Id); }
 			set { Entity.Attributes[Fields.Entity2Id] = value; }
-		}
-
-		/// <summary>
-		/// <para>Object type code for the second entity of the business process flow instance.</para>
-		/// <para>EntityName</para>
-		/// <para>Entity2ObjectTypeCode</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string Entity2ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.Entity2ObjectTypeCode); }
-			set { Entity.Attributes[Fields.Entity2ObjectTypeCode] = value; }
 		}
 
 		/// <summary>
@@ -257,18 +229,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Object type code for the third entity of the business process flow instance.</para>
-		/// <para>EntityName</para>
-		/// <para>Entity3ObjectTypeCode</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string Entity3ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.Entity3ObjectTypeCode); }
-			set { Entity.Attributes[Fields.Entity3ObjectTypeCode] = value; }
-		}
-
-		/// <summary>
 		/// <para>Unique identifier of the fourth entity instance.</para>
 		/// <para>Uniqueidentifier</para>
 		/// <para>Entity 4 Id</para>
@@ -281,18 +241,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Object type code for the fourth entity of the business process flow instance.</para>
-		/// <para>EntityName</para>
-		/// <para>Entity4ObjectTypeCode</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string Entity4ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.Entity4ObjectTypeCode); }
-			set { Entity.Attributes[Fields.Entity4ObjectTypeCode] = value; }
-		}
-
-		/// <summary>
 		/// <para>Unique identifier of the fifth entity instance.</para>
 		/// <para>Uniqueidentifier</para>
 		/// <para>Entity 5 ID</para>
@@ -302,18 +250,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.Entity5Id); }
 			set { Entity.Attributes[Fields.Entity5Id] = value; }
-		}
-
-		/// <summary>
-		/// <para>Object type code for the fifth entity of the business process flow instance.</para>
-		/// <para>EntityName</para>
-		/// <para>Entity5ObjectTypeCode</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string Entity5ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.Entity5ObjectTypeCode); }
-			set { Entity.Attributes[Fields.Entity5ObjectTypeCode] = value; }
 		}
 
 		/// <summary>
@@ -409,7 +345,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Business process flow instance's status.</para>
+		/// <para>Business process flow instance&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

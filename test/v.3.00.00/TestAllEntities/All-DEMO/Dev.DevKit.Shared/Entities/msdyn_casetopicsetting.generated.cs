@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_casetopicsettingOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -113,7 +113,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_casetopicsetting";
 
-		public const int EntityTypeCode = 10193;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10205;
 
 		[DebuggerNonUserCode()]
 		public msdyn_casetopicsetting()
@@ -370,9 +371,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_casetopicsettingOptionSets.msdyn_SelectionLocation)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_SelectionLocation] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_SelectionLocation] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_SelectionLocation] = null;
+			}
 		}
 
 		/// <summary>

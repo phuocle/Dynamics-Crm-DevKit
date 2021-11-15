@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_schedulingfeatureflagOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -105,7 +105,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_schedulingfeatureflag";
 
-		public const int EntityTypeCode = 10322;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10385;
 
 		[DebuggerNonUserCode()]
 		public msdyn_schedulingfeatureflag()
@@ -298,9 +299,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_schedulingfeatureflagOptionSets.msdyn_Enabled)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Enabled] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Enabled] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Enabled] = null;
+			}
 		}
 
 		/// <summary>
@@ -368,7 +372,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

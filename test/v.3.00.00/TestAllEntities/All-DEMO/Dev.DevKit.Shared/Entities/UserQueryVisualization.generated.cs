@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.UserQueryVisualizationOptionSets
 	public enum ChartType
 	{
 		/// <summary>
-		/// ASPNET_Charts = 0
+		/// ASP.NET Charts = 0
 		/// </summary>
 		ASPNET_Charts = 0,
 		/// <summary>
-		/// Power_BI = 1
+		/// Power BI = 1
 		/// </summary>
 		Power_BI = 1
 	}
@@ -45,7 +45,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
 			public const string PresentationDescription = "presentationdescription";
-			public const string PrimaryEntityTypeCode = "primaryentitytypecode";
 			public const string UserQueryVisualizationId = "userqueryvisualizationid";
 			public const string VersionNumber = "versionnumber";
 			public const string WebResourceId = "webresourceid";
@@ -53,6 +52,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "userqueryvisualization";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1112;
 
 		[DebuggerNonUserCode()]
@@ -118,9 +118,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.UserQueryVisualizationOptionSets.ChartType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.ChartType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.ChartType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.ChartType] = null;
+			}
 		}
 
 		/// <summary>
@@ -239,7 +242,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -283,7 +286,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Contains the chart's formatting details and presentation properties, stored in XML format.</para>
+		/// <para>Contains the chart&apos;s formatting details and presentation properties, stored in XML format.</para>
 		/// <para>Memo - MaxLength: 1073741823</para>
 		/// <para>Presentation XML</para>
 		/// </summary>
@@ -292,18 +295,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.PresentationDescription); }
 			set { Entity.Attributes[Fields.PresentationDescription] = value; }
-		}
-
-		/// <summary>
-		/// <para>Type of entity which the user chart is attached.</para>
-		/// <para>EntityName</para>
-		/// <para>Primary Type Code</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryEntityTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryEntityTypeCode); }
-			set { Entity.Attributes[Fields.PrimaryEntityTypeCode] = value; }
 		}
 
 		/// <summary>

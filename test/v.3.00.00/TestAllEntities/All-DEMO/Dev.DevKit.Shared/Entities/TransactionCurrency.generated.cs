@@ -65,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "transactioncurrency";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9105;
 
 		[DebuggerNonUserCode()]
@@ -162,7 +163,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Number of decimal places that can be used for currency.</para>
-		/// <para>Integer - MinValue: 0 - MaxValue: 4</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 10</para>
 		/// <para>Currency Precision</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

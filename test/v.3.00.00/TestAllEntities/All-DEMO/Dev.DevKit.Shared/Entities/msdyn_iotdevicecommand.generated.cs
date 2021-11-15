@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotdevicecommandOptionSets
 		/// </summary>
 		Error = 192350002,
 		/// <summary>
-		/// In_Progress = 192350000
+		/// In Progress = 192350000
 		/// </summary>
 		In_Progress = 192350000,
 		/// <summary>
@@ -89,7 +89,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotdevicecommand";
 
-		public const int EntityTypeCode = 10129;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10141;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotdevicecommand()
@@ -230,7 +231,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Describes the status of the command. If this stays at "In Progress" for a long time, verify the IoT endpoint configuration.</para>
+		/// <para>Describes the status of the command. If this stays at &quot;In Progress&quot; for a long time, verify the IoT endpoint configuration.</para>
 		/// <para>Picklist</para>
 		/// <para>Command Status</para>
 		/// </summary>
@@ -267,7 +268,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>The command will be sent to a device connected to this asset.</para>
 		/// <para>Lookup to msdyn_customerasset</para>
-		/// <para>Device</para>
+		/// <para>Customer Asset</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public EntityReference msdyn_CustomerAsset
@@ -378,7 +379,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

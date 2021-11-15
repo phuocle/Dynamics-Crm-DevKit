@@ -10,7 +10,149 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.AnnotationOptionSets
 {
-
+	public enum ObjectTypeCode
+	{
+		/// <summary>
+		/// Account = 1
+		/// </summary>
+		Account = 1,
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Bulk Import = 4407
+		/// </summary>
+		Bulk_Import = 4407,
+		/// <summary>
+		/// Calendar = 4003
+		/// </summary>
+		Calendar = 4003,
+		/// <summary>
+		/// Campaign = 4400
+		/// </summary>
+		Campaign = 4400,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case = 112
+		/// </summary>
+		Case = 112,
+		/// <summary>
+		/// Case Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Commitment = 4215
+		/// </summary>
+		Commitment = 4215,
+		/// <summary>
+		/// Competitor = 123
+		/// </summary>
+		Competitor = 123,
+		/// <summary>
+		/// Contact = 2
+		/// </summary>
+		Contact = 2,
+		/// <summary>
+		/// Contract = 1010
+		/// </summary>
+		Contract = 1010,
+		/// <summary>
+		/// Contract Line = 1011
+		/// </summary>
+		Contract_Line = 1011,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Facility/Equipment = 4000
+		/// </summary>
+		FacilityEquipment = 4000,
+		/// <summary>
+		/// Fax = 4204
+		/// </summary>
+		Fax = 4204,
+		/// <summary>
+		/// Invoice = 1090
+		/// </summary>
+		Invoice = 1090,
+		/// <summary>
+		/// Lead = 4
+		/// </summary>
+		Lead = 4,
+		/// <summary>
+		/// Letter = 4207
+		/// </summary>
+		Letter = 4207,
+		/// <summary>
+		/// Marketing List = 4300
+		/// </summary>
+		Marketing_List = 4300,
+		/// <summary>
+		/// Opportunity = 3
+		/// </summary>
+		Opportunity = 3,
+		/// <summary>
+		/// Opportunity Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Order = 1088
+		/// </summary>
+		Order = 1088,
+		/// <summary>
+		/// Order Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Product = 1024
+		/// </summary>
+		Product = 1024,
+		/// <summary>
+		/// Quote = 1084
+		/// </summary>
+		Quote = 1084,
+		/// <summary>
+		/// Quote Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Resource Specification = 4006
+		/// </summary>
+		Resource_Specification = 4006,
+		/// <summary>
+		/// Routing Rule = 8181
+		/// </summary>
+		Routing_Rule = 8181,
+		/// <summary>
+		/// Routing Rule Item = 8199
+		/// </summary>
+		Routing_Rule_Item = 8199,
+		/// <summary>
+		/// Service = 4001
+		/// </summary>
+		Service = 4001,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
 }
 
 namespace Dev.DevKit.Shared.Entities
@@ -24,6 +166,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string DocumentBody = "documentbody";
+			[System.Obsolete("Deprecated from version: 9.1.0.0")]
+			public const string DummyFileName = "dummyfilename";
+			[System.Obsolete("Deprecated from version: 9.1.0.0")]
+			public const string DummyRegarding = "dummyregarding";
 			public const string FileName = "filename";
 			public const string FilePointer = "filepointer";
 			public const string FileSize = "filesize";
@@ -52,6 +198,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "annotation";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 5;
 
 		[DebuggerNonUserCode()]
@@ -152,7 +299,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Contents of the note's attachment.</para>
+		/// <para>Contents of the note&apos;s attachment.</para>
 		/// <para>String - MaxLength: 1073741823</para>
 		/// <para>Document</para>
 		/// </summary>
@@ -161,6 +308,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.DocumentBody); }
 			set { Entity.Attributes[Fields.DocumentBody] = value; }
+		}
+
+		/// <summary>
+		/// <para>Dummy attribute associated with the note attachment</para>
+		/// <para>ReadOnly - String - MaxLength: 500</para>
+		/// <para>File Name</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.1.0.0")]
+		public string DummyFileName
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.DummyFileName); }
+		}
+
+		/// <summary>
+		/// <para>Dummy attribute associated with the note regarding</para>
+		/// <para>ReadOnly - String - MaxLength: 500</para>
+		/// <para>Regarding</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 9.1.0.0")]
+		public string DummyRegarding
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.DummyRegarding); }
 		}
 
 		/// <summary>
@@ -244,7 +415,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>MIME type of the note's attachment.</para>
+		/// <para>MIME type of the note&apos;s attachment.</para>
 		/// <para>String - MaxLength: 256</para>
 		/// <para>Mime Type</para>
 		/// </summary>
@@ -302,7 +473,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the note is associated.</para>
-		/// <para>Lookup to account;appointment;bookableresource;bookableresourcebooking;bookableresourcebookingheader;bookableresourcecategoryassn;bookableresourcecharacteristic;bookableresourcegroup;bulkoperation;calendar;campaign;campaignactivity;campaignresponse;channelaccessprofile;channelaccessprofilerule;channelaccessprofileruleitem;commitment;competitor;contact;contract;contractdetail;convertrule;duplicaterule;email;emailserverprofile;entitlement;entitlementchannel;entitlementtemplate;equipment;fax;goal;incident;incidentresolution;invoice;kbarticle;knowledgearticle;knowledgebaserecord;lead;letter;list;mailbox;msdyn_3dmodel;msdyn_accountpricelist;msdyn_actual;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingincident;msdyn_agreementbookingproduct;msdyn_agreementbookingservice;msdyn_agreementbookingservicetask;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoiceproduct;msdyn_agreementinvoicesetup;msdyn_agreementsubstatus;msdyn_aifptrainingdocument;msdyn_aimodel;msdyn_aiodimage;msdyn_approval;msdyn_bookingalert;msdyn_bookingalertstatus;msdyn_bookingjournal;msdyn_bookingrule;msdyn_bookingtimestamp;msdyn_characteristicreqforteammember;msdyn_contactpricelist;msdyn_customerasset;msdyn_dataexport;msdyn_delegation;msdyn_estimate;msdyn_estimateline;msdyn_expense;msdyn_expensecategory;msdyn_expensereceipt;msdyn_fact;msdyn_fieldservicesetting;msdyn_findworkevent;msdyn_incidenttype;msdyn_incidenttypecharacteristic;msdyn_incidenttypeproduct;msdyn_incidenttypeservice;msdyn_incidenttypessetup;msdyn_inspectionattachment;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventoryjournal;msdyn_inventorytransfer;msdyn_invoicelinetransaction;msdyn_iotalert;msdyn_iotdevice;msdyn_iotdevicecategory;msdyn_iotdevicecommand;msdyn_iotdeviceregistrationhistory;msdyn_journal;msdyn_journalline;msdyn_liveconversation;msdyn_ocliveworkitem;msdyn_ocoutboundmessage;msdyn_ocsession;msdyn_opportunitylineresourcecategory;msdyn_opportunitylinetransaction;msdyn_opportunitylinetransactioncategory;msdyn_opportunitylinetransactionclassificatio;msdyn_opportunitypricelist;msdyn_orderlineresourcecategory;msdyn_orderlinetransaction;msdyn_orderlinetransactioncategory;msdyn_orderlinetransactionclassification;msdyn_orderpricelist;msdyn_organizationalunit;msdyn_payment;msdyn_paymentdetail;msdyn_paymentmethod;msdyn_paymentterm;msdyn_personalsoundsetting;msdyn_playbookinstance;msdyn_playbooktemplate;msdyn_postalbum;msdyn_postalcode;msdyn_priority;msdyn_processnotes;msdyn_productinventory;msdyn_project;msdyn_projectapproval;msdyn_projectparameter;msdyn_projectparameterpricelist;msdyn_projectpricelist;msdyn_projecttask;msdyn_projecttaskdependency;msdyn_projecttaskstatususer;msdyn_projectteam;msdyn_projectteammembersignup;msdyn_projecttransactioncategory;msdyn_purchaseorder;msdyn_purchaseorderbill;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_purchaseorderreceiptproduct;msdyn_purchaseordersubstatus;msdyn_quotebookingincident;msdyn_quotebookingproduct;msdyn_quotebookingservice;msdyn_quotebookingservicetask;msdyn_quotelineresourcecategory;msdyn_quotelinetransaction;msdyn_quotelinetransactioncategory;msdyn_quotelinetransactionclassification;msdyn_quotepricelist;msdyn_requirementcharacteristic;msdyn_requirementresourcecategory;msdyn_requirementresourcepreference;msdyn_requirementstatus;msdyn_resourcecategorypricelevel;msdyn_resourcepaytype;msdyn_resourcerequest;msdyn_resourcerequirement;msdyn_resourcerequirementdetail;msdyn_resourceterritory;msdyn_rma;msdyn_rmaproduct;msdyn_rmareceipt;msdyn_rmareceiptproduct;msdyn_rmasubstatus;msdyn_rolecompetencyrequirement;msdyn_rtv;msdyn_rtvproduct;msdyn_rtvsubstatus;msdyn_servicetasktype;msdyn_shipvia;msdyn_soundfile;msdyn_soundnotificationsetting;msdyn_systemuserschedulersetting;msdyn_taxcode;msdyn_taxcodedetail;msdyn_timeentry;msdyn_timegroup;msdyn_timegroupdetail;msdyn_timeoffrequest;msdyn_transactioncategory;msdyn_transactioncategoryclassification;msdyn_transactioncategoryhierarchyelement;msdyn_transactioncategorypricelevel;msdyn_transactionconnection;msdyn_transactionorigin;msdyn_transactiontype;msdyn_transcript;msdyn_warehouse;msdyn_workhourtemplate;msdyn_workorder;msdyn_workordercharacteristic;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderresourcerestriction;msdyn_workorderservice;msdyn_workorderservicetask;msdyn_workordersubstatus;msdyusd_agentscriptaction;msdyusd_answer;msdyusd_configuration;msdyusd_customizationfiles;msdyusd_entityassignment;msdyusd_entitysearch;msdyusd_form;msdyusd_languagemodule;msdyusd_scriptlet;msdyusd_scripttasktrigger;msdyusd_search;msdyusd_sessioninformation;msdyusd_task;msdyusd_toolbarbutton;msdyusd_toolbarstrip;msdyusd_tracesourcesetting;msdyusd_uiievent;msdyusd_windowroute;msfp_alert;msfp_question;msfp_surveyinvite;msfp_surveyresponse;opportunity;opportunityclose;orderclose;phonecall;product;quote;quoteclose;recurringappointmentmaster;resourcespec;routingrule;routingruleitem;salesorder;service;serviceappointment;sharepointdocument;sla;socialactivity;task;uii_action;uii_hostedapplication;uii_nonhostedapplication;uii_option;uii_workflow;uii_workflowstep;uii_workflow_workflowstep_mapping;workflow</para>
+		/// <para>Lookup to account;appointment;bookableresource;bookableresourcebooking;bookableresourcebookingheader;bookableresourcecategoryassn;bookableresourcecharacteristic;bookableresourcegroup;bulkoperation;calendar;campaign;campaignactivity;campaignresponse;channelaccessprofile;channelaccessprofilerule;channelaccessprofileruleitem;commitment;competitor;contact;contract;contractdetail;convertrule;duplicaterule;email;emailserverprofile;entitlement;entitlementchannel;entitlementtemplate;equipment;fax;goal;incident;incidentresolution;invoice;kbarticle;knowledgearticle;knowledgebaserecord;lead;letter;list;mailbox;msdyn_3dmodel;msdyn_accountpricelist;msdyn_actual;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingincident;msdyn_agreementbookingproduct;msdyn_agreementbookingservice;msdyn_agreementbookingservicetask;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoiceproduct;msdyn_agreementinvoicesetup;msdyn_agreementsubstatus;msdyn_aifptrainingdocument;msdyn_aimodel;msdyn_aiodimage;msdyn_approval;msdyn_approvalset;msdyn_bookingalert;msdyn_bookingalertstatus;msdyn_bookingjournal;msdyn_bookingrule;msdyn_bookingtimestamp;msdyn_characteristicreqforteammember;msdyn_contactpricelist;msdyn_customerasset;msdyn_dataexport;msdyn_delegation;msdyn_estimate;msdyn_estimateline;msdyn_expense;msdyn_expensecategory;msdyn_expensereceipt;msdyn_fact;msdyn_fieldservicesetting;msdyn_findworkevent;msdyn_incidenttype;msdyn_incidenttypecharacteristic;msdyn_incidenttypeproduct;msdyn_incidenttypeservice;msdyn_incidenttypessetup;msdyn_inspectionattachment;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventoryjournal;msdyn_inventorytransfer;msdyn_invoicelinetransaction;msdyn_iotalert;msdyn_iotdevice;msdyn_iotdevicecategory;msdyn_iotdevicecommand;msdyn_iotdeviceregistrationhistory;msdyn_journal;msdyn_journalline;msdyn_liveconversation;msdyn_ocflaggedspam;msdyn_ocliveworkitem;msdyn_ocoutboundmessage;msdyn_ocsession;msdyn_opportunitylineresourcecategory;msdyn_opportunitylinetransaction;msdyn_opportunitylinetransactioncategory;msdyn_opportunitylinetransactionclassificatio;msdyn_opportunitypricelist;msdyn_orderlineresourcecategory;msdyn_orderlinetransaction;msdyn_orderlinetransactioncategory;msdyn_orderlinetransactionclassification;msdyn_orderpricelist;msdyn_organizationalunit;msdyn_overflowactionconfig;msdyn_payment;msdyn_paymentdetail;msdyn_paymentmethod;msdyn_paymentterm;msdyn_personalsoundsetting;msdyn_playbookinstance;msdyn_playbooktemplate;msdyn_postalbum;msdyn_postalcode;msdyn_priority;msdyn_processnotes;msdyn_productinventory;msdyn_project;msdyn_projectapproval;msdyn_projectparameter;msdyn_projectparameterpricelist;msdyn_projectpricelist;msdyn_projecttask;msdyn_projecttaskdependency;msdyn_projecttaskstatususer;msdyn_projectteam;msdyn_projectteammembersignup;msdyn_projecttransactioncategory;msdyn_purchaseorder;msdyn_purchaseorderbill;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_purchaseorderreceiptproduct;msdyn_purchaseordersubstatus;msdyn_quotebookingincident;msdyn_quotebookingproduct;msdyn_quotebookingservice;msdyn_quotebookingservicetask;msdyn_quotelineresourcecategory;msdyn_quotelinetransaction;msdyn_quotelinetransactioncategory;msdyn_quotelinetransactionclassification;msdyn_quotepricelist;msdyn_requirementcharacteristic;msdyn_requirementresourcecategory;msdyn_requirementresourcepreference;msdyn_requirementstatus;msdyn_resourcecategorypricelevel;msdyn_resourcepaytype;msdyn_resourcerequest;msdyn_resourcerequirement;msdyn_resourcerequirementdetail;msdyn_resourceterritory;msdyn_rma;msdyn_rmaproduct;msdyn_rmareceipt;msdyn_rmareceiptproduct;msdyn_rmasubstatus;msdyn_rolecompetencyrequirement;msdyn_rtv;msdyn_rtvproduct;msdyn_rtvsubstatus;msdyn_servicetasktype;msdyn_shipvia;msdyn_soundfile;msdyn_soundnotificationsetting;msdyn_systemuserschedulersetting;msdyn_taxcode;msdyn_taxcodedetail;msdyn_timeentry;msdyn_timegroup;msdyn_timegroupdetail;msdyn_timeoffrequest;msdyn_transactioncategory;msdyn_transactioncategoryclassification;msdyn_transactioncategoryhierarchyelement;msdyn_transactioncategorypricelevel;msdyn_transactionconnection;msdyn_transactionorigin;msdyn_transactiontype;msdyn_transcript;msdyn_warehouse;msdyn_workhourtemplate;msdyn_workorder;msdyn_workordercharacteristic;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderresourcerestriction;msdyn_workorderservice;msdyn_workorderservicetask;msdyn_workordersubstatus;msdyusd_agentscriptaction;msdyusd_answer;msdyusd_configuration;msdyusd_customizationfiles;msdyusd_entityassignment;msdyusd_entitysearch;msdyusd_form;msdyusd_languagemodule;msdyusd_scriptlet;msdyusd_scripttasktrigger;msdyusd_search;msdyusd_sessioninformation;msdyusd_task;msdyusd_toolbarbutton;msdyusd_toolbarstrip;msdyusd_tracesourcesetting;msdyusd_uiievent;msdyusd_windowroute;msfp_alert;msfp_question;msfp_surveyinvite;msfp_surveyresponse;opportunity;opportunityclose;orderclose;phonecall;product;quote;quoteclose;recurringappointmentmaster;resourcespec;routingrule;routingruleitem;salesorder;service;serviceappointment;sharepointdocument;sla;socialactivity;task;uii_action;uii_hostedapplication;uii_nonhostedapplication;uii_option;uii_workflow;uii_workflowstep;uii_workflow_workflowstep_mapping;workflow</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -315,7 +486,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Type of entity with which the note is associated.</para>
 		/// <para>EntityName</para>
-		/// <para>Object Type </para>
+		/// <para>Object Type</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string ObjectTypeCode
@@ -338,7 +509,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the note.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysisjobOptionSets
 		/// </summary>
 		Complete = 192350001,
 		/// <summary>
-		/// Completed_With_Exceptions = 192350003
+		/// Completed With Exceptions = 192350003
 		/// </summary>
 		Completed_With_Exceptions = 192350003,
 		/// <summary>
@@ -70,6 +70,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_EndTime = "msdyn_endtime";
 			public const string msdyn_ErrorCount = "msdyn_errorcount";
 			public const string msdyn_Exception = "msdyn_exception";
+			public const string msdyn_InAppNotificationEnabled = "msdyn_inappnotificationenabled";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_RuleFailCount = "msdyn_rulefailcount";
 			public const string msdyn_RulePassCount = "msdyn_rulepasscount";
@@ -98,7 +99,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_analysisjob";
 
-		public const int EntityTypeCode = 10096;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10106;
 
 		[DebuggerNonUserCode()]
 		public msdyn_analysisjob()
@@ -298,6 +300,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Health rule set Failure In App Notification Enabled.</para>
+		/// <para>Boolean</para>
+		/// <para>Health rule set Failure In App Notification Enabled.</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_InAppNotificationEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_InAppNotificationEnabled); }
+			set { Entity.Attributes[Fields.msdyn_InAppNotificationEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>The name of the custom entity.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Name</para>
@@ -467,7 +481,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

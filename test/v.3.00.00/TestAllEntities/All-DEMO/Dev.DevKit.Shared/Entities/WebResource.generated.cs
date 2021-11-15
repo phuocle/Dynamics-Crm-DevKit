@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.WebResourceOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,51 +33,51 @@ namespace Dev.DevKit.Shared.Entities.WebResourceOptionSets
 	public enum WebResourceType
 	{
 		/// <summary>
-		/// Data_XML = 4
+		/// Data (XML) = 4
 		/// </summary>
 		Data_XML = 4,
 		/// <summary>
-		/// GIF_format = 7
+		/// GIF format = 7
 		/// </summary>
 		GIF_format = 7,
 		/// <summary>
-		/// ICO_format = 10
+		/// ICO format = 10
 		/// </summary>
 		ICO_format = 10,
 		/// <summary>
-		/// JPG_format = 6
+		/// JPG format = 6
 		/// </summary>
 		JPG_format = 6,
 		/// <summary>
-		/// PNG_format = 5
+		/// PNG format = 5
 		/// </summary>
 		PNG_format = 5,
 		/// <summary>
-		/// Script_JScript = 3
+		/// Script (JScript) = 3
 		/// </summary>
 		Script_JScript = 3,
 		/// <summary>
-		/// Silverlight_XAP = 8
+		/// Silverlight (XAP) = 8
 		/// </summary>
 		Silverlight_XAP = 8,
 		/// <summary>
-		/// String_RESX = 12
+		/// String (RESX) = 12
 		/// </summary>
 		String_RESX = 12,
 		/// <summary>
-		/// Style_Sheet_CSS = 2
+		/// Style Sheet (CSS) = 2
 		/// </summary>
 		Style_Sheet_CSS = 2,
 		/// <summary>
-		/// Style_Sheet_XSL = 9
+		/// Style Sheet (XSL) = 9
 		/// </summary>
 		Style_Sheet_XSL = 9,
 		/// <summary>
-		/// Vector_format_SVG = 11
+		/// Vector format (SVG) = 11
 		/// </summary>
 		Vector_format_SVG = 11,
 		/// <summary>
-		/// Webpage_HTML = 1
+		/// Webpage (HTML) = 1
 		/// </summary>
 		Webpage_HTML = 1
 	}
@@ -91,7 +91,9 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string ComponentState = "componentstate";
 			public const string Content = "content";
+			public const string ContentFileRef = "contentfileref";
 			public const string ContentJson = "contentjson";
+			public const string ContentJsonFileRef = "contentjsonfileref";
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
@@ -120,6 +122,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "webresource";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9333;
 
 		[DebuggerNonUserCode()]
@@ -199,6 +202,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Reference to the content file on Azure.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>ContentFileRef</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ContentFileRef
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ContentFileRef); }
+		}
+
+		/// <summary>
 		/// <para>Json representation of the content of the resource.</para>
 		/// <para>Memo - MaxLength: 1073741823</para>
 		/// <para></para>
@@ -208,6 +222,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.ContentJson); }
 			set { Entity.Attributes[Fields.ContentJson] = value; }
+		}
+
+		/// <summary>
+		/// <para>Reference to the Json content file on Azure.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>ContentJsonFileRef</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ContentJsonFileRef
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ContentJsonFileRef); }
 		}
 
 		/// <summary>

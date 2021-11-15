@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocoutboundconfigurationOptionSets
 	public enum msdyn_channel
 	{
 		/// <summary>
-		/// Co_browse = 192390000
+		/// Co-browse = 192390000
 		/// </summary>
-		Co_browse = 192390000,
+		Cobrowse = 192390000,
 		/// <summary>
 		/// Custom = 192350002
 		/// </summary>
 		Custom = 192350002,
 		/// <summary>
-		/// Entity_Records = 192350000
+		/// Entity Records = 192350000
 		/// </summary>
 		Entity_Records = 192350000,
 		/// <summary>
@@ -33,15 +33,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocoutboundconfigurationOptionSets
 		/// </summary>
 		LINE = 192310000,
 		/// <summary>
-		/// Live_chat = 192360000
+		/// Live chat = 192360000
 		/// </summary>
 		Live_chat = 192360000,
 		/// <summary>
-		/// Microsoft_Teams = 19241000
+		/// Microsoft Teams = 19241000
 		/// </summary>
 		Microsoft_Teams = 19241000,
 		/// <summary>
-		/// Screen_sharing = 192400000
+		/// Screen sharing = 192400000
 		/// </summary>
 		Screen_sharing = 192400000,
 		/// <summary>
@@ -85,13 +85,13 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocoutboundconfigurationOptionSets
 	public enum msdyn_type
 	{
 		/// <summary>
-		/// Create_conversation_on_send = 100000001
+		/// Create conversation on send = 100000001
 		/// </summary>
 		Create_conversation_on_send = 100000001,
 		/// <summary>
-		/// Create_conversation_when_customer_responds_ = 100000000
+		/// Create conversation when customer responds  = 100000000
 		/// </summary>
-		Create_conversation_when_customer_responds_ = 100000000
+		Create_conversation_when_customer_responds = 100000000
 	}
 
 	public enum statecode
@@ -162,7 +162,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocoutboundconfiguration";
 
-		public const int EntityTypeCode = 10672;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10751;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocoutboundconfiguration()
@@ -305,9 +306,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocoutboundconfigurationOptionSets.msdyn_channel)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_channel] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_channel] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_channel] = null;
+			}
 		}
 
 		/// <summary>
@@ -335,7 +339,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Deprecated - This language will be used if there’s no customer preferred language or message template in customer's language.</para>
+		/// <para>Deprecated - This language will be used if there’s no customer preferred language or message template in customer&apos;s language.</para>
 		/// <para>Required - Lookup to msdyn_oclanguage</para>
 		/// <para>Deprecated - Language</para>
 		/// </summary>
@@ -373,7 +377,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier for Work Stream associated with Outbound Configuration</para>
 		/// <para>Required - Lookup to msdyn_liveworkstream</para>
-		/// <para>Work Stream</para>
+		/// <para>Work Stream (Deprecated)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public EntityReference msdyn_liveworkstreamid
@@ -425,7 +429,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Scope of the outbound configuration</para>
 		/// <para>Picklist</para>
-		/// <para>Scope</para>
+		/// <para>Scope (Deprecated)</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.msdyn_ocoutboundconfigurationOptionSets.msdyn_ocscope? msdyn_ocscope
@@ -496,9 +500,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocoutboundconfigurationOptionSets.msdyn_type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_type] = null;
+			}
 		}
 
 		/// <summary>
@@ -527,7 +534,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

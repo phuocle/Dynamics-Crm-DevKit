@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.BusinessUnitOptionSets
 	public enum Address1_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.BusinessUnitOptionSets
 	public enum Address1_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.BusinessUnitOptionSets
 	public enum Address2_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.BusinessUnitOptionSets
 	public enum Address2_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -129,6 +129,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "businessunit";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 10;
 
 		[DebuggerNonUserCode()]

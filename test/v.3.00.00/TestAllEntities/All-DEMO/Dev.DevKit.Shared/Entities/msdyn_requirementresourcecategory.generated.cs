@@ -67,7 +67,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementresourcecategory";
 
-		public const int EntityTypeCode = 10308;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10371;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementresourcecategory()
@@ -196,7 +197,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Yes if resource category requirement is primary. If it's primary then it can't be deleted</para>
+		/// <para>Yes if resource category requirement is primary. If it&apos;s primary then it can&apos;t be deleted</para>
 		/// <para>Boolean</para>
 		/// <para>Is Primary</para>
 		/// </summary>
@@ -273,7 +274,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

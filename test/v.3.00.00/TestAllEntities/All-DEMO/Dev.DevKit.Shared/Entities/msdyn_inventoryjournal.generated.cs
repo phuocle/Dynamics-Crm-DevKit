@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_inventoryjournalOptionSets
 		/// </summary>
 		Allocated = 690970002,
 		/// <summary>
-		/// On_Hand = 690970000
+		/// On Hand = 690970000
 		/// </summary>
 		On_Hand = 690970000,
 		/// <summary>
-		/// On_Order = 690970001
+		/// On Order = 690970001
 		/// </summary>
 		On_Order = 690970001
 	}
@@ -29,11 +29,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_inventoryjournalOptionSets
 	public enum msdyn_TransactionType
 	{
 		/// <summary>
-		/// Inventory_Adjustment = 690970003
+		/// Inventory Adjustment = 690970003
 		/// </summary>
 		Inventory_Adjustment = 690970003,
 		/// <summary>
-		/// Inventory_Transfer = 690970004
+		/// Inventory Transfer = 690970004
 		/// </summary>
 		Inventory_Transfer = 690970004,
 		/// <summary>
@@ -41,19 +41,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_inventoryjournalOptionSets
 		/// </summary>
 		Manual = 690970006,
 		/// <summary>
-		/// Purchase_Order_Product = 690970000
+		/// Purchase Order Product = 690970000
 		/// </summary>
 		Purchase_Order_Product = 690970000,
 		/// <summary>
-		/// Purchase_Order_Receipt = 690970001
+		/// Purchase Order Receipt = 690970001
 		/// </summary>
 		Purchase_Order_Receipt = 690970001,
 		/// <summary>
-		/// RMA_Product = 690970005
+		/// RMA Product = 690970005
 		/// </summary>
 		RMA_Product = 690970005,
 		/// <summary>
-		/// WO_Product = 690970002
+		/// WO Product = 690970002
 		/// </summary>
 		WO_Product = 690970002
 	}
@@ -127,7 +127,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_inventoryjournal";
 
-		public const int EntityTypeCode = 10444;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10508;
 
 		[DebuggerNonUserCode()]
 		public msdyn_inventoryjournal()
@@ -322,9 +323,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_inventoryjournalOptionSets.msdyn_JournalType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_JournalType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_JournalType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_JournalType] = null;
+			}
 		}
 
 		/// <summary>
@@ -438,9 +442,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_inventoryjournalOptionSets.msdyn_TransactionType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionType] = null;
+			}
 		}
 
 		/// <summary>
@@ -493,7 +500,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

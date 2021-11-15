@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.FieldPermissionOptionSets
 		/// </summary>
 		Allowed = 4,
 		/// <summary>
-		/// Not_Allowed = 0
+		/// Not Allowed = 0
 		/// </summary>
 		Not_Allowed = 0
 	}
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.FieldPermissionOptionSets
 		/// </summary>
 		Allowed = 4,
 		/// <summary>
-		/// Not_Allowed = 0
+		/// Not Allowed = 0
 		/// </summary>
 		Not_Allowed = 0
 	}
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.FieldPermissionOptionSets
 		/// </summary>
 		Allowed = 4,
 		/// <summary>
-		/// Not_Allowed = 0
+		/// Not Allowed = 0
 		/// </summary>
 		Not_Allowed = 0
 	}
@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.FieldPermissionOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -78,7 +78,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CanRead = "canread";
 			public const string CanUpdate = "canupdate";
 			public const string ComponentState = "componentstate";
-			public const string EntityName = "entityname";
 			public const string FieldPermissionId = "fieldpermissionid";
 			public const string FieldPermissionIdUnique = "fieldpermissionidunique";
 			public const string FieldSecurityProfileId = "fieldsecurityprofileid";
@@ -92,6 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "fieldpermission";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1201;
 
 		[DebuggerNonUserCode()]
@@ -237,18 +237,6 @@ namespace Dev.DevKit.Shared.Entities
 				if (value == null) return null;
 				return (Dev.DevKit.Shared.Entities.FieldPermissionOptionSets.ComponentState)value.Value;
 			}
-		}
-
-		/// <summary>
-		/// <para>Entity name.</para>
-		/// <para>EntityName</para>
-		/// <para>Name of the Entity for which this privilege is defined</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string EntityName
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.EntityName); }
-			set { Entity.Attributes[Fields.EntityName] = value; }
 		}
 
 		/// <summary>

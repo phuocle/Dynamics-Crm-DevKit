@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkstreamcontextvariableOption
 	public enum msdyn_datatype
 	{
 		/// <summary>
-		/// Entity_Reference = 192350100
+		/// Entity Reference = 192350100
 		/// </summary>
 		Entity_Reference = 192350100,
 		/// <summary>
@@ -89,7 +89,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocliveworkstreamcontextvariable";
 
-		public const int EntityTypeCode = 10568;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10650;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkstreamcontextvariable()
@@ -232,9 +233,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocliveworkstreamcontextvariableOptionSets.msdyn_datatype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_datatype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_datatype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_datatype] = null;
+			}
 		}
 
 		/// <summary>
@@ -375,7 +379,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

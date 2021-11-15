@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.listoperationOptionSets
 		/// </summary>
 		Failed = 100000003,
 		/// <summary>
-		/// In_Progress = 100000000
+		/// In Progress = 100000000
 		/// </summary>
 		In_Progress = 100000000,
 		/// <summary>
@@ -49,19 +49,19 @@ namespace Dev.DevKit.Shared.Entities.listoperationOptionSets
 	public enum Type
 	{
 		/// <summary>
-		/// Add_members_by_id = 100000001
+		/// Add members by id = 100000001
 		/// </summary>
 		Add_members_by_id = 100000001,
 		/// <summary>
-		/// Add_members_by_query = 100000000
+		/// Add members by query = 100000000
 		/// </summary>
 		Add_members_by_query = 100000000,
 		/// <summary>
-		/// Remove_members_by_id = 100000003
+		/// Remove members by id = 100000003
 		/// </summary>
 		Remove_members_by_id = 100000003,
 		/// <summary>
-		/// Remove_members_by_query = 100000002
+		/// Remove members by query = 100000002
 		/// </summary>
 		Remove_members_by_query = 100000002
 	}
@@ -106,7 +106,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "listoperation";
 
-		public const int EntityTypeCode = 10102;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10113;
 
 		[DebuggerNonUserCode()]
 		public listoperation()
@@ -372,7 +373,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -500,9 +501,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.listoperationOptionSets.Type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.Type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.Type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.Type] = null;
+			}
 		}
 
 		/// <summary>

@@ -25,15 +25,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectOptionSets
 	public enum msdyn_CostPerformence
 	{
 		/// <summary>
-		/// On_Budget = 192350000
+		/// On Budget = 192350000
 		/// </summary>
 		On_Budget = 192350000,
 		/// <summary>
-		/// Over_Budget = 192350001
+		/// Over Budget = 192350001
 		/// </summary>
 		Over_Budget = 192350001,
 		/// <summary>
-		/// Under_Budget = 192350002
+		/// Under Budget = 192350002
 		/// </summary>
 		Under_Budget = 192350002
 	}
@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectOptionSets
 		/// </summary>
 		Behind = 192350002,
 		/// <summary>
-		/// On_Time = 192350000
+		/// On Time = 192350000
 		/// </summary>
 		On_Time = 192350000
 	}
@@ -89,13 +89,13 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectOptionSets
 		/// </summary>
 		Active = 1,
 		/// <summary>
-		/// Closed_Sets_project_to_read_only_and_cancels_future_bookings = 192350000
+		/// Closed - Sets project to read only and cancels future bookings = 192350000
 		/// </summary>
-		Closed_Sets_project_to_read_only_and_cancels_future_bookings = 192350000,
+		Closed__Sets_project_to_read_only_and_cancels_future_bookings = 192350000,
 		/// <summary>
-		/// Inactive_Sets_project_to_read_only = 2
+		/// Inactive - Sets project to read only = 2
 		/// </summary>
-		Inactive_Sets_project_to_read_only = 2
+		Inactive__Sets_project_to_read_only = 2
 	}
 }
 
@@ -209,7 +209,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_project";
 
-		public const int EntityTypeCode = 10363;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10426;
 
 		[DebuggerNonUserCode()]
 		public msdyn_project()
@@ -728,7 +729,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>This is an internal field, mainly used during import so that we don't create a team member record for the project manager. System Field - For PSA Use Only.</para>
+		/// <para>This is an internal field, mainly used during import so that we don&apos;t create a team member record for the project manager. System Field - For PSA Use Only.</para>
 		/// <para>Boolean</para>
 		/// <para>Disable create of team member for project manager</para>
 		/// </summary>
@@ -1577,7 +1578,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

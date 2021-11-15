@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.AdvancedSimilarityRuleOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -40,6 +40,14 @@ namespace Dev.DevKit.Shared.Entities.AdvancedSimilarityRuleOptionSets
 		/// Inactive = 1
 		/// </summary>
 		Inactive = 1
+	}
+
+	public enum SourceEntity
+	{
+		/// <summary>
+		/// Case = 112
+		/// </summary>
+		Case = 112
 	}
 
 	public enum StateCode
@@ -106,6 +114,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "advancedsimilarityrule";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9949;
 
 		[DebuggerNonUserCode()]

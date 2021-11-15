@@ -13,13 +13,13 @@ namespace Dev.DevKit.Shared.Entities.msdyn_odatav4dsOptionSets
 	public enum msdyn_paginationtype
 	{
 		/// <summary>
-		/// Client_side_Paging = 0
+		/// Client-side Paging = 0
 		/// </summary>
-		Client_side_Paging = 0,
+		Clientside_Paging = 0,
 		/// <summary>
-		/// Server_side_Paging = 1
+		/// Server-side Paging = 1
 		/// </summary>
-		Server_side_Paging = 1
+		Serverside_Paging = 1
 	}
 }
 
@@ -71,7 +71,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_odatav4ds";
 
-		public const int EntityTypeCode = 10032;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10044;
 
 		[DebuggerNonUserCode()]
 		public msdyn_odatav4ds()
@@ -306,9 +307,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_odatav4dsOptionSets.msdyn_paginationtype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_paginationtype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_paginationtype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_paginationtype] = null;
+			}
 		}
 
 		/// <summary>

@@ -67,7 +67,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_macrosession";
 
-		public const int EntityTypeCode = 10170;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10182;
 
 		[DebuggerNonUserCode()]
 		public msdyn_macrosession()
@@ -273,7 +274,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>User</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

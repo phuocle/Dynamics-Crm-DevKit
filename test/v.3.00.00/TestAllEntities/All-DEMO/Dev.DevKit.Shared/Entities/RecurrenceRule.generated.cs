@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.RecurrenceRuleOptionSets
 		/// </summary>
 		February = 2,
 		/// <summary>
-		/// Invalid_Month_Of_Year = 0
+		/// Invalid Month Of Year = 0
 		/// </summary>
 		Invalid_Month_Of_Year = 0,
 		/// <summary>
@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities.RecurrenceRuleOptionSets
 	public enum PatternEndType
 	{
 		/// <summary>
-		/// No_End_Date = 1
+		/// No End Date = 1
 		/// </summary>
 		No_End_Date = 1,
 		/// <summary>
@@ -101,7 +101,7 @@ namespace Dev.DevKit.Shared.Entities.RecurrenceRuleOptionSets
 		/// </summary>
 		Occurrences = 2,
 		/// <summary>
-		/// Pattern_End_Date = 3
+		/// Pattern End Date = 3
 		/// </summary>
 		Pattern_End_Date = 3
 	}
@@ -170,6 +170,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "recurrencerule";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4250;
 
 		[DebuggerNonUserCode()]
@@ -502,7 +503,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the recurrence rule.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

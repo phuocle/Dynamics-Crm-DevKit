@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.TeamOptionSets
 		/// </summary>
 		Members = 1,
 		/// <summary>
-		/// Members_and_guests = 0
+		/// Members and guests = 0
 		/// </summary>
 		Members_and_guests = 0,
 		/// <summary>
@@ -33,11 +33,11 @@ namespace Dev.DevKit.Shared.Entities.TeamOptionSets
 	public enum TeamType
 	{
 		/// <summary>
-		/// AAD_Office_Group = 3
+		/// AAD Office Group = 3
 		/// </summary>
 		AAD_Office_Group = 3,
 		/// <summary>
-		/// AAD_Security_Group = 2
+		/// AAD Security Group = 2
 		/// </summary>
 		AAD_Security_Group = 2,
 		/// <summary>
@@ -68,6 +68,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ExchangeRate = "exchangerate";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string IsDefault = "isdefault";
+			public const string IsSasTokenSet = "issastokenset";
 			public const string MembershipType = "membershiptype";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
@@ -78,6 +79,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ProcessId = "processid";
 			public const string QueueId = "queueid";
 			public const string RegardingObjectId = "regardingobjectid";
+			public const string SasToken = "sastoken";
+			public const string ShareLinkQualifier = "sharelinkqualifier";
 			public const string StageId = "stageid";
 			public const string SystemManaged = "systemmanaged";
 			public const string TeamId = "teamid";
@@ -91,6 +94,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "team";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9;
 
 		[DebuggerNonUserCode()]
@@ -269,6 +273,16 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para></para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsSasTokenSet
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsSasTokenSet); }
+		}
+
+		/// <summary>
 		/// <para>Picklist</para>
 		/// <para>Membership Type</para>
 		/// </summary>
@@ -338,7 +352,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier of the organization associated with the team.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para>Organization </para>
+		/// <para>Organization</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? OrganizationId
@@ -392,6 +406,28 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.RegardingObjectId); }
 			set { Entity.Attributes[Fields.RegardingObjectId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Sas Token for Team.</para>
+		/// <para>ReadOnly - String - MaxLength: 50</para>
+		/// <para>Sas Token</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string SasToken
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.SasToken); }
+		}
+
+		/// <summary>
+		/// <para>For internal use only.</para>
+		/// <para>ReadOnly - String - MaxLength: 1250</para>
+		/// <para>Share Link Qualifier</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string ShareLinkQualifier
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.ShareLinkQualifier); }
 		}
 
 		/// <summary>

@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemcharacteristicOptionSet
 		/// </summary>
 		Manual = 321240002,
 		/// <summary>
-		/// ML_Based = 321240001
+		/// ML Based = 321240001
 		/// </summary>
 		ML_Based = 321240001,
 		/// <summary>
-		/// Rule_Based = 321240000
+		/// Rule Based = 321240000
 		/// </summary>
 		Rule_Based = 321240000
 	}
@@ -102,7 +102,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocliveworkitemcharacteristic";
 
-		public const int EntityTypeCode = 10618;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10694;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocliveworkitemcharacteristic()
@@ -392,9 +393,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_ocliveworkitemcharacteristicOptionSets.msdyn_status)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_status] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_status] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_status] = null;
+			}
 		}
 
 		/// <summary>
@@ -411,7 +415,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

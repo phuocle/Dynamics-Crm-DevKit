@@ -13,27 +13,27 @@ namespace Dev.DevKit.Shared.Entities.EmailServerProfileOptionSets
 	public enum ExchangeVersion
 	{
 		/// <summary>
-		/// Exchange_2007 = 0
+		/// Exchange 2007 = 0
 		/// </summary>
 		Exchange_2007 = 0,
 		/// <summary>
-		/// Exchange_2007_SP1 = 1
+		/// Exchange 2007 SP1 = 1
 		/// </summary>
 		Exchange_2007_SP1 = 1,
 		/// <summary>
-		/// Exchange_2010 = 2
+		/// Exchange 2010 = 2
 		/// </summary>
 		Exchange_2010 = 2,
 		/// <summary>
-		/// Exchange_2010_SP1 = 3
+		/// Exchange 2010 SP1 = 3
 		/// </summary>
 		Exchange_2010_SP1 = 3,
 		/// <summary>
-		/// Exchange_2010_SP2 = 4
+		/// Exchange 2010 SP2 = 4
 		/// </summary>
 		Exchange_2010_SP2 = 4,
 		/// <summary>
-		/// Exchange_2013 = 5
+		/// Exchange 2013 = 5
 		/// </summary>
 		Exchange_2013 = 5
 	}
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.EmailServerProfileOptionSets
 	public enum IncomingAuthenticationProtocol
 	{
 		/// <summary>
-		/// Auto_Detect = 0
+		/// Auto Detect = 0
 		/// </summary>
 		Auto_Detect = 0,
 		/// <summary>
@@ -65,35 +65,35 @@ namespace Dev.DevKit.Shared.Entities.EmailServerProfileOptionSets
 	public enum IncomingCredentialRetrieval
 	{
 		/// <summary>
-		/// Azure_Active_Directory_OAuth = 7
+		/// Azure Active Directory OAuth = 7
 		/// </summary>
 		Azure_Active_Directory_OAuth = 7,
 		/// <summary>
-		/// Credentials_Specified_by_a_User_or_Queue = 0
+		/// Credentials Specified by a User or Queue = 0
 		/// </summary>
 		Credentials_Specified_by_a_User_or_Queue = 0,
 		/// <summary>
-		/// Credentials_Specified_in_Email_Server_Profile = 1
+		/// Credentials Specified in Email Server Profile = 1
 		/// </summary>
 		Credentials_Specified_in_Email_Server_Profile = 1,
 		/// <summary>
-		/// Exchange_Hybrid_Modern_Auth_HMA = 6
+		/// Exchange Hybrid Modern Auth (HMA) = 6
 		/// </summary>
 		Exchange_Hybrid_Modern_Auth_HMA = 6,
 		/// <summary>
-		/// Gmail_OAuth = 5
+		/// Gmail OAuth = 5
 		/// </summary>
 		Gmail_OAuth = 5,
 		/// <summary>
-		/// Server_to_Server_Authentication = 2
+		/// Server to Server Authentication = 2
 		/// </summary>
 		Server_to_Server_Authentication = 2,
 		/// <summary>
-		/// Windows_Integrated_Authentication = 3
+		/// Windows Integrated Authentication = 3
 		/// </summary>
 		Windows_Integrated_Authentication = 3,
 		/// <summary>
-		/// Without_Credentials_Anonymous = 4
+		/// Without Credentials (Anonymous) = 4
 		/// </summary>
 		Without_Credentials_Anonymous = 4
 	}
@@ -141,7 +141,7 @@ namespace Dev.DevKit.Shared.Entities.EmailServerProfileOptionSets
 	public enum OutgoingAuthenticationProtocol
 	{
 		/// <summary>
-		/// Auto_Detect = 0
+		/// Auto Detect = 0
 		/// </summary>
 		Auto_Detect = 0,
 		/// <summary>
@@ -165,35 +165,35 @@ namespace Dev.DevKit.Shared.Entities.EmailServerProfileOptionSets
 	public enum OutgoingCredentialRetrieval
 	{
 		/// <summary>
-		/// Azure_Active_Directory_OAuth = 7
+		/// Azure Active Directory OAuth = 7
 		/// </summary>
 		Azure_Active_Directory_OAuth = 7,
 		/// <summary>
-		/// Credentials_Specified_by_a_User_or_Queue = 0
+		/// Credentials Specified by a User or Queue = 0
 		/// </summary>
 		Credentials_Specified_by_a_User_or_Queue = 0,
 		/// <summary>
-		/// Credentials_Specified_in_Email_Server_Profile = 1
+		/// Credentials Specified in Email Server Profile = 1
 		/// </summary>
 		Credentials_Specified_in_Email_Server_Profile = 1,
 		/// <summary>
-		/// Exchange_Hybrid_Modern_Auth_HMA = 6
+		/// Exchange Hybrid Modern Auth (HMA) = 6
 		/// </summary>
 		Exchange_Hybrid_Modern_Auth_HMA = 6,
 		/// <summary>
-		/// Gmail_OAuth = 5
+		/// Gmail OAuth = 5
 		/// </summary>
 		Gmail_OAuth = 5,
 		/// <summary>
-		/// Server_to_Server_Authentication = 2
+		/// Server to Server Authentication = 2
 		/// </summary>
 		Server_to_Server_Authentication = 2,
 		/// <summary>
-		/// Windows_Integrated_Authentication = 3
+		/// Windows Integrated Authentication = 3
 		/// </summary>
 		Windows_Integrated_Authentication = 3,
 		/// <summary>
-		/// Without_Credentials_Anonymous = 4
+		/// Without Credentials (Anonymous) = 4
 		/// </summary>
 		Without_Credentials_Anonymous = 4
 	}
@@ -201,23 +201,23 @@ namespace Dev.DevKit.Shared.Entities.EmailServerProfileOptionSets
 	public enum ServerType
 	{
 		/// <summary>
-		/// Exchange_Online_Hybrid = 3
+		/// Exchange Online (Hybrid) = 3
 		/// </summary>
 		Exchange_Online_Hybrid = 3,
 		/// <summary>
-		/// Exchange_Server = 0
+		/// Exchange Server = 0
 		/// </summary>
 		Exchange_Server = 0,
 		/// <summary>
-		/// Exchange_Server_Hybrid = 2
+		/// Exchange Server (Hybrid) = 2
 		/// </summary>
 		Exchange_Server_Hybrid = 2,
 		/// <summary>
-		/// IMAPSMTP = 4
+		/// IMAP/SMTP = 4
 		/// </summary>
 		IMAPSMTP = 4,
 		/// <summary>
-		/// Other_POP3SMTP = 1
+		/// Other (POP3/SMTP) = 1
 		/// </summary>
 		Other_POP3SMTP = 1
 	}
@@ -329,6 +329,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "emailserverprofile";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9605;
 
 		[DebuggerNonUserCode()]
@@ -1103,7 +1104,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Email Server Profile Owner's email address</para>
+		/// <para>Email Server Profile Owner&apos;s email address</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Email Server Profile Owner's email address</para>
 		/// </summary>
@@ -1116,7 +1117,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1184,7 +1185,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the profile's email server type.</para>
+		/// <para>Select the profile&apos;s email server type.</para>
 		/// <para>Required - Picklist</para>
 		/// <para>Email Server Type</para>
 		/// </summary>
@@ -1198,9 +1199,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.EmailServerProfileOptionSets.ServerType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.ServerType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.ServerType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.ServerType] = null;
+			}
 		}
 
 		/// <summary>
@@ -1227,7 +1231,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the email server profile's status.</para>
+		/// <para>Select the email server profile&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

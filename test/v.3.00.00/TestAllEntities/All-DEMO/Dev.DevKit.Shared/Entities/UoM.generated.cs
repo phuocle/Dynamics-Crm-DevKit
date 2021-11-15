@@ -43,6 +43,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uom";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1055;
 
 		[DebuggerNonUserCode()]
@@ -231,7 +232,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier of the organization associated with the unit of measure.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para>Organization </para>
+		/// <para>Organization</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? OrganizationId

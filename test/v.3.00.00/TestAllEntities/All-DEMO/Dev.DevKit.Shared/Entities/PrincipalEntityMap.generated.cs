@@ -19,7 +19,6 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		public struct Fields
 		{
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string PrincipalEntityMapId = "principalentitymapid";
 			public const string PrincipalId = "principalid";
 			public const string VersionNumber = "versionnumber";
@@ -27,6 +26,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "principalentitymap";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 41;
 
 		[DebuggerNonUserCode()]
@@ -75,16 +75,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
 		}
 
 		/// <summary>

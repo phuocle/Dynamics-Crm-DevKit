@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_bookableresourceassociationOptionSets
 	public enum msdyn_Type
 	{
 		/// <summary>
-		/// Work_Location = 192350000
+		/// Work Location = 192350000
 		/// </summary>
 		Work_Location = 192350000
 	}
@@ -77,7 +77,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookableresourceassociation";
 
-		public const int EntityTypeCode = 10293;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10356;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookableresourceassociation()
@@ -313,7 +314,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

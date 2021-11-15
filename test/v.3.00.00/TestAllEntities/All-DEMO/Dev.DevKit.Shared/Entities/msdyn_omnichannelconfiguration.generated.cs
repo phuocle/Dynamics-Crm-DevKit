@@ -13,181 +13,181 @@ namespace Dev.DevKit.Shared.Entities.msdyn_omnichannelconfigurationOptionSets
 	public enum msdyn_defaultAgentInputLanguage
 	{
 		/// <summary>
-		/// Arabic_Saudi_Arabia = 1025
+		/// Arabic - Saudi Arabia = 1025
 		/// </summary>
-		Arabic_Saudi_Arabia = 1025,
+		Arabic__Saudi_Arabia = 1025,
 		/// <summary>
-		/// Basque_Spain = 1069
+		/// Basque - Spain = 1069
 		/// </summary>
-		Basque_Spain = 1069,
+		Basque__Spain = 1069,
 		/// <summary>
-		/// Bulgarian_Bulgaria = 1026
+		/// Bulgarian - Bulgaria = 1026
 		/// </summary>
-		Bulgarian_Bulgaria = 1026,
+		Bulgarian__Bulgaria = 1026,
 		/// <summary>
-		/// Catalan_Spain = 1027
+		/// Catalan - Spain = 1027
 		/// </summary>
-		Catalan_Spain = 1027,
+		Catalan__Spain = 1027,
 		/// <summary>
-		/// Chinese_China = 2052
+		/// Chinese - China = 2052
 		/// </summary>
-		Chinese_China = 2052,
+		Chinese__China = 2052,
 		/// <summary>
-		/// Chinese_Hong_Kong = 3076
+		/// Chinese - Hong Kong = 3076
 		/// </summary>
-		Chinese_Hong_Kong = 3076,
+		Chinese__Hong_Kong = 3076,
 		/// <summary>
-		/// Croatian_Croatia = 1050
+		/// Croatian - Croatia = 1050
 		/// </summary>
-		Croatian_Croatia = 1050,
+		Croatian__Croatia = 1050,
 		/// <summary>
-		/// Czech_Czech_Republic = 1029
+		/// Czech - Czech Republic = 1029
 		/// </summary>
-		Czech_Czech_Republic = 1029,
+		Czech__Czech_Republic = 1029,
 		/// <summary>
-		/// Danish_Denmark = 1030
+		/// Danish - Denmark = 1030
 		/// </summary>
-		Danish_Denmark = 1030,
+		Danish__Denmark = 1030,
 		/// <summary>
-		/// Dutch_Netherlands = 1043
+		/// Dutch - Netherlands = 1043
 		/// </summary>
-		Dutch_Netherlands = 1043,
+		Dutch__Netherlands = 1043,
 		/// <summary>
-		/// English_United_States = 1033
+		/// English - United States = 1033
 		/// </summary>
-		English_United_States = 1033,
+		English__United_States = 1033,
 		/// <summary>
-		/// Estonian_Estonia = 1061
+		/// Estonian - Estonia = 1061
 		/// </summary>
-		Estonian_Estonia = 1061,
+		Estonian__Estonia = 1061,
 		/// <summary>
-		/// Finnish_Finland = 1035
+		/// Finnish - Finland = 1035
 		/// </summary>
-		Finnish_Finland = 1035,
+		Finnish__Finland = 1035,
 		/// <summary>
-		/// French_France = 1036
+		/// French - France = 1036
 		/// </summary>
-		French_France = 1036,
+		French__France = 1036,
 		/// <summary>
-		/// Galician_Spain = 1110
+		/// Galician - Spain = 1110
 		/// </summary>
-		Galician_Spain = 1110,
+		Galician__Spain = 1110,
 		/// <summary>
-		/// German_Germany = 1031
+		/// German - Germany = 1031
 		/// </summary>
-		German_Germany = 1031,
+		German__Germany = 1031,
 		/// <summary>
-		/// Greek_Greece = 1032
+		/// Greek - Greece = 1032
 		/// </summary>
-		Greek_Greece = 1032,
+		Greek__Greece = 1032,
 		/// <summary>
-		/// Hebrew_Israel = 1037
+		/// Hebrew - Israel = 1037
 		/// </summary>
-		Hebrew_Israel = 1037,
+		Hebrew__Israel = 1037,
 		/// <summary>
-		/// Hindi_India = 1081
+		/// Hindi - India = 1081
 		/// </summary>
-		Hindi_India = 1081,
+		Hindi__India = 1081,
 		/// <summary>
-		/// Hungarian_Hungary = 1038
+		/// Hungarian - Hungary = 1038
 		/// </summary>
-		Hungarian_Hungary = 1038,
+		Hungarian__Hungary = 1038,
 		/// <summary>
-		/// Indonesian_Indonesia = 1057
+		/// Indonesian - Indonesia = 1057
 		/// </summary>
-		Indonesian_Indonesia = 1057,
+		Indonesian__Indonesia = 1057,
 		/// <summary>
-		/// Italian_Italy = 1040
+		/// Italian - Italy = 1040
 		/// </summary>
-		Italian_Italy = 1040,
+		Italian__Italy = 1040,
 		/// <summary>
-		/// Japanese_Japan = 1041
+		/// Japanese - Japan = 1041
 		/// </summary>
-		Japanese_Japan = 1041,
+		Japanese__Japan = 1041,
 		/// <summary>
-		/// Kazakh_Kazakhstan = 1087
+		/// Kazakh - Kazakhstan = 1087
 		/// </summary>
-		Kazakh_Kazakhstan = 1087,
+		Kazakh__Kazakhstan = 1087,
 		/// <summary>
-		/// Korean_Korea = 1042
+		/// Korean - Korea = 1042
 		/// </summary>
-		Korean_Korea = 1042,
+		Korean__Korea = 1042,
 		/// <summary>
-		/// Latvian_Latvia = 1062
+		/// Latvian - Latvia = 1062
 		/// </summary>
-		Latvian_Latvia = 1062,
+		Latvian__Latvia = 1062,
 		/// <summary>
-		/// Lithuanian_Lithuania = 1063
+		/// Lithuanian - Lithuania = 1063
 		/// </summary>
-		Lithuanian_Lithuania = 1063,
+		Lithuanian__Lithuania = 1063,
 		/// <summary>
-		/// Malay_Malaysia = 1086
+		/// Malay - Malaysia = 1086
 		/// </summary>
-		Malay_Malaysia = 1086,
+		Malay__Malaysia = 1086,
 		/// <summary>
-		/// Norwegian_Bokmal_Norway = 1044
+		/// Norwegian Bokmal - Norway = 1044
 		/// </summary>
-		Norwegian_Bokmal_Norway = 1044,
+		Norwegian_Bokmal__Norway = 1044,
 		/// <summary>
-		/// Polish_Poland = 1045
+		/// Polish - Poland = 1045
 		/// </summary>
-		Polish_Poland = 1045,
+		Polish__Poland = 1045,
 		/// <summary>
-		/// Portuguese_Brazil = 1046
+		/// Portuguese - Brazil = 1046
 		/// </summary>
-		Portuguese_Brazil = 1046,
+		Portuguese__Brazil = 1046,
 		/// <summary>
-		/// Portuguese_Portugal = 2070
+		/// Portuguese - Portugal = 2070
 		/// </summary>
-		Portuguese_Portugal = 2070,
+		Portuguese__Portugal = 2070,
 		/// <summary>
-		/// Romanian_Romania = 1048
+		/// Romanian - Romania = 1048
 		/// </summary>
-		Romanian_Romania = 1048,
+		Romanian__Romania = 1048,
 		/// <summary>
-		/// Russian_Russia = 1049
+		/// Russian - Russia = 1049
 		/// </summary>
-		Russian_Russia = 1049,
+		Russian__Russia = 1049,
 		/// <summary>
-		/// Serbian_Cyrillic_Serbia = 3098
+		/// Serbian (Cyrillic) - Serbia = 3098
 		/// </summary>
-		Serbian_Cyrillic_Serbia = 3098,
+		Serbian_Cyrillic__Serbia = 3098,
 		/// <summary>
-		/// Serbian_Latin_Serbia = 2074
+		/// Serbian (Latin) - Serbia = 2074
 		/// </summary>
-		Serbian_Latin_Serbia = 2074,
+		Serbian_Latin__Serbia = 2074,
 		/// <summary>
-		/// Slovak_Slovakia = 1051
+		/// Slovak - Slovakia = 1051
 		/// </summary>
-		Slovak_Slovakia = 1051,
+		Slovak__Slovakia = 1051,
 		/// <summary>
-		/// Slovenian_Slovenia = 1060
+		/// Slovenian - Slovenia = 1060
 		/// </summary>
-		Slovenian_Slovenia = 1060,
+		Slovenian__Slovenia = 1060,
 		/// <summary>
-		/// Spanish_Spain = 3082
+		/// Spanish - Spain = 3082
 		/// </summary>
-		Spanish_Spain = 3082,
+		Spanish__Spain = 3082,
 		/// <summary>
-		/// Swedish_Sweden = 1053
+		/// Swedish - Sweden = 1053
 		/// </summary>
-		Swedish_Sweden = 1053,
+		Swedish__Sweden = 1053,
 		/// <summary>
-		/// Thai_Thailand = 1054
+		/// Thai - Thailand = 1054
 		/// </summary>
-		Thai_Thailand = 1054,
+		Thai__Thailand = 1054,
 		/// <summary>
-		/// Turkish_Turkey = 1055
+		/// Turkish - Turkey = 1055
 		/// </summary>
-		Turkish_Turkey = 1055,
+		Turkish__Turkey = 1055,
 		/// <summary>
-		/// Ukrainian_Ukraine = 1058
+		/// Ukrainian - Ukraine = 1058
 		/// </summary>
-		Ukrainian_Ukraine = 1058,
+		Ukrainian__Ukraine = 1058,
 		/// <summary>
-		/// Vietnamese_Vietnam = 1066
+		/// Vietnamese - Vietnam = 1066
 		/// </summary>
-		Vietnamese_Vietnam = 1066
+		Vietnamese__Vietnam = 1066
 	}
 
 	public enum statecode
@@ -229,12 +229,18 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_defaultAgentInputLanguage = "msdyn_defaultagentinputlanguage";
+			public const string msdyn_dnd_presence_lookup = "msdyn_dnd_presence_lookup";
 			public const string msdyn_enable_advance_entity_routing = "msdyn_enable_advance_entity_routing";
+			public const string msdyn_enable_agent_reject_notifications = "msdyn_enable_agent_reject_notifications";
 			public const string msdyn_enable_missed_notifications = "msdyn_enable_missed_notifications";
+			public const string msdyn_enable_new_consult_exp = "msdyn_enable_new_consult_exp";
 			public const string msdyn_enable_supervisor_assign = "msdyn_enable_supervisor_assign";
 			public const string msdyn_enable_supervisor_monitor = "msdyn_enable_supervisor_monitor";
+			public const string msdyn_enable_supervisor_transfer = "msdyn_enable_supervisor_transfer";
 			public const string msdyn_enable_unified_routing_diagnostic = "msdyn_enable_unified_routing_diagnostic";
 			public const string msdyn_enable_visitorjourney = "msdyn_enable_visitorjourney";
+			public const string msdyn_enablemarkdown = "msdyn_enablemarkdown";
+			public const string msdyn_enablenewconversationform = "msdyn_enablenewconversationform";
 			public const string msdyn_EnableRealTimeTranslation = "msdyn_enablerealtimetranslation";
 			public const string msdyn_enablesoundnotifications = "msdyn_enablesoundnotifications";
 			public const string msdyn_inactive_presence_lookup = "msdyn_inactive_presence_lookup";
@@ -261,7 +267,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_omnichannelconfiguration";
 
-		public const int EntityTypeCode = 10600;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10665;
 
 		[DebuggerNonUserCode()]
 		public msdyn_omnichannelconfiguration()
@@ -390,7 +397,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Default language in which customer's messages are translated for an org</para>
+		/// <para>Default language in which customer&apos;s messages are translated for an org</para>
 		/// <para>Picklist</para>
 		/// <para>Default input language</para>
 		/// </summary>
@@ -413,6 +420,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Lookup to display DND presence.</para>
+		/// <para>Lookup to msdyn_presence</para>
+		/// <para>DND Presnce</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_dnd_presence_lookup
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_dnd_presence_lookup); }
+			set { Entity.Attributes[Fields.msdyn_dnd_presence_lookup] = value; }
+		}
+
+		/// <summary>
 		/// <para>Setting to change advance entity routing for the org.</para>
 		/// <para>Boolean</para>
 		/// <para>Enable advance entity routing</para>
@@ -425,6 +444,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Setting to change agent status when agent rejects a notification.</para>
+		/// <para>Boolean</para>
+		/// <para>Enable Agent Reject Notification Setting</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enable_agent_reject_notifications
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_agent_reject_notifications); }
+			set { Entity.Attributes[Fields.msdyn_enable_agent_reject_notifications] = value; }
+		}
+
+		/// <summary>
 		/// <para>Setting to change agent status when a notification has been missed.</para>
 		/// <para>Boolean</para>
 		/// <para>Enable missed notifications setting</para>
@@ -434,6 +465,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_missed_notifications); }
 			set { Entity.Attributes[Fields.msdyn_enable_missed_notifications] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable new consult experience</para>
+		/// <para>Boolean</para>
+		/// <para>Enable new consult experience</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enable_new_consult_exp
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_new_consult_exp); }
+			set { Entity.Attributes[Fields.msdyn_enable_new_consult_exp] = value; }
 		}
 
 		/// <summary>
@@ -461,6 +504,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Enables supervisor transfer feature for the org</para>
+		/// <para>Required - Boolean</para>
+		/// <para>Enable supervisor transfer</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enable_supervisor_transfer
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_supervisor_transfer); }
+			set { Entity.Attributes[Fields.msdyn_enable_supervisor_transfer] = value; }
+		}
+
+		/// <summary>
 		/// <para>Setting to change unified routing diagnostic for the org.</para>
 		/// <para>Boolean</para>
 		/// <para>Enable unified routing diagnostic</para>
@@ -482,6 +537,30 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enable_visitorjourney); }
 			set { Entity.Attributes[Fields.msdyn_enable_visitorjourney] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable markdown support for messages</para>
+		/// <para>Boolean</para>
+		/// <para>Enable Markdown</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enablemarkdown
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enablemarkdown); }
+			set { Entity.Attributes[Fields.msdyn_enablemarkdown] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable new conversation form feature</para>
+		/// <para>Boolean</para>
+		/// <para>Enable new conversation form</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_enablenewconversationform
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_enablenewconversationform); }
+			set { Entity.Attributes[Fields.msdyn_enablenewconversationform] = value; }
 		}
 
 		/// <summary>

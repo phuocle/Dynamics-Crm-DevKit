@@ -85,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "knowledgearticleincident";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9954;
 
 		[DebuggerNonUserCode()]
@@ -169,7 +170,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -246,7 +247,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Knowledge Usage.</para>
 		/// <para>Picklist</para>
-		/// <para>Knowledge Usage </para>
+		/// <para>Knowledge Usage</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.KnowledgeArticleIncidentOptionSets.KnowledgeUsage? KnowledgeUsage
@@ -313,7 +314,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

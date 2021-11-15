@@ -51,6 +51,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_AppModules = "msdyn_appmodules";
 			public const string msdyn_LayoutSchema = "msdyn_layoutschema";
 			public const string msdyn_name = "msdyn_name";
+			public const string msdyn_RecordingSecurityRoles = "msdyn_recordingsecurityroles";
 			public const string msdyn_SecurityRoles = "msdyn_securityroles";
 			public const string msdyn_teamsdialeradminsettingsId = "msdyn_teamsdialeradminsettingsid";
 			public const string OrganizationId = "organizationid";
@@ -64,7 +65,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_teamsdialeradminsettings";
 
-		public const int EntityTypeCode = 10256;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10228;
 
 		[DebuggerNonUserCode()]
 		public msdyn_teamsdialeradminsettings()
@@ -226,6 +228,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_name); }
 			set { Entity.Attributes[Fields.msdyn_name] = value; }
+		}
+
+		/// <summary>
+		/// <para>Recording security roles enabled for the settings instance</para>
+		/// <para>Memo - MaxLength: 1000000</para>
+		/// <para>Recording Security Roles List</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_RecordingSecurityRoles
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_RecordingSecurityRoles); }
+			set { Entity.Attributes[Fields.msdyn_RecordingSecurityRoles] = value; }
 		}
 
 		/// <summary>

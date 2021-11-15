@@ -81,7 +81,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_agreementbookingservice";
 
-		public const int EntityTypeCode = 10417;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10481;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementbookingservice()
@@ -335,7 +336,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the duration you want to bill the customer for. By default, this will default to the same value as the "Duration" field.</para>
+		/// <para>Enter the duration you want to bill the customer for. By default, this will default to the same value as the &quot;Duration&quot; field.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Duration To Bill</para>
 		/// </summary>
@@ -470,7 +471,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

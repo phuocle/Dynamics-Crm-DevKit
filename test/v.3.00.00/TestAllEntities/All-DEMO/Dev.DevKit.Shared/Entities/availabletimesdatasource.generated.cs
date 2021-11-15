@@ -25,7 +25,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "availabletimesdatasource";
 
-		public const int EntityTypeCode = 10110;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10122;
 
 		[DebuggerNonUserCode()]
 		public availabletimesdatasource()

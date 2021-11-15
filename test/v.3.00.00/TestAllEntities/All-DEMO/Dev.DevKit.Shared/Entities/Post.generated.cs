@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.PostOptionSets
 	public enum Source
 	{
 		/// <summary>
-		/// ActionHub_Post = 3
+		/// ActionHub Post = 3
 		/// </summary>
 		ActionHub_Post = 3,
 		/// <summary>
-		/// Auto_Post = 1
+		/// Auto Post = 1
 		/// </summary>
 		Auto_Post = 1,
 		/// <summary>
-		/// Manual_Post = 2
+		/// Manual Post = 2
 		/// </summary>
 		Manual_Post = 2
 	}
@@ -29,9 +29,9 @@ namespace Dev.DevKit.Shared.Entities.PostOptionSets
 	public enum Type
 	{
 		/// <summary>
-		/// Check_in = 1
+		/// Check-in = 1
 		/// </summary>
-		Check_in = 1,
+		Checkin = 1,
 		/// <summary>
 		/// Idea = 2
 		/// </summary>
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.PostOptionSets
 		/// </summary>
 		News = 3,
 		/// <summary>
-		/// Private_Message = 4
+		/// Private Message = 4
 		/// </summary>
 		Private_Message = 4,
 		/// <summary>
@@ -49,9 +49,9 @@ namespace Dev.DevKit.Shared.Entities.PostOptionSets
 		/// </summary>
 		Question = 5,
 		/// <summary>
-		/// Re_post = 6
+		/// Re-post = 6
 		/// </summary>
-		Re_post = 6,
+		Repost = 6,
 		/// <summary>
 		/// Status = 7
 		/// </summary>
@@ -90,6 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "post";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 8000;
 
 		[DebuggerNonUserCode()]
@@ -281,7 +282,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the regarding object.</para>
-		/// <para>ReadOnly - Owner</para>
+		/// <para>ReadOnly - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -316,9 +317,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.PostOptionSets.Source)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.Source] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.Source] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.Source] = null;
+			}
 		}
 
 		/// <summary>
@@ -360,9 +364,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.PostOptionSets.Type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.Type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.Type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.Type] = null;
+			}
 		}
 
 		/// <summary>

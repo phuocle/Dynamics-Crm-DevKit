@@ -21,13 +21,13 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string Name = "name";
 			public const string OwnerId = "ownerid";
-			public const string OwnerIdType = "owneridtype";
 			public const string VersionNumber = "versionnumber";
 			public const string YomiName = "yominame";
 		}
 
 		public const string EntityLogicalName = "owner";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 7;
 
 		[DebuggerNonUserCode()]
@@ -103,16 +103,6 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.OwnerId] = value;
 				Entity.Id = value;
 			}
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string OwnerIdType
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.OwnerIdType); }
 		}
 
 		/// <summary>

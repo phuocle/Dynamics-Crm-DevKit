@@ -13,9 +13,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_playbookactivityattributeOptionSets
 	public enum msdyn_attributeType
 	{
 		/// <summary>
-		/// _string = 1
+		/// string = 1
 		/// </summary>
-		_string = 1,
+		@string = 1,
 		/// <summary>
 		/// boolean = 4
 		/// </summary>
@@ -91,7 +91,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_playbookactivityattribute";
 
-		public const int EntityTypeCode = 10200;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10213;
 
 		[DebuggerNonUserCode()]
 		public msdyn_playbookactivityattribute()
@@ -246,9 +247,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_playbookactivityattributeOptionSets.msdyn_attributeType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_attributeType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_attributeType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_attributeType] = null;
+			}
 		}
 
 		/// <summary>
@@ -305,7 +309,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

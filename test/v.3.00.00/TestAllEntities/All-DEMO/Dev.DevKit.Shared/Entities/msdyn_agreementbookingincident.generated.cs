@@ -73,7 +73,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_agreementbookingincident";
 
-		public const int EntityTypeCode = 10415;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10479;
 
 		[DebuggerNonUserCode()]
 		public msdyn_agreementbookingincident()
@@ -278,7 +279,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Agreement Booking Incident's functional location.</para>
+		/// <para>Agreement Booking Incident&apos;s functional location.</para>
 		/// <para>Lookup to msdyn_functionallocation</para>
 		/// <para>Functional Location</para>
 		/// </summary>
@@ -348,7 +349,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -415,7 +416,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the Agreement Booking Incident's status.</para>
+		/// <para>Select the Agreement Booking Incident&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

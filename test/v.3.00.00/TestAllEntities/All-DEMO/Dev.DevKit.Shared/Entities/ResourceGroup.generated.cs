@@ -37,7 +37,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string GroupTypeCode = "grouptypecode";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string Name = "name";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string OrganizationId = "organizationid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string ResourceGroupId = "resourcegroupid";
@@ -48,6 +47,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "resourcegroup";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4005;
 
 		[DebuggerNonUserCode()]
@@ -155,18 +155,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Name); }
 			set { Entity.Attributes[Fields.Name] = value; }
-		}
-
-		/// <summary>
-		/// <para>Type of entity with which the scheduling group is associated.</para>
-		/// <para>EntityName</para>
-		/// <para>Entity</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-			set { Entity.Attributes[Fields.ObjectTypeCode] = value; }
 		}
 
 		/// <summary>

@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.BusinessUnitNewsArticleOptionSets
 	public enum ArticleTypeCode
 	{
 		/// <summary>
-		/// All_Users = 1
+		/// All Users = 1
 		/// </summary>
 		All_Users = 1,
 		/// <summary>
-		/// Sales_Users = 2
+		/// Sales Users = 2
 		/// </summary>
 		Sales_Users = 2,
 		/// <summary>
-		/// Service_Users = 3
+		/// Service Users = 3
 		/// </summary>
 		Service_Users = 3
 	}
@@ -57,6 +57,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "businessunitnewsarticle";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 132;
 
 		[DebuggerNonUserCode()]

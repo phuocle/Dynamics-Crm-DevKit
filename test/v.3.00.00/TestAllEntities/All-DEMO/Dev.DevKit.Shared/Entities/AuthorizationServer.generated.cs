@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.AuthorizationServerOptionSets
 	public enum AuthorizationServerType
 	{
 		/// <summary>
-		/// Access_Control_Service = 0
+		/// Access Control Service = 0
 		/// </summary>
 		Access_Control_Service = 0,
 		/// <summary>
-		/// Evolved_STS = 1
+		/// Evolved STS = 1
 		/// </summary>
 		Evolved_STS = 1
 	}
@@ -78,6 +78,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "authorizationserver";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1094;
 
 		[DebuggerNonUserCode()]
@@ -332,7 +333,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the authorization server's status.</para>
+		/// <para>Select the authorization server&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

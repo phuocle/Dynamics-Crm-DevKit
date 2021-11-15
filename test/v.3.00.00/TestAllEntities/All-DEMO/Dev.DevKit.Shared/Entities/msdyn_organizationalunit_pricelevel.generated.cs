@@ -27,7 +27,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_organizationalunit_pricelevel";
 
-		public const int EntityTypeCode = 10400;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10463;
 
 		[DebuggerNonUserCode()]
 		public msdyn_organizationalunit_pricelevel()

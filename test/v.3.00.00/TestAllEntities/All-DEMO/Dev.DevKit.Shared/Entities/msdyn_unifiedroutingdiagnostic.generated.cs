@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_unifiedroutingdiagnosticOptionSets
 		/// </summary>
 		Assignment = 6,
 		/// <summary>
-		/// Assignment_Selection_Criteria = 9
+		/// Assignment Selection Criteria = 9
 		/// </summary>
 		Assignment_Selection_Criteria = 9,
 		/// <summary>
-		/// Demand_Classification = 1
+		/// Demand Classification = 1
 		/// </summary>
 		Demand_Classification = 1,
 		/// <summary>
@@ -37,11 +37,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_unifiedroutingdiagnosticOptionSets
 		/// </summary>
 		Prioritization = 5,
 		/// <summary>
-		/// Route_To_Queue = 2
+		/// Route To Queue = 2
 		/// </summary>
 		Route_To_Queue = 2,
 		/// <summary>
-		/// Skill_Identification = 3
+		/// Skill Identification = 3
 		/// </summary>
 		Skill_Identification = 3
 	}
@@ -111,7 +111,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_unifiedroutingdiagnostic";
 
-		public const int EntityTypeCode = 10545;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10614;
 
 		[DebuggerNonUserCode()]
 		public msdyn_unifiedroutingdiagnostic()
@@ -424,7 +425,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

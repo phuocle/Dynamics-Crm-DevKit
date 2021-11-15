@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsimltrainingOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -37,39 +37,39 @@ namespace Dev.DevKit.Shared.Entities.msdyn_ocsimltrainingOptionSets
 		/// </summary>
 		Draft = 192350000,
 		/// <summary>
-		/// Loading_Data = 326340008
+		/// Loading Data = 326340008
 		/// </summary>
 		Loading_Data = 326340008,
 		/// <summary>
-		/// Publish_completed = 326340003
+		/// Publish completed = 326340003
 		/// </summary>
 		Publish_completed = 326340003,
 		/// <summary>
-		/// Publish_config_created = 326340007
+		/// Publish config created = 326340007
 		/// </summary>
 		Publish_config_created = 326340007,
 		/// <summary>
-		/// Publish_failed = 326340002
+		/// Publish failed = 326340002
 		/// </summary>
 		Publish_failed = 326340002,
 		/// <summary>
-		/// Publish_in_progress = 326340000
+		/// Publish in progress = 326340000
 		/// </summary>
 		Publish_in_progress = 326340000,
 		/// <summary>
-		/// Train_config_created = 326340001
+		/// Train config created = 326340001
 		/// </summary>
 		Train_config_created = 326340001,
 		/// <summary>
-		/// Training_completed = 326340006
+		/// Training completed = 326340006
 		/// </summary>
 		Training_completed = 326340006,
 		/// <summary>
-		/// Training_failed = 326340004
+		/// Training failed = 326340004
 		/// </summary>
 		Training_failed = 326340004,
 		/// <summary>
-		/// Training_in_progress = 326340005
+		/// Training in progress = 326340005
 		/// </summary>
 		Training_in_progress = 326340005
 	}
@@ -143,7 +143,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsimltraining";
 
-		public const int EntityTypeCode = 10622;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10698;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsimltraining()
@@ -481,7 +482,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

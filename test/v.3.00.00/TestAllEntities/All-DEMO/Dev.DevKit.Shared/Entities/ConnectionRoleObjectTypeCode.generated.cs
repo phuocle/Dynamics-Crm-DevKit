@@ -19,7 +19,6 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		public struct Fields
 		{
-			public const string AssociatedObjectTypeCode = "associatedobjecttypecode";
 			public const string ConnectionRoleId = "connectionroleid";
 			public const string ConnectionRoleObjectTypeCodeId = "connectionroleobjecttypecodeid";
 			public const string OrganizationId = "organizationid";
@@ -28,6 +27,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "connectionroleobjecttypecode";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 3233;
 
 		[DebuggerNonUserCode()]
@@ -79,17 +79,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string AssociatedObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.AssociatedObjectTypeCode); }
-			set { Entity.Attributes[Fields.AssociatedObjectTypeCode] = value; }
-		}
-
-		/// <summary>
 		/// <para>Unique identifier of the connection role associated with the Connection Role Object Type Code.</para>
 		/// <para>Lookup to connectionrole</para>
 		/// <para>Connection Role</para>
@@ -120,7 +109,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier of the organization associated with the connectionroleobjecttypecode.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para>Organization </para>
+		/// <para>Organization</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? OrganizationId

@@ -64,7 +64,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string AttributeExchangeName = "attributeexchangename";
 			public const string ComputedProperties = "computedproperties";
 			public const string DefaultSyncDirection = "defaultsyncdirection";
-			public const string EntityTypeCode = "entitytypecode";
 			public const string IsComputed = "iscomputed";
 			public const string MappingName = "mappingname";
 			public const string OrganizationId = "organizationid";
@@ -77,6 +76,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "principalsyncattributemap";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1404;
 
 		[DebuggerNonUserCode()]
@@ -220,18 +220,6 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.DefaultSyncDirection] = null;
 			}
-		}
-
-		/// <summary>
-		/// <para>Object type code for the entity.</para>
-		/// <para>EntityName</para>
-		/// <para>Name of the Entity for which this attribute mapping is defined</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string EntityTypeCode1
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.EntityTypeCode); }
-			set { Entity.Attributes[Fields.EntityTypeCode] = value; }
 		}
 
 		/// <summary>

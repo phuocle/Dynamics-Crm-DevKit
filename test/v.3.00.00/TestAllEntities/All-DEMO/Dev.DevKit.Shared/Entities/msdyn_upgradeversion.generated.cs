@@ -82,7 +82,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_upgradeversion";
 
-		public const int EntityTypeCode = 10106;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10118;
 
 		[DebuggerNonUserCode()]
 		public msdyn_upgradeversion()

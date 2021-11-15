@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotpropertydefinitionOptionSets
 		/// </summary>
 		Boolean = 192350003,
 		/// <summary>
-		/// Date_and_Time = 192350002
+		/// Date and Time = 192350002
 		/// </summary>
 		Date_and_Time = 192350002,
 		/// <summary>
-		/// Decimal_Number = 192350005
+		/// Decimal Number = 192350005
 		/// </summary>
 		Decimal_Number = 192350005,
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotpropertydefinitionOptionSets
 		/// </summary>
 		String = 192350000,
 		/// <summary>
-		/// Whole_Number = 192350004
+		/// Whole Number = 192350004
 		/// </summary>
 		Whole_Number = 192350004
 	}
@@ -98,7 +98,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotpropertydefinition";
 
-		public const int EntityTypeCode = 10136;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10148;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotpropertydefinition()
@@ -303,9 +304,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_iotpropertydefinitionOptionSets.msdyn_Type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Type] = null;
+			}
 		}
 
 		/// <summary>
@@ -345,7 +349,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

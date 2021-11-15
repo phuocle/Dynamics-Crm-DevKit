@@ -63,7 +63,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_casetopic_incident";
 
-		public const int EntityTypeCode = 10195;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10207;
 
 		[DebuggerNonUserCode()]
 		public msdyn_casetopic_incident()

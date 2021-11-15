@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.PrivilegeObjectTypeCodesOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -40,7 +40,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ComponentState = "componentstate";
 			public const string IntroducedVersion = "introducedversion";
 			public const string IsManaged = "ismanaged";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string OverwriteTime = "overwritetime";
 			public const string PrivilegeId = "privilegeid";
 			public const string PrivilegeObjectTypeCodeId = "privilegeobjecttypecodeid";
@@ -52,6 +51,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "privilegeobjecttypecodes";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 31;
 
 		[DebuggerNonUserCode()]
@@ -139,18 +139,6 @@ namespace Dev.DevKit.Shared.Entities
 		public bool? IsManaged
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.IsManaged); }
-		}
-
-		/// <summary>
-		/// <para>For internal use only.</para>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-			set { Entity.Attributes[Fields.ObjectTypeCode] = value; }
 		}
 
 		/// <summary>

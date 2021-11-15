@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.EntitlementTemplateOptionSets
 	public enum AllocationTypeCode
 	{
 		/// <summary>
-		/// Number_of_cases = 0
+		/// Number of cases = 0
 		/// </summary>
 		Number_of_cases = 0,
 		/// <summary>
-		/// Number_of_hours = 1
+		/// Number of hours = 1
 		/// </summary>
 		Number_of_hours = 1
 	}
@@ -25,11 +25,11 @@ namespace Dev.DevKit.Shared.Entities.EntitlementTemplateOptionSets
 	public enum DecreaseRemainingOn
 	{
 		/// <summary>
-		/// Case_Creation = 1
+		/// Case Creation = 1
 		/// </summary>
 		Case_Creation = 1,
 		/// <summary>
-		/// Case_Resolution = 0
+		/// Case Resolution = 0
 		/// </summary>
 		Case_Resolution = 0
 	}
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementTemplateOptionSets
 		/// </summary>
 		Case = 0,
 		/// <summary>
-		/// Work_Order = 192350000
+		/// Work Order = 192350000
 		/// </summary>
 		Work_Order = 192350000
 	}
@@ -99,6 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "entitlementtemplate";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9702;
 
 		[DebuggerNonUserCode()]
@@ -229,7 +230,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type additional information to describe the account, such as an excerpt from the company's website.</para>
+		/// <para>Type additional information to describe the account, such as an excerpt from the company&apos;s website.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Description</para>
 		/// </summary>
@@ -283,9 +284,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.EntitlementTemplateOptionSets.entitytype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.entitytype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.entitytype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.entitytype] = null;
+			}
 		}
 
 		/// <summary>

@@ -13,23 +13,23 @@ namespace Dev.DevKit.Shared.Entities.msdyn_problematicassetfeedbackOptionSets
 	public enum msdyn_NumberOfDays
 	{
 		/// <summary>
-		/// _0 = 192350000
+		/// 0 = 192350000
 		/// </summary>
 		_0 = 192350000,
 		/// <summary>
-		/// _15 = 192350001
+		/// 15 = 192350001
 		/// </summary>
 		_15 = 192350001,
 		/// <summary>
-		/// _30 = 192350002
+		/// 30 = 192350002
 		/// </summary>
 		_30 = 192350002,
 		/// <summary>
-		/// _60 = 192350003
+		/// 60 = 192350003
 		/// </summary>
 		_60 = 192350003,
 		/// <summary>
-		/// _90 = 192350004
+		/// 90 = 192350004
 		/// </summary>
 		_90 = 192350004
 	}
@@ -148,7 +148,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_problematicassetfeedback";
 
-		public const int EntityTypeCode = 10507;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10571;
 
 		[DebuggerNonUserCode()]
 		public msdyn_problematicassetfeedback()
@@ -327,9 +328,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_problematicassetfeedbackOptionSets.msdyn_NumberOfDays)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_NumberOfDays] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_NumberOfDays] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_NumberOfDays] = null;
+			}
 		}
 
 		/// <summary>
@@ -421,9 +425,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_problematicassetfeedbackOptionSets.msdyn_Suggestion)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Suggestion] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Suggestion] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Suggestion] = null;
+			}
 		}
 
 		/// <summary>
@@ -463,7 +470,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

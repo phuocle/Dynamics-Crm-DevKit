@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_pmrecordingOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -149,7 +149,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_pmrecording";
 
-		public const int EntityTypeCode = 10094;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10104;
 
 		[DebuggerNonUserCode()]
 		public msdyn_pmrecording()
@@ -402,9 +403,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_pmrecordingOptionSets.msdyn_publishingstatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_publishingstatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_publishingstatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_publishingstatus] = null;
+			}
 		}
 
 		/// <summary>
@@ -433,9 +437,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_pmrecordingOptionSets.msdyn_type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_type] = null;
+			}
 		}
 
 		/// <summary>
@@ -463,7 +470,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

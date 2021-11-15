@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_fieldserviceslaconfigurationOptionSet
 	public enum msdyn_SLAType
 	{
 		/// <summary>
-		/// Arrival_Time = 690970000
+		/// Arrival Time = 690970000
 		/// </summary>
 		Arrival_Time = 690970000
 	}
@@ -73,7 +73,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_fieldserviceslaconfiguration";
 
-		public const int EntityTypeCode = 10433;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10497;
 
 		[DebuggerNonUserCode()]
 		public msdyn_fieldserviceslaconfiguration()
@@ -243,9 +244,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_fieldserviceslaconfigurationOptionSets.msdyn_SLAType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_SLAType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_SLAType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_SLAType] = null;
+			}
 		}
 
 		/// <summary>
@@ -262,7 +266,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

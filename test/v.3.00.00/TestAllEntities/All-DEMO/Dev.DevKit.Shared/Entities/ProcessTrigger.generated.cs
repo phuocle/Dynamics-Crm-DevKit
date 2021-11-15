@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.ProcessTriggerOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.ProcessTriggerOptionSets
 		/// </summary>
 		Attribute = 1,
 		/// <summary>
-		/// Form_Tab = 2
+		/// Form Tab = 2
 		/// </summary>
 		Form_Tab = 2
 	}
@@ -45,15 +45,15 @@ namespace Dev.DevKit.Shared.Entities.ProcessTriggerOptionSets
 	public enum PipelineStage
 	{
 		/// <summary>
-		/// After_Main_Operation = 40
+		/// After Main Operation = 40
 		/// </summary>
 		After_Main_Operation = 40,
 		/// <summary>
-		/// Before_Main_Operation = 20
+		/// Before Main Operation = 20
 		/// </summary>
 		Before_Main_Operation = 20,
 		/// <summary>
-		/// Default_Value = 0
+		/// Default Value = 0
 		/// </summary>
 		Default_Value = 0
 	}
@@ -95,7 +95,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningBusinessUnit = "owningbusinessunit";
 			public const string OwningUser = "owninguser";
 			public const string PipelineStage = "pipelinestage";
-			public const string PrimaryEntityTypeCode = "primaryentitytypecode";
 			public const string ProcessId = "processid";
 			public const string ProcessTriggerId = "processtriggerid";
 			public const string ProcessTriggerIdUnique = "processtriggeridunique";
@@ -107,6 +106,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "processtrigger";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4712;
 
 		[DebuggerNonUserCode()]
@@ -334,7 +334,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -386,18 +386,6 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.PipelineStage] = null;
 			}
-		}
-
-		/// <summary>
-		/// <para>Primary entity for the process which is invoked by the event.</para>
-		/// <para>EntityName</para>
-		/// <para>Primary Entity</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryEntityTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryEntityTypeCode); }
-			set { Entity.Attributes[Fields.PrimaryEntityTypeCode] = value; }
 		}
 
 		/// <summary>

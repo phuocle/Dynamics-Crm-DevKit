@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.ManagedIdentityOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -43,7 +43,11 @@ namespace Dev.DevKit.Shared.Entities.ManagedIdentityOptionSets
 		/// <summary>
 		/// KeyVault = 1
 		/// </summary>
-		KeyVault = 1
+		KeyVault = 1,
+		/// <summary>
+		/// MicrosoftFirstPartyCertificate = 3
+		/// </summary>
+		MicrosoftFirstPartyCertificate = 3
 	}
 
 	public enum statecode
@@ -112,7 +116,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "managedidentity";
 
-		public const int EntityTypeCode = 10065;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10092;
 
 		[DebuggerNonUserCode()]
 		public ManagedIdentity()
@@ -175,7 +180,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Client Secret</para>
+		/// <para>Contains a secret for the Azure Active Directory application. Once set, it cannot be read except by Dataverse.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Client Secret</para>
 		/// </summary>
@@ -247,8 +252,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Where the Managed Identity will get the credentials to use.</para>
 		/// <para>Picklist</para>
-		/// <para>CredentialSource</para>
+		/// <para>Credential Source</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.ManagedIdentityOptionSets.CredentialSource? CredentialSource
@@ -353,7 +359,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Name</para>
+		/// <para>The name assigned to this Managed Identity.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Name</para>
 		/// </summary>
@@ -400,7 +406,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -455,7 +461,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Status of the ManagedIdentity</para>
+		/// <para>Status of the Managed Identity</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -478,7 +484,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Reason for the status of the ManagedIdentity</para>
+		/// <para>Reason for the status of the Managed Identity</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -512,7 +518,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>TenantId</para>
+		/// <para>The Id of the Azure Active Directory Tenant that the Application is part of.</para>
 		/// <para>Uniqueidentifier</para>
 		/// <para>TenantId</para>
 		/// </summary>

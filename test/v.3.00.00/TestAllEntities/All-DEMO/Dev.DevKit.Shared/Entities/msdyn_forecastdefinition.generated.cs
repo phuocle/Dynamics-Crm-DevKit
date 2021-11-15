@@ -197,9 +197,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastdefinitionOptionSets
 	public enum msdyn_quotasource
 	{
 		/// <summary>
-		/// Goal_based = 192350000
+		/// Goal-based = 192350000
 		/// </summary>
-		Goal_based = 192350000,
+		Goalbased = 192350000,
 		/// <summary>
 		/// Manual = 192350001
 		/// </summary>
@@ -229,7 +229,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_forecastdefinitionOptionSets
 		/// </summary>
 		Failed = 4,
 		/// <summary>
-		/// In_progress = 2
+		/// In progress = 2
 		/// </summary>
 		In_progress = 2,
 		/// <summary>
@@ -278,7 +278,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_forecastdefinition";
 
-		public const int EntityTypeCode = 10212;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10233;
 
 		[DebuggerNonUserCode()]
 		public msdyn_forecastdefinition()
@@ -518,9 +519,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_forecastdefinitionOptionSets.msdyn_forecastperiodtype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_forecastperiodtype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_forecastperiodtype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_forecastperiodtype] = null;
+			}
 		}
 
 		/// <summary>
@@ -562,9 +566,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_forecastdefinitionOptionSets.msdyn_quotasource)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_quotasource] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_quotasource] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_quotasource] = null;
+			}
 		}
 
 		/// <summary>
@@ -645,7 +652,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

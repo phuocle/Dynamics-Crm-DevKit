@@ -25,11 +25,11 @@ namespace Dev.DevKit.Shared.Entities.ServiceOptionSets
 		/// </summary>
 		Completed = 8,
 		/// <summary>
-		/// In_Progress = 6
+		/// In Progress = 6
 		/// </summary>
 		In_Progress = 6,
 		/// <summary>
-		/// No_Show = 10
+		/// No Show = 10
 		/// </summary>
 		No_Show = 10,
 		/// <summary>
@@ -53,11 +53,11 @@ namespace Dev.DevKit.Shared.Entities.ServiceOptionSets
 	public enum msdyn_SchedulingEngine
 	{
 		/// <summary>
-		/// Legacy_Scheduling = 0
+		/// Legacy Scheduling = 0
 		/// </summary>
 		Legacy_Scheduling = 0,
 		/// <summary>
-		/// Universal_Resource_Scheduling = 1
+		/// Universal Resource Scheduling = 1
 		/// </summary>
 		Universal_Resource_Scheduling = 1
 	}
@@ -100,6 +100,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "service";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4001;
 
 		[DebuggerNonUserCode()]
@@ -208,7 +209,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Description of activity that represents work done to satisfy a customer's need.</para>
+		/// <para>Description of activity that represents work done to satisfy a customer&apos;s need.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Description</para>
 		/// </summary>

@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotfieldmappingOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -45,15 +45,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotfieldmappingOptionSets
 	public enum msdyn_MappingType
 	{
 		/// <summary>
-		/// Device_identifier = 192350000
+		/// Device identifier = 192350000
 		/// </summary>
 		Device_identifier = 192350000,
 		/// <summary>
-		/// Device_property = 192350002
+		/// Device property = 192350002
 		/// </summary>
 		Device_property = 192350002,
 		/// <summary>
-		/// Rule_identifier = 192350001
+		/// Rule identifier = 192350001
 		/// </summary>
 		Rule_identifier = 192350001
 	}
@@ -61,11 +61,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotfieldmappingOptionSets
 	public enum msdyn_SearchType
 	{
 		/// <summary>
-		/// Direct_Path = 192350000
+		/// Direct Path = 192350000
 		/// </summary>
 		Direct_Path = 192350000,
 		/// <summary>
-		/// Key_Value_Path = 192350001
+		/// Key Value Path = 192350001
 		/// </summary>
 		Key_Value_Path = 192350001
 	}
@@ -136,7 +136,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotfieldmapping";
 
-		public const int EntityTypeCode = 10135;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10147;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotfieldmapping()
@@ -329,9 +330,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_iotfieldmappingOptionSets.msdyn_FieldDataFormat)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_FieldDataFormat] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_FieldDataFormat] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_FieldDataFormat] = null;
+			}
 		}
 
 		/// <summary>
@@ -377,13 +381,16 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_iotfieldmappingOptionSets.msdyn_MappingType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_MappingType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_MappingType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_MappingType] = null;
+			}
 		}
 
 		/// <summary>
-		/// <para>The ML model's input field name.</para>
+		/// <para>The ML model&apos;s input field name.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Model Input Field Name</para>
 		/// </summary>
@@ -454,7 +461,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

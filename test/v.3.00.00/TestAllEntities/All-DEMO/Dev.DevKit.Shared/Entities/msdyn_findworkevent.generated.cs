@@ -85,7 +85,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_findworkevent";
 
-		public const int EntityTypeCode = 10343;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10406;
 
 		[DebuggerNonUserCode()]
 		public msdyn_findworkevent()
@@ -277,9 +278,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_findworkeventOptionSets.msdyn_Type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Type] = null;
+			}
 		}
 
 		/// <summary>
@@ -318,7 +322,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

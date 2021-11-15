@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.activitymonitorOptionSets
 		/// </summary>
 		Failed = 2,
 		/// <summary>
-		/// Ready_for_Power_Automate = 1
+		/// Ready for Power Automate = 1
 		/// </summary>
 		Ready_for_Power_Automate = 1,
 		/// <summary>
-		/// Ready_for_workflow = 0
+		/// Ready for workflow = 0
 		/// </summary>
 		Ready_for_workflow = 0,
 		/// <summary>
@@ -33,59 +33,67 @@ namespace Dev.DevKit.Shared.Entities.activitymonitorOptionSets
 	public enum Reason
 	{
 		/// <summary>
-		/// __0 = 0
+		/// -- = 0
 		/// </summary>
 		__0 = 0,
 		/// <summary>
-		/// __12 = 12
+		/// -- = 12
 		/// </summary>
 		__12 = 12,
 		/// <summary>
-		/// __8 = 8
+		/// -- = 8
 		/// </summary>
 		__8 = 8,
 		/// <summary>
-		/// A_contact_was_not_created_for_this_sender_This_can_be_that_the_rule_owner_doesnt_have_permission_to_create_contacts = 9
+		/// A contact was not created for this sender. This can be that the rule owner doesn't have permission to create contacts. = 9
 		/// </summary>
 		A_contact_was_not_created_for_this_sender_This_can_be_that_the_rule_owner_doesnt_have_permission_to_create_contacts = 9,
 		/// <summary>
-		/// A_resolved_case_is_already_connected_with_this_record = 4
+		/// A resolved case is already connected with this record. = 4
 		/// </summary>
 		A_resolved_case_is_already_connected_with_this_record = 4,
 		/// <summary>
-		/// An_active_case_is_already_connected_with_this_record = 3
+		/// An active case is already connected with this record. = 3
 		/// </summary>
 		An_active_case_is_already_connected_with_this_record = 3,
 		/// <summary>
-		/// An_existing_entity_is_already_connected_with_this_record = 2
+		/// An existing entity is already connected with this record. = 2
 		/// </summary>
 		An_existing_entity_is_already_connected_with_this_record = 2,
 		/// <summary>
-		/// Email_is_coming_from_an_unknown_sender = 7
+		/// Email is coming from an unknown sender. = 7
 		/// </summary>
 		Email_is_coming_from_an_unknown_sender = 7,
 		/// <summary>
-		/// No_email_sender_is_found = 6
+		/// No email sender is found. = 6
 		/// </summary>
 		No_email_sender_is_found = 6,
 		/// <summary>
-		/// No_valid_entitlement_for_this_email_sender = 11
+		/// No valid entitlement for this email sender. = 11
 		/// </summary>
 		No_valid_entitlement_for_this_email_sender = 11,
 		/// <summary>
-		/// No_valid_entitlement_for_this_email_sender_The_rule_continued_with_any_additional_action_selected_but_skipped_the_primary_action_for_this_email_sender = 10
+		/// No valid entitlement for this email sender. The rule continued with any additional action selected, but skipped the primary action for this email sender. = 10
 		/// </summary>
 		No_valid_entitlement_for_this_email_sender_The_rule_continued_with_any_additional_action_selected_but_skipped_the_primary_action_for_this_email_sender = 10,
 		/// <summary>
-		/// The_rule_doesnt_have_any_conditions_applicable_to_the_record = 13
+		/// The rule doesn’t have any conditions applicable to the record. = 13
 		/// </summary>
 		The_rule_doesnt_have_any_conditions_applicable_to_the_record = 13,
 		/// <summary>
-		/// The_rule_requires_a_connected_case_to_be_resolved_for_a_specific_amount_of_time_before_creating_a_new_one_This_connected_case_has_been_resolved_for_less_than_the_amount_of_time_selected = 5
+		/// The rule is disconnected from the Power Automate flow. To reconnect, please deactivate and reactivate the rule. = 14
+		/// </summary>
+		The_rule_is_disconnected_from_the_Power_Automate_flow_To_reconnect_please_deactivate_and_reactivate_the_rule = 14,
+		/// <summary>
+		/// The rule is disconnected from the workflow. To reconnect, please deactivate and reactivate the rule. = 15
+		/// </summary>
+		The_rule_is_disconnected_from_the_workflow_To_reconnect_please_deactivate_and_reactivate_the_rule = 15,
+		/// <summary>
+		/// The rule requires a connected case to be resolved for a specific amount of time before creating a new one. This connected case has been resolved for less than the amount of time selected. = 5
 		/// </summary>
 		The_rule_requires_a_connected_case_to_be_resolved_for_a_specific_amount_of_time_before_creating_a_new_one_This_connected_case_has_been_resolved_for_less_than_the_amount_of_time_selected = 5,
 		/// <summary>
-		/// Unable_to_find_the_source_data_for_this_email = 1
+		/// Unable to find the source data for this email. = 1
 		/// </summary>
 		Unable_to_find_the_source_data_for_this_email = 1
 	}
@@ -152,7 +160,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "activitymonitor";
 
-		public const int EntityTypeCode = 10107;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10119;
 
 		[DebuggerNonUserCode()]
 		public activitymonitor()
@@ -405,7 +414,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

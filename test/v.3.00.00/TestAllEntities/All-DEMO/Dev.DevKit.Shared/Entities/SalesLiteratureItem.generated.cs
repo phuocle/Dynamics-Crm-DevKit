@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.SalesLiteratureItemOptionSets
 	public enum FileTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -56,6 +56,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "salesliteratureitem";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1070;
 
 		[DebuggerNonUserCode()]
@@ -340,7 +341,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier of the organization associated with the document.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para>Organization </para>
+		/// <para>Organization</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? OrganizationId

@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 	public enum BusinessProcessType
 	{
 		/// <summary>
-		/// Business_Flow = 0
+		/// Business Flow = 0
 		/// </summary>
 		Business_Flow = 0,
 		/// <summary>
-		/// Task_Flow = 1
+		/// Task Flow = 1
 		/// </summary>
 		Task_Flow = 1
 	}
@@ -29,15 +29,15 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// </summary>
 		Action = 3,
 		/// <summary>
-		/// Business_Process_Flow = 4
+		/// Business Process Flow = 4
 		/// </summary>
 		Business_Process_Flow = 4,
 		/// <summary>
-		/// Business_Rule = 2
+		/// Business Rule = 2
 		/// </summary>
 		Business_Rule = 2,
 		/// <summary>
-		/// Desktop_Flow = 6
+		/// Desktop Flow = 6
 		/// </summary>
 		Desktop_Flow = 6,
 		/// <summary>
@@ -45,9 +45,13 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// </summary>
 		Dialog = 1,
 		/// <summary>
-		/// Modern_Flow = 5
+		/// Modern Flow = 5
 		/// </summary>
 		Modern_Flow = 5,
+		/// <summary>
+		/// Web Client API Flow = 9000
+		/// </summary>
+		Web_Client_API_Flow = 9000,
 		/// <summary>
 		/// Workflow = 0
 		/// </summary>
@@ -61,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -77,25 +81,25 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 	public enum CreateStage
 	{
 		/// <summary>
-		/// Post_operation = 40
+		/// Post-operation = 40
 		/// </summary>
-		Post_operation = 40,
+		Postoperation = 40,
 		/// <summary>
-		/// Pre_operation = 20
+		/// Pre-operation = 20
 		/// </summary>
-		Pre_operation = 20
+		Preoperation = 20
 	}
 
 	public enum DeleteStage
 	{
 		/// <summary>
-		/// Post_operation = 40
+		/// Post-operation = 40
 		/// </summary>
-		Post_operation = 40,
+		Postoperation = 40,
 		/// <summary>
-		/// Pre_operation = 20
+		/// Pre-operation = 20
 		/// </summary>
-		Pre_operation = 20
+		Preoperation = 20
 	}
 
 	public enum Mode
@@ -105,9 +109,9 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// </summary>
 		Background = 0,
 		/// <summary>
-		/// Real_time = 1
+		/// Real-time = 1
 		/// </summary>
-		Real_time = 1
+		Realtime = 1
 	}
 
 	public enum ProcessTriggerScope
@@ -125,7 +129,7 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 	public enum RunAs
 	{
 		/// <summary>
-		/// Calling_User = 1
+		/// Calling User = 1
 		/// </summary>
 		Calling_User = 1,
 		/// <summary>
@@ -137,7 +141,7 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 	public enum Scope
 	{
 		/// <summary>
-		/// Business_Unit = 2
+		/// Business Unit = 2
 		/// </summary>
 		Business_Unit = 2,
 		/// <summary>
@@ -145,7 +149,7 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// </summary>
 		Organization = 4,
 		/// <summary>
-		/// Parent_Child_Business_Units = 3
+		/// Parent: Child Business Units = 3
 		/// </summary>
 		Parent_Child_Business_Units = 3,
 		/// <summary>
@@ -163,7 +167,11 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// <summary>
 		/// Draft = 0
 		/// </summary>
-		Draft = 0
+		Draft = 0,
+		/// <summary>
+		/// Suspended = 2
+		/// </summary>
+		Suspended = 2
 	}
 
 	public enum StatusCode
@@ -172,6 +180,10 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// Activated = 2
 		/// </summary>
 		Activated = 2,
+		/// <summary>
+		/// CompanyDLPViolation = 3
+		/// </summary>
+		CompanyDLPViolation = 3,
 		/// <summary>
 		/// Draft = 1
 		/// </summary>
@@ -197,7 +209,7 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 	public enum UIFlowType
 	{
 		/// <summary>
-		/// Power_Automate_Desktop = 2
+		/// Power Automate Desktop = 2
 		/// </summary>
 		Power_Automate_Desktop = 2,
 		/// <summary>
@@ -205,11 +217,11 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 		/// </summary>
 		Recording = 101,
 		/// <summary>
-		/// Selenium_IDE = 1
+		/// Selenium IDE = 1
 		/// </summary>
 		Selenium_IDE = 1,
 		/// <summary>
-		/// Windows_recorder_V1 = 0
+		/// Windows recorder (V1) = 0
 		/// </summary>
 		Windows_recorder_V1 = 0
 	}
@@ -217,13 +229,13 @@ namespace Dev.DevKit.Shared.Entities.WorkflowOptionSets
 	public enum UpdateStage
 	{
 		/// <summary>
-		/// Post_operation = 40
+		/// Post-operation = 40
 		/// </summary>
-		Post_operation = 40,
+		Postoperation = 40,
 		/// <summary>
-		/// Pre_operation = 20
+		/// Pre-operation = 20
 		/// </summary>
-		Pre_operation = 20
+		Preoperation = 20
 	}
 }
 
@@ -266,13 +278,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningUser = "owninguser";
 			public const string ParentWorkflowId = "parentworkflowid";
 			public const string PluginTypeId = "plugintypeid";
-			public const string PrimaryEntity = "primaryentity";
 			public const string ProcessOrder = "processorder";
 			public const string ProcessRoleAssignment = "processroleassignment";
 			public const string ProcessTriggerFormId = "processtriggerformid";
 			public const string ProcessTriggerScope = "processtriggerscope";
 			public const string Rank = "rank";
-			public const string RendererObjectTypeCode = "rendererobjecttypecode";
 			public const string RunAs = "runas";
 			public const string Scope = "scope";
 			public const string SdkMessageId = "sdkmessageid";
@@ -285,6 +295,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string TriggerOnCreate = "triggeroncreate";
 			public const string TriggerOnDelete = "triggerondelete";
 			public const string TriggerOnUpdateAttributeList = "triggeronupdateattributelist";
+			public const string TrustedAccess = "trustedaccess";
 			public const string Type = "type";
 			public const string UIData = "uidata";
 			public const string UIFlowType = "uiflowtype";
@@ -298,6 +309,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "workflow";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4703;
 
 		[DebuggerNonUserCode()]
@@ -722,7 +734,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the process.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -785,18 +797,6 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference PluginTypeId
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.PluginTypeId); }
-		}
-
-		/// <summary>
-		/// <para>Primary entity for the process. The process can be associated for one or more SDK operations defined on the primary entity.</para>
-		/// <para>EntityName</para>
-		/// <para>Primary Entity</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryEntity
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryEntity); }
-			set { Entity.Attributes[Fields.PrimaryEntity] = value; }
 		}
 
 		/// <summary>
@@ -871,18 +871,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The renderer type of Workflow</para>
-		/// <para>EntityName</para>
-		/// <para>Renderer Type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string RendererObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.RendererObjectTypeCode); }
-			set { Entity.Attributes[Fields.RendererObjectTypeCode] = value; }
-		}
-
-		/// <summary>
 		/// <para>Specifies the system user account under which a workflow executes.</para>
 		/// <para>Picklist</para>
 		/// <para>Run As User</para>
@@ -951,7 +939,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Status of the process.</para>
+		/// <para>Status of the workflow</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -974,7 +962,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Additional information about status of the process.</para>
+		/// <para>Reason for the status of the workflow</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -1065,6 +1053,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.TriggerOnUpdateAttributeList); }
 			set { Entity.Attributes[Fields.TriggerOnUpdateAttributeList] = value; }
+		}
+
+		/// <summary>
+		/// <para>For Internal Use Only.</para>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para>Trusted Access</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? TrustedAccess
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.TrustedAccess); }
 		}
 
 		/// <summary>

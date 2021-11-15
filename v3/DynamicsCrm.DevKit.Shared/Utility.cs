@@ -74,7 +74,7 @@ namespace DynamicsCrm.DevKit.Shared
                 string data;
                 var executingAssembly = Assembly.GetExecutingAssembly();
                 var directoryName = Path.GetDirectoryName(executingAssembly.Location);
-                var assembly = Assembly.LoadFile(Path.Combine(directoryName, "Const.PLDynamicsCrmDevKitResourcesDll"));
+                var assembly = Assembly.LoadFile(Path.Combine(directoryName, Const.DynamicsCrmDevKitLibDll));
                 using (var stream = assembly.GetManifestResourceStream(path))
                 using (var reader = new StreamReader(stream ?? throw new InvalidOperationException()))
                 {

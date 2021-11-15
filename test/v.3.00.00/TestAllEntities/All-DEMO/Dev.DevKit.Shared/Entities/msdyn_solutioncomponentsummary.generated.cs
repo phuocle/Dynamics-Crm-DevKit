@@ -80,7 +80,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_solutioncomponentsummary";
 
-		public const int EntityTypeCode = 10011;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10013;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutioncomponentsummary()

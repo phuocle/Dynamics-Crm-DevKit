@@ -99,7 +99,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_transactioncategoryclassification";
 
-		public const int EntityTypeCode = 10392;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10455;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transactioncategoryclassification()
@@ -280,9 +281,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_transactioncategoryclassificationOptionSets.msdyn_transactionclassification)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_transactionclassification] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_transactionclassification] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_transactionclassification] = null;
+			}
 		}
 
 		/// <summary>

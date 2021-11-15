@@ -10,6 +10,102 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.LetterOptionSets
 {
+	public enum ActivityTypeCode
+	{
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Booking Alert = 10357
+		/// </summary>
+		Booking_Alert = 10357,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Conversation = 10644
+		/// </summary>
+		Conversation = 10644,
+		/// <summary>
+		/// Customer Voice alert = 10261
+		/// </summary>
+		Customer_Voice_alert = 10261,
+		/// <summary>
+		/// Customer Voice survey invite = 10271
+		/// </summary>
+		Customer_Voice_survey_invite = 10271,
+		/// <summary>
+		/// Customer Voice survey response = 10273
+		/// </summary>
+		Customer_Voice_survey_response = 10273,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Fax = 4204
+		/// </summary>
+		Fax = 4204,
+		/// <summary>
+		/// Letter = 4207
+		/// </summary>
+		Letter = 4207,
+		/// <summary>
+		/// Opportunity Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Order Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Outbound message = 10752
+		/// </summary>
+		Outbound_message = 10752,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Project Service Approval = 10387
+		/// </summary>
+		Project_Service_Approval = 10387,
+		/// <summary>
+		/// Quick Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quote Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Recurring Appointment = 4251
+		/// </summary>
+		Recurring_Appointment = 4251,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10659
+		/// </summary>
+		Session = 10659,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
+
 	public enum PriorityCode
 	{
 		/// <summary>
@@ -129,6 +225,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "letter";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4207;
 
 		[DebuggerNonUserCode()]
@@ -252,7 +349,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the recipients that are included in the letter distribution, but are not displayed to other recipients.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;lead;systemuser</para>
 		/// <para>Bcc</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -288,7 +385,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the recipients that should be copied on the letter.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;lead;systemuser</para>
 		/// <para>Cc</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -368,7 +465,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -380,7 +477,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, or user who sent the letter.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;lead;systemuser</para>
 		/// <para>From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -519,7 +616,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -704,7 +801,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the letter is open, completed, or canceled. Completed and canceled letters are read-only and can't be edited.</para>
+		/// <para>Shows whether the letter is open, completed, or canceled. Completed and canceled letters are read-only and can&apos;t be edited.</para>
 		/// <para>State</para>
 		/// <para>Activity Status</para>
 		/// </summary>
@@ -727,7 +824,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the letter's status.</para>
+		/// <para>Select the letter&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -799,7 +896,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, or user recipients for the letter.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;lead;systemuser</para>
 		/// <para>To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

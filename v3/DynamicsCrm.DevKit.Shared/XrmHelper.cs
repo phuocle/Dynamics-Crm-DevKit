@@ -222,8 +222,10 @@ namespace DynamicsCrm.DevKit.Shared
                 request.Requests.Add( new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = entity.ToLower() });
             var list = new List<EntityMetadata>();
             ExecuteMultipleResponse response = (ExecuteMultipleResponse)crmServiceClient.Execute(request);
-            foreach(var result in response.Responses)
-                list.Add(((RetrieveEntityResponse)result.Response).EntityMetadata);
+            foreach (var result in response.Responses)
+            {
+                if (result.Fault == null) list.Add(((RetrieveEntityResponse)result.Response).EntityMetadata);
+            }
             return list;
         }
 

@@ -48,6 +48,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_GenerateEventOnGeofenceCreating = "msdyn_generateeventongeofencecreating";
 			public const string msdyn_geofencingsettingsId = "msdyn_geofencingsettingsid";
 			public const string msdyn_minradius = "msdyn_minradius";
 			public const string msdyn_name = "msdyn_name";
@@ -66,7 +67,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_geofencingsettings";
 
-		public const int EntityTypeCode = 10518;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10582;
 
 		[DebuggerNonUserCode()]
 		public msdyn_geofencingsettings()
@@ -195,6 +197,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Generate event on geofence creation by default</para>
+		/// <para>Boolean</para>
+		/// <para>Generate Event on Geofence Creation</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_GenerateEventOnGeofenceCreating
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_GenerateEventOnGeofenceCreating); }
+			set { Entity.Attributes[Fields.msdyn_GenerateEventOnGeofenceCreating] = value; }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier for entity instances</para>
 		/// <para>Primary Key - Uniqueidentifier</para>
 		/// <para>Geofencing Settings</para>
@@ -260,7 +274,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

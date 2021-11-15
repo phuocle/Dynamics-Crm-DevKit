@@ -44,6 +44,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
+			public const string Data = "data";
 			public const string FlowSessionId = "flowsessionid";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string Metadata = "metadata";
@@ -70,7 +71,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "workflowbinary";
 
-		public const int EntityTypeCode = 10036;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10048;
 
 		[DebuggerNonUserCode()]
 		public workflowbinary()
@@ -151,6 +153,17 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference CreatedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.CreatedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Azure blob storage backed file containing the binary data</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Data</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string Data
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Data); }
 		}
 
 		/// <summary>
@@ -260,7 +273,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

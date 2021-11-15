@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SystemFormOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities.SystemFormOptionSets
 		/// </summary>
 		Card = 11,
 		/// <summary>
-		/// Contextual_Dashboard = 13
+		/// Contextual Dashboard = 13
 		/// </summary>
 		Contextual_Dashboard = 13,
 		/// <summary>
@@ -93,9 +93,9 @@ namespace Dev.DevKit.Shared.Entities.SystemFormOptionSets
 		/// </summary>
 		Main = 2,
 		/// <summary>
-		/// Main_Interactive_experience = 12
+		/// Main - Interactive experience = 12
 		/// </summary>
-		Main_Interactive_experience = 12,
+		Main__Interactive_experience = 12,
 		/// <summary>
 		/// MainBackup = 101
 		/// </summary>
@@ -105,15 +105,15 @@ namespace Dev.DevKit.Shared.Entities.SystemFormOptionSets
 		/// </summary>
 		MiniCampaignBO = 3,
 		/// <summary>
-		/// Mobile_Express = 5
+		/// Mobile - Express = 5
 		/// </summary>
-		Mobile_Express = 5,
+		Mobile__Express = 5,
 		/// <summary>
 		/// Other = 100
 		/// </summary>
 		Other = 100,
 		/// <summary>
-		/// Power_BI_Dashboard = 103
+		/// Power BI Dashboard = 103
 		/// </summary>
 		Power_BI_Dashboard = 103,
 		/// <summary>
@@ -121,15 +121,15 @@ namespace Dev.DevKit.Shared.Entities.SystemFormOptionSets
 		/// </summary>
 		Preview = 4,
 		/// <summary>
-		/// Quick_Create = 7
+		/// Quick Create = 7
 		/// </summary>
 		Quick_Create = 7,
 		/// <summary>
-		/// Quick_View_Form = 6
+		/// Quick View Form = 6
 		/// </summary>
 		Quick_View_Form = 6,
 		/// <summary>
-		/// Task_Flow_Form = 9
+		/// Task Flow Form = 9
 		/// </summary>
 		Task_Flow_Form = 9
 	}
@@ -158,7 +158,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsManaged = "ismanaged";
 			public const string IsTabletEnabled = "istabletenabled";
 			public const string Name = "name";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
 			public const string PublishedOn = "publishedon";
@@ -172,6 +171,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "systemform";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1030;
 
 		[DebuggerNonUserCode()]
@@ -446,18 +446,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Name); }
 			set { Entity.Attributes[Fields.Name] = value; }
-		}
-
-		/// <summary>
-		/// <para>Code that represents the record type.</para>
-		/// <para>EntityName</para>
-		/// <para>Entity Name</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-			set { Entity.Attributes[Fields.ObjectTypeCode] = value; }
 		}
 
 		/// <summary>

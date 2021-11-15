@@ -13,29 +13,29 @@ namespace Dev.DevKit.Shared.Entities.msdyn_workordersubstatusOptionSets
 	public enum msdyn_SystemStatus
 	{
 		/// <summary>
-		/// Closed_Canceled = 690970005
+		/// Canceled = 690970005
 		/// </summary>
-		Closed_Canceled = 690970005,
+		Canceled = 690970005,
 		/// <summary>
-		/// Closed_Posted = 690970004
+		/// Completed = 690970003
 		/// </summary>
-		Closed_Posted = 690970004,
+		Completed = 690970003,
 		/// <summary>
-		/// Open_Completed = 690970003
+		/// In Progress = 690970002
 		/// </summary>
-		Open_Completed = 690970003,
+		In_Progress = 690970002,
 		/// <summary>
-		/// Open_In_Progress = 690970002
+		/// Posted = 690970004
 		/// </summary>
-		Open_In_Progress = 690970002,
+		Posted = 690970004,
 		/// <summary>
-		/// Open_Scheduled = 690970001
+		/// Scheduled = 690970001
 		/// </summary>
-		Open_Scheduled = 690970001,
+		Scheduled = 690970001,
 		/// <summary>
-		/// Open_Unscheduled = 690970000
+		/// Unscheduled = 690970000
 		/// </summary>
-		Open_Unscheduled = 690970000
+		Unscheduled = 690970000
 	}
 
 	public enum statecode
@@ -94,7 +94,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_workordersubstatus";
 
-		public const int EntityTypeCode = 10493;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10557;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workordersubstatus()
@@ -261,9 +262,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_workordersubstatusOptionSets.msdyn_SystemStatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_SystemStatus] = null;
+			}
 		}
 
 		/// <summary>
@@ -296,7 +300,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

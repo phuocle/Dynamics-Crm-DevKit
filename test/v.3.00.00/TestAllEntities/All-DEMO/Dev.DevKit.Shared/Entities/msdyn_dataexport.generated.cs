@@ -13,19 +13,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_dataexportOptionSets
 	public enum msdyn_exportstatus
 	{
 		/// <summary>
-		/// Completed_All_records_extracted = 192350002
+		/// Completed. All records extracted. = 192350002
 		/// </summary>
 		Completed_All_records_extracted = 192350002,
 		/// <summary>
-		/// Exported_with_more_records_to_extract = 192350003
+		/// Exported with more records to extract. = 192350003
 		/// </summary>
 		Exported_with_more_records_to_extract = 192350003,
 		/// <summary>
-		/// Exporting = 192350001
+		/// Exporting. = 192350001
 		/// </summary>
 		Exporting = 192350001,
 		/// <summary>
-		/// Submitted = 192350000
+		/// Submitted. = 192350000
 		/// </summary>
 		Submitted = 192350000
 	}
@@ -90,7 +90,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_dataexport";
 
-		public const int EntityTypeCode = 10332;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10395;
 
 		[DebuggerNonUserCode()]
 		public msdyn_dataexport()
@@ -343,7 +344,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

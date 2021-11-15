@@ -20,12 +20,12 @@ namespace Dev.DevKit.Shared.Entities
 		public struct Fields
 		{
 			public const string QueueId = "queueid";
-			public const string QueueMemberCount = "queuemembercount";
 			public const string QueueMemberCountId = "queuemembercountid";
 		}
 
 		public const string EntityLogicalName = "queuemembercount";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 2024;
 
 		[DebuggerNonUserCode()]
@@ -84,16 +84,6 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? QueueId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.QueueId); }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string QueueMemberCount1
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.QueueMemberCount); }
 		}
 
 		/// <summary>

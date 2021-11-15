@@ -21,11 +21,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_orderlineresourcecategoryOptionSets
 		/// </summary>
 		Complimentary = 192350002,
 		/// <summary>
-		/// Non_Chargeable = 192350000
+		/// Non Chargeable = 192350000
 		/// </summary>
 		Non_Chargeable = 192350000,
 		/// <summary>
-		/// Not_Available = 192350003
+		/// Not Available = 192350003
 		/// </summary>
 		Not_Available = 192350003
 	}
@@ -126,7 +126,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_orderlineresourcecategory";
 
-		public const int EntityTypeCode = 10357;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10420;
 
 		[DebuggerNonUserCode()]
 		public msdyn_orderlineresourcecategory()
@@ -390,7 +391,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

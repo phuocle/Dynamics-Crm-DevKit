@@ -13,19 +13,19 @@ namespace Dev.DevKit.Shared.Entities.CanvasAppOptionSets
 	public enum CanvasAppType
 	{
 		/// <summary>
-		/// App_Component_Library = 1
+		/// App Component Library = 1
 		/// </summary>
 		App_Component_Library = 1,
 		/// <summary>
-		/// Classic_Canvas_App = 0
+		/// Classic Canvas App = 0
 		/// </summary>
 		Classic_Canvas_App = 0,
 		/// <summary>
-		/// Custom_Canvas_Page = 2
+		/// Custom Canvas Page = 2
 		/// </summary>
 		Custom_Canvas_Page = 2,
 		/// <summary>
-		/// Unified_App = 3
+		/// Unified App = 3
 		/// </summary>
 		Unified_App = 3
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.CanvasAppOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -65,8 +65,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string AppComponents = "appcomponents";
 			public const string AppOpenUri = "appopenuri";
 			public const string AppVersion = "appversion";
+			public const string Assets = "assets";
 			public const string AuthorizationReferences = "authorizationreferences";
 			public const string BackgroundColor = "backgroundcolor";
+			public const string BackgroundImage = "background_image";
 			public const string BypassConsent = "bypassconsent";
 			public const string CanConsumeAppPass = "canconsumeapppass";
 			public const string CanvasAppId = "canvasappid";
@@ -81,6 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string DatabaseReferences = "databasereferences";
 			public const string Description = "description";
 			public const string DisplayName = "displayname";
+			public const string Document = "document";
 			public const string EmbeddedApp = "embeddedapp";
 			public const string GalleryItemId = "galleryitemid";
 			public const string IntroducedVersion = "introducedversion";
@@ -89,8 +92,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsHeroApp = "isheroapp";
 			public const string IsHidden = "ishidden";
 			public const string IsManaged = "ismanaged";
+			public const string LargeIcon = "large_icon";
 			public const string LastModifiedTime = "lastmodifiedtime";
 			public const string LastPublishTime = "lastpublishtime";
+			public const string MediumIcon = "medium_icon";
 			public const string MinClientVersion = "minclientversion";
 			public const string Name = "name";
 			public const string OverwriteTime = "overwritetime";
@@ -99,15 +104,20 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
 			public const string Publisher = "publisher";
+			public const string SmallIcon = "small_icon";
 			public const string SolutionId = "solutionid";
 			public const string Status = "status";
 			public const string SupportingSolutionId = "supportingsolutionid";
 			public const string Tags = "tags";
+			public const string TeamsIcon = "teams_icon";
+			public const string UniqueCanvasAppId = "uniquecanvasappid";
 			public const string VersionNumber = "versionnumber";
+			public const string WideIcon = "wide_icon";
 		}
 
 		public const string EntityLogicalName = "canvasapp";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 300;
 
 		[DebuggerNonUserCode()]
@@ -255,6 +265,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Assets for Canvas Apps.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Assets</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string Assets
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Assets); }
+		}
+
+		/// <summary>
 		/// <para>The authorization references of the application.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para></para>
@@ -276,6 +297,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.BackgroundColor); }
 			set { Entity.Attributes[Fields.BackgroundColor] = value; }
+		}
+
+		/// <summary>
+		/// <para>Background image for Canvas Apps.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Background Image</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string BackgroundImage
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.BackgroundImage); }
 		}
 
 		/// <summary>
@@ -465,6 +497,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Document for Canvas Apps.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Document</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string Document
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.Document); }
+		}
+
+		/// <summary>
 		/// <para>Internal use. The embedded app information.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para></para>
@@ -537,7 +580,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Indicates whether the canvas app is hidden from a user's list.</para>
+		/// <para>Indicates whether the canvas app is hidden from a user&apos;s list.</para>
 		/// <para>Boolean</para>
 		/// <para>Is Hidden</para>
 		/// </summary>
@@ -557,6 +600,17 @@ namespace Dev.DevKit.Shared.Entities
 		public bool? IsManaged
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.IsManaged); }
+		}
+
+		/// <summary>
+		/// <para>Large icon for Canvas Apps.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Large Icon</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string LargeIcon
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.LargeIcon); }
 		}
 
 		/// <summary>
@@ -581,6 +635,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.LastPublishTime); }
 			set { Entity.Attributes[Fields.LastPublishTime] = value; }
+		}
+
+		/// <summary>
+		/// <para>Medium icon for Canvas Apps.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Medium Icon</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string MediumIcon
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.MediumIcon); }
 		}
 
 		/// <summary>
@@ -620,7 +685,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the canvas app.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -676,6 +741,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Small icon for Canvas Apps.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Small Icon</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string SmallIcon
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.SmallIcon); }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier of the associated solution.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
 		/// <para>Solution</para>
@@ -722,6 +798,29 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Teams icon for Canvas Apps.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Teams Icon</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string TeamsIcon
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.TeamsIcon); }
+		}
+
+		/// <summary>
+		/// <para>The globally unique canvas app id</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Unique CanvasApp Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string UniqueCanvasAppId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.UniqueCanvasAppId); }
+			set { Entity.Attributes[Fields.UniqueCanvasAppId] = value; }
+		}
+
+		/// <summary>
 		/// <para>ReadOnly - BigInt</para>
 		/// <para></para>
 		/// </summary>
@@ -729,6 +828,17 @@ namespace Dev.DevKit.Shared.Entities
 		public long? VersionNumber
 		{
 			get { return Entity.GetAttributeValue<long?>(Fields.VersionNumber); }
+		}
+
+		/// <summary>
+		/// <para>Wide icon for Canvas Apps.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Wide Icon</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string WideIcon
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.WideIcon); }
 		}
 	}
 }

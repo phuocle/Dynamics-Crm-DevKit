@@ -73,7 +73,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_wechatengagementctx";
 
-		public const int EntityTypeCode = 10668;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10746;
 
 		[DebuggerNonUserCode()]
 		public msdyn_wechatengagementctx()
@@ -286,7 +287,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The url of the customer's profile picture</para>
+		/// <para>The url of the customer&apos;s profile picture</para>
 		/// <para>String - MaxLength: 500</para>
 		/// <para>Profile Picture</para>
 		/// </summary>
@@ -351,7 +352,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

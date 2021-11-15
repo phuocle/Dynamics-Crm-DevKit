@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourcerequestOptionSets
 		/// </summary>
 		Fulfilled = 192350008,
 		/// <summary>
-		/// In_Progress = 192350009
+		/// In Progress = 192350009
 		/// </summary>
 		In_Progress = 192350009,
 		/// <summary>
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_resourcerequestOptionSets
 		/// </summary>
 		Inactive = 192350011,
 		/// <summary>
-		/// Needs_Review = 192350003
+		/// Needs Review = 192350003
 		/// </summary>
 		Needs_Review = 192350003,
 		/// <summary>
@@ -81,7 +81,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_resourcerequest";
 
-		public const int EntityTypeCode = 10386;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10449;
 
 		[DebuggerNonUserCode()]
 		public msdyn_resourcerequest()
@@ -311,7 +312,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

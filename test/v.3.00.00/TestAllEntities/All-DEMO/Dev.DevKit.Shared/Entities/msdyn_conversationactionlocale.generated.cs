@@ -13,185 +13,185 @@ namespace Dev.DevKit.Shared.Entities.msdyn_conversationactionlocaleOptionSets
 	public enum msdyn_Locale_picklist
 	{
 		/// <summary>
-		/// ar_SA = 1025
+		/// ar-SA = 1025
 		/// </summary>
-		ar_SA = 1025,
+		arSA = 1025,
 		/// <summary>
-		/// bg_BG = 1026
+		/// bg-BG = 1026
 		/// </summary>
-		bg_BG = 1026,
+		bgBG = 1026,
 		/// <summary>
-		/// ca_ES = 1027
+		/// ca-ES = 1027
 		/// </summary>
-		ca_ES = 1027,
+		caES = 1027,
 		/// <summary>
-		/// cs_CZ = 1029
+		/// cs-CZ = 1029
 		/// </summary>
-		cs_CZ = 1029,
+		csCZ = 1029,
 		/// <summary>
-		/// da_DK = 1030
+		/// da-DK = 1030
 		/// </summary>
-		da_DK = 1030,
+		daDK = 1030,
 		/// <summary>
-		/// de_DE = 1031
+		/// de-DE = 1031
 		/// </summary>
-		de_DE = 1031,
+		deDE = 1031,
 		/// <summary>
-		/// el_GR = 1032
+		/// el-GR = 1032
 		/// </summary>
-		el_GR = 1032,
+		elGR = 1032,
 		/// <summary>
-		/// en_US = 1033
+		/// en-US = 1033
 		/// </summary>
-		en_US = 1033,
+		enUS = 1033,
 		/// <summary>
-		/// es_ES = 3082
+		/// es-ES = 3082
 		/// </summary>
-		es_ES = 3082,
+		esES = 3082,
 		/// <summary>
-		/// et_EE = 1061
+		/// et-EE = 1061
 		/// </summary>
-		et_EE = 1061,
+		etEE = 1061,
 		/// <summary>
-		/// eu_ES = 1069
+		/// eu-ES = 1069
 		/// </summary>
-		eu_ES = 1069,
+		euES = 1069,
 		/// <summary>
-		/// fi_FI = 1035
+		/// fi-FI = 1035
 		/// </summary>
-		fi_FI = 1035,
+		fiFI = 1035,
 		/// <summary>
-		/// fr_FR = 1036
+		/// fr-FR = 1036
 		/// </summary>
-		fr_FR = 1036,
+		frFR = 1036,
 		/// <summary>
-		/// gl_ES = 1110
+		/// gl-ES = 1110
 		/// </summary>
-		gl_ES = 1110,
+		glES = 1110,
 		/// <summary>
-		/// he_IL = 1037
+		/// he-IL = 1037
 		/// </summary>
-		he_IL = 1037,
+		heIL = 1037,
 		/// <summary>
-		/// hi_IN = 1081
+		/// hi-IN = 1081
 		/// </summary>
-		hi_IN = 1081,
+		hiIN = 1081,
 		/// <summary>
-		/// hr_HR = 1050
+		/// hr-HR = 1050
 		/// </summary>
-		hr_HR = 1050,
+		hrHR = 1050,
 		/// <summary>
-		/// hu_HU = 1038
+		/// hu-HU = 1038
 		/// </summary>
-		hu_HU = 1038,
+		huHU = 1038,
 		/// <summary>
-		/// id_ID = 1057
+		/// id-ID = 1057
 		/// </summary>
-		id_ID = 1057,
+		idID = 1057,
 		/// <summary>
-		/// it_IT = 1040
+		/// it-IT = 1040
 		/// </summary>
-		it_IT = 1040,
+		itIT = 1040,
 		/// <summary>
-		/// ja_JP = 1041
+		/// ja-JP = 1041
 		/// </summary>
-		ja_JP = 1041,
+		jaJP = 1041,
 		/// <summary>
-		/// kk_KZ = 1087
+		/// kk-KZ = 1087
 		/// </summary>
-		kk_KZ = 1087,
+		kkKZ = 1087,
 		/// <summary>
-		/// ko_KR = 1042
+		/// ko-KR = 1042
 		/// </summary>
-		ko_KR = 1042,
+		koKR = 1042,
 		/// <summary>
-		/// lt_LT = 1063
+		/// lt-LT = 1063
 		/// </summary>
-		lt_LT = 1063,
+		ltLT = 1063,
 		/// <summary>
-		/// lv_LV = 1062
+		/// lv-LV = 1062
 		/// </summary>
-		lv_LV = 1062,
+		lvLV = 1062,
 		/// <summary>
-		/// ms_MY = 1086
+		/// ms-MY = 1086
 		/// </summary>
-		ms_MY = 1086,
+		msMY = 1086,
 		/// <summary>
-		/// nb_NO = 1044
+		/// nb-NO = 1044
 		/// </summary>
-		nb_NO = 1044,
+		nbNO = 1044,
 		/// <summary>
-		/// nl_NL = 1043
+		/// nl-NL = 1043
 		/// </summary>
-		nl_NL = 1043,
+		nlNL = 1043,
 		/// <summary>
-		/// pl_PL = 1045
+		/// pl-PL = 1045
 		/// </summary>
-		pl_PL = 1045,
+		plPL = 1045,
 		/// <summary>
-		/// pt_BR = 1046
+		/// pt-BR = 1046
 		/// </summary>
-		pt_BR = 1046,
+		ptBR = 1046,
 		/// <summary>
-		/// pt_PT = 2070
+		/// pt-PT = 2070
 		/// </summary>
-		pt_PT = 2070,
+		ptPT = 2070,
 		/// <summary>
-		/// ro_RO = 1048
+		/// ro-RO = 1048
 		/// </summary>
-		ro_RO = 1048,
+		roRO = 1048,
 		/// <summary>
-		/// ru_RU = 1049
+		/// ru-RU = 1049
 		/// </summary>
-		ru_RU = 1049,
+		ruRU = 1049,
 		/// <summary>
-		/// sk_SK = 1051
+		/// sk-SK = 1051
 		/// </summary>
-		sk_SK = 1051,
+		skSK = 1051,
 		/// <summary>
-		/// sl_SI = 1060
+		/// sl-SI = 1060
 		/// </summary>
-		sl_SI = 1060,
+		slSI = 1060,
 		/// <summary>
-		/// sr_Cyrl_CS = 3098
+		/// sr-Cyrl-CS = 3098
 		/// </summary>
-		sr_Cyrl_CS = 3098,
+		srCyrlCS = 3098,
 		/// <summary>
-		/// sr_Latn_CS = 2074
+		/// sr-Latn-CS = 2074
 		/// </summary>
-		sr_Latn_CS = 2074,
+		srLatnCS = 2074,
 		/// <summary>
-		/// sv_SE = 1053
+		/// sv-SE = 1053
 		/// </summary>
-		sv_SE = 1053,
+		svSE = 1053,
 		/// <summary>
-		/// th_TH = 1054
+		/// th-TH = 1054
 		/// </summary>
-		th_TH = 1054,
+		thTH = 1054,
 		/// <summary>
-		/// tr_TR = 1055
+		/// tr-TR = 1055
 		/// </summary>
-		tr_TR = 1055,
+		trTR = 1055,
 		/// <summary>
-		/// uk_UA = 1058
+		/// uk-UA = 1058
 		/// </summary>
-		uk_UA = 1058,
+		ukUA = 1058,
 		/// <summary>
-		/// vi_VN = 1066
+		/// vi-VN = 1066
 		/// </summary>
-		vi_VN = 1066,
+		viVN = 1066,
 		/// <summary>
-		/// zh_CN = 2052
+		/// zh-CN = 2052
 		/// </summary>
-		zh_CN = 2052,
+		zhCN = 2052,
 		/// <summary>
-		/// zh_HK = 3076
+		/// zh-HK = 3076
 		/// </summary>
-		zh_HK = 3076,
+		zhHK = 3076,
 		/// <summary>
-		/// zh_TW = 1028
+		/// zh-TW = 1028
 		/// </summary>
-		zh_TW = 1028
+		zhTW = 1028
 	}
 
 	public enum statecode
@@ -253,7 +253,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_conversationactionlocale";
 
-		public const int EntityTypeCode = 10591;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10631;
 
 		[DebuggerNonUserCode()]
 		public msdyn_conversationactionlocale()
@@ -436,9 +437,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_conversationactionlocaleOptionSets.msdyn_Locale_picklist)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Locale_picklist] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Locale_picklist] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Locale_picklist] = null;
+			}
 		}
 
 		/// <summary>
@@ -491,7 +495,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

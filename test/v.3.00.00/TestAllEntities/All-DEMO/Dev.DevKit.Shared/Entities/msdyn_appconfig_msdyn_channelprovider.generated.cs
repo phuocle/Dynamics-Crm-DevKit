@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_appconfig_msdyn_channelproviderOption
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -51,7 +51,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_appconfig_msdyn_channelprovider";
 
-		public const int EntityTypeCode = 10157;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10169;
 
 		[DebuggerNonUserCode()]
 		public msdyn_appconfig_msdyn_channelprovider()

@@ -50,6 +50,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_Name = "msdyn_name";
 			public const string msdyn_soundfileId = "msdyn_soundfileid";
+			public const string msdyn_Uploadsoundfile = "msdyn_uploadsoundfile";
 			public const string OrganizationId = "organizationid";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string statecode = "statecode";
@@ -61,7 +62,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_soundfile";
 
-		public const int EntityTypeCode = 10606;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10680;
 
 		[DebuggerNonUserCode()]
 		public msdyn_soundfile()
@@ -215,6 +217,17 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.msdyn_soundfileId] = value;
 				Entity.Id = value;
 			}
+		}
+
+		/// <summary>
+		/// <para>Use this field to upload audio files to the system</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Upload audio file</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_Uploadsoundfile
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_Uploadsoundfile); }
 		}
 
 		/// <summary>

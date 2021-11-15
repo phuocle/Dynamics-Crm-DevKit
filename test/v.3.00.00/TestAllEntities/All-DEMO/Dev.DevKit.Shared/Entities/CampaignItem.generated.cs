@@ -22,7 +22,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CampaignId = "campaignid";
 			public const string CampaignItemId = "campaignitemid";
 			public const string EntityId = "entityid";
-			public const string EntityType = "entitytype";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string Name = "name";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
@@ -36,6 +35,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "campaignitem";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4403;
 
 		[DebuggerNonUserCode()]
@@ -127,18 +127,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Object type of entity for the campaign item.</para>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string EntityType
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.EntityType); }
-			set { Entity.Attributes[Fields.EntityType] = value; }
-		}
-
-		/// <summary>
 		/// <para>Sequence number of the import that created this record.</para>
 		/// <para>Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
 		/// <para>Import Sequence Number</para>
@@ -176,7 +164,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the campaign item.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

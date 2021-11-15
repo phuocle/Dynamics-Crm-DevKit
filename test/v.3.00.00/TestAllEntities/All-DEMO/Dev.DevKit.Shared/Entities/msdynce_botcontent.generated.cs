@@ -78,7 +78,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdynce_botcontent";
 
-		public const int EntityTypeCode = 10040;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10064;
 
 		[DebuggerNonUserCode()]
 		public msdynce_botcontent()
@@ -259,9 +260,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdynce_botcontentOptionSets.msdynce_state)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdynce_state] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdynce_state] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdynce_state] = null;
+			}
 		}
 
 		/// <summary>
@@ -278,7 +282,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

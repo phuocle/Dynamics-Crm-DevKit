@@ -64,7 +64,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_federatedarticleincident";
 
-		public const int EntityTypeCode = 10054;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10078;
 
 		[DebuggerNonUserCode()]
 		public msdyn_federatedarticleincident()
@@ -220,7 +221,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Lookup to </para>
+		/// <para>Lookup to incident</para>
 		/// <para>IncidentId</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

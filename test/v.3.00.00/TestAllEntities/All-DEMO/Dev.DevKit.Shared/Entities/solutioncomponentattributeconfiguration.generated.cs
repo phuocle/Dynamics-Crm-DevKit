@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.solutioncomponentattributeconfigurationOpti
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -86,9 +86,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string EncodingFormat = "encodingformat";
 			public const string FileExtension = "fileextension";
 			public const string ImportSequenceNumber = "importsequencenumber";
+			public const string IsEnabledForDependencyExtraction = "isenabledfordependencyextraction";
 			public const string IsExportDisabled = "isexportdisabled";
 			public const string IsExportedAsFile = "isexportedasfile";
 			public const string IsManaged = "ismanaged";
+			public const string IsPrefixedByTemplate = "isprefixedbytemplate";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
@@ -109,6 +111,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "solutioncomponentattributeconfiguration";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 10000;
 
 		[DebuggerNonUserCode()]
@@ -278,6 +281,17 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Boolean</para>
+		/// <para>Enabled for Dependency Extraction</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsEnabledForDependencyExtraction
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsEnabledForDependencyExtraction); }
+			set { Entity.Attributes[Fields.IsEnabledForDependencyExtraction] = value; }
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
 		/// <para>Export Disabled</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -307,6 +321,17 @@ namespace Dev.DevKit.Shared.Entities
 		public bool? IsManaged
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.IsManaged); }
+		}
+
+		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>Prefixed by Template</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsPrefixedByTemplate
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsPrefixedByTemplate); }
+			set { Entity.Attributes[Fields.IsPrefixedByTemplate] = value; }
 		}
 
 		/// <summary>

@@ -141,7 +141,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "organizationdatasyncsubscription";
 
-		public const int EntityTypeCode = 10075;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10096;
 
 		[DebuggerNonUserCode()]
 		public organizationdatasyncsubscription()
@@ -216,9 +217,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.organizationdatasyncsubscriptionOptionSets.BlobPartitionBy)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.BlobPartitionBy] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.BlobPartitionBy] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.BlobPartitionBy] = null;
+			}
 		}
 
 		/// <summary>

@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotdeviceOptionSets
 		/// </summary>
 		Error = 192350004,
 		/// <summary>
-		/// In_Progress = 192350002
+		/// In Progress = 192350002
 		/// </summary>
 		In_Progress = 192350002,
 		/// <summary>
@@ -115,7 +115,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotdevice";
 
-		public const int EntityTypeCode = 10127;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10139;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotdevice()
@@ -460,7 +461,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The device's time zone.</para>
+		/// <para>The device&apos;s time zone.</para>
 		/// <para>Integer - MinValue: -1,500 - MaxValue: 1,500</para>
 		/// <para>Time Zone</para>
 		/// </summary>
@@ -485,7 +486,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

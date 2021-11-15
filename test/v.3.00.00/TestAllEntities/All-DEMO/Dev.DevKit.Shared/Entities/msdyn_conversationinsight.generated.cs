@@ -56,7 +56,9 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_CallTalkToListenRatio = "msdyn_calltalktolistenratio";
 			public const string msdyn_ConversationId = "msdyn_conversationid";
 			public const string msdyn_conversationinsightId = "msdyn_conversationinsightid";
+			public const string msdyn_insights = "msdyn_insights";
 			public const string msdyn_name = "msdyn_name";
+			public const string msdyn_TranscriptWithInsights = "msdyn_transcriptwithinsights";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -71,7 +73,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_conversationinsight";
 
-		public const int EntityTypeCode = 10642;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10719;
 
 		[DebuggerNonUserCode()]
 		public msdyn_conversationinsight()
@@ -293,6 +296,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>AI powered insights for Omnichannel conversation</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Insights</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_insights
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_insights); }
+		}
+
+		/// <summary>
 		/// <para>The name of the custom entity.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Name</para>
@@ -302,6 +316,16 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_name); }
 			set { Entity.Attributes[Fields.msdyn_name] = value; }
+		}
+
+		/// <summary>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>(Deprecated) TranscriptWithInsights</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_TranscriptWithInsights
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_TranscriptWithInsights); }
 		}
 
 		/// <summary>
@@ -318,7 +342,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

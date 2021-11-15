@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_msdyn_prod_actionoutputparameter_msdy
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -51,7 +51,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msdyn_prod_actionoutputparameter_msdyn_pa";
 
-		public const int EntityTypeCode = 10173;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10185;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msdyn_prod_actionoutputparameter_msdyn_pa()

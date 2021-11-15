@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessiontemplate_applicationtabOptionS
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -51,7 +51,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_sessiontemplate_applicationtab";
 
-		public const int EntityTypeCode = 10152;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10164;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sessiontemplate_applicationtab()

@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_solutionhealthruleOptionSets
 	public enum msdyn_ResolutionType
 	{
 		/// <summary>
-		/// Auto_Heal = 192350000
+		/// Auto Heal = 192350000
 		/// </summary>
 		Auto_Heal = 192350000,
 		/// <summary>
-		/// Customer_Action_Required = 192350001
+		/// Customer Action Required = 192350001
 		/// </summary>
 		Customer_Action_Required = 192350001,
 		/// <summary>
@@ -93,7 +93,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_solutionhealthrule";
 
-		public const int EntityTypeCode = 10099;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10109;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutionhealthrule()
@@ -378,7 +379,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

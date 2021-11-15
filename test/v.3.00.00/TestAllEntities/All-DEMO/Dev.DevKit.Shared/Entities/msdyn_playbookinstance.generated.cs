@@ -25,23 +25,23 @@ namespace Dev.DevKit.Shared.Entities.msdyn_playbookinstanceOptionSets
 	public enum statuscode
 	{
 		/// <summary>
-		/// In_Progress = 1
+		/// In Progress = 1
 		/// </summary>
 		In_Progress = 1,
 		/// <summary>
-		/// Not_Required = 5
+		/// Not Required = 5
 		/// </summary>
 		Not_Required = 5,
 		/// <summary>
-		/// Not_Successful = 3
+		/// Not Successful = 3
 		/// </summary>
 		Not_Successful = 3,
 		/// <summary>
-		/// Not_Tracked = 6
+		/// Not Tracked = 6
 		/// </summary>
 		Not_Tracked = 6,
 		/// <summary>
-		/// Partially_Successful = 4
+		/// Partially Successful = 4
 		/// </summary>
 		Partially_Successful = 4,
 		/// <summary>
@@ -88,7 +88,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_playbookinstance";
 
-		public const int EntityTypeCode = 10202;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10215;
 
 		[DebuggerNonUserCode()]
 		public msdyn_playbookinstance()
@@ -340,7 +341,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

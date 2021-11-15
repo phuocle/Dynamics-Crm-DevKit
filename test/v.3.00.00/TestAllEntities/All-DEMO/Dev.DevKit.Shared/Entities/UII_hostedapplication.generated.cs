@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets
 	public enum msdyusd_APIVersion
 	{
 		/// <summary>
-		/// _10 = 100000000
+		/// 1.0 = 100000000
 		/// </summary>
 		_10 = 100000000
 	}
@@ -21,31 +21,31 @@ namespace Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets
 	public enum msdyusd_CRMWindowHostType
 	{
 		/// <summary>
-		/// Agent_Scripting = 803750006
+		/// Agent Scripting = 803750006
 		/// </summary>
 		Agent_Scripting = 803750006,
 		/// <summary>
-		/// CCA_Hosted_Application = 803750002
+		/// CCA Hosted Application = 803750002
 		/// </summary>
 		CCA_Hosted_Application = 803750002,
 		/// <summary>
-		/// Channel_Integration_Framework = 803750025
+		/// Channel Integration Framework = 803750025
 		/// </summary>
 		Channel_Integration_Framework = 803750025,
 		/// <summary>
-		/// Connection_Manager = 803750011
+		/// Connection Manager = 803750011
 		/// </summary>
 		Connection_Manager = 803750011,
 		/// <summary>
-		/// CRM_Dialog = 803750000
+		/// CRM Dialog = 803750000
 		/// </summary>
 		CRM_Dialog = 803750000,
 		/// <summary>
-		/// CRM_Page = 803750003
+		/// CRM Page = 803750003
 		/// </summary>
 		CRM_Page = 803750003,
 		/// <summary>
-		/// CTI_Desktop_Manager = 803750014
+		/// CTI Desktop Manager = 803750014
 		/// </summary>
 		CTI_Desktop_Manager = 803750014,
 		/// <summary>
@@ -53,71 +53,71 @@ namespace Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets
 		/// </summary>
 		Debugger = 803750016,
 		/// <summary>
-		/// Global_Manager = 803750001
+		/// Global Manager = 803750001
 		/// </summary>
 		Global_Manager = 803750001,
 		/// <summary>
-		/// Interactive_Service_Hub_Page = 803750021
+		/// Interactive Service Hub Page = 803750021
 		/// </summary>
 		Interactive_Service_Hub_Page = 803750021,
 		/// <summary>
-		/// KM_Control = 803750019
+		/// KM Control = 803750019
 		/// </summary>
 		KM_Control = 803750019,
 		/// <summary>
-		/// Listener_Hosted_Control = 803750020
+		/// Listener Hosted Control = 803750020
 		/// </summary>
 		Listener_Hosted_Control = 803750020,
 		/// <summary>
-		/// Panel_Layout = 803750015
+		/// Panel Layout = 803750015
 		/// </summary>
 		Panel_Layout = 803750015,
 		/// <summary>
-		/// Popup_Notification = 803750022
+		/// Popup Notification = 803750022
 		/// </summary>
 		Popup_Notification = 803750022,
 		/// <summary>
-		/// Ribbon_Hosted_Control = 803750007
+		/// Ribbon Hosted Control = 803750007
 		/// </summary>
 		Ribbon_Hosted_Control = 803750007,
 		/// <summary>
-		/// Session_Lines = 803750012
+		/// Session Lines = 803750012
 		/// </summary>
 		Session_Lines = 803750012,
 		/// <summary>
-		/// Session_Tabs = 803750009
+		/// Session Tabs = 803750009
 		/// </summary>
 		Session_Tabs = 803750009,
 		/// <summary>
-		/// Standard_Web_Application = 803750004
+		/// Standard Web Application = 803750004
 		/// </summary>
 		Standard_Web_Application = 803750004,
 		/// <summary>
-		/// Todo_List = 803750017
+		/// Todo List = 803750017
 		/// </summary>
 		Todo_List = 803750017,
 		/// <summary>
-		/// Toolbar_Container = 803750008
+		/// Toolbar Container = 803750008
 		/// </summary>
 		Toolbar_Container = 803750008,
 		/// <summary>
-		/// Tree_Bar = 803750013
+		/// Tree Bar = 803750013
 		/// </summary>
 		Tree_Bar = 803750013,
 		/// <summary>
-		/// Unified_Interface_KM_Control = 803750024
+		/// Unified Interface KM Control = 803750024
 		/// </summary>
 		Unified_Interface_KM_Control = 803750024,
 		/// <summary>
-		/// Unified_Interface_Page = 803750023
+		/// Unified Interface Page = 803750023
 		/// </summary>
 		Unified_Interface_Page = 803750023,
 		/// <summary>
-		/// USD_Hosted_Control = 803750005
+		/// USD Hosted Control = 803750005
 		/// </summary>
 		USD_Hosted_Control = 803750005,
 		/// <summary>
-		/// User_Notes = 803750010
+		/// User Notes = 803750010
 		/// </summary>
 		User_Notes = 803750010
 	}
@@ -125,19 +125,19 @@ namespace Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets
 	public enum msdyusd_HostingType
 	{
 		/// <summary>
-		/// Chrome_Process = 803750003
+		/// Chrome Process = 803750003
 		/// </summary>
 		Chrome_Process = 803750003,
 		/// <summary>
-		/// Edge_Process = 803750002
+		/// Edge Process = 803750002
 		/// </summary>
 		Edge_Process = 803750002,
 		/// <summary>
-		/// IE_Process = 803750001
+		/// IE Process = 803750001
 		/// </summary>
 		IE_Process = 803750001,
 		/// <summary>
-		/// Internal_WPF = 803750000
+		/// Internal WPF = 803750000
 		/// </summary>
 		Internal_WPF = 803750000
 	}
@@ -145,23 +145,23 @@ namespace Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets
 	public enum msdyusd_PanelType
 	{
 		/// <summary>
-		/// Horizontal_Split = 803750005
+		/// Horizontal Split = 803750005
 		/// </summary>
 		Horizontal_Split = 803750005,
 		/// <summary>
-		/// Ribbon_Main_Panel = 803750003
+		/// Ribbon Main Panel = 803750003
 		/// </summary>
 		Ribbon_Main_Panel = 803750003,
 		/// <summary>
-		/// Standard_Main_Panel = 803750000
+		/// Standard Main Panel = 803750000
 		/// </summary>
 		Standard_Main_Panel = 803750000,
 		/// <summary>
-		/// User_Defined = 803750001
+		/// User Defined = 803750001
 		/// </summary>
 		User_Defined = 803750001,
 		/// <summary>
-		/// Vertical_Split = 803750004
+		/// Vertical Split = 803750004
 		/// </summary>
 		Vertical_Split = 803750004,
 		/// <summary>
@@ -197,15 +197,15 @@ namespace Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets
 	public enum UII_AdapterMode
 	{
 		/// <summary>
-		/// Use_Adapter = 3
+		/// Use Adapter = 3
 		/// </summary>
 		Use_Adapter = 3,
 		/// <summary>
-		/// Use_Automation_Adapter_HAT = 2
+		/// Use Automation Adapter (HAT) = 2
 		/// </summary>
 		Use_Automation_Adapter_HAT = 2,
 		/// <summary>
-		/// Use_No_Adapter = 1
+		/// Use No Adapter = 1
 		/// </summary>
 		Use_No_Adapter = 1
 	}
@@ -213,15 +213,15 @@ namespace Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets
 	public enum UII_ApplicationHostingMode
 	{
 		/// <summary>
-		/// Host_Outside = 1
+		/// Host Outside = 1
 		/// </summary>
 		Host_Outside = 1,
 		/// <summary>
-		/// Use_Dynamic_Positioning = 3
+		/// Use Dynamic Positioning = 3
 		/// </summary>
 		Use_Dynamic_Positioning = 3,
 		/// <summary>
-		/// Use_SetParent = 2
+		/// Use SetParent = 2
 		/// </summary>
 		Use_SetParent = 2
 	}
@@ -229,19 +229,19 @@ namespace Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets
 	public enum UII_HostedApplicationType
 	{
 		/// <summary>
-		/// External_Hosted_Application = 3
+		/// External Hosted Application = 3
 		/// </summary>
 		External_Hosted_Application = 3,
 		/// <summary>
-		/// Hosted_Control = 1
+		/// Hosted Control = 1
 		/// </summary>
 		Hosted_Control = 1,
 		/// <summary>
-		/// Remote_Hosted_Application = 4
+		/// Remote Hosted Application = 4
 		/// </summary>
 		Remote_Hosted_Application = 4,
 		/// <summary>
-		/// Web_Hosted_Application = 2
+		/// Web Hosted Application = 2
 		/// </summary>
 		Web_Hosted_Application = 2
 	}
@@ -253,11 +253,11 @@ namespace Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets
 		/// </summary>
 		None = 1,
 		/// <summary>
-		/// Use_FindWindow = 3
+		/// Use FindWindow = 3
 		/// </summary>
 		Use_FindWindow = 3,
 		/// <summary>
-		/// Use_VB_Top_Level = 2
+		/// Use VB Top Level = 2
 		/// </summary>
 		Use_VB_Top_Level = 2
 	}
@@ -356,7 +356,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_hostedapplication";
 
-		public const int EntityTypeCode = 10677;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10756;
 
 		[DebuggerNonUserCode()]
 		public UII_hostedapplication()
@@ -553,9 +554,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets.msdyusd_CRMWindowHostType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyusd_CRMWindowHostType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyusd_CRMWindowHostType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyusd_CRMWindowHostType] = null;
+			}
 		}
 
 		/// <summary>
@@ -728,7 +732,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -844,9 +848,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets.UII_AdapterMode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.UII_AdapterMode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.UII_AdapterMode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.UII_AdapterMode] = null;
+			}
 		}
 
 		/// <summary>
@@ -888,9 +895,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets.UII_ApplicationHostingMode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.UII_ApplicationHostingMode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.UII_ApplicationHostingMode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.UII_ApplicationHostingMode] = null;
+			}
 		}
 
 		/// <summary>
@@ -1032,9 +1042,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets.UII_HostedApplicationType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.UII_HostedApplicationType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.UII_HostedApplicationType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.UII_HostedApplicationType] = null;
+			}
 		}
 
 		/// <summary>
@@ -1424,9 +1437,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.UII_hostedapplicationOptionSets.UII_TopLevelWindowMode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.UII_TopLevelWindowMode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.UII_TopLevelWindowMode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.UII_TopLevelWindowMode] = null;
+			}
 		}
 
 		/// <summary>

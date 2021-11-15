@@ -31,6 +31,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "roletemplateprivileges";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 28;
 
 		[DebuggerNonUserCode()]
@@ -82,7 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Information about whether the role in the template applies to the user, the user's team, or objects shared by the user.</para>
+		/// <para>Information about whether the role in the template applies to the user, the user&apos;s team, or objects shared by the user.</para>
 		/// <para>Boolean</para>
 		/// <para></para>
 		/// </summary>
@@ -118,7 +119,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Information about whether the role in the template applies to the user's business unit.</para>
+		/// <para>Information about whether the role in the template applies to the user&apos;s business unit.</para>
 		/// <para>Boolean</para>
 		/// <para></para>
 		/// </summary>

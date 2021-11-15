@@ -23,7 +23,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string EntityId = "entityid";
-			public const string EntityType = "entitytype";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string ListId = "listid";
 			public const string ListMemberId = "listmemberid";
@@ -42,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "listmember";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4301;
 
 		[DebuggerNonUserCode()]
@@ -134,17 +134,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.EntityId); }
 			set { Entity.Attributes[Fields.EntityId] = value; }
-		}
-
-		/// <summary>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string EntityType
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.EntityType); }
-			set { Entity.Attributes[Fields.EntityType] = value; }
 		}
 
 		/// <summary>
@@ -244,7 +233,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the list member.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

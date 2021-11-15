@@ -25,19 +25,19 @@ namespace Dev.DevKit.Shared.Entities.UserSettingsOptionSets
 	public enum DefaultSearchExperience
 	{
 		/// <summary>
-		/// Categorized_search = 1
+		/// Categorized search = 1
 		/// </summary>
 		Categorized_search = 1,
 		/// <summary>
-		/// Custom_search = 3
+		/// Custom search = 3
 		/// </summary>
 		Custom_search = 3,
 		/// <summary>
-		/// Relevance_search = 0
+		/// Relevance search = 0
 		/// </summary>
 		Relevance_search = 0,
 		/// <summary>
-		/// Use_last_search = 2
+		/// Use last search = 2
 		/// </summary>
 		Use_last_search = 2
 	}
@@ -49,35 +49,35 @@ namespace Dev.DevKit.Shared.Entities.UserSettingsOptionSets
 		/// </summary>
 		Edit = 2,
 		/// <summary>
-		/// Organization_default = 0
+		/// Organization default = 0
 		/// </summary>
 		Organization_default = 0,
 		/// <summary>
-		/// Read_optimized = 1
+		/// Read-optimized = 1
 		/// </summary>
-		Read_optimized = 1
+		Readoptimized = 1
 	}
 
 	public enum IncomingEmailFilteringMethod
 	{
 		/// <summary>
-		/// All_email_messages = 0
+		/// All email messages = 0
 		/// </summary>
 		All_email_messages = 0,
 		/// <summary>
-		/// Email_messages_from_Dynamics_365_Leads_Contacts_and_Accounts = 2
+		/// Email messages from Dynamics 365 Leads, Contacts and Accounts = 2
 		/// </summary>
 		Email_messages_from_Dynamics_365_Leads_Contacts_and_Accounts = 2,
 		/// <summary>
-		/// Email_messages_from_Dynamics_365_records_that_are_email_enabled = 3
+		/// Email messages from Dynamics 365 records that are email enabled = 3
 		/// </summary>
 		Email_messages_from_Dynamics_365_records_that_are_email_enabled = 3,
 		/// <summary>
-		/// Email_messages_in_response_to_Dynamics_365_email = 1
+		/// Email messages in response to Dynamics 365 email = 1
 		/// </summary>
 		Email_messages_in_response_to_Dynamics_365_email = 1,
 		/// <summary>
-		/// No_email_messages = 4
+		/// No email messages = 4
 		/// </summary>
 		No_email_messages = 4
 	}
@@ -85,15 +85,15 @@ namespace Dev.DevKit.Shared.Entities.UserSettingsOptionSets
 	public enum ReportScriptErrors
 	{
 		/// <summary>
-		/// Ask_me_for_permission_to_send_an_error_report_to_Microsoft = 1
+		/// Ask me for permission to send an error report to Microsoft = 1
 		/// </summary>
 		Ask_me_for_permission_to_send_an_error_report_to_Microsoft = 1,
 		/// <summary>
-		/// Automatically_send_an_error_report_to_Microsoft_without_asking_me_for_permission = 2
+		/// Automatically send an error report to Microsoft without asking me for permission = 2
 		/// </summary>
 		Automatically_send_an_error_report_to_Microsoft_without_asking_me_for_permission = 2,
 		/// <summary>
-		/// Never_send_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365 = 3
+		/// Never send an error report to Microsoft about Microsoft Dynamics 365 = 3
 		/// </summary>
 		Never_send_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365 = 3
 	}
@@ -101,13 +101,13 @@ namespace Dev.DevKit.Shared.Entities.UserSettingsOptionSets
 	public enum VisualizationPaneLayout
 	{
 		/// <summary>
-		/// Side_by_side = 1
+		/// Side-by-side = 1
 		/// </summary>
-		Side_by_side = 1,
+		Sidebyside = 1,
 		/// <summary>
-		/// Top_bottom = 0
+		/// Top-bottom = 0
 		/// </summary>
-		Top_bottom = 0
+		Topbottom = 0
 	}
 }
 
@@ -119,6 +119,8 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			public const string AddressBookSyncInterval = "addressbooksyncinterval";
 			public const string AdvancedFindStartupMode = "advancedfindstartupmode";
+			[System.Obsolete("Deprecated from version: 6.0.0.0")]
+			public const string AllowEmailCredentials = "allowemailcredentials";
 			public const string AMDesignator = "amdesignator";
 			public const string AutoCaptureUserStatus = "autocaptureuserstatus";
 			public const string AutoCreateContactOnPromote = "autocreatecontactonpromote";
@@ -127,6 +129,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string CurrencyDecimalPrecision = "currencydecimalprecision";
 			public const string CurrencyFormatCode = "currencyformatcode";
 			public const string CurrencySymbol = "currencysymbol";
 			public const string DataValidationModeForExportToExcel = "datavalidationmodeforexporttoexcel";
@@ -138,6 +142,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string DefaultCountryCode = "defaultcountrycode";
 			public const string DefaultDashboardId = "defaultdashboardid";
 			public const string DefaultSearchExperience = "defaultsearchexperience";
+			[System.Obsolete("Deprecated from version: 6.0.0.0")]
+			public const string EmailPassword = "emailpassword";
+			[System.Obsolete("Deprecated from version: 6.0.0.0")]
+			public const string EmailUsername = "emailusername";
 			public const string EntityFormMode = "entityformmode";
 			public const string FullNameConventionCode = "fullnameconventioncode";
 			public const string GetStartedPaneContentEnabled = "getstartedpanecontentenabled";
@@ -171,6 +179,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string PagingLimit = "paginglimit";
 			public const string PersonalizationSettings = "personalizationsettings";
 			public const string PMDesignator = "pmdesignator";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string PricingDecimalPrecision = "pricingdecimalprecision";
 			public const string ReportScriptErrors = "reportscripterrors";
 			public const string ResourceBookingExchangeSyncVersion = "resourcebookingexchangesyncversion";
 			public const string SelectedGlobalFilterId = "selectedglobalfilterid";
@@ -216,6 +226,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "usersettings";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 150;
 
 		[DebuggerNonUserCode()]
@@ -288,6 +299,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.AdvancedFindStartupMode); }
 			set { Entity.Attributes[Fields.AdvancedFindStartupMode] = value; }
+		}
+
+		/// <summary>
+		/// <para>This attribute is no longer used. The data is now in the Mailbox.AllowEmailConnectorToUseCredentials attribute.</para>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para></para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 6.0.0.0")]
+		public bool? AllowEmailCredentials
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.AllowEmailCredentials); }
 		}
 
 		/// <summary>
@@ -381,6 +404,19 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference CreatedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.CreatedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Number of decimal places that can be used for currency.</para>
+		/// <para>Required - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para></para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public int? CurrencyDecimalPrecision
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.CurrencyDecimalPrecision); }
+			set { Entity.Attributes[Fields.CurrencyDecimalPrecision] = value; }
 		}
 
 		/// <summary>
@@ -535,6 +571,30 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.DefaultSearchExperience] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>This attribute is no longer used. The data is now in the Mailbox.Password attribute.</para>
+		/// <para>ReadOnly - String - MaxLength: 200</para>
+		/// <para></para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 6.0.0.0")]
+		public string EmailPassword
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.EmailPassword); }
+		}
+
+		/// <summary>
+		/// <para>This attribute is no longer used. The data is now in the Mailbox.UserName attribute.</para>
+		/// <para>ReadOnly - String - MaxLength: 200</para>
+		/// <para></para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 6.0.0.0")]
+		public string EmailUsername
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.EmailUsername); }
 		}
 
 		/// <summary>
@@ -950,6 +1010,19 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.PMDesignator); }
 			set { Entity.Attributes[Fields.PMDesignator] = value; }
+		}
+
+		/// <summary>
+		/// <para>Number of decimal places that can be used for prices.</para>
+		/// <para>Required - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
+		/// <para></para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public int? PricingDecimalPrecision
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.PricingDecimalPrecision); }
+			set { Entity.Attributes[Fields.PricingDecimalPrecision] = value; }
 		}
 
 		/// <summary>

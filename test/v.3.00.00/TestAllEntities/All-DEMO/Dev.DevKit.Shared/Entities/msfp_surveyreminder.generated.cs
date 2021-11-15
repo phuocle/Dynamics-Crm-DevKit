@@ -87,7 +87,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_surveyreminder";
 
-		public const int EntityTypeCode = 10249;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10272;
 
 		[DebuggerNonUserCode()]
 		public msfp_surveyreminder()
@@ -291,9 +292,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msfp_surveyreminderOptionSets.msfp_status)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msfp_status] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msfp_status] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msfp_status] = null;
+			}
 		}
 
 		/// <summary>
@@ -350,7 +354,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

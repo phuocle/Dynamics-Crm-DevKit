@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_requirementdependencyOptionSets
 	public enum msdyn_dependencytype
 	{
 		/// <summary>
-		/// Start_After_End = 192350000
+		/// Start After End = 192350000
 		/// </summary>
 		Start_After_End = 192350000
 	}
@@ -75,7 +75,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementdependency";
 
-		public const int EntityTypeCode = 10321;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10384;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementdependency()
@@ -218,9 +219,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_requirementdependencyOptionSets.msdyn_dependencytype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_dependencytype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_dependencytype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_dependencytype] = null;
+			}
 		}
 
 		/// <summary>
@@ -287,7 +291,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

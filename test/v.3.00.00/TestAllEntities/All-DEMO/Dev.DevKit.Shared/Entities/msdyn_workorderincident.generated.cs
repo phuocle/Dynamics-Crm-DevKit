@@ -79,7 +79,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_workorderincident";
 
-		public const int EntityTypeCode = 10488;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10552;
 
 		[DebuggerNonUserCode()]
 		public msdyn_workorderincident()
@@ -256,7 +257,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Workorder incident's functional location.</para>
+		/// <para>Workorder incident&apos;s functional location.</para>
 		/// <para>Lookup to msdyn_functionallocation</para>
 		/// <para>Functional Location</para>
 		/// </summary>
@@ -425,7 +426,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

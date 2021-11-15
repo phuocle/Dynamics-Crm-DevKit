@@ -381,7 +381,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OperationType = "operationtype";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
-			public const string PrimaryEntityTypeCode = "primaryentitytypecode";
 			public const string ProcessId = "processid";
 			public const string ProcessStageId = "processstageid";
 			public const string StageCategory = "stagecategory";
@@ -391,6 +390,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "processstage";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4724;
 
 		[DebuggerNonUserCode()]
@@ -536,7 +536,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -554,18 +554,6 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? OwningBusinessUnit
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.OwningBusinessUnit); }
-		}
-
-		/// <summary>
-		/// <para>Primary entity associated with the stage.</para>
-		/// <para>EntityName</para>
-		/// <para>Primary Entity</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryEntityTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryEntityTypeCode); }
-			set { Entity.Attributes[Fields.PrimaryEntityTypeCode] = value; }
 		}
 
 		/// <summary>

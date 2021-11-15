@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_authenticationsettingsOptionSets
 	public enum msdyn_Authenticationtype
 	{
 		/// <summary>
-		/// OAuth_20_implicit_flow = 192350000
+		/// OAuth 2.0 implicit flow = 192350000
 		/// </summary>
 		OAuth_20_implicit_flow = 192350000
 	}
@@ -75,7 +75,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_authenticationsettings";
 
-		public const int EntityTypeCode = 10628;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10707;
 
 		[DebuggerNonUserCode()]
 		public msdyn_authenticationsettings()
@@ -234,9 +235,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_authenticationsettingsOptionSets.msdyn_Authenticationtype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Authenticationtype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Authenticationtype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Authenticationtype] = null;
+			}
 		}
 
 		/// <summary>
@@ -289,7 +293,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

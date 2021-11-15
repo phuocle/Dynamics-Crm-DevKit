@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.CompetitorOptionSets
 	public enum Address1_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.CompetitorOptionSets
 	public enum Address1_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.CompetitorOptionSets
 	public enum Address2_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.CompetitorOptionSets
 	public enum Address2_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -133,6 +133,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "competitor";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 123;
 
 		[DebuggerNonUserCode()]
@@ -756,7 +757,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier of the competitor.</para>
 		/// <para>Primary Key - Uniqueidentifier</para>
-		/// <para>Competitor </para>
+		/// <para>Competitor</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid CompetitorId
@@ -813,7 +814,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -836,7 +837,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the competitor's primary product, service, or specialty.</para>
+		/// <para>Type the competitor&apos;s primary product, service, or specialty.</para>
 		/// <para>String - MaxLength: 200</para>
 		/// <para>Key Product</para>
 		/// </summary>
@@ -928,7 +929,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type notes or other information about the competitor's business, such as location, revenue, or distribution channel.</para>
+		/// <para>Type notes or other information about the competitor&apos;s business, such as location, revenue, or distribution channel.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Overview</para>
 		/// </summary>
@@ -964,7 +965,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the amount of revenue reported in the competitor's annual report or other source.</para>
+		/// <para>Type the amount of revenue reported in the competitor&apos;s annual report or other source.</para>
 		/// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
 		/// <para>Reported Revenue</para>
 		/// </summary>
@@ -1003,7 +1004,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the quarter number during which the competitor's reported revenue was recorded or announced for use in reporting and analysis.</para>
+		/// <para>Type the quarter number during which the competitor&apos;s reported revenue was recorded or announced for use in reporting and analysis.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Reporting Quarter</para>
 		/// </summary>
@@ -1015,7 +1016,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the fiscal year during which the competitor's reported revenue was announced for use in reporting and analysis.</para>
+		/// <para>Type the fiscal year during which the competitor&apos;s reported revenue was announced for use in reporting and analysis.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Reporting Year</para>
 		/// </summary>
@@ -1051,7 +1052,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type notes or other information about the competitor's strengths, such as top-selling products and targeted industries or markets.</para>
+		/// <para>Type notes or other information about the competitor&apos;s strengths, such as top-selling products and targeted industries or markets.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Strength</para>
 		/// </summary>
@@ -1063,7 +1064,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type notes or other information about the competitor's threats to your organization when you sell to the same prospect or customer.</para>
+		/// <para>Type notes or other information about the competitor&apos;s threats to your organization when you sell to the same prospect or customer.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Threat</para>
 		/// </summary>
@@ -1146,7 +1147,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type notes or other information about the competitor's weaknesses or areas in which your organization outperforms the competitor.</para>
+		/// <para>Type notes or other information about the competitor&apos;s weaknesses or areas in which your organization outperforms the competitor.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Weakness</para>
 		/// </summary>
@@ -1170,7 +1171,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the percentage of your organization's lost opportunities that are won by the competitor to identify your strongest competitors.</para>
+		/// <para>Type the percentage of your organization&apos;s lost opportunities that are won by the competitor to identify your strongest competitors.</para>
 		/// <para>Double - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Win Percentage</para>
 		/// </summary>
@@ -1182,7 +1183,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the competitor's name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.</para>
+		/// <para>Type the phonetic spelling of the competitor&apos;s name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Yomi Name</para>
 		/// </summary>

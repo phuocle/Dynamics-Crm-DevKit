@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.RibbonCommandOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -60,6 +60,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "ribboncommand";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1116;
 
 		[DebuggerNonUserCode()]
@@ -111,7 +112,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The command's Id</para>
+		/// <para>The command&apos;s Id</para>
 		/// <para>Memo - MaxLength: 200</para>
 		/// <para></para>
 		/// </summary>

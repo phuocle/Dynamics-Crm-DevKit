@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 	public enum ComponentType
 	{
 		/// <summary>
-		/// AI_Configuration = 402
+		/// AI Configuration = 402
 		/// </summary>
 		AI_Configuration = 402,
 		/// <summary>
-		/// AI_Project = 401
+		/// AI Project = 401
 		/// </summary>
 		AI_Project = 401,
 		/// <summary>
-		/// AI_Project_Type = 400
+		/// AI Project Type = 400
 		/// </summary>
 		AI_Project_Type = 400,
 		/// <summary>
@@ -33,83 +33,83 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		Attribute = 2,
 		/// <summary>
-		/// Attribute_Image_Configuration = 431
+		/// Attribute Image Configuration = 431
 		/// </summary>
 		Attribute_Image_Configuration = 431,
 		/// <summary>
-		/// Attribute_Lookup_Value = 5
+		/// Attribute Lookup Value = 5
 		/// </summary>
 		Attribute_Lookup_Value = 5,
 		/// <summary>
-		/// Attribute_Map = 47
+		/// Attribute Map = 47
 		/// </summary>
 		Attribute_Map = 47,
 		/// <summary>
-		/// Attribute_Picklist_Value = 4
+		/// Attribute Picklist Value = 4
 		/// </summary>
 		Attribute_Picklist_Value = 4,
 		/// <summary>
-		/// Canvas_App = 300
+		/// Canvas App = 300
 		/// </summary>
 		Canvas_App = 300,
 		/// <summary>
-		/// Complex_Control = 64
+		/// Complex Control = 64
 		/// </summary>
 		Complex_Control = 64,
 		/// <summary>
-		/// Connection_Role = 63
+		/// Connection Role = 63
 		/// </summary>
 		Connection_Role = 63,
 		/// <summary>
-		/// Connector_371 = 371
+		/// Connector = 371
 		/// </summary>
 		Connector_371 = 371,
 		/// <summary>
-		/// Connector_372 = 372
+		/// Connector = 372
 		/// </summary>
 		Connector_372 = 372,
 		/// <summary>
-		/// Contract_Template = 37
+		/// Contract Template = 37
 		/// </summary>
 		Contract_Template = 37,
 		/// <summary>
-		/// Convert_Rule = 154
+		/// Convert Rule = 154
 		/// </summary>
 		Convert_Rule = 154,
 		/// <summary>
-		/// Convert_Rule_Item = 155
+		/// Convert Rule Item = 155
 		/// </summary>
 		Convert_Rule_Item = 155,
 		/// <summary>
-		/// Custom_Control = 66
+		/// Custom Control = 66
 		/// </summary>
 		Custom_Control = 66,
 		/// <summary>
-		/// Custom_Control_Default_Config = 68
+		/// Custom Control Default Config = 68
 		/// </summary>
 		Custom_Control_Default_Config = 68,
 		/// <summary>
-		/// Data_Source_Mapping = 166
+		/// Data Source Mapping = 166
 		/// </summary>
 		Data_Source_Mapping = 166,
 		/// <summary>
-		/// Display_String = 22
+		/// Display String = 22
 		/// </summary>
 		Display_String = 22,
 		/// <summary>
-		/// Display_String_Map = 23
+		/// Display String Map = 23
 		/// </summary>
 		Display_String_Map = 23,
 		/// <summary>
-		/// Duplicate_Rule = 44
+		/// Duplicate Rule = 44
 		/// </summary>
 		Duplicate_Rule = 44,
 		/// <summary>
-		/// Duplicate_Rule_Condition = 45
+		/// Duplicate Rule Condition = 45
 		/// </summary>
 		Duplicate_Rule_Condition = 45,
 		/// <summary>
-		/// Email_Template = 36
+		/// Email Template = 36
 		/// </summary>
 		Email_Template = 36,
 		/// <summary>
@@ -117,47 +117,47 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		Entity = 1,
 		/// <summary>
-		/// Entity_Analytics_Configuration = 430
+		/// Entity Analytics Configuration = 430
 		/// </summary>
 		Entity_Analytics_Configuration = 430,
 		/// <summary>
-		/// Entity_Image_Configuration = 432
+		/// Entity Image Configuration = 432
 		/// </summary>
 		Entity_Image_Configuration = 432,
 		/// <summary>
-		/// Entity_Key = 14
+		/// Entity Key = 14
 		/// </summary>
 		Entity_Key = 14,
 		/// <summary>
-		/// Entity_Map = 46
+		/// Entity Map = 46
 		/// </summary>
 		Entity_Map = 46,
 		/// <summary>
-		/// Entity_Relationship = 10
+		/// Entity Relationship = 10
 		/// </summary>
 		Entity_Relationship = 10,
 		/// <summary>
-		/// Entity_Relationship_Relationships = 12
+		/// Entity Relationship Relationships = 12
 		/// </summary>
 		Entity_Relationship_Relationships = 12,
 		/// <summary>
-		/// Entity_Relationship_Role = 11
+		/// Entity Relationship Role = 11
 		/// </summary>
 		Entity_Relationship_Role = 11,
 		/// <summary>
-		/// Environment_Variable_Definition = 380
+		/// Environment Variable Definition = 380
 		/// </summary>
 		Environment_Variable_Definition = 380,
 		/// <summary>
-		/// Environment_Variable_Value = 381
+		/// Environment Variable Value = 381
 		/// </summary>
 		Environment_Variable_Value = 381,
 		/// <summary>
-		/// Field_Permission = 71
+		/// Field Permission = 71
 		/// </summary>
 		Field_Permission = 71,
 		/// <summary>
-		/// Field_Security_Profile = 70
+		/// Field Security Profile = 70
 		/// </summary>
 		Field_Security_Profile = 70,
 		/// <summary>
@@ -165,11 +165,11 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		Form = 24,
 		/// <summary>
-		/// Hierarchy_Rule = 65
+		/// Hierarchy Rule = 65
 		/// </summary>
 		Hierarchy_Rule = 65,
 		/// <summary>
-		/// Import_Map = 208
+		/// Import Map = 208
 		/// </summary>
 		Import_Map = 208,
 		/// <summary>
@@ -177,31 +177,31 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		Index = 18,
 		/// <summary>
-		/// KB_Article_Template = 38
+		/// KB Article Template = 38
 		/// </summary>
 		KB_Article_Template = 38,
 		/// <summary>
-		/// Localized_Label = 7
+		/// Localized Label = 7
 		/// </summary>
 		Localized_Label = 7,
 		/// <summary>
-		/// Mail_Merge_Template = 39
+		/// Mail Merge Template = 39
 		/// </summary>
 		Mail_Merge_Template = 39,
 		/// <summary>
-		/// Managed_Property = 13
+		/// Managed Property = 13
 		/// </summary>
 		Managed_Property = 13,
 		/// <summary>
-		/// Mobile_Offline_Profile = 161
+		/// Mobile Offline Profile = 161
 		/// </summary>
 		Mobile_Offline_Profile = 161,
 		/// <summary>
-		/// Mobile_Offline_Profile_Item = 162
+		/// Mobile Offline Profile Item = 162
 		/// </summary>
 		Mobile_Offline_Profile_Item = 162,
 		/// <summary>
-		/// Option_Set = 9
+		/// Option Set = 9
 		/// </summary>
 		Option_Set = 9,
 		/// <summary>
@@ -209,11 +209,11 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		Organization = 25,
 		/// <summary>
-		/// Plugin_Assembly = 91
+		/// Plugin Assembly = 91
 		/// </summary>
 		Plugin_Assembly = 91,
 		/// <summary>
-		/// Plugin_Type = 90
+		/// Plugin Type = 90
 		/// </summary>
 		Plugin_Type = 90,
 		/// <summary>
@@ -229,7 +229,7 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		Relationship = 3,
 		/// <summary>
-		/// Relationship_Extra_Condition = 8
+		/// Relationship Extra Condition = 8
 		/// </summary>
 		Relationship_Extra_Condition = 8,
 		/// <summary>
@@ -237,39 +237,39 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		Report = 31,
 		/// <summary>
-		/// Report_Category = 33
+		/// Report Category = 33
 		/// </summary>
 		Report_Category = 33,
 		/// <summary>
-		/// Report_Entity = 32
+		/// Report Entity = 32
 		/// </summary>
 		Report_Entity = 32,
 		/// <summary>
-		/// Report_Visibility = 34
+		/// Report Visibility = 34
 		/// </summary>
 		Report_Visibility = 34,
 		/// <summary>
-		/// Ribbon_Command = 48
+		/// Ribbon Command = 48
 		/// </summary>
 		Ribbon_Command = 48,
 		/// <summary>
-		/// Ribbon_Context_Group = 49
+		/// Ribbon Context Group = 49
 		/// </summary>
 		Ribbon_Context_Group = 49,
 		/// <summary>
-		/// Ribbon_Customization = 50
+		/// Ribbon Customization = 50
 		/// </summary>
 		Ribbon_Customization = 50,
 		/// <summary>
-		/// Ribbon_Diff = 55
+		/// Ribbon Diff = 55
 		/// </summary>
 		Ribbon_Diff = 55,
 		/// <summary>
-		/// Ribbon_Rule = 52
+		/// Ribbon Rule = 52
 		/// </summary>
 		Ribbon_Rule = 52,
 		/// <summary>
-		/// Ribbon_Tab_To_Command_Map = 53
+		/// Ribbon Tab To Command Map = 53
 		/// </summary>
 		Ribbon_Tab_To_Command_Map = 53,
 		/// <summary>
@@ -277,31 +277,31 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		Role = 20,
 		/// <summary>
-		/// Role_Privilege = 21
+		/// Role Privilege = 21
 		/// </summary>
 		Role_Privilege = 21,
 		/// <summary>
-		/// Routing_Rule = 150
+		/// Routing Rule = 150
 		/// </summary>
 		Routing_Rule = 150,
 		/// <summary>
-		/// Routing_Rule_Item = 151
+		/// Routing Rule Item = 151
 		/// </summary>
 		Routing_Rule_Item = 151,
 		/// <summary>
-		/// Saved_Query = 26
+		/// Saved Query = 26
 		/// </summary>
 		Saved_Query = 26,
 		/// <summary>
-		/// Saved_Query_Visualization = 59
+		/// Saved Query Visualization = 59
 		/// </summary>
 		Saved_Query_Visualization = 59,
 		/// <summary>
-		/// SDK_Message_Processing_Step = 92
+		/// SDK Message Processing Step = 92
 		/// </summary>
 		SDK_Message_Processing_Step = 92,
 		/// <summary>
-		/// SDK_Message_Processing_Step_Image = 93
+		/// SDK Message Processing Step Image = 93
 		/// </summary>
 		SDK_Message_Processing_Step_Image = 93,
 		/// <summary>
@@ -333,15 +333,15 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		SdkMessageResponseField = 207,
 		/// <summary>
-		/// Service_Endpoint = 95
+		/// Service Endpoint = 95
 		/// </summary>
 		Service_Endpoint = 95,
 		/// <summary>
-		/// Similarity_Rule = 165
+		/// Similarity Rule = 165
 		/// </summary>
 		Similarity_Rule = 165,
 		/// <summary>
-		/// Site_Map = 62
+		/// Site Map = 62
 		/// </summary>
 		Site_Map = 62,
 		/// <summary>
@@ -349,19 +349,19 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 		/// </summary>
 		SLA = 152,
 		/// <summary>
-		/// SLA_Item = 153
+		/// SLA Item = 153
 		/// </summary>
 		SLA_Item = 153,
 		/// <summary>
-		/// System_Form = 60
+		/// System Form = 60
 		/// </summary>
 		System_Form = 60,
 		/// <summary>
-		/// View_Attribute = 6
+		/// View Attribute = 6
 		/// </summary>
 		View_Attribute = 6,
 		/// <summary>
-		/// Web_Resource = 61
+		/// Web Resource = 61
 		/// </summary>
 		Web_Resource = 61,
 		/// <summary>
@@ -377,15 +377,15 @@ namespace Dev.DevKit.Shared.Entities.SolutionComponentOptionSets
 	public enum RootComponentBehavior
 	{
 		/// <summary>
-		/// Do_not_include_subcomponents = 1
+		/// Do not include subcomponents = 1
 		/// </summary>
 		Do_not_include_subcomponents = 1,
 		/// <summary>
-		/// Include_As_Shell_Only = 2
+		/// Include As Shell Only = 2
 		/// </summary>
 		Include_As_Shell_Only = 2,
 		/// <summary>
-		/// Include_Subcomponents = 0
+		/// Include Subcomponents = 0
 		/// </summary>
 		Include_Subcomponents = 0
 	}
@@ -415,6 +415,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "solutioncomponent";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 7103;
 
 		[DebuggerNonUserCode()]

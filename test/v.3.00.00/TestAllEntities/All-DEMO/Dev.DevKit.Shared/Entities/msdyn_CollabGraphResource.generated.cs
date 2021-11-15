@@ -10,11 +10,6 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.msdyn_CollabGraphResourceOptionSets
 {
-	public enum statecode
-	{
-
-	}
-
 	public enum statuscode
 	{
 		/// <summary>
@@ -45,7 +40,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_GraphResourceId = "msdyn_graphresourceid";
 			public const string msdyn_GraphResourceName = "msdyn_graphresourcename";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
-			public const string statecode = "statecode";
 			public const string statuscode = "statuscode";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
@@ -54,7 +48,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_collabgraphresource";
 
-		public const int EntityTypeCode = 10252;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10224;
 
 		[DebuggerNonUserCode()]
 		public msdyn_CollabGraphResource()
@@ -232,29 +227,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.OverriddenCreatedOn); }
 			set { Entity.Attributes[Fields.OverriddenCreatedOn] = value; }
-		}
-
-		/// <summary>
-		/// <para>Status of the Collaboration Graph Resource entity</para>
-		/// <para>State</para>
-		/// <para>Status</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.msdyn_CollabGraphResourceOptionSets.statecode? statecode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statecode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.msdyn_CollabGraphResourceOptionSets.statecode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.statecode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.statecode] = null;
-			}
 		}
 
 		/// <summary>

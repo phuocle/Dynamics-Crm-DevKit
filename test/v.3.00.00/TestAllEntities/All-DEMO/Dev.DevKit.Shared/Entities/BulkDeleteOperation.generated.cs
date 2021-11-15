@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.BulkDeleteOperationOptionSets
 		/// </summary>
 		Failed = 31,
 		/// <summary>
-		/// In_Progress = 20
+		/// In Progress = 20
 		/// </summary>
 		In_Progress = 20,
 		/// <summary>
@@ -69,7 +69,7 @@ namespace Dev.DevKit.Shared.Entities.BulkDeleteOperationOptionSets
 		/// </summary>
 		Waiting = 10,
 		/// <summary>
-		/// Waiting_For_Resources = 0
+		/// Waiting For Resources = 0
 		/// </summary>
 		Waiting_For_Resources = 0
 	}
@@ -107,6 +107,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "bulkdeleteoperation";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4424;
 
 		[DebuggerNonUserCode()]
@@ -302,7 +303,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the bulk delete operation.</para>
-		/// <para>ReadOnly - Owner</para>
+		/// <para>ReadOnly - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

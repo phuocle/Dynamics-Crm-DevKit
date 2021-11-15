@@ -34,6 +34,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "sdkmessageprocessingstepsecureconfig";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4616;
 
 		[DebuggerNonUserCode()]
@@ -200,7 +201,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Secure step-specific configuration for the plug-in type that is passed to the plug-in's constructor at run time.</para>
+		/// <para>Secure step-specific configuration for the plug-in type that is passed to the plug-in&apos;s constructor at run time.</para>
 		/// <para>String - MaxLength: 1073741823</para>
 		/// <para>Secure Configuration</para>
 		/// </summary>

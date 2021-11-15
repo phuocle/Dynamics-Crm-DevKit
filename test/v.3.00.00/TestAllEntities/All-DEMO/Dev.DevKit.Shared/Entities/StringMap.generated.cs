@@ -23,7 +23,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string AttributeValue = "attributevalue";
 			public const string DisplayOrder = "displayorder";
 			public const string LangId = "langid";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string OrganizationId = "organizationid";
 			public const string StringMapId = "stringmapid";
 			public const string Value = "value";
@@ -32,6 +31,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "stringmap";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1043;
 
 		[DebuggerNonUserCode()]
@@ -121,16 +121,6 @@ namespace Dev.DevKit.Shared.Entities
 		public int? LangId
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.LangId); }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
 		}
 
 		/// <summary>

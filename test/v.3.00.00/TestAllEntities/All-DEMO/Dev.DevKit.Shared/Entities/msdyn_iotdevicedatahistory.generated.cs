@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotdevicedatahistoryOptionSets
 		/// </summary>
 		Enabled = 192350000,
 		/// <summary>
-		/// Not_Found = 192350002
+		/// Not Found = 192350002
 		/// </summary>
 		Not_Found = 192350002
 	}
@@ -88,7 +88,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotdevicedatahistory";
 
-		public const int EntityTypeCode = 10131;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10143;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotdevicedatahistory()
@@ -331,9 +332,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_iotdevicedatahistoryOptionSets.msdyn_Status)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Status] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Status] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Status] = null;
+			}
 		}
 
 		/// <summary>
@@ -362,7 +366,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

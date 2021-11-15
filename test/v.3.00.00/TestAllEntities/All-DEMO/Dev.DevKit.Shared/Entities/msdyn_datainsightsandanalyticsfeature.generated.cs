@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_datainsightsandanalyticsfeatureOption
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,15 +33,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_datainsightsandanalyticsfeatureOption
 	public enum msdyn_provisionstatus
 	{
 		/// <summary>
-		/// Not_Provisioned = 192350001
+		/// Not Provisioned = 192350001
 		/// </summary>
 		Not_Provisioned = 192350001,
 		/// <summary>
-		/// Provision_Failed = 192350002
+		/// Provision Failed = 192350002
 		/// </summary>
 		Provision_Failed = 192350002,
 		/// <summary>
-		/// Provision_in_Progress = 192350003
+		/// Provision in Progress = 192350003
 		/// </summary>
 		Provision_in_Progress = 192350003,
 		/// <summary>
@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_analyticschecksum = "msdyn_analyticschecksum";
 			public const string msdyn_datainsightsandanalyticsfeatureId = "msdyn_datainsightsandanalyticsfeatureid";
+			public const string msdyn_isdemoenabled = "msdyn_isdemoenabled";
 			public const string msdyn_isenabled = "msdyn_isenabled";
 			public const string msdyn_lastaccesstime = "msdyn_lastaccesstime";
 			public const string msdyn_lastreportrefreshtime = "msdyn_lastreportrefreshtime";
@@ -113,7 +114,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_datainsightsandanalyticsfeature";
 
-		public const int EntityTypeCode = 10190;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10202;
 
 		[DebuggerNonUserCode()]
 		public msdyn_datainsightsandanalyticsfeature()
@@ -305,6 +307,18 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.msdyn_datainsightsandanalyticsfeatureId] = value;
 				Entity.Id = value;
 			}
+		}
+
+		/// <summary>
+		/// <para>Is Demo Enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Is Demo Enabled</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_isdemoenabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_isdemoenabled); }
+			set { Entity.Attributes[Fields.msdyn_isdemoenabled] = value; }
 		}
 
 		/// <summary>

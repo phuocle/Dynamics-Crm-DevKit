@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_integrationjobOptionSets
 	public enum msdyn_Type
 	{
 		/// <summary>
-		/// MS_Project_Client = 192350000
+		/// MS Project Client = 192350000
 		/// </summary>
 		MS_Project_Client = 192350000
 	}
@@ -106,7 +106,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_integrationjob";
 
-		public const int EntityTypeCode = 10344;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10407;
 
 		[DebuggerNonUserCode()]
 		public msdyn_integrationjob()
@@ -325,9 +326,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_integrationjobOptionSets.msdyn_Status)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Status] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Status] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Status] = null;
+			}
 		}
 
 		/// <summary>
@@ -345,9 +349,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_integrationjobOptionSets.msdyn_Type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Type] = null;
+			}
 		}
 
 		/// <summary>
@@ -364,7 +371,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

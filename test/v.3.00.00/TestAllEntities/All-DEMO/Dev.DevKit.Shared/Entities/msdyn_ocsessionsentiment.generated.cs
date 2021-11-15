@@ -70,7 +70,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_ocsessionsentiment";
 
-		public const int EntityTypeCode = 10598;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10661;
 
 		[DebuggerNonUserCode()]
 		public msdyn_ocsessionsentiment()
@@ -287,7 +288,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The categorical value generated from "Sentiment Pulse" using specific cut-off points. There are three categories: “Positive”, “Neutral”, “Negative”.</para>
+		/// <para>The categorical value generated from &quot;Sentiment Pulse&quot; using specific cut-off points. There are three categories: “Positive”, “Neutral”, “Negative”.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Sentiment Zone</para>
 		/// </summary>
@@ -312,7 +313,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

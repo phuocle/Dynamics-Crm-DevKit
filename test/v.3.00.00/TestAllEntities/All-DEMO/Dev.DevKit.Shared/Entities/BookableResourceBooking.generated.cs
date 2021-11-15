@@ -33,21 +33,21 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceBookingOptionSets
 		/// </summary>
 		Mobile = 690970002,
 		/// <summary>
-		/// Resource_Scheduling_Optimization = 192350000
+		/// Resource Scheduling Optimization = 192350000
 		/// </summary>
 		Resource_Scheduling_Optimization = 192350000,
 		/// <summary>
-		/// Schedule_Assistant = 690970004
+		/// Schedule Assistant = 690970004
 		/// </summary>
 		Schedule_Assistant = 690970004,
 		/// <summary>
-		/// Schedule_Board = 690970001
+		/// Schedule Board = 690970001
 		/// </summary>
 		Schedule_Board = 690970001,
 		/// <summary>
-		/// System_Agreement_Schedule = 690970005
+		/// System - Agreement Schedule = 690970005
 		/// </summary>
-		System_Agreement_Schedule = 690970005
+		System__Agreement_Schedule = 690970005
 	}
 
 	public enum msdyn_CrewMemberType
@@ -101,15 +101,15 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceBookingOptionSets
 		/// </summary>
 		Approximate = 192350003,
 		/// <summary>
-		/// Bing_Maps_with_historical_traffic = 192350001
+		/// Bing Maps with historical traffic = 192350001
 		/// </summary>
 		Bing_Maps_with_historical_traffic = 192350001,
 		/// <summary>
-		/// Bing_Maps_without_historical_traffic = 192350000
+		/// Bing Maps without historical traffic = 192350000
 		/// </summary>
 		Bing_Maps_without_historical_traffic = 192350000,
 		/// <summary>
-		/// Custom_Map_Provider = 192350002
+		/// Custom Map Provider = 192350002
 		/// </summary>
 		Custom_Map_Provider = 192350002
 	}
@@ -121,7 +121,7 @@ namespace Dev.DevKit.Shared.Entities.BookableResourceBookingOptionSets
 		/// </summary>
 		Facility = 690970001,
 		/// <summary>
-		/// Location_Agnostic = 690970002
+		/// Location Agnostic = 690970002
 		/// </summary>
 		Location_Agnostic = 690970002,
 		/// <summary>
@@ -200,6 +200,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_projectteamid = "msdyn_projectteamid";
 			public const string msdyn_quickNoteAction = "msdyn_quickNoteAction";
 			public const string msdyn_requirementgroupid = "msdyn_requirementgroupid";
+			public const string msdyn_requirementgroupset = "msdyn_requirementgroupset";
 			public const string msdyn_resourcecategoryid = "msdyn_resourcecategoryid";
 			public const string msdyn_ResourceGroup = "msdyn_resourcegroup";
 			public const string msdyn_ResourceRequirement = "msdyn_resourcerequirement";
@@ -238,6 +239,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "bookableresourcebooking";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1145;
 
 		[DebuggerNonUserCode()]
@@ -489,7 +491,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the total travel duration. Calculated based on the difference between the Bookable Resource Booking's start time and actual arrival time.</para>
+		/// <para>Shows the total travel duration. Calculated based on the difference between the Bookable Resource Booking&apos;s start time and actual arrival time.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Actual Travel Duration</para>
 		/// </summary>
@@ -796,6 +798,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Requirement Group Set</para>
+		/// <para>String - MaxLength: 40</para>
+		/// <para>Requirement Group Set</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_requirementgroupset
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_requirementgroupset); }
+			set { Entity.Attributes[Fields.msdyn_requirementgroupset] = value; }
+		}
+
+		/// <summary>
 		/// <para>Resource Category</para>
 		/// <para>Lookup to bookableresourcecategory</para>
 		/// <para>Resource Category</para>
@@ -1059,7 +1073,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

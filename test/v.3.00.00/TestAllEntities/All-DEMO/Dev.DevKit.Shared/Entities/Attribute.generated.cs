@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.AttributeOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -38,6 +38,8 @@ namespace Dev.DevKit.Shared.Entities
 		public struct Fields
 		{
 			public const string AttributeId = "attributeid";
+			public const string AttributeOf = "attributeof";
+			public const string AttributeTypeId = "attributetypeid";
 			public const string ComponentState = "componentstate";
 			public const string ExternalName = "externalname";
 			public const string LogicalName = "logicalname";
@@ -48,11 +50,13 @@ namespace Dev.DevKit.Shared.Entities
 			public const string PhysicalName = "physicalname";
 			public const string SolutionId = "solutionid";
 			public const string TableColumnName = "tablecolumnname";
+			public const string ValidForReadAPI = "validforreadapi";
 			public const string VersionNumber = "versionnumber";
 		}
 
 		public const string EntityLogicalName = "attribute";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9808;
 
 		[DebuggerNonUserCode()]
@@ -117,6 +121,28 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.AttributeId] = value;
 				Entity.Id = value;
 			}
+		}
+
+		/// <summary>
+		/// <para>Attribute Of</para>
+		/// <para>ReadOnly - Uniqueidentifier</para>
+		/// <para>Attribute Of</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid? AttributeOf
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.AttributeOf); }
+		}
+
+		/// <summary>
+		/// <para>Attribute Type Id</para>
+		/// <para>ReadOnly - Uniqueidentifier</para>
+		/// <para>Attribute Type Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid? AttributeTypeId
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.AttributeTypeId); }
 		}
 
 		/// <summary>
@@ -239,6 +265,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.TableColumnName); }
 			set { Entity.Attributes[Fields.TableColumnName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Valid For Read API</para>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para>Valid For Read API</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? ValidForReadAPI
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.ValidForReadAPI); }
 		}
 
 		/// <summary>

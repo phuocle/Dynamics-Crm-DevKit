@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_urnotificationtemplateOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,15 +33,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_urnotificationtemplateOptionSets
 	public enum msdyn_channeltype
 	{
 		/// <summary>
-		/// Co_browse = 192390000
+		/// Co-browse = 192390000
 		/// </summary>
-		Co_browse = 192390000,
+		Cobrowse = 192390000,
 		/// <summary>
 		/// Custom = 192350002
 		/// </summary>
 		Custom = 192350002,
 		/// <summary>
-		/// Entity_Records = 192350000
+		/// Entity Records = 192350000
 		/// </summary>
 		Entity_Records = 192350000,
 		/// <summary>
@@ -53,15 +53,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_urnotificationtemplateOptionSets
 		/// </summary>
 		LINE = 192310000,
 		/// <summary>
-		/// Live_chat = 192360000
+		/// Live chat = 192360000
 		/// </summary>
 		Live_chat = 192360000,
 		/// <summary>
-		/// Microsoft_Teams = 19241000
+		/// Microsoft Teams = 19241000
 		/// </summary>
 		Microsoft_Teams = 19241000,
 		/// <summary>
-		/// Screen_sharing = 192400000
+		/// Screen sharing = 192400000
 		/// </summary>
 		Screen_sharing = 192400000,
 		/// <summary>
@@ -153,7 +153,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_urnotificationtemplate";
 
-		public const int EntityTypeCode = 10608;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10683;
 
 		[DebuggerNonUserCode()]
 		public msdyn_urnotificationtemplate()
@@ -419,7 +420,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

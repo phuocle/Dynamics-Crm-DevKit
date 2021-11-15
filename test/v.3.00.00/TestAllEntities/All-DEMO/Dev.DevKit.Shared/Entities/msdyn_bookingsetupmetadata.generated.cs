@@ -81,7 +81,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookingsetupmetadata";
 
-		public const int EntityTypeCode = 10298;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10361;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingsetupmetadata()
@@ -261,7 +262,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether, when moving open slots to the next day, to leave the old slots and change their status to "Cancel."</para>
+		/// <para>Select whether, when moving open slots to the next day, to leave the old slots and change their status to &quot;Cancel.&quot;</para>
 		/// <para>Boolean</para>
 		/// <para>Cancel Bookings When Moving</para>
 		/// </summary>
@@ -285,7 +286,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The default booking canceled status to use when a user can't select a status.</para>
+		/// <para>The default booking canceled status to use when a user can&apos;t select a status.</para>
 		/// <para>Lookup to bookingstatus</para>
 		/// <para>Default Booking Canceled Status</para>
 		/// </summary>
@@ -297,7 +298,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The default booking committed status to use when a user can't select a status.</para>
+		/// <para>The default booking committed status to use when a user can&apos;t select a status.</para>
 		/// <para>Lookup to bookingstatus</para>
 		/// <para>Default Booking Committed Status</para>
 		/// </summary>
@@ -321,7 +322,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The default requirement active status to use when a user can't select a status</para>
+		/// <para>The default requirement active status to use when a user can&apos;t select a status</para>
 		/// <para>Lookup to msdyn_requirementstatus</para>
 		/// <para>Default Requirement Active Status</para>
 		/// </summary>
@@ -333,7 +334,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The default requirement canceled status to use when a user can't select a status.</para>
+		/// <para>The default requirement canceled status to use when a user can&apos;t select a status.</para>
 		/// <para>Lookup to msdyn_requirementstatus</para>
 		/// <para>Default Requirement Canceled Status</para>
 		/// </summary>
@@ -345,7 +346,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The default requirement completed status to use when a user can't select a status.</para>
+		/// <para>The default requirement completed status to use when a user can&apos;t select a status.</para>
 		/// <para>Lookup to msdyn_requirementstatus</para>
 		/// <para>Default Requirement Completed Status</para>
 		/// </summary>
@@ -357,6 +358,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Determines if a requirement should be created automatically when a booking is generated and there&apos;s no requirement for a scheduling entity.</para>
 		/// <para>Boolean</para>
 		/// <para>Disable Requirement Auto Creation for Bookings</para>
 		/// </summary>
@@ -451,7 +453,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

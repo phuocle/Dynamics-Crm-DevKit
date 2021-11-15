@@ -39,7 +39,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_suggestedactivity";
 
-		public const int EntityTypeCode = 10227;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10248;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestedactivity()
@@ -218,7 +219,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Sender's Name</para>
+		/// <para>Sender&apos;s Name</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Sender's Name</para>
 		/// </summary>

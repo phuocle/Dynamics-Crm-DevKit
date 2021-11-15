@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_scheduleboardsettingOptionSets
 		/// </summary>
 		Everyone = 192350000,
 		/// <summary>
-		/// Just_me = 192350001
+		/// Just me = 192350001
 		/// </summary>
 		Just_me = 192350001,
 		/// <summary>
-		/// Specific_people = 192350002
+		/// Specific people = 192350002
 		/// </summary>
 		Specific_people = 192350002,
 		/// <summary>
@@ -129,7 +129,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_scheduleboardsetting";
 
-		public const int EntityTypeCode = 10314;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10377;
 
 		[DebuggerNonUserCode()]
 		public msdyn_scheduleboardsetting()
@@ -723,9 +724,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_scheduleboardsettingOptionSets.msdyn_ShareType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_ShareType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_ShareType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_ShareType] = null;
+			}
 		}
 
 		/// <summary>
@@ -763,7 +767,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the number of records to be displayed per page in 'Resource Requirement' section.</para>
+		/// <para>Shows the number of records to be displayed per page in &apos;Resource Requirement&apos; section.</para>
 		/// <para>Required - Integer - MinValue: 1 - MaxValue: 2,147,483,647</para>
 		/// <para>Resource Requirement View Page Record Count</para>
 		/// </summary>
@@ -810,7 +814,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

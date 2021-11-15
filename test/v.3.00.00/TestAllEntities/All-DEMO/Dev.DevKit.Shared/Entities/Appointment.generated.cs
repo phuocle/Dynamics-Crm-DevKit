@@ -10,6 +10,102 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.AppointmentOptionSets
 {
+	public enum ActivityTypeCode
+	{
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Booking Alert = 10357
+		/// </summary>
+		Booking_Alert = 10357,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Conversation = 10644
+		/// </summary>
+		Conversation = 10644,
+		/// <summary>
+		/// Customer Voice alert = 10261
+		/// </summary>
+		Customer_Voice_alert = 10261,
+		/// <summary>
+		/// Customer Voice survey invite = 10271
+		/// </summary>
+		Customer_Voice_survey_invite = 10271,
+		/// <summary>
+		/// Customer Voice survey response = 10273
+		/// </summary>
+		Customer_Voice_survey_response = 10273,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Fax = 4204
+		/// </summary>
+		Fax = 4204,
+		/// <summary>
+		/// Letter = 4207
+		/// </summary>
+		Letter = 4207,
+		/// <summary>
+		/// Opportunity Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Order Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Outbound message = 10752
+		/// </summary>
+		Outbound_message = 10752,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Project Service Approval = 10387
+		/// </summary>
+		Project_Service_Approval = 10387,
+		/// <summary>
+		/// Quick Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quote Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Recurring Appointment = 4251
+		/// </summary>
+		Recurring_Appointment = 4251,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10659
+		/// </summary>
+		Session = 10659,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
+
 	public enum AttachmentErrors
 	{
 		/// <summary>
@@ -17,7 +113,7 @@ namespace Dev.DevKit.Shared.Entities.AppointmentOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// The_appointment_was_saved_as_a_Microsoft_Dynamics_365_appointment_record_but_not_all_the_attachments_could_be_saved_with_it_An_attachment_cannot_be_saved_if_it_is_blocked_or_if_its_file_type_is_invalid = 1
+		/// The appointment was saved as a Microsoft Dynamics 365 appointment record, but not all the attachments could be saved with it. An attachment cannot be saved if it is blocked or if its file type is invalid. = 1
 		/// </summary>
 		The_appointment_was_saved_as_a_Microsoft_Dynamics_365_appointment_record_but_not_all_the_attachments_could_be_saved_with_it_An_attachment_cannot_be_saved_if_it_is_blocked_or_if_its_file_type_is_invalid = 1
 	}
@@ -25,23 +121,23 @@ namespace Dev.DevKit.Shared.Entities.AppointmentOptionSets
 	public enum InstanceTypeCode
 	{
 		/// <summary>
-		/// Not_Recurring = 0
+		/// Not Recurring = 0
 		/// </summary>
 		Not_Recurring = 0,
 		/// <summary>
-		/// Recurring_Exception = 3
+		/// Recurring Exception = 3
 		/// </summary>
 		Recurring_Exception = 3,
 		/// <summary>
-		/// Recurring_Future_Exception = 4
+		/// Recurring Future Exception = 4
 		/// </summary>
 		Recurring_Future_Exception = 4,
 		/// <summary>
-		/// Recurring_Instance = 2
+		/// Recurring Instance = 2
 		/// </summary>
 		Recurring_Instance = 2,
 		/// <summary>
-		/// Recurring_Master = 1
+		/// Recurring Master = 1
 		/// </summary>
 		Recurring_Master = 1
 	}
@@ -101,7 +197,7 @@ namespace Dev.DevKit.Shared.Entities.AppointmentOptionSets
 		/// </summary>
 		Free = 1,
 		/// <summary>
-		/// Out_of_Office = 6
+		/// Out of Office = 6
 		/// </summary>
 		Out_of_Office = 6,
 		/// <summary>
@@ -184,6 +280,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "appointment";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4201;
 
 		[DebuggerNonUserCode()]
@@ -397,7 +494,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -610,7 +707,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, user, or other equipment resources that are not needed at the appointment, but can optionally attend.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;entitlement;equipment;knowledgearticle;lead;queue;systemuser;unresolvedaddress</para>
 		/// <para>Optional Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -633,8 +730,8 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the user who is in charge of coordinating or leading the appointment to make sure the appointment is displayed in the user's My Activities view.</para>
-		/// <para>PartyList</para>
+		/// <para>Enter the user who is in charge of coordinating or leading the appointment to make sure the appointment is displayed in the user&apos;s My Activities view.</para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Organizer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -693,7 +790,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -785,7 +882,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, user, or other equipment resources that are required to attend the appointment.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;entitlement;equipment;knowledgearticle;lead;queue;systemuser;unresolvedaddress</para>
 		/// <para>Required Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -914,7 +1011,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the appointment is open, completed, or canceled. Completed and canceled appointments are read-only and can't be edited.</para>
+		/// <para>Shows whether the appointment is open, completed, or canceled. Completed and canceled appointments are read-only and can&apos;t be edited.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -937,7 +1034,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the appointment's status.</para>
+		/// <para>Select the appointment&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

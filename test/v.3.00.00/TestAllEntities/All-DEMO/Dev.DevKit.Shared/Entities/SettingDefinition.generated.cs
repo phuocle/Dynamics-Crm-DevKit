@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SettingDefinitionOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -49,15 +49,15 @@ namespace Dev.DevKit.Shared.Entities.SettingDefinitionOptionSets
 	public enum OverridableLevel
 	{
 		/// <summary>
-		/// App_And_Organization = 0
+		/// App And Organization = 0
 		/// </summary>
 		App_And_Organization = 0,
 		/// <summary>
-		/// App_Only = 2
+		/// App Only = 2
 		/// </summary>
 		App_Only = 2,
 		/// <summary>
-		/// Organization_Only = 1
+		/// Organization Only = 1
 		/// </summary>
 		Organization_Only = 1
 	}
@@ -65,7 +65,7 @@ namespace Dev.DevKit.Shared.Entities.SettingDefinitionOptionSets
 	public enum ReleaseLevel
 	{
 		/// <summary>
-		/// Early_Access = 1
+		/// Early Access = 1
 		/// </summary>
 		Early_Access = 1,
 		/// <summary>
@@ -119,9 +119,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string Description = "description";
 			public const string DisplayName = "displayname";
 			public const string ImportSequenceNumber = "importsequencenumber";
+			public const string InformationUrl = "informationurl";
 			public const string IsHidden = "ishidden";
 			public const string IsManaged = "ismanaged";
 			public const string IsOverridable = "isoverridable";
+			public const string IsPlatform = "isplatform";
 			public const string IsPreview = "ispreview";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
@@ -144,7 +146,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "settingdefinition";
 
-		public const int EntityTypeCode = 10030;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10037;
 
 		[DebuggerNonUserCode()]
 		public SettingDefinition()
@@ -326,9 +329,21 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Specifies information url of the setting.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Information Url</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string InformationUrl
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.InformationUrl); }
+			set { Entity.Attributes[Fields.InformationUrl] = value; }
+		}
+
+		/// <summary>
 		/// <para>Specifies whether settings is hidden from ui designer.</para>
 		/// <para>Boolean</para>
-		/// <para>IsHidden</para>
+		/// <para>Is Hidden</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? IsHidden
@@ -351,7 +366,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Specifies whether settings can be overridden at an app or org level by other publishers.</para>
 		/// <para>Boolean</para>
-		/// <para>IsOverridable</para>
+		/// <para>Is Overridable</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? IsOverridable
@@ -361,9 +376,21 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Specifies whether setting is a internal platform setting.</para>
+		/// <para>Boolean</para>
+		/// <para>Is Platform</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsPlatform
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsPlatform); }
+			set { Entity.Attributes[Fields.IsPlatform] = value; }
+		}
+
+		/// <summary>
 		/// <para>Specifies whether settings controls the flighting a preview feature.</para>
 		/// <para>ReadOnly - Boolean</para>
-		/// <para>IsPreview</para>
+		/// <para>Is Preview</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? IsPreview
@@ -464,7 +491,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Specifies settings release level.</para>
 		/// <para>Picklist</para>
-		/// <para>ReleaseLevel</para>
+		/// <para>Release Level</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.SettingDefinitionOptionSets.ReleaseLevel? ReleaseLevel

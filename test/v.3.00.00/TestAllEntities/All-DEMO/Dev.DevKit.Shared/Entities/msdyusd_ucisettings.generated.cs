@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_ucisettingsOptionSets
 		/// </summary>
 		Air = 0,
 		/// <summary>
-		/// Unified_Blue = 1
+		/// Unified Blue = 1
 		/// </summary>
 		Unified_Blue = 1
 	}
@@ -79,7 +79,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_ucisettings";
 
-		public const int EntityTypeCode = 10705;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10784;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_ucisettings()
@@ -295,7 +296,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

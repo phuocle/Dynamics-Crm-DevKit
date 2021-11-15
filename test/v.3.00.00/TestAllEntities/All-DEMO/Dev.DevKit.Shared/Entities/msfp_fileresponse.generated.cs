@@ -48,6 +48,16 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msfp_file1 = "msfp_file1";
+			public const string msfp_file10 = "msfp_file10";
+			public const string msfp_file2 = "msfp_file2";
+			public const string msfp_file3 = "msfp_file3";
+			public const string msfp_file4 = "msfp_file4";
+			public const string msfp_file5 = "msfp_file5";
+			public const string msfp_file6 = "msfp_file6";
+			public const string msfp_file7 = "msfp_file7";
+			public const string msfp_file8 = "msfp_file8";
+			public const string msfp_file9 = "msfp_file9";
 			public const string msfp_fileresponseId = "msfp_fileresponseid";
 			public const string msfp_name = "msfp_name";
 			public const string msfp_otherproperties = "msfp_otherproperties";
@@ -69,7 +79,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_fileresponse";
 
-		public const int EntityTypeCode = 10241;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10264;
 
 		[DebuggerNonUserCode()]
 		public msfp_fileresponse()
@@ -198,6 +209,116 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>First uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 1</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file1
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file1); }
+		}
+
+		/// <summary>
+		/// <para>Tenth uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 10</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file10
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file10); }
+		}
+
+		/// <summary>
+		/// <para>Second uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 2</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file2
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file2); }
+		}
+
+		/// <summary>
+		/// <para>Third uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 3</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file3
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file3); }
+		}
+
+		/// <summary>
+		/// <para>Fourth uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 4</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file4
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file4); }
+		}
+
+		/// <summary>
+		/// <para>Fifth uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 5</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file5
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file5); }
+		}
+
+		/// <summary>
+		/// <para>Sixth uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 6</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file6
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file6); }
+		}
+
+		/// <summary>
+		/// <para>Seventh uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 7</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file7
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file7); }
+		}
+
+		/// <summary>
+		/// <para>Eighth uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 8</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file8
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file8); }
+		}
+
+		/// <summary>
+		/// <para>Ninth uploaded file.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File 9</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msfp_file9
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msfp_file9); }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier for entity instances</para>
 		/// <para>Primary Key - Uniqueidentifier</para>
 		/// <para>Customer Voice file response</para>
@@ -299,7 +420,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

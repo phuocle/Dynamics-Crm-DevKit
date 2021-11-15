@@ -106,6 +106,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ismanaged = "msdyn_ismanaged";
 			public const string msdyn_isoverwritecustomizations = "msdyn_isoverwritecustomizations";
 			public const string msdyn_ispatch = "msdyn_ispatch";
+			public const string msdyn_maxretries = "msdyn_maxretries";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_operation = "msdyn_operation";
 			public const string msdyn_packagename = "msdyn_packagename";
@@ -113,6 +114,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_publisherid = "msdyn_publisherid";
 			public const string msdyn_publishername = "msdyn_publishername";
 			public const string msdyn_result = "msdyn_result";
+			public const string msdyn_retrycount = "msdyn_retrycount";
 			public const string msdyn_solutionhistoryId = "msdyn_solutionhistoryid";
 			public const string msdyn_solutionid = "msdyn_solutionid";
 			public const string msdyn_solutionversion = "msdyn_solutionversion";
@@ -124,7 +126,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_solutionhistory";
 
-		public const int EntityTypeCode = 10003;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10004;
 
 		[DebuggerNonUserCode()]
 		public msdyn_solutionhistory()
@@ -274,6 +277,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Maximum number of retries.</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
+		/// <para>Maximum Retries</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_maxretries
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_maxretries); }
+			set { Entity.Attributes[Fields.msdyn_maxretries] = value; }
+		}
+
+		/// <summary>
 		/// <para>The name of the custom entity.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Solution Name</para>
@@ -360,6 +375,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_result); }
 			set { Entity.Attributes[Fields.msdyn_result] = value; }
+		}
+
+		/// <summary>
+		/// <para>Retry count</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
+		/// <para>Retry count</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_retrycount
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_retrycount); }
+			set { Entity.Attributes[Fields.msdyn_retrycount] = value; }
 		}
 
 		/// <summary>

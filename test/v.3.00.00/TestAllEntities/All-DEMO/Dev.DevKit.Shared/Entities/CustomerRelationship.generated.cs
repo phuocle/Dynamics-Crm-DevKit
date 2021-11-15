@@ -45,6 +45,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "customerrelationship";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4502;
 
 		[DebuggerNonUserCode()]
@@ -142,7 +143,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the primary account or contact involved in the customer relationship.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account;contact</para>
 		/// <para>Party 1</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -169,7 +170,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type additional information about the primary party's role in the customer relationship, such as the length or quality of the relationship.</para>
+		/// <para>Type additional information about the primary party&apos;s role in the customer relationship, such as the length or quality of the relationship.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Description 1</para>
 		/// </summary>
@@ -181,7 +182,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the primary party's role or nature of the relationship the customer has with the second party. The field is read-only until both parties have been selected. Administrators can configure role values under Business Management in the Settings area.</para>
+		/// <para>Choose the primary party&apos;s role or nature of the relationship the customer has with the second party. The field is read-only until both parties have been selected. Administrators can configure role values under Business Management in the Settings area.</para>
 		/// <para>Lookup to relationshiprole</para>
 		/// <para>Role 1</para>
 		/// </summary>
@@ -251,7 +252,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -296,7 +297,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the secondary account or contact involved in the customer relationship.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account;contact</para>
 		/// <para>Party 2</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -307,7 +308,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type additional information about the secondary party's role in the customer relationship, such as the length or quality of the relationship.</para>
+		/// <para>Type additional information about the secondary party&apos;s role in the customer relationship, such as the length or quality of the relationship.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Description 2</para>
 		/// </summary>
@@ -319,7 +320,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the secondary party's role or nature of the relationship the customer has with the primary party. The field is read-only until both parties have been selected. Administrators can configure role values under Business Management in the Settings area.</para>
+		/// <para>Choose the secondary party&apos;s role or nature of the relationship the customer has with the primary party. The field is read-only until both parties have been selected. Administrators can configure role values under Business Management in the Settings area.</para>
 		/// <para>Lookup to relationshiprole</para>
 		/// <para>Role 2</para>
 		/// </summary>

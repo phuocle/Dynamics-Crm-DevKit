@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -45,13 +45,21 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 	public enum ObjectTypeCode
 	{
 		/// <summary>
+		/// [Deprecated] Dynamics Customer Service Analytics = 10203
+		/// </summary>
+		_Deprecated_Dynamics_Customer_Service_Analytics = 10203,
+		/// <summary>
+		/// (Deprecated)Teams Engagement Context = 10749
+		/// </summary>
+		_DeprecatedTeams_Engagement_Context = 10749,
+		/// <summary>
 		/// Account = 1
 		/// </summary>
 		Account = 1,
 		/// <summary>
-		/// Account_Project_Price_List = 10323
+		/// Account Project Price List = 10386
 		/// </summary>
-		Account_Project_Price_List = 10323,
+		Account_Project_Price_List = 10386,
 		/// <summary>
 		/// AccountLeads = 16
 		/// </summary>
@@ -61,41 +69,41 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		ACIViewMapper = 8040,
 		/// <summary>
-		/// Action_Call = 10686
+		/// Action Call = 10765
 		/// </summary>
-		Action_Call = 10686,
+		Action_Call = 10765,
 		/// <summary>
-		/// Action_Call_Workflow = 10685
+		/// Action Call Workflow = 10764
 		/// </summary>
-		Action_Call_Workflow = 10685,
+		Action_Call_Workflow = 10764,
 		/// <summary>
-		/// Action_Card = 9962
+		/// Action Card = 9962
 		/// </summary>
 		Action_Card = 9962,
 		/// <summary>
-		/// Action_Card_Regarding = 10219
+		/// Action Card Regarding = 10240
 		/// </summary>
-		Action_Card_Regarding = 10219,
+		Action_Card_Regarding = 10240,
 		/// <summary>
-		/// Action_Card_Role_Setting = 10220
+		/// Action Card Role Setting = 10241
 		/// </summary>
-		Action_Card_Role_Setting = 10220,
+		Action_Card_Role_Setting = 10241,
 		/// <summary>
-		/// Action_Card_Type = 9983
+		/// Action Card Type = 9983
 		/// </summary>
 		Action_Card_Type = 9983,
 		/// <summary>
-		/// Action_Card_User_Settings = 9973
+		/// Action Card User Settings = 9973
 		/// </summary>
 		Action_Card_User_Settings = 9973,
 		/// <summary>
-		/// Action_Input_Parameter = 10165
+		/// Action Input Parameter = 10177
 		/// </summary>
-		Action_Input_Parameter = 10165,
+		Action_Input_Parameter = 10177,
 		/// <summary>
-		/// Action_Output_Parameter = 10166
+		/// Action Output Parameter = 10178
 		/// </summary>
-		Action_Output_Parameter = 10166,
+		Action_Output_Parameter = 10178,
 		/// <summary>
 		/// ActionCardUserState = 9968
 		/// </summary>
@@ -105,263 +113,267 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Activity = 4200,
 		/// <summary>
-		/// Activity_File_Attachment = 10050
+		/// Activity File Attachment = 10074
 		/// </summary>
-		Activity_File_Attachment = 10050,
+		Activity_File_Attachment = 10074,
 		/// <summary>
-		/// Activity_monitor = 10107
+		/// Activity monitor = 10119
 		/// </summary>
-		Activity_monitor = 10107,
+		Activity_monitor = 10119,
 		/// <summary>
-		/// Activity_Party = 135
+		/// Activity Party = 135
 		/// </summary>
 		Activity_Party = 135,
 		/// <summary>
-		/// Actual = 10292
+		/// Actual = 10355
 		/// </summary>
-		Actual = 10292,
+		Actual = 10355,
 		/// <summary>
-		/// Actual_Data_Export_Deprecated = 10332
+		/// Actual Data Export (Deprecated) = 10395
 		/// </summary>
-		Actual_Data_Export_Deprecated = 10332,
+		Actual_Data_Export_Deprecated = 10395,
 		/// <summary>
-		/// Adaptive_Card_Configuration = 10174
+		/// Adaptive Card Configuration = 10186
 		/// </summary>
-		Adaptive_Card_Configuration = 10174,
+		Adaptive_Card_Configuration = 10186,
 		/// <summary>
 		/// Address = 1071
 		/// </summary>
 		Address = 1071,
 		/// <summary>
-		/// admin_settings_entity = 10205
+		/// admin_settings_entity = 10218
 		/// </summary>
-		admin_settings_entity = 10205,
+		admin_settings_entity = 10218,
 		/// <summary>
-		/// AdminAppState = 10587
+		/// AdminAppState = 10624
 		/// </summary>
-		AdminAppState = 10587,
+		AdminAppState = 10624,
 		/// <summary>
-		/// Advanced_Similarity_Rule = 9949
+		/// Advanced Similarity Rule = 9949
 		/// </summary>
 		Advanced_Similarity_Rule = 9949,
 		/// <summary>
-		/// Agent_script = 10162
+		/// Agent script = 10174
 		/// </summary>
-		Agent_script = 10162,
+		Agent_script = 10174,
 		/// <summary>
-		/// Agent_Script_Answer = 10688
+		/// Agent Script Answer = 10767
 		/// </summary>
-		Agent_Script_Answer = 10688,
+		Agent_Script_Answer = 10767,
 		/// <summary>
-		/// Agent_script_step = 10163
+		/// Agent script step = 10175
 		/// </summary>
-		Agent_script_step = 10163,
+		Agent_script_step = 10175,
 		/// <summary>
-		/// Agent_Script_Task = 10701
+		/// Agent Script Task = 10780
 		/// </summary>
-		Agent_Script_Task = 10701,
+		Agent_Script_Task = 10780,
 		/// <summary>
-		/// Agent_Script_Task_Category = 10687
+		/// Agent Script Task Category = 10766
 		/// </summary>
-		Agent_Script_Task_Category = 10687,
+		Agent_Script_Task_Category = 10766,
 		/// <summary>
-		/// Agent_Status_history = 10588
+		/// Agent Status history = 10625
 		/// </summary>
-		Agent_Status_history = 10588,
+		Agent_Status_history = 10625,
 		/// <summary>
-		/// Agreement = 10413
+		/// Agreement = 10477
 		/// </summary>
-		Agreement = 10413,
+		Agreement = 10477,
 		/// <summary>
-		/// Agreement_Booking_Date = 10414
+		/// Agreement Booking Date = 10478
 		/// </summary>
-		Agreement_Booking_Date = 10414,
+		Agreement_Booking_Date = 10478,
 		/// <summary>
-		/// Agreement_Booking_Incident = 10415
+		/// Agreement Booking Incident = 10479
 		/// </summary>
-		Agreement_Booking_Incident = 10415,
+		Agreement_Booking_Incident = 10479,
 		/// <summary>
-		/// Agreement_Booking_Product = 10416
+		/// Agreement Booking Product = 10480
 		/// </summary>
-		Agreement_Booking_Product = 10416,
+		Agreement_Booking_Product = 10480,
 		/// <summary>
-		/// Agreement_Booking_Service = 10417
+		/// Agreement Booking Service = 10481
 		/// </summary>
-		Agreement_Booking_Service = 10417,
+		Agreement_Booking_Service = 10481,
 		/// <summary>
-		/// Agreement_Booking_Service_Task = 10418
+		/// Agreement Booking Service Task = 10482
 		/// </summary>
-		Agreement_Booking_Service_Task = 10418,
+		Agreement_Booking_Service_Task = 10482,
 		/// <summary>
-		/// Agreement_Booking_Setup = 10419
+		/// Agreement Booking Setup = 10483
 		/// </summary>
-		Agreement_Booking_Setup = 10419,
+		Agreement_Booking_Setup = 10483,
 		/// <summary>
-		/// Agreement_Business_Process = 10428
+		/// Agreement Business Process = 10492
 		/// </summary>
-		Agreement_Business_Process = 10428,
+		Agreement_Business_Process = 10492,
 		/// <summary>
-		/// Agreement_Invoice_Date = 10420
+		/// Agreement Invoice Date = 10484
 		/// </summary>
-		Agreement_Invoice_Date = 10420,
+		Agreement_Invoice_Date = 10484,
 		/// <summary>
-		/// Agreement_Invoice_Product = 10421
+		/// Agreement Invoice Product = 10485
 		/// </summary>
-		Agreement_Invoice_Product = 10421,
+		Agreement_Invoice_Product = 10485,
 		/// <summary>
-		/// Agreement_Invoice_Setup = 10422
+		/// Agreement Invoice Setup = 10486
 		/// </summary>
-		Agreement_Invoice_Setup = 10422,
+		Agreement_Invoice_Setup = 10486,
 		/// <summary>
-		/// Agreement_Substatus = 10423
+		/// Agreement Substatus = 10487
 		/// </summary>
-		Agreement_Substatus = 10423,
+		Agreement_Substatus = 10487,
 		/// <summary>
-		/// AI_Builder_Dataset = 10087
+		/// AI Builder Dataset = 10056
 		/// </summary>
-		AI_Builder_Dataset = 10087,
+		AI_Builder_Dataset = 10056,
 		/// <summary>
-		/// AI_Builder_Dataset_File = 10088
+		/// AI Builder Dataset File = 10057
 		/// </summary>
-		AI_Builder_Dataset_File = 10088,
+		AI_Builder_Dataset_File = 10057,
 		/// <summary>
-		/// AI_Builder_Dataset_Record = 10089
+		/// AI Builder Dataset Record = 10058
 		/// </summary>
-		AI_Builder_Dataset_Record = 10089,
+		AI_Builder_Dataset_Record = 10058,
 		/// <summary>
-		/// AI_Builder_Datasets_Container = 10090
+		/// AI Builder Datasets Container = 10059
 		/// </summary>
-		AI_Builder_Datasets_Container = 10090,
+		AI_Builder_Datasets_Container = 10059,
 		/// <summary>
-		/// AI_Builder_File = 10091
+		/// AI Builder File = 10060
 		/// </summary>
-		AI_Builder_File = 10091,
+		AI_Builder_File = 10060,
 		/// <summary>
-		/// AI_Builder_File_Attached_Data = 10092
+		/// AI Builder File Attached Data = 10061
 		/// </summary>
-		AI_Builder_File_Attached_Data = 10092,
+		AI_Builder_File_Attached_Data = 10061,
 		/// <summary>
-		/// AI_Configuration = 402
+		/// AI Configuration = 402
 		/// </summary>
 		AI_Configuration = 402,
 		/// <summary>
-		/// AI_Form_Processing_Document = 10081
+		/// AI Form Processing Document = 10050
 		/// </summary>
-		AI_Form_Processing_Document = 10081,
+		AI_Form_Processing_Document = 10050,
 		/// <summary>
-		/// AI_Model = 401
+		/// AI Model = 401
 		/// </summary>
 		AI_Model = 401,
 		/// <summary>
-		/// AI_Object_Detection_Bounding_Box = 10084
+		/// AI Object Detection Bounding Box = 10053
 		/// </summary>
-		AI_Object_Detection_Bounding_Box = 10084,
+		AI_Object_Detection_Bounding_Box = 10053,
 		/// <summary>
-		/// AI_Object_Detection_Image = 10082
+		/// AI Object Detection Image = 10051
 		/// </summary>
-		AI_Object_Detection_Image = 10082,
+		AI_Object_Detection_Image = 10051,
 		/// <summary>
-		/// AI_Object_Detection_Image_Mapping = 10085
+		/// AI Object Detection Image Mapping = 10054
 		/// </summary>
-		AI_Object_Detection_Image_Mapping = 10085,
+		AI_Object_Detection_Image_Mapping = 10054,
 		/// <summary>
-		/// AI_Object_Detection_Label = 10083
+		/// AI Object Detection Label = 10052
 		/// </summary>
-		AI_Object_Detection_Label = 10083,
+		AI_Object_Detection_Label = 10052,
 		/// <summary>
-		/// AI_Template = 400
+		/// AI Template = 400
 		/// </summary>
 		AI_Template = 400,
 		/// <summary>
-		/// Analysis_Component = 10095
+		/// Analysis Component = 10105
 		/// </summary>
-		Analysis_Component = 10095,
+		Analysis_Component = 10105,
 		/// <summary>
-		/// Analysis_Job = 10096
+		/// Analysis Job = 10106
 		/// </summary>
-		Analysis_Job = 10096,
+		Analysis_Job = 10106,
 		/// <summary>
-		/// Analysis_Result = 10097
+		/// Analysis Result = 10107
 		/// </summary>
-		Analysis_Result = 10097,
+		Analysis_Result = 10107,
 		/// <summary>
-		/// Analysis_Result_Detail = 10098
+		/// Analysis Result Detail = 10108
 		/// </summary>
-		Analysis_Result_Detail = 10098,
+		Analysis_Result_Detail = 10108,
 		/// <summary>
 		/// Announcement = 132
 		/// </summary>
 		Announcement = 132,
 		/// <summary>
-		/// Annual_Fiscal_Calendar = 2000
+		/// Annual Fiscal Calendar = 2000
 		/// </summary>
 		Annual_Fiscal_Calendar = 2000,
 		/// <summary>
-		/// App_Config_Master = 9011
+		/// App Action = 10100
+		/// </summary>
+		App_Action = 10100,
+		/// <summary>
+		/// App Config Master = 9011
 		/// </summary>
 		App_Config_Master = 9011,
 		/// <summary>
-		/// App_Configuration = 9012
+		/// App Configuration = 9012
 		/// </summary>
 		App_Configuration = 9012,
 		/// <summary>
-		/// App_Configuration_Instance = 9013
+		/// App Configuration Instance = 9013
 		/// </summary>
 		App_Configuration_Instance = 9013,
 		/// <summary>
-		/// App_Module_Component = 9007
+		/// App Module Component = 9007
 		/// </summary>
 		App_Module_Component = 9007,
 		/// <summary>
-		/// App_Module_Roles = 9009
+		/// App Module Roles = 9009
 		/// </summary>
 		App_Module_Roles = 9009,
 		/// <summary>
-		/// App_Parameter_Definition_Deprecated = 10526
+		/// App Parameter Definition (Deprecated) = 10595
 		/// </summary>
-		App_Parameter_Definition_Deprecated = 10526,
+		App_Parameter_Definition_Deprecated = 10595,
 		/// <summary>
-		/// App_profile = 10144
+		/// App profile = 10156
 		/// </summary>
-		App_profile = 10144,
+		App_profile = 10156,
 		/// <summary>
-		/// Application_Extension = 10145
+		/// Application Extension = 10157
 		/// </summary>
-		Application_Extension = 10145,
+		Application_Extension = 10157,
 		/// <summary>
-		/// Application_File = 4707
+		/// Application File = 4707
 		/// </summary>
 		Application_File = 4707,
 		/// <summary>
-		/// Application_Ribbons = 1120
+		/// Application Ribbons = 1120
 		/// </summary>
 		Application_Ribbons = 1120,
 		/// <summary>
-		/// Application_Tab_Template = 10146
+		/// Application Tab Template = 10158
 		/// </summary>
-		Application_Tab_Template = 10146,
+		Application_Tab_Template = 10158,
 		/// <summary>
-		/// Application_Tab_Template_Deprecated = 10528
+		/// Application Tab Template (Deprecated) = 10597
 		/// </summary>
-		Application_Tab_Template_Deprecated = 10528,
+		Application_Tab_Template_Deprecated = 10597,
 		/// <summary>
-		/// Application_Type_Deprecated = 10531
+		/// Application Type (Deprecated) = 10600
 		/// </summary>
-		Application_Type_Deprecated = 10531,
+		Application_Type_Deprecated = 10600,
 		/// <summary>
-		/// ApplicationUser = 10021
+		/// ApplicationUser = 10041
 		/// </summary>
-		ApplicationUser = 10021,
+		ApplicationUser = 10041,
 		/// <summary>
-		/// AppModule_Metadata = 8700
+		/// AppModule Metadata = 8700
 		/// </summary>
 		AppModule_Metadata = 8700,
 		/// <summary>
-		/// AppModule_Metadata_Async_Operation = 8702
+		/// AppModule Metadata Async Operation = 8702
 		/// </summary>
 		AppModule_Metadata_Async_Operation = 8702,
 		/// <summary>
-		/// AppModule_Metadata_Dependency = 8701
+		/// AppModule Metadata Dependency = 8701
 		/// </summary>
 		AppModule_Metadata_Dependency = 8701,
 		/// <summary>
@@ -369,207 +381,235 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
+		/// Approval Set = 10468
+		/// </summary>
+		Approval_Set = 10468,
+		/// <summary>
 		/// Article = 127
 		/// </summary>
 		Article = 127,
 		/// <summary>
-		/// Article_Comment = 1082
+		/// Article Comment = 1082
 		/// </summary>
 		Article_Comment = 1082,
 		/// <summary>
-		/// Article_Template = 1016
+		/// Article Template = 1016
 		/// </summary>
 		Article_Template = 1016,
 		/// <summary>
-		/// Asset_Category_Template_Association = 10114
+		/// Asset Category Template Association = 10126
 		/// </summary>
-		Asset_Category_Template_Association = 10114,
+		Asset_Category_Template_Association = 10126,
 		/// <summary>
-		/// Asset_Suggestion = 10506
+		/// Asset Suggestion = 10570
 		/// </summary>
-		Asset_Suggestion = 10506,
+		Asset_Suggestion = 10570,
 		/// <summary>
-		/// Asset_Template_Association = 10115
+		/// Asset Suggestions Setting = 10583
 		/// </summary>
-		Asset_Template_Association = 10115,
+		Asset_Suggestions_Setting = 10583,
 		/// <summary>
-		/// Assignment_Configuration = 10549
+		/// Asset Template Association = 10127
 		/// </summary>
-		Assignment_Configuration = 10549,
+		Asset_Template_Association = 10127,
 		/// <summary>
-		/// Assignment_Configuration_Step = 10550
+		/// Assignment Configuration = 10618
 		/// </summary>
-		Assignment_Configuration_Step = 10550,
+		Assignment_Configuration = 10618,
 		/// <summary>
-		/// Attach_Skill = 10621
+		/// Assignment Configuration Step = 10619
 		/// </summary>
-		Attach_Skill = 10621,
+		Assignment_Configuration_Step = 10619,
 		/// <summary>
-		/// Attachment_1001 = 1001
+		/// Assignment Map = 10820
+		/// </summary>
+		Assignment_Map = 10820,
+		/// <summary>
+		/// Assignment Rule = 10817
+		/// </summary>
+		Assignment_Rule = 10817,
+		/// <summary>
+		/// Attach Skill = 10697
+		/// </summary>
+		Attach_Skill = 10697,
+		/// <summary>
+		/// Attachment = 1001
 		/// </summary>
 		Attachment_1001 = 1001,
 		/// <summary>
-		/// Attachment_1002 = 1002
+		/// Attachment = 1002
 		/// </summary>
 		Attachment_1002 = 1002,
 		/// <summary>
+		/// Attribute = 10818
+		/// </summary>
+		Attribute_10818 = 10818,
+		/// <summary>
 		/// Attribute = 9808
 		/// </summary>
-		Attribute = 9808,
+		Attribute_9808 = 9808,
 		/// <summary>
-		/// Attribute_Map = 4601
+		/// Attribute Map = 4601
 		/// </summary>
 		Attribute_Map = 4601,
 		/// <summary>
-		/// Audio_File = 10606
+		/// Attribute Value = 10819
 		/// </summary>
-		Audio_File = 10606,
+		Attribute_Value = 10819,
 		/// <summary>
-		/// Audit_Diagnostics_Setting = 10689
+		/// Audio File = 10680
 		/// </summary>
-		Audit_Diagnostics_Setting = 10689,
+		Audio_File = 10680,
+		/// <summary>
+		/// Audit & Diagnostics Setting = 10768
+		/// </summary>
+		Audit__Diagnostics_Setting = 10768,
 		/// <summary>
 		/// Auditing = 4567
 		/// </summary>
 		Auditing = 4567,
 		/// <summary>
-		/// Authorization_Server = 1094
+		/// Authorization Server = 1094
 		/// </summary>
 		Authorization_Server = 1094,
 		/// <summary>
-		/// Auto_Capture_Rule = 10224
+		/// Auto block rule = 10638
 		/// </summary>
-		Auto_Capture_Rule = 10224,
+		Auto_block_rule = 10638,
 		/// <summary>
-		/// Auto_Capture_Settings = 10225
+		/// Auto Capture Rule = 10245
 		/// </summary>
-		Auto_Capture_Settings = 10225,
+		Auto_Capture_Rule = 10245,
 		/// <summary>
-		/// Available_Times = 10109
+		/// Auto Capture Settings = 10246
 		/// </summary>
-		Available_Times = 10109,
+		Auto_Capture_Settings = 10246,
 		/// <summary>
-		/// Available_Times_Data_Source = 10110
+		/// Available Times = 10121
 		/// </summary>
-		Available_Times_Data_Source = 10110,
+		Available_Times = 10121,
 		/// <summary>
-		/// Azure_Service_Connection = 9936
+		/// Available Times Data Source = 10122
+		/// </summary>
+		Available_Times_Data_Source = 10122,
+		/// <summary>
+		/// Azure Service Connection = 9936
 		/// </summary>
 		Azure_Service_Connection = 9936,
 		/// <summary>
-		/// Batch_Job = 10325
+		/// Batch Job = 10388
 		/// </summary>
-		Batch_Job = 10325,
+		Batch_Job = 10388,
 		/// <summary>
-		/// Bookable_Resource = 1150
+		/// Bookable Resource = 1150
 		/// </summary>
 		Bookable_Resource = 1150,
 		/// <summary>
-		/// Bookable_Resource_Association = 10293
+		/// Bookable Resource Association = 10356
 		/// </summary>
-		Bookable_Resource_Association = 10293,
+		Bookable_Resource_Association = 10356,
 		/// <summary>
-		/// Bookable_Resource_Booking = 1145
+		/// Bookable Resource Booking = 1145
 		/// </summary>
 		Bookable_Resource_Booking = 1145,
 		/// <summary>
-		/// Bookable_Resource_Booking_Header = 1146
+		/// Bookable Resource Booking Header = 1146
 		/// </summary>
 		Bookable_Resource_Booking_Header = 1146,
 		/// <summary>
-		/// Bookable_Resource_Booking_Quick_Note = 10500
+		/// Bookable Resource Booking Quick Note = 10564
 		/// </summary>
-		Bookable_Resource_Booking_Quick_Note = 10500,
+		Bookable_Resource_Booking_Quick_Note = 10564,
 		/// <summary>
-		/// Bookable_Resource_Booking_to_Exchange_Id_Mapping = 4421
+		/// Bookable Resource Booking to Exchange Id Mapping = 4421
 		/// </summary>
 		Bookable_Resource_Booking_to_Exchange_Id_Mapping = 4421,
 		/// <summary>
-		/// Bookable_Resource_Capacity_Profile = 10615
+		/// Bookable Resource Capacity Profile = 10691
 		/// </summary>
-		Bookable_Resource_Capacity_Profile = 10615,
+		Bookable_Resource_Capacity_Profile = 10691,
 		/// <summary>
-		/// Bookable_Resource_Category = 1147
+		/// Bookable Resource Category = 1147
 		/// </summary>
 		Bookable_Resource_Category = 1147,
 		/// <summary>
-		/// Bookable_Resource_Category_Assn = 1149
+		/// Bookable Resource Category Assn = 1149
 		/// </summary>
 		Bookable_Resource_Category_Assn = 1149,
 		/// <summary>
-		/// Bookable_Resource_Characteristic = 1148
+		/// Bookable Resource Characteristic = 1148
 		/// </summary>
 		Bookable_Resource_Characteristic = 1148,
 		/// <summary>
-		/// Bookable_Resource_Group = 1151
+		/// Bookable Resource Group = 1151
 		/// </summary>
 		Bookable_Resource_Group = 1151,
 		/// <summary>
-		/// Booking_Alert = 10294
+		/// Booking Alert = 10357
 		/// </summary>
-		Booking_Alert = 10294,
+		Booking_Alert = 10357,
 		/// <summary>
-		/// Booking_Alert_Status = 10295
+		/// Booking Alert Status = 10358
 		/// </summary>
-		Booking_Alert_Status = 10295,
+		Booking_Alert_Status = 10358,
 		/// <summary>
-		/// Booking_Change = 10296
+		/// Booking Change = 10359
 		/// </summary>
-		Booking_Change = 10296,
+		Booking_Change = 10359,
 		/// <summary>
-		/// Booking_Journal = 10424
+		/// Booking Journal = 10488
 		/// </summary>
-		Booking_Journal = 10424,
+		Booking_Journal = 10488,
 		/// <summary>
-		/// Booking_Rule = 10297
+		/// Booking Rule = 10360
 		/// </summary>
-		Booking_Rule = 10297,
+		Booking_Rule = 10360,
 		/// <summary>
-		/// Booking_Setup_Metadata = 10298
+		/// Booking Setup Metadata = 10361
 		/// </summary>
-		Booking_Setup_Metadata = 10298,
+		Booking_Setup_Metadata = 10361,
 		/// <summary>
-		/// Booking_Status = 1152
+		/// Booking Status = 1152
 		/// </summary>
 		Booking_Status = 1152,
 		/// <summary>
-		/// Booking_Timestamp = 10425
+		/// Booking Timestamp = 10489
 		/// </summary>
-		Booking_Timestamp = 10425,
+		Booking_Timestamp = 10489,
 		/// <summary>
-		/// BotContent = 10040
+		/// BotContent = 10064
 		/// </summary>
-		BotContent = 10040,
+		BotContent = 10064,
 		/// <summary>
-		/// Bulk_Delete_Failure = 4425
+		/// Bulk Delete Failure = 4425
 		/// </summary>
 		Bulk_Delete_Failure = 4425,
 		/// <summary>
-		/// Bulk_Delete_Operation = 4424
+		/// Bulk Delete Operation = 4424
 		/// </summary>
 		Bulk_Delete_Operation = 4424,
 		/// <summary>
-		/// Bulk_Operation_Log = 4405
+		/// Bulk Operation Log = 4405
 		/// </summary>
 		Bulk_Operation_Log = 4405,
 		/// <summary>
-		/// Business_Closure = 10299
+		/// Business Closure = 10362
 		/// </summary>
-		Business_Closure = 10299,
+		Business_Closure = 10362,
 		/// <summary>
-		/// Business_Data_Localized_Label = 4232
+		/// Business Data Localized Label = 4232
 		/// </summary>
 		Business_Data_Localized_Label = 4232,
 		/// <summary>
-		/// Business_Process_Flow_Instance = 4725
+		/// Business Process Flow Instance = 4725
 		/// </summary>
 		Business_Process_Flow_Instance = 4725,
 		/// <summary>
-		/// Business_Unit = 10
+		/// Business Unit = 10
 		/// </summary>
 		Business_Unit = 10,
 		/// <summary>
-		/// Business_Unit_Map = 6
+		/// Business Unit Map = 6
 		/// </summary>
 		Business_Unit_Map = 6,
 		/// <summary>
@@ -577,11 +617,11 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Calendar = 4003,
 		/// <summary>
-		/// Calendar_Rule = 4004
+		/// Calendar Rule = 4004
 		/// </summary>
 		Calendar_Rule = 4004,
 		/// <summary>
-		/// Callback_Registration = 301
+		/// Callback Registration = 301
 		/// </summary>
 		Callback_Registration = 301,
 		/// <summary>
@@ -589,223 +629,231 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Campaign = 4400,
 		/// <summary>
-		/// Campaign_Activity = 4402
+		/// Campaign Activity = 4402
 		/// </summary>
 		Campaign_Activity = 4402,
 		/// <summary>
-		/// Campaign_Activity_Item = 4404
+		/// Campaign Activity Item = 4404
 		/// </summary>
 		Campaign_Activity_Item = 4404,
 		/// <summary>
-		/// Campaign_Item = 4403
+		/// Campaign Item = 4403
 		/// </summary>
 		Campaign_Item = 4403,
 		/// <summary>
-		/// Campaign_Response = 4401
+		/// Campaign Response = 4401
 		/// </summary>
 		Campaign_Response = 4401,
 		/// <summary>
-		/// Canvas_App = 300
+		/// Canvas App = 300
 		/// </summary>
 		Canvas_App = 300,
 		/// <summary>
-		/// CanvasApp_Extended_Metadata = 10031
+		/// CanvasApp Extended Metadata = 10038
 		/// </summary>
-		CanvasApp_Extended_Metadata = 10031,
+		CanvasApp_Extended_Metadata = 10038,
 		/// <summary>
-		/// Capacity_Profile = 10551
+		/// Capacity Profile = 10620
 		/// </summary>
-		Capacity_Profile = 10551,
+		Capacity_Profile = 10620,
 		/// <summary>
-		/// CascadeGrantRevokeAccessRecordsTracker = 10018
+		/// Carrier = 10726
 		/// </summary>
-		CascadeGrantRevokeAccessRecordsTracker = 10018,
+		Carrier = 10726,
 		/// <summary>
-		/// CascadeGrantRevokeAccessVersionTracker = 10019
+		/// CascadeGrantRevokeAccessRecordsTracker = 10028
 		/// </summary>
-		CascadeGrantRevokeAccessVersionTracker = 10019,
+		CascadeGrantRevokeAccessRecordsTracker = 10028,
+		/// <summary>
+		/// CascadeGrantRevokeAccessVersionTracker = 10029
+		/// </summary>
+		CascadeGrantRevokeAccessVersionTracker = 10029,
 		/// <summary>
 		/// Case = 112
 		/// </summary>
 		Case = 112,
 		/// <summary>
-		/// Case_Enrichment = 10177
+		/// Case Enrichment = 10189
 		/// </summary>
-		Case_Enrichment = 10177,
+		Case_Enrichment = 10189,
 		/// <summary>
-		/// Case_Resolution = 4206
+		/// Case Resolution = 4206
 		/// </summary>
 		Case_Resolution = 4206,
 		/// <summary>
-		/// Case_Suggestion = 10178
+		/// Case Suggestion = 10190
 		/// </summary>
-		Case_Suggestion = 10178,
+		Case_Suggestion = 10190,
 		/// <summary>
-		/// Case_Suggestion_Request_Payload = 10179
+		/// Case Suggestion Request Payload = 10191
 		/// </summary>
-		Case_Suggestion_Request_Payload = 10179,
+		Case_Suggestion_Request_Payload = 10191,
 		/// <summary>
-		/// Case_Suggestions_Data_Souce = 10180
+		/// Case Suggestions Data Souce = 10192
 		/// </summary>
-		Case_Suggestions_Data_Souce = 10180,
+		Case_Suggestions_Data_Souce = 10192,
 		/// <summary>
-		/// Case_to_Work_Order_Business_Process = 10427
+		/// Case to Work Order Business Process = 10491
 		/// </summary>
-		Case_to_Work_Order_Business_Process = 10427,
+		Case_to_Work_Order_Business_Process = 10491,
 		/// <summary>
-		/// Case_Topic = 10192
+		/// Case Topic = 10204
 		/// </summary>
-		Case_Topic = 10192,
+		Case_Topic = 10204,
 		/// <summary>
-		/// Case_topic_Incident_mapping = 10195
+		/// Case topic Incident mapping = 10207
 		/// </summary>
-		Case_topic_Incident_mapping = 10195,
+		Case_topic_Incident_mapping = 10207,
 		/// <summary>
-		/// Case_Topic_Setting = 10193
+		/// Case Topic Setting = 10205
 		/// </summary>
-		Case_Topic_Setting = 10193,
+		Case_Topic_Setting = 10205,
 		/// <summary>
-		/// Case_Topic_Summary = 10194
+		/// Case Topic Summary = 10206
 		/// </summary>
-		Case_Topic_Summary = 10194,
+		Case_Topic_Summary = 10206,
 		/// <summary>
-		/// Catalog = 10066
+		/// Catalog = 10017
 		/// </summary>
-		Catalog = 10066,
+		Catalog = 10017,
 		/// <summary>
-		/// Catalog_Assignment = 10067
+		/// Catalog Assignment = 10018
 		/// </summary>
-		Catalog_Assignment = 10067,
+		Catalog_Assignment = 10018,
 		/// <summary>
 		/// Category = 9959
 		/// </summary>
 		Category = 9959,
 		/// <summary>
-		/// CFS_IoT_Alert_Process_Flow = 10512
+		/// CFS - IoT Alert Process Flow = 10576
 		/// </summary>
-		CFS_IoT_Alert_Process_Flow = 10512,
+		CFS__IoT_Alert_Process_Flow = 10576,
 		/// <summary>
-		/// channel = 10540
+		/// channel = 10609
 		/// </summary>
-		channel = 10540,
+		channel = 10609,
 		/// <summary>
-		/// Channel_Access_Profile = 3005
+		/// Channel Access Profile = 3005
 		/// </summary>
 		Channel_Access_Profile = 3005,
 		/// <summary>
-		/// Channel_Access_Profile_Rule = 9400
+		/// Channel Access Profile Rule = 9400
 		/// </summary>
 		Channel_Access_Profile_Rule = 9400,
 		/// <summary>
-		/// Channel_Access_Profile_Rule_Item = 9401
+		/// Channel Access Profile Rule Item = 9401
 		/// </summary>
 		Channel_Access_Profile_Rule_Item = 9401,
 		/// <summary>
-		/// Channel_Capability = 10589
+		/// Channel Capability = 10629
 		/// </summary>
-		Channel_Capability = 10589,
+		Channel_Capability = 10629,
 		/// <summary>
-		/// Channel_Configuration = 10562
+		/// Channel Configuration = 10640
 		/// </summary>
-		Channel_Configuration = 10562,
+		Channel_Configuration = 10640,
 		/// <summary>
-		/// Channel_Property = 1236
+		/// Channel Integration Framework v1.0 Provider = 10592
+		/// </summary>
+		Channel_Integration_Framework_v10_Provider = 10592,
+		/// <summary>
+		/// Channel Integration Framework v2.0 Provider = 10168
+		/// </summary>
+		Channel_Integration_Framework_v20_Provider = 10168,
+		/// <summary>
+		/// Channel Property = 1236
 		/// </summary>
 		Channel_Property = 1236,
 		/// <summary>
-		/// Channel_Property_Group = 1234
+		/// Channel Property Group = 1234
 		/// </summary>
 		Channel_Property_Group = 1234,
 		/// <summary>
-		/// Channel_Provider_10156 = 10156
+		/// Channel State Configuration = 10641
 		/// </summary>
-		Channel_Provider_10156 = 10156,
-		/// <summary>
-		/// Channel_Provider_10523 = 10523
-		/// </summary>
-		Channel_Provider_10523 = 10523,
-		/// <summary>
-		/// Channel_State_Configuration = 10563
-		/// </summary>
-		Channel_State_Configuration = 10563,
+		Channel_State_Configuration = 10641,
 		/// <summary>
 		/// Characteristic = 1141
 		/// </summary>
 		Characteristic = 1141,
 		/// <summary>
-		/// Characteristic_mapping = 10624
+		/// Characteristic mapping = 10700
 		/// </summary>
-		Characteristic_mapping = 10624,
+		Characteristic_mapping = 10700,
 		/// <summary>
-		/// Chat_Authentication_Settings = 10628
+		/// Chat Authentication Settings = 10707
 		/// </summary>
-		Chat_Authentication_Settings = 10628,
+		Chat_Authentication_Settings = 10707,
 		/// <summary>
-		/// Chat_Widget = 10633
+		/// Chat Widget = 10712
 		/// </summary>
-		Chat_Widget = 10633,
+		Chat_Widget = 10712,
 		/// <summary>
-		/// Chat_Widget_Languagedeprecated = 10632
+		/// Chat Widget Language(deprecated) = 10711
 		/// </summary>
-		Chat_Widget_Languagedeprecated = 10632,
+		Chat_Widget_Languagedeprecated = 10711,
 		/// <summary>
-		/// Chat_Widget_Location = 10635
+		/// Chat Widget Location = 10714
 		/// </summary>
-		Chat_Widget_Location = 10635,
+		Chat_Widget_Location = 10714,
 		/// <summary>
-		/// Chatbot = 10042
+		/// Chatbot = 10066
 		/// </summary>
-		Chatbot = 10042,
+		Chatbot = 10066,
 		/// <summary>
-		/// Chatbot_subcomponent = 10043
+		/// Chatbot subcomponent = 10067
 		/// </summary>
-		Chatbot_subcomponent = 10043,
+		Chatbot_subcomponent = 10067,
 		/// <summary>
-		/// Child_Incident_Count = 113
+		/// Child Incident Count = 113
 		/// </summary>
 		Child_Incident_Count = 113,
 		/// <summary>
-		/// Client_Extension = 10300
+		/// Client Extension = 10363
 		/// </summary>
-		Client_Extension = 10300,
+		Client_Extension = 10363,
 		/// <summary>
-		/// Client_update = 36
+		/// Client update = 36
 		/// </summary>
 		Client_update = 36,
 		/// <summary>
-		/// Column_Mapping = 4417
+		/// Column Mapping = 4417
 		/// </summary>
 		Column_Mapping = 4417,
 		/// <summary>
+		/// Comment = 10112
+		/// </summary>
+		Comment_10112 = 10112,
+		/// <summary>
 		/// Comment = 8005
 		/// </summary>
-		Comment = 8005,
+		Comment_8005 = 8005,
 		/// <summary>
 		/// Commitment = 4215
 		/// </summary>
 		Commitment = 4215,
 		/// <summary>
-		/// Communication_Provider_Setting = 10649
+		/// Communication Provider Setting = 10727
 		/// </summary>
-		Communication_Provider_Setting = 10649,
+		Communication_Provider_Setting = 10727,
 		/// <summary>
-		/// Communication_Provider_Setting_Entry = 10650
+		/// Communication Provider Setting Entry = 10728
 		/// </summary>
-		Communication_Provider_Setting_Entry = 10650,
+		Communication_Provider_Setting_Entry = 10728,
 		/// <summary>
-		/// Competency_Requirement_Deprecated = 10328
+		/// Competency Requirement (Deprecated) = 10391
 		/// </summary>
-		Competency_Requirement_Deprecated = 10328,
+		Competency_Requirement_Deprecated = 10391,
 		/// <summary>
 		/// Competitor = 123
 		/// </summary>
 		Competitor = 123,
 		/// <summary>
-		/// Competitor_Address = 1004
+		/// Competitor Address = 1004
 		/// </summary>
 		Competitor_Address = 1004,
 		/// <summary>
-		/// Competitor_Product = 1006
+		/// Competitor Product = 1006
 		/// </summary>
 		Competitor_Product = 1006,
 		/// <summary>
@@ -813,35 +861,35 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		CompetitorSalesLiterature = 26,
 		/// <summary>
-		/// Component_Layer = 10005
+		/// Component Layer = 10006
 		/// </summary>
-		Component_Layer = 10005,
+		Component_Layer = 10006,
 		/// <summary>
-		/// Component_Layer_Data_Source = 10006
+		/// Component Layer Data Source = 10007
 		/// </summary>
-		Component_Layer_Data_Source = 10006,
+		Component_Layer_Data_Source = 10007,
 		/// <summary>
-		/// Configuration_10301 = 10301
+		/// Configuration = 10364
 		/// </summary>
-		Configuration_10301 = 10301,
+		Configuration_10364 = 10364,
 		/// <summary>
-		/// Configuration_10690 = 10690
+		/// Configuration = 10769
 		/// </summary>
-		Configuration_10690 = 10690,
+		Configuration_10769 = 10769,
 		/// <summary>
 		/// Connection = 3234
 		/// </summary>
 		Connection = 3234,
 		/// <summary>
-		/// Connection_Reference = 10037
+		/// Connection Reference = 10049
 		/// </summary>
-		Connection_Reference = 10037,
+		Connection_Reference = 10049,
 		/// <summary>
-		/// Connection_Role = 3231
+		/// Connection Role = 3231
 		/// </summary>
 		Connection_Role = 3231,
 		/// <summary>
-		/// Connection_Role_Object_Type_Code = 3233
+		/// Connection Role Object Type Code = 3233
 		/// </summary>
 		Connection_Role_Object_Type_Code = 3233,
 		/// <summary>
@@ -853,9 +901,9 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Contact = 2,
 		/// <summary>
-		/// Contact_Price_List = 10329
+		/// Contact Price List = 10392
 		/// </summary>
-		Contact_Price_List = 10329,
+		Contact_Price_List = 10392,
 		/// <summary>
 		/// ContactInvoices = 17
 		/// </summary>
@@ -873,269 +921,277 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		ContactQuotes = 18,
 		/// <summary>
-		/// Context_item_value = 10565
+		/// Context item value = 10647
 		/// </summary>
-		Context_item_value = 10565,
+		Context_item_value = 10647,
 		/// <summary>
-		/// Context_variable = 10568
+		/// Context variable = 10650
 		/// </summary>
-		Context_variable = 10568,
+		Context_variable = 10650,
 		/// <summary>
 		/// Contract = 1010
 		/// </summary>
 		Contract = 1010,
 		/// <summary>
-		/// Contract_Line = 1011
+		/// Contract Line = 1011
 		/// </summary>
 		Contract_Line = 1011,
 		/// <summary>
-		/// Contract_Line_Detail_Performance = 10405
+		/// Contract Line Detail Performance = 10469
 		/// </summary>
-		Contract_Line_Detail_Performance = 10405,
+		Contract_Line_Detail_Performance = 10469,
 		/// <summary>
-		/// Contract_Performance = 10406
+		/// Contract Performance = 10470
 		/// </summary>
-		Contract_Performance = 10406,
+		Contract_Performance = 10470,
 		/// <summary>
-		/// Contract_Template = 2011
+		/// Contract Template = 2011
 		/// </summary>
 		Contract_Template = 2011,
 		/// <summary>
-		/// Conversation = 10564
+		/// Conversation = 10644
 		/// </summary>
-		Conversation = 10564,
+		Conversation = 10644,
 		/// <summary>
-		/// Conversation_Action = 10590
+		/// Conversation Action = 10630
 		/// </summary>
-		Conversation_Action = 10590,
+		Conversation_Action = 10630,
 		/// <summary>
-		/// Conversation_Action_Locale = 10591
+		/// Conversation Action Locale = 10631
 		/// </summary>
-		Conversation_Action_Locale = 10591,
+		Conversation_Action_Locale = 10631,
 		/// <summary>
-		/// Conversation_Capacity_profile = 10617
+		/// Conversation Capacity profile = 10693
 		/// </summary>
-		Conversation_Capacity_profile = 10617,
+		Conversation_Capacity_profile = 10693,
 		/// <summary>
-		/// Conversation_Characteristic = 10618
+		/// Conversation Characteristic = 10694
 		/// </summary>
-		Conversation_Characteristic = 10618,
+		Conversation_Characteristic = 10694,
 		/// <summary>
-		/// Conversation_Data_Deprecated = 10206
+		/// Conversation Data (Deprecated) = 10219
 		/// </summary>
-		Conversation_Data_Deprecated = 10206,
+		Conversation_Data_Deprecated = 10219,
 		/// <summary>
-		/// Conversation_Sentiment = 10567
+		/// Conversation Sentiment = 10649
 		/// </summary>
-		Conversation_Sentiment = 10567,
+		Conversation_Sentiment = 10649,
 		/// <summary>
-		/// Conversation_Topic = 10643
+		/// Conversation Topic = 10720
 		/// </summary>
-		Conversation_Topic = 10643,
+		Conversation_Topic = 10720,
 		/// <summary>
-		/// Conversation_topic_Conversation_mapping = 10646
+		/// Conversation topic Conversation mapping = 10723
 		/// </summary>
-		Conversation_topic_Conversation_mapping = 10646,
+		Conversation_topic_Conversation_mapping = 10723,
 		/// <summary>
-		/// Conversation_Topic_Setting = 10644
+		/// Conversation Topic Setting = 10721
 		/// </summary>
-		Conversation_Topic_Setting = 10644,
+		Conversation_Topic_Setting = 10721,
 		/// <summary>
-		/// Conversation_Topic_Summary = 10645
+		/// Conversation Topic Summary = 10722
 		/// </summary>
-		Conversation_Topic_Summary = 10645,
+		Conversation_Topic_Summary = 10722,
 		/// <summary>
-		/// ConversationInsight = 10642
+		/// ConversationInsight = 10719
 		/// </summary>
-		ConversationInsight = 10642,
+		ConversationInsight = 10719,
 		/// <summary>
-		/// conversationsuggestionrequestpayload = 10641
+		/// conversationsuggestionrequestpayload = 10718
 		/// </summary>
-		conversationsuggestionrequestpayload = 10641,
+		conversationsuggestionrequestpayload = 10718,
 		/// <summary>
-		/// ConversationTranscript = 10041
+		/// ConversationTranscript = 10065
 		/// </summary>
-		ConversationTranscript = 10041,
+		ConversationTranscript = 10065,
 		/// <summary>
-		/// CTI_Search = 10698
+		/// CTI Search = 10777
 		/// </summary>
-		CTI_Search = 10698,
+		CTI_Search = 10777,
 		/// <summary>
 		/// Currency = 9105
 		/// </summary>
 		Currency = 9105,
 		/// <summary>
-		/// Custom_API = 10069
+		/// Custom API = 10020
 		/// </summary>
-		Custom_API = 10069,
+		Custom_API = 10020,
 		/// <summary>
-		/// Custom_API_Request_Parameter = 10070
+		/// Custom API Request Parameter = 10021
 		/// </summary>
-		Custom_API_Request_Parameter = 10070,
+		Custom_API_Request_Parameter = 10021,
 		/// <summary>
-		/// Custom_API_Response_Property = 10071
+		/// Custom API Response Property = 10022
 		/// </summary>
-		Custom_API_Response_Property = 10071,
+		Custom_API_Response_Property = 10022,
 		/// <summary>
-		/// Custom_Control = 9753
+		/// Custom Control = 9753
 		/// </summary>
 		Custom_Control = 9753,
 		/// <summary>
-		/// Custom_Control_Default_Config = 9755
+		/// Custom Control Default Config = 9755
 		/// </summary>
 		Custom_Control_Default_Config = 9755,
 		/// <summary>
-		/// Custom_Control_Resource = 9754
+		/// Custom Control Resource = 9754
 		/// </summary>
 		Custom_Control_Resource = 9754,
 		/// <summary>
-		/// Custom_messaging_account = 10561
+		/// Custom messaging account = 10639
 		/// </summary>
-		Custom_messaging_account = 10561,
+		Custom_messaging_account = 10639,
 		/// <summary>
-		/// Custom_messaging_channel = 10660
+		/// Custom messaging channel = 10738
 		/// </summary>
-		Custom_messaging_channel = 10660,
+		Custom_messaging_channel = 10738,
 		/// <summary>
-		/// Custom_Messaging_Engagement_Context = 10658
+		/// Custom Messaging Engagement Context = 10736
 		/// </summary>
-		Custom_Messaging_Engagement_Context = 10658,
+		Custom_Messaging_Engagement_Context = 10736,
 		/// <summary>
-		/// Customer_Asset = 10116
+		/// Customer Asset = 10128
 		/// </summary>
-		Customer_Asset = 10116,
+		Customer_Asset = 10128,
 		/// <summary>
-		/// Customer_Asset_Attachment = 10117
+		/// Customer Asset Attachment = 10129
 		/// </summary>
-		Customer_Asset_Attachment = 10117,
+		Customer_Asset_Attachment = 10129,
 		/// <summary>
-		/// Customer_Asset_Category = 10118
+		/// Customer Asset Category = 10130
 		/// </summary>
-		Customer_Asset_Category = 10118,
+		Customer_Asset_Category = 10130,
 		/// <summary>
-		/// Customer_Relationship = 4502
+		/// Customer Relationship = 4502
 		/// </summary>
 		Customer_Relationship = 4502,
 		/// <summary>
-		/// Customer_Service_historical_analytics = 10196
+		/// Customer Service historical analytics = 10208
 		/// </summary>
-		Customer_Service_historical_analytics = 10196,
+		Customer_Service_historical_analytics = 10208,
 		/// <summary>
-		/// Customer_Voice_alert = 10238
+		/// Customer Voice alert = 10261
 		/// </summary>
-		Customer_Voice_alert = 10238,
+		Customer_Voice_alert = 10261,
 		/// <summary>
-		/// Customer_Voice_alert_rule = 10239
+		/// Customer Voice alert rule = 10262
 		/// </summary>
-		Customer_Voice_alert_rule = 10239,
+		Customer_Voice_alert_rule = 10262,
 		/// <summary>
-		/// Customer_Voice_file_response = 10241
+		/// Customer Voice file response = 10264
 		/// </summary>
-		Customer_Voice_file_response = 10241,
+		Customer_Voice_file_response = 10264,
 		/// <summary>
-		/// Customer_Voice_localized_survey_email_template = 10242
+		/// Customer Voice localized survey email template = 10265
 		/// </summary>
-		Customer_Voice_localized_survey_email_template = 10242,
+		Customer_Voice_localized_survey_email_template = 10265,
 		/// <summary>
-		/// Customer_Voice_project = 10243
+		/// Customer Voice project = 10266
 		/// </summary>
-		Customer_Voice_project = 10243,
+		Customer_Voice_project = 10266,
 		/// <summary>
-		/// Customer_Voice_satisfaction_metric = 10246
+		/// Customer Voice satisfaction metric = 10269
 		/// </summary>
-		Customer_Voice_satisfaction_metric = 10246,
+		Customer_Voice_satisfaction_metric = 10269,
 		/// <summary>
-		/// Customer_Voice_survey = 10247
+		/// Customer Voice survey = 10270
 		/// </summary>
-		Customer_Voice_survey = 10247,
+		Customer_Voice_survey = 10270,
 		/// <summary>
-		/// Customer_Voice_survey_email_template = 10240
+		/// Customer Voice survey email template = 10263
 		/// </summary>
-		Customer_Voice_survey_email_template = 10240,
+		Customer_Voice_survey_email_template = 10263,
 		/// <summary>
-		/// Customer_Voice_survey_invite = 10248
+		/// Customer Voice survey invite = 10271
 		/// </summary>
-		Customer_Voice_survey_invite = 10248,
+		Customer_Voice_survey_invite = 10271,
 		/// <summary>
-		/// Customer_Voice_survey_question = 10244
+		/// Customer Voice survey question = 10267
 		/// </summary>
-		Customer_Voice_survey_question = 10244,
+		Customer_Voice_survey_question = 10267,
 		/// <summary>
-		/// Customer_Voice_survey_question_response = 10245
+		/// Customer Voice survey question response = 10268
 		/// </summary>
-		Customer_Voice_survey_question_response = 10245,
+		Customer_Voice_survey_question_response = 10268,
 		/// <summary>
-		/// Customer_Voice_survey_reminder = 10249
+		/// Customer Voice survey reminder = 10272
 		/// </summary>
-		Customer_Voice_survey_reminder = 10249,
+		Customer_Voice_survey_reminder = 10272,
 		/// <summary>
-		/// Customer_Voice_survey_response = 10250
+		/// Customer Voice survey response = 10273
 		/// </summary>
-		Customer_Voice_survey_response = 10250,
+		Customer_Voice_survey_response = 10273,
 		/// <summary>
-		/// Customer_Voice_unsubscribed_recipient = 10251
+		/// Customer Voice unsubscribed recipient = 10274
 		/// </summary>
-		Customer_Voice_unsubscribed_recipient = 10251,
+		Customer_Voice_unsubscribed_recipient = 10274,
 		/// <summary>
-		/// Customization_File = 10691
+		/// Customization File = 10770
 		/// </summary>
-		Customization_File = 10691,
+		Customization_File = 10770,
 		/// <summary>
-		/// Data_Analytics_Admin_Settings_Deprecated = 10188
+		/// Data Analytics Admin Settings (Deprecated) = 10200
 		/// </summary>
-		Data_Analytics_Admin_Settings_Deprecated = 10188,
+		Data_Analytics_Admin_Settings_Deprecated = 10200,
 		/// <summary>
-		/// Data_Analytics_Report = 10189
+		/// Data Analytics Report = 10201
 		/// </summary>
-		Data_Analytics_Report = 10189,
+		Data_Analytics_Report = 10201,
 		/// <summary>
-		/// Data_Import = 4410
+		/// Data Import = 4410
 		/// </summary>
 		Data_Import = 4410,
 		/// <summary>
-		/// Data_Lake_Folder = 10014
+		/// Data Lake Folder = 10024
 		/// </summary>
-		Data_Lake_Folder = 10014,
+		Data_Lake_Folder = 10024,
 		/// <summary>
-		/// Data_Lake_Folder_Permission = 10015
+		/// Data Lake Folder Permission = 10025
 		/// </summary>
-		Data_Lake_Folder_Permission = 10015,
+		Data_Lake_Folder_Permission = 10025,
 		/// <summary>
-		/// Data_Lake_Workspace = 10016
+		/// Data Lake Workspace = 10026
 		/// </summary>
-		Data_Lake_Workspace = 10016,
+		Data_Lake_Workspace = 10026,
 		/// <summary>
-		/// Data_Lake_Workspace_Permission = 10017
+		/// Data Lake Workspace Permission = 10027
 		/// </summary>
-		Data_Lake_Workspace_Permission = 10017,
+		Data_Lake_Workspace_Permission = 10027,
 		/// <summary>
-		/// Data_Map = 4411
+		/// Data Map = 4411
 		/// </summary>
 		Data_Map = 4411,
 		/// <summary>
-		/// Data_Performance_Dashboard = 4450
+		/// Data Performance Dashboard = 4450
 		/// </summary>
 		Data_Performance_Dashboard = 4450,
 		/// <summary>
-		/// Database_Version = 10103
+		/// Database Version = 10115
 		/// </summary>
-		Database_Version = 10103,
+		Database_Version = 10115,
 		/// <summary>
 		/// Dataflow = 418
 		/// </summary>
 		Dataflow = 418,
 		/// <summary>
-		/// Decision_contract = 10542
+		/// Deal manager settings = 10255
 		/// </summary>
-		Decision_contract = 10542,
+		Deal_manager_settings = 10255,
 		/// <summary>
-		/// Decision_rule_set = 10543
+		/// dealmanageraccess = 10254
 		/// </summary>
-		Decision_rule_set = 10543,
+		dealmanageraccess = 10254,
 		/// <summary>
-		/// Delegation = 10333
+		/// Decision contract = 10611
 		/// </summary>
-		Delegation = 10333,
+		Decision_contract = 10611,
+		/// <summary>
+		/// Decision rule set = 10612
+		/// </summary>
+		Decision_rule_set = 10612,
+		/// <summary>
+		/// Delegation = 10396
+		/// </summary>
+		Delegation = 10396,
 		/// <summary>
 		/// DelveActionHub = 9961
 		/// </summary>
@@ -1145,83 +1201,91 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Dependency = 7105,
 		/// <summary>
-		/// Dependency_Feature = 7108
+		/// Dependency Feature = 7108
 		/// </summary>
 		Dependency_Feature = 7108,
 		/// <summary>
-		/// Dependency_Node = 7106
+		/// Dependency Node = 7106
 		/// </summary>
 		Dependency_Node = 7106,
 		/// <summary>
-		/// Deprecated_Dynamics_Customer_Service_Analytics = 10191
+		/// Deprecated Workstream Entity Configuration = 10632
 		/// </summary>
-		Deprecated_Dynamics_Customer_Service_Analytics = 10191,
-		/// <summary>
-		/// Deprecated_Workstream_Entity_Configuration = 10557
-		/// </summary>
-		Deprecated_Workstream_Entity_Configuration = 10557,
+		Deprecated_Workstream_Entity_Configuration = 10632,
 		/// <summary>
 		/// Discount = 1013
 		/// </summary>
 		Discount = 1013,
 		/// <summary>
-		/// Discount_List = 1080
+		/// Discount List = 1080
 		/// </summary>
 		Discount_List = 1080,
 		/// <summary>
-		/// Display_String = 4102
+		/// Display String = 4102
 		/// </summary>
 		Display_String = 4102,
 		/// <summary>
-		/// Display_String_Map = 4101
+		/// Display String Map = 4101
 		/// </summary>
 		Display_String_Map = 4101,
 		/// <summary>
-		/// Document_Location = 9508
+		/// Document Location = 9508
 		/// </summary>
 		Document_Location = 9508,
 		/// <summary>
-		/// Document_Suggestions = 1189
+		/// Document Suggestions = 1189
 		/// </summary>
 		Document_Suggestions = 1189,
 		/// <summary>
-		/// Document_Template = 9940
+		/// Document Template = 9940
 		/// </summary>
 		Document_Template = 9940,
 		/// <summary>
-		/// Duplicate_Detection_Rule = 4414
+		/// Duplicate Detection Rule = 4414
 		/// </summary>
 		Duplicate_Detection_Rule = 4414,
 		/// <summary>
-		/// Duplicate_Record = 4415
+		/// Duplicate Record = 4415
 		/// </summary>
 		Duplicate_Record = 4415,
 		/// <summary>
-		/// Duplicate_Rule_Condition = 4416
+		/// Duplicate Rule Condition = 4416
 		/// </summary>
 		Duplicate_Rule_Condition = 4416,
+		/// <summary>
+		/// Effort estimate = 10703
+		/// </summary>
+		Effort_estimate = 10703,
+		/// <summary>
+		/// Effort estimation model = 10704
+		/// </summary>
+		Effort_estimation_model = 10704,
+		/// <summary>
+		/// Effort model training details = 10705
+		/// </summary>
+		Effort_model_training_details = 10705,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
 		Email = 4202,
 		/// <summary>
-		/// Email_Hash = 4023
+		/// Email Hash = 4023
 		/// </summary>
 		Email_Hash = 4023,
 		/// <summary>
-		/// Email_Search = 4299
+		/// Email Search = 4299
 		/// </summary>
 		Email_Search = 4299,
 		/// <summary>
-		/// Email_Server_Profile = 9605
+		/// Email Server Profile = 9605
 		/// </summary>
 		Email_Server_Profile = 9605,
 		/// <summary>
-		/// Email_Signature = 9997
+		/// Email Signature = 9997
 		/// </summary>
 		Email_Signature = 9997,
 		/// <summary>
-		/// Email_Template = 2010
+		/// Email Template = 2010
 		/// </summary>
 		Email_Template = 2010,
 		/// <summary>
@@ -1229,199 +1293,219 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Entitlement = 9700,
 		/// <summary>
-		/// Entitlement_Application = 10430
+		/// Entitlement Application = 10494
 		/// </summary>
-		Entitlement_Application = 10430,
+		Entitlement_Application = 10494,
 		/// <summary>
-		/// Entitlement_Channel = 9701
+		/// Entitlement Channel = 9701
 		/// </summary>
 		Entitlement_Channel = 9701,
 		/// <summary>
-		/// Entitlement_Contact = 7272
+		/// Entitlement Contact = 7272
 		/// </summary>
 		Entitlement_Contact = 7272,
 		/// <summary>
-		/// Entitlement_Entity_Allocation_Type_Mapping = 9704
+		/// Entitlement Entity Allocation Type Mapping = 9704
 		/// </summary>
 		Entitlement_Entity_Allocation_Type_Mapping = 9704,
 		/// <summary>
-		/// Entitlement_Product = 6363
+		/// Entitlement Product = 6363
 		/// </summary>
 		Entitlement_Product = 6363,
 		/// <summary>
-		/// Entitlement_Template = 9702
+		/// Entitlement Template = 9702
 		/// </summary>
 		Entitlement_Template = 9702,
 		/// <summary>
-		/// Entitlement_Template_Channel = 9703
+		/// Entitlement Template Channel = 9703
 		/// </summary>
 		Entitlement_Template_Channel = 9703,
 		/// <summary>
-		/// Entitlement_Template_Product = 4545
+		/// Entitlement Template Product = 4545
 		/// </summary>
 		Entitlement_Template_Product = 4545,
 		/// <summary>
-		/// Entity_10592 = 10592
+		/// Entity = 10633
 		/// </summary>
-		Entity_10592 = 10592,
+		Entity_10633 = 10633,
 		/// <summary>
-		/// Entity_9800 = 9800
+		/// Entity = 9800
 		/// </summary>
 		Entity_9800 = 9800,
 		/// <summary>
-		/// Entity_Analytics_Config = 430
+		/// Entity Analytics Config = 430
 		/// </summary>
 		Entity_Analytics_Config = 430,
 		/// <summary>
-		/// Entity_Configuration = 10515
+		/// Entity Configuration = 10579
 		/// </summary>
-		Entity_Configuration = 10515,
+		Entity_Configuration = 10579,
 		/// <summary>
-		/// Entity_Image_Configuration = 432
+		/// Entity Image Configuration = 432
 		/// </summary>
 		Entity_Image_Configuration = 432,
 		/// <summary>
-		/// Entity_Key = 9810
+		/// Entity Index = 9815
+		/// </summary>
+		Entity_Index = 9815,
+		/// <summary>
+		/// Entity Key = 9810
 		/// </summary>
 		Entity_Key = 9810,
 		/// <summary>
-		/// Entity_Map = 4600
+		/// Entity link chat configuration = 10229
+		/// </summary>
+		Entity_link_chat_configuration = 10229,
+		/// <summary>
+		/// Entity Map = 4600
 		/// </summary>
 		Entity_Map = 4600,
 		/// <summary>
-		/// Entity_Relationship = 9811
+		/// Entity Relationship = 9811
 		/// </summary>
 		Entity_Relationship = 9811,
 		/// <summary>
-		/// Entity_Routing_Context = 10556
+		/// Entity Routing Context = 10628
 		/// </summary>
-		Entity_Routing_Context = 10556,
+		Entity_Routing_Context = 10628,
 		/// <summary>
-		/// Entity_Search = 10693
+		/// Entity Search = 10772
 		/// </summary>
-		Entity_Search = 10693,
+		Entity_Search = 10772,
 		/// <summary>
-		/// Entity_Type = 10692
+		/// Entity Type = 10771
 		/// </summary>
-		Entity_Type = 10692,
+		Entity_Type = 10771,
 		/// <summary>
-		/// EntityRankingRule = 10221
+		/// EntityRankingRule = 10242
 		/// </summary>
-		EntityRankingRule = 10221,
+		EntityRankingRule = 10242,
 		/// <summary>
-		/// Environment_Variable_Definition = 380
+		/// Environment Variable Definition = 380
 		/// </summary>
 		Environment_Variable_Definition = 380,
 		/// <summary>
-		/// Environment_Variable_Value = 381
+		/// Environment Variable Value = 381
 		/// </summary>
 		Environment_Variable_Value = 381,
 		/// <summary>
-		/// Estimate = 10336
+		/// Estimate = 10399
 		/// </summary>
-		Estimate = 10336,
+		Estimate = 10399,
 		/// <summary>
-		/// Estimate_Line = 10337
+		/// Estimate Line = 10400
 		/// </summary>
-		Estimate_Line = 10337,
+		Estimate_Line = 10400,
 		/// <summary>
-		/// Event = 10706
+		/// Event = 10785
 		/// </summary>
-		Event = 10706,
+		Event = 10785,
 		/// <summary>
-		/// Exchange_Sync_Id_Mapping = 4120
+		/// Exchange Sync Id Mapping = 4120
 		/// </summary>
 		Exchange_Sync_Id_Mapping = 4120,
 		/// <summary>
-		/// Expander_Event = 4711
+		/// Expander Event = 4711
 		/// </summary>
 		Expander_Event = 4711,
 		/// <summary>
-		/// Expense = 10338
+		/// Expense = 10401
 		/// </summary>
-		Expense = 10338,
+		Expense = 10401,
 		/// <summary>
-		/// Expense_Category = 10339
+		/// Expense Category = 10402
 		/// </summary>
-		Expense_Category = 10339,
+		Expense_Category = 10402,
 		/// <summary>
-		/// Expense_Receipt = 10340
+		/// Expense Receipt = 10403
 		/// </summary>
-		Expense_Receipt = 10340,
+		Expense_Receipt = 10403,
 		/// <summary>
-		/// Expired_Process = 955
+		/// Expired Process = 955
 		/// </summary>
 		Expired_Process = 955,
 		/// <summary>
-		/// ExportSolutionUpload = 10010
+		/// ExportSolutionUpload = 10011
 		/// </summary>
-		ExportSolutionUpload = 10010,
+		ExportSolutionUpload = 10011,
 		/// <summary>
-		/// External_Party = 3008
+		/// Extended User Setting = 10823
+		/// </summary>
+		Extended_User_Setting = 10823,
+		/// <summary>
+		/// External Party = 3008
 		/// </summary>
 		External_Party = 3008,
 		/// <summary>
-		/// External_Party_Item = 9987
+		/// External Party Item = 9987
 		/// </summary>
 		External_Party_Item = 9987,
 		/// <summary>
-		/// Facebook_Application = 10656
+		/// Facebook Application = 10734
 		/// </summary>
-		Facebook_Application = 10656,
+		Facebook_Application = 10734,
 		/// <summary>
-		/// Facebook_Engagement_Context = 10655
+		/// Facebook Engagement Context = 10733
 		/// </summary>
-		Facebook_Engagement_Context = 10655,
+		Facebook_Engagement_Context = 10733,
 		/// <summary>
-		/// Facebook_Page = 10657
+		/// Facebook Page = 10735
 		/// </summary>
-		Facebook_Page = 10657,
+		Facebook_Page = 10735,
 		/// <summary>
-		/// FacilityEquipment = 4000
+		/// Facility/Equipment = 4000
 		/// </summary>
 		FacilityEquipment = 4000,
 		/// <summary>
-		/// Fact = 10341
+		/// Fact = 10404
 		/// </summary>
-		Fact = 10341,
+		Fact = 10404,
 		/// <summary>
 		/// Fax = 4204
 		/// </summary>
 		Fax = 4204,
 		/// <summary>
+		/// FeatureControlSetting = 10012
+		/// </summary>
+		FeatureControlSetting = 10012,
+		/// <summary>
 		/// Feedback = 9958
 		/// </summary>
 		Feedback = 9958,
 		/// <summary>
-		/// Field_Computation = 10342
+		/// Field Computation = 10405
 		/// </summary>
-		Field_Computation = 10342,
+		Field_Computation = 10405,
 		/// <summary>
-		/// Field_Permission = 1201
+		/// Field Permission = 1201
 		/// </summary>
 		Field_Permission = 1201,
 		/// <summary>
-		/// Field_Security_Profile = 1200
+		/// Field Security Profile = 1200
 		/// </summary>
 		Field_Security_Profile = 1200,
 		/// <summary>
-		/// Field_Service_Price_List_Item = 10431
+		/// Field service historical analytics = 10584
 		/// </summary>
-		Field_Service_Price_List_Item = 10431,
+		Field_service_historical_analytics = 10584,
 		/// <summary>
-		/// Field_Service_Setting = 10432
+		/// Field Service Price List Item = 10495
 		/// </summary>
-		Field_Service_Setting = 10432,
+		Field_Service_Price_List_Item = 10495,
 		/// <summary>
-		/// Field_Service_SLA_Configuration = 10433
+		/// Field Service Setting = 10496
 		/// </summary>
-		Field_Service_SLA_Configuration = 10433,
+		Field_Service_Setting = 10496,
 		/// <summary>
-		/// Field_Service_System_Job = 10434
+		/// Field Service SLA Configuration = 10497
 		/// </summary>
-		Field_Service_System_Job = 10434,
+		Field_Service_SLA_Configuration = 10497,
 		/// <summary>
-		/// Field_Sharing = 44
+		/// Field Service System Job = 10498
+		/// </summary>
+		Field_Service_System_Job = 10498,
+		/// <summary>
+		/// Field Sharing = 44
 		/// </summary>
 		Field_Sharing = 44,
 		/// <summary>
@@ -1429,99 +1513,103 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		FileAttachment = 55,
 		/// <summary>
-		/// Filter = 10237
+		/// Filter = 10260
 		/// </summary>
-		Filter = 10237,
+		Filter = 10260,
 		/// <summary>
-		/// Filter_Template = 30
+		/// Filter Template = 30
 		/// </summary>
 		Filter_Template = 30,
 		/// <summary>
-		/// Find_Work_Event_Deprecated_in_v30 = 10343
+		/// Find Work Event (Deprecated in v3.0) = 10406
 		/// </summary>
-		Find_Work_Event_Deprecated_in_v30 = 10343,
+		Find_Work_Event_Deprecated_in_v30 = 10406,
 		/// <summary>
-		/// Fixed_Monthly_Fiscal_Calendar = 2004
+		/// Fixed Monthly Fiscal Calendar = 2004
 		/// </summary>
 		Fixed_Monthly_Fiscal_Calendar = 2004,
 		/// <summary>
-		/// Flow_Machine = 10033
+		/// Flagged spam = 10642
 		/// </summary>
-		Flow_Machine = 10033,
+		Flagged_spam = 10642,
 		/// <summary>
-		/// Flow_Machine_Group = 10034
+		/// Flow Machine = 10045
 		/// </summary>
-		Flow_Machine_Group = 10034,
+		Flow_Machine = 10045,
 		/// <summary>
-		/// Flow_Session = 4720
+		/// Flow Machine Group = 10046
+		/// </summary>
+		Flow_Machine_Group = 10046,
+		/// <summary>
+		/// Flow Session = 4720
 		/// </summary>
 		Flow_Session = 4720,
 		/// <summary>
-		/// flowcardtype = 10222
+		/// flowcardtype = 10243
 		/// </summary>
-		flowcardtype = 10222,
+		flowcardtype = 10243,
 		/// <summary>
 		/// Follow = 8003
 		/// </summary>
 		Follow = 8003,
 		/// <summary>
-		/// Forecast = 10213
+		/// Forecast = 10234
 		/// </summary>
-		Forecast = 10213,
+		Forecast = 10234,
 		/// <summary>
-		/// Forecast_Configuration = 10211
+		/// Forecast Configuration = 10232
 		/// </summary>
-		Forecast_Configuration = 10211,
+		Forecast_Configuration = 10232,
 		/// <summary>
-		/// Forecast_definition = 10212
+		/// Forecast definition = 10233
 		/// </summary>
-		Forecast_definition = 10212,
+		Forecast_definition = 10233,
 		/// <summary>
-		/// Forecast_recurrence = 10214
+		/// Forecast recurrence = 10235
 		/// </summary>
-		Forecast_recurrence = 10214,
+		Forecast_recurrence = 10235,
 		/// <summary>
-		/// Form = 10694
+		/// Form = 10773
 		/// </summary>
-		Form = 10694,
+		Form = 10773,
 		/// <summary>
-		/// Fulfillment_Preference = 10317
+		/// Fulfillment Preference = 10380
 		/// </summary>
-		Fulfillment_Preference = 10317,
+		Fulfillment_Preference = 10380,
 		/// <summary>
-		/// Functional_Location = 10119
+		/// Functional Location = 10131
 		/// </summary>
-		Functional_Location = 10119,
+		Functional_Location = 10131,
 		/// <summary>
-		/// GDPRData = 10215
+		/// GDPRData = 10236
 		/// </summary>
-		GDPRData = 10215,
+		GDPRData = 10236,
 		/// <summary>
-		/// Geo_Location_Provider = 10575
+		/// Geo Location Provider = 10664
 		/// </summary>
-		Geo_Location_Provider = 10575,
+		Geo_Location_Provider = 10664,
 		/// <summary>
-		/// Geofence = 10516
+		/// Geofence = 10580
 		/// </summary>
-		Geofence = 10516,
+		Geofence = 10580,
 		/// <summary>
-		/// Geofence_Event = 10517
+		/// Geofence Event = 10581
 		/// </summary>
-		Geofence_Event = 10517,
+		Geofence_Event = 10581,
 		/// <summary>
-		/// Geofencing_Settings = 10518
+		/// Geofencing Settings = 10582
 		/// </summary>
-		Geofencing_Settings = 10518,
+		Geofencing_Settings = 10582,
 		/// <summary>
-		/// Geolocation_Settings = 10513
+		/// Geolocation Settings = 10577
 		/// </summary>
-		Geolocation_Settings = 10513,
+		Geolocation_Settings = 10577,
 		/// <summary>
-		/// Geolocation_Tracking = 10514
+		/// Geolocation Tracking = 10578
 		/// </summary>
-		Geolocation_Tracking = 10514,
+		Geolocation_Tracking = 10578,
 		/// <summary>
-		/// Global_Search_Configuration = 54
+		/// Global Search Configuration = 54
 		/// </summary>
 		Global_Search_Configuration = 54,
 		/// <summary>
@@ -1529,19 +1617,19 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Goal = 9600,
 		/// <summary>
-		/// Goal_Metric = 9603
+		/// Goal Metric = 9603
 		/// </summary>
 		Goal_Metric = 9603,
 		/// <summary>
-		/// Help_Page = 10038
+		/// Help Page = 10062
 		/// </summary>
-		Help_Page = 10038,
+		Help_Page = 10062,
 		/// <summary>
-		/// Hierarchy_Rule = 8840
+		/// Hierarchy Rule = 8840
 		/// </summary>
 		Hierarchy_Rule = 8840,
 		/// <summary>
-		/// Hierarchy_Security_Configuration = 9919
+		/// Hierarchy Security Configuration = 9919
 		/// </summary>
 		Hierarchy_Security_Configuration = 9919,
 		/// <summary>
@@ -1549,363 +1637,375 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		HolidayWrapper = 9996,
 		/// <summary>
-		/// Hosted_Control = 10677
+		/// Hosted Control = 10756
 		/// </summary>
-		Hosted_Control = 10677,
+		Hosted_Control = 10756,
 		/// <summary>
-		/// icebreakersconfig = 10232
+		/// icebreakersconfig = 10253
 		/// </summary>
-		icebreakersconfig = 10232,
+		icebreakersconfig = 10253,
 		/// <summary>
-		/// Image_Attribute_Configuration = 431
+		/// Image Attribute Configuration = 431
 		/// </summary>
 		Image_Attribute_Configuration = 431,
 		/// <summary>
-		/// Image_Descriptor = 1007
+		/// Image Descriptor = 1007
 		/// </summary>
 		Image_Descriptor = 1007,
 		/// <summary>
-		/// Import_Data = 4413
+		/// Import Data = 4413
 		/// </summary>
 		Import_Data = 4413,
 		/// <summary>
-		/// Import_Entity_Mapping = 4428
+		/// Import Entity Mapping = 4428
 		/// </summary>
 		Import_Entity_Mapping = 4428,
 		/// <summary>
-		/// Import_Job = 9107
+		/// Import Job = 9107
 		/// </summary>
 		Import_Job = 9107,
 		/// <summary>
-		/// Import_Log = 4423
+		/// Import Log = 4423
 		/// </summary>
 		Import_Log = 4423,
 		/// <summary>
-		/// Import_Source_File = 4412
+		/// Import Source File = 4412
 		/// </summary>
 		Import_Source_File = 4412,
 		/// <summary>
-		/// Incident_KnowledgeBaseRecord = 9931
+		/// Incident KnowledgeBaseRecord = 9931
 		/// </summary>
 		Incident_KnowledgeBaseRecord = 9931,
 		/// <summary>
-		/// Incident_Type = 10435
+		/// Incident Type = 10499
 		/// </summary>
-		Incident_Type = 10435,
+		Incident_Type = 10499,
 		/// <summary>
-		/// Incident_Type_Characteristic = 10436
+		/// Incident Type Characteristic = 10500
 		/// </summary>
-		Incident_Type_Characteristic = 10436,
+		Incident_Type_Characteristic = 10500,
 		/// <summary>
-		/// Incident_Type_Product = 10437
+		/// Incident Type Product = 10501
 		/// </summary>
-		Incident_Type_Product = 10437,
+		Incident_Type_Product = 10501,
 		/// <summary>
-		/// Incident_Type_Requirement_Group = 10441
+		/// Incident Type Requirement Group = 10505
 		/// </summary>
-		Incident_Type_Requirement_Group = 10441,
+		Incident_Type_Requirement_Group = 10505,
 		/// <summary>
-		/// Incident_Type_Resolution = 10505
+		/// Incident Type Resolution = 10569
 		/// </summary>
-		Incident_Type_Resolution = 10505,
+		Incident_Type_Resolution = 10569,
 		/// <summary>
-		/// Incident_Type_Service = 10438
+		/// Incident Type Service = 10502
 		/// </summary>
-		Incident_Type_Service = 10438,
+		Incident_Type_Service = 10502,
 		/// <summary>
-		/// Incident_Type_Service_Task = 10439
+		/// Incident Type Service Task = 10503
 		/// </summary>
-		Incident_Type_Service_Task = 10439,
+		Incident_Type_Service_Task = 10503,
 		/// <summary>
-		/// Incident_Type_Suggestion_Result = 10503
+		/// Incident Type Suggestion Result = 10567
 		/// </summary>
-		Incident_Type_Suggestion_Result = 10503,
+		Incident_Type_Suggestion_Result = 10567,
 		/// <summary>
-		/// Incident_Type_Suggestion_Run_History = 10504
+		/// Incident Type Suggestion Run History = 10568
 		/// </summary>
-		Incident_Type_Suggestion_Run_History = 10504,
+		Incident_Type_Suggestion_Run_History = 10568,
 		/// <summary>
-		/// Incident_Types_Setup = 10440
+		/// Incident Types Setup = 10504
 		/// </summary>
-		Incident_Types_Setup = 10440,
+		Incident_Types_Setup = 10504,
 		/// <summary>
-		/// Indexed_Article = 126
+		/// Index Attribute = 9816
+		/// </summary>
+		Index_Attribute = 9816,
+		/// <summary>
+		/// Indexed Article = 126
 		/// </summary>
 		Indexed_Article = 126,
 		/// <summary>
-		/// Insights = 10190
+		/// Insights = 10202
 		/// </summary>
-		Insights = 10190,
+		Insights = 10202,
 		/// <summary>
-		/// Inspection = 10411
+		/// Inspection = 10475
 		/// </summary>
-		Inspection = 10411,
+		Inspection = 10475,
 		/// <summary>
-		/// Inspection_Attachment = 10409
+		/// Inspection Attachment = 10473
 		/// </summary>
-		Inspection_Attachment = 10409,
+		Inspection_Attachment = 10473,
 		/// <summary>
-		/// Inspection_Response = 10412
+		/// Inspection Response = 10476
 		/// </summary>
-		Inspection_Response = 10412,
+		Inspection_Response = 10476,
 		/// <summary>
-		/// Inspection_Template = 10408
+		/// Inspection Template = 10472
 		/// </summary>
-		Inspection_Template = 10408,
+		Inspection_Template = 10472,
 		/// <summary>
-		/// Inspection_Template_Version = 10410
+		/// Inspection Template Version = 10474
 		/// </summary>
-		Inspection_Template_Version = 10410,
+		Inspection_Template_Version = 10474,
 		/// <summary>
-		/// Integration_Job = 10344
+		/// Integration Job = 10407
 		/// </summary>
-		Integration_Job = 10344,
+		Integration_Job = 10407,
 		/// <summary>
-		/// Integration_Job_Detail = 10345
+		/// Integration Job Detail = 10408
 		/// </summary>
-		Integration_Job_Detail = 10345,
+		Integration_Job_Detail = 10408,
 		/// <summary>
-		/// Integration_Status = 3000
+		/// Integration Status = 3000
 		/// </summary>
 		Integration_Status = 3000,
 		/// <summary>
-		/// Inter_Process_Lock = 4011
+		/// Inter Process Lock = 4011
 		/// </summary>
 		Inter_Process_Lock = 4011,
 		/// <summary>
-		/// Interaction_for_Email = 9986
+		/// Interaction for Email = 9986
 		/// </summary>
 		Interaction_for_Email = 9986,
 		/// <summary>
-		/// Internal_Address = 1003
+		/// Internal Address = 1003
 		/// </summary>
 		Internal_Address = 1003,
 		/// <summary>
-		/// Internal_Catalog_Assignment = 10068
+		/// Internal Catalog Assignment = 10019
 		/// </summary>
-		Internal_Catalog_Assignment = 10068,
+		Internal_Catalog_Assignment = 10019,
 		/// <summary>
-		/// Invalid_Dependency = 7107
+		/// Invalid Dependency = 7107
 		/// </summary>
 		Invalid_Dependency = 7107,
 		/// <summary>
-		/// Inventory_Adjustment = 10442
+		/// Inventory Adjustment = 10506
 		/// </summary>
-		Inventory_Adjustment = 10442,
+		Inventory_Adjustment = 10506,
 		/// <summary>
-		/// Inventory_Adjustment_Product = 10443
+		/// Inventory Adjustment Product = 10507
 		/// </summary>
-		Inventory_Adjustment_Product = 10443,
+		Inventory_Adjustment_Product = 10507,
 		/// <summary>
-		/// Inventory_Journal = 10444
+		/// Inventory Journal = 10508
 		/// </summary>
-		Inventory_Journal = 10444,
+		Inventory_Journal = 10508,
 		/// <summary>
-		/// Inventory_Transfer = 10445
+		/// Inventory Transfer = 10509
 		/// </summary>
-		Inventory_Transfer = 10445,
+		Inventory_Transfer = 10509,
 		/// <summary>
 		/// Invoice = 1090
 		/// </summary>
 		Invoice = 1090,
 		/// <summary>
-		/// Invoice_Frequency = 10346
+		/// Invoice Frequency = 10409
 		/// </summary>
-		Invoice_Frequency = 10346,
+		Invoice_Frequency = 10409,
 		/// <summary>
-		/// Invoice_Frequency_Detail = 10347
+		/// Invoice Frequency Detail = 10410
 		/// </summary>
-		Invoice_Frequency_Detail = 10347,
+		Invoice_Frequency_Detail = 10410,
 		/// <summary>
-		/// Invoice_Line = 1091
+		/// Invoice Line = 1091
 		/// </summary>
 		Invoice_Line = 1091,
 		/// <summary>
-		/// Invoice_Line_Detail = 10348
+		/// Invoice Line Detail = 10411
 		/// </summary>
-		Invoice_Line_Detail = 10348,
+		Invoice_Line_Detail = 10411,
 		/// <summary>
-		/// Invoice_Process = 10327
+		/// Invoice Process = 10390
 		/// </summary>
-		Invoice_Process = 10327,
+		Invoice_Process = 10390,
 		/// <summary>
-		/// IoT_Alert = 10126
+		/// IoT Alert = 10138
 		/// </summary>
-		IoT_Alert = 10126,
+		IoT_Alert = 10138,
 		/// <summary>
-		/// IoT_Alert_to_Case_Process = 10142
+		/// IoT Alert to Case Process = 10154
 		/// </summary>
-		IoT_Alert_to_Case_Process = 10142,
+		IoT_Alert_to_Case_Process = 10154,
 		/// <summary>
-		/// IoT_Device = 10127
+		/// IoT Device = 10139
 		/// </summary>
-		IoT_Device = 10127,
+		IoT_Device = 10139,
 		/// <summary>
-		/// IoT_Device_Category = 10128
+		/// IoT Device Category = 10140
 		/// </summary>
-		IoT_Device_Category = 10128,
+		IoT_Device_Category = 10140,
 		/// <summary>
-		/// IoT_Device_Command = 10129
+		/// IoT Device Command = 10141
 		/// </summary>
-		IoT_Device_Command = 10129,
+		IoT_Device_Command = 10141,
 		/// <summary>
-		/// IoT_Device_Command_Definition = 10130
+		/// IoT Device Command Definition = 10142
 		/// </summary>
-		IoT_Device_Command_Definition = 10130,
+		IoT_Device_Command_Definition = 10142,
 		/// <summary>
-		/// IoT_Device_Data_History = 10131
+		/// IoT Device Data History = 10143
 		/// </summary>
-		IoT_Device_Data_History = 10131,
+		IoT_Device_Data_History = 10143,
 		/// <summary>
-		/// IoT_Device_Property = 10132
+		/// IoT Device Property = 10144
 		/// </summary>
-		IoT_Device_Property = 10132,
+		IoT_Device_Property = 10144,
 		/// <summary>
-		/// IoT_Device_Registration_History = 10133
+		/// IoT Device Registration History = 10145
 		/// </summary>
-		IoT_Device_Registration_History = 10133,
+		IoT_Device_Registration_History = 10145,
 		/// <summary>
-		/// IoT_Device_Visualization_Configuration = 10134
+		/// IoT Device Visualization Configuration = 10146
 		/// </summary>
-		IoT_Device_Visualization_Configuration = 10134,
+		IoT_Device_Visualization_Configuration = 10146,
 		/// <summary>
-		/// IoT_Field_Mapping = 10135
+		/// IoT Field Mapping = 10147
 		/// </summary>
-		IoT_Field_Mapping = 10135,
+		IoT_Field_Mapping = 10147,
 		/// <summary>
-		/// IoT_Property_Definition = 10136
+		/// IoT Property Definition = 10148
 		/// </summary>
-		IoT_Property_Definition = 10136,
+		IoT_Property_Definition = 10148,
 		/// <summary>
-		/// IoT_Provider = 10137
+		/// IoT Provider = 10149
 		/// </summary>
-		IoT_Provider = 10137,
+		IoT_Provider = 10149,
 		/// <summary>
-		/// IoT_Provider_Instance = 10138
+		/// IoT Provider Instance = 10150
 		/// </summary>
-		IoT_Provider_Instance = 10138,
+		IoT_Provider_Instance = 10150,
 		/// <summary>
-		/// IoT_Settings = 10139
+		/// IoT Settings = 10151
 		/// </summary>
-		IoT_Settings = 10139,
+		IoT_Settings = 10151,
 		/// <summary>
-		/// ISV_Config = 4705
+		/// ISV Config = 4705
 		/// </summary>
 		ISV_Config = 4705,
 		/// <summary>
-		/// Journal = 10349
+		/// Journal = 10412
 		/// </summary>
-		Journal = 10349,
+		Journal = 10412,
 		/// <summary>
-		/// Journal_Line = 10350
+		/// Journal Line = 10413
 		/// </summary>
-		Journal_Line = 10350,
+		Journal_Line = 10413,
 		/// <summary>
-		/// KB_Enrichment = 10181
+		/// KB Enrichment = 10193
 		/// </summary>
-		KB_Enrichment = 10181,
+		KB_Enrichment = 10193,
 		/// <summary>
-		/// KeyVaultReference = 10064
+		/// Key Vault Reference = 10091
 		/// </summary>
-		KeyVaultReference = 10064,
+		Key_Vault_Reference = 10091,
 		/// <summary>
-		/// Knowledge_Article = 9953
+		/// Keywords Description Suggestion Setting = 10210
+		/// </summary>
+		Keywords_Description_Suggestion_Setting = 10210,
+		/// <summary>
+		/// Knowledge Article = 9953
 		/// </summary>
 		Knowledge_Article = 9953,
 		/// <summary>
-		/// Knowledge_Article_Category = 9960
+		/// Knowledge Article Attachment = 10084
+		/// </summary>
+		Knowledge_Article_Attachment = 10084,
+		/// <summary>
+		/// Knowledge Article Category = 9960
 		/// </summary>
 		Knowledge_Article_Category = 9960,
 		/// <summary>
-		/// Knowledge_Article_Image = 10056
+		/// Knowledge Article Image = 10080
 		/// </summary>
-		Knowledge_Article_Image = 10056,
+		Knowledge_Article_Image = 10080,
 		/// <summary>
-		/// Knowledge_Article_Incident = 9954
+		/// Knowledge Article Incident = 9954
 		/// </summary>
 		Knowledge_Article_Incident = 9954,
 		/// <summary>
-		/// Knowledge_article_language_setting = 10059
+		/// Knowledge article language setting = 10083
 		/// </summary>
-		Knowledge_article_language_setting = 10059,
+		Knowledge_article_language_setting = 10083,
 		/// <summary>
-		/// Knowledge_Article_Suggestion = 10182
+		/// Knowledge Article Suggestion = 10194
 		/// </summary>
-		Knowledge_Article_Suggestion = 10182,
+		Knowledge_Article_Suggestion = 10194,
 		/// <summary>
-		/// Knowledge_Article_Suggestion_Data_Source = 10183
+		/// Knowledge Article Suggestion Data Source = 10195
 		/// </summary>
-		Knowledge_Article_Suggestion_Data_Source = 10183,
+		Knowledge_Article_Suggestion_Data_Source = 10195,
 		/// <summary>
-		/// Knowledge_Article_Template = 10061
+		/// Knowledge Article Template = 10086
 		/// </summary>
-		Knowledge_Article_Template = 10061,
+		Knowledge_Article_Template = 10086,
 		/// <summary>
-		/// Knowledge_Article_Views = 9955
+		/// Knowledge Article Views = 9955
 		/// </summary>
 		Knowledge_Article_Views = 9955,
 		/// <summary>
-		/// Knowledge_Base_Record = 9930
+		/// Knowledge Base Record = 9930
 		/// </summary>
 		Knowledge_Base_Record = 9930,
 		/// <summary>
-		/// Knowledge_Federated_Article = 10053
+		/// Knowledge Federated Article = 10077
 		/// </summary>
-		Knowledge_Federated_Article = 10053,
+		Knowledge_Federated_Article = 10077,
 		/// <summary>
-		/// Knowledge_FederatedArticle_Incident = 10054
+		/// Knowledge Federated Article Incident = 10078
 		/// </summary>
-		Knowledge_FederatedArticle_Incident = 10054,
+		Knowledge_Federated_Article_Incident = 10078,
 		/// <summary>
-		/// Knowledge_Interaction_Insight = 10057
+		/// Knowledge Interaction Insight = 10081
 		/// </summary>
-		Knowledge_Interaction_Insight = 10057,
+		Knowledge_Interaction_Insight = 10081,
 		/// <summary>
-		/// Knowledge_personalization = 10060
+		/// Knowledge personalization = 10085
 		/// </summary>
-		Knowledge_personalization = 10060,
+		Knowledge_personalization = 10085,
 		/// <summary>
-		/// Knowledge_search_analytics = 10197
+		/// Knowledge search analytics = 10209
 		/// </summary>
-		Knowledge_search_analytics = 10197,
+		Knowledge_search_analytics = 10209,
 		/// <summary>
-		/// Knowledge_search_filter = 10063
+		/// Knowledge search filter = 10088
 		/// </summary>
-		Knowledge_search_filter = 10063,
+		Knowledge_search_filter = 10088,
 		/// <summary>
-		/// Knowledge_Search_Insight = 10058
+		/// Knowledge Search Insight = 10082
 		/// </summary>
-		Knowledge_Search_Insight = 10058,
+		Knowledge_Search_Insight = 10082,
 		/// <summary>
-		/// Knowledge_Search_Model = 9947
+		/// Knowledge Search Model = 9947
 		/// </summary>
 		Knowledge_Search_Model = 9947,
 		/// <summary>
-		/// Knowledge_search_personal_filter_config = 10062
+		/// Knowledge search personal filter config = 10087
 		/// </summary>
-		Knowledge_search_personal_filter_config = 10062,
+		Knowledge_search_personal_filter_config = 10087,
 		/// <summary>
-		/// KPI_Event_Data = 10207
+		/// KPI Event Data = 10220
 		/// </summary>
-		KPI_Event_Data = 10207,
+		KPI_Event_Data = 10220,
 		/// <summary>
-		/// KPI_Event_Definition = 10208
+		/// KPI Event Definition = 10221
 		/// </summary>
-		KPI_Event_Definition = 10208,
+		KPI_Event_Definition = 10221,
 		/// <summary>
-		/// Language_10594 = 10594
+		/// Language = 10643
 		/// </summary>
-		Language_10594 = 10594,
+		Language_10643 = 10643,
 		/// <summary>
-		/// Language_9957 = 9957
+		/// Language = 9957
 		/// </summary>
 		Language_9957 = 9957,
 		/// <summary>
-		/// Language_Module = 10695
+		/// Language Module = 10774
 		/// </summary>
-		Language_Module = 10695,
+		Language_Module = 10774,
 		/// <summary>
-		/// Language_Provisioning_State = 9875
+		/// Language Provisioning State = 9875
 		/// </summary>
 		Language_Provisioning_State = 9875,
 		/// <summary>
@@ -1913,11 +2013,11 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Lead = 4,
 		/// <summary>
-		/// Lead_Address = 1017
+		/// Lead Address = 1017
 		/// </summary>
 		Lead_Address = 1017,
 		/// <summary>
-		/// Lead_To_Opportunity_Sales_Process = 954
+		/// Lead To Opportunity Sales Process = 954
 		/// </summary>
 		Lead_To_Opportunity_Sales_Process = 954,
 		/// <summary>
@@ -1941,67 +2041,67 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Like = 8006,
 		/// <summary>
-		/// LINE_account = 10661
+		/// LINE account = 10739
 		/// </summary>
-		LINE_account = 10661,
+		LINE_account = 10739,
 		/// <summary>
-		/// LINE_Engagement_Context = 10659
+		/// LINE Engagement Context = 10737
 		/// </summary>
-		LINE_Engagement_Context = 10659,
+		LINE_Engagement_Context = 10737,
 		/// <summary>
-		/// List_Operation = 10102
+		/// List Operation = 10113
 		/// </summary>
-		List_Operation = 10102,
+		List_Operation = 10113,
 		/// <summary>
-		/// List_Value_Mapping = 4418
+		/// List Value Mapping = 4418
 		/// </summary>
 		List_Value_Mapping = 4418,
 		/// <summary>
-		/// Live_Chat_Context = 10634
+		/// Live Chat Context = 10713
 		/// </summary>
-		Live_Chat_Context = 10634,
+		Live_Chat_Context = 10713,
 		/// <summary>
-		/// Live_work_item_event = 10593
+		/// Live work item event = 10635
 		/// </summary>
-		Live_work_item_event = 10593,
+		Live_work_item_event = 10635,
 		/// <summary>
-		/// Live_Work_Item_Participant_Deprecated = 10566
+		/// Live Work Item Participant (Deprecated) = 10648
 		/// </summary>
-		Live_Work_Item_Participant_Deprecated = 10566,
+		Live_Work_Item_Participant_Deprecated = 10648,
 		/// <summary>
 		/// LocalConfigStore = 9201
 		/// </summary>
 		LocalConfigStore = 9201,
 		/// <summary>
-		/// Localization = 10569
+		/// Localization = 10651
 		/// </summary>
-		Localization = 10569,
+		Localization = 10651,
 		/// <summary>
-		/// Localized_Survey_Question_Deprecated = 10636
+		/// Localized Survey Question (Deprecated) = 10715
 		/// </summary>
-		Localized_Survey_Question_Deprecated = 10636,
+		Localized_Survey_Question_Deprecated = 10715,
 		/// <summary>
-		/// Lookup_Mapping = 4419
+		/// Lookup Mapping = 4419
 		/// </summary>
 		Lookup_Mapping = 4419,
 		/// <summary>
-		/// Macro_Action_Template = 10167
+		/// Macro Action Template = 10179
 		/// </summary>
-		Macro_Action_Template = 10167,
+		Macro_Action_Template = 10179,
 		/// <summary>
-		/// Macro_Connector = 10169
+		/// Macro Connector = 10181
 		/// </summary>
-		Macro_Connector = 10169,
+		Macro_Connector = 10181,
 		/// <summary>
-		/// Macro_Run_History = 10170
+		/// Macro Run History = 10182
 		/// </summary>
-		Macro_Run_History = 10170,
+		Macro_Run_History = 10182,
 		/// <summary>
-		/// Macro_Solution_Configuration = 10168
+		/// Macro Solution Configuration = 10180
 		/// </summary>
-		Macro_Solution_Configuration = 10168,
+		Macro_Solution_Configuration = 10180,
 		/// <summary>
-		/// Mail_Merge_Template = 9106
+		/// Mail Merge Template = 9106
 		/// </summary>
 		Mail_Merge_Template = 9106,
 		/// <summary>
@@ -2009,131 +2109,139 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Mailbox = 9606,
 		/// <summary>
-		/// Mailbox_Auto_Tracking_Folder = 9608
+		/// Mailbox Auto Tracking Folder = 9608
 		/// </summary>
 		Mailbox_Auto_Tracking_Folder = 9608,
 		/// <summary>
-		/// Mailbox_Statistics = 9607
+		/// Mailbox Statistics = 9607
 		/// </summary>
 		Mailbox_Statistics = 9607,
 		/// <summary>
-		/// Mailbox_Tracking_Category = 9609
+		/// Mailbox Tracking Category = 9609
 		/// </summary>
 		Mailbox_Tracking_Category = 9609,
 		/// <summary>
-		/// Managed_Property = 9812
+		/// Managed Identity = 10092
+		/// </summary>
+		Managed_Identity = 10092,
+		/// <summary>
+		/// Managed Property = 9812
 		/// </summary>
 		Managed_Property = 9812,
 		/// <summary>
-		/// ManagedIdentity = 10065
+		/// Marketing Form Display Attributes = 10114
 		/// </summary>
-		ManagedIdentity = 10065,
+		Marketing_Form_Display_Attributes = 10114,
 		/// <summary>
-		/// Marketing_Form_Display_Attributes = 10733
-		/// </summary>
-		Marketing_Form_Display_Attributes = 10733,
-		/// <summary>
-		/// Marketing_List = 4300
+		/// Marketing List = 4300
 		/// </summary>
 		Marketing_List = 4300,
 		/// <summary>
-		/// Marketing_List_Member = 4301
+		/// Marketing List Member = 4301
 		/// </summary>
 		Marketing_List_Member = 4301,
 		/// <summary>
-		/// MarketingSiteMap = 10519
+		/// MarketingSiteMap = 10588
 		/// </summary>
-		MarketingSiteMap = 10519,
+		MarketingSiteMap = 10588,
 		/// <summary>
-		/// Masking_Rule = 10560
+		/// Masking Rule = 10637
 		/// </summary>
-		Masking_Rule = 10560,
+		Masking_Rule = 10637,
 		/// <summary>
-		/// Master_Entity_Routing_Configuration = 10547
+		/// Master Entity Routing Configuration = 10616
 		/// </summary>
-		Master_Entity_Routing_Configuration = 10547,
+		Master_Entity_Routing_Configuration = 10616,
 		/// <summary>
-		/// Message = 10574
+		/// Message = 10662
 		/// </summary>
-		Message = 10574,
+		Message = 10662,
 		/// <summary>
-		/// Metadata_Difference = 4231
+		/// Metadata Difference = 4231
 		/// </summary>
 		Metadata_Difference = 4231,
 		/// <summary>
-		/// Microsoft_Teams_account = 10670
+		/// Microsoft Teams account = 10748
 		/// </summary>
-		Microsoft_Teams_account = 10670,
+		Microsoft_Teams_account = 10748,
 		/// <summary>
-		/// Microsoft_Teams_Collaboration_entity = 10255
+		/// Microsoft Teams chat association entity = 10230
 		/// </summary>
-		Microsoft_Teams_Collaboration_entity = 10255,
+		Microsoft_Teams_chat_association_entity = 10230,
 		/// <summary>
-		/// Microsoft_Teams_Graph_resource_Entity = 10252
+		/// Microsoft Teams chat suggestion = 10231
 		/// </summary>
-		Microsoft_Teams_Graph_resource_Entity = 10252,
+		Microsoft_Teams_chat_suggestion = 10231,
 		/// <summary>
-		/// Migration_tracker = 10113
+		/// Microsoft Teams Collaboration entity = 10227
 		/// </summary>
-		Migration_tracker = 10113,
+		Microsoft_Teams_Collaboration_entity = 10227,
 		/// <summary>
-		/// Mobile_Offline_Profile = 9866
+		/// Microsoft Teams Graph resource Entity = 10224
+		/// </summary>
+		Microsoft_Teams_Graph_resource_Entity = 10224,
+		/// <summary>
+		/// Migration tracker = 10125
+		/// </summary>
+		Migration_tracker = 10125,
+		/// <summary>
+		/// Mobile Offline Profile = 9866
 		/// </summary>
 		Mobile_Offline_Profile = 9866,
 		/// <summary>
-		/// Mobile_Offline_Profile_Item = 9867
+		/// Mobile Offline Profile Item = 9867
 		/// </summary>
 		Mobile_Offline_Profile_Item = 9867,
 		/// <summary>
-		/// Mobile_Offline_Profile_Item_Association = 9868
+		/// Mobile Offline Profile Item Association = 9868
 		/// </summary>
 		Mobile_Offline_Profile_Item_Association = 9868,
 		/// <summary>
-		/// Model_driven_App = 9006
+		/// Model training details = 10698
 		/// </summary>
-		Model_driven_App = 9006,
+		Model_training_details = 10698,
 		/// <summary>
-		/// Model_Driven_App_Component_Node = 10026
+		/// Model-driven App = 9006
 		/// </summary>
-		Model_Driven_App_Component_Node = 10026,
+		Modeldriven_App = 9006,
 		/// <summary>
-		/// Model_Driven_App_Component_Nodes_Edge = 10025
+		/// Model-Driven App Component Node = 10033
 		/// </summary>
-		Model_Driven_App_Component_Nodes_Edge = 10025,
+		ModelDriven_App_Component_Node = 10033,
 		/// <summary>
-		/// Model_Driven_App_Element = 10024
+		/// Model-Driven App Component Node's Edge = 10032
 		/// </summary>
-		Model_Driven_App_Element = 10024,
+		ModelDriven_App_Component_Nodes_Edge = 10032,
 		/// <summary>
-		/// Model_Driven_App_Setting = 10027
+		/// Model-Driven App Element = 10031
 		/// </summary>
-		Model_Driven_App_Setting = 10027,
+		ModelDriven_App_Element = 10031,
 		/// <summary>
-		/// Model_Driven_App_User_Setting = 10028
+		/// Model-Driven App Setting = 10034
 		/// </summary>
-		Model_Driven_App_User_Setting = 10028,
+		ModelDriven_App_Setting = 10034,
 		/// <summary>
-		/// Model_training_details = 10622
+		/// Model-Driven App User Setting = 10035
 		/// </summary>
-		Model_training_details = 10622,
+		ModelDriven_App_User_Setting = 10035,
 		/// <summary>
-		/// Monthly_Fiscal_Calendar = 2003
+		/// Monthly Fiscal Calendar = 2003
 		/// </summary>
 		Monthly_Fiscal_Calendar = 2003,
 		/// <summary>
-		/// msdyn_msteamssetting = 10253
+		/// msdyn_msteamssetting = 10225
 		/// </summary>
-		msdyn_msteamssetting = 10253,
+		msdyn_msteamssetting = 10225,
 		/// <summary>
-		/// msdyn_msteamssettingsv2 = 10254
+		/// msdyn_msteamssettingsv2 = 10226
 		/// </summary>
-		msdyn_msteamssettingsv2 = 10254,
+		msdyn_msteamssettingsv2 = 10226,
 		/// <summary>
-		/// msdyn_relationshipinsightsunifiedconfig = 10216
+		/// msdyn_relationshipinsightsunifiedconfig = 10237
 		/// </summary>
-		msdyn_relationshipinsightsunifiedconfig = 10216,
+		msdyn_relationshipinsightsunifiedconfig = 10237,
 		/// <summary>
-		/// Multi_Select_Option_Value = 9912
+		/// Multi Select Option Value = 9912
 		/// </summary>
 		Multi_Select_Option_Value = 9912,
 		/// <summary>
@@ -2141,139 +2249,139 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		MultiEntitySearch = 9910,
 		/// <summary>
-		/// Navigation_Setting = 9900
+		/// Navigation Setting = 9900
 		/// </summary>
 		Navigation_Setting = 9900,
 		/// <summary>
-		/// New_Process = 950
+		/// New Process = 950
 		/// </summary>
 		New_Process = 950,
 		/// <summary>
-		/// NonRelational_Data_Source = 10079
+		/// NonRelational Data Source = 10098
 		/// </summary>
-		NonRelational_Data_Source = 10079,
+		NonRelational_Data_Source = 10098,
 		/// <summary>
 		/// Note = 5
 		/// </summary>
 		Note = 5,
 		/// <summary>
-		/// Notes_analysis_Config = 10231
+		/// Notes analysis Config = 10252
 		/// </summary>
-		Notes_analysis_Config = 10231,
+		Notes_analysis_Config = 10252,
 		/// <summary>
-		/// Notification_10077 = 10077
+		/// Notification = 10099
 		/// </summary>
-		Notification_10077 = 10077,
+		Notification_10099 = 10099,
 		/// <summary>
-		/// Notification_4110 = 4110
+		/// Notification = 4110
 		/// </summary>
 		Notification_4110 = 4110,
 		/// <summary>
-		/// Notification_Field = 10147
+		/// Notification Field = 10159
 		/// </summary>
-		Notification_Field = 10147,
+		Notification_Field = 10159,
 		/// <summary>
-		/// Notification_Field_Deprecated = 10524
+		/// Notification Field (Deprecated) = 10593
 		/// </summary>
-		Notification_Field_Deprecated = 10524,
+		Notification_Field_Deprecated = 10593,
 		/// <summary>
-		/// Notification_Template = 10148
+		/// Notification Template = 10160
 		/// </summary>
-		Notification_Template = 10148,
+		Notification_Template = 10160,
 		/// <summary>
-		/// Notification_Template_Deprecated = 10525
+		/// Notification Template (Deprecated) = 10594
 		/// </summary>
-		Notification_Template_Deprecated = 10525,
+		Notification_Template_Deprecated = 10594,
 		/// <summary>
-		/// OData_v4_Data_Source = 10032
+		/// OData v4 Data Source = 10044
 		/// </summary>
-		OData_v4_Data_Source = 10032,
+		OData_v4_Data_Source = 10044,
 		/// <summary>
-		/// Office_Document = 4490
+		/// Office Document = 4490
 		/// </summary>
 		Office_Document = 4490,
 		/// <summary>
-		/// Office_Graph_Document = 9950
+		/// Office Graph Document = 9950
 		/// </summary>
 		Office_Graph_Document = 9950,
 		/// <summary>
-		/// Offline_Command_Definition = 9870
+		/// Offline Command Definition = 9870
 		/// </summary>
 		Offline_Command_Definition = 9870,
 		/// <summary>
-		/// Omnichannel_Configuration = 10600
+		/// Omnichannel Configuration = 10665
 		/// </summary>
-		Omnichannel_Configuration = 10600,
+		Omnichannel_Configuration = 10665,
 		/// <summary>
-		/// Omnichannel_historical_analytics = 10647
+		/// Omnichannel historical analytics = 10724
 		/// </summary>
-		Omnichannel_historical_analytics = 10647,
+		Omnichannel_historical_analytics = 10724,
 		/// <summary>
-		/// Omnichannel_Personalization = 10576
+		/// Omnichannel Personalization = 10666
 		/// </summary>
-		Omnichannel_Personalization = 10576,
+		Omnichannel_Personalization = 10666,
 		/// <summary>
-		/// Omnichannel_Queue_Deprecated = 10577
+		/// Omnichannel Queue (Deprecated) = 10667
 		/// </summary>
-		Omnichannel_Queue_Deprecated = 10577,
+		Omnichannel_Queue_Deprecated = 10667,
 		/// <summary>
-		/// Omnichannel_Request = 10571
+		/// Omnichannel Request = 10654
 		/// </summary>
-		Omnichannel_Request = 10571,
+		Omnichannel_Request = 10654,
 		/// <summary>
-		/// Omnichannel_Sync_Config = 10601
+		/// Omnichannel Sync Config = 10668
 		/// </summary>
-		Omnichannel_Sync_Config = 10601,
+		Omnichannel_Sync_Config = 10668,
 		/// <summary>
-		/// Omnichannel_voice_historical_analytics_preview = 10648
+		/// Omnichannel voice historical analytics (preview) (Deprecated) = 10725
 		/// </summary>
-		Omnichannel_voice_historical_analytics_preview = 10648,
+		Omnichannel_voice_historical_analytics_preview_Deprecated = 10725,
 		/// <summary>
-		/// Ongoing_conversation_Deprecated = 10558
+		/// Ongoing conversation (Deprecated) = 10634
 		/// </summary>
-		Ongoing_conversation_Deprecated = 10558,
+		Ongoing_conversation_Deprecated = 10634,
 		/// <summary>
-		/// Operating_Hour = 10578
+		/// Operating Hour = 10669
 		/// </summary>
-		Operating_Hour = 10578,
+		Operating_Hour = 10669,
 		/// <summary>
 		/// Opportunity = 3
 		/// </summary>
 		Opportunity = 3,
 		/// <summary>
-		/// Opportunity_Close = 4208
+		/// Opportunity Close = 4208
 		/// </summary>
 		Opportunity_Close = 4208,
 		/// <summary>
-		/// Opportunity_Line = 1083
+		/// Opportunity Line = 1083
 		/// </summary>
 		Opportunity_Line = 1083,
 		/// <summary>
-		/// Opportunity_Line_Detail_Deprecated = 10353
+		/// Opportunity Line Detail (Deprecated) = 10416
 		/// </summary>
-		Opportunity_Line_Detail_Deprecated = 10353,
+		Opportunity_Line_Detail_Deprecated = 10416,
 		/// <summary>
-		/// Opportunity_Line_Resource_Category_Deprecated = 10352
+		/// Opportunity Line Resource Category (Deprecated) = 10415
 		/// </summary>
-		Opportunity_Line_Resource_Category_Deprecated = 10352,
+		Opportunity_Line_Resource_Category_Deprecated = 10415,
 		/// <summary>
-		/// Opportunity_Line_Transaction_Category_Deprecated = 10354
+		/// Opportunity Line Transaction Category (Deprecated) = 10417
 		/// </summary>
-		Opportunity_Line_Transaction_Category_Deprecated = 10354,
+		Opportunity_Line_Transaction_Category_Deprecated = 10417,
 		/// <summary>
-		/// Opportunity_Line_Transaction_Classification_Deprecated = 10355
+		/// Opportunity Line Transaction Classification (Deprecated) = 10418
 		/// </summary>
-		Opportunity_Line_Transaction_Classification_Deprecated = 10355,
+		Opportunity_Line_Transaction_Classification_Deprecated = 10418,
 		/// <summary>
-		/// Opportunity_Project_Price_List = 10356
+		/// Opportunity Project Price List = 10419
 		/// </summary>
-		Opportunity_Project_Price_List = 10356,
+		Opportunity_Project_Price_List = 10419,
 		/// <summary>
-		/// Opportunity_Relationship = 4503
+		/// Opportunity Relationship = 4503
 		/// </summary>
 		Opportunity_Relationship = 4503,
 		/// <summary>
-		/// Opportunity_Sales_Process = 953
+		/// Opportunity Sales Process = 953
 		/// </summary>
 		Opportunity_Sales_Process = 953,
 		/// <summary>
@@ -2281,9 +2389,9 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		OpportunityCompetitors = 25,
 		/// <summary>
-		/// Option = 10679
+		/// Option = 10758
 		/// </summary>
-		Option = 10679,
+		Option = 10758,
 		/// <summary>
 		/// OptionSet = 9809
 		/// </summary>
@@ -2293,27 +2401,27 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Order = 1088,
 		/// <summary>
-		/// Order_Close = 4209
+		/// Order Close = 4209
 		/// </summary>
 		Order_Close = 4209,
 		/// <summary>
-		/// Order_Invoicing_Date = 10446
+		/// Order Invoicing Date = 10510
 		/// </summary>
-		Order_Invoicing_Date = 10446,
+		Order_Invoicing_Date = 10510,
 		/// <summary>
-		/// Order_Invoicing_Product = 10447
+		/// Order Invoicing Product = 10511
 		/// </summary>
-		Order_Invoicing_Product = 10447,
+		Order_Invoicing_Product = 10511,
 		/// <summary>
-		/// Order_Invoicing_Setup = 10448
+		/// Order Invoicing Setup = 10512
 		/// </summary>
-		Order_Invoicing_Setup = 10448,
+		Order_Invoicing_Setup = 10512,
 		/// <summary>
-		/// Order_Invoicing_Setup_Date = 10449
+		/// Order Invoicing Setup Date = 10513
 		/// </summary>
-		Order_Invoicing_Setup_Date = 10449,
+		Order_Invoicing_Setup_Date = 10513,
 		/// <summary>
-		/// Order_Line = 1089
+		/// Order Line = 1089
 		/// </summary>
 		Order_Line = 1089,
 		/// <summary>
@@ -2321,173 +2429,181 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Organization = 1019,
 		/// <summary>
-		/// Organization_Insights_Metric = 9699
+		/// Organization Insights Metric = 9699
 		/// </summary>
 		Organization_Insights_Metric = 9699,
 		/// <summary>
-		/// Organization_Insights_Notification = 9690
+		/// Organization Insights Notification = 9690
 		/// </summary>
 		Organization_Insights_Notification = 9690,
 		/// <summary>
-		/// Organization_Setting = 10029
+		/// Organization Setting = 10036
 		/// </summary>
-		Organization_Setting = 10029,
+		Organization_Setting = 10036,
 		/// <summary>
-		/// Organization_Statistic = 4708
+		/// Organization Statistic = 4708
 		/// </summary>
 		Organization_Statistic = 4708,
 		/// <summary>
-		/// Organization_UI = 1021
+		/// Organization UI = 1021
 		/// </summary>
 		Organization_UI = 1021,
 		/// <summary>
-		/// Organizational_Unit = 10302
+		/// Organizational Unit = 10365
 		/// </summary>
-		Organizational_Unit = 10302,
+		Organizational_Unit = 10365,
 		/// <summary>
-		/// OrganizationDataSyncSubscription = 10075
+		/// OrganizationDataSyncSubscription = 10096
 		/// </summary>
-		OrganizationDataSyncSubscription = 10075,
+		OrganizationDataSyncSubscription = 10096,
 		/// <summary>
-		/// OrganizationDataSyncSubscriptionEntity = 10076
+		/// OrganizationDataSyncSubscriptionEntity = 10097
 		/// </summary>
-		OrganizationDataSyncSubscriptionEntity = 10076,
+		OrganizationDataSyncSubscriptionEntity = 10097,
 		/// <summary>
-		/// Outbound_Configuration = 10672
+		/// Outbound Configuration = 10751
 		/// </summary>
-		Outbound_Configuration = 10672,
+		Outbound_Configuration = 10751,
 		/// <summary>
-		/// Outbound_message = 10673
+		/// Outbound message = 10752
 		/// </summary>
-		Outbound_message = 10673,
+		Outbound_message = 10752,
+		/// <summary>
+		/// Overflow Action Config = 10621
+		/// </summary>
+		Overflow_Action_Config = 10621,
 		/// <summary>
 		/// Owner = 7
 		/// </summary>
 		Owner = 7,
 		/// <summary>
-		/// Owner_Mapping = 4420
+		/// Owner Mapping = 4420
 		/// </summary>
 		Owner_Mapping = 4420,
 		/// <summary>
-		/// Package = 10007
+		/// Package = 10008
 		/// </summary>
-		Package = 10007,
+		Package = 10008,
 		/// <summary>
-		/// Pane_tab_configuration = 10159
+		/// Pane tab configuration = 10171
 		/// </summary>
-		Pane_tab_configuration = 10159,
+		Pane_tab_configuration = 10171,
 		/// <summary>
-		/// Pane_tool_configuration = 10160
+		/// Pane tool configuration = 10172
 		/// </summary>
-		Pane_tool_configuration = 10160,
+		Pane_tool_configuration = 10172,
 		/// <summary>
-		/// Parameter_definition = 10171
+		/// Parameter definition = 10183
 		/// </summary>
-		Parameter_definition = 10171,
+		Parameter_definition = 10183,
 		/// <summary>
-		/// Parameter_Deprecated = 10529
+		/// Parameter (Deprecated) = 10598
 		/// </summary>
-		Parameter_Deprecated = 10529,
+		Parameter_Deprecated = 10598,
 		/// <summary>
-		/// Partner_Application = 1095
+		/// Partner Application = 1095
 		/// </summary>
 		Partner_Application = 1095,
 		/// <summary>
-		/// Payment = 10450
+		/// Payment = 10514
 		/// </summary>
-		Payment = 10450,
+		Payment = 10514,
 		/// <summary>
-		/// Payment_Detail = 10451
+		/// Payment Detail = 10515
 		/// </summary>
-		Payment_Detail = 10451,
+		Payment_Detail = 10515,
 		/// <summary>
-		/// Payment_Method = 10452
+		/// Payment Method = 10516
 		/// </summary>
-		Payment_Method = 10452,
+		Payment_Method = 10516,
 		/// <summary>
-		/// Payment_Term = 10453
+		/// Payment Term = 10517
 		/// </summary>
-		Payment_Term = 10453,
+		Payment_Term = 10517,
 		/// <summary>
-		/// PDF_Setting = 10049
+		/// PDF Setting = 10073
 		/// </summary>
-		PDF_Setting = 10049,
+		PDF_Setting = 10073,
 		/// <summary>
-		/// Persona_Security_Role_Mapping = 10604
+		/// Persona Security Role Mapping = 10672
 		/// </summary>
-		Persona_Security_Role_Mapping = 10604,
+		Persona_Security_Role_Mapping = 10672,
 		/// <summary>
-		/// Personal_Document_Template = 9941
+		/// Personal Document Template = 9941
 		/// </summary>
 		Personal_Document_Template = 9941,
 		/// <summary>
-		/// Personal_quick_reply = 10602
+		/// Personal quick reply = 10670
 		/// </summary>
-		Personal_quick_reply = 10602,
+		Personal_quick_reply = 10670,
 		/// <summary>
-		/// Personal_sound_setting = 10603
+		/// Personal sound setting = 10671
 		/// </summary>
-		Personal_sound_setting = 10603,
+		Personal_sound_setting = 10671,
 		/// <summary>
-		/// Phone_Call = 4210
+		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Phone_Number = 10651
+		/// Phone Number = 10729
 		/// </summary>
-		Phone_Number = 10651,
+		Phone_Number = 10729,
 		/// <summary>
-		/// Phone_To_Case_Process = 952
+		/// Phone To Case Process = 952
 		/// </summary>
 		Phone_To_Case_Process = 952,
 		/// <summary>
-		/// Playbook = 10202
+		/// Playbook = 10215
 		/// </summary>
-		Playbook = 10202,
+		Playbook = 10215,
 		/// <summary>
-		/// Playbook_activity = 10199
+		/// Playbook activity = 10212
 		/// </summary>
-		Playbook_activity = 10199,
+		Playbook_activity = 10212,
 		/// <summary>
-		/// Playbook_activity_attribute = 10200
+		/// Playbook activity attribute = 10213
 		/// </summary>
-		Playbook_activity_attribute = 10200,
+		Playbook_activity_attribute = 10213,
 		/// <summary>
-		/// Playbook_Callable_Context = 10198
+		/// Playbook Callable Context = 10211
 		/// </summary>
-		Playbook_Callable_Context = 10198,
+		Playbook_Callable_Context = 10211,
 		/// <summary>
-		/// Playbook_category = 10201
+		/// Playbook category = 10214
 		/// </summary>
-		Playbook_category = 10201,
+		Playbook_category = 10214,
 		/// <summary>
-		/// Playbook_template = 10203
+		/// Playbook template = 10216
 		/// </summary>
-		Playbook_template = 10203,
+		Playbook_template = 10216,
 		/// <summary>
-		/// Plug_in_Assembly = 4605
+		/// Plug-in Assembly = 4605
 		/// </summary>
-		Plug_in_Assembly = 4605,
+		Plugin_Assembly = 4605,
 		/// <summary>
-		/// Plug_in_Trace_Log = 4619
+		/// Plugin Package = 10090
 		/// </summary>
-		Plug_in_Trace_Log = 4619,
+		Plugin_Package = 10090,
 		/// <summary>
-		/// Plug_in_Type = 4602
+		/// Plug-in Trace Log = 4619
 		/// </summary>
-		Plug_in_Type = 4602,
+		Plugin_Trace_Log = 4619,
 		/// <summary>
-		/// Plug_in_Type_Statistic = 4603
+		/// Plug-in Type = 4602
 		/// </summary>
-		Plug_in_Type_Statistic = 4603,
+		Plugin_Type = 4602,
 		/// <summary>
-		/// PM_Inferred_Task = 10093
+		/// Plug-in Type Statistic = 4603
 		/// </summary>
-		PM_Inferred_Task = 10093,
+		Plugin_Type_Statistic = 4603,
 		/// <summary>
-		/// PM_Recording = 10094
+		/// PM Inferred Task = 10103
 		/// </summary>
-		PM_Recording = 10094,
+		PM_Inferred_Task = 10103,
+		/// <summary>
+		/// PM Recording = 10104
+		/// </summary>
+		PM_Recording = 10104,
 		/// <summary>
 		/// Position = 50
 		/// </summary>
@@ -2497,295 +2613,307 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Post = 8000,
 		/// <summary>
-		/// Post_Configuration = 10234
+		/// Post Configuration = 10257
 		/// </summary>
-		Post_Configuration = 10234,
+		Post_Configuration = 10257,
 		/// <summary>
-		/// Post_Regarding = 8002
+		/// Post Regarding = 8002
 		/// </summary>
 		Post_Regarding = 8002,
 		/// <summary>
-		/// Post_Role = 8001
+		/// Post Role = 8001
 		/// </summary>
 		Post_Role = 8001,
 		/// <summary>
-		/// Post_Rule_Configuration = 10235
+		/// Post Rule Configuration = 10258
 		/// </summary>
-		Post_Rule_Configuration = 10235,
+		Post_Rule_Configuration = 10258,
 		/// <summary>
-		/// Postal_Code = 10454
+		/// Postal Code = 10518
 		/// </summary>
-		Postal_Code = 10454,
+		Postal_Code = 10518,
 		/// <summary>
-		/// Power_BI_Configuration = 10554
+		/// Power BI Configuration = 10626
 		/// </summary>
-		Power_BI_Configuration = 10554,
+		Power_BI_Configuration = 10626,
 		/// <summary>
-		/// Presence = 10579
+		/// Predictive duration (preview) = 10586
 		/// </summary>
-		Presence = 10579,
+		Predictive_duration_preview = 10586,
 		/// <summary>
-		/// Price_List = 1022
+		/// Predictive Work Hour Duration Setting = 10587
+		/// </summary>
+		Predictive_Work_Hour_Duration_Setting = 10587,
+		/// <summary>
+		/// Presence = 10673
+		/// </summary>
+		Presence = 10673,
+		/// <summary>
+		/// Price List = 1022
 		/// </summary>
 		Price_List = 1022,
 		/// <summary>
-		/// Price_List_Item = 1026
+		/// Price List Item = 1026
 		/// </summary>
 		Price_List_Item = 1026,
 		/// <summary>
-		/// Pricing_Dimension = 10334
+		/// Pricing Dimension = 10397
 		/// </summary>
-		Pricing_Dimension = 10334,
+		Pricing_Dimension = 10397,
 		/// <summary>
-		/// Pricing_Dimension_Field_Name = 10335
+		/// Pricing Dimension Field Name = 10398
 		/// </summary>
-		Pricing_Dimension_Field_Name = 10335,
+		Pricing_Dimension_Field_Name = 10398,
 		/// <summary>
-		/// Principal_Sync_Attribute_Map = 1404
+		/// Principal Sync Attribute Map = 1404
 		/// </summary>
 		Principal_Sync_Attribute_Map = 1404,
 		/// <summary>
-		/// Priority = 10303
+		/// PrincipalEntityBusinessUnitMap = 61
 		/// </summary>
-		Priority = 10303,
+		PrincipalEntityBusinessUnitMap = 61,
+		/// <summary>
+		/// Priority = 10366
+		/// </summary>
+		Priority = 10366,
 		/// <summary>
 		/// Privilege = 1023
 		/// </summary>
 		Privilege = 1023,
 		/// <summary>
-		/// Privilege_Object_Type_Code = 31
+		/// Privilege Object Type Code = 31
 		/// </summary>
 		Privilege_Object_Type_Code = 31,
 		/// <summary>
-		/// Problematic_Asset_Feedback = 10507
+		/// Problematic Asset Feedback = 10571
 		/// </summary>
-		Problematic_Asset_Feedback = 10507,
+		Problematic_Asset_Feedback = 10571,
 		/// <summary>
 		/// Process = 4703
 		/// </summary>
 		Process = 4703,
 		/// <summary>
-		/// Process_Configuration = 9650
+		/// Process Configuration = 9650
 		/// </summary>
 		Process_Configuration = 9650,
 		/// <summary>
-		/// Process_Dependency = 4704
+		/// Process Dependency = 4704
 		/// </summary>
 		Process_Dependency = 4704,
 		/// <summary>
-		/// Process_Log = 4706
+		/// Process Log = 4706
 		/// </summary>
 		Process_Log = 4706,
 		/// <summary>
-		/// Process_Notes = 10362
+		/// Process Notes = 10425
 		/// </summary>
-		Process_Notes = 10362,
+		Process_Notes = 10425,
 		/// <summary>
-		/// Process_Session = 4710
+		/// Process Session = 4710
 		/// </summary>
 		Process_Session = 4710,
 		/// <summary>
-		/// Process_Stage = 4724
+		/// Process Stage = 4724
 		/// </summary>
 		Process_Stage = 4724,
 		/// <summary>
-		/// Process_Trigger = 4712
+		/// Process Trigger = 4712
 		/// </summary>
 		Process_Trigger = 4712,
 		/// <summary>
-		/// ProcessStageParameter = 10035
+		/// ProcessStageParameter = 10047
 		/// </summary>
-		ProcessStageParameter = 10035,
+		ProcessStageParameter = 10047,
 		/// <summary>
 		/// Product = 1024
 		/// </summary>
 		Product = 1024,
 		/// <summary>
-		/// Product_Association = 1025
+		/// Product Association = 1025
 		/// </summary>
 		Product_Association = 1025,
 		/// <summary>
-		/// Product_Inventory = 10455
+		/// Product Inventory = 10519
 		/// </summary>
-		Product_Inventory = 10455,
+		Product_Inventory = 10519,
 		/// <summary>
-		/// Product_Relationship = 1028
+		/// Product Relationship = 1028
 		/// </summary>
 		Product_Relationship = 1028,
 		/// <summary>
-		/// Productivity_pane_configuration = 10158
+		/// Productivity pane configuration = 10170
 		/// </summary>
-		Productivity_pane_configuration = 10158,
+		Productivity_pane_configuration = 10170,
 		/// <summary>
 		/// ProductSalesLiterature = 21
 		/// </summary>
 		ProductSalesLiterature = 21,
 		/// <summary>
-		/// Profile_Album = 10233
+		/// Profile Album = 10256
 		/// </summary>
-		Profile_Album = 10233,
+		Profile_Album = 10256,
 		/// <summary>
-		/// Project = 10363
+		/// Project = 10426
 		/// </summary>
-		Project = 10363,
+		Project = 10426,
 		/// <summary>
-		/// Project_Approval = 10364
+		/// Project Approval = 10427
 		/// </summary>
-		Project_Approval = 10364,
+		Project_Approval = 10427,
 		/// <summary>
-		/// Project_Contract_Line_Detail = 10358
+		/// Project Contract Line Detail = 10421
 		/// </summary>
-		Project_Contract_Line_Detail = 10358,
+		Project_Contract_Line_Detail = 10421,
 		/// <summary>
-		/// Project_Contract_Line_Invoice_Schedule = 10330
+		/// Project Contract Line Invoice Schedule = 10393
 		/// </summary>
-		Project_Contract_Line_Invoice_Schedule = 10330,
+		Project_Contract_Line_Invoice_Schedule = 10393,
 		/// <summary>
-		/// Project_Contract_Line_Milestone = 10331
+		/// Project Contract Line Milestone = 10394
 		/// </summary>
-		Project_Contract_Line_Milestone = 10331,
+		Project_Contract_Line_Milestone = 10394,
 		/// <summary>
-		/// Project_Contract_Line_Resource_Category = 10357
+		/// Project Contract Line Resource Category = 10420
 		/// </summary>
-		Project_Contract_Line_Resource_Category = 10357,
+		Project_Contract_Line_Resource_Category = 10420,
 		/// <summary>
-		/// Project_Contract_Line_Transaction_Category = 10359
+		/// Project Contract Line Transaction Category = 10422
 		/// </summary>
-		Project_Contract_Line_Transaction_Category = 10359,
+		Project_Contract_Line_Transaction_Category = 10422,
 		/// <summary>
-		/// Project_Contract_Line_Transaction_Classification = 10360
+		/// Project Contract Line Transaction Classification = 10423
 		/// </summary>
-		Project_Contract_Line_Transaction_Classification = 10360,
+		Project_Contract_Line_Transaction_Classification = 10423,
 		/// <summary>
-		/// Project_Contract_Project_Price_List = 10361
+		/// Project Contract Project Price List = 10424
 		/// </summary>
-		Project_Contract_Project_Price_List = 10361,
+		Project_Contract_Project_Price_List = 10424,
 		/// <summary>
-		/// Project_Parameter = 10365
+		/// Project Parameter = 10428
 		/// </summary>
-		Project_Parameter = 10365,
+		Project_Parameter = 10428,
 		/// <summary>
-		/// Project_Parameter_Price_List = 10366
+		/// Project Parameter Price List = 10429
 		/// </summary>
-		Project_Parameter_Price_List = 10366,
+		Project_Parameter_Price_List = 10429,
 		/// <summary>
-		/// Project_Price_List = 10367
+		/// Project Price List = 10430
 		/// </summary>
-		Project_Price_List = 10367,
+		Project_Price_List = 10430,
 		/// <summary>
-		/// Project_Service_Approval = 10324
+		/// Project Service Approval = 10387
 		/// </summary>
-		Project_Service_Approval = 10324,
+		Project_Service_Approval = 10387,
 		/// <summary>
-		/// Project_Stages = 10326
+		/// Project Stages = 10389
 		/// </summary>
-		Project_Stages = 10326,
+		Project_Stages = 10389,
 		/// <summary>
-		/// Project_Task = 10368
+		/// Project Task = 10431
 		/// </summary>
-		Project_Task = 10368,
+		Project_Task = 10431,
 		/// <summary>
-		/// Project_Task_Dependency = 10369
+		/// Project Task Dependency = 10432
 		/// </summary>
-		Project_Task_Dependency = 10369,
+		Project_Task_Dependency = 10432,
 		/// <summary>
-		/// Project_Task_Status_User = 10370
+		/// Project Task Status User = 10433
 		/// </summary>
-		Project_Task_Status_User = 10370,
+		Project_Task_Status_User = 10433,
 		/// <summary>
-		/// Project_Team_Member = 10371
+		/// Project Team Member = 10434
 		/// </summary>
-		Project_Team_Member = 10371,
+		Project_Team_Member = 10434,
 		/// <summary>
-		/// Project_Team_Member_Sign_Up_Deprecated_in_v30 = 10372
+		/// Project Team Member Sign-Up (Deprecated in v3.0) = 10435
 		/// </summary>
-		Project_Team_Member_Sign_Up_Deprecated_in_v30 = 10372,
+		Project_Team_Member_SignUp_Deprecated_in_v30 = 10435,
 		/// <summary>
-		/// Project_Transaction_Category_Deprecated = 10373
+		/// Project Transaction Category (Deprecated) = 10436
 		/// </summary>
-		Project_Transaction_Category_Deprecated = 10373,
+		Project_Transaction_Category_Deprecated = 10436,
 		/// <summary>
 		/// Property = 1048
 		/// </summary>
 		Property = 1048,
 		/// <summary>
-		/// Property_Asset_Association = 10121
+		/// Property Asset Association = 10133
 		/// </summary>
-		Property_Asset_Association = 10121,
+		Property_Asset_Association = 10133,
 		/// <summary>
-		/// Property_Association = 1235
+		/// Property Association = 1235
 		/// </summary>
 		Property_Association = 1235,
 		/// <summary>
-		/// Property_Definition = 10120
+		/// Property Definition = 10132
 		/// </summary>
-		Property_Definition = 10120,
+		Property_Definition = 10132,
 		/// <summary>
-		/// Property_Instance = 1333
+		/// Property Instance = 1333
 		/// </summary>
 		Property_Instance = 1333,
 		/// <summary>
-		/// Property_Log = 10122
+		/// Property Log = 10134
 		/// </summary>
-		Property_Log = 10122,
+		Property_Log = 10134,
 		/// <summary>
-		/// Property_Option_Set_Item = 1049
+		/// Property Option Set Item = 1049
 		/// </summary>
 		Property_Option_Set_Item = 1049,
 		/// <summary>
-		/// Property_Template_Association = 10123
+		/// Property Template Association = 10135
 		/// </summary>
-		Property_Template_Association = 10123,
+		Property_Template_Association = 10135,
 		/// <summary>
-		/// Provider = 10605
+		/// Provider = 10674
 		/// </summary>
-		Provider = 10605,
+		Provider = 10674,
 		/// <summary>
-		/// Provisioning_State = 10570
+		/// Provisioning State = 10652
 		/// </summary>
-		Provisioning_State = 10570,
+		Provisioning_State = 10652,
 		/// <summary>
-		/// ProvisionLanguageForUser = 10013
+		/// ProvisionLanguageForUser = 10023
 		/// </summary>
-		ProvisionLanguageForUser = 10013,
+		ProvisionLanguageForUser = 10023,
 		/// <summary>
 		/// Publisher = 7101
 		/// </summary>
 		Publisher = 7101,
 		/// <summary>
-		/// Publisher_Address = 7102
+		/// Publisher Address = 7102
 		/// </summary>
 		Publisher_Address = 7102,
 		/// <summary>
-		/// Purchase_Order = 10456
+		/// Purchase Order = 10520
 		/// </summary>
-		Purchase_Order = 10456,
+		Purchase_Order = 10520,
 		/// <summary>
-		/// Purchase_Order_Bill = 10457
+		/// Purchase Order Bill = 10521
 		/// </summary>
-		Purchase_Order_Bill = 10457,
+		Purchase_Order_Bill = 10521,
 		/// <summary>
-		/// Purchase_Order_Business_Process = 10426
+		/// Purchase Order Business Process = 10490
 		/// </summary>
-		Purchase_Order_Business_Process = 10426,
+		Purchase_Order_Business_Process = 10490,
 		/// <summary>
-		/// Purchase_Order_Product = 10458
+		/// Purchase Order Product = 10522
 		/// </summary>
-		Purchase_Order_Product = 10458,
+		Purchase_Order_Product = 10522,
 		/// <summary>
-		/// Purchase_Order_Receipt = 10459
+		/// Purchase Order Receipt = 10523
 		/// </summary>
-		Purchase_Order_Receipt = 10459,
+		Purchase_Order_Receipt = 10523,
 		/// <summary>
-		/// Purchase_Order_Receipt_Product = 10460
+		/// Purchase Order Receipt Product = 10524
 		/// </summary>
-		Purchase_Order_Receipt_Product = 10460,
+		Purchase_Order_Receipt_Product = 10524,
 		/// <summary>
-		/// Purchase_Order_SubStatus = 10461
+		/// Purchase Order SubStatus = 10525
 		/// </summary>
-		Purchase_Order_SubStatus = 10461,
+		Purchase_Order_SubStatus = 10525,
 		/// <summary>
-		/// Quarterly_Fiscal_Calendar = 2002
+		/// Quarterly Fiscal Calendar = 2002
 		/// </summary>
 		Quarterly_Fiscal_Calendar = 2002,
 		/// <summary>
@@ -2793,7 +2921,7 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Queue = 2020,
 		/// <summary>
-		/// Queue_Item = 2029
+		/// Queue Item = 2029
 		/// </summary>
 		Queue_Item = 2029,
 		/// <summary>
@@ -2805,127 +2933,131 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		QueueMemberCount = 2024,
 		/// <summary>
-		/// Quick_Campaign = 4406
+		/// Quick Campaign = 4406
 		/// </summary>
 		Quick_Campaign = 4406,
 		/// <summary>
-		/// Quick_reply = 10555
+		/// Quick reply = 10627
 		/// </summary>
-		Quick_reply = 10555,
+		Quick_reply = 10627,
 		/// <summary>
 		/// Quote = 1084
 		/// </summary>
 		Quote = 1084,
 		/// <summary>
-		/// Quote_Booking_Incident = 10462
+		/// Quote Booking Incident = 10526
 		/// </summary>
-		Quote_Booking_Incident = 10462,
+		Quote_Booking_Incident = 10526,
 		/// <summary>
-		/// Quote_Booking_Product = 10463
+		/// Quote Booking Product = 10527
 		/// </summary>
-		Quote_Booking_Product = 10463,
+		Quote_Booking_Product = 10527,
 		/// <summary>
-		/// Quote_Booking_Service = 10464
+		/// Quote Booking Service = 10528
 		/// </summary>
-		Quote_Booking_Service = 10464,
+		Quote_Booking_Service = 10528,
 		/// <summary>
-		/// Quote_Booking_Service_Task = 10465
+		/// Quote Booking Service Task = 10529
 		/// </summary>
-		Quote_Booking_Service_Task = 10465,
+		Quote_Booking_Service_Task = 10529,
 		/// <summary>
-		/// Quote_Booking_Setup = 10466
+		/// Quote Booking Setup = 10530
 		/// </summary>
-		Quote_Booking_Setup = 10466,
+		Quote_Booking_Setup = 10530,
 		/// <summary>
-		/// Quote_Close = 4211
+		/// Quote Close = 4211
 		/// </summary>
 		Quote_Close = 4211,
 		/// <summary>
-		/// Quote_Invoicing_Product = 10467
+		/// Quote Invoicing Product = 10531
 		/// </summary>
-		Quote_Invoicing_Product = 10467,
+		Quote_Invoicing_Product = 10531,
 		/// <summary>
-		/// Quote_Invoicing_Setup = 10468
+		/// Quote Invoicing Setup = 10532
 		/// </summary>
-		Quote_Invoicing_Setup = 10468,
+		Quote_Invoicing_Setup = 10532,
 		/// <summary>
-		/// Quote_Line = 1085
+		/// Quote Line = 1085
 		/// </summary>
 		Quote_Line = 1085,
 		/// <summary>
-		/// Quote_Line_Analytics_Breakdown = 10374
+		/// Quote Line Analytics Breakdown = 10437
 		/// </summary>
-		Quote_Line_Analytics_Breakdown = 10374,
+		Quote_Line_Analytics_Breakdown = 10437,
 		/// <summary>
-		/// Quote_Line_Detail = 10378
+		/// Quote Line Detail = 10441
 		/// </summary>
-		Quote_Line_Detail = 10378,
+		Quote_Line_Detail = 10441,
 		/// <summary>
-		/// Quote_Line_Invoice_Schedule = 10375
+		/// Quote Line Invoice Schedule = 10438
 		/// </summary>
-		Quote_Line_Invoice_Schedule = 10375,
+		Quote_Line_Invoice_Schedule = 10438,
 		/// <summary>
-		/// Quote_Line_Milestone = 10377
+		/// Quote Line Milestone = 10440
 		/// </summary>
-		Quote_Line_Milestone = 10377,
+		Quote_Line_Milestone = 10440,
 		/// <summary>
-		/// Quote_Line_Resource_Category = 10376
+		/// Quote Line Resource Category = 10439
 		/// </summary>
-		Quote_Line_Resource_Category = 10376,
+		Quote_Line_Resource_Category = 10439,
 		/// <summary>
-		/// Quote_Line_Transaction_Category = 10379
+		/// Quote Line Transaction Category = 10442
 		/// </summary>
-		Quote_Line_Transaction_Category = 10379,
+		Quote_Line_Transaction_Category = 10442,
 		/// <summary>
-		/// Quote_Line_Transaction_Classification = 10380
+		/// Quote Line Transaction Classification = 10443
 		/// </summary>
-		Quote_Line_Transaction_Classification = 10380,
+		Quote_Line_Transaction_Classification = 10443,
 		/// <summary>
-		/// Quote_Project_Price_List = 10381
+		/// Quote Project Price List = 10444
 		/// </summary>
-		Quote_Project_Price_List = 10381,
+		Quote_Project_Price_List = 10444,
 		/// <summary>
-		/// Rating_Model = 1144
+		/// Rating Model = 1144
 		/// </summary>
 		Rating_Model = 1144,
 		/// <summary>
-		/// Rating_Value = 1142
+		/// Rating Value = 1142
 		/// </summary>
 		Rating_Value = 1142,
 		/// <summary>
-		/// Record_Creation_and_Update_Rule = 9300
+		/// Record Creation and Update Rule = 9300
 		/// </summary>
 		Record_Creation_and_Update_Rule = 9300,
 		/// <summary>
-		/// Record_Creation_and_Update_Rule_Item = 9301
+		/// Record Creation and Update Rule Item = 9301
 		/// </summary>
 		Record_Creation_and_Update_Rule_Item = 9301,
 		/// <summary>
-		/// Recurrence_Rule = 4250
+		/// Recording = 10653
+		/// </summary>
+		Recording = 10653,
+		/// <summary>
+		/// Recurrence Rule = 4250
 		/// </summary>
 		Recurrence_Rule = 4250,
 		/// <summary>
-		/// Recurring_Appointment = 4251
+		/// Recurring Appointment = 4251
 		/// </summary>
 		Recurring_Appointment = 4251,
 		/// <summary>
-		/// Relationship_Attribute = 9814
+		/// Relationship Attribute = 9814
 		/// </summary>
 		Relationship_Attribute = 9814,
 		/// <summary>
-		/// Relationship_Entity = 9813
+		/// Relationship Entity = 9813
 		/// </summary>
 		Relationship_Entity = 9813,
 		/// <summary>
-		/// Relationship_Role = 4500
+		/// Relationship Role = 4500
 		/// </summary>
 		Relationship_Role = 4500,
 		/// <summary>
-		/// Relationship_Role_Map = 4501
+		/// Relationship Role Map = 4501
 		/// </summary>
 		Relationship_Role_Map = 4501,
 		/// <summary>
-		/// Replication_Backlog = 1140
+		/// Replication Backlog = 1140
 		/// </summary>
 		Replication_Backlog = 1140,
 		/// <summary>
@@ -2933,499 +3065,547 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Report = 9100,
 		/// <summary>
-		/// Report_Link = 9104
+		/// Report Link = 9104
 		/// </summary>
 		Report_Link = 9104,
 		/// <summary>
-		/// Report_Related_Category = 9102
+		/// Report Related Category = 9102
 		/// </summary>
 		Report_Related_Category = 9102,
 		/// <summary>
-		/// Report_Related_Entity = 9101
+		/// Report Related Entity = 9101
 		/// </summary>
 		Report_Related_Entity = 9101,
 		/// <summary>
-		/// Report_Visibility = 9103
+		/// Report Visibility = 9103
 		/// </summary>
 		Report_Visibility = 9103,
 		/// <summary>
-		/// Requirement_Characteristic = 10304
+		/// Requirement Characteristic = 10367
 		/// </summary>
-		Requirement_Characteristic = 10304,
+		Requirement_Characteristic = 10367,
 		/// <summary>
-		/// Requirement_Dependency = 10321
+		/// Requirement Dependency = 10384
 		/// </summary>
-		Requirement_Dependency = 10321,
+		Requirement_Dependency = 10384,
 		/// <summary>
-		/// Requirement_Group = 10305
+		/// Requirement Group = 10368
 		/// </summary>
-		Requirement_Group = 10305,
+		Requirement_Group = 10368,
 		/// <summary>
-		/// Requirement_Organization_Unit = 10306
+		/// Requirement Organization Unit = 10369
 		/// </summary>
-		Requirement_Organization_Unit = 10306,
+		Requirement_Organization_Unit = 10369,
 		/// <summary>
-		/// Requirement_Relationship = 10307
+		/// Requirement Relationship = 10370
 		/// </summary>
-		Requirement_Relationship = 10307,
+		Requirement_Relationship = 10370,
 		/// <summary>
-		/// Requirement_Resource_Category = 10308
+		/// Requirement Resource Category = 10371
 		/// </summary>
-		Requirement_Resource_Category = 10308,
+		Requirement_Resource_Category = 10371,
 		/// <summary>
-		/// Requirement_Resource_Preference = 10309
+		/// Requirement Resource Preference = 10372
 		/// </summary>
-		Requirement_Resource_Preference = 10309,
+		Requirement_Resource_Preference = 10372,
 		/// <summary>
-		/// Requirement_Status = 10310
+		/// Requirement Status = 10373
 		/// </summary>
-		Requirement_Status = 10310,
+		Requirement_Status = 10373,
 		/// <summary>
-		/// Resolution = 10508
+		/// Resolution = 10572
 		/// </summary>
-		Resolution = 10508,
+		Resolution = 10572,
 		/// <summary>
 		/// Resource = 4002
 		/// </summary>
 		Resource = 4002,
 		/// <summary>
-		/// Resource_Assignment = 10382
+		/// Resource Assignment = 10445
 		/// </summary>
-		Resource_Assignment = 10382,
+		Resource_Assignment = 10445,
 		/// <summary>
-		/// Resource_Assignment_Detail_Deprecated_in_v20 = 10383
+		/// Resource Assignment Detail (Deprecated in v2.0) = 10446
 		/// </summary>
-		Resource_Assignment_Detail_Deprecated_in_v20 = 10383,
+		Resource_Assignment_Detail_Deprecated_in_v20 = 10446,
 		/// <summary>
-		/// Resource_Expansion = 4010
+		/// Resource duration (preview) = 10585
+		/// </summary>
+		Resource_duration_preview = 10585,
+		/// <summary>
+		/// Resource Expansion = 4010
 		/// </summary>
 		Resource_Expansion = 4010,
 		/// <summary>
-		/// Resource_Group = 4007
+		/// Resource Group = 4007
 		/// </summary>
 		Resource_Group = 4007,
 		/// <summary>
-		/// resource_group_data_source = 10111
+		/// resource group data source = 10123
 		/// </summary>
-		resource_group_data_source = 10111,
+		resource_group_data_source = 10123,
 		/// <summary>
-		/// Resource_Pay_Type = 10469
+		/// Resource Pay Type = 10533
 		/// </summary>
-		Resource_Pay_Type = 10469,
+		Resource_Pay_Type = 10533,
 		/// <summary>
-		/// Resource_Request = 10386
+		/// Resource Request = 10449
 		/// </summary>
-		Resource_Request = 10386,
+		Resource_Request = 10449,
 		/// <summary>
-		/// Resource_Requirement = 10311
+		/// Resource Requirement = 10374
 		/// </summary>
-		Resource_Requirement = 10311,
+		Resource_Requirement = 10374,
 		/// <summary>
-		/// Resource_Requirement_Detail = 10312
+		/// Resource Requirement Detail = 10375
 		/// </summary>
-		Resource_Requirement_Detail = 10312,
+		Resource_Requirement_Detail = 10375,
 		/// <summary>
-		/// Resource_Restriction_Deprecated = 10490
+		/// Resource Restriction (Deprecated) = 10554
 		/// </summary>
-		Resource_Restriction_Deprecated = 10490,
+		Resource_Restriction_Deprecated = 10554,
 		/// <summary>
-		/// Resource_Specification = 4006
+		/// Resource Specification = 4006
 		/// </summary>
 		Resource_Specification = 4006,
 		/// <summary>
-		/// Resource_Territory = 10313
+		/// Resource Territory = 10376
 		/// </summary>
-		Resource_Territory = 10313,
+		Resource_Territory = 10376,
 		/// <summary>
-		/// Result_Cache = 10351
+		/// Result Cache = 10414
 		/// </summary>
-		Result_Cache = 10351,
+		Result_Cache = 10414,
 		/// <summary>
-		/// RevokeInheritedAccessRecordsTracker = 90001
+		/// RevokeInheritedAccessRecordsTracker = 10030
 		/// </summary>
-		RevokeInheritedAccessRecordsTracker = 90001,
+		RevokeInheritedAccessRecordsTracker = 10030,
 		/// <summary>
-		/// Ribbon_Client_Metadata = 4579
+		/// Ribbon Client Metadata. = 4579
 		/// </summary>
 		Ribbon_Client_Metadata = 4579,
 		/// <summary>
-		/// Ribbon_Command = 1116
+		/// Ribbon Command = 1116
 		/// </summary>
 		Ribbon_Command = 1116,
 		/// <summary>
-		/// Ribbon_Context_Group = 1115
+		/// Ribbon Context Group = 1115
 		/// </summary>
 		Ribbon_Context_Group = 1115,
 		/// <summary>
-		/// Ribbon_Difference = 1130
+		/// Ribbon Difference = 1130
 		/// </summary>
 		Ribbon_Difference = 1130,
 		/// <summary>
-		/// Ribbon_Metadata_To_Process = 9880
+		/// Ribbon Metadata To Process = 9880
 		/// </summary>
 		Ribbon_Metadata_To_Process = 9880,
 		/// <summary>
-		/// Ribbon_Rule = 1117
+		/// Ribbon Rule = 1117
 		/// </summary>
 		Ribbon_Rule = 1117,
 		/// <summary>
-		/// Ribbon_Tab_To_Command_Mapping = 1113
+		/// Ribbon Tab To Command Mapping = 1113
 		/// </summary>
 		Ribbon_Tab_To_Command_Mapping = 1113,
 		/// <summary>
-		/// Rich_Text_Attachment = 10078
+		/// Rich Text Attachment = 10101
 		/// </summary>
-		Rich_Text_Attachment = 10078,
+		Rich_Text_Attachment = 10101,
 		/// <summary>
-		/// RMA = 10470
+		/// RMA = 10534
 		/// </summary>
-		RMA = 10470,
+		RMA = 10534,
 		/// <summary>
-		/// RMA_Product = 10471
+		/// RMA Product = 10535
 		/// </summary>
-		RMA_Product = 10471,
+		RMA_Product = 10535,
 		/// <summary>
-		/// RMA_Receipt = 10472
+		/// RMA Receipt = 10536
 		/// </summary>
-		RMA_Receipt = 10472,
+		RMA_Receipt = 10536,
 		/// <summary>
-		/// RMA_Receipt_Product = 10473
+		/// RMA Receipt Product = 10537
 		/// </summary>
-		RMA_Receipt_Product = 10473,
+		RMA_Receipt_Product = 10537,
 		/// <summary>
-		/// RMA_SubStatus = 10474
+		/// RMA SubStatus = 10538
 		/// </summary>
-		RMA_SubStatus = 10474,
+		RMA_SubStatus = 10538,
 		/// <summary>
-		/// Role_competency_requirement = 10387
+		/// Role competency requirement = 10450
 		/// </summary>
-		Role_competency_requirement = 10387,
+		Role_competency_requirement = 10450,
 		/// <summary>
-		/// Role_Price = 10385
+		/// Role Price = 10448
 		/// </summary>
-		Role_Price = 10385,
+		Role_Price = 10448,
 		/// <summary>
-		/// Role_Price_Markup = 10384
+		/// Role Price Markup = 10447
 		/// </summary>
-		Role_Price_Markup = 10384,
+		Role_Price_Markup = 10447,
 		/// <summary>
-		/// Role_Template = 1037
+		/// Role Template = 1037
 		/// </summary>
 		Role_Template = 1037,
 		/// <summary>
-		/// Role_Utilization = 10388
+		/// Role Utilization = 10451
 		/// </summary>
-		Role_Utilization = 10388,
+		Role_Utilization = 10451,
 		/// <summary>
-		/// Rollup_Field = 9604
+		/// Rollup Field = 9604
 		/// </summary>
 		Rollup_Field = 9604,
 		/// <summary>
-		/// Rollup_Job = 9511
+		/// Rollup Job = 9511
 		/// </summary>
 		Rollup_Job = 9511,
 		/// <summary>
-		/// Rollup_Properties = 9510
+		/// Rollup Properties = 9510
 		/// </summary>
 		Rollup_Properties = 9510,
 		/// <summary>
-		/// Rollup_Query = 9602
+		/// Rollup Query = 9602
 		/// </summary>
 		Rollup_Query = 9602,
 		/// <summary>
-		/// Routing_configuration = 10552
+		/// Routing configuration = 10622
 		/// </summary>
-		Routing_configuration = 10552,
+		Routing_configuration = 10622,
 		/// <summary>
-		/// Routing_configuration_step = 10553
+		/// Routing configuration step = 10623
 		/// </summary>
-		Routing_configuration_step = 10553,
+		Routing_configuration_step = 10623,
 		/// <summary>
-		/// Routing_Rule_Set = 8181
+		/// Routing diagnostic = 10615
+		/// </summary>
+		Routing_diagnostic = 10615,
+		/// <summary>
+		/// Routing diagnostic item = 10614
+		/// </summary>
+		Routing_diagnostic_item = 10614,
+		/// <summary>
+		/// Routing Rule Set = 8181
 		/// </summary>
 		Routing_Rule_Set = 8181,
 		/// <summary>
-		/// Routing_Rule_Set_Setting = 10548
+		/// Routing Rule Set Setting = 10617
 		/// </summary>
-		Routing_Rule_Set_Setting = 10548,
+		Routing_Rule_Set_Setting = 10617,
 		/// <summary>
-		/// RoutingRequest = 10580
+		/// RoutingRequest = 10675
 		/// </summary>
-		RoutingRequest = 10580,
+		RoutingRequest = 10675,
 		/// <summary>
-		/// RTV = 10475
+		/// RTV = 10539
 		/// </summary>
-		RTV = 10475,
+		RTV = 10539,
 		/// <summary>
-		/// RTV_Product = 10476
+		/// RTV Product = 10540
 		/// </summary>
-		RTV_Product = 10476,
+		RTV_Product = 10540,
 		/// <summary>
-		/// RTV_Substatus = 10477
+		/// RTV Substatus = 10541
 		/// </summary>
-		RTV_Substatus = 10477,
+		RTV_Substatus = 10541,
 		/// <summary>
-		/// Rule_Item_10572 = 10572
+		/// Rule Item = 10655
 		/// </summary>
-		Rule_Item_10572 = 10572,
+		Rule_Item_10655 = 10655,
 		/// <summary>
-		/// Rule_Item_8199 = 8199
+		/// Rule Item = 8199
 		/// </summary>
 		Rule_Item_8199 = 8199,
 		/// <summary>
-		/// Rulesetentitymapping = 10544
+		/// Rulesetentitymapping = 10613
 		/// </summary>
-		Rulesetentitymapping = 10544,
+		Rulesetentitymapping = 10613,
 		/// <summary>
 		/// RuntimeDependency = 7200
 		/// </summary>
 		RuntimeDependency = 7200,
 		/// <summary>
-		/// Sales_Attachment = 1070
+		/// Sales Acceleration settings = 10824
+		/// </summary>
+		Sales_Acceleration_settings = 10824,
+		/// <summary>
+		/// Sales Assignment Setting = 10821
+		/// </summary>
+		Sales_Assignment_Setting = 10821,
+		/// <summary>
+		/// Sales Attachment = 1070
 		/// </summary>
 		Sales_Attachment = 1070,
 		/// <summary>
-		/// Sales_Literature = 1038
+		/// Sales Literature = 1038
 		/// </summary>
 		Sales_Literature = 1038,
 		/// <summary>
-		/// Sales_Process_Instance = 32
+		/// Sales Process Instance = 32
 		/// </summary>
 		Sales_Process_Instance = 32,
 		/// <summary>
-		/// salesinsightssettings = 10223
+		/// salesinsightssettings = 10244
 		/// </summary>
-		salesinsightssettings = 10223,
+		salesinsightssettings = 10244,
 		/// <summary>
-		/// SalesSiteMap = 10520
+		/// SalesSiteMap = 10589
 		/// </summary>
-		SalesSiteMap = 10520,
+		SalesSiteMap = 10589,
 		/// <summary>
-		/// Saved_Organization_Insights_Configuration = 1309
+		/// Saved Organization Insights Configuration = 1309
 		/// </summary>
 		Saved_Organization_Insights_Configuration = 1309,
 		/// <summary>
-		/// Saved_View = 4230
+		/// Saved View = 4230
 		/// </summary>
 		Saved_View = 4230,
 		/// <summary>
-		/// Scenario = 10541
+		/// Scenario = 10610
 		/// </summary>
-		Scenario = 10541,
+		Scenario = 10610,
 		/// <summary>
-		/// Schedule_Board_Setting = 10314
+		/// Schedule Board Setting = 10377
 		/// </summary>
-		Schedule_Board_Setting = 10314,
+		Schedule_Board_Setting = 10377,
 		/// <summary>
-		/// Scheduling_Feature_Flag = 10322
+		/// Scheduling Feature Flag = 10385
 		/// </summary>
-		Scheduling_Feature_Flag = 10322,
+		Scheduling_Feature_Flag = 10385,
 		/// <summary>
-		/// Scheduling_Group = 4005
+		/// Scheduling Group = 4005
 		/// </summary>
 		Scheduling_Group = 4005,
 		/// <summary>
-		/// Scheduling_Parameter = 10315
+		/// Scheduling Parameter = 10378
 		/// </summary>
-		Scheduling_Parameter = 10315,
+		Scheduling_Parameter = 10378,
 		/// <summary>
-		/// Script_Task_Trigger = 10697
+		/// Script Task Trigger = 10776
 		/// </summary>
-		Script_Task_Trigger = 10697,
+		Script_Task_Trigger = 10776,
 		/// <summary>
-		/// Scriptlet = 10696
+		/// Scriptlet = 10775
 		/// </summary>
-		Scriptlet = 10696,
+		Scriptlet = 10775,
 		/// <summary>
-		/// Sdk_Message = 4606
+		/// Sdk Message = 4606
 		/// </summary>
 		Sdk_Message = 4606,
 		/// <summary>
-		/// Sdk_Message_Filter = 4607
+		/// Sdk Message Filter = 4607
 		/// </summary>
 		Sdk_Message_Filter = 4607,
 		/// <summary>
-		/// Sdk_Message_Pair = 4613
+		/// Sdk Message Pair = 4613
 		/// </summary>
 		Sdk_Message_Pair = 4613,
 		/// <summary>
-		/// Sdk_Message_Processing_Step = 4608
+		/// Sdk Message Processing Step = 4608
 		/// </summary>
 		Sdk_Message_Processing_Step = 4608,
 		/// <summary>
-		/// Sdk_Message_Processing_Step_Image = 4615
+		/// Sdk Message Processing Step Image = 4615
 		/// </summary>
 		Sdk_Message_Processing_Step_Image = 4615,
 		/// <summary>
-		/// Sdk_Message_Processing_Step_Secure_Configuration = 4616
+		/// Sdk Message Processing Step Secure Configuration = 4616
 		/// </summary>
 		Sdk_Message_Processing_Step_Secure_Configuration = 4616,
 		/// <summary>
-		/// Sdk_Message_Request = 4609
+		/// Sdk Message Request = 4609
 		/// </summary>
 		Sdk_Message_Request = 4609,
 		/// <summary>
-		/// Sdk_Message_Request_Field = 4614
+		/// Sdk Message Request Field = 4614
 		/// </summary>
 		Sdk_Message_Request_Field = 4614,
 		/// <summary>
-		/// Sdk_Message_Response = 4610
+		/// Sdk Message Response = 4610
 		/// </summary>
 		Sdk_Message_Response = 4610,
 		/// <summary>
-		/// Sdk_Message_Response_Field = 4611
+		/// Sdk Message Response Field = 4611
 		/// </summary>
 		Sdk_Message_Response_Field = 4611,
 		/// <summary>
-		/// Search_Configuration = 10581
+		/// Search Configuration = 10676
 		/// </summary>
-		Search_Configuration = 10581,
+		Search_Configuration = 10676,
 		/// <summary>
-		/// Search_provider = 10055
+		/// Search provider = 10079
 		/// </summary>
-		Search_provider = 10055,
+		Search_provider = 10079,
 		/// <summary>
-		/// Search_Telemetry = 10080
+		/// Search Telemetry = 10102
 		/// </summary>
-		Search_Telemetry = 10080,
+		Search_Telemetry = 10102,
 		/// <summary>
-		/// Security_Role = 1036
+		/// Security Role = 1036
 		/// </summary>
 		Security_Role = 1036,
 		/// <summary>
-		/// Self_service = 10611
+		/// Segment = 10815
 		/// </summary>
-		Self_service = 10611,
+		Segment = 10815,
 		/// <summary>
-		/// Semiannual_Fiscal_Calendar = 2001
+		/// SegmentsUtil = 10816
+		/// </summary>
+		SegmentsUtil = 10816,
+		/// <summary>
+		/// Self service = 10686
+		/// </summary>
+		Self_service = 10686,
+		/// <summary>
+		/// Semiannual Fiscal Calendar = 2001
 		/// </summary>
 		Semiannual_Fiscal_Calendar = 2001,
 		/// <summary>
-		/// Sentiment_analysis = 10582
+		/// Sentiment analysis = 10677
 		/// </summary>
-		Sentiment_analysis = 10582,
+		Sentiment_analysis = 10677,
 		/// <summary>
-		/// Sentiment_daily_topic = 10595
+		/// Sentiment daily topic = 10656
 		/// </summary>
-		Sentiment_daily_topic = 10595,
+		Sentiment_daily_topic = 10656,
 		/// <summary>
-		/// Sentiment_daily_topic_keyword = 10596
+		/// Sentiment daily topic keyword = 10657
 		/// </summary>
-		Sentiment_daily_topic_keyword = 10596,
+		Sentiment_daily_topic_keyword = 10657,
 		/// <summary>
-		/// Sentiment_daily_topic_trending = 10597
+		/// Sentiment daily topic trending = 10658
 		/// </summary>
-		Sentiment_daily_topic_trending = 10597,
+		Sentiment_daily_topic_trending = 10658,
+		/// <summary>
+		/// Sequence = 10812
+		/// </summary>
+		Sequence = 10812,
+		/// <summary>
+		/// Sequence Target = 10813
+		/// </summary>
+		Sequence_Target = 10813,
+		/// <summary>
+		/// Sequence Target Step = 10814
+		/// </summary>
+		Sequence_Target_Step = 10814,
 		/// <summary>
 		/// Service = 4001
 		/// </summary>
 		Service = 4001,
 		/// <summary>
-		/// Service_Activity = 4214
+		/// Service Activity = 4214
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Service_Configuration = 10051
+		/// Service Configuration = 10075
 		/// </summary>
-		Service_Configuration = 10051,
+		Service_Configuration = 10075,
 		/// <summary>
-		/// Service_Contract_Contact = 20
+		/// Service Contract Contact = 20
 		/// </summary>
 		Service_Contract_Contact = 20,
 		/// <summary>
-		/// Service_Endpoint = 4618
+		/// Service Endpoint = 4618
 		/// </summary>
 		Service_Endpoint = 4618,
 		/// <summary>
-		/// Service_Plan = 101
+		/// Service Plan = 101
 		/// </summary>
 		Service_Plan = 101,
 		/// <summary>
-		/// Service_Task_Type = 10478
+		/// Service Plan Mapping = 10039
 		/// </summary>
-		Service_Task_Type = 10478,
+		Service_Plan_Mapping = 10039,
 		/// <summary>
-		/// ServicesSiteMap = 10521
+		/// Service Task Type = 10542
 		/// </summary>
-		ServicesSiteMap = 10521,
+		Service_Task_Type = 10542,
 		/// <summary>
-		/// Session = 10573
+		/// ServicesSiteMap = 10590
 		/// </summary>
-		Session = 10573,
+		ServicesSiteMap = 10590,
 		/// <summary>
-		/// Session_Characteristic = 10619
+		/// Session = 10659
 		/// </summary>
-		Session_Characteristic = 10619,
+		Session = 10659,
 		/// <summary>
-		/// Session_Data_Deprecated = 10209
+		/// Session Characteristic = 10695
 		/// </summary>
-		Session_Data_Deprecated = 10209,
+		Session_Characteristic = 10695,
 		/// <summary>
-		/// Session_event = 10583
+		/// Session Data (Deprecated) = 10222
 		/// </summary>
-		Session_event = 10583,
+		Session_Data_Deprecated = 10222,
 		/// <summary>
-		/// Session_Information = 10699
+		/// Session event = 10678
 		/// </summary>
-		Session_Information = 10699,
+		Session_event = 10678,
 		/// <summary>
-		/// Session_participant = 10584
+		/// Session Information = 10778
 		/// </summary>
-		Session_participant = 10584,
+		Session_Information = 10778,
 		/// <summary>
-		/// Session_Participant_Data_Deprecated = 10210
+		/// Session participant = 10679
 		/// </summary>
-		Session_Participant_Data_Deprecated = 10210,
+		Session_participant = 10679,
 		/// <summary>
-		/// Session_Sentiment = 10598
+		/// Session Participant Data (Deprecated) = 10223
 		/// </summary>
-		Session_Sentiment = 10598,
+		Session_Participant_Data_Deprecated = 10223,
 		/// <summary>
-		/// Session_Template = 10149
+		/// Session Participant Event = 10660
 		/// </summary>
-		Session_Template = 10149,
+		Session_Participant_Event = 10660,
 		/// <summary>
-		/// Session_Templates_Deprecated = 10527
+		/// Session Sentiment = 10661
 		/// </summary>
-		Session_Templates_Deprecated = 10527,
+		Session_Sentiment = 10661,
 		/// <summary>
-		/// Session_Transfer = 10700
+		/// Session Template = 10161
 		/// </summary>
-		Session_Transfer = 10700,
+		Session_Template = 10161,
 		/// <summary>
-		/// Setting_Definition = 10030
+		/// Session Templates (Deprecated) = 10596
 		/// </summary>
-		Setting_Definition = 10030,
+		Session_Templates_Deprecated = 10596,
 		/// <summary>
-		/// SettingsSiteMap = 10522
+		/// Session Transfer = 10779
 		/// </summary>
-		SettingsSiteMap = 10522,
+		Session_Transfer = 10779,
 		/// <summary>
-		/// SharePoint_Data = 9509
+		/// Setting Definition = 10037
+		/// </summary>
+		Setting_Definition = 10037,
+		/// <summary>
+		/// SettingsSiteMap = 10591
+		/// </summary>
+		SettingsSiteMap = 10591,
+		/// <summary>
+		/// SharePoint Data = 9509
 		/// </summary>
 		SharePoint_Data = 9509,
 		/// <summary>
-		/// Sharepoint_Document = 9507
+		/// Sharepoint Document = 9507
 		/// </summary>
 		Sharepoint_Document = 9507,
 		/// <summary>
-		/// SharePoint_Site = 9502
+		/// SharePoint Site = 9502
 		/// </summary>
 		SharePoint_Site = 9502,
 		/// <summary>
-		/// Ship_Via = 10479
+		/// Ship Via = 10543
 		/// </summary>
-		Ship_Via = 10479,
+		Ship_Via = 10543,
 		/// <summary>
-		/// SI_Key_Value_Config = 10218
+		/// SI Key Value Config = 10239
 		/// </summary>
-		SI_Key_Value_Config = 10218,
+		SI_Key_Value_Config = 10239,
 		/// <summary>
-		/// siconfig = 10217
+		/// siconfig = 10238
 		/// </summary>
-		siconfig = 10217,
+		siconfig = 10238,
 		/// <summary>
-		/// Similarity_Rule = 9951
+		/// Similarity Rule = 9951
 		/// </summary>
 		Similarity_Rule = 9951,
 		/// <summary>
@@ -3433,55 +3613,55 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Site = 4009,
 		/// <summary>
-		/// Site_Map = 4709
+		/// Site Map = 4709
 		/// </summary>
 		Site_Map = 4709,
 		/// <summary>
-		/// Skill_Attachment_Rule = 10620
+		/// Skill Attachment Rule = 10696
 		/// </summary>
-		Skill_Attachment_Rule = 10620,
+		Skill_Attachment_Rule = 10696,
 		/// <summary>
-		/// Skill_finder_model = 10626
+		/// Skill finder model = 10702
 		/// </summary>
-		Skill_finder_model = 10626,
+		Skill_finder_model = 10702,
 		/// <summary>
 		/// SLA = 9750
 		/// </summary>
 		SLA = 9750,
 		/// <summary>
-		/// SLA_Item = 9751
+		/// SLA Item = 9751
 		/// </summary>
 		SLA_Item = 9751,
 		/// <summary>
-		/// SLA_KPI = 10052
+		/// SLA KPI = 10076
 		/// </summary>
-		SLA_KPI = 10052,
+		SLA_KPI = 10076,
 		/// <summary>
-		/// SLA_KPI_Instance = 9752
+		/// SLA KPI Instance = 9752
 		/// </summary>
 		SLA_KPI_Instance = 9752,
 		/// <summary>
-		/// Smartassist_configuration = 10175
+		/// Smartassist configuration = 10187
 		/// </summary>
-		Smartassist_configuration = 10175,
+		Smartassist_configuration = 10187,
 		/// <summary>
-		/// SMS_Engagement_Context = 10652
+		/// SMS Engagement Context = 10730
 		/// </summary>
-		SMS_Engagement_Context = 10652,
+		SMS_Engagement_Context = 10730,
 		/// <summary>
-		/// SMS_Number = 10653
+		/// SMS Number = 10731
 		/// </summary>
-		SMS_Number = 10653,
+		SMS_Number = 10731,
 		/// <summary>
-		/// SMS_Number_settings = 10654
+		/// SMS Number settings = 10732
 		/// </summary>
-		SMS_Number_settings = 10654,
+		SMS_Number_settings = 10732,
 		/// <summary>
-		/// Social_Activity = 4216
+		/// Social Activity = 4216
 		/// </summary>
 		Social_Activity = 4216,
 		/// <summary>
-		/// Social_Profile = 99
+		/// Social Profile = 99
 		/// </summary>
 		Social_Profile = 99,
 		/// <summary>
@@ -3493,71 +3673,83 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Solution = 7100,
 		/// <summary>
-		/// Solution_Component = 7103
+		/// Solution Component = 7103
 		/// </summary>
 		Solution_Component = 7103,
 		/// <summary>
-		/// Solution_Component_Attribute_Configuration = 10000
+		/// Solution Component Attribute Configuration = 10000
 		/// </summary>
 		Solution_Component_Attribute_Configuration = 10000,
 		/// <summary>
-		/// Solution_Component_Configuration = 10001
+		/// Solution Component Batch Configuration = 10001
 		/// </summary>
-		Solution_Component_Configuration = 10001,
+		Solution_Component_Batch_Configuration = 10001,
 		/// <summary>
-		/// Solution_Component_Data_Source = 10012
+		/// Solution Component Configuration = 10002
 		/// </summary>
-		Solution_Component_Data_Source = 10012,
+		Solution_Component_Configuration = 10002,
 		/// <summary>
-		/// Solution_Component_Definition = 7104
+		/// Solution Component Count Data Source = 10016
+		/// </summary>
+		Solution_Component_Count_Data_Source = 10016,
+		/// <summary>
+		/// Solution Component Count Summary = 10014
+		/// </summary>
+		Solution_Component_Count_Summary = 10014,
+		/// <summary>
+		/// Solution Component Data Source = 10015
+		/// </summary>
+		Solution_Component_Data_Source = 10015,
+		/// <summary>
+		/// Solution Component Definition = 7104
 		/// </summary>
 		Solution_Component_Definition = 7104,
 		/// <summary>
-		/// Solution_Component_Relationship_Configuration = 10002
+		/// Solution Component Relationship Configuration = 10003
 		/// </summary>
-		Solution_Component_Relationship_Configuration = 10002,
+		Solution_Component_Relationship_Configuration = 10003,
 		/// <summary>
-		/// Solution_Component_Summary = 10011
+		/// Solution Component Summary = 10013
 		/// </summary>
-		Solution_Component_Summary = 10011,
+		Solution_Component_Summary = 10013,
 		/// <summary>
-		/// Solution_Health_Rule = 10099
+		/// Solution Health Rule = 10109
 		/// </summary>
-		Solution_Health_Rule = 10099,
+		Solution_Health_Rule = 10109,
 		/// <summary>
-		/// Solution_Health_Rule_Argument = 10100
+		/// Solution Health Rule Argument = 10110
 		/// </summary>
-		Solution_Health_Rule_Argument = 10100,
+		Solution_Health_Rule_Argument = 10110,
 		/// <summary>
-		/// Solution_Health_Rule_Set = 10101
+		/// Solution Health Rule Set = 10111
 		/// </summary>
-		Solution_Health_Rule_Set = 10101,
+		Solution_Health_Rule_Set = 10111,
 		/// <summary>
-		/// Solution_History = 10003
+		/// Solution History = 10004
 		/// </summary>
-		Solution_History = 10003,
+		Solution_History = 10004,
 		/// <summary>
-		/// Solution_History_Data_Source = 10004
+		/// Solution History Data Source = 10005
 		/// </summary>
-		Solution_History_Data_Source = 10004,
+		Solution_History_Data_Source = 10005,
 		/// <summary>
 		/// SolutionHistoryData = 9890
 		/// </summary>
 		SolutionHistoryData = 9890,
 		/// <summary>
-		/// Sound_notification_setting = 10607
+		/// Sound notification setting = 10681
 		/// </summary>
-		Sound_notification_setting = 10607,
+		Sound_notification_setting = 10681,
 		/// <summary>
-		/// StageSolutionUpload = 10009
+		/// StageSolutionUpload = 10010
 		/// </summary>
-		StageSolutionUpload = 10009,
+		StageSolutionUpload = 10010,
 		/// <summary>
-		/// Status_Map = 1075
+		/// Status Map = 1075
 		/// </summary>
 		Status_Map = 1075,
 		/// <summary>
-		/// String_Map = 1043
+		/// String Map = 1043
 		/// </summary>
 		String_Map = 1043,
 		/// <summary>
@@ -3569,131 +3761,131 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Subscription = 29,
 		/// <summary>
-		/// Subscription_Clients = 1072
+		/// Subscription Clients = 1072
 		/// </summary>
 		Subscription_Clients = 1072,
 		/// <summary>
-		/// Subscription_Manually_Tracked_Object = 37
+		/// Subscription Manually Tracked Object = 37
 		/// </summary>
 		Subscription_Manually_Tracked_Object = 37,
 		/// <summary>
-		/// Subscription_Statistic_Offline = 45
+		/// Subscription Statistic Offline = 45
 		/// </summary>
 		Subscription_Statistic_Offline = 45,
 		/// <summary>
-		/// Subscription_Statistic_Outlook = 46
+		/// Subscription Statistic Outlook = 46
 		/// </summary>
 		Subscription_Statistic_Outlook = 46,
 		/// <summary>
-		/// Subscription_Sync_Entry_Offline = 47
+		/// Subscription Sync Entry Offline = 47
 		/// </summary>
 		Subscription_Sync_Entry_Offline = 47,
 		/// <summary>
-		/// Subscription_Sync_Entry_Outlook = 48
+		/// Subscription Sync Entry Outlook = 48
 		/// </summary>
 		Subscription_Sync_Entry_Outlook = 48,
 		/// <summary>
-		/// Subscription_Synchronization_Information = 33
+		/// Subscription Synchronization Information = 33
 		/// </summary>
 		Subscription_Synchronization_Information = 33,
 		/// <summary>
-		/// Suggested_Activity = 10227
+		/// Suggested Activity = 10248
 		/// </summary>
-		Suggested_Activity = 10227,
+		Suggested_Activity = 10248,
 		/// <summary>
-		/// Suggested_Activity_Data_Source = 10228
+		/// Suggested Activity Data Source = 10249
 		/// </summary>
-		Suggested_Activity_Data_Source = 10228,
+		Suggested_Activity_Data_Source = 10249,
 		/// <summary>
-		/// Suggested_Contact = 10229
+		/// Suggested Contact = 10250
 		/// </summary>
-		Suggested_Contact = 10229,
+		Suggested_Contact = 10250,
 		/// <summary>
-		/// Suggested_contacts_data_source = 10230
+		/// Suggested contacts data source = 10251
 		/// </summary>
-		Suggested_contacts_data_source = 10230,
+		Suggested_contacts_data_source = 10251,
 		/// <summary>
-		/// Suggestion_Interaction = 10184
+		/// Suggestion Interaction = 10196
 		/// </summary>
-		Suggestion_Interaction = 10184,
+		Suggestion_Interaction = 10196,
 		/// <summary>
-		/// Suggestion_request_payload = 10185
+		/// Suggestion request payload = 10197
 		/// </summary>
-		Suggestion_request_payload = 10185,
+		Suggestion_request_payload = 10197,
 		/// <summary>
 		/// SuggestionCardTemplate = 1190
 		/// </summary>
 		SuggestionCardTemplate = 1190,
 		/// <summary>
-		/// Suggestions_Model_Summary = 10186
+		/// Suggestions Model Summary = 10198
 		/// </summary>
-		Suggestions_Model_Summary = 10186,
+		Suggestions_Model_Summary = 10198,
 		/// <summary>
-		/// Suggestions_Setting = 10187
+		/// Suggestions Setting = 10199
 		/// </summary>
-		Suggestions_Setting = 10187,
+		Suggestions_Setting = 10199,
 		/// <summary>
-		/// Survey_Answer_Option = 10629
+		/// Survey Answer Option = 10708
 		/// </summary>
-		Survey_Answer_Option = 10629,
+		Survey_Answer_Option = 10708,
 		/// <summary>
-		/// Survey_Question = 10638
+		/// Survey Question = 10717
 		/// </summary>
-		Survey_Question = 10638,
+		Survey_Question = 10717,
 		/// <summary>
-		/// Survey_Question_Sequence = 10637
+		/// Survey Question Sequence = 10716
 		/// </summary>
-		Survey_Question_Sequence = 10637,
+		Survey_Question_Sequence = 10716,
 		/// <summary>
-		/// Survey_Response = 10630
+		/// Survey Response = 10709
 		/// </summary>
-		Survey_Response = 10630,
+		Survey_Response = 10709,
 		/// <summary>
-		/// Survey_Response_Value = 10631
+		/// Survey Response Value = 10710
 		/// </summary>
-		Survey_Response_Value = 10631,
+		Survey_Response_Value = 10710,
 		/// <summary>
-		/// Sync_Attribute_Mapping = 1401
+		/// Sync Attribute Mapping = 1401
 		/// </summary>
 		Sync_Attribute_Mapping = 1401,
 		/// <summary>
-		/// Sync_Attribute_Mapping_Profile = 1400
+		/// Sync Attribute Mapping Profile = 1400
 		/// </summary>
 		Sync_Attribute_Mapping_Profile = 1400,
 		/// <summary>
-		/// Sync_Error = 9869
+		/// Sync Error = 9869
 		/// </summary>
 		Sync_Error = 9869,
 		/// <summary>
-		/// System_Application_Metadata = 7000
+		/// System Application Metadata = 7000
 		/// </summary>
 		System_Application_Metadata = 7000,
 		/// <summary>
-		/// System_Chart = 1111
+		/// System Chart = 1111
 		/// </summary>
 		System_Chart = 1111,
 		/// <summary>
-		/// System_Form = 1030
+		/// System Form = 1030
 		/// </summary>
 		System_Form = 1030,
 		/// <summary>
-		/// System_Job = 4700
+		/// System Job = 4700
 		/// </summary>
 		System_Job = 4700,
 		/// <summary>
-		/// System_User_Manager_Map = 51
+		/// System User Manager Map = 51
 		/// </summary>
 		System_User_Manager_Map = 51,
 		/// <summary>
-		/// System_User_Principal = 14
+		/// System User Principal = 14
 		/// </summary>
 		System_User_Principal = 14,
 		/// <summary>
-		/// System_User_Scheduler_Setting = 10316
+		/// System User Scheduler Setting = 10379
 		/// </summary>
-		System_User_Scheduler_Setting = 10316,
+		System_User_Scheduler_Setting = 10379,
 		/// <summary>
-		/// SystemUser_BusinessUnit_Entity_Map = 42
+		/// SystemUser BusinessUnit Entity Map = 42
 		/// </summary>
 		SystemUser_BusinessUnit_Entity_Map = 42,
 		/// <summary>
@@ -3701,71 +3893,71 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		SystemUserAuthorizationChangeTracker = 60,
 		/// <summary>
-		/// Tag = 10599
+		/// Tag = 10663
 		/// </summary>
-		Tag = 10599,
+		Tag = 10663,
 		/// <summary>
 		/// Task = 4212
 		/// </summary>
 		Task = 4212,
 		/// <summary>
-		/// Tax_Code = 10480
+		/// Tax Code = 10544
 		/// </summary>
-		Tax_Code = 10480,
+		Tax_Code = 10544,
 		/// <summary>
-		/// Tax_Code_Detail = 10481
+		/// Tax Code Detail = 10545
 		/// </summary>
-		Tax_Code_Detail = 10481,
+		Tax_Code_Detail = 10545,
 		/// <summary>
 		/// Team = 9
 		/// </summary>
 		Team = 9,
 		/// <summary>
-		/// Team_Profiles = 1203
+		/// Team Profiles = 1203
 		/// </summary>
 		Team_Profiles = 1203,
 		/// <summary>
-		/// Team_Sync_Attribute_Mapping_Profiles = 1403
+		/// Team Sync-Attribute Mapping Profiles = 1403
 		/// </summary>
-		Team_Sync_Attribute_Mapping_Profiles = 1403,
+		Team_SyncAttribute_Mapping_Profiles = 1403,
 		/// <summary>
-		/// Team_template = 92
+		/// Team template = 92
 		/// </summary>
 		Team_template = 92,
 		/// <summary>
-		/// TeamMobileOfflineProfileMembership = 10073
+		/// TeamMobileOfflineProfileMembership = 10094
 		/// </summary>
-		TeamMobileOfflineProfileMembership = 10073,
+		TeamMobileOfflineProfileMembership = 10094,
 		/// <summary>
-		/// Teams_Dialer_Admin_settings = 10256
+		/// Teams Dialer Admin settings = 10228
 		/// </summary>
-		Teams_Dialer_Admin_settings = 10256,
+		Teams_Dialer_Admin_settings = 10228,
 		/// <summary>
-		/// Teams_Engagement_Context = 10671
+		/// Teams Engagement Context = 10750
 		/// </summary>
-		Teams_Engagement_Context = 10671,
+		Teams_Engagement_Context = 10750,
 		/// <summary>
-		/// Template_For_Properties = 10124
+		/// Template For Properties = 10136
 		/// </summary>
-		Template_For_Properties = 10124,
+		Template_For_Properties = 10136,
 		/// <summary>
-		/// Template_Parameter = 10150
+		/// Template Parameter = 10162
 		/// </summary>
-		Template_Parameter = 10150,
+		Template_Parameter = 10162,
 		/// <summary>
-		/// Template_Tag_Deprecated = 10530
+		/// Template Tag (Deprecated) = 10599
 		/// </summary>
-		Template_Tag_Deprecated = 10530,
+		Template_Tag_Deprecated = 10599,
 		/// <summary>
 		/// Territory = 2013
 		/// </summary>
 		Territory = 2013,
 		/// <summary>
-		/// Text_Analytics_Entity_Mapping = 9945
+		/// Text Analytics Entity Mapping = 9945
 		/// </summary>
 		Text_Analytics_Entity_Mapping = 9945,
 		/// <summary>
-		/// Text_Analytics_Topic = 9948
+		/// Text Analytics Topic = 9948
 		/// </summary>
 		Text_Analytics_Topic = 9948,
 		/// <summary>
@@ -3773,441 +3965,449 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Theme = 2015,
 		/// <summary>
-		/// Three_Dimensional_Model = 10407
+		/// Three-Dimensional Model = 10471
 		/// </summary>
-		Three_Dimensional_Model = 10407,
+		ThreeDimensional_Model = 10471,
 		/// <summary>
-		/// Time_Entry = 10389
+		/// Time Entry = 10452
 		/// </summary>
-		Time_Entry = 10389,
+		Time_Entry = 10452,
 		/// <summary>
-		/// Time_Group_Detail = 10318
+		/// Time Group Detail = 10381
 		/// </summary>
-		Time_Group_Detail = 10318,
+		Time_Group_Detail = 10381,
 		/// <summary>
-		/// Time_Off_Calendar = 10390
+		/// Time Off Calendar = 10453
 		/// </summary>
-		Time_Off_Calendar = 10390,
+		Time_Off_Calendar = 10453,
 		/// <summary>
-		/// Time_Off_Request = 10482
+		/// Time Off Request = 10546
 		/// </summary>
-		Time_Off_Request = 10482,
+		Time_Off_Request = 10546,
 		/// <summary>
-		/// Time_Source = 10404
+		/// Time Source = 10467
 		/// </summary>
-		Time_Source = 10404,
+		Time_Source = 10467,
 		/// <summary>
-		/// Time_Stamp_Date_Mapping = 9932
+		/// Time Stamp Date Mapping = 9932
 		/// </summary>
 		Time_Stamp_Date_Mapping = 9932,
 		/// <summary>
-		/// Time_Zone_Definition = 4810
+		/// Time Zone Definition = 4810
 		/// </summary>
 		Time_Zone_Definition = 4810,
 		/// <summary>
-		/// Time_Zone_Localized_Name = 4812
+		/// Time Zone Localized Name = 4812
 		/// </summary>
 		Time_Zone_Localized_Name = 4812,
 		/// <summary>
-		/// Time_Zone_Rule = 4811
+		/// Time Zone Rule = 4811
 		/// </summary>
 		Time_Zone_Rule = 4811,
 		/// <summary>
-		/// Toolbar = 10703
+		/// Toolbar = 10782
 		/// </summary>
-		Toolbar = 10703,
+		Toolbar = 10782,
 		/// <summary>
-		/// Toolbar_Button = 10702
+		/// Toolbar Button = 10781
 		/// </summary>
-		Toolbar_Button = 10702,
+		Toolbar_Button = 10781,
 		/// <summary>
-		/// Topic_History = 9946
+		/// Topic History = 9946
 		/// </summary>
 		Topic_History = 9946,
 		/// <summary>
-		/// Topic_Model = 9944
+		/// Topic Model = 9944
 		/// </summary>
 		Topic_Model = 9944,
 		/// <summary>
-		/// Topic_Model_Configuration = 9942
+		/// Topic Model Configuration = 9942
 		/// </summary>
 		Topic_Model_Configuration = 9942,
 		/// <summary>
-		/// Topic_Model_Execution_History = 9943
+		/// Topic Model Execution History = 9943
 		/// </summary>
 		Topic_Model_Execution_History = 9943,
 		/// <summary>
-		/// Tour = 10039
+		/// Tour = 10063
 		/// </summary>
-		Tour = 10039,
+		Tour = 10063,
 		/// <summary>
 		/// Trace = 8050
 		/// </summary>
 		Trace = 8050,
 		/// <summary>
-		/// Trace_Association = 8051
+		/// Trace Association = 8051
 		/// </summary>
 		Trace_Association = 8051,
 		/// <summary>
-		/// Trace_Regarding = 8052
+		/// Trace Regarding = 8052
 		/// </summary>
 		Trace_Regarding = 8052,
 		/// <summary>
-		/// Trace_Source_Setting = 10704
+		/// Trace Source Setting = 10783
 		/// </summary>
-		Trace_Source_Setting = 10704,
+		Trace_Source_Setting = 10783,
 		/// <summary>
-		/// Tracking_information_for_deleted_entities = 35
+		/// Tracking information for deleted entities = 35
 		/// </summary>
 		Tracking_information_for_deleted_entities = 35,
 		/// <summary>
-		/// Training_data_import_configuration = 10623
+		/// Training data import configuration = 10699
 		/// </summary>
-		Training_data_import_configuration = 10623,
+		Training_data_import_configuration = 10699,
 		/// <summary>
-		/// Training_record = 10625
+		/// Training record = 10701
 		/// </summary>
-		Training_record = 10625,
+		Training_record = 10701,
 		/// <summary>
-		/// Transaction_Category = 10391
+		/// Transaction Category = 10454
 		/// </summary>
-		Transaction_Category = 10391,
+		Transaction_Category = 10454,
 		/// <summary>
-		/// Transaction_Category_Classification = 10392
+		/// Transaction Category Classification = 10455
 		/// </summary>
-		Transaction_Category_Classification = 10392,
+		Transaction_Category_Classification = 10455,
 		/// <summary>
-		/// Transaction_Category_Hierarchy_Element = 10393
+		/// Transaction Category Hierarchy Element = 10456
 		/// </summary>
-		Transaction_Category_Hierarchy_Element = 10393,
+		Transaction_Category_Hierarchy_Element = 10456,
 		/// <summary>
-		/// Transaction_Category_Price = 10394
+		/// Transaction Category Price = 10457
 		/// </summary>
-		Transaction_Category_Price = 10394,
+		Transaction_Category_Price = 10457,
 		/// <summary>
-		/// Transaction_Connection = 10395
+		/// Transaction Connection = 10458
 		/// </summary>
-		Transaction_Connection = 10395,
+		Transaction_Connection = 10458,
 		/// <summary>
-		/// Transaction_Origin = 10319
+		/// Transaction Origin = 10382
 		/// </summary>
-		Transaction_Origin = 10319,
+		Transaction_Origin = 10382,
 		/// <summary>
-		/// Transaction_Type = 10396
+		/// Transaction Type = 10459
 		/// </summary>
-		Transaction_Type = 10396,
+		Transaction_Type = 10459,
 		/// <summary>
-		/// Transcript = 10585
+		/// Transcript = 10682
 		/// </summary>
-		Transcript = 10585,
+		Transcript = 10682,
 		/// <summary>
-		/// Transformation_Mapping = 4426
+		/// Transformation Mapping = 4426
 		/// </summary>
 		Transformation_Mapping = 4426,
 		/// <summary>
-		/// Transformation_Parameter_Mapping = 4427
+		/// Transformation Parameter Mapping = 4427
 		/// </summary>
 		Transformation_Parameter_Mapping = 4427,
 		/// <summary>
-		/// Translation_Process = 951
+		/// Translation Process = 951
 		/// </summary>
 		Translation_Process = 951,
 		/// <summary>
-		/// Twitter_account = 10662
+		/// Twitter account = 10740
 		/// </summary>
-		Twitter_account = 10662,
+		Twitter_account = 10740,
 		/// <summary>
-		/// Twitter_Engagement_Context = 10667
+		/// Twitter Engagement Context = 10745
 		/// </summary>
-		Twitter_Engagement_Context = 10667,
+		Twitter_Engagement_Context = 10745,
 		/// <summary>
-		/// Twitter_handle = 10663
+		/// Twitter handle = 10741
 		/// </summary>
-		Twitter_handle = 10663,
+		Twitter_handle = 10741,
 		/// <summary>
-		/// UII_Action = 10674
+		/// UII Action = 10753
 		/// </summary>
-		UII_Action = 10674,
+		UII_Action = 10753,
 		/// <summary>
-		/// UII_Audit = 10675
+		/// UII Audit = 10754
 		/// </summary>
-		UII_Audit = 10675,
+		UII_Audit = 10754,
 		/// <summary>
-		/// UII_Context = 10676
+		/// UII Context = 10755
 		/// </summary>
-		UII_Context = 10676,
+		UII_Context = 10755,
 		/// <summary>
-		/// UII_Non_Hosted_Application = 10678
+		/// UII Non-Hosted Application = 10757
 		/// </summary>
-		UII_Non_Hosted_Application = 10678,
+		UII_NonHosted_Application = 10757,
 		/// <summary>
-		/// UII_Saved_Session = 10680
+		/// UII Saved Session = 10759
 		/// </summary>
-		UII_Saved_Session = 10680,
+		UII_Saved_Session = 10759,
 		/// <summary>
-		/// UII_Session_Transfer = 10681
+		/// UII Session Transfer = 10760
 		/// </summary>
-		UII_Session_Transfer = 10681,
+		UII_Session_Transfer = 10760,
 		/// <summary>
-		/// UII_Workflow = 10682
+		/// UII Workflow = 10761
 		/// </summary>
-		UII_Workflow = 10682,
+		UII_Workflow = 10761,
 		/// <summary>
-		/// UII_Workflow_Step = 10683
+		/// UII Workflow Step = 10762
 		/// </summary>
-		UII_Workflow_Step = 10683,
+		UII_Workflow_Step = 10762,
 		/// <summary>
-		/// UII_Workflow_Step_Mapping = 10684
+		/// UII Workflow-Step Mapping = 10763
 		/// </summary>
-		UII_Workflow_Step_Mapping = 10684,
+		UII_WorkflowStep_Mapping = 10763,
 		/// <summary>
-		/// Unified_Interface_Settings = 10705
+		/// Unified Interface Settings = 10784
 		/// </summary>
-		Unified_Interface_Settings = 10705,
+		Unified_Interface_Settings = 10784,
 		/// <summary>
-		/// Unified_routing_diagnostic = 10545
+		/// Unified Routing Setup Tracker = 10120
 		/// </summary>
-		Unified_routing_diagnostic = 10545,
+		Unified_Routing_Setup_Tracker = 10120,
 		/// <summary>
-		/// Unified_routing_run = 10546
+		/// Unique Number = 10547
 		/// </summary>
-		Unified_routing_run = 10546,
-		/// <summary>
-		/// Unified_Routing_Setup_Tracker = 10108
-		/// </summary>
-		Unified_Routing_Setup_Tracker = 10108,
-		/// <summary>
-		/// Unique_Number = 10483
-		/// </summary>
-		Unique_Number = 10483,
+		Unique_Number = 10547,
 		/// <summary>
 		/// Unit = 1055
 		/// </summary>
 		Unit = 1055,
 		/// <summary>
-		/// Unit_Group = 1056
+		/// Unit Group = 1056
 		/// </summary>
 		Unit_Group = 1056,
 		/// <summary>
-		/// Unresolved_Address = 2012
+		/// Unresolved Address = 2012
 		/// </summary>
 		Unresolved_Address = 2012,
 		/// <summary>
-		/// UntrackedAppointment = 10226
+		/// UntrackedAppointment = 10247
 		/// </summary>
-		UntrackedAppointment = 10226,
+		UntrackedAppointment = 10247,
 		/// <summary>
 		/// UntrackedEmail = 4220
 		/// </summary>
 		UntrackedEmail = 4220,
 		/// <summary>
-		/// Upgrade_Run = 10104
+		/// Upgrade Run = 10116
 		/// </summary>
-		Upgrade_Run = 10104,
+		Upgrade_Run = 10116,
 		/// <summary>
-		/// Upgrade_Step = 10105
+		/// Upgrade Step = 10117
 		/// </summary>
-		Upgrade_Step = 10105,
+		Upgrade_Step = 10117,
 		/// <summary>
-		/// Upgrade_Version = 10106
+		/// Upgrade Version = 10118
 		/// </summary>
-		Upgrade_Version = 10106,
+		Upgrade_Version = 10118,
 		/// <summary>
-		/// UR_notification_template = 10608
+		/// UR notification template = 10683
 		/// </summary>
-		UR_notification_template = 10608,
+		UR_notification_template = 10683,
 		/// <summary>
-		/// UR_Notification_Template_Mapping = 10609
+		/// UR Notification Template Mapping = 10684
 		/// </summary>
-		UR_Notification_Template_Mapping = 10609,
+		UR_Notification_Template_Mapping = 10684,
 		/// <summary>
 		/// User = 8
 		/// </summary>
 		User = 8,
 		/// <summary>
-		/// User_Application_Metadata = 7001
+		/// User Application Metadata = 7001
 		/// </summary>
 		User_Application_Metadata = 7001,
 		/// <summary>
-		/// User_Chart = 1112
+		/// User Chart = 1112
 		/// </summary>
 		User_Chart = 1112,
 		/// <summary>
-		/// User_Dashboard = 1031
+		/// User Dashboard = 1031
 		/// </summary>
 		User_Dashboard = 1031,
 		/// <summary>
-		/// User_Entity_Instance_Data = 2501
+		/// User Entity Instance Data = 2501
 		/// </summary>
 		User_Entity_Instance_Data = 2501,
 		/// <summary>
-		/// User_Entity_UI_Settings = 2500
+		/// User Entity UI Settings = 2500
 		/// </summary>
 		User_Entity_UI_Settings = 2500,
 		/// <summary>
-		/// User_Fiscal_Calendar = 1086
+		/// User Fiscal Calendar = 1086
 		/// </summary>
 		User_Fiscal_Calendar = 1086,
 		/// <summary>
-		/// User_Mapping = 2016
+		/// User Mapping = 2016
 		/// </summary>
 		User_Mapping = 2016,
 		/// <summary>
-		/// User_Search_Facet = 52
+		/// User Search Facet = 52
 		/// </summary>
 		User_Search_Facet = 52,
 		/// <summary>
-		/// User_Setting = 10707
+		/// User Setting = 10786
 		/// </summary>
-		User_Setting = 10707,
+		User_Setting = 10786,
 		/// <summary>
-		/// User_settings_10610 = 10610
+		/// User settings = 10685
 		/// </summary>
-		User_settings_10610 = 10610,
+		User_settings = 10685,
 		/// <summary>
-		/// User_settings_150 = 150
+		/// User Settings = 150
 		/// </summary>
-		User_settings_150 = 150,
+		User_Settings = 150,
 		/// <summary>
-		/// User_Work_History = 10397
+		/// User Work History = 10460
 		/// </summary>
-		User_Work_History = 10397,
+		User_Work_History = 10460,
 		/// <summary>
-		/// UserMobileOfflineProfileMembership = 10074
+		/// UserMobileOfflineProfileMembership = 10095
 		/// </summary>
-		UserMobileOfflineProfileMembership = 10074,
+		UserMobileOfflineProfileMembership = 10095,
 		/// <summary>
 		/// View = 1039
 		/// </summary>
 		View = 1039,
 		/// <summary>
-		/// Virtual_Entity_Data_Provider = 78
+		/// Virtual Entity Data Provider = 78
 		/// </summary>
 		Virtual_Entity_Data_Provider = 78,
 		/// <summary>
-		/// Virtual_Entity_Data_Source = 85
+		/// Virtual Entity Data Source = 85
 		/// </summary>
 		Virtual_Entity_Data_Source = 85,
 		/// <summary>
-		/// Virtual_Entity_Metadata = 10072
+		/// Virtual Entity  Metadata = 10093
 		/// </summary>
-		Virtual_Entity_Metadata = 10072,
+		Virtual_Entity_Metadata = 10093,
 		/// <summary>
-		/// Virtual_Resource_Group_Resource = 10112
+		/// Virtual Resource Group Resource = 10124
 		/// </summary>
-		Virtual_Resource_Group_Resource = 10112,
+		Virtual_Resource_Group_Resource = 10124,
 		/// <summary>
-		/// Wall_View = 10236
+		/// Wall View = 10259
 		/// </summary>
-		Wall_View = 10236,
+		Wall_View = 10259,
 		/// <summary>
-		/// Warehouse = 10484
+		/// Warehouse = 10548
 		/// </summary>
-		Warehouse = 10484,
+		Warehouse = 10548,
 		/// <summary>
-		/// Web_Resource = 9333
+		/// Web Resource = 9333
 		/// </summary>
 		Web_Resource = 9333,
 		/// <summary>
-		/// Web_Wizard = 4800
+		/// Web Wizard = 4800
 		/// </summary>
 		Web_Wizard = 4800,
 		/// <summary>
-		/// Web_Wizard_Access_Privilege = 4803
+		/// Web Wizard Access Privilege = 4803
 		/// </summary>
 		Web_Wizard_Access_Privilege = 4803,
 		/// <summary>
-		/// WeChat_account = 10664
+		/// WeChat account = 10742
 		/// </summary>
-		WeChat_account = 10664,
+		WeChat_account = 10742,
 		/// <summary>
-		/// WeChat_Engagement_Context = 10668
+		/// WeChat Engagement Context = 10746
 		/// </summary>
-		WeChat_Engagement_Context = 10668,
+		WeChat_Engagement_Context = 10746,
 		/// <summary>
-		/// WhatsApp_account = 10665
+		/// WhatsApp account = 10743
 		/// </summary>
-		WhatsApp_account = 10665,
+		WhatsApp_account = 10743,
 		/// <summary>
-		/// WhatsApp_Engagement_Context = 10669
+		/// WhatsApp Engagement Context = 10747
 		/// </summary>
-		WhatsApp_Engagement_Context = 10669,
+		WhatsApp_Engagement_Context = 10747,
 		/// <summary>
-		/// WhatsApp_number = 10666
+		/// WhatsApp number = 10744
 		/// </summary>
-		WhatsApp_number = 10666,
+		WhatsApp_number = 10744,
 		/// <summary>
-		/// Window_Navigation_Rule = 10708
+		/// Window Navigation Rule = 10787
 		/// </summary>
-		Window_Navigation_Rule = 10708,
+		Window_Navigation_Rule = 10787,
 		/// <summary>
-		/// Wizard_Page = 4802
+		/// Wizard Page = 4802
 		/// </summary>
 		Wizard_Page = 4802,
 		/// <summary>
-		/// Work_Order = 10485
+		/// Work list user setting = 10827
 		/// </summary>
-		Work_Order = 10485,
+		Work_list_user_setting = 10827,
 		/// <summary>
-		/// Work_Order_Business_Process = 10429
+		/// Work Order = 10549
 		/// </summary>
-		Work_Order_Business_Process = 10429,
+		Work_Order = 10549,
 		/// <summary>
-		/// Work_Order_Characteristic_Deprecated = 10486
+		/// Work Order Business Process = 10493
 		/// </summary>
-		Work_Order_Characteristic_Deprecated = 10486,
+		Work_Order_Business_Process = 10493,
 		/// <summary>
-		/// Work_Order_Details_Generation_Queue_Deprecated = 10487
+		/// Work Order Characteristic (Deprecated) = 10550
 		/// </summary>
-		Work_Order_Details_Generation_Queue_Deprecated = 10487,
+		Work_Order_Characteristic_Deprecated = 10550,
 		/// <summary>
-		/// Work_Order_Incident = 10488
+		/// Work Order Details Generation Queue (Deprecated) = 10551
 		/// </summary>
-		Work_Order_Incident = 10488,
+		Work_Order_Details_Generation_Queue_Deprecated = 10551,
 		/// <summary>
-		/// Work_Order_Product = 10489
+		/// Work Order Incident = 10552
 		/// </summary>
-		Work_Order_Product = 10489,
+		Work_Order_Incident = 10552,
 		/// <summary>
-		/// Work_Order_Resolution = 10511
+		/// Work Order Product = 10553
 		/// </summary>
-		Work_Order_Resolution = 10511,
+		Work_Order_Product = 10553,
 		/// <summary>
-		/// Work_Order_Service = 10491
+		/// Work Order Resolution = 10575
 		/// </summary>
-		Work_Order_Service = 10491,
+		Work_Order_Resolution = 10575,
 		/// <summary>
-		/// Work_Order_Service_Task = 10492
+		/// Work Order Service = 10555
 		/// </summary>
-		Work_Order_Service_Task = 10492,
+		Work_Order_Service = 10555,
 		/// <summary>
-		/// Work_Order_Substatus = 10493
+		/// Work Order Service Task = 10556
 		/// </summary>
-		Work_Order_Substatus = 10493,
+		Work_Order_Service_Task = 10556,
 		/// <summary>
-		/// Work_Order_Type = 10494
+		/// Work Order Substatus = 10557
 		/// </summary>
-		Work_Order_Type = 10494,
+		Work_Order_Substatus = 10557,
 		/// <summary>
-		/// Work_Stream = 10559
+		/// Work Order Type = 10558
 		/// </summary>
-		Work_Stream = 10559,
+		Work_Order_Type = 10558,
 		/// <summary>
-		/// Work_stream_capacity_profile = 10616
+		/// Work Queue Record = 10825
 		/// </summary>
-		Work_stream_capacity_profile = 10616,
+		Work_Queue_Record = 10825,
 		/// <summary>
-		/// Work_template = 10320
+		/// Work Queue Record State = 10826
 		/// </summary>
-		Work_template = 10320,
+		Work_Queue_Record_State = 10826,
 		/// <summary>
-		/// Workflow_Binary = 10036
+		/// Work Stream = 10636
 		/// </summary>
-		Workflow_Binary = 10036,
+		Work_Stream = 10636,
 		/// <summary>
-		/// Workflow_Wait_Subscription = 4702
+		/// Work stream capacity profile = 10692
 		/// </summary>
-		Workflow_Wait_Subscription = 4702
+		Work_stream_capacity_profile = 10692,
+		/// <summary>
+		/// Work template = 10383
+		/// </summary>
+		Work_template = 10383,
+		/// <summary>
+		/// Workflow Binary = 10048
+		/// </summary>
+		Workflow_Binary = 10048,
+		/// <summary>
+		/// Workflow Wait Subscription = 4702
+		/// </summary>
+		Workflow_Wait_Subscription = 4702,
+		/// <summary>
+		/// WQDataSource = 10828
+		/// </summary>
+		WQDataSource = 10828
 	}
 
 	public enum SLAType
@@ -4225,11 +4425,11 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 	public enum slaversion
 	{
 		/// <summary>
-		/// Version_UC = 100000001
+		/// Version UC = 100000001
 		/// </summary>
 		Version_UC = 100000001,
 		/// <summary>
-		/// Version_WC = 100000000
+		/// Version WC = 100000000
 		/// </summary>
 		Version_WC = 100000000
 	}
@@ -4304,6 +4504,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "sla";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9750;
 
 		[DebuggerNonUserCode()]
@@ -4415,7 +4616,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Type additional information to describe the SLA</para>
-		/// <para>String - MaxLength: 1000</para>
+		/// <para>String - MaxLength: 4000</para>
 		/// <para>ChangedAttributeList</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -4594,7 +4795,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who owns the SLA. This field is updated every time the item is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

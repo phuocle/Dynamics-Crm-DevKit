@@ -17,27 +17,27 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Activate = 4,
 		/// <summary>
-		/// Add_Item = 37
+		/// Add Item = 37
 		/// </summary>
 		Add_Item = 37,
 		/// <summary>
-		/// Add_Member = 31
+		/// Add Member = 31
 		/// </summary>
 		Add_Member = 31,
 		/// <summary>
-		/// Add_Members = 35
+		/// Add Members = 35
 		/// </summary>
 		Add_Members = 35,
 		/// <summary>
-		/// Add_Privileges_to_Role = 57
+		/// Add Privileges to Role = 57
 		/// </summary>
 		Add_Privileges_to_Role = 57,
 		/// <summary>
-		/// Add_Substitute = 39
+		/// Add Substitute = 39
 		/// </summary>
 		Add_Substitute = 39,
 		/// <summary>
-		/// Add_To_Queue = 52
+		/// Add To Queue = 52
 		/// </summary>
 		Add_To_Queue = 52,
 		/// <summary>
@@ -49,47 +49,47 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Assign = 13,
 		/// <summary>
-		/// Assign_Role_To_Team = 53
+		/// Assign Role To Team = 53
 		/// </summary>
 		Assign_Role_To_Team = 53,
 		/// <summary>
-		/// Assign_Role_To_User = 55
+		/// Assign Role To User = 55
 		/// </summary>
 		Assign_Role_To_User = 55,
 		/// <summary>
-		/// Associate_Entities = 33
+		/// Associate Entities = 33
 		/// </summary>
 		Associate_Entities = 33,
 		/// <summary>
-		/// Attribute_Audit_Started = 106
+		/// Attribute Audit Started = 106
 		/// </summary>
 		Attribute_Audit_Started = 106,
 		/// <summary>
-		/// Attribute_Audit_Stopped = 109
+		/// Attribute Audit Stopped = 109
 		/// </summary>
 		Attribute_Audit_Stopped = 109,
 		/// <summary>
-		/// Audit_Change_at_Attribute_Level = 103
+		/// Audit Change at Attribute Level = 103
 		/// </summary>
 		Audit_Change_at_Attribute_Level = 103,
 		/// <summary>
-		/// Audit_Change_at_Entity_Level = 102
+		/// Audit Change at Entity Level = 102
 		/// </summary>
 		Audit_Change_at_Entity_Level = 102,
 		/// <summary>
-		/// Audit_Change_at_Org_Level = 104
+		/// Audit Change at Org Level = 104
 		/// </summary>
 		Audit_Change_at_Org_Level = 104,
 		/// <summary>
-		/// Audit_Disabled = 110
+		/// Audit Disabled = 110
 		/// </summary>
 		Audit_Disabled = 110,
 		/// <summary>
-		/// Audit_Enabled = 107
+		/// Audit Enabled = 107
 		/// </summary>
 		Audit_Enabled = 107,
 		/// <summary>
-		/// Audit_Log_Deletion = 111
+		/// Audit Log Deletion = 111
 		/// </summary>
 		Audit_Log_Deletion = 111,
 		/// <summary>
@@ -129,15 +129,15 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Delete = 3,
 		/// <summary>
-		/// Delete_Attribute = 101
+		/// Delete Attribute = 101
 		/// </summary>
 		Delete_Attribute = 101,
 		/// <summary>
-		/// Delete_Entity = 100
+		/// Delete Entity = 100
 		/// </summary>
 		Delete_Entity = 100,
 		/// <summary>
-		/// Disassociate_Entities = 34
+		/// Disassociate Entities = 34
 		/// </summary>
 		Disassociate_Entities = 34,
 		/// <summary>
@@ -145,15 +145,15 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Disqualify = 25,
 		/// <summary>
-		/// Enabled_for_organization = 63
+		/// Enabled for organization = 63
 		/// </summary>
 		Enabled_for_organization = 63,
 		/// <summary>
-		/// Entity_Audit_Started = 105
+		/// Entity Audit Started = 105
 		/// </summary>
 		Entity_Audit_Started = 105,
 		/// <summary>
-		/// Entity_Audit_Stopped = 108
+		/// Entity Audit Stopped = 108
 		/// </summary>
 		Entity_Audit_Stopped = 108,
 		/// <summary>
@@ -161,7 +161,7 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Fulfill = 22,
 		/// <summary>
-		/// Generate_Quote_From_Opportunity = 51
+		/// Generate Quote From Opportunity = 51
 		/// </summary>
 		Generate_Quote_From_Opportunity = 51,
 		/// <summary>
@@ -169,11 +169,11 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Hold = 30,
 		/// <summary>
-		/// Import_Mappings = 60
+		/// Import Mappings = 60
 		/// </summary>
 		Import_Mappings = 60,
 		/// <summary>
-		/// Internal_Processing = 46
+		/// Internal Processing = 46
 		/// </summary>
 		Internal_Processing = 46,
 		/// <summary>
@@ -189,7 +189,7 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Merge = 12,
 		/// <summary>
-		/// Modify_Share = 48
+		/// Modify Share = 48
 		/// </summary>
 		Modify_Share = 48,
 		/// <summary>
@@ -205,31 +205,31 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Reject = 27,
 		/// <summary>
-		/// Remove_Item = 38
+		/// Remove Item = 38
 		/// </summary>
 		Remove_Item = 38,
 		/// <summary>
-		/// Remove_Member = 32
+		/// Remove Member = 32
 		/// </summary>
 		Remove_Member = 32,
 		/// <summary>
-		/// Remove_Members = 36
+		/// Remove Members = 36
 		/// </summary>
 		Remove_Members = 36,
 		/// <summary>
-		/// Remove_Privileges_From_Role = 58
+		/// Remove Privileges From Role = 58
 		/// </summary>
 		Remove_Privileges_From_Role = 58,
 		/// <summary>
-		/// Remove_Role_From_Team = 54
+		/// Remove Role From Team = 54
 		/// </summary>
 		Remove_Role_From_Team = 54,
 		/// <summary>
-		/// Remove_Role_From_User = 56
+		/// Remove Role From User = 56
 		/// </summary>
 		Remove_Role_From_User = 56,
 		/// <summary>
-		/// Remove_Substitute = 40
+		/// Remove Substitute = 40
 		/// </summary>
 		Remove_Substitute = 40,
 		/// <summary>
@@ -241,7 +241,7 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Reopen = 21,
 		/// <summary>
-		/// Replace_Privileges_In_Role = 59
+		/// Replace Privileges In Role = 59
 		/// </summary>
 		Replace_Privileges_In_Role = 59,
 		/// <summary>
@@ -261,11 +261,11 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Revise = 43,
 		/// <summary>
-		/// Send_Direct_Email = 62
+		/// Send Direct Email = 62
 		/// </summary>
 		Send_Direct_Email = 62,
 		/// <summary>
-		/// Set_State = 41
+		/// Set State = 41
 		/// </summary>
 		Set_State = 41,
 		/// <summary>
@@ -289,19 +289,19 @@ namespace Dev.DevKit.Shared.Entities.AuditOptionSets
 		/// </summary>
 		Update = 2,
 		/// <summary>
-		/// User_Access_Audit_Started = 112
+		/// User Access Audit Started = 112
 		/// </summary>
 		User_Access_Audit_Started = 112,
 		/// <summary>
-		/// User_Access_Audit_Stopped = 113
+		/// User Access Audit Stopped = 113
 		/// </summary>
 		User_Access_Audit_Stopped = 113,
 		/// <summary>
-		/// User_Access_via_Web = 64
+		/// User Access via Web = 64
 		/// </summary>
 		User_Access_via_Web = 64,
 		/// <summary>
-		/// User_Access_via_Web_Services = 65
+		/// User Access via Web Services = 65
 		/// </summary>
 		User_Access_via_Web_Services = 65,
 		/// <summary>
@@ -353,6 +353,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "audit";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4567;
 
 		[DebuggerNonUserCode()]

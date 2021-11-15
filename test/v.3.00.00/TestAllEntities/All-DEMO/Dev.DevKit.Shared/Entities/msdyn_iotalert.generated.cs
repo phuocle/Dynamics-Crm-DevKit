@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotalertOptionSets
 		/// </summary>
 		Info = 192350001,
 		/// <summary>
-		/// Preventive_Maintenance = 192350002
+		/// Preventive Maintenance = 192350002
 		/// </summary>
 		Preventive_Maintenance = 192350002,
 		/// <summary>
@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotalertOptionSets
 		/// </summary>
 		Low = 192350002,
 		/// <summary>
-		/// No_Suggestions = 192350003
+		/// No Suggestions = 192350003
 		/// </summary>
 		No_Suggestions = 192350003
 	}
@@ -81,21 +81,21 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotalertOptionSets
 		/// </summary>
 		Closed = 6,
 		/// <summary>
-		/// In_Progress_Case_Created = 3
+		/// In Progress - Case Created = 3
 		/// </summary>
-		In_Progress_Case_Created = 3,
+		In_Progress__Case_Created = 3,
 		/// <summary>
-		/// In_Progress_Command_Failed = 7
+		/// In Progress - Command Failed = 7
 		/// </summary>
-		In_Progress_Command_Failed = 7,
+		In_Progress__Command_Failed = 7,
 		/// <summary>
-		/// In_Progress_Command_Sent = 5
+		/// In Progress - Command Sent = 5
 		/// </summary>
-		In_Progress_Command_Sent = 5,
+		In_Progress__Command_Sent = 5,
 		/// <summary>
-		/// In_Progress_Work_Order_Created = 4
+		/// In Progress - Work Order Created = 4
 		/// </summary>
-		In_Progress_Work_Order_Created = 4,
+		In_Progress__Work_Order_Created = 4,
 		/// <summary>
 		/// Inactive = 2
 		/// </summary>
@@ -152,7 +152,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_iotalert";
 
-		public const int EntityTypeCode = 10126;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10138;
 
 		[DebuggerNonUserCode()]
 		public msdyn_iotalert()
@@ -377,7 +378,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>The asset connected to the IoT device that raised the alert.</para>
 		/// <para>Lookup to msdyn_customerasset</para>
-		/// <para>Device</para>
+		/// <para>Customer Asset</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public EntityReference msdyn_CustomerAsset
@@ -545,7 +546,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

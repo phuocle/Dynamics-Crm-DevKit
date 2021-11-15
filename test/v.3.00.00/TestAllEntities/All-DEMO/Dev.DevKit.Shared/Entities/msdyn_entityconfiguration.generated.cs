@@ -61,7 +61,14 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_CopyGeoDataFromURS = "msdyn_copygeodatafromurs";
+			public const string msdyn_DateFilter1FieldName = "msdyn_datefilter1fieldname";
+			public const string msdyn_DateFilter1LastXDay = "msdyn_datefilter1lastxday";
+			public const string msdyn_DateFilter1NextXDay = "msdyn_datefilter1nextxday";
+			public const string msdyn_DateFilter2FieldName = "msdyn_datefilter2fieldname";
+			public const string msdyn_DateFilter2LastXDay = "msdyn_datefilter2lastxday";
+			public const string msdyn_DateFilter2NextXDay = "msdyn_datefilter2nextxday";
 			public const string msdyn_EnabledAs = "msdyn_enabledas";
+			public const string msdyn_EnableTriggerFilters = "msdyn_enabletriggerfilters";
 			public const string msdyn_Entity = "msdyn_entity";
 			public const string msdyn_entityconfigurationId = "msdyn_entityconfigurationid";
 			public const string msdyn_EntityPrimaryKey = "msdyn_entityprimarykey";
@@ -85,7 +92,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_entityconfiguration";
 
-		public const int EntityTypeCode = 10515;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10579;
 
 		[DebuggerNonUserCode()]
 		public msdyn_entityconfiguration()
@@ -214,6 +222,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Copy newly introduced coordinates into bookable resource table.</para>
 		/// <para>Boolean</para>
 		/// <para>Copy Geo Data From URS</para>
 		/// </summary>
@@ -225,7 +234,75 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enables the entity's records to either represent geofences or be geotracked for entry and exit of geofences.</para>
+		/// <para>Schematic name of the first date field for the configured entity.</para>
+		/// <para>String - MaxLength: 256</para>
+		/// <para>First Date Filter Field Name</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_DateFilter1FieldName
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_DateFilter1FieldName); }
+			set { Entity.Attributes[Fields.msdyn_DateFilter1FieldName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Integer - MinValue: 0 - MaxValue: 365</para>
+		/// <para>First Date Last Days Value</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_DateFilter1LastXDay
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_DateFilter1LastXDay); }
+			set { Entity.Attributes[Fields.msdyn_DateFilter1LastXDay] = value; }
+		}
+
+		/// <summary>
+		/// <para>Integer - MinValue: 0 - MaxValue: 365</para>
+		/// <para>First Date Next Days Value</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_DateFilter1NextXDay
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_DateFilter1NextXDay); }
+			set { Entity.Attributes[Fields.msdyn_DateFilter1NextXDay] = value; }
+		}
+
+		/// <summary>
+		/// <para>Schematic name of the second date field for the configured entity.</para>
+		/// <para>String - MaxLength: 256</para>
+		/// <para>Second Date Filter Field Name</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_DateFilter2FieldName
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_DateFilter2FieldName); }
+			set { Entity.Attributes[Fields.msdyn_DateFilter2FieldName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Integer - MinValue: 0 - MaxValue: 365</para>
+		/// <para>Second Date Last Days Value</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_DateFilter2LastXDay
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_DateFilter2LastXDay); }
+			set { Entity.Attributes[Fields.msdyn_DateFilter2LastXDay] = value; }
+		}
+
+		/// <summary>
+		/// <para>Integer - MinValue: 0 - MaxValue: 365</para>
+		/// <para>Second Date Next Days Value</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? msdyn_DateFilter2NextXDay
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_DateFilter2NextXDay); }
+			set { Entity.Attributes[Fields.msdyn_DateFilter2NextXDay] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enables the entity&apos;s records to either represent geofences or be geotracked for entry and exit of geofences.</para>
 		/// <para>Required - Picklist</para>
 		/// <para>Enabled As</para>
 		/// </summary>
@@ -239,9 +316,24 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_entityconfigurationOptionSets.msdyn_EnabledAs)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_EnabledAs] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_EnabledAs] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_EnabledAs] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>Enable Trigger Filters</para>
+		/// <para>Boolean</para>
+		/// <para>Enable Trigger Filters</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_EnableTriggerFilters
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_EnableTriggerFilters); }
+			set { Entity.Attributes[Fields.msdyn_EnableTriggerFilters] = value; }
 		}
 
 		/// <summary>
@@ -273,7 +365,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Name of the configured entity's primary key field.</para>
+		/// <para>Name of the configured entity&apos;s primary key field.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Entity Primary Key Field Name</para>
 		/// </summary>
@@ -370,7 +462,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

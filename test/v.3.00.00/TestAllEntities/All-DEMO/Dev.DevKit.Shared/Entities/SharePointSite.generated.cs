@@ -10,10 +10,26 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.SharePointSiteOptionSets
 {
+	public enum FolderStructureEntity
+	{
+		/// <summary>
+		/// Account = 1
+		/// </summary>
+		Account = 1,
+		/// <summary>
+		/// Contact = 2
+		/// </summary>
+		Contact = 2,
+		/// <summary>
+		/// None = 0
+		/// </summary>
+		None = 0
+	}
+
 	public enum ServiceType
 	{
 		/// <summary>
-		/// MS_Teams = 3
+		/// MS Teams = 3
 		/// </summary>
 		MS_Teams = 3,
 		/// <summary>
@@ -21,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointSiteOptionSets
 		/// </summary>
 		OneDrive = 1,
 		/// <summary>
-		/// Shared_with_me = 2
+		/// Shared with me = 2
 		/// </summary>
 		Shared_with_me = 2,
 		/// <summary>
@@ -57,11 +73,11 @@ namespace Dev.DevKit.Shared.Entities.SharePointSiteOptionSets
 	public enum ValidationStatus
 	{
 		/// <summary>
-		/// Could_not_validate = 5
+		/// Could not validate = 5
 		/// </summary>
 		Could_not_validate = 5,
 		/// <summary>
-		/// In_Progress = 2
+		/// In Progress = 2
 		/// </summary>
 		In_Progress = 2,
 		/// <summary>
@@ -69,7 +85,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointSiteOptionSets
 		/// </summary>
 		Invalid = 3,
 		/// <summary>
-		/// Not_Validated = 1
+		/// Not Validated = 1
 		/// </summary>
 		Not_Validated = 1,
 		/// <summary>
@@ -81,31 +97,31 @@ namespace Dev.DevKit.Shared.Entities.SharePointSiteOptionSets
 	public enum ValidationStatusErrorCode
 	{
 		/// <summary>
-		/// Authentication_failure = 6
+		/// Authentication failure. = 6
 		/// </summary>
 		Authentication_failure = 6,
 		/// <summary>
-		/// Invalid_certificates = 7
+		/// Invalid certificates. = 7
 		/// </summary>
 		Invalid_certificates = 7,
 		/// <summary>
-		/// The_URL_could_not_be_accessed_because_of_Internet_Explorer_security_settings = 5
+		/// The URL could not be accessed because of Internet Explorer security settings. = 5
 		/// </summary>
 		The_URL_could_not_be_accessed_because_of_Internet_Explorer_security_settings = 5,
 		/// <summary>
-		/// The_URL_schemes_of_Microsoft_Dynamics_365_and_SharePoint_are_different = 4
+		/// The URL schemes of Microsoft Dynamics 365 and SharePoint are different. = 4
 		/// </summary>
 		The_URL_schemes_of_Microsoft_Dynamics_365_and_SharePoint_are_different = 4,
 		/// <summary>
-		/// This_records_URL_has_not_been_validated = 1
+		/// This record's URL has not been validated. = 1
 		/// </summary>
 		This_records_URL_has_not_been_validated = 1,
 		/// <summary>
-		/// This_records_URL_is_not_valid = 3
+		/// This record's URL is not valid. = 3
 		/// </summary>
 		This_records_URL_is_not_valid = 3,
 		/// <summary>
-		/// This_records_URL_is_valid = 2
+		/// This record's URL is valid. = 2
 		/// </summary>
 		This_records_URL_is_valid = 2
 	}
@@ -156,6 +172,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "sharepointsite";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9502;
 
 		[DebuggerNonUserCode()]
@@ -405,7 +422,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the SharePoint site.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

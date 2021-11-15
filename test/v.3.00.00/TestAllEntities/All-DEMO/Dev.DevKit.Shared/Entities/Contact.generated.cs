@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum AccountRoleCode
 	{
 		/// <summary>
-		/// Decision_Maker = 1
+		/// Decision Maker = 1
 		/// </summary>
 		Decision_Maker = 1,
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum Address1_AddressTypeCode
 	{
 		/// <summary>
-		/// Bill_To = 1
+		/// Bill To = 1
 		/// </summary>
 		Bill_To = 1,
 		/// <summary>
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 		/// </summary>
 		Primary = 3,
 		/// <summary>
-		/// Ship_To = 2
+		/// Ship To = 2
 		/// </summary>
 		Ship_To = 2
 	}
@@ -53,7 +53,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 		/// </summary>
 		FOB = 1,
 		/// <summary>
-		/// No_Charge = 2
+		/// No Charge = 2
 		/// </summary>
 		No_Charge = 2
 	}
@@ -73,11 +73,11 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 		/// </summary>
 		FedEx = 3,
 		/// <summary>
-		/// Full_Load = 6
+		/// Full Load = 6
 		/// </summary>
 		Full_Load = 6,
 		/// <summary>
-		/// Postal_Mail = 5
+		/// Postal Mail = 5
 		/// </summary>
 		Postal_Mail = 5,
 		/// <summary>
@@ -85,7 +85,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 		/// </summary>
 		UPS = 4,
 		/// <summary>
-		/// Will_Call = 7
+		/// Will Call = 7
 		/// </summary>
 		Will_Call = 7
 	}
@@ -93,7 +93,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum Address2_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -101,7 +101,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum Address2_FreightTermsCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -109,7 +109,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum Address2_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -117,7 +117,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum Address3_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -125,7 +125,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum Address3_FreightTermsCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -133,7 +133,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum Address3_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -141,7 +141,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum CustomerSizeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -149,7 +149,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum CustomerTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -157,7 +157,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum EducationCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -197,7 +197,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum HasChildrenCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -205,7 +205,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum LeadSourceCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -217,11 +217,11 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 		/// </summary>
 		Ignore = 2,
 		/// <summary>
-		/// No_Feedback = 0
+		/// No Feedback = 0
 		/// </summary>
 		No_Feedback = 0,
 		/// <summary>
-		/// Not_at_Company = 1
+		/// Not at Company = 1
 		/// </summary>
 		Not_at_Company = 1
 	}
@@ -229,19 +229,19 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum PaymentTermsCode
 	{
 		/// <summary>
-		/// _2_10_Net_30 = 2
+		/// 2% 10, Net 30 = 2
 		/// </summary>
 		_2_10_Net_30 = 2,
 		/// <summary>
-		/// Net_30 = 1
+		/// Net 30 = 1
 		/// </summary>
 		Net_30 = 1,
 		/// <summary>
-		/// Net_45 = 3
+		/// Net 45 = 3
 		/// </summary>
 		Net_45 = 3,
 		/// <summary>
-		/// Net_60 = 4
+		/// Net 60 = 4
 		/// </summary>
 		Net_60 = 4
 	}
@@ -321,7 +321,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -353,7 +353,7 @@ namespace Dev.DevKit.Shared.Entities.ContactOptionSets
 	public enum TerritoryCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -571,6 +571,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "contact";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 2;
 
 		[DebuggerNonUserCode()]
@@ -633,7 +634,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the contact's role within the company or sales process, such as decision maker, employee, or influencer.</para>
+		/// <para>Select the contact&apos;s role within the company or sales process, such as decision maker, employee, or influencer.</para>
 		/// <para>Picklist</para>
 		/// <para>Role</para>
 		/// </summary>
@@ -869,7 +870,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the name of the main contact at the account's primary address.</para>
+		/// <para>Type the name of the main contact at the account&apos;s primary address.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Address 1: Primary Contact Name</para>
 		/// </summary>
@@ -1189,7 +1190,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the name of the main contact at the account's secondary address.</para>
+		/// <para>Type the name of the main contact at the account&apos;s secondary address.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Address 2: Primary Contact Name</para>
 		/// </summary>
@@ -1509,7 +1510,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the name of the main contact at the account's third address.</para>
+		/// <para>Type the name of the main contact at the account&apos;s third address.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Address 3: Primary Contact Name</para>
 		/// </summary>
@@ -1632,7 +1633,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the Aging 30 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
+		/// <para>Shows the Aging 30 field converted to the system&apos;s default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
 		/// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
 		/// <para>Aging 30 (Base)</para>
 		/// </summary>
@@ -1664,7 +1665,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the Aging 60 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
+		/// <para>Shows the Aging 60 field converted to the system&apos;s default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
 		/// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
 		/// <para>Aging 60 (Base)</para>
 		/// </summary>
@@ -1696,7 +1697,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the Aging 90 field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
+		/// <para>Shows the Aging 90 field converted to the system&apos;s default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
 		/// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
 		/// <para>Aging 90 (Base)</para>
 		/// </summary>
@@ -1712,7 +1713,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the date of the contact's wedding or service anniversary for use in customer gift programs or other communications.</para>
+		/// <para>Enter the date of the contact&apos;s wedding or service anniversary for use in customer gift programs or other communications.</para>
 		/// <para>DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly</para>
 		/// <para>Anniversary</para>
 		/// </summary>
@@ -1729,7 +1730,7 @@ namespace Dev.DevKit.Shared.Entities
 			{
 				if (value.HasValue)
 				{
-					DateTime? dateTime = value.Value.ToDateTime();
+					DateTime dateTime = value.Value.ToDateTime();
 					Entity.Attributes[Fields.Anniversary] = dateTime;
 				}
 				else
@@ -1738,7 +1739,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the contact's annual income for use in profiling and financial analysis.</para>
+		/// <para>Type the contact&apos;s annual income for use in profiling and financial analysis.</para>
 		/// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
 		/// <para>Annual Income</para>
 		/// </summary>
@@ -1761,7 +1762,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the Annual Income field converted to the system's default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
+		/// <para>Shows the Annual Income field converted to the system&apos;s default base currency. The calculations use the exchange rate specified in the Currencies area.</para>
 		/// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
 		/// <para>Annual Income (Base)</para>
 		/// </summary>
@@ -1777,7 +1778,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the name of the contact's assistant.</para>
+		/// <para>Type the name of the contact&apos;s assistant.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Assistant</para>
 		/// </summary>
@@ -1789,7 +1790,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phone number for the contact's assistant.</para>
+		/// <para>Type the phone number for the contact&apos;s assistant.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Assistant Phone</para>
 		/// </summary>
@@ -1801,7 +1802,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the contact's birthday for use in customer gift programs or other communications.</para>
+		/// <para>Enter the contact&apos;s birthday for use in customer gift programs or other communications.</para>
 		/// <para>DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly</para>
 		/// <para>Birthday</para>
 		/// </summary>
@@ -1818,7 +1819,7 @@ namespace Dev.DevKit.Shared.Entities
 			{
 				if (value.HasValue)
 				{
-					DateTime? dateTime = value.Value.ToDateTime();
+					DateTime dateTime = value.Value.ToDateTime();
 					Entity.Attributes[Fields.BirthDate] = dateTime;
 				}
 				else
@@ -1875,7 +1876,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the names of the contact's children for reference in communications and client programs.</para>
+		/// <para>Type the names of the contact&apos;s children for reference in communications and client programs.</para>
 		/// <para>String - MaxLength: 255</para>
 		/// <para>Children's Names</para>
 		/// </summary>
@@ -1982,7 +1983,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the Credit Limit field converted to the system's default base currency for reporting purposes. The calculations use the exchange rate specified in the Currencies area.</para>
+		/// <para>Shows the Credit Limit field converted to the system&apos;s default base currency for reporting purposes. The calculations use the exchange rate specified in the Currencies area.</para>
 		/// <para>ReadOnly - Money - MinValue: -922,337,203,685,477 - MaxValue: 922,337,203,685,477</para>
 		/// <para>Credit Limit (Base)</para>
 		/// </summary>
@@ -2010,7 +2011,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the size of the contact's company for segmentation and reporting purposes.</para>
+		/// <para>Select the size of the contact&apos;s company for segmentation and reporting purposes.</para>
 		/// <para>Picklist</para>
 		/// <para>Customer Size</para>
 		/// </summary>
@@ -2080,7 +2081,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type additional information to describe the contact, such as an excerpt from the company's website.</para>
+		/// <para>Type additional information to describe the contact, such as an excerpt from the company&apos;s website.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Description</para>
 		/// </summary>
@@ -2176,7 +2177,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the contact's highest level of education for use in segmentation and analysis.</para>
+		/// <para>Select the contact&apos;s highest level of education for use in segmentation and analysis.</para>
 		/// <para>Picklist</para>
 		/// <para>Education</para>
 		/// </summary>
@@ -2235,7 +2236,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the employee ID or number for the contact for reference in orders, service cases, or other communications with the contact's organization.</para>
+		/// <para>Type the employee ID or number for the contact for reference in orders, service cases, or other communications with the contact&apos;s organization.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Employee</para>
 		/// </summary>
@@ -2258,7 +2259,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -2316,7 +2317,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the contact's first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
+		/// <para>Type the contact&apos;s first name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>First Name</para>
 		/// </summary>
@@ -2340,7 +2341,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the URL for the contact's FTP site to enable users to access data and share documents.</para>
+		/// <para>Type the URL for the contact&apos;s FTP site to enable users to access data and share documents.</para>
 		/// <para>String - MaxLength: 200</para>
 		/// <para>FTP Site</para>
 		/// </summary>
@@ -2352,7 +2353,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Combines and shows the contact's first and last names so that the full name can be displayed in views and reports.</para>
+		/// <para>Combines and shows the contact&apos;s first and last names so that the full name can be displayed in views and reports.</para>
 		/// <para>ReadOnly - String - MaxLength: 160</para>
 		/// <para>Full Name</para>
 		/// </summary>
@@ -2363,7 +2364,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the contact's gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
+		/// <para>Select the contact&apos;s gender to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
 		/// <para>Picklist</para>
 		/// <para>Gender</para>
 		/// </summary>
@@ -2490,7 +2491,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the contact's last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
+		/// <para>Type the contact&apos;s last name to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
 		/// <para>Required - String - MaxLength: 50</para>
 		/// <para>Last Name</para>
 		/// </summary>
@@ -2549,7 +2550,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the name of the contact's manager for use in escalating issues or other follow-up communications with the contact.</para>
+		/// <para>Type the name of the contact&apos;s manager for use in escalating issues or other follow-up communications with the contact.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Manager</para>
 		/// </summary>
@@ -2561,7 +2562,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phone number for the contact's manager.</para>
+		/// <para>Type the phone number for the contact&apos;s manager.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Manager Phone</para>
 		/// </summary>
@@ -2607,7 +2608,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the contact's middle name or initial to make sure the contact is addressed correctly.</para>
+		/// <para>Type the contact&apos;s middle name or initial to make sure the contact is addressed correctly.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Middle Name</para>
 		/// </summary>
@@ -2743,7 +2744,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the contact's nickname.</para>
+		/// <para>Type the contact&apos;s nickname.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Nickname</para>
 		/// </summary>
@@ -2803,7 +2804,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -2871,7 +2872,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the parent account or parent contact for the contact to provide a quick link to additional details, such as financial information, activities, and opportunities.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account;contact</para>
 		/// <para>Company Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -2986,7 +2987,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the contact's preferred service facility or equipment to make sure services are scheduled correctly for the customer.</para>
+		/// <para>Choose the contact&apos;s preferred service facility or equipment to make sure services are scheduled correctly for the customer.</para>
 		/// <para>Lookup to equipment</para>
 		/// <para>Preferred Facility/Equipment</para>
 		/// </summary>
@@ -2998,7 +2999,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the contact's preferred service to make sure services are scheduled correctly for the customer.</para>
+		/// <para>Choose the contact&apos;s preferred service to make sure services are scheduled correctly for the customer.</para>
 		/// <para>Lookup to service</para>
 		/// <para>Preferred Service</para>
 		/// </summary>
@@ -3092,7 +3093,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the name of the contact's spouse or partner for reference during calls, events, or other communications with the contact.</para>
+		/// <para>Type the name of the contact&apos;s spouse or partner for reference during calls, events, or other communications with the contact.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Spouse/Partner Name</para>
 		/// </summary>
@@ -3116,7 +3117,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the contact is active or inactive. Inactive contacts are read-only and can't be edited unless they are reactivated.</para>
+		/// <para>Shows whether the contact is active or inactive. Inactive contacts are read-only and can&apos;t be edited unless they are reactivated.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -3139,7 +3140,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the contact's status.</para>
+		/// <para>Select the contact&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -3174,7 +3175,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the suffix used in the contact's name, such as Jr. or Sr. to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
+		/// <para>Type the suffix used in the contact&apos;s name, such as Jr. or Sr. to make sure the contact is addressed correctly in sales calls, email, and marketing campaigns.</para>
 		/// <para>String - MaxLength: 10</para>
 		/// <para>Suffix</para>
 		/// </summary>
@@ -3327,7 +3328,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the contact's professional or personal website or blog URL.</para>
+		/// <para>Type the contact&apos;s professional or personal website or blog URL.</para>
 		/// <para>String - MaxLength: 200</para>
 		/// <para>Website</para>
 		/// </summary>
@@ -3339,7 +3340,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the contact's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
+		/// <para>Type the phonetic spelling of the contact&apos;s first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi First Name</para>
 		/// </summary>
@@ -3362,7 +3363,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the contact's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
+		/// <para>Type the phonetic spelling of the contact&apos;s last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi Last Name</para>
 		/// </summary>
@@ -3374,7 +3375,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the contact's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
+		/// <para>Type the phonetic spelling of the contact&apos;s middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the contact.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi Middle Name</para>
 		/// </summary>

@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_journalOptionSets
 		/// </summary>
 		Entry = 192350000,
 		/// <summary>
-		/// Expense_Correction = 192350002
+		/// Expense Correction = 192350002
 		/// </summary>
 		Expense_Correction = 192350002,
 		/// <summary>
-		/// Time_Correction = 192350001
+		/// Time Correction = 192350001
 		/// </summary>
 		Time_Correction = 192350001
 	}
@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_journalOptionSets
 		/// </summary>
 		Active = 1,
 		/// <summary>
-		/// Draft_Adjustment = 192350000
+		/// Draft Adjustment = 192350000
 		/// </summary>
 		Draft_Adjustment = 192350000,
 		/// <summary>
@@ -97,7 +97,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_journal";
 
-		public const int EntityTypeCode = 10349;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10412;
 
 		[DebuggerNonUserCode()]
 		public msdyn_journal()
@@ -327,9 +328,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_journalOptionSets.msdyn_JournalType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_JournalType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_JournalType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_JournalType] = null;
+			}
 		}
 
 		/// <summary>
@@ -394,7 +398,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

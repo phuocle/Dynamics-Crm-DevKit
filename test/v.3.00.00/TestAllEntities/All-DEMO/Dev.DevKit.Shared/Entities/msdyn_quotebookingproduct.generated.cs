@@ -88,7 +88,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotebookingproduct";
 
-		public const int EntityTypeCode = 10463;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10527;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotebookingproduct()
@@ -429,7 +430,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the quantity you wish to bill the customer for. By default, this will default to the same value as "Quantity."</para>
+		/// <para>Enter the quantity you wish to bill the customer for. By default, this will default to the same value as &quot;Quantity.&quot;</para>
 		/// <para>Double - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Quantity To Bill</para>
 		/// </summary>
@@ -608,7 +609,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

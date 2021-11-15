@@ -13,23 +13,23 @@ namespace Dev.DevKit.Shared.Entities.msdyn_orderlinetransactionOptionSets
 	public enum msdyn_AmountMethod
 	{
 		/// <summary>
-		/// Fixed_Price = 192350001
+		/// Fixed Price = 192350001
 		/// </summary>
 		Fixed_Price = 192350001,
 		/// <summary>
-		/// Multiply_Basis_Amount_By_Percent = 192350003
+		/// Multiply Basis Amount By Percent = 192350003
 		/// </summary>
 		Multiply_Basis_Amount_By_Percent = 192350003,
 		/// <summary>
-		/// Multiply_Basis_Quantity_By_Price = 192350002
+		/// Multiply Basis Quantity By Price = 192350002
 		/// </summary>
 		Multiply_Basis_Quantity_By_Price = 192350002,
 		/// <summary>
-		/// Multiply_Quantity_By_Price = 192350000
+		/// Multiply Quantity By Price = 192350000
 		/// </summary>
 		Multiply_Quantity_By_Price = 192350000,
 		/// <summary>
-		/// Tax_Calculation = 690970000
+		/// Tax Calculation = 690970000
 		/// </summary>
 		Tax_Calculation = 690970000
 	}
@@ -45,11 +45,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_orderlinetransactionOptionSets
 		/// </summary>
 		Complimentary = 192350002,
 		/// <summary>
-		/// Non_Chargeable = 192350000
+		/// Non Chargeable = 192350000
 		/// </summary>
 		Non_Chargeable = 192350000,
 		/// <summary>
-		/// Not_Available = 192350003
+		/// Not Available = 192350003
 		/// </summary>
 		Not_Available = 192350003
 	}
@@ -105,7 +105,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_orderlinetransactionOptionSets
 	public enum msdyn_TransactionTypeCode
 	{
 		/// <summary>
-		/// Billed_Sales = 192350006
+		/// Billed Sales = 192350006
 		/// </summary>
 		Billed_Sales = 192350006,
 		/// <summary>
@@ -113,19 +113,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_orderlinetransactionOptionSets
 		/// </summary>
 		Cost = 192350000,
 		/// <summary>
-		/// Inter_Organizational_Sales = 192350008
+		/// Inter-Organizational Sales = 192350008
 		/// </summary>
-		Inter_Organizational_Sales = 192350008,
+		InterOrganizational_Sales = 192350008,
 		/// <summary>
-		/// Project_Contract = 192350004
+		/// Project Contract = 192350004
 		/// </summary>
 		Project_Contract = 192350004,
 		/// <summary>
-		/// Resourcing_Unit_Cost = 192350007
+		/// Resourcing Unit Cost = 192350007
 		/// </summary>
 		Resourcing_Unit_Cost = 192350007,
 		/// <summary>
-		/// Unbilled_Sales = 192350005
+		/// Unbilled Sales = 192350005
 		/// </summary>
 		Unbilled_Sales = 192350005
 	}
@@ -243,7 +243,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_orderlinetransaction";
 
-		public const int EntityTypeCode = 10358;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10421;
 
 		[DebuggerNonUserCode()]
 		public msdyn_orderlinetransaction()
@@ -487,7 +488,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the amount calculation method used for this project contract estimate line. Valid values are:  0: Multiply Quantity By Price 1: Fixed Price 2: Multiply Basis Quantity By Price 3: Multiply Basis Amount By Percent</para>
+		/// <para>Select the amount calculation method used for this project contract estimate line. Valid values are: 0: Multiply Quantity By Price1: Fixed Price2: Multiply Basis Quantity By Price3: Multiply Basis Amount By Percent</para>
 		/// <para>Picklist</para>
 		/// <para>Amount Method</para>
 		/// </summary>
@@ -741,7 +742,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Foreign key to the detail line that originated this entry. For example, revenue line points to it's related cost line.</para>
+		/// <para>Foreign key to the detail line that originated this entry. For example, revenue line points to it&apos;s related cost line.</para>
 		/// <para>Lookup to msdyn_orderlinetransaction</para>
 		/// <para>Origin</para>
 		/// </summary>
@@ -753,7 +754,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Relevant when amount calculation method on the Project Contract line transactions is "Multiply basis amount by percent"</para>
+		/// <para>Relevant when amount calculation method on the Project Contract line transactions is &quot;Multiply basis amount by percent&quot;</para>
 		/// <para>Decimal - MinValue: -1,000,000,000 - MaxValue: 1,000,000,000</para>
 		/// <para>Percent</para>
 		/// </summary>
@@ -1012,9 +1013,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_orderlinetransactionOptionSets.msdyn_TransactionClassification)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionClassification] = null;
+			}
 		}
 
 		/// <summary>
@@ -1032,9 +1036,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_orderlinetransactionOptionSets.msdyn_TransactionTypeCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_TransactionTypeCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_TransactionTypeCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_TransactionTypeCode] = null;
+			}
 		}
 
 		/// <summary>
@@ -1097,7 +1104,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

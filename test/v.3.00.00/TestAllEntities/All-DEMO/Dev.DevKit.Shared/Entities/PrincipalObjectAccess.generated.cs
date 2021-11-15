@@ -23,10 +23,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ChangedOn = "changedon";
 			public const string InheritedAccessRightsMask = "inheritedaccessrightsmask";
 			public const string ObjectId = "objectid";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string PrincipalId = "principalid";
 			public const string PrincipalObjectAccessId = "principalobjectaccessid";
-			public const string PrincipalTypeCode = "principaltypecode";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
@@ -34,6 +32,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "principalobjectaccess";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 11;
 
 		[DebuggerNonUserCode()]
@@ -128,17 +127,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-			set { Entity.Attributes[Fields.ObjectTypeCode] = value; }
-		}
-
-		/// <summary>
 		/// <para>ReadOnly - Uniqueidentifier</para>
 		/// <para></para>
 		/// </summary>
@@ -162,17 +150,6 @@ namespace Dev.DevKit.Shared.Entities
 				Entity.Attributes[Fields.PrincipalObjectAccessId] = value;
 				Entity.Id = value;
 			}
-		}
-
-		/// <summary>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrincipalTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrincipalTypeCode); }
-			set { Entity.Attributes[Fields.PrincipalTypeCode] = value; }
 		}
 
 		/// <summary>

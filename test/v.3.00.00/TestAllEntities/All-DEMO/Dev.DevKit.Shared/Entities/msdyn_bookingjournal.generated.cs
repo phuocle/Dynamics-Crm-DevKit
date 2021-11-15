@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_bookingjournalOptionSets
 		/// </summary>
 		Break = 690970001,
 		/// <summary>
-		/// Business_Closure = 690970004
+		/// Business Closure = 690970004
 		/// </summary>
 		Business_Closure = 690970004,
 		/// <summary>
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_bookingjournalOptionSets
 		/// </summary>
 		Travel = 690970002,
 		/// <summary>
-		/// Working_Hours = 690970000
+		/// Working Hours = 690970000
 		/// </summary>
 		Working_Hours = 690970000
 	}
@@ -103,7 +103,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookingjournal";
 
-		public const int EntityTypeCode = 10424;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10488;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingjournal()
@@ -360,9 +361,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_bookingjournalOptionSets.msdyn_JournalType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_JournalType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_JournalType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_JournalType] = null;
+			}
 		}
 
 		/// <summary>
@@ -493,7 +497,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

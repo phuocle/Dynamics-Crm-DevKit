@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_migrationtrackerOptionSets
 	public enum msdyn_MigrationStatus
 	{
 		/// <summary>
-		/// In_Progress = 0
+		/// In Progress = 0
 		/// </summary>
 		In_Progress = 0,
 		/// <summary>
@@ -82,9 +82,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_LegacyConvertRuleId = "msdyn_legacyconvertruleid";
 			public const string msdyn_LegacyConvertRuleItemId = "msdyn_legacyconvertruleitemid";
 			public const string msdyn_LegacyRuleIdName = "msdyn_legacyruleidname";
-			public const string msdyn_LegacyRuleIdType = "msdyn_legacyruleidtype";
 			public const string msdyn_LegacyRuleItemIdName = "msdyn_legacyruleitemidname";
-			public const string msdyn_LegacyRuleItemIdType = "msdyn_legacyruleitemidtype";
 			public const string msdyn_LegacySLAId = "msdyn_legacyslaid";
 			public const string msdyn_LegacySLAItemId = "msdyn_legacyslaitemid";
 			public const string msdyn_MigrationStatus = "msdyn_migrationstatus";
@@ -95,13 +93,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ModernConvertRuleId = "msdyn_modernconvertruleid";
 			public const string msdyn_ModernConvertRuleItemId = "msdyn_modernconvertruleitemid";
 			public const string msdyn_ModernRuleIdName = "msdyn_modernruleidname";
-			public const string msdyn_ModernRuleIdType = "msdyn_modernruleidtype";
 			public const string msdyn_ModernRuleItemIdName = "msdyn_modernruleitemidname";
-			public const string msdyn_ModernRuleItemIdType = "msdyn_modernruleitemidtype";
 			public const string msdyn_ModernSLAId = "msdyn_modernslaid";
 			public const string msdyn_ModernSLAItemId = "msdyn_modernslaitemid";
 			public const string msdyn_Name = "msdyn_name";
-			public const string msdyn_Objecttypecode = "msdyn_objecttypecode";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -116,7 +111,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_migrationtracker";
 
-		public const int EntityTypeCode = 10113;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10125;
 
 		[DebuggerNonUserCode()]
 		public msdyn_migrationtracker()
@@ -315,17 +311,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>EntityName</para>
-		/// <para>Legacy rule type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_LegacyRuleIdType
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_LegacyRuleIdType); }
-			set { Entity.Attributes[Fields.msdyn_LegacyRuleIdType] = value; }
-		}
-
-		/// <summary>
 		/// <para>ReadOnly - String - MaxLength: 160</para>
 		/// <para></para>
 		/// </summary>
@@ -333,17 +318,6 @@ namespace Dev.DevKit.Shared.Entities
 		public string msdyn_LegacyRuleItemIdName
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_LegacyRuleItemIdName); }
-		}
-
-		/// <summary>
-		/// <para>EntityName</para>
-		/// <para>Legacy rule item type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_LegacyRuleItemIdType
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_LegacyRuleItemIdType); }
-			set { Entity.Attributes[Fields.msdyn_LegacyRuleItemIdType] = value; }
 		}
 
 		/// <summary>
@@ -491,17 +465,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>EntityName</para>
-		/// <para>Modern rule type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ModernRuleIdType
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ModernRuleIdType); }
-			set { Entity.Attributes[Fields.msdyn_ModernRuleIdType] = value; }
-		}
-
-		/// <summary>
 		/// <para>ReadOnly - String - MaxLength: 160</para>
 		/// <para></para>
 		/// </summary>
@@ -509,17 +472,6 @@ namespace Dev.DevKit.Shared.Entities
 		public string msdyn_ModernRuleItemIdName
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ModernRuleItemIdName); }
-		}
-
-		/// <summary>
-		/// <para>EntityName</para>
-		/// <para>Monitored activity type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_ModernRuleItemIdType
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_ModernRuleItemIdType); }
-			set { Entity.Attributes[Fields.msdyn_ModernRuleItemIdType] = value; }
 		}
 
 		/// <summary>
@@ -559,18 +511,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Object type code</para>
-		/// <para>EntityName</para>
-		/// <para>Object type code</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string msdyn_Objecttypecode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_Objecttypecode); }
-			set { Entity.Attributes[Fields.msdyn_Objecttypecode] = value; }
-		}
-
-		/// <summary>
 		/// <para>Date and time that the record was migrated.</para>
 		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
 		/// <para>Record Created On</para>
@@ -584,7 +524,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -23,7 +23,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string DateAttribute = "dateattribute";
-			public const string EntityForDateAttribute = "entityfordateattribute";
 			public const string GoalAttribute = "goalattribute";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string IsStateParentEntityAttribute = "isstateparententityattribute";
@@ -34,7 +33,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OrganizationId = "organizationid";
 			public const string RollupFieldId = "rollupfieldid";
 			public const string SourceAttribute = "sourceattribute";
-			public const string SourceEntity = "sourceentity";
 			public const string SourceState = "sourcestate";
 			public const string SourceStatus = "sourcestatus";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
@@ -44,6 +42,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "rollupfield";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9604;
 
 		[DebuggerNonUserCode()]
@@ -137,18 +136,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.DateAttribute); }
 			set { Entity.Attributes[Fields.DateAttribute] = value; }
-		}
-
-		/// <summary>
-		/// <para>Select the record type that contains the date field that will be considered while rolling up data to the goal.</para>
-		/// <para>Required - EntityName</para>
-		/// <para>Record Type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string EntityForDateAttribute
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.EntityForDateAttribute); }
-			set { Entity.Attributes[Fields.EntityForDateAttribute] = value; }
 		}
 
 		/// <summary>
@@ -269,18 +256,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.SourceAttribute); }
 			set { Entity.Attributes[Fields.SourceAttribute] = value; }
-		}
-
-		/// <summary>
-		/// <para>Type the name of the record type (entity) that the data for the goal must roll up from.</para>
-		/// <para>Required - EntityName</para>
-		/// <para>Source Record Type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string SourceEntity
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.SourceEntity); }
-			set { Entity.Attributes[Fields.SourceEntity] = value; }
 		}
 
 		/// <summary>

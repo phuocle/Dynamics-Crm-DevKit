@@ -84,7 +84,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_upgradestep";
 
-		public const int EntityTypeCode = 10105;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10117;
 
 		[DebuggerNonUserCode()]
 		public msdyn_upgradestep()
@@ -239,7 +240,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Error text, if an error occurred during this step</para>
-		/// <para>Memo - MaxLength: 4000</para>
+		/// <para>Memo - MaxLength: 1048576</para>
 		/// <para>Errors</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -288,9 +289,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_upgradestepOptionSets.msdyn_Status)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Status] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Status] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Status] = null;
+			}
 		}
 
 		/// <summary>

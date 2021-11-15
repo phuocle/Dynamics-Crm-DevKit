@@ -21,11 +21,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_opportunitylinetransactioncategoryOpt
 		/// </summary>
 		Complimentary = 192350002,
 		/// <summary>
-		/// Non_Chargeable = 192350000
+		/// Non Chargeable = 192350000
 		/// </summary>
 		Non_Chargeable = 192350000,
 		/// <summary>
-		/// Not_Available = 192350003
+		/// Not Available = 192350003
 		/// </summary>
 		Not_Available = 192350003
 	}
@@ -87,7 +87,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_opportunitylinetransactioncategory";
 
-		public const int EntityTypeCode = 10354;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10417;
 
 		[DebuggerNonUserCode()]
 		public msdyn_opportunitylinetransactioncategory()
@@ -216,7 +217,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select where the transaction category's costs are charged to the customer. Valid values can Chargeable, Non-chargeable and Complimentary. Only chargeable transaction will add to the total of any invoice</para>
+		/// <para>Select where the transaction category&apos;s costs are charged to the customer. Valid values can Chargeable, Non-chargeable and Complimentary. Only chargeable transaction will add to the total of any invoice</para>
 		/// <para>Picklist</para>
 		/// <para>Billing Type</para>
 		/// </summary>
@@ -304,7 +305,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

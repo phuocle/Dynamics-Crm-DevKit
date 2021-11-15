@@ -37,23 +37,23 @@ namespace Dev.DevKit.Shared.Entities.msdyn_problematicassetOptionSets
 	public enum msdyn_NumberofDays
 	{
 		/// <summary>
-		/// _0 = 192350000
+		/// 0 = 192350000
 		/// </summary>
 		_0 = 192350000,
 		/// <summary>
-		/// _15 = 192350001
+		/// 15 = 192350001
 		/// </summary>
 		_15 = 192350001,
 		/// <summary>
-		/// _30 = 192350002
+		/// 30 = 192350002
 		/// </summary>
 		_30 = 192350002,
 		/// <summary>
-		/// _60 = 192350003
+		/// 60 = 192350003
 		/// </summary>
 		_60 = 192350003,
 		/// <summary>
-		/// _90 = 192350004
+		/// 90 = 192350004
 		/// </summary>
 		_90 = 192350004
 	}
@@ -153,7 +153,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_problematicasset";
 
-		public const int EntityTypeCode = 10506;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10570;
 
 		[DebuggerNonUserCode()]
 		public msdyn_problematicasset()
@@ -433,9 +434,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_problematicassetOptionSets.msdyn_HigherTotalCost)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_HigherTotalCost] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_HigherTotalCost] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_HigherTotalCost] = null;
+			}
 		}
 
 		/// <summary>
@@ -453,9 +457,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_problematicassetOptionSets.msdyn_HigherWorkOrderCount)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_HigherWorkOrderCount] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_HigherWorkOrderCount] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_HigherWorkOrderCount] = null;
+			}
 		}
 
 		/// <summary>
@@ -575,9 +582,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_problematicassetOptionSets.msdyn_NumberofDays)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_NumberofDays] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_NumberofDays] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_NumberofDays] = null;
+			}
 		}
 
 		/// <summary>
@@ -713,9 +723,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_problematicassetOptionSets.msdyn_Suggestion)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Suggestion] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Suggestion] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Suggestion] = null;
+			}
 		}
 
 		/// <summary>
@@ -732,7 +745,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

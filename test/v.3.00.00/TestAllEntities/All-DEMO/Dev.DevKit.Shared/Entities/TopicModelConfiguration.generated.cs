@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.TopicModelConfigurationOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -30,14 +30,22 @@ namespace Dev.DevKit.Shared.Entities.TopicModelConfigurationOptionSets
 		Unpublished = 1
 	}
 
+	public enum SourceEntity
+	{
+		/// <summary>
+		/// Incident = 112
+		/// </summary>
+		Incident = 112
+	}
+
 	public enum TimeFilter
 	{
 		/// <summary>
-		/// Last_N_Days = 1
+		/// Last N Days = 1
 		/// </summary>
 		Last_N_Days = 1,
 		/// <summary>
-		/// Last_N_Weeks = 2
+		/// Last N Weeks = 2
 		/// </summary>
 		Last_N_Weeks = 2
 	}
@@ -77,6 +85,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "topicmodelconfiguration";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9942;
 
 		[DebuggerNonUserCode()]
@@ -333,9 +342,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.TopicModelConfigurationOptionSets.TimeFilter)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.TimeFilter] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.TimeFilter] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.TimeFilter] = null;
+			}
 		}
 
 		/// <summary>

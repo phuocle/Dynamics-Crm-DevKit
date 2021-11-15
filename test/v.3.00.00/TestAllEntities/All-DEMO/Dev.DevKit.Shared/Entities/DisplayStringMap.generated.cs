@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.DisplayStringMapOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -42,7 +42,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string DisplayStringMapId = "displaystringmapid";
 			public const string DisplayStringMapIdUnique = "displaystringmapidunique";
 			public const string IsManaged = "ismanaged";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string OverwriteTime = "overwritetime";
 			public const string SolutionId = "solutionid";
 			public const string SupportingSolutionId = "supportingsolutionid";
@@ -50,6 +49,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "displaystringmap";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4101;
 
 		[DebuggerNonUserCode()]
@@ -163,18 +163,6 @@ namespace Dev.DevKit.Shared.Entities
 		public bool? IsManaged
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.IsManaged); }
-		}
-
-		/// <summary>
-		/// <para>Type of entity with which the note is associated.</para>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-			set { Entity.Attributes[Fields.ObjectTypeCode] = value; }
 		}
 
 		/// <summary>

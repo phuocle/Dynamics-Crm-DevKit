@@ -48,7 +48,9 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_DefaultTeamsChatTitleEnabled = "msdyn_defaultteamschattitleenabled";
 			public const string msdyn_EmbedCollabServiceUrl = "msdyn_embedcollabserviceurl";
+			public const string msdyn_EmbedCollabTeamsIntegrationEnabled = "msdyn_embedcollabteamsintegrationenabled";
 			public const string msdyn_MSTeamsSettingsName = "msdyn_msteamssettingsname";
 			public const string msdyn_msteamssettingsv2Id = "msdyn_msteamssettingsv2id";
 			public const string msdyn_TabServiceUrl = "msdyn_tabserviceurl";
@@ -63,7 +65,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_msteamssettingsv2";
 
-		public const int EntityTypeCode = 10254;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10226;
 
 		[DebuggerNonUserCode()]
 		public msdyn_msteamssettingsv2()
@@ -193,6 +196,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Indicates whether the default title for linked chat is the record name</para>
+		/// <para>Boolean</para>
+		/// <para>Indicates whether the default title for linked chat is the record name</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_DefaultTeamsChatTitleEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_DefaultTeamsChatTitleEnabled); }
+			set { Entity.Attributes[Fields.msdyn_DefaultTeamsChatTitleEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>URL for embeded collaboration MSteams service</para>
 		/// <para>String - MaxLength: 500</para>
 		/// <para>Embeded Collaboration Service Url</para>
@@ -202,6 +217,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_EmbedCollabServiceUrl); }
 			set { Entity.Attributes[Fields.msdyn_EmbedCollabServiceUrl] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether embed-collab teams integration is enabled</para>
+		/// <para>Boolean</para>
+		/// <para>Indicates whether embed-collab teams integration is enabled</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_EmbedCollabTeamsIntegrationEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_EmbedCollabTeamsIntegrationEnabled); }
+			set { Entity.Attributes[Fields.msdyn_EmbedCollabTeamsIntegrationEnabled] = value; }
 		}
 
 		/// <summary>

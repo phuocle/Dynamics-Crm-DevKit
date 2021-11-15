@@ -69,7 +69,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_whatsappengagementctx";
 
-		public const int EntityTypeCode = 10669;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10747;
 
 		[DebuggerNonUserCode()]
 		public msdyn_whatsappengagementctx()
@@ -198,7 +199,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>WhatsApp Customer's first incoming message</para>
+		/// <para>WhatsApp Customer&apos;s first incoming message</para>
 		/// <para>String - MaxLength: 250</para>
 		/// <para>Customer First Message</para>
 		/// </summary>
@@ -299,7 +300,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

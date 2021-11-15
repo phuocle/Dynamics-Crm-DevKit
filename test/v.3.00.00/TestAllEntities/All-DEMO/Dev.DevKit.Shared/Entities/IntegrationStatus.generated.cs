@@ -10,15 +10,7 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.IntegrationStatusOptionSets
 {
-	public enum StateCode
-	{
 
-	}
-
-	public enum StatusCode
-	{
-
-	}
 }
 
 namespace Dev.DevKit.Shared.Entities
@@ -35,11 +27,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string ObjectId = "objectid";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string OrganizationId = "organizationid";
-			public const string StateCode = "statecode";
 			public const string StateDescription = "statedescription";
-			public const string StatusCode = "statuscode";
 			public const string StatusDescription = "statusdescription";
 			public const string SystemName = "systemname";
 			public const string VersionNumber = "versionnumber";
@@ -47,6 +36,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "integrationstatus";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 3000;
 
 		[DebuggerNonUserCode()]
@@ -187,17 +177,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type of entity with which the integration status is associated.</para>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-		}
-
-		/// <summary>
 		/// <para>Unique identifier of the organization associated with the integration status.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
 		/// <para></para>
@@ -206,29 +185,6 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? OrganizationId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.OrganizationId); }
-		}
-
-		/// <summary>
-		/// <para>Status of the integration.</para>
-		/// <para>State</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.IntegrationStatusOptionSets.StateCode? StateCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.StateCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.IntegrationStatusOptionSets.StateCode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.StateCode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.StateCode] = null;
-			}
 		}
 
 		/// <summary>
@@ -241,29 +197,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.StateDescription); }
 			set { Entity.Attributes[Fields.StateDescription] = value; }
-		}
-
-		/// <summary>
-		/// <para>Reason for the status of the integration.</para>
-		/// <para>Status</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.IntegrationStatusOptionSets.StatusCode? StatusCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.StatusCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.IntegrationStatusOptionSets.StatusCode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.StatusCode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.StatusCode] = null;
-			}
 		}
 
 		/// <summary>

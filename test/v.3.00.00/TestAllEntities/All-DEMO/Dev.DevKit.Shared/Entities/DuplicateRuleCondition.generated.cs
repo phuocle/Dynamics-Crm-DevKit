@@ -13,31 +13,31 @@ namespace Dev.DevKit.Shared.Entities.DuplicateRuleConditionOptionSets
 	public enum OperatorCode
 	{
 		/// <summary>
-		/// Exact_Match = 0
+		/// Exact Match = 0
 		/// </summary>
 		Exact_Match = 0,
 		/// <summary>
-		/// Exact_Match_Pick_List_Label = 5
+		/// Exact Match (Pick List Label) = 5
 		/// </summary>
 		Exact_Match_Pick_List_Label = 5,
 		/// <summary>
-		/// Exact_Match_Pick_List_Value = 6
+		/// Exact Match (Pick List Value) = 6
 		/// </summary>
 		Exact_Match_Pick_List_Value = 6,
 		/// <summary>
-		/// Same_Date = 3
+		/// Same Date = 3
 		/// </summary>
 		Same_Date = 3,
 		/// <summary>
-		/// Same_Date_and_Time = 4
+		/// Same Date and Time = 4
 		/// </summary>
 		Same_Date_and_Time = 4,
 		/// <summary>
-		/// Same_First_Characters = 1
+		/// Same First Characters = 1
 		/// </summary>
 		Same_First_Characters = 1,
 		/// <summary>
-		/// Same_Last_Characters = 2
+		/// Same Last Characters = 2
 		/// </summary>
 		Same_Last_Characters = 2
 	}
@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "duplicaterulecondition";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4416;
 
 		[DebuggerNonUserCode()]
@@ -274,7 +275,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the duplicate rule condition.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

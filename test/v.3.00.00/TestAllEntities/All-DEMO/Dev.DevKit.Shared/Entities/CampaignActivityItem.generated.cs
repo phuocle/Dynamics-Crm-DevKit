@@ -23,7 +23,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CampaignActivityItemId = "campaignactivityitemid";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string ItemId = "itemid";
-			public const string ItemObjectTypeCode = "itemobjecttypecode";
 			public const string Name = "name";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
@@ -36,6 +35,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "campaignactivityitem";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4404;
 
 		[DebuggerNonUserCode()]
@@ -139,18 +139,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Identification of the type of the campaign activity item.</para>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ItemObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ItemObjectTypeCode); }
-			set { Entity.Attributes[Fields.ItemObjectTypeCode] = value; }
-		}
-
-		/// <summary>
 		/// <para>name</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>name</para>
@@ -176,7 +164,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the campaign activity item.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

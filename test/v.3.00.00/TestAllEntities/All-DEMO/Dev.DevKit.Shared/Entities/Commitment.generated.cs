@@ -10,15 +10,7 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.CommitmentOptionSets
 {
-	public enum StateCode
-	{
 
-	}
-
-	public enum StatusCode
-	{
-
-	}
 }
 
 namespace Dev.DevKit.Shared.Entities
@@ -28,7 +20,6 @@ namespace Dev.DevKit.Shared.Entities
 		public struct Fields
 		{
 			public const string ActivityId = "activityid";
-			public const string ActivityTypeCode = "activitytypecode";
 			public const string CommitmentId = "commitmentid";
 			public const string Effort = "effort";
 			public const string ImportSequenceNumber = "importsequencenumber";
@@ -40,8 +31,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ScheduledEnd = "scheduledend";
 			public const string ScheduledStart = "scheduledstart";
 			public const string ServiceId = "serviceid";
-			public const string StateCode = "statecode";
-			public const string StatusCode = "statuscode";
 			public const string Subject = "subject";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
@@ -50,6 +39,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "commitment";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4215;
 
 		[DebuggerNonUserCode()]
@@ -108,16 +98,6 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? ActivityId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.ActivityId); }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ActivityTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ActivityTypeCode); }
 		}
 
 		/// <summary>
@@ -234,36 +214,6 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference ServiceId
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ServiceId); }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - State</para>
-		/// <para>Status</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.CommitmentOptionSets.StateCode? StateCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.StateCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.CommitmentOptionSets.StateCode)value.Value;
-			}
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - Status</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.CommitmentOptionSets.StatusCode? StatusCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.StatusCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.CommitmentOptionSets.StatusCode)value.Value;
-			}
 		}
 
 		/// <summary>

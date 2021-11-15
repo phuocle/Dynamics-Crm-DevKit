@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.ClientUpdateOptionSets
 	public enum WhenExecute
 	{
 		/// <summary>
-		/// After_download_data = 3
+		/// After download data = 3
 		/// </summary>
 		After_download_data = 3,
 		/// <summary>
-		/// After_SchemaChanges_but_before_Download_data = 2
+		/// After SchemaChanges but before Download data = 2
 		/// </summary>
 		After_SchemaChanges_but_before_Download_data = 2,
 		/// <summary>
-		/// Before_SchemaChanges = 1
+		/// Before SchemaChanges = 1
 		/// </summary>
 		Before_SchemaChanges = 1
 	}
@@ -44,6 +44,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "clientupdate";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 36;
 
 		[DebuggerNonUserCode()]

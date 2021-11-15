@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_transactioncategorypricelevelOptionSe
 	public enum msdyn_pricecalculation
 	{
 		/// <summary>
-		/// At_cost = 192350001
+		/// At cost = 192350001
 		/// </summary>
 		At_cost = 192350001,
 		/// <summary>
-		/// Markup_percentage = 192350002
+		/// Markup percentage = 192350002
 		/// </summary>
 		Markup_percentage = 192350002,
 		/// <summary>
-		/// Price_per_unit = 192350000
+		/// Price per unit = 192350000
 		/// </summary>
 		Price_per_unit = 192350000
 	}
@@ -87,7 +87,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_transactioncategorypricelevel";
 
-		public const int EntityTypeCode = 10394;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10457;
 
 		[DebuggerNonUserCode()]
 		public msdyn_transactioncategorypricelevel()
@@ -239,7 +240,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Enter the mark up on cost when creating billable transactions from cost transactions. This field is relevant only when the price calculation is "Markup over cost."</para>
+		/// <para>Enter the mark up on cost when creating billable transactions from cost transactions. This field is relevant only when the price calculation is &quot;Markup over cost.&quot;</para>
 		/// <para>Decimal - MinValue: -100 - MaxValue: 100,000,000,000</para>
 		/// <para>Percent</para>
 		/// </summary>
@@ -304,9 +305,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_transactioncategorypricelevelOptionSets.msdyn_pricecalculation)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_pricecalculation] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_pricecalculation] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_pricecalculation] = null;
+			}
 		}
 
 		/// <summary>

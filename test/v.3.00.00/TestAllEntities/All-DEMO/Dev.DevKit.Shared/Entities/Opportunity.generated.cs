@@ -13,19 +13,19 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 	public enum BudgetStatus
 	{
 		/// <summary>
-		/// Can_Buy = 2
+		/// Can Buy = 2
 		/// </summary>
 		Can_Buy = 2,
 		/// <summary>
-		/// May_Buy = 1
+		/// May Buy = 1
 		/// </summary>
 		May_Buy = 1,
 		/// <summary>
-		/// No_Committed_Budget = 0
+		/// No Committed Budget = 0
 		/// </summary>
 		No_Committed_Budget = 0,
 		/// <summary>
-		/// Will_Buy = 3
+		/// Will Buy = 3
 		/// </summary>
 		Will_Buy = 3
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 		/// </summary>
 		Contacted = 0,
 		/// <summary>
-		/// Not_Contacted = 1
+		/// Not Contacted = 1
 		/// </summary>
 		Not_Contacted = 1
 	}
@@ -45,7 +45,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 	public enum msdyn_forecastcategory
 	{
 		/// <summary>
-		/// Best_case = 100000002
+		/// Best case = 100000002
 		/// </summary>
 		Best_case = 100000002,
 		/// <summary>
@@ -73,15 +73,15 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 	public enum msdyn_OrderType
 	{
 		/// <summary>
-		/// Item_based = 192350000
+		/// Item based = 192350000
 		/// </summary>
 		Item_based = 192350000,
 		/// <summary>
-		/// Service_Maintenance_Based = 690970002
+		/// Service-Maintenance Based = 690970002
 		/// </summary>
-		Service_Maintenance_Based = 690970002,
+		ServiceMaintenance_Based = 690970002,
 		/// <summary>
-		/// Work_based = 192350001
+		/// Work based = 192350001
 		/// </summary>
 		Work_based = 192350001
 	}
@@ -89,19 +89,19 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 	public enum Need
 	{
 		/// <summary>
-		/// Good_to_have = 2
+		/// Good to have = 2
 		/// </summary>
 		Good_to_have = 2,
 		/// <summary>
-		/// Must_have = 0
+		/// Must have = 0
 		/// </summary>
 		Must_have = 0,
 		/// <summary>
-		/// No_need = 3
+		/// No need = 3
 		/// </summary>
 		No_need = 3,
 		/// <summary>
-		/// Should_have = 1
+		/// Should have = 1
 		/// </summary>
 		Should_have = 1
 	}
@@ -125,139 +125,139 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 	public enum PricingErrorCode
 	{
 		/// <summary>
-		/// Base_Currency_Attribute_Overflow = 36
+		/// Base Currency Attribute Overflow = 36
 		/// </summary>
 		Base_Currency_Attribute_Overflow = 36,
 		/// <summary>
-		/// Base_Currency_Attribute_Underflow = 37
+		/// Base Currency Attribute Underflow = 37
 		/// </summary>
 		Base_Currency_Attribute_Underflow = 37,
 		/// <summary>
-		/// Detail_Error = 1
+		/// Detail Error = 1
 		/// </summary>
 		Detail_Error = 1,
 		/// <summary>
-		/// Discount_Type_Invalid_State = 27
+		/// Discount Type Invalid State = 27
 		/// </summary>
 		Discount_Type_Invalid_State = 27,
 		/// <summary>
-		/// Inactive_Discount_Type = 33
+		/// Inactive Discount Type = 33
 		/// </summary>
 		Inactive_Discount_Type = 33,
 		/// <summary>
-		/// Inactive_Price_Level = 3
+		/// Inactive Price Level = 3
 		/// </summary>
 		Inactive_Price_Level = 3,
 		/// <summary>
-		/// Invalid_Current_Cost = 20
+		/// Invalid Current Cost = 20
 		/// </summary>
 		Invalid_Current_Cost = 20,
 		/// <summary>
-		/// Invalid_Discount = 28
+		/// Invalid Discount = 28
 		/// </summary>
 		Invalid_Discount = 28,
 		/// <summary>
-		/// Invalid_Discount_Type = 26
+		/// Invalid Discount Type = 26
 		/// </summary>
 		Invalid_Discount_Type = 26,
 		/// <summary>
-		/// Invalid_Price = 19
+		/// Invalid Price = 19
 		/// </summary>
 		Invalid_Price = 19,
 		/// <summary>
-		/// Invalid_Price_Level_Amount = 17
+		/// Invalid Price Level Amount = 17
 		/// </summary>
 		Invalid_Price_Level_Amount = 17,
 		/// <summary>
-		/// Invalid_Price_Level_Currency = 34
+		/// Invalid Price Level Currency = 34
 		/// </summary>
 		Invalid_Price_Level_Currency = 34,
 		/// <summary>
-		/// Invalid_Price_Level_Percentage = 18
+		/// Invalid Price Level Percentage = 18
 		/// </summary>
 		Invalid_Price_Level_Percentage = 18,
 		/// <summary>
-		/// Invalid_Pricing_Code = 9
+		/// Invalid Pricing Code = 9
 		/// </summary>
 		Invalid_Pricing_Code = 9,
 		/// <summary>
-		/// Invalid_Pricing_Precision = 30
+		/// Invalid Pricing Precision = 30
 		/// </summary>
 		Invalid_Pricing_Precision = 30,
 		/// <summary>
-		/// Invalid_Product = 7
+		/// Invalid Product = 7
 		/// </summary>
 		Invalid_Product = 7,
 		/// <summary>
-		/// Invalid_Quantity = 29
+		/// Invalid Quantity = 29
 		/// </summary>
 		Invalid_Quantity = 29,
 		/// <summary>
-		/// Invalid_Rounding_Amount = 24
+		/// Invalid Rounding Amount = 24
 		/// </summary>
 		Invalid_Rounding_Amount = 24,
 		/// <summary>
-		/// Invalid_Rounding_Option = 23
+		/// Invalid Rounding Option = 23
 		/// </summary>
 		Invalid_Rounding_Option = 23,
 		/// <summary>
-		/// Invalid_Rounding_Policy = 22
+		/// Invalid Rounding Policy = 22
 		/// </summary>
 		Invalid_Rounding_Policy = 22,
 		/// <summary>
-		/// Invalid_Standard_Cost = 21
+		/// Invalid Standard Cost = 21
 		/// </summary>
 		Invalid_Standard_Cost = 21,
 		/// <summary>
-		/// Missing_Current_Cost = 15
+		/// Missing Current Cost = 15
 		/// </summary>
 		Missing_Current_Cost = 15,
 		/// <summary>
-		/// Missing_Price = 14
+		/// Missing Price = 14
 		/// </summary>
 		Missing_Price = 14,
 		/// <summary>
-		/// Missing_Price_Level = 2
+		/// Missing Price Level = 2
 		/// </summary>
 		Missing_Price_Level = 2,
 		/// <summary>
-		/// Missing_Price_Level_Amount = 12
+		/// Missing Price Level Amount = 12
 		/// </summary>
 		Missing_Price_Level_Amount = 12,
 		/// <summary>
-		/// Missing_Price_Level_Percentage = 13
+		/// Missing Price Level Percentage = 13
 		/// </summary>
 		Missing_Price_Level_Percentage = 13,
 		/// <summary>
-		/// Missing_Pricing_Code = 8
+		/// Missing Pricing Code = 8
 		/// </summary>
 		Missing_Pricing_Code = 8,
 		/// <summary>
-		/// Missing_Product = 6
+		/// Missing Product = 6
 		/// </summary>
 		Missing_Product = 6,
 		/// <summary>
-		/// Missing_Product_Default_UOM = 31
+		/// Missing Product Default UOM = 31
 		/// </summary>
 		Missing_Product_Default_UOM = 31,
 		/// <summary>
-		/// Missing_Product_UOM_Schedule_ = 32
+		/// Missing Product UOM Schedule  = 32
 		/// </summary>
-		Missing_Product_UOM_Schedule_ = 32,
+		Missing_Product_UOM_Schedule = 32,
 		/// <summary>
-		/// Missing_Quantity = 4
+		/// Missing Quantity = 4
 		/// </summary>
 		Missing_Quantity = 4,
 		/// <summary>
-		/// Missing_Standard_Cost = 16
+		/// Missing Standard Cost = 16
 		/// </summary>
 		Missing_Standard_Cost = 16,
 		/// <summary>
-		/// Missing_Unit_Price = 5
+		/// Missing Unit Price = 5
 		/// </summary>
 		Missing_Unit_Price = 5,
 		/// <summary>
-		/// Missing_UOM = 10
+		/// Missing UOM = 10
 		/// </summary>
 		Missing_UOM = 10,
 		/// <summary>
@@ -265,19 +265,19 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Price_Attribute_Out_Of_Range = 35
+		/// Price Attribute Out Of Range = 35
 		/// </summary>
 		Price_Attribute_Out_Of_Range = 35,
 		/// <summary>
-		/// Price_Calculation_Error = 25
+		/// Price Calculation Error = 25
 		/// </summary>
 		Price_Calculation_Error = 25,
 		/// <summary>
-		/// Product_Not_In_Price_Level = 11
+		/// Product Not In Price Level = 11
 		/// </summary>
 		Product_Not_In_Price_Level = 11,
 		/// <summary>
-		/// Transaction_currency_is_not_set_for_the_product_price_list_item = 38
+		/// Transaction currency is not set for the product price list item = 38
 		/// </summary>
 		Transaction_currency_is_not_set_for_the_product_price_list_item = 38
 	}
@@ -285,7 +285,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 	public enum PriorityCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -313,15 +313,15 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 		/// </summary>
 		Immediate = 0,
 		/// <summary>
-		/// Next_Quarter = 2
+		/// Next Quarter = 2
 		/// </summary>
 		Next_Quarter = 2,
 		/// <summary>
-		/// This_Quarter = 1
+		/// This Quarter = 1
 		/// </summary>
 		This_Quarter = 1,
 		/// <summary>
-		/// This_Year = 3
+		/// This Year = 3
 		/// </summary>
 		This_Year = 3,
 		/// <summary>
@@ -353,7 +353,7 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 	public enum SalesStageCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -393,17 +393,17 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 		/// </summary>
 		Canceled = 4,
 		/// <summary>
-		/// In_Progress = 1
+		/// In Progress = 1
 		/// </summary>
 		In_Progress = 1,
 		/// <summary>
-		/// On_Hold = 2
+		/// On Hold = 2
 		/// </summary>
 		On_Hold = 2,
 		/// <summary>
-		/// Out_Sold = 5
+		/// Out-Sold = 5
 		/// </summary>
-		Out_Sold = 5,
+		OutSold = 5,
 		/// <summary>
 		/// Won = 3
 		/// </summary>
@@ -417,19 +417,19 @@ namespace Dev.DevKit.Shared.Entities.OpportunityOptionSets
 		/// </summary>
 		Immediate = 0,
 		/// <summary>
-		/// Next_Quarter = 2
+		/// Next Quarter = 2
 		/// </summary>
 		Next_Quarter = 2,
 		/// <summary>
-		/// Not_known = 4
+		/// Not known = 4
 		/// </summary>
 		Not_known = 4,
 		/// <summary>
-		/// This_Quarter = 1
+		/// This Quarter = 1
 		/// </summary>
 		This_Quarter = 1,
 		/// <summary>
-		/// This_Year = 3
+		/// This Year = 3
 		/// </summary>
 		This_Year = 3
 	}
@@ -495,6 +495,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_ContractOrganizationalUnitId = "msdyn_contractorganizationalunitid";
 			public const string msdyn_forecastcategory = "msdyn_forecastcategory";
 			public const string msdyn_OrderType = "msdyn_ordertype";
+			public const string msdyn_segmentid = "msdyn_segmentid";
 			public const string msdyn_WorkOrderType = "msdyn_workordertype";
 			public const string Name = "name";
 			public const string Need = "need";
@@ -561,6 +562,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "opportunity";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 3;
 
 		[DebuggerNonUserCode()]
@@ -640,7 +642,7 @@ namespace Dev.DevKit.Shared.Entities
 			{
 				if (value.HasValue)
 				{
-					DateTime? dateTime = value.Value.ToDateTime();
+					DateTime dateTime = value.Value.ToDateTime();
 					Entity.Attributes[Fields.ActualCloseDate] = dateTime;
 				}
 				else
@@ -688,7 +690,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type a value between 0 and 1,000,000,000,000 to indicate the lead's potential available budget.</para>
+		/// <para>Type a value between 0 and 1,000,000,000,000 to indicate the lead&apos;s potential available budget.</para>
 		/// <para>Money - MinValue: 0 - MaxValue: 1,000,000,000,000</para>
 		/// <para>Budget Amount</para>
 		/// </summary>
@@ -727,7 +729,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the likely budget status for the lead's company. This may help determine the lead rating or your sales approach.</para>
+		/// <para>Select the likely budget status for the lead&apos;s company. This may help determine the lead rating or your sales approach.</para>
 		/// <para>Picklist</para>
 		/// <para>Budget</para>
 		/// </summary>
@@ -879,7 +881,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders.</para>
-		/// <para>Required - Customer</para>
+		/// <para>Required - Lookup to account;contact</para>
 		/// <para>Potential Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -890,7 +892,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type some notes about the customer's requirements, to help the sales team identify products and services that could meet their requirements.</para>
+		/// <para>Type some notes about the customer&apos;s requirements, to help the sales team identify products and services that could meet their requirements.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Customer Need</para>
 		/// </summary>
@@ -902,7 +904,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type notes about the customer's pain points to help the sales team identify products and services that could address these pain points.</para>
+		/// <para>Type notes about the customer&apos;s pain points to help the sales team identify products and services that could address these pain points.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Customer Pain Points</para>
 		/// </summary>
@@ -914,7 +916,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether your notes include information about who makes the purchase decisions at the lead's company.</para>
+		/// <para>Select whether your notes include information about who makes the purchase decisions at the lead&apos;s company.</para>
 		/// <para>Boolean</para>
 		/// <para>Decision Maker?</para>
 		/// </summary>
@@ -1030,7 +1032,7 @@ namespace Dev.DevKit.Shared.Entities
 			{
 				if (value.HasValue)
 				{
-					DateTime? dateTime = value.Value.ToDateTime();
+					DateTime dateTime = value.Value.ToDateTime();
 					Entity.Attributes[Fields.EstimatedCloseDate] = dateTime;
 				}
 				else
@@ -1078,7 +1080,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether the fit between the lead's requirements and your offerings was evaluated.</para>
+		/// <para>Select whether the fit between the lead&apos;s requirements and your offerings was evaluated.</para>
 		/// <para>Boolean</para>
 		/// <para>Evaluate Fit</para>
 		/// </summary>
@@ -1090,7 +1092,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -1101,7 +1103,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose whether the sales team has recorded detailed notes on the proposals and the account's responses.</para>
+		/// <para>Choose whether the sales team has recorded detailed notes on the proposals and the account&apos;s responses.</para>
 		/// <para>Boolean</para>
 		/// <para>File Debrief</para>
 		/// </summary>
@@ -1130,7 +1132,7 @@ namespace Dev.DevKit.Shared.Entities
 			{
 				if (value.HasValue)
 				{
-					DateTime? dateTime = value.Value.ToDateTime();
+					DateTime dateTime = value.Value.ToDateTime();
 					Entity.Attributes[Fields.FinalDecisionDate] = dateTime;
 				}
 				else
@@ -1426,6 +1428,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Unique identifier for Segment associated with Opportunity.</para>
+		/// <para>Lookup to msdyn_segment</para>
+		/// <para>Segment Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_segmentid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_segmentid); }
+			set { Entity.Attributes[Fields.msdyn_segmentid] = value; }
+		}
+
+		/// <summary>
 		/// <para>Unique identifier for Work Order Type associated with Opportunity.</para>
 		/// <para>Lookup to msdyn_workordertype</para>
 		/// <para>Work Order Type</para>
@@ -1450,7 +1464,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose how high the level of need is for the lead's company.</para>
+		/// <para>Choose how high the level of need is for the lead&apos;s company.</para>
 		/// <para>Picklist</para>
 		/// <para>Need</para>
 		/// </summary>
@@ -1548,7 +1562,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1666,7 +1680,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Pricing error for the opportunity.</para>
 		/// <para>Picklist</para>
-		/// <para>Pricing Error </para>
+		/// <para>Pricing Error</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.OpportunityOptionSets.PricingErrorCode? PricingErrorCode
@@ -1980,7 +1994,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the opportunity is open, won, or lost. Won and lost opportunities are read-only and can't be edited until they are reactivated.</para>
+		/// <para>Shows whether the opportunity is open, won, or lost. Won and lost opportunities are read-only and can&apos;t be edited until they are reactivated.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -2003,7 +2017,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the opportunity's status.</para>
+		/// <para>Select the opportunity&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

@@ -20,7 +20,6 @@ namespace Dev.DevKit.Shared.Entities
 		public struct Fields
 		{
 			public const string IsDefault = "isdefault";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string OrganizationId = "organizationid";
 			public const string State = "state";
 			public const string Status = "status";
@@ -30,6 +29,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "statusmap";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1075;
 
 		[DebuggerNonUserCode()]
@@ -89,16 +89,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<bool?>(Fields.IsDefault); }
 			set { Entity.Attributes[Fields.IsDefault] = value; }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
 		}
 
 		/// <summary>

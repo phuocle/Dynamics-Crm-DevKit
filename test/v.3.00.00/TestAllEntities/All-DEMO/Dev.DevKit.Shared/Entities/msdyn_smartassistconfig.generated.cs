@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_smartassistconfigOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_smartassistconfigOptionSets
 	public enum msdyn_Suggestioncontroltype
 	{
 		/// <summary>
-		/// Adaptive_Card = 192360000
+		/// Adaptive Card = 192360000
 		/// </summary>
 		Adaptive_Card = 192360000
 	}
@@ -41,15 +41,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_smartassistconfigOptionSets
 	public enum msdyn_Suggestiontype
 	{
 		/// <summary>
-		/// Bot_Suggestion = 192360002
+		/// Bot Suggestion = 192360002
 		/// </summary>
 		Bot_Suggestion = 192360002,
 		/// <summary>
-		/// Knowledge_Article_Suggestion = 192360000
+		/// Knowledge Article Suggestion = 192360000
 		/// </summary>
 		Knowledge_Article_Suggestion = 192360000,
 		/// <summary>
-		/// Similar_Case_Suggestion = 192360001
+		/// Similar Case Suggestion = 192360001
 		/// </summary>
 		Similar_Case_Suggestion = 192360001
 	}
@@ -123,7 +123,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_smartassistconfig";
 
-		public const int EntityTypeCode = 10175;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10187;
 
 		[DebuggerNonUserCode()]
 		public msdyn_smartassistconfig()
@@ -416,9 +417,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_smartassistconfigOptionSets.msdyn_Suggestioncontroltype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Suggestioncontroltype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Suggestioncontroltype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Suggestioncontroltype] = null;
+			}
 		}
 
 		/// <summary>
@@ -448,9 +452,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_smartassistconfigOptionSets.msdyn_Suggestiontype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_Suggestiontype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_Suggestiontype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_Suggestiontype] = null;
+			}
 		}
 
 		/// <summary>

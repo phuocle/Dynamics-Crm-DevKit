@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets
 	public enum msdyusd_Action
 	{
 		/// <summary>
-		/// Create_Session = 803750000
+		/// Create Session = 803750000
 		/// </summary>
 		Create_Session = 803750000,
 		/// <summary>
@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets
 		/// </summary>
 		Default = 803750004,
 		/// <summary>
-		/// In_Place = 803750005
+		/// In Place = 803750005
 		/// </summary>
 		In_Place = 803750005,
 		/// <summary>
@@ -29,11 +29,11 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets
 		/// </summary>
 		None = 803750003,
 		/// <summary>
-		/// Route_Window = 803750002
+		/// Route Window = 803750002
 		/// </summary>
 		Route_Window = 803750002,
 		/// <summary>
-		/// Show_Outside = 803750001
+		/// Show Outside = 803750001
 		/// </summary>
 		Show_Outside = 803750001
 	}
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets
 	public enum msdyusd_Destination
 	{
 		/// <summary>
-		/// Entity_Search = 803750001
+		/// Entity Search = 803750001
 		/// </summary>
 		Entity_Search = 803750001,
 		/// <summary>
@@ -69,15 +69,15 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets
 	public enum msdyusd_MultipleMatchesDecision
 	{
 		/// <summary>
-		/// Create_Session_then_Do_Action = 803750002
+		/// Create Session then Do Action = 803750002
 		/// </summary>
 		Create_Session_then_Do_Action = 803750002,
 		/// <summary>
-		/// Do_Action = 803750000
+		/// Do Action = 803750000
 		/// </summary>
 		Do_Action = 803750000,
 		/// <summary>
-		/// Next_Rule = 803750001
+		/// Next Rule = 803750001
 		/// </summary>
 		Next_Rule = 803750001
 	}
@@ -85,15 +85,15 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets
 	public enum msdyusd_NoMatchDecision
 	{
 		/// <summary>
-		/// Create_Session_then_Do_Action = 803750002
+		/// Create Session then Do Action = 803750002
 		/// </summary>
 		Create_Session_then_Do_Action = 803750002,
 		/// <summary>
-		/// Do_Action = 803750000
+		/// Do Action = 803750000
 		/// </summary>
 		Do_Action = 803750000,
 		/// <summary>
-		/// Next_Rule = 803750001
+		/// Next Rule = 803750001
 		/// </summary>
 		Next_Rule = 803750001
 	}
@@ -101,11 +101,11 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets
 	public enum msdyusd_RouteType
 	{
 		/// <summary>
-		/// In_Place = 803750003
+		/// In Place = 803750003
 		/// </summary>
 		In_Place = 803750003,
 		/// <summary>
-		/// Menu_Chosen = 803750002
+		/// Menu Chosen = 803750002
 		/// </summary>
 		Menu_Chosen = 803750002,
 		/// <summary>
@@ -121,19 +121,19 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets
 	public enum msdyusd_SingleMatchDecision
 	{
 		/// <summary>
-		/// Create_Session_Load_Match_then_Do_Action = 803750003
+		/// Create Session, Load Match then Do Action = 803750003
 		/// </summary>
 		Create_Session_Load_Match_then_Do_Action = 803750003,
 		/// <summary>
-		/// Create_Session_then_Do_Action = 803750002
+		/// Create Session then Do Action = 803750002
 		/// </summary>
 		Create_Session_then_Do_Action = 803750002,
 		/// <summary>
-		/// Do_Action = 803750000
+		/// Do Action = 803750000
 		/// </summary>
 		Do_Action = 803750000,
 		/// <summary>
-		/// Next_Rule = 803750001
+		/// Next Rule = 803750001
 		/// </summary>
 		Next_Rule = 803750001
 	}
@@ -219,7 +219,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_windowroute";
 
-		public const int EntityTypeCode = 10708;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10787;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_windowroute()
@@ -361,9 +362,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets.msdyusd_Action)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyusd_Action] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyusd_Action] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyusd_Action] = null;
+			}
 		}
 
 		/// <summary>
@@ -426,9 +430,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets.msdyusd_Destination)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyusd_Destination] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyusd_Destination] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyusd_Destination] = null;
+			}
 		}
 
 		/// <summary>
@@ -662,9 +669,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyusd_windowrouteOptionSets.msdyusd_RouteType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyusd_RouteType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyusd_RouteType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyusd_RouteType] = null;
+			}
 		}
 
 		/// <summary>
@@ -765,7 +775,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

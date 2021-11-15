@@ -66,7 +66,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_liveworkstreamcapacityprofile";
 
-		public const int EntityTypeCode = 10616;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10692;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveworkstreamcapacityprofile()
@@ -258,7 +259,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

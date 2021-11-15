@@ -91,6 +91,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "bookableresourcebookingheader";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1146;
 
 		[DebuggerNonUserCode()]
@@ -309,9 +310,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.BookableResourceBookingHeaderOptionSets.msdyn_BookingType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_BookingType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_BookingType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_BookingType] = null;
+			}
 		}
 
 		/// <summary>
@@ -388,7 +392,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

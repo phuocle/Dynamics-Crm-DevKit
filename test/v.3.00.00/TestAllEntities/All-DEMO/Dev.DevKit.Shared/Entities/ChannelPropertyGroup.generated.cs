@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.ChannelPropertyGroupOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -37,51 +37,51 @@ namespace Dev.DevKit.Shared.Entities.ChannelPropertyGroupOptionSets
 		/// </summary>
 		Appointment = 4201,
 		/// <summary>
-		/// Booking_Alert = 10294
+		/// Booking Alert = 10357
 		/// </summary>
-		Booking_Alert = 10294,
+		Booking_Alert = 10357,
 		/// <summary>
-		/// Conversation = 10564
+		/// Conversation = 10644
 		/// </summary>
-		Conversation = 10564,
+		Conversation = 10644,
 		/// <summary>
-		/// Customer_Voice_alert = 10238
+		/// Customer Voice alert = 10261
 		/// </summary>
-		Customer_Voice_alert = 10238,
+		Customer_Voice_alert = 10261,
 		/// <summary>
-		/// Customer_Voice_survey_invite = 10248
+		/// Customer Voice survey invite = 10271
 		/// </summary>
-		Customer_Voice_survey_invite = 10248,
+		Customer_Voice_survey_invite = 10271,
 		/// <summary>
-		/// Customer_Voice_survey_response = 10250
+		/// Customer Voice survey response = 10273
 		/// </summary>
-		Customer_Voice_survey_response = 10250,
+		Customer_Voice_survey_response = 10273,
 		/// <summary>
 		/// Email = 4202
 		/// </summary>
 		Email = 4202,
 		/// <summary>
-		/// Outbound_message = 10673
+		/// Outbound message = 10752
 		/// </summary>
-		Outbound_message = 10673,
+		Outbound_message = 10752,
 		/// <summary>
-		/// Phone_Call = 4210
+		/// Phone Call = 4210
 		/// </summary>
 		Phone_Call = 4210,
 		/// <summary>
-		/// Project_Service_Approval = 10324
+		/// Project Service Approval = 10387
 		/// </summary>
-		Project_Service_Approval = 10324,
+		Project_Service_Approval = 10387,
 		/// <summary>
-		/// Service_Activity = 4214
+		/// Service Activity = 4214
 		/// </summary>
 		Service_Activity = 4214,
 		/// <summary>
-		/// Session = 10573
+		/// Session = 10659
 		/// </summary>
-		Session = 10573,
+		Session = 10659,
 		/// <summary>
-		/// Social_Activity = 4216
+		/// Social Activity = 4216
 		/// </summary>
 		Social_Activity = 4216,
 		/// <summary>
@@ -147,6 +147,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "channelpropertygroup";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1234;
 
 		[DebuggerNonUserCode()]

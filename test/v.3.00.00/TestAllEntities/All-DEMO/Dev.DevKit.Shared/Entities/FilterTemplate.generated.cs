@@ -24,11 +24,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string FilterTemplateId = "filtertemplateid";
 			public const string Name = "name";
 			public const string QueryType = "querytype";
-			public const string ReturnedTypeCode = "returnedtypecode";
 		}
 
 		public const string EntityLogicalName = "filtertemplate";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 30;
 
 		[DebuggerNonUserCode()]
@@ -141,18 +141,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.QueryType); }
 			set { Entity.Attributes[Fields.QueryType] = value; }
-		}
-
-		/// <summary>
-		/// <para>For internal use only.</para>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ReturnedTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ReturnedTypeCode); }
-			set { Entity.Attributes[Fields.ReturnedTypeCode] = value; }
 		}
 	}
 }

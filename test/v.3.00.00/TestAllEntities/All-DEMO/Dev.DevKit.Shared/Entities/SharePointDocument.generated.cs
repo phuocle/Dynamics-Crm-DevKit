@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointDocumentOptionSets
 	public enum DocumentLocationType
 	{
 		/// <summary>
-		/// Dedicated_for_OneNote_Integration = 1
+		/// Dedicated for OneNote Integration = 1
 		/// </summary>
 		Dedicated_for_OneNote_Integration = 1,
 		/// <summary>
@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointDocumentOptionSets
 	public enum ServiceType
 	{
 		/// <summary>
-		/// MS_Teams = 3
+		/// MS Teams = 3
 		/// </summary>
 		MS_Teams = 3,
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.SharePointDocumentOptionSets
 		/// </summary>
 		OneDrive = 1,
 		/// <summary>
-		/// Shared_with_me = 2
+		/// Shared with me = 2
 		/// </summary>
 		Shared_with_me = 2,
 		/// <summary>
@@ -101,6 +101,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "sharepointdocument";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9507;
 
 		[DebuggerNonUserCode()]
@@ -534,7 +535,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

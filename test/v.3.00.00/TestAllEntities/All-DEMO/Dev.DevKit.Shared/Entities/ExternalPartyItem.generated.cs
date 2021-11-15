@@ -69,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "externalpartyitem";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9987;
 
 		[DebuggerNonUserCode()]
@@ -120,7 +121,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the channel access profile that's used to determine the permissions when CRM is accessed from an external channel.</para>
+		/// <para>Choose the channel access profile that&apos;s used to determine the permissions when CRM is accessed from an external channel.</para>
 		/// <para>Lookup to channelaccessprofile</para>
 		/// <para>Channel Access Profile</para>
 		/// </summary>
@@ -310,7 +311,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user or team.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

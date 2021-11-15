@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.ProvisionLanguageForUserOptionSets
 		/// </summary>
 		Queued = 0,
 		/// <summary>
-		/// Waiting_For_Language_Provision = 2
+		/// Waiting For Language Provision = 2
 		/// </summary>
 		Waiting_For_Language_Provision = 2
 	}
@@ -48,7 +48,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "provisionlanguageforuser";
 
-		public const int EntityTypeCode = 10013;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10023;
 
 		[DebuggerNonUserCode()]
 		public ProvisionLanguageForUser()

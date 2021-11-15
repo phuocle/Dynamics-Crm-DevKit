@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_productivityagentscriptstepOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -114,7 +114,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_productivityagentscriptstep";
 
-		public const int EntityTypeCode = 10163;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10175;
 
 		[DebuggerNonUserCode()]
 		public msdyn_productivityagentscriptstep()
@@ -295,9 +296,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_productivityagentscriptstepOptionSets.msdyn_actiontype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_actiontype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_actiontype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_actiontype] = null;
+			}
 		}
 
 		/// <summary>
@@ -437,7 +441,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

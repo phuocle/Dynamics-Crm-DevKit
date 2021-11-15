@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.ActivityMimeAttachmentOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -29,6 +29,18 @@ namespace Dev.DevKit.Shared.Entities.ActivityMimeAttachmentOptionSets
 		/// </summary>
 		Unpublished = 1
 	}
+
+	public enum ObjectTypeCode
+	{
+		/// <summary>
+		/// Email Activity = 4200
+		/// </summary>
+		Email_Activity = 4200,
+		/// <summary>
+		/// Email Template = 2010
+		/// </summary>
+		Email_Template = 2010
+	}
 }
 
 namespace Dev.DevKit.Shared.Entities
@@ -37,6 +49,8 @@ namespace Dev.DevKit.Shared.Entities
 	{
 		public struct Fields
 		{
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string ActivityId = "activityid";
 			public const string ActivityMimeAttachmentId = "activitymimeattachmentid";
 			public const string ActivityMimeAttachmentIdUnique = "activitymimeattachmentidunique";
 			public const string ActivitySubject = "activitysubject";
@@ -65,6 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "activitymimeattachment";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1001;
 
 		[DebuggerNonUserCode()]
@@ -113,6 +128,19 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
+		}
+
+		/// <summary>
+		/// <para>Unique identifier of the activity with which the attachment is associated.</para>
+		/// <para>Lookup to activitypointer</para>
+		/// <para>Regarding</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public EntityReference ActivityId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.ActivityId); }
+			set { Entity.Attributes[Fields.ActivityId] = value; }
 		}
 
 		/// <summary>
@@ -323,7 +351,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the activity_mime_attachment.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

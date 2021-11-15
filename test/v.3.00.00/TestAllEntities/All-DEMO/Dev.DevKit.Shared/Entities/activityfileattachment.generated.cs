@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.activityfileattachmentOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -28,6 +28,18 @@ namespace Dev.DevKit.Shared.Entities.activityfileattachmentOptionSets
 		/// Unpublished = 1
 		/// </summary>
 		Unpublished = 1
+	}
+
+	public enum ObjectTypeCode
+	{
+		/// <summary>
+		/// Post = 8000
+		/// </summary>
+		Post = 8000,
+		/// <summary>
+		/// Post Comment = 8005
+		/// </summary>
+		Post_Comment = 8005
 	}
 
 	public enum statecode
@@ -67,6 +79,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedBy = "createdby";
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
+			public const string FileContent = "filecontent";
 			public const string filename = "filename";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string IsManaged = "ismanaged";
@@ -92,7 +105,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "activityfileattachment";
 
-		public const int EntityTypeCode = 10050;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10074;
 
 		[DebuggerNonUserCode()]
 		public activityfileattachment()
@@ -219,6 +233,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Content of the uploaded file</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File Content</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string FileContent
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.FileContent); }
+		}
+
+		/// <summary>
 		/// <para>The name of the file attachment.</para>
 		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Name</para>
@@ -323,7 +348,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

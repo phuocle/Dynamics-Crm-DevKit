@@ -35,6 +35,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "kbarticlecomment";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1082;
 
 		[DebuggerNonUserCode()]
@@ -194,7 +195,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Unique identifier of the organization with which the article comment is associated.</para>
 		/// <para>ReadOnly - Uniqueidentifier</para>
-		/// <para>Organization </para>
+		/// <para>Organization</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Guid? OrganizationId

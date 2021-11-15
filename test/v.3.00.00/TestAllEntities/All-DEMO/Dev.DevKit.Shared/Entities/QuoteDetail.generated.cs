@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.QuoteDetailOptionSets
 	public enum msdyn_BillingMethod
 	{
 		/// <summary>
-		/// Fixed_Price = 192350001
+		/// Fixed Price = 192350001
 		/// </summary>
 		Fixed_Price = 192350001,
 		/// <summary>
-		/// Time_and_Material = 192350000
+		/// Time and Material = 192350000
 		/// </summary>
 		Time_and_Material = 192350000
 	}
@@ -25,11 +25,11 @@ namespace Dev.DevKit.Shared.Entities.QuoteDetailOptionSets
 	public enum msdyn_LineType
 	{
 		/// <summary>
-		/// Field_Service_Line = 690970001
+		/// Field Service Line = 690970001
 		/// </summary>
 		Field_Service_Line = 690970001,
 		/// <summary>
-		/// Project_Service_Line = 690970000
+		/// Project Service Line = 690970000
 		/// </summary>
 		Project_Service_Line = 690970000
 	}
@@ -37,139 +37,139 @@ namespace Dev.DevKit.Shared.Entities.QuoteDetailOptionSets
 	public enum PricingErrorCode
 	{
 		/// <summary>
-		/// Base_Currency_Attribute_Overflow = 36
+		/// Base Currency Attribute Overflow = 36
 		/// </summary>
 		Base_Currency_Attribute_Overflow = 36,
 		/// <summary>
-		/// Base_Currency_Attribute_Underflow = 37
+		/// Base Currency Attribute Underflow = 37
 		/// </summary>
 		Base_Currency_Attribute_Underflow = 37,
 		/// <summary>
-		/// Detail_Error = 1
+		/// Detail Error = 1
 		/// </summary>
 		Detail_Error = 1,
 		/// <summary>
-		/// Discount_Type_Invalid_State = 27
+		/// Discount Type Invalid State = 27
 		/// </summary>
 		Discount_Type_Invalid_State = 27,
 		/// <summary>
-		/// Inactive_Discount_Type = 33
+		/// Inactive Discount Type = 33
 		/// </summary>
 		Inactive_Discount_Type = 33,
 		/// <summary>
-		/// Inactive_Price_Level = 3
+		/// Inactive Price Level = 3
 		/// </summary>
 		Inactive_Price_Level = 3,
 		/// <summary>
-		/// Invalid_Current_Cost = 20
+		/// Invalid Current Cost = 20
 		/// </summary>
 		Invalid_Current_Cost = 20,
 		/// <summary>
-		/// Invalid_Discount = 28
+		/// Invalid Discount = 28
 		/// </summary>
 		Invalid_Discount = 28,
 		/// <summary>
-		/// Invalid_Discount_Type = 26
+		/// Invalid Discount Type = 26
 		/// </summary>
 		Invalid_Discount_Type = 26,
 		/// <summary>
-		/// Invalid_Price = 19
+		/// Invalid Price = 19
 		/// </summary>
 		Invalid_Price = 19,
 		/// <summary>
-		/// Invalid_Price_Level_Amount = 17
+		/// Invalid Price Level Amount = 17
 		/// </summary>
 		Invalid_Price_Level_Amount = 17,
 		/// <summary>
-		/// Invalid_Price_Level_Currency = 34
+		/// Invalid Price Level Currency = 34
 		/// </summary>
 		Invalid_Price_Level_Currency = 34,
 		/// <summary>
-		/// Invalid_Price_Level_Percentage = 18
+		/// Invalid Price Level Percentage = 18
 		/// </summary>
 		Invalid_Price_Level_Percentage = 18,
 		/// <summary>
-		/// Invalid_Pricing_Code = 9
+		/// Invalid Pricing Code = 9
 		/// </summary>
 		Invalid_Pricing_Code = 9,
 		/// <summary>
-		/// Invalid_Pricing_Precision = 30
+		/// Invalid Pricing Precision = 30
 		/// </summary>
 		Invalid_Pricing_Precision = 30,
 		/// <summary>
-		/// Invalid_Product = 7
+		/// Invalid Product = 7
 		/// </summary>
 		Invalid_Product = 7,
 		/// <summary>
-		/// Invalid_Quantity = 29
+		/// Invalid Quantity = 29
 		/// </summary>
 		Invalid_Quantity = 29,
 		/// <summary>
-		/// Invalid_Rounding_Amount = 24
+		/// Invalid Rounding Amount = 24
 		/// </summary>
 		Invalid_Rounding_Amount = 24,
 		/// <summary>
-		/// Invalid_Rounding_Option = 23
+		/// Invalid Rounding Option = 23
 		/// </summary>
 		Invalid_Rounding_Option = 23,
 		/// <summary>
-		/// Invalid_Rounding_Policy = 22
+		/// Invalid Rounding Policy = 22
 		/// </summary>
 		Invalid_Rounding_Policy = 22,
 		/// <summary>
-		/// Invalid_Standard_Cost = 21
+		/// Invalid Standard Cost = 21
 		/// </summary>
 		Invalid_Standard_Cost = 21,
 		/// <summary>
-		/// Missing_Current_Cost = 15
+		/// Missing Current Cost = 15
 		/// </summary>
 		Missing_Current_Cost = 15,
 		/// <summary>
-		/// Missing_Price = 14
+		/// Missing Price = 14
 		/// </summary>
 		Missing_Price = 14,
 		/// <summary>
-		/// Missing_Price_Level = 2
+		/// Missing Price Level = 2
 		/// </summary>
 		Missing_Price_Level = 2,
 		/// <summary>
-		/// Missing_Price_Level_Amount = 12
+		/// Missing Price Level Amount = 12
 		/// </summary>
 		Missing_Price_Level_Amount = 12,
 		/// <summary>
-		/// Missing_Price_Level_Percentage = 13
+		/// Missing Price Level Percentage = 13
 		/// </summary>
 		Missing_Price_Level_Percentage = 13,
 		/// <summary>
-		/// Missing_Pricing_Code = 8
+		/// Missing Pricing Code = 8
 		/// </summary>
 		Missing_Pricing_Code = 8,
 		/// <summary>
-		/// Missing_Product = 6
+		/// Missing Product = 6
 		/// </summary>
 		Missing_Product = 6,
 		/// <summary>
-		/// Missing_Product_Default_UOM = 31
+		/// Missing Product Default UOM = 31
 		/// </summary>
 		Missing_Product_Default_UOM = 31,
 		/// <summary>
-		/// Missing_Product_UOM_Schedule_ = 32
+		/// Missing Product UOM Schedule  = 32
 		/// </summary>
-		Missing_Product_UOM_Schedule_ = 32,
+		Missing_Product_UOM_Schedule = 32,
 		/// <summary>
-		/// Missing_Quantity = 4
+		/// Missing Quantity = 4
 		/// </summary>
 		Missing_Quantity = 4,
 		/// <summary>
-		/// Missing_Standard_Cost = 16
+		/// Missing Standard Cost = 16
 		/// </summary>
 		Missing_Standard_Cost = 16,
 		/// <summary>
-		/// Missing_Unit_Price = 5
+		/// Missing Unit Price = 5
 		/// </summary>
 		Missing_Unit_Price = 5,
 		/// <summary>
-		/// Missing_UOM = 10
+		/// Missing UOM = 10
 		/// </summary>
 		Missing_UOM = 10,
 		/// <summary>
@@ -177,19 +177,19 @@ namespace Dev.DevKit.Shared.Entities.QuoteDetailOptionSets
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Price_Attribute_Out_Of_Range = 35
+		/// Price Attribute Out Of Range = 35
 		/// </summary>
 		Price_Attribute_Out_Of_Range = 35,
 		/// <summary>
-		/// Price_Calculation_Error = 25
+		/// Price Calculation Error = 25
 		/// </summary>
 		Price_Calculation_Error = 25,
 		/// <summary>
-		/// Product_Not_In_Price_Level = 11
+		/// Product Not In Price Level = 11
 		/// </summary>
 		Product_Not_In_Price_Level = 11,
 		/// <summary>
-		/// Transaction_currency_is_not_set_for_the_product_price_list_item = 38
+		/// Transaction currency is not set for the product price list item = 38
 		/// </summary>
 		Transaction_currency_is_not_set_for_the_product_price_list_item = 38
 	}
@@ -201,7 +201,7 @@ namespace Dev.DevKit.Shared.Entities.QuoteDetailOptionSets
 		/// </summary>
 		Bundle = 2,
 		/// <summary>
-		/// Optional_Bundle_Product = 4
+		/// Optional Bundle Product = 4
 		/// </summary>
 		Optional_Bundle_Product = 4,
 		/// <summary>
@@ -209,11 +209,11 @@ namespace Dev.DevKit.Shared.Entities.QuoteDetailOptionSets
 		/// </summary>
 		Product = 1,
 		/// <summary>
-		/// Project_based_Service = 5
+		/// Project-based Service = 5
 		/// </summary>
-		Project_based_Service = 5,
+		Projectbased_Service = 5,
 		/// <summary>
-		/// Required_Bundle_Product = 3
+		/// Required Bundle Product = 3
 		/// </summary>
 		Required_Bundle_Product = 3
 	}
@@ -225,18 +225,13 @@ namespace Dev.DevKit.Shared.Entities.QuoteDetailOptionSets
 		/// </summary>
 		Edit = 0,
 		/// <summary>
-		/// Not_Configured = 2
+		/// Not Configured = 2
 		/// </summary>
 		Not_Configured = 2,
 		/// <summary>
 		/// Rectify = 1
 		/// </summary>
 		Rectify = 1
-	}
-
-	public enum QuoteStateCode
-	{
-
 	}
 
 	public enum ShipTo_FreightTermsCode
@@ -246,7 +241,7 @@ namespace Dev.DevKit.Shared.Entities.QuoteDetailOptionSets
 		/// </summary>
 		FOB = 1,
 		/// <summary>
-		/// No_Charge = 2
+		/// No Charge = 2
 		/// </summary>
 		No_Charge = 2
 	}
@@ -349,7 +344,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string QuoteDetailId = "quotedetailid";
 			public const string QuoteDetailName = "quotedetailname";
 			public const string QuoteId = "quoteid";
-			public const string QuoteStateCode = "quotestatecode";
 			public const string RequestDeliveryBy = "requestdeliveryby";
 			public const string SalesRepId = "salesrepid";
 			public const string SequenceNumber = "sequencenumber";
@@ -381,6 +375,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "quotedetail";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1085;
 
 		[DebuggerNonUserCode()]
@@ -516,7 +511,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -602,7 +597,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the line item number for the quote product to easily identify the product in the quote and make sure it's listed in the correct order.</para>
+		/// <para>Type the line item number for the quote product to easily identify the product in the quote and make sure it&apos;s listed in the correct order.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Line Item Number</para>
 		/// </summary>
@@ -1178,7 +1173,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1286,7 +1281,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Select the type of pricing error, such as a missing or invalid product, or missing quantity.</para>
 		/// <para>Picklist</para>
-		/// <para>Pricing Error </para>
+		/// <para>Pricing Error</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.QuoteDetailOptionSets.PricingErrorCode? PricingErrorCode
@@ -1331,7 +1326,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose the product to include on the quote to link the product's pricing and other information to the quote.</para>
+		/// <para>Choose the product to include on the quote to link the product&apos;s pricing and other information to the quote.</para>
 		/// <para>Lookup to product</para>
 		/// <para>Existing Product</para>
 		/// </summary>
@@ -1464,22 +1459,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Status of the quote product.</para>
-		/// <para>ReadOnly - Picklist</para>
-		/// <para>Quote Status</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.QuoteDetailOptionSets.QuoteStateCode? QuoteStateCode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.QuoteStateCode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.QuoteDetailOptionSets.QuoteStateCode)value.Value;
-			}
-		}
-
-		/// <summary>
 		/// <para>Enter the delivery date requested by the customer for the quote product.</para>
 		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
 		/// <para>Requested Delivery Date</para>
@@ -1528,7 +1507,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the city for the customer's shipping address.</para>
+		/// <para>Type the city for the customer&apos;s shipping address.</para>
 		/// <para>String - MaxLength: 80</para>
 		/// <para>Ship To City</para>
 		/// </summary>
@@ -1540,7 +1519,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the primary contact name at the customer's shipping address.</para>
+		/// <para>Type the primary contact name at the customer&apos;s shipping address.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Ship To Contact Name</para>
 		/// </summary>
@@ -1552,7 +1531,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the country or region for the customer's shipping address.</para>
+		/// <para>Type the country or region for the customer&apos;s shipping address.</para>
 		/// <para>String - MaxLength: 80</para>
 		/// <para>Ship To Country/Region</para>
 		/// </summary>
@@ -1564,7 +1543,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the fax number for the customer's shipping address.</para>
+		/// <para>Type the fax number for the customer&apos;s shipping address.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Ship To Fax</para>
 		/// </summary>
@@ -1599,7 +1578,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the first line of the customer's shipping address.</para>
+		/// <para>Type the first line of the customer&apos;s shipping address.</para>
 		/// <para>String - MaxLength: 250</para>
 		/// <para>Ship To Street 1</para>
 		/// </summary>
@@ -1611,7 +1590,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the second line of the customer's shipping address.</para>
+		/// <para>Type the second line of the customer&apos;s shipping address.</para>
 		/// <para>String - MaxLength: 250</para>
 		/// <para>Ship To Street 2</para>
 		/// </summary>
@@ -1635,7 +1614,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type a name for the customer's shipping address, such as "Headquarters" or "Field office",  to identify the address.</para>
+		/// <para>Type a name for the customer&apos;s shipping address, such as &quot;Headquarters&quot; or &quot;Field office&quot;,  to identify the address.</para>
 		/// <para>String - MaxLength: 200</para>
 		/// <para>Ship To Name</para>
 		/// </summary>
@@ -1671,7 +1650,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phone number for the customer's shipping address.</para>
+		/// <para>Type the phone number for the customer&apos;s shipping address.</para>
 		/// <para>String - MaxLength: 50</para>
 		/// <para>Ship To Phone</para>
 		/// </summary>

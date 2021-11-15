@@ -29,15 +29,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_rmaproductOptionSets
 	public enum msdyn_ProcessingAction
 	{
 		/// <summary>
-		/// Change_Asset_Ownership = 690970002
+		/// Change Asset Ownership = 690970002
 		/// </summary>
 		Change_Asset_Ownership = 690970002,
 		/// <summary>
-		/// Create_RTV = 690970000
+		/// Create RTV = 690970000
 		/// </summary>
 		Create_RTV = 690970000,
 		/// <summary>
-		/// Return_to_Warehouse = 690970001
+		/// Return to Warehouse = 690970001
 		/// </summary>
 		Return_to_Warehouse = 690970001
 	}
@@ -121,7 +121,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_rmaproduct";
 
-		public const int EntityTypeCode = 10471;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10535;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rmaproduct()
@@ -334,9 +335,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_rmaproductOptionSets.msdyn_ItemStatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_ItemStatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_ItemStatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_ItemStatus] = null;
+			}
 		}
 
 		/// <summary>
@@ -390,9 +394,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_rmaproductOptionSets.msdyn_ProcessingAction)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_ProcessingAction] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_ProcessingAction] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_ProcessingAction] = null;
+			}
 		}
 
 		/// <summary>
@@ -622,7 +629,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

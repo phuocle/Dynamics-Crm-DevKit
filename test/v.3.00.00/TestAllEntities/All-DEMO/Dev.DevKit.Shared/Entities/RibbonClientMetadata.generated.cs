@@ -25,12 +25,14 @@ namespace Dev.DevKit.Shared.Entities
 			public const string RibbonId = "ribbonid";
 			public const string RibbonIdUnique = "ribbonidunique";
 			public const string RibbonJson = "ribbonjson";
+			public const string RibbonJsonFileRef = "ribbonjsonfileref";
 			public const string SolutionId = "solutionid";
 			public const string VersionNumber = "versionnumber";
 		}
 
 		public const string EntityLogicalName = "ribbonclientmetadata";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4579;
 
 		[DebuggerNonUserCode()]
@@ -149,6 +151,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.RibbonJson); }
 			set { Entity.Attributes[Fields.RibbonJson] = value; }
+		}
+
+		/// <summary>
+		/// <para>Reference to the Ribbon JSON file on Azure.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>RibbonJsonFileRef</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string RibbonJsonFileRef
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.RibbonJsonFileRef); }
 		}
 
 		/// <summary>

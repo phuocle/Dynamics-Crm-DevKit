@@ -17,19 +17,19 @@ namespace Dev.DevKit.Shared.Entities.DynamicPropertyOptionSets
 		/// </summary>
 		Decimal = 1,
 		/// <summary>
-		/// Floating_Point_Number = 2
+		/// Floating Point Number = 2
 		/// </summary>
 		Floating_Point_Number = 2,
 		/// <summary>
-		/// Option_Set = 0
+		/// Option Set = 0
 		/// </summary>
 		Option_Set = 0,
 		/// <summary>
-		/// Single_Line_Of_Text = 3
+		/// Single Line Of Text = 3
 		/// </summary>
 		Single_Line_Of_Text = 3,
 		/// <summary>
-		/// Whole_Number = 4
+		/// Whole Number = 4
 		/// </summary>
 		Whole_Number = 4
 	}
@@ -117,6 +117,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "dynamicproperty";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1048;
 
 		[DebuggerNonUserCode()]

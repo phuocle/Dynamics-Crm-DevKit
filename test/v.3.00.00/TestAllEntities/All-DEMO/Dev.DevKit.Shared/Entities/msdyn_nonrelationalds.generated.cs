@@ -25,7 +25,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_nonrelationalds";
 
-		public const int EntityTypeCode = 10079;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10098;
 
 		[DebuggerNonUserCode()]
 		public msdyn_nonrelationalds()

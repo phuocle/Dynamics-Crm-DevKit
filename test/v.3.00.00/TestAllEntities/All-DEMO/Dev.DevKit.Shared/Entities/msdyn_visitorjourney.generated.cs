@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_visitorjourneyOptionSets
 	public enum msdyn_type
 	{
 		/// <summary>
-		/// Custom_Action = 192350100
+		/// Custom Action = 192350100
 		/// </summary>
 		Custom_Action = 192350100,
 		/// <summary>
-		/// KB_Article = 192350002
+		/// KB Article = 192350002
 		/// </summary>
 		KB_Article = 192350002,
 		/// <summary>
-		/// Page_View = 192350000
+		/// Page View = 192350000
 		/// </summary>
 		Page_View = 192350000,
 		/// <summary>
@@ -89,7 +89,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_visitorjourney";
 
-		public const int EntityTypeCode = 10611;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10686;
 
 		[DebuggerNonUserCode()]
 		public msdyn_visitorjourney()
@@ -330,7 +331,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

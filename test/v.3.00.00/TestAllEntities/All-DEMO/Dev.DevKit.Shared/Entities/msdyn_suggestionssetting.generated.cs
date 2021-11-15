@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_suggestionssettingOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -97,7 +97,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_suggestionssetting";
 
-		public const int EntityTypeCode = 10187;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10199;
 
 		[DebuggerNonUserCode()]
 		public msdyn_suggestionssetting()

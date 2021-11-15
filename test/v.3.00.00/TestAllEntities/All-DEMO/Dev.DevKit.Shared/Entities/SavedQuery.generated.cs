@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SavedQueryOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -74,6 +74,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsCustom = "iscustom";
 			public const string IsDefault = "isdefault";
 			public const string IsManaged = "ismanaged";
+			[System.Obsolete("Deprecated from version: 5.0.0.0")]
+			public const string IsPrivate = "isprivate";
 			public const string IsQuickFindQuery = "isquickfindquery";
 			public const string IsUserDefined = "isuserdefined";
 			public const string LayoutJson = "layoutjson";
@@ -89,7 +91,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string QueryAPI = "queryapi";
 			public const string QueryAppUsage = "queryappusage";
 			public const string QueryType = "querytype";
-			public const string ReturnedTypeCode = "returnedtypecode";
 			public const string SavedQueryId = "savedqueryid";
 			public const string SavedQueryIdUnique = "savedqueryidunique";
 			public const string SolutionId = "solutionid";
@@ -101,6 +102,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "savedquery";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1039;
 
 		[DebuggerNonUserCode()]
@@ -307,6 +309,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Indicates whether or not this is viewable by the entire organization.</para>
+		/// <para>ReadOnly - Boolean</para>
+		/// <para>Is Private</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		[System.Obsolete("Deprecated from version: 5.0.0.0")]
+		public bool? IsPrivate
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsPrivate); }
+		}
+
+		/// <summary>
 		/// <para>Choose whether the view is compatible with Quick Find. When users search for specific items, you define the fields that are searched in.</para>
 		/// <para>Boolean</para>
 		/// <para>Quick Find Compatible</para>
@@ -476,18 +490,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.QueryType); }
 			set { Entity.Attributes[Fields.QueryType] = value; }
-		}
-
-		/// <summary>
-		/// <para>Type of entity displayed in the view.</para>
-		/// <para>EntityName</para>
-		/// <para>Entity Name</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ReturnedTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ReturnedTypeCode); }
-			set { Entity.Attributes[Fields.ReturnedTypeCode] = value; }
 		}
 
 		/// <summary>

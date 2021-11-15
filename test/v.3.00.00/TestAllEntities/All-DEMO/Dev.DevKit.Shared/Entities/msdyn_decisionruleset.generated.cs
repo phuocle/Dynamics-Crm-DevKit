@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_decisionrulesetOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_decisionrulesetOptionSets
 	public enum msdyn_authoringmode
 	{
 		/// <summary>
-		/// Decision_list = 192350000
+		/// Decision list = 192350000
 		/// </summary>
 		Decision_list = 192350000
 	}
@@ -41,7 +41,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_decisionrulesetOptionSets
 	public enum msdyn_mlmodeltype
 	{
 		/// <summary>
-		/// Skill_based = 192350000
+		/// Effort based = 192350002
+		/// </summary>
+		Effort_based = 192350002,
+		/// <summary>
+		/// Sentiment based = 192350001
+		/// </summary>
+		Sentiment_based = 192350001,
+		/// <summary>
+		/// Skill based = 192350000
 		/// </summary>
 		Skill_based = 192350000
 	}
@@ -53,7 +61,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_decisionrulesetOptionSets
 		/// </summary>
 		Declarative = 192350000,
 		/// <summary>
-		/// ML_model_based = 192350001
+		/// ML model based = 192350001
 		/// </summary>
 		ML_model_based = 192350001
 	}
@@ -128,7 +136,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_decisionruleset";
 
-		public const int EntityTypeCode = 10543;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10612;
 
 		[DebuggerNonUserCode()]
 		public msdyn_decisionruleset()
@@ -500,7 +509,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

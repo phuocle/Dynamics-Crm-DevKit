@@ -21,11 +21,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_bookingtimestampOptionSets
 		/// </summary>
 		Completed = 690970004,
 		/// <summary>
-		/// In_Progress = 690970003
+		/// In Progress = 690970003
 		/// </summary>
 		In_Progress = 690970003,
 		/// <summary>
-		/// On_Break = 690970002
+		/// On Break = 690970002
 		/// </summary>
 		On_Break = 690970002,
 		/// <summary>
@@ -110,7 +110,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_bookingtimestamp";
 
-		public const int EntityTypeCode = 10425;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10489;
 
 		[DebuggerNonUserCode()]
 		public msdyn_bookingtimestamp()
@@ -316,9 +317,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_bookingtimestampOptionSets.msdyn_SystemStatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_SystemStatus] = null;
+			}
 		}
 
 		/// <summary>
@@ -368,7 +372,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.PluginAssemblyOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -103,6 +103,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string Name = "name";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
+			public const string PackageId = "packageid";
 			public const string Password = "password";
 			public const string Path = "path";
 			public const string PluginAssemblyId = "pluginassemblyid";
@@ -120,6 +121,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "pluginassembly";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4605;
 
 		[DebuggerNonUserCode()]
@@ -444,6 +446,18 @@ namespace Dev.DevKit.Shared.Entities
 		public DateTime? OverwriteTimeUtc
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.OverwriteTime); }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Plugin Package associated with Plug-in Assembly.</para>
+		/// <para>Lookup to pluginpackage</para>
+		/// <para>Package</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference PackageId
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.PackageId); }
+			set { Entity.Attributes[Fields.PackageId] = value; }
 		}
 
 		/// <summary>

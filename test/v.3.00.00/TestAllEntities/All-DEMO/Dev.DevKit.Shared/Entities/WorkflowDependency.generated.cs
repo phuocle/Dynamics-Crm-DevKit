@@ -13,39 +13,39 @@ namespace Dev.DevKit.Shared.Entities.WorkflowDependencyOptionSets
 	public enum Type
 	{
 		/// <summary>
-		/// Argument_Entity_that_workflow_depends_on = 9
+		/// Argument Entity that workflow depends on = 9
 		/// </summary>
 		Argument_Entity_that_workflow_depends_on = 9,
 		/// <summary>
-		/// Attribute_definition_that_workflow_depends_on = 8
+		/// Attribute definition that workflow depends on = 8
 		/// </summary>
 		Attribute_definition_that_workflow_depends_on = 8,
 		/// <summary>
-		/// Custom_entity_definition_that_workflow_depends_on = 7
+		/// Custom entity definition that workflow depends on = 7
 		/// </summary>
 		Custom_entity_definition_that_workflow_depends_on = 7,
 		/// <summary>
-		/// Local_parameter = 2
+		/// Local parameter = 2
 		/// </summary>
 		Local_parameter = 2,
 		/// <summary>
-		/// Primary_entity = 3
+		/// Primary entity = 3
 		/// </summary>
 		Primary_entity = 3,
 		/// <summary>
-		/// Primary_entity_after_SDK_operation = 5
+		/// Primary entity - after SDK operation = 5
 		/// </summary>
-		Primary_entity_after_SDK_operation = 5,
+		Primary_entity__after_SDK_operation = 5,
 		/// <summary>
-		/// Primary_entity_before_SDK_operation = 4
+		/// Primary entity - before SDK operation = 4
 		/// </summary>
-		Primary_entity_before_SDK_operation = 4,
+		Primary_entity__before_SDK_operation = 4,
 		/// <summary>
-		/// Related_entity = 6
+		/// Related entity = 6
 		/// </summary>
 		Related_entity = 6,
 		/// <summary>
-		/// Sdk_association = 1
+		/// Sdk association = 1
 		/// </summary>
 		Sdk_association = 1
 	}
@@ -83,6 +83,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "workflowdependency";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4704;
 
 		[DebuggerNonUserCode()]
@@ -249,7 +250,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the parent workflow instance.</para>
-		/// <para>ReadOnly - Required - Owner</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

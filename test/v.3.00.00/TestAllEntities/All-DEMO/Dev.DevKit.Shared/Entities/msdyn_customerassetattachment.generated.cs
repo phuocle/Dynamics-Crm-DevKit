@@ -76,6 +76,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_Category = "msdyn_category";
 			public const string msdyn_CustomerAsset = "msdyn_customerasset";
 			public const string msdyn_customerassetattachmentId = "msdyn_customerassetattachmentid";
+			public const string msdyn_File = "msdyn_file";
 			public const string msdyn_ImageId = "msdyn_imageid";
 			public const string msdyn_name = "msdyn_name";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
@@ -92,7 +93,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_customerassetattachment";
 
-		public const int EntityTypeCode = 10117;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10129;
 
 		[DebuggerNonUserCode()]
 		public msdyn_customerassetattachment()
@@ -294,6 +296,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Field to attach Video for Customer Asset</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Video</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_File
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_File); }
+		}
+
+		/// <summary>
 		/// <para>ReadOnly - Uniqueidentifier</para>
 		/// <para></para>
 		/// </summary>
@@ -329,7 +342,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -459,8 +472,8 @@ namespace Dev.DevKit.Shared.Entities
 		[DebuggerNonUserCode()]
 		public byte[] EntityImage
 		{
-			get { return Entity.GetAttributeValue<byte[]>("entityimage"); }
-			set { Entity.Attributes["entityimage"] = value; }
+			get { return Entity.GetAttributeValue<byte[]>("msdyn_image"); }
+			set { Entity.Attributes["msdyn_image"] = value; }
 		}
 
 		/// <summary>
@@ -469,7 +482,26 @@ namespace Dev.DevKit.Shared.Entities
 		[DebuggerNonUserCode()]
 		public string EntityImageUrl
 		{
-			get { return Entity.GetAttributeValue<string>("entityimage_url"); }
+			get { return Entity.GetAttributeValue<string>("msdyn_image_url"); }
+		}
+
+		/// <summary>
+		/// <para>byte[]</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public byte[] msdyn_Image
+		{
+			get { return Entity.GetAttributeValue<byte[]>("msdyn_image"); }
+			set { Entity.Attributes["msdyn_image"] = value; }
+		}
+
+		/// <summary>
+		/// <para>ReadOnly - String</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_ImageUrl
+		{
+			get { return Entity.GetAttributeValue<string>("msdyn_image_url"); }
 		}
 	}
 }

@@ -13,21 +13,21 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projecttaskdependencyOptionSets
 	public enum msdyn_LinkType
 	{
 		/// <summary>
-		/// Finish_to_Finish = 192350002
+		/// Finish-to-Finish = 192350002
 		/// </summary>
-		Finish_to_Finish = 192350002,
+		FinishtoFinish = 192350002,
 		/// <summary>
-		/// Finish_to_Start = 192350000
+		/// Finish-to-Start = 192350000
 		/// </summary>
-		Finish_to_Start = 192350000,
+		FinishtoStart = 192350000,
 		/// <summary>
-		/// Start_to_Finish = 192350004
+		/// Start-to-Finish = 192350004
 		/// </summary>
-		Start_to_Finish = 192350004,
+		StarttoFinish = 192350004,
 		/// <summary>
-		/// Start_to_Start = 192350001
+		/// Start-to-Start = 192350001
 		/// </summary>
-		Start_to_Start = 192350001
+		StarttoStart = 192350001
 	}
 
 	public enum statecode
@@ -88,7 +88,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_projecttaskdependency";
 
-		public const int EntityTypeCode = 10369;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10432;
 
 		[DebuggerNonUserCode()]
 		public msdyn_projecttaskdependency()
@@ -229,7 +230,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the  "Finish to Start" type of dependency.</para>
+		/// <para>Select the  &quot;Finish to Start&quot; type of dependency.</para>
 		/// <para>Required - Picklist</para>
 		/// <para>Link Type</para>
 		/// </summary>
@@ -243,9 +244,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_projecttaskdependencyOptionSets.msdyn_LinkType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_LinkType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_LinkType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_LinkType] = null;
+			}
 		}
 
 		/// <summary>
@@ -314,7 +318,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

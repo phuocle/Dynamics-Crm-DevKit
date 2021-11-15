@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_paymentOptionSets
 		/// </summary>
 		Check = 690970001,
 		/// <summary>
-		/// Credit_Card = 690970002
+		/// Credit Card = 690970002
 		/// </summary>
 		Credit_Card = 690970002,
 		/// <summary>
@@ -96,7 +96,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_payment";
 
-		public const int EntityTypeCode = 10450;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10514;
 
 		[DebuggerNonUserCode()]
 		public msdyn_payment()
@@ -361,9 +362,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_paymentOptionSets.msdyn_PaymentType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_PaymentType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_PaymentType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_PaymentType] = null;
+			}
 		}
 
 		/// <summary>
@@ -430,7 +434,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

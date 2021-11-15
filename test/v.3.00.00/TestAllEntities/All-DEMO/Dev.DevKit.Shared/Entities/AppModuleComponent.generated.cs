@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.AppModuleComponentOptionSets
 	public enum ComponentType
 	{
 		/// <summary>
-		/// Business_Process_Flows = 29
+		/// Business Process Flows = 29
 		/// </summary>
 		Business_Process_Flows = 29,
 		/// <summary>
@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.AppModuleComponentOptionSets
 		/// </summary>
 		Charts = 59,
 		/// <summary>
-		/// Command_Ribbon_for_Forms_Grids_sub_grids = 48
+		/// Command (Ribbon) for Forms, Grids, sub grids = 48
 		/// </summary>
 		Command_Ribbon_for_Forms_Grids_sub_grids = 48,
 		/// <summary>
@@ -45,15 +45,15 @@ namespace Dev.DevKit.Shared.Entities.AppModuleComponentOptionSets
 	public enum RootComponentBehavior
 	{
 		/// <summary>
-		/// Do_not_include_subcomponents = 1
+		/// Do not include subcomponents = 1
 		/// </summary>
 		Do_not_include_subcomponents = 1,
 		/// <summary>
-		/// Include_As_Shell_Only = 2
+		/// Include As Shell Only = 2
 		/// </summary>
 		Include_As_Shell_Only = 2,
 		/// <summary>
-		/// Include_Subcomponents = 0
+		/// Include Subcomponents = 0
 		/// </summary>
 		Include_Subcomponents = 0
 	}
@@ -90,6 +90,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "appmodulecomponent";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9007;
 
 		[DebuggerNonUserCode()]
@@ -195,9 +196,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.AppModuleComponentOptionSets.ComponentType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.ComponentType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.ComponentType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.ComponentType] = null;
+			}
 		}
 
 		/// <summary>

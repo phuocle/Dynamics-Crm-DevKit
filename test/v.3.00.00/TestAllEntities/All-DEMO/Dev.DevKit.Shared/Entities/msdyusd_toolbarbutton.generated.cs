@@ -17,11 +17,11 @@ namespace Dev.DevKit.Shared.Entities.msdyusd_toolbarbuttonOptionSets
 		/// </summary>
 		Always = 803750000,
 		/// <summary>
-		/// Customer_Session = 803750001
+		/// Customer Session = 803750001
 		/// </summary>
 		Customer_Session = 803750001,
 		/// <summary>
-		/// Script_Expression = 803750002
+		/// Script Expression = 803750002
 		/// </summary>
 		Script_Expression = 803750002
 	}
@@ -93,7 +93,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyusd_toolbarbutton";
 
-		public const int EntityTypeCode = 10702;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10781;
 
 		[DebuggerNonUserCode()]
 		public msdyusd_toolbarbutton()
@@ -421,7 +422,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

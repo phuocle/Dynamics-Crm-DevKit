@@ -25,15 +25,15 @@ namespace Dev.DevKit.Shared.Entities.PluginTraceLogOptionSets
 	public enum OperationType
 	{
 		/// <summary>
-		/// Plug_in = 1
+		/// Plug-in = 1
 		/// </summary>
-		Plug_in = 1,
+		Plugin = 1,
 		/// <summary>
 		/// Unknown = 0
 		/// </summary>
 		Unknown = 0,
 		/// <summary>
-		/// Workflow_Activity = 2
+		/// Workflow Activity = 2
 		/// </summary>
 		Workflow_Activity = 2
 	}
@@ -74,6 +74,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "plugintracelog";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4619;
 
 		[DebuggerNonUserCode()]
@@ -202,7 +203,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Where the event originated. Set to true if it's a system trace; otherwise, false.</para>
+		/// <para>Where the event originated. Set to true if it&apos;s a system trace; otherwise, false.</para>
 		/// <para>ReadOnly - Boolean</para>
 		/// <para>System Created</para>
 		/// </summary>

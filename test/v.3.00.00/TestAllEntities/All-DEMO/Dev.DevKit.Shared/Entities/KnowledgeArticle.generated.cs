@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.KnowledgeArticleOptionSets
 		/// </summary>
 		Archive = 2,
 		/// <summary>
-		/// Needs_Updating = 0
+		/// Needs Updating = 0
 		/// </summary>
 		Needs_Updating = 0,
 		/// <summary>
@@ -93,15 +93,15 @@ namespace Dev.DevKit.Shared.Entities.KnowledgeArticleOptionSets
 		/// </summary>
 		Expired = 10,
 		/// <summary>
-		/// In_review = 4
+		/// In review = 4
 		/// </summary>
 		In_review = 4,
 		/// <summary>
-		/// Needs_review_3 = 3
+		/// Needs review = 3
 		/// </summary>
 		Needs_review_3 = 3,
 		/// <summary>
-		/// Needs_review_8 = 8
+		/// Needs review = 8
 		/// </summary>
 		Needs_review_8 = 8,
 		/// <summary>
@@ -113,11 +113,11 @@ namespace Dev.DevKit.Shared.Entities.KnowledgeArticleOptionSets
 		/// </summary>
 		Published = 7,
 		/// <summary>
-		/// Rejected_11 = 11
+		/// Rejected = 11
 		/// </summary>
 		Rejected_11 = 11,
 		/// <summary>
-		/// Rejected_14 = 14
+		/// Rejected = 14
 		/// </summary>
 		Rejected_14 = 14,
 		/// <summary>
@@ -166,6 +166,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_ingestedarticleurl = "msdyn_ingestedarticleurl";
 			public const string msdyn_isingestedarticle = "msdyn_isingestedarticle";
+			public const string msdyn_keywordsdescsuggestioncontrol = "msdyn_keywordsdescsuggestioncontrol";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -203,6 +204,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "knowledgearticle";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9953;
 
 		[DebuggerNonUserCode()]
@@ -514,7 +516,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the language that the article's content is in.</para>
+		/// <para>Select the language that the article&apos;s content is in.</para>
 		/// <para>Lookup to languagelocale</para>
 		/// <para>Language</para>
 		/// </summary>
@@ -526,7 +528,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the major version number of this article's content.</para>
+		/// <para>Shows the major version number of this article&apos;s content.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Major Version Number</para>
 		/// </summary>
@@ -538,7 +540,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the minor version number of this article's content.</para>
+		/// <para>Shows the minor version number of this article&apos;s content.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Minor Version Number</para>
 		/// </summary>
@@ -607,6 +609,17 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Boolean</para>
+		/// <para>Keywords and Description Suggestion control</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_keywordsdescsuggestioncontrol
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_keywordsdescsuggestioncontrol); }
+			set { Entity.Attributes[Fields.msdyn_keywordsdescsuggestioncontrol] = value; }
+		}
+
+		/// <summary>
 		/// <para>Date and time that the record was migrated.</para>
 		/// <para>DateTimeBehavior: UserLocal - DateTimeFormat: DateOnly</para>
 		/// <para>Record Created On</para>
@@ -620,7 +633,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the record.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -886,7 +899,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the article is a draft or is published, archived, or discarded. Draft articles aren't available externally and can be edited. Published articles are available externally, based on applicable permissions, but can't be edited. All metadata changes are reflected in the published version. Archived and discarded articles aren't available externally and can't be edited.</para>
+		/// <para>Shows whether the article is a draft or is published, archived, or discarded. Draft articles aren&apos;t available externally and can be edited. Published articles are available externally, based on applicable permissions, but can&apos;t be edited. All metadata changes are reflected in the published version. Archived and discarded articles aren&apos;t available externally and can&apos;t be edited.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -909,7 +922,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the article's status.</para>
+		/// <para>Select the article&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

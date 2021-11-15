@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysiscomponentOptionSets
 	public enum msdyn_AnalysisComponentType
 	{
 		/// <summary>
-		/// Component_Health = 192350001
+		/// Component Health = 192350001
 		/// </summary>
 		Component_Health = 192350001,
 		/// <summary>
-		/// Object_Health = 192350002
+		/// Object Health = 192350002
 		/// </summary>
 		Object_Health = 192350002,
 		/// <summary>
-		/// Organization_Health = 192350000
+		/// Organization Health = 192350000
 		/// </summary>
 		Organization_Health = 192350000
 	}
@@ -77,7 +77,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_analysiscomponentOptionSets
 		/// </summary>
 		Complete = 192350001,
 		/// <summary>
-		/// Completed_With_Exceptions = 192350003
+		/// Completed With Exceptions = 192350003
 		/// </summary>
 		Completed_With_Exceptions = 192350003,
 		/// <summary>
@@ -142,7 +142,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_analysiscomponent";
 
-		public const int EntityTypeCode = 10095;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10105;
 
 		[DebuggerNonUserCode()]
 		public msdyn_analysiscomponent()
@@ -356,9 +357,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_analysiscomponentOptionSets.msdyn_ComponentType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_ComponentType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_ComponentType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_ComponentType] = null;
+			}
 		}
 
 		/// <summary>
@@ -531,7 +535,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -25,7 +25,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_purchaseorderOptionSets
 	public enum msdyn_ShipTo
 	{
 		/// <summary>
-		/// Business_Unit = 690970001
+		/// Business Unit = 690970001
 		/// </summary>
 		Business_Unit = 690970001,
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_purchaseorderOptionSets
 		/// </summary>
 		Other = 690970003,
 		/// <summary>
-		/// Service_Account = 690970002
+		/// Service Account = 690970002
 		/// </summary>
 		Service_Account = 690970002,
 		/// <summary>
@@ -57,7 +57,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_purchaseorderOptionSets
 		/// </summary>
 		Draft = 690970000,
 		/// <summary>
-		/// Products_Received = 690970003
+		/// Products Received = 690970003
 		/// </summary>
 		Products_Received = 690970003,
 		/// <summary>
@@ -157,7 +157,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_purchaseorder";
 
-		public const int EntityTypeCode = 10456;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10520;
 
 		[DebuggerNonUserCode()]
 		public msdyn_purchaseorder()
@@ -678,9 +679,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_purchaseorderOptionSets.msdyn_SystemStatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_SystemStatus] = null;
+			}
 		}
 
 		/// <summary>
@@ -772,7 +776,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

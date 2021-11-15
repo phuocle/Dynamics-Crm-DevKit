@@ -17,15 +17,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_channelcapabilityOptionSets
 		/// </summary>
 		Audio = 192350000,
 		/// <summary>
-		/// Co_browse = 192350002
+		/// Co-browse = 192350002
 		/// </summary>
-		Co_browse = 192350002,
+		Cobrowse = 192350002,
 		/// <summary>
 		/// None = 192350003
 		/// </summary>
 		None = 192350003,
 		/// <summary>
-		/// Screen_sharing = 100000000
+		/// Screen sharing = 100000000
 		/// </summary>
 		Screen_sharing = 100000000,
 		/// <summary>
@@ -88,7 +88,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_channelcapability";
 
-		public const int EntityTypeCode = 10589;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10629;
 
 		[DebuggerNonUserCode()]
 		public msdyn_channelcapability()
@@ -259,9 +260,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_channelcapabilityOptionSets.msdyn_EscalationChannelMode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_EscalationChannelMode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_EscalationChannelMode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_EscalationChannelMode] = null;
+			}
 		}
 
 		/// <summary>

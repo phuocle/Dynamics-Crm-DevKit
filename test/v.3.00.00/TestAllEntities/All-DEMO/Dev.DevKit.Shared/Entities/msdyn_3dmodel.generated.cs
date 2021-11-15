@@ -13,23 +13,23 @@ namespace Dev.DevKit.Shared.Entities.msdyn_3dmodelOptionSets
 	public enum msdyn_FileType
 	{
 		/// <summary>
-		/// glb = 100000001
+		/// .glb = 100000001
 		/// </summary>
-		glb = 100000001,
+		_glb = 100000001,
 		/// <summary>
-		/// gltf = 100000000
+		/// .gltf = 100000000
 		/// </summary>
-		gltf = 100000000,
+		_gltf = 100000000,
 		/// <summary>
-		/// obj = 100000002
+		/// .obj = 100000002
 		/// </summary>
-		obj = 100000002
+		_obj = 100000002
 	}
 
 	public enum msdyn_StorageType
 	{
 		/// <summary>
-		/// Note_Attachment = 100000000
+		/// Note Attachment = 100000000
 		/// </summary>
 		Note_Attachment = 100000000,
 		/// <summary>
@@ -93,7 +93,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_3dmodel";
 
-		public const int EntityTypeCode = 10407;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10471;
 
 		[DebuggerNonUserCode()]
 		public msdyn_3dmodel()
@@ -306,9 +307,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_3dmodelOptionSets.msdyn_StorageType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_StorageType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_StorageType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_StorageType] = null;
+			}
 		}
 
 		/// <summary>

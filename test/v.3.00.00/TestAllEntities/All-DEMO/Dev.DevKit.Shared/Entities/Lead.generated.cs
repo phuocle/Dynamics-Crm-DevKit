@@ -13,7 +13,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 	public enum Address1_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -21,7 +21,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 	public enum Address1_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -29,7 +29,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 	public enum Address2_AddressTypeCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 	public enum Address2_ShippingMethodCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -45,19 +45,19 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 	public enum BudgetStatus
 	{
 		/// <summary>
-		/// Can_Buy = 2
+		/// Can Buy = 2
 		/// </summary>
 		Can_Buy = 2,
 		/// <summary>
-		/// May_Buy = 1
+		/// May Buy = 1
 		/// </summary>
 		May_Buy = 1,
 		/// <summary>
-		/// No_Committed_Budget = 0
+		/// No Committed Budget = 0
 		/// </summary>
 		No_Committed_Budget = 0,
 		/// <summary>
-		/// Will_Buy = 3
+		/// Will Buy = 3
 		/// </summary>
 		Will_Buy = 3
 	}
@@ -69,11 +69,11 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Accounting = 1,
 		/// <summary>
-		/// Agriculture_and_Non_petrol_Natural_Resource_Extraction = 2
+		/// Agriculture and Non-petrol Natural Resource Extraction = 2
 		/// </summary>
-		Agriculture_and_Non_petrol_Natural_Resource_Extraction = 2,
+		Agriculture_and_Nonpetrol_Natural_Resource_Extraction = 2,
 		/// <summary>
-		/// Broadcasting_Printing_and_Publishing = 3
+		/// Broadcasting Printing and Publishing = 3
 		/// </summary>
 		Broadcasting_Printing_and_Publishing = 3,
 		/// <summary>
@@ -81,11 +81,11 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Brokers = 4,
 		/// <summary>
-		/// Building_Supply_Retail = 5
+		/// Building Supply Retail = 5
 		/// </summary>
 		Building_Supply_Retail = 5,
 		/// <summary>
-		/// Business_Services = 6
+		/// Business Services = 6
 		/// </summary>
 		Business_Services = 6,
 		/// <summary>
@@ -93,35 +93,35 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Consulting = 7,
 		/// <summary>
-		/// Consumer_Services = 8
+		/// Consumer Services = 8
 		/// </summary>
 		Consumer_Services = 8,
 		/// <summary>
-		/// Design_Direction_and_Creative_Management = 9
+		/// Design, Direction and Creative Management = 9
 		/// </summary>
 		Design_Direction_and_Creative_Management = 9,
 		/// <summary>
-		/// Distributors_Dispatchers_and_Processors = 10
+		/// Distributors, Dispatchers and Processors = 10
 		/// </summary>
 		Distributors_Dispatchers_and_Processors = 10,
 		/// <summary>
-		/// Doctors_Offices_and_Clinics = 11
+		/// Doctor's Offices and Clinics = 11
 		/// </summary>
 		Doctors_Offices_and_Clinics = 11,
 		/// <summary>
-		/// Durable_Manufacturing = 12
+		/// Durable Manufacturing = 12
 		/// </summary>
 		Durable_Manufacturing = 12,
 		/// <summary>
-		/// Eating_and_Drinking_Places = 13
+		/// Eating and Drinking Places = 13
 		/// </summary>
 		Eating_and_Drinking_Places = 13,
 		/// <summary>
-		/// Entertainment_Retail = 14
+		/// Entertainment Retail = 14
 		/// </summary>
 		Entertainment_Retail = 14,
 		/// <summary>
-		/// Equipment_Rental_and_Leasing = 15
+		/// Equipment Rental and Leasing = 15
 		/// </summary>
 		Equipment_Rental_and_Leasing = 15,
 		/// <summary>
@@ -129,15 +129,15 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Financial = 16,
 		/// <summary>
-		/// Food_and_Tobacco_Processing = 17
+		/// Food and Tobacco Processing = 17
 		/// </summary>
 		Food_and_Tobacco_Processing = 17,
 		/// <summary>
-		/// Inbound_Capital_Intensive_Processing = 18
+		/// Inbound Capital Intensive Processing = 18
 		/// </summary>
 		Inbound_Capital_Intensive_Processing = 18,
 		/// <summary>
-		/// Inbound_Repair_and_Services = 19
+		/// Inbound Repair and Services = 19
 		/// </summary>
 		Inbound_Repair_and_Services = 19,
 		/// <summary>
@@ -145,39 +145,39 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Insurance = 20,
 		/// <summary>
-		/// Legal_Services = 21
+		/// Legal Services = 21
 		/// </summary>
 		Legal_Services = 21,
 		/// <summary>
-		/// Non_Durable_Merchandise_Retail = 22
+		/// Non-Durable Merchandise Retail = 22
 		/// </summary>
-		Non_Durable_Merchandise_Retail = 22,
+		NonDurable_Merchandise_Retail = 22,
 		/// <summary>
-		/// Outbound_Consumer_Service = 23
+		/// Outbound Consumer Service = 23
 		/// </summary>
 		Outbound_Consumer_Service = 23,
 		/// <summary>
-		/// Petrochemical_Extraction_and_Distribution = 24
+		/// Petrochemical Extraction and Distribution = 24
 		/// </summary>
 		Petrochemical_Extraction_and_Distribution = 24,
 		/// <summary>
-		/// Service_Retail = 25
+		/// Service Retail = 25
 		/// </summary>
 		Service_Retail = 25,
 		/// <summary>
-		/// SIG_Affiliations = 26
+		/// SIG Affiliations = 26
 		/// </summary>
 		SIG_Affiliations = 26,
 		/// <summary>
-		/// Social_Services = 27
+		/// Social Services = 27
 		/// </summary>
 		Social_Services = 27,
 		/// <summary>
-		/// Special_Outbound_Trade_Contractors = 28
+		/// Special Outbound Trade Contractors = 28
 		/// </summary>
 		Special_Outbound_Trade_Contractors = 28,
 		/// <summary>
-		/// Specialty_Realty = 29
+		/// Specialty Realty = 29
 		/// </summary>
 		Specialty_Realty = 29,
 		/// <summary>
@@ -185,11 +185,11 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Transportation = 30,
 		/// <summary>
-		/// Utility_Creation_and_Distribution = 31
+		/// Utility Creation and Distribution = 31
 		/// </summary>
 		Utility_Creation_and_Distribution = 31,
 		/// <summary>
-		/// Vehicle_Retail = 32
+		/// Vehicle Retail = 32
 		/// </summary>
 		Vehicle_Retail = 32,
 		/// <summary>
@@ -205,7 +205,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Contacted = 0,
 		/// <summary>
-		/// Not_Contacted = 1
+		/// Not Contacted = 1
 		/// </summary>
 		Not_Contacted = 1
 	}
@@ -233,11 +233,11 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Advertisement = 1,
 		/// <summary>
-		/// Employee_Referral = 2
+		/// Employee Referral = 2
 		/// </summary>
 		Employee_Referral = 2,
 		/// <summary>
-		/// External_Referral = 3
+		/// External Referral = 3
 		/// </summary>
 		External_Referral = 3,
 		/// <summary>
@@ -249,7 +249,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Partner = 4,
 		/// <summary>
-		/// Public_Relations = 5
+		/// Public Relations = 5
 		/// </summary>
 		Public_Relations = 5,
 		/// <summary>
@@ -257,7 +257,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Seminar = 6,
 		/// <summary>
-		/// Trade_Show = 7
+		/// Trade Show = 7
 		/// </summary>
 		Trade_Show = 7,
 		/// <summary>
@@ -265,7 +265,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Web = 8,
 		/// <summary>
-		/// Word_of_Mouth = 9
+		/// Word of Mouth = 9
 		/// </summary>
 		Word_of_Mouth = 9
 	}
@@ -273,35 +273,47 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 	public enum msdyn_ordertype
 	{
 		/// <summary>
-		/// Item_based = 192350000
+		/// Item based = 192350000
 		/// </summary>
 		Item_based = 192350000,
 		/// <summary>
-		/// Service_Maintenance_Based = 690970002
+		/// Service-Maintenance Based = 690970002
 		/// </summary>
-		Service_Maintenance_Based = 690970002,
+		ServiceMaintenance_Based = 690970002,
 		/// <summary>
-		/// Work_based = 192350001
+		/// Work based = 192350001
 		/// </summary>
 		Work_based = 192350001
+	}
+
+	public enum msdyn_salesassignmentresult
+	{
+		/// <summary>
+		/// Failed = 1
+		/// </summary>
+		Failed = 1,
+		/// <summary>
+		/// Succeeded = 0
+		/// </summary>
+		Succeeded = 0
 	}
 
 	public enum Need
 	{
 		/// <summary>
-		/// Good_to_have = 2
+		/// Good to have = 2
 		/// </summary>
 		Good_to_have = 2,
 		/// <summary>
-		/// Must_have = 0
+		/// Must have = 0
 		/// </summary>
 		Must_have = 0,
 		/// <summary>
-		/// No_need = 3
+		/// No need = 3
 		/// </summary>
 		No_need = 3,
 		/// <summary>
-		/// Should_have = 1
+		/// Should have = 1
 		/// </summary>
 		Should_have = 1
 	}
@@ -333,7 +345,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 	public enum PriorityCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -361,15 +373,15 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Immediate = 0,
 		/// <summary>
-		/// Next_Quarter = 2
+		/// Next Quarter = 2
 		/// </summary>
 		Next_Quarter = 2,
 		/// <summary>
-		/// This_Quarter = 1
+		/// This Quarter = 1
 		/// </summary>
 		This_Quarter = 1,
 		/// <summary>
-		/// This_Year = 3
+		/// This Year = 3
 		/// </summary>
 		This_Year = 3,
 		/// <summary>
@@ -389,7 +401,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 	public enum SalesStageCode
 	{
 		/// <summary>
-		/// Default_Value = 1
+		/// Default Value = 1
 		/// </summary>
 		Default_Value = 1
 	}
@@ -417,7 +429,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		Canceled = 7,
 		/// <summary>
-		/// Cannot_Contact = 5
+		/// Cannot Contact = 5
 		/// </summary>
 		Cannot_Contact = 5,
 		/// <summary>
@@ -433,7 +445,7 @@ namespace Dev.DevKit.Shared.Entities.LeadOptionSets
 		/// </summary>
 		New = 1,
 		/// <summary>
-		/// No_Longer_Interested = 6
+		/// No Longer Interested = 6
 		/// </summary>
 		No_Longer_Interested = 6,
 		/// <summary>
@@ -550,6 +562,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string msdyn_gdproptout = "msdyn_gdproptout";
 			public const string msdyn_ordertype = "msdyn_ordertype";
+			public const string msdyn_salesassignmentresult = "msdyn_salesassignmentresult";
+			public const string msdyn_segmentid = "msdyn_segmentid";
 			public const string Need = "need";
 			public const string NumberOfEmployees = "numberofemployees";
 			public const string OnHoldTime = "onholdtime";
@@ -605,6 +619,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "lead";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4;
 
 		[DebuggerNonUserCode()]
@@ -1237,7 +1252,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Information about the budget amount of the lead's company or organization.</para>
+		/// <para>Information about the budget amount of the lead&apos;s company or organization.</para>
 		/// <para>Money - MinValue: 0 - MaxValue: 1,000,000,000,000</para>
 		/// <para>Budget Amount</para>
 		/// </summary>
@@ -1276,7 +1291,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Information about the budget status of the lead's company or organization.</para>
+		/// <para>Information about the budget status of the lead&apos;s company or organization.</para>
 		/// <para>Picklist</para>
 		/// <para>Budget</para>
 		/// </summary>
@@ -1404,7 +1419,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account;contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1415,7 +1430,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether your notes include information about who makes the purchase decisions at the lead's company.</para>
+		/// <para>Select whether your notes include information about who makes the purchase decisions at the lead&apos;s company.</para>
 		/// <para>Boolean</para>
 		/// <para>Decision Maker?</para>
 		/// </summary>
@@ -1427,7 +1442,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type additional information to describe the lead, such as an excerpt from the company's website.</para>
+		/// <para>Type additional information to describe the lead, such as an excerpt from the company&apos;s website.</para>
 		/// <para>Memo - MaxLength: 2000</para>
 		/// <para>Description</para>
 		/// </summary>
@@ -1613,7 +1628,7 @@ namespace Dev.DevKit.Shared.Entities
 			{
 				if (value.HasValue)
 				{
-					DateTime? dateTime = value.Value.ToDateTime();
+					DateTime dateTime = value.Value.ToDateTime();
 					Entity.Attributes[Fields.EstimatedCloseDate] = dateTime;
 				}
 				else
@@ -1622,7 +1637,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type a numeric value of the lead's estimated value, such as a product quantity, if no revenue amount can be specified in the Est. Value field. This can be used for sales forecasting and planning.</para>
+		/// <para>Type a numeric value of the lead&apos;s estimated value, such as a product quantity, if no revenue amount can be specified in the Est. Value field. This can be used for sales forecasting and planning.</para>
 		/// <para>Double - MinValue: 0 - MaxValue: 1,000,000,000</para>
 		/// <para>Est. Value (deprecated)</para>
 		/// </summary>
@@ -1634,7 +1649,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select whether the fit between the lead's requirements and your offerings was evaluated.</para>
+		/// <para>Select whether the fit between the lead&apos;s requirements and your offerings was evaluated.</para>
 		/// <para>Boolean</para>
 		/// <para>Evaluate Fit</para>
 		/// </summary>
@@ -1646,7 +1661,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -1693,7 +1708,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Combines and shows the lead's first and last names so the full name can be displayed in views and reports.</para>
+		/// <para>Combines and shows the lead&apos;s first and last names so the full name can be displayed in views and reports.</para>
 		/// <para>ReadOnly - String - MaxLength: 160</para>
 		/// <para>Name</para>
 		/// </summary>
@@ -1716,7 +1731,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the primary industry in which the lead's business is focused, for use in marketing segmentation and demographic analysis.</para>
+		/// <para>Select the primary industry in which the lead&apos;s business is focused, for use in marketing segmentation and demographic analysis.</para>
 		/// <para>Picklist</para>
 		/// <para>Industry</para>
 		/// </summary>
@@ -1848,7 +1863,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select a rating value to indicate the lead's potential to become a customer.</para>
+		/// <para>Select a rating value to indicate the lead&apos;s potential to become a customer.</para>
 		/// <para>Picklist</para>
 		/// <para>Rating</para>
 		/// </summary>
@@ -2008,7 +2023,42 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Choose how high the level of need is for the lead's company.</para>
+		/// <para>Result of the assignment rule process</para>
+		/// <para>Picklist</para>
+		/// <para>Assignment Rule Result</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.LeadOptionSets.msdyn_salesassignmentresult? msdyn_salesassignmentresult
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_salesassignmentresult);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.LeadOptionSets.msdyn_salesassignmentresult)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_salesassignmentresult] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_salesassignmentresult] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for Segment associated with Lead.</para>
+		/// <para>Lookup to msdyn_segment</para>
+		/// <para>Segment Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_segmentid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_segmentid); }
+			set { Entity.Attributes[Fields.msdyn_segmentid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Choose how high the level of need is for the lead&apos;s company.</para>
 		/// <para>Picklist</para>
 		/// <para>Need</para>
 		/// </summary>
@@ -2079,7 +2129,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -2311,7 +2361,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the annual revenue of the company associated with the lead to provide an understanding of the prospect's business.</para>
+		/// <para>Type the annual revenue of the company associated with the lead to provide an understanding of the prospect&apos;s business.</para>
 		/// <para>Money - MinValue: 0 - MaxValue: 100,000,000,000,000</para>
 		/// <para>Annual Revenue</para>
 		/// </summary>
@@ -2432,7 +2482,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the Standard Industrial Classification (SIC) code that indicates the lead's primary industry of business for use in marketing segmentation and demographic analysis.</para>
+		/// <para>Type the Standard Industrial Classification (SIC) code that indicates the lead&apos;s primary industry of business for use in marketing segmentation and demographic analysis.</para>
 		/// <para>String - MaxLength: 20</para>
 		/// <para>SIC Code</para>
 		/// </summary>
@@ -2479,7 +2529,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows whether the lead is open, qualified, or disqualified. Qualified and disqualified leads are read-only and can't be edited unless they are reactivated.</para>
+		/// <para>Shows whether the lead is open, qualified, or disqualified. Qualified and disqualified leads are read-only and can&apos;t be edited unless they are reactivated.</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
@@ -2502,7 +2552,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the lead's status.</para>
+		/// <para>Select the lead&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
@@ -2667,7 +2717,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the lead's company name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
+		/// <para>Type the phonetic spelling of the lead&apos;s company name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Yomi Company Name</para>
 		/// </summary>
@@ -2679,7 +2729,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the lead's first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
+		/// <para>Type the phonetic spelling of the lead&apos;s first name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi First Name</para>
 		/// </summary>
@@ -2691,7 +2741,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Combines and shows the lead's Yomi first and last names so the full phonetic name can be displayed in views and reports.</para>
+		/// <para>Combines and shows the lead&apos;s Yomi first and last names so the full phonetic name can be displayed in views and reports.</para>
 		/// <para>ReadOnly - String - MaxLength: 450</para>
 		/// <para>Yomi Full Name</para>
 		/// </summary>
@@ -2702,7 +2752,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the lead's last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
+		/// <para>Type the phonetic spelling of the lead&apos;s last name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi Last Name</para>
 		/// </summary>
@@ -2714,7 +2764,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type the phonetic spelling of the lead's middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
+		/// <para>Type the phonetic spelling of the lead&apos;s middle name, if the name is specified in Japanese, to make sure the name is pronounced correctly in phone calls with the prospect.</para>
 		/// <para>String - MaxLength: 150</para>
 		/// <para>Yomi Middle Name</para>
 		/// </summary>

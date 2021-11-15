@@ -10,6 +10,102 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.SocialActivityOptionSets
 {
+	public enum ActivityTypeCode
+	{
+		/// <summary>
+		/// Appointment = 4201
+		/// </summary>
+		Appointment = 4201,
+		/// <summary>
+		/// Booking Alert = 10357
+		/// </summary>
+		Booking_Alert = 10357,
+		/// <summary>
+		/// Campaign Activity = 4402
+		/// </summary>
+		Campaign_Activity = 4402,
+		/// <summary>
+		/// Campaign Response = 4401
+		/// </summary>
+		Campaign_Response = 4401,
+		/// <summary>
+		/// Case Resolution = 4206
+		/// </summary>
+		Case_Resolution = 4206,
+		/// <summary>
+		/// Conversation = 10644
+		/// </summary>
+		Conversation = 10644,
+		/// <summary>
+		/// Customer Voice alert = 10261
+		/// </summary>
+		Customer_Voice_alert = 10261,
+		/// <summary>
+		/// Customer Voice survey invite = 10271
+		/// </summary>
+		Customer_Voice_survey_invite = 10271,
+		/// <summary>
+		/// Customer Voice survey response = 10273
+		/// </summary>
+		Customer_Voice_survey_response = 10273,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// Fax = 4204
+		/// </summary>
+		Fax = 4204,
+		/// <summary>
+		/// Letter = 4207
+		/// </summary>
+		Letter = 4207,
+		/// <summary>
+		/// Opportunity Close = 4208
+		/// </summary>
+		Opportunity_Close = 4208,
+		/// <summary>
+		/// Order Close = 4209
+		/// </summary>
+		Order_Close = 4209,
+		/// <summary>
+		/// Outbound message = 10752
+		/// </summary>
+		Outbound_message = 10752,
+		/// <summary>
+		/// Phone Call = 4210
+		/// </summary>
+		Phone_Call = 4210,
+		/// <summary>
+		/// Project Service Approval = 10387
+		/// </summary>
+		Project_Service_Approval = 10387,
+		/// <summary>
+		/// Quick Campaign = 4406
+		/// </summary>
+		Quick_Campaign = 4406,
+		/// <summary>
+		/// Quote Close = 4211
+		/// </summary>
+		Quote_Close = 4211,
+		/// <summary>
+		/// Recurring Appointment = 4251
+		/// </summary>
+		Recurring_Appointment = 4251,
+		/// <summary>
+		/// Service Activity = 4214
+		/// </summary>
+		Service_Activity = 4214,
+		/// <summary>
+		/// Session = 10659
+		/// </summary>
+		Session = 10659,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212
+	}
+
 	public enum Community
 	{
 		/// <summary>
@@ -17,11 +113,11 @@ namespace Dev.DevKit.Shared.Entities.SocialActivityOptionSets
 		/// </summary>
 		Cortana = 5,
 		/// <summary>
-		/// Direct_Line = 6
+		/// Direct Line = 6
 		/// </summary>
 		Direct_Line = 6,
 		/// <summary>
-		/// Direct_Line_Speech = 8
+		/// Direct Line Speech = 8
 		/// </summary>
 		Direct_Line_Speech = 8,
 		/// <summary>
@@ -45,7 +141,7 @@ namespace Dev.DevKit.Shared.Entities.SocialActivityOptionSets
 		/// </summary>
 		Line = 3,
 		/// <summary>
-		/// Microsoft_Teams = 7
+		/// Microsoft Teams = 7
 		/// </summary>
 		Microsoft_Teams = 7,
 		/// <summary>
@@ -81,11 +177,11 @@ namespace Dev.DevKit.Shared.Entities.SocialActivityOptionSets
 	public enum PostMessageType
 	{
 		/// <summary>
-		/// Private_Message = 1
+		/// Private Message = 1
 		/// </summary>
 		Private_Message = 1,
 		/// <summary>
-		/// Public_Message = 0
+		/// Public Message = 0
 		/// </summary>
 		Public_Message = 0
 	}
@@ -218,6 +314,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "socialactivity";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4216;
 
 		[DebuggerNonUserCode()]
@@ -420,7 +517,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -432,7 +529,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who the activity is from.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;lead;systemuser</para>
 		/// <para>From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -583,7 +680,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the activity.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -628,7 +725,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the contact or account that authored the post.</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account;contact</para>
 		/// <para>Post Author</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -640,7 +737,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the parent account of the author of the post.</para>
-		/// <para>Required - Customer</para>
+		/// <para>Required - Lookup to account;contact</para>
 		/// <para>Post Author Account</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -782,7 +879,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Users or facility/equipment that are required for the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to equipment;systemuser</para>
 		/// <para>Resources</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1007,7 +1104,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who is the receiver of the activity.</para>
-		/// <para>PartyList</para>
+		/// <para>Lookup to account;contact;lead;systemuser</para>
 		/// <para>To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_timeentrysettingOptionSets
 	public enum msdyn_sourcetype
 	{
 		/// <summary>
-		/// Field_Service = 192354000
+		/// Field Service = 192354000
 		/// </summary>
 		Field_Service = 192354000,
 		/// <summary>
-		/// Project_Service = 192351000
+		/// Project Service = 192351000
 		/// </summary>
 		Project_Service = 192351000
 	}
@@ -78,7 +78,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_timeentrysetting";
 
-		public const int EntityTypeCode = 10404;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10467;
 
 		[DebuggerNonUserCode()]
 		public msdyn_timeentrysetting()
@@ -245,9 +246,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_timeentrysettingOptionSets.msdyn_sourcetype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_sourcetype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_sourcetype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_sourcetype] = null;
+			}
 		}
 
 		/// <summary>
@@ -280,7 +284,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.AzureServiceConnectionOptionSets
 		/// </summary>
 		Recommendation = 1,
 		/// <summary>
-		/// Text_Analytics = 2
+		/// Text Analytics = 2
 		/// </summary>
 		Text_Analytics = 2
 	}
@@ -86,6 +86,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "azureserviceconnection";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9936;
 
 		[DebuggerNonUserCode()]
@@ -179,9 +180,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.AzureServiceConnectionOptionSets.ConnectionType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.ConnectionType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.ConnectionType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.ConnectionType] = null;
+			}
 		}
 
 		/// <summary>
@@ -356,7 +360,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the Azure service connection's status.</para>
+		/// <para>Select the Azure service connection&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

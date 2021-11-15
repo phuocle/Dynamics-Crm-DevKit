@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_applicationextensionOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -119,7 +119,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_applicationextension";
 
-		public const int EntityTypeCode = 10145;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10157;
 
 		[DebuggerNonUserCode()]
 		public msdyn_applicationextension()
@@ -338,9 +339,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_applicationextensionOptionSets.msdyn_relationship_cardinality)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_relationship_cardinality] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_relationship_cardinality] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_relationship_cardinality] = null;
+			}
 		}
 
 		/// <summary>
@@ -357,9 +361,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_applicationextensionOptionSets.msdyn_type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_type] = null;
+			}
 		}
 
 		/// <summary>
@@ -410,7 +417,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

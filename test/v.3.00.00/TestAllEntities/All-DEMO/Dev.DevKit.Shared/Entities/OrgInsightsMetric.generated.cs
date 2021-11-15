@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.OrgInsightsMetricOptionSets
 		/// </summary>
 		Category = 2,
 		/// <summary>
-		/// Time_Series = 1
+		/// Time Series = 1
 		/// </summary>
 		Time_Series = 1
 	}
@@ -39,6 +39,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "orginsightsmetric";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9699;
 
 		[DebuggerNonUserCode()]

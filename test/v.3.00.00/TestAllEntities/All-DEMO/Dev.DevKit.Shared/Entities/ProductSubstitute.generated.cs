@@ -13,13 +13,13 @@ namespace Dev.DevKit.Shared.Entities.ProductSubstituteOptionSets
 	public enum Direction
 	{
 		/// <summary>
-		/// Bi_Directional = 1
+		/// Bi-Directional = 1
 		/// </summary>
-		Bi_Directional = 1,
+		BiDirectional = 1,
 		/// <summary>
-		/// Uni_Directional = 0
+		/// Uni-Directional = 0
 		/// </summary>
-		Uni_Directional = 0
+		UniDirectional = 0
 	}
 
 	public enum SalesRelationshipType
@@ -29,17 +29,17 @@ namespace Dev.DevKit.Shared.Entities.ProductSubstituteOptionSets
 		/// </summary>
 		Accessory = 2,
 		/// <summary>
-		/// Cross_sell = 1
+		/// Cross-sell = 1
 		/// </summary>
-		Cross_sell = 1,
+		Crosssell = 1,
 		/// <summary>
 		/// Substitute = 3
 		/// </summary>
 		Substitute = 3,
 		/// <summary>
-		/// Up_sell = 0
+		/// Up-sell = 0
 		/// </summary>
-		Up_sell = 0
+		Upsell = 0
 	}
 
 	public enum statecode
@@ -99,6 +99,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "productsubstitute";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1028;
 
 		[DebuggerNonUserCode()]
@@ -206,7 +207,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Shows the conversion rate of the record's currency. The exchange rate is used to convert all money fields in the record from the local currency to the system's default currency.</para>
+		/// <para>Shows the conversion rate of the record&apos;s currency. The exchange rate is used to convert all money fields in the record from the local currency to the system&apos;s default currency.</para>
 		/// <para>ReadOnly - Decimal - MinValue: 0 - MaxValue: 100,000,000,000</para>
 		/// <para>Exchange Rate</para>
 		/// </summary>
@@ -348,7 +349,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the product relationship's status.</para>
+		/// <para>Select the product relationship&apos;s status.</para>
 		/// <para>ReadOnly - State</para>
 		/// <para>Status</para>
 		/// </summary>

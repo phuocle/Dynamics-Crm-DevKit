@@ -27,7 +27,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_aiodlabel_msdyn_aiconfiguration";
 
-		public const int EntityTypeCode = 10086;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10055;
 
 		[DebuggerNonUserCode()]
 		public msdyn_aiodlabel_msdyn_aiconfiguration()

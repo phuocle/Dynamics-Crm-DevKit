@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.CustomControlDefaultConfigOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -53,7 +53,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
-			public const string PrimaryEntityTypeCode = "primaryentitytypecode";
 			public const string SolutionId = "solutionid";
 			public const string SupportingSolutionId = "supportingsolutionid";
 			public const string VersionNumber = "versionnumber";
@@ -61,6 +60,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "customcontroldefaultconfig";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9755;
 
 		[DebuggerNonUserCode()]
@@ -298,18 +298,6 @@ namespace Dev.DevKit.Shared.Entities
 		public DateTime? OverwriteTimeUtc
 		{
 			get { return Entity.GetAttributeValue<DateTime?>(Fields.OverwriteTime); }
-		}
-
-		/// <summary>
-		/// <para>Entity Type Code of the Custom Control Default Config.</para>
-		/// <para>EntityName</para>
-		/// <para>Entity Type Code of the Custom Control Default Config</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryEntityTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryEntityTypeCode); }
-			set { Entity.Attributes[Fields.PrimaryEntityTypeCode] = value; }
 		}
 
 		/// <summary>

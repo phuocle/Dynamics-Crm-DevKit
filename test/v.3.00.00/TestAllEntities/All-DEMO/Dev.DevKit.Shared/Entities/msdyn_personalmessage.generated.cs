@@ -13,101 +13,101 @@ namespace Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets
 	public enum msdyn_locale_field
 	{
 		/// <summary>
-		/// ar_SA = 1025
+		/// ar-SA = 1025
 		/// </summary>
-		ar_SA = 1025,
+		arSA = 1025,
 		/// <summary>
-		/// cs_CZ = 1029
+		/// cs-CZ = 1029
 		/// </summary>
-		cs_CZ = 1029,
+		csCZ = 1029,
 		/// <summary>
-		/// da_DK = 1030
+		/// da-DK = 1030
 		/// </summary>
-		da_DK = 1030,
+		daDK = 1030,
 		/// <summary>
-		/// de_DE = 1031
+		/// de-DE = 1031
 		/// </summary>
-		de_DE = 1031,
+		deDE = 1031,
 		/// <summary>
-		/// en_US = 1033
+		/// en-US = 1033
 		/// </summary>
-		en_US = 1033,
+		enUS = 1033,
 		/// <summary>
-		/// es_ES = 3082
+		/// es-ES = 3082
 		/// </summary>
-		es_ES = 3082,
+		esES = 3082,
 		/// <summary>
-		/// fi_FI = 1035
+		/// fi-FI = 1035
 		/// </summary>
-		fi_FI = 1035,
+		fiFI = 1035,
 		/// <summary>
-		/// fr_FR = 1036
+		/// fr-FR = 1036
 		/// </summary>
-		fr_FR = 1036,
+		frFR = 1036,
 		/// <summary>
-		/// he_IL = 1037
+		/// he-IL = 1037
 		/// </summary>
-		he_IL = 1037,
+		heIL = 1037,
 		/// <summary>
-		/// id_ID = 1057
+		/// id-ID = 1057
 		/// </summary>
-		id_ID = 1057,
+		idID = 1057,
 		/// <summary>
-		/// it_IT = 1040
+		/// it-IT = 1040
 		/// </summary>
-		it_IT = 1040,
+		itIT = 1040,
 		/// <summary>
-		/// ja_JP = 1041
+		/// ja-JP = 1041
 		/// </summary>
-		ja_JP = 1041,
+		jaJP = 1041,
 		/// <summary>
-		/// ko_KR = 1042
+		/// ko-KR = 1042
 		/// </summary>
-		ko_KR = 1042,
+		koKR = 1042,
 		/// <summary>
-		/// nb_NO = 1044
+		/// nb-NO = 1044
 		/// </summary>
-		nb_NO = 1044,
+		nbNO = 1044,
 		/// <summary>
-		/// nl_NL = 1043
+		/// nl-NL = 1043
 		/// </summary>
-		nl_NL = 1043,
+		nlNL = 1043,
 		/// <summary>
-		/// pl_PL = 1045
+		/// pl-PL = 1045
 		/// </summary>
-		pl_PL = 1045,
+		plPL = 1045,
 		/// <summary>
-		/// pt_BR = 1046
+		/// pt-BR = 1046
 		/// </summary>
-		pt_BR = 1046,
+		ptBR = 1046,
 		/// <summary>
-		/// pt_PT = 2070
+		/// pt-PT = 2070
 		/// </summary>
-		pt_PT = 2070,
+		ptPT = 2070,
 		/// <summary>
-		/// ro_RO = 1048
+		/// ro-RO = 1048
 		/// </summary>
-		ro_RO = 1048,
+		roRO = 1048,
 		/// <summary>
-		/// ru_RU = 1049
+		/// ru-RU = 1049
 		/// </summary>
-		ru_RU = 1049,
+		ruRU = 1049,
 		/// <summary>
-		/// sv_SE = 1053
+		/// sv-SE = 1053
 		/// </summary>
-		sv_SE = 1053,
+		svSE = 1053,
 		/// <summary>
-		/// th_TH = 1054
+		/// th-TH = 1054
 		/// </summary>
-		th_TH = 1054,
+		thTH = 1054,
 		/// <summary>
-		/// tr_TR = 1055
+		/// tr-TR = 1055
 		/// </summary>
-		tr_TR = 1055,
+		trTR = 1055,
 		/// <summary>
-		/// zh_CN = 2052
+		/// zh-CN = 2052
 		/// </summary>
-		zh_CN = 2052
+		zhCN = 2052
 	}
 
 	public enum statecode
@@ -167,7 +167,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_personalmessage";
 
-		public const int EntityTypeCode = 10602;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10670;
 
 		[DebuggerNonUserCode()]
 		public msdyn_personalmessage()
@@ -310,9 +311,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_personalmessageOptionSets.msdyn_locale_field)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_locale_field] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_locale_field] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_locale_field] = null;
+			}
 		}
 
 		/// <summary>
@@ -381,7 +385,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -26,6 +26,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "subscriptionstatisticsoffline";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 45;
 
 		[DebuggerNonUserCode()]

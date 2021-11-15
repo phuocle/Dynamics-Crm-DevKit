@@ -118,7 +118,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_rtv";
 
-		public const int EntityTypeCode = 10475;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10539;
 
 		[DebuggerNonUserCode()]
 		public msdyn_rtv()
@@ -530,9 +531,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_rtvOptionSets.msdyn_SystemStatus)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_SystemStatus] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_SystemStatus] = null;
+			}
 		}
 
 		/// <summary>
@@ -648,7 +652,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

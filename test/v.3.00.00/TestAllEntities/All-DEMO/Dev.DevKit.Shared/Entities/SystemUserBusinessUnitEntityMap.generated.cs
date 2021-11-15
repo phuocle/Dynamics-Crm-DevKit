@@ -20,7 +20,6 @@ namespace Dev.DevKit.Shared.Entities
 		public struct Fields
 		{
 			public const string BusinessUnitId = "businessunitid";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string ReadPrivilegeDepth = "readprivilegedepth";
 			public const string SystemUserBusinessUnitEntityMapId = "systemuserbusinessunitentitymapid";
 			public const string SystemUserId = "systemuserid";
@@ -29,6 +28,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "systemuserbusinessunitentitymap";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 42;
 
 		[DebuggerNonUserCode()]
@@ -87,16 +87,6 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? BusinessUnitId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.BusinessUnitId); }
-		}
-
-		/// <summary>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
 		}
 
 		/// <summary>

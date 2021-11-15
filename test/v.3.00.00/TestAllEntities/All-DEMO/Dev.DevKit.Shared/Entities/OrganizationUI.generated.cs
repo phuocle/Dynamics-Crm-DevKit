@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.OrganizationUIOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -45,7 +45,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string GridIcon = "gridicon";
 			public const string IsManaged = "ismanaged";
 			public const string LargeEntityIcon = "largeentityicon";
-			public const string ObjectTypeCode = "objecttypecode";
 			public const string OrganizationId = "organizationid";
 			public const string OutlookShortcutIcon = "outlookshortcuticon";
 			public const string OverwriteTime = "overwritetime";
@@ -59,6 +58,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "organizationui";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1021;
 
 		[DebuggerNonUserCode()]
@@ -204,18 +204,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.LargeEntityIcon); }
 			set { Entity.Attributes[Fields.LargeEntityIcon] = value; }
-		}
-
-		/// <summary>
-		/// <para>Code that represents the record type.</para>
-		/// <para>EntityName</para>
-		/// <para></para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string ObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.ObjectTypeCode); }
-			set { Entity.Attributes[Fields.ObjectTypeCode] = value; }
 		}
 
 		/// <summary>

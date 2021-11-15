@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.InternalCatalogAssignmentOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -89,7 +89,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "internalcatalogassignment";
 
-		public const int EntityTypeCode = 10068;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10019;
 
 		[DebuggerNonUserCode()]
 		public InternalCatalogAssignment()

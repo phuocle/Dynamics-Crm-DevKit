@@ -73,7 +73,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_twitterengagementctx";
 
-		public const int EntityTypeCode = 10667;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10745;
 
 		[DebuggerNonUserCode()]
 		public msdyn_twitterengagementctx()
@@ -286,7 +287,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Customer's Friend count on twitter</para>
+		/// <para>Customer&apos;s Friend count on twitter</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,647</para>
 		/// <para>Friend Count</para>
 		/// </summary>
@@ -351,7 +352,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

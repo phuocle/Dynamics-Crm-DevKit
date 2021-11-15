@@ -38,6 +38,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string Description = "description";
+			public const string FileId = "fileid";
 			public const string FriendlyName = "friendlyname";
 			public const string InstalledOn = "installedon";
 			public const string IsApiManaged = "isapimanaged";
@@ -68,6 +69,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "solution";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 7100;
 
 		[DebuggerNonUserCode()]
@@ -173,6 +175,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Description); }
 			set { Entity.Attributes[Fields.Description] = value; }
+		}
+
+		/// <summary>
+		/// <para>File Id for the blob url used for file storage.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string FileId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.FileId); }
 		}
 
 		/// <summary>

@@ -13,15 +13,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 	public enum msdyn_channel
 	{
 		/// <summary>
-		/// Co_browse = 192390000
+		/// Co-browse = 192390000
 		/// </summary>
-		Co_browse = 192390000,
+		Cobrowse = 192390000,
 		/// <summary>
 		/// Custom = 192350002
 		/// </summary>
 		Custom = 192350002,
 		/// <summary>
-		/// Entity_Records = 192350000
+		/// Entity Records = 192350000
 		/// </summary>
 		Entity_Records = 192350000,
 		/// <summary>
@@ -33,15 +33,15 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// </summary>
 		LINE = 192310000,
 		/// <summary>
-		/// Live_chat = 192360000
+		/// Live chat = 192360000
 		/// </summary>
 		Live_chat = 192360000,
 		/// <summary>
-		/// Microsoft_Teams = 19241000
+		/// Microsoft Teams = 19241000
 		/// </summary>
 		Microsoft_Teams = 19241000,
 		/// <summary>
-		/// Screen_sharing = 192400000
+		/// Screen sharing = 192400000
 		/// </summary>
 		Screen_sharing = 192400000,
 		/// <summary>
@@ -73,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 	public enum msdyn_customersentimentlabel
 	{
 		/// <summary>
-		/// NA = 0
+		/// N/A = 0
 		/// </summary>
 		NA = 0,
 		/// <summary>
@@ -89,19 +89,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// </summary>
 		Positive = 12,
 		/// <summary>
-		/// Slightly_negative = 9
+		/// Slightly negative = 9
 		/// </summary>
 		Slightly_negative = 9,
 		/// <summary>
-		/// Slightly_positive = 11
+		/// Slightly positive = 11
 		/// </summary>
 		Slightly_positive = 11,
 		/// <summary>
-		/// Very_negative = 7
+		/// Very negative = 7
 		/// </summary>
 		Very_negative = 7,
 		/// <summary>
-		/// Very_positive = 13
+		/// Very positive = 13
 		/// </summary>
 		Very_positive = 13
 	}
@@ -125,9 +125,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// </summary>
 		Waiting = 2,
 		/// <summary>
-		/// Wrap_up = 4
+		/// Wrap-up = 4
 		/// </summary>
-		Wrap_up = 4
+		Wrapup = 4
 	}
 
 	public enum msdyn_statuscode
@@ -149,9 +149,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// </summary>
 		Waiting = 3,
 		/// <summary>
-		/// Wrap_up = 5
+		/// Wrap-up = 5
 		/// </summary>
-		Wrap_up = 5
+		Wrapup = 5
 	}
 
 	public enum msdyn_workstreamworkdistributionmode
@@ -185,9 +185,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// </summary>
 		Waiting = 2,
 		/// <summary>
-		/// Wrap_up = 4
+		/// Wrap-up = 4
 		/// </summary>
-		Wrap_up = 4
+		Wrapup = 4
 	}
 
 	public enum statuscode
@@ -209,9 +209,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveconversationOptionSets
 		/// </summary>
 		Waiting = 3,
 		/// <summary>
-		/// Wrap_up = 5
+		/// Wrap-up = 5
 		/// </summary>
-		Wrap_up = 5
+		Wrapup = 5
 	}
 }
 
@@ -265,7 +265,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_liveconversation";
 
-		public const int EntityTypeCode = 10558;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10634;
 
 		[DebuggerNonUserCode()]
 		public msdyn_liveconversation()
@@ -494,7 +495,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Customer associated to the conversation</para>
-		/// <para>Customer</para>
+		/// <para>Lookup to account;contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -758,7 +759,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the conversation record.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

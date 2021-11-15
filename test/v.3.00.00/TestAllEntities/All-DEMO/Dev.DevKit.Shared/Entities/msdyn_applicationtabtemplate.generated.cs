@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_applicationtabtemplateOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -45,11 +45,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_applicationtabtemplateOptionSets
 		/// </summary>
 		Dashboard = 509180004,
 		/// <summary>
-		/// Entity_List = 509180000
+		/// Entity List = 509180000
 		/// </summary>
 		Entity_List = 509180000,
 		/// <summary>
-		/// Entity_Record = 509180001
+		/// Entity Record = 509180001
 		/// </summary>
 		Entity_Record = 509180001,
 		/// <summary>
@@ -57,11 +57,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_applicationtabtemplateOptionSets
 		/// </summary>
 		Search = 509180005,
 		/// <summary>
-		/// Third_Party_Website = 509180006
+		/// Third Party Website = 509180006
 		/// </summary>
 		Third_Party_Website = 509180006,
 		/// <summary>
-		/// Web_Resource = 509180002
+		/// Web Resource = 509180002
 		/// </summary>
 		Web_Resource = 509180002
 	}
@@ -132,7 +132,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_applicationtabtemplate";
 
-		public const int EntityTypeCode = 10146;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10158;
 
 		[DebuggerNonUserCode()]
 		public msdyn_applicationtabtemplate()
@@ -353,9 +354,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_applicationtabtemplateOptionSets.msdyn_pagetype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_pagetype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_pagetype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_pagetype] = null;
+			}
 		}
 
 		/// <summary>
@@ -431,7 +435,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

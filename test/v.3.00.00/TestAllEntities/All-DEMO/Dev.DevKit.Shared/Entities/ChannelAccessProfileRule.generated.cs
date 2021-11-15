@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.ChannelAccessProfileRuleOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -93,6 +93,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "channelaccessprofilerule";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9400;
 
 		[DebuggerNonUserCode()]
@@ -323,7 +324,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team that owns the channel access profile rule.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -401,7 +402,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the channel access profile rule's status.</para>
+		/// <para>Select the channel access profile rule&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>

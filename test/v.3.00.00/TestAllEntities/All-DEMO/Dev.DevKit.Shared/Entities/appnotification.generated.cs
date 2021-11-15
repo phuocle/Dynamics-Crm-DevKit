@@ -50,34 +50,6 @@ namespace Dev.DevKit.Shared.Entities.appnotificationOptionSets
 		Normal = 200000000
 	}
 
-	public enum statecode
-	{
-		/// <summary>
-		/// Active = 0
-		/// </summary>
-		Active = 0,
-		/// <summary>
-		/// Inactive = 1
-		/// </summary>
-		Inactive = 1
-	}
-
-	public enum statuscode
-	{
-		/// <summary>
-		/// Inactive = 3
-		/// </summary>
-		Inactive = 3,
-		/// <summary>
-		/// Read = 2
-		/// </summary>
-		Read = 2,
-		/// <summary>
-		/// Unread = 1
-		/// </summary>
-		Unread = 1
-	}
-
 	public enum ToastType
 	{
 		/// <summary>
@@ -104,7 +76,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string Data = "data";
-			public const string ExpiresOn = "expireson";
 			public const string IconType = "icontype";
 			public const string ImportSequenceNumber = "importsequencenumber";
 			public const string ModifiedBy = "modifiedby";
@@ -115,19 +86,20 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningBusinessUnit = "owningbusinessunit";
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
+			public const string PartitionId = "partitionid";
 			public const string Priority = "priority";
-			public const string statecode = "statecode";
-			public const string statuscode = "statuscode";
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string Title = "title";
 			public const string ToastType = "toasttype";
+			public const string TTLInSeconds = "ttlinseconds";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
 		}
 
 		public const string EntityLogicalName = "appnotification";
 
-		public const int EntityTypeCode = 10077;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10099;
 
 		[DebuggerNonUserCode()]
 		public appnotification()
@@ -263,32 +235,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Date and time when the notification will be deleted</para>
-		/// <para>DateTimeBehavior: DateOnly - DateTimeFormat: DateOnly</para>
-		/// <para>Expires on</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Date? ExpiresOn
-		{
-			get
-			{
-				var dateTime = Entity.GetAttributeValue<DateTime?>(Fields.ExpiresOn);
-				if (dateTime == null) return null;
-				return dateTime.Value.ToDate();
-			}
-			set
-			{
-				if (value.HasValue)
-				{
-					DateTime? dateTime = value.Value.ToDateTime();
-					Entity.Attributes[Fields.ExpiresOn] = dateTime;
-				}
-				else
-					Entity.Attributes[Fields.ExpiresOn] = null;
-			}
-		}
-
-		/// <summary>
 		/// <para>Picklist</para>
 		/// <para>IconType</para>
 		/// </summary>
@@ -369,7 +315,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -413,6 +359,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Partitioning will be based on owner and it is recommended to specify this field for all operations for performance reason</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Partition Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string PartitionId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.PartitionId); }
+			set { Entity.Attributes[Fields.PartitionId] = value; }
+		}
+
+		/// <summary>
 		/// <para>Priority of the notification</para>
 		/// <para>Picklist</para>
 		/// <para>Priority</para>
@@ -432,52 +390,6 @@ namespace Dev.DevKit.Shared.Entities
 					Entity.Attributes[Fields.Priority] = new OptionSetValue((int)value.Value);
 				else
 					Entity.Attributes[Fields.Priority] = null;
-			}
-		}
-
-		/// <summary>
-		/// <para>Status of the notification</para>
-		/// <para>State</para>
-		/// <para>Status</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.appnotificationOptionSets.statecode? statecode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statecode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.appnotificationOptionSets.statecode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.statecode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.statecode] = null;
-			}
-		}
-
-		/// <summary>
-		/// <para>Reason for the status of the Notification</para>
-		/// <para>Status</para>
-		/// <para>Status Reason</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.appnotificationOptionSets.statuscode? statuscode
-		{
-			get
-			{
-				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statuscode);
-				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.appnotificationOptionSets.statuscode)value.Value;
-			}
-			set
-			{
-				if (value.HasValue)
-					Entity.Attributes[Fields.statuscode] = new OptionSetValue((int)value.Value);
-				else
-					Entity.Attributes[Fields.statuscode] = null;
 			}
 		}
 
@@ -526,6 +438,18 @@ namespace Dev.DevKit.Shared.Entities
 				else
 					Entity.Attributes[Fields.ToastType] = null;
 			}
+		}
+
+		/// <summary>
+		/// <para>After the specified number of seconds the notification will be deleted</para>
+		/// <para>Integer - MinValue: 1 - MaxValue: 2,147,483,647</para>
+		/// <para>Expiry (seconds)</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public int? TTLInSeconds
+		{
+			get { return Entity.GetAttributeValue<int?>(Fields.TTLInSeconds); }
+			set { Entity.Attributes[Fields.TTLInSeconds] = value; }
 		}
 
 		/// <summary>

@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_customerassetOptionSets
 		/// </summary>
 		Error = 192350004,
 		/// <summary>
-		/// In_Progress = 192350002
+		/// In Progress = 192350002
 		/// </summary>
 		In_Progress = 192350002,
 		/// <summary>
@@ -108,7 +108,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_customerasset";
 
-		public const int EntityTypeCode = 10116;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10128;
 
 		[DebuggerNonUserCode()]
 		public msdyn_customerasset()
@@ -249,7 +250,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>If active parent alerts exist for the device</para>
+		/// <para>If active parent alerts exist for the customer asset</para>
 		/// <para>ReadOnly - Boolean</para>
 		/// <para>Active or in-progress alerts</para>
 		/// </summary>
@@ -260,7 +261,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Count of parent alerts for this device</para>
+		/// <para>Count of parent alerts for this customer asset</para>
 		/// <para>ReadOnly - Integer - MinValue: -2,147,483,648 - MaxValue: 2,147,483,647</para>
 		/// <para>Alert Count</para>
 		/// </summary>
@@ -518,7 +519,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

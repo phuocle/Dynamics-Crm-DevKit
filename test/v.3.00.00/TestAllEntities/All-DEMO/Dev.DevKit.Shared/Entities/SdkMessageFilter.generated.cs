@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.SdkMessageFilterOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -53,12 +53,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string Name = "name";
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
-			public const string PrimaryObjectTypeCode = "primaryobjecttypecode";
 			public const string RestrictionLevel = "restrictionlevel";
 			public const string SdkMessageFilterId = "sdkmessagefilterid";
 			public const string SdkMessageFilterIdUnique = "sdkmessagefilteridunique";
 			public const string SdkMessageId = "sdkmessageid";
-			public const string SecondaryObjectTypeCode = "secondaryobjecttypecode";
 			public const string SolutionId = "solutionid";
 			public const string SupportingSolutionId = "supportingsolutionid";
 			public const string VersionNumber = "versionnumber";
@@ -67,6 +65,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "sdkmessagefilter";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4607;
 
 		[DebuggerNonUserCode()]
@@ -303,17 +302,6 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type of entity with which the SDK message filter is primarily associated.</para>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para>Primary Object Type Code</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryObjectTypeCode); }
-		}
-
-		/// <summary>
 		/// <para>For internal use only.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 255</para>
 		/// <para></para>
@@ -362,17 +350,6 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.SdkMessageId); }
 			set { Entity.Attributes[Fields.SdkMessageId] = value; }
-		}
-
-		/// <summary>
-		/// <para>Type of entity with which the SDK message filter is secondarily associated.</para>
-		/// <para>ReadOnly - EntityName</para>
-		/// <para>Secondary Object Type Code</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string SecondaryObjectTypeCode
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.SecondaryObjectTypeCode); }
 		}
 
 		/// <summary>

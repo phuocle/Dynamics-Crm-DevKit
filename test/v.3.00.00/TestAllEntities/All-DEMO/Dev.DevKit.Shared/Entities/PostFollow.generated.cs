@@ -38,6 +38,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "postfollow";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 8003;
 
 		[DebuggerNonUserCode()]
@@ -123,7 +124,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

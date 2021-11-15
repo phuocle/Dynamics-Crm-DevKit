@@ -79,7 +79,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_requirementgroup";
 
-		public const int EntityTypeCode = 10305;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10368;
 
 		[DebuggerNonUserCode()]
 		public msdyn_requirementgroup()
@@ -222,9 +223,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_requirementgroupOptionSets.msdyn_autogrouptype)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_autogrouptype] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_autogrouptype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_autogrouptype] = null;
+			}
 		}
 
 		/// <summary>
@@ -293,7 +297,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

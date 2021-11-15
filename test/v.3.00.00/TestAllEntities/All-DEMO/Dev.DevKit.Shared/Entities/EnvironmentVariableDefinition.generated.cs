@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -28,6 +28,18 @@ namespace Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets
 		/// Unpublished = 1
 		/// </summary>
 		Unpublished = 1
+	}
+
+	public enum SecretStore
+	{
+		/// <summary>
+		/// Azure Key Vault = 0
+		/// </summary>
+		Azure_Key_Vault = 0,
+		/// <summary>
+		/// Microsoft Dataverse = 1
+		/// </summary>
+		Microsoft_Dataverse = 1
 	}
 
 	public enum statecode
@@ -61,7 +73,7 @@ namespace Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets
 		/// </summary>
 		Boolean = 100000002,
 		/// <summary>
-		/// Data_Source = 100000004
+		/// Data Source = 100000004
 		/// </summary>
 		Data_Source = 100000004,
 		/// <summary>
@@ -72,6 +84,10 @@ namespace Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets
 		/// Number = 100000001
 		/// </summary>
 		Number = 100000001,
+		/// <summary>
+		/// Secret = 100000005
+		/// </summary>
+		Secret = 100000005,
 		/// <summary>
 		/// String = 100000000
 		/// </summary>
@@ -113,6 +129,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ParameterKey = "parameterkey";
 			public const string ParentDefinitionId = "parentdefinitionid";
 			public const string SchemaName = "schemaname";
+			public const string SecretStore = "secretstore";
 			public const string SolutionId = "solutionid";
 			public const string statecode = "statecode";
 			public const string statuscode = "statuscode";
@@ -126,6 +143,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "environmentvariabledefinition";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 380;
 
 		[DebuggerNonUserCode()]
@@ -428,7 +446,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -504,6 +522,29 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.SchemaName); }
 			set { Entity.Attributes[Fields.SchemaName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Environment variable secret store.</para>
+		/// <para>Picklist</para>
+		/// <para>SecretStore</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets.SecretStore? SecretStore
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.SecretStore);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets.SecretStore)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.SecretStore] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.SecretStore] = null;
+			}
 		}
 
 		/// <summary>
@@ -601,9 +642,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.EnvironmentVariableDefinitionOptionSets.Type)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.Type] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.Type] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.Type] = null;
+			}
 		}
 
 		/// <summary>

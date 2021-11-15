@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.uii_optionOptionSets
 		/// </summary>
 		ClientCacheVersionNumber = 100000000,
 		/// <summary>
-		/// CRM_UI_Base_Url = 100000001
+		/// CRM UI Base Url = 100000001
 		/// </summary>
 		CRM_UI_Base_Url = 100000001,
 		/// <summary>
@@ -122,7 +122,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_option";
 
-		public const int EntityTypeCode = 10679;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10758;
 
 		[DebuggerNonUserCode()]
 		public uii_option()
@@ -264,9 +265,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.uii_optionOptionSets.msdyusd_GlobalOption)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyusd_GlobalOption] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyusd_GlobalOption] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyusd_GlobalOption] = null;
+			}
 		}
 
 		/// <summary>
@@ -283,7 +287,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

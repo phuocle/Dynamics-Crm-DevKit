@@ -67,7 +67,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msfp_alertrule";
 
-		public const int EntityTypeCode = 10239;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10262;
 
 		[DebuggerNonUserCode()]
 		public msfp_alertrule()
@@ -225,7 +226,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Name of the alert rule.</para>
-		/// <para>Required - String - MaxLength: 50</para>
+		/// <para>Required - String - MaxLength: 850</para>
 		/// <para>Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -273,7 +274,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

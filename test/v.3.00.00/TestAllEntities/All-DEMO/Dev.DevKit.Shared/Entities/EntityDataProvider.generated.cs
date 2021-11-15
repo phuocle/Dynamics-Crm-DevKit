@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.EntityDataProviderOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -41,6 +41,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreateMultiplePlugin = "createmultipleplugin";
 			public const string CreatePlugin = "createplugin";
 			public const string DataSourceLogicalName = "datasourcelogicalname";
+			public const string DeleteMultiplePlugin = "deletemultipleplugin";
 			public const string DeletePlugin = "deleteplugin";
 			public const string Description = "description";
 			public const string EntityDataProviderId = "entitydataproviderid";
@@ -63,6 +64,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "entitydataprovider";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 78;
 
 		[DebuggerNonUserCode()]
@@ -163,6 +165,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.DataSourceLogicalName); }
 			set { Entity.Attributes[Fields.DataSourceLogicalName] = value; }
+		}
+
+		/// <summary>
+		/// <para>Contains the deletemultipleplugin id that should be run when DeleteMultiple is invoked</para>
+		/// <para>Uniqueidentifier</para>
+		/// <para>Contains the deletemultipleplugin id that should be run when DeleteMultiple is invoked</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid? DeleteMultiplePlugin
+		{
+			get { return Entity.GetAttributeValue<Guid?>(Fields.DeleteMultiplePlugin); }
+			set { Entity.Attributes[Fields.DeleteMultiplePlugin] = value; }
 		}
 
 		/// <summary>

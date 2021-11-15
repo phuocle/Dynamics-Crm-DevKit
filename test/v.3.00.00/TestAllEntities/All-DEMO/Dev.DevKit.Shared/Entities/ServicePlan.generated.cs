@@ -13,23 +13,23 @@ namespace Dev.DevKit.Shared.Entities.ServicePlanOptionSets
 	public enum AccessMode
 	{
 		/// <summary>
-		/// Custom_applications = 0
+		/// Custom applications = 0
 		/// </summary>
 		Custom_applications = 0,
 		/// <summary>
-		/// First_party_and_Custom_applications = 2
+		/// First party and Custom applications = 2
 		/// </summary>
 		First_party_and_Custom_applications = 2,
 		/// <summary>
-		/// First_party_applications = 1
+		/// First party applications = 1
 		/// </summary>
 		First_party_applications = 1,
 		/// <summary>
-		/// No_restrictions_For_legacy_license_only_overrides_012 = 3
+		/// No restrictions -For legacy license only, overrides 0,1,2 = 3
 		/// </summary>
 		No_restrictions_For_legacy_license_only_overrides_012 = 3,
 		/// <summary>
-		/// Restricted_to_ISV_applications_and_will_Override_all_other_access_modes_including_access_mode_3 = 4
+		/// Restricted to ISV applications and will Override all other access modes (including access mode= 3) = 4
 		/// </summary>
 		Restricted_to_ISV_applications_and_will_Override_all_other_access_modes_including_access_mode_3 = 4
 	}
@@ -41,7 +41,7 @@ namespace Dev.DevKit.Shared.Entities.ServicePlanOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -87,6 +87,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "serviceplan";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 101;
 
 		[DebuggerNonUserCode()]

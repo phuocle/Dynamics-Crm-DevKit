@@ -13,11 +13,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_surveyquestionOptionSets
 	public enum msdyn_AnswerType
 	{
 		/// <summary>
-		/// Multiple_lines = 192350001
+		/// Multiple lines = 192350001
 		/// </summary>
 		Multiple_lines = 192350001,
 		/// <summary>
-		/// Option_set = 192350002
+		/// Option set = 192350002
 		/// </summary>
 		Option_set = 192350002,
 		/// <summary>
@@ -25,11 +25,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_surveyquestionOptionSets
 		/// </summary>
 		Rating = 192350003,
 		/// <summary>
-		/// Single_line = 192350000
+		/// Single line = 192350000
 		/// </summary>
 		Single_line = 192350000,
 		/// <summary>
-		/// User_Consent = 192350004
+		/// User Consent = 192350004
 		/// </summary>
 		User_Consent = 192350004
 	}
@@ -93,7 +93,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_surveyquestion";
 
-		public const int EntityTypeCode = 10638;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10717;
 
 		[DebuggerNonUserCode()]
 		public msdyn_surveyquestion()
@@ -236,9 +237,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_surveyquestionOptionSets.msdyn_AnswerType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_AnswerType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_AnswerType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_AnswerType] = null;
+			}
 		}
 
 		/// <summary>
@@ -331,7 +335,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

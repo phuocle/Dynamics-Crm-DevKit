@@ -6,6 +6,8 @@
         public const string Build = "xxxx-yy-zz";
         public const string CrmString = "Dataverse/CDS";
         public const string DynamicsCrmDevKitJson = "DynamicsCrm.DevKit.json";
+        public const string DynamicsCrmDevKitLibDll = "DynamicsCrm.DevKit.Lib.dll";
+
 
         public static readonly string VersionBuild = $"v.{Version} - Build: {Build}";
         public static readonly string WindowTitle = $"DynamicsCrm.DevKit { Const.VersionBuild }";

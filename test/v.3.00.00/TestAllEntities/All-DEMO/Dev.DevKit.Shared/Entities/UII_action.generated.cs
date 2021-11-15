@@ -37,15 +37,15 @@ namespace Dev.DevKit.Shared.Entities.UII_actionOptionSets
 	public enum UII_AutomationMode
 	{
 		/// <summary>
-		/// No_Automation = 1
+		/// No Automation = 1
 		/// </summary>
 		No_Automation = 1,
 		/// <summary>
-		/// Use_Workflow_Assembly = 2
+		/// Use Workflow Assembly = 2
 		/// </summary>
 		Use_Workflow_Assembly = 2,
 		/// <summary>
-		/// Use_Workflow_XAML = 3
+		/// Use Workflow XAML = 3
 		/// </summary>
 		Use_Workflow_XAML = 3
 	}
@@ -107,7 +107,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "uii_action";
 
-		public const int EntityTypeCode = 10674;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10753;
 
 		[DebuggerNonUserCode()]
 		public UII_action()
@@ -272,7 +273,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -404,9 +405,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.UII_actionOptionSets.UII_AutomationMode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.UII_AutomationMode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.UII_AutomationMode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.UII_AutomationMode] = null;
+			}
 		}
 
 		/// <summary>

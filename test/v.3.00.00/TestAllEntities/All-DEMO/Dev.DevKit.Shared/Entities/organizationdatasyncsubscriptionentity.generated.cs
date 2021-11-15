@@ -65,7 +65,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "organizationdatasyncsubscriptionentity";
 
-		public const int EntityTypeCode = 10076;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10097;
 
 		[DebuggerNonUserCode()]
 		public organizationdatasyncsubscriptionentity()

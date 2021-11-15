@@ -13,71 +13,79 @@ namespace Dev.DevKit.Shared.Entities.AsyncOperationOptionSets
 	public enum OperationType
 	{
 		/// <summary>
-		/// Activity_Propagation = 6
+		/// Activity Propagation = 6
 		/// </summary>
 		Activity_Propagation = 6,
 		/// <summary>
-		/// AI_Builder_Prediction_Events = 190690092
+		/// AI Builder Prediction Events = 190690092
 		/// </summary>
 		AI_Builder_Prediction_Events = 190690092,
 		/// <summary>
-		/// AI_Builder_Training_Events = 190690091
+		/// AI Builder Training Events = 190690091
 		/// </summary>
 		AI_Builder_Training_Events = 190690091,
 		/// <summary>
-		/// ALM_Anomaly_Detection_Operation = 73
+		/// ALM Anomaly Detection Operation = 73
 		/// </summary>
 		ALM_Anomaly_Detection_Operation = 73,
 		/// <summary>
-		/// App_Module_Metadata_Operation = 72
+		/// App Module Metadata Operation = 72
 		/// </summary>
 		App_Module_Metadata_Operation = 72,
 		/// <summary>
-		/// Audit_Partition_Creation = 41
+		/// Audit Partition Creation = 41
 		/// </summary>
 		Audit_Partition_Creation = 41,
 		/// <summary>
-		/// Bulk_Delete = 13
+		/// Bulk Delete = 13
 		/// </summary>
 		Bulk_Delete = 13,
 		/// <summary>
-		/// Bulk_Delete_File_Attachment = 94
+		/// Bulk Delete File Attachment = 94
 		/// </summary>
 		Bulk_Delete_File_Attachment = 94,
 		/// <summary>
-		/// Bulk_Delete_Subprocess = 23
+		/// Bulk Delete Subprocess = 23
 		/// </summary>
 		Bulk_Delete_Subprocess = 23,
 		/// <summary>
-		/// Bulk_Duplicate_Detection = 8
+		/// Bulk Duplicate Detection = 8
 		/// </summary>
 		Bulk_Duplicate_Detection = 8,
 		/// <summary>
-		/// Bulk_Email = 2
+		/// Bulk Email = 2
 		/// </summary>
 		Bulk_Email = 2,
 		/// <summary>
-		/// Calculate_Organization_Maximum_Storage_Size = 22
+		/// BulkArchive Async Operation = 260
+		/// </summary>
+		BulkArchive_Async_Operation = 260,
+		/// <summary>
+		/// BulkArchiveBatch Async Operation = 261
+		/// </summary>
+		BulkArchiveBatch_Async_Operation = 261,
+		/// <summary>
+		/// Calculate Organization Maximum Storage Size = 22
 		/// </summary>
 		Calculate_Organization_Maximum_Storage_Size = 22,
 		/// <summary>
-		/// Calculate_Organization_Storage_Size = 18
+		/// Calculate Organization Storage Size = 18
 		/// </summary>
 		Calculate_Organization_Storage_Size = 18,
 		/// <summary>
-		/// Calculate_Rollup_Field = 57
+		/// Calculate Rollup Field = 57
 		/// </summary>
 		Calculate_Rollup_Field = 57,
 		/// <summary>
-		/// CallbackRegistration_Expander_Operation = 79
+		/// CallbackRegistration Expander Operation = 79
 		/// </summary>
 		CallbackRegistration_Expander_Operation = 79,
 		/// <summary>
-		/// Cascade_FlowSession_Permissions_Async_Operation = 100
+		/// Cascade FlowSession Permissions Async Operation = 100
 		/// </summary>
 		Cascade_FlowSession_Permissions_Async_Operation = 100,
 		/// <summary>
-		/// Cascade_Grant_or_Revoke_Access_Version_Tracking_Async_Operation = 12801
+		/// Cascade Grant or Revoke Access Version Tracking Async Operation = 12801
 		/// </summary>
 		Cascade_Grant_or_Revoke_Access_Version_Tracking_Async_Operation = 12801,
 		/// <summary>
@@ -89,87 +97,87 @@ namespace Dev.DevKit.Shared.Entities.AsyncOperationOptionSets
 		/// </summary>
 		CascadeDelete = 91,
 		/// <summary>
-		/// Check_For_Language_Pack_Updates = 42
+		/// Check For Language Pack Updates = 42
 		/// </summary>
 		Check_For_Language_Pack_Updates = 42,
 		/// <summary>
-		/// Cleanup_inactive_workflow_assemblies = 32
+		/// Cleanup inactive workflow assemblies = 32
 		/// </summary>
 		Cleanup_inactive_workflow_assemblies = 32,
 		/// <summary>
-		/// Cleanup_Solution_Components = 71
+		/// Cleanup Solution Components = 71
 		/// </summary>
 		Cleanup_Solution_Components = 71,
 		/// <summary>
-		/// Collect_Organization_Database_Statistics = 19
+		/// Collect Organization Database Statistics = 19
 		/// </summary>
 		Collect_Organization_Database_Statistics = 19,
 		/// <summary>
-		/// Collect_Organization_Statistics = 16
+		/// Collect Organization Statistics = 16
 		/// </summary>
 		Collect_Organization_Statistics = 16,
 		/// <summary>
-		/// Collection_Organization_Size_Statistics = 20
+		/// Collection Organization Size Statistics = 20
 		/// </summary>
 		Collection_Organization_Size_Statistics = 20,
 		/// <summary>
-		/// Convert_Date_And_Time_Behavior = 62
+		/// Convert Date And Time Behavior = 62
 		/// </summary>
 		Convert_Date_And_Time_Behavior = 62,
 		/// <summary>
-		/// Create_Or_Refresh_Virtual_Entity = 98
+		/// Create Or Refresh Virtual Entity = 98
 		/// </summary>
 		Create_Or_Refresh_Virtual_Entity = 98,
 		/// <summary>
-		/// Database_log_backup = 26
+		/// Database log backup = 26
 		/// </summary>
 		Database_log_backup = 26,
 		/// <summary>
-		/// Database_Tuning = 21
+		/// Database Tuning = 21
 		/// </summary>
 		Database_Tuning = 21,
 		/// <summary>
-		/// DBCC_SHRINKDATABASE_maintenance_job = 28
+		/// DBCC SHRINKDATABASE maintenance job = 28
 		/// </summary>
 		DBCC_SHRINKDATABASE_maintenance_job = 28,
 		/// <summary>
-		/// DBCC_SHRINKFILE_maintenance_job = 29
+		/// DBCC SHRINKFILE maintenance job = 29
 		/// </summary>
 		DBCC_SHRINKFILE_maintenance_job = 29,
 		/// <summary>
-		/// Deletion_Service = 14
+		/// Deletion Service = 14
 		/// </summary>
 		Deletion_Service = 14,
 		/// <summary>
-		/// Duplicate_Detection_Rule_Publish = 7
+		/// Duplicate Detection Rule Publish = 7
 		/// </summary>
 		Duplicate_Detection_Rule_Publish = 7,
 		/// <summary>
-		/// Encryption_Health_Check = 53
+		/// Encryption Health Check = 53
 		/// </summary>
 		Encryption_Health_Check = 53,
 		/// <summary>
-		/// EntityKey_Index_Creation = 63
+		/// EntityKey Index Creation = 63
 		/// </summary>
 		EntityKey_Index_Creation = 63,
 		/// <summary>
-		/// Event_Expander_Operation = 92
+		/// Event Expander Operation = 92
 		/// </summary>
 		Event_Expander_Operation = 92,
 		/// <summary>
-		/// Execute_Async_Request = 54
+		/// Execute Async Request = 54
 		/// </summary>
 		Execute_Async_Request = 54,
 		/// <summary>
-		/// Export_Solution_Async_Operation = 202
+		/// Export Solution Async Operation = 202
 		/// </summary>
 		Export_Solution_Async_Operation = 202,
 		/// <summary>
-		/// Flow_Notification = 75
+		/// Flow Notification = 75
 		/// </summary>
 		Flow_Notification = 75,
 		/// <summary>
-		/// Goal_Roll_Up = 40
+		/// Goal Roll Up = 40
 		/// </summary>
 		Goal_Roll_Up = 40,
 		/// <summary>
@@ -177,155 +185,159 @@ namespace Dev.DevKit.Shared.Entities.AsyncOperationOptionSets
 		/// </summary>
 		Import = 5,
 		/// <summary>
-		/// Import_File_Parse = 3
+		/// Import File Parse = 3
 		/// </summary>
 		Import_File_Parse = 3,
 		/// <summary>
-		/// Import_Sample_Data = 38
+		/// Import Sample Data = 38
 		/// </summary>
 		Import_Sample_Data = 38,
 		/// <summary>
-		/// Import_Solution_Async_Operation = 203
+		/// Import Solution Async Operation = 203
 		/// </summary>
 		Import_Solution_Async_Operation = 203,
 		/// <summary>
-		/// Import_Solution_Metadata = 93
+		/// Import Solution Metadata = 93
 		/// </summary>
 		Import_Solution_Metadata = 93,
 		/// <summary>
-		/// Import_Subprocess = 17
+		/// Import Subprocess = 17
 		/// </summary>
 		Import_Subprocess = 17,
 		/// <summary>
-		/// Import_Translation = 59
+		/// Import Translation = 59
 		/// </summary>
 		Import_Translation = 59,
 		/// <summary>
-		/// Incoming_Email_Processing = 51
+		/// Incoming Email Processing = 51
 		/// </summary>
 		Incoming_Email_Processing = 51,
 		/// <summary>
-		/// Index_Management = 15
+		/// Index Management = 15
 		/// </summary>
 		Index_Management = 15,
 		/// <summary>
-		/// Mailbox_Test_Access = 52
+		/// Mailbox Test Access = 52
 		/// </summary>
 		Mailbox_Test_Access = 52,
 		/// <summary>
-		/// Mass_Calculate_Rollup_Field = 58
+		/// Mass Calculate Rollup Field = 58
 		/// </summary>
 		Mass_Calculate_Rollup_Field = 58,
 		/// <summary>
-		/// Matchcode_Update = 12
+		/// Matchcode Update = 12
 		/// </summary>
 		Matchcode_Update = 12,
 		/// <summary>
-		/// Organization_Full_Text_Catalog_Index = 25
+		/// Migrate notes to attachments job = 85
+		/// </summary>
+		Migrate_notes_to_attachments_job = 85,
+		/// <summary>
+		/// Organization Full Text Catalog Index = 25
 		/// </summary>
 		Organization_Full_Text_Catalog_Index = 25,
 		/// <summary>
-		/// Outgoing_Activity = 50
+		/// Outgoing Activity = 50
 		/// </summary>
 		Outgoing_Activity = 50,
 		/// <summary>
-		/// Post_to_Yammer = 49
+		/// Post to Yammer = 49
 		/// </summary>
 		Post_to_Yammer = 49,
 		/// <summary>
-		/// Provision_language_for_user = 201
+		/// Provision language for user = 201
 		/// </summary>
 		Provision_language_for_user = 201,
 		/// <summary>
-		/// Provision_Language_Pack = 43
+		/// Provision Language Pack = 43
 		/// </summary>
 		Provision_Language_Pack = 43,
 		/// <summary>
-		/// Quick_Campaign = 11
+		/// Quick Campaign = 11
 		/// </summary>
 		Quick_Campaign = 11,
 		/// <summary>
-		/// Recurring_Series_Expansion = 35
+		/// Recurring Series Expansion = 35
 		/// </summary>
 		Recurring_Series_Expansion = 35,
 		/// <summary>
-		/// Refresh_Business_Unit_for_Records_Owned_By_Principal = 95
+		/// Refresh Business Unit for Records Owned By Principal = 95
 		/// </summary>
 		Refresh_Business_Unit_for_Records_Owned_By_Principal = 95,
 		/// <summary>
-		/// Refresh_Runtime_Integration_Components_Async_Operation = 250
+		/// Refresh Runtime Integration Components Async Operation = 250
 		/// </summary>
 		Refresh_Runtime_Integration_Components_Async_Operation = 250,
 		/// <summary>
-		/// Regenerate_Entity_Row_Count_Snapshot_Data = 46
+		/// Regenerate Entity Row Count Snapshot Data = 46
 		/// </summary>
 		Regenerate_Entity_Row_Count_Snapshot_Data = 46,
 		/// <summary>
-		/// Regenerate_Read_Share_Snapshot_Data = 47
+		/// Regenerate Read Share Snapshot Data = 47
 		/// </summary>
 		Regenerate_Read_Share_Snapshot_Data = 47,
 		/// <summary>
-		/// Reindex_all_indices_maintenance_job = 30
+		/// Reindex all indices maintenance job = 30
 		/// </summary>
 		Reindex_all_indices_maintenance_job = 30,
 		/// <summary>
-		/// Relationship_Assistant_Cards = 69
+		/// Relationship Assistant Cards = 69
 		/// </summary>
 		Relationship_Assistant_Cards = 69,
 		/// <summary>
-		/// Resource_Booking_Sync = 68
+		/// Resource Booking Sync = 68
 		/// </summary>
 		Resource_Booking_Sync = 68,
 		/// <summary>
-		/// Revoke_Inherited_Access = 96
+		/// Revoke Inherited Access = 96
 		/// </summary>
 		Revoke_Inherited_Access = 96,
 		/// <summary>
-		/// Ribbon_Client_Metadata_Operation = 76
+		/// Ribbon Client Metadata Operation = 76
 		/// </summary>
 		Ribbon_Client_Metadata_Operation = 76,
 		/// <summary>
-		/// SQM_Data_Collection = 9
+		/// SQM Data Collection = 9
 		/// </summary>
 		SQM_Data_Collection = 9,
 		/// <summary>
-		/// Storage_Limit_Notification = 31
+		/// Storage Limit Notification = 31
 		/// </summary>
 		Storage_Limit_Notification = 31,
 		/// <summary>
-		/// System_Event = 1
+		/// System Event = 1
 		/// </summary>
 		System_Event = 1,
 		/// <summary>
-		/// Transform_Parse_Data = 4
+		/// Transform Parse Data = 4
 		/// </summary>
 		Transform_Parse_Data = 4,
 		/// <summary>
-		/// Update_Contract_States = 27
+		/// Update Contract States = 27
 		/// </summary>
 		Update_Contract_States = 27,
 		/// <summary>
-		/// Update_Entitlement_States = 56
+		/// Update Entitlement States = 56
 		/// </summary>
 		Update_Entitlement_States = 56,
 		/// <summary>
-		/// Update_Knowledge_Article_States = 65
+		/// Update Knowledge Article States = 65
 		/// </summary>
 		Update_Knowledge_Article_States = 65,
 		/// <summary>
-		/// Update_Modern_Flow_Async_Operation = 101
+		/// Update Modern Flow Async Operation = 101
 		/// </summary>
 		Update_Modern_Flow_Async_Operation = 101,
 		/// <summary>
-		/// Update_Organization_Database = 44
+		/// Update Organization Database = 44
 		/// </summary>
 		Update_Organization_Database = 44,
 		/// <summary>
-		/// Update_Solution = 45
+		/// Update Solution = 45
 		/// </summary>
 		Update_Solution = 45,
 		/// <summary>
-		/// Update_Statistic_Intervals = 24
+		/// Update Statistic Intervals = 24
 		/// </summary>
 		Update_Statistic_Intervals = 24,
 		/// <summary>
@@ -369,7 +381,7 @@ namespace Dev.DevKit.Shared.Entities.AsyncOperationOptionSets
 		/// </summary>
 		Failed = 31,
 		/// <summary>
-		/// In_Progress = 20
+		/// In Progress = 20
 		/// </summary>
 		In_Progress = 20,
 		/// <summary>
@@ -385,7 +397,7 @@ namespace Dev.DevKit.Shared.Entities.AsyncOperationOptionSets
 		/// </summary>
 		Waiting = 10,
 		/// <summary>
-		/// Waiting_For_Resources = 0
+		/// Waiting For Resources = 0
 		/// </summary>
 		Waiting_For_Resources = 0
 	}
@@ -407,6 +419,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string CreatedOn = "createdon";
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string Data = "data";
+			public const string DataBlobId = "datablobid";
 			public const string DependencyToken = "dependencytoken";
 			public const string Depth = "depth";
 			public const string ErrorCode = "errorcode";
@@ -429,7 +442,6 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OwningUser = "owninguser";
 			public const string ParentPluginExecutionId = "parentpluginexecutionid";
 			public const string PostponeUntil = "postponeuntil";
-			public const string PrimaryEntityType = "primaryentitytype";
 			public const string RecurrencePattern = "recurrencepattern";
 			public const string RecurrenceStartTime = "recurrencestarttime";
 			public const string RegardingObjectId = "regardingobjectid";
@@ -453,6 +465,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "asyncoperation";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 4700;
 
 		[DebuggerNonUserCode()]
@@ -621,6 +634,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.Data); }
 			set { Entity.Attributes[Fields.Data] = value; }
+		}
+
+		/// <summary>
+		/// <para>File Id for the blob url used for file storage.</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>Data File Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string DataBlobId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.DataBlobId); }
 		}
 
 		/// <summary>
@@ -809,7 +833,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the system job.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -888,19 +912,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Type of entity with which the system job is primarily associated.</para>
-		/// <para>EntityName</para>
-		/// <para>Primary Entity Type</para>
-		/// </summary>
-		[DebuggerNonUserCode()]
-		public string PrimaryEntityType
-		{
-			get { return Entity.GetAttributeValue<string>(Fields.PrimaryEntityType); }
-			set { Entity.Attributes[Fields.PrimaryEntityType] = value; }
-		}
-
-		/// <summary>
-		/// <para>Pattern of the system job's recurrence.</para>
+		/// <para>Pattern of the system job&apos;s recurrence.</para>
 		/// <para>String - MaxLength: 256</para>
 		/// <para>Recurrence Pattern</para>
 		/// </summary>
@@ -925,7 +937,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the system job is associated.</para>
-		/// <para>Lookup to account;accountleads;activityfileattachment;activitymimeattachment;activitymonitor;activitypointer;adminsettingsentity;annotation;annualfiscalcalendar;appelement;applicationuser;appmodulecomponentedge;appmodulecomponentnode;appnotification;appointment;appsetting;appusersetting;attributeimageconfig;attributemap;bookableresource;bookableresourcebooking;bookableresourcebookingexchangesyncidmapping;bookableresourcebookingheader;bookableresourcecategory;bookableresourcecategoryassn;bookableresourcecharacteristic;bookableresourcegroup;bookingstatus;bot;botcomponent;bulkoperation;bulkoperationlog;businessunit;businessunitnewsarticle;calendar;campaign;campaignactivity;campaignactivityitem;campaignitem;campaignresponse;canvasappextendedmetadata;cascadegrantrevokeaccessrecordstracker;cascadegrantrevokeaccessversiontracker;catalog;catalogassignment;channelaccessprofile;channelaccessprofilerule;characteristic;childincidentcount;commitment;competitor;competitoraddress;competitorproduct;competitorsalesliterature;connection;connectionreference;connectionrole;connector;constraintbasedgroup;contact;contactinvoices;contactleads;contactorders;contactquotes;contract;contractdetail;contracttemplate;conversationtranscript;convertrule;customapi;customapirequestparameter;customapiresponseproperty;customeraddress;customeropportunityrole;customerrelationship;datalakefolder;datalakefolderpermission;datalakeworkspace;datalakeworkspacepermission;discount;discounttype;displaystring;dynamicproperty;dynamicpropertyassociation;dynamicpropertyinstance;dynamicpropertyoptionsetitem;email;emailserverprofile;entitlement;entitlementchannel;entitlementcontacts;entitlemententityallocationtypemapping;entitlementproducts;entitlementtemplate;entitlementtemplatechannel;entitlementtemplateproducts;entityanalyticsconfig;entityimageconfig;entitymap;environmentvariabledefinition;environmentvariablevalue;equipment;exportsolutionupload;externalparty;externalpartyitem;fax;fixedmonthlyfiscalcalendar;flowmachine;flowmachinegroup;flowsession;goal;goalrollupquery;holidaywrapper;import;importdata;importfile;importlog;importmap;incident;incidentknowledgebaserecord;incidentresolution;interactionforemail;internalcatalogassignment;invoice;invoicedetail;isvconfig;kbarticle;kbarticlecomment;kbarticletemplate;keyvaultreference;knowledgearticle;knowledgearticleincident;knowledgebaserecord;lead;leadaddress;leadcompetitors;leadproduct;leadtoopportunitysalesprocess;letter;list;listmember;listoperation;mailbox;mailmergetemplate;managedidentity;marketingformdisplayattributes;metric;monthlyfiscalcalendar;msdynce_botcontent;msdynsm_marketingsitemap;msdynsm_salessitemap;msdynsm_servicessitemap;msdynsm_settingssitemap;msdyn_3dmodel;msdyn_accountpricelist;msdyn_actioncardregarding;msdyn_actioncardrolesetting;msdyn_actual;msdyn_adaptivecardconfiguration;msdyn_adminappstate;msdyn_agentstatushistory;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingincident;msdyn_agreementbookingproduct;msdyn_agreementbookingservice;msdyn_agreementbookingservicetask;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoiceproduct;msdyn_agreementinvoicesetup;msdyn_agreementsubstatus;msdyn_aibdataset;msdyn_aibdatasetfile;msdyn_aibdatasetrecord;msdyn_aibdatasetscontainer;msdyn_aibfile;msdyn_aibfileattacheddata;msdyn_aiconfiguration;msdyn_aifptrainingdocument;msdyn_aimodel;msdyn_aiodimage;msdyn_aiodlabel;msdyn_aiodtrainingboundingbox;msdyn_aiodtrainingimage;msdyn_aitemplate;msdyn_analysiscomponent;msdyn_analysisjob;msdyn_analysisresult;msdyn_analysisresultdetail;msdyn_analytics;msdyn_analyticsadminsettings;msdyn_analyticsforcs;msdyn_appconfiguration;msdyn_applicationextension;msdyn_applicationtabtemplate;msdyn_approval;msdyn_assetcategorytemplateassociation;msdyn_assettemplateassociation;msdyn_assignmentconfiguration;msdyn_assignmentconfigurationstep;msdyn_authenticationsettings;msdyn_autocapturerule;msdyn_autocapturesettings;msdyn_batchjob;msdyn_bookableresourceassociation;msdyn_bookableresourcebookingquicknote;msdyn_bookableresourcecapacityprofile;msdyn_bookingalert;msdyn_bookingalertstatus;msdyn_bookingchange;msdyn_bookingjournal;msdyn_bookingrule;msdyn_bookingsetupmetadata;msdyn_bookingtimestamp;msdyn_bpf_2c5fe86acc8b414b8322ae571000c799;msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b;msdyn_bpf_665e73aa18c247d886bfc50499c73b82;msdyn_bpf_989e9b1857e24af18787d5143b67523b;msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3;msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39;msdyn_bpf_d8f9dc7f099f44db9d641dd81fbd470d;msdyn_businessclosure;msdyn_callablecontext;msdyn_cannedmessage;msdyn_capacityprofile;msdyn_caseenrichment;msdyn_casesuggestionrequestpayload;msdyn_casetopic;msdyn_casetopicsetting;msdyn_casetopicsummary;msdyn_casetopic_incident;msdyn_cdsentityengagementctx;msdyn_channel;msdyn_channelcapability;msdyn_channelprovider;msdyn_characteristicreqforteammember;msdyn_chatansweroption;msdyn_chatquestionnaireresponse;msdyn_chatquestionnaireresponseitem;msdyn_chatwidgetlanguage;msdyn_ciprovider;msdyn_clientextension;msdyn_collabgraphresource;msdyn_configuration;msdyn_consoleapplicationnotificationfield;msdyn_consoleapplicationnotificationtemplate;msdyn_consoleapplicationsessiontemplate;msdyn_consoleapplicationtemplate;msdyn_consoleapplicationtemplateparameter;msdyn_consoleapplicationtype;msdyn_consoleappparameterdefinition;msdyn_contactpricelist;msdyn_contractlinedetailperformance;msdyn_contractlineinvoiceschedule;msdyn_contractlinescheduleofvalue;msdyn_contractperformance;msdyn_conversationaction;msdyn_conversationactionlocale;msdyn_conversationdata;msdyn_conversationinsight;msdyn_conversationsuggestionrequestpayload;msdyn_conversationtopic;msdyn_conversationtopicsetting;msdyn_conversationtopicsummary;msdyn_conversationtopic_conversation;msdyn_customengagementctx;msdyn_customerasset;msdyn_customerassetattachment;msdyn_customerassetcategory;msdyn_dataanalyticsreport;msdyn_dataanalyticsreport_csrmanager;msdyn_dataanalyticsreport_ksinsights;msdyn_dataanalyticsreport_oc;msdyn_dataanalyticsreport_ocvoice;msdyn_databaseversion;msdyn_dataexport;msdyn_dataflow;msdyn_datainsightsandanalyticsfeature;msdyn_decisioncontract;msdyn_decisionruleset;msdyn_delegation;msdyn_dimension;msdyn_dimensionfieldname;msdyn_entitlementapplication;msdyn_entityconfig;msdyn_entityconfiguration;msdyn_entityrankingrule;msdyn_entityroutingconfiguration;msdyn_estimate;msdyn_estimateline;msdyn_expense;msdyn_expensecategory;msdyn_expensereceipt;msdyn_facebookengagementctx;msdyn_fact;msdyn_federatedarticle;msdyn_federatedarticleincident;msdyn_fieldcomputation;msdyn_fieldservicepricelistitem;msdyn_fieldservicesetting;msdyn_fieldserviceslaconfiguration;msdyn_fieldservicesystemjob;msdyn_findworkevent;msdyn_flowcardtype;msdyn_forecastconfiguration;msdyn_forecastdefinition;msdyn_forecastinstance;msdyn_forecastrecurrence;msdyn_functionallocation;msdyn_gdprdata;msdyn_geofence;msdyn_geofenceevent;msdyn_geofencingsettings;msdyn_geolocationsettings;msdyn_geolocationtracking;msdyn_helppage;msdyn_icebreakersconfig;msdyn_incidenttype;msdyn_incidenttypecharacteristic;msdyn_incidenttypeproduct;msdyn_incidenttyperecommendationresult;msdyn_incidenttyperecommendationrunhistory;msdyn_incidenttyperesolution;msdyn_incidenttypeservice;msdyn_incidenttypeservicetask;msdyn_incidenttypessetup;msdyn_incidenttype_requirementgroup;msdyn_inspection;msdyn_inspectionattachment;msdyn_inspectiondefinition;msdyn_inspectioninstance;msdyn_inspectionresponse;msdyn_integrationjob;msdyn_integrationjobdetail;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventoryjournal;msdyn_inventorytransfer;msdyn_invoicefrequency;msdyn_invoicefrequencydetail;msdyn_invoicelinetransaction;msdyn_iotalert;msdyn_iotdevice;msdyn_iotdevicecategory;msdyn_iotdevicecommand;msdyn_iotdevicecommanddefinition;msdyn_iotdevicedatahistory;msdyn_iotdeviceproperty;msdyn_iotdeviceregistrationhistory;msdyn_iotdevicevisualizationconfiguration;msdyn_iotfieldmapping;msdyn_iotpropertydefinition;msdyn_iotprovider;msdyn_iotproviderinstance;msdyn_iotsettings;msdyn_iottocaseprocess;msdyn_journal;msdyn_journalline;msdyn_kalanguagesetting;msdyn_kbenrichment;msdyn_kmfederatedsearchconfig;msdyn_kmpersonalizationsetting;msdyn_knowledgearticleimage;msdyn_knowledgearticletemplate;msdyn_knowledgeinteractioninsight;msdyn_knowledgepersonalfilter;msdyn_knowledgesearchfilter;msdyn_knowledgesearchinsight;msdyn_kpieventdata;msdyn_kpieventdefinition;msdyn_lineengagementctx;msdyn_livechatconfig;msdyn_livechatengagementctx;msdyn_livechatwidgetlocation;msdyn_liveconversation;msdyn_liveworkitemevent;msdyn_liveworkstream;msdyn_liveworkstreamcapacityprofile;msdyn_localizedsurveyquestion;msdyn_macrosession;msdyn_maskingrule;msdyn_masterentityroutingconfiguration;msdyn_migrationtracker;msdyn_mlresultcache;msdyn_msteamssetting;msdyn_msteamssettingsv2;msdyn_notesanalysisconfig;msdyn_notificationfield;msdyn_notificationtemplate;msdyn_ocbotchannelregistration;msdyn_occhannelconfiguration;msdyn_occhannelstateconfiguration;msdyn_occommunicationprovidersetting;msdyn_occommunicationprovidersettingentry;msdyn_occustommessagingchannel;msdyn_ocfbapplication;msdyn_ocfbpage;msdyn_oclanguage;msdyn_oclinechannelconfig;msdyn_ocliveworkitem;msdyn_ocliveworkitemcapacityprofile;msdyn_ocliveworkitemcharacteristic;msdyn_ocliveworkitemcontextitem;msdyn_ocliveworkitemparticipant;msdyn_ocliveworkitemsentiment;msdyn_ocliveworkstreamcontextvariable;msdyn_oclocalizationdata;msdyn_ocoutboundconfiguration;msdyn_ocoutboundmessage;msdyn_ocphonenumber;msdyn_ocprovisioningstate;msdyn_ocrequest;msdyn_ocruleitem;msdyn_ocsentimentdailytopic;msdyn_ocsentimentdailytopickeyword;msdyn_ocsentimentdailytopictrending;msdyn_ocsession;msdyn_ocsessioncharacteristic;msdyn_ocsessionsentiment;msdyn_ocsimltraining;msdyn_ocsitdimportconfig;msdyn_ocsitdskill;msdyn_ocsitrainingdata;msdyn_ocskillidentmlmodel;msdyn_ocsmschannelsetting;msdyn_ocsystemmessage;msdyn_octag;msdyn_octeamschannelconfig;msdyn_octwitterapplication;msdyn_octwitterhandle;msdyn_ocwechatchannelconfig;msdyn_ocwhatsappchannelaccount;msdyn_ocwhatsappchannelnumber;msdyn_oc_geolocationprovider;msdyn_omnichannelconfiguration;msdyn_omnichannelpersonalization;msdyn_omnichannelqueue;msdyn_omnichannelsyncconfig;msdyn_operatinghour;msdyn_opportunitylineresourcecategory;msdyn_opportunitylinetransaction;msdyn_opportunitylinetransactioncategory;msdyn_opportunitylinetransactionclassificatio;msdyn_opportunitypricelist;msdyn_orderinvoicingdate;msdyn_orderinvoicingproduct;msdyn_orderinvoicingsetup;msdyn_orderinvoicingsetupdate;msdyn_orderlineresourcecategory;msdyn_orderlinetransaction;msdyn_orderlinetransactioncategory;msdyn_orderlinetransactionclassification;msdyn_orderpricelist;msdyn_organizationalunit;msdyn_paneconfiguration;msdyn_panetabconfiguration;msdyn_panetoolconfiguration;msdyn_payment;msdyn_paymentdetail;msdyn_paymentmethod;msdyn_paymentterm;msdyn_personalmessage;msdyn_personalsoundsetting;msdyn_personasecurityrolemapping;msdyn_playbookactivity;msdyn_playbookactivityattribute;msdyn_playbookcategory;msdyn_playbookinstance;msdyn_playbooktemplate;msdyn_pminferredtask;msdyn_pmrecording;msdyn_postalbum;msdyn_postalcode;msdyn_postconfig;msdyn_postruleconfig;msdyn_presence;msdyn_priority;msdyn_problematicasset;msdyn_problematicassetfeedback;msdyn_processnotes;msdyn_productinventory;msdyn_productivityactioninputparameter;msdyn_productivityactionoutputparameter;msdyn_productivityagentscript;msdyn_productivityagentscriptstep;msdyn_productivitymacroactiontemplate;msdyn_productivitymacroconnector;msdyn_productivitymacrosolutionconfiguration;msdyn_productivityparameterdefinition;msdyn_project;msdyn_projectapproval;msdyn_projectparameter;msdyn_projectparameterpricelist;msdyn_projectpricelist;msdyn_projecttask;msdyn_projecttaskdependency;msdyn_projecttaskstatususer;msdyn_projectteam;msdyn_projectteammembersignup;msdyn_projecttransactioncategory;msdyn_property;msdyn_propertyassetassociation;msdyn_propertylog;msdyn_propertytemplateassociation;msdyn_provider;msdyn_purchaseorder;msdyn_purchaseorderbill;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_purchaseorderreceiptproduct;msdyn_purchaseordersubstatus;msdyn_questionsequence;msdyn_quotebookingincident;msdyn_quotebookingproduct;msdyn_quotebookingservice;msdyn_quotebookingservicetask;msdyn_quotebookingsetup;msdyn_quoteinvoicingproduct;msdyn_quoteinvoicingsetup;msdyn_quotelineanalyticsbreakdown;msdyn_quotelineinvoiceschedule;msdyn_quotelineresourcecategory;msdyn_quotelinescheduleofvalue;msdyn_quotelinetransaction;msdyn_quotelinetransactioncategory;msdyn_quotelinetransactionclassification;msdyn_quotepricelist;msdyn_relationshipinsightsunifiedconfig;msdyn_requirementcharacteristic;msdyn_requirementdependency;msdyn_requirementgroup;msdyn_requirementorganizationunit;msdyn_requirementrelationship;msdyn_requirementresourcecategory;msdyn_requirementresourcepreference;msdyn_requirementstatus;msdyn_resolution;msdyn_resourceassignment;msdyn_resourceassignmentdetail;msdyn_resourcecategorymarkuppricelevel;msdyn_resourcecategorypricelevel;msdyn_resourcepaytype;msdyn_resourcerequest;msdyn_resourcerequirement;msdyn_resourcerequirementdetail;msdyn_resourceterritory;msdyn_richtextfile;msdyn_rma;msdyn_rmaproduct;msdyn_rmareceipt;msdyn_rmareceiptproduct;msdyn_rmasubstatus;msdyn_rolecompetencyrequirement;msdyn_roleutilization;msdyn_routingconfiguration;msdyn_routingconfigurationstep;msdyn_routingrequest;msdyn_routingrulesetsetting;msdyn_rtv;msdyn_rtvproduct;msdyn_rtvsubstatus;msdyn_rulesetdependencymapping;msdyn_salesinsightssettings;msdyn_scenario;msdyn_scheduleboardsetting;msdyn_schedulingfeatureflag;msdyn_schedulingparameter;msdyn_searchconfiguration;msdyn_sentimentanalysis;msdyn_serviceconfiguration;msdyn_servicetasktype;msdyn_sessiondata;msdyn_sessionevent;msdyn_sessionparticipant;msdyn_sessionparticipantdata;msdyn_sessiontemplate;msdyn_shipvia;msdyn_siconfig;msdyn_sikeyvalueconfig;msdyn_skillattachmentruleitem;msdyn_skillattachmenttarget;msdyn_slakpi;msdyn_smartassistconfig;msdyn_smsengagementctx;msdyn_smsnumber;msdyn_solutionhealthrule;msdyn_solutionhealthruleargument;msdyn_solutionhealthruleset;msdyn_soundfile;msdyn_soundnotificationsetting;msdyn_suggestioninteraction;msdyn_suggestionrequestpayload;msdyn_suggestionsmodelsummary;msdyn_suggestionssetting;msdyn_surveyquestion;msdyn_systemuserschedulersetting;msdyn_taxcode;msdyn_taxcodedetail;msdyn_teamscollaboration;msdyn_teamsdialeradminsettings;msdyn_teamsengagementctx;msdyn_templateforproperties;msdyn_templateparameter;msdyn_templatetags;msdyn_timeentry;msdyn_timeentrysetting;msdyn_timegroup;msdyn_timegroupdetail;msdyn_timeoffcalendar;msdyn_timeoffrequest;msdyn_tour;msdyn_transactioncategory;msdyn_transactioncategoryclassification;msdyn_transactioncategoryhierarchyelement;msdyn_transactioncategorypricelevel;msdyn_transactionconnection;msdyn_transactionorigin;msdyn_transactiontype;msdyn_transcript;msdyn_twitterengagementctx;msdyn_unifiedroutingdiagnostic;msdyn_unifiedroutingrun;msdyn_unifiedroutingsetuptracker;msdyn_uniquenumber;msdyn_untrackedappointment;msdyn_upgraderun;msdyn_upgradestep;msdyn_upgradeversion;msdyn_urnotificationtemplate;msdyn_urnotificationtemplatemapping;msdyn_usersetting;msdyn_userworkhistory;msdyn_visitorjourney;msdyn_wallsavedquery;msdyn_wallsavedqueryusersettings;msdyn_warehouse;msdyn_wechatengagementctx;msdyn_whatsappengagementctx;msdyn_workhourtemplate;msdyn_workorder;msdyn_workordercharacteristic;msdyn_workorderdetailsgenerationqueue;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderresolution;msdyn_workorderresourcerestriction;msdyn_workorderservice;msdyn_workorderservicetask;msdyn_workordersubstatus;msdyn_workordertype;msdyusd_actioncallworkflow;msdyusd_agentscriptaction;msdyusd_agentscripttaskcategory;msdyusd_answer;msdyusd_auditanddiagnosticssetting;msdyusd_configuration;msdyusd_customizationfiles;msdyusd_entityassignment;msdyusd_entitysearch;msdyusd_form;msdyusd_languagemodule;msdyusd_scriptlet;msdyusd_scripttasktrigger;msdyusd_search;msdyusd_sessioninformation;msdyusd_sessiontransfer;msdyusd_task;msdyusd_toolbarbutton;msdyusd_toolbarstrip;msdyusd_tracesourcesetting;msdyusd_ucisettings;msdyusd_uiievent;msdyusd_usersettings;msdyusd_windowroute;msfp_alert;msfp_alertrule;msfp_emailtemplate;msfp_fileresponse;msfp_localizedemailtemplate;msfp_project;msfp_question;msfp_questionresponse;msfp_satisfactionmetric;msfp_survey;msfp_surveyinvite;msfp_surveyreminder;msfp_surveyresponse;msfp_unsubscribedrecipient;opportunity;opportunityclose;opportunitycompetitors;opportunityproduct;opportunitysalesprocess;orderclose;organization;organizationdatasyncsubscription;organizationdatasyncsubscriptionentity;organizationsetting;package;pdfsetting;phonecall;phonetocaseprocess;position;post;postfollow;pricelevel;privilege;processstageparameter;product;productassociation;productpricelevel;productsalesliterature;productsubstitute;provisionlanguageforuser;quarterlyfiscalcalendar;queue;queueitem;quote;quoteclose;quotedetail;ratingmodel;ratingvalue;recurringappointmentmaster;relationshipattribute;relationshiprole;relationshiprolemap;report;resource;resourcegroup;resourcegroupexpansion;resourcespec;revokeinheritedaccessrecordstracker;role;rollupfield;routingrule;routingruleitem;salesliterature;salesliteratureitem;salesorder;salesorderdetail;salesprocessinstance;savedquery;semiannualfiscalcalendar;service;serviceappointment;servicecontractcontacts;serviceplan;settingdefinition;sharepointdocumentlocation;sharepointsite;similarityrule;site;sla;socialactivity;socialprofile;solutioncomponentattributeconfiguration;solutioncomponentconfiguration;solutioncomponentrelationshipconfiguration;stagesolutionupload;subject;systemform;systemuser;systemuserauthorizationchangetracker;task;team;teammobileofflineprofilemembership;template;territory;theme;topic;topichistory;topicmodel;topicmodelconfiguration;topicmodelexecutionhistory;transactioncurrency;uii_action;uii_audit;uii_context;uii_hostedapplication;uii_nonhostedapplication;uii_option;uii_savedsession;uii_sessiontransfer;uii_workflow;uii_workflowstep;uii_workflow_workflowstep_mapping;uom;uomschedule;userform;usermapping;usermobileofflineprofilemembership;userquery;virtualentitymetadata;workflowbinary</para>
+		/// <para>Lookup to account;accountleads;activityfileattachment;activitymimeattachment;activitymonitor;activitypointer;adminsettingsentity;annotation;annualfiscalcalendar;appaction;appelement;applicationuser;appmodulecomponentedge;appmodulecomponentnode;appointment;appsetting;appusersetting;attributeimageconfig;attributemap;bookableresource;bookableresourcebooking;bookableresourcebookingexchangesyncidmapping;bookableresourcebookingheader;bookableresourcecategory;bookableresourcecategoryassn;bookableresourcecharacteristic;bookableresourcegroup;bookingstatus;bot;botcomponent;bulkoperation;bulkoperationlog;businessunit;businessunitnewsarticle;calendar;campaign;campaignactivity;campaignactivityitem;campaignitem;campaignresponse;canvasappextendedmetadata;cascadegrantrevokeaccessrecordstracker;cascadegrantrevokeaccessversiontracker;catalog;catalogassignment;channelaccessprofile;channelaccessprofilerule;characteristic;childincidentcount;comment;commitment;competitor;competitoraddress;competitorproduct;competitorsalesliterature;connection;connectionreference;connectionrole;connector;constraintbasedgroup;contact;contactinvoices;contactleads;contactorders;contactquotes;contract;contractdetail;contracttemplate;conversationtranscript;convertrule;customapi;customapirequestparameter;customapiresponseproperty;customeraddress;customeropportunityrole;customerrelationship;datalakefolder;datalakefolderpermission;datalakeworkspace;datalakeworkspacepermission;discount;discounttype;displaystring;dynamicproperty;dynamicpropertyassociation;dynamicpropertyinstance;dynamicpropertyoptionsetitem;email;emailserverprofile;entitlement;entitlementchannel;entitlementcontacts;entitlemententityallocationtypemapping;entitlementproducts;entitlementtemplate;entitlementtemplatechannel;entitlementtemplateproducts;entityanalyticsconfig;entityimageconfig;entityindex;entitymap;environmentvariabledefinition;environmentvariablevalue;equipment;exportsolutionupload;externalparty;externalpartyitem;fax;featurecontrolsetting;fixedmonthlyfiscalcalendar;flowmachine;flowmachinegroup;flowsession;goal;goalrollupquery;holidaywrapper;import;importdata;importfile;importlog;importmap;incident;incidentknowledgebaserecord;incidentresolution;indexattributes;interactionforemail;internalcatalogassignment;invoice;invoicedetail;isvconfig;kbarticle;kbarticlecomment;kbarticletemplate;keyvaultreference;knowledgearticle;knowledgearticleincident;knowledgebaserecord;lead;leadaddress;leadcompetitors;leadproduct;leadtoopportunitysalesprocess;letter;list;listmember;listoperation;mailbox;mailmergetemplate;managedidentity;marketingformdisplayattributes;metric;monthlyfiscalcalendar;msdynce_botcontent;msdynsm_marketingsitemap;msdynsm_salessitemap;msdynsm_servicessitemap;msdynsm_settingssitemap;msdyn_3dmodel;msdyn_accountpricelist;msdyn_actioncardregarding;msdyn_actioncardrolesetting;msdyn_actual;msdyn_adaptivecardconfiguration;msdyn_adminappstate;msdyn_agentstatushistory;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingincident;msdyn_agreementbookingproduct;msdyn_agreementbookingservice;msdyn_agreementbookingservicetask;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoiceproduct;msdyn_agreementinvoicesetup;msdyn_agreementsubstatus;msdyn_aibdataset;msdyn_aibdatasetfile;msdyn_aibdatasetrecord;msdyn_aibdatasetscontainer;msdyn_aibfile;msdyn_aibfileattacheddata;msdyn_aiconfiguration;msdyn_aifptrainingdocument;msdyn_aimodel;msdyn_aiodimage;msdyn_aiodlabel;msdyn_aiodtrainingboundingbox;msdyn_aiodtrainingimage;msdyn_aitemplate;msdyn_analysiscomponent;msdyn_analysisjob;msdyn_analysisresult;msdyn_analysisresultdetail;msdyn_analytics;msdyn_analyticsadminsettings;msdyn_analyticsforcs;msdyn_appconfiguration;msdyn_applicationextension;msdyn_applicationtabtemplate;msdyn_approval;msdyn_approvalset;msdyn_assetcategorytemplateassociation;msdyn_assetsuggestionssetting;msdyn_assettemplateassociation;msdyn_assignmentconfiguration;msdyn_assignmentconfigurationstep;msdyn_assignmentmap;msdyn_assignmentrule;msdyn_attribute;msdyn_attributevalue;msdyn_authenticationsettings;msdyn_autocapturerule;msdyn_autocapturesettings;msdyn_batchjob;msdyn_bookableresourceassociation;msdyn_bookableresourcebookingquicknote;msdyn_bookableresourcecapacityprofile;msdyn_bookingalert;msdyn_bookingalertstatus;msdyn_bookingchange;msdyn_bookingjournal;msdyn_bookingrule;msdyn_bookingsetupmetadata;msdyn_bookingtimestamp;msdyn_bpf_2c5fe86acc8b414b8322ae571000c799;msdyn_bpf_477c16f59170487b8b4dc895c5dcd09b;msdyn_bpf_665e73aa18c247d886bfc50499c73b82;msdyn_bpf_989e9b1857e24af18787d5143b67523b;msdyn_bpf_baa0a411a239410cb8bded8b5fdd88e3;msdyn_bpf_d3d97bac8c294105840e99e37a9d1c39;msdyn_bpf_d8f9dc7f099f44db9d641dd81fbd470d;msdyn_businessclosure;msdyn_callablecontext;msdyn_cannedmessage;msdyn_capacityprofile;msdyn_caseenrichment;msdyn_casesuggestionrequestpayload;msdyn_casetopic;msdyn_casetopicsetting;msdyn_casetopicsummary;msdyn_casetopic_incident;msdyn_cdsentityengagementctx;msdyn_channel;msdyn_channelcapability;msdyn_channelprovider;msdyn_characteristicreqforteammember;msdyn_chatansweroption;msdyn_chatquestionnaireresponse;msdyn_chatquestionnaireresponseitem;msdyn_chatwidgetlanguage;msdyn_ciprovider;msdyn_clientextension;msdyn_collabgraphresource;msdyn_configuration;msdyn_consoleapplicationnotificationfield;msdyn_consoleapplicationnotificationtemplate;msdyn_consoleapplicationsessiontemplate;msdyn_consoleapplicationtemplate;msdyn_consoleapplicationtemplateparameter;msdyn_consoleapplicationtype;msdyn_consoleappparameterdefinition;msdyn_contactpricelist;msdyn_contractlinedetailperformance;msdyn_contractlineinvoiceschedule;msdyn_contractlinescheduleofvalue;msdyn_contractperformance;msdyn_conversationaction;msdyn_conversationactionlocale;msdyn_conversationdata;msdyn_conversationinsight;msdyn_conversationsuggestionrequestpayload;msdyn_conversationtopic;msdyn_conversationtopicsetting;msdyn_conversationtopicsummary;msdyn_conversationtopic_conversation;msdyn_customengagementctx;msdyn_customerasset;msdyn_customerassetattachment;msdyn_customerassetcategory;msdyn_dataanalyticsreport;msdyn_dataanalyticsreport_csrmanager;msdyn_dataanalyticsreport_fs;msdyn_dataanalyticsreport_fspredictrs;msdyn_dataanalyticsreport_fspredictwhd;msdyn_dataanalyticsreport_ksinsights;msdyn_dataanalyticsreport_oc;msdyn_dataanalyticsreport_ocvoice;msdyn_databaseversion;msdyn_dataexport;msdyn_dataflow;msdyn_datainsightsandanalyticsfeature;msdyn_dealmanageraccess;msdyn_dealmanagersettings;msdyn_decisioncontract;msdyn_decisionruleset;msdyn_delegation;msdyn_dimension;msdyn_dimensionfieldname;msdyn_effortpredictionresult;msdyn_entitlementapplication;msdyn_entityconfig;msdyn_entityconfiguration;msdyn_entitylinkchatconfiguration;msdyn_entityrankingrule;msdyn_entityroutingconfiguration;msdyn_estimate;msdyn_estimateline;msdyn_expense;msdyn_expensecategory;msdyn_expensereceipt;msdyn_extendedusersetting;msdyn_facebookengagementctx;msdyn_fact;msdyn_federatedarticle;msdyn_federatedarticleincident;msdyn_fieldcomputation;msdyn_fieldservicepricelistitem;msdyn_fieldservicesetting;msdyn_fieldserviceslaconfiguration;msdyn_fieldservicesystemjob;msdyn_findworkevent;msdyn_flowcardtype;msdyn_forecastconfiguration;msdyn_forecastdefinition;msdyn_forecastinstance;msdyn_forecastrecurrence;msdyn_functionallocation;msdyn_gdprdata;msdyn_geofence;msdyn_geofenceevent;msdyn_geofencingsettings;msdyn_geolocationsettings;msdyn_geolocationtracking;msdyn_helppage;msdyn_icebreakersconfig;msdyn_iermlmodel;msdyn_iermltraining;msdyn_incidenttype;msdyn_incidenttypecharacteristic;msdyn_incidenttypeproduct;msdyn_incidenttyperecommendationresult;msdyn_incidenttyperecommendationrunhistory;msdyn_incidenttyperesolution;msdyn_incidenttypeservice;msdyn_incidenttypeservicetask;msdyn_incidenttypessetup;msdyn_incidenttype_requirementgroup;msdyn_inspection;msdyn_inspectionattachment;msdyn_inspectiondefinition;msdyn_inspectioninstance;msdyn_inspectionresponse;msdyn_integrationjob;msdyn_integrationjobdetail;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventoryjournal;msdyn_inventorytransfer;msdyn_invoicefrequency;msdyn_invoicefrequencydetail;msdyn_invoicelinetransaction;msdyn_iotalert;msdyn_iotdevice;msdyn_iotdevicecategory;msdyn_iotdevicecommand;msdyn_iotdevicecommanddefinition;msdyn_iotdevicedatahistory;msdyn_iotdeviceproperty;msdyn_iotdeviceregistrationhistory;msdyn_iotdevicevisualizationconfiguration;msdyn_iotfieldmapping;msdyn_iotpropertydefinition;msdyn_iotprovider;msdyn_iotproviderinstance;msdyn_iotsettings;msdyn_iottocaseprocess;msdyn_journal;msdyn_journalline;msdyn_kalanguagesetting;msdyn_kbattachment;msdyn_kbenrichment;msdyn_kbkeywordsdescsuggestionsetting;msdyn_kmfederatedsearchconfig;msdyn_kmpersonalizationsetting;msdyn_knowledgearticleimage;msdyn_knowledgearticletemplate;msdyn_knowledgeinteractioninsight;msdyn_knowledgepersonalfilter;msdyn_knowledgesearchfilter;msdyn_knowledgesearchinsight;msdyn_kpieventdata;msdyn_kpieventdefinition;msdyn_lineengagementctx;msdyn_livechatconfig;msdyn_livechatengagementctx;msdyn_livechatwidgetlocation;msdyn_liveconversation;msdyn_liveworkitemevent;msdyn_liveworkstream;msdyn_liveworkstreamcapacityprofile;msdyn_localizedsurveyquestion;msdyn_macrosession;msdyn_maskingrule;msdyn_masterentityroutingconfiguration;msdyn_migrationtracker;msdyn_mlresultcache;msdyn_msteamssetting;msdyn_msteamssettingsv2;msdyn_notesanalysisconfig;msdyn_notificationfield;msdyn_notificationtemplate;msdyn_ocautoblockrule;msdyn_ocbotchannelregistration;msdyn_occarrier;msdyn_occhannelconfiguration;msdyn_occhannelstateconfiguration;msdyn_occommunicationprovidersetting;msdyn_occommunicationprovidersettingentry;msdyn_occustommessagingchannel;msdyn_ocfbapplication;msdyn_ocfbpage;msdyn_ocflaggedspam;msdyn_oclanguage;msdyn_oclinechannelconfig;msdyn_ocliveworkitem;msdyn_ocliveworkitemcapacityprofile;msdyn_ocliveworkitemcharacteristic;msdyn_ocliveworkitemcontextitem;msdyn_ocliveworkitemparticipant;msdyn_ocliveworkitemsentiment;msdyn_ocliveworkstreamcontextvariable;msdyn_oclocalizationdata;msdyn_ocoutboundconfiguration;msdyn_ocoutboundmessage;msdyn_ocphonenumber;msdyn_ocprovisioningstate;msdyn_ocrecording;msdyn_ocrequest;msdyn_ocruleitem;msdyn_ocsentimentdailytopic;msdyn_ocsentimentdailytopickeyword;msdyn_ocsentimentdailytopictrending;msdyn_ocsession;msdyn_ocsessioncharacteristic;msdyn_ocsessionparticipantevent;msdyn_ocsessionsentiment;msdyn_ocsimltraining;msdyn_ocsitdimportconfig;msdyn_ocsitdskill;msdyn_ocsitrainingdata;msdyn_ocskillidentmlmodel;msdyn_ocsmschannelsetting;msdyn_ocsystemmessage;msdyn_octag;msdyn_octeamschannelconfig;msdyn_octwitterapplication;msdyn_octwitterhandle;msdyn_ocwechatchannelconfig;msdyn_ocwhatsappchannelaccount;msdyn_ocwhatsappchannelnumber;msdyn_oc_geolocationprovider;msdyn_omnichannelconfiguration;msdyn_omnichannelpersonalization;msdyn_omnichannelqueue;msdyn_omnichannelsyncconfig;msdyn_operatinghour;msdyn_opportunitylineresourcecategory;msdyn_opportunitylinetransaction;msdyn_opportunitylinetransactioncategory;msdyn_opportunitylinetransactionclassificatio;msdyn_opportunitypricelist;msdyn_orderinvoicingdate;msdyn_orderinvoicingproduct;msdyn_orderinvoicingsetup;msdyn_orderinvoicingsetupdate;msdyn_orderlineresourcecategory;msdyn_orderlinetransaction;msdyn_orderlinetransactioncategory;msdyn_orderlinetransactionclassification;msdyn_orderpricelist;msdyn_organizationalunit;msdyn_overflowactionconfig;msdyn_paneconfiguration;msdyn_panetabconfiguration;msdyn_panetoolconfiguration;msdyn_payment;msdyn_paymentdetail;msdyn_paymentmethod;msdyn_paymentterm;msdyn_personalmessage;msdyn_personalsoundsetting;msdyn_personasecurityrolemapping;msdyn_playbookactivity;msdyn_playbookactivityattribute;msdyn_playbookcategory;msdyn_playbookinstance;msdyn_playbooktemplate;msdyn_pminferredtask;msdyn_pmrecording;msdyn_postalbum;msdyn_postalcode;msdyn_postconfig;msdyn_postruleconfig;msdyn_predictworkhourdurationsetting;msdyn_presence;msdyn_priority;msdyn_problematicasset;msdyn_problematicassetfeedback;msdyn_processnotes;msdyn_productinventory;msdyn_productivityactioninputparameter;msdyn_productivityactionoutputparameter;msdyn_productivityagentscript;msdyn_productivityagentscriptstep;msdyn_productivitymacroactiontemplate;msdyn_productivitymacroconnector;msdyn_productivitymacrosolutionconfiguration;msdyn_productivityparameterdefinition;msdyn_project;msdyn_projectapproval;msdyn_projectparameter;msdyn_projectparameterpricelist;msdyn_projectpricelist;msdyn_projecttask;msdyn_projecttaskdependency;msdyn_projecttaskstatususer;msdyn_projectteam;msdyn_projectteammembersignup;msdyn_projecttransactioncategory;msdyn_property;msdyn_propertyassetassociation;msdyn_propertylog;msdyn_propertytemplateassociation;msdyn_provider;msdyn_purchaseorder;msdyn_purchaseorderbill;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_purchaseorderreceiptproduct;msdyn_purchaseordersubstatus;msdyn_questionsequence;msdyn_quotebookingincident;msdyn_quotebookingproduct;msdyn_quotebookingservice;msdyn_quotebookingservicetask;msdyn_quotebookingsetup;msdyn_quoteinvoicingproduct;msdyn_quoteinvoicingsetup;msdyn_quotelineanalyticsbreakdown;msdyn_quotelineinvoiceschedule;msdyn_quotelineresourcecategory;msdyn_quotelinescheduleofvalue;msdyn_quotelinetransaction;msdyn_quotelinetransactioncategory;msdyn_quotelinetransactionclassification;msdyn_quotepricelist;msdyn_relationshipinsightsunifiedconfig;msdyn_requirementcharacteristic;msdyn_requirementdependency;msdyn_requirementgroup;msdyn_requirementorganizationunit;msdyn_requirementrelationship;msdyn_requirementresourcecategory;msdyn_requirementresourcepreference;msdyn_requirementstatus;msdyn_resolution;msdyn_resourceassignment;msdyn_resourceassignmentdetail;msdyn_resourcecategorymarkuppricelevel;msdyn_resourcecategorypricelevel;msdyn_resourcepaytype;msdyn_resourcerequest;msdyn_resourcerequirement;msdyn_resourcerequirementdetail;msdyn_resourceterritory;msdyn_richtextfile;msdyn_rma;msdyn_rmaproduct;msdyn_rmareceipt;msdyn_rmareceiptproduct;msdyn_rmasubstatus;msdyn_rolecompetencyrequirement;msdyn_roleutilization;msdyn_routingconfiguration;msdyn_routingconfigurationstep;msdyn_routingrequest;msdyn_routingrulesetsetting;msdyn_rtv;msdyn_rtvproduct;msdyn_rtvsubstatus;msdyn_rulesetdependencymapping;msdyn_salesaccelerationsettings;msdyn_salesassignmentsetting;msdyn_salesinsightssettings;msdyn_scenario;msdyn_scheduleboardsetting;msdyn_schedulingfeatureflag;msdyn_schedulingparameter;msdyn_searchconfiguration;msdyn_segment;msdyn_segmentcatalogue;msdyn_sentimentanalysis;msdyn_sequence;msdyn_sequencetarget;msdyn_sequencetargetstep;msdyn_serviceconfiguration;msdyn_servicetasktype;msdyn_sessiondata;msdyn_sessionevent;msdyn_sessionparticipant;msdyn_sessionparticipantdata;msdyn_sessiontemplate;msdyn_shipvia;msdyn_siconfig;msdyn_sikeyvalueconfig;msdyn_skillattachmentruleitem;msdyn_skillattachmenttarget;msdyn_slakpi;msdyn_smartassistconfig;msdyn_smsengagementctx;msdyn_smsnumber;msdyn_solutionhealthrule;msdyn_solutionhealthruleargument;msdyn_solutionhealthruleset;msdyn_soundfile;msdyn_soundnotificationsetting;msdyn_suggestioninteraction;msdyn_suggestionrequestpayload;msdyn_suggestionsmodelsummary;msdyn_suggestionssetting;msdyn_surveyquestion;msdyn_systemuserschedulersetting;msdyn_taxcode;msdyn_taxcodedetail;msdyn_teamschannelengagementctx;msdyn_teamschatassociation;msdyn_teamschatsuggestion;msdyn_teamscollaboration;msdyn_teamsdialeradminsettings;msdyn_teamsengagementctx;msdyn_templateforproperties;msdyn_templateparameter;msdyn_templatetags;msdyn_timeentry;msdyn_timeentrysetting;msdyn_timegroup;msdyn_timegroupdetail;msdyn_timeoffcalendar;msdyn_timeoffrequest;msdyn_tour;msdyn_transactioncategory;msdyn_transactioncategoryclassification;msdyn_transactioncategoryhierarchyelement;msdyn_transactioncategorypricelevel;msdyn_transactionconnection;msdyn_transactionorigin;msdyn_transactiontype;msdyn_transcript;msdyn_twitterengagementctx;msdyn_unifiedroutingdiagnostic;msdyn_unifiedroutingrun;msdyn_unifiedroutingsetuptracker;msdyn_uniquenumber;msdyn_untrackedappointment;msdyn_upgraderun;msdyn_upgradestep;msdyn_upgradeversion;msdyn_urnotificationtemplate;msdyn_urnotificationtemplatemapping;msdyn_usersetting;msdyn_userworkhistory;msdyn_visitorjourney;msdyn_wallsavedquery;msdyn_wallsavedqueryusersettings;msdyn_warehouse;msdyn_wechatengagementctx;msdyn_whatsappengagementctx;msdyn_workhourtemplate;msdyn_workorder;msdyn_workordercharacteristic;msdyn_workorderdetailsgenerationqueue;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderresolution;msdyn_workorderresourcerestriction;msdyn_workorderservice;msdyn_workorderservicetask;msdyn_workordersubstatus;msdyn_workordertype;msdyn_workqueuestate;msdyn_workqueueusersetting;msdyusd_actioncallworkflow;msdyusd_agentscriptaction;msdyusd_agentscripttaskcategory;msdyusd_answer;msdyusd_auditanddiagnosticssetting;msdyusd_configuration;msdyusd_customizationfiles;msdyusd_entityassignment;msdyusd_entitysearch;msdyusd_form;msdyusd_languagemodule;msdyusd_scriptlet;msdyusd_scripttasktrigger;msdyusd_search;msdyusd_sessioninformation;msdyusd_sessiontransfer;msdyusd_task;msdyusd_toolbarbutton;msdyusd_toolbarstrip;msdyusd_tracesourcesetting;msdyusd_ucisettings;msdyusd_uiievent;msdyusd_usersettings;msdyusd_windowroute;msfp_alert;msfp_alertrule;msfp_emailtemplate;msfp_fileresponse;msfp_localizedemailtemplate;msfp_project;msfp_question;msfp_questionresponse;msfp_satisfactionmetric;msfp_survey;msfp_surveyinvite;msfp_surveyreminder;msfp_surveyresponse;msfp_unsubscribedrecipient;opportunity;opportunityclose;opportunitycompetitors;opportunityproduct;opportunitysalesprocess;orderclose;organization;organizationdatasyncsubscription;organizationdatasyncsubscriptionentity;organizationsetting;package;pdfsetting;phonecall;phonetocaseprocess;pluginpackage;position;post;postfollow;pricelevel;privilege;processstageparameter;product;productassociation;productpricelevel;productsalesliterature;productsubstitute;provisionlanguageforuser;quarterlyfiscalcalendar;queue;queueitem;quote;quoteclose;quotedetail;ratingmodel;ratingvalue;recurringappointmentmaster;relationshipattribute;relationshiprole;relationshiprolemap;report;resource;resourcegroup;resourcegroupexpansion;resourcespec;revokeinheritedaccessrecordstracker;role;rollupfield;routingrule;routingruleitem;salesliterature;salesliteratureitem;salesorder;salesorderdetail;salesprocessinstance;savedquery;semiannualfiscalcalendar;service;serviceappointment;servicecontractcontacts;serviceplan;serviceplanmapping;settingdefinition;sharepointdocumentlocation;sharepointsite;similarityrule;site;sla;socialactivity;socialprofile;solutioncomponentattributeconfiguration;solutioncomponentbatchconfiguration;solutioncomponentconfiguration;solutioncomponentrelationshipconfiguration;stagesolutionupload;subject;systemform;systemuser;systemuserauthorizationchangetracker;task;team;teammobileofflineprofilemembership;template;territory;theme;topic;topichistory;topicmodel;topicmodelconfiguration;topicmodelexecutionhistory;transactioncurrency;uii_action;uii_audit;uii_context;uii_hostedapplication;uii_nonhostedapplication;uii_option;uii_savedsession;uii_sessiontransfer;uii_workflow;uii_workflowstep;uii_workflow_workflowstep_mapping;uom;uomschedule;userform;usermapping;usermobileofflineprofilemembership;userquery;virtualentitymetadata;workflowbinary</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

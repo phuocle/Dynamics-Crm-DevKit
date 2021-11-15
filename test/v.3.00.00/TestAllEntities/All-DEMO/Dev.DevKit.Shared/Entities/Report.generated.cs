@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.ReportOptionSets
 		/// </summary>
 		Deleted = 2,
 		/// <summary>
-		/// Deleted_Unpublished = 3
+		/// Deleted Unpublished = 3
 		/// </summary>
 		Deleted_Unpublished = 3,
 		/// <summary>
@@ -33,15 +33,15 @@ namespace Dev.DevKit.Shared.Entities.ReportOptionSets
 	public enum ReportTypeCode
 	{
 		/// <summary>
-		/// Linked_Report = 3
+		/// Linked Report = 3
 		/// </summary>
 		Linked_Report = 3,
 		/// <summary>
-		/// Other_Report = 2
+		/// Other Report = 2
 		/// </summary>
 		Other_Report = 2,
 		/// <summary>
-		/// Reporting_Services_Report = 1
+		/// Reporting Services Report = 1
 		/// </summary>
 		Reporting_Services_Report = 1
 	}
@@ -105,6 +105,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "report";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 9100;
 
 		[DebuggerNonUserCode()]
@@ -460,7 +461,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the report.</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -590,9 +591,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.ReportOptionSets.ReportTypeCode)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.ReportTypeCode] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.ReportTypeCode] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.ReportTypeCode] = null;
+			}
 		}
 
 		/// <summary>

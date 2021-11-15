@@ -13,9 +13,9 @@ namespace Dev.DevKit.Shared.Entities.msdyn_consoleapplicationtemplateparameterOp
 	public enum msdyn_RuntimeType
 	{
 		/// <summary>
-		/// _string = 110000000
+		/// string = 110000000
 		/// </summary>
-		_string = 110000000,
+		@string = 110000000,
 		/// <summary>
 		/// boolean = 110000002
 		/// </summary>
@@ -88,7 +88,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_consoleapplicationtemplateparameter";
 
-		public const int EntityTypeCode = 10529;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10598;
 
 		[DebuggerNonUserCode()]
 		public msdyn_consoleapplicationtemplateparameter()
@@ -283,9 +284,12 @@ namespace Dev.DevKit.Shared.Entities
 				return (Dev.DevKit.Shared.Entities.msdyn_consoleapplicationtemplateparameterOptionSets.msdyn_RuntimeType)value.Value;
 			}
 			set
-	{
-		Entity.Attributes[Fields.msdyn_RuntimeType] = new OptionSetValue((int)value);
-}
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_RuntimeType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_RuntimeType] = null;
+			}
 		}
 
 		/// <summary>
@@ -314,7 +318,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

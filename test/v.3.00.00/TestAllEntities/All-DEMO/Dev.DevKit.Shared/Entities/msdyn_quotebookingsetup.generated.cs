@@ -17,7 +17,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_quotebookingsetupOptionSets
 		/// </summary>
 		Facility = 690970001,
 		/// <summary>
-		/// Location_Agnostic = 690970002
+		/// Location Agnostic = 690970002
 		/// </summary>
 		Location_Agnostic = 690970002,
 		/// <summary>
@@ -127,7 +127,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_quotebookingsetup";
 
-		public const int EntityTypeCode = 10466;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10530;
 
 		[DebuggerNonUserCode()]
 		public msdyn_quotebookingsetup()
@@ -921,7 +922,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

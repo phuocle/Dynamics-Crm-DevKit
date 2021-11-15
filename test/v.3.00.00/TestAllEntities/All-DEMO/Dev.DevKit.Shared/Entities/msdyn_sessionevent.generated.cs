@@ -53,13 +53,13 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessioneventOptionSets
 		/// </summary>
 		AgentTransferred = 192350012,
 		/// <summary>
-		/// AssignToAgentBySupervisor_ = 192350026
+		/// AssignToAgentBySupervisor   = 192350026
 		/// </summary>
-		AssignToAgentBySupervisor_ = 192350026,
+		AssignToAgentBySupervisor = 192350026,
 		/// <summary>
-		/// AssignToQueueBySupervisor_ = 192350027
+		/// AssignToQueueBySupervisor   = 192350027
 		/// </summary>
-		AssignToQueueBySupervisor_ = 192350027,
+		AssignToQueueBySupervisor = 192350027,
 		/// <summary>
 		/// AutoAccept = 192350006
 		/// </summary>
@@ -69,13 +69,13 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessioneventOptionSets
 		/// </summary>
 		AutoAccepted = 192350020,
 		/// <summary>
-		/// BotEndConversation_ = 192350025
+		/// BotEndConversation  = 192350025
 		/// </summary>
-		BotEndConversation_ = 192350025,
+		BotEndConversation = 192350025,
 		/// <summary>
-		/// BotTransferSession_ = 192350024
+		/// BotTransferSession  = 192350024
 		/// </summary>
-		BotTransferSession_ = 192350024,
+		BotTransferSession = 192350024,
 		/// <summary>
 		/// Closed = 192350007
 		/// </summary>
@@ -132,6 +132,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_sessioneventOptionSets
 		/// SessionTimeout = 192350015
 		/// </summary>
 		SessionTimeout = 192350015,
+		/// <summary>
+		/// SupervisorTransferToAgent = 192350031
+		/// </summary>
+		SupervisorTransferToAgent = 192350031,
 		/// <summary>
 		/// TimedOut = 192350018
 		/// </summary>
@@ -317,7 +321,8 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "msdyn_sessionevent";
 
-		public const int EntityTypeCode = 10583;
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
+		public const int EntityTypeCode = 10678;
 
 		[DebuggerNonUserCode()]
 		public msdyn_sessionevent()
@@ -580,7 +585,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Owner</para>
+		/// <para>Lookup to systemuser;team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

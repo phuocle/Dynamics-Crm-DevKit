@@ -77,6 +77,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		public const string EntityLogicalName = "partnerapplication";
 
+		[System.Obsolete("This value is different for each instance. Please don't use it.")]
 		public const int EntityTypeCode = 1095;
 
 		[DebuggerNonUserCode()]
@@ -308,7 +309,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Select the partner application's status.</para>
+		/// <para>Select the partner application&apos;s status.</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
