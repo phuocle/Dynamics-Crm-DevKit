@@ -124,32 +124,39 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             foreach(var file in files)
             {
                 var schemaName = Utility.GetSchemaNameFromFile(file, endsWith);
-                var entityMetadata = EntitiesMetadata.First(x => x.SchemaName == schemaName);
-                var oldCsCode = Utility.ReadAllText(file);
-                var newCsCode = CSharpLateBound.GetCsCode(CrmServiceClient, entityMetadata, schemaName, json.rootnamespace);
-                if (Utility.IsTheSame(oldCsCode, newCsCode))
+                var entityMetadata = EntitiesMetadata.FirstOrDefault(x => x.SchemaName == schemaName);
+                if (entityMetadata?.Attributes?.Length > 0)
                 {
-                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
-                }
-                else
-                {
-                    if (File.Exists(file))
+                    var oldCsCode = Utility.ReadAllText(file);
+                    var newCsCode = CSharpLateBound.GetCsCode(CrmServiceClient, entityMetadata, schemaName, json.rootnamespace);
+                    if (Utility.IsTheSame(oldCsCode, newCsCode))
                     {
-                        Utility.ForceWriteAllText(file, newCsCode);
-                        CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
                     }
                     else
                     {
-                        var newFileName = Path.Combine(Path.GetDirectoryName(file), $"{schemaName}.cs");
-                        var newFileNameContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.LateBound.cs");
-                        newFileNameContent = newFileNameContent
-                            .Replace("$NameSpace$", json.rootnamespace)
-                            .Replace("$class$", schemaName);
-                        Utility.ForceWriteAllText(newFileName, newFileNameContent);
-                        CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}.cs");
-                        Utility.ForceWriteAllText(file, newCsCode);
-                        CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        if (File.Exists(file))
+                        {
+                            Utility.ForceWriteAllText(file, newCsCode);
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                        else
+                        {
+                            var newFileName = Path.Combine(Path.GetDirectoryName(file), $"{schemaName}.cs");
+                            var newFileNameContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.LateBound.cs");
+                            newFileNameContent = newFileNameContent
+                                .Replace("$NameSpace$", json.rootnamespace)
+                                .Replace("$class$", schemaName);
+                            Utility.ForceWriteAllText(newFileName, newFileNameContent);
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}.cs");
+                            Utility.ForceWriteAllText(file, newCsCode);
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
                     }
+                }
+                else
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Error, ConsoleColor.White, $"entity logical name: ", ConsoleColor.DarkMagenta, entityMetadata.LogicalName, ConsoleColor.White, " not found in the current instance !!!");
                 }
                 i++;
             }

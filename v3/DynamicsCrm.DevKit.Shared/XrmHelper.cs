@@ -224,7 +224,18 @@ namespace DynamicsCrm.DevKit.Shared
             ExecuteMultipleResponse response = (ExecuteMultipleResponse)crmServiceClient.Execute(request);
             foreach (var result in response.Responses)
             {
-                if (result.Fault == null) list.Add(((RetrieveEntityResponse)result.Response).EntityMetadata);
+                if (result.Fault == null)
+                    list.Add(((RetrieveEntityResponse)result.Response).EntityMetadata);
+                else
+                {
+                    var errorRequest = request.Requests[result.RequestIndex] as RetrieveEntityRequest;
+                    var entityMetadataError = new EntityMetadata
+                    {
+                        LogicalName = errorRequest.LogicalName,
+                        SchemaName = errorRequest.LogicalName
+                    };
+                    list.Add(entityMetadataError);
+                }
             }
             return list;
         }
