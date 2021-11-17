@@ -21,7 +21,7 @@
       "rootnamespace": "DevKit",
       "rootfolder": "",
       "type": "JsWebApi",
-      "entities": "untrackedemail,uom,uomschedule,userapplicationmetadata,userentityinstancedata,userentityuisettings,userfiscalcalendar,userform,usermapping,usermobileofflineprofilemembership,userquery,userqueryvisualization,usersearchfacet,usersettings,virtualentitymetadata,virtualresourcegroupresource,webresource,webwizard,wizardaccessprivilege,wizardpage,workflow,workflowbinary,workflowdependency,workflowlog,workflowwaitsubscription",
+      "entities": "account,email",
       "debug": "yes"
     }
   ],

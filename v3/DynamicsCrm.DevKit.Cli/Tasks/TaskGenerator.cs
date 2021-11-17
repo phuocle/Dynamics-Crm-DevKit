@@ -14,7 +14,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
     {
         public string CurrentDirectory { get; set; }
         public CrmServiceClient CrmServiceClient { get; set; }
-        public string TaskType => "[GENERATOR]";
+        public string TaskType { get; set; }
         private JsonGenerator json { get; set; }
         private List<EntityMetadata> EntitiesMetadata { get; set; }
         private string CurrentFolder => $"{CurrentDirectory}\\{json.rootfolder}";
@@ -59,20 +59,57 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if (json.type.ToLower() == nameof(GeneratorType.csharp))
                     GeneratorLateBound(".generated.cs");
                 else if (json.type.ToLower() == nameof(GeneratorType.jsform))
-                    GeneratorJsForm();
+                    GeneratorJsForm(".form.js");
                 else if (json.type.ToLower() == nameof(GeneratorType.jswebapi))
-                    GeneratorWebApi();
+                    GeneratorWebApi(".webapi.js");
             }
 
             CliLog.WriteLine(ConsoleColor.White, "|");
             CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "END ", ConsoleColor.Blue, TaskType);
         }
 
-        private void GeneratorWebApi()
+        private void GeneratorWebApi(string endsWith)
         {
+            var files = GetFiles(endsWith);
+            var totalFiles = files.Count();
+            var len = totalFiles.ToString().Length;
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            var i = 1;
+            foreach (var file in files)
+            {
+                var schemaName = Utility.GetSchemaNameFromFile(file, endsWith);
+                var oldCode = Utility.ReadAllText(file);
+                var newCode = JsWebApi.GetCode(CrmServiceClient, EntitiesMetadata.First(x => x.SchemaName == schemaName), schemaName, json.rootnamespace);
+                if (Utility.IsTheSame(oldCode, newCode))
+                {
+                    CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+                }
+                else
+                {
+                    if (File.Exists(file))
+                    {
+                        Utility.ForceWriteAllText(file, newCode);
+                        CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
+                    }
+                    else
+                    {
+                        //var newFileName = Path.Combine(Path.GetDirectoryName(file), $"{schemaName}.cs");
+                        //var newFileNameContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.LateBound.cs");
+                        //newFileNameContent = newFileNameContent
+                        //    .Replace("$NameSpace$", json.rootnamespace)
+                        //    .Replace("$class$", schemaName);
+                        //Utility.ForceWriteAllText(newFileName, newFileNameContent);
+                        //CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}.cs");
+                        //Utility.ForceWriteAllText(file, newCsCode);
+                        //CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
+                    }
+                }
+                i++;
+            }
         }
 
-        private void GeneratorJsForm()
+        private void GeneratorJsForm(string endsWith)
         {
         }
 
@@ -174,6 +211,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             CrmServiceClient = crmServiceClient;
             CurrentDirectory = currentDirectory;
             this.json = json;
+            TaskType = $"[GENERATOR - {json.type.ToUpper() }]";
         }
     }
 }

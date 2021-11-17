@@ -47,23 +47,23 @@ namespace DynamicsCrm.DevKit.Shared
             return values.OrderBy(x => x.Name).ToList();
         }
 
-        public static string GetEntityReferenceLogicalName(this AttributeMetadata attribute)
-        {
-            if (attribute.AttributeType == AttributeTypeCode.Owner)
-            {
-                return "systemuser;team";
-            }
-            else if (attribute.AttributeType == AttributeTypeCode.Lookup || attribute.AttributeType == AttributeTypeCode.Customer || attribute.AttributeType == AttributeTypeCode.PartyList)
-            {
-                var lookup = (LookupAttributeMetadata)attribute;
-                var value = string.Empty;
-                foreach (var target in lookup.Targets)
-                    value += target + ";";
-                if (value.Length > 0) value = value.Substring(0, value.Length - 1);
-                return value;
-            }
-            return string.Empty;
-        }
+        //public static string GetEntityReferenceLogicalName(this AttributeMetadata attribute)
+        //{
+        //    if (attribute.AttributeType == AttributeTypeCode.Owner)
+        //    {
+        //        return "systemuser;team";
+        //    }
+        //    else if (attribute.AttributeType == AttributeTypeCode.Lookup || attribute.AttributeType == AttributeTypeCode.Customer || attribute.AttributeType == AttributeTypeCode.PartyList)
+        //    {
+        //        var lookup = (LookupAttributeMetadata)attribute;
+        //        var value = string.Empty;
+        //        foreach (var target in lookup.Targets)
+        //            value += target + ";";
+        //        if (value.Length > 0) value = value.Substring(0, value.Length - 1);
+        //        return value;
+        //    }
+        //    return string.Empty;
+        //}
 
         public static int? GetMaxLength(this AttributeMetadata attribute)
         {
@@ -104,6 +104,11 @@ namespace DynamicsCrm.DevKit.Shared
         {
             if (value == null) return null;
             return value.Trim().Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+        }
+
+        public static bool IsReadOnly(this AttributeMetadata attribute)
+        {
+            return attribute.SourceType == 1 || attribute.SourceType == 2;
         }
     }
 }

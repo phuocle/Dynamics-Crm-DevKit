@@ -31,12 +31,14 @@
 
   <ItemGroup>
     <None Remove="Forms\FormWebResource.xaml" />
+    <None Remove="Resources\WebApi.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\devkit.d.ts" />
     <EmbeddedResource Include="Resources\devkit.js" />
     <EmbeddedResource Include="Resources\DynamicsCrm.DevKit.Cli.json" />
     <EmbeddedResource Include="Resources\LateBound.cs" />
+    <EmbeddedResource Include="Resources\WebApi.js" />
   </ItemGroup>
 
   <ItemGroup>

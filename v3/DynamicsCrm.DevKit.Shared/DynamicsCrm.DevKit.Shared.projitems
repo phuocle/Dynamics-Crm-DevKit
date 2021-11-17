@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EncryptDecrypt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsWebApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommandLineArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CrmConnection.cs" />
