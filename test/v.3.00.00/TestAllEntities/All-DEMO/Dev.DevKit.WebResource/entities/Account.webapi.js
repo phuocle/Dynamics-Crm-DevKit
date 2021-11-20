@@ -126,16 +126,16 @@ var DevKit;
 			Aging90: { a: 'aging90', r: true },
 			Aging90_Base: { a: 'aging90_base', r: true },
 			BusinessTypeCode: { a: 'businesstypecode' },
-			CreatedBy: { b: 'createdby', a: '_createdby_value', d: 'systemuser', r: true },
-			CreatedByExternalParty: { b: 'createdbyexternalparty', a: '_createdbyexternalparty_value', d: 'externalparty', r: true },
+			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
+			CreatedByExternalParty: { b: 'createdbyexternalparty', a: '_createdbyexternalparty_value', c: 'externalparties', d: 'externalparty', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
-			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', d: 'systemuser', r: true },
+			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreditLimit: { a: 'creditlimit' },
 			CreditLimit_Base: { a: 'creditlimit_base', r: true },
 			CreditOnHold: { a: 'creditonhold' },
 			CustomerSizeCode: { a: 'customersizecode' },
 			CustomerTypeCode: { a: 'customertypecode' },
-			DefaultPriceLevelId: { b: 'defaultpricelevelid', a: '_defaultpricelevelid_value', d: 'pricelevel' },
+			DefaultPriceLevelId: { b: 'defaultpricelevelid', a: '_defaultpricelevelid_value', c: 'pricelevels', d: 'pricelevel' },
 			Description: { a: 'description' },
 			DoNotBulkEMail: { a: 'donotbulkemail' },
 			DoNotBulkPostalMail: { a: 'donotbulkpostalmail' },
@@ -147,6 +147,9 @@ var DevKit;
 			EMailAddress1: { a: 'emailaddress1' },
 			EMailAddress2: { a: 'emailaddress2' },
 			EMailAddress3: { a: 'emailaddress3' },
+			EntityImage: { a: 'entityimage' },
+			EntityImage_Timestamp: { a: 'entityimage_timestamp', r: true },
+			EntityImage_URL: { a: 'entityimage_url', r: true },
 			EntityImageId: { a: 'entityimageid', r: true },
 			ExchangeRate: { a: 'exchangerate', r: true },
 			Fax: { a: 'fax' },
@@ -160,23 +163,24 @@ var DevKit;
 			MarketCap: { a: 'marketcap' },
 			MarketCap_Base: { a: 'marketcap_base', r: true },
 			MarketingOnly: { a: 'marketingonly' },
-			MasterId: { b: 'masterid', a: '_masterid_value', d: 'account', r: true },
+			MasterAccountIdName: { a: 'masteraccountidname', r: true },
+			MasterId: { b: 'masterid', a: '_masterid_value', c: 'accounts', d: 'account', r: true },
 			Merged: { a: 'merged', r: true },
-			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', d: 'systemuser', r: true },
-			ModifiedByExternalParty: { b: 'modifiedbyexternalparty', a: '_modifiedbyexternalparty_value', d: 'externalparty', r: true },
+			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
+			ModifiedByExternalParty: { b: 'modifiedbyexternalparty', a: '_modifiedbyexternalparty_value', c: 'externalparties', d: 'externalparty', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
-			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', d: 'systemuser', r: true },
-			msdyn_BillingAccount: { b: 'msdyn_BillingAccount', a: '_msdyn_billingaccount_value', d: 'account' },
+			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			msdyn_BillingAccount: { b: 'msdyn_BillingAccount', a: '_msdyn_billingaccount_value', c: 'accounts', d: 'account' },
 			msdyn_externalaccountid: { a: 'msdyn_externalaccountid' },
-			msdyn_PreferredResource: { b: 'msdyn_PreferredResource', a: '_msdyn_preferredresource_value', d: 'bookableresource' },
-			msdyn_SalesTaxCode: { b: 'msdyn_SalesTaxCode', a: '_msdyn_salestaxcode_value', d: 'msdyn_taxcode' },
-			msdyn_ServiceTerritory: { b: 'msdyn_ServiceTerritory', a: '_msdyn_serviceterritory_value', d: 'territory' },
+			msdyn_PreferredResource: { b: 'msdyn_PreferredResource', a: '_msdyn_preferredresource_value', c: 'bookableresources', d: 'bookableresource' },
+			msdyn_SalesTaxCode: { b: 'msdyn_SalesTaxCode', a: '_msdyn_salestaxcode_value', c: 'msdyn_taxcodes', d: 'msdyn_taxcode' },
+			msdyn_ServiceTerritory: { b: 'msdyn_ServiceTerritory', a: '_msdyn_serviceterritory_value', c: 'territories', d: 'territory' },
 			msdyn_TaxExempt: { a: 'msdyn_taxexempt' },
 			msdyn_TaxExemptNumber: { a: 'msdyn_taxexemptnumber' },
 			msdyn_TravelCharge: { a: 'msdyn_travelcharge' },
 			msdyn_travelcharge_Base: { a: 'msdyn_travelcharge_base', r: true },
 			msdyn_TravelChargeType: { a: 'msdyn_travelchargetype' },
-			msdyn_workhourtemplate: { b: 'msdyn_workhourtemplate', a: '_msdyn_workhourtemplate_value', d: 'msdyn_workhourtemplate' },
+			msdyn_workhourtemplate: { b: 'msdyn_workhourtemplate', a: '_msdyn_workhourtemplate_value', c: 'msdyn_workhourtemplates', d: 'msdyn_workhourtemplate' },
 			msdyn_WorkOrderInstructions: { a: 'msdyn_workorderinstructions' },
 			msdyusd_Facebook: { a: 'msdyusd_facebook' },
 			msdyusd_Twitter: { a: 'msdyusd_twitter' },
@@ -190,24 +194,24 @@ var DevKit;
 			OpenRevenue_Base: { a: 'openrevenue_base', r: true },
 			OpenRevenue_Date_UtcDateAndTime: { a: 'openrevenue_date', r: true },
 			OpenRevenue_State: { a: 'openrevenue_state', r: true },
-			OriginatingLeadId: { b: 'originatingleadid', a: '_originatingleadid_value', d: 'lead' },
+			OriginatingLeadId: { b: 'originatingleadid', a: '_originatingleadid_value', c: 'leads', d: 'lead' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
-			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', d: 'systemuser' },
-			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', d: 'team' },
+			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
+			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
 			OwnershipCode: { a: 'ownershipcode' },
-			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', d: 'businessunit', r: true },
-			OwningTeam: { b: 'owningteam', a: '_owningteam_value', d: 'team', r: true },
-			OwningUser: { b: 'owninguser', a: '_owninguser_value', d: 'systemuser', r: true },
-			ParentAccountId: { b: 'parentaccountid', a: '_parentaccountid_value', d: 'account' },
+			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
+			OwningTeam: { b: 'owningteam', a: '_owningteam_value', c: 'teams', d: 'team', r: true },
+			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
+			ParentAccountId: { b: 'parentaccountid', a: '_parentaccountid_value', c: 'accounts', d: 'account' },
 			ParticipatesInWorkflow: { a: 'participatesinworkflow' },
 			PaymentTermsCode: { a: 'paymenttermscode' },
 			PreferredAppointmentDayCode: { a: 'preferredappointmentdaycode' },
 			PreferredAppointmentTimeCode: { a: 'preferredappointmenttimecode' },
 			PreferredContactMethodCode: { a: 'preferredcontactmethodcode' },
-			PreferredEquipmentId: { b: 'preferredequipmentid', a: '_preferredequipmentid_value', d: 'equipment' },
-			PreferredServiceId: { b: 'preferredserviceid', a: '_preferredserviceid_value', d: 'service' },
-			PreferredSystemUserId: { b: 'preferredsystemuserid', a: '_preferredsystemuserid_value', d: 'systemuser' },
-			PrimaryContactId: { b: 'primarycontactid', a: '_primarycontactid_value', d: 'contact' },
+			PreferredEquipmentId: { b: 'preferredequipmentid', a: '_preferredequipmentid_value', c: 'equipments', d: 'equipment' },
+			PreferredServiceId: { b: 'preferredserviceid', a: '_preferredserviceid_value', c: 'services', d: 'service' },
+			PreferredSystemUserId: { b: 'preferredsystemuserid', a: '_preferredsystemuserid_value', c: 'systemusers', d: 'systemuser' },
+			PrimaryContactId: { b: 'primarycontactid', a: '_primarycontactid_value', c: 'contacts', d: 'contact' },
 			PrimarySatoriId: { a: 'primarysatoriid' },
 			PrimaryTwitterId: { a: 'primarytwitterid' },
 			ProcessId: { a: 'processid' },
@@ -216,8 +220,9 @@ var DevKit;
 			SharesOutstanding: { a: 'sharesoutstanding' },
 			ShippingMethodCode: { a: 'shippingmethodcode' },
 			SIC: { a: 'sic' },
-			SLAId: { b: 'slaid', a: '_slaid_value', d: 'sla' },
-			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', d: 'sla', r: true },
+			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
+			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
+			SLAName: { a: 'slaname', r: true },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
 			StatusCode: { a: 'statuscode' },
@@ -227,16 +232,16 @@ var DevKit;
 			Telephone2: { a: 'telephone2' },
 			Telephone3: { a: 'telephone3' },
 			TerritoryCode: { a: 'territorycode' },
-			TerritoryId: { b: 'territoryid', a: '_territoryid_value', d: 'territory' },
+			TerritoryId: { b: 'territoryid', a: '_territoryid_value', c: 'territories', d: 'territory' },
 			TickerSymbol: { a: 'tickersymbol' },
 			TimeSpentByMeOnEmailAndMeetings: { a: 'timespentbymeonemailandmeetings', r: true },
 			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber' },
-			TransactionCurrencyId: { b: 'transactioncurrencyid', a: '_transactioncurrencyid_value', d: 'transactioncurrency' },
+			TransactionCurrencyId: { b: 'transactioncurrencyid', a: '_transactioncurrencyid_value', c: 'transactioncurrencies', d: 'transactioncurrency' },
 			TraversedPath: { a: 'traversedpath' },
 			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' },
 			VersionNumber: { a: 'versionnumber', r: true },
 			WebSiteURL: { a: 'websiteurl' },
-			YomiName: { a: 'yominame' },
+			YomiName: { a: 'yominame' }
 		};
 		if (e === undefined) e = {};
 		var u = {};
@@ -249,3 +254,190 @@ var DevKit;
 			var r = account[field].r;
 			account[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
+		account.Entity = u;
+		account.EntityName = 'account';
+		account.EntityCollectionName = 'accounts';
+		account['@odata.etag'] = e['@odata.etag'];
+		account.getAliasedValue = function (alias, isMultiOptionSet) {
+			if (e[alias] === undefined || e[alias] === null) {
+				return null;
+			}
+			if (isMultiOptionSet) {
+				return e[alias].toString().split(',').map(function (item) { return parseInt(item, 10); });
+			}
+			return e[alias];
+		}
+		account.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+			if (e[alias + f] === undefined || e[alias + f] === null) {
+				return EMPTY_STRING;
+			}
+			if (isMultiOptionSet) {
+				return e[alias + f].toString().split(';').map(function (item) { return item.trim(); });
+			}
+			return e[alias + f];
+		}
+		return account;
+	};
+})(DevKit || (DevKit = {}));
+/** @namespace OptionSet */
+var OptionSet;
+(function (OptionSet) {
+	OptionSet.Account = {
+		AccountCategoryCode : {
+			Preferred_Customer: 1,
+			Standard: 2
+		},
+		AccountClassificationCode : {
+			Default_Value: 1
+		},
+		AccountRatingCode : {
+			Default_Value: 1
+		},
+		Address1_AddressTypeCode : {
+			Bill_To: 1,
+			Other: 4,
+			Primary: 3,
+			Ship_To: 2
+		},
+		Address1_FreightTermsCode : {
+			FOB: 1,
+			No_Charge: 2
+		},
+		Address1_ShippingMethodCode : {
+			Airborne: 1,
+			DHL: 2,
+			FedEx: 3,
+			Full_Load: 6,
+			Postal_Mail: 5,
+			UPS: 4,
+			Will_Call: 7
+		},
+		Address2_AddressTypeCode : {
+			Default_Value: 1
+		},
+		Address2_FreightTermsCode : {
+			Default_Value: 1
+		},
+		Address2_ShippingMethodCode : {
+			Default_Value: 1
+		},
+		BusinessTypeCode : {
+			Default_Value: 1
+		},
+		CustomerSizeCode : {
+			Default_Value: 1
+		},
+		CustomerTypeCode : {
+			Competitor: 1,
+			Consultant: 2,
+			Customer: 3,
+			Influencer: 6,
+			Investor: 4,
+			Other: 12,
+			Partner: 5,
+			Press: 7,
+			Prospect: 8,
+			Reseller: 9,
+			Supplier: 10,
+			Vendor: 11
+		},
+		IndustryCode : {
+			Accounting: 1,
+			Agriculture_and_Non_petrol_Natural_Resource_Extraction: 2,
+			Broadcasting_Printing_and_Publishing: 3,
+			Brokers: 4,
+			Building_Supply_Retail: 5,
+			Business_Services: 6,
+			Consulting: 7,
+			Consumer_Services: 8,
+			Design_Direction_and_Creative_Management: 9,
+			Distributors_Dispatchers_and_Processors: 10,
+			Doctors_Offices_and_Clinics: 11,
+			Durable_Manufacturing: 12,
+			Eating_and_Drinking_Places: 13,
+			Entertainment_Retail: 14,
+			Equipment_Rental_and_Leasing: 15,
+			Financial: 16,
+			Food_and_Tobacco_Processing: 17,
+			Inbound_Capital_Intensive_Processing: 18,
+			Inbound_Repair_and_Services: 19,
+			Insurance: 20,
+			Legal_Services: 21,
+			Non_Durable_Merchandise_Retail: 22,
+			Outbound_Consumer_Service: 23,
+			Petrochemical_Extraction_and_Distribution: 24,
+			Service_Retail: 25,
+			SIG_Affiliations: 26,
+			Social_Services: 27,
+			Special_Outbound_Trade_Contractors: 28,
+			Specialty_Realty: 29,
+			Transportation: 30,
+			Utility_Creation_and_Distribution: 31,
+			Vehicle_Retail: 32,
+			Wholesale: 33
+		},
+		msdyn_TravelChargeType : {
+			Fixed: 690970002,
+			Hourly: 690970000,
+			Mileage: 690970001,
+			None: 690970003
+		},
+		OwnershipCode : {
+			Other: 4,
+			Private: 2,
+			Public: 1,
+			Subsidiary: 3
+		},
+		PaymentTermsCode : {
+			_2_10_Net_30: 2,
+			Net_30: 1,
+			Net_45: 3,
+			Net_60: 4
+		},
+		PreferredAppointmentDayCode : {
+			Friday: 5,
+			Monday: 1,
+			Saturday: 6,
+			Sunday: 0,
+			Thursday: 4,
+			Tuesday: 2,
+			Wednesday: 3
+		},
+		PreferredAppointmentTimeCode : {
+			Afternoon: 2,
+			Evening: 3,
+			Morning: 1
+		},
+		PreferredContactMethodCode : {
+			Any: 1,
+			Email: 2,
+			Fax: 4,
+			Mail: 5,
+			Phone: 3
+		},
+		ShippingMethodCode : {
+			Default_Value: 1
+		},
+		StateCode : {
+			Active: 0,
+			Inactive: 1
+		},
+		StatusCode : {
+			Active: 1,
+			Inactive: 2
+		},
+		TerritoryCode : {
+			Default_Value: 1
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
+
+	};
+})(OptionSet || (OptionSet = {}));

@@ -13,6 +13,7 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class XrmHelper
     {
+        public static List<EntityMetadata> EntitiesMetadata { get; set; } = null;
         public static string BuildConnectionString(string type, string url, string user, string pass)
         {
             if (type == "ClientSecret")
@@ -248,6 +249,13 @@ namespace DynamicsCrm.DevKit.Shared
         public static bool IsOptionSet(AttributeMetadata attribute)
         {
             return attribute is EnumAttributeMetadata;
+        }
+        public static void ReadEntitiesMetadata(CrmServiceClient crmServiceClient)
+        {
+            if (XrmHelper.EntitiesMetadata == null)
+            {
+                XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(crmServiceClient);
+            }
         }
     }
 }

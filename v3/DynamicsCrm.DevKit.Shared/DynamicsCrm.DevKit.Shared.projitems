@@ -41,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Models.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NameValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XrmSingleton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VsixCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VsixHelper.cs" />

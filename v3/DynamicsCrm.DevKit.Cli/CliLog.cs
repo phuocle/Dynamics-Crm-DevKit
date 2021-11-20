@@ -122,10 +122,14 @@ namespace DynamicsCrm.DevKit.Cli
                     Console.Write(value);
             Console.ForegroundColor = oldConsoleColor;
         }
-
         public static void Waiting()
         {
-            Write(ConsoleColor.White, "|");
+            Waiting("");
+        }
+
+        public static void Waiting(string message = "")
+        {
+            Write(ConsoleColor.White, "| ", message);
             while (true)
             {
                 CliLog.Write(ConsoleColor.White, ".");
