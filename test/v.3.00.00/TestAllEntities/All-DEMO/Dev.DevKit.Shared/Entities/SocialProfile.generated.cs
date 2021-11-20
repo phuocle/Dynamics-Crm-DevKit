@@ -269,7 +269,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the customer that this social profile belongs to.</para>
-		/// <para>Lookup to account;contact</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -445,7 +445,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the user or team that is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

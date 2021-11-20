@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.RecurringAppointmentMasterApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var recurringappointmentmaster = {
 			ActivityId: { a: 'activityid' },
 			Category: { a: 'category' },
@@ -211,7 +211,6 @@ var DevKit;
 			regardingobjectid_uii_workflowstep_recurringappointmentmaster: { b: 'regardingobjectid_uii_workflowstep_recurringappointmentmaster', a: '_regardingobjectid_value', c: 'uii_workflowsteps', d: 'uii_workflowstep' },
 			regardingobjectid_uii_workflow_workflowstep_mapping_recurringappointmentmaster: { b: 'regardingobjectid_uii_workflow_workflowstep_mapping_recurringappointmentmaster', a: '_regardingobjectid_value', c: 'uii_workflow_workflowstep_mappings', d: 'uii_workflow_workflowstep_mapping' },
 			RuleId: { b: 'ruleid', a: '_ruleid_value', c: 'recurrencerules', d: 'recurrencerule', r: true },
-			SafeDescription: { a: 'safedescription', r: true },
 			ScheduledEnd_UtcDateAndTime: { a: 'scheduledend', r: true },
 			ScheduledStart_UtcDateAndTime: { a: 'scheduledstart', r: true },
 			SeriesStatus: { a: 'seriesstatus' },
@@ -276,80 +275,105 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-	OptionSet.RecurringAppointmentMaster = {
-		ExpansionStateCode : {
-			Full: 2,
-			Partial: 1,
-			Unexpanded: 0
-		},
-		Instance : {
-			First: 1,
-			Fourth: 4,
-			Last: 5,
-			Second: 2,
-			Third: 3
-		},
-		InstanceTypeCode : {
-			Not_Recurring: 0,
-			Recurring_Exception: 3,
-			Recurring_Future_Exception: 4,
-			Recurring_Instance: 2,
-			Recurring_Master: 1
-		},
-		MonthOfYear : {
-			April: 4,
-			August: 8,
-			December: 12,
-			February: 2,
-			Invalid_Month_Of_Year: 0,
-			January: 1,
-			July: 7,
-			June: 6,
-			March: 3,
-			May: 5,
-			November: 11,
-			October: 10,
-			September: 9
-		},
-		PatternEndType : {
-			No_End_Date: 1,
-			Occurrences: 2,
-			Pattern_End_Date: 3
-		},
-		PriorityCode : {
-			High: 2,
-			Low: 0,
-			Normal: 1
-		},
-		RecurrencePatternType : {
-			Daily: 0,
-			Monthly: 2,
-			Weekly: 1,
-			Yearly: 3
-		},
-		StateCode : {
-			Canceled: 2,
-			Completed: 1,
-			Open: 0,
-			Scheduled: 3
-		},
-		StatusCode : {
-			Busy: 5,
-			Canceled: 4,
-			Completed: 3,
-			Free: 1,
-			Out_of_Office: 6,
-			Tentative: 2
-		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
+		OptionSet.RecurringAppointmentMaster = {
+			ActivityTypeCode : {
+				Appointment: 4201,
+				Booking_Alert: 10357,
+				Campaign_Activity: 4402,
+				Campaign_Response: 4401,
+				Case_Resolution: 4206,
+				Conversation: 10644,
+				Customer_Voice_alert: 10261,
+				Customer_Voice_survey_invite: 10271,
+				Customer_Voice_survey_response: 10273,
+				Email: 4202,
+				Fax: 4204,
+				Letter: 4207,
+				Opportunity_Close: 4208,
+				Order_Close: 4209,
+				Outbound_message: 10752,
+				Phone_Call: 4210,
+				Project_Service_Approval: 10387,
+				Quick_Campaign: 4406,
+				Quote_Close: 4211,
+				Recurring_Appointment: 4251,
+				Service_Activity: 4214,
+				Session: 10659,
+				Task: 4212
+			},
+			ExpansionStateCode : {
+				Full: 2,
+				Partial: 1,
+				Unexpanded: 0
+			},
+			Instance : {
+				First: 1,
+				Fourth: 4,
+				Last: 5,
+				Second: 2,
+				Third: 3
+			},
+			InstanceTypeCode : {
+				Not_Recurring: 0,
+				Recurring_Exception: 3,
+				Recurring_Future_Exception: 4,
+				Recurring_Instance: 2,
+				Recurring_Master: 1
+			},
+			MonthOfYear : {
+				April: 4,
+				August: 8,
+				December: 12,
+				February: 2,
+				Invalid_Month_Of_Year: 0,
+				January: 1,
+				July: 7,
+				June: 6,
+				March: 3,
+				May: 5,
+				November: 11,
+				October: 10,
+				September: 9
+			},
+			PatternEndType : {
+				No_End_Date: 1,
+				Occurrences: 2,
+				Pattern_End_Date: 3
+			},
+			PriorityCode : {
+				High: 2,
+				Low: 0,
+				Normal: 1
+			},
+			RecurrencePatternType : {
+				Daily: 0,
+				Monthly: 2,
+				Weekly: 1,
+				Yearly: 3
+			},
+			StateCode : {
+				Canceled: 2,
+				Completed: 1,
+				Open: 0,
+				Scheduled: 3
+			},
+			StatusCode : {
+				Busy: 5,
+				Canceled: 4,
+				Completed: 3,
+				Free: 1,
+				Out_of_Office: 6,
+				Tentative: 2
+			},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 
 	};
 })(OptionSet || (OptionSet = {}));

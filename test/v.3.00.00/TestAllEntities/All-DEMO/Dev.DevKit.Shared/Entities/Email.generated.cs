@@ -441,7 +441,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>The Entity that Accepted the Email</para>
-		/// <para>Lookup to queue;systemuser</para>
+		/// <para>Lookup to queue, systemuser</para>
 		/// <para>Accepting Entity</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -559,7 +559,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the recipients that are included on the email distribution, but are not displayed to other recipients.</para>
-		/// <para>Lookup to account;contact;entitlement;equipment;knowledgearticle;lead;queue;systemuser;unresolvedaddress</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
 		/// <para>Bcc</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -595,7 +595,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the recipients that should be copied on the email.</para>
-		/// <para>Lookup to account;contact;entitlement;equipment;knowledgearticle;lead;queue;systemuser;unresolvedaddress</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
 		/// <para>Cc</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -860,7 +860,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the sender of the email.</para>
-		/// <para>ReadOnly - Lookup to account;contact;equipment;lead;queue;systemuser</para>
+		/// <para>ReadOnly - Lookup to account, contact, equipment, lead, queue, systemuser</para>
 		/// <para>Sender</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -906,7 +906,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the sender of the email.</para>
-		/// <para>Lookup to queue;systemuser</para>
+		/// <para>Lookup to queue, systemuser</para>
 		/// <para>From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1197,7 +1197,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1324,7 +1324,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the e-mail is associated.</para>
-		/// <para>Lookup to account;asyncoperation;bookableresourcebooking;bookableresourcebookingheader;bulkoperation;campaign;campaignactivity;contact;contract;entitlement;entitlementtemplate;incident;invoice;knowledgearticle;knowledgebaserecord;lead;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingincident;msdyn_agreementbookingproduct;msdyn_agreementbookingservice;msdyn_agreementbookingservicetask;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoiceproduct;msdyn_agreementinvoicesetup;msdyn_bookingalertstatus;msdyn_bookingrule;msdyn_bookingtimestamp;msdyn_customerasset;msdyn_fieldservicesetting;msdyn_incidenttypecharacteristic;msdyn_incidenttypeproduct;msdyn_incidenttypeservice;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventoryjournal;msdyn_inventorytransfer;msdyn_payment;msdyn_paymentdetail;msdyn_paymentmethod;msdyn_paymentterm;msdyn_playbookinstance;msdyn_postalbum;msdyn_postalcode;msdyn_processnotes;msdyn_productinventory;msdyn_projectteam;msdyn_purchaseorder;msdyn_purchaseorderbill;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_purchaseorderreceiptproduct;msdyn_purchaseordersubstatus;msdyn_quotebookingincident;msdyn_quotebookingproduct;msdyn_quotebookingservice;msdyn_quotebookingservicetask;msdyn_resourceterritory;msdyn_rma;msdyn_rmaproduct;msdyn_rmareceipt;msdyn_rmareceiptproduct;msdyn_rmasubstatus;msdyn_rtv;msdyn_rtvproduct;msdyn_rtvsubstatus;msdyn_shipvia;msdyn_systemuserschedulersetting;msdyn_timegroup;msdyn_timegroupdetail;msdyn_timeoffrequest;msdyn_warehouse;msdyn_workorder;msdyn_workordercharacteristic;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderresourcerestriction;msdyn_workorderservice;msdyn_workorderservicetask;opportunity;quote;salesorder;site;uii_action;uii_hostedapplication;uii_nonhostedapplication;uii_option;uii_savedsession;uii_workflow;uii_workflowstep;uii_workflow_workflowstep_mapping</para>
+		/// <para>Lookup to account, asyncoperation, bookableresourcebooking, bookableresourcebookingheader, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, entitlementtemplate, incident, invoice, knowledgearticle, knowledgebaserecord, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingincident, msdyn_agreementbookingproduct, msdyn_agreementbookingservice, msdyn_agreementbookingservicetask, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoiceproduct, msdyn_agreementinvoicesetup, msdyn_bookingalertstatus, msdyn_bookingrule, msdyn_bookingtimestamp, msdyn_customerasset, msdyn_fieldservicesetting, msdyn_incidenttypecharacteristic, msdyn_incidenttypeproduct, msdyn_incidenttypeservice, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventoryjournal, msdyn_inventorytransfer, msdyn_payment, msdyn_paymentdetail, msdyn_paymentmethod, msdyn_paymentterm, msdyn_playbookinstance, msdyn_postalbum, msdyn_postalcode, msdyn_processnotes, msdyn_productinventory, msdyn_projectteam, msdyn_purchaseorder, msdyn_purchaseorderbill, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_purchaseorderreceiptproduct, msdyn_purchaseordersubstatus, msdyn_quotebookingincident, msdyn_quotebookingproduct, msdyn_quotebookingservice, msdyn_quotebookingservicetask, msdyn_resourceterritory, msdyn_rma, msdyn_rmaproduct, msdyn_rmareceipt, msdyn_rmareceiptproduct, msdyn_rmasubstatus, msdyn_rtv, msdyn_rtvproduct, msdyn_rtvsubstatus, msdyn_shipvia, msdyn_systemuserschedulersetting, msdyn_timegroup, msdyn_timegroupdetail, msdyn_timeoffrequest, msdyn_warehouse, msdyn_workorder, msdyn_workordercharacteristic, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderresourcerestriction, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, quote, salesorder, site, uii_action, uii_hostedapplication, uii_nonhostedapplication, uii_option, uii_savedsession, uii_workflow, uii_workflowstep, uii_workflow_workflowstep_mapping</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1616,7 +1616,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the account, contact, lead, queue, or user recipients for the email.</para>
-		/// <para>Lookup to account;contact;entitlement;equipment;knowledgearticle;lead;queue;systemuser;unresolvedaddress</para>
+		/// <para>Lookup to account, contact, entitlement, equipment, knowledgearticle, lead, queue, systemuser, unresolvedaddress</para>
 		/// <para>To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

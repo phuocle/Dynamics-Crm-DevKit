@@ -47,7 +47,7 @@ namespace Dev.DevKit.Shared.Entities.SalesOrderDetailOptionSets
 		/// <summary>
 		/// Work order closed - posted = 690970000
 		/// </summary>
-		Work_order_closed__posted = 690970000
+		Work_order_closed_posted = 690970000
 	}
 
 	public enum msdyn_LineType
@@ -1020,7 +1020,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

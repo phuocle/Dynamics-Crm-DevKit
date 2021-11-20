@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.OpportunityApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var opportunity = {
 			AccountId: { b: 'accountid', a: '_accountid_value', c: 'accounts', d: 'account', r: true },
 			ActualCloseDate_DateOnly: { a: 'actualclosedate' },
@@ -121,6 +121,7 @@ var DevKit;
 			msdyn_ContractOrganizationalUnitId: { b: 'msdyn_ContractOrganizationalUnitId', a: '_msdyn_contractorganizationalunitid_value', c: 'msdyn_organizationalunits', d: 'msdyn_organizationalunit' },
 			msdyn_forecastcategory: { a: 'msdyn_forecastcategory' },
 			msdyn_OrderType: { a: 'msdyn_ordertype' },
+			msdyn_segmentid: { b: 'msdyn_segmentid', a: '_msdyn_segmentid_value', c: 'msdyn_segments', d: 'msdyn_segment' },
 			msdyn_WorkOrderType: { b: 'msdyn_WorkOrderType', a: '_msdyn_workordertype_value', c: 'msdyn_workordertypes', d: 'msdyn_workordertype' },
 			Name: { a: 'name' },
 			Need: { a: 'need' },
@@ -159,7 +160,6 @@ var DevKit;
 			SkipPriceCalculation: { a: 'skippricecalculation' },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
-			SLAName: { a: 'slaname', r: true },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
 			StatusCode: { a: 'statuscode' },
@@ -225,138 +225,138 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-	OptionSet.Opportunity = {
-		BudgetStatus : {
-			Can_Buy: 2,
-			May_Buy: 1,
-			No_Committed_Budget: 0,
-			Will_Buy: 3
-		},
-		InitialCommunication : {
-			Contacted: 0,
-			Not_Contacted: 1
-		},
-		msdyn_forecastcategory : {
-			Best_case: 100000002,
-			Committed: 100000003,
-			Lost: 100000006,
-			Omitted: 100000004,
-			Pipeline: 100000001,
-			Won: 100000005
-		},
-		msdyn_OrderType : {
-			Item_based: 192350000,
-			Service_Maintenance_Based: 690970002,
-			Work_based: 192350001
-		},
-		Need : {
-			Good_to_have: 2,
-			Must_have: 0,
-			No_need: 3,
-			Should_have: 1
-		},
-		OpportunityRatingCode : {
-			Cold: 3,
-			Hot: 1,
-			Warm: 2
-		},
-		PricingErrorCode : {
-			Base_Currency_Attribute_Overflow: 36,
-			Base_Currency_Attribute_Underflow: 37,
-			Detail_Error: 1,
-			Discount_Type_Invalid_State: 27,
-			Inactive_Discount_Type: 33,
-			Inactive_Price_Level: 3,
-			Invalid_Current_Cost: 20,
-			Invalid_Discount: 28,
-			Invalid_Discount_Type: 26,
-			Invalid_Price: 19,
-			Invalid_Price_Level_Amount: 17,
-			Invalid_Price_Level_Currency: 34,
-			Invalid_Price_Level_Percentage: 18,
-			Invalid_Pricing_Code: 9,
-			Invalid_Pricing_Precision: 30,
-			Invalid_Product: 7,
-			Invalid_Quantity: 29,
-			Invalid_Rounding_Amount: 24,
-			Invalid_Rounding_Option: 23,
-			Invalid_Rounding_Policy: 22,
-			Invalid_Standard_Cost: 21,
-			Missing_Current_Cost: 15,
-			Missing_Price: 14,
-			Missing_Price_Level: 2,
-			Missing_Price_Level_Amount: 12,
-			Missing_Price_Level_Percentage: 13,
-			Missing_Pricing_Code: 8,
-			Missing_Product: 6,
-			Missing_Product_Default_UOM: 31,
-			Missing_Product_UOM_Schedule_: 32,
-			Missing_Quantity: 4,
-			Missing_Standard_Cost: 16,
-			Missing_Unit_Price: 5,
-			Missing_UOM: 10,
-			None: 0,
-			Price_Attribute_Out_Of_Range: 35,
-			Price_Calculation_Error: 25,
-			Product_Not_In_Price_Level: 11,
-			Transaction_currency_is_not_set_for_the_product_price_list_item: 38
-		},
-		PriorityCode : {
-			Default_Value: 1
-		},
-		PurchaseProcess : {
-			Committee: 1,
-			Individual: 0,
-			Unknown: 2
-		},
-		PurchaseTimeframe : {
-			Immediate: 0,
-			Next_Quarter: 2,
-			This_Quarter: 1,
-			This_Year: 3,
-			Unknown: 4
-		},
-		SalesStage : {
-			Close: 3,
-			Develop: 1,
-			Propose: 2,
-			Qualify: 0
-		},
-		SalesStageCode : {
-			Default_Value: 1
-		},
-		SkipPriceCalculation : {
-			DoPriceCalcAlways: 0,
-			SkipPriceCalcOnRetrieve: 1
-		},
-		StateCode : {
-			Lost: 2,
-			Open: 0,
-			Won: 1
-		},
-		StatusCode : {
-			Canceled: 4,
-			In_Progress: 1,
-			On_Hold: 2,
-			Out_Sold: 5,
-			Won: 3
-		},
-		TimeLine : {
-			Immediate: 0,
-			Next_Quarter: 2,
-			Not_known: 4,
-			This_Quarter: 1,
-			This_Year: 3
-		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
+		OptionSet.Opportunity = {
+			BudgetStatus : {
+				Can_Buy: 2,
+				May_Buy: 1,
+				No_Committed_Budget: 0,
+				Will_Buy: 3
+			},
+			InitialCommunication : {
+				Contacted: 0,
+				Not_Contacted: 1
+			},
+			msdyn_forecastcategory : {
+				Best_case: 100000002,
+				Committed: 100000003,
+				Lost: 100000006,
+				Omitted: 100000004,
+				Pipeline: 100000001,
+				Won: 100000005
+			},
+			msdyn_OrderType : {
+				Item_based: 192350000,
+				ServiceMaintenance_Based: 690970002,
+				Work_based: 192350001
+			},
+			Need : {
+				Good_to_have: 2,
+				Must_have: 0,
+				No_need: 3,
+				Should_have: 1
+			},
+			OpportunityRatingCode : {
+				Cold: 3,
+				Hot: 1,
+				Warm: 2
+			},
+			PricingErrorCode : {
+				Base_Currency_Attribute_Overflow: 36,
+				Base_Currency_Attribute_Underflow: 37,
+				Detail_Error: 1,
+				Discount_Type_Invalid_State: 27,
+				Inactive_Discount_Type: 33,
+				Inactive_Price_Level: 3,
+				Invalid_Current_Cost: 20,
+				Invalid_Discount: 28,
+				Invalid_Discount_Type: 26,
+				Invalid_Price: 19,
+				Invalid_Price_Level_Amount: 17,
+				Invalid_Price_Level_Currency: 34,
+				Invalid_Price_Level_Percentage: 18,
+				Invalid_Pricing_Code: 9,
+				Invalid_Pricing_Precision: 30,
+				Invalid_Product: 7,
+				Invalid_Quantity: 29,
+				Invalid_Rounding_Amount: 24,
+				Invalid_Rounding_Option: 23,
+				Invalid_Rounding_Policy: 22,
+				Invalid_Standard_Cost: 21,
+				Missing_Current_Cost: 15,
+				Missing_Price: 14,
+				Missing_Price_Level: 2,
+				Missing_Price_Level_Amount: 12,
+				Missing_Price_Level_Percentage: 13,
+				Missing_Pricing_Code: 8,
+				Missing_Product: 6,
+				Missing_Product_Default_UOM: 31,
+				Missing_Product_UOM_Schedule: 32,
+				Missing_Quantity: 4,
+				Missing_Standard_Cost: 16,
+				Missing_Unit_Price: 5,
+				Missing_UOM: 10,
+				None: 0,
+				Price_Attribute_Out_Of_Range: 35,
+				Price_Calculation_Error: 25,
+				Product_Not_In_Price_Level: 11,
+				Transaction_currency_is_not_set_for_the_product_price_list_item: 38
+			},
+			PriorityCode : {
+				Default_Value: 1
+			},
+			PurchaseProcess : {
+				Committee: 1,
+				Individual: 0,
+				Unknown: 2
+			},
+			PurchaseTimeframe : {
+				Immediate: 0,
+				Next_Quarter: 2,
+				This_Quarter: 1,
+				This_Year: 3,
+				Unknown: 4
+			},
+			SalesStage : {
+				Close: 3,
+				Develop: 1,
+				Propose: 2,
+				Qualify: 0
+			},
+			SalesStageCode : {
+				Default_Value: 1
+			},
+			SkipPriceCalculation : {
+				DoPriceCalcAlways: 0,
+				SkipPriceCalcOnRetrieve: 1
+			},
+			StateCode : {
+				Lost: 2,
+				Open: 0,
+				Won: 1
+			},
+			StatusCode : {
+				Canceled: 4,
+				In_Progress: 1,
+				On_Hold: 2,
+				OutSold: 5,
+				Won: 3
+			},
+			TimeLine : {
+				Immediate: 0,
+				Next_Quarter: 2,
+				Not_known: 4,
+				This_Quarter: 1,
+				This_Year: 3
+			},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 
 	};
 })(OptionSet || (OptionSet = {}));

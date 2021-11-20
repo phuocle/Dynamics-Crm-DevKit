@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.IncidentApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var incident = {
 			AccountId: { b: 'accountid', a: '_accountid_value', c: 'accounts', d: 'account', r: true },
 			ActivitiesComplete: { a: 'activitiescomplete' },
@@ -140,13 +140,13 @@ var DevKit;
 			ResolveByKPIId: { b: 'resolvebykpiid', a: '_resolvebykpiid_value', c: 'slakpiinstances', d: 'slakpiinstance' },
 			ResolveBySLAStatus: { a: 'resolvebyslastatus' },
 			ResponseBy_UtcDateAndTime: { a: 'responseby' },
+			ResponsibleContactId: { b: 'responsiblecontactid', a: '_responsiblecontactid_value', c: 'contacts', d: 'contact' },
 			RouteCase: { a: 'routecase' },
 			SentimentValue: { a: 'sentimentvalue' },
 			ServiceStage: { a: 'servicestage' },
 			SeverityCode: { a: 'severitycode' },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
-			SLAName: { a: 'slaname', r: true },
 			SocialProfileId: { b: 'socialprofileid', a: '_socialprofileid_value', c: 'socialprofiles', d: 'socialprofile' },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
@@ -199,93 +199,93 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-	OptionSet.Incident = {
-		CaseOriginCode : {
-			Email: 2,
-			Facebook: 2483,
-			IoT: 700610000,
-			Phone: 1,
-			Twitter: 3986,
-			Web: 3
-		},
-		CaseTypeCode : {
-			Problem: 2,
-			Question: 1,
-			Request: 3
-		},
-		ContractServiceLevelCode : {
-			Bronze: 3,
-			Gold: 1,
-			Silver: 2
-		},
-		CustomerSatisfactionCode : {
-			Dissatisfied: 2,
-			Neutral: 3,
-			Satisfied: 4,
-			Very_Dissatisfied: 1,
-			Very_Satisfied: 5
-		},
-		FirstResponseSLAStatus : {
-			In_Progress: 1,
-			Nearing_Noncompliance: 2,
-			Noncompliant: 4,
-			Succeeded: 3
-		},
-		IncidentStageCode : {
-			Default_Value: 1
-		},
-		int_CustomerEffort : {
-			High: 121590002,
-			Low: 121590000,
-			Medium: 121590001
-		},
-		MessageTypeCode : {
-			Private_Message: 1,
-			Public_Message: 0
-		},
-		PriorityCode : {
-			High: 1,
-			Low: 3,
-			Normal: 2
-		},
-		ResolveBySLAStatus : {
-			In_Progress: 1,
-			Nearing_Noncompliance: 2,
-			Noncompliant: 4,
-			Succeeded: 3
-		},
-		ServiceStage : {
-			Identify: 0,
-			Research: 1,
-			Resolve: 2
-		},
-		SeverityCode : {
-			Default_Value: 1
-		},
-		StateCode : {
-			Active: 0,
-			Cancelled: 2,
-			Resolved: 1
-		},
-		StatusCode : {
-			Cancelled: 6,
-			In_Progress: 1,
-			Information_Provided: 1000,
-			Merged: 2000,
-			On_Hold: 2,
-			Problem_Solved: 5,
-			Researching: 4,
-			Waiting_for_Details: 3
-		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
+		OptionSet.Incident = {
+			CaseOriginCode : {
+				Email: 2,
+				Facebook: 2483,
+				IoT: 700610000,
+				Phone: 1,
+				Twitter: 3986,
+				Web: 3
+			},
+			CaseTypeCode : {
+				Problem: 2,
+				Question: 1,
+				Request: 3
+			},
+			ContractServiceLevelCode : {
+				Bronze: 3,
+				Gold: 1,
+				Silver: 2
+			},
+			CustomerSatisfactionCode : {
+				Dissatisfied: 2,
+				Neutral: 3,
+				Satisfied: 4,
+				Very_Dissatisfied: 1,
+				Very_Satisfied: 5
+			},
+			FirstResponseSLAStatus : {
+				In_Progress: 1,
+				Nearing_Noncompliance: 2,
+				Noncompliant: 4,
+				Succeeded: 3
+			},
+			IncidentStageCode : {
+				Default_Value: 1
+			},
+			int_CustomerEffort : {
+				High: 121590002,
+				Low: 121590000,
+				Medium: 121590001
+			},
+			MessageTypeCode : {
+				Private_Message: 1,
+				Public_Message: 0
+			},
+			PriorityCode : {
+				High: 1,
+				Low: 3,
+				Normal: 2
+			},
+			ResolveBySLAStatus : {
+				In_Progress: 1,
+				Nearing_Noncompliance: 2,
+				Noncompliant: 4,
+				Succeeded: 3
+			},
+			ServiceStage : {
+				Identify: 0,
+				Research: 1,
+				Resolve: 2
+			},
+			SeverityCode : {
+				Default_Value: 1
+			},
+			StateCode : {
+				Active: 0,
+				Cancelled: 2,
+				Resolved: 1
+			},
+			StatusCode : {
+				Cancelled: 6,
+				In_Progress: 1,
+				Information_Provided: 1000,
+				Merged: 2000,
+				On_Hold: 2,
+				Problem_Solved: 5,
+				Researching: 4,
+				Waiting_for_Details: 3
+			},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 
 	};
 })(OptionSet || (OptionSet = {}));

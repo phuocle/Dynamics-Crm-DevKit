@@ -313,7 +313,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Publisher Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Publisher</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -15,7 +15,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementOptionSets
 		/// <summary>
 		/// Discount % and Price List = 192350000
 		/// </summary>
-		Discount__and_Price_List = 192350000,
+		Discount_and_Price_List = 192350000,
 		/// <summary>
 		/// Number of cases = 0
 		/// </summary>
@@ -71,7 +71,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementOptionSets
 		/// <summary>
 		/// Both Work Order Products & Services = 690970002
 		/// </summary>
-		Both_Work_Order_Products__Services = 690970002,
+		Both_Work_Order_Products_Services = 690970002,
 		/// <summary>
 		/// Work Order Products = 690970000
 		/// </summary>
@@ -317,7 +317,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose a contact or account for which this entitlement has been defined.</para>
-		/// <para>Lookup to account;contact</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -613,7 +613,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

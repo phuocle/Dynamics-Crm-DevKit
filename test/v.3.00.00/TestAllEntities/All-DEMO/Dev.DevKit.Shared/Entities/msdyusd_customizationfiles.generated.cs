@@ -273,7 +273,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the owner of the customization file.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

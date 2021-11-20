@@ -734,7 +734,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the process.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

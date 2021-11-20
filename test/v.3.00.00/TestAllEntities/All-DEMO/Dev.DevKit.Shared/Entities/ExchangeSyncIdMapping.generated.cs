@@ -244,7 +244,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para></para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -431,7 +431,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// <summary>
 		/// Audit & Diagnostics Setting = 10768
 		/// </summary>
-		Audit__Diagnostics_Setting = 10768,
+		Audit_Diagnostics_Setting = 10768,
 		/// <summary>
 		/// Auditing = 4567
 		/// </summary>
@@ -695,7 +695,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// <summary>
 		/// CFS - IoT Alert Process Flow = 10576
 		/// </summary>
-		CFS__IoT_Alert_Process_Flow = 10576,
+		CFS_IoT_Alert_Process_Flow = 10576,
 		/// <summary>
 		/// channel = 10609
 		/// </summary>
@@ -872,6 +872,14 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// Contact Price List = 10392
 		/// </summary>
 		Contact_Price_List = 10392,
+		/// <summary>
+		/// Contact suggestion rule = 10851
+		/// </summary>
+		Contact_suggestion_rule = 10851,
+		/// <summary>
+		/// Contact suggestion ruleset = 10852
+		/// </summary>
+		Contact_suggestion_ruleset = 10852,
 		/// <summary>
 		/// ContactInvoices = 17
 		/// </summary>
@@ -3897,6 +3905,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// </summary>
 		TeamMobileOfflineProfileMembership = 10094,
 		/// <summary>
+		/// Teams Contact Suggestion by AI = 10850
+		/// </summary>
+		Teams_Contact_Suggestion_by_AI = 10850,
+		/// <summary>
 		/// Teams Dialer Admin settings = 10228
 		/// </summary>
 		Teams_Dialer_Admin_settings = 10228,
@@ -3920,6 +3932,10 @@ namespace Dev.DevKit.Shared.Entities.msdyn_callablecontextOptionSets
 		/// Territory = 2013
 		/// </summary>
 		Territory = 2013,
+		/// <summary>
+		/// Test = 10849
+		/// </summary>
+		Test = 10849,
 		/// <summary>
 		/// Text Analytics Entity Mapping = 9945
 		/// </summary>
@@ -4627,7 +4643,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

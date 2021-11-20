@@ -695,7 +695,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the customer account or contact to provide a quick link to additional customer details, such as account information, activities, and opportunities.</para>
-		/// <para>Required - Lookup to account;contact</para>
+		/// <para>Required - Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1157,7 +1157,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

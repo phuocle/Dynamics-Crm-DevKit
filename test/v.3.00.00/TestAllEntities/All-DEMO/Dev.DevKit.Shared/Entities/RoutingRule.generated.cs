@@ -309,7 +309,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>For internal use only.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

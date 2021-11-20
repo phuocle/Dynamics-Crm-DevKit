@@ -136,7 +136,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the email hash.</para>
-		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

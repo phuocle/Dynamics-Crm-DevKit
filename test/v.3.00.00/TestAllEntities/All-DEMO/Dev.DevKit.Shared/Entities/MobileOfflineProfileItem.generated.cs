@@ -115,7 +115,7 @@ namespace Dev.DevKit.Shared.Entities.MobileOfflineProfileItemOptionSets
 		/// <summary>
 		/// CFS - IoT Alert Process Flow = 10576
 		/// </summary>
-		CFS__IoT_Alert_Process_Flow = 10576,
+		CFS_IoT_Alert_Process_Flow = 10576,
 		/// <summary>
 		/// Competitor = 123
 		/// </summary>

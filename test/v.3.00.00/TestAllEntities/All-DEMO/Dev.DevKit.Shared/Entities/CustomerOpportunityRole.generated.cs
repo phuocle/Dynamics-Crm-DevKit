@@ -132,7 +132,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the account or contact associated to the opportunity, such as a strategic partner, third-party vendor, or key decision maker.</para>
-		/// <para>Lookup to account;contact</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -275,7 +275,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

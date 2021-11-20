@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.PrincipalObjectAttributeAccessApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var principalobjectattributeaccess = {
 			AttributeId: { a: 'attributeid' },
 			objectid_account: { b: 'objectid_account', a: '_objectid_value', c: 'accounts', d: 'account' },
@@ -72,11 +72,11 @@ var DevKit;
 			objectid_activityfileattachment: { b: 'objectid_activityfileattachment', a: '_objectid_value', c: 'activityfileattachments', d: 'activityfileattachment' },
 			objectid_activitymonitor: { b: 'objectid_activitymonitor', a: '_objectid_value', c: 'activitymonitors', d: 'activitymonitor' },
 			objectid_adminsettingsentity: { b: 'objectid_adminsettingsentity', a: '_objectid_value', c: 'adminsettingsentities', d: 'adminsettingsentity' },
+			objectid_appaction: { b: 'objectid_appaction', a: '_objectid_value', c: 'appactions', d: 'appaction' },
 			objectid_appelement: { b: 'objectid_appelement', a: '_objectid_value', c: 'appelements', d: 'appelement' },
 			objectid_applicationuser: { b: 'objectid_applicationuser', a: '_objectid_value', c: 'applicationusers', d: 'applicationuser' },
 			objectid_appmodulecomponentedge: { b: 'objectid_appmodulecomponentedge', a: '_objectid_value', c: 'appmodulecomponentedges', d: 'appmodulecomponentedge' },
 			objectid_appmodulecomponentnode: { b: 'objectid_appmodulecomponentnode', a: '_objectid_value', c: 'appmodulecomponentnodes', d: 'appmodulecomponentnode' },
-			objectid_appnotification: { b: 'objectid_appnotification', a: '_objectid_value', c: 'appnotifications', d: 'appnotification' },
 			objectid_appointment: { b: 'objectid_appointment', a: '_objectid_value', c: 'appointments', d: 'appointment' },
 			objectid_appsetting: { b: 'objectid_appsetting', a: '_objectid_value', c: 'appsettings', d: 'appsetting' },
 			objectid_appusersetting: { b: 'objectid_appusersetting', a: '_objectid_value', c: 'appusersettings', d: 'appusersetting' },
@@ -108,6 +108,7 @@ var DevKit;
 			channelaccessprofile_principalobjectattributeaccess: { b: 'channelaccessprofile_principalobjectattributeaccess', a: '_objectid_value', c: 'channelaccessprofiles', d: 'channelaccessprofile' },
 			objectid_characteristic: { b: 'objectid_characteristic', a: '_objectid_value', c: 'characteristics', d: 'characteristic' },
 			objectid_childincidentcount: { b: 'objectid_childincidentcount', a: '_objectid_value', c: 'childincidentcounts', d: 'childincidentcount' },
+			objectid_comment: { b: 'objectid_comment', a: '_objectid_value', c: 'comments', d: 'comment' },
 			objectid_commitment: { b: 'objectid_commitment', a: '_objectid_value', c: 'commitments', d: 'commitment' },
 			objectid_competitor: { b: 'objectid_competitor', a: '_objectid_value', c: 'competitors', d: 'competitor' },
 			objectid_competitoraddress: { b: 'objectid_competitoraddress', a: '_objectid_value', c: 'competitoraddresses', d: 'competitoraddress' },
@@ -152,11 +153,13 @@ var DevKit;
 			objectid_entitlementtemplateproducts: { b: 'objectid_entitlementtemplateproducts', a: '_objectid_value', c: '', d: 'entitlementtemplateproducts' },
 			objectid_entityanalyticsconfig: { b: 'objectid_entityanalyticsconfig', a: '_objectid_value', c: 'entityanalyticsconfigs', d: 'entityanalyticsconfig' },
 			objectid_entityimageconfig: { b: 'objectid_entityimageconfig', a: '_objectid_value', c: 'entityimageconfigs', d: 'entityimageconfig' },
+			objectid_entityindex: { b: 'objectid_entityindex', a: '_objectid_value', c: 'entityindexes', d: 'entityindex' },
 			objectid_environmentvariabledefinition: { b: 'objectid_environmentvariabledefinition', a: '_objectid_value', c: 'environmentvariabledefinitions', d: 'environmentvariabledefinition' },
 			objectid_environmentvariablevalue: { b: 'objectid_environmentvariablevalue', a: '_objectid_value', c: 'environmentvariablevalues', d: 'environmentvariablevalue' },
 			objectid_equipment: { b: 'objectid_equipment', a: '_objectid_value', c: 'equipments', d: 'equipment' },
 			objectid_exportsolutionupload: { b: 'objectid_exportsolutionupload', a: '_objectid_value', c: 'exportsolutionuploads', d: 'exportsolutionupload' },
 			objectid_fax: { b: 'objectid_fax', a: '_objectid_value', c: 'faxes', d: 'fax' },
+			objectid_featurecontrolsetting: { b: 'objectid_featurecontrolsetting', a: '_objectid_value', c: 'featurecontrolsettings', d: 'featurecontrolsetting' },
 			objectid_feedback: { b: 'objectid_feedback', a: '_objectid_value', c: 'feedback', d: 'feedback' },
 			objectid_flowmachine: { b: 'objectid_flowmachine', a: '_objectid_value', c: 'flowmachines', d: 'flowmachine' },
 			objectid_flowmachinegroup: { b: 'objectid_flowmachinegroup', a: '_objectid_value', c: 'flowmachinegroups', d: 'flowmachinegroup' },
@@ -166,6 +169,7 @@ var DevKit;
 			objectid_incident: { b: 'objectid_incident', a: '_objectid_value', c: 'incidents', d: 'incident' },
 			objectid_incidentknowledgebaserecord: { b: 'objectid_incidentknowledgebaserecord', a: '_objectid_value', c: '', d: 'incidentknowledgebaserecord' },
 			objectid_incidentresolution: { b: 'objectid_incidentresolution', a: '_objectid_value', c: 'incidentresolutions', d: 'incidentresolution' },
+			objectid_indexattributes: { b: 'objectid_indexattributes', a: '_objectid_value', c: 'indexattributes', d: 'indexattributes' },
 			objectid_internalcatalogassignment: { b: 'objectid_internalcatalogassignment', a: '_objectid_value', c: 'internalcatalogassignments', d: 'internalcatalogassignment' },
 			objectid_invoice: { b: 'objectid_invoice', a: '_objectid_value', c: 'invoices', d: 'invoice' },
 			objectid_invoicedetail: { b: 'objectid_invoicedetail', a: '_objectid_value', c: 'invoicedetails', d: 'invoicedetail' },
@@ -218,6 +222,7 @@ var DevKit;
 			objectid_msdyn_aibfile: { b: 'objectid_msdyn_aibfile', a: '_objectid_value', c: 'msdyn_aibfiles', d: 'msdyn_aibfile' },
 			objectid_msdyn_aibfileattacheddata: { b: 'objectid_msdyn_aibfileattacheddata', a: '_objectid_value', c: 'msdyn_aibfileattacheddatas', d: 'msdyn_aibfileattacheddata' },
 			objectid_msdyn_aiconfiguration: { b: 'objectid_msdyn_aiconfiguration', a: '_objectid_value', c: 'msdyn_aiconfigurations', d: 'msdyn_aiconfiguration' },
+			objectid_msdyn_aicontactsuggestion: { b: 'objectid_msdyn_aicontactsuggestion', a: '_objectid_value', c: 'msdyn_aicontactsuggestions', d: 'msdyn_aicontactsuggestion' },
 			objectid_msdyn_aifptrainingdocument: { b: 'objectid_msdyn_aifptrainingdocument', a: '_objectid_value', c: 'msdyn_aifptrainingdocuments', d: 'msdyn_aifptrainingdocument' },
 			objectid_msdyn_aimodel: { b: 'objectid_msdyn_aimodel', a: '_objectid_value', c: 'msdyn_aimodels', d: 'msdyn_aimodel' },
 			objectid_msdyn_aiodimage: { b: 'objectid_msdyn_aiodimage', a: '_objectid_value', c: 'msdyn_aiodimages', d: 'msdyn_aiodimage' },
@@ -236,10 +241,16 @@ var DevKit;
 			objectid_msdyn_applicationextension: { b: 'objectid_msdyn_applicationextension', a: '_objectid_value', c: 'msdyn_applicationextensions', d: 'msdyn_applicationextension' },
 			objectid_msdyn_applicationtabtemplate: { b: 'objectid_msdyn_applicationtabtemplate', a: '_objectid_value', c: 'msdyn_applicationtabtemplates', d: 'msdyn_applicationtabtemplate' },
 			objectid_msdyn_approval: { b: 'objectid_msdyn_approval', a: '_objectid_value', c: 'msdyn_approvals', d: 'msdyn_approval' },
+			objectid_msdyn_approvalset: { b: 'objectid_msdyn_approvalset', a: '_objectid_value', c: 'msdyn_approvalsets', d: 'msdyn_approvalset' },
 			objectid_msdyn_assetcategorytemplateassociation: { b: 'objectid_msdyn_assetcategorytemplateassociation', a: '_objectid_value', c: 'msdyn_assetcategorytemplateassociations', d: 'msdyn_assetcategorytemplateassociation' },
+			objectid_msdyn_assetsuggestionssetting: { b: 'objectid_msdyn_assetsuggestionssetting', a: '_objectid_value', c: 'msdyn_assetsuggestionssettings', d: 'msdyn_assetsuggestionssetting' },
 			objectid_msdyn_assettemplateassociation: { b: 'objectid_msdyn_assettemplateassociation', a: '_objectid_value', c: 'msdyn_assettemplateassociations', d: 'msdyn_assettemplateassociation' },
 			objectid_msdyn_assignmentconfiguration: { b: 'objectid_msdyn_assignmentconfiguration', a: '_objectid_value', c: 'msdyn_assignmentconfigurations', d: 'msdyn_assignmentconfiguration' },
 			objectid_msdyn_assignmentconfigurationstep: { b: 'objectid_msdyn_assignmentconfigurationstep', a: '_objectid_value', c: 'msdyn_assignmentconfigurationsteps', d: 'msdyn_assignmentconfigurationstep' },
+			objectid_msdyn_assignmentmap: { b: 'objectid_msdyn_assignmentmap', a: '_objectid_value', c: 'msdyn_assignmentmaps', d: 'msdyn_assignmentmap' },
+			objectid_msdyn_assignmentrule: { b: 'objectid_msdyn_assignmentrule', a: '_objectid_value', c: 'msdyn_assignmentrules', d: 'msdyn_assignmentrule' },
+			objectid_msdyn_attribute: { b: 'objectid_msdyn_attribute', a: '_objectid_value', c: 'msdyn_attributes', d: 'msdyn_attribute' },
+			objectid_msdyn_attributevalue: { b: 'objectid_msdyn_attributevalue', a: '_objectid_value', c: 'msdyn_attributevalues', d: 'msdyn_attributevalue' },
 			objectid_msdyn_authenticationsettings: { b: 'objectid_msdyn_authenticationsettings', a: '_objectid_value', c: 'msdyn_authenticationsettingses', d: 'msdyn_authenticationsettings' },
 			objectid_msdyn_autocapturerule: { b: 'objectid_msdyn_autocapturerule', a: '_objectid_value', c: 'msdyn_autocapturerules', d: 'msdyn_autocapturerule' },
 			objectid_msdyn_autocapturesettings: { b: 'objectid_msdyn_autocapturesettings', a: '_objectid_value', c: 'msdyn_autocapturesettingses', d: 'msdyn_autocapturesettings' },
@@ -292,6 +303,8 @@ var DevKit;
 			objectid_msdyn_consoleapplicationtype: { b: 'objectid_msdyn_consoleapplicationtype', a: '_objectid_value', c: 'msdyn_consoleapplicationtypes', d: 'msdyn_consoleapplicationtype' },
 			objectid_msdyn_consoleappparameterdefinition: { b: 'objectid_msdyn_consoleappparameterdefinition', a: '_objectid_value', c: 'msdyn_consoleappparameterdefinitions', d: 'msdyn_consoleappparameterdefinition' },
 			objectid_msdyn_contactpricelist: { b: 'objectid_msdyn_contactpricelist', a: '_objectid_value', c: 'msdyn_contactpricelists', d: 'msdyn_contactpricelist' },
+			objectid_msdyn_contactsuggestionrule: { b: 'objectid_msdyn_contactsuggestionrule', a: '_objectid_value', c: 'msdyn_contactsuggestionrules', d: 'msdyn_contactsuggestionrule' },
+			objectid_msdyn_contactsuggestionruleset: { b: 'objectid_msdyn_contactsuggestionruleset', a: '_objectid_value', c: 'msdyn_contactsuggestionrulesets', d: 'msdyn_contactsuggestionruleset' },
 			objectid_msdyn_contractlinedetailperformance: { b: 'objectid_msdyn_contractlinedetailperformance', a: '_objectid_value', c: 'msdyn_contractlinedetailperformances', d: 'msdyn_contractlinedetailperformance' },
 			objectid_msdyn_contractlineinvoiceschedule: { b: 'objectid_msdyn_contractlineinvoiceschedule', a: '_objectid_value', c: 'msdyn_contractlineinvoiceschedules', d: 'msdyn_contractlineinvoiceschedule' },
 			objectid_msdyn_contractlinescheduleofvalue: { b: 'objectid_msdyn_contractlinescheduleofvalue', a: '_objectid_value', c: 'msdyn_contractlinescheduleofvalues', d: 'msdyn_contractlinescheduleofvalue' },
@@ -311,6 +324,9 @@ var DevKit;
 			objectid_msdyn_customerassetcategory: { b: 'objectid_msdyn_customerassetcategory', a: '_objectid_value', c: 'msdyn_customerassetcategories', d: 'msdyn_customerassetcategory' },
 			objectid_msdyn_dataanalyticsreport: { b: 'objectid_msdyn_dataanalyticsreport', a: '_objectid_value', c: 'msdyn_dataanalyticsreports', d: 'msdyn_dataanalyticsreport' },
 			objectid_msdyn_dataanalyticsreport_csrmanager: { b: 'objectid_msdyn_dataanalyticsreport_csrmanager', a: '_objectid_value', c: 'msdyn_dataanalyticsreport_csrmanagers', d: 'msdyn_dataanalyticsreport_csrmanager' },
+			objectid_msdyn_dataanalyticsreport_fs: { b: 'objectid_msdyn_dataanalyticsreport_fs', a: '_objectid_value', c: 'msdyn_dataanalyticsreport_fses', d: 'msdyn_dataanalyticsreport_fs' },
+			objectid_msdyn_dataanalyticsreport_fspredictrs: { b: 'objectid_msdyn_dataanalyticsreport_fspredictrs', a: '_objectid_value', c: 'msdyn_dataanalyticsreport_fspredictrses', d: 'msdyn_dataanalyticsreport_fspredictrs' },
+			objectid_msdyn_dataanalyticsreport_fspredictwhd: { b: 'objectid_msdyn_dataanalyticsreport_fspredictwhd', a: '_objectid_value', c: 'msdyn_dataanalyticsreport_fspredictwhds', d: 'msdyn_dataanalyticsreport_fspredictwhd' },
 			objectid_msdyn_dataanalyticsreport_ksinsights: { b: 'objectid_msdyn_dataanalyticsreport_ksinsights', a: '_objectid_value', c: 'msdyn_dataanalyticsreport_ksinsightses', d: 'msdyn_dataanalyticsreport_ksinsights' },
 			objectid_msdyn_dataanalyticsreport_oc: { b: 'objectid_msdyn_dataanalyticsreport_oc', a: '_objectid_value', c: 'msdyn_dataanalyticsreport_ocs', d: 'msdyn_dataanalyticsreport_oc' },
 			objectid_msdyn_dataanalyticsreport_ocvoice: { b: 'objectid_msdyn_dataanalyticsreport_ocvoice', a: '_objectid_value', c: 'msdyn_dataanalyticsreport_ocvoices', d: 'msdyn_dataanalyticsreport_ocvoice' },
@@ -318,14 +334,18 @@ var DevKit;
 			objectid_msdyn_dataexport: { b: 'objectid_msdyn_dataexport', a: '_objectid_value', c: 'msdyn_dataexports', d: 'msdyn_dataexport' },
 			objectid_msdyn_dataflow: { b: 'objectid_msdyn_dataflow', a: '_objectid_value', c: 'msdyn_dataflows', d: 'msdyn_dataflow' },
 			objectid_msdyn_datainsightsandanalyticsfeature: { b: 'objectid_msdyn_datainsightsandanalyticsfeature', a: '_objectid_value', c: 'msdyn_datainsightsandanalyticsfeatures', d: 'msdyn_datainsightsandanalyticsfeature' },
+			objectid_msdyn_dealmanageraccess: { b: 'objectid_msdyn_dealmanageraccess', a: '_objectid_value', c: 'msdyn_dealmanageraccesses', d: 'msdyn_dealmanageraccess' },
+			objectid_msdyn_dealmanagersettings: { b: 'objectid_msdyn_dealmanagersettings', a: '_objectid_value', c: 'msdyn_dealmanagersettingses', d: 'msdyn_dealmanagersettings' },
 			objectid_msdyn_decisioncontract: { b: 'objectid_msdyn_decisioncontract', a: '_objectid_value', c: 'msdyn_decisioncontracts', d: 'msdyn_decisioncontract' },
 			objectid_msdyn_decisionruleset: { b: 'objectid_msdyn_decisionruleset', a: '_objectid_value', c: 'msdyn_decisionrulesets', d: 'msdyn_decisionruleset' },
 			objectid_msdyn_delegation: { b: 'objectid_msdyn_delegation', a: '_objectid_value', c: 'msdyn_delegations', d: 'msdyn_delegation' },
 			objectid_msdyn_dimension: { b: 'objectid_msdyn_dimension', a: '_objectid_value', c: 'msdyn_dimensions', d: 'msdyn_dimension' },
 			objectid_msdyn_dimensionfieldname: { b: 'objectid_msdyn_dimensionfieldname', a: '_objectid_value', c: 'msdyn_dimensionfieldnames', d: 'msdyn_dimensionfieldname' },
+			objectid_msdyn_effortpredictionresult: { b: 'objectid_msdyn_effortpredictionresult', a: '_objectid_value', c: 'msdyn_effortpredictionresults', d: 'msdyn_effortpredictionresult' },
 			objectid_msdyn_entitlementapplication: { b: 'objectid_msdyn_entitlementapplication', a: '_objectid_value', c: 'msdyn_entitlementapplications', d: 'msdyn_entitlementapplication' },
 			objectid_msdyn_entityconfig: { b: 'objectid_msdyn_entityconfig', a: '_objectid_value', c: 'msdyn_entityconfigs', d: 'msdyn_entityconfig' },
 			objectid_msdyn_entityconfiguration: { b: 'objectid_msdyn_entityconfiguration', a: '_objectid_value', c: 'msdyn_entityconfigurations', d: 'msdyn_entityconfiguration' },
+			objectid_msdyn_entitylinkchatconfiguration: { b: 'objectid_msdyn_entitylinkchatconfiguration', a: '_objectid_value', c: 'msdyn_entitylinkchatconfigurations', d: 'msdyn_entitylinkchatconfiguration' },
 			objectid_msdyn_entityrankingrule: { b: 'objectid_msdyn_entityrankingrule', a: '_objectid_value', c: 'msdyn_entityrankingrules', d: 'msdyn_entityrankingrule' },
 			objectid_msdyn_entityroutingconfiguration: { b: 'objectid_msdyn_entityroutingconfiguration', a: '_objectid_value', c: 'msdyn_entityroutingconfigurations', d: 'msdyn_entityroutingconfiguration' },
 			objectid_msdyn_estimate: { b: 'objectid_msdyn_estimate', a: '_objectid_value', c: 'msdyn_estimates', d: 'msdyn_estimate' },
@@ -333,6 +353,7 @@ var DevKit;
 			objectid_msdyn_expense: { b: 'objectid_msdyn_expense', a: '_objectid_value', c: 'msdyn_expenses', d: 'msdyn_expense' },
 			objectid_msdyn_expensecategory: { b: 'objectid_msdyn_expensecategory', a: '_objectid_value', c: 'msdyn_expensecategories', d: 'msdyn_expensecategory' },
 			objectid_msdyn_expensereceipt: { b: 'objectid_msdyn_expensereceipt', a: '_objectid_value', c: 'msdyn_expensereceipts', d: 'msdyn_expensereceipt' },
+			objectid_msdyn_extendedusersetting: { b: 'objectid_msdyn_extendedusersetting', a: '_objectid_value', c: 'msdyn_extendedusersettings', d: 'msdyn_extendedusersetting' },
 			objectid_msdyn_facebookengagementctx: { b: 'objectid_msdyn_facebookengagementctx', a: '_objectid_value', c: 'msdyn_facebookengagementctxes', d: 'msdyn_facebookengagementctx' },
 			objectid_msdyn_fact: { b: 'objectid_msdyn_fact', a: '_objectid_value', c: 'msdyn_facts', d: 'msdyn_fact' },
 			objectid_msdyn_federatedarticle: { b: 'objectid_msdyn_federatedarticle', a: '_objectid_value', c: 'msdyn_federatedarticles', d: 'msdyn_federatedarticle' },
@@ -357,6 +378,8 @@ var DevKit;
 			objectid_msdyn_geolocationtracking: { b: 'objectid_msdyn_geolocationtracking', a: '_objectid_value', c: 'msdyn_geolocationtrackings', d: 'msdyn_geolocationtracking' },
 			objectid_msdyn_helppage: { b: 'objectid_msdyn_helppage', a: '_objectid_value', c: 'msdyn_helppages', d: 'msdyn_helppage' },
 			objectid_msdyn_icebreakersconfig: { b: 'objectid_msdyn_icebreakersconfig', a: '_objectid_value', c: 'msdyn_icebreakersconfigs', d: 'msdyn_icebreakersconfig' },
+			objectid_msdyn_iermlmodel: { b: 'objectid_msdyn_iermlmodel', a: '_objectid_value', c: 'msdyn_iermlmodels', d: 'msdyn_iermlmodel' },
+			objectid_msdyn_iermltraining: { b: 'objectid_msdyn_iermltraining', a: '_objectid_value', c: 'msdyn_iermltrainings', d: 'msdyn_iermltraining' },
 			objectid_msdyn_incidenttype: { b: 'objectid_msdyn_incidenttype', a: '_objectid_value', c: 'msdyn_incidenttypes', d: 'msdyn_incidenttype' },
 			objectid_msdyn_incidenttypecharacteristic: { b: 'objectid_msdyn_incidenttypecharacteristic', a: '_objectid_value', c: 'msdyn_incidenttypecharacteristics', d: 'msdyn_incidenttypecharacteristic' },
 			objectid_msdyn_incidenttypeproduct: { b: 'objectid_msdyn_incidenttypeproduct', a: '_objectid_value', c: 'msdyn_incidenttypeproducts', d: 'msdyn_incidenttypeproduct' },
@@ -399,7 +422,9 @@ var DevKit;
 			objectid_msdyn_journal: { b: 'objectid_msdyn_journal', a: '_objectid_value', c: 'msdyn_journals', d: 'msdyn_journal' },
 			objectid_msdyn_journalline: { b: 'objectid_msdyn_journalline', a: '_objectid_value', c: 'msdyn_journallines', d: 'msdyn_journalline' },
 			objectid_msdyn_kalanguagesetting: { b: 'objectid_msdyn_kalanguagesetting', a: '_objectid_value', c: 'msdyn_kalanguagesettings', d: 'msdyn_kalanguagesetting' },
+			objectid_msdyn_kbattachment: { b: 'objectid_msdyn_kbattachment', a: '_objectid_value', c: 'msdyn_kbattachments', d: 'msdyn_kbattachment' },
 			objectid_msdyn_kbenrichment: { b: 'objectid_msdyn_kbenrichment', a: '_objectid_value', c: 'msdyn_kbenrichments', d: 'msdyn_kbenrichment' },
+			objectid_msdyn_kbkeywordsdescsuggestionsetting: { b: 'objectid_msdyn_kbkeywordsdescsuggestionsetting', a: '_objectid_value', c: 'msdyn_kbkeywordsdescsuggestionsettings', d: 'msdyn_kbkeywordsdescsuggestionsetting' },
 			objectid_msdyn_kmfederatedsearchconfig: { b: 'objectid_msdyn_kmfederatedsearchconfig', a: '_objectid_value', c: 'msdyn_kmfederatedsearchconfigs', d: 'msdyn_kmfederatedsearchconfig' },
 			objectid_msdyn_kmpersonalizationsetting: { b: 'objectid_msdyn_kmpersonalizationsetting', a: '_objectid_value', c: 'msdyn_kmpersonalizationsettings', d: 'msdyn_kmpersonalizationsetting' },
 			objectid_msdyn_knowledgearticleimage: { b: 'objectid_msdyn_knowledgearticleimage', a: '_objectid_value', c: 'msdyn_knowledgearticleimages', d: 'msdyn_knowledgearticleimage' },
@@ -429,7 +454,9 @@ var DevKit;
 			objectid_msdyn_notesanalysisconfig: { b: 'objectid_msdyn_notesanalysisconfig', a: '_objectid_value', c: 'msdyn_notesanalysisconfigs', d: 'msdyn_notesanalysisconfig' },
 			objectid_msdyn_notificationfield: { b: 'objectid_msdyn_notificationfield', a: '_objectid_value', c: 'msdyn_notificationfields', d: 'msdyn_notificationfield' },
 			objectid_msdyn_notificationtemplate: { b: 'objectid_msdyn_notificationtemplate', a: '_objectid_value', c: 'msdyn_notificationtemplates', d: 'msdyn_notificationtemplate' },
+			objectid_msdyn_ocautoblockrule: { b: 'objectid_msdyn_ocautoblockrule', a: '_objectid_value', c: 'msdyn_ocautoblockrules', d: 'msdyn_ocautoblockrule' },
 			objectid_msdyn_ocbotchannelregistration: { b: 'objectid_msdyn_ocbotchannelregistration', a: '_objectid_value', c: 'msdyn_ocbotchannelregistrations', d: 'msdyn_ocbotchannelregistration' },
+			objectid_msdyn_occarrier: { b: 'objectid_msdyn_occarrier', a: '_objectid_value', c: 'msdyn_occarriers', d: 'msdyn_occarrier' },
 			objectid_msdyn_occhannelconfiguration: { b: 'objectid_msdyn_occhannelconfiguration', a: '_objectid_value', c: 'msdyn_occhannelconfigurations', d: 'msdyn_occhannelconfiguration' },
 			objectid_msdyn_occhannelstateconfiguration: { b: 'objectid_msdyn_occhannelstateconfiguration', a: '_objectid_value', c: 'msdyn_occhannelstateconfigurations', d: 'msdyn_occhannelstateconfiguration' },
 			objectid_msdyn_occommunicationprovidersetting: { b: 'objectid_msdyn_occommunicationprovidersetting', a: '_objectid_value', c: 'msdyn_occommunicationprovidersettings', d: 'msdyn_occommunicationprovidersetting' },
@@ -437,6 +464,7 @@ var DevKit;
 			objectid_msdyn_occustommessagingchannel: { b: 'objectid_msdyn_occustommessagingchannel', a: '_objectid_value', c: 'msdyn_occustommessagingchannels', d: 'msdyn_occustommessagingchannel' },
 			objectid_msdyn_ocfbapplication: { b: 'objectid_msdyn_ocfbapplication', a: '_objectid_value', c: 'msdyn_ocfbapplications', d: 'msdyn_ocfbapplication' },
 			objectid_msdyn_ocfbpage: { b: 'objectid_msdyn_ocfbpage', a: '_objectid_value', c: 'msdyn_ocfbpages', d: 'msdyn_ocfbpage' },
+			objectid_msdyn_ocflaggedspam: { b: 'objectid_msdyn_ocflaggedspam', a: '_objectid_value', c: 'msdyn_ocflaggedspams', d: 'msdyn_ocflaggedspam' },
 			objectid_msdyn_oclanguage: { b: 'objectid_msdyn_oclanguage', a: '_objectid_value', c: 'msdyn_oclanguages', d: 'msdyn_oclanguage' },
 			objectid_msdyn_oclinechannelconfig: { b: 'objectid_msdyn_oclinechannelconfig', a: '_objectid_value', c: 'msdyn_oclinechannelconfigs', d: 'msdyn_oclinechannelconfig' },
 			objectid_msdyn_ocliveworkitem: { b: 'objectid_msdyn_ocliveworkitem', a: '_objectid_value', c: 'msdyn_ocliveworkitems', d: 'msdyn_ocliveworkitem' },
@@ -451,6 +479,7 @@ var DevKit;
 			objectid_msdyn_ocoutboundmessage: { b: 'objectid_msdyn_ocoutboundmessage', a: '_objectid_value', c: 'msdyn_ocoutboundmessages', d: 'msdyn_ocoutboundmessage' },
 			objectid_msdyn_ocphonenumber: { b: 'objectid_msdyn_ocphonenumber', a: '_objectid_value', c: 'msdyn_ocphonenumbers', d: 'msdyn_ocphonenumber' },
 			objectid_msdyn_ocprovisioningstate: { b: 'objectid_msdyn_ocprovisioningstate', a: '_objectid_value', c: 'msdyn_ocprovisioningstates', d: 'msdyn_ocprovisioningstate' },
+			objectid_msdyn_ocrecording: { b: 'objectid_msdyn_ocrecording', a: '_objectid_value', c: 'msdyn_ocrecordings', d: 'msdyn_ocrecording' },
 			objectid_msdyn_ocrequest: { b: 'objectid_msdyn_ocrequest', a: '_objectid_value', c: 'msdyn_ocrequests', d: 'msdyn_ocrequest' },
 			objectid_msdyn_ocruleitem: { b: 'objectid_msdyn_ocruleitem', a: '_objectid_value', c: 'msdyn_ocruleitems', d: 'msdyn_ocruleitem' },
 			objectid_msdyn_ocsentimentdailytopic: { b: 'objectid_msdyn_ocsentimentdailytopic', a: '_objectid_value', c: 'msdyn_ocsentimentdailytopics', d: 'msdyn_ocsentimentdailytopic' },
@@ -458,6 +487,7 @@ var DevKit;
 			objectid_msdyn_ocsentimentdailytopictrending: { b: 'objectid_msdyn_ocsentimentdailytopictrending', a: '_objectid_value', c: 'msdyn_ocsentimentdailytopictrendings', d: 'msdyn_ocsentimentdailytopictrending' },
 			objectid_msdyn_ocsession: { b: 'objectid_msdyn_ocsession', a: '_objectid_value', c: 'msdyn_ocsessions', d: 'msdyn_ocsession' },
 			objectid_msdyn_ocsessioncharacteristic: { b: 'objectid_msdyn_ocsessioncharacteristic', a: '_objectid_value', c: 'msdyn_ocsessioncharacteristics', d: 'msdyn_ocsessioncharacteristic' },
+			objectid_msdyn_ocsessionparticipantevent: { b: 'objectid_msdyn_ocsessionparticipantevent', a: '_objectid_value', c: 'msdyn_ocsessionparticipantevents', d: 'msdyn_ocsessionparticipantevent' },
 			objectid_msdyn_ocsessionsentiment: { b: 'objectid_msdyn_ocsessionsentiment', a: '_objectid_value', c: 'msdyn_ocsessionsentiments', d: 'msdyn_ocsessionsentiment' },
 			objectid_msdyn_ocsimltraining: { b: 'objectid_msdyn_ocsimltraining', a: '_objectid_value', c: 'msdyn_ocsimltrainings', d: 'msdyn_ocsimltraining' },
 			objectid_msdyn_ocsitdimportconfig: { b: 'objectid_msdyn_ocsitdimportconfig', a: '_objectid_value', c: 'msdyn_ocsitdimportconfigs', d: 'msdyn_ocsitdimportconfig' },
@@ -494,6 +524,7 @@ var DevKit;
 			objectid_msdyn_orderlinetransactionclassification: { b: 'objectid_msdyn_orderlinetransactionclassification', a: '_objectid_value', c: 'msdyn_orderlinetransactionclassifications', d: 'msdyn_orderlinetransactionclassification' },
 			objectid_msdyn_orderpricelist: { b: 'objectid_msdyn_orderpricelist', a: '_objectid_value', c: 'msdyn_orderpricelists', d: 'msdyn_orderpricelist' },
 			objectid_msdyn_organizationalunit: { b: 'objectid_msdyn_organizationalunit', a: '_objectid_value', c: 'msdyn_organizationalunits', d: 'msdyn_organizationalunit' },
+			objectid_msdyn_overflowactionconfig: { b: 'objectid_msdyn_overflowactionconfig', a: '_objectid_value', c: 'msdyn_overflowactionconfigs', d: 'msdyn_overflowactionconfig' },
 			objectid_msdyn_paneconfiguration: { b: 'objectid_msdyn_paneconfiguration', a: '_objectid_value', c: 'msdyn_paneconfigurations', d: 'msdyn_paneconfiguration' },
 			objectid_msdyn_panetabconfiguration: { b: 'objectid_msdyn_panetabconfiguration', a: '_objectid_value', c: 'msdyn_panetabconfigurations', d: 'msdyn_panetabconfiguration' },
 			objectid_msdyn_panetoolconfiguration: { b: 'objectid_msdyn_panetoolconfiguration', a: '_objectid_value', c: 'msdyn_panetoolconfigurations', d: 'msdyn_panetoolconfiguration' },
@@ -515,6 +546,7 @@ var DevKit;
 			objectid_msdyn_postalcode: { b: 'objectid_msdyn_postalcode', a: '_objectid_value', c: 'msdyn_postalcodes', d: 'msdyn_postalcode' },
 			objectid_msdyn_postconfig: { b: 'objectid_msdyn_postconfig', a: '_objectid_value', c: 'msdyn_postconfigs', d: 'msdyn_postconfig' },
 			objectid_msdyn_postruleconfig: { b: 'objectid_msdyn_postruleconfig', a: '_objectid_value', c: 'msdyn_postruleconfigs', d: 'msdyn_postruleconfig' },
+			objectid_msdyn_predictworkhourdurationsetting: { b: 'objectid_msdyn_predictworkhourdurationsetting', a: '_objectid_value', c: 'msdyn_predictworkhourdurationsettings', d: 'msdyn_predictworkhourdurationsetting' },
 			objectid_msdyn_presence: { b: 'objectid_msdyn_presence', a: '_objectid_value', c: 'msdyn_presences', d: 'msdyn_presence' },
 			objectid_msdyn_priority: { b: 'objectid_msdyn_priority', a: '_objectid_value', c: 'msdyn_priorities', d: 'msdyn_priority' },
 			objectid_msdyn_problematicasset: { b: 'objectid_msdyn_problematicasset', a: '_objectid_value', c: 'msdyn_problematicassets', d: 'msdyn_problematicasset' },
@@ -602,13 +634,20 @@ var DevKit;
 			objectid_msdyn_rtvproduct: { b: 'objectid_msdyn_rtvproduct', a: '_objectid_value', c: 'msdyn_rtvproducts', d: 'msdyn_rtvproduct' },
 			objectid_msdyn_rtvsubstatus: { b: 'objectid_msdyn_rtvsubstatus', a: '_objectid_value', c: 'msdyn_rtvsubstatuses', d: 'msdyn_rtvsubstatus' },
 			objectid_msdyn_rulesetdependencymapping: { b: 'objectid_msdyn_rulesetdependencymapping', a: '_objectid_value', c: 'msdyn_rulesetdependencymappings', d: 'msdyn_rulesetdependencymapping' },
+			objectid_msdyn_salesaccelerationsettings: { b: 'objectid_msdyn_salesaccelerationsettings', a: '_objectid_value', c: 'msdyn_salesaccelerationsettingses', d: 'msdyn_salesaccelerationsettings' },
+			objectid_msdyn_salesassignmentsetting: { b: 'objectid_msdyn_salesassignmentsetting', a: '_objectid_value', c: 'msdyn_salesassignmentsettings', d: 'msdyn_salesassignmentsetting' },
 			objectid_msdyn_salesinsightssettings: { b: 'objectid_msdyn_salesinsightssettings', a: '_objectid_value', c: 'msdyn_salesinsightssettingses', d: 'msdyn_salesinsightssettings' },
 			objectid_msdyn_scenario: { b: 'objectid_msdyn_scenario', a: '_objectid_value', c: 'msdyn_scenarios', d: 'msdyn_scenario' },
 			objectid_msdyn_scheduleboardsetting: { b: 'objectid_msdyn_scheduleboardsetting', a: '_objectid_value', c: 'msdyn_scheduleboardsettings', d: 'msdyn_scheduleboardsetting' },
 			objectid_msdyn_schedulingfeatureflag: { b: 'objectid_msdyn_schedulingfeatureflag', a: '_objectid_value', c: 'msdyn_schedulingfeatureflags', d: 'msdyn_schedulingfeatureflag' },
 			objectid_msdyn_schedulingparameter: { b: 'objectid_msdyn_schedulingparameter', a: '_objectid_value', c: 'msdyn_schedulingparameters', d: 'msdyn_schedulingparameter' },
 			objectid_msdyn_searchconfiguration: { b: 'objectid_msdyn_searchconfiguration', a: '_objectid_value', c: 'msdyn_searchconfigurations', d: 'msdyn_searchconfiguration' },
+			objectid_msdyn_segment: { b: 'objectid_msdyn_segment', a: '_objectid_value', c: 'msdyn_segments', d: 'msdyn_segment' },
+			objectid_msdyn_segmentcatalogue: { b: 'objectid_msdyn_segmentcatalogue', a: '_objectid_value', c: 'msdyn_segmentcatalogues', d: 'msdyn_segmentcatalogue' },
 			objectid_msdyn_sentimentanalysis: { b: 'objectid_msdyn_sentimentanalysis', a: '_objectid_value', c: 'msdyn_sentimentanalysises', d: 'msdyn_sentimentanalysis' },
+			objectid_msdyn_sequence: { b: 'objectid_msdyn_sequence', a: '_objectid_value', c: 'msdyn_sequences', d: 'msdyn_sequence' },
+			objectid_msdyn_sequencetarget: { b: 'objectid_msdyn_sequencetarget', a: '_objectid_value', c: 'msdyn_sequencetargets', d: 'msdyn_sequencetarget' },
+			objectid_msdyn_sequencetargetstep: { b: 'objectid_msdyn_sequencetargetstep', a: '_objectid_value', c: 'msdyn_sequencetargetsteps', d: 'msdyn_sequencetargetstep' },
 			objectid_msdyn_serviceconfiguration: { b: 'objectid_msdyn_serviceconfiguration', a: '_objectid_value', c: 'msdyn_serviceconfigurations', d: 'msdyn_serviceconfiguration' },
 			objectid_msdyn_servicetasktype: { b: 'objectid_msdyn_servicetasktype', a: '_objectid_value', c: 'msdyn_servicetasktypes', d: 'msdyn_servicetasktype' },
 			objectid_msdyn_sessiondata: { b: 'objectid_msdyn_sessiondata', a: '_objectid_value', c: 'msdyn_sessiondatas', d: 'msdyn_sessiondata' },
@@ -638,6 +677,9 @@ var DevKit;
 			objectid_msdyn_systemuserschedulersetting: { b: 'objectid_msdyn_systemuserschedulersetting', a: '_objectid_value', c: 'msdyn_systemuserschedulersettings', d: 'msdyn_systemuserschedulersetting' },
 			objectid_msdyn_taxcode: { b: 'objectid_msdyn_taxcode', a: '_objectid_value', c: 'msdyn_taxcodes', d: 'msdyn_taxcode' },
 			objectid_msdyn_taxcodedetail: { b: 'objectid_msdyn_taxcodedetail', a: '_objectid_value', c: 'msdyn_taxcodedetails', d: 'msdyn_taxcodedetail' },
+			objectid_msdyn_teamschannelengagementctx: { b: 'objectid_msdyn_teamschannelengagementctx', a: '_objectid_value', c: 'msdyn_teamschannelengagementctxes', d: 'msdyn_teamschannelengagementctx' },
+			objectid_msdyn_teamschatassociation: { b: 'objectid_msdyn_teamschatassociation', a: '_objectid_value', c: 'msdyn_teamschatassociations', d: 'msdyn_teamschatassociation' },
+			objectid_msdyn_teamschatsuggestion: { b: 'objectid_msdyn_teamschatsuggestion', a: '_objectid_value', c: 'msdyn_teamschatsuggestions', d: 'msdyn_teamschatsuggestion' },
 			objectid_msdyn_teamscollaboration: { b: 'objectid_msdyn_teamscollaboration', a: '_objectid_value', c: 'msdyn_teamscollaborations', d: 'msdyn_teamscollaboration' },
 			objectid_msdyn_teamsdialeradminsettings: { b: 'objectid_msdyn_teamsdialeradminsettings', a: '_objectid_value', c: 'msdyn_teamsdialeradminsettingses', d: 'msdyn_teamsdialeradminsettings' },
 			objectid_msdyn_teamsengagementctx: { b: 'objectid_msdyn_teamsengagementctx', a: '_objectid_value', c: 'msdyn_teamsengagementctxes', d: 'msdyn_teamsengagementctx' },
@@ -690,6 +732,8 @@ var DevKit;
 			objectid_msdyn_workorderservicetask: { b: 'objectid_msdyn_workorderservicetask', a: '_objectid_value', c: 'msdyn_workorderservicetasks', d: 'msdyn_workorderservicetask' },
 			objectid_msdyn_workordersubstatus: { b: 'objectid_msdyn_workordersubstatus', a: '_objectid_value', c: 'msdyn_workordersubstatuses', d: 'msdyn_workordersubstatus' },
 			objectid_msdyn_workordertype: { b: 'objectid_msdyn_workordertype', a: '_objectid_value', c: 'msdyn_workordertypes', d: 'msdyn_workordertype' },
+			objectid_msdyn_workqueuestate: { b: 'objectid_msdyn_workqueuestate', a: '_objectid_value', c: 'msdyn_workqueuestates', d: 'msdyn_workqueuestate' },
+			objectid_msdyn_workqueueusersetting: { b: 'objectid_msdyn_workqueueusersetting', a: '_objectid_value', c: 'msdyn_workqueueusersettings', d: 'msdyn_workqueueusersetting' },
 			objectid_msdyusd_actioncallworkflow: { b: 'objectid_msdyusd_actioncallworkflow', a: '_objectid_value', c: 'msdyusd_actioncallworkflows', d: 'msdyusd_actioncallworkflow' },
 			objectid_msdyusd_agentscriptaction: { b: 'objectid_msdyusd_agentscriptaction', a: '_objectid_value', c: 'msdyusd_agentscriptactions', d: 'msdyusd_agentscriptaction' },
 			objectid_msdyusd_agentscripttaskcategory: { b: 'objectid_msdyusd_agentscripttaskcategory', a: '_objectid_value', c: 'msdyusd_agentscripttaskcategories', d: 'msdyusd_agentscripttaskcategory' },
@@ -728,6 +772,7 @@ var DevKit;
 			objectid_msfp_surveyreminder: { b: 'objectid_msfp_surveyreminder', a: '_objectid_value', c: 'msfp_surveyreminders', d: 'msfp_surveyreminder' },
 			objectid_msfp_surveyresponse: { b: 'objectid_msfp_surveyresponse', a: '_objectid_value', c: 'msfp_surveyresponses', d: 'msfp_surveyresponse' },
 			objectid_msfp_unsubscribedrecipient: { b: 'objectid_msfp_unsubscribedrecipient', a: '_objectid_value', c: 'msfp_unsubscribedrecipients', d: 'msfp_unsubscribedrecipient' },
+			objectid_new_test: { b: 'objectid_new_test', a: '_objectid_value', c: 'new_tests', d: 'new_test' },
 			objectid_opportunity: { b: 'objectid_opportunity', a: '_objectid_value', c: 'opportunities', d: 'opportunity' },
 			objectid_opportunityclose: { b: 'objectid_opportunityclose', a: '_objectid_value', c: 'opportunitycloses', d: 'opportunityclose' },
 			objectid_opportunitycompetitors: { b: 'objectid_opportunitycompetitors', a: '_objectid_value', c: '', d: 'opportunitycompetitors' },
@@ -741,6 +786,7 @@ var DevKit;
 			objectid_pdfsetting: { b: 'objectid_pdfsetting', a: '_objectid_value', c: 'pdfsettings', d: 'pdfsetting' },
 			objectid_phonecall: { b: 'objectid_phonecall', a: '_objectid_value', c: 'phonecalls', d: 'phonecall' },
 			objectid_phonetocaseprocess: { b: 'objectid_phonetocaseprocess', a: '_objectid_value', c: 'phonetocaseprocesses', d: 'phonetocaseprocess' },
+			objectid_pluginpackage: { b: 'objectid_pluginpackage', a: '_objectid_value', c: 'pluginpackages', d: 'pluginpackage' },
 			objectid_position: { b: 'objectid_position', a: '_objectid_value', c: 'positions', d: 'position' },
 			objectid_pricelevel: { b: 'objectid_pricelevel', a: '_objectid_value', c: 'pricelevels', d: 'pricelevel' },
 			objectid_processstageparameter: { b: 'objectid_processstageparameter', a: '_objectid_value', c: 'processstageparameters', d: 'processstageparameter' },
@@ -774,6 +820,7 @@ var DevKit;
 			objectid_serviceappointment: { b: 'objectid_serviceappointment', a: '_objectid_value', c: 'serviceappointments', d: 'serviceappointment' },
 			objectid_servicecontractcontacts: { b: 'objectid_servicecontractcontacts', a: '_objectid_value', c: '', d: 'servicecontractcontacts' },
 			objectid_serviceplan: { b: 'objectid_serviceplan', a: '_objectid_value', c: 'serviceplans', d: 'serviceplan' },
+			objectid_serviceplanmapping: { b: 'objectid_serviceplanmapping', a: '_objectid_value', c: 'serviceplanmappings', d: 'serviceplanmapping' },
 			objectid_settingdefinition: { b: 'objectid_settingdefinition', a: '_objectid_value', c: 'settingdefinitions', d: 'settingdefinition' },
 			objectid_sharepointdocumentlocation: { b: 'objectid_sharepointdocumentlocation', a: '_objectid_value', c: 'sharePointdocumentlocations', d: 'sharepointdocumentlocation' },
 			objectid_sharepointsite: { b: 'objectid_sharepointsite', a: '_objectid_value', c: 'sharepointsites', d: 'sharepointsite' },
@@ -781,6 +828,7 @@ var DevKit;
 			objectid_socialactivity: { b: 'objectid_socialactivity', a: '_objectid_value', c: 'socialactivities', d: 'socialactivity' },
 			objectid_socialprofile: { b: 'objectid_socialprofile', a: '_objectid_value', c: 'socialprofiles', d: 'socialprofile' },
 			objectid_solutioncomponentattributeconfiguration: { b: 'objectid_solutioncomponentattributeconfiguration', a: '_objectid_value', c: 'solutioncomponentattributeconfigurations', d: 'solutioncomponentattributeconfiguration' },
+			objectid_solutioncomponentbatchconfiguration: { b: 'objectid_solutioncomponentbatchconfiguration', a: '_objectid_value', c: 'solutioncomponentbatchconfigurations', d: 'solutioncomponentbatchconfiguration' },
 			objectid_solutioncomponentconfiguration: { b: 'objectid_solutioncomponentconfiguration', a: '_objectid_value', c: 'solutioncomponentconfigurations', d: 'solutioncomponentconfiguration' },
 			objectid_solutioncomponentrelationshipconfiguration: { b: 'objectid_solutioncomponentrelationshipconfiguration', a: '_objectid_value', c: 'solutioncomponentrelationshipconfigurations', d: 'solutioncomponentrelationshipconfiguration' },
 			objectid_stagesolutionupload: { b: 'objectid_stagesolutionupload', a: '_objectid_value', c: 'stagesolutionuploads', d: 'stagesolutionupload' },
@@ -858,16 +906,16 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-	OptionSet.PrincipalObjectAttributeAccess = {
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
+		OptionSet.PrincipalObjectAttributeAccess = {
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 
 	};
 })(OptionSet || (OptionSet = {}));

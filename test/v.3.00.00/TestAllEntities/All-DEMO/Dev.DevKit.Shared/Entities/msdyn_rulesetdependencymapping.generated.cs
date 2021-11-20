@@ -212,7 +212,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Polymorphic entity id referenced by the ruleset</para>
-		/// <para>Lookup to characteristic;msdyn_capacityprofile;msdyn_decisionruleset;msdyn_liveworkstream;msdyn_ocliveworkstreamcontextvariable;queue;ratingvalue</para>
+		/// <para>Lookup to characteristic, msdyn_capacityprofile, msdyn_decisionruleset, msdyn_liveworkstream, msdyn_ocliveworkstreamcontextvariable, queue, ratingvalue</para>
 		/// <para>Referenced polymorphic entity id</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -300,7 +300,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

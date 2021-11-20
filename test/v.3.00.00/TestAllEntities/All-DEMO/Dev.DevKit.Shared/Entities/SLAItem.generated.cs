@@ -398,7 +398,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who owns the SLA. This field is updated every time the item is assigned to a different user.</para>
-		/// <para>Required - Lookup to systemuser;team</para>
+		/// <para>Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

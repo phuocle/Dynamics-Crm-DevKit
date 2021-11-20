@@ -27,7 +27,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_liveworkstreamOptionSets
 		/// <summary>
 		/// Busy - DND = 192360002
 		/// </summary>
-		Busy__DND = 192360002,
+		Busy_DND = 192360002,
 		/// <summary>
 		/// Offline = 192360004
 		/// </summary>
@@ -1273,7 +1273,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

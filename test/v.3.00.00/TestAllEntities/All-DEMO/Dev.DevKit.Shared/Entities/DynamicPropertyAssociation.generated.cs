@@ -345,7 +345,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the object that the property is associated with.</para>
-		/// <para>Lookup to product;productassociation</para>
+		/// <para>Lookup to product, productassociation</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

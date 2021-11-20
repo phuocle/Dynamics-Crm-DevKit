@@ -15,7 +15,7 @@ namespace Dev.DevKit.Shared.Entities.EntitlementEntityAllocationTypeMappingOptio
 		/// <summary>
 		/// Discount % and Price List = 192350000
 		/// </summary>
-		Discount__and_Price_List = 192350000,
+		Discount_and_Price_List = 192350000,
 		/// <summary>
 		/// Number of cases = 0
 		/// </summary>
@@ -309,7 +309,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

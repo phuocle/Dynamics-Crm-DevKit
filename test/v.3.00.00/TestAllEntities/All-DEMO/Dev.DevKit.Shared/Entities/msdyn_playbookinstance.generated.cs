@@ -341,7 +341,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -386,7 +386,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the entity the playbook is launched for.</para>
-		/// <para>Lookup to account;contact;invoice;lead;opportunity;quote;salesorder</para>
+		/// <para>Lookup to account, contact, invoice, lead, opportunity, quote, salesorder</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -575,7 +575,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user who is assigned to follow up with or manage the import file. This field is updated every time the import file is assigned to a different user.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -714,7 +714,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the user that the records created during the import job should be assigned to.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Records Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.msdyn_conversationactionlocaleApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var msdyn_conversationactionlocale = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -131,71 +131,71 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-	OptionSet.msdyn_conversationactionlocale = {
-		msdyn_Locale_picklist : {
-			ar_SA: 1025,
-			bg_BG: 1026,
-			ca_ES: 1027,
-			cs_CZ: 1029,
-			da_DK: 1030,
-			de_DE: 1031,
-			el_GR: 1032,
-			en_US: 1033,
-			es_ES: 3082,
-			et_EE: 1061,
-			eu_ES: 1069,
-			fi_FI: 1035,
-			fr_FR: 1036,
-			gl_ES: 1110,
-			he_IL: 1037,
-			hi_IN: 1081,
-			hr_HR: 1050,
-			hu_HU: 1038,
-			id_ID: 1057,
-			it_IT: 1040,
-			ja_JP: 1041,
-			kk_KZ: 1087,
-			ko_KR: 1042,
-			lt_LT: 1063,
-			lv_LV: 1062,
-			ms_MY: 1086,
-			nb_NO: 1044,
-			nl_NL: 1043,
-			pl_PL: 1045,
-			pt_BR: 1046,
-			pt_PT: 2070,
-			ro_RO: 1048,
-			ru_RU: 1049,
-			sk_SK: 1051,
-			sl_SI: 1060,
-			sr_Cyrl_CS: 3098,
-			sr_Latn_CS: 2074,
-			sv_SE: 1053,
-			th_TH: 1054,
-			tr_TR: 1055,
-			uk_UA: 1058,
-			vi_VN: 1066,
-			zh_CN: 2052,
-			zh_HK: 3076,
-			zh_TW: 1028
-		},
-		statecode : {
-			Active: 0,
-			Inactive: 1
-		},
-		statuscode : {
-			Active: 1,
-			Inactive: 2
-		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
+		OptionSet.msdyn_conversationactionlocale = {
+			msdyn_Locale_picklist : {
+				arSA: 1025,
+				bgBG: 1026,
+				caES: 1027,
+				csCZ: 1029,
+				daDK: 1030,
+				deDE: 1031,
+				elGR: 1032,
+				enUS: 1033,
+				esES: 3082,
+				etEE: 1061,
+				euES: 1069,
+				fiFI: 1035,
+				frFR: 1036,
+				glES: 1110,
+				heIL: 1037,
+				hiIN: 1081,
+				hrHR: 1050,
+				huHU: 1038,
+				idID: 1057,
+				itIT: 1040,
+				jaJP: 1041,
+				kkKZ: 1087,
+				koKR: 1042,
+				ltLT: 1063,
+				lvLV: 1062,
+				msMY: 1086,
+				nbNO: 1044,
+				nlNL: 1043,
+				plPL: 1045,
+				ptBR: 1046,
+				ptPT: 2070,
+				roRO: 1048,
+				ruRU: 1049,
+				skSK: 1051,
+				slSI: 1060,
+				srCyrlCS: 3098,
+				srLatnCS: 2074,
+				svSE: 1053,
+				thTH: 1054,
+				trTR: 1055,
+				ukUA: 1058,
+				viVN: 1066,
+				zhCN: 2052,
+				zhHK: 3076,
+				zhTW: 1028
+			},
+			statecode : {
+				Active: 0,
+				Inactive: 1
+			},
+			statuscode : {
+				Active: 1,
+				Inactive: 2
+			},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 
 	};
 })(OptionSet || (OptionSet = {}));

@@ -398,7 +398,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the record that the team relates to.</para>
-		/// <para>Lookup to knowledgearticle;opportunity</para>
+		/// <para>Lookup to knowledgearticle, opportunity</para>
 		/// <para>Regarding Object Id</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -15,31 +15,31 @@ namespace Dev.DevKit.Shared.Entities.msdyn_unifiedroutingrunOptionSets
 		/// <summary>
 		/// Agent assignment - completed = 100000006
 		/// </summary>
-		Agent_assignment__completed = 100000006,
+		Agent_assignment_completed = 100000006,
 		/// <summary>
 		/// Intake rules - completed = 100000000
 		/// </summary>
-		Intake_rules__completed = 100000000,
+		Intake_rules_completed = 100000000,
 		/// <summary>
 		/// Queue: Assignment rules - completed = 100000005
 		/// </summary>
-		Queue_Assignment_rules__completed = 100000005,
+		Queue_Assignment_rules_completed = 100000005,
 		/// <summary>
 		/// Queue: Assignment selection rules - completed = 100000004
 		/// </summary>
-		Queue_Assignment_selection_rules__completed = 100000004,
+		Queue_Assignment_selection_rules_completed = 100000004,
 		/// <summary>
 		/// Queue: Prioritization rules - completed = 100000003
 		/// </summary>
-		Queue_Prioritization_rules__completed = 100000003,
+		Queue_Prioritization_rules_completed = 100000003,
 		/// <summary>
 		/// Workstream: Classification rules - processing... = 100000001
 		/// </summary>
-		Workstream_Classification_rules__processing = 100000001,
+		Workstream_Classification_rules_processing = 100000001,
 		/// <summary>
 		/// Workstream: Route-to-queue rules - completed = 100000002
 		/// </summary>
-		Workstream_Routetoqueue_rules__completed = 100000002
+		Workstream_Routetoqueue_rules_completed = 100000002
 	}
 
 	public enum statecode
@@ -362,7 +362,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier for the target object associated with unified routing run.</para>
-		/// <para>Lookup to msdyn_ocliveworkitem;queueitem</para>
+		/// <para>Lookup to msdyn_ocliveworkitem, queueitem</para>
 		/// <para>Target Object</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -413,7 +413,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

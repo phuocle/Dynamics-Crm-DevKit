@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.BookableResourceBookingApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var bookableresourcebooking = {
 			BookableResourceBookingId: { a: 'bookableresourcebookingid' },
 			BookingStatus: { b: 'bookingstatus', a: '_bookingstatus_value', c: 'bookingstatuses', d: 'bookingstatus' },
@@ -105,6 +105,7 @@ var DevKit;
 			msdyn_projectteamid: { b: 'msdyn_projectteamid', a: '_msdyn_projectteamid_value', c: 'msdyn_projectteams', d: 'msdyn_projectteam' },
 			msdyn_quickNoteAction: { a: 'msdyn_quickNoteAction' },
 			msdyn_requirementgroupid: { b: 'msdyn_requirementgroupid', a: '_msdyn_requirementgroupid_value', c: 'msdyn_requirementgroups', d: 'msdyn_requirementgroup' },
+			msdyn_requirementgroupset: { a: 'msdyn_requirementgroupset' },
 			msdyn_resourcecategoryid: { b: 'msdyn_resourcecategoryid', a: '_msdyn_resourcecategoryid_value', c: 'bookableresourcecategories', d: 'bookableresourcecategory' },
 			msdyn_ResourceGroup: { b: 'msdyn_ResourceGroup', a: '_msdyn_resourcegroup_value', c: 'bookableresources', d: 'bookableresource' },
 			msdyn_ResourceRequirement: { b: 'msdyn_ResourceRequirement', a: '_msdyn_resourcerequirement_value', c: 'msdyn_resourcerequirements', d: 'msdyn_resourcerequirement' },
@@ -180,60 +181,60 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-	OptionSet.BookableResourceBooking = {
-		BookingType : {
-			Liquid: 2,
-			Solid: 1
-		},
-		msdyn_BookingMethod : {
-			Manual: 690970003,
-			Mobile: 690970002,
-			Resource_Scheduling_Optimization: 192350000,
-			Schedule_Assistant: 690970004,
-			Schedule_Board: 690970001,
-			System_Agreement_Schedule: 690970005
-		},
-		msdyn_CrewMemberType : {
-			Leader: 192350000,
-			Member: 192350001,
-			None: 192350002
-		},
-		msdyn_quickNoteAction : {
-			audio: 100000004,
-			file: 100000005,
-			none: 100000000,
-			photo: 100000002,
-			text: 100000001,
-			video: 100000003
-		},
-		msdyn_TravelTimeCalculationType : {
-			Approximate: 192350003,
-			Bing_Maps_with_historical_traffic: 192350001,
-			Bing_Maps_without_historical_traffic: 192350000,
-			Custom_Map_Provider: 192350002
-		},
-		msdyn_WorkLocation : {
-			Facility: 690970001,
-			Location_Agnostic: 690970002,
-			Onsite: 690970000
-		},
-		StateCode : {
-			Active: 0,
-			Inactive: 1
-		},
-		StatusCode : {
-			Active: 1,
-			Inactive: 2
-		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
+		OptionSet.BookableResourceBooking = {
+			BookingType : {
+				Liquid: 2,
+				Solid: 1
+			},
+			msdyn_BookingMethod : {
+				Manual: 690970003,
+				Mobile: 690970002,
+				Resource_Scheduling_Optimization: 192350000,
+				Schedule_Assistant: 690970004,
+				Schedule_Board: 690970001,
+				System_Agreement_Schedule: 690970005
+			},
+			msdyn_CrewMemberType : {
+				Leader: 192350000,
+				Member: 192350001,
+				None: 192350002
+			},
+			msdyn_quickNoteAction : {
+				audio: 100000004,
+				file: 100000005,
+				none: 100000000,
+				photo: 100000002,
+				text: 100000001,
+				video: 100000003
+			},
+			msdyn_TravelTimeCalculationType : {
+				Approximate: 192350003,
+				Bing_Maps_with_historical_traffic: 192350001,
+				Bing_Maps_without_historical_traffic: 192350000,
+				Custom_Map_Provider: 192350002
+			},
+			msdyn_WorkLocation : {
+				Facility: 690970001,
+				Location_Agnostic: 690970002,
+				Onsite: 690970000
+			},
+			StateCode : {
+				Active: 0,
+				Inactive: 1
+			},
+			StatusCode : {
+				Active: 1,
+				Inactive: 2
+			},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 
 	};
 })(OptionSet || (OptionSet = {}));

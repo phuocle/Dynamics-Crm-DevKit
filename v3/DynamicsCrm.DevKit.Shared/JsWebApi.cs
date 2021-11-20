@@ -115,6 +115,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}HierarchicalRecursionLimitReached: 5,{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}LoopDetected: 6{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
             return code;
         }
@@ -160,7 +161,8 @@ namespace DynamicsCrm.DevKit.Shared
                     attribute.AttributeType == AttributeTypeCode.Decimal ||
                     attribute.AttributeType == AttributeTypeCode.Money ||
                     attribute.AttributeType == AttributeTypeCode.Uniqueidentifier ||
-                    attribute.AttributeType == AttributeTypeCode.ManagedProperty
+                    attribute.AttributeType == AttributeTypeCode.ManagedProperty ||
+                    attribute.AttributeTypeName == AttributeTypeDisplayName.FileType
                 )
                 {
                     code += $"{TAB}{TAB}{TAB}{attribute.SchemaName}: {{ {a}{r} }},{NEW_LINE}";
@@ -177,8 +179,8 @@ namespace DynamicsCrm.DevKit.Shared
                 }
                 else if (attribute.AttributeType == AttributeTypeCode.Owner)
                 {
-                    code += $"{TAB}{TAB}{TAB}OwnerId_systemuser: {{ b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' }},{NEW_LINE}";
-                    code += $"{TAB}{TAB}{TAB}OwnerId_team: {{ b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' }},{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}OwnerId_systemuser: {{ b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser'{r} }},{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}OwnerId_team: {{ b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team'{r} }},{NEW_LINE}";
                 }
                 else if (attribute is LookupAttributeMetadata lookup)
                 {
@@ -194,13 +196,21 @@ namespace DynamicsCrm.DevKit.Shared
                     }
                     else
                     {
-                        foreach (var entityLogicalName in lookup.Targets)
+                        if (attribute.LogicalName == "acceptingentityid")
                         {
-                            var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
-                            var b = $"b: '{navigation?.ReferencingEntityNavigationPropertyName}'";
-                            var c = $"c: '{XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName).LogicalCollectionName}'";
-                            var d = $"d: '{entityLogicalName}'";
-                            code += $"{TAB}{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
+                            code += $"{TAB}{TAB}{TAB}acceptingentityid_queue: {{ b: 'acceptingentityid_queue', a: '_acceptingentityid_value', c: 'queues', d: 'queue' }},{NEW_LINE}";
+                            code += $"{TAB}{TAB}{TAB}acceptingentityid_systemuser: {{ b: 'acceptingentityid_systemuser', a: '_acceptingentityid_value', c: 'systemusers', d: 'systemuser' }},{NEW_LINE}";
+                        }
+                        else
+                        {
+                            foreach (var entityLogicalName in lookup.Targets)
+                            {
+                                var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
+                                var b = $"b: '{navigation?.ReferencingEntityNavigationPropertyName}'";
+                                var c = $"c: '{XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName).LogicalCollectionName}'";
+                                var d = $"d: '{entityLogicalName}'";
+                                code += $"{TAB}{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
+                            }
                         }
                     }
                 }

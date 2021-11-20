@@ -95,7 +95,7 @@ namespace Dev.DevKit.Shared.Entities.SystemFormOptionSets
 		/// <summary>
 		/// Main - Interactive experience = 12
 		/// </summary>
-		Main__Interactive_experience = 12,
+		Main_Interactive_experience = 12,
 		/// <summary>
 		/// MainBackup = 101
 		/// </summary>
@@ -107,7 +107,7 @@ namespace Dev.DevKit.Shared.Entities.SystemFormOptionSets
 		/// <summary>
 		/// Mobile - Express = 5
 		/// </summary>
-		Mobile__Express = 5,
+		Mobile_Express = 5,
 		/// <summary>
 		/// Other = 100
 		/// </summary>

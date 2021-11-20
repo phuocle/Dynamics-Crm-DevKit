@@ -298,7 +298,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier for the object associated with the catalog assignment</para>
-		/// <para>Lookup to customapi;entity;workflow</para>
+		/// <para>Lookup to customapi, entity, workflow</para>
 		/// <para>Catalog Assignment Object</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -35,11 +35,11 @@ namespace Dev.DevKit.Shared.Entities.WorkflowDependencyOptionSets
 		/// <summary>
 		/// Primary entity - after SDK operation = 5
 		/// </summary>
-		Primary_entity__after_SDK_operation = 5,
+		Primary_entity_after_SDK_operation = 5,
 		/// <summary>
 		/// Primary entity - before SDK operation = 4
 		/// </summary>
-		Primary_entity__before_SDK_operation = 4,
+		Primary_entity_before_SDK_operation = 4,
 		/// <summary>
 		/// Related entity = 6
 		/// </summary>
@@ -250,7 +250,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the parent workflow instance.</para>
-		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

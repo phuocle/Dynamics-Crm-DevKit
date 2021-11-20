@@ -91,11 +91,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectOptionSets
 		/// <summary>
 		/// Closed - Sets project to read only and cancels future bookings = 192350000
 		/// </summary>
-		Closed__Sets_project_to_read_only_and_cancels_future_bookings = 192350000,
+		Closed_Sets_project_to_read_only_and_cancels_future_bookings = 192350000,
 		/// <summary>
 		/// Inactive - Sets project to read only = 2
 		/// </summary>
-		Inactive__Sets_project_to_read_only = 2
+		Inactive_Sets_project_to_read_only = 2
 	}
 }
 
@@ -1578,7 +1578,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

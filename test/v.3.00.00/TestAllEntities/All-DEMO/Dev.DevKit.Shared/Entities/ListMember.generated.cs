@@ -126,7 +126,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Lookup to account;contact;lead</para>
+		/// <para>Lookup to account, contact, lead</para>
 		/// <para>Entity</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -233,7 +233,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the list member.</para>
-		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -218,7 +218,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Suggested Entity lookup attribute</para>
-		/// <para>Required - Lookup to incident;knowledgearticle</para>
+		/// <para>Required - Lookup to incident, knowledgearticle</para>
 		/// <para>Suggested Entity</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -230,7 +230,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Suggestion for lookup attribute</para>
-		/// <para>Required - Lookup to incident;msdyn_ocliveworkitem</para>
+		/// <para>Required - Lookup to incident, msdyn_ocliveworkitem</para>
 		/// <para>Suggestion For</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -539,7 +539,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user who caused a change</para>
-		/// <para>ReadOnly - Lookup to externalparty;systemuser</para>
+		/// <para>ReadOnly - Lookup to externalparty, systemuser</para>
 		/// <para>Changed By</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -320,7 +320,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the SharePoint document location record.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -365,7 +365,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the parent site or location.</para>
-		/// <para>Lookup to sharepointdocumentlocation;sharepointsite</para>
+		/// <para>Lookup to sharepointdocumentlocation, sharepointsite</para>
 		/// <para>Parent Site or Location</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -377,7 +377,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the object with which the SharePoint document location record is associated.</para>
-		/// <para>Lookup to account;kbarticle;knowledgearticle;lead;msdyn_agreement;msdyn_agreementbookingdate;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoicesetup;msdyn_bookingtimestamp;msdyn_expense;msdyn_incidenttypeproduct;msdyn_inventoryadjustment;msdyn_inventoryadjustmentproduct;msdyn_inventorytransfer;msdyn_knowledgearticletemplate;msdyn_playbookactivity;msdyn_project;msdyn_purchaseorder;msdyn_purchaseorderproduct;msdyn_purchaseorderreceipt;msdyn_resourceterritory;msdyn_rma;msdyn_rmareceipt;msdyn_rtv;msdyn_timegroup;msdyn_timegroupdetail;msdyn_warehouse;msdyn_workorder;msdyn_workorderincident;msdyn_workorderproduct;msdyn_workorderservice;msdyn_workorderservicetask;opportunity;product;quote;salesliterature</para>
+		/// <para>Lookup to account, kbarticle, knowledgearticle, lead, msdyn_agreement, msdyn_agreementbookingdate, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoicesetup, msdyn_bookingtimestamp, msdyn_expense, msdyn_incidenttypeproduct, msdyn_inventoryadjustment, msdyn_inventoryadjustmentproduct, msdyn_inventorytransfer, msdyn_knowledgearticletemplate, msdyn_playbookactivity, msdyn_project, msdyn_purchaseorder, msdyn_purchaseorderproduct, msdyn_purchaseorderreceipt, msdyn_resourceterritory, msdyn_rma, msdyn_rmareceipt, msdyn_rtv, msdyn_timegroup, msdyn_timegroupdetail, msdyn_warehouse, msdyn_workorder, msdyn_workorderincident, msdyn_workorderproduct, msdyn_workorderservice, msdyn_workorderservicetask, opportunity, product, quote, salesliterature</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

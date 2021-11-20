@@ -173,7 +173,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the parent record.</para>
-		/// <para>Lookup to asyncoperation;processsession</para>
+		/// <para>Lookup to asyncoperation, processsession</para>
 		/// <para>Parent record</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -185,7 +185,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the system job.</para>
-		/// <para>Lookup to asyncoperation;processsession</para>
+		/// <para>Lookup to asyncoperation, processsession</para>
 		/// <para>Child Workflow System Job</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -380,7 +380,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the process log.</para>
-		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

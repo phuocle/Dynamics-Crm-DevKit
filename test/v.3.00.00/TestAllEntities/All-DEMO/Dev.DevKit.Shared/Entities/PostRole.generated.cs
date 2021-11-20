@@ -138,7 +138,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the record that the post role relates to.</para>
-		/// <para>Lookup to account;appointment;competitor;contact;incident;knowledgearticle;lead;opportunity;phonecall;processsession;queue;recurringappointmentmaster;systemuser;task;team</para>
+		/// <para>Lookup to account, appointment, competitor, contact, incident, knowledgearticle, lead, opportunity, phonecall, processsession, queue, recurringappointmentmaster, systemuser, task, team</para>
 		/// <para>RegardingObjectId</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

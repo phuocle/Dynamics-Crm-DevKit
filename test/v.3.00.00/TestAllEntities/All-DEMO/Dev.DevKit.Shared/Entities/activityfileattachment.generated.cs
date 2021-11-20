@@ -348,7 +348,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -393,7 +393,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the entity with which the attachment is associated.</para>
-		/// <para>Lookup to post;postcomment</para>
+		/// <para>Lookup to post, postcomment</para>
 		/// <para>Parent</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

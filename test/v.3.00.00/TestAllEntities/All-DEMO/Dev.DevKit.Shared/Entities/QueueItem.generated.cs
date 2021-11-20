@@ -420,7 +420,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the activity, case, or article assigned to the queue.</para>
-		/// <para>Required - Lookup to activitypointer;appointment;bulkoperation;campaignactivity;campaignresponse;email;fax;incident;knowledgearticle;letter;msdyn_agreementbookingdate;msdyn_agreementbookingsetup;msdyn_agreementinvoicedate;msdyn_agreementinvoicesetup;msdyn_approval;msdyn_bookingalert;msdyn_inventoryadjustment;msdyn_inventorytransfer;msdyn_iotalert;msdyn_knowledgearticletemplate;msdyn_liveconversation;msdyn_ocliveworkitem;msdyn_ocoutboundmessage;msdyn_ocsession;msdyn_overflowactionconfig;msdyn_project;msdyn_projecttask;msdyn_resourcerequest;msdyn_timegroup;msdyn_timegroupdetail;msdyn_workorder;msdyn_workorderincident;msdyn_workorderservice;msdyn_workorderservicetask;msfp_alert;msfp_surveyinvite;msfp_surveyresponse;phonecall;recurringappointmentmaster;serviceappointment;socialactivity;task</para>
+		/// <para>Required - Lookup to activitypointer, appointment, bulkoperation, campaignactivity, campaignresponse, email, fax, incident, knowledgearticle, letter, msdyn_agreementbookingdate, msdyn_agreementbookingsetup, msdyn_agreementinvoicedate, msdyn_agreementinvoicesetup, msdyn_approval, msdyn_bookingalert, msdyn_inventoryadjustment, msdyn_inventorytransfer, msdyn_iotalert, msdyn_knowledgearticletemplate, msdyn_liveconversation, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msdyn_overflowactionconfig, msdyn_project, msdyn_projecttask, msdyn_resourcerequest, msdyn_timegroup, msdyn_timegroupdetail, msdyn_workorder, msdyn_workorderincident, msdyn_workorderservice, msdyn_workorderservicetask, msfp_alert, msfp_surveyinvite, msfp_surveyresponse, phonecall, recurringappointmentmaster, serviceappointment, socialactivity, task</para>
 		/// <para>Object</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -471,7 +471,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the queue item.</para>
-		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -701,7 +701,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows who is working on the queue item.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Worked By</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

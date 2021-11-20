@@ -54,6 +54,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_MSTeamsSettingsName = "msdyn_msteamssettingsname";
 			public const string msdyn_msteamssettingsv2Id = "msdyn_msteamssettingsv2id";
 			public const string msdyn_TabServiceUrl = "msdyn_tabserviceurl";
+			public const string msdyn_TeamsMeetingIntegrationEnabled = "msdyn_teamsmeetingintegrationenabled";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwningBusinessUnit = "owningbusinessunit";
 			public const string statecode = "statecode";
@@ -198,7 +199,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Indicates whether the default title for linked chat is the record name</para>
 		/// <para>Boolean</para>
-		/// <para>Indicates whether the default title for linked chat is the record name</para>
+		/// <para>Default title for linked chat</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_DefaultTeamsChatTitleEnabled
@@ -222,7 +223,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Indicates whether embed-collab teams integration is enabled</para>
 		/// <para>Boolean</para>
-		/// <para>Indicates whether embed-collab teams integration is enabled</para>
+		/// <para>Embed-collab teams integration</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public bool? msdyn_EmbedCollabTeamsIntegrationEnabled
@@ -268,6 +269,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_TabServiceUrl); }
 			set { Entity.Attributes[Fields.msdyn_TabServiceUrl] = value; }
+		}
+
+		/// <summary>
+		/// <para>Indicates whether teams meeting integration is enabled</para>
+		/// <para>Boolean</para>
+		/// <para>teams meeting integration</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? msdyn_TeamsMeetingIntegrationEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.msdyn_TeamsMeetingIntegrationEnabled); }
+			set { Entity.Attributes[Fields.msdyn_TeamsMeetingIntegrationEnabled] = value; }
 		}
 
 		/// <summary>

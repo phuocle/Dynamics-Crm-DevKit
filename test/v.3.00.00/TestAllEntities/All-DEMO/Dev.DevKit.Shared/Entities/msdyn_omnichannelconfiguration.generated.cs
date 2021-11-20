@@ -15,179 +15,179 @@ namespace Dev.DevKit.Shared.Entities.msdyn_omnichannelconfigurationOptionSets
 		/// <summary>
 		/// Arabic - Saudi Arabia = 1025
 		/// </summary>
-		Arabic__Saudi_Arabia = 1025,
+		Arabic_Saudi_Arabia = 1025,
 		/// <summary>
 		/// Basque - Spain = 1069
 		/// </summary>
-		Basque__Spain = 1069,
+		Basque_Spain = 1069,
 		/// <summary>
 		/// Bulgarian - Bulgaria = 1026
 		/// </summary>
-		Bulgarian__Bulgaria = 1026,
+		Bulgarian_Bulgaria = 1026,
 		/// <summary>
 		/// Catalan - Spain = 1027
 		/// </summary>
-		Catalan__Spain = 1027,
+		Catalan_Spain = 1027,
 		/// <summary>
 		/// Chinese - China = 2052
 		/// </summary>
-		Chinese__China = 2052,
+		Chinese_China = 2052,
 		/// <summary>
 		/// Chinese - Hong Kong = 3076
 		/// </summary>
-		Chinese__Hong_Kong = 3076,
+		Chinese_Hong_Kong = 3076,
 		/// <summary>
 		/// Croatian - Croatia = 1050
 		/// </summary>
-		Croatian__Croatia = 1050,
+		Croatian_Croatia = 1050,
 		/// <summary>
 		/// Czech - Czech Republic = 1029
 		/// </summary>
-		Czech__Czech_Republic = 1029,
+		Czech_Czech_Republic = 1029,
 		/// <summary>
 		/// Danish - Denmark = 1030
 		/// </summary>
-		Danish__Denmark = 1030,
+		Danish_Denmark = 1030,
 		/// <summary>
 		/// Dutch - Netherlands = 1043
 		/// </summary>
-		Dutch__Netherlands = 1043,
+		Dutch_Netherlands = 1043,
 		/// <summary>
 		/// English - United States = 1033
 		/// </summary>
-		English__United_States = 1033,
+		English_United_States = 1033,
 		/// <summary>
 		/// Estonian - Estonia = 1061
 		/// </summary>
-		Estonian__Estonia = 1061,
+		Estonian_Estonia = 1061,
 		/// <summary>
 		/// Finnish - Finland = 1035
 		/// </summary>
-		Finnish__Finland = 1035,
+		Finnish_Finland = 1035,
 		/// <summary>
 		/// French - France = 1036
 		/// </summary>
-		French__France = 1036,
+		French_France = 1036,
 		/// <summary>
 		/// Galician - Spain = 1110
 		/// </summary>
-		Galician__Spain = 1110,
+		Galician_Spain = 1110,
 		/// <summary>
 		/// German - Germany = 1031
 		/// </summary>
-		German__Germany = 1031,
+		German_Germany = 1031,
 		/// <summary>
 		/// Greek - Greece = 1032
 		/// </summary>
-		Greek__Greece = 1032,
+		Greek_Greece = 1032,
 		/// <summary>
 		/// Hebrew - Israel = 1037
 		/// </summary>
-		Hebrew__Israel = 1037,
+		Hebrew_Israel = 1037,
 		/// <summary>
 		/// Hindi - India = 1081
 		/// </summary>
-		Hindi__India = 1081,
+		Hindi_India = 1081,
 		/// <summary>
 		/// Hungarian - Hungary = 1038
 		/// </summary>
-		Hungarian__Hungary = 1038,
+		Hungarian_Hungary = 1038,
 		/// <summary>
 		/// Indonesian - Indonesia = 1057
 		/// </summary>
-		Indonesian__Indonesia = 1057,
+		Indonesian_Indonesia = 1057,
 		/// <summary>
 		/// Italian - Italy = 1040
 		/// </summary>
-		Italian__Italy = 1040,
+		Italian_Italy = 1040,
 		/// <summary>
 		/// Japanese - Japan = 1041
 		/// </summary>
-		Japanese__Japan = 1041,
+		Japanese_Japan = 1041,
 		/// <summary>
 		/// Kazakh - Kazakhstan = 1087
 		/// </summary>
-		Kazakh__Kazakhstan = 1087,
+		Kazakh_Kazakhstan = 1087,
 		/// <summary>
 		/// Korean - Korea = 1042
 		/// </summary>
-		Korean__Korea = 1042,
+		Korean_Korea = 1042,
 		/// <summary>
 		/// Latvian - Latvia = 1062
 		/// </summary>
-		Latvian__Latvia = 1062,
+		Latvian_Latvia = 1062,
 		/// <summary>
 		/// Lithuanian - Lithuania = 1063
 		/// </summary>
-		Lithuanian__Lithuania = 1063,
+		Lithuanian_Lithuania = 1063,
 		/// <summary>
 		/// Malay - Malaysia = 1086
 		/// </summary>
-		Malay__Malaysia = 1086,
+		Malay_Malaysia = 1086,
 		/// <summary>
 		/// Norwegian Bokmal - Norway = 1044
 		/// </summary>
-		Norwegian_Bokmal__Norway = 1044,
+		Norwegian_Bokmal_Norway = 1044,
 		/// <summary>
 		/// Polish - Poland = 1045
 		/// </summary>
-		Polish__Poland = 1045,
+		Polish_Poland = 1045,
 		/// <summary>
 		/// Portuguese - Brazil = 1046
 		/// </summary>
-		Portuguese__Brazil = 1046,
+		Portuguese_Brazil = 1046,
 		/// <summary>
 		/// Portuguese - Portugal = 2070
 		/// </summary>
-		Portuguese__Portugal = 2070,
+		Portuguese_Portugal = 2070,
 		/// <summary>
 		/// Romanian - Romania = 1048
 		/// </summary>
-		Romanian__Romania = 1048,
+		Romanian_Romania = 1048,
 		/// <summary>
 		/// Russian - Russia = 1049
 		/// </summary>
-		Russian__Russia = 1049,
+		Russian_Russia = 1049,
 		/// <summary>
 		/// Serbian (Cyrillic) - Serbia = 3098
 		/// </summary>
-		Serbian_Cyrillic__Serbia = 3098,
+		Serbian_Cyrillic_Serbia = 3098,
 		/// <summary>
 		/// Serbian (Latin) - Serbia = 2074
 		/// </summary>
-		Serbian_Latin__Serbia = 2074,
+		Serbian_Latin_Serbia = 2074,
 		/// <summary>
 		/// Slovak - Slovakia = 1051
 		/// </summary>
-		Slovak__Slovakia = 1051,
+		Slovak_Slovakia = 1051,
 		/// <summary>
 		/// Slovenian - Slovenia = 1060
 		/// </summary>
-		Slovenian__Slovenia = 1060,
+		Slovenian_Slovenia = 1060,
 		/// <summary>
 		/// Spanish - Spain = 3082
 		/// </summary>
-		Spanish__Spain = 3082,
+		Spanish_Spain = 3082,
 		/// <summary>
 		/// Swedish - Sweden = 1053
 		/// </summary>
-		Swedish__Sweden = 1053,
+		Swedish_Sweden = 1053,
 		/// <summary>
 		/// Thai - Thailand = 1054
 		/// </summary>
-		Thai__Thailand = 1054,
+		Thai_Thailand = 1054,
 		/// <summary>
 		/// Turkish - Turkey = 1055
 		/// </summary>
-		Turkish__Turkey = 1055,
+		Turkish_Turkey = 1055,
 		/// <summary>
 		/// Ukrainian - Ukraine = 1058
 		/// </summary>
-		Ukrainian__Ukraine = 1058,
+		Ukrainian_Ukraine = 1058,
 		/// <summary>
 		/// Vietnamese - Vietnam = 1066
 		/// </summary>
-		Vietnamese__Vietnam = 1066
+		Vietnamese_Vietnam = 1066
 	}
 
 	public enum statecode

@@ -378,7 +378,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Monitored activity item record.</para>
-		/// <para>Lookup to email;task</para>
+		/// <para>Lookup to email, task</para>
 		/// <para>Monitored activity item</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -414,7 +414,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

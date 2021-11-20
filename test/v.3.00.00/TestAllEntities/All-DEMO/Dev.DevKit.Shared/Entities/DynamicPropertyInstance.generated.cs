@@ -256,7 +256,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -301,7 +301,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the object that the property is associated with.</para>
-		/// <para>Lookup to invoicedetail;opportunityproduct;quotedetail;salesorderdetail</para>
+		/// <para>Lookup to invoicedetail, opportunityproduct, quotedetail, salesorderdetail</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

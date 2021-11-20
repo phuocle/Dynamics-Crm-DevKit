@@ -15,11 +15,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_projectteamOptionSets
 		/// <summary>
 		/// By Hours - Distribute evenly = 192350003
 		/// </summary>
-		By_Hours__Distribute_evenly = 192350003,
+		By_Hours_Distribute_evenly = 192350003,
 		/// <summary>
 		/// By Hours - Front load = 192350005
 		/// </summary>
-		By_Hours__Front_load = 192350005,
+		By_Hours_Front_load = 192350005,
 		/// <summary>
 		/// Full Capacity = 192350001
 		/// </summary>
@@ -688,7 +688,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

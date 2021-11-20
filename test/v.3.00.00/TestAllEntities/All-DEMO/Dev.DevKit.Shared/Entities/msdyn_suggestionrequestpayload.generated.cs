@@ -228,7 +228,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Suggestion for poly lookup attribute</para>
-		/// <para>Required - Lookup to incident;msdyn_ocliveworkitem</para>
+		/// <para>Required - Lookup to incident, msdyn_ocliveworkitem</para>
 		/// <para>Suggestion For</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

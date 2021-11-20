@@ -120,6 +120,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 result = $"@{result}";
             }
+            result = result.Replace("__", "_");
             return result;
         }
 

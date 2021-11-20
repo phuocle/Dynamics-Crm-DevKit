@@ -83,19 +83,19 @@ namespace Dev.DevKit.Shared.Entities.msdyn_iotalertOptionSets
 		/// <summary>
 		/// In Progress - Case Created = 3
 		/// </summary>
-		In_Progress__Case_Created = 3,
+		In_Progress_Case_Created = 3,
 		/// <summary>
 		/// In Progress - Command Failed = 7
 		/// </summary>
-		In_Progress__Command_Failed = 7,
+		In_Progress_Command_Failed = 7,
 		/// <summary>
 		/// In Progress - Command Sent = 5
 		/// </summary>
-		In_Progress__Command_Sent = 5,
+		In_Progress_Command_Sent = 5,
 		/// <summary>
 		/// In Progress - Work Order Created = 4
 		/// </summary>
-		In_Progress__Work_Order_Created = 4,
+		In_Progress_Work_Order_Created = 4,
 		/// <summary>
 		/// Inactive = 2
 		/// </summary>
@@ -546,7 +546,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -373,7 +373,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier for the target object associated with unifiedroutingdiagnostic.</para>
-		/// <para>Lookup to msdyn_ocliveworkitem;queueitem</para>
+		/// <para>Lookup to msdyn_ocliveworkitem, queueitem</para>
 		/// <para>Target Object</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -425,7 +425,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

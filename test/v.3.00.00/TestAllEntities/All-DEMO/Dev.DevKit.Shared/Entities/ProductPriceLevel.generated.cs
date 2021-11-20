@@ -19,19 +19,19 @@ namespace Dev.DevKit.Shared.Entities.ProductPriceLevelOptionSets
 		/// <summary>
 		/// Percent Margin - Current Cost = 4
 		/// </summary>
-		Percent_Margin__Current_Cost = 4,
+		Percent_Margin_Current_Cost = 4,
 		/// <summary>
 		/// Percent Margin - Standard Cost = 6
 		/// </summary>
-		Percent_Margin__Standard_Cost = 6,
+		Percent_Margin_Standard_Cost = 6,
 		/// <summary>
 		/// Percent Markup - Current Cost = 3
 		/// </summary>
-		Percent_Markup__Current_Cost = 3,
+		Percent_Markup_Current_Cost = 3,
 		/// <summary>
 		/// Percent Markup - Standard Cost = 5
 		/// </summary>
-		Percent_Markup__Standard_Cost = 5,
+		Percent_Markup_Standard_Cost = 5,
 		/// <summary>
 		/// Percent of List = 2
 		/// </summary>

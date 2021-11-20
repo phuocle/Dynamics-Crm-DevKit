@@ -336,7 +336,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the record in context of which feedback rating is being provided.</para>
-		/// <para>Lookup to incident;knowledgearticle</para>
+		/// <para>Lookup to incident, knowledgearticle</para>
 		/// <para>Context</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -371,7 +371,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the knowledge article views.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -428,7 +428,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Shows the record that the feedback is associated with.</para>
-		/// <para>Lookup to contact;feedback;knowledgearticle;msdyn_liveconversation;msdyn_ocliveworkitem;msdyn_ocoutboundmessage;msdyn_ocsession;msfp_alert;msfp_surveyinvite;msfp_surveyresponse</para>
+		/// <para>Lookup to contact, feedback, knowledgearticle, msdyn_liveconversation, msdyn_ocliveworkitem, msdyn_ocoutboundmessage, msdyn_ocsession, msfp_alert, msfp_surveyinvite, msfp_surveyresponse</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

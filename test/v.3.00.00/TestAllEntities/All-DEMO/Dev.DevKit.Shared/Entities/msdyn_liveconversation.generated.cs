@@ -495,7 +495,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Customer associated to the conversation</para>
-		/// <para>Lookup to account;contact</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -759,7 +759,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the conversation record.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -307,7 +307,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the customer account or contact to which the contract should be billed to provide a quick link to address and other customer details.</para>
-		/// <para>Lookup to account;contact</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Bill To Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -519,7 +519,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Select the customer account or contact to provide a quick link to additional customer details, such as address, phone number, activities, and orders.</para>
-		/// <para>Lookup to account;contact</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customer</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -700,7 +700,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

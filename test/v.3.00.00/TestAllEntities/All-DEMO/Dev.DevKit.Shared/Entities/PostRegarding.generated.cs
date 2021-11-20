@@ -120,7 +120,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the record that the post relates to.</para>
-		/// <para>Lookup to account;appointment;competitor;contact;externalparty;incident;knowledgearticle;lead;opportunity;phonecall;processsession;queue;recurringappointmentmaster;systemuser;task;team</para>
+		/// <para>Lookup to account, appointment, competitor, contact, externalparty, incident, knowledgearticle, lead, opportunity, phonecall, processsession, queue, recurringappointmentmaster, systemuser, task, team</para>
 		/// <para>RegardingObjectId</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -132,7 +132,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the regarding object.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

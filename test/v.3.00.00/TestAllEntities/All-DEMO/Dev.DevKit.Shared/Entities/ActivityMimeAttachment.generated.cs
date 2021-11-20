@@ -316,7 +316,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the record with which the attachment is associated</para>
-		/// <para>Lookup to activitypointer;template</para>
+		/// <para>Lookup to activitypointer, template</para>
 		/// <para>Item</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -351,7 +351,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the activity_mime_attachment.</para>
-		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

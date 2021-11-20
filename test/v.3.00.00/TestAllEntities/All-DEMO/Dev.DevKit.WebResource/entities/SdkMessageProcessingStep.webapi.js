@@ -6,68 +6,69 @@ var DevKit;
 	DevKit.SdkMessageProcessingStepApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var sdkmessageprocessingstep = {
 			AsyncAutoDelete: { a: 'asyncautodelete' },
 			CanUseReadOnlyConnection: { a: 'canusereadonlyconnection' },
+			Category: { a: 'category' },
 			ComponentState: { a: 'componentstate', r: true },
 			Configuration: { a: 'configuration' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
@@ -81,6 +82,7 @@ var DevKit;
 			FilteringAttributes: { a: 'filteringattributes' },
 			ImpersonatingUserId: { b: 'impersonatinguserid', a: '_impersonatinguserid_value', c: 'systemusers', d: 'systemuser' },
 			IntroducedVersion: { a: 'introducedversion' },
+			InvocationSource: { a: 'invocationsource' },
 			IsCustomizable: { a: 'iscustomizable' },
 			IsHidden: { a: 'ishidden' },
 			IsManaged: { a: 'ismanaged', r: true },
@@ -91,6 +93,7 @@ var DevKit;
 			Name: { a: 'name' },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
+			PluginTypeId: { b: 'plugintypeid', a: '_plugintypeid_value', c: 'sdkmessagefilters', d: 'sdkmessagefilter' },
 			Rank: { a: 'rank' },
 			RuntimeIntegrationProperties: { a: 'runtimeintegrationproperties' },
 			SdkMessageFilterId: { b: 'sdkmessagefilterid', a: '_sdkmessagefilterid_value', c: 'sdkmessagefilters', d: 'sdkmessagefilter' },
@@ -145,59 +148,58 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-	OptionSet.SdkMessageProcessingStep = {
-		ComponentState : {
-			Deleted: 2,
-			Deleted_Unpublished: 3,
-			Published: 0,
-			Unpublished: 1
-		},
-		InvocationSource : {
-			Child: 1,
-			Internal: -1,
-			Parent: 0
-		},
-		Mode : {
-			Asynchronous: 1,
-			Synchronous: 0
-		},
-		Stage : {
-			Final_Post_operation_For_internal_use_only: 55,
-			Initial_Pre_operation_For_internal_use_only: 5,
-			Internal_Post_operation_After_External_Plugins_For_internal_use_only: 45,
-			Internal_Post_operation_Before_External_Plugins_For_internal_use_only: 35,
-			Internal_Pre_operation_After_External_Plugins_For_internal_use_only: 25,
-			Internal_Pre_operation_Before_External_Plugins_For_internal_use_only: 15,
-			Main_Operation_For_internal_use_only: 30,
-			Post_Commit_stage_fired_after_transaction_commit_For_internal_use_only: 90,
-			Post_operation: 40,
-			Post_operation_Deprecated: 50,
-			Pre_Commit_stage_fired_before_transaction_commit_For_internal_use_only: 80,
-			Pre_operation: 20,
-			Pre_validation: 10
-		},
-		StateCode : {
-			Disabled: 1,
-			Enabled: 0
-		},
-		StatusCode : {
-			Disabled: 2,
-			Enabled: 1
-		},
-		SupportedDeployment : {
-			Both: 2,
-			Microsoft_Dynamics_365_Client_for_Outlook_Only: 1,
-			Server_Only: 0
-		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
+		OptionSet.SdkMessageProcessingStep = {
+			ComponentState : {
+				Deleted: 2,
+				Deleted_Unpublished: 3,
+				Published: 0,
+				Unpublished: 1
+			},
+			InvocationSource : {
+				Child: 1,
+				Parent: 0
+			},
+			Mode : {
+				Asynchronous: 1,
+				Synchronous: 0
+			},
+			Stage : {
+				Final_Postoperation_For_internal_use_only: 55,
+				Initial_Preoperation_For_internal_use_only: 5,
+				Internal_Postoperation_After_External_Plugins_For_internal_use_only: 45,
+				Internal_Postoperation_Before_External_Plugins_For_internal_use_only: 35,
+				Internal_Preoperation_After_External_Plugins_For_internal_use_only: 25,
+				Internal_Preoperation_Before_External_Plugins_For_internal_use_only: 15,
+				Main_Operation_For_internal_use_only: 30,
+				PostCommit_stage_fired_after_transaction_commit_For_internal_use_only: 90,
+				Postoperation: 40,
+				Postoperation_Deprecated: 50,
+				PreCommit_stage_fired_before_transaction_commit_For_internal_use_only: 80,
+				Preoperation: 20,
+				Prevalidation: 10
+			},
+			StateCode : {
+				Disabled: 1,
+				Enabled: 0
+			},
+			StatusCode : {
+				Disabled: 2,
+				Enabled: 1
+			},
+			SupportedDeployment : {
+				Both: 2,
+				Microsoft_Dynamics_365_Client_for_Outlook_Only: 1,
+				Server_Only: 0
+			},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 
 	};
 })(OptionSet || (OptionSet = {}));

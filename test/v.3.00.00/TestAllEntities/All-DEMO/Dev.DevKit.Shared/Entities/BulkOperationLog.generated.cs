@@ -147,7 +147,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the activity or other item created by the bulk operation.</para>
-		/// <para>Lookup to account;activitypointer;contact;lead;opportunity</para>
+		/// <para>Lookup to account, activitypointer, contact, lead, opportunity</para>
 		/// <para>Created Object</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -230,7 +230,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Owner Id</para>
-		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -274,7 +274,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the account, contact, lead, or list that the bulk operation log item applies to.</para>
-		/// <para>Required - Lookup to account;contact;lead</para>
+		/// <para>Required - Lookup to account, contact, lead</para>
 		/// <para>Customers</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

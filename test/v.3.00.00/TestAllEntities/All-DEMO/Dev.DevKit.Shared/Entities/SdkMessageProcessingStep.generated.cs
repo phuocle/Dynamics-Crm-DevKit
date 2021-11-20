@@ -387,7 +387,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the associated event handler.</para>
-		/// <para>Lookup to plugintype;serviceendpoint</para>
+		/// <para>Lookup to plugintype, serviceendpoint</para>
 		/// <para>Event Handler</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.QueueItemApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-            var property = {};
-            var getFormattedValue = function () {
-                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-                    return EMPTY_STRING;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName + f];
-                    }
-                    return EMPTY_STRING;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-                }
-                return entity[logicalName + f];
-            };
-            var getValue = function () {
-                if (entity[logicalName] === undefined || entity[logicalName] === null) {
-                    return null;
-                }
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-                        return entity[logicalName];
-                    }
-                    return null;
-                }
-                if (isMultiOptionSet) {
-                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-                }
-                return entity[logicalName];
-            };
-            var setValue = function (value) {
-                if (isMultiOptionSet) value = value.join(',');
-                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-                } else {
-                    upsertEntity[logicalName] = value;
-                }
-                entity[logicalName] = value;
-            };
-            Object.defineProperty(property, 'FormattedValue', {
-                get: getFormattedValue
-            });
-            if (readOnly) {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue
-                });
-            }
-            else {
-                Object.defineProperty(property, 'Value', {
-                    get: getValue,
-                    set: setValue
-                });
-            }
-            return property;
-        }
+		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+			var property = {};
+			var getFormattedValue = function () {
+				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+					return EMPTY_STRING;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName + f];
+					}
+					return EMPTY_STRING;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+				}
+				return entity[logicalName + f];
+			};
+			var getValue = function () {
+				if (entity[logicalName] === undefined || entity[logicalName] === null) {
+					return null;
+				}
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+						return entity[logicalName];
+					}
+					return null;
+				}
+				if (isMultiOptionSet) {
+					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+				}
+				return entity[logicalName];
+			};
+			var setValue = function (value) {
+				if (isMultiOptionSet) value = value.join(',');
+				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+				} else {
+					upsertEntity[logicalName] = value;
+				}
+				entity[logicalName] = value;
+			};
+			Object.defineProperty(property, 'FormattedValue', {
+				get: getFormattedValue
+			});
+			if (readOnly) {
+				Object.defineProperty(property, 'Value', {
+					get: getValue
+				});
+			}
+			else {
+				Object.defineProperty(property, 'Value', {
+					get: getValue,
+					set: setValue
+				});
+			}
+			return property;
+		}
 		var queueitem = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -100,6 +100,7 @@ var DevKit;
 			objectid_msdyn_ocliveworkitem: { b: 'objectid_msdyn_ocliveworkitem', a: '_objectid_value', c: 'msdyn_ocliveworkitems', d: 'msdyn_ocliveworkitem' },
 			objectid_msdyn_ocoutboundmessage: { b: 'objectid_msdyn_ocoutboundmessage', a: '_objectid_value', c: 'msdyn_ocoutboundmessages', d: 'msdyn_ocoutboundmessage' },
 			objectid_msdyn_ocsession: { b: 'objectid_msdyn_ocsession', a: '_objectid_value', c: 'msdyn_ocsessions', d: 'msdyn_ocsession' },
+			objectid_msdyn_overflowactionconfig: { b: 'objectid_msdyn_overflowactionconfig', a: '_objectid_value', c: 'msdyn_overflowactionconfigs', d: 'msdyn_overflowactionconfig' },
 			objectid_msdyn_project: { b: 'objectid_msdyn_project', a: '_objectid_value', c: 'msdyn_projects', d: 'msdyn_project' },
 			objectid_msdyn_projecttask: { b: 'objectid_msdyn_projecttask', a: '_objectid_value', c: 'msdyn_projecttasks', d: 'msdyn_projecttask' },
 			objectid_msdyn_resourcerequest: { b: 'objectid_msdyn_resourcerequest', a: '_objectid_value', c: 'msdyn_resourcerequests', d: 'msdyn_resourcerequest' },
@@ -120,16 +121,21 @@ var DevKit;
 			ObjectTypeCode: { a: 'objecttypecode', r: true },
 			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
-			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
+			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser', r: true },
 			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team', r: true },
 			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
 			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
+			Priority: { a: 'priority' },
 			QueueId: { b: 'queueid', a: '_queueid_value', c: 'queues', d: 'queue' },
 			QueueItemId: { a: 'queueitemid' },
+			Sender: { a: 'sender' },
+			State: { a: 'state' },
 			StateCode: { a: 'statecode' },
+			Status: { a: 'status' },
 			StatusCode: { a: 'statuscode' },
 			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber' },
 			Title: { a: 'title', r: true },
+			ToRecipients: { a: 'torecipients' },
 			TransactionCurrencyId: { b: 'transactioncurrencyid', a: '_transactioncurrencyid_value', c: 'transactioncurrencies', d: 'transactioncurrency' },
 			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' },
 			VersionNumber: { a: 'versionnumber', r: true },
@@ -176,67 +182,68 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-	OptionSet.QueueItem = {
-		ObjectTypeCode : {
-			Activity: 4200,
-			Agreement_Booking_Date: 10414,
-			Agreement_Booking_Setup: 10419,
-			Agreement_Invoice_Date: 10420,
-			Agreement_Invoice_Setup: 10422,
-			Appointment: 4201,
-			Booking_Alert: 10294,
-			Campaign_Activity: 4402,
-			Campaign_Response: 4401,
-			Case: 112,
-			Conversation: 10564,
-			Customer_Voice_alert: 10238,
-			Customer_Voice_survey_invite: 10248,
-			Customer_Voice_survey_response: 10250,
-			Email: 4202,
-			Fax: 4204,
-			Fulfillment_Preference: 10317,
-			Inventory_Adjustment: 10442,
-			Inventory_Transfer: 10445,
-			IoT_Alert: 10126,
-			Knowledge_Article: 9953,
-			Knowledge_Article_Template: 10061,
-			Letter: 4207,
-			Ongoing_conversation_Deprecated: 10558,
-			Outbound_message: 10673,
-			Phone_Call: 4210,
-			Project: 10363,
-			Project_Service_Approval: 10324,
-			Project_Task: 10368,
-			Quick_Campaign: 4406,
-			Recurring_Appointment: 4251,
-			Resource_Request: 10386,
-			Service_Activity: 4214,
-			Session: 10573,
-			Social_Activity: 4216,
-			Task: 4212,
-			Time_Group_Detail: 10318,
-			Work_Order: 10485,
-			Work_Order_Incident: 10488,
-			Work_Order_Service: 10491,
-			Work_Order_Service_Task: 10492
-		},
-		StateCode : {
-			Active: 0,
-			Inactive: 1
-		},
-		StatusCode : {
-			Active: 1,
-			Inactive: 2
-		},
-        RollupState : {
-            NotCalculated: 0,
-            Calculated: 1,
-            OverflowError: 2,
-            OtherError: 3,
-            RetryLimitExceeded: 4,
-            HierarchicalRecursionLimitReached: 5,
-            LoopDetected: 6
-        }
+		OptionSet.QueueItem = {
+			ObjectTypeCode : {
+				Activity: 4200,
+				Agreement_Booking_Date: 10478,
+				Agreement_Booking_Setup: 10483,
+				Agreement_Invoice_Date: 10484,
+				Agreement_Invoice_Setup: 10486,
+				Appointment: 4201,
+				Booking_Alert: 10357,
+				Campaign_Activity: 4402,
+				Campaign_Response: 4401,
+				Case: 112,
+				Conversation: 10644,
+				Customer_Voice_alert: 10261,
+				Customer_Voice_survey_invite: 10271,
+				Customer_Voice_survey_response: 10273,
+				Email: 4202,
+				Fax: 4204,
+				Fulfillment_Preference: 10380,
+				Inventory_Adjustment: 10506,
+				Inventory_Transfer: 10509,
+				IoT_Alert: 10138,
+				Knowledge_Article: 9953,
+				Knowledge_Article_Template: 10086,
+				Letter: 4207,
+				Ongoing_conversation_Deprecated: 10634,
+				Outbound_message: 10752,
+				Overflow_Action_Config: 10621,
+				Phone_Call: 4210,
+				Project: 10426,
+				Project_Service_Approval: 10387,
+				Project_Task: 10431,
+				Quick_Campaign: 4406,
+				Recurring_Appointment: 4251,
+				Resource_Request: 10449,
+				Service_Activity: 4214,
+				Session: 10659,
+				Social_Activity: 4216,
+				Task: 4212,
+				Time_Group_Detail: 10381,
+				Work_Order: 10549,
+				Work_Order_Incident: 10552,
+				Work_Order_Service: 10555,
+				Work_Order_Service_Task: 10556
+			},
+			StateCode : {
+				Active: 0,
+				Inactive: 1
+			},
+			StatusCode : {
+				Active: 1,
+				Inactive: 2
+			},
+		RollupState : {
+			NotCalculated: 0,
+			Calculated: 1,
+			OverflowError: 2,
+			OtherError: 3,
+			RetryLimitExceeded: 4,
+			HierarchicalRecursionLimitReached: 5,
+			LoopDetected: 6
+		}
 
 	};
 })(OptionSet || (OptionSet = {}));

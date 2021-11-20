@@ -313,7 +313,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the activity_party.</para>
-		/// <para>ReadOnly - Required - Lookup to systemuser;team</para>
+		/// <para>ReadOnly - Required - Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -367,7 +367,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the party associated with the activity.</para>
-		/// <para>Lookup to account;bulkoperation;campaign;campaignactivity;contact;contract;entitlement;equipment;incident;invoice;knowledgearticle;lead;opportunity;queue;quote;salesorder;systemuser</para>
+		/// <para>Lookup to account, bulkoperation, campaign, campaignactivity, contact, contract, entitlement, equipment, incident, invoice, knowledgearticle, lead, opportunity, queue, quote, salesorder, systemuser</para>
 		/// <para>Party</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

@@ -551,7 +551,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Blind Carbon-copy (bcc) recipients of the activity.</para>
-		/// <para>Lookup to account;contact;systemuser</para>
+		/// <para>Lookup to account, contact, systemuser</para>
 		/// <para>BCC</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -586,7 +586,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Carbon-copy (cc) recipients of the activity.</para>
-		/// <para>Lookup to account;contact;systemuser</para>
+		/// <para>Lookup to account, contact, systemuser</para>
 		/// <para>CC</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -689,7 +689,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Customer with which the activity is associated.</para>
-		/// <para>Lookup to account;contact</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Customers</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -817,7 +817,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who the activity is from.</para>
-		/// <para>Lookup to account;contact;systemuser</para>
+		/// <para>Lookup to account, contact, systemuser</para>
 		/// <para>From</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1005,7 +1005,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of optional attendees for the activity.</para>
-		/// <para>Lookup to account;contact;systemuser</para>
+		/// <para>Lookup to account, contact, systemuser</para>
 		/// <para>Optional Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1065,7 +1065,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Unique identifier of the user or team who owns the activity.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1122,7 +1122,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Outsource vendor with which activity is associated.</para>
-		/// <para>Lookup to account;contact</para>
+		/// <para>Lookup to account, contact</para>
 		/// <para>Outsource Vendors</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1192,7 +1192,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the campaign from which the campaign activities were bulk-distributed.</para>
-		/// <para>Lookup to campaignactivity;list</para>
+		/// <para>Lookup to campaignactivity, list</para>
 		/// <para>Import File Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1204,7 +1204,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>List of required attendees for the activity.</para>
-		/// <para>Lookup to account;contact;systemuser</para>
+		/// <para>Lookup to account, contact, systemuser</para>
 		/// <para>Required Attendees</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -1487,7 +1487,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Person who is the receiver of the activity.</para>
-		/// <para>Lookup to account;contact;systemuser</para>
+		/// <para>Lookup to account, contact, systemuser</para>
 		/// <para>To</para>
 		/// </summary>
 		[DebuggerNonUserCode()]

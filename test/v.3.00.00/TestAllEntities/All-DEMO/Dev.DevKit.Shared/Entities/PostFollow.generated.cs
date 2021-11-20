@@ -124,7 +124,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Enter the user or team who is assigned to manage the record. This field is updated every time the record is assigned to a different user.</para>
-		/// <para>Lookup to systemuser;team</para>
+		/// <para>Lookup to systemuser, team</para>
 		/// <para>Owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -196,7 +196,7 @@ namespace Dev.DevKit.Shared.Entities
 
 		/// <summary>
 		/// <para>Choose the parent record for the followed post to identify the customer, opportunity, case, or other record type that the post most closely relates to.</para>
-		/// <para>Lookup to account;appointment;competitor;contact;incident;knowledgearticle;lead;opportunity;phonecall;processsession;queue;recurringappointmentmaster;systemuser;task</para>
+		/// <para>Lookup to account, appointment, competitor, contact, incident, knowledgearticle, lead, opportunity, phonecall, processsession, queue, recurringappointmentmaster, systemuser, task</para>
 		/// <para>Regarding</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
