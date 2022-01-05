@@ -56,6 +56,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string OrganizationId = "organizationid";
 			public const string OverwriteTime = "overwritetime";
 			public const string SolutionId = "solutionid";
+			public const string SupportedPlatform = "supportedplatform";
 			public const string SupportingSolutionId = "supportingsolutionid";
 			public const string Version = "version";
 			public const string VersionNumber = "versionnumber";
@@ -336,6 +337,18 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? SolutionId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.SolutionId); }
+		}
+
+		/// <summary>
+		/// <para>Supported platforms of the CustomControl.</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Supported Platforms</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string SupportedPlatform
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.SupportedPlatform); }
+			set { Entity.Attributes[Fields.SupportedPlatform] = value; }
 		}
 
 		/// <summary>

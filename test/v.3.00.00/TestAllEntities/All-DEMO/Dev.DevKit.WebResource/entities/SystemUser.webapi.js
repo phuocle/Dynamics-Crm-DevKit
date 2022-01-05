@@ -115,6 +115,8 @@ var DevKit;
 			ApplicationId: { a: 'applicationid' },
 			ApplicationIdUri: { a: 'applicationiduri', r: true },
 			AzureActiveDirectoryObjectId: { a: 'azureactivedirectoryobjectid', r: true },
+			AzureDeletedOn_UtcDateAndTime: { a: 'azuredeletedon', r: true },
+			AzureState: { a: 'azurestate' },
 			BusinessUnitId: { b: 'businessunitid', a: '_businessunitid_value', c: 'businessunits', d: 'businessunit' },
 			CalendarId: { b: 'calendarid', a: '_calendarid_value', c: 'calendars', d: 'calendar' },
 			CALType: { a: 'caltype' },
@@ -273,6 +275,11 @@ var OptionSet;
 			},
 			Address2_ShippingMethodCode : {
 				Default_Value: 1
+			},
+			AzureState : {
+				Exists: 0,
+				Not_found_or_hard_deleted: 2,
+				Soft_deleted: 1
 			},
 			CALType : {
 				Administrative: 1,

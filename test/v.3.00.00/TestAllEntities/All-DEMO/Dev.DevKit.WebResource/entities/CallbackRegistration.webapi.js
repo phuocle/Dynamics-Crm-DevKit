@@ -73,6 +73,7 @@ var DevKit;
 			EntityName: { a: 'entityname' },
 			FilterExpression: { a: 'filterexpression' },
 			FilteringAttributes: { a: 'filteringattributes' },
+			HardDelete: { a: 'harddelete' },
 			Message: { a: 'message' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },

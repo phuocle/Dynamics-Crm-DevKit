@@ -70,6 +70,22 @@ namespace Dev.DevKit.Shared.Entities.SystemUserOptionSets
 		Default_Value = 1
 	}
 
+	public enum AzureState
+	{
+		/// <summary>
+		/// Exists = 0
+		/// </summary>
+		Exists = 0,
+		/// <summary>
+		/// Not found or hard deleted = 2
+		/// </summary>
+		Not_found_or_hard_deleted = 2,
+		/// <summary>
+		/// Soft deleted = 1
+		/// </summary>
+		Soft_deleted = 1
+	}
+
 	public enum CALType
 	{
 		/// <summary>
@@ -362,6 +378,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ApplicationId = "applicationid";
 			public const string ApplicationIdUri = "applicationiduri";
 			public const string AzureActiveDirectoryObjectId = "azureactivedirectoryobjectid";
+			public const string AzureDeletedOn = "azuredeletedon";
+			public const string AzureState = "azurestate";
 			public const string BusinessUnitId = "businessunitid";
 			public const string CalendarId = "calendarid";
 			public const string CALType = "caltype";
@@ -1148,6 +1166,40 @@ namespace Dev.DevKit.Shared.Entities
 		public Guid? AzureActiveDirectoryObjectId
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.AzureActiveDirectoryObjectId); }
+		}
+
+		/// <summary>
+		/// <para>Date and time when the user was set as soft deleted in Azure.</para>
+		/// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
+		/// <para>Azure Deleted On</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public DateTime? AzureDeletedOnUtc
+		{
+			get { return Entity.GetAttributeValue<DateTime?>(Fields.AzureDeletedOn); }
+		}
+
+		/// <summary>
+		/// <para>Azure state of user</para>
+		/// <para>Picklist</para>
+		/// <para>Azure State</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.SystemUserOptionSets.AzureState? AzureState
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.AzureState);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.SystemUserOptionSets.AzureState)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.AzureState] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.AzureState] = null;
+			}
 		}
 
 		/// <summary>

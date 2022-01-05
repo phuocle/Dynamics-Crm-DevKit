@@ -665,6 +665,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ParsedTableColumnPrefix = "parsedtablecolumnprefix";
 			public const string ParsedTablePrefix = "parsedtableprefix";
 			public const string PastExpansionWindow = "pastexpansionwindow";
+			public const string PcfDatasetGridEnabled = "pcfdatasetgridenabled";
 			public const string Picture = "picture";
 			public const string PinpointLanguageCode = "pinpointlanguagecode";
 			public const string PluginTraceLogSetting = "plugintracelogsetting";
@@ -754,6 +755,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string UserAccessAuditingInterval = "useraccessauditinginterval";
 			public const string UseReadForm = "usereadform";
 			public const string UserGroupId = "usergroupid";
+			public const string UserRatingEnabled = "userratingenabled";
 			public const string UseSkypeProtocol = "useskypeprotocol";
 			public const string UTCConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string V3CalloutConfigHash = "v3calloutconfighash";
@@ -4430,6 +4432,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Leave empty to use default setting. Set to on/off to enable/disable replacement of default grids with modern ones in model-driven apps.</para>
+		/// <para>String - MaxLength: 16</para>
+		/// <para>Enable modern grids in model-driven apps</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string PcfDatasetGridEnabled
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.PcfDatasetGridEnabled); }
+			set { Entity.Attributes[Fields.PcfDatasetGridEnabled] = value; }
+		}
+
+		/// <summary>
 		/// <para>For internal use only.</para>
 		/// <para>Memo - MaxLength: 1073741823</para>
 		/// <para>Picture</para>
@@ -5527,6 +5541,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<Guid?>(Fields.UserGroupId); }
 			set { Entity.Attributes[Fields.UserGroupId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Enable the user rating feature to show the NSAT score and comment to maker</para>
+		/// <para>Boolean</para>
+		/// <para>Enable the user rating feature</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? UserRatingEnabled
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.UserRatingEnabled); }
+			set { Entity.Attributes[Fields.UserRatingEnabled] = value; }
 		}
 
 		/// <summary>

@@ -48,6 +48,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
+			public const string msdyn_fileblob = "msdyn_fileblob";
 			public const string msdyn_imageblobId = "msdyn_imageblobid";
 			public const string msdyn_name = "msdyn_name";
 			public const string msdyn_parententity_fieldname = "msdyn_parententity_fieldname";
@@ -195,6 +196,17 @@ namespace Dev.DevKit.Shared.Entities
 		public EntityReference ModifiedOnBehalfBy
 		{
 			get { return Entity.GetAttributeValue<EntityReference>(Fields.ModifiedOnBehalfBy); }
+		}
+
+		/// <summary>
+		/// <para>Base64 encoded file content for Rich Text Attachments</para>
+		/// <para>ReadOnly - Virtual</para>
+		/// <para>File Blob</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_fileblob
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_fileblob); }
 		}
 
 		/// <summary>

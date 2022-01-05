@@ -108,6 +108,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string EntityName = "entityname";
 			public const string FilterExpression = "filterexpression";
 			public const string FilteringAttributes = "filteringattributes";
+			public const string HardDelete = "harddelete";
 			public const string Message = "message";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
@@ -263,6 +264,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.FilteringAttributes); }
 			set { Entity.Attributes[Fields.FilteringAttributes] = value; }
+		}
+
+		/// <summary>
+		/// <para>For internal use only. Holds hard delete information.</para>
+		/// <para>Boolean</para>
+		/// <para>Hard Delete</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? HardDelete
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.HardDelete); }
+			set { Entity.Attributes[Fields.HardDelete] = value; }
 		}
 
 		/// <summary>

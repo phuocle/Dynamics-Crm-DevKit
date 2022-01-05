@@ -10,6 +10,66 @@ using System.Diagnostics;
 
 namespace Dev.DevKit.Shared.Entities.msdyn_sequencetargetOptionSets
 {
+	public enum msdyn_currentstepsubtype
+	{
+		/// <summary>
+		/// Default = 0
+		/// </summary>
+		Default = 0,
+		/// <summary>
+		/// LinkedInConnect = 3
+		/// </summary>
+		LinkedInConnect = 3,
+		/// <summary>
+		/// LinkedInGetIntroduced = 2
+		/// </summary>
+		LinkedInGetIntroduced = 2,
+		/// <summary>
+		/// LinkedInMail = 4
+		/// </summary>
+		LinkedInMail = 4,
+		/// <summary>
+		/// LinkedInResearch = 1
+		/// </summary>
+		LinkedInResearch = 1
+	}
+
+	public enum msdyn_currentsteptype
+	{
+		/// <summary>
+		/// Auto action = 4
+		/// </summary>
+		Auto_action = 4,
+		/// <summary>
+		/// Automated Email = 3
+		/// </summary>
+		Automated_Email = 3,
+		/// <summary>
+		/// Email = 4202
+		/// </summary>
+		Email = 4202,
+		/// <summary>
+		/// LinkedIn action = 5
+		/// </summary>
+		LinkedIn_action = 5,
+		/// <summary>
+		/// Phone call = 4210
+		/// </summary>
+		Phone_call = 4210,
+		/// <summary>
+		/// Simple Condition = 1
+		/// </summary>
+		Simple_Condition = 1,
+		/// <summary>
+		/// Task = 4212
+		/// </summary>
+		Task = 4212,
+		/// <summary>
+		/// Wait = 0
+		/// </summary>
+		Wait = 0
+	}
+
 	public enum msdyn_deactivatereason
 	{
 		/// <summary>
@@ -83,6 +143,8 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_appliedsequenceinstance = "msdyn_appliedsequenceinstance";
 			public const string msdyn_currentstepcount = "msdyn_currentstepcount";
 			public const string msdyn_currentstepname = "msdyn_currentstepname";
+			public const string msdyn_currentstepsubtype = "msdyn_currentstepsubtype";
+			public const string msdyn_currentsteptype = "msdyn_currentsteptype";
 			public const string msdyn_deactivatereason = "msdyn_deactivatereason";
 			public const string msdyn_msflowrunid = "msdyn_msflowrunid";
 			public const string msdyn_name = "msdyn_name";
@@ -171,9 +233,9 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Date and time when the record was created.</para>
+		/// <para>Date and time when the record was connected to the sequence.</para>
 		/// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
-		/// <para>Created On</para>
+		/// <para>Connected On</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public DateTime? CreatedOnUtc
@@ -261,15 +323,60 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>The name of the Sequence Target step entity.</para>
+		/// <para>The current step name of the Sequence Target Step entity.</para>
 		/// <para>String - MaxLength: 100</para>
-		/// <para>Current Step Name</para>
+		/// <para>Current Step</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public string msdyn_currentstepname
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_currentstepname); }
 			set { Entity.Attributes[Fields.msdyn_currentstepname] = value; }
+		}
+
+		/// <summary>
+		/// <para>Shows the sub type of sequence target step</para>
+		/// <para>Picklist</para>
+		/// <para>Sequence Target Step Sub Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_sequencetargetOptionSets.msdyn_currentstepsubtype? msdyn_currentstepsubtype
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_currentstepsubtype);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_sequencetargetOptionSets.msdyn_currentstepsubtype)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_currentstepsubtype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_currentstepsubtype] = null;
+			}
+		}
+
+		/// <summary>
+		/// <para>Required - Picklist</para>
+		/// <para>Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.msdyn_sequencetargetOptionSets.msdyn_currentsteptype? msdyn_currentsteptype
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.msdyn_currentsteptype);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.msdyn_sequencetargetOptionSets.msdyn_currentsteptype)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.msdyn_currentsteptype] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.msdyn_currentsteptype] = null;
+			}
 		}
 
 		/// <summary>
@@ -501,7 +608,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Reason for the status of the Sequence Target</para>
 		/// <para>Status</para>
-		/// <para>Status Reason</para>
+		/// <para>Progress</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public Dev.DevKit.Shared.Entities.msdyn_sequencetargetOptionSets.statuscode? statuscode

@@ -76,6 +76,8 @@ var DevKit;
 			msdyn_appliedsequenceinstance: { b: 'msdyn_appliedsequenceinstance', a: '_msdyn_appliedsequenceinstance_value', c: 'msdyn_sequences', d: 'msdyn_sequence' },
 			msdyn_currentstepcount: { a: 'msdyn_currentstepcount' },
 			msdyn_currentstepname: { a: 'msdyn_currentstepname' },
+			msdyn_currentstepsubtype: { a: 'msdyn_currentstepsubtype' },
+			msdyn_currentsteptype: { a: 'msdyn_currentsteptype' },
 			msdyn_deactivatereason: { a: 'msdyn_deactivatereason' },
 			msdyn_msflowrunid: { a: 'msdyn_msflowrunid' },
 			msdyn_name: { a: 'msdyn_name' },
@@ -142,6 +144,23 @@ var DevKit;
 var OptionSet;
 (function (OptionSet) {
 		OptionSet.msdyn_sequencetarget = {
+			msdyn_currentstepsubtype : {
+				Default: 0,
+				LinkedInConnect: 3,
+				LinkedInGetIntroduced: 2,
+				LinkedInMail: 4,
+				LinkedInResearch: 1
+			},
+			msdyn_currentsteptype : {
+				Auto_action: 4,
+				Automated_Email: 3,
+				Email: 4202,
+				LinkedIn_action: 5,
+				Phone_call: 4210,
+				Simple_Condition: 1,
+				Task: 4212,
+				Wait: 0
+			},
 			msdyn_deactivatereason : {
 				Exit_Criterion_Met: 3,
 				Parent_Sequence_Deactivated: 1,

@@ -87,6 +87,11 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_SequenceExitCriterion = "msdyn_sequenceexitcriterion";
 			public const string msdyn_sequenceId = "msdyn_sequenceid";
 			public const string msdyn_SequenceRecords = "msdyn_sequencerecords";
+			public const string msdyn_SequenceStats180d = "msdyn_SequenceStats180d";
+			public const string msdyn_SequenceStats1y = "msdyn_SequenceStats1y";
+			public const string msdyn_SequenceStats2y = "msdyn_SequenceStats2y";
+			public const string msdyn_SequenceStats30d = "msdyn_SequenceStats30d";
+			public const string msdyn_SequenceStats90d = "msdyn_SequenceStats90d";
 			public const string msdyn_totaltasks = "msdyn_totaltasks";
 			public const string msdyn_Type = "msdyn_type";
 			public const string msdyn_Version = "msdyn_version";
@@ -260,7 +265,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>The max step count for the sequence.</para>
 		/// <para>Integer - MinValue: 0 - MaxValue: 400</para>
-		/// <para>Max Step Count</para>
+		/// <para>Max. Steps</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public int? msdyn_maxstepcount
@@ -376,6 +381,66 @@ namespace Dev.DevKit.Shared.Entities
 		public string msdyn_SequenceRecords
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_SequenceRecords); }
+		}
+
+		/// <summary>
+		/// <para>Sequence Stats 180d</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Sequence Stats 180d</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_SequenceStats180d
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_SequenceStats180d); }
+			set { Entity.Attributes[Fields.msdyn_SequenceStats180d] = value; }
+		}
+
+		/// <summary>
+		/// <para>Sequence Stats 1y</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Sequence Stats 1y</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_SequenceStats1y
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_SequenceStats1y); }
+			set { Entity.Attributes[Fields.msdyn_SequenceStats1y] = value; }
+		}
+
+		/// <summary>
+		/// <para>Sequence Stats 2y</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Sequence Stats 2y</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_SequenceStats2y
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_SequenceStats2y); }
+			set { Entity.Attributes[Fields.msdyn_SequenceStats2y] = value; }
+		}
+
+		/// <summary>
+		/// <para>Sequence Stats 30d</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Sequence Stats 30d</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_SequenceStats30d
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_SequenceStats30d); }
+			set { Entity.Attributes[Fields.msdyn_SequenceStats30d] = value; }
+		}
+
+		/// <summary>
+		/// <para>Sequence Stats 90d</para>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Sequence Stats 90d</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_SequenceStats90d
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_SequenceStats90d); }
+			set { Entity.Attributes[Fields.msdyn_SequenceStats90d] = value; }
 		}
 
 		/// <summary>

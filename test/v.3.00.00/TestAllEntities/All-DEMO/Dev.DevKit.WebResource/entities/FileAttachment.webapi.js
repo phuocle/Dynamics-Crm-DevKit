@@ -91,6 +91,7 @@ var DevKit;
 			objectid_msdyn_knowledgearticleimage: { b: 'objectid_msdyn_knowledgearticleimage', a: '_objectid_value', c: 'msdyn_knowledgearticleimages', d: 'msdyn_knowledgearticleimage' },
 			objectid_msdyn_ocrecording: { b: 'objectid_msdyn_ocrecording', a: '_objectid_value', c: 'msdyn_ocrecordings', d: 'msdyn_ocrecording' },
 			objectid_msdyn_pminferredtask: { b: 'objectid_msdyn_pminferredtask', a: '_objectid_value', c: 'msdyn_pminferredtasks', d: 'msdyn_pminferredtask' },
+			objectid_msdyn_richtextfile: { b: 'objectid_msdyn_richtextfile', a: '_objectid_value', c: 'msdyn_richtextfiles', d: 'msdyn_richtextfile' },
 			objectid_msdyn_soundfile: { b: 'objectid_msdyn_soundfile', a: '_objectid_value', c: 'msdyn_soundfiles', d: 'msdyn_soundfile' },
 			objectid_msdyn_transcript: { b: 'objectid_msdyn_transcript', a: '_objectid_value', c: 'msdyn_transcripts', d: 'msdyn_transcript' },
 			objectid_msfp_fileresponse: { b: 'objectid_msfp_fileresponse', a: '_objectid_value', c: 'msfp_fileresponses', d: 'msfp_fileresponse' },

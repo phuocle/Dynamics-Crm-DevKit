@@ -73,6 +73,7 @@ var DevKit;
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
+			msdyn_fileblob: { a: 'msdyn_fileblob', r: true },
 			EntityImage: { a: 'msdyn_imageblob' },
 			EntityImage_Timestamp: { a: 'msdyn_imageblob_timestamp', r: true },
 			EntityImage_URL: { a: 'msdyn_imageblob_url', r: true },

@@ -111,6 +111,7 @@ var DevKit;
 			msdyn_sdkmessagename: { a: 'msdyn_sdkmessagename' },
 			msdyn_solutioncomponentsummaryId: { a: 'msdyn_solutioncomponentsummaryid' },
 			msdyn_solutionid: { a: 'msdyn_solutionid' },
+			msdyn_standardstatus: { a: 'msdyn_standardstatus' },
 			msdyn_status: { a: 'msdyn_status' },
 			msdyn_statusname: { a: 'msdyn_statusname' },
 			msdyn_subtype: { a: 'msdyn_subtype' },

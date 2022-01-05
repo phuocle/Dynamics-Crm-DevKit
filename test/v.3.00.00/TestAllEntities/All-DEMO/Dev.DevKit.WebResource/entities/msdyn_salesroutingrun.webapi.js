@@ -3,7 +3,7 @@
 var DevKit;
 (function (DevKit) {
 	'use strict';
-	DevKit.CustomControlApi = function (e) {
+	DevKit.msdyn_salesroutingrunApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
@@ -65,47 +65,50 @@ var DevKit;
 			}
 			return property;
 		}
-		var customcontrol = {
-			AuthoringManifest: { a: 'authoringmanifest' },
-			ClientJson: { a: 'clientjson' },
-			CompatibleDataTypes: { a: 'compatibledatatypes' },
-			ComponentState: { a: 'componentstate', r: true },
+		var msdyn_salesroutingrun = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			CustomControlId: { a: 'customcontrolid' },
-			CustomControlIdUnique: { a: 'customcontrolidunique', r: true },
-			IntroducedVersion: { a: 'introducedversion' },
-			IsManaged: { a: 'ismanaged', r: true },
-			Manifest: { a: 'manifest' },
+			ImportSequenceNumber: { a: 'importsequencenumber' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			Name: { a: 'name' },
-			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
-			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
-			SolutionId: { a: 'solutionid', r: true },
-			SupportedPlatform: { a: 'supportedplatform' },
-			SupportingSolutionId: { a: 'supportingsolutionid', r: true },
-			Version: { a: 'version' },
+			msdyn_assignmentruleid: { b: 'msdyn_assignmentruleid', a: '_msdyn_assignmentruleid_value', c: 'msdyn_assignmentrules', d: 'msdyn_assignmentrule' },
+			msdyn_name: { a: 'msdyn_name' },
+			msdyn_ownerassigned_systemuser: { b: 'msdyn_ownerassigned_systemuser', a: '_msdyn_ownerassigned_value', c: 'systemusers', d: 'systemuser' },
+			msdyn_ownerassigned_team: { b: 'msdyn_ownerassigned_team', a: '_msdyn_ownerassigned_value', c: 'teams', d: 'team' },
+			msdyn_salesroutingrunId: { a: 'msdyn_salesroutingrunid' },
+			msdyn_segmentid: { b: 'msdyn_segmentid', a: '_msdyn_segmentid_value', c: 'msdyn_segments', d: 'msdyn_segment' },
+			msdyn_targetobject_lead: { b: 'msdyn_targetobject_lead', a: '_msdyn_targetobject_value', c: 'leads', d: 'lead' },
+			msdyn_targetobject_opportunity: { b: 'msdyn_targetobject_opportunity', a: '_msdyn_targetobject_value', c: 'opportunities', d: 'opportunity' },
+			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
+			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
+			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
+			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
+			OwningTeam: { b: 'owningteam', a: '_owningteam_value', c: 'teams', d: 'team', r: true },
+			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
+			statecode: { a: 'statecode' },
+			statuscode: { a: 'statuscode' },
+			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber' },
+			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' },
 			VersionNumber: { a: 'versionnumber', r: true }
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in customcontrol) {
-			var a = customcontrol[field].a;
-			var b = customcontrol[field].b;
-			var c = customcontrol[field].c;
-			var d = customcontrol[field].d;
-			var g = customcontrol[field].g;
-			var r = customcontrol[field].r;
-			customcontrol[field] = webApiField(e, a, b, c, d, r, u, g);
+		for (var field in msdyn_salesroutingrun) {
+			var a = msdyn_salesroutingrun[field].a;
+			var b = msdyn_salesroutingrun[field].b;
+			var c = msdyn_salesroutingrun[field].c;
+			var d = msdyn_salesroutingrun[field].d;
+			var g = msdyn_salesroutingrun[field].g;
+			var r = msdyn_salesroutingrun[field].r;
+			msdyn_salesroutingrun[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
-		customcontrol.Entity = u;
-		customcontrol.EntityName = 'customcontrol';
-		customcontrol.EntityCollectionName = 'customcontrols';
-		customcontrol['@odata.etag'] = e['@odata.etag'];
-		customcontrol.getAliasedValue = function (alias, isMultiOptionSet) {
+		msdyn_salesroutingrun.Entity = u;
+		msdyn_salesroutingrun.EntityName = 'msdyn_salesroutingrun';
+		msdyn_salesroutingrun.EntityCollectionName = 'msdyn_salesroutingruns';
+		msdyn_salesroutingrun['@odata.etag'] = e['@odata.etag'];
+		msdyn_salesroutingrun.getAliasedValue = function (alias, isMultiOptionSet) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -114,7 +117,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		customcontrol.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		msdyn_salesroutingrun.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
@@ -123,18 +126,28 @@ var DevKit;
 			}
 			return e[alias + f];
 		}
-		return customcontrol;
+		return msdyn_salesroutingrun;
 	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.CustomControl = {
-			ComponentState : {
-				Deleted: 2,
-				Deleted_Unpublished: 3,
-				Published: 0,
-				Unpublished: 1
+		OptionSet.msdyn_salesroutingrun = {
+			statecode : {
+				Failed: 2,
+				Inprogress: 0,
+				Succeeded: 1
+			},
+			statuscode : {
+				Eligible_sellers_dont_have_availability: 6,
+				Eligible_sellers_dont_have_capacity: 7,
+				No_assignment_rule_for_this_records_segment: 8,
+				No_sellers_meet_the_conditions: 5,
+				Owner_assigned_manually: 9,
+				Owner_assigned_successfully: 2,
+				Record_doesnt_meet_any_conditions: 4,
+				Run_is_in_progress: 1,
+				There_was_an_issue_with_the_server: 3
 			},
 		RollupState : {
 			NotCalculated: 0,

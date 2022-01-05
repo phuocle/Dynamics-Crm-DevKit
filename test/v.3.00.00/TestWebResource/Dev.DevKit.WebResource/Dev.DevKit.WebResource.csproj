@@ -61,6 +61,7 @@
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <None Include="deploy.debug.bat" />
+    <Content Include="form.json" />
     <None Include="packages.config" />
     <None Include="package.json" />
     <None Include="chutzpah.json" />

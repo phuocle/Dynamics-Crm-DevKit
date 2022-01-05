@@ -77,6 +77,7 @@ var DevKit;
 			msdyn_entityfieldname: { a: 'msdyn_entityfieldname' },
 			msdyn_entityfilter: { a: 'msdyn_entityfilter' },
 			msdyn_name: { a: 'msdyn_name' },
+			msdyn_objecttype: { a: 'msdyn_objecttype' },
 			msdyn_objecttypecode: { a: 'msdyn_objecttypecode' },
 			msdyn_segmentId: { a: 'msdyn_segmentid' },
 			msdyn_sequence: { b: 'msdyn_sequence', a: '_msdyn_sequence_value', c: 'msdyn_sequences', d: 'msdyn_sequence' },
@@ -135,7 +136,8 @@ var OptionSet;
 		OptionSet.msdyn_segment = {
 			msdyn_objecttypecode : {
 				Lead: 4,
-				Opportunity: 3
+				Opportunity: 3,
+				Other_Entity: 5
 			},
 			msdyn_triggertype : {
 				Entity_Create: 0,
@@ -143,11 +145,13 @@ var OptionSet;
 			},
 			statecode : {
 				Active: 0,
-				Inactive: 1
+				Inactive: 1,
+				Pause: 2
 			},
 			statuscode : {
 				Active: 1,
-				Inactive: 2
+				Inactive: 2,
+				Pause: 3
 			},
 		RollupState : {
 			NotCalculated: 0,

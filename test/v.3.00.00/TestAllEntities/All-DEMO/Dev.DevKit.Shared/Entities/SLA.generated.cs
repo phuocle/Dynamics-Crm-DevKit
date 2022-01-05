@@ -3353,6 +3353,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// </summary>
 		Sales_Process_Instance = 32,
 		/// <summary>
+		/// Sales routing run = 10854
+		/// </summary>
+		Sales_routing_run = 10854,
+		/// <summary>
 		/// salesinsightssettings = 10244
 		/// </summary>
 		salesinsightssettings = 10244,
@@ -3488,6 +3492,10 @@ namespace Dev.DevKit.Shared.Entities.SLAOptionSets
 		/// Sequence = 10812
 		/// </summary>
 		Sequence = 10812,
+		/// <summary>
+		/// Sequence Stat = 10853
+		/// </summary>
+		Sequence_Stat = 10853,
 		/// <summary>
 		/// Sequence Target = 10813
 		/// </summary>

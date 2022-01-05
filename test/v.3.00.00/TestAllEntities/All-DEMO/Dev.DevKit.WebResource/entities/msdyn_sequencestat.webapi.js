@@ -3,7 +3,7 @@
 var DevKit;
 (function (DevKit) {
 	'use strict';
-	DevKit.CustomControlApi = function (e) {
+	DevKit.msdyn_sequencestatApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
 		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
@@ -65,47 +65,51 @@ var DevKit;
 			}
 			return property;
 		}
-		var customcontrol = {
-			AuthoringManifest: { a: 'authoringmanifest' },
-			ClientJson: { a: 'clientjson' },
-			CompatibleDataTypes: { a: 'compatibledatatypes' },
-			ComponentState: { a: 'componentstate', r: true },
+		var msdyn_sequencestat = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
 			CreatedOnBehalfBy: { b: 'createdonbehalfby', a: '_createdonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			CustomControlId: { a: 'customcontrolid' },
-			CustomControlIdUnique: { a: 'customcontrolidunique', r: true },
-			IntroducedVersion: { a: 'introducedversion' },
-			IsManaged: { a: 'ismanaged', r: true },
-			Manifest: { a: 'manifest' },
+			ImportSequenceNumber: { a: 'importsequencenumber' },
 			ModifiedBy: { b: 'modifiedby', a: '_modifiedby_value', c: 'systemusers', d: 'systemuser', r: true },
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
-			Name: { a: 'name' },
-			OrganizationId: { b: 'organizationid', a: '_organizationid_value', c: 'organizations', d: 'organization', r: true },
-			OverwriteTime_UtcDateOnly: { a: 'overwritetime', r: true },
-			SolutionId: { a: 'solutionid', r: true },
-			SupportedPlatform: { a: 'supportedplatform' },
-			SupportingSolutionId: { a: 'supportingsolutionid', r: true },
-			Version: { a: 'version' },
+			msdyn_avgtimefortargetcompletion: { a: 'msdyn_avgtimefortargetcompletion' },
+			msdyn_name: { a: 'msdyn_name' },
+			msdyn_range: { a: 'msdyn_range' },
+			msdyn_sequence: { b: 'msdyn_sequence', a: '_msdyn_sequence_value', c: 'msdyn_sequences', d: 'msdyn_sequence' },
+			msdyn_sequencestatId: { a: 'msdyn_sequencestatid' },
+			msdyn_successrate: { a: 'msdyn_successrate' },
+			msdyn_targetscompleted: { a: 'msdyn_targetscompleted' },
+			msdyn_targetscreated: { a: 'msdyn_targetscreated' },
+			msdyn_targetsdisconnected: { a: 'msdyn_targetsdisconnected' },
+			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
+			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
+			OwnerId_team: { b: 'ownerid', a: '_ownerid_value', c: 'teams', d: 'team' },
+			OwningBusinessUnit: { b: 'owningbusinessunit', a: '_owningbusinessunit_value', c: 'businessunits', d: 'businessunit', r: true },
+			OwningTeam: { b: 'owningteam', a: '_owningteam_value', c: 'teams', d: 'team', r: true },
+			OwningUser: { b: 'owninguser', a: '_owninguser_value', c: 'systemusers', d: 'systemuser', r: true },
+			statecode: { a: 'statecode' },
+			statuscode: { a: 'statuscode' },
+			TimeZoneRuleVersionNumber: { a: 'timezoneruleversionnumber' },
+			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' },
 			VersionNumber: { a: 'versionnumber', r: true }
 		};
 		if (e === undefined) e = {};
 		var u = {};
-		for (var field in customcontrol) {
-			var a = customcontrol[field].a;
-			var b = customcontrol[field].b;
-			var c = customcontrol[field].c;
-			var d = customcontrol[field].d;
-			var g = customcontrol[field].g;
-			var r = customcontrol[field].r;
-			customcontrol[field] = webApiField(e, a, b, c, d, r, u, g);
+		for (var field in msdyn_sequencestat) {
+			var a = msdyn_sequencestat[field].a;
+			var b = msdyn_sequencestat[field].b;
+			var c = msdyn_sequencestat[field].c;
+			var d = msdyn_sequencestat[field].d;
+			var g = msdyn_sequencestat[field].g;
+			var r = msdyn_sequencestat[field].r;
+			msdyn_sequencestat[field] = webApiField(e, a, b, c, d, r, u, g);
 		}
-		customcontrol.Entity = u;
-		customcontrol.EntityName = 'customcontrol';
-		customcontrol.EntityCollectionName = 'customcontrols';
-		customcontrol['@odata.etag'] = e['@odata.etag'];
-		customcontrol.getAliasedValue = function (alias, isMultiOptionSet) {
+		msdyn_sequencestat.Entity = u;
+		msdyn_sequencestat.EntityName = 'msdyn_sequencestat';
+		msdyn_sequencestat.EntityCollectionName = 'msdyn_sequencestats';
+		msdyn_sequencestat['@odata.etag'] = e['@odata.etag'];
+		msdyn_sequencestat.getAliasedValue = function (alias, isMultiOptionSet) {
 			if (e[alias] === undefined || e[alias] === null) {
 				return null;
 			}
@@ -114,7 +118,7 @@ var DevKit;
 			}
 			return e[alias];
 		}
-		customcontrol.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
+		msdyn_sequencestat.getAliasedFormattedValue = function (alias, isMultiOptionSet) {
 			if (e[alias + f] === undefined || e[alias + f] === null) {
 				return EMPTY_STRING;
 			}
@@ -123,18 +127,20 @@ var DevKit;
 			}
 			return e[alias + f];
 		}
-		return customcontrol;
+		return msdyn_sequencestat;
 	};
 })(DevKit || (DevKit = {}));
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.CustomControl = {
-			ComponentState : {
-				Deleted: 2,
-				Deleted_Unpublished: 3,
-				Published: 0,
-				Unpublished: 1
+		OptionSet.msdyn_sequencestat = {
+			statecode : {
+				Active: 0,
+				Inactive: 1
+			},
+			statuscode : {
+				Active: 1,
+				Inactive: 2
 			},
 		RollupState : {
 			NotCalculated: 0,

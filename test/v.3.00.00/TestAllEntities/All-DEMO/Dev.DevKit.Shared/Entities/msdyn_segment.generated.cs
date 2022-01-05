@@ -19,7 +19,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_segmentOptionSets
 		/// <summary>
 		/// Opportunity = 3
 		/// </summary>
-		Opportunity = 3
+		Opportunity = 3,
+		/// <summary>
+		/// Other Entity = 5
+		/// </summary>
+		Other_Entity = 5
 	}
 
 	public enum msdyn_triggertype
@@ -43,7 +47,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_segmentOptionSets
 		/// <summary>
 		/// Inactive = 1
 		/// </summary>
-		Inactive = 1
+		Inactive = 1,
+		/// <summary>
+		/// Pause = 2
+		/// </summary>
+		Pause = 2
 	}
 
 	public enum statuscode
@@ -55,7 +63,11 @@ namespace Dev.DevKit.Shared.Entities.msdyn_segmentOptionSets
 		/// <summary>
 		/// Inactive = 2
 		/// </summary>
-		Inactive = 2
+		Inactive = 2,
+		/// <summary>
+		/// Pause = 3
+		/// </summary>
+		Pause = 3
 	}
 }
 
@@ -76,6 +88,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_entityfieldname = "msdyn_entityfieldname";
 			public const string msdyn_entityfilter = "msdyn_entityfilter";
 			public const string msdyn_name = "msdyn_name";
+			public const string msdyn_objecttype = "msdyn_objecttype";
 			public const string msdyn_objecttypecode = "msdyn_objecttypecode";
 			public const string msdyn_segmentId = "msdyn_segmentid";
 			public const string msdyn_sequence = "msdyn_sequence";
@@ -266,6 +279,18 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_name); }
 			set { Entity.Attributes[Fields.msdyn_name] = value; }
+		}
+
+		/// <summary>
+		/// <para>The name of entity on which Segment is created.</para>
+		/// <para>String - MaxLength: 1000</para>
+		/// <para>Record type name</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_objecttype
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_objecttype); }
+			set { Entity.Attributes[Fields.msdyn_objecttype] = value; }
 		}
 
 		/// <summary>

@@ -2596,7 +2596,7 @@ declare namespace DevKit {
         /** A dictionary object that passes extra parameters to the form. */
         data?: any,
         /** ID of the form instance to be displayed. */
-        formId: DevKit.Guid,
+        formId?: DevKit.Guid,
         /** Indicates whether the form is navigated to from a different entity using cross-entity business process flow. */
         isCrossEntityNavigate?: boolean,
         /** Indicates whether there are any offline sync errors. */

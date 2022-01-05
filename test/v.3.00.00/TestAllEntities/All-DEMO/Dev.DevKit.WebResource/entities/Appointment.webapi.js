@@ -86,6 +86,7 @@ var DevKit;
 			IsBilled: { a: 'isbilled' },
 			IsDraft: { a: 'isdraft' },
 			IsMapiPrivate: { a: 'ismapiprivate' },
+			IsOnlineMeeting: { a: 'isonlinemeeting' },
 			IsRegularActivity: { a: 'isregularactivity', r: true },
 			IsUnsafe: { a: 'isunsafe', r: true },
 			IsWorkflowCreated: { a: 'isworkflowcreated' },
@@ -96,6 +97,10 @@ var DevKit;
 			ModifiedOn_UtcDateAndTime: { a: 'modifiedon', r: true },
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			OnHoldTime: { a: 'onholdtime', r: true },
+			OnlineMeetingChatId: { a: 'onlinemeetingchatid' },
+			OnlineMeetingId: { a: 'onlinemeetingid' },
+			OnlineMeetingJoinUrl: { a: 'onlinemeetingjoinurl' },
+			OnlineMeetingType: { a: 'onlinemeetingtype' },
 			OriginalStartDate_UtcDateAndTime: { a: 'originalstartdate', r: true },
 			OutlookOwnerApptId: { a: 'outlookownerapptid' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
@@ -299,6 +304,9 @@ var OptionSet;
 				Recurring_Future_Exception: 4,
 				Recurring_Instance: 2,
 				Recurring_Master: 1
+			},
+			OnlineMeetingType : {
+				Teams_Meeting: 1
 			},
 			PriorityCode : {
 				High: 2,

@@ -69,6 +69,7 @@ var DevKit;
 			msdyn_componentlogicalname: { a: 'msdyn_componentlogicalname' },
 			msdyn_componenttype: { a: 'msdyn_componenttype' },
 			msdyn_name: { a: 'msdyn_name' },
+			msdyn_primaryentityname: { a: 'msdyn_primaryentityname' },
 			msdyn_solutioncomponentcountsummaryId: { a: 'msdyn_solutioncomponentcountsummaryid' },
 			msdyn_solutionid: { a: 'msdyn_solutionid' },
 			msdyn_subtype: { a: 'msdyn_subtype' },

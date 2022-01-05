@@ -8,36 +8,68 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
 
-namespace Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets
+namespace Dev.DevKit.Shared.Entities.msdyn_salesroutingrunOptionSets
 {
 	public enum statecode
 	{
 		/// <summary>
-		/// Active = 0
+		/// Failed = 2
 		/// </summary>
-		Active = 0,
+		Failed = 2,
 		/// <summary>
-		/// Inactive = 1
+		/// Inprogress = 0
 		/// </summary>
-		Inactive = 1
+		Inprogress = 0,
+		/// <summary>
+		/// Succeeded = 1
+		/// </summary>
+		Succeeded = 1
 	}
 
 	public enum statuscode
 	{
 		/// <summary>
-		/// Active = 1
+		/// Eligible sellers don't have availability = 6
 		/// </summary>
-		Active = 1,
+		Eligible_sellers_dont_have_availability = 6,
 		/// <summary>
-		/// Inactive = 2
+		/// Eligible sellers don't have capacity = 7
 		/// </summary>
-		Inactive = 2
+		Eligible_sellers_dont_have_capacity = 7,
+		/// <summary>
+		/// No assignment rule for this record's segment = 8
+		/// </summary>
+		No_assignment_rule_for_this_records_segment = 8,
+		/// <summary>
+		/// No sellers meet the conditions = 5
+		/// </summary>
+		No_sellers_meet_the_conditions = 5,
+		/// <summary>
+		/// Owner assigned manually = 9
+		/// </summary>
+		Owner_assigned_manually = 9,
+		/// <summary>
+		/// Owner assigned successfully = 2
+		/// </summary>
+		Owner_assigned_successfully = 2,
+		/// <summary>
+		/// Record doesn't meet any conditions = 4
+		/// </summary>
+		Record_doesnt_meet_any_conditions = 4,
+		/// <summary>
+		/// Run is in progress = 1
+		/// </summary>
+		Run_is_in_progress = 1,
+		/// <summary>
+		/// There was an issue with the server = 3
+		/// </summary>
+		There_was_an_issue_with_the_server = 3
 	}
 }
 
 namespace Dev.DevKit.Shared.Entities
 {
-	public partial class msdyn_aicontactsuggestion : EntityBase
+	public partial class msdyn_salesroutingrun : EntityBase
 	{
 		public struct Fields
 		{
@@ -48,10 +80,12 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
-			public const string msdyn_aicontactsuggestionId = "msdyn_aicontactsuggestionid";
+			public const string msdyn_assignmentruleid = "msdyn_assignmentruleid";
 			public const string msdyn_name = "msdyn_name";
-			public const string msdyn_sourcerecord = "msdyn_sourcerecord";
-			public const string msdyn_suggestionresponse = "msdyn_suggestionresponse";
+			public const string msdyn_ownerassigned = "msdyn_ownerassigned";
+			public const string msdyn_salesroutingrunId = "msdyn_salesroutingrunid";
+			public const string msdyn_segmentid = "msdyn_segmentid";
+			public const string msdyn_targetobject = "msdyn_targetobject";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -64,41 +98,41 @@ namespace Dev.DevKit.Shared.Entities
 			public const string VersionNumber = "versionnumber";
 		}
 
-		public const string EntityLogicalName = "msdyn_aicontactsuggestion";
+		public const string EntityLogicalName = "msdyn_salesroutingrun";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10850;
+		public const int EntityTypeCode = 10854;
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion()
+		public msdyn_salesroutingrun()
 		{
 			Entity = new Entity(EntityLogicalName);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(Guid msdyn_aicontactsuggestionId)
+		public msdyn_salesroutingrun(Guid msdyn_salesroutingrunId)
 		{
-			Entity = new Entity(EntityLogicalName, msdyn_aicontactsuggestionId);
+			Entity = new Entity(EntityLogicalName, msdyn_salesroutingrunId);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(string keyName, object keyValue)
+		public msdyn_salesroutingrun(string keyName, object keyValue)
 		{
 			Entity = new Entity(EntityLogicalName, keyName, keyValue);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(Entity entity)
+		public msdyn_salesroutingrun(Entity entity)
 		{
 			Entity = entity;
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(Entity entity, Entity merge)
+		public msdyn_salesroutingrun(Entity entity, Entity merge)
 		{
 			Entity = entity;
 			foreach (var property in merge?.Attributes)
@@ -111,7 +145,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(KeyAttributeCollection keys)
+		public msdyn_salesroutingrun(KeyAttributeCollection keys)
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
@@ -176,7 +210,7 @@ namespace Dev.DevKit.Shared.Entities
 		/// <summary>
 		/// <para>Date and time when the record was modified.</para>
 		/// <para>ReadOnly - DateTimeBehavior: UserLocal - DateTimeFormat: DateAndTime</para>
-		/// <para>Modified On</para>
+		/// <para>Assignment attempt</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
 		public DateTime? ModifiedOnUtc
@@ -196,24 +230,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique identifier for entity instances</para>
-		/// <para>Primary Key - Uniqueidentifier</para>
-		/// <para>AI Contact Suggestion</para>
+		/// <para>Required - Lookup to msdyn_assignmentrule</para>
+		/// <para>Assignment Rule</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Guid msdyn_aicontactsuggestionId
+		public EntityReference msdyn_assignmentruleid
 		{
-			get { return Id; }
-			set
-			{
-				Entity.Attributes[Fields.msdyn_aicontactsuggestionId] = value;
-				Entity.Id = value;
-			}
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_assignmentruleid); }
+			set { Entity.Attributes[Fields.msdyn_assignmentruleid] = value; }
 		}
 
 		/// <summary>
 		/// <para>The name of the custom entity.</para>
-		/// <para>String - MaxLength: 100</para>
+		/// <para>Required - String - MaxLength: 100</para>
 		/// <para>Name</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
@@ -224,27 +253,53 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique identifier for the source entity associated with the Teams contact suggestion by AI.</para>
-		/// <para>Lookup to account, incident</para>
-		/// <para>Source Entity</para>
+		/// <para>Assigned owner id</para>
+		/// <para>Required - Lookup to systemuser, team</para>
+		/// <para>Assigned owner</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public EntityReference msdyn_sourcerecord
+		public EntityReference msdyn_ownerassigned
 		{
-			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_sourcerecord); }
-			set { Entity.Attributes[Fields.msdyn_sourcerecord] = value; }
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_ownerassigned); }
+			set { Entity.Attributes[Fields.msdyn_ownerassigned] = value; }
 		}
 
 		/// <summary>
-		/// <para>Teams Contact Suggestion Response from AI</para>
-		/// <para>Memo - MaxLength: 1048576</para>
-		/// <para>Teams Contact Suggestion Response from AI</para>
+		/// <para>Unique identifier for entity instances</para>
+		/// <para>Primary Key - Uniqueidentifier</para>
+		/// <para>Sales routing run</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public string msdyn_suggestionresponse
+		public Guid msdyn_salesroutingrunId
 		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_suggestionresponse); }
-			set { Entity.Attributes[Fields.msdyn_suggestionresponse] = value; }
+			get { return Id; }
+			set
+			{
+				Entity.Attributes[Fields.msdyn_salesroutingrunId] = value;
+				Entity.Id = value;
+			}
+		}
+
+		/// <summary>
+		/// <para>Required - Lookup to msdyn_segment</para>
+		/// <para>Segment</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_segmentid
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_segmentid); }
+			set { Entity.Attributes[Fields.msdyn_segmentid] = value; }
+		}
+
+		/// <summary>
+		/// <para>Lookup to lead, opportunity</para>
+		/// <para>Target Object</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public EntityReference msdyn_targetobject
+		{
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_targetobject); }
+			set { Entity.Attributes[Fields.msdyn_targetobject] = value; }
 		}
 
 		/// <summary>
@@ -305,18 +360,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Status of the aicontactsuggestion</para>
+		/// <para>Status of the Sales routing run</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets.statecode? statecode
+		public Dev.DevKit.Shared.Entities.msdyn_salesroutingrunOptionSets.statecode? statecode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statecode);
 				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets.statecode)value.Value;
+				return (Dev.DevKit.Shared.Entities.msdyn_salesroutingrunOptionSets.statecode)value.Value;
 			}
 			set
 			{
@@ -328,18 +383,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Reason for the status of the aicontactsuggestion</para>
+		/// <para>Reason for the status of the Sales routing run</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets.statuscode? statuscode
+		public Dev.DevKit.Shared.Entities.msdyn_salesroutingrunOptionSets.statuscode? statuscode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statuscode);
 				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets.statuscode)value.Value;
+				return (Dev.DevKit.Shared.Entities.msdyn_salesroutingrunOptionSets.statuscode)value.Value;
 			}
 			set
 			{

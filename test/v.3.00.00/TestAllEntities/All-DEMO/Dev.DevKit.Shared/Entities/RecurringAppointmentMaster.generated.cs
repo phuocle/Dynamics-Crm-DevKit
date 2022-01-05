@@ -226,6 +226,14 @@ namespace Dev.DevKit.Shared.Entities.RecurringAppointmentMasterOptionSets
 		September = 9
 	}
 
+	public enum OnlineMeetingType
+	{
+		/// <summary>
+		/// Teams Meeting = 1
+		/// </summary>
+		Teams_Meeting = 1
+	}
+
 	public enum PatternEndType
 	{
 		/// <summary>
@@ -361,6 +369,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string IsMapiPrivate = "ismapiprivate";
 			public const string IsNthMonthly = "isnthmonthly";
 			public const string IsNthYearly = "isnthyearly";
+			public const string IsOnlineMeeting = "isonlinemeeting";
 			public const string IsRegenerate = "isregenerate";
 			public const string IsRegularActivity = "isregularactivity";
 			public const string IsUnsafe = "isunsafe";
@@ -374,6 +383,10 @@ namespace Dev.DevKit.Shared.Entities
 			public const string MonthOfYear = "monthofyear";
 			public const string NextExpansionInstanceDate = "nextexpansioninstancedate";
 			public const string Occurrences = "occurrences";
+			public const string OnlineMeetingChatId = "onlinemeetingchatid";
+			public const string OnlineMeetingId = "onlinemeetingid";
+			public const string OnlineMeetingJoinUrl = "onlinemeetingjoinurl";
+			public const string OnlineMeetingType = "onlinemeetingtype";
 			public const string OptionalAttendees = "optionalattendees";
 			public const string Organizer = "organizer";
 			public const string OutlookOwnerApptId = "outlookownerapptid";
@@ -812,6 +825,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
+		/// <para>Displays whether or not this is an online meeting.</para>
+		/// <para>Boolean</para>
+		/// <para>Is Online Meeting</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public bool? IsOnlineMeeting
+		{
+			get { return Entity.GetAttributeValue<bool?>(Fields.IsOnlineMeeting); }
+			set { Entity.Attributes[Fields.IsOnlineMeeting] = value; }
+		}
+
+		/// <summary>
 		/// <para>For internal use only.</para>
 		/// <para>Boolean</para>
 		/// <para>Regenerate</para>
@@ -969,6 +994,65 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<int?>(Fields.Occurrences); }
 			set { Entity.Attributes[Fields.Occurrences] = value; }
+		}
+
+		/// <summary>
+		/// <para>Shows the online meeting chat id.</para>
+		/// <para>String - MaxLength: 200</para>
+		/// <para>Online Meeting Chat Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string OnlineMeetingChatId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.OnlineMeetingChatId); }
+			set { Entity.Attributes[Fields.OnlineMeetingChatId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Shows the online meeting id.</para>
+		/// <para>String - MaxLength: 300</para>
+		/// <para>Online Meeting Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string OnlineMeetingId
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.OnlineMeetingId); }
+			set { Entity.Attributes[Fields.OnlineMeetingId] = value; }
+		}
+
+		/// <summary>
+		/// <para>Shows the online meeting join url.</para>
+		/// <para>String - MaxLength: 600</para>
+		/// <para>Online Meeting Join Url</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string OnlineMeetingJoinUrl
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.OnlineMeetingJoinUrl); }
+			set { Entity.Attributes[Fields.OnlineMeetingJoinUrl] = value; }
+		}
+
+		/// <summary>
+		/// <para>Displays the online meeting type.</para>
+		/// <para>Picklist</para>
+		/// <para>Online Meeting Type</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Dev.DevKit.Shared.Entities.RecurringAppointmentMasterOptionSets.OnlineMeetingType? OnlineMeetingType
+		{
+			get
+			{
+				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.OnlineMeetingType);
+				if (value == null) return null;
+				return (Dev.DevKit.Shared.Entities.RecurringAppointmentMasterOptionSets.OnlineMeetingType)value.Value;
+			}
+			set
+			{
+				if (value.HasValue)
+					Entity.Attributes[Fields.OnlineMeetingType] = new OptionSetValue((int)value.Value);
+				else
+					Entity.Attributes[Fields.OnlineMeetingType] = null;
+			}
 		}
 
 		/// <summary>

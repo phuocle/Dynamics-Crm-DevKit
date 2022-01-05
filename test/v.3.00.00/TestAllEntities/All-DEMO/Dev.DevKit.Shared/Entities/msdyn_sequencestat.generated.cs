@@ -8,7 +8,7 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Diagnostics;
 
-namespace Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets
+namespace Dev.DevKit.Shared.Entities.msdyn_sequencestatOptionSets
 {
 	public enum statecode
 	{
@@ -37,7 +37,7 @@ namespace Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets
 
 namespace Dev.DevKit.Shared.Entities
 {
-	public partial class msdyn_aicontactsuggestion : EntityBase
+	public partial class msdyn_sequencestat : EntityBase
 	{
 		public struct Fields
 		{
@@ -48,10 +48,15 @@ namespace Dev.DevKit.Shared.Entities
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedOn = "modifiedon";
 			public const string ModifiedOnBehalfBy = "modifiedonbehalfby";
-			public const string msdyn_aicontactsuggestionId = "msdyn_aicontactsuggestionid";
+			public const string msdyn_avgtimefortargetcompletion = "msdyn_avgtimefortargetcompletion";
 			public const string msdyn_name = "msdyn_name";
-			public const string msdyn_sourcerecord = "msdyn_sourcerecord";
-			public const string msdyn_suggestionresponse = "msdyn_suggestionresponse";
+			public const string msdyn_range = "msdyn_range";
+			public const string msdyn_sequence = "msdyn_sequence";
+			public const string msdyn_sequencestatId = "msdyn_sequencestatid";
+			public const string msdyn_successrate = "msdyn_successrate";
+			public const string msdyn_targetscompleted = "msdyn_targetscompleted";
+			public const string msdyn_targetscreated = "msdyn_targetscreated";
+			public const string msdyn_targetsdisconnected = "msdyn_targetsdisconnected";
 			public const string OverriddenCreatedOn = "overriddencreatedon";
 			public const string OwnerId = "ownerid";
 			public const string OwningBusinessUnit = "owningbusinessunit";
@@ -64,41 +69,41 @@ namespace Dev.DevKit.Shared.Entities
 			public const string VersionNumber = "versionnumber";
 		}
 
-		public const string EntityLogicalName = "msdyn_aicontactsuggestion";
+		public const string EntityLogicalName = "msdyn_sequencestat";
 
 		[System.Obsolete("This value is different for each instance. Please don't use it.")]
-		public const int EntityTypeCode = 10850;
+		public const int EntityTypeCode = 10853;
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion()
+		public msdyn_sequencestat()
 		{
 			Entity = new Entity(EntityLogicalName);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(Guid msdyn_aicontactsuggestionId)
+		public msdyn_sequencestat(Guid msdyn_sequencestatId)
 		{
-			Entity = new Entity(EntityLogicalName, msdyn_aicontactsuggestionId);
+			Entity = new Entity(EntityLogicalName, msdyn_sequencestatId);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(string keyName, object keyValue)
+		public msdyn_sequencestat(string keyName, object keyValue)
 		{
 			Entity = new Entity(EntityLogicalName, keyName, keyValue);
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(Entity entity)
+		public msdyn_sequencestat(Entity entity)
 		{
 			Entity = entity;
 			PreEntity = CloneThisEntity(Entity);
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(Entity entity, Entity merge)
+		public msdyn_sequencestat(Entity entity, Entity merge)
 		{
 			Entity = entity;
 			foreach (var property in merge?.Attributes)
@@ -111,7 +116,7 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		[DebuggerNonUserCode()]
-		public msdyn_aicontactsuggestion(KeyAttributeCollection keys)
+		public msdyn_sequencestat(KeyAttributeCollection keys)
 		{
 			Entity = new Entity(EntityLogicalName, keys);
 			PreEntity = CloneThisEntity(Entity);
@@ -196,23 +201,19 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique identifier for entity instances</para>
-		/// <para>Primary Key - Uniqueidentifier</para>
-		/// <para>AI Contact Suggestion</para>
+		/// <para>Avg Time For Target Completion in seconds</para>
+		/// <para>Double - MinValue: 0 - MaxValue: 1,000,000,000</para>
+		/// <para>Avg Time For Target Completion</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Guid msdyn_aicontactsuggestionId
+		public double? msdyn_avgtimefortargetcompletion
 		{
-			get { return Id; }
-			set
-			{
-				Entity.Attributes[Fields.msdyn_aicontactsuggestionId] = value;
-				Entity.Id = value;
-			}
+			get { return Entity.GetAttributeValue<double?>(Fields.msdyn_avgtimefortargetcompletion); }
+			set { Entity.Attributes[Fields.msdyn_avgtimefortargetcompletion] = value; }
 		}
 
 		/// <summary>
-		/// <para>The name of the custom entity.</para>
+		/// <para>The name of the Sequence Stat entity.</para>
 		/// <para>String - MaxLength: 100</para>
 		/// <para>Name</para>
 		/// </summary>
@@ -224,27 +225,91 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Unique identifier for the source entity associated with the Teams contact suggestion by AI.</para>
-		/// <para>Lookup to account, incident</para>
-		/// <para>Source Entity</para>
+		/// <para>Range of days for which the data is stored</para>
+		/// <para>Integer - MinValue: 0 - MaxValue: 2,147,483,646</para>
+		/// <para>Range</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public EntityReference msdyn_sourcerecord
+		public int? msdyn_range
 		{
-			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_sourcerecord); }
-			set { Entity.Attributes[Fields.msdyn_sourcerecord] = value; }
+			get { return Entity.GetAttributeValue<int?>(Fields.msdyn_range); }
+			set { Entity.Attributes[Fields.msdyn_range] = value; }
 		}
 
 		/// <summary>
-		/// <para>Teams Contact Suggestion Response from AI</para>
-		/// <para>Memo - MaxLength: 1048576</para>
-		/// <para>Teams Contact Suggestion Response from AI</para>
+		/// <para>Related Sequence</para>
+		/// <para>Required - Lookup to msdyn_sequence</para>
+		/// <para>Sequence</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public string msdyn_suggestionresponse
+		public EntityReference msdyn_sequence
 		{
-			get { return Entity.GetAttributeValue<string>(Fields.msdyn_suggestionresponse); }
-			set { Entity.Attributes[Fields.msdyn_suggestionresponse] = value; }
+			get { return Entity.GetAttributeValue<EntityReference>(Fields.msdyn_sequence); }
+			set { Entity.Attributes[Fields.msdyn_sequence] = value; }
+		}
+
+		/// <summary>
+		/// <para>Unique identifier for entity Sequence Stat</para>
+		/// <para>Primary Key - Uniqueidentifier</para>
+		/// <para>Sequence Stat Id</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public Guid msdyn_sequencestatId
+		{
+			get { return Id; }
+			set
+			{
+				Entity.Attributes[Fields.msdyn_sequencestatId] = value;
+				Entity.Id = value;
+			}
+		}
+
+		/// <summary>
+		/// <para>Success Rate in percentage</para>
+		/// <para>Double - MinValue: -100 - MaxValue: 100</para>
+		/// <para>Success Rate</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public double? msdyn_successrate
+		{
+			get { return Entity.GetAttributeValue<double?>(Fields.msdyn_successrate); }
+			set { Entity.Attributes[Fields.msdyn_successrate] = value; }
+		}
+
+		/// <summary>
+		/// <para>Targets completed for this sequence in given range</para>
+		/// <para>BigInt</para>
+		/// <para>Targets Completed</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public long? msdyn_targetscompleted
+		{
+			get { return Entity.GetAttributeValue<long?>(Fields.msdyn_targetscompleted); }
+			set { Entity.Attributes[Fields.msdyn_targetscompleted] = value; }
+		}
+
+		/// <summary>
+		/// <para>Targets created for this sequence in given range</para>
+		/// <para>BigInt</para>
+		/// <para>Targets Created</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public long? msdyn_targetscreated
+		{
+			get { return Entity.GetAttributeValue<long?>(Fields.msdyn_targetscreated); }
+			set { Entity.Attributes[Fields.msdyn_targetscreated] = value; }
+		}
+
+		/// <summary>
+		/// <para>Targets disconnected for this sequence in given range</para>
+		/// <para>BigInt</para>
+		/// <para>Targets Disconnected</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public long? msdyn_targetsdisconnected
+		{
+			get { return Entity.GetAttributeValue<long?>(Fields.msdyn_targetsdisconnected); }
+			set { Entity.Attributes[Fields.msdyn_targetsdisconnected] = value; }
 		}
 
 		/// <summary>
@@ -305,18 +370,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Status of the aicontactsuggestion</para>
+		/// <para>Status of the Sequence Stat</para>
 		/// <para>State</para>
 		/// <para>Status</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets.statecode? statecode
+		public Dev.DevKit.Shared.Entities.msdyn_sequencestatOptionSets.statecode? statecode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statecode);
 				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets.statecode)value.Value;
+				return (Dev.DevKit.Shared.Entities.msdyn_sequencestatOptionSets.statecode)value.Value;
 			}
 			set
 			{
@@ -328,18 +393,18 @@ namespace Dev.DevKit.Shared.Entities
 		}
 
 		/// <summary>
-		/// <para>Reason for the status of the aicontactsuggestion</para>
+		/// <para>Reason for the status of the Sequence Stat</para>
 		/// <para>Status</para>
 		/// <para>Status Reason</para>
 		/// </summary>
 		[DebuggerNonUserCode()]
-		public Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets.statuscode? statuscode
+		public Dev.DevKit.Shared.Entities.msdyn_sequencestatOptionSets.statuscode? statuscode
 		{
 			get
 			{
 				var value = Entity.GetAttributeValue<OptionSetValue>(Fields.statuscode);
 				if (value == null) return null;
-				return (Dev.DevKit.Shared.Entities.msdyn_aicontactsuggestionOptionSets.statuscode)value.Value;
+				return (Dev.DevKit.Shared.Entities.msdyn_sequencestatOptionSets.statuscode)value.Value;
 			}
 			set
 			{

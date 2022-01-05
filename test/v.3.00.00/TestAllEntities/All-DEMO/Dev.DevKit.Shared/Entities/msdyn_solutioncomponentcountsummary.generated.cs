@@ -22,6 +22,7 @@ namespace Dev.DevKit.Shared.Entities
 			public const string msdyn_componentlogicalname = "msdyn_componentlogicalname";
 			public const string msdyn_componenttype = "msdyn_componenttype";
 			public const string msdyn_name = "msdyn_name";
+			public const string msdyn_primaryentityname = "msdyn_primaryentityname";
 			public const string msdyn_solutioncomponentcountsummaryId = "msdyn_solutioncomponentcountsummaryid";
 			public const string msdyn_solutionid = "msdyn_solutionid";
 			public const string msdyn_subtype = "msdyn_subtype";
@@ -115,6 +116,17 @@ namespace Dev.DevKit.Shared.Entities
 		{
 			get { return Entity.GetAttributeValue<string>(Fields.msdyn_name); }
 			set { Entity.Attributes[Fields.msdyn_name] = value; }
+		}
+
+		/// <summary>
+		/// <para>String - MaxLength: 100</para>
+		/// <para>Primary Entity Name</para>
+		/// </summary>
+		[DebuggerNonUserCode()]
+		public string msdyn_primaryentityname
+		{
+			get { return Entity.GetAttributeValue<string>(Fields.msdyn_primaryentityname); }
+			set { Entity.Attributes[Fields.msdyn_primaryentityname] = value; }
 		}
 
 		/// <summary>

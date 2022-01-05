@@ -93,6 +93,7 @@ var DevKit;
 			IsMapiPrivate: { a: 'ismapiprivate' },
 			IsNthMonthly: { a: 'isnthmonthly' },
 			IsNthYearly: { a: 'isnthyearly' },
+			IsOnlineMeeting: { a: 'isonlinemeeting' },
 			IsRegenerate: { a: 'isregenerate' },
 			IsRegularActivity: { a: 'isregularactivity', r: true },
 			IsUnsafe: { a: 'isunsafe', r: true },
@@ -106,6 +107,10 @@ var DevKit;
 			MonthOfYear: { a: 'monthofyear' },
 			NextExpansionInstanceDate_UtcDateAndTime: { a: 'nextexpansioninstancedate', r: true },
 			Occurrences: { a: 'occurrences' },
+			OnlineMeetingChatId: { a: 'onlinemeetingchatid' },
+			OnlineMeetingId: { a: 'onlinemeetingid' },
+			OnlineMeetingJoinUrl: { a: 'onlinemeetingjoinurl' },
+			OnlineMeetingType: { a: 'onlinemeetingtype' },
 			OutlookOwnerApptId: { a: 'outlookownerapptid' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
@@ -334,6 +339,9 @@ var OptionSet;
 				November: 11,
 				October: 10,
 				September: 9
+			},
+			OnlineMeetingType : {
+				Teams_Meeting: 1
 			},
 			PatternEndType : {
 				No_End_Date: 1,
