@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DynamicsCrm.DevKit.Shared
 {
@@ -13,28 +11,26 @@ namespace DynamicsCrm.DevKit.Shared
         private const string TAB = "\t";
         private static CrmServiceClient CrmServiceClient { get; set; }
         private static EntityMetadata EntityMetadata { get; set; }
-        private static string SchemaName { get; set; }
         private static string RootNamespace { get; set; }
 
 
-        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string schemaName, string rootNamespace)
+        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace)
         {
             CrmServiceClient = crmServiceClient;
             EntityMetadata = entityMetadata;
-            SchemaName = schemaName;
             RootNamespace = rootNamespace;
 
             var code = string.Empty;
 
             var @namespace = GetNameSpace();
-            var logicalName = schemaName.ToLower();
+            var logicalName = entityMetadata.LogicalName;
 
             code += $"'use strict';{NEW_LINE}";
             code += $"/** @namespace {@namespace} */{NEW_LINE}";
             code += $"var {@namespace};{NEW_LINE}";
             code += $"(function ({@namespace}) {{{NEW_LINE}";
             code += $"{TAB}'use strict';{NEW_LINE}";
-            code += $"{TAB}{@namespace}.{schemaName}Api = function (e) {{{NEW_LINE}";
+            code += $"{TAB}{@namespace}.{entityMetadata.SchemaName}Api = function (e) {{{NEW_LINE}";
             code += $"{TAB}{TAB}var EMPTY_STRING = '';{NEW_LINE}";
             code += $"{TAB}{TAB}var f = '@OData.Community.Display.V1.FormattedValue';{NEW_LINE}";
             code += $"{Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.WebApi.js")}";
@@ -141,7 +137,7 @@ namespace DynamicsCrm.DevKit.Shared
         {
             var code = string.Empty;
 
-            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
                 if (attribute.AttributeType == AttributeTypeCode.PartyList ||
                     attribute.AttributeType == AttributeTypeCode.EntityName
@@ -188,6 +184,7 @@ namespace DynamicsCrm.DevKit.Shared
                     if (lookup.Targets.Count() == 1)
                     {
                         var entityLogicalName = lookup.Targets[0];
+                        XrmHelper.EntitiesMetadata.AddIfNotExist(CrmServiceClient, entityLogicalName);
                         var entityMetadata = XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName);
                         var b = $"b: '{((attribute.IsCustomAttribute ?? false) ? attribute.SchemaName : attribute.LogicalName)}'";
                         var c = $"c: '{entityMetadata.LogicalCollectionName}'";

@@ -91,7 +91,8 @@ namespace DynamicsCrm.DevKit.Shared
         public static string GetSchemaNameFromFile(string file, string endsWith)
         {
             var fileName = Path.GetFileName(file);
-            return fileName.Substring(0, fileName.Length - endsWith.Length);
+            if (fileName.EndsWith(endsWith)) return fileName.Substring(0, fileName.Length - endsWith.Length);
+            return fileName;
         }
 
         public static string SafeIdentifier(string name)

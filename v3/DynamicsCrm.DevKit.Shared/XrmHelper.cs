@@ -208,7 +208,7 @@ namespace DynamicsCrm.DevKit.Shared
             return respone.EntityMetadata.ToList();
         }
 
-        public static List<EntityMetadata> GetEntitiesMetadata(CrmServiceClient crmServiceClient, List<string> entities)
+        public static List<EntityMetadata> GetEntitiesMetadata(CrmServiceClient crmServiceClient, List<string> schemaNames)
         {
             var request = new ExecuteMultipleRequest()
             {
@@ -219,8 +219,8 @@ namespace DynamicsCrm.DevKit.Shared
                 },
                 Requests = new OrganizationRequestCollection()
             };
-            foreach(var entity in entities)
-                request.Requests.Add( new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = entity.ToLower() });
+            foreach (var schemaName in schemaNames)
+                request.Requests.Add(new RetrieveEntityRequest { EntityFilters = EntityFilters.All, LogicalName = schemaName.ToLower() });
             var list = new List<EntityMetadata>();
             ExecuteMultipleResponse response = (ExecuteMultipleResponse)crmServiceClient.Execute(request);
             foreach (var result in response.Responses)

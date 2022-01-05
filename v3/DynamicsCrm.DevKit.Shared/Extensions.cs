@@ -1,5 +1,6 @@
 ﻿using DynamicsCrm.DevKit.Shared.Models;
 using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -109,6 +110,14 @@ namespace DynamicsCrm.DevKit.Shared
         public static bool IsReadOnly(this AttributeMetadata attribute)
         {
             return attribute.SourceType == 1 || attribute.SourceType == 2;
+        }
+
+        public static void AddIfNotExist(this List<EntityMetadata> entitiesMetadata, CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            if (!XrmHelper.EntitiesMetadata.Any(x => x.LogicalName == entityLogicalName))
+            {
+                XrmHelper.EntitiesMetadata.Add(XrmHelper.GetEntityMetadata(crmServiceClient, entityLogicalName));
+            }
         }
     }
 }
