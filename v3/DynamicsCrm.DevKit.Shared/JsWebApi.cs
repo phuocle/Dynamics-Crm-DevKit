@@ -15,7 +15,7 @@ namespace DynamicsCrm.DevKit.Shared
         private static string RootNamespace { get; set; }
         private static CommentTypeScriptDeclaration Comment { get; set; }
 
-        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
+        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
         {
             CrmServiceClient = crmServiceClient;
             EntityMetadata = entityMetadata;
@@ -50,36 +50,35 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}{logicalName}[field] = webApiField(e, a, b, c, d, r, u, g);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{GeneratorActivityPartyCode()}";
-            code += $"\t\t{EntityMetadata.LogicalName}.Entity = u;\r\n";
-            code += $"\t\t{EntityMetadata.LogicalName}.EntityName = '{EntityMetadata.LogicalName}';\r\n";
-            code += $"\t\t{EntityMetadata.LogicalName}.EntityCollectionName = '{EntityMetadata.LogicalCollectionName}';\r\n";
-            code += $"\t\t{EntityMetadata.LogicalName}['@odata.etag'] = e['@odata.etag'];\r\n";
-            code += $"\t\t{EntityMetadata.LogicalName}.getAliasedValue = function (alias, isMultiOptionSet) {{\r\n";
-            code += $"\t\t\tif (e[alias] === undefined || e[alias] === null) {{\r\n";
-            code += $"\t\t\t\treturn null;\r\n";
-            code += $"\t\t\t}}\r\n";
-            code += $"\t\t\tif (isMultiOptionSet) {{\r\n";
-            code += $"\t\t\t\treturn e[alias].toString().split(',').map(function (item) {{ return parseInt(item, 10); }});\r\n";
-            code += $"\t\t\t}}\r\n";
-            code += $"\t\t\treturn e[alias];\r\n";
-            code += $"\t\t}}\r\n";
-            code += $"\t\t{EntityMetadata.LogicalName}.getAliasedFormattedValue = function (alias, isMultiOptionSet) {{\r\n";
-            code += $"\t\t\tif (e[alias + f] === undefined || e[alias + f] === null) {{\r\n";
-            code += $"\t\t\t\treturn EMPTY_STRING;\r\n";
-            code += $"\t\t\t}}\r\n";
-            code += $"\t\t\tif (isMultiOptionSet) {{\r\n";
-            code += $"\t\t\t\treturn e[alias + f].toString().split(';').map(function (item) {{ return item.trim(); }});\r\n";
-            code += $"\t\t\t}}\r\n";
-            code += $"\t\t\treturn e[alias + f];\r\n";
-            code += $"\t\t}}\r\n";
-            code += $"\t\treturn {EntityMetadata.LogicalName};\r\n";
-            code += $"\t}};\r\n";
+            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.Entity = u;{NEW_LINE}";
+            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.EntityName = '{EntityMetadata.LogicalName}';{NEW_LINE}";
+            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.EntityCollectionName = '{EntityMetadata.LogicalCollectionName}';{NEW_LINE}";
+            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}['@odata.etag'] = e['@odata.etag'];{NEW_LINE}";
+            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.getAliasedValue = function (alias, isMultiOptionSet) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (e[alias] === undefined || e[alias] === null) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}return null;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (isMultiOptionSet) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}return e[alias].toString().split(',').map(function (item) {{ return parseInt(item, 10); }});{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return e[alias];{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.getAliasedFormattedValue = function (alias, isMultiOptionSet) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (e[alias + f] === undefined || e[alias + f] === null) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}return EMPTY_STRING;{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}if (isMultiOptionSet) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}{TAB}return e[alias + f].toString().split(';').map(function (item) {{ return item.trim(); }});{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}return e[alias + f];{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{TAB}{TAB}return {EntityMetadata.LogicalName};{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
+            dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
             return code;
         }
-
-
 
         private static string GeneratorActivityPartyCode()
         {
@@ -104,9 +103,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                if (attribute.AttributeType == AttributeTypeCode.PartyList ||
-                    attribute.AttributeType == AttributeTypeCode.EntityName
-                    ) continue;
+                if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
                 var a = $"a: '{attribute.LogicalName}'";
                 var r = (!((attribute.IsValidForCreate ?? false) || (attribute.IsValidForUpdate ?? false)) || attribute.IsReadOnly()) ? $", r: true" : $"";

@@ -122,41 +122,42 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             var i = 1;
             foreach (var schemaName in schemaNames)
             {
-                var file = Path.Combine(CurrentFolder, $"{schemaName}{endsWith}");
-                var dtsFile = Path.Combine(CurrentFolder, $"{schemaName}.d.ts");
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
-                    var oldCode = Utility.ReadAllText(file);
+                    var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.js");
+                    var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
+                    var dtsFile = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.d.ts");
+                    var oldCode = Utility.ReadAllText(fileEndsWith);
+                    var oldDTS = Utility.ReadAllText(dtsFile);
                     var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.ObjectTypeCode, dtsFile);
-                    if (comment.JsForm.Count == 0)
+                    if (!comment.JsWebApi)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
                         i++;
                         continue;
                     }
-                    var newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment);
+                    var newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment, out var newDTS);
                     if (Utility.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
                     }
                     else
                     {
-                        if (File.Exists(file))
+                        if (File.Exists(fileEndsWith))
                         {
-                            Utility.ForceWriteAllText(file, newCode);
+                            Utility.ForceWriteAllText(fileEndsWith, newCode);
+                            Utility.ForceWriteAllText(dtsFile, newDTS);
                             CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                         else
                         {
-                            //var newFileName = Path.Combine(Path.GetDirectoryName(file), $"{schemaName}.cs");
-                            //var newFileNameContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.LateBound.cs");
-                            //newFileNameContent = newFileNameContent
-                            //    .Replace("$NameSpace$", json.rootnamespace)
-                            //    .Replace("$class$", schemaName);
-                            //Utility.ForceWriteAllText(newFileName, newFileNameContent);
-                            //CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}.cs");
-                            Utility.ForceWriteAllText(file, newCode);
+                            Utility.ForceWriteAllText(fileEndsWith, newCode);
+                            Utility.ForceWriteAllText(dtsFile, newDTS);
+                            if (!File.Exists(file))
+                            {
+                                Utility.ForceWriteAllText(file, GetDefaultFileWithApi(entityMetadata.SchemaName));
+                            }
                             CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
                     }
@@ -167,6 +168,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 i++;
             }
+        }
+
+        private string GetDefaultFileWithApi(string schemaName)
+        {
+            const string NEW_LINE = "\r\n";
+            var code = string.Empty;
+            code += $"//@ts-check{NEW_LINE}";
+            code += $"///<reference path=\"{schemaName}.d.ts\" />{NEW_LINE}";
+            return code;
         }
 
         private void GeneratorJsForm(List<string> schemaNames)

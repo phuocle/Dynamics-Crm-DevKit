@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsonHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JsWebApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CliAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommandLineArgs.cs" />

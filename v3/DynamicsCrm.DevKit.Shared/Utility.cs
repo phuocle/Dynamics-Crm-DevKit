@@ -211,7 +211,6 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}HierarchicalRecursionLimitReached: 5,{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}LoopDetected: 6{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
             code += $"}})(OptionSet || (OptionSet = {{}}));";
             return code;
