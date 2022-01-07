@@ -28,6 +28,7 @@ namespace DynamicsCrm.DevKit.Shared
             foreach (var option in options)
             {
                 var name = option?.Label?.UserLocalizedLabel?.Label ?? String.Empty;
+                name = name.Replace("-", "_");
                 if (name.Length == 0) continue;
                 name = Utility.SafeIdentifier(name);
                 var value = option?.Value ?? -1;

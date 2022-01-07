@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace DynamicsCrm.DevKit.Shared
@@ -131,13 +132,11 @@ namespace DynamicsCrm.DevKit.Shared
                 code += $"\t\tdevKit.LoadFields(formContext, footer, \"footer_\");\r\n";
                 code += $"\t\tform.Footer = footer;\r\n";
             }
+            code += $"\t\tvar process = devKit.LoadProcess(formContext);\r\n";
             var codeProcess = GetJsProcessCode();
             if (codeProcess.Length > 0)
-            {
-                code += $"\t\tvar process = devKit.LoadProcess(formContext);\r\n";
                 code += codeProcess;
-                code += $"\t\tform.Process = process;\r\n";
-            }
+            code += $"\t\tform.Process = process;\r\n";
             var codeQuickForm = GetJsQuickFormCode(form.FormXml);
             if (codeQuickForm.Length > 0)
             {
@@ -366,8 +365,76 @@ namespace DynamicsCrm.DevKit.Shared
 
         private static string GetJsProcessCode()
         {
-            return string.Empty;
+            var code = string.Empty;
+            var processes = GetProcess();
+
+            if (processes.Count == 0) return string.Empty;
+            var processed = processes.OrderBy(x => x.LogicalName);
+            foreach (var entity in processed)
+            {
+                var xaml = entity.GetAttributeValue<string>("xaml");
+                var name = entity.GetAttributeValue<string>("name");
+                name = Utility.SafeIdentifier(name);
+                code += $"\t\tvar _{name} = {{\r\n";
+
+                var xdoc = XDocument.Parse(xaml);
+                var ns = xdoc.Root?.GetNamespaceOfPrefix("mxswa");
+                var rows2 = from x in xdoc.Descendants(ns + "Workflow").Elements(ns + "ActivityReference")
+                            select new
+                            {
+                                DisplayName = x.Attribute("DisplayName")?.Value,
+                                InnerText = x.ToString()
+                            };
+                var fields = new List<string>();
+                foreach (var row in rows2)
+                {
+                    var arr = row.DisplayName.Split(" ".ToCharArray());
+                    if (arr.Length == 1) continue;
+                    const string pattern = @"DataFieldName=""\w*""";
+                    foreach (Match m in Regex.Matches(row.InnerText, pattern))
+                    {
+                        var array = m.Value.Split("=".ToCharArray());
+                        var fieldName = array[1].Substring(1, array[1].Length - 2);
+                        fields.Add(fieldName);
+                    }
+                }
+
+                fields.Sort();
+                code += GetJsForListFields(fields);
+                code += $"\t\t}}\r\n";
+                code += $"\t\tdevKit.LoadFields(formContext, _{name}, \"header_process_\");\r\n";
+                code += $"\t\tprocess.{name} = _{name};\r\n";
+            }
+            return code;
         }
+
+        private static DataCollection<Entity> GetProcess()
+        {
+            var fetchData = new
+            {
+                category = "4",
+                statecode = "1",
+                primaryentity = EntityMetadata.ObjectTypeCode,
+                businessprocesstype = "0"
+            };
+            var fetchXml = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+  <entity name='workflow'>
+    <attribute name='name' />
+    <attribute name='uniquename' />
+    <attribute name='xaml' />
+    <filter type='and'>
+      <condition attribute='category' operator='eq' value='{fetchData.category /*4*/}'/>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode /*1*/}'/>
+      <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity /*4*/}'/>
+      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype /*4*/}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return rows.Entities;
+        }
+
         private static string GetJsForListFields(IEnumerable<string> list)
         {
             var code = string.Empty;
