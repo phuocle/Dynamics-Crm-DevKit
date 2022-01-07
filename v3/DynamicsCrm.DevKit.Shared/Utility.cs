@@ -185,21 +185,21 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"/** @namespace OptionSet */{NEW_LINE}";
             code += $"var OptionSet;{NEW_LINE}";
             code += $"(function (OptionSet) {{{NEW_LINE}";
-            code += $"{TAB}{TAB}OptionSet.{EntityMetadata.SchemaName} = {{{NEW_LINE}";
+            code += $"{TAB}OptionSet.{EntityMetadata.SchemaName} = {{{NEW_LINE}";
             foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
             {
                 if (XrmHelper.IsOptionSet(attribute))
                 {
                     var values = attribute.OptionSetValues();
                     if (values.Count == 0) continue;
-                    code += $"{TAB}{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
+                    code += $"{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
                     foreach (var value in values)
                     {
-                        code += $"{TAB}{TAB}{TAB}{TAB}{value.Name}: {value.Value},{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{value.Name}: {value.Value},{NEW_LINE}";
                     }
                     code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
                     code += $"{NEW_LINE}";
-                    code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
+                    code += $"{TAB}{TAB}}},{NEW_LINE}";
                 }
             }
             code += $"{TAB}{TAB}RollupState : {{{NEW_LINE}";

@@ -298,9 +298,9 @@ namespace DynamicsCrm.DevKit.Shared
                 FormXml = x.GetAttributeValue<string>("formxml"),
                 IsQuickCreate = x.GetAttributeValue<OptionSetValue>("type").Value == 7
             });
-            forms = forms.GroupBy(x => x.Name).Where(g => g.Count() == 1).Select(g => g.First()).OrderBy(x => x.Name);
+            //forms = forms.GroupBy(x => x.Name).Where(g => g.Count() == 1).Select(g => g.First()).OrderBy(x => x.Name);
             //forms = forms.Where(x => Comment.JsForm.Any(y => x.Name.ToLower().EndsWith(y.ToLower())));
-            return forms.ToList();
+            return forms.OrderBy(x => x.Name).ToList();
         }
 
         public static CommentTypeScriptDeclaration GetComment(CrmServiceClient crmServiceClient, int? objectTypeCode, string dtsFile)
