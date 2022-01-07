@@ -163,6 +163,56 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private void GeneratorJsForm(List<string> schemaNames)
         {
+            const string endsWith = ".form.js";
+            var totalFiles = schemaNames.Count();
+            var len = totalFiles.ToString().Length;
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            var i = 1;
+            foreach (var schemaName in schemaNames)
+            {
+                var file = Path.Combine(CurrentFolder, $"{schemaName}{endsWith}");
+                var dtsFile = Path.Combine(CurrentFolder, $"{schemaName}.d.ts");
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
+                if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
+                {
+                    var oldCode = Utility.ReadAllText(file);
+                    var comment = Utility.GetComment(dtsFile);
+                    if (comment.JsForm.Count == 0)
+                        continue;
+                        //comment.JsForm = XrmHelper.GetAllForms(CrmServiceClient, schemaName);
+                    var newCode = JsForm.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment);
+                    if (Utility.IsTheSame(oldCode, newCode))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+                    }
+                    else
+                    {
+                        if (File.Exists(file))
+                        {
+                            Utility.ForceWriteAllText(file, newCode);
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                        else
+                        {
+                            //var newFileName = Path.Combine(Path.GetDirectoryName(file), $"{schemaName}.cs");
+                            //var newFileNameContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.LateBound.cs");
+                            //newFileNameContent = newFileNameContent
+                            //    .Replace("$NameSpace$", json.rootnamespace)
+                            //    .Replace("$class$", schemaName);
+                            //Utility.ForceWriteAllText(newFileName, newFileNameContent);
+                            //CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}.cs");
+                            Utility.ForceWriteAllText(file, newCode);
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                    }
+                }
+                else
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Error, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                }
+                i++;
+            }
         }
 
         private void GeneratorLateBound(List<string> schemaNames)

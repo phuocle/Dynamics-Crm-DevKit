@@ -145,6 +145,11 @@ namespace DynamicsCrm.DevKit.Shared
             return (true, solutionId, prefix);
         }
 
+        //public static List<string> GetAllForms(CrmServiceClient crmServiceClient, string schemaName)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         public static List<DownloadFile> GetReportsBySolution(CrmServiceClient crmServiceClient, string solution)
         {
             var fetchData = new

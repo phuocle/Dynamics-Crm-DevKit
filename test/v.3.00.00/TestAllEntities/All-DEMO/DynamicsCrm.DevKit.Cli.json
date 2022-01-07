@@ -13,7 +13,7 @@
       "rootnamespace": "DevKit",
       "rootfolder": "",
       "type": "JsForm",
-      "entities": "account,abc",
+      "entities": "*",
       "debug": "yes"
     },
     {

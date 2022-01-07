@@ -1,7 +1,9 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CSharp;
+﻿using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Tooling.Connector;
 using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -97,6 +99,15 @@ namespace DynamicsCrm.DevKit.Shared
 
         public static string SafeIdentifier(string name)
         {
+            if (name == null) return string.Empty;
+            if (Guid.TryParse(name, out var outputGuid) || (name.Length > 38 && Guid.TryParse(name.Substring(0, 38), out var outputGuid2)))
+            {
+                name = name.ToUpper()
+                    .Replace("-", "_")
+                    .Replace("{", string.Empty)
+                    .Replace("}", string.Empty);
+                return "_" + name;
+            }
             name = name.Trim();
             name = name.Replace(" ", "_");
             name = name.Replace("____", "_");
@@ -136,5 +147,113 @@ namespace DynamicsCrm.DevKit.Shared
             return declareName;
         }
 
+        public static string GetNameSpace(string rootNamespace)
+        {
+            var parts = rootNamespace.Split(".".ToCharArray());
+            var @namespace = parts.Length > 1 ? parts[1] : parts[0];
+            return Utility.SafeIdentifier(@namespace);
+        }
+
+        public static CommentTypeScriptDeclaration GetComment(string dtsFile)
+        {
+            if (File.Exists(dtsFile))
+            {
+                var lines = File.ReadAllLines(dtsFile);
+                try
+                {
+                    var json = lines[lines.Length - 1];
+                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    comment.Version = Const.Version;
+                    return comment;
+                }
+                catch
+                {
+                    return new CommentTypeScriptDeclaration
+                    {
+                        JsForm = new List<string>(),
+                        JsWebApi = false,
+                        Version = Const.Version
+                    };
+                }
+            }
+            else
+            {
+                return new CommentTypeScriptDeclaration
+                {
+                    JsForm = new List<string>(),
+                    JsWebApi = false,
+                    Version = Const.Version
+                };
+            }
+        }
+
+        public static string GetFormName(string formName, string @class)
+        {
+            if (formName.ToLower() == "information") return $"{@class} Information";
+            else if (formName.ToLower() == "wizard") return $"{@class} Wizard";
+            else if (formName.ToLower() == "ai for sales") return $"{@class} AI for Sales";
+            else if (formName.ToLower() == "quick create") return $"{@class} Quick Create";
+            else if (formName.ToLower() == "quickcreate") return $"{@class} QuickCreate";
+            else if (formName.ToLower() == "new form") return $"{@class} New_Form";
+            else if (formName.ToLower() == "adobe sign") return $"{@class} Adobe_Sign";
+            else if (formName.ToLower() == "sales insights") return $"{@class} Sales_Insights";
+            else if (formName.ToLower() == "agreement") return $"{@class} Agreement";
+            else if (formName.ToLower() == "project information") return $"{@class} Project Information";
+            else if (formName.ToLower() == "project quick create") return $"{@class} Project Quick Create";
+            else if (formName.ToLower() == "omnichannel information") return $"{@class} Omnichannel Information";
+            else if (formName.ToLower() == "field service information") return $"{@class} Field Service Information";
+            else if (formName.ToLower() == "main form") return $"{@class} Main Form";
+            else if (formName.ToLower() == "quick create form") return $"{@class} Quick Create Form";
+            else if (formName.ToLower() == "quick create from requirement") return $"{@class} Quick Create from Requirement";
+            return formName;
+        }
+
+        public static string GeneratorOptionSet(EntityMetadata EntityMetadata)
+        {
+            const string NEW_LINE = "\r\n";
+            const string TAB = "\t";
+            var code = string.Empty;
+            code += $"/** @namespace OptionSet */{NEW_LINE}";
+            code += $"var OptionSet;{NEW_LINE}";
+            code += $"(function (OptionSet) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}OptionSet.{EntityMetadata.SchemaName} = {{{NEW_LINE}";
+            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
+            {
+                if (XrmHelper.IsOptionSet(attribute))
+                {
+                    var values = attribute.OptionSetValues();
+                    if (values.Count == 0) continue;
+                    code += $"{TAB}{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
+                    foreach (var value in values)
+                    {
+                        code += $"{TAB}{TAB}{TAB}{TAB}{value.Name}: {value.Value},{NEW_LINE}";
+                    }
+                    code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
+                    code += $"{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
+                }
+            }
+            code += $"{TAB}{TAB}RollupState : {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}NotCalculated: 0,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}Calculated: 1,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}OverflowError: 2,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}OtherError: 3,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}RetryLimitExceeded: 4,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}HierarchicalRecursionLimitReached: 5,{NEW_LINE}";
+            code += $"{TAB}{TAB}{TAB}LoopDetected: 6{NEW_LINE}";
+            code += $"{TAB}{TAB}}}{NEW_LINE}";
+            code += $"{NEW_LINE}";
+            code += $"{TAB}}};{NEW_LINE}";
+            code += $"}})(OptionSet || (OptionSet = {{}}));";
+            return code;
+        }
+
+        public static string TrimGuid(string guid)
+        {
+            if (guid == null) return null;
+            if (Guid.TryParse(guid, out var guidType))
+                return guid.Replace("{", string.Empty).Replace("}", string.Empty);
+            return guid;
+        }
     }
 }

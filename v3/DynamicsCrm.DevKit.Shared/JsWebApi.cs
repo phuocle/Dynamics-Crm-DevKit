@@ -22,7 +22,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             var code = string.Empty;
 
-            var @namespace = GetNameSpace();
+            var @namespace = Utility.GetNameSpace(RootNamespace);
             var logicalName = entityMetadata.LogicalName;
 
             code += $"'use strict';{NEW_LINE}";
@@ -74,47 +74,11 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"\t\treturn {EntityMetadata.LogicalName};\r\n";
             code += $"\t}};\r\n";
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
-            code += $"/** @namespace OptionSet */{NEW_LINE}";
-            code += $"var OptionSet;{NEW_LINE}";
-            code += $"(function (OptionSet) {{{NEW_LINE}";
-            code += $"{GeneratorOptionSet()}";
-            code += $"}})(OptionSet || (OptionSet = {{}}));";
+            code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
             return code;
         }
 
-        private static string GeneratorOptionSet()
-        {
-            var code = string.Empty;
-            code += $"{TAB}{TAB}OptionSet.{EntityMetadata.SchemaName} = {{{NEW_LINE}";
-            foreach (var attribute in EntityMetadata.Attributes.OrderBy(x => x.SchemaName))
-            {
-                if (XrmHelper.IsOptionSet(attribute))
-                {
-                    var values = attribute.OptionSetValues();
-                    if (values.Count == 0) continue;
-                    code += $"{TAB}{TAB}{TAB}{attribute.SchemaName} : {{{NEW_LINE}";
-                    foreach (var value in values)
-                    {
-                        code += $"{TAB}{TAB}{TAB}{TAB}{value.Name}: {value.Value},{NEW_LINE}";
-                    }
-                    code = code.TrimEnd($",{NEW_LINE}".ToCharArray());
-                    code += $"{NEW_LINE}";
-                    code += $"{TAB}{TAB}{TAB}}},{NEW_LINE}";
-                }
-            }
-            code += $"{TAB}{TAB}RollupState : {{{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}NotCalculated: 0,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}Calculated: 1,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}OverflowError: 2,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}OtherError: 3,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}RetryLimitExceeded: 4,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}HierarchicalRecursionLimitReached: 5,{NEW_LINE}";
-            code += $"{TAB}{TAB}{TAB}LoopDetected: 6{NEW_LINE}";
-            code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{NEW_LINE}";
-            code += $"{TAB}}};{NEW_LINE}";
-            return code;
-        }
+
 
         private static string GeneratorActivityPartyCode()
         {
@@ -255,13 +219,6 @@ namespace DynamicsCrm.DevKit.Shared
                 return "_TimezoneDateAndTime";
             }
 
-        }
-
-        private static string GetNameSpace()
-        {
-            var parts = RootNamespace.Split(".".ToCharArray());
-            var @namespace = parts.Length > 1 ? parts[1] : parts[0];
-            return Utility.SafeIdentifier(@namespace);
         }
     }
 }

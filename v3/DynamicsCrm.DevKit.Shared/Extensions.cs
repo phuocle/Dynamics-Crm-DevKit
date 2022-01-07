@@ -119,5 +119,12 @@ namespace DynamicsCrm.DevKit.Shared
                 XrmHelper.EntitiesMetadata.Add(XrmHelper.GetEntityMetadata(crmServiceClient, entityLogicalName));
             }
         }
+
+        public static bool EndsWith (this List<string> items, string value)
+        {
+            foreach (string item in items)
+                if (item.ToLower().EndsWith(value.ToLower())) return true;
+            return false;
+        }
     }
 }
