@@ -167,7 +167,7 @@ var OptionSet;
 			msdyn_CrewStrategy : {
 				Cascade_and_Accept_Cascade_Completely_Not_Recommended: 192350000,
 				Crew_Leader_Management: 192350001,
-				Crew_Member_SelfManagement: 192350002
+				Crew_Member_Self_Management: 192350002
 			},
 			msdyn_EnableAppointments : {
 				No: 192350000,

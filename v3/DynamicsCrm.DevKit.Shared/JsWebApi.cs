@@ -1,4 +1,5 @@
-﻿using Microsoft.Xrm.Sdk.Metadata;
+﻿using DynamicsCrm.DevKit.Shared.Models;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Linq;
@@ -12,16 +13,16 @@ namespace DynamicsCrm.DevKit.Shared
         private static CrmServiceClient CrmServiceClient { get; set; }
         private static EntityMetadata EntityMetadata { get; set; }
         private static string RootNamespace { get; set; }
+        private static CommentTypeScriptDeclaration Comment { get; set; }
 
-
-        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace)
+        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
         {
             CrmServiceClient = crmServiceClient;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
+            Comment = comment;
 
             var code = string.Empty;
-
             var @namespace = Utility.GetNameSpace(RootNamespace);
             var logicalName = entityMetadata.LogicalName;
 

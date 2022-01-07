@@ -154,7 +154,7 @@ var OptionSet;
 				Choice: 647390000,
 				Date: 647390003,
 				Date_and_time: 647390010,
-				Dropdown: 647390011,
+				Drop_down: 647390011,
 				File_Upload: 647390008,
 				MatrixChoice: 647390006,
 				MatrixChoiceGroup: 647390005,

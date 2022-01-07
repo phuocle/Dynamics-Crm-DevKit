@@ -196,7 +196,7 @@ var OptionSet;
 			msdyn_TransactionTypeCode : {
 				Billed_Sales: 192350006,
 				Cost: 192350000,
-				InterOrganizational_Sales: 192350008,
+				Inter_Organizational_Sales: 192350008,
 				Project_Contract: 192350004,
 				Resourcing_Unit_Cost: 192350007,
 				Unbilled_Sales: 192350005

@@ -227,7 +227,7 @@ var OptionSet;
 				Bundle: 2,
 				Optional_Bundle_Product: 4,
 				Product: 1,
-				Projectbased_Service: 5,
+				Project_based_Service: 5,
 				Required_Bundle_Product: 3
 			},
 			PropertyConfigurationStatus : {

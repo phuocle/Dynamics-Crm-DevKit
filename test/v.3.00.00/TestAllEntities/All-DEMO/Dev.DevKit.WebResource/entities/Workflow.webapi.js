@@ -194,16 +194,16 @@ var OptionSet;
 				Unpublished: 1
 			},
 			CreateStage : {
-				Postoperation: 40,
-				Preoperation: 20
+				Post_operation: 40,
+				Pre_operation: 20
 			},
 			DeleteStage : {
-				Postoperation: 40,
-				Preoperation: 20
+				Post_operation: 40,
+				Pre_operation: 20
 			},
 			Mode : {
 				Background: 0,
-				Realtime: 1
+				Real_time: 1
 			},
 			ProcessTriggerScope : {
 				Entity: 2,
@@ -241,8 +241,8 @@ var OptionSet;
 				Windows_recorder_V1: 0
 			},
 			UpdateStage : {
-				Postoperation: 40,
-				Preoperation: 20
+				Post_operation: 40,
+				Pre_operation: 20
 			},
 		RollupState : {
 			NotCalculated: 0,

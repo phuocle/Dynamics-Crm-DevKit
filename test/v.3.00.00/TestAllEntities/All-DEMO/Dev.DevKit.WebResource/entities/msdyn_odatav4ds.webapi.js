@@ -146,8 +146,8 @@ var OptionSet;
 (function (OptionSet) {
 		OptionSet.msdyn_odatav4ds = {
 			msdyn_paginationtype : {
-				Clientside_Paging: 0,
-				Serverside_Paging: 1
+				Client_side_Paging: 0,
+				Server_side_Paging: 1
 			},
 		RollupState : {
 			NotCalculated: 0,

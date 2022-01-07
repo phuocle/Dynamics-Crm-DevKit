@@ -168,7 +168,7 @@ var OptionSet;
 			},
 			msdyn_ComponentType : {
 				Configuration: 192350002,
-				PlugIn: 192350001,
+				Plug_In: 192350001,
 				Web_Resources: 192350000
 			},
 			msdyn_Level : {

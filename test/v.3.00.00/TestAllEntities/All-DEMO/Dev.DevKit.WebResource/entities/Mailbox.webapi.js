@@ -213,7 +213,7 @@ var OptionSet;
 			ACTDeliveryMethod : {
 				Microsoft_Dynamics_365_for_Outlook: 0,
 				None: 2,
-				ServerSide_Synchronization: 1
+				Server_Side_Synchronization: 1
 			},
 			ACTStatus : {
 				Failure: 2,
@@ -235,7 +235,7 @@ var OptionSet;
 				Forward_Mailbox: 3,
 				Microsoft_Dynamics_365_for_Outlook: 1,
 				None: 0,
-				ServerSide_Synchronization_or_Email_Router: 2
+				Server_Side_Synchronization_or_Email_Router: 2
 			},
 			IncomingEmailStatus : {
 				Failure: 2,
@@ -257,7 +257,7 @@ var OptionSet;
 			OutgoingEmailDeliveryMethod : {
 				Microsoft_Dynamics_365_for_Outlook: 1,
 				None: 0,
-				ServerSide_Synchronization_or_Email_Router: 2
+				Server_Side_Synchronization_or_Email_Router: 2
 			},
 			OutgoingEmailStatus : {
 				Failure: 2,

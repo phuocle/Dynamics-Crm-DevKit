@@ -132,10 +132,10 @@ var OptionSet;
 (function (OptionSet) {
 		OptionSet.msdyn_projecttaskdependency = {
 			msdyn_LinkType : {
-				FinishtoFinish: 192350002,
-				FinishtoStart: 192350000,
-				StarttoFinish: 192350004,
-				StarttoStart: 192350001
+				Finish_to_Finish: 192350002,
+				Finish_to_Start: 192350000,
+				Start_to_Finish: 192350004,
+				Start_to_Start: 192350001
 			},
 			statecode : {
 				Active: 0,

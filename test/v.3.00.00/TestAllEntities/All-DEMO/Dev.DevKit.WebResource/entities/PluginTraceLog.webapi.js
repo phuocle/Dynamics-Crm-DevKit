@@ -137,7 +137,7 @@ var OptionSet;
 				Synchronous: 0
 			},
 			OperationType : {
-				Plugin: 1,
+				Plug_in: 1,
 				Unknown: 0,
 				Workflow_Activity: 2
 			},

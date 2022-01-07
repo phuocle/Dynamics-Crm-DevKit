@@ -41,7 +41,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' 'empty' or '???'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
             }
-            if (json.type.ToLower() != nameof(GeneratorType.jsform)  && json.type.ToLower() != nameof(GeneratorType.jswebapi) && json.type.ToLower() != nameof(GeneratorType.csharp))
+            if (json.type.ToLower() != nameof(GeneratorType.jsform) && json.type.ToLower() != nameof(GeneratorType.jswebapi) && json.type.ToLower() != nameof(GeneratorType.csharp))
             {
                 CliLog.WriteLineError(ConsoleColor.Yellow, $"{TaskType} 'type' should be: 'JsForm' or 'JsWebApi' or 'CSharp'. Please check DynamicsCrm.DevKit.Cli.json file.");
                 return false;
@@ -123,11 +123,19 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             foreach (var schemaName in schemaNames)
             {
                 var file = Path.Combine(CurrentFolder, $"{schemaName}{endsWith}");
+                var dtsFile = Path.Combine(CurrentFolder, $"{schemaName}.d.ts");
                 var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
                     var oldCode = Utility.ReadAllText(file);
-                    var newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace);
+                    var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.ObjectTypeCode, dtsFile);
+                    if (comment.JsForm.Count == 0)
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        i++;
+                        continue;
+                    }
+                    var newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment);
                     if (Utility.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");

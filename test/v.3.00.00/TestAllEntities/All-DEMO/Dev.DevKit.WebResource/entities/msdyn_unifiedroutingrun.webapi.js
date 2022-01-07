@@ -146,7 +146,7 @@ var OptionSet;
 				Queue_Assignment_selection_rules_completed: 100000004,
 				Queue_Prioritization_rules_completed: 100000003,
 				Workstream_Classification_rules_processing: 100000001,
-				Workstream_Routetoqueue_rules_completed: 100000002
+				Workstream_Route_to_queue_rules_completed: 100000002
 			},
 			statecode : {
 				Active: 0,

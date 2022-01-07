@@ -176,7 +176,7 @@ var OptionSet;
 			},
 			TypeCode : {
 				Advertisement: 1,
-				Cobranding: 4,
+				Co_branding: 4,
 				Direct_Marketing: 2,
 				Event: 3,
 				Other: 5

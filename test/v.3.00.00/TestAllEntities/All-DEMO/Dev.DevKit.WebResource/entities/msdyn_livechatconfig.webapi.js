@@ -197,7 +197,7 @@ var OptionSet;
 				Persistent_Chat: 192350001
 			},
 			msdyn_Language : {
-				AutoDetect: 192350000,
+				Auto_Detect: 192350000,
 				English: 192360014
 			},
 			msdyn_offlinewidgetthemecolor : {

@@ -134,12 +134,12 @@ var OptionSet;
 				Manual_Post: 2
 			},
 			Type : {
-				Checkin: 1,
+				Check_in: 1,
 				Idea: 2,
 				News: 3,
 				Private_Message: 4,
 				Question: 5,
-				Repost: 6,
+				Re_post: 6,
 				Status: 7
 			},
 		RollupState : {

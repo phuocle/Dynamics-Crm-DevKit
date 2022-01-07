@@ -286,7 +286,7 @@ var OptionSet;
 			},
 			IndustryCode : {
 				Accounting: 1,
-				Agriculture_and_Nonpetrol_Natural_Resource_Extraction: 2,
+				Agriculture_and_Non_petrol_Natural_Resource_Extraction: 2,
 				Broadcasting_Printing_and_Publishing: 3,
 				Brokers: 4,
 				Building_Supply_Retail: 5,
@@ -306,7 +306,7 @@ var OptionSet;
 				Inbound_Repair_and_Services: 19,
 				Insurance: 20,
 				Legal_Services: 21,
-				NonDurable_Merchandise_Retail: 22,
+				Non_Durable_Merchandise_Retail: 22,
 				Outbound_Consumer_Service: 23,
 				Petrochemical_Extraction_and_Distribution: 24,
 				Service_Retail: 25,
@@ -342,7 +342,7 @@ var OptionSet;
 			},
 			msdyn_ordertype : {
 				Item_based: 192350000,
-				ServiceMaintenance_Based: 690970002,
+				Service_Maintenance_Based: 690970002,
 				Work_based: 192350001
 			},
 			msdyn_salesassignmentresult : {

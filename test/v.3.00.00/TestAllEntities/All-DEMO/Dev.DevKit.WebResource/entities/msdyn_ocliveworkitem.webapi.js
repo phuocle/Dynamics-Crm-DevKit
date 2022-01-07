@@ -358,7 +358,7 @@ var OptionSet;
 				Recurring_Master: 1
 			},
 			msdyn_channel : {
-				Cobrowse: 192390000,
+				Co_browse: 192390000,
 				Custom: 192350002,
 				Entity_Records: 192350000,
 				Facebook: 192330000,
@@ -407,7 +407,7 @@ var OptionSet;
 				Open: 0,
 				Resolved: 2,
 				Scheduled: 3,
-				Wrapup_Deprecated: 4
+				Wrap_up_Deprecated: 4
 			},
 			StatusCode : {
 				Active: 2,
@@ -416,7 +416,7 @@ var OptionSet;
 				Resolved: 6,
 				Scheduled: 7,
 				Waiting: 3,
-				Wrapup: 5
+				Wrap_up: 5
 			},
 		RollupState : {
 			NotCalculated: 0,

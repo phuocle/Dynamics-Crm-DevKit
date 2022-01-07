@@ -135,10 +135,10 @@ var OptionSet;
 			msdyn_chatquestionnairetype : {
 				Offline_authenticated: 192350002,
 				Offline_unauthenticated: 192350003,
-				Postchat_authenticated: 192350004,
-				Postchat_unauthenticated: 192350005,
-				Prechat_authenticated: 192350000,
-				Prechat_unauthenticated: 192350001
+				Post_chat_authenticated: 192350004,
+				Post_chat_unauthenticated: 192350005,
+				Pre_chat_authenticated: 192350000,
+				Pre_chat_unauthenticated: 192350001
 			},
 			statecode : {
 				Active: 0,

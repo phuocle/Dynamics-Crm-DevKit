@@ -175,7 +175,7 @@ var OptionSet;
 		OptionSet.Product = {
 			msdyn_FieldServiceProductType : {
 				Inventory: 690970000,
-				NonInventory: 690970001,
+				Non_Inventory: 690970001,
 				Service: 690970002
 			},
 			ProductStructure : {

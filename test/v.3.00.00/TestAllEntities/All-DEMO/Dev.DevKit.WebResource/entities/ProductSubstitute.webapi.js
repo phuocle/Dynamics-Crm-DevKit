@@ -130,14 +130,14 @@ var OptionSet;
 (function (OptionSet) {
 		OptionSet.ProductSubstitute = {
 			Direction : {
-				BiDirectional: 1,
-				UniDirectional: 0
+				Bi_Directional: 1,
+				Uni_Directional: 0
 			},
 			SalesRelationshipType : {
 				Accessory: 2,
-				Crosssell: 1,
+				Cross_sell: 1,
 				Substitute: 3,
-				Upsell: 0
+				Up_sell: 0
 			},
 			statecode : {
 				Active: 0,

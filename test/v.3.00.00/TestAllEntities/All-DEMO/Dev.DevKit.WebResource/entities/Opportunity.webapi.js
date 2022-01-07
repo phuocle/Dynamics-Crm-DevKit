@@ -246,7 +246,7 @@ var OptionSet;
 			},
 			msdyn_OrderType : {
 				Item_based: 192350000,
-				ServiceMaintenance_Based: 690970002,
+				Service_Maintenance_Based: 690970002,
 				Work_based: 192350001
 			},
 			Need : {
@@ -338,7 +338,7 @@ var OptionSet;
 				Canceled: 4,
 				In_Progress: 1,
 				On_Hold: 2,
-				OutSold: 5,
+				Out_Sold: 5,
 				Won: 3
 			},
 			TimeLine : {

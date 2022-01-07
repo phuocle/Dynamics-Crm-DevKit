@@ -133,7 +133,7 @@ var OptionSet;
 (function (OptionSet) {
 		OptionSet.msdyn_kmfederatedsearchconfig = {
 			SearchType : {
-				CrossOrganizational_Search: 100000000,
+				Cross_Organizational_Search: 100000000,
 				Microsoft_Graph_Connector: 100000002,
 				Sharepoint: 100000001
 			},

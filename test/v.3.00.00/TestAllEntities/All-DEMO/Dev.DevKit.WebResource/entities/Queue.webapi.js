@@ -169,7 +169,7 @@ var OptionSet;
 			IncomingEmailDeliveryMethod : {
 				Forward_Mailbox: 3,
 				None: 0,
-				ServerSide_Synchronization_or_Email_Router: 2
+				Server_Side_Synchronization_or_Email_Router: 2
 			},
 			IncomingEmailFilteringMethod : {
 				All_email_messages: 0,
@@ -189,7 +189,7 @@ var OptionSet;
 			},
 			OutgoingEmailDeliveryMethod : {
 				None: 0,
-				ServerSide_Synchronization_or_Email_Router: 2
+				Server_Side_Synchronization_or_Email_Router: 2
 			},
 			QueueTypeCode : {
 				Default_Value: 1

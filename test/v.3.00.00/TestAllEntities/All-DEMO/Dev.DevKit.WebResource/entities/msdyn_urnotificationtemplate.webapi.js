@@ -144,7 +144,7 @@ var OptionSet;
 				Unpublished: 1
 			},
 			msdyn_channeltype : {
-				Cobrowse: 192390000,
+				Co_browse: 192390000,
 				Custom: 192350002,
 				Entity_Records: 192350000,
 				Facebook: 192330000,

@@ -150,7 +150,7 @@ var OptionSet;
 (function (OptionSet) {
 		OptionSet.msdyn_liveconversation = {
 			msdyn_channel : {
-				Cobrowse: 192390000,
+				Co_browse: 192390000,
 				Custom: 192350002,
 				Entity_Records: 192350000,
 				Facebook: 192330000,
@@ -180,14 +180,14 @@ var OptionSet;
 				Closed: 3,
 				Open: 0,
 				Waiting: 2,
-				Wrapup: 4
+				Wrap_up: 4
 			},
 			msdyn_statuscode : {
 				Active: 2,
 				Closed: 4,
 				Open: 1,
 				Waiting: 3,
-				Wrapup: 5
+				Wrap_up: 5
 			},
 			msdyn_workstreamworkdistributionmode : {
 				Pick: 192350001,
@@ -198,14 +198,14 @@ var OptionSet;
 				Closed: 3,
 				Open: 0,
 				Waiting: 2,
-				Wrapup: 4
+				Wrap_up: 4
 			},
 			statuscode : {
 				Active: 2,
 				Closed: 4,
 				Open: 1,
 				Waiting: 3,
-				Wrapup: 5
+				Wrap_up: 5
 			},
 		RollupState : {
 			NotCalculated: 0,

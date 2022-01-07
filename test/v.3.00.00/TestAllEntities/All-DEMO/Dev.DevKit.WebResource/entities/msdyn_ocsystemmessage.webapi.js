@@ -138,14 +138,14 @@ var OptionSet;
 				Customer: 192350001
 			},
 			msdyn_messagetemplatetrigger : {
-				Outside_24hour_conversation_window: 1
+				Outside_24_hour_conversation_window: 1
 			},
 			msdyn_messagetype : {
 				Automated_Message: 2,
 				Message_Template: 3
 			},
 			msdyn_streamsource : {
-				Cobrowse: 192390000,
+				Co_browse: 192390000,
 				Custom: 192350002,
 				Entity_Records: 192350000,
 				Facebook: 192330000,

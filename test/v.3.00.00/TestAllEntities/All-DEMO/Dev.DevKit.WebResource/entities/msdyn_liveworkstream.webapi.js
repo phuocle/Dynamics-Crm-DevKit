@@ -228,7 +228,7 @@ var OptionSet;
 				Twilio: 192350001
 			},
 			msdyn_streamsource : {
-				Cobrowse: 192390000,
+				Co_browse: 192390000,
 				Custom: 192350002,
 				Entity_Records: 192350000,
 				Facebook: 192330000,

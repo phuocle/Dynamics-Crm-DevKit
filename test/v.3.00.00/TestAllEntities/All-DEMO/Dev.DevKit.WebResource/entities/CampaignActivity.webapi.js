@@ -269,7 +269,7 @@ var OptionSet;
 			TypeCode : {
 				Content_Distribution: 5,
 				Content_Preparation: 2,
-				Direct_FollowUp_Contact: 7,
+				Direct_Follow_Up_Contact: 7,
 				Direct_Initial_Contact: 6,
 				Lead_Qualification: 4,
 				Reminder_Distribution: 8,

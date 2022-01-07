@@ -135,8 +135,8 @@ var OptionSet;
 (function (OptionSet) {
 		OptionSet.msdyn_dimension = {
 			msdyn_Type : {
-				Amountbased: 192350000,
-				Markupbased: 192350001
+				Amount_based: 192350000,
+				Markup_based: 192350001
 			},
 			statecode : {
 				Active: 0,

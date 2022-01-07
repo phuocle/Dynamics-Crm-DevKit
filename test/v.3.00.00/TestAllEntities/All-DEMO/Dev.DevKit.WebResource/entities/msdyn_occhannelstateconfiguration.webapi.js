@@ -132,7 +132,7 @@ var OptionSet;
 				Closed: 3,
 				Open: 0,
 				Waiting: 2,
-				Wrapup: 4
+				Wrap_up: 4
 			},
 			statecode : {
 				Active: 0,

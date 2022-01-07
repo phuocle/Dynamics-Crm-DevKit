@@ -209,7 +209,7 @@ var OptionSet;
 		OptionSet.Invoice = {
 			msdyn_OrderType : {
 				Item_based: 192350000,
-				ServiceMaintenance_Based: 690970002,
+				Service_Maintenance_Based: 690970002,
 				Work_based: 192350001
 			},
 			msdyn_projectinvoicestatus : {

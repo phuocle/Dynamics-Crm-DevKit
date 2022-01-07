@@ -128,8 +128,8 @@ var OptionSet;
 (function (OptionSet) {
 		OptionSet.msdyn_localizedsurveyquestion = {
 			msdyn_languagecode : {
-				EnglishenUS: 100000001,
-				FrenchfrFR: 100000002
+				Englishen_US: 100000001,
+				Frenchfr_FR: 100000002
 			},
 			statecode : {
 				Active: 0,

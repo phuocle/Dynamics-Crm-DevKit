@@ -128,7 +128,7 @@ var OptionSet;
 		OptionSet.msdyn_channelcapability = {
 			msdyn_EscalationChannelMode : {
 				Audio: 192350000,
-				Cobrowse: 192350002,
+				Co_browse: 192350002,
 				None: 192350003,
 				Screen_sharing: 100000000,
 				Video: 192350001

@@ -260,7 +260,7 @@ var OptionSet;
 				Canceled: 4,
 				In_Progress: 1,
 				On_Hold: 2,
-				OutSold: 5,
+				Out_Sold: 5,
 				Won: 3
 			},
 			PriorityCode : {

@@ -259,9 +259,9 @@ var OptionSet;
 			AccessMode : {
 				Administrative: 1,
 				Delegated_Admin: 5,
-				Noninteractive: 4,
+				Non_interactive: 4,
 				Read: 2,
-				ReadWrite: 0,
+				Read_Write: 0,
 				Support_User: 3
 			},
 			Address1_AddressTypeCode : {
@@ -310,7 +310,7 @@ var OptionSet;
 				Forward_Mailbox: 3,
 				Microsoft_Dynamics_365_for_Outlook: 1,
 				None: 0,
-				ServerSide_Synchronization_or_Email_Router: 2
+				Server_Side_Synchronization_or_Email_Router: 2
 			},
 			InviteStatusCode : {
 				Invitation_Accepted: 4,
@@ -337,7 +337,7 @@ var OptionSet;
 			OutgoingEmailDeliveryMethod : {
 				Microsoft_Dynamics_365_for_Outlook: 1,
 				None: 0,
-				ServerSide_Synchronization_or_Email_Router: 2
+				Server_Side_Synchronization_or_Email_Router: 2
 			},
 			PreferredAddressCode : {
 				Mailing_Address: 1,
