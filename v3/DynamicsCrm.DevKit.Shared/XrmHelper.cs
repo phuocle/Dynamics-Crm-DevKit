@@ -262,5 +262,78 @@ namespace DynamicsCrm.DevKit.Shared
                 XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(crmServiceClient);
             }
         }
+
+        public static List<SystemForm> GetForms(CrmServiceClient crmServiceClient, int? objectTypeCode)
+        {
+            var fetchData = new
+            {
+                formactivationstate = "1",
+                objecttypecode = objectTypeCode ?? -1,
+                type = "2",
+                type2 = "7"
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='systemform'>
+    <attribute name='description' />
+    <attribute name='name' />
+    <attribute name='formxml' />
+    <attribute name='type' />
+    <order attribute='name' descending='false'/>
+    <filter type='and'>
+      <condition attribute='formactivationstate' operator='eq' value='{fetchData.formactivationstate}'/>
+      <condition attribute='objecttypecode' operator='eq' value='{fetchData.objecttypecode}'/>
+      <filter type='or'>
+        <condition attribute='type' operator='eq' value='{fetchData.type}'/>
+        <condition attribute='type' operator='eq' value='{fetchData.type2}'/>
+      </filter>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            var forms = rows.Entities.Select(x => new SystemForm
+            {
+                Name = x.GetAttributeValue<string>("name"),
+                Description = x.GetAttributeValue<string>("description"),
+                FormXml = x.GetAttributeValue<string>("formxml"),
+                IsQuickCreate = x.GetAttributeValue<OptionSetValue>("type").Value == 7
+            });
+            forms = forms.GroupBy(x => x.Name).Where(g => g.Count() == 1).Select(g => g.First()).OrderBy(x => x.Name);
+            //forms = forms.Where(x => Comment.JsForm.Any(y => x.Name.ToLower().EndsWith(y.ToLower())));
+            return forms.ToList();
+        }
+
+        public static CommentTypeScriptDeclaration GetComment(CrmServiceClient crmServiceClient, int? objectTypeCode, string dtsFile)
+        {
+            if (File.Exists(dtsFile))
+            {
+                var lines = File.ReadAllLines(dtsFile);
+                try
+                {
+                    var json = lines[lines.Length - 1];
+                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    comment.Version = Const.Version;
+                    return comment;
+                }
+                catch
+                {
+                    return new CommentTypeScriptDeclaration
+                    {
+                        JsForm = new List<string>(),
+                        JsWebApi = false,
+                        Version = Const.Version
+                    };
+                }
+            }
+            else
+            {
+                return new CommentTypeScriptDeclaration
+                {
+                    JsForm = XrmHelper.GetForms(crmServiceClient, objectTypeCode).Select(x => x.Name).ToList(),
+                    JsWebApi = true,
+                    Version = Const.Version
+                };
+            }
+        }
     }
 }

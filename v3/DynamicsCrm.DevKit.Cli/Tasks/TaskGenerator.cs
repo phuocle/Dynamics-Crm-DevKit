@@ -177,10 +177,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
                 {
                     var oldCode = Utility.ReadAllText(file);
-                    var comment = Utility.GetComment(dtsFile);
+                    var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.ObjectTypeCode, dtsFile);
                     if (comment.JsForm.Count == 0)
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        i++;
                         continue;
-                        //comment.JsForm = XrmHelper.GetAllForms(CrmServiceClient, schemaName);
+                    }
                     var newCode = JsForm.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment);
                     if (Utility.IsTheSame(oldCode, newCode))
                     {

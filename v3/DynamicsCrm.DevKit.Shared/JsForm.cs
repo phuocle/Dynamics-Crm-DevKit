@@ -36,7 +36,8 @@ namespace DynamicsCrm.DevKit.Shared
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
-            var forms = GetForms();
+            var forms = XrmHelper.GetForms(CrmServiceClient, EntityMetadata.ObjectTypeCode);
+            forms = forms.Where(x => Comment.JsForm.Any(y => x.Name.ToLower().EndsWith(y.ToLower()))).ToList();
             var code = string.Empty;
             var @namespace = Utility.GetNameSpace(RootNamespace);
             var logicalName = entityMetadata.LogicalName;
@@ -568,46 +569,5 @@ namespace DynamicsCrm.DevKit.Shared
             fields.Sort();
             return GetJsForListFields(fields);
         }
-
-        private static List<SystemForm> GetForms()
-        {
-            var fetchData = new
-            {
-                formactivationstate = "1",
-                objecttypecode = EntityMetadata.ObjectTypeCode ?? -1,
-                type = "2",
-                type2 = "7"
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='systemform'>
-    <attribute name='description' />
-    <attribute name='name' />
-    <attribute name='formxml' />
-    <attribute name='type' />
-    <order attribute='name' descending='false'/>
-    <filter type='and'>
-      <condition attribute='formactivationstate' operator='eq' value='{fetchData.formactivationstate}'/>
-      <condition attribute='objecttypecode' operator='eq' value='{fetchData.objecttypecode}'/>
-      <filter type='or'>
-        <condition attribute='type' operator='eq' value='{fetchData.type}'/>
-        <condition attribute='type' operator='eq' value='{fetchData.type2}'/>
-      </filter>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            var forms = rows.Entities.Select(x => new SystemForm
-            {
-                Name = x.GetAttributeValue<string>("name"),
-                Description = x.GetAttributeValue<string>("description"),
-                FormXml = x.GetAttributeValue<string>("formxml"),
-                IsQuickCreate = x.GetAttributeValue<OptionSetValue>("type").Value == 7
-            });
-            forms = forms.GroupBy(x => x.Name).Where(g => g.Count() == 1).Select(g => g.First()).OrderBy(x => x.Name);
-            forms = forms.Where(x => Comment.JsForm.Any(y => x.Name.ToLower().EndsWith(y.ToLower())));
-            return forms.ToList();
-        }
-
     }
 }

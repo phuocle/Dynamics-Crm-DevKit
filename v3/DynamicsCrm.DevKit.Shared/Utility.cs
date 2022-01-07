@@ -154,38 +154,7 @@ namespace DynamicsCrm.DevKit.Shared
             return Utility.SafeIdentifier(@namespace);
         }
 
-        public static CommentTypeScriptDeclaration GetComment(string dtsFile)
-        {
-            if (File.Exists(dtsFile))
-            {
-                var lines = File.ReadAllLines(dtsFile);
-                try
-                {
-                    var json = lines[lines.Length - 1];
-                    var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
-                    comment.Version = Const.Version;
-                    return comment;
-                }
-                catch
-                {
-                    return new CommentTypeScriptDeclaration
-                    {
-                        JsForm = new List<string>(),
-                        JsWebApi = false,
-                        Version = Const.Version
-                    };
-                }
-            }
-            else
-            {
-                return new CommentTypeScriptDeclaration
-                {
-                    JsForm = new List<string>(),
-                    JsWebApi = false,
-                    Version = Const.Version
-                };
-            }
-        }
+
 
         public static string GetFormName(string formName, string @class)
         {
