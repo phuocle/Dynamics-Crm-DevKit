@@ -37,7 +37,7 @@ namespace DynamicsCrm.DevKit.Shared
             RootNamespace = rootNamespace;
             Comment = comment;
             var forms = XrmHelper.GetForms(CrmServiceClient, EntityMetadata.ObjectTypeCode);
-            forms = forms.Where(x => Comment.JsForm.Any(y => x.Name.ToLower().EndsWith(y.ToLower()))).ToList();
+            //forms = forms.Where(x => Comment.JsForm.Any(y => x.Name.ToLower().EndsWith(y.ToLower()))).ToList();
             var code = string.Empty;
             var @namespace = Utility.GetNameSpace(RootNamespace);
             var logicalName = entityMetadata.LogicalName;

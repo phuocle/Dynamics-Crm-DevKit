@@ -196,7 +196,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 {
                     var oldCode = Utility.ReadAllText(file);
                     var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.ObjectTypeCode, dtsFile);
-                    if (comment.JsForm.Count == 0)
+                    if (!comment.JsForm)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
                         i++;

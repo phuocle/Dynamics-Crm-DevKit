@@ -103,6 +103,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
+                var attributeSchemaName = Utility.GetAttributeSchemaName(attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
                 var a = $"a: '{attribute.LogicalName}'";
@@ -123,17 +124,17 @@ namespace DynamicsCrm.DevKit.Shared
                     attribute.AttributeTypeName == AttributeTypeDisplayName.FileType
                 )
                 {
-                    code += $"{TAB}{TAB}{TAB}{attribute.SchemaName}: {{ {a}{r} }},{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{attributeSchemaName}: {{ {a}{r} }},{NEW_LINE}";
                 }
                 else if (attribute.AttributeType == AttributeTypeCode.DateTime)
                 {
                     var suffix = GetSuffix(attribute);
-                    code += $"{TAB}{TAB}{TAB}{attribute.SchemaName}{suffix}: {{ {a}{r} }},{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{attributeSchemaName}{suffix}: {{ {a}{r} }},{NEW_LINE}";
                 }
                 else if (attribute is MultiSelectPicklistAttributeMetadata)
                 {
                     var g = (attribute is MultiSelectPicklistAttributeMetadata) ? $", g: true" : $"";
-                    code += $"{TAB}{TAB}{TAB}{attribute.SchemaName}: {{ {a}{g}{r} }},{NEW_LINE}";
+                    code += $"{TAB}{TAB}{TAB}{attributeSchemaName}: {{ {a}{g}{r} }},{NEW_LINE}";
                 }
                 else if (attribute.AttributeType == AttributeTypeCode.Owner)
                 {
@@ -148,10 +149,10 @@ namespace DynamicsCrm.DevKit.Shared
                         var entityLogicalName = lookup.Targets[0];
                         XrmHelper.EntitiesMetadata.AddIfNotExist(CrmServiceClient, entityLogicalName);
                         var entityMetadata = XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName);
-                        var b = $"b: '{((attribute.IsCustomAttribute ?? false) ? attribute.SchemaName : attribute.LogicalName)}'";
+                        var b = $"b: '{((attribute.IsCustomAttribute ?? false) ? attributeSchemaName : attribute.LogicalName)}'";
                         var c = $"c: '{entityMetadata.LogicalCollectionName}'";
                         var d = $"d: '{lookup.Targets[0]}'";
-                        code += $"{TAB}{TAB}{TAB}{attribute.SchemaName}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
+                        code += $"{TAB}{TAB}{TAB}{attributeSchemaName}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
                     }
                     else
                     {
@@ -177,7 +178,7 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     if ((image.IsPrimaryImage ?? false) && image.LogicalName != "entityimage")
                         code += GetGeneratorImageCode("EntityImage", image.LogicalName);
-                    code += GetGeneratorImageCode(attribute.SchemaName, attribute.LogicalName);
+                    code += GetGeneratorImageCode(attributeSchemaName, attribute.LogicalName);
                 }
                 else
                 {
@@ -188,6 +189,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{NEW_LINE}";
             return code;
         }
+
 
         private static string GetGeneratorImageCode(string schemaName, string logicalName)
         {

@@ -319,7 +319,7 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     return new CommentTypeScriptDeclaration
                     {
-                        JsForm = new List<string>(),
+                        JsForm = false,
                         JsWebApi = false,
                         Version = Const.Version
                     };
@@ -329,7 +329,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 return new CommentTypeScriptDeclaration
                 {
-                    JsForm = XrmHelper.GetForms(crmServiceClient, objectTypeCode).Select(x => x.Name).ToList(),
+                    JsForm = GetForms(crmServiceClient, objectTypeCode).Select(x => x.Name).ToList().Count > 0,
                     JsWebApi = true,
                     Version = Const.Version
                 };

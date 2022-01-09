@@ -25,7 +25,7 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"//@ts-check{NEW_LINE}";
             _d_ts += $"///<reference path=\"devkit.d.ts\" />{NEW_LINE}";
             _d_ts += $"declare namespace {rootNamespace} {{{NEW_LINE}";
-            if (comment.JsForm.Count > 0)
+            if (comment.JsForm)
                 _d_ts += GetForm_d_ts();
             if (comment.JsWebApi)
                 _d_ts += GetWebApi_d_ts();
@@ -44,9 +44,10 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (XrmHelper.IsOptionSet(attribute))
                 {
+                    var attributeSchemaName = Utility.GetAttributeSchemaName(attribute);
                     var values = attribute.OptionSetValues();
                     if (values.Count == 0) continue;
-                    _d_ts += $"{TAB}{TAB}enum {attribute.SchemaName} {{{NEW_LINE}";
+                    _d_ts += $"{TAB}{TAB}enum {attributeSchemaName} {{{NEW_LINE}";
                     foreach (var value in values)
                     {
                         _d_ts += $"{TAB}{TAB}{TAB}/** {value.Value} */{NEW_LINE}";
@@ -110,25 +111,32 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
+                var attributeSchemaName = Utility.GetAttributeSchemaName(attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
 
                 var Readonly = (!(attribute.IsValidForCreate ?? false) && !(attribute.IsValidForUpdate ?? false)) ? "Readonly" : string.Empty;
                 var jdoc = attribute?.Description?.UserLocalizedLabel?.Label ?? string.Empty;
-                if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                 switch (attribute.AttributeType)
                 {
                     case AttributeTypeCode.Picklist:
                     case AttributeTypeCode.State:
                     case AttributeTypeCode.Status:
                         if (attribute is MultiSelectPicklistAttributeMetadata)
-                            _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.MultiOptionSetValue{Readonly};\r\n";
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.MultiOptionSetValue{Readonly};{NEW_LINE}";
+                        }
                         else if (attribute is PicklistAttributeMetadata || attribute is StateAttributeMetadata || attribute is StatusAttributeMetadata)
-                            _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.OptionSetValue{Readonly};\r\n";
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.OptionSetValue{Readonly};{NEW_LINE}";
+                        }
                         break;
                     case AttributeTypeCode.Owner:
+                        _d_ts += $"{TAB}{TAB}/** Enter the user who is assigned to manage the record. This field is updated every time the record is assigned to a different user */{NEW_LINE}";
                         _d_ts += $"{TAB}{TAB}OwnerId_systemuser: DevKit.WebApi.LookupValue{Readonly};\r\n";
-                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}/** Enter the team who is assigned to manage the record. This field is updated every time the record is assigned to a different team */{NEW_LINE}";
                         _d_ts += $"{TAB}{TAB}OwnerId_team: DevKit.WebApi.LookupValue{Readonly};\r\n";
                         break;
                     case AttributeTypeCode.Lookup:
@@ -137,16 +145,17 @@ namespace DynamicsCrm.DevKit.Shared
                         {
                             if (lookup.Targets.Count() == 1)
                             {
-                                _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.LookupValue{Readonly};\r\n";
+                                if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                                _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
                             }
                             else
                             {
                                 if (attribute.LogicalName == "acceptingentityid")
                                 {
                                     if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                                    _d_ts += $"{TAB}{TAB}acceptingentityid_queue: DevKit.WebApi.LookupValue{Readonly};\r\n";
+                                    _d_ts += $"{TAB}{TAB}acceptingentityid_queue: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
                                     if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                                    _d_ts += $"{TAB}{TAB}acceptingentityid_systemuser: DevKit.WebApi.LookupValue{Readonly};\r\n";
+                                    _d_ts += $"{TAB}{TAB}acceptingentityid_systemuser: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
                                 }
                                 else
                                 {
@@ -154,7 +163,7 @@ namespace DynamicsCrm.DevKit.Shared
                                     {
                                         var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                                        _d_ts += $"{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: DevKit.WebApi.LookupValue{Readonly};\r\n";
+                                        _d_ts += $"{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
                                     }
                                 }
                             }
@@ -162,63 +171,74 @@ namespace DynamicsCrm.DevKit.Shared
                         break;
                     case AttributeTypeCode.Memo:
                     case AttributeTypeCode.String:
-                        _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.StringValue{Readonly};\r\n";
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.StringValue{Readonly};{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Boolean:
-                        _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.BooleanValue{Readonly};\r\n";
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.BooleanValue{Readonly};{NEW_LINE}";
                         break;
                     case AttributeTypeCode.DateTime:
                         if (attribute is DateTimeAttributeMetadata dateTime)
                         {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                             if (dateTime.DateTimeBehavior == DateTimeBehavior.DateOnly)
-                                _d_ts += $"{TAB}{TAB}{attribute.SchemaName}_DateOnly: DevKit.WebApi.DateOnlyValue{Readonly};{NEW_LINE}";
+                                _d_ts += $"{TAB}{TAB}{attributeSchemaName}_DateOnly: DevKit.WebApi.DateOnlyValue{Readonly};{NEW_LINE}";
                             else if (dateTime.DateTimeBehavior == DateTimeBehavior.TimeZoneIndependent)
                             {
                                 if (dateTime.Format == DateTimeFormat.DateOnly)
-                                    _d_ts += $"{TAB}{TAB}{attribute.SchemaName}_TimezoneDateOnly: DevKit.WebApi.TimezoneDateOnlyValue{Readonly};{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{attributeSchemaName}_TimezoneDateOnly: DevKit.WebApi.TimezoneDateOnlyValue{Readonly};{NEW_LINE}";
                                 else
-                                    _d_ts += $"{TAB}{TAB}{attribute.SchemaName}_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue{Readonly};{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{attributeSchemaName}_TimezoneDateAndTime: DevKit.WebApi.TimezoneDateAndTimeValue{Readonly};{NEW_LINE}";
                             }
                             else
                             {
                                 if (dateTime.Format == DateTimeFormat.DateOnly)
-                                    _d_ts += $"{TAB}{TAB}{attribute.SchemaName}_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue{Readonly};{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{attributeSchemaName}_UtcDateOnly: DevKit.WebApi.UtcDateOnlyValue{Readonly};{NEW_LINE}";
                                 else
-                                    _d_ts += $"{TAB}{TAB}{attribute.SchemaName}_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue{Readonly};{NEW_LINE}";
+                                    _d_ts += $"{TAB}{TAB}{attributeSchemaName}_UtcDateAndTime: DevKit.WebApi.UtcDateAndTimeValue{Readonly};{NEW_LINE}";
                             }
                         }
                         break;
                     case AttributeTypeCode.Integer:
-                        _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.IntegerValue{Readonly};\r\n";
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.IntegerValue{Readonly};{NEW_LINE}";
                         break;
                     case AttributeTypeCode.BigInt:
-                        _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.BigIntValue{Readonly};\r\n";
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.BigIntValue{Readonly};{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Decimal:
-                        _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.DecimalValue{Readonly};\r\n";
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.DecimalValue{Readonly};{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Double:
-                        _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.DoubleValue{Readonly};\r\n";
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.DoubleValue{Readonly};{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Money:
-                        _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.MoneyValue{Readonly};\r\n";
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.MoneyValue{Readonly};{NEW_LINE}";
                         break;
                     case AttributeTypeCode.Uniqueidentifier:
-                        _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.GuidValue{Readonly};\r\n";
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.GuidValue{Readonly};{NEW_LINE}";
                         break;
                     case AttributeTypeCode.ManagedProperty:
-                        _d_ts += $"{TAB}{TAB}{attribute.SchemaName}: DevKit.WebApi.ManagedPropertyValue{Readonly};\r\n";
+                        if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                        _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.ManagedPropertyValue{Readonly};{NEW_LINE}";
                         break;
 
                     default:
                         if (attribute is ImageAttributeMetadata image)
                         {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                             if ((image.IsPrimaryImage ?? false) && image.LogicalName != "entityimage")
                                 _d_ts += GetGeneratorImageCode_d_ts("EntityImage", image.LogicalName);
-                            _d_ts += GetGeneratorImageCode_d_ts(attribute.SchemaName, attribute.LogicalName);
+                            _d_ts += GetGeneratorImageCode_d_ts(attributeSchemaName, attribute.LogicalName);
                         }
                         else
-                            _d_ts += $"{attribute.AttributeType}-{attribute.SchemaName}-{attribute.LogicalName}\r\n";
+                            _d_ts += $"{attribute.AttributeType}-{attributeSchemaName}-{attribute.LogicalName};{NEW_LINE}";
                         break;
                 }
 
