@@ -283,6 +283,30 @@ namespace DynamicsCrm.DevKit.Shared
         private static string GetFormQuickCreate_d_ts(SystemForm form, string @namespace)
         {
             var _d_ts = string.Empty;
+            var formName = Utility.SafeIdentifier(Utility.GetFormName(form.Name, EntityMetadata.SchemaName));
+
+            _d_ts += $"\tnamespace Form{formName} {{\r\n";
+            var form_d_ts_Body_QuickCreate = GetForm_d_ts_Body(form.FormXml);
+            if (form_d_ts_Body_QuickCreate.Length > 0)
+            {
+                _d_ts += form_d_ts_Body_QuickCreate;
+            }
+            _d_ts += $"\t}}\r\n";
+            _d_ts += $"\tclass Form{formName} extends DevKit.IForm {{\r\n";
+            _d_ts += $"\t\t/**\r\n";
+            _d_ts += $"\t\t* DynamicsCrm.DevKit form {formName}\r\n";
+            _d_ts += $"\t\t* @param executionContext the execution context\r\n";
+            _d_ts += $"\t\t* @param defaultWebResourceName default resource name. E.g.: \"devkit_/resources/Resource\"\r\n";
+            _d_ts += $"\t\t*/\r\n";
+            _d_ts += $"\t\tconstructor(executionContext: any, defaultWebResourceName?: string);\r\n";
+            _d_ts += $"\t\t/** Utility functions/methods/objects for Dynamics 365 form */\r\n";
+            _d_ts += $"\t\tUtility: DevKit.Utility;\r\n";
+            if (form_d_ts_Body_QuickCreate.Length > 0)
+            {
+                _d_ts += $"\t\t/** The Body section of form {formName} */\r\n";
+                _d_ts += $"\t\tBody: {@namespace}.Form{formName}.Body;\r\n";
+            }
+            _d_ts += $"\t}}\r\n";
             return _d_ts;
         }
 

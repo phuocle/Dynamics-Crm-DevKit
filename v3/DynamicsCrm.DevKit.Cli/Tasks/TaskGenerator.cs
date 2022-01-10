@@ -223,7 +223,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                             Utility.ForceWriteAllText(dtsFile, newDTS);
                             if (!File.Exists(file))
                             {
-                                Utility.ForceWriteAllText(file, GetDefaultFileWithApi(entityMetadata.SchemaName));
+                                Utility.ForceWriteAllText(file, GetDefaultFileWithForm(entityMetadata));
                             }
                             CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
                         }
@@ -235,6 +235,36 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                 }
                 i++;
             }
+        }
+
+        private string GetDefaultFileWithForm(EntityMetadata entityMetadata)
+        {
+            var forms = XrmHelper.GetEntityForms(CrmServiceClient, entityMetadata.LogicalName);
+            if (!forms.Any()) return GetDefaultFileWithApi(entityMetadata.SchemaName);
+            var @namespace = Utility.GetNameSpace(json.rootnamespace);
+            var code = string.Empty;
+            code += $"//@ts-check\r\n";
+            code += $"///<reference path=\"{entityMetadata.SchemaName}.d.ts\" />\r\n";
+            code += "\"use strict\";\r\n";
+            foreach (var form in forms)
+            {
+                var formName = Utility.GetFormName(form.Name, entityMetadata.SchemaName);
+                var type = $"{@namespace}.Form{Utility.SafeIdentifier(formName)}";
+                code += $"var form{Utility.SafeIdentifier(formName)} = (function () {{\r\n";
+                code += $"\t\"use strict\";\r\n";
+                code += $"\t/** @type {type} */\r\n";
+                code += $"\tvar form = null;\r\n";
+                code += $"\tasync function onLoad(executionContext) {{\r\n";
+                code += $"\t\tform = new {type}(executionContext);\r\n";
+                code += $"\r\n";
+                code += $"\t}}\r\n";
+                code += $"\tasync function onSave(executionContext) {{\r\n";
+                code += $"\t}}\r\n";
+                code += $"\treturn {{\r\n\t\tOnLoad: onLoad,\r\n\t\tOnSave: onSave\r\n\t}};\r\n";
+                code += $"}})();\r\n";
+            }
+            code = code.TrimEnd("\r\n".ToCharArray());
+            return code;
         }
 
         private void GeneratorLateBound(List<string> schemaNames)
