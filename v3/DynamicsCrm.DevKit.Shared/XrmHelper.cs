@@ -13,7 +13,18 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class XrmHelper
     {
-        public static List<EntityMetadata> EntitiesMetadata { get; set; } = null;
+        public enum FormType
+        {
+            Main = 2,
+            QuickCreate = 7,
+            QuickView = 6
+        };
+
+
+        public static List<EntityMetadata> EntitiesMetadata { get; set; } = new List<EntityMetadata>();
+
+        public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
+
         public static string BuildConnectionString(string type, string url, string user, string pass)
         {
             if (type == "ClientSecret")
@@ -145,6 +156,8 @@ namespace DynamicsCrm.DevKit.Shared
             return (true, solutionId, prefix);
         }
 
+
+
         //public static List<string> GetAllForms(CrmServiceClient crmServiceClient, string schemaName)
         //{
         //    throw new NotImplementedException();
@@ -257,20 +270,29 @@ namespace DynamicsCrm.DevKit.Shared
         }
         public static void ReadEntitiesMetadata(CrmServiceClient crmServiceClient)
         {
-            if (XrmHelper.EntitiesMetadata == null)
+            if (XrmHelper.EntitiesMetadata.Count == 0)
             {
                 XrmHelper.EntitiesMetadata = XrmHelper.GetEntitiesMetadata(crmServiceClient);
             }
         }
 
-        public static List<SystemForm> GetForms(CrmServiceClient crmServiceClient, int? objectTypeCode)
+        public static void ReadEntitiesFormXml(CrmServiceClient crmServiceClient)
+        {
+            if (XrmHelper.EntitiesFormXml.Count == 0)
+            {
+                XrmHelper.EntitiesFormXml = XrmHelper.GetEntitiesFormXml(crmServiceClient);
+            }
+        }
+
+        public static List<SystemForm> GetEntityFormXml(CrmServiceClient crmServiceClient, string objectTypeCodeName)
         {
             var fetchData = new
             {
                 formactivationstate = "1",
-                objecttypecode = objectTypeCode ?? -1,
-                type = "2",
-                type2 = "7"
+                type = (int)FormType.Main,
+                type2 = (int)FormType.QuickCreate,
+                type3 = (int)FormType.QuickView,
+                objecttypecode = objectTypeCodeName
             };
             var fetchXml = $@"
 <fetch>
@@ -279,13 +301,60 @@ namespace DynamicsCrm.DevKit.Shared
     <attribute name='name' />
     <attribute name='formxml' />
     <attribute name='type' />
+    <attribute name='objecttypecode' />
+    <attribute name='formid' />
     <order attribute='name' descending='false'/>
     <filter type='and'>
       <condition attribute='formactivationstate' operator='eq' value='{fetchData.formactivationstate}'/>
-      <condition attribute='objecttypecode' operator='eq' value='{fetchData.objecttypecode}'/>
+      <condition attribute='objecttypecodename' operator='eq' value='{fetchData.objecttypecode}'/>
       <filter type='or'>
         <condition attribute='type' operator='eq' value='{fetchData.type}'/>
         <condition attribute='type' operator='eq' value='{fetchData.type2}'/>
+        <condition attribute='type' operator='eq' value='{fetchData.type3}'/>
+      </filter>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            if (rows.Entities.Count == 0) return new List<SystemForm>();
+            var forms = rows.Entities.Select(x => new SystemForm
+            {
+                Name = x.GetAttributeValue<string>("name"),
+                Description = x.GetAttributeValue<string>("description"),
+                FormXml = x.GetAttributeValue<string>("formxml"),
+                IsQuickCreate = x.GetAttributeValue<OptionSetValue>("type")?.Value == 7,
+                EntityLogicalName = x.GetAttributeValue<string>("objecttypecode"),
+                FormType = (FormType)x.GetAttributeValue<OptionSetValue>("type")?.Value,
+                FormId = x.GetAttributeValue<Guid?>("formid")
+            });
+            return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
+        }
+
+        public static List<SystemForm> GetEntitiesFormXml(CrmServiceClient crmServiceClient)
+        {
+            var fetchData = new
+            {
+                formactivationstate = "1",
+                type = (int)FormType.Main,
+                type2 = (int)FormType.QuickCreate,
+                type3 = (int)FormType.QuickView
+            };
+            var fetchXml = $@"
+<fetch>
+  <entity name='systemform'>
+    <attribute name='description' />
+    <attribute name='name' />
+    <attribute name='formxml' />
+    <attribute name='type' />
+    <attribute name='objecttypecode' />
+    <attribute name='formid' />
+    <order attribute='name' descending='false'/>
+    <filter type='and'>
+      <condition attribute='formactivationstate' operator='eq' value='{fetchData.formactivationstate}'/>
+      <filter type='or'>
+        <condition attribute='type' operator='eq' value='{fetchData.type}'/>
+        <condition attribute='type' operator='eq' value='{fetchData.type2}'/>
+        <condition attribute='type' operator='eq' value='{fetchData.type3}'/>
       </filter>
     </filter>
   </entity>
@@ -296,14 +365,15 @@ namespace DynamicsCrm.DevKit.Shared
                 Name = x.GetAttributeValue<string>("name"),
                 Description = x.GetAttributeValue<string>("description"),
                 FormXml = x.GetAttributeValue<string>("formxml"),
-                IsQuickCreate = x.GetAttributeValue<OptionSetValue>("type").Value == 7
+                IsQuickCreate = x.GetAttributeValue<OptionSetValue>("type")?.Value == 7,
+                EntityLogicalName = x.GetAttributeValue<string>("objecttypecode"),
+                FormType = (FormType) x.GetAttributeValue<OptionSetValue>("type")?.Value,
+                FormId = x.GetAttributeValue<Guid?>("formid")
             });
-            //forms = forms.GroupBy(x => x.Name).Where(g => g.Count() == 1).Select(g => g.First()).OrderBy(x => x.Name);
-            //forms = forms.Where(x => Comment.JsForm.Any(y => x.Name.ToLower().EndsWith(y.ToLower())));
-            return forms.OrderBy(x => x.Name).ToList();
+            return forms.OrderBy(x => x.EntityLogicalName).ThenBy(x => x.Name).ToList();
         }
 
-        public static CommentTypeScriptDeclaration GetComment(CrmServiceClient crmServiceClient, int? objectTypeCode, string dtsFile)
+        public static CommentTypeScriptDeclaration GetComment(CrmServiceClient crmServiceClient, string entityLogicalName, string dtsFile)
         {
             if (File.Exists(dtsFile))
             {
@@ -327,9 +397,10 @@ namespace DynamicsCrm.DevKit.Shared
             }
             else
             {
+                XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityLogicalName);
                 return new CommentTypeScriptDeclaration
                 {
-                    JsForm = GetForms(crmServiceClient, objectTypeCode).Select(x => x.Name).ToList().Count > 0,
+                    JsForm = XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName),
                     JsWebApi = true,
                     Version = Const.Version
                 };

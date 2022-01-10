@@ -30,14 +30,22 @@ namespace DynamicsCrm.DevKit.Shared
         private static string RootNamespace { get; set; }
         private static CommentTypeScriptDeclaration Comment { get; set; }
 
-        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment)
+        public static string GetCode(CrmServiceClient crmServiceClient, EntityMetadata entityMetadata, string rootNamespace, CommentTypeScriptDeclaration comment, out string dts)
         {
             CrmServiceClient = crmServiceClient;
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
-            var forms = XrmHelper.GetForms(CrmServiceClient, EntityMetadata.ObjectTypeCode);
-            //forms = forms.Where(x => Comment.JsForm.Any(y => x.Name.ToLower().EndsWith(y.ToLower()))).ToList();
+            XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityMetadata.LogicalName);
+            var forms = XrmHelper.EntitiesFormXml
+                .Where(x => x.EntityLogicalName == entityMetadata.LogicalName  && (x.FormType == XrmHelper.FormType.Main || x.FormType == XrmHelper.FormType.QuickCreate))
+                .OrderBy(x => x.Name)
+                .ToList();
+            if (!forms.Any())
+            {
+                dts = String.Empty;
+                return String.Empty;
+            }
             var code = string.Empty;
             var @namespace = Utility.GetNameSpace(RootNamespace);
             var logicalName = entityMetadata.LogicalName;
@@ -53,6 +61,7 @@ namespace DynamicsCrm.DevKit.Shared
                 code += GetQuickCreateFormCode(form, @namespace);
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
+            dts = JsTypeScriptDeclaration.GetCode(crmServiceClient, entityMetadata, rootNamespace, comment);
             return code;
         }
 
@@ -224,11 +233,12 @@ namespace DynamicsCrm.DevKit.Shared
                          ).FirstOrDefault();
             if (node2 == null) return string.Empty;
             var xdoc2 = XDocument.Parse(node2);
-            var formId = (from x in xdoc2.Descendants("QuickFormId") select x.Value).FirstOrDefault();
-            if (formId == null) return string.Empty;
+            //<QuickFormIds><QuickFormId entityname="contact">29DE27BC-A257-4F29-99CF-BAB4A84E688F</QuickFormId></QuickFormIds>
+            var quickViewXml = (from x in xdoc2.Descendants("QuickFormId") select new { formId = x.Value, entityLogicalName = x?.Attribute("entityname")?.Value }).FirstOrDefault();
+            if (quickViewXml == null) return string.Empty;
             var quickViewFormXml = string.Empty;
-            var quickViewEntityLogicalName = string.Empty;
-            GetFormXml(formId, out quickViewFormXml, out quickViewEntityLogicalName);
+            //var quickViewEntityLogicalName = string.Empty;
+            GetFormXml(quickViewXml.formId, quickViewXml.entityLogicalName, out quickViewFormXml);
             if (quickViewFormXml == string.Empty) return string.Empty;
             var xdoc3 = XDocument.Parse(quickViewFormXml);
             var fields = (from x in xdoc3
@@ -250,8 +260,8 @@ namespace DynamicsCrm.DevKit.Shared
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
             fields = fields.OrderBy(x => x.Name).ToList();
-            XrmHelper.EntitiesMetadata.AddIfNotExist(CrmServiceClient, quickViewEntityLogicalName);
-            var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewEntityLogicalName).FirstOrDefault();
+            XrmHelper.EntitiesMetadata.AddIfNotExist(CrmServiceClient, quickViewXml.entityLogicalName);
+            var quickViewMetadata = XrmHelper.EntitiesMetadata.Where(x => x.LogicalName == quickViewXml.entityLogicalName).FirstOrDefault();
             if (quickViewMetadata == null) return String.Empty;
             foreach (var field in fields)
             {
@@ -265,29 +275,15 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        private static void GetFormXml(string formId, out string formXml, out string entityLogicalName)
+        private static void GetFormXml(string formId, string entityLogicalName, out string formXml)
         {
             formXml = string.Empty;
-            entityLogicalName = string.Empty;
-            var fetchData = new
+            XrmHelper.EntitiesFormXml.AddIfNotExist(CrmServiceClient, entityLogicalName);
+            var form = XrmHelper.EntitiesFormXml.FirstOrDefault(x => x.FormType == XrmHelper.FormType.QuickView && x.FormId == Guid.Parse(formId));
+            if (form != null)
             {
-                formid = formId
-            };
-            var fetchXml = $@"
-<fetch>
-  <entity name='systemform'>
-    <attribute name='formxml' />
-    <attribute name='objecttypecode' />
-    <filter>
-      <condition attribute='formid' operator='eq' value='{fetchData.formid}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            if (rows.Entities.Count != 1) return;
-            var entity = rows.Entities[0];
-            formXml = entity.GetAttributeValue<string>("formxml");
-            entityLogicalName = entity.GetAttributeValue<string>("objecttypecode");
+                formXml = form.FormXml;
+            }
         }
 
         private static string GetARealClassId(string formXml, string classId, string controlId)

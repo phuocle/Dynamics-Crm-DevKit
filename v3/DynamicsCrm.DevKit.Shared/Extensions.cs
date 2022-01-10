@@ -121,11 +121,14 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static bool EndsWith (this List<string> items, string value)
+        public static void AddIfNotExist(this List<SystemForm> entitiesFormXml, CrmServiceClient crmServiceClient, string entityLogicalName)
         {
-            foreach (string item in items)
-                if (item.ToLower().EndsWith(value.ToLower())) return true;
-            return false;
+            if (!XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName))
+            {
+                var forms = XrmHelper.GetEntityFormXml(crmServiceClient, entityLogicalName);
+                if (forms.Count > 0) XrmHelper.EntitiesFormXml.AddRange(forms);
+            }
         }
+
     }
 }
