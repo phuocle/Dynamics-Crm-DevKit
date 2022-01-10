@@ -22,6 +22,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static List<EntityMetadata> EntitiesMetadata { get; set; } = new List<EntityMetadata>();
 
         public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
+        public static List<ProcessForm> EntitiesProcessForm { get; set; } = new List<ProcessForm>();
 
         public static string BuildConnectionString(string type, string url, string user, string pass)
         {
@@ -154,13 +155,6 @@ namespace DynamicsCrm.DevKit.Shared
             return (true, solutionId, prefix);
         }
 
-
-
-        //public static List<string> GetAllForms(CrmServiceClient crmServiceClient, string schemaName)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         public static List<DownloadFile> GetReportsBySolution(CrmServiceClient crmServiceClient, string solution)
         {
             var fetchData = new
@@ -282,7 +276,79 @@ namespace DynamicsCrm.DevKit.Shared
             }
         }
 
-        public static List<SystemForm> GetEntityFormXml(CrmServiceClient crmServiceClient, string objectTypeCodeName)
+        public static void ReadEntitiesProcessForm(CrmServiceClient crmServiceClient)
+        {
+            if (XrmHelper.EntitiesProcessForm.Count == 0)
+            {
+                XrmHelper.EntitiesProcessForm = XrmHelper.GetEntitiesProcessForm(crmServiceClient);
+            }
+        }
+
+        private static List<ProcessForm> GetEntitiesProcessForm(CrmServiceClient crmServiceClient)
+        {
+            var fetchData = new
+            {
+                category = "4",
+                statecode = "1",
+                businessprocesstype = "0"
+            };
+            var fetchXml = $@"
+            <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+              <entity name='workflow'>
+                <attribute name='name' />
+                <attribute name='uniquename' />
+                <attribute name='xaml' />
+                <attribute name='primaryentity' />
+                <filter type='and'>
+                  <condition attribute='category' operator='eq' value='{fetchData.category /*4*/}'/>
+                  <condition attribute='statecode' operator='eq' value='{fetchData.statecode /*1*/}'/>
+                  <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype /*4*/}'/>
+                </filter>
+              </entity>
+            </fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return rows.Entities.Select(x => new ProcessForm
+            {
+                EntityLogicalName = x.GetAttributeValue<string>("primaryentity"),
+                Name = x.GetAttributeValue<string>("name"),
+                xaml = x.GetAttributeValue<string>("xaml")
+            }).ToList();
+        }
+
+        public static List<ProcessForm> GetEntityProcessForm(CrmServiceClient crmServiceClient, int? objectTypeCode)
+        {
+            var fetchData = new
+            {
+                category = "4",
+                statecode = "1",
+                primaryentity = objectTypeCode ?? -1,
+                businessprocesstype = "0"
+            };
+            var fetchXml = $@"
+<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+  <entity name='workflow'>
+    <attribute name='name' />
+    <attribute name='uniquename' />
+    <attribute name='xaml' />
+    <attribute name='primaryentity' />
+    <filter type='and'>
+      <condition attribute='category' operator='eq' value='{fetchData.category /*4*/}'/>
+      <condition attribute='statecode' operator='eq' value='{fetchData.statecode /*1*/}'/>
+      <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity /*4*/}'/>
+      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype /*4*/}'/>
+    </filter>
+  </entity>
+</fetch>";
+            var rows = crmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+            return rows.Entities.Select(x => new ProcessForm
+            {
+                EntityLogicalName = x.GetAttributeValue<string>("primaryentity"),
+                Name = x.GetAttributeValue<string>("name"),
+                xaml = x.GetAttributeValue<string>("xaml")
+            }).ToList();
+        }
+
+        public static List<SystemForm> GetEntityFormXml(CrmServiceClient crmServiceClient, int? objectTypeCode)
         {
             var fetchData = new
             {
@@ -290,7 +356,7 @@ namespace DynamicsCrm.DevKit.Shared
                 type = (int)FormType.Main,
                 type2 = (int)FormType.QuickCreate,
                 type3 = (int)FormType.QuickView,
-                objecttypecode = objectTypeCodeName
+                objecttypecode = objectTypeCode ?? -1
             };
             var fetchXml = $@"
 <fetch>
@@ -304,7 +370,7 @@ namespace DynamicsCrm.DevKit.Shared
     <order attribute='name' descending='false'/>
     <filter type='and'>
       <condition attribute='formactivationstate' operator='eq' value='{fetchData.formactivationstate}'/>
-      <condition attribute='objecttypecodename' operator='eq' value='{fetchData.objecttypecode}'/>
+      <condition attribute='objecttypecode' operator='eq' value='{fetchData.objecttypecode}'/>
       <filter type='or'>
         <condition attribute='type' operator='eq' value='{fetchData.type}'/>
         <condition attribute='type' operator='eq' value='{fetchData.type2}'/>

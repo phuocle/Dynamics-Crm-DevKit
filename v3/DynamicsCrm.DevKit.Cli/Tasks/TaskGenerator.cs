@@ -206,7 +206,7 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
 
-                        Utility.ForceWriteAllText(dtsFile, newDTS);
+                        //Utility.ForceWriteAllText(dtsFile, newDTS);
 
                     }
                     else
@@ -350,6 +350,13 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             wait2.Start();
             XrmHelper.ReadEntitiesFormXml(crmServiceClient);
             wait2.Abort();
+            CliLog.WriteLine("");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+
+            var wait3 = new Thread(() => CliLog.Waiting("Reading entities Process "));
+            wait3.Start();
+            XrmHelper.ReadEntitiesProcessForm(crmServiceClient);
+            wait3.Abort();
             CliLog.WriteLine("");
             CliLog.WriteLine(ConsoleColor.White, "|");
         }

@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.msdyn_liveworkstreamApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var msdyn_liveworkstream = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -86,7 +86,6 @@ var DevKit;
 			msdyn_ConnectorsURL: { a: 'msdyn_connectorsurl' },
 			msdyn_conversationmode: { a: 'msdyn_conversationmode' },
 			msdyn_CustomerID: { a: 'msdyn_customerid' },
-			msdyn_direction: { a: 'msdyn_direction' },
 			msdyn_enableagentaffinity: { a: 'msdyn_enableagentaffinity' },
 			msdyn_enableautomatedmessages: { a: 'msdyn_enableautomatedmessages' },
 			msdyn_enableselectingfrompushbasedworkstreams: { a: 'msdyn_enableselectingfrompushbasedworkstreams' },
@@ -94,7 +93,6 @@ var DevKit;
 			msdyn_FallBackLanguage: { a: 'msdyn_fallbacklanguage' },
 			msdyn_FollowUpAfterWaiting: { a: 'msdyn_followupafterwaiting' },
 			msdyn_handlingtimethreshold: { a: 'msdyn_handlingtimethreshold' },
-			msdyn_isdefault: { a: 'msdyn_isdefault' },
 			msdyn_LastValidationOn_TimezoneDateAndTime: { a: 'msdyn_lastvalidationon' },
 			msdyn_LastValidationStatus: { a: 'msdyn_lastvalidationstatus' },
 			msdyn_liveworkstreamId: { a: 'msdyn_liveworkstreamid' },
@@ -110,7 +108,6 @@ var DevKit;
 			msdyn_notificationtemplate_incoming_unauth: { a: 'msdyn_notificationtemplate_incoming_unauth' },
 			msdyn_notificationtemplate_supervisorassign: { a: 'msdyn_notificationtemplate_supervisorassign' },
 			msdyn_notificationtemplate_transfer: { a: 'msdyn_notificationtemplate_transfer' },
-			msdyn_outboundqueueid: { b: 'msdyn_outboundqueueid', a: '_msdyn_outboundqueueid_value', c: 'queues', d: 'queue' },
 			msdyn_recordidentificationrule: { a: 'msdyn_recordidentificationrule' },
 			msdyn_RecordIdentificationValidationRule: { a: 'msdyn_recordidentificationvalidationrule' },
 			msdyn_routingcontractid: { b: 'msdyn_routingcontractid', a: '_msdyn_routingcontractid_value', c: 'msdyn_decisioncontracts', d: 'msdyn_decisioncontract' },
@@ -178,92 +175,88 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.msdyn_liveworkstream = {
-			msdyn_AllowedPresences : {
-				Available: 192360000,
-				Away: 192360003,
-				Busy: 192360001,
-				Busy_DND: 192360002,
-				Offline: 192360004
-			},
-			msdyn_capacityformat : {
-				Profile_based: 192360000,
-				Unit_based: 192350000
-			},
-			msdyn_conversationmode : {
-				Live_Chat: 192350000,
-				Persistent_Chat: 192350001
-			},
-			msdyn_direction : {
-				Inbound: 0,
-				Outbound: 1
-			},
-			msdyn_matchinglogic : {
-				Closest_Match: 192350001,
-				Exact_Match: 192350000
-			},
-			msdyn_mode : {
-				Legacy: 717210000,
-				Simplified: 717210001
-			},
-			msdyn_Notification : {
-				Directly_open_session: 100000000,
-				Screen_pop_with_decline: 100000002,
-				Screen_pop_with_timeout: 100000001
-			},
-			msdyn_Screenpoptimeout_optionSet : {
-				_120: 120,
-				_150: 150,
-				_180: 180,
-				_210: 210,
-				_240: 240,
-				_270: 270,
-				_30: 30,
-				_300: 300,
-				_60: 60,
-				_90: 90
-			},
-			msdyn_smsprovider : {
-				TeleSign: 192350000,
-				Twilio: 192350001
-			},
-			msdyn_streamsource : {
-				Co_browse: 192390000,
-				Custom: 192350002,
-				Entity_Records: 192350000,
-				Facebook: 192330000,
-				LINE: 192310000,
-				Live_chat: 192360000,
-				Microsoft_Teams: 19241000,
-				Screen_sharing: 192400000,
-				SMS: 192340000,
-				Twitter: 192350001,
-				Video: 192380000,
-				Voice: 192370000,
-				WeChat: 192320000,
-				WhatsApp: 192300000
-			},
-			msdyn_workdistributionmode : {
-				Pick: 192350001,
-				Push: 192350000
-			},
-			statecode : {
-				Active: 0,
-				Inactive: 1
-			},
-			statuscode : {
-				Active: 1,
-				Inactive: 2
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.msdyn_liveworkstream = {
+		msdyn_AllowedPresences : {
+			Available: 192360000,
+			Away: 192360003,
+			Busy: 192360001,
+			Busy_DND: 192360002,
+			Offline: 192360004
+		},
+		msdyn_capacityformat : {
+			Profile_based: 192360000,
+			Unit_based: 192350000
+		},
+		msdyn_conversationmode : {
+			Live_Chat: 192350000,
+			Persistent_Chat: 192350001
+		},
+		msdyn_matchinglogic : {
+			Closest_Match: 192350001,
+			Exact_Match: 192350000
+		},
+		msdyn_mode : {
+			Legacy: 717210000,
+			Simplified: 717210001
+		},
+		msdyn_Notification : {
+			Directly_open_session: 100000000,
+			Screen_pop_with_decline: 100000002,
+			Screen_pop_with_timeout: 100000001
+		},
+		msdyn_Screenpoptimeout_optionSet : {
+			_120: 120,
+			_150: 150,
+			_180: 180,
+			_210: 210,
+			_240: 240,
+			_270: 270,
+			_30: 30,
+			_300: 300,
+			_60: 60,
+			_90: 90
+		},
+		msdyn_smsprovider : {
+			TeleSign: 192350000,
+			Twilio: 192350001
+		},
+		msdyn_streamsource : {
+			Co_browse: 192390000,
+			Custom: 192350002,
+			Entity_Records: 192350000,
+			Facebook: 192330000,
+			LINE: 192310000,
+			Live_chat: 192360000,
+			Microsoft_Teams: 19241000,
+			Screen_sharing: 192400000,
+			SMS: 192340000,
+			Twitter: 192350001,
+			Video: 192380000,
+			Voice: 192370000,
+			WeChat: 192320000,
+			WhatsApp: 192300000
+		},
+		msdyn_workdistributionmode : {
+			Pick: 192350001,
+			Push: 192350000
+		},
+		statecode : {
+			Active: 0,
+			Inactive: 1
+		},
+		statuscode : {
+			Active: 1,
+			Inactive: 2
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

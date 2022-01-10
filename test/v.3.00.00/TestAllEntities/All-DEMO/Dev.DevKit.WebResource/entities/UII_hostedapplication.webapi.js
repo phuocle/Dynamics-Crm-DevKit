@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.UII_hostedapplicationApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var uii_hostedapplication = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -190,89 +190,89 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.UII_hostedapplication = {
-			msdyusd_APIVersion : {
-				_10: 100000000
-			},
-			msdyusd_CRMWindowHostType : {
-				Agent_Scripting: 803750006,
-				CCA_Hosted_Application: 803750002,
-				Channel_Integration_Framework: 803750025,
-				Connection_Manager: 803750011,
-				CRM_Dialog: 803750000,
-				CRM_Page: 803750003,
-				CTI_Desktop_Manager: 803750014,
-				Debugger: 803750016,
-				Global_Manager: 803750001,
-				Interactive_Service_Hub_Page: 803750021,
-				KM_Control: 803750019,
-				Listener_Hosted_Control: 803750020,
-				Panel_Layout: 803750015,
-				Popup_Notification: 803750022,
-				Ribbon_Hosted_Control: 803750007,
-				Session_Lines: 803750012,
-				Session_Tabs: 803750009,
-				Standard_Web_Application: 803750004,
-				Todo_List: 803750017,
-				Toolbar_Container: 803750008,
-				Tree_Bar: 803750013,
-				Unified_Interface_KM_Control: 803750024,
-				Unified_Interface_Page: 803750023,
-				USD_Hosted_Control: 803750005,
-				User_Notes: 803750010
-			},
-			msdyusd_HostingType : {
-				Chrome_Process: 803750003,
-				Edge_Process: 803750002,
-				IE_Process: 803750001,
-				Internal_WPF: 803750000
-			},
-			msdyusd_PanelType : {
-				Horizontal_Split: 803750005,
-				Ribbon_Main_Panel: 803750003,
-				Standard_Main_Panel: 803750000,
-				User_Defined: 803750001,
-				Vertical_Split: 803750004,
-				XAML: 803750002
-			},
-			statecode : {
-				Active: 0,
-				Inactive: 1
-			},
-			statuscode : {
-				Active: 1,
-				Inactive: 2
-			},
-			UII_AdapterMode : {
-				Use_Adapter: 3,
-				Use_Automation_Adapter_HAT: 2,
-				Use_No_Adapter: 1
-			},
-			UII_ApplicationHostingMode : {
-				Host_Outside: 1,
-				Use_Dynamic_Positioning: 3,
-				Use_SetParent: 2
-			},
-			UII_HostedApplicationType : {
-				External_Hosted_Application: 3,
-				Hosted_Control: 1,
-				Remote_Hosted_Application: 4,
-				Web_Hosted_Application: 2
-			},
-			UII_TopLevelWindowMode : {
-				None: 1,
-				Use_FindWindow: 3,
-				Use_VB_Top_Level: 2
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.UII_hostedapplication = {
+		msdyusd_APIVersion : {
+			_10: 100000000
+		},
+		msdyusd_CRMWindowHostType : {
+			Agent_Scripting: 803750006,
+			CCA_Hosted_Application: 803750002,
+			Channel_Integration_Framework: 803750025,
+			Connection_Manager: 803750011,
+			CRM_Dialog: 803750000,
+			CRM_Page: 803750003,
+			CTI_Desktop_Manager: 803750014,
+			Debugger: 803750016,
+			Global_Manager: 803750001,
+			Interactive_Service_Hub_Page: 803750021,
+			KM_Control: 803750019,
+			Listener_Hosted_Control: 803750020,
+			Panel_Layout: 803750015,
+			Popup_Notification: 803750022,
+			Ribbon_Hosted_Control: 803750007,
+			Session_Lines: 803750012,
+			Session_Tabs: 803750009,
+			Standard_Web_Application: 803750004,
+			Todo_List: 803750017,
+			Toolbar_Container: 803750008,
+			Tree_Bar: 803750013,
+			Unified_Interface_KM_Control: 803750024,
+			Unified_Interface_Page: 803750023,
+			USD_Hosted_Control: 803750005,
+			User_Notes: 803750010
+		},
+		msdyusd_HostingType : {
+			Chrome_Process: 803750003,
+			Edge_Process: 803750002,
+			IE_Process: 803750001,
+			Internal_WPF: 803750000
+		},
+		msdyusd_PanelType : {
+			Horizontal_Split: 803750005,
+			Ribbon_Main_Panel: 803750003,
+			Standard_Main_Panel: 803750000,
+			User_Defined: 803750001,
+			Vertical_Split: 803750004,
+			XAML: 803750002
+		},
+		statecode : {
+			Active: 0,
+			Inactive: 1
+		},
+		statuscode : {
+			Active: 1,
+			Inactive: 2
+		},
+		UII_AdapterMode : {
+			Use_Adapter: 3,
+			Use_Automation_Adapter_HAT: 2,
+			Use_No_Adapter: 1
+		},
+		UII_ApplicationHostingMode : {
+			Host_Outside: 1,
+			Use_Dynamic_Positioning: 3,
+			Use_SetParent: 2
+		},
+		UII_HostedApplicationType : {
+			External_Hosted_Application: 3,
+			Hosted_Control: 1,
+			Remote_Hosted_Application: 4,
+			Web_Hosted_Application: 2
+		},
+		UII_TopLevelWindowMode : {
+			None: 1,
+			Use_FindWindow: 3,
+			Use_VB_Top_Level: 2
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

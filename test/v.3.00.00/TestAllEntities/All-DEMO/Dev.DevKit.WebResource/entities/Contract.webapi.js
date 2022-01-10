@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.ContractApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var contract = {
 			AccountId: { b: 'accountid', a: '_accountid_value', c: 'accounts', d: 'account', r: true },
 			ActiveOn_UtcDateOnly: { a: 'activeon' },
@@ -165,49 +165,49 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.Contract = {
-			AllotmentTypeCode : {
-				Coverage_Dates: 3,
-				Number_of_Cases: 1,
-				Time: 2
-			},
-			BillingFrequencyCode : {
-				Annually: 5,
-				Bimonthly: 2,
-				Monthly: 1,
-				Quarterly: 3,
-				Semiannually: 4
-			},
-			ContractServiceLevelCode : {
-				Bronze: 3,
-				Gold: 1,
-				Silver: 2
-			},
-			StateCode : {
-				Active: 2,
-				Canceled: 4,
-				Draft: 0,
-				Expired: 5,
-				Invoiced: 1,
-				On_Hold: 3
-			},
-			StatusCode : {
-				Active: 3,
-				Canceled: 5,
-				Draft: 1,
-				Expired: 6,
-				Invoiced: 2,
-				On_Hold: 4
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.Contract = {
+		AllotmentTypeCode : {
+			Coverage_Dates: 3,
+			Number_of_Cases: 1,
+			Time: 2
+		},
+		BillingFrequencyCode : {
+			Annually: 5,
+			Bimonthly: 2,
+			Monthly: 1,
+			Quarterly: 3,
+			Semiannually: 4
+		},
+		ContractServiceLevelCode : {
+			Bronze: 3,
+			Gold: 1,
+			Silver: 2
+		},
+		StateCode : {
+			Active: 2,
+			Canceled: 4,
+			Draft: 0,
+			Expired: 5,
+			Invoiced: 1,
+			On_Hold: 3
+		},
+		StatusCode : {
+			Active: 3,
+			Canceled: 5,
+			Draft: 1,
+			Expired: 6,
+			Invoiced: 2,
+			On_Hold: 4
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

@@ -322,7 +322,7 @@ namespace DynamicsCrm.DevKit.Shared
                               ClassId = Utility.TrimGuid(x?.Attribute("classid")?.Value?.ToUpper()),
                               ControlId = x?.Attribute("uniqueid")?.Value
                           }).Distinct().ToList();
-            fields = fields.OrderBy(x => x.Name).ToList();
+            fields = fields.OrderBy(x => x.Id).ToList();
             var temp = string.Empty;
             foreach (var field in fields)
             {
@@ -350,18 +350,17 @@ namespace DynamicsCrm.DevKit.Shared
         private static string GetJsProcessCode()
         {
             var code = string.Empty;
-            var processes = GetProcess();
-
-            if (processes.Count == 0) return string.Empty;
-            var processed = processes.OrderBy(x => x.LogicalName);
-            foreach (var entity in processed)
+            XrmHelper.EntitiesProcessForm.AddIfNotExist(CrmServiceClient, EntityMetadata.LogicalName);
+            var processes = XrmHelper.EntitiesProcessForm.Where(x => x.EntityLogicalName == EntityMetadata.LogicalName).OrderBy(x => x.Name);
+            if (processes.Count() == 0) return string.Empty;
+            foreach (var process in processes)
             {
-                var xaml = entity.GetAttributeValue<string>("xaml");
-                var name = entity.GetAttributeValue<string>("name");
-                name = Utility.SafeIdentifier(name);
+                //var xaml = entity.GetAttributeValue<string>("xaml");
+                //var name = entity.GetAttributeValue<string>("name");
+                var name = Utility.SafeIdentifier(process.Name);
                 code += $"\t\tvar _{name} = {{\r\n";
 
-                var xdoc = XDocument.Parse(xaml);
+                var xdoc = XDocument.Parse(process.xaml);
                 var ns = xdoc.Root?.GetNamespaceOfPrefix("mxswa");
                 var rows2 = from x in xdoc.Descendants(ns + "Workflow").Elements(ns + "ActivityReference")
                             select new
@@ -392,32 +391,32 @@ namespace DynamicsCrm.DevKit.Shared
             return code;
         }
 
-        private static DataCollection<Entity> GetProcess()
-        {
-            var fetchData = new
-            {
-                category = "4",
-                statecode = "1",
-                primaryentity = EntityMetadata.ObjectTypeCode,
-                businessprocesstype = "0"
-            };
-            var fetchXml = $@"
-<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-  <entity name='workflow'>
-    <attribute name='name' />
-    <attribute name='uniquename' />
-    <attribute name='xaml' />
-    <filter type='and'>
-      <condition attribute='category' operator='eq' value='{fetchData.category /*4*/}'/>
-      <condition attribute='statecode' operator='eq' value='{fetchData.statecode /*1*/}'/>
-      <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity /*4*/}'/>
-      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype /*4*/}'/>
-    </filter>
-  </entity>
-</fetch>";
-            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
-            return rows.Entities;
-        }
+//        private static DataCollection<Entity> GetProcess()
+//        {
+//            var fetchData = new
+//            {
+//                category = "4",
+//                statecode = "1",
+//                primaryentity = EntityMetadata.ObjectTypeCode,
+//                businessprocesstype = "0"
+//            };
+//            var fetchXml = $@"
+//<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+//  <entity name='workflow'>
+//    <attribute name='name' />
+//    <attribute name='uniquename' />
+//    <attribute name='xaml' />
+//    <filter type='and'>
+//      <condition attribute='category' operator='eq' value='{fetchData.category /*4*/}'/>
+//      <condition attribute='statecode' operator='eq' value='{fetchData.statecode /*1*/}'/>
+//      <condition attribute='primaryentity' operator='eq' value='{fetchData.primaryentity /*4*/}'/>
+//      <condition attribute='businessprocesstype' operator='eq' value='{fetchData.businessprocesstype /*4*/}'/>
+//    </filter>
+//  </entity>
+//</fetch>";
+//            var rows = CrmServiceClient.RetrieveMultiple(new FetchExpression(fetchXml));
+//            return rows.Entities;
+//        }
 
         private static string GetJsForListFields(IEnumerable<string> list)
         {

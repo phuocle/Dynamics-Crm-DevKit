@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.ImportFileApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var importfile = {
 			AdditionalHeaderRow: { a: 'additionalheaderrow', r: true },
 			CompletedOn_UtcDateOnly: { a: 'completedon', r: true },
@@ -154,68 +154,68 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.ImportFile = {
-			DataDelimiterCode : {
-				DoubleQuote: 1,
-				None: 2,
-				SingleQuote: 3
-			},
-			FieldDelimiterCode : {
-				Colon: 1,
-				Comma: 2,
-				Semicolon: 4,
-				Tab: 3
-			},
-			FileTypeCode : {
-				Attachment: 2,
-				CSV: 0,
-				XLSX: 3,
-				XML_Spreadsheet_2003: 1
-			},
-			ProcessCode : {
-				Ignore: 2,
-				Internal: 3,
-				Process: 1
-			},
-			ProcessingStatus : {
-				Complex_Transformation: 4,
-				Import_Complete: 11,
-				Import_Pass_1: 9,
-				Import_Pass_2: 10,
-				Lookup_Transformation: 5,
-				Not_Started: 1,
-				Owner_Transformation: 7,
-				Parsing: 2,
-				Parsing_Complete: 3,
-				Picklist_Transformation: 6,
-				Primary_Key_Transformation: 12,
-				Transformation_Complete: 8
-			},
-			StateCode : {
-				Active: 0
-			},
-			StatusCode : {
-				Completed: 4,
-				Failed: 5,
-				Importing: 3,
-				Parsing: 1,
-				Submitted: 0,
-				Transforming: 2
-			},
-			UpsertModeCode : {
-				Create: 0,
-				Ignore: 2,
-				Update: 1
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.ImportFile = {
+		DataDelimiterCode : {
+			DoubleQuote: 1,
+			None: 2,
+			SingleQuote: 3
+		},
+		FieldDelimiterCode : {
+			Colon: 1,
+			Comma: 2,
+			Semicolon: 4,
+			Tab: 3
+		},
+		FileTypeCode : {
+			Attachment: 2,
+			CSV: 0,
+			XLSX: 3,
+			XML_Spreadsheet_2003: 1
+		},
+		ProcessCode : {
+			Ignore: 2,
+			Internal: 3,
+			Process: 1
+		},
+		ProcessingStatus : {
+			Complex_Transformation: 4,
+			Import_Complete: 11,
+			Import_Pass_1: 9,
+			Import_Pass_2: 10,
+			Lookup_Transformation: 5,
+			Not_Started: 1,
+			Owner_Transformation: 7,
+			Parsing: 2,
+			Parsing_Complete: 3,
+			Picklist_Transformation: 6,
+			Primary_Key_Transformation: 12,
+			Transformation_Complete: 8
+		},
+		StateCode : {
+			Active: 0
+		},
+		StatusCode : {
+			Completed: 4,
+			Failed: 5,
+			Importing: 3,
+			Parsing: 1,
+			Submitted: 0,
+			Transforming: 2
+		},
+		UpsertModeCode : {
+			Create: 0,
+			Ignore: 2,
+			Update: 1
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

@@ -125,10 +125,25 @@ namespace DynamicsCrm.DevKit.Shared
         {
             if (!XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName))
             {
-                var forms = XrmHelper.GetEntityFormXml(crmServiceClient, entityLogicalName);
-                if (forms.Count > 0) XrmHelper.EntitiesFormXml.AddRange(forms);
+                XrmHelper.EntitiesMetadata.AddIfNotExist(crmServiceClient, entityLogicalName);
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
+                if (entityMetadata != null)
+                {
+                    var forms = XrmHelper.GetEntityFormXml(crmServiceClient, entityMetadata.ObjectTypeCode);
+                    if (forms.Count > 0) XrmHelper.EntitiesFormXml.AddRange(forms);
+                }
             }
         }
 
+        public static void AddIfNotExist(this List<ProcessForm> entitiesProcessForm, CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            if (!XrmHelper.EntitiesProcessForm.Any(x => x.EntityLogicalName == entityLogicalName))
+            {
+                XrmHelper.EntitiesMetadata.AddIfNotExist(crmServiceClient, entityLogicalName);
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == entityLogicalName);
+                var processes = XrmHelper.GetEntityProcessForm(crmServiceClient, entityMetadata.ObjectTypeCode);
+                if (processes.Count > 0) XrmHelper.EntitiesProcessForm.AddRange(processes);
+            }
+        }
     }
 }

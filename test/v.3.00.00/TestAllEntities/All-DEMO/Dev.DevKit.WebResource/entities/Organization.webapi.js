@@ -6,71 +6,68 @@ var DevKit;
 	DevKit.OrganizationApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var organization = {
 			ACIWebEndpointUrl: { a: 'aciwebendpointurl' },
 			AcknowledgementTemplateId: { b: 'acknowledgementtemplateid', a: '_acknowledgementtemplateid_value', c: 'templates', d: 'template' },
-			AdvancedColumnEditorEnabled: { a: 'advancedcolumneditorenabled' },
-			AdvancedColumnFilteringEnabled: { a: 'advancedcolumnfilteringenabled' },
-			AdvancedFilteringEnabled: { a: 'advancedfilteringenabled' },
 			AdvancedLookupEnabled: { a: 'advancedlookupenabled' },
 			AllowAddressBookSyncs: { a: 'allowaddressbooksyncs' },
 			AllowAutoResponseCreation: { a: 'allowautoresponsecreation' },
@@ -83,10 +80,8 @@ var DevKit;
 			AllowMarketingEmailExecution: { a: 'allowmarketingemailexecution' },
 			AllowOfflineScheduledSyncs: { a: 'allowofflinescheduledsyncs' },
 			AllowOutlookScheduledSyncs: { a: 'allowoutlookscheduledsyncs' },
-			AllowRedirectAdminSettingsToModernUI: { a: 'allowredirectadminsettingstomodernui' },
 			AllowUnresolvedPartiesOnEmailSend: { a: 'allowunresolvedpartiesonemailsend' },
 			AllowUserFormModePreference: { a: 'allowuserformmodepreference' },
-			AllowUsersHidingSystemViews: { a: 'allowusershidingsystemviews' },
 			AllowUsersSeeAppdownloadMessage: { a: 'allowusersseeappdownloadmessage' },
 			AllowWebExcelExport: { a: 'allowwebexcelexport' },
 			AMDesignator: { a: 'amdesignator' },
@@ -117,7 +112,6 @@ var DevKit;
 			ClientFeatureSet: { a: 'clientfeatureset' },
 			ContentSecurityPolicyConfiguration: { a: 'contentsecuritypolicyconfiguration' },
 			ContractPrefix: { a: 'contractprefix' },
-			CopresenceRefreshRate: { a: 'copresencerefreshrate' },
 			CortanaProactiveExperienceEnabled: { a: 'cortanaproactiveexperienceenabled' },
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -127,18 +121,8 @@ var DevKit;
 			CurrencyDisplayOption: { a: 'currencydisplayoption' },
 			CurrencyFormatCode: { a: 'currencyformatcode' },
 			CurrencySymbol: { a: 'currencysymbol' },
-			CurrentBulkOperationNumber: { a: 'currentbulkoperationnumber' },
-			CurrentCampaignNumber: { a: 'currentcampaignnumber' },
-			CurrentCaseNumber: { a: 'currentcasenumber' },
-			CurrentCategoryNumber: { a: 'currentcategorynumber' },
-			CurrentContractNumber: { a: 'currentcontractnumber' },
 			CurrentImportSequenceNumber: { a: 'currentimportsequencenumber', r: true },
-			CurrentInvoiceNumber: { a: 'currentinvoicenumber' },
-			CurrentKaNumber: { a: 'currentkanumber' },
-			CurrentKbNumber: { a: 'currentkbnumber' },
-			CurrentOrderNumber: { a: 'currentordernumber' },
 			CurrentParsedTableNumber: { a: 'currentparsedtablenumber', r: true },
-			CurrentQuoteNumber: { a: 'currentquotenumber' },
 			DateFormatCode: { a: 'dateformatcode' },
 			DateFormatString: { a: 'dateformatstring' },
 			DateSeparator: { a: 'dateseparator' },
@@ -165,14 +149,12 @@ var DevKit;
 			EnableLivePersonaCardUCI: { a: 'enablelivepersonacarduci' },
 			EnableLivePersonCardIntegrationInOffice: { a: 'enablelivepersoncardintegrationinoffice' },
 			EnableLPAuthoring: { a: 'enablelpauthoring' },
-			EnableMakerSwitchToClassic: { a: 'enablemakerswitchtoclassic' },
 			EnableMicrosoftFlowIntegration: { a: 'enablemicrosoftflowintegration' },
 			EnablePricingOnCreate: { a: 'enablepricingoncreate' },
 			EnableSensitivityLabelsForTeamsCollab: { a: 'enablesensitivitylabelsforteamscollab' },
 			EnableSmartMatching: { a: 'enablesmartmatching' },
 			EnableUnifiedInterfaceShellRefresh: { a: 'enableunifiedinterfaceshellrefresh' },
 			EnforceReadOnlyPlugins: { a: 'enforcereadonlyplugins' },
-			EnhancedOQOIAddProductsSettings: { a: 'enhancedoqoiaddproductssettings' },
 			EntityImage: { a: 'entityimage' },
 			EntityImage_Timestamp: { a: 'entityimage_timestamp', r: true },
 			EntityImage_URL: { a: 'entityimage_url', r: true },
@@ -187,7 +169,6 @@ var DevKit;
 			FiscalPeriodFormat: { a: 'fiscalperiodformat' },
 			FiscalPeriodFormatPeriod: { a: 'fiscalperiodformatperiod' },
 			FiscalPeriodType: { a: 'fiscalperiodtype' },
-			FiscalSettingsUpdated: { a: 'fiscalsettingsupdated', r: true },
 			FiscalYearDisplayCode: { a: 'fiscalyeardisplaycode' },
 			FiscalYearFormat: { a: 'fiscalyearformat' },
 			FiscalYearFormatPrefix: { a: 'fiscalyearformatprefix' },
@@ -232,7 +213,6 @@ var DevKit;
 			IsAutoDataCaptureV2Enabled: { a: 'isautodatacapturev2enabled' },
 			IsAutoSaveEnabled: { a: 'isautosaveenabled' },
 			IsBPFEntityCustomizationFeatureEnabled: { a: 'isbpfentitycustomizationfeatureenabled' },
-			IsCollaborationExperienceEnabled: { a: 'iscollaborationexperienceenabled' },
 			IsConflictDetectionEnabledForMobileClient: { a: 'isconflictdetectionenabledformobileclient' },
 			IsContactMailingAddressSyncEnabled: { a: 'iscontactmailingaddresssyncenabled' },
 			IsContentSecurityPolicyEnabled: { a: 'iscontentsecuritypolicyenabled' },
@@ -289,11 +269,9 @@ var DevKit;
 			IsRichTextNotesEnabled: { a: 'isrichtextnotesenabled' },
 			IsSalesAssistantEnabled: { a: 'issalesassistantenabled' },
 			IsSalesMobilePreviewEnabled: { a: 'issalesmobilepreviewenabled' },
-			IsSharingInOrgAllowed: { a: 'issharinginorgallowed' },
 			IsSOPIntegrationEnabled: { a: 'issopintegrationenabled' },
 			IsTextWrapEnabled: { a: 'istextwrapenabled' },
 			IsUserAccessAuditEnabled: { a: 'isuseraccessauditenabled' },
-			ISVIntegrationCode: { a: 'isvintegrationcode' },
 			IsWriteInProductsAllowed: { a: 'iswriteinproductsallowed' },
 			KaPrefix: { a: 'kaprefix' },
 			KbPrefix: { a: 'kbprefix' },
@@ -306,8 +284,6 @@ var DevKit;
 			MailboxIntermittentIssueMinRange: { a: 'mailboxintermittentissueminrange' },
 			MailboxPermanentIssueMinRange: { a: 'mailboxpermanentissueminrange' },
 			MaxActionStepsInBPF: { a: 'maxactionstepsinbpf' },
-			MaxAllowedPendingRollupJobCount: { a: 'maxallowedpendingrollupjobcount' },
-			MaxAllowedPendingRollupJobPercentage: { a: 'maxallowedpendingrollupjobpercentage' },
 			MaxAppointmentDurationDays: { a: 'maxappointmentdurationdays' },
 			MaxConditionsForMobileOfflineFilters: { a: 'maxconditionsformobileofflinefilters' },
 			MaxDepthForHierarchicalSecurityModel: { a: 'maxdepthforhierarchicalsecuritymodel' },
@@ -320,15 +296,12 @@ var DevKit;
 			MaxProductsInBundle: { a: 'maxproductsinbundle' },
 			MaxRecordsForExportToExcel: { a: 'maxrecordsforexporttoexcel' },
 			MaxRecordsForLookupFilters: { a: 'maxrecordsforlookupfilters' },
-			MaxRollupFieldsPerEntity: { a: 'maxrollupfieldsperentity' },
-			MaxRollupFieldsPerOrg: { a: 'maxrollupfieldsperorg' },
 			MaxSLAItemsPerSLA: { a: 'maxslaitemspersla' },
 			MaxSupportedInternetExplorerVersion: { a: 'maxsupportedinternetexplorerversion', r: true },
 			MaxUploadFileSize: { a: 'maxuploadfilesize' },
 			MaxVerboseLoggingMailbox: { a: 'maxverboseloggingmailbox', r: true },
 			MaxVerboseLoggingSyncCycles: { a: 'maxverboseloggingsynccycles', r: true },
 			MetadataSyncLastTimeOfNeverExpiredDeletedObjects_UtcDateAndTime: { a: 'metadatasynclasttimeofneverexpireddeletedobjects', r: true },
-			MetadataSyncTimestamp: { a: 'metadatasynctimestamp', r: true },
 			MicrosoftFlowEnvironment: { a: 'microsoftflowenvironment' },
 			MinAddressBookSyncInterval: { a: 'minaddressbooksyncinterval' },
 			MinOfflineSyncInterval: { a: 'minofflinesyncinterval' },
@@ -361,7 +334,6 @@ var DevKit;
 			ParsedTableColumnPrefix: { a: 'parsedtablecolumnprefix', r: true },
 			ParsedTablePrefix: { a: 'parsedtableprefix', r: true },
 			PastExpansionWindow: { a: 'pastexpansionwindow' },
-			PcfDatasetGridEnabled: { a: 'pcfdatasetgridenabled' },
 			Picture: { a: 'picture' },
 			PinpointLanguageCode: { a: 'pinpointlanguagecode' },
 			PluginTraceLogSetting: { a: 'plugintracelogsetting' },
@@ -375,18 +347,12 @@ var DevKit;
 			PrivReportingGroupName: { a: 'privreportinggroupname' },
 			ProductRecommendationsEnabled: { a: 'productrecommendationsenabled' },
 			QualifyLeadAdditionalOptions: { a: 'qualifyleadadditionaloptions' },
-			QuickActionToOpenRecordsInSidePaneEnabled: { a: 'quickactiontoopenrecordsinsidepaneenabled' },
 			QuickFindRecordLimitEnabled: { a: 'quickfindrecordlimitenabled' },
 			QuotePrefix: { a: 'quoteprefix' },
-			RecalculateSLA: { a: 'recalculatesla' },
 			RecurrenceDefaultNumberOfOccurrences: { a: 'recurrencedefaultnumberofoccurrences' },
 			RecurrenceExpansionJobBatchInterval: { a: 'recurrenceexpansionjobbatchinterval' },
 			RecurrenceExpansionJobBatchSize: { a: 'recurrenceexpansionjobbatchsize' },
 			RecurrenceExpansionSynchCreateMax: { a: 'recurrenceexpansionsynchcreatemax' },
-			ReferenceSiteMapXml: { a: 'referencesitemapxml' },
-			ReleaseWaveName: { a: 'releasewavename' },
-			RelevanceSearchEnabledByPlatform: { a: 'relevancesearchenabledbyplatform' },
-			RelevanceSearchModifiedOn_UtcDateAndTime: { a: 'relevancesearchmodifiedon' },
 			RenderSecureIFrameForEmail: { a: 'rendersecureiframeforemail' },
 			ReportingGroupId: { a: 'reportinggroupid' },
 			ReportingGroupName: { a: 'reportinggroupname' },
@@ -401,7 +367,6 @@ var DevKit;
 			SchemaNamePrefix: { a: 'schemanameprefix' },
 			SendBulkEmailInUCI: { a: 'sendbulkemailinuci' },
 			ServeStaticResourcesFromAzureCDN: { a: 'servestaticresourcesfromazurecdn' },
-			SessionRecordingEnabled: { a: 'sessionrecordingenabled' },
 			SessionTimeoutEnabled: { a: 'sessiontimeoutenabled' },
 			SessionTimeoutInMins: { a: 'sessiontimeoutinmins' },
 			SessionTimeoutReminderInMins: { a: 'sessiontimeoutreminderinmins' },
@@ -410,7 +375,6 @@ var DevKit;
 			ShowKBArticleDeprecationNotification: { a: 'showkbarticledeprecationnotification' },
 			ShowWeekNumber: { a: 'showweeknumber' },
 			SignupOutlookDownloadFWLink: { a: 'signupoutlookdownloadfwlink' },
-			SiteMapXml: { a: 'sitemapxml' },
 			SlaPauseStates: { a: 'slapausestates' },
 			SocialInsightsEnabled: { a: 'socialinsightsenabled' },
 			SocialInsightsInstance: { a: 'socialinsightsinstance' },
@@ -450,7 +414,6 @@ var DevKit;
 			UserAccessAuditingInterval: { a: 'useraccessauditinginterval' },
 			UseReadForm: { a: 'usereadform' },
 			UserGroupId: { a: 'usergroupid' },
-			UserRatingEnabled: { a: 'userratingenabled' },
 			UseSkypeProtocol: { a: 'useskypeprotocol' },
 			UTCConversionTimeZoneCode: { a: 'utcconversiontimezonecode' },
 			V3CalloutConfigHash: { a: 'v3calloutconfighash', r: true },
@@ -503,121 +466,129 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.Organization = {
-			CurrencyDisplayOption : {
-				Currency_code: 1,
-				Currency_symbol: 0
-			},
-			CurrencyFormatCode : {
-				_123_: 3,
-				_123_0: 0,
-				_123_1: 1,
-				_123_2: 2
-			},
-			DefaultRecurrenceEndRangeType : {
-				End_By_Date: 3,
-				No_End_Date: 1,
-				Number_of_Occurrences: 2
-			},
-			DiscountCalculationMethod : {
-				Line_item: 0,
-				Per_unit: 1
-			},
-			EmailConnectionChannel : {
-				Microsoft_Dynamics_365_Email_Router: 1,
-				ServerSide_Synchronization: 0
-			},
-			FiscalPeriodFormatPeriod : {
-				M0: 5,
-				Month_0: 4,
-				Month_Name: 7,
-				P0: 3,
-				Q0: 2,
-				Quarter_0: 1,
-				Semester_0: 6
-			},
-			FiscalYearFormatPrefix : {
-				FY: 1
-			},
-			FiscalYearFormatSuffix : {
-				Fiscal_Year: 2,
-				FY: 1
-			},
-			FiscalYearFormatYear : {
-				GGYY: 3,
-				YY: 2,
-				YYYY: 1
-			},
-			FullNameConventionCode : {
-				First_Name: 1,
-				First_Name_Middle_Initial_Last_Name: 3,
-				First_Name_Middle_Name_Last_Name: 5,
-				Last_Name_First_Name: 0,
-				Last_Name_First_Name_Middle_Initial: 2,
-				Last_Name_First_Name_Middle_Name: 4,
-				Last_Name_no_space_First_Name: 7,
-				Last_Name_space_First_Name: 6
-			},
-			ISVIntegrationCode : {
-				All: 7,
-				None: 0,
-				Outlook: 6,
-				Outlook_Laptop_Client: 4,
-				Outlook_Workstation_Client: 2,
-				Web: 1,
-				Web_Outlook_Laptop_Client: 5,
-				Web_Outlook_Workstation_Client: 3
-			},
-			NegativeFormatCode : {
-				Brackets: 0,
-				Dash: 1,
-				Dash_plus_Space: 2,
-				Space_plus_Trailing_Dash: 4,
-				Trailing_Dash: 3
-			},
-			OrganizationState : {
-				Active: 3,
-				Creating: 0,
-				Updating: 2,
-				Upgrading: 1
-			},
-			PluginTraceLogSetting : {
-				All: 2,
-				Exception: 1,
-				Off: 0
-			},
-			ReportScriptErrors : {
-				Ask_me_for_permission_to_send_an_error_report_to_Microsoft: 1,
-				Automatically_send_an_error_report_to_Microsoft_without_asking_me_for_permission: 2,
-				Never_send_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365: 3,
-				No_preference_for_sending_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365: 0
-			},
-			SchedulingEngine : {
-				_Default_Scheduling_Engine: 0,
-				_Deprecated_Universal_Resource_Scheduling: 192350000
-			},
-			SharePointDeploymentType : {
-				Online: 0,
-				OnPremises: 1
-			},
-			SyncOptInSelectionStatus : {
-				Failed: 3,
-				Passed: 2,
-				Processing: 1
-			},
-			YammerPostMethod : {
-				Private: 1,
-				Public: 0
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.Organization = {
+		CurrencyDisplayOption : {
+			Currency_code: 1,
+			Currency_symbol: 0
+		},
+		CurrencyFormatCode : {
+			_123_: 3,
+			_123_0: 0,
+			_123_1: 1,
+			_123_2: 2
+		},
+		DateFormatCode : {
+		},
+		DefaultRecurrenceEndRangeType : {
+			End_By_Date: 3,
+			No_End_Date: 1,
+			Number_of_Occurrences: 2
+		},
+		DiscountCalculationMethod : {
+			Line_item: 0,
+			Per_unit: 1
+		},
+		EmailConnectionChannel : {
+			Microsoft_Dynamics_365_Email_Router: 1,
+			Server_Side_Synchronization: 0
+		},
+		FiscalPeriodFormatPeriod : {
+			M0: 5,
+			Month_0: 4,
+			Month_Name: 7,
+			P0: 3,
+			Q0: 2,
+			Quarter_0: 1,
+			Semester_0: 6
+		},
+		FiscalYearFormatPrefix : {
+			_: 2,
+			FY: 1
+		},
+		FiscalYearFormatSuffix : {
+			_: 3,
+			_Fiscal_Year: 2,
+			FY: 1
+		},
+		FiscalYearFormatYear : {
+			GGYY: 3,
+			YY: 2,
+			YYYY: 1
+		},
+		FullNameConventionCode : {
+			First_Name: 1,
+			First_Name_Middle_Initial_Last_Name: 3,
+			First_Name_Middle_Name_Last_Name: 5,
+			Last_Name_First_Name: 0,
+			Last_Name_First_Name_Middle_Initial: 2,
+			Last_Name_First_Name_Middle_Name: 4,
+			Last_Name_no_space_First_Name: 7,
+			Last_Name_space_First_Name: 6
+		},
+		ISVIntegrationCode : {
+			All: 7,
+			None: 0,
+			Outlook: 6,
+			Outlook_Laptop_Client: 4,
+			Outlook_Workstation_Client: 2,
+			Web: 1,
+			Web_Outlook_Laptop_Client: 5,
+			Web_Outlook_Workstation_Client: 3
+		},
+		NegativeFormatCode : {
+			Brackets: 0,
+			Dash: 1,
+			Dash_plus_Space: 2,
+			Space_plus_Trailing_Dash: 4,
+			Trailing_Dash: 3
+		},
+		OrganizationState : {
+			Active: 3,
+			Creating: 0,
+			Updating: 2,
+			Upgrading: 1
+		},
+		PluginTraceLogSetting : {
+			All: 2,
+			Exception: 1,
+			Off: 0
+		},
+		ReportScriptErrors : {
+			Ask_me_for_permission_to_send_an_error_report_to_Microsoft: 1,
+			Automatically_send_an_error_report_to_Microsoft_without_asking_me_for_permission: 2,
+			Never_send_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365: 3,
+			No_preference_for_sending_an_error_report_to_Microsoft_about_Microsoft_Dynamics_365: 0
+		},
+		SchedulingEngine : {
+			Default_Scheduling_Engine: 0,
+			Deprecated_Universal_Resource_Scheduling: 192350000
+		},
+		SharePointDeploymentType : {
+			On_Premises: 1,
+			Online: 0
+		},
+		SyncOptInSelectionStatus : {
+			Failed: 3,
+			Passed: 2,
+			Processing: 1
+		},
+		TimeFormatCode : {
+		},
+		WeekStartDayCode : {
+		},
+		YammerPostMethod : {
+			Private: 1,
+			Public: 0
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.msdyn_pminferredtaskApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var msdyn_pminferredtask = {
 			ComponentIdUnique: { a: 'componentidunique', r: true },
 			ComponentState: { a: 'componentstate', r: true },
@@ -80,19 +80,12 @@ var DevKit;
 			msdyn_automationdata: { a: 'msdyn_automationdata' },
 			msdyn_automationstatus: { a: 'msdyn_automationstatus' },
 			msdyn_description: { a: 'msdyn_description' },
-			msdyn_inputdatabinding: { a: 'msdyn_inputdatabinding' },
-			msdyn_isreportavailable: { a: 'msdyn_isreportavailable' },
 			msdyn_iterationid: { a: 'msdyn_iterationid' },
 			msdyn_lasterrors: { a: 'msdyn_lasterrors' },
-			msdyn_lasterrorsreport: { a: 'msdyn_lasterrorsreport', r: true },
-			msdyn_lastreportrefreshdate_TimezoneDateAndTime: { a: 'msdyn_lastreportrefreshdate' },
 			msdyn_name: { a: 'msdyn_name' },
 			msdyn_outputdata: { a: 'msdyn_outputdata' },
 			msdyn_pminferredtaskId: { a: 'msdyn_pminferredtaskid' },
-			msdyn_reportdata: { a: 'msdyn_reportdata' },
-			msdyn_reportprovisioningstatus: { a: 'msdyn_reportprovisioningstatus' },
 			msdyn_sharedrecordingmetadata: { a: 'msdyn_sharedrecordingmetadata' },
-			msdyn_source: { a: 'msdyn_source' },
 			OverriddenCreatedOn_UtcDateOnly: { a: 'overriddencreatedon' },
 			OverwriteTime_UtcDateAndTime: { a: 'overwritetime', r: true },
 			OwnerId_systemuser: { b: 'ownerid', a: '_ownerid_value', c: 'systemusers', d: 'systemuser' },
@@ -147,53 +140,43 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.msdyn_pminferredtask = {
-			ComponentState : {
-				Deleted: 2,
-				Deleted_Unpublished: 3,
-				Published: 0,
-				Unpublished: 1
-			},
-			msdyn_automationstatus : {
-				Complete: 200000003,
-				InProgress: 200000002,
-				NotRecommended: 200000001,
-				NotStarted: 200000000
-			},
-			msdyn_reportprovisioningstatus : {
-				Failed: 193350003,
-				NotStarted: 193350000,
-				Provisioned: 193350002,
-				Provisioning: 193350001
-			},
-			msdyn_source : {
-				DataLake: 1,
-				Recording: 0
-			},
-			statecode : {
-				Done: 2,
-				Draft: 0,
-				Failed: 3,
-				InProgress: 1
-			},
-			statuscode : {
-				Analyzed: 4,
-				AnalyzeFailed: 5,
-				Analyzing: 2,
-				DeleteFailed: 6,
-				Deleting: 3,
-				Draft: 0,
-				Queued: 1
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.msdyn_pminferredtask = {
+		ComponentState : {
+			Deleted: 2,
+			Deleted_Unpublished: 3,
+			Published: 0,
+			Unpublished: 1
+		},
+		msdyn_automationstatus : {
+			Complete: 200000003,
+			InProgress: 200000002,
+			NotRecommended: 200000001,
+			NotStarted: 200000000
+		},
+		statecode : {
+			Done: 2,
+			Draft: 0,
+			Failed: 3,
+			InProgress: 1
+		},
+		statuscode : {
+			Analyzed: 4,
+			AnalyzeFailed: 5,
+			Analyzing: 2,
+			DeleteFailed: 6,
+			Deleting: 3,
+			Draft: 0,
+			Queued: 1
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

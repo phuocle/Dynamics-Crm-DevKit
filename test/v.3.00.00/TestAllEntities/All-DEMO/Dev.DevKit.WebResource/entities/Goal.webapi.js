@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.GoalApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var goal = {
 			ActualDecimal: { a: 'actualdecimal' },
 			ActualInteger: { a: 'actualinteger' },
@@ -192,135 +192,135 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.Goal = {
-			AmountDataType : {
-				Decimal: 1,
-				Integer: 2,
-				Money: 0
-			},
-			FiscalPeriod : {
-				Annual: 301,
-				April: 104,
-				August: 108,
-				December: 112,
-				February: 102,
-				January: 101,
-				July: 107,
-				June: 106,
-				March: 103,
-				May: 105,
-				November: 111,
-				October: 110,
-				P1: 401,
-				P10: 410,
-				P11: 411,
-				P12: 412,
-				P13: 413,
-				P2: 402,
-				P3: 403,
-				P4: 404,
-				P5: 405,
-				P6: 406,
-				P7: 407,
-				P8: 408,
-				P9: 409,
-				Quarter_1: 1,
-				Quarter_2: 2,
-				Quarter_3: 3,
-				Quarter_4: 4,
-				Semester_1: 201,
-				Semester_2: 202,
-				September: 109
-			},
-			FiscalYear : {
-				FY1970: 1970,
-				FY1971: 1971,
-				FY1972: 1972,
-				FY1973: 1973,
-				FY1974: 1974,
-				FY1975: 1975,
-				FY1976: 1976,
-				FY1977: 1977,
-				FY1978: 1978,
-				FY1979: 1979,
-				FY1980: 1980,
-				FY1981: 1981,
-				FY1982: 1982,
-				FY1983: 1983,
-				FY1984: 1984,
-				FY1985: 1985,
-				FY1986: 1986,
-				FY1987: 1987,
-				FY1988: 1988,
-				FY1989: 1989,
-				FY1990: 1990,
-				FY1991: 1991,
-				FY1992: 1992,
-				FY1993: 1993,
-				FY1994: 1994,
-				FY1995: 1995,
-				FY1996: 1996,
-				FY1997: 1997,
-				FY1998: 1998,
-				FY1999: 1999,
-				FY2000: 2000,
-				FY2001: 2001,
-				FY2002: 2002,
-				FY2003: 2003,
-				FY2004: 2004,
-				FY2005: 2005,
-				FY2006: 2006,
-				FY2007: 2007,
-				FY2008: 2008,
-				FY2009: 2009,
-				FY2010: 2010,
-				FY2011: 2011,
-				FY2012: 2012,
-				FY2013: 2013,
-				FY2014: 2014,
-				FY2015: 2015,
-				FY2016: 2016,
-				FY2017: 2017,
-				FY2018: 2018,
-				FY2019: 2019,
-				FY2020: 2020,
-				FY2021: 2021,
-				FY2022: 2022,
-				FY2023: 2023,
-				FY2024: 2024,
-				FY2025: 2025,
-				FY2026: 2026,
-				FY2027: 2027,
-				FY2028: 2028,
-				FY2029: 2029,
-				FY2030: 2030,
-				FY2031: 2031,
-				FY2032: 2032,
-				FY2033: 2033,
-				FY2034: 2034,
-				FY2035: 2035,
-				FY2036: 2036,
-				FY2037: 2037,
-				FY2038: 2038
-			},
-			StateCode : {
-				Active: 0,
-				Inactive: 1
-			},
-			StatusCode : {
-				Closed: 1,
-				Discarded: 2,
-				Open: 0
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.Goal = {
+		AmountDataType : {
+			Decimal: 1,
+			Integer: 2,
+			Money: 0
+		},
+		FiscalPeriod : {
+			Annual: 301,
+			April: 104,
+			August: 108,
+			December: 112,
+			February: 102,
+			January: 101,
+			July: 107,
+			June: 106,
+			March: 103,
+			May: 105,
+			November: 111,
+			October: 110,
+			P1: 401,
+			P10: 410,
+			P11: 411,
+			P12: 412,
+			P13: 413,
+			P2: 402,
+			P3: 403,
+			P4: 404,
+			P5: 405,
+			P6: 406,
+			P7: 407,
+			P8: 408,
+			P9: 409,
+			Quarter_1: 1,
+			Quarter_2: 2,
+			Quarter_3: 3,
+			Quarter_4: 4,
+			Semester_1: 201,
+			Semester_2: 202,
+			September: 109
+		},
+		FiscalYear : {
+			FY1970: 1970,
+			FY1971: 1971,
+			FY1972: 1972,
+			FY1973: 1973,
+			FY1974: 1974,
+			FY1975: 1975,
+			FY1976: 1976,
+			FY1977: 1977,
+			FY1978: 1978,
+			FY1979: 1979,
+			FY1980: 1980,
+			FY1981: 1981,
+			FY1982: 1982,
+			FY1983: 1983,
+			FY1984: 1984,
+			FY1985: 1985,
+			FY1986: 1986,
+			FY1987: 1987,
+			FY1988: 1988,
+			FY1989: 1989,
+			FY1990: 1990,
+			FY1991: 1991,
+			FY1992: 1992,
+			FY1993: 1993,
+			FY1994: 1994,
+			FY1995: 1995,
+			FY1996: 1996,
+			FY1997: 1997,
+			FY1998: 1998,
+			FY1999: 1999,
+			FY2000: 2000,
+			FY2001: 2001,
+			FY2002: 2002,
+			FY2003: 2003,
+			FY2004: 2004,
+			FY2005: 2005,
+			FY2006: 2006,
+			FY2007: 2007,
+			FY2008: 2008,
+			FY2009: 2009,
+			FY2010: 2010,
+			FY2011: 2011,
+			FY2012: 2012,
+			FY2013: 2013,
+			FY2014: 2014,
+			FY2015: 2015,
+			FY2016: 2016,
+			FY2017: 2017,
+			FY2018: 2018,
+			FY2019: 2019,
+			FY2020: 2020,
+			FY2021: 2021,
+			FY2022: 2022,
+			FY2023: 2023,
+			FY2024: 2024,
+			FY2025: 2025,
+			FY2026: 2026,
+			FY2027: 2027,
+			FY2028: 2028,
+			FY2029: 2029,
+			FY2030: 2030,
+			FY2031: 2031,
+			FY2032: 2032,
+			FY2033: 2033,
+			FY2034: 2034,
+			FY2035: 2035,
+			FY2036: 2036,
+			FY2037: 2037,
+			FY2038: 2038
+		},
+		StateCode : {
+			Active: 0,
+			Inactive: 1
+		},
+		StatusCode : {
+			Closed: 1,
+			Discarded: 2,
+			Open: 0
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

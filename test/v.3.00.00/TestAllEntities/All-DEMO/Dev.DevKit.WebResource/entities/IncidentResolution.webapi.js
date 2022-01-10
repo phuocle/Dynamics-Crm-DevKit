@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.IncidentResolutionApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var incidentresolution = {
 			ActivityAdditionalParams: { a: 'activityadditionalparams' },
 			ActivityId: { a: 'activityid' },
@@ -118,6 +118,7 @@ var DevKit;
 			regardingobjectid_knowledgearticle_incidentresolution: { b: 'regardingobjectid_knowledgearticle_incidentresolution', a: '_regardingobjectid_value', c: 'knowledgearticles', d: 'knowledgearticle' },
 			regardingobjectid_knowledgebaserecord_incidentresolution: { b: 'regardingobjectid_knowledgebaserecord_incidentresolution', a: '_regardingobjectid_value', c: 'knowledgebaserecords', d: 'knowledgebaserecord' },
 			regardingobjectid_lead_incidentresolution: { b: 'regardingobjectid_lead_incidentresolution', a: '_regardingobjectid_value', c: 'leads', d: 'lead' },
+			RegardingObjectIdYomiName: { a: 'regardingobjectidyominame' },
 			ResolutionTypeCode: { a: 'resolutiontypecode' },
 			ScheduledDurationMinutes: { a: 'scheduleddurationminutes', r: true },
 			ScheduledEnd_UtcDateOnly: { a: 'scheduledend' },
@@ -128,6 +129,7 @@ var DevKit;
 			ServiceId: { b: 'serviceid', a: '_serviceid_value', c: 'services', d: 'service' },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
+			SLAName: { a: 'slaname', r: true },
 			SortDate_UtcDateAndTime: { a: 'sortdate' },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
@@ -188,90 +190,65 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.IncidentResolution = {
-			ActivityTypeCode : {
-				Appointment: 4201,
-				Booking_Alert: 10357,
-				Campaign_Activity: 4402,
-				Campaign_Response: 4401,
-				Case_Resolution: 4206,
-				Conversation: 10644,
-				Customer_Voice_alert: 10261,
-				Customer_Voice_survey_invite: 10271,
-				Customer_Voice_survey_response: 10273,
-				Email: 4202,
-				Fax: 4204,
-				Letter: 4207,
-				Opportunity_Close: 4208,
-				Order_Close: 4209,
-				Outbound_message: 10752,
-				Phone_Call: 4210,
-				Project_Service_Approval: 10387,
-				Quick_Campaign: 4406,
-				Quote_Close: 4211,
-				Recurring_Appointment: 4251,
-				Service_Activity: 4214,
-				Session: 10659,
-				Task: 4212
-			},
-			Community : {
-				Cortana: 5,
-				Direct_Line: 6,
-				Direct_Line_Speech: 8,
-				Email: 9,
-				Facebook: 1,
-				GroupMe: 10,
-				Kik: 11,
-				Line: 3,
-				Microsoft_Teams: 7,
-				Other: 0,
-				Skype: 13,
-				Slack: 14,
-				Telegram: 12,
-				Twitter: 2,
-				Wechat: 4,
-				WhatsApp: 15
-			},
-			DeliveryPriorityCode : {
-				High: 2,
-				Low: 0,
-				Normal: 1
-			},
-			InstanceTypeCode : {
-				Not_Recurring: 0,
-				Recurring_Exception: 3,
-				Recurring_Future_Exception: 4,
-				Recurring_Instance: 2,
-				Recurring_Master: 1
-			},
-			PriorityCode : {
-				High: 2,
-				Low: 0,
-				Normal: 1
-			},
-			ResolutionTypeCode : {
-				Information_Provided: 1000,
-				Problem_Solved: 5
-			},
-			StateCode : {
-				Canceled: 2,
-				Completed: 1,
-				Open: 0
-			},
-			StatusCode : {
-				Canceled: 3,
-				Closed: 2,
-				Open: 1
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.IncidentResolution = {
+		Community : {
+			Cortana: 5,
+			Direct_Line: 6,
+			Direct_Line_Speech: 8,
+			Email: 9,
+			Facebook: 1,
+			GroupMe: 10,
+			Kik: 11,
+			Line: 3,
+			Microsoft_Teams: 7,
+			Other: 0,
+			Skype: 13,
+			Slack: 14,
+			Telegram: 12,
+			Twitter: 2,
+			Wechat: 4,
+			WhatsApp: 15
+		},
+		DeliveryPriorityCode : {
+			High: 2,
+			Low: 0,
+			Normal: 1
+		},
+		InstanceTypeCode : {
+			Not_Recurring: 0,
+			Recurring_Exception: 3,
+			Recurring_Future_Exception: 4,
+			Recurring_Instance: 2,
+			Recurring_Master: 1
+		},
+		PriorityCode : {
+			High: 2,
+			Low: 0,
+			Normal: 1
+		},
+		ResolutionTypeCode : {
+			Information_Provided: 1000,
+			Problem_Solved: 5
+		},
+		StateCode : {
+			Canceled: 2,
+			Completed: 1,
+			Open: 0
+		},
+		StatusCode : {
+			Canceled: 3,
+			Closed: 2,
+			Open: 1
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.LeadApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var lead = {
 			AccountId: { b: 'accountid', a: '_accountid_value', c: 'accounts', d: 'account', r: true },
 			Address1_AddressId: { a: 'address1_addressid' },
@@ -163,6 +163,7 @@ var DevKit;
 			LeadQualityCode: { a: 'leadqualitycode' },
 			LeadSourceCode: { a: 'leadsourcecode' },
 			MasterId: { b: 'masterid', a: '_masterid_value', c: 'leads', d: 'lead', r: true },
+			MasterLeadIdName: { a: 'masterleadidname', r: true },
 			Merged: { a: 'merged', r: true },
 			MiddleName: { a: 'middlename' },
 			MobilePhone: { a: 'mobilephone' },
@@ -171,8 +172,6 @@ var DevKit;
 			ModifiedOnBehalfBy: { b: 'modifiedonbehalfby', a: '_modifiedonbehalfby_value', c: 'systemusers', d: 'systemuser', r: true },
 			msdyn_gdproptout: { a: 'msdyn_gdproptout' },
 			msdyn_ordertype: { a: 'msdyn_ordertype' },
-			msdyn_salesassignmentresult: { a: 'msdyn_salesassignmentresult' },
-			msdyn_segmentid: { b: 'msdyn_segmentid', a: '_msdyn_segmentid_value', c: 'msdyn_segments', d: 'msdyn_segment' },
 			Need: { a: 'need' },
 			NumberOfEmployees: { a: 'numberofemployees' },
 			OnHoldTime: { a: 'onholdtime', r: true },
@@ -205,6 +204,7 @@ var DevKit;
 			SIC: { a: 'sic' },
 			SLAId: { b: 'slaid', a: '_slaid_value', c: 'slas', d: 'sla' },
 			SLAInvokedId: { b: 'slainvokedid', a: '_slainvokedid_value', c: 'slas', d: 'sla', r: true },
+			SLAName: { a: 'slaname', r: true },
 			StageId: { a: 'stageid' },
 			StateCode: { a: 'statecode' },
 			StatusCode: { a: 'statuscode' },
@@ -265,147 +265,143 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.Lead = {
-			Address1_AddressTypeCode : {
-				Default_Value: 1
-			},
-			Address1_ShippingMethodCode : {
-				Default_Value: 1
-			},
-			Address2_AddressTypeCode : {
-				Default_Value: 1
-			},
-			Address2_ShippingMethodCode : {
-				Default_Value: 1
-			},
-			BudgetStatus : {
-				Can_Buy: 2,
-				May_Buy: 1,
-				No_Committed_Budget: 0,
-				Will_Buy: 3
-			},
-			IndustryCode : {
-				Accounting: 1,
-				Agriculture_and_Non_petrol_Natural_Resource_Extraction: 2,
-				Broadcasting_Printing_and_Publishing: 3,
-				Brokers: 4,
-				Building_Supply_Retail: 5,
-				Business_Services: 6,
-				Consulting: 7,
-				Consumer_Services: 8,
-				Design_Direction_and_Creative_Management: 9,
-				Distributors_Dispatchers_and_Processors: 10,
-				Doctors_Offices_and_Clinics: 11,
-				Durable_Manufacturing: 12,
-				Eating_and_Drinking_Places: 13,
-				Entertainment_Retail: 14,
-				Equipment_Rental_and_Leasing: 15,
-				Financial: 16,
-				Food_and_Tobacco_Processing: 17,
-				Inbound_Capital_Intensive_Processing: 18,
-				Inbound_Repair_and_Services: 19,
-				Insurance: 20,
-				Legal_Services: 21,
-				Non_Durable_Merchandise_Retail: 22,
-				Outbound_Consumer_Service: 23,
-				Petrochemical_Extraction_and_Distribution: 24,
-				Service_Retail: 25,
-				SIG_Affiliations: 26,
-				Social_Services: 27,
-				Special_Outbound_Trade_Contractors: 28,
-				Specialty_Realty: 29,
-				Transportation: 30,
-				Utility_Creation_and_Distribution: 31,
-				Vehicle_Retail: 32,
-				Wholesale: 33
-			},
-			InitialCommunication : {
-				Contacted: 0,
-				Not_Contacted: 1
-			},
-			LeadQualityCode : {
-				Cold: 3,
-				Hot: 1,
-				Warm: 2
-			},
-			LeadSourceCode : {
-				Advertisement: 1,
-				Employee_Referral: 2,
-				External_Referral: 3,
-				Other: 10,
-				Partner: 4,
-				Public_Relations: 5,
-				Seminar: 6,
-				Trade_Show: 7,
-				Web: 8,
-				Word_of_Mouth: 9
-			},
-			msdyn_ordertype : {
-				Item_based: 192350000,
-				Service_Maintenance_Based: 690970002,
-				Work_based: 192350001
-			},
-			msdyn_salesassignmentresult : {
-				Failed: 1,
-				Succeeded: 0
-			},
-			Need : {
-				Good_to_have: 2,
-				Must_have: 0,
-				No_need: 3,
-				Should_have: 1
-			},
-			PreferredContactMethodCode : {
-				Any: 1,
-				Email: 2,
-				Fax: 4,
-				Mail: 5,
-				Phone: 3
-			},
-			PriorityCode : {
-				Default_Value: 1
-			},
-			PurchaseProcess : {
-				Committee: 1,
-				Individual: 0,
-				Unknown: 2
-			},
-			PurchaseTimeFrame : {
-				Immediate: 0,
-				Next_Quarter: 2,
-				This_Quarter: 1,
-				This_Year: 3,
-				Unknown: 4
-			},
-			SalesStage : {
-				Qualify: 0
-			},
-			SalesStageCode : {
-				Default_Value: 1
-			},
-			StateCode : {
-				Disqualified: 2,
-				Open: 0,
-				Qualified: 1
-			},
-			StatusCode : {
-				Canceled: 7,
-				Cannot_Contact: 5,
-				Contacted: 2,
-				Lost: 4,
-				New: 1,
-				No_Longer_Interested: 6,
-				Qualified: 3
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.Lead = {
+		Address1_AddressTypeCode : {
+			Default_Value: 1
+		},
+		Address1_ShippingMethodCode : {
+			Default_Value: 1
+		},
+		Address2_AddressTypeCode : {
+			Default_Value: 1
+		},
+		Address2_ShippingMethodCode : {
+			Default_Value: 1
+		},
+		BudgetStatus : {
+			Can_Buy: 2,
+			May_Buy: 1,
+			No_Committed_Budget: 0,
+			Will_Buy: 3
+		},
+		IndustryCode : {
+			Accounting: 1,
+			Agriculture_and_Non_petrol_Natural_Resource_Extraction: 2,
+			Broadcasting_Printing_and_Publishing: 3,
+			Brokers: 4,
+			Building_Supply_Retail: 5,
+			Business_Services: 6,
+			Consulting: 7,
+			Consumer_Services: 8,
+			Design_Direction_and_Creative_Management: 9,
+			Distributors_Dispatchers_and_Processors: 10,
+			Doctors_Offices_and_Clinics: 11,
+			Durable_Manufacturing: 12,
+			Eating_and_Drinking_Places: 13,
+			Entertainment_Retail: 14,
+			Equipment_Rental_and_Leasing: 15,
+			Financial: 16,
+			Food_and_Tobacco_Processing: 17,
+			Inbound_Capital_Intensive_Processing: 18,
+			Inbound_Repair_and_Services: 19,
+			Insurance: 20,
+			Legal_Services: 21,
+			Non_Durable_Merchandise_Retail: 22,
+			Outbound_Consumer_Service: 23,
+			Petrochemical_Extraction_and_Distribution: 24,
+			Service_Retail: 25,
+			SIG_Affiliations: 26,
+			Social_Services: 27,
+			Special_Outbound_Trade_Contractors: 28,
+			Specialty_Realty: 29,
+			Transportation: 30,
+			Utility_Creation_and_Distribution: 31,
+			Vehicle_Retail: 32,
+			Wholesale: 33
+		},
+		InitialCommunication : {
+			Contacted: 0,
+			Not_Contacted: 1
+		},
+		LeadQualityCode : {
+			Cold: 3,
+			Hot: 1,
+			Warm: 2
+		},
+		LeadSourceCode : {
+			Advertisement: 1,
+			Employee_Referral: 2,
+			External_Referral: 3,
+			Other: 10,
+			Partner: 4,
+			Public_Relations: 5,
+			Seminar: 6,
+			Trade_Show: 7,
+			Web: 8,
+			Word_of_Mouth: 9
+		},
+		msdyn_ordertype : {
+			Item_based: 192350000,
+			Service_Maintenance_Based: 690970002,
+			Work_based: 192350001
+		},
+		Need : {
+			Good_to_have: 2,
+			Must_have: 0,
+			No_need: 3,
+			Should_have: 1
+		},
+		PreferredContactMethodCode : {
+			Any: 1,
+			Email: 2,
+			Fax: 4,
+			Mail: 5,
+			Phone: 3
+		},
+		PriorityCode : {
+			Default_Value: 1
+		},
+		PurchaseProcess : {
+			Committee: 1,
+			Individual: 0,
+			Unknown: 2
+		},
+		PurchaseTimeFrame : {
+			Immediate: 0,
+			Next_Quarter: 2,
+			This_Quarter: 1,
+			This_Year: 3,
+			Unknown: 4
+		},
+		SalesStage : {
+			Qualify: 0
+		},
+		SalesStageCode : {
+			Default_Value: 1
+		},
+		StateCode : {
+			Disqualified: 2,
+			Open: 0,
+			Qualified: 1
+		},
+		StatusCode : {
+			Canceled: 7,
+			Cannot_Contact: 5,
+			Contacted: 2,
+			Lost: 4,
+			New: 1,
+			No_Longer_Interested: 6,
+			Qualified: 3
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

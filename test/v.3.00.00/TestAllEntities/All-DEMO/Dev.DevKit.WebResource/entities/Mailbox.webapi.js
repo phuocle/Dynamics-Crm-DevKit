@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.MailboxApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var mailbox = {
 			ACTDeliveryMethod: { a: 'actdeliverymethod' },
 			ACTStatus: { a: 'actstatus' },
@@ -87,7 +87,7 @@ var DevKit;
 			ExchangeContactsImportCompletedOn_UtcDateAndTime: { a: 'exchangecontactsimportcompletedon', r: true },
 			ExchangeContactsImportStatus: { a: 'exchangecontactsimportstatus' },
 			ExchangeSyncStateXml: { a: 'exchangesyncstatexml' },
-			ExchangeSyncStateXmlFileRef: { a: 'exchangesyncstatexmlfileref', r: true },
+			ExchangeSyncStateXmlFileRef_Name: { a: 'exchangesyncstatexmlfileref_name', r: true },
 			FolderHierarchy: { a: 'folderhierarchy' },
 			ForcedUnlockCount: { a: 'forcedunlockcount', r: true },
 			HostId: { a: 'hostid', r: true },
@@ -154,7 +154,7 @@ var DevKit;
 			ProcessingStateCode: { a: 'processingstatecode', r: true },
 			ReceivingPostponedUntil_UtcDateOnly: { a: 'receivingpostponeduntil', r: true },
 			ReceivingPostponedUntilForACT_UtcDateOnly: { a: 'receivingpostponeduntilforact', r: true },
-			regardingobjectid_queue: { b: 'regardingobjectid_queue', a: '_regardingobjectid_value', c: 'queues', d: 'queue', r: true },
+			regardingobjectid_queue: { b: 'regardingobjectid_queue', a: '_regardingobjectid_value', c: 'queues', d: 'queue' },
 			regardingobjectid: { b: 'regardingobjectid', a: '_regardingobjectid_value', c: 'systemusers', d: 'systemuser', r: true },
 			StateCode: { a: 'statecode' },
 			StatusCode: { a: 'statuscode' },
@@ -209,78 +209,78 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.Mailbox = {
-			ACTDeliveryMethod : {
-				Microsoft_Dynamics_365_for_Outlook: 0,
-				None: 2,
-				Server_Side_Synchronization: 1
-			},
-			ACTStatus : {
-				Failure: 2,
-				Not_Run: 0,
-				Success: 1
-			},
-			EmailRouterAccessApproval : {
-				Approved: 1,
-				Empty: 0,
-				Pending_Approval: 2,
-				Rejected: 3
-			},
-			ExchangeContactsImportStatus : {
-				Imported: 1,
-				ImportFailed: 2,
-				NotImported: 0
-			},
-			IncomingEmailDeliveryMethod : {
-				Forward_Mailbox: 3,
-				Microsoft_Dynamics_365_for_Outlook: 1,
-				None: 0,
-				Server_Side_Synchronization_or_Email_Router: 2
-			},
-			IncomingEmailStatus : {
-				Failure: 2,
-				Not_Run: 0,
-				Success: 1
-			},
-			MailboxStatus : {
-				Failure: 2,
-				Not_Run: 0,
-				Success: 1
-			},
-			OfficeAppsDeploymentStatus : {
-				Installed: 1,
-				InstallFailed: 2,
-				NotInstalled: 0,
-				UninstallFailed: 3,
-				UpgradeRequired: 4
-			},
-			OutgoingEmailDeliveryMethod : {
-				Microsoft_Dynamics_365_for_Outlook: 1,
-				None: 0,
-				Server_Side_Synchronization_or_Email_Router: 2
-			},
-			OutgoingEmailStatus : {
-				Failure: 2,
-				Not_Run: 0,
-				Success: 1
-			},
-			StateCode : {
-				Active: 0,
-				Inactive: 1
-			},
-			StatusCode : {
-				Active: 1,
-				Inactive: 2
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.Mailbox = {
+		ACTDeliveryMethod : {
+			Microsoft_Dynamics_365_for_Outlook: 0,
+			None: 2,
+			Server_Side_Synchronization: 1
+		},
+		ACTStatus : {
+			Failure: 2,
+			Not_Run: 0,
+			Success: 1
+		},
+		EmailRouterAccessApproval : {
+			Approved: 1,
+			Empty: 0,
+			Pending_Approval: 2,
+			Rejected: 3
+		},
+		ExchangeContactsImportStatus : {
+			Imported: 1,
+			ImportFailed: 2,
+			NotImported: 0
+		},
+		IncomingEmailDeliveryMethod : {
+			Forward_Mailbox: 3,
+			Microsoft_Dynamics_365_for_Outlook: 1,
+			None: 0,
+			Server_Side_Synchronization_or_Email_Router: 2
+		},
+		IncomingEmailStatus : {
+			Failure: 2,
+			Not_Run: 0,
+			Success: 1
+		},
+		MailboxStatus : {
+			Failure: 2,
+			Not_Run: 0,
+			Success: 1
+		},
+		OfficeAppsDeploymentStatus : {
+			Installed: 1,
+			InstallFailed: 2,
+			NotInstalled: 0,
+			UninstallFailed: 3,
+			UpgradeRequired: 4
+		},
+		OutgoingEmailDeliveryMethod : {
+			Microsoft_Dynamics_365_for_Outlook: 1,
+			None: 0,
+			Server_Side_Synchronization_or_Email_Router: 2
+		},
+		OutgoingEmailStatus : {
+			Failure: 2,
+			Not_Run: 0,
+			Success: 1
+		},
+		StateCode : {
+			Active: 0,
+			Inactive: 1
+		},
+		StatusCode : {
+			Active: 1,
+			Inactive: 2
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));

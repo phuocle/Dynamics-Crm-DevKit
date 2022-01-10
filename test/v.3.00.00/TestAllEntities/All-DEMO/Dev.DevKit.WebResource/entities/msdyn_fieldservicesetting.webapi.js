@@ -6,65 +6,65 @@ var DevKit;
 	DevKit.msdyn_fieldservicesettingApi = function (e) {
 		var EMPTY_STRING = '';
 		var f = '@OData.Community.Display.V1.FormattedValue';
-		function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
-			var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
-			var property = {};
-			var getFormattedValue = function () {
-				if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
-					return EMPTY_STRING;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName + f];
-					}
-					return EMPTY_STRING;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
-				}
-				return entity[logicalName + f];
-			};
-			var getValue = function () {
-				if (entity[logicalName] === undefined || entity[logicalName] === null) {
-					return null;
-				}
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
-						return entity[logicalName];
-					}
-					return null;
-				}
-				if (isMultiOptionSet) {
-					return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
-				}
-				return entity[logicalName];
-			};
-			var setValue = function (value) {
-				if (isMultiOptionSet) value = value.join(',');
-				if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
-					value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
-					upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
-				} else {
-					upsertEntity[logicalName] = value;
-				}
-				entity[logicalName] = value;
-			};
-			Object.defineProperty(property, 'FormattedValue', {
-				get: getFormattedValue
-			});
-			if (readOnly) {
-				Object.defineProperty(property, 'Value', {
-					get: getValue
-				});
-			}
-			else {
-				Object.defineProperty(property, 'Value', {
-					get: getValue,
-					set: setValue
-				});
-			}
-			return property;
-		}
+        function webApiField(entity, logicalName, schemaName, entityLogicalCollectionName, entityLogicalName, readOnly, upsertEntity, isMultiOptionSet) {
+            var l = '@Microsoft.Dynamics.CRM.lookuplogicalname';
+            var property = {};
+            var getFormattedValue = function () {
+                if (entity[logicalName + f] === undefined || entity[logicalName + f] === null) {
+                    return EMPTY_STRING;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName + f];
+                    }
+                    return EMPTY_STRING;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName + f].toString().split(';').map(function (item) { return item.trim(); });
+                }
+                return entity[logicalName + f];
+            };
+            var getValue = function () {
+                if (entity[logicalName] === undefined || entity[logicalName] === null) {
+                    return null;
+                }
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    if (entity[logicalName + l] === undefined || entity[logicalName + l] === entityLogicalName) {
+                        return entity[logicalName];
+                    }
+                    return null;
+                }
+                if (isMultiOptionSet) {
+                    return entity[logicalName].toString().split(',').map(function (item) { return parseInt(item, 10); });
+                }
+                return entity[logicalName];
+            };
+            var setValue = function (value) {
+                if (isMultiOptionSet) value = value.join(',');
+                if (entityLogicalCollectionName !== undefined && entityLogicalCollectionName.length > 0) {
+                    value = value.replace('{', EMPTY_STRING).replace('}', EMPTY_STRING);
+                    upsertEntity[schemaName + '@odata.bind'] = '/' + entityLogicalCollectionName + '(' + value + ')';
+                } else {
+                    upsertEntity[logicalName] = value;
+                }
+                entity[logicalName] = value;
+            };
+            Object.defineProperty(property, 'FormattedValue', {
+                get: getFormattedValue
+            });
+            if (readOnly) {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue
+                });
+            }
+            else {
+                Object.defineProperty(property, 'Value', {
+                    get: getValue,
+                    set: setValue
+                });
+            }
+            return property;
+        }
 		var msdyn_fieldservicesetting = {
 			CreatedBy: { b: 'createdby', a: '_createdby_value', c: 'systemusers', d: 'systemuser', r: true },
 			CreatedOn_UtcDateAndTime: { a: 'createdon', r: true },
@@ -87,7 +87,6 @@ var DevKit;
 			msdyn_BookingAlertTemplate: { a: 'msdyn_bookingalerttemplate' },
 			msdyn_BreakPayType: { b: 'msdyn_BreakPayType', a: '_msdyn_breakpaytype_value', c: 'msdyn_resourcepaytypes', d: 'msdyn_resourcepaytype' },
 			msdyn_BusinessClosurePayType: { b: 'msdyn_BusinessClosurePayType', a: '_msdyn_businessclosurepaytype_value', c: 'msdyn_resourcepaytypes', d: 'msdyn_resourcepaytype' },
-			msdyn_CalculatePrice: { a: 'msdyn_calculateprice' },
 			msdyn_CalculateTax: { a: 'msdyn_calculatetax' },
 			msdyn_CancelCurrentSlotsWhenMoving: { a: 'msdyn_cancelcurrentslotswhenmoving' },
 			msdyn_CustomGPSData: { a: 'msdyn_customgpsdata' },
@@ -97,7 +96,6 @@ var DevKit;
 			msdyn_CustomGPSResourcefield: { a: 'msdyn_customgpsresourcefield' },
 			msdyn_CustomGPSTimestampfield: { a: 'msdyn_customgpstimestampfield' },
 			msdyn_DatabaseVersion: { a: 'msdyn_databaseversion' },
-			msdyn_datepopulationtype: { a: 'msdyn_datepopulationtype' },
 			msdyn_DeactivateBookingWhenCanceled: { a: 'msdyn_deactivatebookingwhencanceled' },
 			msdyn_DeactivateBookingWhenCompleted: { a: 'msdyn_deactivatebookingwhencompleted' },
 			msdyn_DeactivateWorkOrderWhenCanceled: { a: 'msdyn_deactivateworkorderwhencanceled' },
@@ -120,7 +118,6 @@ var DevKit;
 			msdyn_EnhancedBackgroundProcessing: { a: 'msdyn_enhancedbackgroundprocessing' },
 			msdyn_EntityNumberLength: { a: 'msdyn_entitynumberlength' },
 			msdyn_fieldservicesettingId: { a: 'msdyn_fieldservicesettingid' },
-			msdyn_GenerateActuals: { a: 'msdyn_generateactuals' },
 			msdyn_GenerateAgreementInvoicesXDaysInAdvance: { a: 'msdyn_generateagreementinvoicesxdaysinadvance' },
 			msdyn_GenerateAgreementWOXDaysInAdvance: { a: 'msdyn_generateagreementwoxdaysinadvance' },
 			msdyn_GenerateBookingDatesXMonthsInAdvance: { a: 'msdyn_generatebookingdatesxmonthsinadvance' },
@@ -131,7 +128,6 @@ var DevKit;
 			msdyn_InspectionAnalyticsEnabledOn_UtcDateAndTime: { a: 'msdyn_inspectionanalyticsenabledon' },
 			msdyn_InspectionAnalyticsFrequency: { a: 'msdyn_inspectionanalyticsfrequency' },
 			msdyn_InspectionAnalyticsRecommendedTime_UtcDateAndTime: { a: 'msdyn_inspectionanalyticsrecommendedtime' },
-			msdyn_InternalFlags: { a: 'msdyn_internalflags' },
 			msdyn_InventoryAdjustmentPrefix: { a: 'msdyn_inventoryadjustmentprefix' },
 			msdyn_InventoryAdjustmentStartingNumber: { a: 'msdyn_inventoryadjustmentstartingnumber' },
 			msdyn_InventoryTransferPrefix: { a: 'msdyn_inventorytransferprefix' },
@@ -165,7 +161,6 @@ var DevKit;
 			msdyn_SchedulerResourceTooltipView: { a: 'msdyn_schedulerresourcetooltipview' },
 			msdyn_SchedulerUnscheduledView: { a: 'msdyn_schedulerunscheduledview' },
 			msdyn_sdkapimapkey: { a: 'msdyn_sdkapimapkey' },
-			msdyn_ShowSimplifiedWorkOrderCommands: { a: 'msdyn_showsimplifiedworkordercommands' },
 			msdyn_suggestreparentingcustomerassets: { a: 'msdyn_suggestreparentingcustomerassets' },
 			msdyn_TimeCostActualsSource: { a: 'msdyn_timecostactualssource' },
 			msdyn_TimeEntryGenerationStrategy: { a: 'msdyn_timeentrygenerationstrategy' },
@@ -231,79 +226,79 @@ var DevKit;
 /** @namespace OptionSet */
 var OptionSet;
 (function (OptionSet) {
-		OptionSet.msdyn_fieldservicesetting = {
-			msdyn_DefaultCrewStrategy : {
-				Cascade_and_Accept_Cascade_Completely_Not_Recommended: 192350000,
-				Crew_Leader_Management: 192350001,
-				Crew_Member_Self_Management: 192350002
-			},
-			msdyn_DefaultWorkOrderCompletedStatus : {
-				Canceled: 690970005,
-				Completed: 690970003,
-				In_Progress: 690970002,
-				Posted: 690970004,
-				Scheduled: 690970001,
-				Unscheduled: 690970000
-			},
-			msdyn_HistoricalDataFilter : {
-				All: 100000003,
-				Last_12_Months: 100000002,
-				Last_3_Months: 100000000,
-				Last_6_Months: 100000001
-			},
-			msdyn_InspectionAnalyticsFrequency : {
-				Custom: 100000002,
-				Daily: 100000000,
-				Immediately: 100000001
-			},
-			msdyn_ProductCostOrder : {
-				CurrentStandard: 690970001,
-				StandardCurrent: 690970000
-			},
-			msdyn_RunFrequencyOfIncidentTypeRecommendation : {
-				Once_a_Week: 192350000
-			},
-			msdyn_TimeCostActualsSource : {
-				Booking_Journals_on_Post_of_Work_Order: 192354000,
-				Work_Order_Time_Entry_Approval: 192354001
-			},
-			msdyn_TimeEntryGenerationStrategy : {
-				Auto_Generate_from_Booking_Timestamps: 192355201,
-				Manual: 192355200
-			},
-			msdyn_TimestampFrequency : {
-				Per_Booking_Status_Change: 192350000,
-				Per_Field_Service_Status_Change: 192350001
-			},
-			msdyn_UndefinedBookingLocation : {
-				Ignore_Location: 690970001,
-				Previous_Known_Location: 690970000
-			},
-			msdyn_UseofProductsOutofStock : {
-				Confirm: 690970000,
-				Restrict: 690970001
-			},
-			msdyn_WorkOrderInvoiceCreation : {
-				Never: 690970000,
-				On_Work_Order_Posted: 690970001
-			},
-			statecode : {
-				Active: 0,
-				Inactive: 1
-			},
-			statuscode : {
-				Active: 1,
-				Inactive: 2
-			},
-		RollupState : {
-			NotCalculated: 0,
-			Calculated: 1,
-			OverflowError: 2,
-			OtherError: 3,
-			RetryLimitExceeded: 4,
-			HierarchicalRecursionLimitReached: 5,
-			LoopDetected: 6
-		}
+	OptionSet.msdyn_fieldservicesetting = {
+		msdyn_DefaultCrewStrategy : {
+			Cascade_and_Accept_Cascade_Completely: 192350000,
+			Crew_Leader_Management: 192350001,
+			Crew_Member_Self_Management: 192350002
+		},
+		msdyn_DefaultWorkOrderCompletedStatus : {
+			Closed_Canceled: 690970005,
+			Closed_Posted: 690970004,
+			Open_Completed: 690970003,
+			Open_In_Progress: 690970002,
+			Open_Scheduled: 690970001,
+			Open_Unscheduled: 690970000
+		},
+		msdyn_HistoricalDataFilter : {
+			All: 100000003,
+			Last_12_Months: 100000002,
+			Last_3_Months: 100000000,
+			Last_6_Months: 100000001
+		},
+		msdyn_InspectionAnalyticsFrequency : {
+			Custom: 100000002,
+			Daily: 100000000,
+			Immediately: 100000001
+		},
+		msdyn_ProductCostOrder : {
+			CurrentStandard: 690970001,
+			StandardCurrent: 690970000
+		},
+		msdyn_RunFrequencyOfIncidentTypeRecommendation : {
+			Once_a_Week: 192350000
+		},
+		msdyn_TimeCostActualsSource : {
+			Booking_Journals_on_Post_of_Work_Order: 192354000,
+			Work_Order_Time_Entry_Approval: 192354001
+		},
+		msdyn_TimeEntryGenerationStrategy : {
+			Auto_Generate_from_Booking_Timestamps: 192355201,
+			Manual: 192355200
+		},
+		msdyn_TimestampFrequency : {
+			Per_Booking_Status_Change: 192350000,
+			Per_Field_Service_Status_Change: 192350001
+		},
+		msdyn_UndefinedBookingLocation : {
+			Ignore_Location: 690970001,
+			Previous_Known_Location: 690970000
+		},
+		msdyn_UseofProductsOutofStock : {
+			Confirm: 690970000,
+			Restrict: 690970001
+		},
+		msdyn_WorkOrderInvoiceCreation : {
+			Never: 690970000,
+			On_Work_Order_Posted: 690970001
+		},
+		statecode : {
+			Active: 0,
+			Inactive: 1
+		},
+		statuscode : {
+			Active: 1,
+			Inactive: 2
+		},
+        RollupState : {
+            NotCalculated: 0,
+            Calculated: 1,
+            OverflowError: 2,
+            OtherError: 3,
+            RetryLimitExceeded: 4,
+            HierarchicalRecursionLimitReached: 5,
+            LoopDetected: 6
+        }
 
 	};
 })(OptionSet || (OptionSet = {}));
