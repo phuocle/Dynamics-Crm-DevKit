@@ -14,15 +14,6 @@ namespace DynamicsCrm.DevKit.Shared
 {
     public static class JsForm
     {
-        private class IdName
-        {
-            public string Id { get; set; }
-            public string Name { get; set; }
-            public string ClassId { get; set; }
-            public string ControlId { get; set; }
-        }
-
-
         private const string NEW_LINE = "\r\n";
         private const string TAB = "\t";
         private static CrmServiceClient CrmServiceClient { get; set; }
@@ -36,11 +27,7 @@ namespace DynamicsCrm.DevKit.Shared
             EntityMetadata = entityMetadata;
             RootNamespace = rootNamespace;
             Comment = comment;
-            XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityMetadata.LogicalName);
-            var forms = XrmHelper.EntitiesFormXml
-                .Where(x => x.EntityLogicalName == entityMetadata.LogicalName  && (x.FormType == XrmHelper.FormType.Main || x.FormType == XrmHelper.FormType.QuickCreate))
-                .OrderBy(x => x.Name)
-                .ToList();
+            var forms = XrmHelper.GetEntityForms(crmServiceClient, entityMetadata.LogicalName);
             if (!forms.Any())
             {
                 dts = String.Empty;

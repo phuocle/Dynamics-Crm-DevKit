@@ -205,6 +205,9 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (newCode == String.Empty || Utility.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+
+                        Utility.ForceWriteAllText(dtsFile, newDTS);
+
                     }
                     else
                     {

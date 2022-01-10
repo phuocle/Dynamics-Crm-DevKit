@@ -28,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\DevKitConnections.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DownloadFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\IdName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Json.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonDataProvider.cs" />

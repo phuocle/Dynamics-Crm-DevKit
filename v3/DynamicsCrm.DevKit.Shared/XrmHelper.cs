@@ -19,8 +19,6 @@ namespace DynamicsCrm.DevKit.Shared
             QuickCreate = 7,
             QuickView = 6
         };
-
-
         public static List<EntityMetadata> EntitiesMetadata { get; set; } = new List<EntityMetadata>();
 
         public static List<SystemForm> EntitiesFormXml { get; set; } = new List<SystemForm>();
@@ -405,6 +403,16 @@ namespace DynamicsCrm.DevKit.Shared
                     Version = Const.Version
                 };
             }
+        }
+
+        public static List<SystemForm> GetEntityForms(CrmServiceClient crmServiceClient, string entityLogicalName)
+        {
+            XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityLogicalName);
+            var forms = XrmHelper.EntitiesFormXml
+                .Where(x => x.EntityLogicalName == entityLogicalName && (x.FormType == XrmHelper.FormType.Main || x.FormType == XrmHelper.FormType.QuickCreate))
+                .OrderBy(x => x.Name)
+                .ToList();
+            return forms;
         }
     }
 }
