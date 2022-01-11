@@ -16,8 +16,8 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
         public CrmServiceClient CrmServiceClient { get; set; }
         public string TaskType { get; set; }
         private JsonGenerator json { get; set; }
-        //private List<EntityMetadata> FilesMapWithEntityMetadata { get; set; }
         private string CurrentFolder => $"{CurrentDirectory}\\{json.rootfolder}";
+        private static bool IsAll { get; set; } = false;
 
         public bool IsValid()
         {
@@ -128,7 +128,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldCode = Utility.ReadAllText(fileEndsWith);
                     var oldDTS = Utility.ReadAllText(dtsFile);
                     var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.LogicalName, dtsFile);
-                    if (!comment.JsWebApi)
+                    if (IsAll)
+                    {
+                        if (!File.Exists(dtsFile)) comment.UseForm = false;
+                        comment.UseWebApi = true;
+                    }
+                    if (!comment.UseWebApi)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
                         i++;
@@ -176,6 +181,31 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
             return code;
         }
 
+        private string GetDefaultFileWithCs(EntityMetadata entityMetadata, string @namespace)
+        {
+            const string NEW_LINE = "\r\n";
+            const string TAB = "\t";
+            var code = string.Empty;
+            var @class = Utility.SafeDeclareName(entityMetadata.SchemaName, null);
+            code += $"namespace {@namespace}{NEW_LINE}";
+            code += $"{{{NEW_LINE}";
+            code += $"{TAB}public partial class {@class}{NEW_LINE}";
+            code += $"{TAB}{{{NEW_LINE}";
+            code += $"{TAB}{TAB}#region --- PROPERTIES ---{NEW_LINE}";
+            code += NEW_LINE;
+            code += $"{TAB}{TAB}//public DateTime? DateTime {{ get {{ return GetAliasedValue<DateTime?>(\"c.birthdate\"); }} }}{NEW_LINE}";
+            code += NEW_LINE;
+            code += $"{TAB}{TAB}#endregion{NEW_LINE}";
+            code += NEW_LINE;
+            code += $"{TAB}{TAB}#region --- STATIC METHODS ---{NEW_LINE}";
+            code += NEW_LINE;
+            code += NEW_LINE;
+            code += $"{TAB}{TAB}#endregion{NEW_LINE}";
+            code += $"{TAB}}}{NEW_LINE}";
+            code += $"}}{NEW_LINE}";
+            return code;
+        }
+
         private void GeneratorJsForm(List<string> schemaNames)
         {
             const string endsWith = ".form.js";
@@ -195,7 +225,12 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var oldCode = Utility.ReadAllText(fileEndsWith);
                     var oldDTS = Utility.ReadAllText(dtsFile);
                     var comment = XrmHelper.GetComment(CrmServiceClient, entityMetadata.LogicalName, dtsFile);
-                    if (!comment.JsForm)
+                    if (IsAll)
+                    {
+                        comment.UseForm = true;
+                        if(!File.Exists(dtsFile)) comment.UseWebApi = false;
+                    }
+                    if (!comment.UseForm)
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
                         i++;
@@ -205,9 +240,6 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     if (newCode == String.Empty || Utility.IsTheSame(oldCode, newCode))
                     {
                         CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
-
-                        //Utility.ForceWriteAllText(dtsFile, newDTS);
-
                     }
                     else
                     {
@@ -269,121 +301,81 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
 
         private void GeneratorLateBound(List<string> schemaNames)
         {
-            //var totalSchemaNames = schemaNames.Count();
-            //var len = totalSchemaNames.ToString().Length;
-            //CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalSchemaNames, ConsoleColor.Green, " entities");
-            //CliLog.WriteLine(ConsoleColor.White, "|");
-            //var i = 1;
-            //foreach(var file in files)
-            //{
-            //    var schemaName = Utility.GetSchemaNameFromFile(file, endsWith);
-            //    var entityMetadata = FilesMapWithEntityMetadata.FirstOrDefault(x => x.SchemaName == schemaName);
-            //    if (entityMetadata?.Attributes?.Length > 0)
-            //    {
-            //        var oldCsCode = Utility.ReadAllText(file);
-            //        var newCsCode = CSharpLateBound.GetCsCode(CrmServiceClient, entityMetadata, schemaName, json.rootnamespace);
-            //        if (Utility.IsTheSame(oldCsCode, newCsCode))
-            //        {
-            //            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
-            //        }
-            //        else
-            //        {
-            //            if (File.Exists(file))
-            //            {
-            //                Utility.ForceWriteAllText(file, newCsCode);
-            //                CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
-            //            }
-            //            else
-            //            {
-            //                var newFileName = Path.Combine(Path.GetDirectoryName(file), $"{schemaName}.cs");
-            //                var newFileNameContent = Utility.ReadEmbeddedResource("DynamicsCrm.DevKit.Lib.Resources.LateBound.cs");
-            //                newFileNameContent = newFileNameContent
-            //                    .Replace("$NameSpace$", json.rootnamespace)
-            //                    .Replace("$class$", schemaName);
-            //                Utility.ForceWriteAllText(newFileName, newFileNameContent);
-            //                CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}.cs");
-            //                Utility.ForceWriteAllText(file, newCsCode);
-            //                CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        CliLog.WriteLineError(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Error, ConsoleColor.White, $"entity logical name: ", ConsoleColor.DarkMagenta, entityMetadata.LogicalName, ConsoleColor.White, " not found in the current instance !!!");
-            //    }
-            //    i++;
-            //}
+            const string endsWith = ".generated.cs";
+            var totalFiles = schemaNames.Count();
+            var len = totalFiles.ToString().Length;
+            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Found: ", ConsoleColor.Blue, totalFiles, ConsoleColor.Green, " entities");
+            CliLog.WriteLine(ConsoleColor.White, "|");
+            var i = 1;
+            foreach (var schemaName in schemaNames)
+            {
+                var entityMetadata = XrmHelper.EntitiesMetadata.FirstOrDefault(x => x.LogicalName == schemaName.ToLower());
+                if ((entityMetadata?.Attributes?.Length ?? 0) > 0)
+                {
+                    var file = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}.cs");
+                    var fileEndsWith = Path.Combine(CurrentFolder, $"{entityMetadata.SchemaName}{endsWith}");
+                    var oldCode = Utility.ReadAllText(fileEndsWith);
+                    var newCode = CSharpLateBound.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace);
+                    if (newCode == String.Empty || Utility.IsTheSame(oldCode, newCode))
+                    {
+                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+                    }
+                    else
+                    {
+                        if (File.Exists(fileEndsWith))
+                        {
+                            Utility.ForceWriteAllText(fileEndsWith, newCode);
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                        else
+                        {
+                            Utility.ForceWriteAllText(fileEndsWith, newCode);
+                            if (!File.Exists(file))
+                            {
+                                Utility.ForceWriteAllText(file, GetDefaultFileWithCs(entityMetadata, json.rootnamespace));
+                            }
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Created, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                    }
+                }
+                else
+                {
+                    CliLog.WriteLineError(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Error, ConsoleColor.White, $"entity schema name: ", ConsoleColor.DarkMagenta, schemaName, ConsoleColor.White, " not found in the current instance !!!");
+                }
+                i++;
+            }
         }
-
-        //private void ReadFilesWithEntitiesMetadata(string endsWith)
-        //{
-        //    if (json.entities == null || json.entities.Trim().Length == 0 || json.entities.Trim().ToLower() == "folder")
-        //    {
-        //        var pattern = $"*{endsWith}";
-        //        var entities = Directory
-        //            .GetFiles(CurrentFolder, pattern)
-        //            .Select(x => Utility.GetSchemaNameFromFile(x, endsWith))
-        //            .ToList();
-        //        FilesMapWithEntityMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient, entities);
-        //    }
-        //    else if (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all")
-        //    {
-        //        FilesMapWithEntityMetadata = XrmHelper.EntitiesMetadata;
-        //    }
-        //    else
-        //    {
-        //        var entities = json.entities.Split(",".ToCharArray()).ToList();
-        //        FilesMapWithEntityMetadata = XrmHelper.GetEntitiesMetadata(CrmServiceClient, entities);
-        //    }
-        //}
 
         private void ReadEntitiesMetadata(CrmServiceClient crmServiceClient)
         {
-            var wait = new Thread(() => CliLog.Waiting("Reading entities metadata "));
-            wait.Start();
-            XrmHelper.ReadEntitiesMetadata(crmServiceClient);
-            wait.Abort();
-            CliLog.WriteLine("");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+            if (XrmHelper.EntitiesMetadata.Count == 0 &&
+                XrmHelper.EntitiesFormXml.Count == 0 &&
+                XrmHelper.EntitiesProcessForm.Count == 0)
+            {
+                var wait = new Thread(() => CliLog.Waiting("Reading entities Metadata "));
+                wait.Start();
+                XrmHelper.ReadEntitiesMetadata(crmServiceClient);
+                CliLog.WriteLine("");
+                wait.Abort();
 
-            var wait2 = new Thread(() => CliLog.Waiting("Reading entities FormXml "));
-            wait2.Start();
-            XrmHelper.ReadEntitiesFormXml(crmServiceClient);
-            wait2.Abort();
-            CliLog.WriteLine("");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+                if (json.type.ToLower() != nameof(GeneratorType.csharp))
+                {
+                    IsAll = true;
+                    wait = new Thread(() => CliLog.Waiting("Reading entities FormXml "));
+                    wait.Start();
+                    XrmHelper.ReadEntitiesFormXml(crmServiceClient);
+                    CliLog.WriteLine("");
+                    wait.Abort();
 
-            var wait3 = new Thread(() => CliLog.Waiting("Reading entities Process "));
-            wait3.Start();
-            XrmHelper.ReadEntitiesProcessForm(crmServiceClient);
-            wait3.Abort();
-            CliLog.WriteLine("");
-            CliLog.WriteLine(ConsoleColor.White, "|");
+                    wait = new Thread(() => CliLog.Waiting("Reading entities Process "));
+                    wait.Start();
+                    XrmHelper.ReadEntitiesProcessForm(crmServiceClient);
+                    CliLog.WriteLine("");
+                    wait.Abort();
+                }
+                CliLog.WriteLine(ConsoleColor.White, "|");
+            }
         }
-
-        //private List<string> GetFiles(string endsWith)
-        //{
-        //    if (json.entities != null && (json.entities.Trim().ToLower() == "*" || json.entities.Trim().ToLower() == "all"))
-        //    {
-        //        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim().ToLower());
-        //        CliLog.WriteLine(ConsoleColor.White, "|");
-        //    }
-        //    else if (json.entities == null || json.entities.Trim().Length == 0 || json.entities.Trim().ToLower() == "folder")
-        //    {
-        //        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "current folder", ConsoleColor.Green, " with pattern values: ", ConsoleColor.White, $"*{endsWith}");
-        //        CliLog.WriteLine(ConsoleColor.White, "|");
-        //    }
-        //    else
-        //    {
-        //        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Green, "Filter by: ", ConsoleColor.White, "json.entities", ConsoleColor.Green, " with values: ", ConsoleColor.White, json.entities.Trim().ToLower());
-        //        CliLog.WriteLine(ConsoleColor.White, "|");
-        //    }
-        //    ReadFilesWithEntitiesMetadata(endsWith);
-        //    return FilesMapWithEntityMetadata
-        //            .OrderBy(x => x.SchemaName)
-        //            .Select(x => $"{CurrentFolder}{x.SchemaName}{endsWith}")
-        //            .ToList();
-        //}
 
         public TaskGenerator(CrmServiceClient crmServiceClient, string currentDirectory, JsonGenerator json)
         {

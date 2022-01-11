@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Compile Remove="C:\Users\ple\.nuget\packages\community.visualstudio.toolkit\17.0.76.268-pre\build\AssemblyInfo.cs" />
-    <Compile Remove="Resources\LateBound.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,7 +36,6 @@
     <EmbeddedResource Include="Resources\devkit.d.ts" />
     <EmbeddedResource Include="Resources\devkit.js" />
     <EmbeddedResource Include="Resources\DynamicsCrm.DevKit.Cli.json" />
-    <EmbeddedResource Include="Resources\LateBound.cs" />
     <EmbeddedResource Include="Resources\WebApi.js" />
   </ItemGroup>
 

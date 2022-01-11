@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                var attributeSchemaName = Utility.GetAttributeSchemaName(attribute);
+                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
                 var a = $"a: '{attribute.LogicalName}'";
@@ -167,9 +167,13 @@ namespace DynamicsCrm.DevKit.Shared
                             {
                                 var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                 var b = $"b: '{navigation?.ReferencingEntityNavigationPropertyName}'";
-                                var c = $"c: '{XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName).LogicalCollectionName}'";
+                                XrmHelper.EntitiesMetadata.AddIfNotExist(CrmServiceClient, entityLogicalName);
+                                var c = $"c: '{XrmHelper.EntitiesMetadata.First(x => x.LogicalName == entityLogicalName)?.LogicalCollectionName}'";
                                 var d = $"d: '{entityLogicalName}'";
-                                code += $"{TAB}{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
+                                if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName?.Length > 0)
+                                {
+                                    code += $"{TAB}{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
+                                }
                             }
                         }
                     }

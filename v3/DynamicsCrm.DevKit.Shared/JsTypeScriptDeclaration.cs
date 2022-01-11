@@ -31,9 +31,9 @@ namespace DynamicsCrm.DevKit.Shared
             _d_ts += $"//@ts-check{NEW_LINE}";
             _d_ts += $"///<reference path=\"devkit.d.ts\" />{NEW_LINE}";
             _d_ts += $"declare namespace {rootNamespace} {{{NEW_LINE}";
-            if (comment.JsForm)
+            if (comment.UseForm)
                 _d_ts += GetForm_d_ts(@namespace);
-            if (comment.JsWebApi)
+            if (comment.UseWebApi)
                 _d_ts += GetWebApi_d_ts(@namespace);
             _d_ts += $"}}{NEW_LINE}";
             _d_ts += GetOptionSet_d_ts();
@@ -50,7 +50,7 @@ namespace DynamicsCrm.DevKit.Shared
             {
                 if (XrmHelper.IsOptionSet(attribute))
                 {
-                    var attributeSchemaName = Utility.GetAttributeSchemaName(attribute);
+                    var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName);
                     var values = attribute.OptionSetValues();
                     if (values.Count == 0) continue;
                     _d_ts += $"{TAB}{TAB}enum {attributeSchemaName} {{{NEW_LINE}";
@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                var attributeSchemaName = Utility.GetAttributeSchemaName(attribute);
+                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
 
@@ -169,7 +169,8 @@ namespace DynamicsCrm.DevKit.Shared
                                     {
                                         var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
-                                        _d_ts += $"{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
+                                        if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
+                                            _d_ts += $"{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
                                     }
                                 }
                             }
@@ -243,12 +244,20 @@ namespace DynamicsCrm.DevKit.Shared
                                 _d_ts += GetGeneratorImageCode_d_ts("EntityImage", image.LogicalName);
                             _d_ts += GetGeneratorImageCode_d_ts(attributeSchemaName, attribute.LogicalName);
                         }
+                        else if (attribute is FileAttributeMetadata file)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.StringValue{Readonly};{NEW_LINE}";
+                        }
+                        else if (attribute is MultiSelectPicklistAttributeMetadata)
+                        {
+                            if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
+                            _d_ts += $"{TAB}{TAB}{attributeSchemaName}: DevKit.WebApi.MultiOptionSetValue{Readonly};{NEW_LINE}";
+                        }
                         else
                             _d_ts += $"{attribute.AttributeType}-{attributeSchemaName}-{attribute.LogicalName};{NEW_LINE}";
                         break;
                 }
-
-
             }
             if (EntityMetadata.Attributes.Where(f => f.AttributeType == AttributeTypeCode.PartyList).Any())
             {

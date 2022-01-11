@@ -1,9 +1,6 @@
-﻿using DynamicsCrm.DevKit.Shared.Models;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Tooling.Connector;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -118,7 +115,7 @@ namespace DynamicsCrm.DevKit.Shared
             if (!SyntaxFacts.IsIdentifierStartCharacter(name[0]))
             {
                 if (name.Length == 1) sb.Append("_");
-                else if (name[1] != '_') sb.Append("_");
+                else if (name[0] != '_') sb.Append("_");
             }
             foreach (var ch in name)
             {
@@ -139,7 +136,7 @@ namespace DynamicsCrm.DevKit.Shared
         public static string SafeDeclareName(string declareName, string schemaName)
         {
             declareName = SafeIdentifier(declareName);
-            if (declareName.ToLower() == schemaName.ToLower()) return declareName + "1";
+            if (declareName.ToLower() == schemaName?.ToLower()) return declareName + "1";
             if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "1";
             if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "1";
             if (declareName.ToLower() == "Entity".ToLower()) return declareName + "1";
@@ -153,8 +150,6 @@ namespace DynamicsCrm.DevKit.Shared
             var @namespace = parts.Length > 1 ? parts[1] : parts[0];
             return Utility.SafeIdentifier(@namespace);
         }
-
-
 
         public static string GetFormName(string formName, string @class)
         {
@@ -224,10 +219,15 @@ namespace DynamicsCrm.DevKit.Shared
             return guid;
         }
 
-        public static string GetAttributeSchemaName(AttributeMetadata attribute)
-        {
-            if (attribute.SchemaName == "Entity") return "_Entity";
-            return attribute.SchemaName;
-        }
+        //public static string GetAttributeSchemaName(AttributeMetadata attribute)
+        //{
+        //    if (attribute.SchemaName == "Entity") return "_Entity";
+        //    return attribute.SchemaName;
+        //}
+        //public static string GetEntitySchemaName(EntityMetadata entity)
+        //{
+        //    if (entity.SchemaName == "Entity") return "_Entity";
+        //    return entity.SchemaName;
+        //}
     }
 }

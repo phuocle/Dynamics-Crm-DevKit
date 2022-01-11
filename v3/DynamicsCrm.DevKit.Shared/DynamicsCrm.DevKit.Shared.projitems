@@ -45,6 +45,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\JsonWorkflow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Models.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NameValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\OldCommentTypeScriptDeclaration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ProcessForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SystemForm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleJson.cs" />

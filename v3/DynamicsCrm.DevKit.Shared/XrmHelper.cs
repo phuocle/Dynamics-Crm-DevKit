@@ -445,7 +445,13 @@ namespace DynamicsCrm.DevKit.Shared
                 try
                 {
                     var json = lines[lines.Length - 1];
+                    var oldComment = SimpleJson.DeserializeObject<OldCommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
                     var comment = SimpleJson.DeserializeObject<CommentTypeScriptDeclaration>(json.Substring("//".Length).Replace("'", "\""));
+                    if (oldComment?.JsForm?.Count >= 0)
+                    {
+                        comment.UseForm = true;
+                        comment.UseWebApi = oldComment.JsWebApi;
+                    }
                     comment.Version = Const.Version;
                     return comment;
                 }
@@ -453,8 +459,8 @@ namespace DynamicsCrm.DevKit.Shared
                 {
                     return new CommentTypeScriptDeclaration
                     {
-                        JsForm = false,
-                        JsWebApi = false,
+                        UseForm = false,
+                        UseWebApi = false,
                         Version = Const.Version
                     };
                 }
@@ -464,8 +470,8 @@ namespace DynamicsCrm.DevKit.Shared
                 XrmHelper.EntitiesFormXml.AddIfNotExist(crmServiceClient, entityLogicalName);
                 return new CommentTypeScriptDeclaration
                 {
-                    JsForm = XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName),
-                    JsWebApi = true,
+                    UseForm = XrmHelper.EntitiesFormXml.Any(x => x.EntityLogicalName == entityLogicalName),
+                    UseWebApi = true,
                     Version = Const.Version
                 };
             }
