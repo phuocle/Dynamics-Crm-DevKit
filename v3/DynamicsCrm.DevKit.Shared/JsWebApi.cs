@@ -24,7 +24,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             var code = string.Empty;
             var @namespace = Utility.GetNameSpace(RootNamespace);
-            var logicalName = entityMetadata.LogicalName;
+            var logicalName = Utility.SafeIdentifier(entityMetadata.LogicalName);
 
             code += $"'use strict';{NEW_LINE}";
             code += $"/** @namespace {@namespace} */{NEW_LINE}";
@@ -50,11 +50,11 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}{logicalName}[field] = webApiField(e, a, b, c, d, r, u, g);{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
             code += $"{GeneratorActivityPartyCode()}";
-            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.Entity = u;{NEW_LINE}";
-            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.EntityName = '{EntityMetadata.LogicalName}';{NEW_LINE}";
-            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.EntityCollectionName = '{EntityMetadata.LogicalCollectionName}';{NEW_LINE}";
-            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}['@odata.etag'] = e['@odata.etag'];{NEW_LINE}";
-            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.getAliasedValue = function (alias, isMultiOptionSet) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{logicalName}.Entity = u;{NEW_LINE}";
+            code += $"{TAB}{TAB}{logicalName}.EntityName = '{EntityMetadata.LogicalName}';{NEW_LINE}";
+            code += $"{TAB}{TAB}{logicalName}.EntityCollectionName = '{EntityMetadata.LogicalCollectionName}';{NEW_LINE}";
+            code += $"{TAB}{TAB}{logicalName}['@odata.etag'] = e['@odata.etag'];{NEW_LINE}";
+            code += $"{TAB}{TAB}{logicalName}.getAliasedValue = function (alias, isMultiOptionSet) {{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (e[alias] === undefined || e[alias] === null) {{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{TAB}return null;{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
@@ -63,7 +63,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}return e[alias];{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}{EntityMetadata.LogicalName}.getAliasedFormattedValue = function (alias, isMultiOptionSet) {{{NEW_LINE}";
+            code += $"{TAB}{TAB}{logicalName}.getAliasedFormattedValue = function (alias, isMultiOptionSet) {{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}if (e[alias + f] === undefined || e[alias + f] === null) {{{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}{TAB}return EMPTY_STRING;{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
@@ -72,7 +72,7 @@ namespace DynamicsCrm.DevKit.Shared
             code += $"{TAB}{TAB}{TAB}}}{NEW_LINE}";
             code += $"{TAB}{TAB}{TAB}return e[alias + f];{NEW_LINE}";
             code += $"{TAB}{TAB}}}{NEW_LINE}";
-            code += $"{TAB}{TAB}return {EntityMetadata.LogicalName};{NEW_LINE}";
+            code += $"{TAB}{TAB}return {logicalName};{NEW_LINE}";
             code += $"{TAB}}};{NEW_LINE}";
             code += $"}})({@namespace} || ({@namespace} = {{}}));{NEW_LINE}";
             code += $"{Utility.GeneratorOptionSet(EntityMetadata)}";
@@ -103,7 +103,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName);
+                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName, attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
                 var a = $"a: '{attribute.LogicalName}'";
@@ -172,7 +172,7 @@ namespace DynamicsCrm.DevKit.Shared
                                 var d = $"d: '{entityLogicalName}'";
                                 if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName?.Length > 0)
                                 {
-                                    code += $"{TAB}{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
+                                    code += $"{TAB}{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: {{ {b}, {a}, {c}, {d}{r} }},{NEW_LINE}";
                                 }
                             }
                         }

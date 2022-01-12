@@ -117,7 +117,7 @@ namespace DynamicsCrm.DevKit.Shared
 
             foreach (var attribute in EntityMetadata?.Attributes?.OrderBy(x => x.SchemaName))
             {
-                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName);
+                var attributeSchemaName = Utility.SafeDeclareName(attribute.SchemaName, EntityMetadata.SchemaName, attribute);
                 if (attribute.AttributeType == AttributeTypeCode.PartyList || attribute.AttributeType == AttributeTypeCode.EntityName) continue;
                 if (attribute.AttributeOf != null && attribute.AttributeTypeName != AttributeTypeDisplayName.ImageType) continue;
 
@@ -170,7 +170,7 @@ namespace DynamicsCrm.DevKit.Shared
                                         var navigation = EntityMetadata.ManyToOneRelationships.FirstOrDefault(x => x.ReferencingAttribute == attribute.LogicalName && x.ReferencedEntity == entityLogicalName);
                                         if (jdoc.Length > 0) _d_ts += $"{TAB}{TAB}/** {jdoc} */{NEW_LINE}";
                                         if (navigation?.ReferencingEntityNavigationPropertyName != null && navigation?.ReferencingEntityNavigationPropertyName.Length > 0)
-                                            _d_ts += $"{TAB}{TAB}{navigation?.ReferencingEntityNavigationPropertyName}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
+                                            _d_ts += $"{TAB}{TAB}{Utility.SafeDeclareName(navigation?.ReferencingEntityNavigationPropertyName, EntityMetadata.SchemaName, attribute)}: DevKit.WebApi.LookupValue{Readonly};{NEW_LINE}";
                                     }
                                 }
                             }
@@ -933,6 +933,18 @@ namespace DynamicsCrm.DevKit.Shared
                              item.ClassId == ControlClassId.UNKNOWN_3 ||
                              item.ClassId == ControlClassId.UNKNOWN_4 ||
                              item.ClassId == ControlClassId.UNKNOWN_5 ||
+                             item.ClassId == ControlClassId.UNKNOWN_6 ||
+                             item.ClassId == ControlClassId.UNKNOWN_7 ||
+                             item.ClassId == ControlClassId.UNKNOWN_8 ||
+                             item.ClassId == ControlClassId.UNKNOWN_9 ||
+                             item.ClassId == ControlClassId.UNKNOWN_10 ||
+                             item.ClassId == ControlClassId.UNKNOWN_11 ||
+                             item.ClassId == ControlClassId.UNKNOWN_12 ||
+                             item.ClassId == ControlClassId.UNKNOWN_13 ||
+                             item.ClassId == ControlClassId.UNKNOWN_14 ||
+                             item.ClassId == ControlClassId.UNKNOWN_15 ||
+                             item.ClassId == ControlClassId.UNKNOWN_16 ||
+                             item.ClassId == ControlClassId.UNKNOWN_17 ||
                              item.ClassId == ControlClassId.SUB_GRID ||
                              item.ClassId == ControlClassId.SUB_GRID_PANEL ||
                              item.ClassId == ControlClassId.QUICK_VIEW_FORM ||

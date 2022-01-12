@@ -127,18 +127,36 @@ namespace DynamicsCrm.DevKit.Shared
             var result = sb.ToString();
             if (SyntaxFacts.GetKeywordKind(result) != SyntaxKind.None)
             {
-                result = $"@{result}";
+                result = $"_{result}";
             }
             result = result.Replace("__", "_");
+            if (IsJsKeywords(name)) return "_" + name;
             return result;
         }
 
-        public static string SafeDeclareName(string declareName, string schemaName)
+        private static bool IsJsKeywords(string name)
+        {
+            switch (name)
+            {
+                case "import":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static string SafeDeclareName(string declareName, string schemaName = null, AttributeMetadata attribute = null)
         {
             declareName = SafeIdentifier(declareName);
             if (declareName.ToLower() == schemaName?.ToLower()) return declareName + "1";
+            if (declareName.ToLower() == schemaName?.ToLower() + "id")
+                if (attribute != null && attribute.AttributeType == AttributeTypeCode.Uniqueidentifier)
+                    return declareName;
+                else
+                    return declareName + "1";
             if (declareName.ToLower() == "EntityLogicalName".ToLower()) return declareName + "1";
             if (declareName.ToLower() == "EntityTypeCode".ToLower()) return declareName + "1";
+            if (declareName.ToLower() == "EntityName".ToLower()) return declareName + "1";
             if (declareName.ToLower() == "Entity".ToLower()) return declareName + "1";
             if (declareName.ToLower() == "Id".ToLower()) return declareName + "1";
             return declareName;

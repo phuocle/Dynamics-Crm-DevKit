@@ -142,7 +142,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var newCode = JsWebApi.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment, out var newDTS);
                     if (Utility.IsTheSame(oldCode, newCode))
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        if (!Utility.IsTheSame(oldDTS, newDTS))
+                        {
+                            Utility.ForceWriteAllText(dtsFile, newDTS);
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                        else
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
                     }
                     else
                     {
@@ -239,7 +247,15 @@ namespace DynamicsCrm.DevKit.Cli.Tasks
                     var newCode = JsForm.GetCode(CrmServiceClient, entityMetadata, json.rootnamespace, comment, out var newDTS);
                     if (newCode == String.Empty || Utility.IsTheSame(oldCode, newCode))
                     {
-                        CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        if (!Utility.IsTheSame(oldDTS, newDTS))
+                        {
+                            Utility.ForceWriteAllText(dtsFile, newDTS);
+                            CliLog.WriteLineWarning(ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.Updated, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
+                        else
+                        {
+                            CliLog.WriteLine(ConsoleColor.White, "|", ConsoleColor.Yellow, string.Format("{0,0}{1," + len + "}", "", i) + ": ", ConsoleColor.Green, CliAction.DoNothing, ConsoleColor.White, $"{schemaName}{endsWith}");
+                        }
                     }
                     else
                     {
